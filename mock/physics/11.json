@@ -1,0 +1,2002 @@
+[
+  {
+    "questionNumber": 1,
+    "chapter": "Electric Charges and Fields",
+    "topic": "Electric Flux Through a Closed Cylindrical Surface",
+    "questionText": "An electric field given by $\\vec{E} = (200 x)\\hat{i}\\text{ N C}^{-1}$ exists in space, where $x$ is in meters. A closed right circular cylinder of length $L = 0.20\\text{ m}$ and cross-sectional area $A = 0.05\\text{ m}^2$ is oriented with its flat circular faces perpendicular to the x-axis, located at $x = 0.10\\text{ m}$ and $x = 0.30\\text{ m}$. The net outward electric flux passing through the cylinder is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$2.0\\text{ N m}^2\\text{ C}^{-1}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. At left face ($x = 0.1\\text{ m}$), $E_1 = 20\\text{ N/C}$, normal is $-\\hat{i} \\implies \\Phi_1 = -1.0\\text{ N m}^2/\\text{C}$. At right face ($x = 0.3\\text{ m}$), $E_2 = 60\\text{ N/C}$, normal is $+\\hat{i} \\implies \\Phi_2 = +3.0\\text{ N m}^2/\\text{C}$. Curved surface flux is zero. Net flux $\\Phi = 3.0 - 1.0 = 2.0\\text{ N m}^2\\text{ C}^{-1}$."
+      },
+      {
+        "id": "B",
+        "text": "$4.0\\text{ N m}^2\\text{ C}^{-1}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scalar Addition of Inward and Outward Flux",
+        "mistakeAnalysis": "Aspirants add absolute flux magnitudes through both circular faces ($|\\Phi_1| + |\\Phi_2| = 1.0 + 3.0 = 4.0\\text{ N m}^2\\text{ C}^{-1}$), failing to account for the inward normal sign convention on the left face."
+      },
+      {
+        "id": "C",
+        "text": "Zero",
+        "isCorrect": false,
+        "studentSelectionTrap": "Uniform Field Generalization",
+        "mistakeAnalysis": "Aspirants assume net flux through any closed cylinder is identically zero, forgetting that the given electric field is non-uniform along the x-axis."
+      },
+      {
+        "id": "D",
+        "text": "$1.0\\text{ N m}^2\\text{ C}^{-1}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Face Flux Slip",
+        "mistakeAnalysis": "Aspirants evaluate flux only through the left face and report its absolute value."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Flux through curved surface: The electric field is along $\\hat{i}$ while the surface area vector $d\\vec{A}$ is perpendicular to $\\hat{i}$ everywhere along the curved cylindrical wall. Thus, $\\Phi_{\\text{curved}} = 0$.\n2. Flux through the left flat face at $x = 0.10\\text{ m}$:\n$$\\vec{E}_1 = 200(0.10)\\hat{i} = 20\\hat{i}\\text{ N C}^{-1}, \\quad \\vec{A}_1 = -0.05\\hat{i}\\text{ m}^2$$\n$$\\Phi_1 = \\vec{E}_1 \\cdot \\vec{A}_1 = (20)(-0.05) = -1.0\\text{ N m}^2\\text{ C}^{-1}$$\n3. Flux through the right flat face at $x = 0.30\\text{ m}$:\n$$\\vec{E}_2 = 200(0.30)\\hat{i} = 60\\hat{i}\\text{ N C}^{-1}, \\quad \\vec{A}_2 = +0.05\\hat{i}\\text{ m}^2$$\n$$\\Phi_2 = \\vec{E}_2 \\cdot \\vec{A}_2 = (60)(0.05) = +3.0\\text{ N m}^2\\text{ C}^{-1}$$\n4. Net electric flux:\n$$\\Phi_{\\text{net}} = \\Phi_1 + \\Phi_2 + \\Phi_{\\text{curved}} = -1.0 + 3.0 + 0 = 2.0\\text{ N m}^2\\text{ C}^{-1}$$"
+  },
+  {
+    "questionNumber": 2,
+    "chapter": "Electric Charges and Fields",
+    "topic": "Continuous Charge Distribution (Axial Field of a Charged Ring)",
+    "questionText": "A thin circular ring of radius $R$ carries a total positive electrostatic charge $Q$ distributed uniformly along its circumference. At what axial distance $x$ from the center of the ring is the electric field intensity MAXIMUM?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$x = \\frac{R}{\\sqrt{2}}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Differentiating $E(x) = \\frac{k Q x}{(R^2 + x^2)^{3/2}}$ with respect to $x$ and setting the derivative to zero yields $(R^2 + x^2) - 3x^2 = 0 \\implies x = R/\\sqrt{2}$."
+      },
+      {
+        "id": "B",
+        "text": "$x = R$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Radius Equating Fallacy",
+        "mistakeAnalysis": "Aspirants assume the maximum electric field occurs at an axial distance equal to the ring's geometric radius."
+      },
+      {
+        "id": "C",
+        "text": "$x = \\sqrt{2}R$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverted Radical Factor",
+        "mistakeAnalysis": "Aspirants place the factor $\\sqrt{2}$ in the numerator instead of the denominator."
+      },
+      {
+        "id": "D",
+        "text": "$x = \\frac{R}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Midpoint Assumption",
+        "mistakeAnalysis": "Aspirants guess half the radius based on simple geometric midpoint assumptions."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The electric field at an axial point distance $x$ from the center of a uniformly charged ring of radius $R$ is:\n$$E(x) = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Q x}{(R^2 + x^2)^{3/2}}$$\nTo find the maxima, differentiate $E(x)$ with respect to $x$:\n$$\\frac{dE}{dx} = \\frac{Q}{4\\pi\\varepsilon_0} \\left[ \\frac{(R^2 + x^2)^{3/2}(1) - x \\cdot \\frac{3}{2}(R^2 + x^2)^{1/2}(2x)}{(R^2 + x^2)^3} \\right] = 0$$\nSetting the numerator bracket to zero:\n$$(R^2 + x^2) - 3x^2 = 0 \\implies R^2 - 2x^2 = 0 \\implies x^2 = \\frac{R^2}{2} \\implies x = \\frac{R}{\\sqrt{2}}$$"
+  },
+  {
+    "questionNumber": 3,
+    "chapter": "Electrostatic Potential and Capacitance",
+    "topic": "Coalescence of Charged Identical Droplets",
+    "questionText": "Eight identical spherical water droplets, each of radius $r$ and carrying charge $q$, are each at an electrostatic potential of $V_0 = 10.0\\text{ V}$. If all eight droplets coalesce to form a single large spherical drop without loss of charge, the electrostatic potential at the surface of the resulting larger drop is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$40.0\\text{ V}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Volume conservation gives $R = 8^{1/3}r = 2r$. Total charge $Q = 8q$. New surface potential $V = \\frac{k Q}{R} = \\frac{k(8q)}{2r} = 4\\left(\\frac{k q}{r}\\right) = 4 V_0 = 40.0\\text{ V}$."
+      },
+      {
+        "id": "B",
+        "text": "$80.0\\text{ V}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Neglecting Radius Expansion",
+        "mistakeAnalysis": "Aspirants multiply potential by 8 ($8 \\times 10 = 80\\text{ V}$), assuming the drop radius remains unchanged."
+      },
+      {
+        "id": "C",
+        "text": "$20.0\\text{ V}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Radius Proportionality Slip",
+        "mistakeAnalysis": "Aspirants assume potential scales directly with new radius ($V \\propto R$), computing $2 \\times 10 = 20\\text{ V}$."
+      },
+      {
+        "id": "D",
+        "text": "$10.0\\text{ V}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Potential Invariance Fallacy",
+        "mistakeAnalysis": "Aspirants assume electric potential is an intensive quantity that does not change upon coalescence."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Potential of each small droplet:\n$$V_0 = \\frac{1}{4\\pi\\varepsilon_0} \\frac{q}{r} = 10.0\\text{ V}$$\n2. By conservation of volume:\n$$\\frac{4}{3}\\pi R^3 = 8 \\times \\left(\\frac{4}{3}\\pi r^3\\right) \\implies R^3 = 8r^3 \\implies R = 2r$$\n3. By conservation of charge, total charge on the large drop is $Q = 8q$.\n4. Electrostatic potential at the surface of the coalesced drop:\n$$V = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Q}{R} = \\frac{1}{4\\pi\\varepsilon_0} \\frac{8q}{2r} = 4 \\left( \\frac{1}{4\\pi\\varepsilon_0} \\frac{q}{r} \\right) = 4 V_0$$\nSubstitute $V_0 = 10.0\\text{ V}$:\n$$V = 4 \\times 10.0\\text{ V} = 40.0\\text{ V}$$"
+  },
+  {
+    "questionNumber": 4,
+    "chapter": "Electrostatic Potential and Capacitance",
+    "topic": "Capacitor with Dielectric Inserted After Disconnection",
+    "questionText": "A parallel plate capacitor of capacitance $C_0$ is charged across a DC voltage source to potential difference $V_0$ and stores energy $U_0$. The charging battery is then DISCONNECTED, and a dielectric slab of dielectric constant $K = 4$ is completely inserted into the inter-plate space. Which of the following quantities will DECREASE?\n(A) Potential difference between the plates\n(B) Electrostatic energy stored in the capacitor\n(C) Capacitance of the capacitor\n(D) Electric charge stored on the plates\n\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) and (B) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Since the battery is disconnected, $Q$ remains constant. Capacitance increases to $C = KC_0$. Therefore, $V = Q/C = V_0/K$ decreases, and $U = Q^2/(2C) = U_0/K$ decreases."
+      },
+      {
+        "id": "B",
+        "text": "(A), (B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Assuming Charge Dissipates",
+        "mistakeAnalysis": "Aspirants assume stored charge decreases, forgetting that an isolated disconnected capacitor has no external path for charge to leave."
+      },
+      {
+        "id": "C",
+        "text": "(B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Capacitance Decrease Fallacy",
+        "mistakeAnalysis": "Aspirants mistakenly think capacitance decreases upon inserting a dielectric ($K > 1$ always increases capacitance)."
+      },
+      {
+        "id": "D",
+        "text": "(A) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Energy Conservation Confusion",
+        "mistakeAnalysis": "Aspirants assume stored energy remains constant, forgetting that the dielectric is pulled inward by fringe fields, performing mechanical work at the expense of electrostatic energy."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "When a charged capacitor is disconnected from the battery:\n1. Charge is trapped: $Q' = Q_0$ (remains constant, so D does not decrease).\n2. Capacitance with dielectric: $C' = K C_0 = 4 C_0$ (increases, so C does not decrease).\n3. Potential difference: $V' = \\frac{Q'}{C'} = \\frac{Q_0}{K C_0} = \\frac{V_0}{K} = \\frac{V_0}{4}$ (decreases, so A decreases).\n4. Stored electrostatic energy:\n$$U' = \\frac{Q'^2}{2 C'} = \\frac{Q_0^2}{2(K C_0)} = \\frac{U_0}{K} = \\frac{U_0}{4} \\quad (\\text{decreases, so B decreases})$$\nHence, only statements (A) and (B) decrease."
+  },
+  {
+    "questionNumber": 5,
+    "chapter": "Electrostatic Potential and Capacitance",
+    "topic": "Potential of Concentric Conducting Spherical Shells",
+    "questionText": "Two thin concentric conducting spherical shells of radii $a$ and $b$ ($a < b$) carry charges $+q$ and $+2q$, respectively. The electrostatic potential at the surface of the outer shell is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{1}{4\\pi\\varepsilon_0} \\left(\\frac{3q}{b}\\right)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For any point on or outside the outer shell ($r = b$), both shells behave as if their total charge $(q + 2q = 3q)$ were concentrated at the common center: $V = \\frac{k(3q)}{b}$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{1}{4\\pi\\varepsilon_0} \\left(\\frac{q}{a} + \\frac{2q}{b}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inner Shell Surface Formula Misapplication",
+        "mistakeAnalysis": "Aspirants evaluate the potential at the *inner* shell surface instead of the outer shell surface."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{4\\pi\\varepsilon_0} \\left(\\frac{2q}{b}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inner Charge Shielding Myth",
+        "mistakeAnalysis": "Aspirants assume the inner shell charge $+q$ contributes zero potential to points located on the outer shell."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{4\\pi\\varepsilon_0} \\left(\\frac{3q}{a + b}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Radius Addition Fallacy",
+        "mistakeAnalysis": "Aspirants add the radii in the denominator, which is mathematically invalid."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By the principle of superposition, the net potential at the outer shell's surface ($r = b$) is the sum of potentials from both shells:\n1. The inner shell of radius $a$ and charge $+q$ produces a potential at external distance $r = b$ equal to:\n$$V_1 = \\frac{1}{4\\pi\\varepsilon_0} \\frac{q}{b}$$\n2. The outer shell of radius $b$ and charge $+2q$ produces a surface potential of:\n$$V_2 = \\frac{1}{4\\pi\\varepsilon_0} \\frac{2q}{b}$$\n3. Adding the two scalar contributions:\n$$V = V_1 + V_2 = \\frac{1}{4\\pi\\varepsilon_0} \\left( \\frac{q}{b} + \\frac{2q}{b} \\right) = \\frac{1}{4\\pi\\varepsilon_0} \\left( \\frac{3q}{b} \\right)$$"
+  },
+  {
+    "questionNumber": 6,
+    "chapter": "Current Electricity",
+    "topic": "Microscopic Free Electron Model and Conduction Dynamics",
+    "questionText": "Consider the following statements regarding the microscopic mechanisms of electrical conduction in metals:\n(A) In the absence of an applied electric field, the average thermal velocity of the electron gas across any macroscopic section is zero.\n(B) Under an applied electric field, conduction electrons accelerate continuously along straight lines without scattering.\n(C) The drift velocity of electrons is opposite to the direction of the applied electric field vector.\n(D) Electron mobility is defined as the magnitude of drift velocity acquired per unit electric field ($\\mu = v_d / E$).\n\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A), (C) and (D) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Statements (A), (C), and (D) are true. Statement (B) is false because electrons suffer frequent collisions with vibrating lattice ions, constantly randomizing their velocities between collision intervals."
+      },
+      {
+        "id": "B",
+        "text": "(A) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Mobility Definition Omission",
+        "mistakeAnalysis": "Aspirants omit statement (D), failing to recognize $\\mu = v_d/E$ as the standard definition of mobility."
+      },
+      {
+        "id": "C",
+        "text": "(A), (B), (C) and (D)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Collisionless Acceleration Fallacy",
+        "mistakeAnalysis": "Aspirants assume electrons move in a vacuum-like straight path inside conductors, neglecting lattice scattering."
+      },
+      {
+        "id": "D",
+        "text": "(B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Thermal Averaging Neglect",
+        "mistakeAnalysis": "Aspirants omit statement (A), forgetting that random thermal velocities average to vector zero."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. In random thermal motion, electrons move in all directions with equal probability. Thus, the average vector thermal velocity is $\\frac{1}{N}\\sum \\vec{u}_i = 0 \\implies$ (A) is correct.\n2. Conduction electrons repeatedly collide with heavy oscillating positive lattice ions (mean free path $\\sim 10^{-8}\\text{ m}$, relaxation time $\\tau \\sim 10^{-14}\\text{ s}$), constantly redirecting their motion rather than accelerating continuously in straight lines $\\implies$ (B) is incorrect.\n3. Because electrons carry negative charge ($q = -e$), the Lorentz force $\\vec{F} = -e\\vec{E}$ drives drift velocity $\\vec{v}_d = -\\frac{e\\vec{E}\\tau}{m}$ antiparallel to $\\vec{E} \\implies$ (C) is correct.\n4. Mobility is defined as drift speed per unit field: $\\mu = \\frac{v_d}{E} = \\frac{e\\tau}{m} \\implies$ (D) is correct.\nHence, statements (A), (C), and (D) only are correct."
+  },
+  {
+    "questionNumber": 7,
+    "chapter": "Current Electricity",
+    "topic": "Temperature of a Filament from Resistance Measurements",
+    "questionText": "The electrical resistance of the tungsten filament of an incandescent light bulb is $20.0\\,\\Omega$ at room temperature ($20.0^\\circ\\text{C}$). When connected to a $220\\text{ V}$ power line, the filament glows incandescently, drawing a steady current of $1.0\\text{ A}$. If the temperature coefficient of resistance of tungsten is $\\alpha = 5.0 \\times 10^{-3}\\text{ }^\\circ\\text{C}^{-1}$, the operating temperature of the filament is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$2020^\\circ\\text{C}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $R_T = 220/1.0 = 220\\,\\Omega$. $R_T - R_0 = R_0 \\alpha \\Delta T \\implies 220 - 20 = 20(0.005)\\Delta T \\implies 200 = 0.10 \\Delta T \\implies \\Delta T = 2000^\\circ\\text{C}$. Final temperature $T = 20 + 2000 = 2020^\\circ\\text{C}$."
+      },
+      {
+        "id": "B",
+        "text": "$2000^\\circ\\text{C}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reporting Temperature Rise Instead of Final Temperature",
+        "mistakeAnalysis": "Aspirants calculate the temperature rise $\\Delta T = 2000^\\circ\\text{C}$ but forget to add the initial room temperature ($20^\\circ\\text{C}$)."
+      },
+      {
+        "id": "C",
+        "text": "$2200^\\circ\\text{C}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Using $R_T$ Instead of $\\Delta R$",
+        "mistakeAnalysis": "Aspirants divide $R_T$ directly by $R_0 \\alpha$ ($220 / 0.1 = 2200^\\circ\\text{C}$)."
+      },
+      {
+        "id": "D",
+        "text": "$1020^\\circ\\text{C}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factor of 2 Error in Temperature Coefficient",
+        "mistakeAnalysis": "Aspirants evaluate with $\\alpha = 0.010\\text{ }^\\circ\\text{C}^{-1}$, halving the temperature rise."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Operating resistance of the incandescent filament:\n$$R_T = \\frac{V}{I} = \\frac{220\\text{ V}}{1.0\\text{ A}} = 220.0\\,\\Omega$$\n2. Linear temperature dependence of resistance:\n$$R_T = R_0 [1 + \\alpha (T - T_0)]$$\n$$R_T - R_0 = R_0 \\alpha \\Delta T$$\n$$\\Delta T = \\frac{R_T - R_0}{R_0 \\alpha}$$\nSubstitute $R_T = 220.0\\,\\Omega$, $R_0 = 20.0\\,\\Omega$, and $\\alpha = 5.0 \\times 10^{-3}\\text{ }^\\circ\\text{C}^{-1}$:\n$$\\Delta T = \\frac{220.0 - 20.0}{20.0 \\times (5.0 \\times 10^{-3})} = \\frac{200.0}{0.10} = 2000.0^\\circ\\text{C}$$\n3. Operating temperature of the filament:\n$$T = T_0 + \\Delta T = 20.0^\\circ\\text{C} + 2000.0^\\circ\\text{C} = 2020^\\circ\\text{C}$$"
+  },
+  {
+    "questionNumber": 8,
+    "chapter": "Current Electricity",
+    "topic": "Power Dissipation of Electric Bulbs in Series",
+    "questionText": "Two incandescent electric bulbs rated $B_1(40\\text{ W}, 220\\text{ V})$ and $B_2(60\\text{ W}, 220\\text{ V})$ are connected in series across a $220\\text{ V}$ mains supply. Assuming their filament resistances remain constant, the total electric power consumed by the series combination is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$24.0\\text{ W}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. In series, effective power is $\\frac{1}{P_{\\text{eq}}} = \\frac{1}{P_1} + \\frac{1}{P_2} = \\frac{1}{40} + \\frac{1}{60} = \\frac{5}{120} = \\frac{1}{24} \\implies P_{\\text{eq}} = 24.0\\text{ W}$."
+      },
+      {
+        "id": "B",
+        "text": "$100.0\\text{ W}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Parallel Power Addition Fallacy",
+        "mistakeAnalysis": "Aspirants add rated powers algebraically ($40 + 60 = 100\\text{ W}$), which only applies when bulbs are connected in parallel across rated voltage."
+      },
+      {
+        "id": "C",
+        "text": "$50.0\\text{ W}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Simple Average Guess",
+        "mistakeAnalysis": "Aspirants compute the arithmetic mean of the two wattage ratings."
+      },
+      {
+        "id": "D",
+        "text": "$12.0\\text{ W}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Extra Halving Step",
+        "mistakeAnalysis": "Aspirants divide the series power by an extra factor of 2."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Filament resistance of each bulb rated at voltage $V = 220\\text{ V}$:\n$$R_1 = \\frac{V^2}{P_1} = \\frac{(220)^2}{40}$$\n$$R_2 = \\frac{V^2}{P_2} = \\frac{(220)^2}{60}$$\n2. When connected in series, the total resistance is $R_{\\text{total}} = R_1 + R_2$:\n$$R_{\\text{total}} = \\frac{V^2}{P_1} + \\frac{V^2}{P_2} = V^2 \\left( \\frac{1}{P_1} + \\frac{1}{P_2} \\right)$$\n3. The total power consumed across the same supply voltage $V$ is:\n$$P_{\\text{total}} = \\frac{V^2}{R_{\\text{total}}} = \\frac{V^2}{V^2 \\left( \\frac{1}{P_1} + \\frac{1}{P_2} \\right)} = \\frac{1}{\\frac{1}{P_1} + \\frac{1}{P_2}} = \\frac{P_1 P_2}{P_1 + P_2}$$\nSubstitute $P_1 = 40\\text{ W}$ and $P_2 = 60\\text{ W}$:\n$$P_{\\text{total}} = \\frac{40 \\times 60}{40 + 60} = \\frac{2400}{100} = 24.0\\text{ W}$$"
+  },
+  {
+    "questionNumber": 9,
+    "chapter": "Current Electricity",
+    "topic": "Potentiometer Potential Gradient and Balancing Length",
+    "questionText": "A potentiometer has a uniform resistance wire of length $L = 10.0\\text{ m}$ and resistance $R_w = 20.0\\,\\Omega$. It is connected in series with a secondary cell of emf $4.0\\text{ V}$ (negligible internal resistance) and an external series resistor $R_s = 60.0\\,\\Omega$. The potential gradient along the potentiometer wire is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$0.10\\text{ V m}^{-1}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Circuit current $I = \\frac{E}{R_w + R_s} = \\frac{4.0}{20.0 + 60.0} = 0.050\\text{ A}$. Voltage across wire $V_w = I R_w = 0.050 \\times 20.0 = 1.0\\text{ V}$. Potential gradient $k = \\frac{V_w}{L} = \\frac{1.0\\text{ V}}{10.0\\text{ m}} = 0.10\\text{ V m}^{-1}$."
+      },
+      {
+        "id": "B",
+        "text": "$0.40\\text{ V m}^{-1}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Driver Voltage Directly on Wire Fallacy",
+        "mistakeAnalysis": "Aspirants divide the driver cell emf directly by wire length ($4.0 / 10 = 0.40\\text{ V/m}$), forgetting the voltage drop across the series resistor $R_s$."
+      },
+      {
+        "id": "C",
+        "text": "$0.05\\text{ V m}^{-1}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Current Conflation with Potential Gradient",
+        "mistakeAnalysis": "Aspirants confuse the value of primary current ($0.05\\text{ A}$) with the potential gradient."
+      },
+      {
+        "id": "D",
+        "text": "$0.20\\text{ V m}^{-1}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Resistance Ratio Omission",
+        "mistakeAnalysis": "Aspirants evaluate without including $R_w$ in the circuit denominator."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Current in the primary potentiometer circuit:\n$$I = \\frac{\\mathcal{E}}{R_w + R_s} = \\frac{4.0\\text{ V}}{20.0\\,\\Omega + 60.0\\,\\Omega} = \\frac{4.0}{80.0} = 0.050\\text{ A}$$\n2. Potential difference maintained across the potentiometer wire of resistance $R_w = 20.0\\,\\Omega$:\n$$V_w = I R_w = (0.050\\text{ A}) \\times (20.0\\,\\Omega) = 1.0\\text{ V}$$\n3. Potential gradient $k$ along the wire of length $L = 10.0\\text{ m}$:\n$$k = \\frac{V_w}{L} = \\frac{1.0\\text{ V}}{10.0\\text{ m}} = 0.10\\text{ V m}^{-1}$$"
+  },
+  {
+    "questionNumber": 10,
+    "chapter": "Moving Charges and Magnetism",
+    "topic": "Helical Motion in a Uniform Magnetic Field",
+    "questionText": "An alpha particle (${}^{4}_{2}\\text{He}^{2+}$) of mass $m_\\alpha = 6.64 \\times 10^{-27}\\text{ kg}$ and charge $q = 3.20 \\times 10^{-19}\\text{ C}$ enters a uniform magnetic field $B = 0.50\\text{ T}$ at an angle of $\\theta = 60^\\circ$ to the field lines with total speed $v = 2.0 \\times 10^5\\text{ m s}^{-1}$. The pitch of the resulting helical path is approximately:\n(Take $\\pi = 3.14$)",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$2.61\\text{ cm}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $T = \\frac{2\\pi m}{q B} = \\frac{2(3.14)(6.64 \\times 10^{-27})}{(3.2 \\times 10^{-19})(0.50)} = 2.607 \\times 10^{-7}\\text{ s}$. $v_\\parallel = v \\cos 60^\\circ = 1.0 \\times 10^5\\text{ m/s}$. Pitch $p = v_\\parallel T = (10^5)(2.607 \\times 10^{-7}) = 0.0261\\text{ m} = 2.61\\text{ cm}$."
+      },
+      {
+        "id": "B",
+        "text": "$5.22\\text{ cm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Using Total Speed Instead of Parallel Component",
+        "mistakeAnalysis": "Aspirants evaluate pitch with total speed $v$ rather than parallel speed $v_\\parallel = v \\cos 60^\\circ$, doubling the calculated pitch."
+      },
+      {
+        "id": "C",
+        "text": "$4.52\\text{ cm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Using Transverse Velocity Component",
+        "mistakeAnalysis": "Aspirants use $v_\\perp = v \\sin 60^\\circ$ to calculate pitch instead of $v_\\parallel = v \\cos 60^\\circ$."
+      },
+      {
+        "id": "D",
+        "text": "$1.30\\text{ cm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Extra Halving Step",
+        "mistakeAnalysis": "Aspirants divide by 2, confusing pitch with helical orbit radius."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Resolving the velocity vector $\\vec{v}$ relative to $\\vec{B}$:\n- Parallel component: $v_\\parallel = v \\cos(60^\\circ) = (2.0 \\times 10^5\\text{ m s}^{-1}) \\times 0.50 = 1.0 \\times 10^5\\text{ m s}^{-1}$\n- Perpendicular component: $v_\\perp = v \\sin(60^\\circ) = (2.0 \\times 10^5\\text{ m s}^{-1}) \\times \\frac{\\sqrt{3}}{2} = 1.732 \\times 10^5\\text{ m s}^{-1}$\n2. Orbital period of one helical revolution:\n$$T = \\frac{2\\pi m_\\alpha}{q B} = \\frac{2 \\times 3.14 \\times (6.64 \\times 10^{-27}\\text{ kg})}{(3.20 \\times 10^{-19}\\text{ C}) \\times (0.50\\text{ T})} = \\frac{4.170 \\times 10^{-26}}{1.60 \\times 10^{-19}} \\approx 2.607 \\times 10^{-7}\\text{ s}$$\n3. The pitch is the linear distance traveled along $\\vec{B}$ during one revolution:\n$$p = v_\\parallel T = (1.0 \\times 10^5\\text{ m s}^{-1}) \\times (2.607 \\times 10^{-7}\\text{ s}) = 2.607 \\times 10^{-2}\\text{ m} \\approx 2.61\\text{ cm}$$"
+  },
+  {
+    "questionNumber": 11,
+    "chapter": "Moving Charges and Magnetism",
+    "topic": "Torque and Potential Energy of a Magnetic Dipole",
+    "questionText": "A small magnetic needle having magnetic dipole moment $M = 0.60\\text{ A m}^2$ is placed in a uniform horizontal magnetic field $B = 0.50\\text{ T}$. The external work required to slowly turn the needle from its stable equilibrium position ($\\theta_1 = 0^\\circ$) to the position where its axis is perpendicular to the field ($\\theta_2 = 90^\\circ$) is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$0.30\\text{ J}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $W_{\\text{ext}} = -M B(\\cos 90^\\circ - \\cos 0^\\circ) = -M B(0 - 1) = +M B = (0.60)(0.50) = 0.30\\text{ J}$."
+      },
+      {
+        "id": "B",
+        "text": "$0.60\\text{ J}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "180-Degree Rotation Work Error",
+        "mistakeAnalysis": "Aspirants evaluate work required to invert the dipole by $180^\\circ$ ($W = 2MB = 0.60\\text{ J}$) instead of a $90^\\circ$ rotation."
+      },
+      {
+        "id": "C",
+        "text": "Zero",
+        "isCorrect": false,
+        "studentSelectionTrap": "Zero Potential Energy Confusion",
+        "mistakeAnalysis": "Aspirants confuse the fact that potential energy at $90^\\circ$ is zero ($U = -MB\\cos 90^\\circ = 0$) with work done, forgetting that the initial potential energy at $0^\\circ$ was negative ($-MB$)."
+      },
+      {
+        "id": "D",
+        "text": "$-0.30\\text{ J}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants calculate work done by the magnetic field ($W_{\\text{field}} = -\\Delta U$) rather than work required by the external agent ($W_{\\text{ext}} = +\\Delta U$)."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The magnetic potential energy of a dipole of moment $\\vec{M}$ in a uniform magnetic field $\\vec{B}$ is:\n$$U(\\theta) = -\\vec{M} \\cdot \\vec{B} = -M B \\cos\\theta$$\n1. In the initial stable equilibrium orientation ($\\theta_1 = 0^\\circ$):\n$$U_i = -M B \\cos(0^\\circ) = -M B$$\n2. In the final perpendicular orientation ($\\theta_2 = 90^\\circ$):\n$$U_f = -M B \\cos(90^\\circ) = 0$$\n3. Work required by an external agent against the magnetic restoring torque:\n$$W_{\\text{ext}} = U_f - U_i = 0 - (-M B) = +M B$$\nSubstitute $M = 0.60\\text{ A m}^2$ and $B = 0.50\\text{ T}$:\n$$W_{\\text{ext}} = (0.60\\text{ A m}^2) \\times (0.50\\text{ T}) = 0.30\\text{ J}$$"
+  },
+  {
+    "questionNumber": 12,
+    "chapter": "Moving Charges and Magnetism",
+    "topic": "Galvanometer Current Sensitivity Scaling with Coil Parameters",
+    "questionText": "If the number of turns in the coil of a moving-coil galvanometer is doubled while keeping the magnetic field, coil area, and suspension restoring couple per unit twist constant, what happens to the galvanometer's CURRENT SENSITIVITY ($I_s$) and VOLTAGE SENSITIVITY ($V_s$)?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Current sensitivity doubles; voltage sensitivity remains practically unchanged.",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $I_s = \\frac{NBA}{k} \\propto N$, so doubling $N$ doubles $I_s$. Doubling turns also doubles total wire length and resistance ($R' = 2R$). Voltage sensitivity $V_s = \\frac{I_s}{R} = \\frac{2 I_s}{2 R} = V_s$ remains unchanged."
+      },
+      {
+        "id": "B",
+        "text": "Both current sensitivity and voltage sensitivity double.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Neglecting Coil Resistance Increase",
+        "mistakeAnalysis": "Aspirants assume voltage sensitivity scales directly with $N$, failing to recognize that adding turns increases coil electrical resistance $R$ proportionally."
+      },
+      {
+        "id": "C",
+        "text": "Current sensitivity remains unchanged; voltage sensitivity doubles.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sensitivity Role Inversion",
+        "mistakeAnalysis": "Aspirants invert the behavior of current and voltage sensitivities."
+      },
+      {
+        "id": "D",
+        "text": "Both current sensitivity and voltage sensitivity remain unchanged.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Universal Invariance Fallacy",
+        "mistakeAnalysis": "Aspirants assume galvanometer sensitivity cannot be modified by coil geometry."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "From NCERT Class 12 Moving Charges and Magnetism:\n1. Current sensitivity is defined as deflection per unit current:\n$$I_s = \\frac{\\theta}{I} = \\frac{N B A}{k}$$\nSince $I_s \\propto N$, doubling the turns ($N' = 2N$) doubles current sensitivity ($I_s' = 2 I_s$).\n2. Voltage sensitivity is defined as deflection per unit voltage:\n$$V_s = \\frac{\\theta}{V} = \\frac{\\theta}{I R} = \\frac{I_s}{R} = \\frac{N B A}{k R}$$\nWhen the number of turns is doubled using wire of the same gauge, the total length of the wire doubles, doubling its internal resistance: $R' = 2R$.\n3. The new voltage sensitivity becomes:\n$$V_s' = \\frac{I_s'}{R'} = \\frac{2 I_s}{2 R} = \\frac{I_s}{R} = V_s$$\nHence, voltage sensitivity remains unchanged."
+  },
+  {
+    "questionNumber": 13,
+    "chapter": "Magnetism and Matter",
+    "topic": "Magnetic Susceptibility of Diamagnetic, Paramagnetic, and Ferromagnetic Substances",
+    "questionText": "Match the classes of magnetic materials in List-I with their characteristic values of magnetic susceptibility ($\\chi$) in List-II:\n\nList-I (Material Class):\n(A) Diamagnetic substance\n(B) Paramagnetic substance\n(C) Ferromagnetic substance\n(D) Superconductor (perfect diamagnet)\n\nList-II (Magnetic Susceptibility $\\chi$):\n(I) Large, positive ($\\chi \\gg 1$, typically $10^2 - 10^5$)\n(II) Strictly equal to $-1$ ($\\mu_r = 0$)\n(III) Small, negative ($-1 < \\chi < 0$)\n(IV) Small, positive ($0 < \\chi < 10^{-2}$)\n\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A)-(III), (B)-(IV), (C)-(I), (D)-(II)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Diamagnets have small negative $\\chi$ (III); paramagnets have small positive $\\chi$ (IV); ferromagnets have large positive $\\chi$ (I); superconductors exhibit perfect diamagnetism with $\\chi = -1$ (II)."
+      },
+      {
+        "id": "B",
+        "text": "(A)-(IV), (B)-(III), (C)-(I), (D)-(II)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dia- and Paramagnetic Sign Swap",
+        "mistakeAnalysis": "Aspirants swap the susceptibility signs of diamagnetic and paramagnetic materials."
+      },
+      {
+        "id": "C",
+        "text": "(A)-(III), (B)-(IV), (C)-(II), (D)-(I)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Ferromagnet and Superconductor Swap",
+        "mistakeAnalysis": "Aspirants match ferromagnetic substances with $\\chi = -1$."
+      },
+      {
+        "id": "D",
+        "text": "(A)-(II), (B)-(IV), (C)-(I), (D)-(III)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Superconductor Misclassification",
+        "mistakeAnalysis": "Aspirants equate ordinary diamagnetic materials with superconductors."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "From NCERT Class 12 Chapter 'Magnetism and Matter':\n1. Diamagnetic materials: Induced magnetization opposes the magnetizing field; $\\chi$ is small, negative (typically $\\sim -10^{-5}$), and temperature-independent $\\implies$ (A)-(III)\n2. Paramagnetic materials: Permanent dipoles partially align with the field; $\\chi$ is small, positive (typically $\\sim 10^{-3} - 10^{-5}$), and obeys Curie's law $\\implies$ (B)-(IV)\n3. Ferromagnetic materials: Domain alignment creates intense magnetization; $\\chi$ is very large and positive ($10^2 - 10^5$) $\\implies$ (C)-(I)\n4. Superconductors: Completely expel magnetic flux lines (Meissner effect), so relative permeability $\\mu_r = 0 \\implies \\chi = \\mu_r - 1 = -1$ strictly $\\implies$ (D)-(II)\nCorrect matching: (A)-(III), (B)-(IV), (C)-(I), (D)-(II)."
+  },
+  {
+    "questionNumber": 14,
+    "chapter": "Electromagnetic Induction",
+    "topic": "Faraday's Law and Self-Inductance",
+    "questionText": "An electrical current flowing in an inductor of self-inductance $L = 0.80\\text{ H}$ decreases steadily from $5.0\\text{ A}$ to $1.0\\text{ A}$ in a time duration of $0.080\\text{ s}$. The magnitude of the self-induced electromotive force in the inductor during this interval is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$40.0\\text{ V}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|\\mathcal{E}| = L \\left|\\frac{\\Delta I}{\\Delta t}\\right| = 0.80 \\times \\frac{|1.0 - 5.0|}{0.080} = 0.80 \\times \\frac{4.0}{0.080} = 0.80 \\times 50.0 = 40.0\\text{ V}$."
+      },
+      {
+        "id": "B",
+        "text": "$4.0\\text{ V}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Power-of-Ten Decimal Slip",
+        "mistakeAnalysis": "Aspirants evaluate $4.0 / 0.080$ as $5.0$ instead of $50.0$, obtaining $4.0\\text{ V}$."
+      },
+      {
+        "id": "C",
+        "text": "$50.0\\text{ V}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reporting Current Rate of Change",
+        "mistakeAnalysis": "Aspirants calculate $\\Delta I / \\Delta t = 50.0\\text{ A/s}$ and forget to multiply by inductance $L = 0.80\\text{ H}$."
+      },
+      {
+        "id": "D",
+        "text": "$60.0\\text{ V}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Summing Initial and Final Currents",
+        "mistakeAnalysis": "Aspirants add currents ($5 + 1 = 6\\text{ A}$) instead of finding the difference."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By Faraday's law of self-induction:\n$$|\\mathcal{E}| = L \\left| \\frac{\\Delta I}{\\Delta t} \\right|$$\nGiven:\n- $L = 0.80\\text{ H}$\n- $\\Delta I = I_{\\text{final}} - I_{\\text{initial}} = 1.0\\text{ A} - 5.0\\text{ A} = -4.0\\text{ A}$\n- $\\Delta t = 0.080\\text{ s}$\n\n$$|\\mathcal{E}| = 0.80\\text{ H} \\times \\frac{4.0\\text{ A}}{0.080\\text{ s}} = 0.80 \\times 50.0 = 40.0\\text{ V}$$"
+  },
+  {
+    "questionNumber": 15,
+    "chapter": "Electromagnetic Induction",
+    "topic": "Mutual Inductance of Two Concentric Coplanar Circular Loops",
+    "questionText": "A small circular wire loop of radius $r$ is situated concentrically and coplanar with a much larger circular wire loop of radius $R$ ($r \\ll R$). If the current in the larger outer loop is changed at a rate of $\\frac{dI}{dt}$, the induced emf in the inner loop is proportional to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{r^2}{R}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $B = \\frac{\\mu_0 I}{2R}$. Magnetic flux through inner coil is $\\Phi = B(\\pi r^2) = \\frac{\\mu_0 \\pi r^2}{2R} I \\implies M = \\frac{\\mu_0 \\pi r^2}{2R} \\propto \\frac{r^2}{R}$. Since $\\mathcal{E} = M(dI/dt)$, induced emf is proportional to $\\frac{r^2}{R}$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{R^2}{r}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Area Attribution Inversion",
+        "mistakeAnalysis": "Aspirants use the area of the large outer loop for flux linkage, inverting the radii ratio."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{r}{R}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Radius Scaling Fallacy",
+        "mistakeAnalysis": "Aspirants assume flux scales with radius rather than area ($\\,\\pi r^2$)."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{r^2}{R^2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dimensionless Ratio Fallacy",
+        "mistakeAnalysis": "Aspirants square both radii, which is dimensionally incorrect for mutual inductance."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Current $I$ in the outer loop of radius $R$ produces a central magnetic field:\n$$B = \\frac{\\mu_0 I}{2R}$$\n2. Since $r \\ll R$, this field is effectively uniform across the area of the inner loop ($A = \\pi r^2$).\n3. The magnetic flux linked with the inner loop is:\n$$\\Phi = B A = \\left( \\frac{\\mu_0 I}{2R} \\right) (\\pi r^2) = \\left( \\frac{\\mu_0 \\pi r^2}{2R} \\right) I$$\n4. By definition, mutual inductance is $M = \\frac{\\Phi}{I} = \\frac{\\mu_0 \\pi r^2}{2R} \\propto \\frac{r^2}{R}$.\n5. The induced emf is $\\mathcal{E} = M \\left|\\frac{dI}{dt}\\right| \\propto \\frac{r^2}{R}$."
+  },
+  {
+    "questionNumber": 16,
+    "chapter": "Alternating Current",
+    "topic": "Resonant Angular Frequency of Series LCR Circuit",
+    "questionText": "In a series LCR resonant circuit, the inductance is $L = 0.50\\text{ H}$, capacitance is $C = 8.0\\,\\mu\\text{F}$, and resistance is $R = 25.0\\,\\Omega$. The resonant angular frequency $\\omega_0$ and the Quality factor ($Q$) of the circuit are, respectively:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$500\\text{ rad s}^{-1}$ and $10$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\omega_0 = \\frac{1}{\\sqrt{LC}} = \\frac{1}{\\sqrt{0.5 \\times 8 \\times 10^{-6}}} = \\frac{1}{\\sqrt{4 \\times 10^{-6}}} = 500\\text{ rad s}^{-1}$. $Q = \\frac{\\omega_0 L}{R} = \\frac{500 \\times 0.50}{25.0} = \\frac{250}{25} = 10$."
+      },
+      {
+        "id": "B",
+        "text": "$250\\text{ rad s}^{-1}$ and $5$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Radical Error",
+        "mistakeAnalysis": "Aspirants evaluate $\\sqrt{4 \\times 10^{-6}}$ as $4 \\times 10^{-3}$, computing $\\omega_0 = 250\\text{ rad s}^{-1}$."
+      },
+      {
+        "id": "C",
+        "text": "$500\\text{ rad s}^{-1}$ and $20$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Missing Factor of 0.5 in Inductance",
+        "mistakeAnalysis": "Aspirants evaluate with $L = 1.0\\text{ H}$ in the $Q$-factor calculation, doubling $Q$."
+      },
+      {
+        "id": "D",
+        "text": "$1000\\text{ rad s}^{-1}$ and $10$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Square Root Factor Slip",
+        "mistakeAnalysis": "Aspirants forget to take the square root of $LC$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Resonant angular frequency:\n$$\\omega_0 = \\frac{1}{\\sqrt{L C}}$$\nSubstitute $L = 0.50\\text{ H}$ and $C = 8.0 \\times 10^{-6}\\text{ F}$:\n$$L C = 0.50 \\times 8.0 \\times 10^{-6} = 4.0 \\times 10^{-6}\\text{ s}^2$$\n$$\\sqrt{L C} = 2.0 \\times 10^{-3}\\text{ s}$$\n$$\\omega_0 = \\frac{1}{2.0 \\times 10^{-3}\\text{ s}} = 500\\text{ rad s}^{-1}$$\n2. The Quality factor $Q$ measures the sharpness of resonance:\n$$Q = \\frac{\\omega_0 L}{R} = \\frac{(500\\text{ rad s}^{-1}) \\times (0.50\\text{ H})}{25.0\\,\\Omega} = \\frac{250}{25.0} = 10$$"
+  },
+  {
+    "questionNumber": 17,
+    "chapter": "Alternating Current",
+    "topic": "Average Power Dissipated in an AC Circuit",
+    "questionText": "An alternating voltage $v(t) = 200 \\sin(100\\pi t)\\text{ V}$ is applied across an impedance, causing a current $i(t) = 4.0 \\sin\\left(100\\pi t - \\frac{\\pi}{6}\\right)\\text{ A}$ to flow. The average electrical power dissipated in the circuit over a complete cycle is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$200\\sqrt{3}\\text{ W}$ (or $\\approx 346.4\\text{ W}$)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P_{\\text{avg}} = \\frac{V_0 I_0}{2}\\cos\\phi = \\frac{200 \\times 4.0}{2}\\cos(30^\\circ) = 400 \\times \\frac{\\sqrt{3}}{2} = 200\\sqrt{3}\\text{ W} \\approx 346.4\\text{ W}$."
+      },
+      {
+        "id": "B",
+        "text": "$400\\text{ W}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Omitting Power Factor",
+        "mistakeAnalysis": "Aspirants evaluate apparent power $\\frac{V_0 I_0}{2} = 400\\text{ W}$ and omit the power factor $\\cos(\\pi/6)$."
+      },
+      {
+        "id": "C",
+        "text": "$200\\text{ W}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Using Sine Instead of Cosine (Reactive Power)",
+        "mistakeAnalysis": "Aspirants evaluate reactive power $Q = \\frac{V_0 I_0}{2}\\sin(30^\\circ) = 400 \\times 0.5 = 200\\text{ VAR}$ instead of real active power."
+      },
+      {
+        "id": "D",
+        "text": "$400\\sqrt{3}\\text{ W}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Forgetting the RMS Halving Factor",
+        "mistakeAnalysis": "Aspirants multiply peak values directly ($V_0 I_0 \\cos\\phi = 800 \\times \\frac{\\sqrt{3}}{2} = 400\\sqrt{3}\\text{ W}$) without converting to RMS."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The average electrical power consumed in an AC circuit is:\n$$P_{\\text{avg}} = V_{\\text{rms}} I_{\\text{rms}} \\cos\\phi = \\left(\\frac{V_0}{\\sqrt{2}}\\right) \\left(\\frac{I_0}{\\sqrt{2}}\\right) \\cos\\phi = \\frac{1}{2} V_0 I_0 \\cos\\phi$$\nGiven:\n- $V_0 = 200\\text{ V}$\n- $I_0 = 4.0\\text{ A}$\n- Phase angle $\\phi = \\frac{\\pi}{6} = 30^\\circ \\implies \\cos(30^\\circ) = \\frac{\\sqrt{3}}{2}$\n\n$$P_{\\text{avg}} = \\frac{1}{2} \\times (200\\text{ V}) \\times (4.0\\text{ A}) \\times \\left(\\frac{\\sqrt{3}}{2}\\right) = 400 \\times \\frac{\\sqrt{3}}{2} = 200\\sqrt{3}\\text{ W} \\approx 346.4\\text{ W}$$"
+  },
+  {
+    "questionNumber": 18,
+    "chapter": "Alternating Current",
+    "topic": "Peak Current in LC Oscillations",
+    "questionText": "An oscillating LC tank circuit consists of an inductor $L = 2.0\\text{ mH}$ and a capacitor $C = 5.0\\,\\mu\\text{F}$. Initially, the capacitor is charged to a maximum electrostatic charge of $Q_0 = 200\\,\\mu\\text{C}$ and connected across the inductor. The peak instantaneous current flowing through the inductor is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$2.0\\text{ A}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Conservation of energy gives $\\frac{1}{2} L I_0^2 = \\frac{Q_0^2}{2C} \\implies I_0 = Q_0 \\frac{1}{\\sqrt{LC}} = (200 \\times 10^{-6}) \\frac{1}{\\sqrt{(2 \\times 10^{-3})(5 \\times 10^{-6})}} = (200 \\times 10^{-6})(10^4) = 2.0\\text{ A}$."
+      },
+      {
+        "id": "B",
+        "text": "$4.0\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Missing Square Root Step",
+        "mistakeAnalysis": "Aspirants evaluate $LC$ incorrectly or double the calculated peak current."
+      },
+      {
+        "id": "C",
+        "text": "$1.0\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Extra Halving Step",
+        "mistakeAnalysis": "Aspirants divide the result by 2, confusing peak current with RMS current."
+      },
+      {
+        "id": "D",
+        "text": "$0.20\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Power-of-Ten Decimal Slip",
+        "mistakeAnalysis": "Aspirants miscalculate $200 \\times 10^{-6} \\times 10^4$ as $0.20\\text{ A}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "In an ideal LC circuit, total electromagnetic energy is conserved, oscillating between electric energy in the capacitor and magnetic energy in the inductor:\n$$U_{\\text{total}} = \\frac{Q_0^2}{2C} = \\frac{1}{2} L I_0^2$$\nSolving for peak current $I_0$:\n$$I_0^2 = \\frac{Q_0^2}{L C} \\implies I_0 = \\frac{Q_0}{\\sqrt{L C}} = \\omega_0 Q_0$$\nSubstitute given values:\n- $Q_0 = 200\\,\\mu\\text{C} = 2.0 \\times 10^{-4}\\text{ C}$\n- $L = 2.0\\text{ mH} = 2.0 \\times 10^{-3}\\text{ H}$\n- $C = 5.0\\,\\mu\\text{F} = 5.0 \\times 10^{-6}\\text{ F}$\n\n$$L C = (2.0 \\times 10^{-3}\\text{ H}) \\times (5.0 \\times 10^{-6}\\text{ F}) = 1.0 \\times 10^{-8}\\text{ s}^2$$\n$$\\sqrt{L C} = 1.0 \\times 10^{-4}\\text{ s}$$\n$$I_0 = \\frac{2.0 \\times 10^{-4}\\text{ C}}{1.0 \\times 10^{-4}\\text{ s}} = 2.0\\text{ A}$$"
+  },
+  {
+    "questionNumber": 19,
+    "chapter": "Electromagnetic Waves",
+    "topic": "Displacement Current Density Between Circular Capacitor Plates",
+    "questionText": "A parallel plate capacitor having circular plates of radius $R$ is being charged by a steady current $I_c$. At a radial distance $r < R$ from the central axis between the plates, the displacement current enclosed within radius $r$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$I_c \\left(\\frac{r^2}{R^2}\\right)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Displacement current density is uniform: $J_d = \\frac{I_c}{\\pi R^2}$. The displacement current enclosed by a circular loop of radius $r$ is $I_d(r) = J_d (\\pi r^2) = I_c \\left(\\frac{r^2}{R^2}\\right)$."
+      },
+      {
+        "id": "B",
+        "text": "$I_c \\left(\\frac{r}{R}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Radius Scaling Fallacy",
+        "mistakeAnalysis": "Aspirants assume displacement current scales with perimeter/radius ($r/R$) instead of circular cross-sectional area ($r^2/R^2$)."
+      },
+      {
+        "id": "C",
+        "text": "$I_c$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Total Current Fallacy",
+        "mistakeAnalysis": "Aspirants assume the entire displacement current $I_c$ passes through any sub-radius $r < R$."
+      },
+      {
+        "id": "D",
+        "text": "Zero",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cavity Displacement Current Myth",
+        "mistakeAnalysis": "Aspirants assume displacement current is zero in empty space between capacitor plates."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Between the circular capacitor plates of area $A = \\pi R^2$, the electric field is assumed uniform: $E = \\frac{Q}{\\varepsilon_0 \\pi R^2}$.\n2. The electric flux passing through a concentric circular area of radius $r \\le R$ is:\n$$\\Phi_E(r) = E (\\pi r^2) = \\left( \\frac{Q}{\\varepsilon_0 \\pi R^2} \\right) (\\pi r^2) = \\frac{Q}{\\varepsilon_0} \\left( \\frac{r^2}{R^2} \\right)$$\n3. By Maxwell's definition, the displacement current enclosed within radius $r$ is:\n$$I_d(r) = \\varepsilon_0 \\frac{d\\Phi_E}{dt} = \\varepsilon_0 \\left[ \\frac{1}{\\varepsilon_0} \\frac{dQ}{dt} \\left(\\frac{r^2}{R^2}\\right) \\right] = \\frac{dQ}{dt} \\left(\\frac{r^2}{R^2}\\right)$$\n4. Since the conduction current is $I_c = \\frac{dQ}{dt}$:\n$$I_d(r) = I_c \\left(\\frac{r^2}{R^2}\\right)$$"
+  },
+  {
+    "questionNumber": 20,
+    "chapter": "Electromagnetic Waves",
+    "topic": "Poynting Vector and Radiation Intensity",
+    "questionText": "A plane electromagnetic wave traveling in vacuum has an electric field amplitude $E_0 = 90.0\\text{ V m}^{-1}$. The average intensity $I_{\\text{avg}}$ (magnitude of time-averaged Poynting vector) of this wave is:\n(Given: $\\varepsilon_0 = 8.85 \\times 10^{-12}\\text{ C}^2\\text{ N}^{-1}\\text{ m}^{-2}$, $c = 3.0 \\times 10^8\\text{ m s}^{-1}$)",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$10.75\\text{ W m}^{-2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $I_{\\text{avg}} = \\frac{1}{2} c \\varepsilon_0 E_0^2 = 0.5 \\times (3.0 \\times 10^8) \\times (8.85 \\times 10^{-12}) \\times (90)^2 = 1.3275 \\times 10^{-3} \\times 8100 = 10.75\\text{ W m}^{-2}$."
+      },
+      {
+        "id": "B",
+        "text": "$21.50\\text{ W m}^{-2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Missing Factor of 1/2 in Average Intensity",
+        "mistakeAnalysis": "Aspirants evaluate peak instantaneous intensity $c \\varepsilon_0 E_0^2 = 21.50\\text{ W m}^{-2}$, forgetting the factor of $1/2$ from time averaging of $\\sin^2(\\omega t)$."
+      },
+      {
+        "id": "C",
+        "text": "$5.38\\text{ W m}^{-2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Extra Halving Step",
+        "mistakeAnalysis": "Aspirants divide the average intensity by an extra factor of 2."
+      },
+      {
+        "id": "D",
+        "text": "$1.20\\text{ W m}^{-2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants evaluate without squaring the electric field amplitude."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The average intensity of an electromagnetic wave (power transmitted per unit cross-sectional area) is:\n$$I_{\\text{avg}} = u_{\\text{avg}} c = \\left( \\frac{1}{2} \\varepsilon_0 E_0^2 \\right) c = \\frac{1}{2} c \\varepsilon_0 E_0^2$$\nSubstitute $c = 3.0 \\times 10^8\\text{ m s}^{-1}$, $\\varepsilon_0 = 8.85 \\times 10^{-12}\\text{ C}^2\\text{ N}^{-1}\\text{ m}^{-2}$, and $E_0 = 90.0\\text{ V m}^{-1}$:\n$$E_0^2 = (90.0)^2 = 8100\\text{ V}^2\\text{ m}^{-2}$$\n$$I_{\\text{avg}} = \\frac{1}{2} \\times (3.0 \\times 10^8\\text{ m s}^{-1}) \\times (8.85 \\times 10^{-12}\\text{ C}^2\\text{ N}^{-1}\\text{ m}^{-2}) \\times 8100$$\n$$I_{\\text{avg}} = 0.5 \\times 2.655 \\times 10^{-3} \\times 8100 = 1.3275 \\times 10^{-3} \\times 8100 \\approx 10.75\\text{ W m}^{-2}$$"
+  },
+  {
+    "questionNumber": 21,
+    "chapter": "Ray Optics and Optical Instruments",
+    "topic": "Power and Focal Length of Thin Lenses in Contact",
+    "questionText": "A thin convex lens of focal length $f_1 = +20.0\\text{ cm}$ is placed in coaxial contact with a thin concave lens of focal length $f_2 = -30.0\\text{ cm}$. The equivalent focal length $F$ and the optical power $P$ of this combination are:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$F = +60.0\\text{ cm}$ and $P = +1.67\\text{ D}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P_1 = +100/20 = +5.0\\text{ D}$, $P_2 = -100/30 = -3.33\\text{ D}$. Equivalent power $P = 5.0 - 3.33 = +1.67\\text{ D}$. Equivalent focal length $F = 100 / P = +60.0\\text{ cm}$."
+      },
+      {
+        "id": "B",
+        "text": "$F = -60.0\\text{ cm}$ and $P = -1.67\\text{ D}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Focal Length Sign Inversion",
+        "mistakeAnalysis": "Aspirants assign the negative sign of the weaker concave lens to the entire combination, ignoring that the converging lens has greater optical power ($5.0\\text{ D} > 3.33\\text{ D}$)."
+      },
+      {
+        "id": "C",
+        "text": "$F = +12.0\\text{ cm}$ and $P = +8.33\\text{ D}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Adding Absolute Powers (Neglecting Concave Sign)",
+        "mistakeAnalysis": "Aspirants add powers directly without signs ($5.0 + 3.33 = 8.33\\text{ D} \\implies F = 12.0\\text{ cm}$)."
+      },
+      {
+        "id": "D",
+        "text": "$F = +50.0\\text{ cm}$ and $P = +2.0\\text{ D}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Focal Length Addition Error",
+        "mistakeAnalysis": "Aspirants add focal lengths algebraically ($20 + 30 = 50\\text{ cm}$)."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For two thin lenses in contact:\n$$\\frac{1}{F} = \\frac{1}{f_1} + \\frac{1}{f_2}$$\nGiven $f_1 = +20.0\\text{ cm}$ and $f_2 = -30.0\\text{ cm}$:\n$$\\frac{1}{F} = \\frac{1}{20.0} + \\left(-\\frac{1}{30.0}\\right) = \\frac{3 - 2}{60.0} = \\frac{1}{60.0}\\text{ cm}^{-1}$$\n$$F = +60.0\\text{ cm} = +0.60\\text{ m}$$\nEquivalent optical power:\n$$P = \\frac{1}{F\\text{ (in meters)}} = \\frac{1}{+0.60\\text{ m}} = +1.67\\text{ D}$$\n(Since $F > 0$, the combination behaves as a converging lens)."
+  },
+  {
+    "questionNumber": 22,
+    "chapter": "Ray Optics and Optical Instruments",
+    "topic": "Apparent Depth of Multiple Immiscible Liquid Layers",
+    "questionText": "A glass tank is filled with two immiscible transparent liquids: an upper layer of water (thickness $d_1 = 8.0\\text{ cm}$, refractive index $\\mu_1 = \\frac{4}{3}$) and a lower layer of carbon tetrachloride (thickness $d_2 = 6.0\\text{ cm}$, refractive index $\\mu_2 = 1.50$). When viewed normally from above in air, the apparent depth of a coin resting on the bottom of the tank is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$10.0\\text{ cm}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $d' = \\frac{d_1}{\\mu_1} + \\frac{d_2}{\\mu_2} = \\frac{8.0}{4/3} + \\frac{6.0}{1.50} = 6.0 + 4.0 = 10.0\\text{ cm}$."
+      },
+      {
+        "id": "B",
+        "text": "$4.0\\text{ cm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Apparent Shift vs Apparent Depth Slip",
+        "mistakeAnalysis": "Aspirants compute the apparent upward shift $\\Delta y = (d_1 + d_2) - d' = 14.0 - 10.0 = 4.0\\text{ cm}$ and report it instead of apparent depth."
+      },
+      {
+        "id": "C",
+        "text": "$14.0\\text{ cm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Real Depth Reporting Error",
+        "mistakeAnalysis": "Aspirants add actual thicknesses ($8 + 6 = 14\\text{ cm}$), neglecting refraction."
+      },
+      {
+        "id": "D",
+        "text": "$9.33\\text{ cm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Average Refractive Index Approximation",
+        "mistakeAnalysis": "Aspirants divide total thickness $14\\text{ cm}$ by the average refractive index."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For an object viewed normally through multiple immiscible liquid media of thicknesses $d_i$ and refractive indices $\\mu_i$:\n$$d' = \\sum_{i} \\frac{d_i}{\\mu_i} = \\frac{d_1}{\\mu_1} + \\frac{d_2}{\\mu_2}$$\nSubstitute $d_1 = 8.0\\text{ cm}$, $\\mu_1 = \\frac{4}{3}$, $d_2 = 6.0\\text{ cm}$, and $\\mu_2 = 1.50 = \\frac{3}{2}$:\n$$d' = \\frac{8.0}{4/3} + \\frac{6.0}{1.50} = (8.0 \\times 0.75) + 4.0 = 6.0\\text{ cm} + 4.0\\text{ cm} = 10.0\\text{ cm}$$"
+  },
+  {
+    "questionNumber": 23,
+    "chapter": "Ray Optics and Optical Instruments",
+    "topic": "Magnifying Power of a Compound Microscope",
+    "questionText": "A compound microscope has an objective lens of focal length $f_o = 2.0\\text{ cm}$ and an eyepiece of focal length $f_e = 5.0\\text{ cm}$. An object is placed at a distance of $u_o = 2.5\\text{ cm}$ in front of the objective. If the final virtual image is formed at the near point ($D = 25.0\\text{ cm}$), the total magnifying power of the microscope is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$24$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $1/v_o = 1/2.0 - 1/2.5 = 0.5 - 0.4 = 0.1 \\implies v_o = +10\\text{ cm}$. $m_o = v_o/u_o = 10/2.5 = 4$. $m_e = 1 + D/f_e = 1 + 25/5 = 6$. Total magnification $m = m_o \\times m_e = 4 \\times 6 = 24$."
+      },
+      {
+        "id": "B",
+        "text": "$20$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Normal Adjustment (Infinity) Formula Slip",
+        "mistakeAnalysis": "Aspirants use $m_e = D/f_e = 5$ (viewing at infinity), computing $4 \\times 5 = 20$."
+      },
+      {
+        "id": "C",
+        "text": "$10$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Adding Lens Magnifications",
+        "mistakeAnalysis": "Aspirants add individual magnifications ($4 + 6 = 10$) instead of multiplying them."
+      },
+      {
+        "id": "D",
+        "text": "$48$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Double Magnification Error",
+        "mistakeAnalysis": "Aspirants multiply by an extra factor of 2."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. For the objective lens:\n$$\\frac{1}{v_o} - \\frac{1}{u_o} = \\frac{1}{f_o}$$\nGiven $f_o = +2.0\\text{ cm}$ and $u_o = -2.5\\text{ cm}$:\n$$\\frac{1}{v_o} - \\frac{1}{-2.5} = \\frac{1}{2.0} \\implies \\frac{1}{v_o} + \\frac{2}{5} = \\frac{1}{2}$$\n$$\\frac{1}{v_o} = \\frac{1}{2} - \\frac{2}{5} = \\frac{5 - 4}{10} = \\frac{1}{10} \\implies v_o = +10.0\\text{ cm}$$\nLinear magnification of objective:\n$$m_o = \\left| \\frac{v_o}{u_o} \\right| = \\frac{10.0\\text{ cm}}{2.5\\text{ cm}} = 4$$\n2. For the eyepiece, with image formed at near point ($D = 25.0\\text{ cm}$):\n$$m_e = 1 + \\frac{D}{f_e} = 1 + \\frac{25.0\\text{ cm}}{5.0\\text{ cm}} = 1 + 5 = 6$$\n3. Total magnifying power:\n$$m = m_o \\times m_e = 4 \\times 6 = 24$$"
+  },
+  {
+    "questionNumber": 24,
+    "chapter": "Ray Optics and Optical Instruments",
+    "topic": "Total Internal Reflection and Critical Angle",
+    "questionText": "An optical light ray propagating inside a dense glass medium of refractive index $\\mu = \\sqrt{2}$ approaches a planar interface bordering air. The critical angle for total internal reflection at this boundary is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$45^\\circ$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\sin i_c = \\frac{1}{\\mu} = \\frac{1}{\\sqrt{2}} \\implies i_c = 45^\\circ$."
+      },
+      {
+        "id": "B",
+        "text": "$30^\\circ$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Refractive Index Confusion ($\\,\\mu = 2$)",
+        "mistakeAnalysis": "Aspirants confuse $\\mu = \\sqrt{2}$ with $\\mu = 2.0$ (which gives $\\sin i_c = 0.5 \\implies i_c = 30^\\circ$)."
+      },
+      {
+        "id": "C",
+        "text": "$60^\\circ$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverting Sine Function",
+        "mistakeAnalysis": "Aspirants confuse $\\sin 45^\\circ$ with $\\cos 30^\\circ$ or evaluate Brewster's angle instead."
+      },
+      {
+        "id": "D",
+        "text": "$90^\\circ$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Refraction Angle Confusion",
+        "mistakeAnalysis": "Aspirants select the angle of refraction ($r = 90^\\circ$) instead of the critical angle of incidence."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By Snell's law, when light travels from a medium of refractive index $\\mu$ into air ($n = 1.0$), the critical angle $i_c$ is the incidence angle at which the refracted angle is $90^\\circ$:\n$$\\mu \\sin i_c = 1.0 \\sin(90^\\circ) = 1.0$$\n$$\\sin i_c = \\frac{1}{\\mu}$$\nSubstitute $\\mu = \\sqrt{2}$:\n$$\\sin i_c = \\frac{1}{\\sqrt{2}} \\implies i_c = 45^\\circ$$"
+  },
+  {
+    "questionNumber": 25,
+    "chapter": "Wave Optics",
+    "topic": "Shift of Interference Fringes by a Thin Dielectric Plate",
+    "questionText": "In a Young's double-slit experiment illuminated with monochromatic light of wavelength $\\lambda = 500\\text{ nm}$, a thin transparent mica sheet of thickness $t = 2.0\\,\\mu\\text{m}$ and refractive index $\\mu = 1.50$ is placed in front of one of the slits. The number of fringes by which the central interference pattern shifts is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$2$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Additional path difference is $\\Delta x = (\\mu - 1)t = (1.50 - 1)(2.0 \\times 10^{-6}\\text{ m}) = 1.0 \\times 10^{-6}\\text{ m} = 1000\\text{ nm}$. Number of fringes shifted is $n = \\frac{\\Delta x}{\\lambda} = \\frac{1000\\text{ nm}}{500\\text{ nm}} = 2$."
+      },
+      {
+        "id": "B",
+        "text": "$4$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Omitting $(\\mu - 1)$ Subtraction",
+        "mistakeAnalysis": "Aspirants use $\\mu t$ instead of $(\\mu - 1)t$ for the extra path difference: $\\frac{1.5 \\times 2000}{500} = 6$ or make an arithmetic slip."
+      },
+      {
+        "id": "C",
+        "text": "$1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Wavelength Assumption",
+        "mistakeAnalysis": "Aspirants assume introducing a thin plate shifts the pattern by exactly one fringe."
+      },
+      {
+        "id": "D",
+        "text": "$5$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Micron Ratio Trap",
+        "mistakeAnalysis": "Aspirants divide thickness directly by $0.5$ without multiplying by $(\\mu - 1)$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. When a transparent sheet of thickness $t$ and refractive index $\\mu$ is placed across one slit, it introduces an optical path difference:\n$$\\Delta x = (\\mu - 1)t$$\nGiven $t = 2.0\\,\\mu\\text{m} = 2.0 \\times 10^{-6}\\text{ m}$ and $\\mu = 1.50$:\n$$\\Delta x = (1.50 - 1) \\times (2.0 \\times 10^{-6}\\text{ m}) = 0.50 \\times 2.0 \\times 10^{-6}\\text{ m} = 1.0 \\times 10^{-6}\\text{ m} = 1000\\text{ nm}$$\n2. The number of fringes $n$ by which the pattern shifts across the screen is:\n$$n = \\frac{\\Delta x}{\\lambda}$$\nSubstitute $\\lambda = 500\\text{ nm}$:\n$$n = \\frac{1000\\text{ nm}}{500\\text{ nm}} = 2$$"
+  },
+  {
+    "questionNumber": 26,
+    "chapter": "Wave Optics",
+    "topic": "Ratio of Maximum to Minimum Intensity in Interference",
+    "questionText": "In a Young's double-slit experiment, the width ratio of the two slits is $w_1 : w_2 = 16 : 1$. Assuming that light intensity is directly proportional to slit width, the ratio of maximum to minimum intensity ($I_{\\max} : I_{\\min}$) in the resulting interference pattern is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$25 : 9$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $I_1 / I_2 = 16/1 \\implies a_1 / a_2 = \\sqrt{16}/1 = 4/1$. $I_{\\max} = (a_1 + a_2)^2 = (4 + 1)^2 = 25$. $I_{\\min} = (a_1 - a_2)^2 = (4 - 1)^2 = 9$. Ratio is $25 : 9$."
+      },
+      {
+        "id": "B",
+        "text": "$16 : 1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Intensity Ratio Fallacy",
+        "mistakeAnalysis": "Aspirants assume $I_{\\max} / I_{\\min} = I_1 / I_2 = 16 : 1$."
+      },
+      {
+        "id": "C",
+        "text": "$17 : 15$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Sum/Difference without Amplitudes",
+        "mistakeAnalysis": "Aspirants calculate $(I_1 + I_2)/(I_1 - I_2) = (16 + 1)/(16 - 1) = 17/15$, forgetting that coherent waves interfere in amplitudes."
+      },
+      {
+        "id": "D",
+        "text": "$5 : 3$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Forgetting to Square Amplitudes",
+        "mistakeAnalysis": "Aspirants find the amplitude ratio $(4 + 1)/(4 - 1) = 5/3$ and forget to square it to obtain the intensity ratio."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Intensity is directly proportional to slit width:\n$$\\frac{I_1}{I_2} = \\frac{w_1}{w_2} = \\frac{16}{1}$$\n2. Wave amplitude is proportional to the square root of intensity:\n$$\\frac{a_1}{a_2} = \\sqrt{\\frac{I_1}{I_2}} = \\sqrt{\\frac{16}{1}} = \\frac{4}{1} \\implies a_1 = 4a_2$$\n3. The maximum and minimum intensities in interference are:\n$$I_{\\max} = (a_1 + a_2)^2 = (4a_2 + a_2)^2 = (5a_2)^2 = 25a_2^2$$\n$$I_{\\min} = (a_1 - a_2)^2 = (4a_2 - a_2)^2 = (3a_2)^2 = 9a_2^2$$\n4. Taking their ratio:\n$$\\frac{I_{\\max}}{I_{\\min}} = \\frac{25a_2^2}{9a_2^2} = \\frac{25}{9} = 25 : 9$$"
+  },
+  {
+    "questionNumber": 27,
+    "chapter": "Wave Optics",
+    "topic": "Polarization and Brewster's Law",
+    "questionText": "A beam of unpolarized light traveling in air strikes the surface of water (refractive index $\\mu = 1.33 = \\frac{4}{3}$). At what angle of incidence $i_p$ will the reflected beam be completely plane-polarized?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\tan^{-1}\\left(\\frac{4}{3}\\right)$ (or $\\approx 53.1^\\circ$)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. By Brewster's law, $\\tan i_p = \\mu = 4/3 \\implies i_p = \\tan^{-1}(4/3) \\approx 53.1^\\circ$."
+      },
+      {
+        "id": "B",
+        "text": "$\\sin^{-1}\\left(\\frac{3}{4}\\right)$ (or $\\approx 48.6^\\circ$)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Critical Angle vs Brewster Angle Confusion",
+        "mistakeAnalysis": "Aspirants evaluate the critical angle for total internal reflection ($\\sin i_c = 1/\\mu = 3/4$) instead of Brewster's angle ($\\tan i_p = \\mu$)."
+      },
+      {
+        "id": "C",
+        "text": "$\\tan^{-1}\\left(\\frac{3}{4}\\right)$ (or $\\approx 36.9^\\circ$)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverted Refractive Index Ratio",
+        "mistakeAnalysis": "Aspirants evaluate $\\tan i_p = 1/\\mu = 3/4$ instead of $\\mu$."
+      },
+      {
+        "id": "D",
+        "text": "$45.0^\\circ$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Symmetric Reflection Guess",
+        "mistakeAnalysis": "Aspirants assume polarization requires equal incidence and reflection angle of $45^\\circ$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By Brewster's Law of polarization by reflection:\n$$\\tan i_p = \\mu$$\nwhere $i_p$ is the polarizing (Brewster's) angle and $\\mu$ is the refractive index of the reflecting medium relative to air.\nGiven $\\mu = \\frac{4}{3}$:\n$$i_p = \\tan^{-1}\\left(\\frac{4}{3}\\right) \\approx 53.1^\\circ$$"
+  },
+  {
+    "questionNumber": 28,
+    "chapter": "Dual Nature of Radiation and Matter",
+    "topic": "Slope and Intercepts of Photoelectric Stopping Potential Graph",
+    "questionText": "In a photoelectric experiment, a graph of stopping potential $V_0$ versus the frequency $\\nu$ of incident radiation is plotted. The SLOPE of this linear graph is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{h}{e}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. From $e V_0 = h\\nu - \\Phi_0 \\implies V_0 = \\left(\\frac{h}{e}\\right)\\nu - \\frac{\\Phi_0}{e}$, the slope $\\frac{dV_0}{d\\nu} = \\frac{h}{e}$."
+      },
+      {
+        "id": "B",
+        "text": "$h$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Kinetic Energy Graph Confusion",
+        "mistakeAnalysis": "Aspirants confuse the stopping potential plot ($V_0$ vs $\\nu$) with the maximum kinetic energy plot ($K_{\\max}$ vs $\\nu$), where the slope is Planck's constant $h$."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{e}{h}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverted Slope Ratio",
+        "mistakeAnalysis": "Aspirants invert the axes, evaluating the slope of $\\nu$ versus $V_0$."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{\\Phi_0}{e}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Intercept vs Slope Confusion",
+        "mistakeAnalysis": "Aspirants confuse the slope of the line with the magnitude of the potential-axis intercept ($-\\Phi_0/e$)."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Einstein's photoelectric equation is:\n$$K_{\\max} = e V_0 = h \\nu - \\Phi_0$$\nDividing through by the elementary charge $e$:\n$$V_0 = \\left(\\frac{h}{e}\\right) \\nu - \\frac{\\Phi_0}{e}$$\nComparing this with the slope-intercept equation of a straight line $y = m x + c$:\n- Vertical coordinate: $y = V_0$\n- Horizontal coordinate: $x = \\nu$\n- Slope: $m = \\frac{h}{e}$\n- Vertical intercept: $c = -\\frac{\\Phi_0}{e}$\nHence, the slope is strictly equal to $\\frac{h}{e}$."
+  },
+  {
+    "questionNumber": 29,
+    "chapter": "Dual Nature of Radiation and Matter",
+    "topic": "Ratio of de Broglie Wavelengths of Proton and Deuteron",
+    "questionText": "A proton and a deuteron are accelerated from rest across the SAME electrostatic potential difference $V$. The ratio of their de Broglie wavelengths $\\frac{\\lambda_p}{\\lambda_d}$ is:\n(Assume mass of deuteron $m_d = 2 m_p$ and charge $q_d = q_p$)",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\sqrt{2} : 1$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\lambda = \\frac{h}{\\sqrt{2 m q V}} \\implies \\frac{\\lambda_p}{\\lambda_d} = \\sqrt{\\frac{m_d q_d}{m_p q_p}} = \\sqrt{\\frac{2m_p \\times q_p}{m_p \\times q_p}} = \\sqrt{2} : 1$."
+      },
+      {
+        "id": "B",
+        "text": "$1 : \\sqrt{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverted Wavelength Ratio",
+        "mistakeAnalysis": "Aspirants calculate $\\lambda_d / \\lambda_p$ instead of $\\lambda_p / \\lambda_d$."
+      },
+      {
+        "id": "C",
+        "text": "$2 : 1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Missing Square Root Step",
+        "mistakeAnalysis": "Aspirants assume wavelength scales linearly with mass ratio ($2:1$), forgetting that momentum relates to potential through $\\sqrt{m}$."
+      },
+      {
+        "id": "D",
+        "text": "$1 : 2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Ratio Inversion",
+        "mistakeAnalysis": "Aspirants invert the linear mass ratio."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The de Broglie wavelength of a charged particle accelerated from rest through potential $V$ is:\n$$\\lambda = \\frac{h}{\\sqrt{2 m q V}}$$\nFor constant potential $V$:\n$$\\lambda \\propto \\frac{1}{\\sqrt{m q}}$$\nTaking the ratio for a proton ($m_p, q_p$) and a deuteron ($m_d = 2m_p, q_d = q_p$):\n$$\\frac{\\lambda_p}{\\lambda_d} = \\sqrt{\\frac{m_d q_d}{m_p q_p}} = \\sqrt{\\frac{2 m_p \\times q_p}{m_p \\times q_p}} = \\sqrt{2} = \\sqrt{2} : 1$$"
+  },
+  {
+    "questionNumber": 30,
+    "chapter": "Dual Nature of Radiation and Matter",
+    "topic": "Photoelectric Threshold Wavelength Calculation",
+    "questionText": "The work function of a photosensitive metallic cesium surface is $\\Phi_0 = 2.0\\text{ eV}$. The threshold wavelength $\\lambda_0$ for photoelectric emission from cesium is approximately:\n(Given: $h c \\approx 1240\\text{ eV nm}$)",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$620\\text{ nm}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\lambda_0 = \\frac{hc}{\\Phi_0} = \\frac{1240\\text{ eV nm}}{2.0\\text{ eV}} = 620\\text{ nm}$."
+      },
+      {
+        "id": "B",
+        "text": "$310\\text{ nm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factor of 2 Division Error",
+        "mistakeAnalysis": "Aspirants divide by $4.0\\text{ eV}$ instead of $2.0\\text{ eV}$, halving the threshold wavelength."
+      },
+      {
+        "id": "C",
+        "text": "$1240\\text{ nm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Work Function Unity Assumption",
+        "mistakeAnalysis": "Aspirants divide by $1.0\\text{ eV}$ instead of $2.0\\text{ eV}$."
+      },
+      {
+        "id": "D",
+        "text": "$2480\\text{ nm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Multiplying by Work Function",
+        "mistakeAnalysis": "Aspirants multiply $1240$ by $2.0$ instead of dividing."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The threshold wavelength $\\lambda_0$ is related to the work function $\\Phi_0$ by:\n$$\\Phi_0 = \\frac{h c}{\\lambda_0} \\implies \\lambda_0 = \\frac{h c}{\\Phi_0}$$\nSubstitute $h c \\approx 1240\\text{ eV nm}$ and $\\Phi_0 = 2.0\\text{ eV}$:\n$$\\lambda_0 = \\frac{1240\\text{ eV nm}}{2.0\\text{ eV}} = 620\\text{ nm}$$\n(Radiation with $\\lambda > 620\\text{ nm}$ cannot cause electron ejection from cesium)."
+  },
+  {
+    "questionNumber": 31,
+    "chapter": "Atoms",
+    "topic": "Orbital Frequency Scaling in Bohr Atom",
+    "questionText": "In a hydrogen atom, the orbital revolution frequency ($f_n$) of an electron revolving in a stable Bohr orbit is related to the principal quantum number $n$ by:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$f_n \\propto \\frac{1}{n^3}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $v_n \\propto 1/n$ and $r_n \\propto n^2$. Period $T_n = \\frac{2\\pi r_n}{v_n} \\propto \\frac{n^2}{1/n} = n^3$. Orbital frequency $f_n = 1/T_n \\propto 1/n^3$."
+      },
+      {
+        "id": "B",
+        "text": "$f_n \\propto \\frac{1}{n^2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Orbital Energy Scaling Confusion",
+        "mistakeAnalysis": "Aspirants confuse orbital revolution frequency with orbital energy levels ($E_n \\propto 1/n^2$)."
+      },
+      {
+        "id": "C",
+        "text": "$f_n \\propto \\frac{1}{n}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Velocity Scaling Confusion",
+        "mistakeAnalysis": "Aspirants confuse frequency with linear orbital velocity ($v_n \\propto 1/n$)."
+      },
+      {
+        "id": "D",
+        "text": "$f_n \\propto n^3$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Time Period vs Frequency Inversion",
+        "mistakeAnalysis": "Aspirants state the scaling of time period ($T_n \\propto n^3$) instead of frequency."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "From Bohr's atomic postulates:\n1. Orbital velocity: $v_n = \\frac{e^2}{2\\varepsilon_0 n h} \\implies v_n \\propto \\frac{1}{n}$\n2. Orbital radius: $r_n = \\frac{n^2 h^2 \\varepsilon_0}{\\pi m e^2} \\implies r_n \\propto n^2$\n3. Time period for one complete revolution:\n$$T_n = \\frac{2\\pi r_n}{v_n} \\propto \\frac{n^2}{1/n} = n^3$$\n4. Orbital frequency is the reciprocal of the time period:\n$$f_n = \\frac{1}{T_n} \\propto \\frac{1}{n^3}$$"
+  },
+  {
+    "questionNumber": 32,
+    "chapter": "Atoms",
+    "topic": "Wavelength Ratio of Series Limits in Hydrogen Spectrum",
+    "questionText": "The ratio of the series limit wavelength of the Lyman series ($\\lambda_{L,\\min}$) to that of the Balmer series ($\\lambda_{B,\\min}$) in the atomic hydrogen spectrum is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$1 : 4$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Lyman limit ($n_1 = 1, n_2 = \\infty$): $\\lambda_L = 1/R$. Balmer limit ($n_1 = 2, n_2 = \\infty$): $\\lambda_B = 4/R$. Ratio $\\frac{\\lambda_L}{\\lambda_B} = \\frac{1/R}{4/R} = \\frac{1}{4} = 1 : 4$."
+      },
+      {
+        "id": "B",
+        "text": "$4 : 1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverted Wavelength Ratio",
+        "mistakeAnalysis": "Aspirants calculate $\\lambda_B / \\lambda_L$ instead of $\\lambda_L / \\lambda_B$."
+      },
+      {
+        "id": "C",
+        "text": "$1 : 2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Quantum Number Scaling Error",
+        "mistakeAnalysis": "Aspirants take $n_1 / n_2 = 1/2$ without squaring."
+      },
+      {
+        "id": "D",
+        "text": "$1 : 9$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Paschen Series Limit Confusion",
+        "mistakeAnalysis": "Aspirants compare Lyman with the Paschen limit ($n = 3$, $\\lambda_P = 9/R$)."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By the Rydberg formula for hydrogen: $\\frac{1}{\\lambda} = R \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)$.\n1. Lyman series limit ($n_1 = 1, n_2 = \\infty$):\n$$\\frac{1}{\\lambda_{L,\\min}} = R \\left(\\frac{1}{1^2} - 0\\right) = R \\implies \\lambda_{L,\\min} = \\frac{1}{R}$$\n2. Balmer series limit ($n_1 = 2, n_2 = \\infty$):\n$$\\frac{1}{\\lambda_{B,\\min}} = R \\left(\\frac{1}{2^2} - 0\\right) = \\frac{R}{4} \\implies \\lambda_{B,\\min} = \\frac{4}{R}$$\n3. Taking their ratio:\n$$\\frac{\\lambda_{L,\\min}}{\\lambda_{B,\\min}} = \\frac{1/R}{4/R} = \\frac{1}{4} = 1 : 4$$"
+  },
+  {
+    "questionNumber": 33,
+    "chapter": "Atoms",
+    "topic": "Ionization Energy from the Second Excited State",
+    "questionText": "Given that the ground state ionization energy of hydrogen is $13.6\\text{ eV}$, what is the minimum energy required to completely remove an electron from the SECOND EXCITED STATE ($n = 3$) of a hydrogen atom?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$1.51\\text{ eV}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Ground state is $n = 1$; second excited state is $n = 3$. Energy is $E_3 = -13.6 / 3^2 = -13.6 / 9 = -1.51\\text{ eV}$. To ionize to infinity ($E_\\infty = 0$) requires $\\Delta E = 0 - (-1.51\\text{ eV}) = +1.51\\text{ eV}$."
+      },
+      {
+        "id": "B",
+        "text": "$3.40\\text{ eV}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "First vs Second Excited State Confusion",
+        "mistakeAnalysis": "Aspirants evaluate for the first excited state ($n = 2$, $E_2 = -3.40\\text{ eV}$)."
+      },
+      {
+        "id": "C",
+        "text": "$12.09\\text{ eV}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Excitation Energy vs Ionization Energy Confusion",
+        "mistakeAnalysis": "Aspirants calculate the excitation energy from ground state to $n = 3$ ($E_3 - E_1 = -1.51 - (-13.6) = 12.09\\text{ eV}$) instead of the ionization energy from $n = 3$."
+      },
+      {
+        "id": "D",
+        "text": "$0.85\\text{ eV}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Third Excited State ($n = 4$) Slip",
+        "mistakeAnalysis": "Aspirants evaluate for $n = 4$ ($13.6 / 16 = 0.85\\text{ eV}$)."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. In Bohr's model, energy levels are indexed as follows:\n- Ground state: $n = 1$\n- First excited state: $n = 2$\n- Second excited state: $n = 3$\n2. The total energy in the second excited state ($n = 3$) is:\n$$E_3 = -\\frac{13.6\\text{ eV}}{3^2} = -\\frac{13.6\\text{ eV}}{9} \\approx -1.51\\text{ eV}$$\n3. Ionization energy from state $n$ is the energy required to transfer the electron to $n = \\infty$ (where $E_\\infty = 0$):\n$$\\text{Ionization Energy} = E_\\infty - E_3 = 0 - (-1.51\\text{ eV}) = +1.51\\text{ eV}$$"
+  },
+  {
+    "questionNumber": 34,
+    "chapter": "Nuclei",
+    "topic": "Nuclear Radii and Volume Scaling",
+    "questionText": "The nuclear radius of ${}^{64}_{30}\\text{Zn}$ is measured to be $R_1 = 4.8\\text{ fm}$. The nuclear radius $R_2$ of an atomic nucleus of mass number $A = 125$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$6.0\\text{ fm}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $R = R_0 A^{1/3} \\implies \\frac{R_2}{R_1} = \\left(\\frac{125}{64}\\right)^{1/3} = \\frac{5}{4} = 1.25$. Thus, $R_2 = 4.8 \\times 1.25 = 6.0\\text{ fm}$."
+      },
+      {
+        "id": "B",
+        "text": "$9.38\\text{ fm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Mass Number Scaling Fallacy",
+        "mistakeAnalysis": "Aspirants scale radius linearly with mass number ($4.8 \\times 125/64 \\approx 9.38\\text{ fm}$)."
+      },
+      {
+        "id": "C",
+        "text": "$3.84\\text{ fm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverted Mass Ratio Slip",
+        "mistakeAnalysis": "Aspirants multiply by $4/5$ instead of $5/4$."
+      },
+      {
+        "id": "D",
+        "text": "$7.5\\text{ fm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants make a calculation error."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Nuclear radius is proportional to the cube root of mass number $A$:\n$$R = R_0 A^{1/3}$$\nTaking the ratio for $A_2 = 125$ and $A_1 = 64$:\n$$\\frac{R_2}{R_1} = \\left( \\frac{A_2}{A_1} \\right)^{1/3} = \\left( \\frac{125}{64} \\right)^{1/3} = \\frac{5}{4}$$\nSubstitute $R_1 = 4.8\\text{ fm}$:\n$$R_2 = 4.8\\text{ fm} \\times \\frac{5}{4} = 1.2 \\times 5 = 6.0\\text{ fm}$$"
+  },
+  {
+    "questionNumber": 35,
+    "chapter": "Nuclei",
+    "topic": "Binding Energy Released in Nuclear Fusion",
+    "questionText": "Two deuteron nuclei (${}^{2}_{1}\\text{H}$) undergo nuclear fusion to form a helium nucleus (${}^{4}_{2}\\text{He}$). If the binding energy per nucleon of ${}^{2}_{1}\\text{H}$ is $1.10\\text{ MeV}$ and that of ${}^{4}_{2}\\text{He}$ is $7.10\\text{ MeV}$, the total energy released in the fusion reaction is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$24.0\\text{ MeV}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Initial $BE = 2 \\times (2 \\times 1.10) = 4.40\\text{ MeV}$. Final $BE = 4 \\times 7.10 = 28.40\\text{ MeV}$. Energy released $Q = 28.40 - 4.40 = 24.0\\text{ MeV}$."
+      },
+      {
+        "id": "B",
+        "text": "$6.0\\text{ MeV}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Difference Per Nucleon Slip",
+        "mistakeAnalysis": "Aspirants subtract binding energies per nucleon directly ($7.10 - 1.10 = 6.0\\text{ MeV}$) without multiplying by the total number of nucleons (4)."
+      },
+      {
+        "id": "C",
+        "text": "$26.2\\text{ MeV}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Deuteron Subtraction Error",
+        "mistakeAnalysis": "Aspirants subtract the binding energy of only one deuteron ($28.40 - 2.20 = 26.20\\text{ MeV}$)."
+      },
+      {
+        "id": "D",
+        "text": "$32.8\\text{ MeV}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Adding Binding Energies",
+        "mistakeAnalysis": "Aspirants add reactant and product binding energies ($28.4 + 4.4 = 32.8\\text{ MeV}$)."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The nuclear fusion reaction is:\n$${}^{2}_{1}\\text{H} + {}^{2}_{1}\\text{H} \\longrightarrow {}^{4}_{2}\\text{He} + Q$$\n1. Total binding energy of initial reactants (two deuterons, each having $A = 2$ nucleons):\n$$BE_{\\text{initial}} = 2 \\times [2 \\times 1.10\\text{ MeV}] = 2 \\times 2.20\\text{ MeV} = 4.40\\text{ MeV}$$\n2. Total binding energy of product (${}^{4}_{2}\\text{He}$ with $A = 4$ nucleons):\n$$BE_{\\text{final}} = 4 \\times 7.10\\text{ MeV} = 28.40\\text{ MeV}$$\n3. Energy released ($Q$-value):\n$$Q = BE_{\\text{final}} - BE_{\\text{initial}} = 28.40\\text{ MeV} - 4.40\\text{ MeV} = 24.0\\text{ MeV}$$"
+  },
+  {
+    "questionNumber": 36,
+    "chapter": "Nuclei",
+    "topic": "Half-Life and Decay Constant Relationship",
+    "questionText": "The radioactive decay constant of a radioisotope is $\\lambda = 0.0231\\text{ day}^{-1}$. The half-life of this isotope is:\n(Take $\\ln 2 = 0.693$)",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$30.0\\text{ days}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $T_{1/2} = \\frac{\\ln 2}{\\lambda} = \\frac{0.693}{0.0231} = 30.0\\text{ days}$."
+      },
+      {
+        "id": "B",
+        "text": "$43.3\\text{ days}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Mean Lifetime Calculation Error",
+        "mistakeAnalysis": "Aspirants calculate mean lifetime $\\tau = 1/\\lambda = 1/0.0231 \\approx 43.3\\text{ days}$ instead of half-life."
+      },
+      {
+        "id": "C",
+        "text": "$0.016\\text{ days}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Multiplying by $\\ln 2$",
+        "mistakeAnalysis": "Aspirants multiply $\\lambda$ by $\\ln 2$ instead of dividing."
+      },
+      {
+        "id": "D",
+        "text": "$15.0\\text{ days}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Extra Halving Step",
+        "mistakeAnalysis": "Aspirants divide the result by 2."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By the Rutherford-Soddy law of radioactive decay:\n$$T_{1/2} = \\frac{\\ln 2}{\\lambda}$$\nSubstitute $\\ln 2 = 0.693$ and $\\lambda = 0.0231\\text{ day}^{-1}$:\n$$T_{1/2} = \\frac{0.693}{0.0231\\text{ day}^{-1}} = \\frac{693}{23.1} = 30.0\\text{ days}$$"
+  },
+  {
+    "questionNumber": 37,
+    "chapter": "Semiconductor Electronics",
+    "topic": "Energy Band Gap Classification of Solids",
+    "questionText": "Consider the following statements regarding the energy band structure of solids at room temperature:\n(A) In conductors (metals), the conduction band and valence band overlap, meaning the bandgap is zero ($E_g = 0$).\n(B) In insulators, the valence band is separated from the conduction band by a large forbidden gap ($E_g > 3\\text{ eV}$).\n(C) In semiconductors, a small forbidden energy band gap ($E_g < 3\\text{ eV}$) separates the valence and conduction bands.\n(D) Carbon (in the diamond allotrope) has a band gap of $0.7\\text{ eV}$ and behaves as an intrinsic semiconductor at room temperature.\n\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Statements (A), (B), and (C) are accurate. Statement (D) is false because Diamond has a large band gap ($E_g \\approx 5.4\\text{ eV} > 3\\text{ eV}$) and is an insulator. (Germanium has $E_g \\approx 0.7\\text{ eV}$)."
+      },
+      {
+        "id": "B",
+        "text": "(A) and (B) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Semiconductor Gap Definition Doubt",
+        "mistakeAnalysis": "Aspirants doubt statement (C), forgetting that $E_g < 3\\text{ eV}$ is the standard NCERT threshold for semiconductors."
+      },
+      {
+        "id": "C",
+        "text": "(A), (B), (C) and (D)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Diamond-Germanium Bandgap Conflation",
+        "mistakeAnalysis": "Aspirants assign Germanium's bandgap ($0.7\\text{ eV}$) to Diamond, wrongly categorizing diamond as a semiconductor."
+      },
+      {
+        "id": "D",
+        "text": "(B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conductor Overlap Blindspot",
+        "mistakeAnalysis": "Aspirants fail to recognize band overlap in metals."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "From NCERT Class 12 Chapter 'Semiconductor Electronics':\n1. Conductors: Conduction and valence bands overlap ($E_g = 0$), allowing electrons to drift freely under an external potential $\\implies$ (A) is correct.\n2. Insulators: Large forbidden energy gap $E_g > 3\\text{ eV}$; thermal energy at room temperature cannot bridge this gap $\\implies$ (B) is correct.\n3. Semiconductors: Small forbidden band gap $E_g < 3\\text{ eV}$ (e.g., Si has $1.1\\text{ eV}$, Ge has $0.7\\text{ eV}$), permitting moderate thermal excitation $\\implies$ (C) is correct.\n4. Diamond (carbon) has an energy gap of $E_g \\approx 5.4\\text{ eV} \\gg 3\\text{ eV}$, behaving as an electrical insulator $\\implies$ (D) is false.\nThus, statements (A), (B), and (C) only are correct."
+  },
+  {
+    "questionNumber": 38,
+    "chapter": "Semiconductor Electronics",
+    "topic": "Microscopic Conduction in Forward vs Reverse Bias",
+    "questionText": "In a forward-biased p-n junction diode, the primary mechanism of electric current conduction across the depletion region is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Diffusion of majority carriers injected across the reduced potential barrier.",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. In forward bias, the applied voltage lowers the built-in barrier, allowing majority carriers (holes from p-side and electrons from n-side) to diffuse across the junction."
+      },
+      {
+        "id": "B",
+        "text": "Drift of minority carriers driven by an increased built-in electric field.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reverse Bias Mechanism Confusion",
+        "mistakeAnalysis": "Aspirants describe reverse bias, where the barrier widens and current consists solely of minority carrier drift."
+      },
+      {
+        "id": "C",
+        "text": "Dielectric breakdown of covalent bonds throughout the entire semiconductor crystal.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Avalanche Breakdown Misattribution",
+        "mistakeAnalysis": "Aspirants confuse normal forward conduction with high reverse-voltage avalanche breakdown."
+      },
+      {
+        "id": "D",
+        "text": "Thermionic emission of electrons from the metallic contact electrodes.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Vacuum Tube Mechanism Confusion",
+        "mistakeAnalysis": "Aspirants confuse semiconductor conduction with thermionic emission in vacuum tubes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Under forward bias:\n1. The applied forward voltage opposes the built-in potential barrier, reducing the barrier height from $V_0$ to $(V_0 - V)$ and narrowing the depletion layer.\n2. Due to the lowered barrier, energetic majority carriers overcome the junction field: holes diffuse from the p-side to the n-side, and electrons diffuse from the n-side to the p-side.\n3. This massive majority-carrier diffusion constitutes the forward current, which rises exponentially with applied voltage."
+  },
+  {
+    "questionNumber": 39,
+    "chapter": "Semiconductor Electronics",
+    "topic": "Forward Knee Voltage and Series Circuit Current",
+    "questionText": "A silicon p-n junction diode with a forward knee (barrier) voltage drop of $V_B = 0.70\\text{ V}$ is connected in series with an external resistor $R = 200\\,\\Omega$ across a $4.70\\text{ V}$ DC battery in forward bias. The electric current flowing in the circuit is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$20.0\\text{ mA}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Voltage drop across resistor $V_R = V_{\\text{supply}} - V_B = 4.70 - 0.70 = 4.00\\text{ V}$. Current $I = \\frac{V_R}{R} = \\frac{4.00\\text{ V}}{200\\,\\Omega} = 0.020\\text{ A} = 20.0\\text{ mA}$."
+      },
+      {
+        "id": "B",
+        "text": "$23.5\\text{ mA}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Ignoring Forward Barrier Drop",
+        "mistakeAnalysis": "Aspirants treat the diode as ideal with zero forward drop, calculating $I = 4.70 / 200 = 23.5\\text{ mA}$."
+      },
+      {
+        "id": "C",
+        "text": "$3.5\\text{ mA}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Barrier Potential Current Miscalculation",
+        "mistakeAnalysis": "Aspirants divide the barrier drop by resistance ($0.70 / 200 = 3.5\\text{ mA}$)."
+      },
+      {
+        "id": "D",
+        "text": "$27.0\\text{ mA}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Adding Barrier Voltage",
+        "mistakeAnalysis": "Aspirants add the barrier potential ($4.70 + 0.70 = 5.40\\text{ V}$), computing $5.40 / 200 = 27.0\\text{ mA}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By Kirchhoff's voltage law around the single closed loop:\n$$V_{\\text{supply}} - V_B - I R = 0$$\n$$I R = V_{\\text{supply}} - V_B = 4.70\\text{ V} - 0.70\\text{ V} = 4.00\\text{ V}$$\nThe circuit current is:\n$$I = \\frac{4.00\\text{ V}}{200\\,\\Omega} = 0.020\\text{ A} = 20.0\\text{ mA}$$"
+  },
+  {
+    "questionNumber": 40,
+    "chapter": "Current Electricity",
+    "topic": "Stretching Wires and Equivalent Resistance in Parallel",
+    "questionText": "A uniform metallic wire of resistance $R = 8.0\\,\\Omega$ is cut into two equal halves. Each half is then stretched uniformly until its length is doubled without change in volume. The two stretched wires are finally connected in parallel across each other. The equivalent resistance of this parallel combination is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$8.0\\,\\Omega$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Each half has initial resistance $R/2 = 4.0\\,\\Omega$. Stretching to double length ($n = 2$) quadruples resistance: $R' = n^2 (R/2) = 4 \\times 4.0 = 16.0\\,\\Omega$. Two $16.0\\,\\Omega$ resistors in parallel yield $R_{\\text{eq}} = 16.0 / 2 = 8.0\\,\\Omega$."
+      },
+      {
+        "id": "B",
+        "text": "$16.0\\,\\Omega$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Stretched Wire Slip",
+        "mistakeAnalysis": "Aspirants evaluate the resistance of one stretched wire ($16.0\\,\\Omega$) and forget to combine the two wires in parallel."
+      },
+      {
+        "id": "C",
+        "text": "$4.0\\,\\Omega$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Stretching Assumption",
+        "mistakeAnalysis": "Aspirants assume stretching doubles resistance ($4 \\times 2 = 8\\,\\Omega$) rather than quadrupling ($4 \\times 4 = 16\\,\\Omega$), computing $8 / 2 = 4.0\\,\\Omega$."
+      },
+      {
+        "id": "D",
+        "text": "$2.0\\,\\Omega$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Neglecting Stretching Effects",
+        "mistakeAnalysis": "Aspirants place the two unstretched halves in parallel ($4 / 2 = 2.0\\,\\Omega$), ignoring the stretching step."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. When the wire of resistance $R = 8.0\\,\\Omega$ is cut into two equal halves, the resistance of each half is:\n$$R_1 = \\frac{R}{2} = \\frac{8.0\\,\\Omega}{2} = 4.0\\,\\Omega$$\n2. When a wire is stretched to $n$ times its length at constant volume, its cross-sectional area decreases by factor $n$, so resistance increases by $n^2$:\n$$R' = n^2 R_1$$\nHere $n = 2$:\n$$R' = 2^2 \\times 4.0\\,\\Omega = 4 \\times 4.0\\,\\Omega = 16.0\\,\\Omega$$\n3. The two identical stretched wires of resistance $16.0\\,\\Omega$ each are connected in parallel:\n$$R_{\\text{eq}} = \\frac{R'}{2} = \\frac{16.0\\,\\Omega}{2} = 8.0\\,\\Omega$$"
+  },
+  {
+    "questionNumber": 41,
+    "chapter": "Electric Charges and Fields",
+    "topic": "Electric Flux Through a Sphere Enclosing Multiple Charges",
+    "questionText": "An imaginary spherical Gaussian surface encloses three point charges: $q_1 = +8.0\\,\\mu\\text{C}$, $q_2 = -5.0\\,\\mu\\text{C}$, and $q_3 = +6.0\\,\\mu\\text{C}$. A fourth charge $q_4 = +10.0\\,\\mu\\text{C}$ is located outside the sphere. The net electric flux emerging from the spherical surface is:\n(Given: $\\varepsilon_0 = 8.85 \\times 10^{-12}\\text{ C}^2\\text{ N}^{-1}\\text{ m}^{-2}$)",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$1.02 \\times 10^6\\text{ N m}^2\\text{ C}^{-1}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. By Gauss's law, only enclosed charges contribute to net flux: $q_{\\text{enc}} = +8.0 - 5.0 + 6.0 = +9.0\\,\\mu\\text{C} = 9.0 \\times 10^{-6}\\text{ C}$. $\\Phi = \\frac{q_{\\text{enc}}}{\\varepsilon_0} = \\frac{9.0 \\times 10^{-6}}{8.85 \\times 10^{-12}} \\approx 1.017 \\times 10^6\\text{ N m}^2\\text{ C}^{-1}$."
+      },
+      {
+        "id": "B",
+        "text": "$2.15 \\times 10^6\\text{ N m}^2\\text{ C}^{-1}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Including External Charge in Gauss's Law",
+        "mistakeAnalysis": "Aspirants add the external charge $q_4 = 10\\,\\mu\\text{C}$ ($q_{\\text{total}} = 19\\,\\mu\\text{C}$), forgetting that charges outside a closed surface contribute zero net flux."
+      },
+      {
+        "id": "C",
+        "text": "$2.15 \\times 10^5\\text{ N m}^2\\text{ C}^{-1}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scalar Summation without Signs",
+        "mistakeAnalysis": "Aspirants add absolute values of enclosed charges ($8 + 5 + 6 = 19\\,\\mu\\text{C}$) and make a decimal error."
+      },
+      {
+        "id": "D",
+        "text": "Zero",
+        "isCorrect": false,
+        "studentSelectionTrap": "Charge Cancellation Fallacy",
+        "mistakeAnalysis": "Aspirants assume charges cancel out completely."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By Gauss's Law, the total electric flux through any closed surface depends exclusively on the net charge enclosed within that surface:\n$$\\Phi = \\frac{q_{\\text{enclosed}}}{\\varepsilon_0}$$\n1. Calculate net enclosed charge (ignoring the outside charge $q_4$):\n$$q_{\\text{enclosed}} = q_1 + q_2 + q_3 = (+8.0\\,\\mu\\text{C}) + (-5.0\\,\\mu\\text{C}) + (+6.0\\,\\mu\\text{C}) = +9.0\\,\\mu\\text{C} = 9.0 \\times 10^{-6}\\text{ C}$$\n2. Evaluating flux:\n$$\\Phi = \\frac{9.0 \\times 10^{-6}\\text{ C}}{8.85 \\times 10^{-12}\\text{ C}^2\\text{ N}^{-1}\\text{ m}^{-2}} \\approx 1.017 \\times 10^6\\text{ N m}^2\\text{ C}^{-1} \\approx 1.02 \\times 10^6\\text{ N m}^2\\text{ C}^{-1}$$"
+  },
+  {
+    "questionNumber": 42,
+    "chapter": "Moving Charges and Magnetism",
+    "topic": "Magnetic Field at the Center of a Circular Arc",
+    "questionText": "A circular arc of conducting wire of radius $R = 20.0\\text{ cm}$ subtends an angle of $\\theta = 45^\\circ$ ($\\frac{\\pi}{4}\\text{ rad}$) at its center of curvature $O$. If a steady current $I = 8.0\\text{ A}$ flows through the arc, the magnitude of the magnetic field produced at the center $O$ is:\n(Given: $\\mu_0 = 4\\pi \\times 10^{-7}\\text{ T m A}^{-1}$)",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\pi \\times 10^{-6}\\text{ T}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $B = \\frac{\\mu_0 I}{4\\pi R}\\theta = \\frac{(4\\pi \\times 10^{-7})(8.0)}{4\\pi (0.20)} \\left(\\frac{\\pi}{4}\\right) = \\frac{8.0 \\times 10^{-7}}{0.20} \\left(\\frac{\\pi}{4}\\right) = (4.0 \\times 10^{-6}) \\times \\frac{\\pi}{4} = \\pi \\times 10^{-6}\\text{ T}$."
+      },
+      {
+        "id": "B",
+        "text": "$2\\pi \\times 10^{-6}\\text{ T}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Quarter-Circle Formula Slip",
+        "mistakeAnalysis": "Aspirants evaluate for a quarter circle ($\\theta = \\pi/2$), doubling the resulting magnetic field."
+      },
+      {
+        "id": "C",
+        "text": "$8\\pi \\times 10^{-6}\\text{ T}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Full Circle Formula Misapplication",
+        "mistakeAnalysis": "Aspirants evaluate for a complete circular loop, forgetting to multiply by the arc fraction $1/8$."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{\\pi}{2} \\times 10^{-6}\\text{ T}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Extra Halving Step",
+        "mistakeAnalysis": "Aspirants divide by an extra factor of 2."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By the Biot-Savart law, the magnetic field at the center of curvature of a circular arc of radius $R$ subtending angle $\\theta$ (in radians) is:\n$$B = \\frac{\\mu_0 I}{4\\pi R} \\theta$$\nGiven:\n- Radius: $R = 20.0\\text{ cm} = 0.20\\text{ m}$\n- Current: $I = 8.0\\text{ A}$\n- Angle: $\\theta = 45^\\circ = \\frac{\\pi}{4}\\text{ rad}$\n\n$$B = \\frac{(4\\pi \\times 10^{-7}\\text{ T m A}^{-1}) \\times 8.0\\text{ A}}{4\\pi \\times (0.20\\text{ m})} \\times \\left(\\frac{\\pi}{4}\\right)$$\n$$B = \\frac{8.0 \\times 10^{-7}}{0.20} \\times \\frac{\\pi}{4} = (40.0 \\times 10^{-7}) \\times \\frac{\\pi}{4} = 10.0 \\times 10^{-7} \\pi = \\pi \\times 10^{-6}\\text{ T}$$"
+  },
+  {
+    "questionNumber": 43,
+    "chapter": "Electromagnetic Induction",
+    "topic": "Induced EMF in a Coil with Time-Dependent Flux",
+    "questionText": "The magnetic flux linked with a flat coil of wire of resistance $R = 4.0\\,\\Omega$ varies with time $t$ according to the equation:\n$$\\Phi(t) = (3t^2 + 4t + 2)\\text{ Wb}$$\nThe magnitude of the induced current flowing through the coil at $t = 2.0\\text{ s}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$4.0\\text{ A}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|\\mathcal{E}| = \\frac{d\\Phi}{dt} = 6t + 4$. At $t = 2.0\\text{ s}$, $|\\mathcal{E}| = 6(2) + 4 = 16.0\\text{ V}$. Current $I = \\frac{|\\mathcal{E}|}{R} = \\frac{16.0\\text{ V}}{4.0\\,\\Omega} = 4.0\\text{ A}$."
+      },
+      {
+        "id": "B",
+        "text": "$16.0\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reporting Induced EMF as Current",
+        "mistakeAnalysis": "Aspirants evaluate the induced emf ($16.0\\text{ V}$) correctly, but forget to divide by resistance $R = 4.0\\,\\Omega$."
+      },
+      {
+        "id": "C",
+        "text": "$5.5\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Value Division Error",
+        "mistakeAnalysis": "Aspirants evaluate $\\Phi(2) = 3(4) + 4(2) + 2 = 22\\text{ Wb}$ and divide by $R = 4\\,\\Omega$, getting $22/4 = 5.5\\text{ A}$."
+      },
+      {
+        "id": "D",
+        "text": "$2.5\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dropping Linear Term in Derivative",
+        "mistakeAnalysis": "Aspirants differentiate $4t$ as $0$, evaluating $6(2)/4 = 3.0\\text{ A}$ or make an arithmetic slip."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. By Faraday's law of induction:\n$$|\\mathcal{E}| = \\left| \\frac{d\\Phi}{dt} \\right|$$\nDifferentiating $\\Phi(t) = 3t^2 + 4t + 2$ with respect to time $t$:\n$$\\frac{d\\Phi}{dt} = 6t + 4$$\n2. Evaluating at $t = 2.0\\text{ s}$:\n$$|\\mathcal{E}| = 6(2.0) + 4 = 12 + 4 = 16.0\\text{ V}$$\n3. By Ohm's law, the induced current through resistance $R = 4.0\\,\\Omega$ is:\n$$I = \\frac{|\\mathcal{E}|}{R} = \\frac{16.0\\text{ V}}{4.0\\,\\Omega} = 4.0\\text{ A}$$"
+  },
+  {
+    "questionNumber": 44,
+    "chapter": "Current Electricity",
+    "topic": "Color Coding of Carbon Composition Resistors",
+    "questionText": "A carbon composition resistor has four color bands arranged from left to right in the sequence: **Red, Red, Orange, Silver**. Its resistance and tolerance rating are:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$22\\text{ k}\\Omega \\pm 10\\%$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Color code: Red = 2, Red = 2, Orange = multiplier $10^3$ ($1\\text{ k}\\Omega$), Silver = tolerance $\\pm 10\\%$. Resistance is $22 \\times 10^3\\,\\Omega \\pm 10\\% = 22\\text{ k}\\Omega \\pm 10\\%$."
+      },
+      {
+        "id": "B",
+        "text": "$220\\,\\Omega \\pm 5\\%$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Tolerance and Multiplier Swap",
+        "mistakeAnalysis": "Aspirants confuse Orange ($10^3$) with Brown ($10^1$) and Silver ($\\,\\pm 10\\%$) with Gold ($\\,\\pm 5\\%$)."
+      },
+      {
+        "id": "C",
+        "text": "$2.2\\text{ k}\\Omega \\pm 10\\%$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Multiplier Digit Inversion",
+        "mistakeAnalysis": "Aspirants treat Orange as multiplier $10^2$ (Red)."
+      },
+      {
+        "id": "D",
+        "text": "$22\\text{ k}\\Omega \\pm 5\\%$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Gold vs Silver Tolerance Confusion",
+        "mistakeAnalysis": "Aspirants assign Gold tolerance ($\\,\\pm 5\\%$) to the Silver band ($\\,\\pm 10\\%$)."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Using the standard resistor color code sequence:\n- Band 1 (Red) $\\implies 2$\n- Band 2 (Red) $\\implies 2$\n- Band 3 (Orange) $\\implies \\times 10^3$\n- Band 4 (Silver) $\\implies \\pm 10\\%$\nCombining these values:\n$$R = (22 \\times 10^3)\\,\\Omega \\pm 10\\% = 22\\text{ k}\\Omega \\pm 10\\%$$"
+  },
+  {
+    "questionNumber": 45,
+    "chapter": "Current Electricity",
+    "topic": "Current Drawn by Identical Bulbs in Parallel",
+    "questionText": "Four identical electric lamps, each rated $60\\text{ W}, 120\\text{ V}$, are connected in parallel across a $120\\text{ V}$ DC supply line. The total current drawn from the supply by this bank of lamps is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$2.0\\text{ A}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Each bulb draws current $I_1 = \\frac{P}{V} = \\frac{60\\text{ W}}{120\\text{ V}} = 0.50\\text{ A}$. In parallel, total current is $I_{\\text{total}} = 4 \\times I_1 = 4 \\times 0.50 = 2.0\\text{ A}$."
+      },
+      {
+        "id": "B",
+        "text": "$0.50\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Lamp Current Reporting Error",
+        "mistakeAnalysis": "Aspirants calculate the current drawn by a single lamp ($0.50\\text{ A}$) and forget to multiply by 4 for the four parallel branches."
+      },
+      {
+        "id": "C",
+        "text": "$4.0\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Voltage Halving Error",
+        "mistakeAnalysis": "Aspirants evaluate $I_1 = 1.0\\text{ A}$, doubling the total current."
+      },
+      {
+        "id": "D",
+        "text": "$0.125\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Series Connection Misapplication",
+        "mistakeAnalysis": "Aspirants treat the lamps as if they were in series across $120\\text{ V}$, dividing $0.50\\text{ A}$ by 4."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. In parallel connection, each lamp receives the full rated voltage of $V = 120\\text{ V}$.\n2. The current drawn by each individual lamp is:\n$$I_1 = \\frac{P}{V} = \\frac{60\\text{ W}}{120\\text{ V}} = 0.50\\text{ A}$$\n3. By Kirchhoff's junction rule, the total current drawn from the supply by four identical parallel lamps is:\n$$I_{\\text{total}} = 4 \\times I_1 = 4 \\times 0.50\\text{ A} = 2.0\\text{ A}$$"
+  },
+  {
+    "questionNumber": 46,
+    "chapter": "Ray Optics and Optical Instruments",
+    "topic": "Focal Length of an Equi-Concave Lens",
+    "questionText": "An equi-concave diverging lens made of optical glass of refractive index $\\mu = 1.50$ has radii of curvature of magnitude $R = 30.0\\text{ cm}$ on both faces. The focal length of this lens in air is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$-30.0\\text{ cm}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $R_1 = -30\\text{ cm}, R_2 = +30\\text{ cm}$. $\\frac{1}{f} = (1.5 - 1)\\left(-\\frac{1}{30} - \\frac{1}{30}\\right) = 0.5\\left(-\\frac{2}{30}\\right) = -\\frac{1}{30}\\text{ cm}^{-1} \\implies f = -30.0\\text{ cm}$."
+      },
+      {
+        "id": "B",
+        "text": "$+30.0\\text{ cm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Convex Sign Convention Inversion",
+        "mistakeAnalysis": "Aspirants assign positive focal length to a diverging concave lens."
+      },
+      {
+        "id": "C",
+        "text": "$-15.0\\text{ cm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Omitting $(\\mu - 1)$ Multiplier",
+        "mistakeAnalysis": "Aspirants forget to multiply by $(\\mu - 1) = 0.50$, halving the focal length."
+      },
+      {
+        "id": "D",
+        "text": "$-60.0\\text{ cm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Plano-Concave Formula Misapplication",
+        "mistakeAnalysis": "Aspirants evaluate as if one face were flat ($1/R$ instead of $2/R$)."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By the Lens Maker's Formula in air:\n$$\\frac{1}{f} = (\\mu - 1) \\left( \\frac{1}{R_1} - \\frac{1}{R_2} \\right)$$\nFor an equi-concave lens with light incident from the left:\n- $R_1 = -30.0\\text{ cm}$\n- $R_2 = +30.0\\text{ cm}$\n- $\\mu = 1.50$\n\n$$\\frac{1}{f} = (1.50 - 1) \\left( \\frac{1}{-30.0} - \\frac{1}{+30.0} \\right) = 0.50 \\times \\left( -\\frac{2}{30.0} \\right) = 0.50 \\times \\left( -\\frac{1}{15.0} \\right) = -\\frac{1}{30.0}\\text{ cm}^{-1}$$\n$$f = -30.0\\text{ cm}$$"
+  },
+  {
+    "questionNumber": 47,
+    "chapter": "Wave Optics",
+    "topic": "Wavelength Invariance of Frequency During Refraction",
+    "questionText": "A beam of monochromatic green light has a wavelength of $\\lambda_0 = 540\\text{ nm}$ in vacuum. When it enters a dense flint glass block of refractive index $\\mu = 1.80$, its frequency $\\nu$ and wavelength $\\lambda$ inside the glass are, respectively:\n(Take speed of light in vacuum $c = 3.0 \\times 10^8\\text{ m s}^{-1}$)",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\nu = 5.56 \\times 10^{14}\\text{ Hz}$ and $\\lambda = 300\\text{ nm}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Frequency is invariant: $\\nu = \\frac{c}{\\lambda_0} = \\frac{3.0 \\times 10^8}{5.4 \\times 10^{-7}} \\approx 5.56 \\times 10^{14}\\text{ Hz}$. Inside the glass, wavelength compresses: $\\lambda = \\frac{\\lambda_0}{\\mu} = \\frac{540\\text{ nm}}{1.80} = 300\\text{ nm}$."
+      },
+      {
+        "id": "B",
+        "text": "$\\nu = 3.09 \\times 10^{14}\\text{ Hz}$ and $\\lambda = 300\\text{ nm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Frequency Modification Fallacy",
+        "mistakeAnalysis": "Aspirants assume frequency decreases in a denser medium ($\\nu / \\mu$), forgetting that frequency is strictly invariant across boundaries."
+      },
+      {
+        "id": "C",
+        "text": "$\\nu = 5.56 \\times 10^{14}\\text{ Hz}$ and $\\lambda = 972\\text{ nm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Wavelength Expansion Error",
+        "mistakeAnalysis": "Aspirants multiply wavelength by $\\mu$ ($540 \\times 1.80 = 972\\text{ nm}$) instead of dividing."
+      },
+      {
+        "id": "D",
+        "text": "$\\nu = 5.56 \\times 10^{14}\\text{ Hz}$ and $\\lambda = 540\\text{ nm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Wavelength Invariance Assumption",
+        "mistakeAnalysis": "Aspirants assume wavelength remains constant in the glass medium."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Frequency is determined solely by the oscillating source and is invariant upon refraction across media boundaries:\n$$\\nu = \\frac{c}{\\lambda_0} = \\frac{3.0 \\times 10^8\\text{ m s}^{-1}}{540 \\times 10^{-9}\\text{ m}} = \\frac{3.0 \\times 10^8}{5.40 \\times 10^{-7}} \\approx 5.56 \\times 10^{14}\\text{ Hz}$$\n2. In a medium of refractive index $\\mu = 1.80$, phase velocity decreases to $v = \\frac{c}{\\mu}$.\n3. The wavelength correspondingly compresses to:\n$$\\lambda = \\frac{v}{\\nu} = \\frac{\\lambda_0}{\\mu} = \\frac{540\\text{ nm}}{1.80} = 300\\text{ nm}$$"
+  },
+  {
+    "questionNumber": 48,
+    "chapter": "Atoms",
+    "topic": "Radius of the Third Stationary Bohr Orbit",
+    "questionText": "In a hydrogen atom, the radius of the ground state Bohr orbit ($n = 1$) is $r_1 = 0.53\\text{ \\AA}$. The radius of the THIRD stationary orbit ($n = 3$) is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$4.77\\text{ \\AA}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $r_n = r_1 n^2$. For $n = 3$, $r_3 = (0.53\\text{ \\AA}) \\times 3^2 = 0.53 \\times 9 = 4.77\\text{ \\AA}$."
+      },
+      {
+        "id": "B",
+        "text": "$1.59\\text{ \\AA}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Radius Scaling Fallacy",
+        "mistakeAnalysis": "Aspirants scale radius linearly with $n$ ($0.53 \\times 3 = 1.59\\text{ \\AA}$), forgetting that orbital radius scales as $n^2$."
+      },
+      {
+        "id": "C",
+        "text": "$2.12\\text{ \\AA}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Second Orbit Calculation Slip",
+        "mistakeAnalysis": "Aspirants evaluate for the $n = 2$ orbit ($0.53 \\times 4 = 2.12\\text{ \\AA}$)."
+      },
+      {
+        "id": "D",
+        "text": "$0.177\\text{ \\AA}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverse Radius Scaling Error",
+        "mistakeAnalysis": "Aspirants divide $0.53$ by 3 instead of multiplying by $3^2$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "In Bohr's model of the hydrogen atom, the orbital radius of stationary state $n$ is given by:\n$$r_n = \\frac{n^2 h^2 \\varepsilon_0}{\\pi m e^2} = r_1 n^2$$\nGiven $r_1 = 0.53\\text{ \\AA}$ and $n = 3$:\n$$r_3 = (0.53\\text{ \\AA}) \\times (3)^2 = 0.53\\text{ \\AA} \\times 9 = 4.77\\text{ \\AA}$$"
+  },
+  {
+    "questionNumber": 49,
+    "chapter": "Nuclei",
+    "topic": "Binding Energy per Nucleon Comparison and Stability",
+    "questionText": "Consider the following statements regarding nuclear binding energy and stability:\n(A) Iron (${}^{56}_{26}\\text{Fe}$) possesses one of the highest binding energies per nucleon ($\\approx 8.75\\text{ MeV/nucleon}$), making it exceptionally stable.\n(B) Nuclear fission of very heavy nuclei ($A > 200$) releases energy because the product fragments have higher binding energy per nucleon.\n(C) Nuclear fusion of very light nuclei ($A \\le 4$) releases energy because the combined heavier nucleus has higher binding energy per nucleon.\n(D) Nuclear forces obey an inverse-square distance law identical to Coulomb's law.\n\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Statements (A), (B), and (C) are verified nuclear physics facts. Statement (D) is false because the strong nuclear force is a short-range force ($1 - 2\\text{ fm}$) that drops to zero sharply and does not obey an inverse-square law."
+      },
+      {
+        "id": "B",
+        "text": "(A) and (B) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Fusion Stability Mechanism Blindspot",
+        "mistakeAnalysis": "Aspirants omit statement (C), failing to recognize that fusion releases energy precisely because lighter nuclei fuse into tighter-bound helium."
+      },
+      {
+        "id": "C",
+        "text": "(A), (B), (C) and (D)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverse Square Generalization",
+        "mistakeAnalysis": "Aspirants assume all fundamental forces obey inverse-square laws like gravity and electrostatics."
+      },
+      {
+        "id": "D",
+        "text": "(B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Iron Stability Peak Doubt",
+        "mistakeAnalysis": "Aspirants omit statement (A), doubting whether Iron sits at the peak of the binding energy curve."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "From NCERT Class 12 Chapter 'Nuclei':\n1. The binding energy per nucleon curve reaches its maximum of $\\approx 8.75\\text{ MeV/nucleon}$ at ${}^{56}_{26}\\text{Fe}$, making it the most stable nucleus $\\implies$ Statement (A) is correct.\n2. Heavy nuclei ($A > 200$) have lower binding energy per nucleon ($\\approx 7.6\\text{ MeV}$) than intermediate nuclei ($\\approx 8.5\\text{ MeV}$). Fission into middle-mass fragments converts the mass defect into released energy $\\implies$ Statement (B) is correct.\n3. Light nuclei ($A \\le 4$) have lower binding energy per nucleon. Fusing them into helium increases binding energy per nucleon, releasing energy $\\implies$ Statement (C) is correct.\n4. Strong nuclear forces operate only over short subatomic distances ($1 - 2\\text{ fm}$) and do NOT obey an inverse-square law $\\implies$ Statement (D) is false.\nThus, statements (A), (B), and (C) only are correct."
+  },
+  {
+    "questionNumber": 50,
+    "chapter": "Semiconductor Electronics",
+    "topic": "Operational Characteristics of a Zener Diode",
+    "questionText": "Which of the following statements is ACCURATE regarding the operation of a Zener diode as a voltage stabilizer?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "It is operated under reverse bias in the breakdown region, where the voltage across it remains nearly constant over a wide range of reverse currents.",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard NCERT definition: heavily doped p-n junction operating under reverse breakdown where terminal voltage $V_Z$ stays constant despite fluctuations in load or input current."
+      },
+      {
+        "id": "B",
+        "text": "It is operated under forward bias, where forward voltage drop increases linearly with current.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Forward Bias Operation Confusion",
+        "mistakeAnalysis": "Aspirants assume voltage regulators operate in forward bias like standard diodes."
+      },
+      {
+        "id": "C",
+        "text": "It has an extremely wide depletion layer caused by very light doping of its p- and n-regions.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Doping Profile Inversion",
+        "mistakeAnalysis": "Aspirants invert the doping profile: Zener diodes are *heavily* doped, creating an extremely *thin* depletion layer ($\\sim 10^{-6}\\text{ m}$) that produces an intense electric field."
+      },
+      {
+        "id": "D",
+        "text": "It permanently burns out when operated in the reverse breakdown region.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Breakdown vs Damage Confusion",
+        "mistakeAnalysis": "Aspirants confuse non-destructive Zener breakdown (which is fully reversible provided current is limited by an external resistor) with destructive thermal runaway."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "From NCERT Class 12 Semiconductor Electronics:\n1. A Zener diode is fabricated by heavily doping both the p- and n-regions, resulting in a very thin depletion layer ($< 1\\,\\mu\\text{m}$) and an intense junction electric field ($E \\sim 5 \\times 10^6\\text{ V m}^{-1}$ even at a low reverse voltage of $5\\text{ V}$).\n2. When operated in the reverse breakdown region ($V \\ge V_Z$), internal field emission (Zener breakdown) causes reverse current to increase sharply while the voltage across the diode remains practically constant at $V_Z$.\n3. When connected in parallel with a load resistor (with a series current-limiting resistor), it clamps the load voltage to $V_Z$, functioning as an effective voltage regulator."
+  }
+]

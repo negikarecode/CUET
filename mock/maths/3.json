@@ -1,0 +1,2002 @@
+[
+  {
+    "questionNumber": 1,
+    "chapter": "Linear Programming",
+    "topic": "Corner Point Method for Maximization",
+    "questionText": "If $z = 3x + 4y$ is the objective function of a linear programming problem (LPP) and $(3, 1)$, $(2, 4)$, $(0, 4)$, $(5, 0)$ are corner points of the bounded feasible region, then the maximum value of the objective function is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "13",
+        "isCorrect": false,
+        "studentSelectionTrap": "First Vertex Evaluation Stop",
+        "mistakeAnalysis": "Aspirants evaluate $z$ at the first listed vertex $(3, 1)$ to get $3(3)+4(1)=13$ and choose it without testing the remaining vertices[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Subtraction Slip",
+        "mistakeAnalysis": "Aspirants mistakenly compute $3(2) + 4(4) = 6 + 16$ with an arithmetic subtraction error, arriving at 10."
+      },
+      {
+        "id": "C",
+        "text": "22",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Evaluating $z = 3x + 4y$ at all corner points yields a maximum of 22 at $(2, 4)$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "14",
+        "isCorrect": false,
+        "studentSelectionTrap": "Coordinate Swapping Error",
+        "mistakeAnalysis": "Aspirants swap $x$ and $y$ at vertex $(3, 1)$, calculating $3(1) + 4(3) = 15$ or making an arithmetic slip to 14."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Evaluate the objective function $z = 3x + 4y$ at each of the given corner points[cite: 2]:\n1. At $(3, 1)$: $z = 3(3) + 4(1) = 9 + 4 = 13$[cite: 2]\n2. At $(2, 4)$: $z = 3(2) + 4(4) = 6 + 16 = 22$[cite: 2]\n3. At $(0, 4)$: $z = 3(0) + 4(4) = 0 + 16 = 16$[cite: 2]\n4. At $(5, 0)$: $z = 3(5) + 4(0) = 15 + 0 = 15$[cite: 2]\nComparing all evaluated values, the maximum value of $z$ is 22, occurring at $(2, 4)$[cite: 2]."
+  },
+  {
+    "questionNumber": 2,
+    "chapter": "Determinants",
+    "topic": "Properties of Adjoint and Scalar Multiple Determinants",
+    "questionText": "If $A$ is a square matrix of order 3 such that $|A| = 2$, then $|\\operatorname{adj}(2A)|$ is equal to[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "16",
+        "isCorrect": false,
+        "studentSelectionTrap": "Adjoint Power Neglect",
+        "mistakeAnalysis": "Aspirants compute $|2A| = 2^3(2) = 16$ correctly, but forget to square it to account for $|\\operatorname{adj}(B)| = |B|^{n-1}$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "32",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Scalar Multiplication Fallacy",
+        "mistakeAnalysis": "Aspirants assume $|2A| = 2|A| = 4$, leading to $|\\operatorname{adj}(2A)| = 4^2 = 16$ or confuse scalar scaling factors[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "64",
+        "isCorrect": false,
+        "studentSelectionTrap": "Order Exponent Error",
+        "mistakeAnalysis": "Aspirants take $|2A| = 2^2 |A| = 8$, leading to $8^2 = 64$, forgetting that for $n=3$, the scalar is raised to the power 3[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "256",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|2A| = 2^3 |A| = 8(2) = 16$; then $|\\operatorname{adj}(2A)| = |2A|^{3-1} = 16^2 = 256$[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "For an $n \\times n$ matrix $M$, $|kM| = k^n |M|$ and $|\\operatorname{adj}(M)| = |M|^{n-1}$.\nHere, $n = 3$ and $|A| = 2$[cite: 2].\nLet $B = 2A$.\n$|B| = |2A| = 2^3 |A| = 8 \\times 2 = 16$.\nNow evaluate the determinant of the adjoint of $B$:\n$|\\operatorname{adj}(2A)| = |\\operatorname{adj}(B)| = |B|^{n-1} = |B|^{3-1} = |B|^2 = 16^2 = 256$[cite: 2]."
+  },
+  {
+    "questionNumber": 3,
+    "chapter": "Differential Equations",
+    "topic": "Order and Degree of Differential Equations",
+    "questionText": "Match List-I with List-II:\nList-I:\n(A) Degree of the differential equation $\\frac{d^{4}y}{dx^{4}} + 2\\log_{e}\\left(\\frac{d^{3}y}{dx^{3}}\\right) = 0$\n(B) Order of the differential equation $e^{\\left(\\frac{dy}{dx}\\right)^{3}} + 3y\\left(\\frac{d^{2}y}{dx^{2}}\\right)^{3} = 0$\n(C) Degree of $\\frac{d^{4}y}{dx^{4}} + \\left(\\frac{dy}{dx}\\right)^{2} = 0$\n(D) Order of the differential equation $2\\frac{d^{4}y}{dx^{4}} + \\left(\\frac{d^{2}y}{dx^{2}}\\right)^{8} = 0$\n\nList-II:\n(I) 1\n(II) 4\n(III) not defined\n(IV) 2\n\nChoose the correct answer from the options given below[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) - (I), (B) - (IV), (C) - (III), (D) - (II)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Degree Defined for Transcendental Derivatives Trap",
+        "mistakeAnalysis": "Aspirants mistakenly assign degree 1 to non-polynomial differential equations involving logarithmic arguments[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "(A) - (III), (B) - (IV), (C) - (I), (D) - (II)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. (A) has an undefined degree due to the logarithm of a derivative, (B) has highest derivative order 2, (C) is a polynomial in derivatives of degree 1, and (D) has order 4[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "(A) - (III), (B) - (IV), (C) - (II), (D) - (I)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Order and Degree Identification Inversion",
+        "mistakeAnalysis": "Aspirants invert the matchings of (C) and (D)[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "(A) - (II), (B) - (I), (C) - (IV), (D) - (I)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Highest Power Confused with Degree",
+        "mistakeAnalysis": "Aspirants confuse the power 8 in equation (D) with order or degree[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "1. For (A): $\\frac{d^4y}{dx^4} + 2\\log_e\\left(\\frac{d^3y}{dx^3}\\right) = 0$. Because the differential equation cannot be expressed as a polynomial in its derivatives due to $\\log_e(d^3y/dx^3)$, its degree is **not defined** $\\implies$ (A) matches (III)[cite: 2].\n2. For (B): $e^{(dy/dx)^3} + 3y(d^2y/dx^2)^3 = 0$. The highest order derivative present is $\\frac{d^2y}{dx^2}$, so its order is 2 $\\implies$ (B) matches (IV)[cite: 2].\n3. For (C): $\\frac{d^4y}{dx^4} + (dy/dx)^2 = 0$. This is a polynomial in derivatives; the highest order derivative $\\frac{d^4y}{dx^4}$ has an exponent of 1, so degree is 1 $\\implies$ (C) matches (I)[cite: 2].\n4. For (D): $2\\frac{d^4y}{dx^4} + (d^2y/dx^2)^8 = 0$. The highest order derivative present is $\\frac{d^4y}{dx^4}$, which is order 4 $\\implies$ (D) matches (II)[cite: 2].\nMatching: (A)-(III), (B)-(IV), (C)-(I), (D)-(II)[cite: 2]."
+  },
+  {
+    "questionNumber": 4,
+    "chapter": "Matrices",
+    "topic": "Properties of Symmetric and Skew-Symmetric Matrices",
+    "questionText": "If $A$ and $B$ are symmetric matrices of the same order, then $AB - BA$ is a[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Singular matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Zero Determinant Assumption",
+        "mistakeAnalysis": "Aspirants assume the commutator of symmetric matrices always has determinant zero[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "Zero matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Commutativity Fallacy",
+        "mistakeAnalysis": "Aspirants assume symmetric matrices always commute ($AB = BA$)[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "Symmetric matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Transpose Distribution Error",
+        "mistakeAnalysis": "Aspirants assume $(AB)^T = A^T B^T$, concluding that $(AB - BA)^T = AB - BA$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "Skew symmetric matrix",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $(AB - BA)^T = B^T A^T - A^T B^T = BA - AB = -(AB - BA)$[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Given that $A$ and $B$ are symmetric matrices, $A^T = A$ and $B^T = B$.\nLet $C = AB - BA$.\nTaking the transpose of $C$:\n$C^T = (AB - BA)^T = (AB)^T - (BA)^T$.\nUsing the reversal law for transposes $(XY)^T = Y^T X^T$:\n$C^T = B^T A^T - A^T B^T$.\nSubstitute $A^T = A$ and $B^T = B$:\n$C^T = BA - AB = -(AB - BA) = -C$.\nSince $C^T = -C$, the matrix $AB - BA$ is skew-symmetric[cite: 2]."
+  },
+  {
+    "questionNumber": 5,
+    "chapter": "Determinants",
+    "topic": "Properties of Invertible Matrices",
+    "questionText": "If $A$ is an invertible matrix, then which of the following statement(s) is/are TRUE?\n(A) $|A^{-1}| = |A|$\n(B) $(A^{-1})^{-1} = A$\n(C) $A^{-1} = \\frac{\\operatorname{adj} A}{|A|}$\n(D) $(A^{T})^{-1} = (A^{-1})^{T}$\n\nChoose the correct answer from the options given below[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverse Determinant Magnitude Equality Trap",
+        "mistakeAnalysis": "Aspirants assume $|A^{-1}| = |A|$ instead of $|A^{-1}| = 1/|A|$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "(B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Transpose-Inverse Commutation Omission",
+        "mistakeAnalysis": "Aspirants fail to recognize that the transpose and inverse operations commute[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "(C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Exclusivity Bias",
+        "mistakeAnalysis": "Aspirants only identify the textbook formula for $A^{-1}$ and ignore the structural algebraic identities[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "(B), (C) and (D) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. (B), (C), and (D) are standard invertible matrix theorems, while $|A^{-1}| = \\frac{1}{|A|} \\ne |A|$[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "1. Statement (A): Since $A A^{-1} = I$, taking determinants gives $|A||A^{-1}| = |I| = 1 \\implies |A^{-1}| = \\frac{1}{|A|}$. This does not generally equal $|A|$ (unless $|A| = \\pm 1$). Thus, (A) is FALSE[cite: 2].\n2. Statement (B): The inverse of the inverse matrix yields the original matrix: $(A^{-1})^{-1} = A$. (B) is TRUE[cite: 2].\n3. Statement (C): By the fundamental inverse formula, $A^{-1} = \\frac{\\operatorname{adj} A}{|A|}$. (C) is TRUE[cite: 2].\n4. Statement (D): Since $(A^T)(A^{-1})^T = (A^{-1} A)^T = I^T = I$, it follows that $(A^T)^{-1} = (A^{-1})^T$. (D) is TRUE[cite: 2].\nTherefore, (B), (C) and (D) only are true[cite: 2]."
+  },
+  {
+    "questionNumber": 6,
+    "chapter": "Integrals",
+    "topic": "Properties of Definite Integrals (King's Rule)",
+    "questionText": "$\\int_{0}^{a}\\frac{\\sqrt{x}}{\\sqrt{x}+\\sqrt{a-x}}\\,dx$ is equal to[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$a$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by 2 Omission",
+        "mistakeAnalysis": "Aspirants evaluate $2I = a$ but forget to divide by 2 to isolate $I$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{a}{2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Applying $\\int_0^a f(x)\\,dx = \\int_0^a f(a-x)\\,dx$ yields $2I = \\int_0^a 1\\,dx = a \\implies I = a/2$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{a}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Exponent Factor Slip",
+        "mistakeAnalysis": "Aspirants assume a fractional power factor divides the limit by 3[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$2a$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Multiplier Inversion",
+        "mistakeAnalysis": "Aspirants multiply by 2 instead of dividing by 2 when solving $2I = a$[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Let $I = \\int_{0}^{a}\\frac{\\sqrt{x}}{\\sqrt{x}+\\sqrt{a-x}}\\,dx$  --- (Equation 1)[cite: 2]\nUsing the definite integral property $\\int_0^a f(x)\\,dx = \\int_0^a f(a-x)\\,dx$:\n$I = \\int_{0}^{a}\\frac{\\sqrt{a-x}}{\\sqrt{a-x}+\\sqrt{a-(a-x)}}\\,dx = \\int_{0}^{a}\\frac{\\sqrt{a-x}}{\\sqrt{a-x}+\\sqrt{x}}\\,dx$  --- (Equation 2)\nAdding Equation 1 and Equation 2:\n$2I = \\int_{0}^{a}\\frac{\\sqrt{x} + \\sqrt{a-x}}{\\sqrt{x} + \\sqrt{a-x}}\\,dx = \\int_{0}^{a} 1\\,dx$\n$2I = [x]_0^a = a - 0 = a$\n$I = \\frac{a}{2}$[cite: 2]."
+  },
+  {
+    "questionNumber": 7,
+    "chapter": "Probability",
+    "topic": "Binomial Probability Distribution",
+    "questionText": "Let $X$ denote the number of heads in a simultaneous toss of three coins, then $P(0 < X < 3)$ is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{1}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Outcome Evaluation",
+        "mistakeAnalysis": "Aspirants evaluate only $P(X=1) = 3/8$ or confuse with fair coin probability $1/2$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{3}{4}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P(0 < X < 3) = P(X=1) + P(X=2) = 3/8 + 3/8 = 6/8 = 3/4$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{7}{8}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Weak Inequality Inclusion Trap",
+        "mistakeAnalysis": "Aspirants calculate $P(X > 0) = 1 - P(X=0) = 7/8$, mistakenly including $X = 3$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Certain Event Fallacy",
+        "mistakeAnalysis": "Aspirants assume heads must always appear strictly between 0 and 3 times[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "When three fair coins are tossed, the sample space size is $2^3 = 8$.\nThe random variable $X$ takes values $\\{0, 1, 2, 3\\}$.\nThe probability distribution is:\n- $P(X = 0) = \\binom{3}{0}(1/2)^3 = \\frac{1}{8}$\n- $P(X = 1) = \\binom{3}{1}(1/2)^3 = \\frac{3}{8}$\n- $P(X = 2) = \\binom{3}{2}(1/2)^3 = \\frac{3}{8}$\n- $P(X = 3) = \\binom{3}{3}(1/2)^3 = \\frac{1}{8}$\nThe condition $0 < X < 3$ includes only integer values $X = 1$ and $X = 2$[cite: 2]:\n$P(0 < X < 3) = P(X = 1) + P(X = 2) = \\frac{3}{8} + \\frac{3}{8} = \\frac{6}{8} = \\frac{3}{4}$[cite: 2]."
+  },
+  {
+    "questionNumber": 8,
+    "chapter": "Application of Integrals",
+    "topic": "Area Bounded with Respect to the y-axis",
+    "questionText": "The area (in sq. units) of the region bounded by $y = -1$, $y = 2$, $x = y^{3}$ and $x = 0$ is equal to[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Area Neglect",
+        "mistakeAnalysis": "Aspirants integrate only from $y = 0$ to $y = 2$, omitting the region between $y = -1$ and $y = 0$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "8",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Coordinate Multiplication",
+        "mistakeAnalysis": "Aspirants evaluate $(2)^3 = 8$ without integration[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{17}{4}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\text{Area} = \\int_{-1}^0 (-y^3)\\,dy + \\int_0^2 y^3\\,dy = 1/4 + 16/4 = 17/4$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{15}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Signed Integral Cancellation",
+        "mistakeAnalysis": "Aspirants evaluate the definite integral $\\int_{-1}^2 y^3\\,dy = \\frac{2^4 - (-1)^4}{4} = \\frac{16 - 1}{4} = \\frac{15}{4}$, forgetting that geometric area requires the absolute value[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "The area bounded by $x = y^3$ and the $y$-axis ($x = 0$) between $y = -1$ and $y = 2$ is given by $\\int_{-1}^2 |x|\\,dy$[cite: 2].\nFor $y \\in [-1, 0]$, $y^3 \\le 0$, so $|x| = -y^3$.\nFor $y \\in [0, 2]$, $y^3 \\ge 0$, so $|x| = y^3$.\n$\\text{Area} = \\int_{-1}^0 (-y^3)\\,dy + \\int_0^2 y^3\\,dy$\n$= \\left[ -\\frac{y^4}{4} \\right]_{-1}^0 + \\left[ \\frac{y^4}{4} \\right]_0^2$\n$= \\left( 0 - \\left(-\\frac{1}{4}\\right) \\right) + \\left( \\frac{16}{4} - 0 \\right)$\n$= \\frac{1}{4} + 4 = \\frac{17}{4}\\text{ sq. units}$[cite: 2]."
+  },
+  {
+    "questionNumber": 9,
+    "chapter": "Differential Equations",
+    "topic": "Variable Separable Form",
+    "questionText": "The general solution of the differential equation $\\frac{dy}{dx} = -4xy^{2}$ is given by[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$2x^{2}-y=C$, where $C$ is an arbitrary constant[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Integration Error",
+        "mistakeAnalysis": "Aspirants integrate $y^{-2}$ as $y$ or $\\log y$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$2x^{2}-\\frac{1}{y}=C$, where $C$ is an arbitrary constant[cite: 2].",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Separating gives $y^{-2}\\,dy = -4x\\,dx \\implies -1/y = -2x^2 + C_1 \\implies 2x^2 - 1/y = C$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$2x^{2}+\\frac{1}{y^{2}}=C$, where $C$ is an arbitrary constant[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Power Reduction Neglect",
+        "mistakeAnalysis": "Aspirants fail to integrate $y^{-2}$ correctly, retaining the squared term[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$2x^{2}+\\frac{1}{y}=C$, where $C$ is an arbitrary constant[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Transposition Slip",
+        "mistakeAnalysis": "Aspirants drop the negative sign when moving $-1/y$ or $-2x^2$ to the other side[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Given differential equation:\n$\\frac{dy}{dx} = -4xy^2$[cite: 2]\nSeparating the variables:\n$\\frac{dy}{y^2} = -4x\\,dx \\implies y^{-2}\\,dy = -4x\\,dx$\nIntegrating both sides:\n$\\int y^{-2}\\,dy = \\int -4x\\,dx$\n$-\\frac{1}{y} = -4\\left(\\frac{x^2}{2}\\right) + C_1$\n$-\\frac{1}{y} = -2x^2 + C_1$\nRearranging:\n$2x^2 - \\frac{1}{y} = C_1$ (or $2x^2 - \\frac{1}{y} = C$)[cite: 2]."
+  },
+  {
+    "questionNumber": 10,
+    "chapter": "Matrices",
+    "topic": "Matrix Multiplication and Addition Compatibility",
+    "questionText": "Assume $A$, $B$ and $C$ are matrices of order $m\\times n$, $n\\times3$ and $3\\times q$ respectively. The restrictions on $m$, $n$ and $q$ so that $AB+BC$ is defined are[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$n$ is arbitrary, $q = 2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arbitrary Dimension Misattribution",
+        "mistakeAnalysis": "Aspirants confuse column requirement with dimension 2[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$m = n$, $q = 3$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $AB$ is $m \\times 3$ and $BC$ is $n \\times q$. For addition, their orders must be equal: $m = n$ and $q = 3$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$q = 3$, $m = 3$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Fixed Constant Fallacy",
+        "mistakeAnalysis": "Aspirants fix $m = 3$ without requiring $m = n$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$q$ is arbitrary, $n = 2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Addition Compatibility Confusion",
+        "mistakeAnalysis": "Aspirants check only multiplication compatibility and ignore the addition requirement[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "1. Multiplication $AB$:\n   $A$ is $m \\times n$ and $B$ is $n \\times 3$. Since inner dimensions match ($n = n$), the resulting product $AB$ has order $m \\times 3$[cite: 2].\n2. Multiplication $BC$:\n   $B$ is $n \\times 3$ and $C$ is $3 \\times q$. Since inner dimensions match ($3 = 3$), the resulting product $BC$ has order $n \\times q$[cite: 2].\n3. Addition $AB + BC$:\n   Two matrices can be added if and only if they have the identical order[cite: 2].\n   Therefore, the order of $AB$ ($m \\times 3$) must equal the order of $BC$ ($n \\times q$):\n   $m = n$ and $q = 3$[cite: 2]."
+  },
+  {
+    "questionNumber": 11,
+    "chapter": "Linear Programming",
+    "topic": "Terminology of Linear Programming",
+    "questionText": "Which of the following terms are associated with a linear programming problem?\n(A) Constraints\n(B) Independent events\n(C) Feasible region\n(D) Objective function\n\nChoose the correct answer from the options given below[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Objective Function Omission",
+        "mistakeAnalysis": "Aspirants omit the objective function as a defining component of LPP[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "(A), (C) and (D) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Constraints, Feasible region, and Objective function are core elements of LPP; Independent events belongs to Probability[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "(B), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cross-Topic Terminology Confusion",
+        "mistakeAnalysis": "Aspirants mistake probability concepts for linear programming variables[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "(A), (B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Feasible Region Exclusion",
+        "mistakeAnalysis": "Aspirants fail to recognize the feasible region as a fundamental LPP concept[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "In linear programming:\n- **Constraints** are the linear inequalities or restrictions on the decision variables[cite: 2].\n- **Objective function** is the linear function $Z = ax + by$ that is to be maximized or minimized[cite: 2].\n- **Feasible region** is the common region determined by all the constraints including non-negative restrictions[cite: 2].\n- **Independent events** is a concept in Probability theory[cite: 2].\nThus, only (A), (C), and (D) are associated with LPP[cite: 2]."
+  },
+  {
+    "questionNumber": 12,
+    "chapter": "Application of Derivatives",
+    "topic": "Local Minima and Extrema",
+    "questionText": "Which of the following functions has a local minima at $x = 0$?\n(A) $f(x) = x^{3}$\n(B) $f(x) = |x|$\n(C) $f(x) = x^{2}$\n(D) $f(x) = x^{-2}$\n\nChoose the correct answer from the options given below[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inflection Point Confusion",
+        "mistakeAnalysis": "Aspirants assume $f'(0) = 0$ for $x^3$ implies a local minimum, forgetting it is an inflection point[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "(D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Discontinuous Asymptote Fallacy",
+        "mistakeAnalysis": "Aspirants assume $1/x^2 \\to \\infty$ creates a minimum at the vertical asymptote $x = 0$ where the function is undefined[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "(B), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Domain Definition Neglect",
+        "mistakeAnalysis": "Aspirants include $x^{-2}$ without verifying its domain at $x = 0$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "(B) and (C) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Both $|x|$ and $x^2$ attain their global and local minimum value 0 at $x = 0$[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "1. For (A) $f(x) = x^3$: $f(x) < 0$ for $x < 0$ and $f(x) > 0$ for $x > 0$. The function is strictly increasing through $x = 0$; hence $x = 0$ is a point of inflection, not a local minimum[cite: 2].\n2. For (B) $f(x) = |x|$: $f(0) = 0$, and for all $x \\ne 0$, $f(x) > 0 = f(0)$. Thus, $f(x)$ has a local (and global) minimum at $x = 0$[cite: 2].\n3. For (C) $f(x) = x^2$: $f'(x) = 2x$, $f''(x) = 2 > 0$. At $x = 0$, $f'(0) = 0$ and $f''(0) > 0$, confirming a local minimum[cite: 2].\n4. For (D) $f(x) = x^{-2} = \\frac{1}{x^2}$: The function is undefined at $x = 0$, so no local extremum can exist there[cite: 2].\nTherefore, only (B) and (C) have a local minimum at $x = 0$[cite: 2]."
+  },
+  {
+    "questionNumber": 13,
+    "chapter": "Integrals",
+    "topic": "Definite Integrals of Algebraic Functions",
+    "questionText": "$\\int_{0}^{8}(x^{\\frac{2}{3}}+1)\\,dx$ is equal to[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{28}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Power Reciprocal Slip",
+        "mistakeAnalysis": "Aspirants integrate using the wrong power rule exponent[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{25}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Constant Term Integration Omission",
+        "mistakeAnalysis": "Aspirants omit the integration of $+1$ over the interval $[0, 8]$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{184}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Denominator Inversion Fallacy",
+        "mistakeAnalysis": "Aspirants evaluate with denominator 3 instead of 5[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{136}{5}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $[\\frac{3}{5}x^{5/3} + x]_0^8 = \\frac{3}{5}(32) + 8 = \\frac{96}{5} + \\frac{40}{5} = \\frac{136}{5}$[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Integrate term by term:\n$\\int (x^{2/3} + 1)\\,dx = \\frac{x^{2/3 + 1}}{\\frac{2}{3} + 1} + x = \\frac{x^{5/3}}{5/3} + x = \\frac{3}{5}x^{5/3} + x$.\nApply the limits from 0 to 8[cite: 2]:\n$\\left[ \\frac{3}{5}x^{5/3} + x \\right]_0^8 = \\left( \\frac{3}{5}(8)^{5/3} + 8 \\right) - 0$\nSince $8^{5/3} = (2^3)^{5/3} = 2^5 = 32$:\n$= \\frac{3}{5}(32) + 8 = \\frac{96}{5} + 8 = \\frac{96 + 40}{5} = \\frac{136}{5}$[cite: 2]."
+  },
+  {
+    "questionNumber": 14,
+    "chapter": "Application of Derivatives",
+    "topic": "Intervals of Decrease for Power-Exponential Functions",
+    "questionText": "The function $f(x) = x^{x},\\; x > 0$ decreases on the interval[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\left(0, \\frac{1}{e}\\right)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = x^x(1 + \\log x) < 0 \\implies \\log x < -1 \\implies 0 < x < 1/e$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$(0, e)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Slip in Logarithmic Inequality",
+        "mistakeAnalysis": "Aspirants solve $\\log x < 1 \\implies x < e$, forgetting the negative sign from $1 + \\log x = 0$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$\\left(\\frac{1}{e}, \\infty\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Increasing Interval Selected",
+        "mistakeAnalysis": "Aspirants solve for the interval where $f(x)$ is increasing ($f'(x) > 0$)[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$(e, \\infty)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Combined Sign and Direction Error",
+        "mistakeAnalysis": "Aspirants solve $\\log x > 1$ and report the reverse interval[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $y = x^x$ for $x > 0$[cite: 2].\nTaking natural logarithm: $\\log_e y = x \\log_e x$.\nDifferentiating with respect to $x$:\n$\\frac{1}{y}f'(x) = 1 \\cdot \\log_e x + x \\cdot \\frac{1}{x} = 1 + \\log_e x$\n$f'(x) = x^x (1 + \\log_e x)$.\nFor $f(x)$ to be decreasing, $f'(x) < 0$[cite: 2].\nSince $x^x > 0$ for all $x > 0$, we require:\n$1 + \\log_e x < 0$\n$\\log_e x < -1$\n$x < e^{-1} = \\frac{1}{e}$.\nCombining with the domain restriction $x > 0$:\n$x \\in \\left(0, \\frac{1}{e}\\right)$[cite: 2]."
+  },
+  {
+    "questionNumber": 15,
+    "chapter": "Continuity and Differentiability",
+    "topic": "Second Order Parametric Derivatives",
+    "questionText": "If $x = at^{2},\\; y = 2at$, then $\\frac{d^{2}y}{dx^{2}}$ is equal to[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Constant Derivative Assumption",
+        "mistakeAnalysis": "Aspirants differentiate $dy/dx$ treating $t$ as independent of $x$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{1}{t}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "First Derivative Stop",
+        "mistakeAnalysis": "Aspirants compute only the first derivative $\\frac{dy}{dx} = \\frac{1}{t}$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$-\\frac{1}{t^{2}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Chain Rule Factor $dt/dx$ Neglect",
+        "mistakeAnalysis": "Aspirants differentiate $\\frac{1}{t}$ with respect to $t$ as $-\\frac{1}{t^2}$, forgetting to multiply by $\\frac{dt}{dx}$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$-\\frac{1}{2at^{3}}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\frac{dy}{dx} = \\frac{1}{t} \\implies \\frac{d^2y}{dx^2} = \\frac{d}{dt}(t^{-1}) \\cdot \\frac{dt}{dx} = -\\frac{1}{t^2} \\cdot \\frac{1}{2at} = -\\frac{1}{2at^3}$[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Differentiate $x$ and $y$ with respect to $t$[cite: 2]:\n$\\frac{dx}{dt} = 2at$, and $\\frac{dy}{dt} = 2a$[cite: 2].\nFirst derivative:\n$\\frac{dy}{dx} = \\frac{dy/dt}{dx/dt} = \\frac{2a}{2at} = \\frac{1}{t}$.\nSecond derivative:\n$\\frac{d^2y}{dx^2} = \\frac{d}{dx}\\left(\\frac{dy}{dx}\\right) = \\frac{d}{dt}\\left(\\frac{1}{t}\\right) \\cdot \\frac{dt}{dx}$\n$\\frac{d^2y}{dx^2} = \\left(-\\frac{1}{t^2}\\right) \\cdot \\frac{1}{dx/dt} = \\left(-\\frac{1}{t^2}\\right) \\cdot \\frac{1}{2at} = -\\frac{1}{2at^3}$[cite: 2]."
+  },
+  {
+    "questionNumber": 16,
+    "chapter": "Financial Mathematics",
+    "topic": "Linear Straight Line Depreciation",
+    "questionText": "A machine costing Rs. 2,00,000 has a useful life of 5 years. The estimated scrap value is Rs. 20,000. By using straight line method, the annual depreciation is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Rs. 18,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Double Period Divisor Error",
+        "mistakeAnalysis": "Aspirants divide the depreciable base 1,80,000 by 10 instead of 5[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "Rs. 25,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arbitrary Percentage Guess",
+        "mistakeAnalysis": "Aspirants compute 12.5% of total cost[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "Rs. 36,000",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Annual Depreciation $= \\frac{2,00,000 - 20,000}{5} = \\frac{1,80,000}{5} = \\text{Rs. } 36,000$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "Rs. 40,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scrap Value Neglect",
+        "mistakeAnalysis": "Aspirants divide original cost directly by useful life: $2,00,000 / 5 = 40,000$, ignoring scrap value[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Under the straight-line method, annual depreciation ($D$) is given by[cite: 2]:\n$D = \\frac{C - S}{n}$\nwhere:\n$C = \\text{Cost of machine} = \\text{Rs. } 2,00,000$[cite: 2]\n$S = \\text{Scrap value} = \\text{Rs. } 20,000$[cite: 2]\n$n = \\text{Useful life} = 5\\text{ years}$[cite: 2]\n$D = \\frac{2,00,000 - 20,000}{5} = \\frac{1,80,000}{5} = \\text{Rs. } 36,000$[cite: 2]."
+  },
+  {
+    "questionNumber": 17,
+    "chapter": "Probability Distributions",
+    "topic": "Parameters of Binomial Distribution",
+    "questionText": "The binomial distribution for which the mean is 5 and variance is 4, is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$P(X=r) = {}^{25}C_{r}\\left(\\frac{4}{5}\\right)^{r}\\left(\\frac{1}{5}\\right)^{25-r},\\; r = 0, 1, 2, \\dots, 25$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Success-Failure Probability Swapping",
+        "mistakeAnalysis": "Aspirants swap $p$ and $q$, taking $p = 4/5$ instead of $p = 1/5$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$P(X=r) = {}^{25}C_{r}\\left(\\frac{1}{5}\\right)^{r}\\left(\\frac{4}{5}\\right)^{25-r},\\; r = 0, 1, 2, \\dots, 25$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $q = \\sigma^2/\\mu = 4/5 \\implies p = 1/5 \\implies n = 5/(1/5) = 25$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$P(X=r) = {}^{25}C_{r}\\left(\\frac{1}{5}\\right)^{25}\\left(\\frac{4}{5}\\right)^{25-r},\\; r = 0, 1, 2, \\dots, 25$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Fixed Exponent Error",
+        "mistakeAnalysis": "Aspirants set the exponent of $p$ to fixed $n=25$ instead of variable $r$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$P(X=r) = {}^{25}C_{r}\\left(\\frac{1}{5}\\right)^{25-r}\\left(\\frac{4}{5}\\right)^{25},\\; r = 0, 1, 2, \\dots, 25$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Double Exponent Confusion",
+        "mistakeAnalysis": "Aspirants fix the exponent of $q$ to 25[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "For a binomial distribution $B(n, p)$:\nMean $\\mu = np = 5$[cite: 2]\nVariance $\\sigma^2 = npq = 4$[cite: 2]\nDividing variance by mean:\n$q = \\frac{npq}{np} = \\frac{4}{5}$.\nSince $p + q = 1$:\n$p = 1 - q = 1 - \\frac{4}{5} = \\frac{1}{5}$.\nFind $n$:\n$n = \\frac{\\mu}{p} = \\frac{5}{1/5} = 25$.\nThe probability mass function is:\n$P(X = r) = \\binom{n}{r} p^r q^{n-r} = {}^{25}C_r \\left(\\frac{1}{5}\\right)^r \\left(\\frac{4}{5}\\right)^{25-r},\\; r = 0, 1, 2, \\dots, 25$[cite: 2]."
+  },
+  {
+    "questionNumber": 18,
+    "chapter": "Linear Programming",
+    "topic": "Optimal Solution Identification",
+    "questionText": "The point which provides the optimal solution of the linear programming problem:\nMaximise $z = 21x + 35y$ subject to: $3x + 2y \\le 30,\\; 4x + 5y \\le 60,\\; x \\ge 0,\\; y \\ge 0$\nhas the coordinates[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\left(\\frac{30}{7}, \\frac{60}{7}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Intersection Point Bias",
+        "mistakeAnalysis": "Aspirants assume the intersection of constraint lines $(30/7, 60/7)$ is always the optimal vertex, where $z = 390$, which is less than $z(0, 12) = 420$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$(0, 12)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $z(0, 12) = 21(0) + 35(12) = 420$, which is the absolute maximum among all feasible corner points[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$(10, 0)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "$x$-Intercept Sub-optimal Vertex Trap",
+        "mistakeAnalysis": "Aspirants evaluate at $(10, 0)$ where $z = 210$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$(3, 8)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Non-Vertex Integer Guess",
+        "mistakeAnalysis": "Aspirants select an interior integer point rather than an extreme corner point[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Find all corner points of the bounded feasible region in the first quadrant ($x \\ge 0, y \\ge 0$)[cite: 2]:\n1. Origin: $(0, 0) \\implies z = 0$.\n2. $x$-intercept: Intersection of $3x + 2y = 30$ with $y = 0 \\implies x = 10$. Check $4(10) + 5(0) = 40 \\le 60$ (Satisfied). Point: $(10, 0)$. Value: $z = 21(10) + 35(0) = 210$[cite: 2].\n3. $y$-intercept: Intersection of $4x + 5y = 60$ with $x = 0 \\implies y = 12$. Check $3(0) + 2(12) = 24 \\le 30$ (Satisfied). Point: $(0, 12)$. Value: $z = 21(0) + 35(12) = 420$[cite: 2].\n4. Intersection of $3x + 2y = 30$ and $4x + 5y = 60$:\n   $5(3x + 2y) - 2(4x + 5y) = 5(30) - 2(60) \\implies 7x = 30 \\implies x = \\frac{30}{7}$.\n   $2y = 30 - 3(30/7) = \\frac{120}{7} \\implies y = \\frac{60}{7}$.\n   Point: $\\left(\\frac{30}{7}, \\frac{60}{7}\\right)$. Value: $z = 21\\left(\\frac{30}{7}\\right) + 35\\left(\\frac{60}{7}\\right) = 90 + 300 = 390$[cite: 2].\nComparing values: $z_{\\max} = 420$, which occurs at $(0, 12)$[cite: 2]."
+  },
+  {
+    "questionNumber": 19,
+    "chapter": "Matrices",
+    "topic": "Skew-Symmetric Matrix Properties",
+    "questionText": "If the matrix $A = \\begin{bmatrix}x & 2 & y \\\\ -2 & 0 & 3 \\\\ -1 & z & 0\\end{bmatrix}$ is skew-symmetric, then the value of $2x - 3y + 5z$ is equal to[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "18",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion of $z$",
+        "mistakeAnalysis": "Aspirants take $z = +3$ instead of $-3$, evaluating $0 - 3 + 15 = 12$ or reversing signs to $+18$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "15",
+        "isCorrect": false,
+        "studentSelectionTrap": "Partial Evaluation Slip",
+        "mistakeAnalysis": "Aspirants evaluate $5z$ without subtracting $3y$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "-10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Off-Diagonal Equality Mistake",
+        "mistakeAnalysis": "Aspirants treat $A$ as symmetric ($y = -1, z = 3$)[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "-18",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $x = 0, y = 1, z = -3 \\implies 2(0) - 3(1) + 5(-3) = -3 - 15 = -18$[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "For a skew-symmetric matrix $A$, $A^T = -A$, which implies $a_{ii} = 0$ and $a_{ij} = -a_{ji}$ for all $i, j$[cite: 2]:\n1. Diagonal elements must be zero: $a_{11} = 0 \\implies x = 0$[cite: 2].\n2. $a_{13} = -a_{31} \\implies y = -(-1) = 1$[cite: 2].\n3. $a_{32} = -a_{23} \\implies z = -(3) = -3$[cite: 2].\nNow evaluate the expression $2x - 3y + 5z$[cite: 2]:\n$2(0) - 3(1) + 5(-3) = 0 - 3 - 15 = -18$[cite: 2]."
+  },
+  {
+    "questionNumber": 20,
+    "chapter": "Financial Mathematics",
+    "topic": "Compound Annual Growth Rate",
+    "questionText": "Ram invested Rs. 20,000 in a mutual fund in the year 2012. The value of the mutual fund increased to Rs. 32,000 in the year 2017. The compound annual growth rate (CAGR) of his investment is:\n[Given: $(1.6)^{\\frac{1}{5}} = 1.098$][cite: 2]",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "10.8%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Decimal Shift Error",
+        "mistakeAnalysis": "Aspirants read 1.098 as approximately 1.108[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "7.81%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Simple Interest Return Formula",
+        "mistakeAnalysis": "Aspirants divide total simple gain 60% by 5 and subtract arbitrary fees[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "9.8%",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\text{CAGR} = (32000/20000)^{1/5} - 1 = (1.6)^{1/5} - 1 = 1.098 - 1 = 0.098 = 9.8\\%$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "6.81%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Base Value Overestimation",
+        "mistakeAnalysis": "Aspirants divide by final value instead of beginning value[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Present Value ($PV$) = Rs. 20,000[cite: 2]\nFinal Value ($FV$) = Rs. 32,000[cite: 2]\nTime period ($n$) = $2017 - 2012 = 5\\text{ years}$[cite: 2]\nThe CAGR formula is[cite: 2]:\n$\\text{CAGR} = \\left( \\frac{FV}{PV} \\right)^{\\frac{1}{n}} - 1$\n$\\text{CAGR} = \\left( \\frac{32,000}{20,000} \\right)^{\\frac{1}{5}} - 1 = (1.6)^{\\frac{1}{5}} - 1$\nGiven $(1.6)^{1/5} = 1.098$[cite: 2]:\n$\\text{CAGR} = 1.098 - 1 = 0.098 = 9.8\\%$ (or $9.81\\%$)[cite: 2]."
+  },
+  {
+    "questionNumber": 21,
+    "chapter": "Determinants",
+    "topic": "System of Homogeneous Linear Equations",
+    "questionText": "If the system of equations $x + y + z = 0$, $x + ky - z = 0$, $x - y + kz = 0$ has a non-zero solution, then the possible values of $k$ are[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "1, 3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factoring Sign Error",
+        "mistakeAnalysis": "Aspirants factor $k^2 - 2k - 3$ incorrectly as $(k-1)(k-3) = 0$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "1, -3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Quadratic Mid-term Sign Inversion",
+        "mistakeAnalysis": "Aspirants solve $k^2 + 2k - 3 = 0$ getting roots $1, -3$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "2, 3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Expansion Slip",
+        "mistakeAnalysis": "Aspirants make an arithmetic error in the minor expansions[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "-1, 3",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Homogeneous non-trivial solution requires determinant to be zero: $k^2 - 2k - 3 = 0 \\implies k = -1, 3$[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "A homogeneous system of linear equations has a non-zero (non-trivial) solution if and only if the determinant of the coefficient matrix equals zero[cite: 2]:\n$\\begin{vmatrix} 1 & 1 & 1 \\\\ 1 & k & -1 \\\\ 1 & -1 & k \\end{vmatrix} = 0$\nExpanding along Row 1:\n$1(k(k) - (-1)(-1)) - 1(1(k) - (-1)(1)) + 1(1(-1) - k(1)) = 0$\n$1(k^2 - 1) - 1(k + 1) + 1(-1 - k) = 0$\n$k^2 - 1 - k - 1 - 1 - k = 0$\n$k^2 - 2k - 3 = 0$\nFactoring the quadratic:\n$(k - 3)(k + 1) = 0 \\implies k = 3\\text{ or } k = -1$[cite: 2]."
+  },
+  {
+    "questionNumber": 22,
+    "chapter": "Financial Mathematics",
+    "topic": "Sinking Funds",
+    "questionText": "Choose the correct statement about a Sinking Fund[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "It is a long term account which can be closed any time[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Savings Account Equivalence Fallacy",
+        "mistakeAnalysis": "Aspirants confuse sinking funds with demand deposits[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "It does not have any specific purpose[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "General Reserves Misconception",
+        "mistakeAnalysis": "Aspirants confuse sinking funds with general contingency reserves[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "In this fund, a fixed amount at regular intervals is deposited for a fixed term[cite: 2].",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Matches the standard NCERT definition of a sinking fund established for designated capital replacement or debt amortization[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "It can be used in any emergency[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Emergency Fund Confusion",
+        "mistakeAnalysis": "Aspirants confuse sinking funds with liquid emergency reserves[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "By definition in applied financial mathematics, a **sinking fund** is a special fund created by setting aside fixed periodic payments over a specified period to accumulate a required sum at a future date for a predetermined objective (such as repaying a debt or replacing depreciated machinery)[cite: 2]. Thus, statement 3 is correct[cite: 2]."
+  },
+  {
+    "questionNumber": 23,
+    "chapter": "Time Series Analysis",
+    "topic": "Properties of Least Squares Trend Line",
+    "questionText": "If $(t_{1}, y_{1}), (t_{2}, y_{2}), \\dots, (t_{n}, y_{n})$ denote the time series and $y_{t}$ are the trend values of the variables $y$, then[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\sum_{i=1}^{n}(y_{i}-y_{t})=0$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard mathematical property of linear least squares: the algebraic sum of deviations of actual values from trend values is identically zero[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$\\sum_{i=1}^{n}(y_{i}-y_{t})=1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unit Normalization Fallacy",
+        "mistakeAnalysis": "Aspirants confuse residual summation with the total probability axiom[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$\\sum_{i=1}^{n}(y_{i}-y_{t})=\\infty$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Divergence Assumption",
+        "mistakeAnalysis": "Aspirants assume non-stationary series diverge infinitely[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$\\sum_{i=1}^{n}(y_{i}-y_{t})\\ne0$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Non-Zero Error Assumption",
+        "mistakeAnalysis": "Aspirants assume individual non-zero residuals prevent the sum from vanishing[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "In least-squares fitting of a linear trend $y_t = a + bt$, the normal equations minimize $\\sum (y_i - y_t)^2$. The first normal equation is:\n$\\sum_{i=1}^n y_i = na + b\\sum_{i=1}^n t_i = \\sum_{i=1}^n (a + bt_i) = \\sum_{i=1}^n y_t$.\nSubtracting $\\sum y_t$ from both sides gives:\n$\\sum_{i=1}^n (y_i - y_t) = 0$[cite: 2]."
+  },
+  {
+    "questionNumber": 24,
+    "chapter": "Application of Derivatives",
+    "topic": "Applied Maxima and Minima",
+    "questionText": "The two positive numbers whose sum is 16 and the sum of whose squares is minimum are[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "6, 10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sub-optimal Pair Evaluation",
+        "mistakeAnalysis": "Aspirants calculate $6^2 + 10^2 = 36 + 100 = 136$, which is greater than 128[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "7, 9",
+        "isCorrect": false,
+        "studentSelectionTrap": "Near-Center Guess",
+        "mistakeAnalysis": "Aspirants calculate $7^2 + 9^2 = 49 + 81 = 130$, which is sub-optimal[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "8, 8",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $S(x) = x^2 + (16-x)^2 \\implies S'(x) = 4x - 32 = 0 \\implies x = 8$. Min sum of squares is $64 + 64 = 128$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "5, 11",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arbitrary Sum Verification Only",
+        "mistakeAnalysis": "Aspirants check that $5 + 11 = 16$ but overlook the sum of squares $25 + 121 = 146$[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Let the two positive numbers be $x$ and $y$ such that $x + y = 16 \\implies y = 16 - x$[cite: 2].\nWe wish to minimize the sum of their squares:\n$S(x) = x^2 + y^2 = x^2 + (16 - x)^2 = x^2 + 256 - 32x + x^2 = 2x^2 - 32x + 256$.\nDifferentiating with respect to $x$:\n$S'(x) = 4x - 32$.\nSetting $S'(x) = 0 \\implies 4x = 32 \\implies x = 8$.\nSecond derivative:\n$S''(x) = 4 > 0$, confirming a minimum.\nThen $y = 16 - 8 = 8$.\nThus, the numbers are 8, 8[cite: 2]."
+  },
+  {
+    "questionNumber": 25,
+    "chapter": "Quantitative Aptitude",
+    "topic": "Alligations and Mixtures",
+    "questionText": "The cost of type 1 rice is Rs. 20 per kg and type 2 rice is Rs. 30 per kg. If both Type 1 and Type 2 are mixed in the ratio 2:3, then the price per kg of the mixed variety is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Rs. 26",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Weighted mean price $= \\frac{20(2) + 30(3)}{2 + 3} = \\frac{130}{5} = \\text{Rs. } 26$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "Rs. 24",
+        "isCorrect": false,
+        "studentSelectionTrap": "Ratio Inversion Slip",
+        "mistakeAnalysis": "Aspirants mix in the inverted ratio 3:2: $\\frac{20(3) + 30(2)}{5} = \\frac{120}{5} = 24$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "Rs. 30",
+        "isCorrect": false,
+        "studentSelectionTrap": "Maximum Price Anchor",
+        "mistakeAnalysis": "Aspirants anchor to the higher component price[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "Rs. 32",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Addition Error",
+        "mistakeAnalysis": "Aspirants divide 160 by 5[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Using the weighted average formula for mixtures[cite: 2]:\n$\\text{Mean Price} = \\frac{C_1 w_1 + C_2 w_2}{w_1 + w_2}$\nGiven $C_1 = 20, w_1 = 2$ and $C_2 = 30, w_2 = 3$[cite: 2]:\n$\\text{Mean Price} = \\frac{20(2) + 30(3)}{2 + 3} = \\frac{40 + 90}{5} = \\frac{130}{5} = \\text{Rs. } 26\\text{ per kg}$[cite: 2]."
+  },
+  {
+    "questionNumber": 26,
+    "chapter": "Linear Programming",
+    "topic": "Coincident Multiple Optimal Solutions",
+    "questionText": "The corner points of the bounded feasible region determined by the system of linear constraints are $(0,8)$, $(4,4)$, $(12,12)$, $(0,20)$. Let $z = px + qy$, where $p, q > 0$. The condition on $p$ and $q$ so that the maximum of $z$ occurs at both the points $(12,12)$ and $(0,20)$ is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$2p = q$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Coefficient Simplification Slip",
+        "mistakeAnalysis": "Aspirants divide 12 by 6 and 8 by 4 incorrectly[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$p = 3q$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Reduction Inversion",
+        "mistakeAnalysis": "Aspirants calculate $12p = 4q$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$2p = 3q$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Ratio Inversion Error",
+        "mistakeAnalysis": "Aspirants write $12p = 8q$ as $2p = 3q$ instead of $3p = 2q$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$3p = 2q$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $z(12, 12) = z(0, 20) \\implies 12p + 12q = 20q \\implies 12p = 8q \\implies 3p = 2q$[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "For the maximum of $z = px + qy$ to occur at both $(12, 12)$ and $(0, 20)$, the value of $z$ at these two points must be identical[cite: 2]:\n$z(12, 12) = z(0, 20)$\n$p(12) + q(12) = p(0) + q(20)$\n$12p + 12q = 20q$\n$12p = 20q - 12q$\n$12p = 8q$\nDividing both sides by 4:\n$3p = 2q$[cite: 2]."
+  },
+  {
+    "questionNumber": 27,
+    "chapter": "Probability Distributions",
+    "topic": "Mean and Variance of Discrete Random Variables",
+    "questionText": "A random variable $X$ has the following probability distribution[cite: 2]:\n$X$: 0, 1, 2\n$P(X)$: 1/4, 1/2, 1/4\nThen, which of the following is correct[cite: 2]?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\text{mean} = \\text{variance}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Poisson Property Confusion",
+        "mistakeAnalysis": "Aspirants confuse the binomial symmetric distribution with the Poisson property $\\mu = \\sigma^2$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$2\\text{ mean} = \\text{variance}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Ratio Inversion",
+        "mistakeAnalysis": "Aspirants invert the ratio between mean and variance[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$\\text{mean} = 2\\text{ variance}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\text{Mean} = 1$ and $\\text{Variance} = 1/2$, so $\\text{mean} = 2 \\times \\text{variance}$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$3\\text{ mean} = 2\\text{ variance}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip in $E(X^2)$",
+        "mistakeAnalysis": "Aspirants miscalculate $E(X^2)$ as $2/3$[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "1. Compute Mean $E(X)$[cite: 2]:\n$E(X) = \\sum x_i P(x_i) = 0\\left(\\frac{1}{4}\\right) + 1\\left(\\frac{1}{2}\\right) + 2\\left(\\frac{1}{4}\\right) = 0 + \\frac{1}{2} + \\frac{1}{2} = 1$.\n2. Compute $E(X^2)$:\n$E(X^2) = \\sum x_i^2 P(x_i) = 0^2\\left(\\frac{1}{4}\\right) + 1^2\\left(\\frac{1}{2}\\right) + 2^2\\left(\\frac{1}{4}\\right) = 0 + \\frac{1}{2} + 1 = \\frac{3}{2}$.\n3. Compute Variance $\\operatorname{Var}(X)$:\n$\\operatorname{Var}(X) = E(X^2) - [E(X)]^2 = \\frac{3}{2} - (1)^2 = \\frac{1}{2}$.\nComparing the two:\n$\\text{Mean} = 1 = 2 \\times \\left(\\frac{1}{2}\\right) = 2 \\times \\text{Variance}$[cite: 2]."
+  },
+  {
+    "questionNumber": 28,
+    "chapter": "Time Series Analysis",
+    "topic": "Linear Trend by Method of Least Squares",
+    "questionText": "Assuming the same rate of change continues for the following data:\nYear ($X$): 2019, 2020, 2021, 2022, 2023\nProfit in Percentage ($y$): 38, 40, 65, 72, 69\nThe equation of the straight line trend using the least squares method is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$y = 9.4x + 18940.6$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Intercept Sign Error",
+        "mistakeAnalysis": "Aspirants calculate $a = 56.8 - 9.4(2021)$ but drop the leading negative sign[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$y = 9.4x - 18940.6$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $b = 9.4$, and converting origin back from 2021 gives intercept $56.8 - 9.4(2021) = -18940.6$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$y = 9.4x + 56.8$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Coded Form Intercept Misapplication",
+        "mistakeAnalysis": "Aspirants use the transformed intercept with unshifted $x$ instead of $u = x - 2021$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$y = 9.4x - 56.8$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arbitrary Sign Inversion",
+        "mistakeAnalysis": "Aspirants apply a negative sign directly to the transformed mean[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Number of years $N = 5$ (odd)[cite: 2].\nCentral year = 2021. Let $u = X - 2021$[cite: 2].\nValues of $u$: $-2, -1, 0, 1, 2$, giving $\\sum u = 0$ and $\\sum u^2 = (-2)^2 + (-1)^2 + 0^2 + 1^2 + 2^2 = 10$.\nSum of $y$:\n$\\sum y = 38 + 40 + 65 + 72 + 69 = 284$[cite: 2].\nMean $\\bar{y} = \\frac{284}{5} = 56.8$.\nSum of products $\\sum u y$:\n$\\sum u y = (-2)(38) + (-1)(40) + 0(65) + 1(72) + 2(69) = -76 - 40 + 0 + 72 + 138 = 94$.\nSlope $b$:\n$b = \\frac{\\sum u y}{\\sum u^2} = \\frac{94}{10} = 9.4$.\nThe trend line in terms of $u$ is $y = 56.8 + 9.4u$.\nSubstitute $u = x - 2021$:\n$y = 56.8 + 9.4(x - 2021) = 56.8 + 9.4x - 18997.4 = 9.4x - 18940.6$[cite: 2]."
+  },
+  {
+    "questionNumber": 29,
+    "chapter": "Inferential Statistics",
+    "topic": "Properties of Student's t-Distribution",
+    "questionText": "Which of the following statements are TRUE?\n(A) The variable $t$ of $t$-distribution ranges from $-\\infty$ to $\\infty$.\n(B) The probability curve of the $t$-distribution is symmetric about the line $t = 0$.\n(C) The variance of the $t$-distribution is greater than one.\n(D) As the number of degrees of freedom decreases, the $t$-distribution curve moves closer to the standard normal probability curve.\n\nChoose the correct answer from the options given below[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A), (B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Degrees of Freedom Asymptotic Inversion",
+        "mistakeAnalysis": "Aspirants assume the $t$-curve approaches standard normal when degrees of freedom decrease rather than increase[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $t$ ranges on $\\mathbb{R}$, is symmetric about 0, and variance is $\\nu/(\\nu-2) > 1$. (D) is false because convergence requires degrees of freedom to increase[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "(A), (B), (C) and (D)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Universal Acceptance Fallacy",
+        "mistakeAnalysis": "Aspirants accept statement (D) without noticing the word 'decreases' instead of 'increases'[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "(C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Symmetry and Range Neglect",
+        "mistakeAnalysis": "Aspirants overlook the defining symmetry and range properties of the $t$-distribution[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "1. Statement (A): The $t$-statistic is continuous over the entire real line: $-\\infty < t < \\infty$. (True)[cite: 2]\n2. Statement (B): The $t$-distribution probability density function is bell-shaped and completely symmetric about $t = 0$. (True)[cite: 2]\n3. Statement (C): The variance of a $t$-distribution with $\\nu$ degrees of freedom is $\\operatorname{Var}(t) = \\frac{\\nu}{\\nu - 2}$ (for $\\nu > 2$). Since $\\frac{\\nu}{\\nu - 2} > 1$, its variance is always strictly greater than 1. (True)[cite: 2]\n4. Statement (D): By the Central Limit Theorem, the $t$-distribution converges to the standard normal distribution as $\\nu \\to \\infty$ (i.e., as degrees of freedom **increases**, not decreases). (False)[cite: 2]\nThus, (A), (B) and (C) only are TRUE[cite: 2]."
+  },
+  {
+    "questionNumber": 30,
+    "chapter": "Linear Inequalities",
+    "topic": "Linear Inequalities in One Variable",
+    "questionText": "If $\\frac{3x-5}{6} + 8 \\ge 4 + \\frac{2x}{3}$, then[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$x \\in (-\\infty, 19]$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Multiplying by 6 gives $3x - 5 + 48 \\ge 24 + 4x \\implies 43 \\ge 24 + x \\implies x \\le 19$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$x \\in (-\\infty, -19]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants obtain $-19$ due to an arithmetic sign error in $43 - 24$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$x \\in [19, \\infty)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inequality Reversal Fallacy",
+        "mistakeAnalysis": "Aspirants reverse the inequality symbol without multiplying by a negative number[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$x \\in [-19, \\infty)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Combined Sign and Direction Error",
+        "mistakeAnalysis": "Aspirants invert both the sign and the boundary direction[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Given inequality:\n$\\frac{3x - 5}{6} + 8 \\ge 4 + \\frac{2x}{3}$[cite: 2]\nSubtract 4 from both sides:\n$\\frac{3x - 5}{6} + 4 \\ge \\frac{2x}{3}$\nMultiply through by the LCM, which is 6:\n$(3x - 5) + 6(4) \\ge 2(2x)$\n$3x - 5 + 24 \\ge 4x$\n$3x + 19 \\ge 4x$\nSubtract $3x$ from both sides:\n$19 \\ge 4x - 3x \\implies 19 \\ge x \\implies x \\le 19$.\nIn interval notation:\n$x \\in (-\\infty, 19]$[cite: 2]."
+  },
+  {
+    "questionNumber": 31,
+    "chapter": "Differential Equations",
+    "topic": "Formation of Differential Equations and Order/Degree",
+    "questionText": "The sum of the order and degree of the differential equation representing the family of curves $y = mx + m^{4}$, where $m$ is an arbitrary constant, is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Degree Subtraction Slip",
+        "mistakeAnalysis": "Aspirants calculate $4 - 1 = 3$ instead of sum $4 + 1$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Degree Alone Reported",
+        "mistakeAnalysis": "Aspirants report only the degree 4, forgetting to add the order 1[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "5",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Differentiating yields $dy/dx = m$. Substituting gives $y = x(y') + (y')^4$, which has order 1 and degree 4; sum = 5[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Quadratic Fallacy",
+        "mistakeAnalysis": "Aspirants assume a family with 1 parameter has sum of order and degree equal to 2[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Given family of curves:\n$y = mx + m^4$  --- (1)[cite: 2]\nHere $m$ is the single arbitrary constant. Differentiating with respect to $x$[cite: 2]:\n$\\frac{dy}{dx} = m$  --- (2)\nSubstitute $m = \\frac{dy}{dx}$ into equation (1):\n$y = x\\left(\\frac{dy}{dx}\\right) + \\left(\\frac{dy}{dx}\\right)^4$.\n1. Highest order derivative is $\\frac{dy}{dx} \\implies \\text{Order} = 1$.\n2. The highest power of the highest derivative is $4 \\implies \\text{Degree} = 4$.\nSum of order and degree $= 1 + 4 = 5$[cite: 2]."
+  },
+  {
+    "questionNumber": 32,
+    "chapter": "Determinants",
+    "topic": "Singular Matrices and Parameter Evaluation",
+    "questionText": "If $A = \\begin{bmatrix}3 & 2a \\\\ 1 & 5\\end{bmatrix}$ and $B = \\begin{bmatrix}2 & 3 \\\\ b & 5\\end{bmatrix}$ are singular matrices, then $a + b$ is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{6}{65}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reciprocal Inversion",
+        "mistakeAnalysis": "Aspirants invert the sum to $6/65$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$-\\frac{67}{6}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign and Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants introduce an erroneous minus sign during determinant expansion[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{65}{6}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|A|=0 \\implies 15-2a=0 \\implies a=15/2$; $|B|=0 \\implies 10-3b=0 \\implies b=10/3$. Sum $= 15/2 + 10/3 = 65/6$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{66}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Denominator Miscalculation",
+        "mistakeAnalysis": "Aspirants multiply denominators erroneously as 66[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "A matrix is singular if and only if its determinant is zero[cite: 2]:\n1. For matrix $A$[cite: 2]:\n   $|A| = (3)(5) - (2a)(1) = 0 \\implies 15 - 2a = 0 \\implies a = \\frac{15}{2}$.\n2. For matrix $B$[cite: 2]:\n   $|B| = (2)(5) - (3)(b) = 0 \\implies 10 - 3b = 0 \\implies b = \\frac{10}{3}$.\nNow compute $a + b$[cite: 2]:\n$a + b = \\frac{15}{2} + \\frac{10}{3} = \\frac{45 + 20}{6} = \\frac{65}{6}$[cite: 2]."
+  },
+  {
+    "questionNumber": 33,
+    "chapter": "Integrals",
+    "topic": "Definite Integration by Substitution",
+    "questionText": "The value of $\\int_{2}^{4}\\frac{x}{x^{2}+1}\\,dx$ is equal to[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{1}{2}\\log_{e}\\left(\\frac{17}{5}\\right)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Substituting $t = x^2 + 1$ yields $\\frac{1}{2}\\int_5^{17} \\frac{dt}{t} = \\frac{1}{2}\\log_e(17/5)$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{1}{5}\\log_{e}\\left(\\frac{17}{5}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Lower Bound Factor Confusion",
+        "mistakeAnalysis": "Aspirants divide by the lower limit $t = 5$ instead of 2[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$\\log_{e}\\left(\\frac{17}{5}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Substitution Factor $1/2$ Omission",
+        "mistakeAnalysis": "Aspirants forget that $x\\,dx = \\frac{1}{2}dt$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$2\\log_{e}\\left(\\frac{17}{5}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Derivative Multiplier Error",
+        "mistakeAnalysis": "Aspirants multiply by 2 instead of dividing by 2[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $I = \\int_{2}^{4}\\frac{x}{x^{2}+1}\\,dx$[cite: 2].\nSubstitute $t = x^2 + 1 \\implies dt = 2x\\,dx \\implies x\\,dx = \\frac{1}{2}dt$.\nChange limits:\n- When $x = 2$: $t = 2^2 + 1 = 5$\n- When $x = 4$: $t = 4^2 + 1 = 17$\n$I = \\frac{1}{2} \\int_{5}^{17} \\frac{dt}{t} = \\frac{1}{2} [\\log_e |t|]_{5}^{17} = \\frac{1}{2} (\\log_e 17 - \\log_e 5) = \\frac{1}{2}\\log_e\\left(\\frac{17}{5}\\right)$[cite: 2]."
+  },
+  {
+    "questionNumber": 34,
+    "chapter": "Numbers and Quantification",
+    "topic": "Modular Arithmetic and Remainder Theorem",
+    "questionText": "The least non-negative remainder, when 51 is divided by 7, is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "6",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Residue Inversion",
+        "mistakeAnalysis": "Aspirants compute $51 \\equiv -5 \\equiv 2 \\pmod 7$ but mix up steps to get 6[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division Quotient Slip",
+        "mistakeAnalysis": "Aspirants calculate $51 - 49 = 4$ through an arithmetic subtraction slip[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "5",
+        "isCorrect": false,
+        "studentSelectionTrap": "Leading Digit Heuristic",
+        "mistakeAnalysis": "Aspirants pick the leading digit 5[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "2",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $51 = 7 \\times 7 + 2$, with least non-negative remainder $0 \\le r < 7$ being 2[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "By Euclid's Division Lemma, for integers $a$ and $b > 0$, there exist unique integers $q$ and $r$ such that:\n$a = bq + r,\\quad 0 \\le r < b$.\nHere $a = 51$ and $b = 7$[cite: 2]:\n$51 = 7(7) + 2$.\nSince $0 \\le 2 < 7$, the least non-negative remainder is 2[cite: 2]."
+  },
+  {
+    "questionNumber": 35,
+    "chapter": "Application of Derivatives",
+    "topic": "Rate of Change of Geometric Quantities",
+    "questionText": "The length of a rectangle is decreasing at the rate of $4\\text{ cm/minute}$ and the width is increasing at the rate of $3\\text{ cm/minute}$, then the rate of change of the perimeter is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$2\\text{ cm/min}$ decreasing",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P = 2(l + w) \\implies dP/dt = 2(-4 + 3) = -2\\text{ cm/min}$, which is decreasing[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$3\\text{ cm/min}$ decreasing",
+        "isCorrect": false,
+        "studentSelectionTrap": "Width Rate Dominance",
+        "mistakeAnalysis": "Aspirants assume perimeter follows the width rate[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$2\\text{ cm/min}$ increasing",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Convention Error",
+        "mistakeAnalysis": "Aspirants calculate magnitude 2 correctly but misidentify the net rate as increasing[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$3\\text{ cm/min}$ increasing",
+        "isCorrect": false,
+        "studentSelectionTrap": "Difference of Magnitudes Slip",
+        "mistakeAnalysis": "Aspirants take $4 - 1 = 3$[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let the length and width of the rectangle be $l$ and $w$ respectively.\nPerimeter $P = 2(l + w)$.\nDifferentiating with respect to time $t$:\n$\\frac{dP}{dt} = 2\\left( \\frac{dl}{dt} + \\frac{dw}{dt} \\right)$.\nGiven that length is decreasing: $\\frac{dl}{dt} = -4\\text{ cm/min}$[cite: 2].\nWidth is increasing: $\\frac{dw}{dt} = +3\\text{ cm/min}$[cite: 2].\n$\\frac{dP}{dt} = 2(-4 + 3) = 2(-1) = -2\\text{ cm/min}$.\nThe negative sign indicates that the perimeter is decreasing at the rate of $2\\text{ cm/minute}$[cite: 2]."
+  },
+  {
+    "questionNumber": 36,
+    "chapter": "Inferential Statistics",
+    "topic": "Point Estimation of Population Standard Deviation",
+    "questionText": "The following data are from a random sample: 5, 8, 10, 7, 10, 14. Then the point estimate of the population standard deviation is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "2.1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Variance Square Root Truncation",
+        "mistakeAnalysis": "Aspirants approximate incorrectly[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "4.1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Mean Absolute Deviation Trap",
+        "mistakeAnalysis": "Aspirants calculate mean absolute deviation instead of standard deviation[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "5.6",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sample Variance Divisor Slip",
+        "mistakeAnalysis": "Aspirants confuse standard deviation with variance[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "3.1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Sample mean is 9. Unbiased sample variance is $s^2 = 48/(6-1) = 9.6 \\implies s = \\sqrt{9.6} \\approx 3.098 \\approx 3.1$[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Sample size $n = 6$[cite: 2].\nCompute sample mean $\\bar{x}$:\n$\\bar{x} = \\frac{5 + 8 + 10 + 7 + 10 + 14}{6} = \\frac{54}{6} = 9$[cite: 2].\nCompute squared deviations from the mean:\n- $(5 - 9)^2 = (-4)^2 = 16$\n- $(8 - 9)^2 = (-1)^2 = 1$\n- $(10 - 9)^2 = 1^2 = 1$\n- $(7 - 9)^2 = (-2)^2 = 4$\n- $(10 - 9)^2 = 1^2 = 1$\n- $(14 - 9)^2 = 5^2 = 25$\nSum of squared deviations $\\sum (x_i - \\bar{x})^2 = 16 + 1 + 1 + 4 + 1 + 25 = 48$.\nThe unbiased point estimate of population variance is:\n$s^2 = \\frac{\\sum (x_i - \\bar{x})^2}{n - 1} = \\frac{48}{6 - 1} = \\frac{48}{5} = 9.6$.\nPoint estimate of population standard deviation:\n$s = \\sqrt{9.6} \\approx 3.098 \\approx 3.1$[cite: 2]."
+  },
+  {
+    "questionNumber": 37,
+    "chapter": "Probability Distributions",
+    "topic": "Linear Transformation of Expectation and Variance",
+    "questionText": "If $X$ is a random variable and $a, b$ are real numbers, which statements are TRUE?\n(A) $\\operatorname{Var}(aX+b) = a^{2}\\operatorname{Var}(X)$\n(B) $E(aX+b) = aE(X) + b$\n(C) $E(aX+b) = aE(X) - E(b)$\n(D) $\\operatorname{Var}(aX+b) = a\\operatorname{Var}(X) + b$\n\nChoose the correct answer[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) and (B) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Expectation is a linear operator $E(aX+b) = aE(X)+b$, and variance is invariant to shifts: $\\operatorname{Var}(aX+b) = a^2 \\operatorname{Var}(X)$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "(A) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Subtraction in Linearity Trap",
+        "mistakeAnalysis": "Aspirants overlook the minus sign in statement (C)[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "(B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Variance Fallacy",
+        "mistakeAnalysis": "Aspirants assume variance behaves linearly like expectation[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "(A), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Constant Shift in Variance Misconception",
+        "mistakeAnalysis": "Aspirants assume adding a constant $b$ increases variance by $b$[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By standard properties of expectation and variance for a random variable $X$:\n1. $\\operatorname{Var}(aX + b) = E[((aX + b) - E(aX + b))^2] = E[(aX - aE(X))^2] = a^2 E[(X - E(X))^2] = a^2 \\operatorname{Var}(X)$. Thus, (A) is TRUE, and (D) is FALSE[cite: 2].\n2. By linearity of expectation: $E(aX + b) = aE(X) + E(b) = aE(X) + b$. Thus, (B) is TRUE, and (C) is FALSE[cite: 2].\nTherefore, (A) and (B) only are true[cite: 2]."
+  },
+  {
+    "questionNumber": 38,
+    "chapter": "Quantitative Aptitude",
+    "topic": "Work and Time / Pipes and Cisterns",
+    "questionText": "Pipe A and B can fill a tank in 20 hours and 25 hours respectively, and pipe C can empty it in 40 hours. If all the pipes are opened together, then how much time will be needed to make the tank full[cite: 2]?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$15\\frac{1}{13}\\text{ hours}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Numerator Remainder Slip",
+        "mistakeAnalysis": "Aspirants write $200 = 13 \\times 15 + 1$ instead of $13 \\times 15 + 5$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$5\\frac{4}{13}\\text{ hours}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Summation Error",
+        "mistakeAnalysis": "Aspirants make an algebraic error in the reciprocal work rate[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$15\\text{ hours}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Fractional Part Truncation",
+        "mistakeAnalysis": "Aspirants truncate the fractional part $5/13$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$15\\frac{5}{13}\\text{ hours}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Net rate $= 1/20 + 1/25 - 1/40 = 13/200$. Time required $= 200/13 = 15\\frac{5}{13}$ hours[cite: 2]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Part of tank filled by Pipe A in 1 hour = $\\frac{1}{20}$[cite: 2].\nPart of tank filled by Pipe B in 1 hour = $\\frac{1}{25}$[cite: 2].\nPart of tank emptied by Pipe C in 1 hour = $\\frac{1}{40}$[cite: 2].\nWhen all three pipes are opened simultaneously, net part filled in 1 hour is:\n$\\text{Net rate} = \\frac{1}{20} + \\frac{1}{25} - \\frac{1}{40}$\nLCM of 20, 25, and 40 is 200:\n$\\text{Net rate} = \\frac{10 + 8 - 5}{200} = \\frac{13}{200}\\text{ of the tank per hour}$.\nTotal time taken to fill the tank:\n$T = \\frac{1}{13/200} = \\frac{200}{13} = 15\\frac{5}{13}\\text{ hours}$[cite: 2]."
+  },
+  {
+    "questionNumber": 39,
+    "chapter": "Financial Mathematics",
+    "topic": "Compound Annual Growth Rate Concepts",
+    "questionText": "Choose the correct statement about CAGR (compound annual growth rate)[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "CAGR is the average annualised return of an investment[cite: 2].",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. CAGR provides a smoothed annual rate that represents the annualized return of an investment compounding over multiple years[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "CAGR is calculated by taking arithmetic mean of series of returns[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic vs Geometric Mean Confusion",
+        "mistakeAnalysis": "Aspirants assume CAGR uses arithmetic mean rather than geometric compounding[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "CAGR is linear measure that does not account for the effects of compounding[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Fallacy",
+        "mistakeAnalysis": "Aspirants overlook the 'C' in CAGR which explicitly stands for Compound[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "CAGR is calculated by using only the final and beginning value of an investment[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Time Horizon Omission",
+        "mistakeAnalysis": "Aspirants omit the required number of periods ($n$) in the calculation[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By definition, the **Compound Annual Growth Rate (CAGR)** is the geometric mean annualized return that dampens the effect of volatility over multiple periods[cite: 2]. It describes the rate at which an investment would have grown if it had grown at a steady annual rate compounding each year[cite: 2]."
+  },
+  {
+    "questionNumber": 40,
+    "chapter": "Financial Mathematics",
+    "topic": "Linear Cost and Break-Even Analysis",
+    "questionText": "The break-even point is the level of production where[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "the revenue from sales is less than the cost of production and marketing[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Loss Region Misidentification",
+        "mistakeAnalysis": "Aspirants describe the loss zone ($R < C$)[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "the revenue from sales is equal to the cost of production and marketing[cite: 2].",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Break-even occurs where total revenue equals total cost ($R = C$), resulting in zero profit[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "the revenue from sales is greater than the cost of production and marketing[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Profit Zone Misidentification",
+        "mistakeAnalysis": "Aspirants describe the profitable operating zone ($R > C$)[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "the sum of revenue from sales and the cost of production and marketing is zero[cite: 2].",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sum Zero Fallacy",
+        "mistakeAnalysis": "Aspirants confuse profit $R - C = 0$ with the sum $R + C = 0$[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "In business mathematics and cost accounting, the **break-even point** represents the sales volume or production level at which total revenue ($R$) equals total cost ($C$) (including both fixed and variable costs of production and marketing), yielding neither profit nor loss: $P(x) = R(x) - C(x) = 0 \\implies R(x) = C(x)$[cite: 2]."
+  },
+  {
+    "questionNumber": 41,
+    "chapter": "Determinants",
+    "topic": "Minors, Cofactors and Adjoint of a Matrix",
+    "questionText": "If $A = \\begin{bmatrix}5 & 2 \\\\ 4 & 3\\end{bmatrix}$ is a given matrix, then which statements are correct?\n(A) $|A| = 7$\n(B) minor of $3 = -5$\n(C) co-factor of $2 = -4$\n(D) $\\operatorname{adj}(A) = \\begin{bmatrix}3 & -2 \\\\ -4 & 5\\end{bmatrix}$\n\nChoose the correct answer from the options given below[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A), (C) and (D) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|A|=15-8=7$, cofactor of 2 is $-4$, and adjoint swaps diagonals and negates off-diagonals. Minor of 3 is $+5$, making (B) false[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Minor Sign Error",
+        "mistakeAnalysis": "Aspirants assume minors carry cofactor sign factors[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "(B), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Determinant Exclusion",
+        "mistakeAnalysis": "Aspirants miscalculate $|A|$ and omit statement (A)[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "(A), (B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cofactor Sign Omission",
+        "mistakeAnalysis": "Aspirants fail to verify the cofactor sign for entry $a_{12}$[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Given $A = \\begin{bmatrix}5 & 2 \\\\ 4 & 3\\end{bmatrix}$[cite: 2]:\n1. Determinant $|A| = 5(3) - 2(4) = 15 - 8 = 7$. (Statement A is TRUE)[cite: 2].\n2. Minor of 3 (element $a_{22}$) is the determinant of the submatrix obtained by deleting row 2 and column 2: $M_{22} = 5$. (Statement B is FALSE because it states $-5$)[cite: 2].\n3. The element 2 is at position $(1, 2)$. Its minor is $M_{12} = 4$. Cofactor $C_{12} = (-1)^{1+2} M_{12} = -4$. (Statement C is TRUE)[cite: 2].\n4. The adjoint of a $2 \\times 2$ matrix $\\begin{bmatrix}a & b \\\\ c & d\\end{bmatrix}$ is $\\begin{bmatrix}d & -b \\\\ -c & a\\end{bmatrix}$. Thus, $\\operatorname{adj}(A) = \\begin{bmatrix}3 & -2 \\\\ -4 & 5\\end{bmatrix}$. (Statement D is TRUE)[cite: 2].\nTherefore, (A), (C) and (D) only are correct[cite: 2]."
+  },
+  {
+    "questionNumber": 42,
+    "chapter": "Inferential Statistics",
+    "topic": "Two-Sample t-Test Degrees of Freedom",
+    "questionText": "For the following data:\nSample 1: Size = 4, Mean = 40, Standard Deviation = 8\nSample 2: Size = 5, Mean = 50, Standard Deviation = 10\nThe sample statistic $t$ follows $t$-distribution with $m$ degrees of freedom, then $m$ is equal to[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "11",
+        "isCorrect": false,
+        "studentSelectionTrap": "Double Degree Addition Error",
+        "mistakeAnalysis": "Aspirants add 2 instead of subtracting 2: $4 + 5 + 2 = 11$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Standard Deviation Confusion",
+        "mistakeAnalysis": "Aspirants select the standard deviation of Sample 2[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "7",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For a two-sample $t$-test with independent samples, $m = n_1 + n_2 - 2 = 4 + 5 - 2 = 7$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "9",
+        "isCorrect": false,
+        "studentSelectionTrap": "Total Sample Size Unadjusted",
+        "mistakeAnalysis": "Aspirants report $n_1 + n_2 = 4 + 5 = 9$ without subtracting degrees of freedom for estimated parameters[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "For two independent random samples of sizes $n_1$ and $n_2$ drawn from normal populations with equal variances, the degrees of freedom ($m$) for the pooled two-sample $t$-statistic is given by[cite: 2]:\n$m = n_1 + n_2 - 2$\nGiven $n_1 = 4$ and $n_2 = 5$[cite: 2]:\n$m = 4 + 5 - 2 = 7$[cite: 2]."
+  },
+  {
+    "questionNumber": 43,
+    "chapter": "Matrices",
+    "topic": "Idempotent Matrix Binomial Expansion",
+    "questionText": "If $A$ is a square matrix such that $A^{2} = A$ and $I$ is the identity matrix of the same order as $A$, then $(I+2A)^{2}-5A$ is equal to[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$I+2A$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Square Term Dropped",
+        "mistakeAnalysis": "Aspirants expand $(I+2A)^2$ as $I + 4A$ and subtract $5A$ incorrectly[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$I+3A$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $(I + 2A)^2 - 5A = I + 4A + 4A^2 - 5A = I + 8A - 5A = I + 3A$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$I+A$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Subtraction Slip",
+        "mistakeAnalysis": "Aspirants calculate $4 + 2 - 5 = 1$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$I$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Total Linear Cancellation Fallacy",
+        "mistakeAnalysis": "Aspirants mistakenly assume $4A + A - 5A = 0$[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Given $A^2 = A$ (idempotent matrix)[cite: 2].\nSince $I$ commutes with any matrix $A$, expand $(I + 2A)^2$:\n$(I + 2A)^2 = I^2 + 2(I)(2A) + (2A)^2 = I + 4A + 4A^2$.\nSubstitute $A^2 = A$:\n$(I + 2A)^2 = I + 4A + 4A = I + 8A$.\nNow subtract $5A$[cite: 2]:\n$(I + 2A)^2 - 5A = (I + 8A) - 5A = I + 3A$[cite: 2]."
+  },
+  {
+    "questionNumber": 44,
+    "chapter": "Probability Distributions",
+    "topic": "Properties of Normal Probability Curve",
+    "questionText": "The curve $y = f(x)$ is a normal probability curve, then which of the following statements are correct?\n(A) Mean, median and mode of the distribution coincide.\n(B) The area bounded by the curve $y = f(x)$ and $x$-axis is one unit.\n(C) The curve is symmetrical about the line $x = \\mu$, where $\\mu$ is the mean.\n(D) $y$-axis is an asymptote to the curve.\n\nChoose the correct answer from the options given below[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Normal curve is symmetric, unimodal (mean = median = mode), total area is 1, and the $x$-axis (not $y$-axis) is the horizontal asymptote[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "(A), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Asymptote Axis Inversion",
+        "mistakeAnalysis": "Aspirants assume the $y$-axis is the asymptote instead of the horizontal axis $y = 0$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "(B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Symmetry and Coincidence Omission",
+        "mistakeAnalysis": "Aspirants omit core descriptive properties of normal curves[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "(B), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Mode Coincidence Rejection",
+        "mistakeAnalysis": "Aspirants mistakenly believe the mode diverges from the mean in a normal distribution[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Statement (A): The normal distribution is completely unimodal and symmetric about the center, meaning $\\text{Mean} = \\text{Median} = \\text{Mode} = \\mu$. (True)[cite: 2]\n2. Statement (B): By the total probability axiom for probability density functions, $\\int_{-\\infty}^{\\infty} f(x)\\,dx = 1$. The total area under the curve is 1 unit. (True)[cite: 2]\n3. Statement (C): The bell-shaped curve is perfectly symmetrical about the vertical line passing through its mean $x = \\mu$. (True)[cite: 2]\n4. Statement (D): As $x \\to \\pm\\infty$, $f(x) \\to 0$. Thus, the **$x$-axis** is the horizontal asymptote to the curve, not the $y$-axis. (False)[cite: 2]\nTherefore, statements (A), (B) and (C) only are correct[cite: 2]."
+  },
+  {
+    "questionNumber": 45,
+    "chapter": "Quantitative Aptitude",
+    "topic": "Races and Games of Skill",
+    "questionText": "In a kilometer race, A beats B by 50 meters or by 5 seconds, then the time taken by A to complete the race is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "85 seconds",
+        "isCorrect": false,
+        "studentSelectionTrap": "Double Margin Subtraction",
+        "mistakeAnalysis": "Aspirants subtract 15 seconds[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "90 seconds",
+        "isCorrect": false,
+        "studentSelectionTrap": "Extra Margin Subtraction",
+        "mistakeAnalysis": "Aspirants subtract 10 seconds instead of 5[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "95 seconds",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. B's speed $= 50\\text{ m} / 5\\text{ s} = 10\\text{ m/s}$. B's time $= 1000 / 10 = 100\\text{ s}$. A's time $= 100 - 5 = 95\\text{ seconds}$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "120 seconds",
+        "isCorrect": false,
+        "studentSelectionTrap": "Time Addition Fallacy",
+        "mistakeAnalysis": "Aspirants add time margins to an erroneous base[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Race distance = $1\\text{ km} = 1000\\text{ meters}$[cite: 2].\nSince A beats B by 50 meters or 5 seconds, it means that B covers the remaining 50 meters in 5 seconds[cite: 2]:\n$\\text{Speed of B} = \\frac{\\text{Distance}}{\\text{Time}} = \\frac{50\\text{ m}}{5\\text{ s}} = 10\\text{ m/s}$.\nTotal time taken by B to run the full 1000 meters:\n$T_B = \\frac{1000\\text{ m}}{10\\text{ m/s}} = 100\\text{ seconds}$.\nSince A finishes 5 seconds ahead of B[cite: 2]:\n$T_A = T_B - 5 = 100 - 5 = 95\\text{ seconds}$[cite: 2]."
+  },
+  {
+    "questionNumber": 46,
+    "chapter": "Application of Derivatives",
+    "topic": "Marginal Revenue in Business Mathematics",
+    "questionText": "The demand for a certain product is represented by the function $p = 150 + 10x - x^{2}$ (in Rs.) where $x$ is the number of units demanded and $p$ is the price per unit. The value of marginal revenue, when 10 units are sold, is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Rs. 50",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $R = px = 150x + 10x^2 - x^3 \\implies MR = 150 + 20x - 3x^2$. At $x = 10$, $MR = 150 + 200 - 300 = 50$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "Rs. 100",
+        "isCorrect": false,
+        "studentSelectionTrap": "Demand Function Derivative Trap",
+        "mistakeAnalysis": "Aspirants differentiate $p(x)$ directly without first multiplying by $x$ to get total revenue[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "Rs. 150",
+        "isCorrect": false,
+        "studentSelectionTrap": "Constant Term Retention",
+        "mistakeAnalysis": "Aspirants assume marginal revenue equals the fixed intercept term 150[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "Rs. 200",
+        "isCorrect": false,
+        "studentSelectionTrap": "Second Term Dominance",
+        "mistakeAnalysis": "Aspirants calculate $20(10) = 200$ and omit other terms[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Total Revenue $R(x)$ is given by $R(x) = p \\times x$[cite: 2]:\n$R(x) = (150 + 10x - x^2)x = 150x + 10x^2 - x^3$.\nMarginal Revenue ($MR$) is the derivative of total revenue with respect to $x$[cite: 2]:\n$MR = \\frac{dR}{dx} = \\frac{d}{dx}(150x + 10x^2 - x^3) = 150 + 20x - 3x^2$.\nEvaluate at $x = 10$ units[cite: 2]:\n$MR(10) = 150 + 20(10) - 3(10)^2 = 150 + 200 - 3(100) = 350 - 300 = \\text{Rs. } 50$[cite: 2]."
+  },
+  {
+    "questionNumber": 47,
+    "chapter": "Financial Mathematics",
+    "topic": "Rate of Return on Investment",
+    "questionText": "Mr. Vishnu has an initial investment of Rs. 80,000 in an investment plan. After 3 years, it has grown to Rs. 1,00,000. Then his rate of return is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "30%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arbitrary Period Multiplication",
+        "mistakeAnalysis": "Aspirants multiply 10% by 3 years[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "25%",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Absolute Rate of Return $= \\frac{1,00,000 - 80,000}{80,000} \\times 100 = \\frac{20,000}{80,000} \\times 100 = 25\\%$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "20%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Final Value Denominator Error",
+        "mistakeAnalysis": "Aspirants divide the gain by the final value: $(20,000 / 1,00,000) \\times 100 = 20\\%$[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "10%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Simple Annualized Rate Estimation",
+        "mistakeAnalysis": "Aspirants approximate simple annual rate[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Initial investment ($I$) = Rs. 80,000[cite: 2]\nFinal value ($A$) = Rs. 1,00,000[cite: 2]\nNet profit (gain) = $A - I = 1,00,000 - 80,000 = \\text{Rs. } 20,000$.\nTotal Rate of Return ($RoR$) on the investment is[cite: 2]:\n$RoR = \\frac{\\text{Net Gain}}{\\text{Initial Investment}} \\times 100 = \\frac{20,000}{80,000} \\times 100 = \\frac{1}{4} \\times 100 = 25\\%$[cite: 2]."
+  },
+  {
+    "questionNumber": 48,
+    "chapter": "Time Series Analysis",
+    "topic": "Components of Time Series",
+    "questionText": "Which of the following statements are TRUE?\n(A) The sales of woolen clothes, gold, silver etc. exhibit seasonal trends.\n(B) The price of stocks in the share market repeats after a definite time interval.\n(C) The rise and fall of the share market is an example of a cyclic trend.\n(D) The rise in prices before festivals is an example of an irregular trend.\n\nChoose the correct answer from the options given below[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Festival Misclassification as Irregular",
+        "mistakeAnalysis": "Aspirants incorrectly classify festival patterns as irregular rather than seasonal[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Definite Periodicity Fallacy for Business Cycles",
+        "mistakeAnalysis": "Aspirants assume business cycles in the share market have a strictly fixed periodic length[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "(A) and (C) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Seasonal variations occur annually (woolen clothes, festival spikes), while stock market oscillations represent cyclic business trends without fixed duration[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "(B), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Seasonal Concept Rejection",
+        "mistakeAnalysis": "Aspirants reject the seasonal nature of clothing and festive purchases[cite: 2]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "1. Statement (A): Sales of woolen clothes in winter and precious metals during weddings/festivals occur regularly within a 1-year calendar timeframe, exhibiting **seasonal trends**. (True)[cite: 2]\n2. Statement (B): Cyclic movements in stock prices are oscillatory business cycles that do not recur with strict, definite periodicity. (False)[cite: 2]\n3. Statement (C): Boom, recession, depression, and recovery phases of financial markets define **cyclical variation**. (True)[cite: 2]\n4. Statement (D): Pre-festival price increases occur regularly every year, making them **seasonal**, not irregular. (False)[cite: 2]\nTherefore, (A) and (C) only are TRUE[cite: 2]."
+  },
+  {
+    "questionNumber": 49,
+    "chapter": "Time Series Analysis",
+    "topic": "Moving Average Method",
+    "questionText": "For the given five values: 16, 25, 19, 34, 43, the three-year moving averages are[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "20, 26, 32",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $(16+25+19)/3 = 20$, $(25+19+34)/3 = 26$, and $(19+34+43)/3 = 32$[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "20, 26, 33",
+        "isCorrect": false,
+        "studentSelectionTrap": "Rounding Error on Third Average",
+        "mistakeAnalysis": "Aspirants miscalculate $(19+34+43)/3 = 96/3$ as 33[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "20, 27, 32",
+        "isCorrect": false,
+        "studentSelectionTrap": "Summation Slip on Second Average",
+        "mistakeAnalysis": "Aspirants sum $25 + 19 + 34$ as 81 instead of 78[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "20, 26, 31",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip on Third Average",
+        "mistakeAnalysis": "Aspirants sum $19 + 34 + 43$ as 93 instead of 96[cite: 2]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Calculate 3-yearly moving averages by taking consecutive triplets and dividing by 3[cite: 2]:\n1. First average: $\\frac{16 + 25 + 19}{3} = \\frac{60}{3} = 20$[cite: 2]\n2. Second average: $\\frac{25 + 19 + 34}{3} = \\frac{78}{3} = 26$[cite: 2]\n3. Third average: $\\frac{19 + 34 + 43}{3} = \\frac{96}{3} = 32$[cite: 2]\nThe 3-year moving averages are 20, 26, 32[cite: 2]."
+  },
+  {
+    "questionNumber": 50,
+    "chapter": "Quantitative Aptitude",
+    "topic": "Boats and Streams",
+    "questionText": "A man rows downstream 30 km and upstream 20 km. If he takes 5 hours to cover each distance, then the speed of the stream is[cite: 2]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$0.5\\text{ km/hr}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Excess Division by 4",
+        "mistakeAnalysis": "Aspirants divide the difference by 4 instead of 2[cite: 2]."
+      },
+      {
+        "id": "B",
+        "text": "$1\\text{ km/hr}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $v_d = 30/5 = 6\\text{ km/h}, v_u = 20/5 = 4\\text{ km/h}$. Stream speed $= (6 - 4)/2 = 1\\text{ km/hr}$[cite: 2]."
+      },
+      {
+        "id": "C",
+        "text": "$4\\text{ km/hr}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Upstream Speed Misidentification",
+        "mistakeAnalysis": "Aspirants report the upstream speed $v_u = 4\\text{ km/hr}$ as the stream speed[cite: 2]."
+      },
+      {
+        "id": "D",
+        "text": "$6\\text{ km/hr}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Downstream Speed Misidentification",
+        "mistakeAnalysis": "Aspirants report the downstream speed $v_d = 6\\text{ km/hr}$ as the stream speed[cite: 2]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Let the speed of the boat in still water be $u\\text{ km/hr}$ and speed of the stream be $v\\text{ km/hr}$.\nDownstream speed ($v_d$) = $u + v = \\frac{30\\text{ km}}{5\\text{ hr}} = 6\\text{ km/hr}$[cite: 2].\nUpstream speed ($v_u$) = $u - v = \\frac{20\\text{ km}}{5\\text{ hr}} = 4\\text{ km/hr}$[cite: 2].\nSpeed of the stream ($v$) is given by:\n$v = \\frac{v_d - v_u}{2} = \\frac{6 - 4}{2} = \\frac{2}{2} = 1\\text{ km/hr}$[cite: 2]."
+  }
+]

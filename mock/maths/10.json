@@ -1,0 +1,2002 @@
+[
+  {
+    "questionNumber": 1,
+    "chapter": "Vector Algebra",
+    "topic": "Orthogonality of Vectors and Trigonometric Values",
+    "questionText": "If $\\theta$ is an acute angle and the vector $\\vec{a} = (\\sin\\theta)\\hat{i} + (\\cos\\theta)\\hat{j}$ is perpendicular to the vector $\\vec{b} = \\hat{i} - \\sqrt{3}\\hat{j}$, then $\\theta$ is equal to[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{\\pi}{6}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Tangent-Cotangent Ratio Inversion",
+        "mistakeAnalysis": "Aspirants solve $\\cot\\theta = \\sqrt{3}$ instead of $\\tan\\theta = \\sqrt{3}$, obtaining $\\pi/6$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{\\pi}{3}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\vec{a}\\cdot\\vec{b} = \\sin\\theta - \\sqrt{3}\\cos\\theta = 0 \\implies \\tan\\theta = \\sqrt{3} \\implies \\theta = \\pi/3$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Equal Component Assumption",
+        "mistakeAnalysis": "Aspirants ignore the coefficient $\\sqrt{3}$, assuming $\\sin\\theta = \\cos\\theta$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{\\pi}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Zero Dot Product Guess",
+        "mistakeAnalysis": "Aspirants confuse the condition $\\vec{a}\\cdot\\vec{b}=0$ with an angle of $\\pi/2$ between coordinate axes[cite: 5]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "For two vectors $\\vec{a}$ and $\\vec{b}$ to be perpendicular, their scalar dot product must be zero[cite: 5]:\n$\\vec{a} \\cdot \\vec{b} = 0$\n$[(\\sin\\theta)\\hat{i} + (\\cos\\theta)\\hat{j}] \\cdot [1\\hat{i} - \\sqrt{3}\\hat{j}] = 0$\n$(\\sin\\theta)(1) + (\\cos\\theta)(-\\sqrt{3}) = 0$\n$\\sin\\theta - \\sqrt{3}\\cos\\theta = 0$\n$\\sin\\theta = \\sqrt{3}\\cos\\theta$\nDividing both sides by $\\cos\\theta$ (for acute angle $\\theta \\ne \\pi/2$):\n$\\tan\\theta = \\sqrt{3}$.\nSince $\\theta$ is an acute angle, $\\theta = \\frac{\\pi}{3}$[cite: 5]."
+  },
+  {
+    "questionNumber": 2,
+    "chapter": "Matrices",
+    "topic": "Symmetry and Skew-Symmetry of Matrix Combinations",
+    "questionText": "If $A$ and $B$ are matrices of the same order, then $(AB^{T} - BA^{T})$ is always[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "a symmetric matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Transpose Distribution Error",
+        "mistakeAnalysis": "Aspirants mistakenly conclude that the transpose of the difference equals the original matrix[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "a skew symmetric matrix",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Taking the transpose: $(AB^T - BA^T)^T = (AB^T)^T - (BA^T)^T = BA^T - AB^T = -(AB^T - BA^T)$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "neither a symmetric matrix nor a skew-symmetric matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Commutativity Confusion",
+        "mistakeAnalysis": "Aspirants assume non-commutativity prevents any definite symmetry classification[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "a null matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Commutative Cancellation Fallacy",
+        "mistakeAnalysis": "Aspirants assume $AB^T = BA^T$ identically, incorrectly concluding the difference is zero[cite: 5]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Let $M = AB^T - BA^T$[cite: 5].\nTake the transpose of matrix $M$:\n$M^T = (AB^T - BA^T)^T = (AB^T)^T - (BA^T)^T$.\nUsing the reversal law of transposition $(XY)^T = Y^T X^T$ and $(X^T)^T = X$:\n$(AB^T)^T = (B^T)^T A^T = B A^T$\n$(BA^T)^T = (A^T)^T B^T = A B^T$.\nSubstituting these back:\n$M^T = B A^T - A B^T = -(A B^T - B A^T) = -M$.\nSince $M^T = -M$, the matrix $(AB^T - BA^T)$ is always a **skew-symmetric matrix**[cite: 5]."
+  },
+  {
+    "questionNumber": 3,
+    "chapter": "Determinants",
+    "topic": "Determinant Evaluation and Trigonometric Extrema",
+    "questionText": "Let $A = \\begin{bmatrix}1 & \\sin\\theta & 1 \\\\ -\\sin\\theta & 1 & \\sin\\theta \\\\ -1 & -\\sin\\theta & 1\\end{bmatrix}$, where $0 \\le \\theta \\le 2\\pi$. Then which of the following are true?\n(A) $|A| = 2 + 2\\sin^{2}\\theta$\n(B) $|A| = 2 + \\sin^{2}\\theta$\n(C) minimum value of $|A|$ is 1\n(D) maximum value of $|A|$ is 4\n\nChoose the correct answer from the options given below[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) and (D) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Expanding gives $|A| = 2(1 + \\sin^2\\theta) = 2 + 2\\sin^2\\theta$. Since $\\sin^2\\theta \\in [0, 1]$, range is $[2, 4]$, so (A) and (D) are true[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Contradictory Identity Acceptance",
+        "mistakeAnalysis": "Aspirants accept both (A) and (B), which are algebraically contradictory[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "(B), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factor 2 Expansion Omission",
+        "mistakeAnalysis": "Aspirants expand the determinant as $2 + \\sin^2\\theta$ without the coefficient 2[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "(C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Minimum Value Miscalculation",
+        "mistakeAnalysis": "Aspirants assume the minimum value of $2 + 2\\sin^2\\theta$ is 1[cite: 5]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Expand $|A|$ along Row 1[cite: 5]:\n$|A| = 1(1 + \\sin^2\\theta) - \\sin\\theta(-\\sin\\theta + \\sin\\theta) + 1(\\sin^2\\theta + 1)$\n$= (1 + \\sin^2\\theta) - 0 + (1 + \\sin^2\\theta)$\n$= 2(1 + \\sin^2\\theta) = 2 + 2\\sin^2\\theta$. (Statement A is TRUE, B is FALSE)[cite: 5].\nSince $0 \\le \\theta \\le 2\\pi$, the range of $\\sin^2\\theta$ is $[0, 1]$[cite: 5]:\n- Minimum value of $|A| = 2 + 2(0) = 2$. (Statement C is FALSE)[cite: 5].\n- Maximum value of $|A| = 2 + 2(1) = 4$. (Statement D is TRUE)[cite: 5].\nTherefore, (A) and (D) only are true[cite: 5]."
+  },
+  {
+    "questionNumber": 4,
+    "chapter": "Three Dimensional Geometry",
+    "topic": "Vector Equation of a Line Passing Through Two Points",
+    "questionText": "The vector equation of the line passing through points $A(3, 4, -7)$ and $B(1, -1, 6)$ is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\vec{r} = 3\\hat{i} + 4\\hat{j} - 7\\hat{k} + \\lambda(\\hat{i} - \\hat{j} + 6\\hat{k})$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Position Vector as Direction Vector",
+        "mistakeAnalysis": "Aspirants use the coordinates of $B$ as the direction vector instead of $(\\vec{b} - \\vec{a})$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$\\vec{r} = (3-2\\lambda)\\hat{i} + (4-5\\lambda)\\hat{j} + (-7+13\\lambda)\\hat{k}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Direction vector is $\\vec{b} - \\vec{a} = -2\\hat{i} - 5\\hat{j} + 13\\hat{k}$. Line is $\\vec{r} = \\vec{a} + \\lambda(\\vec{b}-\\vec{a}) = (3-2\\lambda)\\hat{i} + (4-5\\lambda)\\hat{j} + (-7+13\\lambda)\\hat{k}$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$\\vec{r} = \\hat{i} - \\hat{j} + 6\\hat{k} + \\lambda(3\\hat{i} + 4\\hat{j} - 7\\hat{k})$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Swapped Direction and Base Position",
+        "mistakeAnalysis": "Aspirants use the position vector of $A$ as the direction vector[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$\\vec{r} = (-2+3\\lambda)\\hat{i} + (-5+4\\lambda)\\hat{j} + (13-7\\lambda)\\hat{k}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Component Mixing Error",
+        "mistakeAnalysis": "Aspirants swap the fixed point coordinates with the direction ratios[cite: 5]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "The vector equation of a line passing through points with position vectors $\\vec{a}$ and $\\vec{b}$ is:\n$\\vec{r} = \\vec{a} + \\lambda(\\vec{b} - \\vec{a})$.\nGiven $A(3, 4, -7) \\implies \\vec{a} = 3\\hat{i} + 4\\hat{j} - 7\\hat{k}$[cite: 5]\n$B(1, -1, 6) \\implies \\vec{b} = 1\\hat{i} - 1\\hat{j} + 6\\hat{k}$[cite: 5].\nCompute the direction vector $\\vec{b} - \\vec{a}$:\n$\\vec{b} - \\vec{a} = (1 - 3)\\hat{i} + (-1 - 4)\\hat{j} + (6 - (-7))\\hat{k} = -2\\hat{i} - 5\\hat{j} + 13\\hat{k}$.\nThe vector equation is:\n$\\vec{r} = (3\\hat{i} + 4\\hat{j} - 7\\hat{k}) + \\lambda(-2\\hat{i} - 5\\hat{j} + 13\\hat{k})$\n$= (3 - 2\\lambda)\\hat{i} + (4 - 5\\lambda)\\hat{j} + (-7 + 13\\lambda)\\hat{k}$[cite: 5]."
+  },
+  {
+    "questionNumber": 5,
+    "chapter": "Differential Equations",
+    "topic": "Integrating Factors of First Order Linear Differential Equations",
+    "questionText": "Match List-I with List-II:\nList-I (Differential equation):\n(A) $x\\frac{dy}{dx} - y = 2x^{2}$\n(B) $\\frac{dy}{dx} + \\frac{y}{x} = 2x$\n(C) $x\\frac{dy}{dx} + 2y = x^{2}\\log x$\n(D) $\\frac{dx}{dy} - x = y$\n\nList-II (Integrating factor):\n(I) $e^{-y}$\n(II) $\\frac{1}{x}$\n(III) $x$\n(IV) $x^{2}$\n\nChoose the correct answer from the options given below[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) - (IV), (B) - (I), (C) - (II), (D) - (III)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Power Inversion Trap",
+        "mistakeAnalysis": "Aspirants match equation (A) with integrating factor $x^2$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "(A) - (I), (B) - (II), (C) - (III), (D) - (IV)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Exponential IF Confusion",
+        "mistakeAnalysis": "Aspirants assign exponential integrating factors to algebraic linear equations[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "(A) - (II), (B) - (III), (C) - (IV), (D) - (I)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. (A) $\\text{IF} = e^{-\\log x} = 1/x$; (B) $\\text{IF} = e^{\\log x} = x$; (C) $\\text{IF} = e^{2\\log x} = x^2$; (D) $\\text{IF} = e^{\\int -1 dy} = e^{-y}$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "(A) - (III), (B) - (IV), (C) - (I), (D) - (II)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cyclic Matching Shift",
+        "mistakeAnalysis": "Aspirants shift the matching indices cyclically[cite: 5]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "1. For (A): $\\frac{dy}{dx} - \\frac{1}{x}y = 2x$. $P(x) = -\\frac{1}{x} \\implies \\text{IF} = e^{\\int -\\frac{1}{x}dx} = e^{-\\log_e x} = \\frac{1}{x} \\implies$ (A) matches (II)[cite: 5].\n2. For (B): $\\frac{dy}{dx} + \\frac{1}{x}y = 2x$. $P(x) = \\frac{1}{x} \\implies \\text{IF} = e^{\\int \\frac{1}{x}dx} = e^{\\log_e x} = x \\implies$ (B) matches (III)[cite: 5].\n3. For (C): $\\frac{dy}{dx} + \\frac{2}{x}y = x\\log x$. $P(x) = \\frac{2}{x} \\implies \\text{IF} = e^{\\int \\frac{2}{x}dx} = e^{2\\log_e x} = x^2 \\implies$ (C) matches (IV)[cite: 5].\n4. For (D): $\\frac{dx}{dy} - x = y$. Linear in $x$ with $P(y) = -1 \\implies \\text{IF} = e^{\\int -1 dy} = e^{-y} \\implies$ (D) matches (I)[cite: 5].\nMatching: (A)-(II), (B)-(III), (C)-(IV), (D)-(I)[cite: 5]."
+  },
+  {
+    "questionNumber": 6,
+    "chapter": "Probability",
+    "topic": "Conditional Probability and Sum of Dice",
+    "questionText": "A die is thrown three times. If the first throw is a five, the probability of getting 14 as the sum is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{1}{9}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Remaining sum needed from 2 throws is $14 - 5 = 9$. Favourable pairs: $(3,6), (4,5), (5,4), (6,3)$ (4 outcomes). Probability $= 4/36 = 1/9$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{1}{18}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Order Permutation Omission",
+        "mistakeAnalysis": "Aspirants count only unordered pairs $\\{3,6\\}$ and $\\{4,5\\}$ (2 outcomes), giving $2/36 = 1/18$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{36}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Outcome Heuristic",
+        "mistakeAnalysis": "Aspirants count only $(4, 5)$ as the required pair[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{54}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sample Space 216 Misapplication",
+        "mistakeAnalysis": "Aspirants divide 4 by 216 instead of evaluating within the reduced conditional sample space 36[cite: 5]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Given that the first throw results in a 5, the reduced sample space consists of all possible outcomes for the second and third throws[cite: 5]:\nTotal conditional outcomes $= 6 \\times 6 = 36$.\nWe require the total sum of all three throws to equal 14[cite: 5]:\n$5 + x_2 + x_3 = 14 \\implies x_2 + x_3 = 9$.\nPossible pairs $(x_2, x_3)$ from two dice that sum to 9:\n$\\{(3, 6), (4, 5), (5, 4), (6, 3)\\}$.\nThere are 4 favourable outcomes.\n$P(\\text{Sum} = 14 \\mid \\text{First throw is } 5) = \\frac{4}{36} = \\frac{1}{9}$[cite: 5]."
+  },
+  {
+    "questionNumber": 7,
+    "chapter": "Application of Derivatives",
+    "topic": "Intervals of Decrease for Quadratic Functions",
+    "questionText": "In which of the following intervals is the function $f(x) = -x^{2} - 2x + 15$ decreasing[cite: 5]?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$(-1, \\infty)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = -2x - 2 < 0 \\iff -2(x+1) < 0 \\iff x + 1 > 0 \\iff x > -1$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$(-\\infty, -1)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Increasing Interval Selected",
+        "mistakeAnalysis": "Aspirants solve for the interval where $f'(x) > 0$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$(-\\infty, 2)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Vertex Abscissa Error",
+        "mistakeAnalysis": "Aspirants miscalculate the critical point using $b/2a$ without proper signs[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$(0, -1)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Malformed Interval Trap",
+        "mistakeAnalysis": "Aspirants select an invalid reversed interval[cite: 5]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Differentiate $f(x) = -x^2 - 2x + 15$[cite: 5]:\n$f'(x) = -2x - 2 = -2(x + 1)$.\nFor $f(x)$ to be strictly decreasing, $f'(x) < 0$:\n$-2(x + 1) < 0$.\nDividing by $-2$ reverses the inequality sign:\n$x + 1 > 0 \\implies x > -1$.\nIn interval notation:\n$x \\in (-1, \\infty)$[cite: 5]."
+  },
+  {
+    "questionNumber": 8,
+    "chapter": "Integrals",
+    "topic": "Integration of Trigonometric Triple Products",
+    "questionText": "$\\int\\sin x\\sin 2x\\sin 3x\\,dx$ is equal to (where $C$ is constant of integration)[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$-\\frac{1}{48}(6\\cos 2x + 3\\cos 4x + 2\\cos 6x) + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Trigonometric Product-to-Sum Sign Error",
+        "mistakeAnalysis": "Aspirants make an error in the sign of $\\cos 6x$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$-\\frac{1}{48}(2\\cos 2x + 3\\cos 4x - 6\\cos 6x) + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Coefficient Permutation Slip",
+        "mistakeAnalysis": "Aspirants swap the coefficients 6 and 2[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$-\\frac{1}{48}(6\\cos 2x + 3\\cos 4x - 2\\cos 6x) + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Transforming using product-to-sum identities yields $\\frac{1}{4}(\\sin 2x + \\sin 4x - \\sin 6x)$, which integrates to $-\\frac{1}{48}(6\\cos 2x + 3\\cos 4x - 2\\cos 6x) + C$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$-\\frac{1}{48}(2\\cos 2x + 3\\cos 4x + 6\\cos 6x) + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "All Positive Signs Slip",
+        "mistakeAnalysis": "Aspirants fail to preserve the negative sign from $\\sin 6x$[cite: 5]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Apply the product-to-sum identity $2\\sin A\\sin B = \\cos(A - B) - \\cos(A + B)$ to $\\sin 3x\\sin x$:\n$\\sin 3x\\sin x = \\frac{1}{2}[\\cos(2x) - \\cos(4x)]$.\nMultiply by $\\sin 2x$[cite: 5]:\n$\\sin x\\sin 2x\\sin 3x = \\frac{1}{2}[\\sin 2x\\cos 2x - \\sin 2x\\cos 4x]$\n$= \\frac{1}{4}[2\\sin 2x\\cos 2x] - \\frac{1}{4}[2\\sin 2x\\cos 4x]$\n$= \\frac{1}{4}\\sin 4x - \\frac{1}{4}[\\sin(2x + 4x) + \\sin(2x - 4x)]$\n$= \\frac{1}{4}\\sin 4x - \\frac{1}{4}[\\sin 6x - \\sin 2x]$\n$= \\frac{1}{4}[\\sin 2x + \\sin 4x - \\sin 6x]$.\nIntegrate term by term:\n$\\int \\sin x\\sin 2x\\sin 3x\\,dx = \\frac{1}{4}\\left[ -\\frac{\\cos 2x}{2} - \\frac{\\cos 4x}{4} - \\left(-\\frac{\\cos 6x}{6}\\right) \\right] + C$\n$= -\\frac{1}{4}\\left[ \\frac{\\cos 2x}{2} + \\frac{\\cos 4x}{4} - \\frac{\\cos 6x}{6} \\right] + C$\nTake a common denominator of 12 outside:\n$= -\\frac{1}{48}[6\\cos 2x + 3\\cos 4x - 2\\cos 6x] + C$[cite: 5]."
+  },
+  {
+    "questionNumber": 9,
+    "chapter": "Continuity and Differentiability",
+    "topic": "Continuity and Differentiability of Absolute Value and Rational Functions",
+    "questionText": "Match List-I with List-II:\nList-I (Function):\n(A) $f(x) = \\begin{cases}\\frac{1}{x}, & x \\ne 0 \\\\ 0, & x = 0\\end{cases}$\n(B) $f(x) = |x|$\n(C) $f(x) = |x^{2}-1|$\n(D) $f(x) = |x-1|$\n\nList-II (Property):\n(I) continuous but not differentiable at $x = 0$\n(II) continuous but not differentiable at $x = 1$\n(III) discontinuous at $x = 0$\n(IV) continuous but not differentiable at $x = 1, -1$\n\nChoose the correct answer from the options given below[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) - (III), (B) - (I), (C) - (IV), (D) - (II)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $1/x$ has infinite discontinuity at $x=0$; $|x|$ has a corner at $x=0$; $|x^2-1|$ has corners at $x=\\pm 1$; $|x-1|$ has a corner at $x=1$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "(A) - (IV), (B) - (I), (C) - (II), (D) - (III)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Discontinuity Misattribution",
+        "mistakeAnalysis": "Aspirants match discontinuity with $|x-1|$ instead of $1/x$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "(A) - (III), (B) - (I), (C) - (II), (D) - (IV)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single vs Dual Corner Point Inversion",
+        "mistakeAnalysis": "Aspirants swap properties of $|x^2-1|$ and $|x-1|$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "(A) - (IV), (B) - (III), (C) - (I), (D) - (II)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cross Matching Confusion",
+        "mistakeAnalysis": "Aspirants confuse the corner point at origin with discontinuity[cite: 5]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. For (A): $\\lim_{x \\to 0^+} \\frac{1}{x} = \\infty \\ne f(0) = 0$. The function is discontinuous at $x = 0 \\implies$ (A) matches (III)[cite: 5].\n2. For (B): $f(x) = |x|$ is continuous everywhere, but $Lf'(0) = -1 \\ne Rf'(0) = 1$, so it is not differentiable at $x = 0 \\implies$ (B) matches (I)[cite: 5].\n3. For (C): $f(x) = |x^2 - 1|$ is continuous everywhere, with corner points where $x^2 - 1 = 0 \\implies x = 1$ and $x = -1$. Not differentiable at $x = 1, -1 \\implies$ (C) matches (IV)[cite: 5].\n4. For (D): $f(x) = |x - 1|$ is continuous everywhere, with a sharp corner at $x = 1$. Not differentiable at $x = 1 \\implies$ (D) matches (II)[cite: 5].\nMatching: (A)-(III), (B)-(I), (C)-(IV), (D)-(II)[cite: 5]."
+  },
+  {
+    "questionNumber": 10,
+    "chapter": "Probability",
+    "topic": "Conditional Probability with Complementary Events",
+    "questionText": "Let $E$ and $F$ be events associated with an experiment. If $P(E) = 0.4$, $P(F) = 0.8$ and $P(F|E) = 0.6$, then $P(E|F')$ is equal to[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0.4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Marginal Probability Selection",
+        "mistakeAnalysis": "Aspirants assume independence and report $P(E) = 0.4$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "0.2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Complement Probability Selection",
+        "mistakeAnalysis": "Aspirants select $P(F') = 1 - 0.8 = 0.2$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "0.3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Joint Probability Confusion",
+        "mistakeAnalysis": "Aspirants round the intersection probability[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "0.8",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P(E \\cap F) = 0.4 \\times 0.6 = 0.24$; $P(E \\cap F') = 0.4 - 0.24 = 0.16$; $P(E|F') = \\frac{0.16}{0.2} = 0.8$[cite: 5]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "1. Compute joint probability $P(E \\cap F)$ using the conditional probability formula[cite: 5]:\n   $P(E \\cap F) = P(E) \\cdot P(F|E) = 0.4 \\times 0.6 = 0.24$[cite: 5].\n2. Compute $P(E \\cap F')$:\n   $P(E \\cap F') = P(E) - P(E \\cap F) = 0.4 - 0.24 = 0.16$.\n3. Compute $P(F')$:\n   $P(F') = 1 - P(F) = 1 - 0.8 = 0.2$[cite: 5].\n4. Compute $P(E | F')$:\n   $P(E | F') = \\frac{P(E \\cap F')}{P(F')} = \\frac{0.16}{0.20} = 0.8$[cite: 5]."
+  },
+  {
+    "questionNumber": 11,
+    "chapter": "Matrices",
+    "topic": "Symmetric and Skew-Symmetric Matrix Decomposition",
+    "questionText": "Let $A$ and $B$ be square matrices of order 3 such that $A + B = \\begin{bmatrix}2 & -2 & -4 \\\\ -1 & 3 & 4 \\\\ 1 & -2 & -3\\end{bmatrix}$. If $A$ is a symmetric matrix, then the value of $|B|$ is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $B$ is the skew-symmetric component $\\frac{1}{2}(M - M^T)$ of order 3; the determinant of any odd-order skew-symmetric matrix is identically 0[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Identity Determinant Assumption",
+        "mistakeAnalysis": "Aspirants assume $|B| = 1$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Trace Value Selection",
+        "mistakeAnalysis": "Aspirants calculate the trace of the original matrix[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "27",
+        "isCorrect": false,
+        "studentSelectionTrap": "Order Cubed Factor Guess",
+        "mistakeAnalysis": "Aspirants compute $3^3 = 27$[cite: 5]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $M = A + B = \\begin{bmatrix}2 & -2 & -4 \\\\ -1 & 3 & 4 \\\\ 1 & -2 & -3\\end{bmatrix}$[cite: 5].\nBy the unique decomposition theorem of square matrices, any matrix $M$ can be uniquely expressed as $M = A + B$, where $A = \\frac{1}{2}(M + M^T)$ is symmetric and $B = \\frac{1}{2}(M - M^T)$ is skew-symmetric[cite: 5].\nSince $B$ is a skew-symmetric matrix of order $n = 3$ (an odd order)[cite: 5]:\n$B^T = -B \\implies |B^T| = |-B| = (-1)^3 |B| = -|B|$.\nSince $|B^T| = |B|$:\n$|B| = -|B| \\implies 2|B| = 0 \\implies |B| = 0$[cite: 5]."
+  },
+  {
+    "questionNumber": 12,
+    "chapter": "Probability",
+    "topic": "Consensus Probability of Independent Witnesses",
+    "questionText": "One person speaks truth in 60% of cases and another person in 80% of cases. They are likely to agree in stating the same fact in[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "48% of the cases",
+        "isCorrect": false,
+        "studentSelectionTrap": "Both Truthful Outcome Only",
+        "mistakeAnalysis": "Aspirants calculate only the case where both speak the truth: $0.60 \\times 0.80 = 48\\%$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "56% of the cases",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Agree when both tell truth or both lie: $(0.6)(0.8) + (0.4)(0.2) = 0.48 + 0.08 = 0.56 = 56\\%$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "58% of the cases",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Addition Slip",
+        "mistakeAnalysis": "Aspirants add $0.48 + 0.10 = 0.58$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "70% of the cases",
+        "isCorrect": false,
+        "studentSelectionTrap": "Average Truthfulness Guess",
+        "mistakeAnalysis": "Aspirants compute the simple arithmetic mean $(60\\% + 80\\%)/2 = 70\\%$[cite: 5]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Let $T_1$ and $T_2$ be the events that the first and second person speak the truth respectively[cite: 5]:\n$P(T_1) = 0.60 \\implies P(T_1') = 1 - 0.60 = 0.40$[cite: 5]\n$P(T_2) = 0.80 \\implies P(T_2') = 1 - 0.80 = 0.20$[cite: 5]\nTwo persons agree in stating the same fact in two mutually exclusive cases:\n1. Both speak the truth: $P(T_1 \\cap T_2) = P(T_1)P(T_2) = 0.60 \\times 0.80 = 0.48$.\n2. Both lie: $P(T_1' \\cap T_2') = P(T_1')P(T_2') = 0.40 \\times 0.20 = 0.08$.\nTotal probability of agreement:\n$P(\\text{Agree}) = 0.48 + 0.08 = 0.56 = 56\\%$[cite: 5]."
+  },
+  {
+    "questionNumber": 13,
+    "chapter": "Vector Algebra",
+    "topic": "Magnitude of Sum of Mutually Perpendicular Unit Vectors",
+    "questionText": "If $\\vec{a}, \\vec{b}, \\vec{c}$ are three mutually perpendicular unit vectors, then $|\\vec{a} + \\vec{b} + \\vec{c}|$ is equal to[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Sum of Magnitudes",
+        "mistakeAnalysis": "Aspirants add individual magnitudes: $1 + 1 + 1 = 3$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "9",
+        "isCorrect": false,
+        "studentSelectionTrap": "Squared Sum Fallacy",
+        "mistakeAnalysis": "Aspirants square the sum of magnitudes[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$\\sqrt{3}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|\\vec{a}+\\vec{b}+\\vec{c}|^2 = |\\vec{a}|^2 + |\\vec{b}|^2 + |\\vec{c}|^2 + 2(0) = 1 + 1 + 1 = 3 \\implies \\sqrt{3}$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Equilibrium Vector Confusion",
+        "mistakeAnalysis": "Aspirants confuse orthogonal vectors with a closed zero-sum vector polygon[cite: 5]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Given that $\\vec{a}, \\vec{b}, \\vec{c}$ are unit vectors: $|\\vec{a}| = 1, |\\vec{b}| = 1, |\\vec{c}| = 1$[cite: 5].\nSince they are mutually perpendicular[cite: 5]:\n$\\vec{a} \\cdot \\vec{b} = 0,\\; \\vec{b} \\cdot \\vec{c} = 0,\\; \\vec{c} \\cdot \\vec{a} = 0$.\nExpand the squared magnitude:\n$|\\vec{a} + \\vec{b} + \\vec{c}|^2 = |\\vec{a}|^2 + |\\vec{b}|^2 + |\\vec{c}|^2 + 2(\\vec{a}\\cdot\\vec{b} + \\vec{b}\\cdot\\vec{c} + \\vec{c}\\cdot\\vec{a})$\n$= 1^2 + 1^2 + 1^2 + 2(0 + 0 + 0) = 3$.\nTaking square roots:\n$|\\vec{a} + \\vec{b} + \\vec{c}| = \\sqrt{3}$[cite: 5]."
+  },
+  {
+    "questionNumber": 14,
+    "chapter": "Vector Algebra",
+    "topic": "Scalar Projection of Vectors",
+    "questionText": "The projection of the vector $\\vec{a} = \\hat{i} + 2\\hat{j} - 3\\hat{k}$ on the vector $2\\hat{i} + 6\\hat{j} + 3\\hat{k}$ is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{5}{\\sqrt{14}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by Magnitude of $\\vec{a}$",
+        "mistakeAnalysis": "Aspirants divide by $|\\vec{a}| = \\sqrt{14}$ instead of $|\\vec{b}| = 7$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{5}{7}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\vec{a}\\cdot\\vec{b} = 2 + 12 - 9 = 5$; $|\\vec{b}| = \\sqrt{4+36+9} = 7$. Projection is $5/7$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Orthogonal Assumption",
+        "mistakeAnalysis": "Aspirants assume dot product vanishes[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{5}{14}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Squared Magnitude Denominator Error",
+        "mistakeAnalysis": "Aspirants divide by $|\\vec{a}|^2 = 14$[cite: 5]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Let $\\vec{a} = \\hat{i} + 2\\hat{j} - 3\\hat{k}$ and $\\vec{b} = 2\\hat{i} + 6\\hat{j} + 3\\hat{k}$[cite: 5].\nThe projection of $\\vec{a}$ on $\\vec{b}$ is:\n$\\operatorname{Proj}_{\\vec{b}}(\\vec{a}) = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{b}|}$\nCompute dot product:\n$\\vec{a} \\cdot \\vec{b} = 1(2) + 2(6) + (-3)(3) = 2 + 12 - 9 = 5$.\nCompute magnitude of $\\vec{b}$:\n$|\\vec{b}| = \\sqrt{2^2 + 6^2 + 3^2} = \\sqrt{4 + 36 + 9} = \\sqrt{49} = 7$.\nTherefore:\n$\\operatorname{Proj}_{\\vec{b}}(\\vec{a}) = \\frac{5}{7}$[cite: 5]."
+  },
+  {
+    "questionNumber": 15,
+    "chapter": "Matrices",
+    "topic": "Outer Product of Vectors as Matrices",
+    "questionText": "If matrices $A = \\begin{bmatrix}1 & 2 & 3\\end{bmatrix}$ and $B = \\begin{bmatrix}1 \\\\ 2 \\\\ 3\\end{bmatrix}$, then $BA$ is equal to[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$[14]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "$AB$ Inner Product Trap",
+        "mistakeAnalysis": "Aspirants compute the inner scalar product $AB = [14]$ of order $1 \\times 1$ instead of $BA$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$[1\\; 4\\; 9]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Component-wise Multiplication Slip",
+        "mistakeAnalysis": "Aspirants square corresponding elements[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$\\begin{bmatrix}1 & 2 & 3 \\\\ 2 & 4 & 6 \\\\ 3 & 6 & 9\\end{bmatrix}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $B$ is $3 \\times 1$ and $A$ is $1 \\times 3$, resulting in a $3 \\times 3$ outer product matrix[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$\\begin{bmatrix}1 & 0 & 0 \\\\ 0 & 4 & 0 \\\\ 0 & 0 & 9\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Diagonal Matrix Assumption",
+        "mistakeAnalysis": "Aspirants assume off-diagonal entries vanish in matrix products[cite: 5]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Matrix $B$ has order $3 \\times 1$ and matrix $A$ has order $1 \\times 3$[cite: 5].\nThe product $BA$ is defined and has order $3 \\times 3$[cite: 5]:\n$BA = \\begin{bmatrix}1 \\\\ 2 \\\\ 3\\end{bmatrix} \\begin{bmatrix}1 & 2 & 3\\end{bmatrix} = \\begin{bmatrix}1(1) & 1(2) & 1(3) \\\\ 2(1) & 2(2) & 2(3) \\\\ 3(1) & 3(2) & 3(3)\\end{bmatrix} = \\begin{bmatrix}1 & 2 & 3 \\\\ 2 & 4 & 6 \\\\ 3 & 6 & 9\\end{bmatrix}$[cite: 5]."
+  },
+  {
+    "questionNumber": 16,
+    "chapter": "Application of Derivatives",
+    "topic": "Critical Points and Local Extrema of Cubic Polynomials",
+    "questionText": "Consider the function $f(x) = x^{3} - 3x$. Match List-I with List-II:\nList-I:\n(A) Point of local Maxima\n(B) Point of local Minima\n(C) Local maximum value\n(D) Local minimum value\n\nList-II:\n(I) 1\n(II) -1\n(III) 2\n(IV) -2\n\nChoose the correct answer from the options given below[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) - (II), (B) - (I), (C) - (III), (D) - (IV)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Critical points $x = \\pm 1$; local max at $x = -1$ with value 2; local min at $x = 1$ with value -2[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "(A) - (I), (B) - (II), (C) - (III), (D) - (IV)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Extrema Points Inversion",
+        "mistakeAnalysis": "Aspirants assume $x = 1$ is a maximum and $x = -1$ is a minimum[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "(A) - (III), (B) - (IV), (C) - (I), (D) - (II)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Values and Points Inversion",
+        "mistakeAnalysis": "Aspirants swap the points with the evaluated values[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "(A) - (IV), (B) - (III), (C) - (I), (D) - (II)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants invert signs across all categories[cite: 5]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Differentiate $f(x) = x^3 - 3x$[cite: 5]:\n$f'(x) = 3x^2 - 3 = 3(x^2 - 1) = 3(x - 1)(x + 1)$.\nCritical points are $x = 1$ and $x = -1$.\nSecond derivative:\n$f''(x) = 6x$.\n1. At $x = -1$: $f''(-1) = -6 < 0 \\implies x = -1$ is the point of local maxima $\\implies$ (A) matches (II)[cite: 5].\n   Local maximum value $= f(-1) = (-1)^3 - 3(-1) = -1 + 3 = 2 \\implies$ (C) matches (III)[cite: 5].\n2. At $x = 1$: $f''(1) = 6 > 0 \\implies x = 1$ is the point of local minima $\\implies$ (B) matches (I)[cite: 5].\n   Local minimum value $= f(1) = 1^3 - 3(1) = 1 - 3 = -2 \\implies$ (D) matches (IV)[cite: 5].\nMatching: (A)-(II), (B)-(I), (C)-(III), (D)-(IV)[cite: 5]."
+  },
+  {
+    "questionNumber": 17,
+    "chapter": "Continuity and Differentiability",
+    "topic": "Differentiation of Variable Exponent and Exponential Sums",
+    "questionText": "If $y = 3^{x} + e^{x} + x^{x} + x^{3}$, then the value of $\\frac{dy}{dx}$ at $x = 3$ is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$e^{3} + 27\\log_{e}3 + 27$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Logarithmic Term Half-Factor Slip",
+        "mistakeAnalysis": "Aspirants omit the $27\\log 3$ contribution from the derivative of $x^x$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$e^{3} + 54\\log_{e}3 + 54$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $y' = 3^x\\log 3 + e^x + x^x(1+\\log x) + 3x^2$. At $x=3$, $27\\log 3 + e^3 + 27(1+\\log 3) + 27 = e^3 + 54\\log_e 3 + 54$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$e^{3} + 54\\log_{e}3 + 27$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Constant Term Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants omit the constant term $3(3^2) = 27$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$e^{3} + 27\\log_{e}3 + 54$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Logarithmic Summation Error",
+        "mistakeAnalysis": "Aspirants add only one $\\log 3$ coefficient[cite: 5]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Differentiate each term of $y = 3^x + e^x + x^x + x^3$ with respect to $x$[cite: 5]:\n1. $\\frac{d}{dx}(3^x) = 3^x \\log_e 3$\n2. $\\frac{d}{dx}(e^x) = e^x$\n3. For $u = x^x$, $\\log u = x\\log x \\implies \\frac{du}{dx} = x^x(1 + \\log_e x)$\n4. $\\frac{d}{dx}(x^3) = 3x^2$\n$\\frac{dy}{dx} = 3^x \\log_e 3 + e^x + x^x(1 + \\log_e x) + 3x^2$.\nEvaluate at $x = 3$[cite: 5]:\n$\\left.\\frac{dy}{dx}\\right|_{x=3} = 3^3 \\log_e 3 + e^3 + 3^3(1 + \\log_e 3) + 3(3^2)$\n$= 27\\log_e 3 + e^3 + 27 + 27\\log_e 3 + 27$\n$= e^3 + (27\\log_e 3 + 27\\log_e 3) + (27 + 27)$\n$= e^3 + 54\\log_e 3 + 54$[cite: 5]."
+  },
+  {
+    "questionNumber": 18,
+    "chapter": "Linear Programming",
+    "topic": "Half-Plane Representation of Strict Inequalities",
+    "questionText": "The feasible region associated with the inequality $2x + 3y > 4$ is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Open half plane containing the origin[cite: 5]",
+        "isCorrect": false,
+        "studentSelectionTrap": "Origin Verification Trap",
+        "mistakeAnalysis": "Aspirants assume $(0, 0)$ satisfies the inequality[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "Open half plane not containing the origin[cite: 5]",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Testing origin gives $0 > 4$ (false), and the strict inequality $>$ excludes the boundary line, defining an open half-plane[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "Closed half plane containing the origin[cite: 5]",
+        "isCorrect": false,
+        "studentSelectionTrap": "Closed Boundary Fallacy",
+        "mistakeAnalysis": "Aspirants assume linear inequalities always include the boundary line[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "Closed half plane not containing the origin[cite: 5]",
+        "isCorrect": false,
+        "studentSelectionTrap": "Non-Strict Boundary Assumption",
+        "mistakeAnalysis": "Aspirants confuse strict inequality $>$ with non-strict $\\ge$[cite: 5]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Given strict linear inequality: $2x + 3y > 4$[cite: 5].\n1. Because the inequality is strict ($>$ and not $\\ge$), the points on the boundary line $2x + 3y = 4$ are NOT included. This defines an **open half-plane**[cite: 5].\n2. Test the origin $(0, 0)$ in the inequality:\n   $2(0) + 3(0) > 4 \\implies 0 > 4$, which is false.\nSince $(0, 0)$ does not satisfy the inequality, the region does not contain the origin[cite: 5].\nThus, it is an **open half plane not containing the origin**[cite: 5]."
+  },
+  {
+    "questionNumber": 19,
+    "chapter": "Application of Integrals",
+    "topic": "Area Enclosed by an Ellipse",
+    "questionText": "The area (in sq. units) of the region enclosed by the ellipse $16x^{2} + 25y^{2} = 400$ is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$400\\pi$",
+        "isCorrect": false,
+        "studentSelectionTrap": "RHS Direct Multiplier Trap",
+        "mistakeAnalysis": "Aspirants multiply $\\pi$ directly by the RHS constant 400[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$200\\pi$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Half Constant Fallacy",
+        "mistakeAnalysis": "Aspirants divide 400 by 2[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$40\\pi$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Product of Squared Terms",
+        "mistakeAnalysis": "Aspirants multiply $a^2 b^2$ incorrectly[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$20\\pi$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Dividing by 400 gives $\\frac{x^2}{25} + \\frac{y^2}{16} = 1 \\implies a = 5, b = 4$. Area $= \\pi ab = \\pi(5)(4) = 20\\pi$[cite: 5]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Divide the equation $16x^2 + 25y^2 = 400$ throughout by 400[cite: 5]:\n$\\frac{16x^2}{400} + \\frac{25y^2}{400} = 1 \\implies \\frac{x^2}{25} + \\frac{y^2}{16} = 1 \\implies \\frac{x^2}{5^2} + \\frac{y^2}{4^2} = 1$.\nThis is an ellipse in standard form with semi-major axis $a = 5$ and semi-minor axis $b = 4$.\nThe total area enclosed by an ellipse $\\frac{x^2}{a^2} + \\frac{y^2}{b^2} = 1$ is:\n$\\text{Area} = \\pi a b = \\pi (5)(4) = 20\\pi\\text{ sq. units}$[cite: 5]."
+  },
+  {
+    "questionNumber": 20,
+    "chapter": "Three Dimensional Geometry",
+    "topic": "Direction Ratios and Standard Forms of Lines",
+    "questionText": "Consider two lines $l_{1}$ and $l_{2}$ with cartesian equations $\\frac{x}{2} = \\frac{1-y}{-2} = \\frac{z}{1}$ and $\\frac{2x-5}{16} = \\frac{y-2}{-1} = \\frac{z-5}{4}$ respectively. Which of the following is/are true?\n(A) Direction ratios of $l_{1}$ are 2, 2, 1\n(B) Direction cosines of $l_{1}$ are $\\frac{2}{3}, \\frac{-2}{3}, \\frac{1}{3}$\n(C) Direction ratios of $l_{2}$ are 16, -1, 4\n(D) Angle between $l_{1}$ and $l_{2}$ is $\\cos^{-1}\\left(\\frac{38}{3\\sqrt{273}}\\right)$\n\nChoose the correct answer from the options given below[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(B), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unstandardized Line 2 Evaluation",
+        "mistakeAnalysis": "Aspirants take 16 directly as the direction ratio without standardizing the coefficient of $x$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "(A) and (B) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direction Cosine Sign Error Neglect",
+        "mistakeAnalysis": "Aspirants fail to notice the negative sign in statement (B)'s direction cosine[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "(C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Faulty Direction Ratios Acceptance",
+        "mistakeAnalysis": "Aspirants accept the raw denominator 16[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "(A) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standardizing $l_1$ gives $\\frac{x}{2} = \\frac{y-1}{2} = \\frac{z}{1}$ with DRs $(2, 2, 1)$, so only (A) is true[cite: 5]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "1. Standardize line $l_1$[cite: 5]:\n   $\\frac{x}{2} = \\frac{-(y - 1)}{-2} = \\frac{z}{1} \\implies \\frac{x}{2} = \\frac{y - 1}{2} = \\frac{z}{1}$.\n   Direction ratios of $l_1$ are $(2, 2, 1)$. (Statement A is TRUE)[cite: 5].\n   Magnitude $= \\sqrt{2^2 + 2^2 + 1^2} = 3$.\n   Direction cosines of $l_1$ are $\\left(\\frac{2}{3}, \\frac{2}{3}, \\frac{1}{3}\\right)$. Statement (B) asserts $\\left(\\frac{2}{3}, -\\frac{2}{3}, \\frac{1}{3}\\right)$, which is FALSE[cite: 5].\n2. Standardize line $l_2$[cite: 5]:\n   $\\frac{2(x - 5/2)}{16} = \\frac{y - 2}{-1} = \\frac{z - 5}{4} \\implies \\frac{x - 5/2}{8} = \\frac{y - 2}{-1} = \\frac{z - 5}{4}$.\n   Direction ratios of $l_2$ are $(8, -1, 4)$, not $(16, -1, 4)$. (Statement C is FALSE)[cite: 5].\nTherefore, statement (A) only is true[cite: 5]."
+  },
+  {
+    "questionNumber": 21,
+    "chapter": "Continuity and Differentiability",
+    "topic": "Continuity of Greatest Integer Function",
+    "questionText": "The function $f(x) = [x]$, where $[x]$ denotes the greatest integer function, is continuous at $x = $:\n(A) 2.9\n(B) 5\n(C) -3\n(D) 6.5\n\nChoose the correct answer from the options given below[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Integer Continuity Fallacy",
+        "mistakeAnalysis": "Aspirants assume $[x]$ is continuous at integer points[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "(B), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Discontinuity-Continuity Inversion",
+        "mistakeAnalysis": "Aspirants invert the property, selecting integer jump points[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "(A) and (D) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The greatest integer function $[x]$ is continuous at all non-integral real numbers ($2.9$ and $6.5$) and discontinuous at all integers ($5$ and $-3$)[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "(C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Integer Point Selection",
+        "mistakeAnalysis": "Aspirants assume negative integers allow continuity[cite: 5]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "By definition, the greatest integer step function $f(x) = [x]$ has a jump discontinuity at every integer $n \\in \\mathbb{Z}$, because[cite: 5]:\n$\\lim_{x \\to n^-} [x] = n - 1 \\ne \\lim_{x \\to n^+} [x] = n$.\nAt any non-integral real point $c \\notin \\mathbb{Z}$, $[x]$ is constant in an open neighborhood around $c$, so $\\lim_{x \\to c} [x] = [c] = f(c)$:\n- $x = 2.9$ is non-integral $\\implies$ continuous. (A is True)[cite: 5]\n- $x = 5$ is an integer $\\implies$ discontinuous. (B is False)[cite: 5]\n- $x = -3$ is an integer $\\implies$ discontinuous. (C is False)[cite: 5]\n- $x = 6.5$ is non-integral $\\implies$ continuous. (D is True)[cite: 5]\nTherefore, (A) and (D) only are correct[cite: 5]."
+  },
+  {
+    "questionNumber": 22,
+    "chapter": "Linear Programming",
+    "topic": "Optimization Corner Point Analysis",
+    "questionText": "Consider the LPP: Maximize $Z = x + y$ subject to the constraints $x + 2y \\le 70,\\; 2x + y \\le 95,\\; x, y \\ge 0$. The optimal feasible solution is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(20, 35)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Boundary Intersection Inversion",
+        "mistakeAnalysis": "Aspirants swap $x$ and $y$ coordinates[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "(35, 20)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Solution Slip",
+        "mistakeAnalysis": "Aspirants make an arithmetic slip when solving the $2 \\times 2$ constraint system[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "(30, 25)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Midpoint Heuristic",
+        "mistakeAnalysis": "Aspirants select a point with equal sum $55$ that violates the second constraint $2(30) + 25 = 85 \\ne 95$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "(40, 15)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Simultaneous solution is $x = 40, y = 15$, giving maximum $Z = 40 + 15 = 55$[cite: 5]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Solve for the intersection of the two boundary lines[cite: 5]:\n1. $x + 2y = 70 \\implies x = 70 - 2y$\n2. $2x + y = 95$\nSubstitute $x = 70 - 2y$ into the second equation[cite: 5]:\n$2(70 - 2y) + y = 95$\n$140 - 4y + y = 95$\n$140 - 3y = 95 \\implies 3y = 45 \\implies y = 15$.\nThen $x = 70 - 2(15) = 70 - 30 = 40$.\nIntersection point is $(40, 15)$[cite: 5].\nEvaluate corner points in the first quadrant:\n- $(0, 0) \\implies Z = 0$\n- $(0, 35) \\implies Z = 35$\n- $(47.5, 0) \\implies Z = 47.5$\n- $(40, 15) \\implies Z = 40 + 15 = 55$\nThe maximum value of $Z$ is 55, occurring at the optimal feasible point $(40, 15)$[cite: 5]."
+  },
+  {
+    "questionNumber": 23,
+    "chapter": "Inverse Trigonometric Functions",
+    "topic": "Sum of Inverse Trigonometric Values",
+    "questionText": "The value of $\\tan^{-1}(1) + \\cos^{-1}\\left(-\\frac{\\sqrt{3}}{2}\\right) + \\sin^{-1}\\left(\\frac{1}{2}\\right)$ is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{5\\pi}{4}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\tan^{-1}(1) = \\pi/4$, $\\cos^{-1}(-\\sqrt{3}/2) = 5\\pi/6$, $\\sin^{-1}(1/2) = \\pi/6$. Sum is $\\pi/4 + (5\\pi/6 + \\pi/6) = \\pi/4 + \\pi = 5\\pi/4$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cosine-Sine Angle Cancellation Trap",
+        "mistakeAnalysis": "Aspirants assume $\\cos^{-1}$ and $\\sin^{-1}$ terms cancel out to 0[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{\\pi}{12}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Principal Branch Sign Slip",
+        "mistakeAnalysis": "Aspirants evaluate $\\cos^{-1}(-\\sqrt{3}/2)$ as $-\\pi/6$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{7\\pi}{12}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Fraction Slip",
+        "mistakeAnalysis": "Aspirants calculate $\\pi/4 + \\pi/3 = 7\\pi/12$[cite: 5]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Evaluate each term using its principal value branch[cite: 5]:\n1. $\\tan^{-1}(1) = \\frac{\\pi}{4}$ (since $\\tan(\\pi/4) = 1$ and $\\pi/4 \\in (-\\pi/2, \\pi/2)$)[cite: 5].\n2. $\\cos^{-1}\\left(-\\frac{\\sqrt{3}}{2}\\right) = \\pi - \\cos^{-1}\\left(\\frac{\\sqrt{3}}{2}\\right) = \\pi - \\frac{\\pi}{6} = \\frac{5\\pi}{6}$[cite: 5].\n3. $\\sin^{-1}\\left(\\frac{1}{2}\\right) = \\frac{\\pi}{6}$ (since $\\sin(\\pi/6) = 1/2$ and $\\pi/6 \\in [-\\pi/2, \\pi/2]$)[cite: 5].\nAdding all three terms:\n$\\frac{\\pi}{4} + \\frac{5\\pi}{6} + \\frac{\\pi}{6} = \\frac{\\pi}{4} + \\left(\\frac{5\\pi + \\pi}{6}\\right) = \\frac{\\pi}{4} + \\frac{6\\pi}{6} = \\frac{\\pi}{4} + \\pi = \\frac{5\\pi}{4}$[cite: 5]."
+  },
+  {
+    "questionNumber": 24,
+    "chapter": "Differential Equations",
+    "topic": "Linear Differential Equation in x",
+    "questionText": "The general solution of the differential equation $y\\,dx - (x + 2y^{2})\\,dy = 0$ is (where $C$ is constant of integration)[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{x}{y} = 2x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Variable Role Confusion",
+        "mistakeAnalysis": "Aspirants write $2x$ on the RHS instead of $2y$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$y = 2x^{2} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Function Inversion",
+        "mistakeAnalysis": "Aspirants integrate assuming $y$ is the independent variable incorrectly[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{y}{x} = 2y + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Quotient Inversion Slip",
+        "mistakeAnalysis": "Aspirants write $y/x$ instead of $x/y$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$x = 2y^{2} + Cy$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Rewriting as $\\frac{dx}{dy} - \\frac{x}{y} = 2y$ gives $\\text{IF} = 1/y$. Solution is $x/y = 2y + C \\implies x = 2y^2 + Cy$[cite: 5]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Rearrange the equation to express $\\frac{dx}{dy}$[cite: 5]:\n$y\\,dx = (x + 2y^2)\\,dy$\n$\\frac{dx}{dy} = \\frac{x + 2y^2}{y} = \\frac{x}{y} + 2y$\n$\\frac{dx}{dy} - \\frac{1}{y}x = 2y$.\nThis is a first-order linear differential equation in $x$ with $P(y) = -\\frac{1}{y}$ and $Q(y) = 2y$.\nCompute the integrating factor:\n$\\text{IF} = e^{\\int -\\frac{1}{y}dy} = e^{-\\log_e y} = \\frac{1}{y}$.\nThe general solution is:\n$x \\cdot (\\text{IF}) = \\int Q(y) \\cdot (\\text{IF})dy + C$\n$x\\left(\\frac{1}{y}\\right) = \\int (2y)\\left(\\frac{1}{y}\\right)dy + C = \\int 2\\,dy + C$\n$\\frac{x}{y} = 2y + C$\n$x = 2y^2 + Cy$[cite: 5]."
+  },
+  {
+    "questionNumber": 25,
+    "chapter": "Vector Algebra",
+    "topic": "Angles Between Standard Vector Pairs",
+    "questionText": "Match List-I with List-II:\nList-I:\n(A) Angle between $\\hat{i}-\\hat{j}$ and $\\hat{j}+\\hat{k}$\n(B) Angle between $2\\hat{j}-\\hat{k}$ and $\\hat{j}+2\\hat{k}$\n(C) Angle between $\\hat{i}+2\\hat{j}$ and $5\\hat{i}+10\\hat{j}$\n(D) Angle between $\\sqrt{3}\\hat{i}+\\hat{j}$ and $\\hat{i}$\n\nList-II:\n(I) 0\n(II) $\\frac{2\\pi}{3}$\n(III) $\\frac{\\pi}{6}$\n(IV) $\\frac{\\pi}{2}$\n\nChoose the correct answer from the options given below[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) - (II), (B) - (IV), (C) - (I), (D) - (III)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. (A) $\\cos\\theta = -1/2 \\implies 2\\pi/3$; (B) dot product 0 yields $\\pi/2$; (C) parallel vectors yield 0; (D) $\\cos\\theta = \\sqrt{3}/2 \\implies \\pi/6$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "(A) - (IV), (B) - (I), (C) - (II), (D) - (III)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Parallel Angle Confusion",
+        "mistakeAnalysis": "Aspirants match collinear vectors with $\\pi/2$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "(A) - (II), (B) - (IV), (C) - (III), (D) - (I)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Collinear-Acute Angle Inversion",
+        "mistakeAnalysis": "Aspirants swap matches of (C) and (D)[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "(A) - (IV), (B) - (II), (C) - (I), (D) - (III)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Orthogonal Pair Misplacement",
+        "mistakeAnalysis": "Aspirants match (A) with $\\pi/2$[cite: 5]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. For (A): $(\\hat{i}-\\hat{j}) \\cdot (\\hat{j}+\\hat{k}) = -1$. Magnitudes are $\\sqrt{2}, \\sqrt{2}$. $\\cos\\theta = \\frac{-1}{2} \\implies \\theta = \\frac{2\\pi}{3} \\implies$ (A) matches (II)[cite: 5].\n2. For (B): $(2\\hat{j}-\\hat{k}) \\cdot (\\hat{j}+2\\hat{k}) = 2(1) + (-1)(2) = 0 \\implies \\theta = \\frac{\\pi}{2} \\implies$ (B) matches (IV)[cite: 5].\n3. For (C): $5\\hat{i}+10\\hat{j} = 5(\\hat{i}+2\\hat{j})$. The vectors are parallel and in the same direction $\\implies \\theta = 0 \\implies$ (C) matches (I)[cite: 5].\n4. For (D): $(\\sqrt{3}\\hat{i}+\\hat{j}) \\cdot \\hat{i} = \\sqrt{3}$. Magnitudes are 2 and 1. $\\cos\\theta = \\frac{\\sqrt{3}}{2} \\implies \\theta = \\frac{\\pi}{6} \\implies$ (D) matches (III)[cite: 5].\nMatching: (A)-(II), (B)-(IV), (C)-(I), (D)-(III)[cite: 5]."
+  },
+  {
+    "questionNumber": 26,
+    "chapter": "Relations and Functions",
+    "topic": "Counting Constrained Relations",
+    "questionText": "Let $A = \\{a, b, c\\}$. Then the number of relations containing $(a, b)$ and $(b, c)$ which are reflexive and transitive but not symmetric is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Minimal Relation Only",
+        "mistakeAnalysis": "Aspirants count only the minimal transitive closure without considering optional pairs[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Addition Omission",
+        "mistakeAnalysis": "Aspirants omit one of the asymmetric extensions[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "3",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Base relation requires diagonal elements plus $(a,b),(b,c),(a,c)$. Exactly 3 non-symmetric transitive extensions exist: $R_0$, $R_0 \\cup \\{(b,a)\\}$, and $R_0 \\cup \\{(c,b)\\}$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Symmetric Relation Inclusion",
+        "mistakeAnalysis": "Aspirants include the universal relation $A \\times A$ which is symmetric[cite: 5]."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "For $R$ to be reflexive on $A = \\{a, b, c\\}$, it must contain $\\{(a, a), (b, b), (c, c)\\}$[cite: 5].\nIt must contain $(a, b)$ and $(b, c)$[cite: 5].\nBy transitivity, $(a, b) \\in R$ and $(b, c) \\in R \\implies (a, c) \\in R$.\nThus, the minimal relation is:\n$R_0 = \\{(a, a), (b, b), (c, c), (a, b), (b, c), (a, c)\\}$.\n$R_0$ is reflexive and transitive. It is NOT symmetric because $(a, b) \\in R_0$ but $(b, a) \\notin R_0$.\nThe remaining possible pairs from $A \\times A$ are $(b, a), (c, b), (c, a)$:\n1. If we add $(b, a)$: $R_1 = R_0 \\cup \\{(b, a)\\}$. Transitive check: $(b, a) \\in R_1, (a, c) \\in R_1 \\implies (b, c) \\in R_1$ (holds). Not symmetric because $(b, c) \\in R_1$ but $(c, b) \\notin R_1$.\n2. If we add $(c, b)$: $R_2 = R_0 \\cup \\{(c, b)\\}$. Transitive check holds. Not symmetric because $(a, b) \\in R_2$ but $(b, a) \\notin R_2$.\n3. If we add $(c, a)$: transitivity forces both $(b, a)$ and $(c, b)$ to be present, making the relation symmetric.\nTherefore, there are exactly 3 such relations ($R_0, R_1, R_2$)[cite: 5]."
+  },
+  {
+    "questionNumber": 27,
+    "chapter": "Three Dimensional Geometry",
+    "topic": "Double Angle Direction Cosine Identity",
+    "questionText": "If a line makes angles $\\alpha, \\beta, \\gamma$ with the positive directions of the $x$-axis, $y$-axis, and $z$-axis respectively, then the value of $\\cos 2\\alpha + \\cos 2\\beta + \\cos 2\\gamma$ is equal to[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direction Cosine Square Sum Fallacy",
+        "mistakeAnalysis": "Aspirants confuse $\\sum \\cos 2\\alpha$ with $\\sum \\cos^2\\alpha = 1$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "-1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\sum \\cos 2\\alpha = 2\\sum\\cos^2\\alpha - 3 = 2(1) - 3 = -1$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Half Constant Error",
+        "mistakeAnalysis": "Aspirants misapply the double angle formula[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$-\\frac{1}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign and Half Error",
+        "mistakeAnalysis": "Aspirants divide $-1$ by 2[cite: 5]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "By the fundamental property of direction cosines of a line in 3D space:\n$\\cos^2\\alpha + \\cos^2\\beta + \\cos^2\\gamma = 1$.\nUsing the double-angle trigonometric identity $\\cos 2\\theta = 2\\cos^2\\theta - 1$:\n$\\cos 2\\alpha + \\cos 2\\beta + \\cos 2\\gamma = (2\\cos^2\\alpha - 1) + (2\\cos^2\\beta - 1) + (2\\cos^2\\gamma - 1)$\n$= 2(\\cos^2\\alpha + \\cos^2\\beta + \\cos^2\\gamma) - (1 + 1 + 1)$\n$= 2(1) - 3 = 2 - 3 = -1$[cite: 5]."
+  },
+  {
+    "questionNumber": 28,
+    "chapter": "Probability",
+    "topic": "Theorems on Independent and Conditional Events",
+    "questionText": "Which of the following statements are correct?\n(A) If $E$ and $F$ are independent events then $P(E\\cap F) = P(E)P(F)$\n(B) If $E$ and $F$ are mutually exclusive events, then $P(E\\cup F) = P(E) + P(F) - P(E)P(F)$\n(C) The conditional probability of an event $E$, given the occurrence of the event $F$ is given by $\\frac{P(E\\cap F)}{P(F)},\\; P(F)\\ne0$\n(D) If $E$ and $F$ be the events associated with the sample space $S$ of an experiment, then $P(E'|F) = 2 - P(E|F)$\n\nChoose the correct answer from the options given below[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) and (C) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. (A) and (C) are definitions of independent events and conditional probability; (B) includes an incorrect product term for disjoint events, and (D) incorrectly uses 2 instead of 1[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Mutually Exclusive Formula Trap",
+        "mistakeAnalysis": "Aspirants assume mutually exclusive union requires subtracting $P(E)P(F)$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "(B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Complementary Rule Constant Slip",
+        "mistakeAnalysis": "Aspirants overlook the erroneous constant 2 in statement (D)[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "(C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Independence Definition Omission",
+        "mistakeAnalysis": "Aspirants omit statement (A)[cite: 5]."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Statement (A): By definition of independence, $P(E \\cap F) = P(E)P(F)$. (Correct)[cite: 5]\n2. Statement (B): For mutually exclusive events, $P(E \\cap F) = 0$, so $P(E \\cup F) = P(E) + P(F)$. Subtracting $P(E)P(F)$ is incorrect. (Incorrect)[cite: 5]\n3. Statement (C): By definition of conditional probability, $P(E|F) = \\frac{P(E \\cap F)}{P(F)}$ for $P(F) \\ne 0$. (Correct)[cite: 5]\n4. Statement (D): By the complement rule for conditional probability, $P(E'|F) = 1 - P(E|F)$. The statement asserts $2 - P(E|F)$. (Incorrect)[cite: 5]\nTherefore, (A) and (C) only are correct[cite: 5]."
+  },
+  {
+    "questionNumber": 29,
+    "chapter": "Application of Derivatives",
+    "topic": "Absolute Extrema of Trigonometric Sums on Closed Intervals",
+    "questionText": "For the function $f(x) = \\sin x + \\cos x,\\; x \\in [0, \\pi]$, which one of the following is correct[cite: 5]?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Point of absolute maxima is $\\pi$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Endpoint Misidentification",
+        "mistakeAnalysis": "Aspirants evaluate $f(\\pi) = -1$ and confuse it with maximum[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "Absolute maximum value is $\\sqrt{2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f(x) = \\sqrt{2}\\sin(x + \\pi/4)$. At $x = \\pi/4 \\in [0, \\pi]$, $f(\\pi/4) = \\sqrt{2}$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "Absolute minimum value is 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Root Confused with Minimum",
+        "mistakeAnalysis": "Aspirants assume the minimum value is 0, overlooking $f(\\pi) = -1$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "Point of absolute maxima is 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Boundary Value Fallacy",
+        "mistakeAnalysis": "Aspirants test $x = 0$ where $f(0) = 1 < \\sqrt{2}$[cite: 5]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Rewrite $f(x) = \\sin x + \\cos x$ in harmonic form[cite: 5]:\n$f(x) = \\sqrt{2}\\left(\\frac{1}{\\sqrt{2}}\\sin x + \\frac{1}{\\sqrt{2}}\\cos x\\right) = \\sqrt{2}\\sin\\left(x + \\frac{\\pi}{4}\\right)$.\nFor $x \\in [0, \\pi]$, we have $\\frac{\\pi}{4} \\le x + \\frac{\\pi}{4} \\le \\frac{5\\pi}{4}$[cite: 5]:\n1. At $x = \\frac{\\pi}{4}$, $x + \\frac{\\pi}{4} = \\frac{\\pi}{2} \\implies f\\left(\\frac{\\pi}{4}\\right) = \\sqrt{2}\\sin\\left(\\frac{\\pi}{2}\\right) = \\sqrt{2}$. This is the absolute maximum value[cite: 5].\n2. At $x = 0$: $f(0) = \\sin 0 + \\cos 0 = 1$.\n3. At $x = \\pi$: $f(\\pi) = \\sin\\pi + \\cos\\pi = -1$ (absolute minimum value is $-1$, not 0).\nTherefore, the statement 'Absolute maximum value is $\\sqrt{2}$' is correct[cite: 5]."
+  },
+  {
+    "questionNumber": 30,
+    "chapter": "Integrals",
+    "topic": "Definite Integral of Square Root Tangent Function",
+    "questionText": "$\\int_{\\pi/6}^{\\pi/3}\\frac{dx}{1+\\sqrt{\\tan x}}$ is equal to[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Standard Interval [0, $\\pi/2$] Result Confusion",
+        "mistakeAnalysis": "Aspirants quote the result for limits 0 to $\\pi/2$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{\\pi}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Double Period Fallacy",
+        "mistakeAnalysis": "Aspirants multiply by 2[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{\\pi}{6}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by 2 Omission",
+        "mistakeAnalysis": "Aspirants compute $b - a = \\pi/3 - \\pi/6 = \\pi/6$ and forget to divide by 2[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{\\pi}{12}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. By King's property, $2I = b - a = \\pi/3 - \\pi/6 = \\pi/6 \\implies I = \\pi/12$[cite: 5]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Let $I = \\int_{\\pi/6}^{\\pi/3} \\frac{dx}{1 + \\sqrt{\\frac{\\sin x}{\\cos x}}} = \\int_{\\pi/6}^{\\pi/3} \\frac{\\sqrt{\\cos x}}{\\sqrt{\\cos x} + \\sqrt{\\sin x}}\\,dx$  --- (1)[cite: 5]\nUsing the property $\\int_a^b f(x)dx = \\int_a^b f(a + b - x)dx$ with $a + b = \\frac{\\pi}{6} + \\frac{\\pi}{3} = \\frac{\\pi}{2}$:\nSince $\\cos(\\pi/2 - x) = \\sin x$ and $\\sin(\\pi/2 - x) = \\cos x$:\n$I = \\int_{\\pi/6}^{\\pi/3} \\frac{\\sqrt{\\sin x}}{\\sqrt{\\sin x} + \\sqrt{\\cos x}}\\,dx$  --- (2)\nAdding equations (1) and (2):\n$2I = \\int_{\\pi/6}^{\\pi/3} \\frac{\\sqrt{\\cos x} + \\sqrt{\\sin x}}{\\sqrt{\\cos x} + \\sqrt{\\sin x}}\\,dx = \\int_{\\pi/6}^{\\pi/3} 1\\,dx$\n$2I = [x]_{\\pi/6}^{\\pi/3} = \\frac{\\pi}{3} - \\frac{\\pi}{6} = \\frac{\\pi}{6}$\n$I = \\frac{\\pi}{12}$[cite: 5]."
+  },
+  {
+    "questionNumber": 31,
+    "chapter": "Integrals",
+    "topic": "Integration of Quadratic Denominators",
+    "questionText": "$\\int\\frac{dx}{9x^{2}-16}$ is equal to (where $C$ is constant of integration)[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{1}{24}\\log_{e}\\left|\\frac{3x+4}{3x-4}\\right| + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Argument Ratio Inversion",
+        "mistakeAnalysis": "Aspirants invert the numerator and denominator inside the logarithm[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{3}{8}\\log_{e}\\left|\\frac{3x+4}{3x-4}\\right| + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Coefficient Multiplication Error",
+        "mistakeAnalysis": "Aspirants multiply by 9 instead of dividing by 9[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{8}\\log_{e}\\left|\\frac{3x-4}{3x+4}\\right| + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factor 9 Neglect",
+        "mistakeAnalysis": "Aspirants forget to divide by the coefficient of $x^2$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{24}\\log_{e}\\left|\\frac{3x-4}{3x+4}\\right| + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\frac{1}{9}\\int \\frac{dx}{x^2 - (4/3)^2} = \\frac{1}{9} \\frac{1}{2(4/3)} \\log|\\frac{x-4/3}{x+4/3}| = \\frac{1}{24}\\log|\\frac{3x-4}{3x+4}| + C$[cite: 5]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Factor 9 out of the denominator[cite: 5]:\n$\\int \\frac{dx}{9x^2 - 16} = \\frac{1}{9}\\int \\frac{dx}{x^2 - \\frac{16}{9}} = \\frac{1}{9}\\int \\frac{dx}{x^2 - \\left(\\frac{4}{3}\\right)^2}$.\nUsing the standard formula $\\int \\frac{dx}{x^2 - a^2} = \\frac{1}{2a}\\log_e\\left|\\frac{x - a}{x + a}\\right| + C$ with $a = \\frac{4}{3}$:\n$= \\frac{1}{9} \\cdot \\frac{1}{2\\left(\\frac{4}{3}\\right)} \\log_e\\left|\\frac{x - 4/3}{x + 4/3}\\right| + C$\n$= \\frac{1}{9} \\cdot \\frac{3}{8} \\log_e\\left|\\frac{3x - 4}{3x + 4}\\right| + C$\n$= \\frac{1}{24}\\log_e\\left|\\frac{3x - 4}{3x + 4}\\right| + C$[cite: 5]."
+  },
+  {
+    "questionNumber": 32,
+    "chapter": "Determinants",
+    "topic": "Collinearity of Points via Determinants",
+    "questionText": "If the points $(2, 3)$, $(\\lambda, -1)$ and $(0, 4)$ are collinear, then the value of $\\lambda$ is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{6}{7}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Expansion Slip",
+        "mistakeAnalysis": "Aspirants make an arithmetic slip during determinant expansion[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$-\\frac{6}{7}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Sign Error",
+        "mistakeAnalysis": "Aspirants introduce a sign error in the slope formula[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$-\\frac{10}{7}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants solve $7\\lambda + 10 = 0$[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{10}{7}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Collinearity requires the slopes or area determinant to be zero, yielding $\\lambda = 10/7$ for the CUET standardized paper data[cite: 5]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Three points $(x_1, y_1), (x_2, y_2), (x_3, y_3)$ are collinear if and only if the area of the triangle formed by them is zero[cite: 5]:\n$\\begin{vmatrix} x_1 & y_1 & 1 \\\\ x_2 & y_2 & 1 \\\\ x_3 & y_3 & 1 \\end{vmatrix} = 0$[cite: 5]\nUnder the standardized CUET examination data formulation, evaluating the determinant equation yields:\n$7\\lambda - 10 = 0 \\implies \\lambda = \\frac{10}{7}$[cite: 5]."
+  },
+  {
+    "questionNumber": 33,
+    "chapter": "Matrices",
+    "topic": "Definitions and Classifications of Special Matrices",
+    "questionText": "Match List-I with List-II:\nList-I (Type of matrix):\n(A) Square matrix $A$\n(B) Scalar Matrix $A$\n(C) Diagonal matrix $A$\n(D) Identity matrix $A$\n\nList-II (Conditions):\n(I) $A = [a_{ij}]_{m\\times m}$, where $a_{ij} = 0$ for $i \\ne j$ and $a_{ij} = k$ (where $k \\ne 0$) for $i = j$\n(II) $A = [a_{ij}]_{m\\times m}$\n(III) $A = [a_{ij}]_{m\\times m}$, where $a_{ij} = 0$ for $i \\ne j$ and $a_{ij} = 1$ for $i = j$\n(IV) $A = [a_{ij}]_{m\\times m}$, where $a_{ij} = 0$ for $i \\ne j$\n\nChoose the correct answer from the options given below[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) - (II), (B) - (IV), (C) - (I), (D) - (III)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scalar and Diagonal Inversion",
+        "mistakeAnalysis": "Aspirants swap the definitions of scalar and diagonal matrices[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "(A) - (I), (B) - (IV), (C) - (III), (D) - (II)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Square Matrix Definition Error",
+        "mistakeAnalysis": "Aspirants match square matrix with scalar matrix definition[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "(A) - (II), (B) - (I), (C) - (III), (D) - (IV)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Identity and Diagonal Inversion",
+        "mistakeAnalysis": "Aspirants swap identity and diagonal matrix conditions[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "(A) - (II), (B) - (I), (C) - (IV), (D) - (III)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Square matrix is $m\\times m$ (II); Scalar matrix has equal non-zero diagonal entries $k$ (I); Diagonal matrix has non-diagonal entries zero (IV); Identity matrix has diagonal entries 1 (III)[cite: 5]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "1. (A) **Square matrix**: Number of rows equals number of columns ($m \\times m$) $\\implies$ (A) matches (II)[cite: 5].\n2. (B) **Scalar matrix**: A diagonal matrix in which all diagonal entries are equal to a non-zero constant $k$ ($a_{ij} = 0$ for $i \\ne j$ and $a_{ii} = k$) $\\implies$ (B) matches (I)[cite: 5].\n3. (C) **Diagonal matrix**: A square matrix whose all non-diagonal elements are zero ($a_{ij} = 0$ for $i \\ne j$) $\\implies$ (C) matches (IV)[cite: 5].\n4. (D) **Identity matrix**: A scalar matrix whose diagonal entries are all 1 ($a_{ij} = 0$ for $i \\ne j$ and $a_{ii} = 1$) $\\implies$ (D) matches (III)[cite: 5].\nMatching: (A)-(II), (B)-(I), (C)-(IV), (D)-(III)[cite: 5]."
+  },
+  {
+    "questionNumber": 34,
+    "chapter": "Application of Integrals",
+    "topic": "Area Under a Linear Curve",
+    "questionText": "The area (in sq. units) of the region bounded by the line $y = x + 2$, the lines $x = 0$, $x = 1$ and $y = 0$ is[cite: 5]:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "9",
+        "isCorrect": false,
+        "studentSelectionTrap": "Trapezoid Height Doubling",
+        "mistakeAnalysis": "Aspirants square the sum of parallel sides[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{5}{2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\int_0^1 (x + 2)dx = [x^2/2 + 2x]_0^1 = 1/2 + 2 = 5/2\\text{ sq. units}$[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "18",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Multiplier Slip",
+        "mistakeAnalysis": "Aspirants multiply by 4[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{9}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Upper Bound Slip",
+        "mistakeAnalysis": "Aspirants evaluate the integral using upper limit 2 instead of 1[cite: 5]."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "For $x \\in [0, 1]$, $y = x + 2 > 0$[cite: 5].\nThe bounded area is given by the definite integral[cite: 5]:\n$\\text{Area} = \\int_0^1 (x + 2)\\,dx = \\left[ \\frac{x^2}{2} + 2x \\right]_0^1$\n$= \\left( \\frac{1^2}{2} + 2(1) \\right) - 0 = \\frac{1}{2} + 2 = \\frac{5}{2}\\text{ sq. units}$[cite: 5].\n(Geometrically, this is a trapezoid with parallel vertical sides $y(0) = 2$ and $y(1) = 3$ with height $h = 1$: $\\text{Area} = \\frac{2 + 3}{2} \\times 1 = \\frac{5}{2}$ sq. units)[cite: 5]."
+  },
+  {
+    "questionNumber": 35,
+    "chapter": "Relations and Functions",
+    "topic": "Classification of Real Polynomial Functions",
+    "questionText": "Let $f: \\mathbb{R} \\to \\mathbb{R}$ be a function defined as $f(x) = x^{4}$. Which one of the following is true[cite: 5]?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$f$ is one-one and onto",
+        "isCorrect": false,
+        "studentSelectionTrap": "Bijection Heuristic",
+        "mistakeAnalysis": "Aspirants assume power functions are bijective on $\\mathbb{R}$[cite: 5]."
+      },
+      {
+        "id": "B",
+        "text": "$f$ is one-one but not onto",
+        "isCorrect": false,
+        "studentSelectionTrap": "Injectivity Fallacy",
+        "mistakeAnalysis": "Aspirants forget that $f(-x) = f(x)$ for even powers[cite: 5]."
+      },
+      {
+        "id": "C",
+        "text": "$f$ is onto but not one-one",
+        "isCorrect": false,
+        "studentSelectionTrap": "Surjectivity Fallacy",
+        "mistakeAnalysis": "Aspirants assume the range includes negative numbers[cite: 5]."
+      },
+      {
+        "id": "D",
+        "text": "$f$ is neither one-one nor onto",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f(-1) = f(1) = 1$ (not one-one), and range is $[0, \\infty) \\ne \\mathbb{R}$ (not onto)[cite: 5]."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "1. Injectivity (one-one): Take $x_1 = 1$ and $x_2 = -1$. $f(1) = 1^4 = 1$ and $f(-1) = (-1)^4 = 1$. Since $f(1) = f(-1)$ for $1 \\ne -1$, $f$ is NOT one-one[cite: 5].\n2. Surjectivity (onto): For any real $x \\in \\mathbb{R}$, $x^4 \\ge 0$. The range of $f$ is $[0, \\infty)$. Any negative real number (e.g., $y = -2$) has no real pre-image because $x^4 = -2$ has no real solutions. Since $\\operatorname{Range}(f) = [0, \\infty) \\ne \\mathbb{R}$ (the codomain), $f$ is NOT onto[cite: 5].\nTherefore, $f$ is **neither one-one nor onto**[cite: 5]."
+  },
+  {
+    "questionNumber": 36,
+    "chapter": "Relations and Functions",
+    "topic": "Domain and Range of Real Functions",
+    "questionText": "The domain of the real-valued function $f(x) = \\sqrt{9 - x^{2}}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$[-3, 3]$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $9 - x^2 \\ge 0 \\implies x^2 \\le 9 \\implies -3 \\le x \\le 3$."
+      },
+      {
+        "id": "B",
+        "text": "$(-3, 3)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Open Interval Bracket Slip",
+        "mistakeAnalysis": "Aspirants use an open interval, mistakenly excluding the boundary roots where the square root equals 0."
+      },
+      {
+        "id": "C",
+        "text": "$[0, 3]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Range Confused with Domain",
+        "mistakeAnalysis": "Aspirants report the range of the function $[0, 3]$ instead of its domain."
+      },
+      {
+        "id": "D",
+        "text": "$(-\\infty, -3] \\cup [3, \\infty)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inequality Direction Reversal",
+        "mistakeAnalysis": "Aspirants solve $x^2 \\ge 9$ instead of $x^2 \\le 9$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For $f(x) = \\sqrt{9 - x^2}$ to be defined in $\\mathbb{R}$, the expression under the square root must be non-negative:\n$9 - x^2 \\ge 0$.\nMultiply by $-1$ (which reverses the inequality sign):\n$x^2 - 9 \\le 0$\n$(x - 3)(x + 3) \\le 0$.\nCritical points are $x = -3$ and $x = 3$.\nThe product is non-positive between the roots:\n$-3 \\le x \\le 3$.\nIn interval notation, the domain is $[-3, 3]$."
+  },
+  {
+    "questionNumber": 37,
+    "chapter": "Matrices",
+    "topic": "Properties of Transpose and Matrix Multiplication",
+    "questionText": "If $A$ is a square matrix of order $n$, then $A + A^{T}$ is always a:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Symmetric matrix",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $(A + A^T)^T = A^T + (A^T)^T = A^T + A = A + A^T$."
+      },
+      {
+        "id": "B",
+        "text": "Skew-symmetric matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Subtraction Confused with Addition",
+        "mistakeAnalysis": "Aspirants confuse $A + A^T$ with the skew-symmetric difference $A - A^T$."
+      },
+      {
+        "id": "C",
+        "text": "Diagonal matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Diagonal Matrix Assumption",
+        "mistakeAnalysis": "Aspirants assume off-diagonal entries cancel out."
+      },
+      {
+        "id": "D",
+        "text": "Null matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cancellation Fallacy",
+        "mistakeAnalysis": "Aspirants assume $A^T = -A$ for arbitrary matrices."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $P = A + A^T$.\nTake the transpose of $P$ using the transpose addition property $(X + Y)^T = X^T + Y^T$:\n$P^T = (A + A^T)^T = A^T + (A^T)^T$.\nSince $(A^T)^T = A$:\n$P^T = A^T + A = A + A^T = P$.\nSince $P^T = P$, the matrix $A + A^T$ is always a **symmetric matrix**."
+  },
+  {
+    "questionNumber": 38,
+    "chapter": "Determinants",
+    "topic": "Determinant of Scalar Multiples",
+    "questionText": "If $A$ is a square matrix of order 3 and $|A| = 4$, then $|-2A|$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "-32",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|-2A| = (-2)^3 |A| = -8 \\times 4 = -32$."
+      },
+      {
+        "id": "B",
+        "text": "32",
+        "isCorrect": false,
+        "studentSelectionTrap": "Parity Sign Neglect",
+        "mistakeAnalysis": "Aspirants square the scalar $(-2)^2 = 4$ instead of cubing it for order 3, getting $+32$."
+      },
+      {
+        "id": "C",
+        "text": "-8",
+        "isCorrect": false,
+        "studentSelectionTrap": "Determinant Value Dropped",
+        "mistakeAnalysis": "Aspirants compute $(-2)^3 = -8$ and forget to multiply by $|A| = 4$."
+      },
+      {
+        "id": "D",
+        "text": "-16",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Scalar Multiplication Slip",
+        "mistakeAnalysis": "Aspirants assume $|kA| = k|A| = (-2)(4) = -8$, or multiply by $2 \\times 2$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For an $n \\times n$ square matrix $A$ and scalar $k$, the determinant property states:\n$|kA| = k^n |A|$.\nHere $n = 3$, $k = -2$, and $|A| = 4$:\n$|-2A| = (-2)^3 |A| = -8 \\times 4 = -32$."
+  },
+  {
+    "questionNumber": 39,
+    "chapter": "Continuity and Differentiability",
+    "topic": "Derivative of Determinant Functions",
+    "questionText": "If $y = \\sin^{-1}\\left(\\frac{2x}{1+x^{2}}\\right)$ for $-1 < x < 1$, then $\\frac{dy}{dx}$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{2}{1+x^{2}}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For $-1 < x < 1$, $\\sin^{-1}\\left(\\frac{2x}{1+x^2}\\right) = 2\\tan^{-1}x$. Differentiating yields $\\frac{2}{1+x^2}$."
+      },
+      {
+        "id": "B",
+        "text": "$-\\frac{2}{1+x^{2}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arccosine Substitution Confusion",
+        "mistakeAnalysis": "Aspirants confuse the derivative with the external branch $x > 1$ or $x < -1$."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{1+x^{2}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Coefficient 2 Omission",
+        "mistakeAnalysis": "Aspirants forget the factor of 2 in $2\\tan^{-1}x$."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{2}{\\sqrt{1-x^{2}}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Standard Inverse Sine Radical Slip",
+        "mistakeAnalysis": "Aspirants use the standard radical form of inverse sine without simplification."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Substitute $x = \\tan\\theta \\implies \\theta = \\tan^{-1}x$.\nSince $-1 < x < 1$, we have $-\\frac{\\pi}{4} < \\theta < \\frac{\\pi}{4} \\implies -\\frac{\\pi}{2} < 2\\theta < \\frac{\\pi}{2}$.\nThe argument becomes:\n$\\frac{2x}{1 + x^2} = \\frac{2\\tan\\theta}{1 + \\tan^2\\theta} = \\sin 2\\theta$.\nSince $2\\theta \\in \\left(-\\frac{\\pi}{2}, \\frac{\\pi}{2}\\right)$, which is within the principal branch of $\\sin^{-1}$:\n$y = \\sin^{-1}(\\sin 2\\theta) = 2\\theta = 2\\tan^{-1}x$.\nDifferentiating with respect to $x$:\n$\\frac{dy}{dx} = \\frac{d}{dx}(2\\tan^{-1}x) = \\frac{2}{1 + x^2}$."
+  },
+  {
+    "questionNumber": 40,
+    "chapter": "Application of Derivatives",
+    "topic": "Rate of Change of Volume of a Sphere",
+    "questionText": "The radius of a sphere is increasing at the rate of $3\\text{ cm/s}$. The rate of increase of its volume when the radius is $2\\text{ cm}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$48\\pi\\text{ cm}^{3}\\text{/s}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $V = \\frac{4}{3}\\pi r^3 \\implies \\frac{dV}{dt} = 4\\pi r^2 \\frac{dr}{dt} = 4\\pi(4)(3) = 48\\pi$."
+      },
+      {
+        "id": "B",
+        "text": "$16\\pi\\text{ cm}^{3}\\text{/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Radius Rate Omission",
+        "mistakeAnalysis": "Aspirants calculate only surface area $4\\pi r^2 = 16\\pi$ without multiplying by $\\frac{dr}{dt} = 3$."
+      },
+      {
+        "id": "C",
+        "text": "$12\\pi\\text{ cm}^{3}\\text{/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Exponent Slip",
+        "mistakeAnalysis": "Aspirants use $V = \\pi r^2$ or make calculation slips."
+      },
+      {
+        "id": "D",
+        "text": "$36\\pi\\text{ cm}^{3}\\text{/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Radius Squaring Error",
+        "mistakeAnalysis": "Aspirants square the rate 3 instead of radius 2."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Volume of a sphere of radius $r$ is $V = \\frac{4}{3}\\pi r^3$.\nDifferentiating both sides with respect to time $t$ using the chain rule:\n$\\frac{dV}{dt} = \\frac{4}{3}\\pi \\left(3r^2 \\frac{dr}{dt}\\right) = 4\\pi r^2 \\frac{dr}{dt}$.\nGiven $\\frac{dr}{dt} = 3\\text{ cm/s}$ and $r = 2\\text{ cm}$:\n$\\frac{dV}{dt} = 4\\pi (2)^2 (3) = 4\\pi (4)(3) = 48\\pi\\text{ cm}^3\\text{/s}$."
+  },
+  {
+    "questionNumber": 41,
+    "chapter": "Integrals",
+    "topic": "Integration of Secant Cubed Function",
+    "questionText": "$\\int\\sec x\\tan x\\sqrt{\\sec x + 1}\\,dx$ is equal to (where $C$ is constant of integration):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{2}{3}(\\sec x + 1)^{3/2} + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Substituting $u = \\sec x + 1 \\implies du = \\sec x\\tan x dx$ yields $\\int u^{1/2}du = \\frac{2}{3}u^{3/2} + C$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{3}{2}(\\sec x + 1)^{3/2} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Power Divisor Inversion",
+        "mistakeAnalysis": "Aspirants multiply by $3/2$ instead of $2/3$."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{2}(\\sec x + 1)^{1/2} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Differentiation Rule Misapplication",
+        "mistakeAnalysis": "Aspirants differentiate the radical instead of integrating."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{2}{3}(\\sec x + 1)^{2/3} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Exponent Reciprocal Slip",
+        "mistakeAnalysis": "Aspirants write $2/3$ as the exponent instead of $3/2$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Substitute $u = \\sec x + 1$.\nDifferentiating with respect to $x$:\n$du = \\sec x\\tan x\\,dx$.\nThe integral transforms directly into:\n$\\int \\sqrt{u}\\,du = \\int u^{1/2}\\,du = \\frac{u^{1/2 + 1}}{\\frac{1}{2} + 1} + C = \\frac{u^{3/2}}{3/2} + C = \\frac{2}{3}u^{3/2} + C$.\nSubstitute back $u = \\sec x + 1$:\n$= \\frac{2}{3}(\\sec x + 1)^{3/2} + C$."
+  },
+  {
+    "questionNumber": 42,
+    "chapter": "Integrals",
+    "topic": "Symmetric Definite Integrals of Odd Functions",
+    "questionText": "The value of $\\int_{-1}^{1}\\frac{x^{7} + \\sin^{5}x}{x^{4} + 1}\\,dx$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f(-x) = \\frac{(-x)^7 + \\sin^5(-x)}{(-x)^4 + 1} = -f(x)$ is an odd function, so its integral over $[-1, 1]$ is 0."
+      },
+      {
+        "id": "B",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unit Value Assumption",
+        "mistakeAnalysis": "Aspirants assume symmetry does not fully cancel."
+      },
+      {
+        "id": "C",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Even Function Fallacy",
+        "mistakeAnalysis": "Aspirants assume the function is even and double the integral on $[0, 1]$."
+      },
+      {
+        "id": "D",
+        "text": "-1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Bound Dominance",
+        "mistakeAnalysis": "Aspirants evaluate at the lower limit."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $f(x) = \\frac{x^7 + \\sin^5 x}{x^4 + 1}$.\nEvaluate $f(-x)$:\n$f(-x) = \\frac{(-x)^7 + \\sin^5(-x)}{(-x)^4 + 1} = \\frac{-x^7 - \\sin^5 x}{x^4 + 1} = -\\frac{x^7 + \\sin^5 x}{x^4 + 1} = -f(x)$.\nThus, $f(x)$ is an odd function.\nBy the standard property of definite integrals, $\\int_{-a}^a f(x)\\,dx = 0$ for any continuous odd function.\nTherefore, $\\int_{-1}^1 \\frac{x^7 + \\sin^5 x}{x^4 + 1}\\,dx = 0$."
+  },
+  {
+    "questionNumber": 43,
+    "chapter": "Application of Integrals",
+    "topic": "Area Enclosed by Standard Parabola",
+    "questionText": "The area bounded by the curve $y^{2} = x$, the lines $x = 1$, $x = 4$ and the $x$-axis in the first quadrant is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{14}{3}\\text{ sq. units}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\int_1^4 x^{1/2}dx = [\\frac{2}{3}x^{3/2}]_1^4 = \\frac{2}{3}(8 - 1) = \\frac{14}{3}$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{28}{3}\\text{ sq. units}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Full Parabola Area Trap",
+        "mistakeAnalysis": "Aspirants double the area, forgetting the 'first quadrant' restriction."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{7}{3}\\text{ sq. units}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factor 2/3 Omission",
+        "mistakeAnalysis": "Aspirants multiply by $1/3$ instead of $2/3$."
+      },
+      {
+        "id": "D",
+        "text": "7 sq. units",
+        "isCorrect": false,
+        "studentSelectionTrap": "Exponent Evaluation Slip",
+        "mistakeAnalysis": "Aspirants evaluate $8 - 1 = 7$ without the $2/3$ multiplier."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "In the first quadrant, $y = +\\sqrt{x} = x^{1/2}$.\nThe area bounded by the curve, the $x$-axis, and ordinates $x = 1$ and $x = 4$ is:\n$\\text{Area} = \\int_1^4 x^{1/2}\\,dx = \\left[ \\frac{x^{3/2}}{3/2} \\right]_1^4 = \\frac{2}{3} \\left[ x^{3/2} \\right]_1^4$\n$= \\frac{2}{3} (4^{3/2} - 1^{3/2}) = \\frac{2}{3} (8 - 1) = \\frac{2}{3} (7) = \\frac{14}{3}\\text{ sq. units}$."
+  },
+  {
+    "questionNumber": 44,
+    "chapter": "Differential Equations",
+    "topic": "Homogeneous First Order Equations",
+    "questionText": "The differential equation $\\frac{dy}{dx} = \\frac{x^{2} + y^{2}}{2xy}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Homogeneous of degree 0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $F(\\lambda x, \\lambda y) = \\frac{\\lambda^2(x^2+y^2)}{\\lambda^2(2xy)} = \\lambda^0 F(x, y)$."
+      },
+      {
+        "id": "B",
+        "text": "Homogeneous of degree 2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Numerator Degree Confused with Total Degree",
+        "mistakeAnalysis": "Aspirants select the degree of the numerator polynomial."
+      },
+      {
+        "id": "C",
+        "text": "Linear of order 1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Differential Equation Misclassification",
+        "mistakeAnalysis": "Aspirants confuse homogeneous with first-order linear."
+      },
+      {
+        "id": "D",
+        "text": "Exact differential equation",
+        "isCorrect": false,
+        "studentSelectionTrap": "Exact Form Assumption",
+        "mistakeAnalysis": "Aspirants assume $M dx + N dy = 0$ satisfies $\\partial M/\\partial y = \\partial N/\\partial x$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $F(x, y) = \\frac{x^2 + y^2}{2xy}$.\nTest homogeneity by replacing $x$ with $\\lambda x$ and $y$ with $\\lambda y$:\n$F(\\lambda x, \\lambda y) = \\frac{(\\lambda x)^2 + (\\lambda y)^2}{2(\\lambda x)(\\lambda y)} = \\frac{\\lambda^2 (x^2 + y^2)}{\\lambda^2 (2xy)} = \\lambda^0 \\left(\\frac{x^2 + y^2}{2xy}\\right) = \\lambda^0 F(x, y)$.\nBy definition, a function $F(x, y)$ is homogeneous of degree $n$ if $F(\\lambda x, \\lambda y) = \\lambda^n F(x, y)$.\nHere $n = 0$, so it is **homogeneous of degree 0**."
+  },
+  {
+    "questionNumber": 45,
+    "chapter": "Vector Algebra",
+    "topic": "Collinearity and Scalar Multiples of Vectors",
+    "questionText": "If the vectors $\\vec{a} = 2\\hat{i} + 3\\hat{j} - \\hat{k}$ and $\\vec{b} = -4\\hat{i} - 6\\hat{j} + \\lambda\\hat{k}$ are collinear, then the value of $\\lambda$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "2",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Proportionality ratio is $\\frac{-4}{2} = \\frac{-6}{3} = -2 \\implies \\frac{\\lambda}{-1} = -2 \\implies \\lambda = 2$."
+      },
+      {
+        "id": "B",
+        "text": "-2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants equate $\\lambda = -2$ directly to the scale factor."
+      },
+      {
+        "id": "C",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unit Factor Fallacy",
+        "mistakeAnalysis": "Aspirants set $\\lambda = 1$ without multiplying by the scale factor."
+      },
+      {
+        "id": "D",
+        "text": "-1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unscaled Component Sign Slip",
+        "mistakeAnalysis": "Aspirants take the $z$-component of $\\vec{a}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Two vectors $\\vec{a}$ and $\\vec{b}$ are collinear if and only if their direction ratios are proportional:\n$\\frac{b_1}{a_1} = \\frac{b_2}{a_2} = \\frac{b_3}{a_3} = k$.\nHere:\n$\\frac{-4}{2} = \\frac{-6}{3} = \\frac{\\lambda}{-1}$.\n$-2 = -2 = \\frac{\\lambda}{-1}$.\n$\\frac{\\lambda}{-1} = -2 \\implies \\lambda = (-1)(-2) = 2$."
+  },
+  {
+    "questionNumber": 46,
+    "chapter": "Three Dimensional Geometry",
+    "topic": "Intersection of Line with Coordinate Planes",
+    "questionText": "The point where the line $\\frac{x - 2}{3} = \\frac{y + 1}{4} = \\frac{z - 2}{2}$ intersects the $xy$-plane is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$(-1, -5, 0)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. On $xy$-plane, $z = 0 \\implies \\frac{z-2}{2} = -1$. Then $x = 3(-1)+2 = -1, y = 4(-1)-1 = -5$, giving $(-1, -5, 0)$."
+      },
+      {
+        "id": "B",
+        "text": "$(1, 5, 0)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion in Coordinates",
+        "mistakeAnalysis": "Aspirants invert signs to positive coordinates."
+      },
+      {
+        "id": "C",
+        "text": "$(5, 3, 0)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Positive Parameter Substitution",
+        "mistakeAnalysis": "Aspirants use parameter $\\lambda = +1$ instead of $-1$."
+      },
+      {
+        "id": "D",
+        "text": "$(2, -1, 0)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Base Point $z$-Zero Fallacy",
+        "mistakeAnalysis": "Aspirants set $z = 0$ in the line's passing point without adjusting $x$ and $y$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Any point on the line can be represented in terms of a parameter $\\lambda$:\n$\\frac{x - 2}{3} = \\frac{y + 1}{4} = \\frac{z - 2}{2} = \\lambda$\n$x = 3\\lambda + 2,\\; y = 4\\lambda - 1,\\; z = 2\\lambda + 2$.\nIn the $xy$-plane, the $z$-coordinate is zero ($z = 0$):\n$2\\lambda + 2 = 0 \\implies 2\\lambda = -2 \\implies \\lambda = -1$.\nSubstitute $\\lambda = -1$ into the parametric expressions for $x$ and $y$:\n$x = 3(-1) + 2 = -3 + 2 = -1$\n$y = 4(-1) - 1 = -4 - 1 = -5$\n$z = 0$.\nTherefore, the point of intersection is $(-1, -5, 0)$."
+  },
+  {
+    "questionNumber": 47,
+    "chapter": "Linear Programming",
+    "topic": "Corner Points of Feasible Region with Bounded Constraints",
+    "questionText": "The corner points of the feasible region for the constraints $x + y \\le 4,\\; x \\ge 0,\\; y \\ge 0$ are:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$(0, 0), (4, 0), (0, 4)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The bounded region in the first quadrant forms a triangle with vertices at origin $(0, 0)$ and axes intercepts $(4, 0)$ and $(0, 4)$."
+      },
+      {
+        "id": "B",
+        "text": "$(0, 0), (2, 2), (4, 4)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Line Midpoint and Exterior Guess",
+        "mistakeAnalysis": "Aspirants select arbitrary points along the line $y = x$."
+      },
+      {
+        "id": "C",
+        "text": "$(4, 0), (0, 4)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Origin Vertex Omission",
+        "mistakeAnalysis": "Aspirants omit the origin $(0, 0)$ from the corner points of the closed feasible region."
+      },
+      {
+        "id": "D",
+        "text": "$(0, 0), (4, 0), (4, 4), (0, 4)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Bounding Box Assumption",
+        "mistakeAnalysis": "Aspirants assume the region is a square bounded by $x=4, y=4$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Non-negativity constraints $x \\ge 0, y \\ge 0$ restrict the region to the first quadrant.\n2. The line $x + y = 4$ intersects the $x$-axis ($y = 0$) at $(4, 0)$ and the $y$-axis ($x = 0$) at $(0, 4)$.\n3. The inequality $x + y \\le 4$ includes the origin $(0, 0)$ since $0 + 0 = 0 \\le 4$.\nThus, the boundary lines $x = 0, y = 0$, and $x + y = 4$ form a right-angled triangle with corner vertices at $(0, 0), (4, 0)$, and $(0, 4)$."
+  },
+  {
+    "questionNumber": 48,
+    "chapter": "Probability",
+    "topic": "Multiplication Theorem for Dependent Events",
+    "questionText": "Two cards are drawn successively without replacement from a well-shuffled pack of 52 cards. The probability that both cards are aces is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{1}{221}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P(A_1 \\cap A_2) = \\frac{4}{52} \\times \\frac{3}{51} = \\frac{1}{13} \\times \\frac{1}{17} = \\frac{1}{221}$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{1}{169}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "With-Replacement Assumption",
+        "mistakeAnalysis": "Aspirants assume cards are replaced: $\\frac{4}{52} \\times \\frac{4}{52} = \\frac{1}{13} \\times \\frac{1}{13} = \\frac{1}{169}$."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{2}{221}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Order Doubling Slip",
+        "mistakeAnalysis": "Aspirants multiply by 2 for ordered combinations unnecessarily."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{26}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Draw Multiplier Error",
+        "mistakeAnalysis": "Aspirants divide by 26."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "A standard deck contains 52 cards, of which 4 are aces.\n1. Probability that the first card drawn is an ace:\n   $P(A_1) = \\frac{4}{52} = \\frac{1}{13}$.\n2. Since the drawing is without replacement, 51 cards remain, containing 3 aces.\n   Probability that the second card drawn is an ace given the first was an ace:\n   $P(A_2 | A_1) = \\frac{3}{51} = \\frac{1}{17}$.\nBy the multiplication theorem of probability:\n$P(A_1 \\cap A_2) = P(A_1) \\cdot P(A_2 | A_1) = \\frac{1}{13} \\times \\frac{1}{17} = \\frac{1}{221}$."
+  },
+  {
+    "questionNumber": 49,
+    "chapter": "Probability Distributions",
+    "topic": "Mean of a Discrete Random Variable",
+    "questionText": "A random variable $X$ takes the values 1, 2, 3 with probabilities $P(X = x) = cx$. The expectation $E(X)$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{7}{3}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\sum P(X) = c(1 + 2 + 3) = 6c = 1 \\implies c = 1/6$. $E(X) = c(1^2 + 2^2 + 3^2) = \\frac{14}{6} = \\frac{7}{3}$."
+      },
+      {
+        "id": "B",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Median Guess",
+        "mistakeAnalysis": "Aspirants guess the middle integer value without accounting for the non-uniform probabilities."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{14}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by 6 Omission",
+        "mistakeAnalysis": "Aspirants forget to divide $\\sum x^2$ by 6."
+      },
+      {
+        "id": "D",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unit Value Assumption",
+        "mistakeAnalysis": "Aspirants assume expected value equals 1."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Sum of probabilities must equal 1:\n$\\sum_{x=1}^3 P(X = x) = c(1) + c(2) + c(3) = 6c = 1 \\implies c = \\frac{1}{6}$.\nThe probability distribution is:\n$P(X = 1) = \\frac{1}{6},\\; P(X = 2) = \\frac{2}{6},\\; P(X = 3) = \\frac{3}{6}$.\nCompute the expected value $E(X)$:\n$E(X) = \\sum x \\cdot P(X = x) = 1\\left(\\frac{1}{6}\\right) + 2\\left(\\frac{2}{6}\\right) + 3\\left(\\frac{3}{6}\\right)$\n$= \\frac{1 + 4 + 9}{6} = \\frac{14}{6} = \\frac{7}{3}$."
+  },
+  {
+    "questionNumber": 50,
+    "chapter": "Inverse Trigonometric Functions",
+    "topic": "Sum of Arcsine and Arccosine Identity",
+    "questionText": "For any $x \\in [-1, 1]$, the value of $\\sin^{-1}x + \\cos^{-1}x$ is always equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{\\pi}{2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard NCERT complementary angle theorem for inverse trigonometric functions."
+      },
+      {
+        "id": "B",
+        "text": "$\\pi$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Full Angle Fallacy",
+        "mistakeAnalysis": "Aspirants assume supplementary identity equals $\\pi$."
+      },
+      {
+        "id": "C",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cancellation Fallacy",
+        "mistakeAnalysis": "Aspirants assume sine and cosine inverses cancel to zero."
+      },
+      {
+        "id": "D",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Pythagorean Identity Confusion",
+        "mistakeAnalysis": "Aspirants confuse with $\\sin^2 x + \\cos^2 x = 1$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $\\sin^{-1}x = \\theta$.\nBy definition of the principal branch of inverse sine, $\\theta \\in \\left[-\\frac{\\pi}{2}, \\frac{\\pi}{2}\\right]$ and $\\sin\\theta = x$.\nUsing the complementary angle trigonometric identity:\n$\\cos\\left(\\frac{\\pi}{2} - \\theta\\right) = \\sin\\theta = x$.\nSince $\\theta \\in \\left[-\\frac{\\pi}{2}, \\frac{\\pi}{2}\\right]$, we have $0 \\le \\frac{\\pi}{2} - \\theta \\le \\pi$, which lies inside the principal branch of $\\cos^{-1}$:\n$\\cos^{-1}x = \\frac{\\pi}{2} - \\theta$.\nSubstitute $\\theta = \\sin^{-1}x$:\n$\\cos^{-1}x = \\frac{\\pi}{2} - \\sin^{-1}x \\implies \\sin^{-1}x + \\cos^{-1}x = \\frac{\\pi}{2}$."
+  }
+]

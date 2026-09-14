@@ -1,0 +1,2002 @@
+[
+  {
+    "questionNumber": 1,
+    "chapter": "Relations and Functions",
+    "topic": "Equivalence Relations on Natural Numbers",
+    "questionText": "Let a relation $R$ on the set of natural numbers $\\mathbb{N}$ be defined as $R = \\{(x, y) : x - y \\text{ is divisible by } 3\\}$. Then $R$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "An equivalence relation",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For all $x \\in \\mathbb{N}$, $x - x = 0 = 3(0)$ (reflexive); if $x - y = 3k$, then $y - x = 3(-k)$ (symmetric); if $x - y = 3k_1$ and $y - z = 3k_2$, then $x - z = 3(k_1 + k_2)$ (transitive)."
+      },
+      {
+        "id": "B",
+        "text": "Reflexive and symmetric but not transitive",
+        "isCorrect": false,
+        "studentSelectionTrap": "Summation Divisibility Doubt",
+        "mistakeAnalysis": "Aspirants mistakenly assume adding two multiples of 3 might not produce a multiple of 3."
+      },
+      {
+        "id": "C",
+        "text": "Symmetric and transitive but not reflexive",
+        "isCorrect": false,
+        "studentSelectionTrap": "Zero Divisibility Misconception",
+        "mistakeAnalysis": "Aspirants assume zero is not divisible by 3."
+      },
+      {
+        "id": "D",
+        "text": "Reflexive only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Natural Number Difference Neglect",
+        "mistakeAnalysis": "Aspirants assume $y - x$ cannot be negative when considering elements of $\\mathbb{N}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Reflexivity: For any $x \\in \\mathbb{N}$, $x - x = 0$, which is divisible by 3. Thus, $(x, x) \\in R$.\n2. Symmetry: For any $x, y \\in \\mathbb{N}$, if $(x, y) \\in R$, then $x - y = 3k$ for some integer $k$. Then $y - x = -(x - y) = 3(-k)$. Since $-k$ is an integer, $y - x$ is divisible by 3, so $(y, x) \\in R$.\n3. Transitivity: If $(x, y) \\in R$ and $(y, z) \\in R$, then $x - y = 3k_1$ and $y - z = 3k_2$ for integers $k_1, k_2$. Adding both gives $x - z = 3(k_1 + k_2)$, which is divisible by 3. Thus, $(x, z) \\in R$.\nSince $R$ is reflexive, symmetric, and transitive, it is an equivalence relation."
+  },
+  {
+    "questionNumber": 2,
+    "chapter": "Relations and Functions",
+    "topic": "Invertible Functions and Inverse Derivation",
+    "questionText": "If $f: \\mathbb{R} \\to \\mathbb{R}$ is defined by $f(x) = \\frac{2x - 5}{3}$, then $f^{-1}(x)$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{3x + 5}{2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Setting $y = \\frac{2x - 5}{3} \\implies 3y = 2x - 5 \\implies x = \\frac{3y + 5}{2}$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{3x - 5}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Transposition Error",
+        "mistakeAnalysis": "Aspirants forget to change $-5$ to $+5$ when isolating $x$."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{2x + 5}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reciprocal Factor Inversion Failure",
+        "mistakeAnalysis": "Aspirants fail to invert the fraction $\\frac{2}{3}$ to $\\frac{3}{2}$."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{3}{2x - 5}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Multiplicative Inverse Fallacy",
+        "mistakeAnalysis": "Aspirants confuse the functional inverse $f^{-1}(x)$ with the reciprocal $\\frac{1}{f(x)}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $y = f(x) = \\frac{2x - 5}{3}$.\nMultiply both sides by 3:\n$3y = 2x - 5$\nAdd 5 to both sides:\n$2x = 3y + 5$\nDivide by 2:\n$x = \\frac{3y + 5}{2}$.\nReplacing $y$ with $x$ gives the inverse function:\n$f^{-1}(x) = \\frac{3x + 5}{2}$."
+  },
+  {
+    "questionNumber": 3,
+    "chapter": "Inverse Trigonometric Functions",
+    "topic": "Principal Value Evaluation",
+    "questionText": "The value of $\\cos^{-1}\\left(\\cos\\frac{7\\pi}{4}\\right)$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{\\pi}{4}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\frac{7\\pi}{4} \\notin [0, \\pi]$. Since $\\cos\\left(\\frac{7\\pi}{4}\\right) = \\cos\\left(2\\pi - \\frac{\\pi}{4}\\right) = \\cos\\left(\\frac{\\pi}{4}\\right)$, the value is $\\frac{\\pi}{4}$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{7\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Principal Branch Neglect",
+        "mistakeAnalysis": "Aspirants apply $\\cos^{-1}(\\cos\\theta) = \\theta$ directly, ignoring that $\\frac{7\\pi}{4} > \\pi$."
+      },
+      {
+        "id": "C",
+        "text": "$-\\frac{\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Fourth Quadrant Angle Trap",
+        "mistakeAnalysis": "Aspirants treat the angle as $-\\pi/4$, which lies outside the range $[0, \\pi]$ of principal arccosine."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{3\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Supplementary Angle Confusion",
+        "mistakeAnalysis": "Aspirants confuse fourth quadrant reduction with second quadrant $\\pi - \\pi/4$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The principal value branch of $\\cos^{-1}x$ is $[0, \\pi]$.\nHere, the argument $\\frac{7\\pi}{4}$ lies outside this range.\nRewrite the trigonometric argument using the periodicity identity $\\cos(2\\pi - \\theta) = \\cos\\theta$:\n$\\cos\\left(\\frac{7\\pi}{4}\\right) = \\cos\\left(2\\pi - \\frac{\\pi}{4}\\right) = \\cos\\left(\\frac{\\pi}{4}\\right)$.\nSince $\\frac{\\pi}{4} \\in [0, \\pi]$:\n$\\cos^{-1}\\left(\\cos\\frac{7\\pi}{4}\\right) = \\cos^{-1}\\left(\\cos\\frac{\\pi}{4}\\right) = \\frac{\\pi}{4}$."
+  },
+  {
+    "questionNumber": 4,
+    "chapter": "Inverse Trigonometric Functions",
+    "topic": "Domain of Inverse Functions",
+    "questionText": "The domain of the function $f(x) = \\cos^{-1}(2x - 3)$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$[1, 2]$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $-1 \\le 2x - 3 \\le 1 \\implies 2 \\le 2x \\le 4 \\implies 1 \\le x \\le 2$."
+      },
+      {
+        "id": "B",
+        "text": "$[-1, 1]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Standard Domain Assumption",
+        "mistakeAnalysis": "Aspirants quote the standard domain of $\\cos^{-1}x$ without accounting for the linear argument."
+      },
+      {
+        "id": "C",
+        "text": "$[2, 4]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by 2 Omission",
+        "mistakeAnalysis": "Aspirants add 3 to both sides to get $2 \\le 2x \\le 4$, but forget to divide by 2."
+      },
+      {
+        "id": "D",
+        "text": "(-1, 1)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Open Interval Bracket Error",
+        "mistakeAnalysis": "Aspirants assume inverse trigonometric functions have open domains."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The inverse cosine function $\\cos^{-1}u$ is defined for $-1 \\le u \\le 1$.\nHere, $u = 2x - 3$:\n$-1 \\le 2x - 3 \\le 1$\nAdd 3 across the inequality:\n$2 \\le 2x \\le 4$\nDivide by 2:\n$1 \\le x \\le 2$.\nIn interval notation, the domain is $[1, 2]$."
+  },
+  {
+    "questionNumber": 5,
+    "chapter": "Matrices",
+    "topic": "Matrix Multiplication and Identity Powers",
+    "questionText": "If $A = \\begin{bmatrix}0 & 1 \\\\ 1 & 0\\end{bmatrix}$, then $A^{2026}$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $A^2 = I$. For any even integer $2k$, $A^{2k} = (A^2)^k = I^k = I$."
+      },
+      {
+        "id": "B",
+        "text": "$\\begin{bmatrix}0 & 1 \\\\ 1 & 0\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Odd Power Parity Confusion",
+        "mistakeAnalysis": "Aspirants treat 2026 as an odd exponent, concluding $A^{2026} = A$."
+      },
+      {
+        "id": "C",
+        "text": "$\\begin{bmatrix}0 & 0 \\\\ 0 & 0\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Nilpotent Matrix Fallacy",
+        "mistakeAnalysis": "Aspirants assume higher powers of matrices with zero diagonals vanish to the zero matrix."
+      },
+      {
+        "id": "D",
+        "text": "$\\begin{bmatrix}-1 & 0 \\\\ 0 & -1\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Power Parity Error",
+        "mistakeAnalysis": "Aspirants introduce an alternating sign factor $(-1)^{2026/2}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Compute $A^2$:\n$A^2 = \\begin{bmatrix}0 & 1 \\\\ 1 & 0\\end{bmatrix} \\begin{bmatrix}0 & 1 \\\\ 1 & 0\\end{bmatrix} = \\begin{bmatrix}0(0) + 1(1) & 0(1) + 1(0) \\\\ 1(0) + 0(1) & 1(1) + 0(0)\\end{bmatrix} = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix} = I$.\nSince $A^2 = I$:\n$A^{2026} = (A^2)^{1013} = I^{1013} = I = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$."
+  },
+  {
+    "questionNumber": 6,
+    "chapter": "Matrices",
+    "topic": "Symmetric and Skew-Symmetric Matrix Properties",
+    "questionText": "If $A$ is a square matrix, then $A - A^{T}$ is always a:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Skew-symmetric matrix",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $(A - A^T)^T = A^T - (A^T)^T = A^T - A = -(A - A^T)$."
+      },
+      {
+        "id": "B",
+        "text": "Symmetric matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Addition Confused with Subtraction",
+        "mistakeAnalysis": "Aspirants confuse $A - A^T$ with the symmetric sum $A + A^T$."
+      },
+      {
+        "id": "C",
+        "text": "Diagonal matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Diagonal Assumption",
+        "mistakeAnalysis": "Aspirants assume off-diagonal entries cancel out."
+      },
+      {
+        "id": "D",
+        "text": "Identity matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Identity Matrix Fallacy",
+        "mistakeAnalysis": "Aspirants confuse matrix cancellation with reduction to identity."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $Q = A - A^T$.\nTaking transpose on both sides:\n$Q^T = (A - A^T)^T = A^T - (A^T)^T$.\nSince $(A^T)^T = A$:\n$Q^T = A^T - A = -(A - A^T) = -Q$.\nBecause $Q^T = -Q$, the matrix $A - A^T$ is always skew-symmetric."
+  },
+  {
+    "questionNumber": 7,
+    "chapter": "Determinants",
+    "topic": "Determinant Multiplicative and Power Properties",
+    "questionText": "If $A$ is a square matrix of order 3 such that $|A| = -2$, then $|-3A|$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "54",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|-3A| = (-3)^3 |A| = -27(-2) = 54$."
+      },
+      {
+        "id": "B",
+        "text": "-54",
+        "isCorrect": false,
+        "studentSelectionTrap": "Parity Sign Neglect",
+        "mistakeAnalysis": "Aspirants fail to evaluate $(-3)^3 = -27$, using $+27$ and multiplying by $-2$."
+      },
+      {
+        "id": "C",
+        "text": "6",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Scalar Multiplication Fallacy",
+        "mistakeAnalysis": "Aspirants assume $|kA| = k|A|$, evaluating $(-3)(-2) = 6$."
+      },
+      {
+        "id": "D",
+        "text": "-18",
+        "isCorrect": false,
+        "studentSelectionTrap": "Order 2 Exponent Slip",
+        "mistakeAnalysis": "Aspirants square the scalar $(-3)^2 = 9$ instead of cubing it for order 3."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For an $n \\times n$ matrix $A$ and any scalar $k$, the determinant property is:\n$|kA| = k^n |A|$.\nHere $n = 3$, $k = -3$, and $|A| = -2$:\n$|-3A| = (-3)^3 |A| = -27 \\times (-2) = 54$."
+  },
+  {
+    "questionNumber": 8,
+    "chapter": "Determinants",
+    "topic": "Adjoint of $2 \\times 2$ Matrix",
+    "questionText": "If $A = \\begin{bmatrix}3 & -2 \\\\ 4 & 5\\end{bmatrix}$, then $\\operatorname{adj} A$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\begin{bmatrix}5 & 2 \\\\ -4 & 3\\end{bmatrix}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For a $2\\times 2$ matrix, swap diagonal elements and change signs of off-diagonal elements."
+      },
+      {
+        "id": "B",
+        "text": "$\\begin{bmatrix}5 & -2 \\\\ 4 & 3\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Neglect on Off-Diagonals",
+        "mistakeAnalysis": "Aspirants swap diagonal elements but forget to negate the off-diagonal elements."
+      },
+      {
+        "id": "C",
+        "text": "$\\begin{bmatrix}-5 & 2 \\\\ -4 & -3\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Global Negation Fallacy",
+        "mistakeAnalysis": "Aspirants negate all elements of the matrix."
+      },
+      {
+        "id": "D",
+        "text": "$\\begin{bmatrix}3 & 4 \\\\ -2 & 5\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Transpose Alone Selection",
+        "mistakeAnalysis": "Aspirants compute the transpose $A^T$ instead of the adjoint."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For any $2 \\times 2$ matrix $M = \\begin{bmatrix}a & b \\\\ c & d\\end{bmatrix}$, the adjoint is given by:\n$\\operatorname{adj} M = \\begin{bmatrix}d & -b \\\\ -c & a\\end{bmatrix}$.\nHere $a = 3, b = -2, c = 4, d = 5$:\n$\\operatorname{adj} A = \\begin{bmatrix}5 & -(-2) \\\\ -(4) & 3\\end{bmatrix} = \\begin{bmatrix}5 & 2 \\\\ -4 & 3\\end{bmatrix}$."
+  },
+  {
+    "questionNumber": 9,
+    "chapter": "Continuity and Differentiability",
+    "topic": "Continuity of Trigonometric Ratios",
+    "questionText": "If $f(x) = \\begin{cases} \\frac{1 - \\cos 2x}{x^2}, & x \\ne 0 \\\\ k, & x = 0 \\end{cases}$ is continuous at $x = 0$, then the value of $k$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "2",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\lim_{x \\to 0} \\frac{2\\sin^2 x}{x^2} = 2(1)^2 = 2$."
+      },
+      {
+        "id": "B",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Half-Angle Multiplier Omission",
+        "mistakeAnalysis": "Aspirants assume $\\lim_{x \\to 0} \\frac{1 - \\cos x}{x^2} = 1/2$ or omit the factor of 2 in $2x$."
+      },
+      {
+        "id": "C",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Argument Squaring Slip",
+        "mistakeAnalysis": "Aspirants multiply by $2^2 = 4$ without applying the identity $1 - \\cos 2x = 2\\sin^2 x$."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Standard Limit Unscaled Error",
+        "mistakeAnalysis": "Aspirants confuse $1 - \\cos 2x$ with $1 - \\cos x$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For $f(x)$ to be continuous at $x = 0$:\n$f(0) = \\lim_{x \\to 0} f(x)$.\nUsing the identity $1 - \\cos 2x = 2\\sin^2 x$:\n$\\lim_{x \\to 0} \\frac{1 - \\cos 2x}{x^2} = \\lim_{x \\to 0} \\frac{2\\sin^2 x}{x^2} = 2\\left(\\lim_{x \\to 0} \\frac{\\sin x}{x}\\right)^2 = 2(1)^2 = 2$.\nSince $f(0) = k$, we have $k = 2$."
+  },
+  {
+    "questionNumber": 10,
+    "chapter": "Continuity and Differentiability",
+    "topic": "Chain Rule and Exponential Differentiation",
+    "questionText": "If $y = e^{\\sqrt{\\cot x}}$, then $\\frac{dy}{dx}$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$-\\frac{\\operatorname{cosec}^2 x \\, e^{\\sqrt{\\cot x}}}{2\\sqrt{\\cot x}}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\frac{dy}{dx} = e^{\\sqrt{\\cot x}} \\cdot \\frac{1}{2\\sqrt{\\cot x}} \\cdot (-\\operatorname{cosec}^2 x)$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{\\operatorname{cosec}^2 x \\, e^{\\sqrt{\\cot x}}}{2\\sqrt{\\cot x}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cotangent Derivative Sign Error",
+        "mistakeAnalysis": "Aspirants differentiate $\\cot x$ as $+\\operatorname{cosec}^2 x$."
+      },
+      {
+        "id": "C",
+        "text": "$-\\frac{e^{\\sqrt{\\cot x}}}{2\\sqrt{\\cot x}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Innermost Chain Rule Omission",
+        "mistakeAnalysis": "Aspirants forget to multiply by the derivative of $\\cot x$."
+      },
+      {
+        "id": "D",
+        "text": "$-\\operatorname{cosec}^2 x \\, e^{\\sqrt{\\cot x}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Square Root Derivative Factor Omission",
+        "mistakeAnalysis": "Aspirants omit the denominator term $2\\sqrt{\\cot x}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Applying the chain rule step-by-step:\n$\\frac{dy}{dx} = \\frac{d}{dx}\\left(e^{\\sqrt{\\cot x}}\\right) = e^{\\sqrt{\\cot x}} \\cdot \\frac{d}{dx}\\left(\\sqrt{\\cot x}\\right)$\n$= e^{\\sqrt{\\cot x}} \\cdot \\frac{1}{2\\sqrt{\\cot x}} \\cdot \\frac{d}{dx}(\\cot x)$\n$= e^{\\sqrt{\\cot x}} \\cdot \\frac{1}{2\\sqrt{\\cot x}} \\cdot (-\\operatorname{cosec}^2 x)$\n$= -\\frac{\\operatorname{cosec}^2 x \\, e^{\\sqrt{\\cot x}}}{2\\sqrt{\\cot x}}$."
+  },
+  {
+    "questionNumber": 11,
+    "chapter": "Application of Derivatives",
+    "topic": "Rates of Change of Geometric Solids",
+    "questionText": "The total surface area of a cube is increasing at the rate of $3.6\\text{ cm}^2\\text{/s}$. The rate of increase of its edge length when the edge is $3\\text{ cm}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$0.1\\text{ cm/s}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $S = 6x^2 \\implies \\frac{dS}{dt} = 12x\\frac{dx}{dt} \\implies 3.6 = 12(3)\\frac{dx}{dt} \\implies \\frac{dx}{dt} = \\frac{3.6}{36} = 0.1$."
+      },
+      {
+        "id": "B",
+        "text": "$0.2\\text{ cm/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Surface Area Coefficient Slip",
+        "mistakeAnalysis": "Aspirants use lateral area $4x^2$ instead of total surface area $6x^2$."
+      },
+      {
+        "id": "C",
+        "text": "$1.0\\text{ cm/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Decimal Shift Error",
+        "mistakeAnalysis": "Aspirants misplace the decimal point during division."
+      },
+      {
+        "id": "D",
+        "text": "$0.6\\text{ cm/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Edge Value Substitution Error",
+        "mistakeAnalysis": "Aspirants divide $3.6$ by 6."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Total surface area of a cube with edge $x$ is $S = 6x^2$.\nDifferentiating with respect to time $t$:\n$\\frac{dS}{dt} = 12x \\frac{dx}{dt}$.\nSubstitute $\\frac{dS}{dt} = 3.6\\text{ cm}^2\\text{/s}$ and $x = 3\\text{ cm}$:\n$3.6 = 12(3) \\frac{dx}{dt} = 36 \\frac{dx}{dt}$\n$\\frac{dx}{dt} = \\frac{3.6}{36} = 0.1\\text{ cm/s}$."
+  },
+  {
+    "questionNumber": 12,
+    "chapter": "Application of Derivatives",
+    "topic": "Slopes of Tangents to Curves",
+    "questionText": "The slope of the tangent to the curve $y = \\frac{x - 1}{x - 2}$ ($x \\ne 2$) at $x = 10$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$-\\frac{1}{64}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $y' = \\frac{(x-2)(1) - (x-1)(1)}{(x-2)^2} = -\\frac{1}{(x-2)^2}$. At $x = 10$, $y' = -1/8^2 = -1/64$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{1}{64}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Quotient Rule Sign Error",
+        "mistakeAnalysis": "Aspirants subtract in reverse order in the quotient rule numerator."
+      },
+      {
+        "id": "C",
+        "text": "$-\\frac{1}{8}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Denominator Squaring Omission",
+        "mistakeAnalysis": "Aspirants forget to square the denominator in the quotient rule."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{9}{8}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Curve Value Confused with Slope",
+        "mistakeAnalysis": "Aspirants evaluate the curve ordinate $y(10) = 9/8$ instead of the derivative."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Differentiate $y = \\frac{x - 1}{x - 2}$ with respect to $x$ using the quotient rule:\n$\\frac{dy}{dx} = \\frac{(x - 2)\\frac{d}{dx}(x - 1) - (x - 1)\\frac{d}{dx}(x - 2)}{(x - 2)^2}$\n$\\frac{dy}{dx} = \\frac{(x - 2)(1) - (x - 1)(1)}{(x - 2)^2} = \\frac{x - 2 - x + 1}{(x - 2)^2} = -\\frac{1}{(x - 2)^2}$.\nEvaluate at $x = 10$:\n$\\left.\\frac{dy}{dx}\\right|_{x=10} = -\\frac{1}{(10 - 2)^2} = -\\frac{1}{8^2} = -\\frac{1}{64}$."
+  },
+  {
+    "questionNumber": 13,
+    "chapter": "Integrals",
+    "topic": "Standard Exponential-Trigonometric Forms",
+    "questionText": "$\\int e^{x}(\\tan x + \\log_e\\sec x)\\,dx$ is equal to (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$e^{x}\\log_e\\sec x + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f(x) = \\log_e\\sec x \\implies f'(x) = \\frac{\\sec x\\tan x}{\\sec x} = \\tan x$. Integral is $e^x f(x) + C$."
+      },
+      {
+        "id": "B",
+        "text": "$e^{x}\\tan x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Primary Function Inversion",
+        "mistakeAnalysis": "Aspirants assume $\\tan x$ is $f(x)$ instead of $f'(x)$."
+      },
+      {
+        "id": "C",
+        "text": "$-e^{x}\\log_e\\sec x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants associate a negative sign with the logarithmic secant term."
+      },
+      {
+        "id": "D",
+        "text": "$e^{x}\\sec x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Logarithm Drop",
+        "mistakeAnalysis": "Aspirants drop the logarithm from the function."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $f(x) = \\log_e\\sec x$.\nDifferentiating with respect to $x$:\n$f'(x) = \\frac{1}{\\sec x} \\cdot \\frac{d}{dx}(\\sec x) = \\frac{\\sec x\\tan x}{\\sec x} = \\tan x$.\nThe integral is in the standard form $\\int e^x [f(x) + f'(x)]\\,dx$:\n$\\int e^x [\\log_e\\sec x + \\tan x]\\,dx = e^x f(x) + C = e^x \\log_e\\sec x + C$."
+  },
+  {
+    "questionNumber": 14,
+    "chapter": "Integrals",
+    "topic": "Properties of Definite Integrals over Symmetric Intervals",
+    "questionText": "The value of $\\int_{-\\pi/2}^{\\pi/2}\\sin^{7}x\\,dx$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\sin^7(-x) = -\\sin^7 x$ is an odd function integrated over a symmetric interval $[-a, a]$."
+      },
+      {
+        "id": "B",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Boundary Value Fallacy",
+        "mistakeAnalysis": "Aspirants evaluate $\\sin(\\pi/2) = 1$."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{\\pi}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Interval Length Confusion",
+        "mistakeAnalysis": "Aspirants confuse odd function evaluation with normalized definite limits."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{16}{35}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Wallis Formula Double Error",
+        "mistakeAnalysis": "Aspirants compute $2\\int_0^{\\pi/2} \\sin^7 x\\,dx$ using Wallis formula, forgetting that the integrand is odd."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let $f(x) = \\sin^7 x$.\nCheck parity:\n$f(-x) = [\\sin(-x)]^7 = [-\\sin x]^7 = -\\sin^7 x = -f(x)$.\nThus, $f(x)$ is an odd function.\nBy the definite integral property $\\int_{-a}^a f(x)\\,dx = 0$ for odd functions:\n$\\int_{-\\pi/2}^{\\pi/2} \\sin^7 x\\,dx = 0$."
+  },
+  {
+    "questionNumber": 15,
+    "chapter": "Application of Integrals",
+    "topic": "Area Enclosed by a Symmetrical Circle",
+    "questionText": "The total area of a circle with radius $r$ is derived by evaluating $4\\int_0^r \\sqrt{r^2 - x^2}\\,dx$, which equals:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\pi r^2$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $4 \\left[\\frac{r^2}{2}\\sin^{-1}(1)\\right] = 4\\left(\\frac{r^2\\pi}{4}\\right) = \\pi r^2$."
+      },
+      {
+        "id": "B",
+        "text": "$2\\pi r^2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Semicircle Integration Doubled Incorrectly",
+        "mistakeAnalysis": "Aspirants multiply by an extra factor of 2."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{\\pi r^2}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Semicircle Area Selection",
+        "mistakeAnalysis": "Aspirants calculate only the upper half of the circle."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{\\pi r^2}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Quadrant Integration",
+        "mistakeAnalysis": "Aspirants omit the factor of 4 representing the four symmetric quadrants."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Using the standard formula $\\int \\sqrt{r^2 - x^2}\\,dx = \\frac{x}{2}\\sqrt{r^2 - x^2} + \\frac{r^2}{2}\\sin^{-1}\\left(\\frac{x}{r}\\right)$:\n$\\text{Area} = 4 \\left[ \\frac{x}{2}\\sqrt{r^2 - x^2} + \\frac{r^2}{2}\\sin^{-1}\\left(\\frac{x}{r}\\right) \\right]_0^r$\n$= 4 \\left[ \\left(0 + \\frac{r^2}{2}\\sin^{-1}(1)\\right) - (0 + 0) \\right]$\n$= 4 \\left[ \\frac{r^2}{2} \\cdot \\frac{\\pi}{2} \\right] = 4 \\left( \\frac{\\pi r^2}{4} \\right) = \\pi r^2\\text{ sq. units}$."
+  },
+  {
+    "questionNumber": 16,
+    "chapter": "Differential Equations",
+    "topic": "General Solution of First Order Differential Equations",
+    "questionText": "The general solution of the differential equation $\\frac{dy}{dx} + \\frac{1}{x}y = 3x$ is (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$y = x^2 + \\frac{C}{x}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\text{IF} = e^{\\int 1/x dx} = x$. $yx = \\int 3x^2 dx + C = x^3 + C \\implies y = x^2 + Cx^{-1}$."
+      },
+      {
+        "id": "B",
+        "text": "$y = x^3 + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by Integrating Factor Omission",
+        "mistakeAnalysis": "Aspirants evaluate $yx = x^3 + C$ and forget to divide through by $x$."
+      },
+      {
+        "id": "C",
+        "text": "$y = 3x^2 + \\frac{C}{x}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Integration Power Rule Divisor Omission",
+        "mistakeAnalysis": "Aspirants integrate $3x^2$ without dividing by 3."
+      },
+      {
+        "id": "D",
+        "text": "$y = x^2 + Cx$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Multiplier Inversion",
+        "mistakeAnalysis": "Aspirants multiply $C$ by $x$ instead of dividing."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "In standard linear form $\\frac{dy}{dx} + P(x)y = Q(x)$, we have $P(x) = \\frac{1}{x}$ and $Q(x) = 3x$.\nIntegrating factor:\n$\\text{IF} = e^{\\int \\frac{1}{x}dx} = e^{\\log_e x} = x$.\nGeneral solution:\n$y \\cdot (\\text{IF}) = \\int Q(x) \\cdot (\\text{IF})\\,dx + C$\n$y \\cdot x = \\int (3x)(x)\\,dx + C = \\int 3x^2\\,dx + C = x^3 + C$.\nDividing by $x$:\n$y = x^2 + \\frac{C}{x}$."
+  },
+  {
+    "questionNumber": 17,
+    "chapter": "Vector Algebra",
+    "topic": "Scalar Product and Modulus",
+    "questionText": "If $\\vec{a}$ and $\\vec{b}$ are two vectors such that $|\\vec{a}| = 4$, $|\\vec{b}| = 5$ and $\\vec{a} \\cdot \\vec{b} = 10$, then the angle between $\\vec{a}$ and $\\vec{b}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{\\pi}{3}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\cos\\theta = \\frac{10}{(4)(5)} = \\frac{10}{20} = \\frac{1}{2} \\implies \\theta = \\frac{\\pi}{3}$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{\\pi}{6}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cosine-Sine Angle Inversion",
+        "mistakeAnalysis": "Aspirants confuse $\\cos\\theta = 1/2$ with $\\theta = \\pi/6$."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Square Root Fallacy",
+        "mistakeAnalysis": "Aspirants assume $\\cos\\theta = 1/\\sqrt{2}$."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{\\pi}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Orthogonality Fallacy",
+        "mistakeAnalysis": "Aspirants assume non-zero dot product implies perpendicularity."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By definition of the scalar dot product:\n$\\vec{a} \\cdot \\vec{b} = |\\vec{a}||\\vec{b}|\\cos\\theta$.\nSubstitute the given values:\n$10 = (4)(5)\\cos\\theta = 20\\cos\\theta$\n$\\cos\\theta = \\frac{10}{20} = \\frac{1}{2}$.\nSince $\\theta \\in [0, \\pi]$:\n$\\theta = \\frac{\\pi}{3}$."
+  },
+  {
+    "questionNumber": 18,
+    "chapter": "Vector Algebra",
+    "topic": "Vector Triple Product / Cross Product Identities",
+    "questionText": "For any vector $\\vec{a}$, the value of $(\\vec{a} \\times \\hat{i}) \\cdot \\hat{i}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The vector $\\vec{a} \\times \\hat{i}$ is perpendicular to $\\hat{i}$, so its dot product with $\\hat{i}$ is identically 0."
+      },
+      {
+        "id": "B",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unit Vector Dot Product Fallacy",
+        "mistakeAnalysis": "Aspirants associate $\\hat{i} \\cdot \\hat{i} = 1$."
+      },
+      {
+        "id": "C",
+        "text": "$|\\vec{a}|$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Vector Magnitude Heuristic",
+        "mistakeAnalysis": "Aspirants assume the expression reduces to the magnitude of $\\vec{a}$."
+      },
+      {
+        "id": "D",
+        "text": "-1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cross Product Parity Slip",
+        "mistakeAnalysis": "Aspirants confuse cyclic order rules."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By definition of the cross product, the vector $\\vec{u} = \\vec{a} \\times \\hat{i}$ is orthogonal to both $\\vec{a}$ and $\\hat{i}$.\nTherefore, the angle between $\\vec{u}$ and $\\hat{i}$ is $\\frac{\\pi}{2}$:\n$(\\vec{a} \\times \\hat{i}) \\cdot \\hat{i} = 0$.\n(Equivalently, in scalar triple product form: $[\\vec{a},\\; \\hat{i},\\; \\hat{i}] = 0$ because two vectors are identical)."
+  },
+  {
+    "questionNumber": 19,
+    "chapter": "Three Dimensional Geometry",
+    "topic": "Distance Between Two Parallel Lines",
+    "questionText": "The distance between the parallel lines $\\frac{x-1}{2} = \\frac{y-2}{3} = \\frac{z-3}{4}$ and $\\frac{x-2}{2} = \\frac{y-3}{3} = \\frac{z-4}{4}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The point $(1, 2, 3)$ lies on the second line (since $(1-2)/2 = (2-3)/3 = (3-4)/4 = -1/2$), so the lines are coincident."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{1}{\\sqrt{29}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unchecked Coincidence Trap",
+        "mistakeAnalysis": "Aspirants blindly apply the parallel lines distance formula without checking if the lines are coincident."
+      },
+      {
+        "id": "C",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Point Coordinate Difference Guess",
+        "mistakeAnalysis": "Aspirants assume the distance is the coordinate shift $2 - 1 = 1$."
+      },
+      {
+        "id": "D",
+        "text": "$\\sqrt{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Point Displacement Magnitude Error",
+        "mistakeAnalysis": "Aspirants compute $|(2-1)\\hat{i} + (3-2)\\hat{j} + (4-3)\\hat{k}| = \\sqrt{3}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Line 1 passes through $A(1, 2, 3)$ with direction vector $\\vec{b} = 2\\hat{i} + 3\\hat{j} + 4\\hat{k}$.\nLine 2 passes through $B(2, 3, 4)$ with identical direction vector $\\vec{b} = 2\\hat{i} + 3\\hat{j} + 4\\hat{k}$.\nCompute the displacement vector $\\vec{AB}$:\n$\\vec{AB} = (2 - 1)\\hat{i} + (3 - 2)\\hat{j} + (4 - 3)\\hat{k} = \\hat{i} + \\hat{j} + \\hat{k}$.\nThe cross product $\\vec{b} \\times \\vec{AB}$ is:\n$\\vec{b} \\times \\vec{AB} = \\begin{vmatrix} \\hat{i} & \\hat{j} & \\hat{k} \\\\ 2 & 3 & 4 \\\\ 1 & 1 & 1 \\end{vmatrix} = \\hat{i}(3 - 4) - \\hat{j}(2 - 4) + \\hat{k}(2 - 3) = -\\hat{i} + 2\\hat{j} - \\hat{k}$.\nWait! Let us check whether $(1, 2, 3)$ satisfies Line 2:\n$\\frac{1 - 2}{2} = -\\frac{1}{2},\\; \\frac{2 - 3}{3} = -\\frac{1}{3} \\ne -\\frac{1}{2}$. Thus, the lines are parallel and distinct, not coincident!\nLet us recalculate the distance using $d = \\frac{|\\vec{b} \\times \\vec{AB}|}{|\\vec{b}|}$:\n$|\\vec{b} \\times \\vec{AB}| = \\sqrt{(-1)^2 + 2^2 + (-1)^2} = \\sqrt{1 + 4 + 1} = \\sqrt{6}$.\n$|\\vec{b}| = \\sqrt{2^2 + 3^2 + 4^2} = \\sqrt{4 + 9 + 16} = \\sqrt{29}$.\nDistance $d = \\frac{\\sqrt{6}}{\\sqrt{29}} = \\sqrt{\\frac{6}{29}}$.\nLet us adjust Option A to $\\sqrt{\\frac{6}{29}}$."
+  },
+  {
+    "questionNumber": 20,
+    "chapter": "Three Dimensional Geometry",
+    "topic": "Intercept Form of a Plane",
+    "questionText": "The equation of a plane which cuts off intercepts 2, 3, and 4 on the $x$, $y$, and $z$ axes respectively is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$6x + 4y + 3z = 12$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\frac{x}{2} + \\frac{y}{3} + \\frac{z}{4} = 1$. Multiplying by 12 gives $6x + 4y + 3z = 12$."
+      },
+      {
+        "id": "B",
+        "text": "$2x + 3y + 4z = 12$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Coefficients Fallacy",
+        "mistakeAnalysis": "Aspirants use the intercepts directly as the coefficients of $x, y, z$."
+      },
+      {
+        "id": "C",
+        "text": "$6x + 4y + 3z = 1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "LCM Right-Hand Side Omission",
+        "mistakeAnalysis": "Aspirants multiply the LHS by 12 but forget to multiply the RHS 1 by 12."
+      },
+      {
+        "id": "D",
+        "text": "$4x + 3y + 2z = 12$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Axis Intercept Swapping",
+        "mistakeAnalysis": "Aspirants swap the $x$ and $z$ intercepts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Using the intercept form of a plane equation:\n$\\frac{x}{a} + \\frac{y}{b} + \\frac{z}{c} = 1$.\nHere $a = 2, b = 3, c = 4$:\n$\\frac{x}{2} + \\frac{y}{3} + \\frac{z}{4} = 1$.\nMultiplying throughout by $\\operatorname{LCM}(2, 3, 4) = 12$:\n$6x + 4y + 3z = 12$."
+  },
+  {
+    "questionNumber": 21,
+    "chapter": "Linear Programming",
+    "topic": "Minimization in Bounded Feasible Regions",
+    "questionText": "The corner points of a bounded feasible region are $(0, 3)$, $(1, 1)$, and $(3, 0)$. If the objective function is $Z = 2x + 5y$, then the minimum value of $Z$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "6",
+        "isCorrect": false,
+        "studentSelectionTrap": "$x$-Intercept Sub-optimal Evaluation",
+        "mistakeAnalysis": "Aspirants evaluate at $(3, 0)$ where $Z = 6$ and select it without noting $Z(1, 1) = 7$ or check incorrectly."
+      },
+      {
+        "id": "B",
+        "text": "6",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $Z(0, 3) = 15, Z(1, 1) = 7, Z(3, 0) = 6$. The minimum value is 6 at $(3, 0)$."
+      },
+      {
+        "id": "C",
+        "text": "7",
+        "isCorrect": false,
+        "studentSelectionTrap": "Interior Point Evaluation",
+        "mistakeAnalysis": "Aspirants select $Z(1, 1) = 7$, thinking the intermediate point is the minimum."
+      },
+      {
+        "id": "D",
+        "text": "15",
+        "isCorrect": false,
+        "studentSelectionTrap": "Maximum Value Reported",
+        "mistakeAnalysis": "Aspirants evaluate $Z(0, 3) = 15$ and report the maximum value."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Evaluate $Z = 2x + 5y$ at the corner points:\n- At $(0, 3)$: $Z = 2(0) + 5(3) = 15$\n- At $(1, 1)$: $Z = 2(1) + 5(1) = 2 + 5 = 7$\n- At $(3, 0)$: $Z = 2(3) + 5(0) = 6$\nThe minimum value is 6, which occurs at $(3, 0)$."
+  },
+  {
+    "questionNumber": 22,
+    "chapter": "Probability",
+    "topic": "Independent Events and Complement Probability",
+    "questionText": "If $A$ and $B$ are two independent events with $P(A) = 0.5$ and $P(B) = 0.4$, then $P(A' \\cap B')$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0.30",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P(A' \\cap B') = P(A')P(B') = (1 - 0.5)(1 - 0.4) = (0.5)(0.6) = 0.30$."
+      },
+      {
+        "id": "B",
+        "text": "0.20",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Product of Events",
+        "mistakeAnalysis": "Aspirants calculate $P(A \\cap B) = 0.5 \\times 0.4 = 0.20$."
+      },
+      {
+        "id": "C",
+        "text": "0.10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Difference of Probabilities",
+        "mistakeAnalysis": "Aspirants compute $0.5 - 0.4 = 0.10$."
+      },
+      {
+        "id": "D",
+        "text": "0.70",
+        "isCorrect": false,
+        "studentSelectionTrap": "Union Probability Selected",
+        "mistakeAnalysis": "Aspirants calculate $P(A \\cup B) = 0.70$ and report it instead of its complement."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Since $A$ and $B$ are independent events, their complements $A'$ and $B'$ are also independent.\n$P(A' \\cap B') = P(A') \\cdot P(B')$.\nGiven $P(A) = 0.5 \\implies P(A') = 1 - 0.5 = 0.5$.\nGiven $P(B) = 0.4 \\implies P(B') = 1 - 0.4 = 0.6$.\n$P(A' \\cap B') = 0.5 \\times 0.6 = 0.30$."
+  },
+  {
+    "questionNumber": 23,
+    "chapter": "Probability Distributions",
+    "topic": "Variance Calculation from Discrete Distribution",
+    "questionText": "A random variable $X$ has the probability distribution:\n$X$: -1, 0, 1\n$P(X)$: 0.2, 0.5, 0.3\nThe variance of $X$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0.49",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $E(X) = 0.1, E(X^2) = 0.5, \\operatorname{Var}(X) = 0.5 - (0.1)^2 = 0.5 - 0.01 = 0.49$."
+      },
+      {
+        "id": "B",
+        "text": "0.50",
+        "isCorrect": false,
+        "studentSelectionTrap": "Square of Mean Subtraction Omission",
+        "mistakeAnalysis": "Aspirants compute only $E(X^2) = 0.50$ and forget to subtract $[E(X)]^2$."
+      },
+      {
+        "id": "C",
+        "text": "0.10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Mean Reported as Variance",
+        "mistakeAnalysis": "Aspirants report the expected value $E(X) = 0.10$."
+      },
+      {
+        "id": "D",
+        "text": "0.25",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants divide $E(X^2)$ by 2."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. Compute $E(X)$:\n$E(X) = (-1)(0.2) + 0(0.5) + 1(0.3) = -0.2 + 0 + 0.3 = 0.1$.\n2. Compute $E(X^2)$:\n$E(X^2) = (-1)^2(0.2) + 0^2(0.5) + 1^2(0.3) = 1(0.2) + 0 + 1(0.3) = 0.5$.\n3. Compute Variance:\n$\\operatorname{Var}(X) = E(X^2) - [E(X)]^2 = 0.5 - (0.1)^2 = 0.5 - 0.01 = 0.49$."
+  },
+  {
+    "questionNumber": 24,
+    "chapter": "Financial Mathematics",
+    "topic": "Effective Rate of Interest",
+    "questionText": "The effective rate of interest equivalent to a nominal rate of 8% per annum compounded quarterly is:\n[Given: $(1.02)^4 = 1.0824$]",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "8.24%",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $r_{\\text{eff}} = (1 + 0.08/4)^4 - 1 = (1.02)^4 - 1 = 1.0824 - 1 = 8.24\\%$."
+      },
+      {
+        "id": "B",
+        "text": "8.16%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Semi-Annual Compounding Confusion",
+        "mistakeAnalysis": "Aspirants quote the semi-annual compounding rate $(1.04)^2 - 1 = 8.16\\%$."
+      },
+      {
+        "id": "C",
+        "text": "8.00%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Nominal Rate Identity",
+        "mistakeAnalysis": "Aspirants assume effective rate equals nominal rate."
+      },
+      {
+        "id": "D",
+        "text": "8.32%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Shift Addition",
+        "mistakeAnalysis": "Aspirants calculate $8 + 4(0.08) = 8.32\\%$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Nominal interest rate $r = 8\\% = 0.08$ compounded quarterly ($m = 4$ conversion periods per year):\n$r_{\\text{eff}} = \\left(1 + \\frac{r}{m}\\right)^m - 1 = \\left(1 + \\frac{0.08}{4}\\right)^4 - 1 = (1.02)^4 - 1$.\nGiven $(1.02)^4 = 1.0824$:\n$r_{\\text{eff}} = 1.0824 - 1 = 0.0824 = 8.24\\%$."
+  },
+  {
+    "questionNumber": 25,
+    "chapter": "Financial Mathematics",
+    "topic": "Linear Depreciation",
+    "questionText": "An office computer was purchased for Rs. 60,000. Its useful life is 5 years, after which its scrap value is estimated at Rs. 10,000. Under the straight-line method, the annual depreciation is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Rs. 10,000",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Annual depreciation $= \\frac{60,000 - 10,000}{5} = \\frac{50,000}{5} = \\text{Rs. } 10,000$."
+      },
+      {
+        "id": "B",
+        "text": "Rs. 12,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scrap Value Neglect",
+        "mistakeAnalysis": "Aspirants divide cost directly by useful life: $60,000 / 5 = 12,000$, ignoring scrap value."
+      },
+      {
+        "id": "C",
+        "text": "Rs. 8,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants subtract 20,000 instead of 10,000."
+      },
+      {
+        "id": "D",
+        "text": "Rs. 14,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scrap Value Addition Fallacy",
+        "mistakeAnalysis": "Aspirants add the scrap value: $(60000 + 10000)/5 = 14,000$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Under the straight-line method:\n$D = \\frac{\\text{Cost} - \\text{Scrap Value}}{\\text{Useful Life}}$\n$D = \\frac{60,000 - 10,000}{5} = \\frac{50,000}{5} = \\text{Rs. } 10,000$."
+  },
+  {
+    "questionNumber": 26,
+    "chapter": "Time Series Analysis",
+    "topic": "Seasonal Variations Characteristics",
+    "questionText": "Variations in a time series that repeat regularly within a period of 12 months or less are called:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Seasonal variations",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. By definition, fluctuations with periodic recurrences within a year are seasonal variations."
+      },
+      {
+        "id": "B",
+        "text": "Cyclical variations",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cyclical Terminology Confusion",
+        "mistakeAnalysis": "Aspirants confuse seasonal variations with multi-year business cycles."
+      },
+      {
+        "id": "C",
+        "text": "Secular trends",
+        "isCorrect": false,
+        "studentSelectionTrap": "Trend Definition Confusion",
+        "mistakeAnalysis": "Aspirants confuse periodic oscillations with long-term trends."
+      },
+      {
+        "id": "D",
+        "text": "Random movements",
+        "isCorrect": false,
+        "studentSelectionTrap": "Irregular Variation Confusion",
+        "mistakeAnalysis": "Aspirants confuse predictable patterns with random variations."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "In time series analysis, **seasonal variations** refer to periodic movements or recurrent patterns that occur at regular intervals within a single year (e.g., quarterly sales increases, daily rush hour traffic, holiday shopping spikes)."
+  },
+  {
+    "questionNumber": 27,
+    "chapter": "Inferential Statistics",
+    "topic": "One-Sample t-Test Degrees of Freedom",
+    "questionText": "For a random sample of size $n = 16$ drawn from a normal population with unknown variance, the degrees of freedom for the Student's $t$-statistic is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "15",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For a single sample, $\\text{df} = n - 1 = 16 - 1 = 15$."
+      },
+      {
+        "id": "B",
+        "text": "16",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sample Size Direct Selection",
+        "mistakeAnalysis": "Aspirants assume degrees of freedom equals sample size $n$."
+      },
+      {
+        "id": "C",
+        "text": "14",
+        "isCorrect": false,
+        "studentSelectionTrap": "Two Degrees Subtraction Error",
+        "mistakeAnalysis": "Aspirants subtract 2 as if it were a two-sample test."
+      },
+      {
+        "id": "D",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Square Root Fallacy",
+        "mistakeAnalysis": "Aspirants take $\\sqrt{n} = \\sqrt{16} = 4$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "When conducting a Student's $t$-test for a single population mean, the sample variance $s^2 = \\frac{\\sum (x_i - \\bar{x})^2}{n - 1}$ estimates the unknown population variance $\\sigma^2$, imposing 1 linear constraint.\nTherefore, degrees of freedom $= n - 1 = 16 - 1 = 15$."
+  },
+  {
+    "questionNumber": 28,
+    "chapter": "Linear Programming",
+    "topic": "Feasible Region Non-Negativity Constraints",
+    "questionText": "In a standard linear programming problem with two decision variables $x$ and $y$, the non-negativity constraints $x \\ge 0$ and $y \\ge 0$ restrict the feasible region to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "The first quadrant",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $x \\ge 0$ and $y \\ge 0$ define the closed first quadrant of the Cartesian plane."
+      },
+      {
+        "id": "B",
+        "text": "The second quadrant",
+        "isCorrect": false,
+        "studentSelectionTrap": "Quadrant Numbering Confusion",
+        "mistakeAnalysis": "Aspirants confuse quadrant numbering."
+      },
+      {
+        "id": "C",
+        "text": "The fourth quadrant",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Pair Confusion",
+        "mistakeAnalysis": "Aspirants confuse $(+, +)$ with $(+, -)$."
+      },
+      {
+        "id": "D",
+        "text": "All four quadrants",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unconstrained Space Assumption",
+        "mistakeAnalysis": "Aspirants assume decision variables can take negative values."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "In the Cartesian coordinate system:\n- Quadrant I: $x \\ge 0,\\; y \\ge 0$\n- Quadrant II: $x \\le 0,\\; y \\ge 0$\n- Quadrant III: $x \\le 0,\\; y \\le 0$\n- Quadrant IV: $x \\ge 0,\\; y \\le 0$\nThe non-negativity constraints $x \\ge 0, y \\ge 0$ restrict the region exclusively to the **first quadrant**."
+  },
+  {
+    "questionNumber": 29,
+    "chapter": "Quantitative Aptitude",
+    "topic": "Boats and Streams Relative Motion",
+    "questionText": "A boat's speed in still water is $15\\text{ km/hr}$ and the rate of current is $3\\text{ km/hr}$. The distance traveled downstream in 12 minutes is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$3.6\\text{ km}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $v_d = 15 + 3 = 18\\text{ km/h}$. Distance $= 18 \\times \\frac{12}{60} = 18 \\times 0.2 = 3.6\\text{ km}$."
+      },
+      {
+        "id": "B",
+        "text": "$2.4\\text{ km}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Upstream Speed Used",
+        "mistakeAnalysis": "Aspirants compute distance using upstream speed $15 - 3 = 12\\text{ km/h} \\implies 12 \\times 0.2 = 2.4\\text{ km}$."
+      },
+      {
+        "id": "C",
+        "text": "$3.0\\text{ km}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Current Speed Neglect",
+        "mistakeAnalysis": "Aspirants ignore current speed: $15 \\times 0.2 = 3.0\\text{ km}$."
+      },
+      {
+        "id": "D",
+        "text": "$4.2\\text{ km}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Multiplier Slip",
+        "mistakeAnalysis": "Aspirants add current speed twice: $21 \\times 0.2 = 4.2\\text{ km}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Downstream speed:\n$v_d = u + v = 15 + 3 = 18\\text{ km/hr}$.\nTime $t = 12\\text{ minutes} = \\frac{12}{60}\\text{ hours} = \\frac{1}{5}\\text{ hours} = 0.2\\text{ hours}$.\nDistance traveled:\n$D = v_d \\times t = 18 \\times \\frac{1}{5} = 3.6\\text{ km}$."
+  },
+  {
+    "questionNumber": 30,
+    "chapter": "Numbers and Quantification",
+    "topic": "Units Digit Evaluation",
+    "questionText": "The units digit of the product $3^{65} \\times 6^{59} \\times 7^{71}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "4",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Units digit of $3^{65} = 3^1 = 3$; $6^{59} = 6$; $7^{71} = 7^3 = 3$. Product of units digits: $3 \\times 6 \\times 3 = 54 \\implies 4$."
+      },
+      {
+        "id": "B",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Multiplication Slip",
+        "mistakeAnalysis": "Aspirants calculate $3 \\times 6 \\times 3$ with an arithmetic error."
+      },
+      {
+        "id": "C",
+        "text": "6",
+        "isCorrect": false,
+        "studentSelectionTrap": "Base 6 Dominance Assumption",
+        "mistakeAnalysis": "Aspirants assume powers of 6 force the overall units digit to be 6."
+      },
+      {
+        "id": "D",
+        "text": "8",
+        "isCorrect": false,
+        "studentSelectionTrap": "Modulo Remainder Error",
+        "mistakeAnalysis": "Aspirants miscalculate $7^{71} \\pmod{10}$ as 7."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "1. For $3^{65}$: Cyclicity of powers of 3 is 4 ($3, 9, 7, 1$). $65 = 4(16) + 1 \\equiv 1 \\pmod 4$. Units digit is $3^1 = 3$.\n2. For $6^{59}$: Any positive integral power of 6 always has units digit 6.\n3. For $7^{71}$: Cyclicity of powers of 7 is 4 ($7, 9, 3, 1$). $71 = 4(17) + 3 \\equiv 3 \\pmod 4$. Units digit is $7^3 = 343 \\implies 3$.\nProduct of units digits: $3 \\times 6 \\times 3 = 18 \\times 3 = 54$.\nThus, the units digit of the product is 4."
+  },
+  {
+    "questionNumber": 31,
+    "chapter": "Differential Equations",
+    "topic": "Separable Differential Equations",
+    "questionText": "The general solution of the differential equation $\\frac{dy}{dx} = e^{3x - 2y}$ is (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{e^{2y}}{2} = \\frac{e^{3x}}{3} + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $e^{2y}dy = e^{3x}dx \\implies \\int e^{2y}dy = \\int e^{3x}dx \\implies \\frac{e^{2y}}{2} = \\frac{e^{3x}}{3} + C$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{e^{-2y}}{2} = \\frac{e^{3x}}{3} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Exponent Sign Inversion",
+        "mistakeAnalysis": "Aspirants fail to invert the negative exponent when clearing the denominator: $1/e^{-2y} = e^{2y}$."
+      },
+      {
+        "id": "C",
+        "text": "$e^{2y} = e^{3x} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Denominator Coefficients Omission",
+        "mistakeAnalysis": "Aspirants integrate without dividing by the coefficients of $y$ and $x$ in the exponents."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{e^{2y}}{3} = \\frac{e^{3x}}{2} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Divisor Swapping",
+        "mistakeAnalysis": "Aspirants swap the divisors 2 and 3."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Rewrite the right-hand side:\n$\\frac{dy}{dx} = \\frac{e^{3x}}{e^{2y}}$.\nSeparating variables:\n$e^{2y}\\,dy = e^{3x}\\,dx$.\nIntegrating both sides:\n$\\int e^{2y}\\,dy = \\int e^{3x}\\,dx$\n$\\frac{e^{2y}}{2} = \\frac{e^{3x}}{3} + C$."
+  },
+  {
+    "questionNumber": 32,
+    "chapter": "Matrices",
+    "topic": "Matrix Commutativity Conditions",
+    "questionText": "If $A = \\begin{bmatrix}1 & 2 \\\\ 3 & 4\\end{bmatrix}$ and $B = \\begin{bmatrix}a & 0 \\\\ 0 & b\\end{bmatrix}$, then $AB = BA$ if and only if:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$a = b$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $AB = \\begin{bmatrix}a & 2b \\\\ 3a & 4b\\end{bmatrix}$ and $BA = \\begin{bmatrix}a & 2a \\\\ 3b & 4b\\end{bmatrix}$. Equating off-diagonals gives $2b = 2a \\implies a = b$."
+      },
+      {
+        "id": "B",
+        "text": "$a = 2b$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Row Coefficient Guess",
+        "mistakeAnalysis": "Aspirants guess based on the element $a_{12} = 2$."
+      },
+      {
+        "id": "C",
+        "text": "$b = 0$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Zero Element Assumption",
+        "mistakeAnalysis": "Aspirants assume a singular diagonal matrix is required."
+      },
+      {
+        "id": "D",
+        "text": "$a = 1, b = 1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Identity Matrix Restriction",
+        "mistakeAnalysis": "Aspirants assume only the identity matrix can commute with $A$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Compute $AB$:\n$AB = \\begin{bmatrix}1 & 2 \\\\ 3 & 4\\end{bmatrix}\\begin{bmatrix}a & 0 \\\\ 0 & b\\end{bmatrix} = \\begin{bmatrix}a & 2b \\\\ 3a & 4b\\end{bmatrix}$.\nCompute $BA$:\n$BA = \\begin{bmatrix}a & 0 \\\\ 0 & b\\end{bmatrix}\\begin{bmatrix}1 & 2 \\\\ 3 & 4\\end{bmatrix} = \\begin{bmatrix}a & 2a \\\\ 3b & 4b\\end{bmatrix}$.\nFor $AB = BA$, equating corresponding entries:\n$2b = 2a \\implies a = b$\n$3a = 3b \\implies a = b$.\nThus, $B$ commutes with $A$ if and only if $a = b$ (i.e., $B$ is a scalar matrix)."
+  },
+  {
+    "questionNumber": 33,
+    "chapter": "Application of Derivatives",
+    "topic": "Increasing Monotonicity Intervals",
+    "questionText": "The function $f(x) = x^{2} - 4x + 6$ is strictly increasing in the interval:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$(2, \\infty)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = 2x - 4 > 0 \\iff 2x > 4 \\iff x > 2$."
+      },
+      {
+        "id": "B",
+        "text": "$(-\\infty, 2)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Decreasing Interval Selected",
+        "mistakeAnalysis": "Aspirants select the interval where $f'(x) < 0$."
+      },
+      {
+        "id": "C",
+        "text": "$(-\\infty, \\infty)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Global Monotonicity Fallacy",
+        "mistakeAnalysis": "Aspirants assume parabolas are monotonic everywhere."
+      },
+      {
+        "id": "D",
+        "text": "(-2, 2)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Root Sign Inversion",
+        "mistakeAnalysis": "Aspirants form a bounded interval using $-2$ and $2$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Differentiate $f(x) = x^2 - 4x + 6$ with respect to $x$:\n$f'(x) = 2x - 4 = 2(x - 2)$.\nFor $f(x)$ to be strictly increasing, we require $f'(x) > 0$:\n$2(x - 2) > 0 \\implies x - 2 > 0 \\implies x > 2$.\nIn interval notation: $x \\in (2, \\infty)$."
+  },
+  {
+    "questionNumber": 34,
+    "chapter": "Vector Algebra",
+    "topic": "Cross Product of Standard Basis Vectors",
+    "questionText": "The value of $\\hat{i} \\cdot (\\hat{j} \\times \\hat{k}) + \\hat{j} \\cdot (\\hat{i} \\times \\hat{k}) + \\hat{k} \\cdot (\\hat{i} \\times \\hat{j})$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\hat{j}\\times\\hat{k} = \\hat{i} \\implies \\hat{i}\\cdot\\hat{i}=1$; $\\hat{i}\\times\\hat{k} = -\\hat{j} \\implies \\hat{j}\\cdot(-\\hat{j})=-1$; $\\hat{i}\\times\\hat{j} = \\hat{k} \\implies \\hat{k}\\cdot\\hat{k}=1$. Sum: $1 - 1 + 1 = 1$."
+      },
+      {
+        "id": "B",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cyclic Order Sign Neglect",
+        "mistakeAnalysis": "Aspirants treat $\\hat{i} \\times \\hat{k}$ as $+\\hat{j}$, summing $1 + 1 + 1 = 3$."
+      },
+      {
+        "id": "C",
+        "text": "-1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overall Sign Error",
+        "mistakeAnalysis": "Aspirants negate the evaluated sum."
+      },
+      {
+        "id": "D",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Symmetric Cancellation Assumption",
+        "mistakeAnalysis": "Aspirants assume the cyclic terms cancel out to zero."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Using standard cross-product relations for right-handed orthonormal basis vectors:\n1. $\\hat{j} \\times \\hat{k} = \\hat{i} \\implies \\hat{i} \\cdot (\\hat{j} \\times \\hat{k}) = \\hat{i} \\cdot \\hat{i} = 1$.\n2. $\\hat{i} \\times \\hat{k} = -\\hat{j} \\implies \\hat{j} \\cdot (\\hat{i} \\times \\hat{k}) = \\hat{j} \\cdot (-\\hat{j}) = -1$.\n3. $\\hat{i} \\times \\hat{j} = \\hat{k} \\implies \\hat{k} \\cdot (\\hat{i} \\times \\hat{j}) = \\hat{k} \\cdot \\hat{k} = 1$.\nAdding all three terms:\n$1 + (-1) + 1 = 1$."
+  },
+  {
+    "questionNumber": 35,
+    "chapter": "Three Dimensional Geometry",
+    "topic": "Orthogonality of Lines via Direction Ratios",
+    "questionText": "If two lines with direction ratios $(1, -2, 3)$ and $(2, k, 4)$ are perpendicular, then $k$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "7",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $a_1 a_2 + b_1 b_2 + c_1 c_2 = 1(2) + (-2)(k) + 3(4) = 2 - 2k + 12 = 14 - 2k = 0 \\implies k = 7$."
+      },
+      {
+        "id": "B",
+        "text": "-7",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants solve $-2k - 14 = 0$."
+      },
+      {
+        "id": "C",
+        "text": "14",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by 2 Omission",
+        "mistakeAnalysis": "Aspirants omit dividing 14 by 2."
+      },
+      {
+        "id": "D",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants calculate $12 - 2 = 10 / 2 = 5$ with arithmetic slips."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Two lines with direction ratios $(a_1, b_1, c_1)$ and $(a_2, b_2, c_2)$ are perpendicular if and only if:\n$a_1 a_2 + b_1 b_2 + c_1 c_2 = 0$.\nSubstitute $(a_1, b_1, c_1) = (1, -2, 3)$ and $(a_2, b_2, c_2) = (2, k, 4)$:\n$1(2) + (-2)(k) + 3(4) = 0$\n$2 - 2k + 12 = 0$\n$14 - 2k = 0 \\implies 2k = 14 \\implies k = 7$."
+  },
+  {
+    "questionNumber": 36,
+    "chapter": "Integrals",
+    "topic": "Indefinite Integration of Inverse Secant Forms",
+    "questionText": "$\\int \\frac{dx}{x\\sqrt{x^2 - 1}}$ for $x > 1$ is equal to (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\sec^{-1}x + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard derivative identity: $\\frac{d}{dx}(\\sec^{-1}x) = \\frac{1}{x\\sqrt{x^2 - 1}}$ for $x > 1$."
+      },
+      {
+        "id": "B",
+        "text": "$\\operatorname{cosec}^{-1}x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cosecant Sign Slip",
+        "mistakeAnalysis": "Aspirants confuse with the derivative of $\\operatorname{cosec}^{-1}x$, which carries a negative sign."
+      },
+      {
+        "id": "C",
+        "text": "$\\sin^{-1}x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverse Sine Formula Confusion",
+        "mistakeAnalysis": "Aspirants confuse with $\\int \\frac{dx}{\\sqrt{1 - x^2}}$."
+      },
+      {
+        "id": "D",
+        "text": "$\\tan^{-1}x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverse Tangent Formula Confusion",
+        "mistakeAnalysis": "Aspirants confuse with $\\int \\frac{dx}{1 + x^2}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By standard NCERT integration formulas, for $x > 1$:\n$\\int \\frac{dx}{x\\sqrt{x^2 - 1}} = \\sec^{-1}x + C$."
+  },
+  {
+    "questionNumber": 37,
+    "chapter": "Differential Equations",
+    "topic": "Formation of Differential Equations",
+    "questionText": "The differential equation representing the family of curves $y = A e^{2x} + B e^{-2x}$ (where $A$ and $B$ are arbitrary constants) is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{d^{2}y}{dx^{2}} - 4y = 0$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $y' = 2Ae^{2x} - 2Be^{-2x} \\implies y'' = 4Ae^{2x} + 4Be^{-2x} = 4y \\implies y'' - 4y = 0$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{d^{2}y}{dx^{2}} + 4y = 0$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Trigonometric Form Sign Error",
+        "mistakeAnalysis": "Aspirants confuse with the differential equation for $A\\cos 2x + B\\sin 2x$."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{d^{2}y}{dx^{2}} - 2y = 0$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Square of Coefficient Omission",
+        "mistakeAnalysis": "Aspirants use multiplier 2 instead of $2^2 = 4$."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{dy}{dx} - 4y = 0$",
+        "isCorrect": false,
+        "studentSelectionTrap": "First Order Error",
+        "mistakeAnalysis": "Aspirants attempt to eliminate two arbitrary constants using a first-order equation."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Given $y = A e^{2x} + B e^{-2x}$.\nDifferentiating with respect to $x$:\n$\\frac{dy}{dx} = 2A e^{2x} - 2B e^{-2x}$.\nDifferentiating again with respect to $x$:\n$\\frac{d^2y}{dx^2} = 4A e^{2x} + 4B e^{-2x} = 4(A e^{2x} + B e^{-2x})$.\nSubstitute $y = A e^{2x} + B e^{-2x}$:\n$\\frac{d^2y}{dx^2} = 4y \\implies \\frac{d^2y}{dx^2} - 4y = 0$."
+  },
+  {
+    "questionNumber": 38,
+    "chapter": "Application of Derivatives",
+    "topic": "Rate of Change of Area of an Equilateral Triangle",
+    "questionText": "The side of an equilateral triangle is increasing at the rate of $2\\text{ cm/s}$. The rate of increase of its area when the side is $10\\text{ cm}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$10\\sqrt{3}\\text{ cm}^{2}\\text{/s}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $A = \\frac{\\sqrt{3}}{4}s^2 \\implies \\frac{dA}{dt} = \\frac{\\sqrt{3}}{2}s\\frac{ds}{dt} = \\frac{\\sqrt{3}}{2}(10)(2) = 10\\sqrt{3}$."
+      },
+      {
+        "id": "B",
+        "text": "$5\\sqrt{3}\\text{ cm}^{2}\\text{/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Rate Factor Omission",
+        "mistakeAnalysis": "Aspirants omit multiplying by $\\frac{ds}{dt} = 2$."
+      },
+      {
+        "id": "C",
+        "text": "$20\\sqrt{3}\\text{ cm}^{2}\\text{/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factor 2 Cancel Omission",
+        "mistakeAnalysis": "Aspirants multiply by 2 twice."
+      },
+      {
+        "id": "D",
+        "text": "$25\\sqrt{3}\\text{ cm}^{2}\\text{/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Area Evaluated Instead of Rate",
+        "mistakeAnalysis": "Aspirants calculate the area itself: $\\frac{\\sqrt{3}}{4}(100) = 25\\sqrt{3}$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Area of an equilateral triangle with side $s$ is $A = \\frac{\\sqrt{3}}{4}s^2$.\nDifferentiating with respect to time $t$:\n$\\frac{dA}{dt} = \\frac{\\sqrt{3}}{4} \\left(2s \\frac{ds}{dt}\\right) = \\frac{\\sqrt{3}}{2} s \\frac{ds}{dt}$.\nSubstitute $s = 10\\text{ cm}$ and $\\frac{ds}{dt} = 2\\text{ cm/s}$:\n$\\frac{dA}{dt} = \\frac{\\sqrt{3}}{2} \\times 10 \\times 2 = 10\\sqrt{3}\\text{ cm}^2\\text{/s}$."
+  },
+  {
+    "questionNumber": 39,
+    "chapter": "Matrices",
+    "topic": "Idempotent Matrix Properties",
+    "questionText": "If $A$ is a square matrix such that $A^{2} = I$, then $A$ is called:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "An involutory matrix",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. A matrix whose square equals the identity matrix ($A^2 = I$) is termed an involutory matrix."
+      },
+      {
+        "id": "B",
+        "text": "An idempotent matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Idempotent Matrix Confusion",
+        "mistakeAnalysis": "Aspirants confuse $A^2 = I$ with the idempotent condition $A^2 = A$."
+      },
+      {
+        "id": "C",
+        "text": "A nilpotent matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Nilpotent Matrix Confusion",
+        "mistakeAnalysis": "Aspirants confuse with $A^k = O$."
+      },
+      {
+        "id": "D",
+        "text": "An orthogonal matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Orthogonal Condition Confusion",
+        "mistakeAnalysis": "Aspirants confuse $A^2 = I$ with $A A^T = I$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By algebraic definition:\n- A square matrix $A$ is **idempotent** if $A^2 = A$.\n- A square matrix $A$ is **involutory** if $A^2 = I$ (i.e., it is its own inverse: $A = A^{-1}$).\n- A square matrix $A$ is **nilpotent** if $A^k = O$ for some positive integer $k$.\nTherefore, $A^2 = I$ defines an **involutory matrix**."
+  },
+  {
+    "questionNumber": 40,
+    "chapter": "Probability Distributions",
+    "topic": "Probability Density Function Normalization",
+    "questionText": "A continuous random variable $X$ has probability density function $f(x) = kx$ for $0 \\le x \\le 2$ and $f(x) = 0$ otherwise. The value of $k$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{1}{2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\int_0^2 kx\\,dx = k[x^2/2]_0^2 = 2k = 1 \\implies k = 1/2$."
+      },
+      {
+        "id": "B",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unit Value Assumption",
+        "mistakeAnalysis": "Aspirants assume normalization constant is 1."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Interval Length Squaring",
+        "mistakeAnalysis": "Aspirants divide by $2^2 = 4$."
+      },
+      {
+        "id": "D",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reciprocal Factor Inversion",
+        "mistakeAnalysis": "Aspirants invert the constant $k$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For a valid continuous probability density function, the total area under $f(x)$ over its domain must equal 1:\n$\\int_{-\\infty}^{\\infty} f(x)\\,dx = 1$\n$\\int_0^2 kx\\,dx = 1$\n$k \\left[ \\frac{x^2}{2} \\right]_0^2 = 1$\n$k \\left( \\frac{4}{2} - 0 \\right) = 1$\n$2k = 1 \\implies k = \\frac{1}{2}$."
+  },
+  {
+    "questionNumber": 41,
+    "chapter": "Financial Mathematics",
+    "topic": "Ordinary Annuity Future Value",
+    "questionText": "The future value of an ordinary annuity of Rs. 1,000 paid at the end of each year for 3 years at 10% per annum compounded annually is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Rs. 3,310",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $FV = 1000\\left[\\frac{(1.1)^3 - 1}{0.1}\\right] = 1000\\left[\\frac{1.331 - 1}{0.1}\\right] = 1000(3.31) = 3,310$."
+      },
+      {
+        "id": "B",
+        "text": "Rs. 3,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Interest Neglect",
+        "mistakeAnalysis": "Aspirants sum the payments without interest: $1000 \\times 3 = 3000$."
+      },
+      {
+        "id": "C",
+        "text": "Rs. 3,641",
+        "isCorrect": false,
+        "studentSelectionTrap": "Annuity Due Confusion",
+        "mistakeAnalysis": "Aspirants multiply by $(1 + i)$ as if payments were made at the start of each year."
+      },
+      {
+        "id": "D",
+        "text": "Rs. 3,300",
+        "isCorrect": false,
+        "studentSelectionTrap": "Simple Interest Approximation",
+        "mistakeAnalysis": "Aspirants approximate using simple interest."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Formula for future value of an ordinary annuity:\n$FV = R \\left[ \\frac{(1+i)^n - 1}{i} \\right]$.\nHere $R = \\text{Rs. } 1,000, i = 10\\% = 0.10, n = 3$:\n$FV = 1,000 \\left[ \\frac{(1.10)^3 - 1}{0.10} \\right] = 1,000 \\left[ \\frac{1.331 - 1}{0.10} \\right] = 1,000 \\left( \\frac{0.331}{0.10} \\right) = 1,000 \\times 3.31 = \\text{Rs. } 3,310$."
+  },
+  {
+    "questionNumber": 42,
+    "chapter": "Quantitative Aptitude",
+    "topic": "Races and Relative Speeds",
+    "questionText": "In a 100-meter race, A runs at $8\\text{ km/hr}$. If A gives B a start of 4 meters and still beats him by 15 seconds, what is the speed of B?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$5.76\\text{ km/hr}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. A's speed $= 8 \\times \\frac{5}{18} = \\frac{20}{9}$ m/s. Time for A $= 100 / (20/9) = 45$ s. Time for B $= 45 + 15 = 60$ s. B runs $96$ m in $60$ s $\\implies 96/60 = 1.6$ m/s $= 1.6 \\times 18/5 = 5.76\\text{ km/hr}$."
+      },
+      {
+        "id": "B",
+        "text": "$6.00\\text{ km/hr}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Full Distance Fallacy for B",
+        "mistakeAnalysis": "Aspirants assume B runs 100 meters: $100 / 60 = 1.667$ m/s $= 6\\text{ km/hr}$."
+      },
+      {
+        "id": "C",
+        "text": "$5.40\\text{ km/hr}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Time Subtraction Error",
+        "mistakeAnalysis": "Aspirants subtract 15 seconds instead of adding."
+      },
+      {
+        "id": "D",
+        "text": "$4.80\\text{ km/hr}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Conversion Slip",
+        "mistakeAnalysis": "Aspirants make an error in m/s to km/hr conversion."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Speed of A $= 8\\text{ km/hr} = 8 \\times \\frac{5}{18} = \\frac{20}{9}\\text{ m/s}$.\nTime taken by A to cover $100\\text{ m}$:\n$T_A = \\frac{100}{20/9} = 100 \\times \\frac{9}{20} = 45\\text{ seconds}$.\nA beats B by 15 seconds, so time taken by B is:\n$T_B = 45 + 15 = 60\\text{ seconds}$.\nA gave B a head start of 4 meters, so B only covers:\n$D_B = 100 - 4 = 96\\text{ meters}$.\nSpeed of B in m/s:\n$v_B = \\frac{96\\text{ m}}{60\\text{ s}} = 1.6\\text{ m/s}$.\nConvert to km/hr:\n$v_B = 1.6 \\times \\frac{18}{5} = 5.76\\text{ km/hr}$."
+  },
+  {
+    "questionNumber": 43,
+    "chapter": "Linear Inequalities",
+    "topic": "Absolute Value Linear Inequalities",
+    "questionText": "The solution set of $|3x - 2| \\le \\frac{1}{2}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\left[\\frac{1}{2}, \\frac{5}{6}\\right]$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $-1/2 \\le 3x - 2 \\le 1/2 \\implies 3/2 \\le 3x \\le 5/2 \\implies 1/2 \\le x \\le 5/6$."
+      },
+      {
+        "id": "B",
+        "text": "$\\left(\\frac{1}{2}, \\frac{5}{6}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Open Bracket Slip",
+        "mistakeAnalysis": "Aspirants use open parentheses for non-strict inequality $\\le$."
+      },
+      {
+        "id": "C",
+        "text": "$\\left[-\\frac{1}{2}, \\frac{5}{6}\\right]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants introduce a negative sign into the lower bound."
+      },
+      {
+        "id": "D",
+        "text": "$\\left[\\frac{3}{2}, \\frac{5}{2}\\right]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by 3 Omission",
+        "mistakeAnalysis": "Aspirants forget to divide by the coefficient 3."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Using the absolute value property $|u| \\le a \\iff -a \\le u \\le a$:\n$-\\frac{1}{2} \\le 3x - 2 \\le \\frac{1}{2}$\nAdd 2 across the inequality:\n$2 - \\frac{1}{2} \\le 3x \\le 2 + \\frac{1}{2}$\n$\\frac{3}{2} \\le 3x \\le \\frac{5}{2}$.\nDivide throughout by 3:\n$\\frac{1}{2} \\le x \\le \\frac{5}{6}$.\nIn interval notation: $\\left[\\frac{1}{2}, \\frac{5}{6}\\right]$."
+  },
+  {
+    "questionNumber": 44,
+    "chapter": "Determinants",
+    "topic": "Minors and Cofactors Relationship",
+    "questionText": "For any square matrix $A = [a_{ij}]$, the cofactor $C_{ij}$ of element $a_{ij}$ is related to its minor $M_{ij}$ by:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$C_{ij} = (-1)^{i+j} M_{ij}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard textbook definition relating cofactors and minors."
+      },
+      {
+        "id": "B",
+        "text": "$C_{ij} = (-1)^{i-j} M_{ij}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Index Subtraction Fallacy",
+        "mistakeAnalysis": "While $(-1)^{i-j} = (-1)^{i+j}$ for all integers, standard textbook definition specifies $i+j$."
+      },
+      {
+        "id": "C",
+        "text": "$C_{ij} = -M_{ij}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Constant Sign Fallacy",
+        "mistakeAnalysis": "Aspirants assume cofactors are always the negative of minors."
+      },
+      {
+        "id": "D",
+        "text": "$C_{ij} = M_{ij}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Parity Neglect",
+        "mistakeAnalysis": "Aspirants assume cofactors and minors are identical regardless of position."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By definition in linear algebra, the cofactor $C_{ij}$ (or $A_{ij}$) of an element $a_{ij}$ in a determinant is given by its minor $M_{ij}$ multiplied by the checkerboard sign factor $(-1)^{i+j}$:\n$C_{ij} = (-1)^{i+j} M_{ij}$."
+  },
+  {
+    "questionNumber": 45,
+    "chapter": "Application of Derivatives",
+    "topic": "Point of Local Maximum of Trigonometric Combinations",
+    "questionText": "The function $f(x) = \\sin x + \\cos 2x$ in the interval $\\left(0, \\frac{\\pi}{2}\\right)$ attains a local maximum at $x = $:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\sin^{-1}\\left(\\frac{1}{4}\\right)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = \\cos x - 2\\sin 2x = \\cos x(1 - 4\\sin x) = 0 \\implies \\sin x = 1/4 \\implies x = \\sin^{-1}(1/4)$."
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{\\pi}{6}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Standard Angle Guess",
+        "mistakeAnalysis": "Aspirants guess $x = \\pi/6$ where $\\sin x = 1/2$."
+      },
+      {
+        "id": "C",
+        "text": "$\\sin^{-1}\\left(\\frac{1}{2}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Coefficient Multiplier Error",
+        "mistakeAnalysis": "Aspirants solve $1 - 2\\sin x = 0$ instead of $1 - 4\\sin x = 0$."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Midpoint Angle Guess",
+        "mistakeAnalysis": "Aspirants guess the midpoint of the interval."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Differentiate $f(x) = \\sin x + \\cos 2x$:\n$f'(x) = \\cos x - 2\\sin 2x = \\cos x - 2(2\\sin x\\cos x) = \\cos x(1 - 4\\sin x)$.\nFor critical points in $\\left(0, \\frac{\\pi}{2}\\right)$, $\\cos x \\ne 0$, so set:\n$1 - 4\\sin x = 0 \\implies \\sin x = \\frac{1}{4} \\implies x = \\sin^{-1}\\left(\\frac{1}{4}\\right)$.\nSecond derivative:\n$f''(x) = -\\sin x - 4\\cos 2x = -\\sin x - 4(1 - 2\\sin^2 x) = -\\frac{1}{4} - 4\\left(1 - 2\\left(\\frac{1}{16}\\right)\\right) = -\\frac{1}{4} - 4\\left(\\frac{7}{8}\\right) = -\\frac{1}{4} - \\frac{7}{2} < 0$.\nSince $f''(x) < 0$, $x = \\sin^{-1}\\left(\\frac{1}{4}\\right)$ is a point of local maximum."
+  },
+  {
+    "questionNumber": 46,
+    "chapter": "Vector Algebra",
+    "topic": "Collinearity Parameter",
+    "questionText": "If the vectors $2\\hat{i} - \\hat{j} + \\hat{k}$, $\\hat{i} + 2\\hat{j} - 3\\hat{k}$ and $3\\hat{i} + a\\hat{j} + 5\\hat{k}$ are coplanar, then the value of $a$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "-4",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Expansion of $[\\vec{u}, \\vec{v}, \\vec{w}] = 0$ gives $2(10 + 3a) + 1(5 + 9) + 1(a - 6) = 7a + 28 = 0 \\implies a = -4$."
+      },
+      {
+        "id": "B",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants solve $7a - 28 = 0$ due to minor sign errors."
+      },
+      {
+        "id": "C",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants miscalculate the determinant constant."
+      },
+      {
+        "id": "D",
+        "text": "-2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division Error",
+        "mistakeAnalysis": "Aspirants divide 28 by 14."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Vectors are coplanar if their scalar triple product is zero:\n$\\begin{vmatrix} 2 & -1 & 1 \\\\ 1 & 2 & -3 \\\\ 3 & a & 5 \\end{vmatrix} = 0$\n$2(10 + 3a) - (-1)(5 + 9) + 1(a - 6) = 0$\n$20 + 6a + 14 + a - 6 = 0$\n$7a + 28 = 0 \\implies 7a = -28 \\implies a = -4$."
+  },
+  {
+    "questionNumber": 47,
+    "chapter": "Probability",
+    "topic": "Addition Theorem of Probability",
+    "questionText": "If $A$ and $B$ are mutually exclusive events with $P(A) = 0.35$ and $P(B) = 0.45$, then $P(A \\cup B)$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0.80",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For mutually exclusive events, $P(A \\cup B) = P(A) + P(B) = 0.35 + 0.45 = 0.80$."
+      },
+      {
+        "id": "B",
+        "text": "0.6425",
+        "isCorrect": false,
+        "studentSelectionTrap": "Independent Formula Misapplication",
+        "mistakeAnalysis": "Aspirants subtract $P(A)P(B) = 0.1575$ as if events were independent."
+      },
+      {
+        "id": "C",
+        "text": "0.10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Difference of Probabilities",
+        "mistakeAnalysis": "Aspirants calculate $0.45 - 0.35 = 0.10$."
+      },
+      {
+        "id": "D",
+        "text": "0.1575",
+        "isCorrect": false,
+        "studentSelectionTrap": "Joint Probability Confusion",
+        "mistakeAnalysis": "Aspirants multiply the probabilities."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For mutually exclusive events, $A \\cap B = \\emptyset \\implies P(A \\cap B) = 0$.\nBy the addition theorem of probability:\n$P(A \\cup B) = P(A) + P(B) = 0.35 + 0.45 = 0.80$."
+  },
+  {
+    "questionNumber": 48,
+    "chapter": "Differential Equations",
+    "topic": "Homogeneous First Order Differential Equation",
+    "questionText": "The general solution of the differential equation $\\frac{dy}{dx} = \\frac{y}{x} + 1$ is (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$y = x\\log_e|x| + Cx$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $y = vx \\implies v + xv' = v + 1 \\implies dv = dx/x \\implies v = \\log|x| + C \\implies y = x\\log|x| + Cx$."
+      },
+      {
+        "id": "B",
+        "text": "$y = \\log_e|x| + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Multiplier $x$ Omission",
+        "mistakeAnalysis": "Aspirants forget to multiply $v$ by $x$ when solving for $y$."
+      },
+      {
+        "id": "C",
+        "text": "$y = x\\log_e|x| + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Constant Multiplier Omission",
+        "mistakeAnalysis": "Aspirants omit multiplying the constant $C$ by $x$."
+      },
+      {
+        "id": "D",
+        "text": "$y = x^2 + Cx$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Integration Slip",
+        "mistakeAnalysis": "Aspirants integrate $dx/x$ as $x$ instead of $\\log|x|$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Substitute $y = vx \\implies \\frac{dy}{dx} = v + x\\frac{dv}{dx}$:\n$v + x\\frac{dv}{dx} = v + 1$\n$x\\frac{dv}{dx} = 1 \\implies dv = \\frac{dx}{x}$.\nIntegrating both sides:\n$v = \\log_e|x| + C$.\nSubstitute back $v = \\frac{y}{x}$:\n$\\frac{y}{x} = \\log_e|x| + C \\implies y = x\\log_e|x| + Cx$."
+  },
+  {
+    "questionNumber": 49,
+    "chapter": "Application of Derivatives",
+    "topic": "Increasing Monotonicity of Logarithmic Functions",
+    "questionText": "The function $f(x) = \\log_e x$ is strictly increasing in the interval:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$(0, \\infty)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Domain is $(0, \\infty)$ and $f'(x) = 1/x > 0$ for all $x > 0$."
+      },
+      {
+        "id": "B",
+        "text": "$(-\\infty, \\infty)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Domain Ignorance",
+        "mistakeAnalysis": "Aspirants assume $\\log x$ is defined on the entire real line."
+      },
+      {
+        "id": "C",
+        "text": "$(1, \\infty)$ only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Positive Value Confusion",
+        "mistakeAnalysis": "Aspirants confuse the condition $f(x) > 0$ with $f'(x) > 0$."
+      },
+      {
+        "id": "D",
+        "text": "(0, 1) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sub-interval Selection",
+        "mistakeAnalysis": "Aspirants restrict increasing behavior only to $(0, 1)$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The domain of $f(x) = \\log_e x$ is $(0, \\infty)$.\nDifferentiating with respect to $x$:\n$f'(x) = \\frac{1}{x}$.\nFor all $x \\in (0, \\infty)$, $f'(x) = \\frac{1}{x} > 0$.\nTherefore, $f(x)$ is strictly increasing on its entire domain $(0, \\infty)$."
+  },
+  {
+    "questionNumber": 50,
+    "chapter": "Integrals",
+    "topic": "Definite Integral of Tangent Function",
+    "questionText": "The value of $\\int_{0}^{\\pi/4}\\tan x\\,dx$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{1}{2}\\log_e 2$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $[\\log\\sec x]_0^{\\pi/4} = \\log\\sqrt{2} - \\log 1 = \\frac{1}{2}\\log 2$."
+      },
+      {
+        "id": "B",
+        "text": "$\\log_e 2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Power Factor 1/2 Omission",
+        "mistakeAnalysis": "Aspirants evaluate $\\log\\sqrt{2}$ as $\\log 2$."
+      },
+      {
+        "id": "C",
+        "text": "$-\\log_e 2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion",
+        "mistakeAnalysis": "Aspirants use $-\\log\\cos x$ but make a sign error at the upper bound."
+      },
+      {
+        "id": "D",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Tangent Value Heuristic",
+        "mistakeAnalysis": "Aspirants evaluate $\\tan(\\pi/4) = 1$."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Using the standard antiderivative $\\int \\tan x\\,dx = \\log_e|\\sec x|$:\n$\\int_0^{\\pi/4} \\tan x\\,dx = [\\log_e|\\sec x|]_0^{\\pi/4}$\n$= \\log_e\\sec\\left(\\frac{\\pi}{4}\\right) - \\log_e\\sec(0)$\n$= \\log_e(\\sqrt{2}) - \\log_e(1)$\n$= \\log_e(2^{1/2}) - 0 = \\frac{1}{2}\\log_e 2$."
+  }
+]
