@@ -19,7 +19,20 @@ export function generateMetadata({ params }: PageProps): Metadata {
   };
 }
 
+import { sanitizeQuestionForActiveExam } from "@/lib/store/useCBTStore";
+
 export default function TestPage({ params, searchParams }: PageProps) {
   const isReattempt = searchParams?.reattempt === "true";
-  return <CBTPageClient testId={params.testId} isReattempt={isReattempt} />;
+  const { testMeta, questions } = getQuestionsForTest(params.testId);
+  // Server-side sanitization prevents answer leakage in client bundle and React tree
+  const sanitizedQuestions = questions.map(sanitizeQuestionForActiveExam);
+
+  return (
+    <CBTPageClient
+      testId={params.testId}
+      isReattempt={isReattempt}
+      initialTestMeta={testMeta}
+      initialQuestions={sanitizedQuestions}
+    />
+  );
 }

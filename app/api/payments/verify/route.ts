@@ -5,14 +5,14 @@ import { createClient } from "@/lib/supabase/server";
 interface VerifyRequestBody {
   razorpay_order_id: string;
   razorpay_payment_id: string;
-  razorpay_signature?: string;
+  razorpay_signature: string;
   userId?: string;
   tier?: string;
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json()) as VerifyRequestBody;
+    const body = (await req.json().catch(() => ({}))) as Partial<VerifyRequestBody>;
     const {
       razorpay_order_id,
       razorpay_payment_id,
@@ -23,26 +23,53 @@ export async function POST(req: NextRequest) {
 
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
 
-    // Verify signature if secret is live
-    if (
-      keySecret &&
-      !keySecret.includes("placeholder") &&
-      razorpay_signature
-    ) {
-      const generatedSignature = crypto
-        .createHmac("sha256", keySecret)
-        .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-        .digest("hex");
-
-      if (generatedSignature !== razorpay_signature) {
-        return NextResponse.json(
-          { error: "Invalid payment verification signature." },
-          { status: 400 }
-        );
-      }
+    // FAIL-CLOSED SECURITY POLICY:
+    // If Razorpay secret is missing or placeholder in production, strictly reject payment verification.
+    // Never bypass signature verification or grant free premium access.
+    if (!keySecret || keySecret.includes("placeholder") || keySecret.trim() === "") {
+      console.error("[SECURITY ALERT] Razorpay Key Secret is unconfigured or placeholder. Failing closed.");
+      return NextResponse.json(
+        {
+          error: "Payment verification gateway is currently unavailable. Server credentials missing or unconfigured.",
+          code: "PAYMENT_GATEWAY_MISCONFIGURED",
+        },
+        { status: 503 }
+      );
     }
 
-    // Upgrade user profile in Supabase
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return NextResponse.json(
+        {
+          error: "Missing mandatory payment verification fields: order ID, payment ID, or signature.",
+          code: "INVALID_VERIFICATION_PAYLOAD",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Cryptographic HMAC SHA-256 signature verification
+    const expectedSignature = crypto
+      .createHmac("sha256", keySecret)
+      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .digest("hex");
+
+    const signaturesMatch = crypto.timingSafeEqual(
+      Buffer.from(expectedSignature, "utf-8"),
+      Buffer.from(razorpay_signature, "utf-8")
+    );
+
+    if (!signaturesMatch) {
+      console.warn(`[SECURITY] Tampered payment signature for order ${razorpay_order_id}`);
+      return NextResponse.json(
+        {
+          error: "Cryptographic signature mismatch. Payment verification failed.",
+          code: "INVALID_SIGNATURE",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Upgrade user profile in Supabase only after verified signature
     const oneYearFromNow = new Date();
     oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
 
@@ -65,21 +92,21 @@ export async function POST(req: NextRequest) {
           campus_coins: currentCoins + 500,
         })
         .eq("id", userId);
-    } catch {
-      // Local fallback
+    } catch (dbErr) {
+      console.error("Supabase profile upgrade error:", dbErr);
     }
 
     return NextResponse.json({
       success: true,
-      message: "Subscription successfully activated! 500 Campus Coins awarded.",
+      message: "Subscription successfully verified and activated! 500 Campus Coins awarded.",
       tier,
       expiresAt: oneYearFromNow.toISOString(),
       bonusCoinsAwarded: 500,
     });
   } catch (error) {
-    console.error("Payment Verification Error:", error);
+    console.error("Payment Verification Fatal Error:", error);
     return NextResponse.json(
-      { error: "Payment verification failed." },
+      { error: "Payment verification failed due to internal error." },
       { status: 500 }
     );
   }

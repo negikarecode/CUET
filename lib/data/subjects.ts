@@ -9,6 +9,13 @@ export const SUBJECT_TO_PYQ: Record<string, string> = {
   "english": "english-pyq",
   "accountancy": "accountancy-pyq",
   "business-studies": "business-pyq",
+  "history": "history-pyq",
+  "political-science": "pol-science-pyq",
+  "geography": "geo-pyq",
+  "geo": "geo-pyq",
+  "psychology": "psychology-pyq",
+  "psy": "psychology-pyq",
+  "psych": "psychology-pyq",
 };
 
 export const SUBJECT_TO_MOCK: Record<string, string> = {
@@ -30,6 +37,41 @@ export const SUBJECT_TO_MOCK: Record<string, string> = {
   "accounts": "accountancy-mock",
   "Accounts": "accountancy-mock",
   "accs": "accountancy-mock",
+  "economics": "eco-mock",
+  "Economics": "eco-mock",
+  "eco": "eco-mock",
+  "Eco": "eco-mock",
+  "business-studies": "bst-mock",
+  "Business Studies": "bst-mock",
+  "business": "bst-mock",
+  "Business": "bst-mock",
+  "bst": "bst-mock",
+  "BST": "bst-mock",
+  "bst-mock": "bst-mock",
+  "history": "history-mock",
+  "History": "history-mock",
+  "hist": "history-mock",
+  "Hist": "history-mock",
+  "history-mock": "history-mock",
+  "political-science": "pol-science-mock",
+  "Political Science": "pol-science-mock",
+  "polscience": "pol-science-mock",
+  "pol-science": "pol-science-mock",
+  "pol": "pol-science-mock",
+  "Pol": "pol-science-mock",
+  "pol-science-mock": "pol-science-mock",
+  "geography": "geo-mock",
+  "Geography": "geo-mock",
+  "geo": "geo-mock",
+  "Geo": "geo-mock",
+  "geo-mock": "geo-mock",
+  "psychology": "psychology-mock",
+  "Psychology": "psychology-mock",
+  "psy": "psychology-mock",
+  "Psy": "psychology-mock",
+  "psych": "psychology-mock",
+  "Psych": "psychology-mock",
+  "psychology-mock": "psychology-mock",
 };
 
 export interface MockTestItem {
@@ -957,6 +999,66 @@ export const ACCOUNTANCY_MOCK_TESTS: MockTestItem[] = [
   },
 ];
 
+export const ECONOMICS_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
+  id: `eco-mock-${i + 1}`,
+  mockNumber: i + 1,
+  label: `Economics Full Mock ${i + 1}`,
+  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
+  duration: "60 Minutes",
+  questions: 50,
+  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
+}));
+
+export const BUSINESS_STUDIES_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
+  id: `bst-mock-${i + 1}`,
+  mockNumber: i + 1,
+  label: `Business Studies Full Mock ${i + 1}`,
+  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
+  duration: "60 Minutes",
+  questions: 50,
+  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
+}));
+
+export const HISTORY_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
+  id: `history-mock-${i + 1}`,
+  mockNumber: i + 1,
+  label: `History Full Mock ${i + 1}`,
+  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
+  duration: "45 Minutes",
+  questions: 50,
+  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
+}));
+
+export const POLITICAL_SCIENCE_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
+  id: `pol-science-mock-${i + 1}`,
+  mockNumber: i + 1,
+  label: `Political Science Full Mock ${i + 1}`,
+  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
+  duration: "45 Minutes",
+  questions: 50,
+  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
+}));
+
+export const GEOGRAPHY_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
+  id: `geo-mock-${i + 1}`,
+  mockNumber: i + 1,
+  label: `Geography Full Mock ${i + 1}`,
+  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
+  duration: "45 Minutes",
+  questions: 50,
+  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
+}));
+
+export const PSYCHOLOGY_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
+  id: `psychology-mock-${i + 1}`,
+  mockNumber: i + 1,
+  label: `Psychology Full Mock ${i + 1}`,
+  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
+  duration: "45 Minutes",
+  questions: 50,
+  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
+}));
+
 export const CUET_SUBJECTS: SubjectConfig[] = [
   // Science Stream
   {
@@ -1105,7 +1207,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 16,
+    popularMockCount: 20,
   },
 
   // Common Stream (General Aptitude Test)

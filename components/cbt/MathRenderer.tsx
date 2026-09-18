@@ -111,13 +111,14 @@ export default function MathRenderer({
         return (
           <div
             key={idx}
-            className="my-3 overflow-x-auto text-center py-1 font-sans"
+            className="notranslate my-3 overflow-x-auto text-center py-1 font-sans"
+            translate="no"
             dangerouslySetInnerHTML={{ __html: html }}
           />
         );
       }
       return (
-        <div key={idx} className="my-2 font-mono text-center">
+        <div key={idx} className="notranslate my-2 font-mono text-center" translate="no">
           {seg.content}
         </div>
       );
@@ -129,19 +130,20 @@ export default function MathRenderer({
         return (
           <span
             key={idx}
-            className="inline-math px-0.5 align-baseline"
+            className="notranslate inline-math px-0.5 align-baseline"
+            translate="no"
             dangerouslySetInnerHTML={{ __html: html }}
           />
         );
       }
       return (
-        <span key={idx} className="font-mono">
+        <span key={idx} className="notranslate font-mono" translate="no">
           {seg.content}
         </span>
       );
     }
 
-    // Normal text
+    // Normal text - eligible for translation
     return <span key={idx}>{seg.content}</span>;
   });
 

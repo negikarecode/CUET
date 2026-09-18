@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { RecordedTestAttempt } from "@/types";
 import { stringToUuid, computeAnalyticsFromAttempts } from "@/lib/analytics";
+import { getQuestionsForTest } from "@/lib/data/mock50Questions";
+import { CUET_UG_2026_CONFIG, calculateExamScore } from "@/lib/config/examConfig";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +18,55 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Authoritative Server-Side Answer Key Verification
+    let authMap = new Map<string, string>();
+    let authoritativeQuestions: any[] = [];
+    try {
+      const { questions: trueQuestions } = getQuestionsForTest(attempt.testId);
+      if (trueQuestions && trueQuestions.length > 0) {
+        authoritativeQuestions = trueQuestions;
+        authMap = new Map(trueQuestions.map((tq) => [tq.id, tq.correctOptionId]));
+      }
+    } catch {
+      // Fallback for ad-hoc custom tests
+    }
+
+    let verifiedCorrectCount = 0;
+    let verifiedIncorrectCount = 0;
+    let verifiedAttemptedCount = 0;
+
+    attempt.questions.forEach((q) => {
+      if (q.selectedOption !== null && q.selectedOption !== undefined) {
+        verifiedAttemptedCount += 1;
+        const expectedOption = authMap.get(q.questionId) || q.correctOption;
+        if (q.selectedOption === expectedOption) {
+          verifiedCorrectCount += 1;
+        } else {
+          verifiedIncorrectCount += 1;
+        }
+      }
+    });
+
+    attempt.correctCount = verifiedCorrectCount;
+    attempt.incorrectCount = verifiedIncorrectCount;
+    attempt.attemptedCount = verifiedAttemptedCount;
+    const unattemptedCount = Math.max(0, (attempt.totalQuestions || attempt.questions.length) - verifiedAttemptedCount);
+    attempt.unattemptedCount = unattemptedCount;
+
+    const { totalMarks, maxMarks } = calculateExamScore(
+      verifiedCorrectCount,
+      verifiedIncorrectCount,
+      unattemptedCount,
+      CUET_UG_2026_CONFIG
+    );
+
+    attempt.totalMarks = totalMarks;
+    attempt.maxMarks = maxMarks;
+    attempt.accuracyPercentage =
+      verifiedAttemptedCount > 0
+        ? Math.round((verifiedCorrectCount / verifiedAttemptedCount) * 100)
+        : 0;
 
     // Determine target User ID
     let targetUserId = attempt.userId || "guest";
@@ -65,6 +116,19 @@ export async function POST(req: NextRequest) {
 
         attempt.questions.forEach((q, idx) => {
           const qUuid = stringToUuid(q.questionId || `${attempt.testId}_q_${idx + 1}`);
+          const optA = q.options?.[0]?.text || "Option A";
+          const optB = q.options?.[1]?.text || "Option B";
+          const optC = q.options?.[2]?.text || "Option C";
+          const optD = q.options?.[3]?.text || "Option D";
+          const qText = q.prompt || `Question ${q.questionNumber || idx + 1}`;
+          const archetype =
+            q.questionType === "assertion-reasoning"
+              ? "Assertion-Reasoning"
+              : q.questionType === "direct-numerical"
+              ? "Numerical"
+              : q.questionType === "case-based"
+              ? "Case-Study MCQ"
+              : "Direct Fact";
 
           questionsToUpsert.push({
             id: qUuid,
@@ -74,15 +138,15 @@ export async function POST(req: NextRequest) {
             ncert_reference:
               q.ncertReference ||
               `NCERT Class 12 (${q.chapter || "General"}), Section Focus`,
-            archetype: "Direct Fact",
-            question_text: `Question ${q.questionNumber || idx + 1}`,
-            option_a: "Option A",
-            option_b: "Option B",
-            option_c: "Option C",
-            option_d: "Option D",
+            archetype,
+            question_text: qText,
+            option_a: optA,
+            option_b: optB,
+            option_c: optC,
+            option_d: optD,
             correct_option: q.correctOption || "A",
             explanation: q.explanation || "Detailed solution based on NCERT guidelines.",
-            is_pyq: false,
+            is_pyq: (attempt.testId || "").includes("pyq"),
             pyq_year: 2024,
           });
 
@@ -146,6 +210,8 @@ export async function POST(req: NextRequest) {
       success: true,
       persistedToDatabase: canPersistToDatabase,
       analytics,
+      attempt,
+      questions: authoritativeQuestions,
     });
   } catch (error: any) {
     console.error("[Record Attempt Unexpected Error]:", error);

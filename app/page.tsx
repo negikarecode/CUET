@@ -18,8 +18,10 @@ import PricingSection from "@/components/payments/PricingSection";
 import OnboardingModal from "@/components/auth/OnboardingModal";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function HomePage() {
+  const { t } = useTranslation();
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
   const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name);
@@ -49,27 +51,27 @@ export default function HomePage() {
               {/* Eyebrow Tag */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FEF3C7] border-2 border-black text-black text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_#000]">
                 <span className="w-2 h-2 rounded-full bg-[#FF5C5C] border border-black animate-pulse" />
-                <span>[NEW 2026 NTA PATTERN: 50/50 COMPULSORY]</span>
+                <span>{t("patternBadge", "[NEW 2026 NTA PATTERN: 50/50 COMPULSORY]")}</span>
               </div>
 
               {/* Headline - Main Attention Grabber */}
               <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] xl:text-[3.75rem] font-black text-black tracking-tight leading-[1.06]">
-                Stop losing{" "}
+                {t("titlePart1", "Stop losing")}{" "}
                 <span className="inline-block bg-[#FEE2E2] text-[#DC2626] px-3 sm:px-3.5 py-0.5 sm:py-1 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_#000] -rotate-1 align-middle my-1">
-                  -6 marks
+                  {t("marksCallout", "-6 marks")}
                 </span>{" "}
-                to trick options.
+                {t("titlePart2", "to trick options.")}
                 <span className="block mt-2.5 sm:mt-3 text-2xl sm:text-3xl lg:text-[2.5rem] xl:text-[2.85rem] text-black font-black leading-tight">
-                  Master CUET&apos;s{" "}
+                  {t("titlePart3", "Master CUET's")}{" "}
                   <span className="underline decoration-[#FF5C5C] decoration-[5px] sm:decoration-[6px] underline-offset-[6px]">
-                    zero-buffer format.
+                    {t("titleHighlight", "zero-buffer format.")}
                   </span>
                 </span>
               </h1>
 
               {/* Sub-headline (1 sentence) */}
               <p className="text-base sm:text-lg text-black/80 leading-relaxed font-semibold">
-                All 50 questions are mandatory. You have 72 seconds per question. CUET AI-Prep pinpoints the trap option you fell for before exam day does.
+                {t("heroSubtitle", "All 50 questions are mandatory. You have 72 seconds per question. CUET AI-Prep pinpoints the trap option you fell for before exam day does.")}
               </p>
 
               {/* Primary & Secondary CTAs */}
@@ -81,7 +83,7 @@ export default function HomePage() {
                   className="px-6 py-3.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] active:bg-[#E03E3E] text-white font-black text-sm tracking-wide border-2 border-black shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   <Zap className="w-4 h-4 fill-white" />
-                  <span>Try 1 Diagnostic Question Free</span>
+                  <span>{t("ctaPrimary", "Try 1 Diagnostic Question Free")}</span>
                 </a>
 
                 {/* Secondary CTA */}
@@ -89,7 +91,7 @@ export default function HomePage() {
                   href="#stream-matrix"
                   className="px-6 py-3.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-sm tracking-wide shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
-                  <span>View Stream Tests</span>
+                  <span>{t("ctaSecondary", "View Stream Tests")}</span>
                 </Link>
               </div>
 
@@ -99,25 +101,25 @@ export default function HomePage() {
                   <div className="w-5 h-5 rounded bg-[#D1FAE5] border border-black flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-black stroke-[3]" />
                   </div>
-                  <span>100% Shift-Wise PYQs</span>
+                  <span>{t("badgePYQ", "100% Shift-Wise PYQs")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded bg-[#FEF3C7] border border-black flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-black stroke-[3]" />
                   </div>
-                  <span>Instant Trap Breakdown</span>
+                  <span>{t("badgeTrap", "Instant Trap Breakdown")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded bg-[#EEF2FF] border border-black flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-black stroke-[3]" />
                   </div>
-                  <span>Exact +5 / -1 Marking</span>
+                  <span>{t("badgeMarking", "Exact +5 / -1 Marking")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded bg-[#FAF7EE] border border-black flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-black stroke-[3]" />
                   </div>
-                  <span>No Login Required to Try</span>
+                  <span>{t("badgeFree", "No Login Required to Try")}</span>
                 </div>
               </div>
             </div>

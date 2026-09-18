@@ -8,6 +8,12 @@ import {
   MATHS_MOCK_TESTS,
   BIOLOGY_MOCK_TESTS,
   ACCOUNTANCY_MOCK_TESTS,
+  BUSINESS_STUDIES_MOCK_TESTS,
+  ECONOMICS_MOCK_TESTS,
+  HISTORY_MOCK_TESTS,
+  POLITICAL_SCIENCE_MOCK_TESTS,
+  GEOGRAPHY_MOCK_TESTS,
+  PSYCHOLOGY_MOCK_TESTS,
   MockTestItem,
 } from "@/lib/data/subjects";
 import {
@@ -23,6 +29,10 @@ import {
   Calculator,
   Briefcase,
   TrendingUp,
+  ScrollText,
+  Landmark,
+  Globe,
+  BrainCircuit,
   Sparkles,
   RotateCcw,
   Trophy,
@@ -30,6 +40,7 @@ import {
 import { useTestStore } from "@/lib/store/useTestStore";
 import { getTestAttemptStats } from "@/lib/analytics";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type SubjectKey =
   | "all"
@@ -39,7 +50,11 @@ type SubjectKey =
   | "biology"
   | "accountancy"
   | "business-studies"
-  | "economics";
+  | "economics"
+  | "history"
+  | "political-science"
+  | "geography"
+  | "psychology";
 
 interface SubjectMeta {
   key: SubjectKey;
@@ -112,27 +127,72 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "business-studies",
     name: "Business Studies",
     code: "305",
-    isLive: false,
-    mockCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
     subtitle:
-      "50 Compulsory Questions per Paper • 45 Minutes • Standard NTA CUET CBT Syllabus",
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Standard NTA CUET CBT Syllabus",
     icon: Briefcase,
   },
   economics: {
     key: "economics",
     name: "Economics",
     code: "309",
-    isLive: false,
-    mockCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
     subtitle:
-      "50 Compulsory Questions per Paper • 60 Minutes • Standard NTA CUET CBT Syllabus",
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Standard NTA CUET CBT Syllabus",
     icon: TrendingUp,
+  },
+  history: {
+    key: "history",
+    name: "History",
+    code: "314",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Themes in Indian History Parts I, II & III",
+    icon: ScrollText,
+  },
+  "political-science": {
+    key: "political-science",
+    name: "Political Science",
+    code: "323",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Contemporary World Politics & Politics in India Since Independence",
+    icon: Landmark,
+  },
+  geography: {
+    key: "geography",
+    name: "Geography",
+    code: "313",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Fundamentals of Human Geography & India: People and Economy",
+    icon: Globe,
+  },
+  psychology: {
+    key: "psychology",
+    name: "Psychology",
+    code: "324",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • NCERT Class 12 Variations, Personality, Disorders & Applied Skills",
+    icon: BrainCircuit,
   },
 };
 
 export default function MocksPage() {
+  const { t } = useTranslation();
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
   const [selectedTab, setSelectedTab] = useState<SubjectKey>("all");
@@ -194,6 +254,66 @@ export default function MocksPage() {
       });
     });
 
+    // Business Studies mocks (20 tests)
+    BUSINESS_STUDIES_MOCK_TESTS.forEach((t) => {
+      list.push({
+        ...t,
+        subjectName: "Business Studies",
+        subjectSlug: "business-studies",
+        code: "305",
+      });
+    });
+
+    // Economics mocks (20 tests)
+    ECONOMICS_MOCK_TESTS.forEach((t) => {
+      list.push({
+        ...t,
+        subjectName: "Economics",
+        subjectSlug: "economics",
+        code: "309",
+      });
+    });
+
+    // History mocks (20 tests)
+    HISTORY_MOCK_TESTS.forEach((t) => {
+      list.push({
+        ...t,
+        subjectName: "History",
+        subjectSlug: "history",
+        code: "314",
+      });
+    });
+
+    // Political Science mocks (20 tests)
+    POLITICAL_SCIENCE_MOCK_TESTS.forEach((t) => {
+      list.push({
+        ...t,
+        subjectName: "Political Science",
+        subjectSlug: "political-science",
+        code: "323",
+      });
+    });
+
+    // Geography mocks (20 tests)
+    GEOGRAPHY_MOCK_TESTS.forEach((t) => {
+      list.push({
+        ...t,
+        subjectName: "Geography",
+        subjectSlug: "geography",
+        code: "313",
+      });
+    });
+
+    // Psychology mocks (20 tests)
+    PSYCHOLOGY_MOCK_TESTS.forEach((t) => {
+      list.push({
+        ...t,
+        subjectName: "Psychology",
+        subjectSlug: "psychology",
+        code: "324",
+      });
+    });
+
     return list;
   }, []);
 
@@ -233,7 +353,7 @@ export default function MocksPage() {
                 : "bg-white text-black hover:bg-[#FAF7EE]"
             }`}
           >
-            All Live Mocks ({allMocksList.length})
+            {t("allAbove", "All Live Mocks")} ({allMocksList.length})
           </button>
 
           {Object.values(SUBJECT_CONFIGS).map((sub) => {
@@ -253,13 +373,14 @@ export default function MocksPage() {
               >
                 <Icon className="w-3.5 h-3.5" />
                 <span>
-                  {sub.name}
+                  {t(sub.key.replace(/-/g, ""), sub.name)}
                   {sub.isLive ? ` (${sub.mockCount} Mocks)` : ""}
                 </span>
               </button>
             );
           })}
         </div>
+
 
         {/* =============================================================== */}
         {/* DOMAIN HEADING BANNER: ONLY rendered when a specific subject is clicked */}
@@ -405,13 +526,13 @@ export default function MocksPage() {
                             className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] transition-all"
                           >
                             <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
-                            <span>Re-attempt</span>
+                            <span>{t("reattemptTest", "Re-attempt")}</span>
                           </Link>
                           <Link
                             href={`/test/${test.id}`}
                             className="px-3 py-2.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all"
                           >
-                            Result
+                            {t("scorecardTitle", "Result")}
                           </Link>
                         </div>
                       ) : (
@@ -419,7 +540,7 @@ export default function MocksPage() {
                           href={`/test/${test.id}`}
                           className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] transition-all"
                         >
-                          <span>Start This Mock</span>
+                          <span>{t("startTest", "Start This Mock")}</span>
                           <ArrowRight className="w-4 h-4" />
                         </Link>
                       )}

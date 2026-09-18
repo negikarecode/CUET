@@ -21,6 +21,7 @@ import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { RepairQuizResponse } from "@/app/api/ai/repair-quiz/route";
 import { TopicMastery, TimeSinkAlertData } from "@/types";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export interface DashboardInitialData {
   user: {
@@ -60,6 +61,7 @@ export default function DashboardClient({
 }: {
   initialData: DashboardInitialData;
 }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const isClient = useIsClient();
   const storeUser = useTestStore((state) => state.user);
@@ -194,7 +196,7 @@ export default function DashboardClient({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-black text-black tracking-tight">
-              Welcome back, {fullName}
+              {t("welcomeBack", "Welcome back,")} {fullName}
             </h1>
             <span className="px-2 py-0.5 rounded bg-[#FEF3C7] border border-black text-[10px] font-black uppercase shadow-[1px_1px_0px_0px_#000]">
               {targetStream}
@@ -212,7 +214,7 @@ export default function DashboardClient({
           className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs sm:text-sm border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all shrink-0 cursor-pointer"
         >
           <Play className="w-3.5 h-3.5 fill-white" />
-          <span>Start Full CBT Mock</span>
+          <span>{t("practiceNow", "Start Full CBT Mock")}</span>
           <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
         </Link>
       </div>
@@ -223,7 +225,7 @@ export default function DashboardClient({
         <div className="p-4 rounded-xl bg-white border-2 border-black shadow-[3px_3px_0px_0px_#000] space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-wider text-black/60">
-              Questions Solved
+              {t("totalSolved", "Questions Solved")}
             </span>
             <FileCheck2 className="w-4 h-4 text-black/50" />
           </div>
@@ -247,7 +249,7 @@ export default function DashboardClient({
         <div className="p-4 rounded-xl bg-white border-2 border-black shadow-[3px_3px_0px_0px_#000] space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-wider text-black/60">
-              Diagnostic Accuracy
+              {t("overallAccuracy", "Diagnostic Accuracy")}
             </span>
             <Target className="w-4 h-4 text-[#059669]" />
           </div>
@@ -365,11 +367,11 @@ export default function DashboardClient({
                 className="px-3 py-1.5 rounded-md bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs shrink-0 flex items-center gap-1 border border-black shadow-[1px_1px_0px_0px_#000] cursor-pointer disabled:opacity-50"
               >
                 {activeRepairTopic === recommendedPractice.topic ? (
-                  <span>Loading...</span>
+                  <span>{t("loading", "Loading...")}</span>
                 ) : (
                   <>
                     <Play className="w-3 h-3 fill-white" />
-                    <span>Quick Drill</span>
+                    <span>{t("startDrill", "Quick Drill")}</span>
                   </>
                 )}
               </button>
@@ -383,7 +385,7 @@ export default function DashboardClient({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b-2 border-black">
               <div>
                 <h2 className="text-base font-black text-black tracking-tight flex items-center gap-2">
-                  <span>AI Diagnostic Radar</span>
+                  <span>{t("weaknessRadar", "AI Diagnostic Radar")}</span>
                   {totalAttempted > 0 && (
                     <span className="px-1.5 py-0.2 rounded bg-[#FEF3C7] border border-black text-[9px] font-black uppercase shadow-[1px_1px_0px_0px_#000]">
                       Live
@@ -407,7 +409,7 @@ export default function DashboardClient({
                         : "text-black/70 hover:text-black"
                     }`}
                   >
-                    <span>Weak Areas</span>
+                    <span>{t("needsWork", "Weak Areas")}</span>
                     <span className="px-1 py-0.1 rounded-full text-[9px] bg-black text-white">
                       {weakCount}
                     </span>
@@ -421,7 +423,7 @@ export default function DashboardClient({
                         : "text-black/70 hover:text-black"
                     }`}
                   >
-                    <span>Strengths</span>
+                    <span>{t("mastered", "Strengths")}</span>
                     <span className="px-1 py-0.1 rounded-full text-[9px] bg-black text-white">
                       {strengthsCount}
                     </span>
@@ -435,7 +437,7 @@ export default function DashboardClient({
                         : "text-black/70 hover:text-black"
                     }`}
                   >
-                    <span>All</span>
+                    <span>{t("allTopics", "All")}</span>
                     <span className="px-1 py-0.1 rounded-full text-[9px] bg-white/30 text-white">
                       {allCount}
                     </span>

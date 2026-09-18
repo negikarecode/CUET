@@ -1,0 +1,3800 @@
+[
+  {
+    "questionNumber": 1,
+    "chapter": "Relations and Functions",
+    "topic": "Equivalence Relations on Integers",
+    "questionText": "Let a relation $R$ on the set of integers $\\mathbb{Z}$ be defined by $R = \\{(a, b) : a + b \\text{ is an even integer}\\}$. Which of the following statements is TRUE?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$R$ is reflexive and symmetric but not transitive",
+        "isCorrect": false,
+        "studentSelectionTrap": "Parity Chain Doubt",
+        "mistakeAnalysis": "Aspirants assume summing pairs of even sums creates an odd sum, failing to reason about invariant parities.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Parity Chain Doubt"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$R$ is an equivalence relation",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $a + a = 2a$ (always even, reflexive); $a + b = b + a$ (symmetric); if $a + b$ and $b + c$ are even, $a$ and $b$ share parity, as do $b$ and $c$, so $a$ and $c$ share parity, making $a + c$ even (transitive).",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "$R$ is symmetric and transitive but not reflexive",
+        "isCorrect": false,
+        "studentSelectionTrap": "Odd Integer Reflexivity Doubt",
+        "mistakeAnalysis": "Aspirants assume an odd integer added to itself produces an odd result, doubting reflexivity.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Odd Integer Reflexivity Doubt"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$R$ is reflexive only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Transitivity Neglect",
+        "mistakeAnalysis": "Aspirants overlook the transitive partition into sets of odd and even integers.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Transitivity Neglect"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "1. Reflexivity: For all $a \\in \\mathbb{Z}$, $a + a = 2a$, which is always divisible by 2. Thus, $(a, a) \\in R$.\n2. Symmetry: If $(a, b) \\in R$, then $a + b = 2k$ for some $k \\in \\mathbb{Z}$. Since addition is commutative, $b + a = a + b = 2k$, so $(b, a) \\in R$.\n3. Transitivity: Let $(a, b) \\in R$ and $(b, c) \\in R$. Then $a + b = 2k_1$ and $b + c = 2k_2$. Adding both equations gives $(a + c) + 2b = 2(k_1 + k_2) \\implies a + c = 2(k_1 + k_2 - b)$. Since $k_1 + k_2 - b \\in \\mathbb{Z}$, $a + c$ is even, so $(a, c) \\in R$.\nSince $R$ is reflexive, symmetric, and transitive, it is an equivalence relation.",
+    "questionId": "MATH-M18-Q01",
+    "conceptId": "MATH-relations-and-functions-equivalence-relations-on-integers",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $R$ is an equivalence relation.",
+      "concept": "1. Reflexivity: For all $a \\in \\mathbb{Z}$, $a + a = 2a$, which is always divisible by 2.",
+      "detailed": "1. Reflexivity: For all $a \\in \\mathbb{Z}$, $a + a = 2a$, which is always divisible by 2. Thus, $(a, a) \\in R$.\n2. Symmetry: If $(a, b) \\in R$, then $a + b = 2k$ for some $k \\in \\mathbb{Z}$. Since addition is commutative, $b + a = a + b = 2k$, so $(b, a) \\in R$.\n3. Transitivity: Let $(a, b) \\in R$ and $(b, c) \\in R$. Then $a + b = 2k_1$ and $b + c = 2k_2$. Adding both equations gives $(a + c) + 2b = 2(k_1 + k_2) \\implies a + c = 2(k_1 + k_2 - b)$. Since $k_1 + k_2 - b \\in \\mathbb{Z}$, $a + c$ is even, so $(a, c) \\in R$.\nSince $R$ is reflexive, symmetric, and transitive, it is an equivalence relation."
+    },
+    "keyConcept": "Relations and Functions: Equivalence Relations on Integers",
+    "formula": "$R = \\{(a, b) : a + b \\text{ is an even integer}\\}$",
+    "tags": [
+      "Maths",
+      "Relations and Functions",
+      "Equivalence Relations on Integers",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 2,
+    "chapter": "Relations and Functions",
+    "topic": "Injective and Surjective Properties of Functions",
+    "questionText": "The function $f: \\mathbb{R} \\to \\mathbb{R}$ defined by $f(x) = x^2 + 3$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "One-one and onto",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Function Confusion",
+        "mistakeAnalysis": "Aspirants confuse quadratic functions with linear polynomials.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Linear Function Confusion"
+        }
+      },
+      {
+        "id": "B",
+        "text": "One-one but not onto",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Domain Exclusion",
+        "mistakeAnalysis": "Aspirants assume the domain is restricted to non-negative real numbers.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Negative Domain Exclusion"
+        }
+      },
+      {
+        "id": "C",
+        "text": "Neither one-one nor onto",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f(-1) = f(1) = 4$ (not one-one); the range is $[3, \\infty) \\ne \\mathbb{R}$ (not onto).",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "Onto but not one-one",
+        "isCorrect": false,
+        "studentSelectionTrap": "Codomain Fallacy",
+        "mistakeAnalysis": "Aspirants overlook that negative numbers and values strictly less than 3 have no real pre-images.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Codomain Fallacy"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "1. Injectivity: Consider $x_1 = 1$ and $x_2 = -1$. Then $f(1) = 1^2 + 3 = 4$ and $f(-1) = (-1)^2 + 3 = 4$. Since $f(1) = f(-1)$ but $1 \\ne -1$, $f$ is not one-one.\n2. Surjectivity: For any real number $x$, $x^2 \\ge 0 \\implies x^2 + 3 \\ge 3$. The range of $f$ is $[3, \\infty)$. Since the codomain is $\\mathbb{R}$ and $[3, \\infty) \\ne \\mathbb{R}$ (for instance, $y = 0$ has no real pre-image), $f$ is not onto.\nTherefore, $f$ is neither one-one nor onto.",
+    "questionId": "MATH-M18-Q02",
+    "conceptId": "MATH-relations-and-functions-injective-and-surjective-properties-of-functions",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is Neither one-one nor onto.",
+      "concept": "1. Injectivity: Consider $x_1 = 1$ and $x_2 = -1$.",
+      "detailed": "1. Injectivity: Consider $x_1 = 1$ and $x_2 = -1$. Then $f(1) = 1^2 + 3 = 4$ and $f(-1) = (-1)^2 + 3 = 4$. Since $f(1) = f(-1)$ but $1 \\ne -1$, $f$ is not one-one.\n2. Surjectivity: For any real number $x$, $x^2 \\ge 0 \\implies x^2 + 3 \\ge 3$. The range of $f$ is $[3, \\infty)$. Since the codomain is $\\mathbb{R}$ and $[3, \\infty) \\ne \\mathbb{R}$ (for instance, $y = 0$ has no real pre-image), $f$ is not onto.\nTherefore, $f$ is neither one-one nor onto."
+    },
+    "keyConcept": "Relations and Functions: Injective and Surjective Properties of Functions",
+    "formula": "$f(x) = x^2 + 3$",
+    "tags": [
+      "Maths",
+      "Relations and Functions",
+      "Injective and Surjective Properties of Functions",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 3,
+    "chapter": "Inverse Trigonometric Functions",
+    "topic": "Principal Value Evaluation",
+    "questionText": "The principal value of $\\cot^{-1}(-\\sqrt{3})$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$-\\frac{\\pi}{6}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Fourth Quadrant Angle Trap",
+        "mistakeAnalysis": "Aspirants assume $\\cot^{-1}(-x) = -\\cot^{-1}(x)$, forgetting that the range is $(0, \\pi)$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Fourth Quadrant Angle Trap"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{\\pi}{6}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Neglect",
+        "mistakeAnalysis": "Aspirants ignore the negative sign inside the argument.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Neglect"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{5\\pi}{6}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The principal value branch of $\\cot^{-1}x$ is $(0, \\pi)$. $\\cot^{-1}(-\\sqrt{3}) = \\pi - \\cot^{-1}(\\sqrt{3}) = \\pi - \\pi/6 = 5\\pi/6$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{2\\pi}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reference Angle Confusion",
+        "mistakeAnalysis": "Aspirants confuse $\\cot(\\pi/6) = \\sqrt{3}$ with $\\cot(\\pi/3) = 1/\\sqrt{3}$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Reference Angle Confusion"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "The principal value branch of $\\cot^{-1}x$ is $(0, \\pi)$.\nUsing the identity $\\cot^{-1}(-u) = \\pi - \\cot^{-1}(u)$ for $u > 0$:\n$\\cot^{-1}(-\\sqrt{3}) = \\pi - \\cot^{-1}(\\sqrt{3})$.\nSince $\\cot\\left(\\frac{\\pi}{6}\\right) = \\sqrt{3}$ and $\\frac{\\pi}{6} \\in (0, \\pi)$:\n$= \\pi - \\frac{\\pi}{6} = \\frac{5\\pi}{6}$.",
+    "questionId": "MATH-M18-Q03",
+    "conceptId": "MATH-inverse-trigonometric-functions-principal-value-evaluation",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $\\frac{5\\pi}{6}$.",
+      "concept": "The principal value branch of $\\cot^{-1}x$ is $(0, \\pi)$. Using the identity $\\cot^{-1}(-u) = \\pi - \\cot^{-1}(u)$ for $u > 0$:\n$\\cot^{-1}(-\\sqrt{3}) = \\pi - \\cot^{-1}(\\sqrt{3})$.",
+      "detailed": "The principal value branch of $\\cot^{-1}x$ is $(0, \\pi)$.\nUsing the identity $\\cot^{-1}(-u) = \\pi - \\cot^{-1}(u)$ for $u > 0$:\n$\\cot^{-1}(-\\sqrt{3}) = \\pi - \\cot^{-1}(\\sqrt{3})$.\nSince $\\cot\\left(\\frac{\\pi}{6}\\right) = \\sqrt{3}$ and $\\frac{\\pi}{6} \\in (0, \\pi)$:\n$= \\pi - \\frac{\\pi}{6} = \\frac{5\\pi}{6}$."
+    },
+    "keyConcept": "Inverse Trigonometric Functions: Principal Value Evaluation",
+    "formula": "$\\cot^{-1}(-u) = \\pi - \\cot^{-1}(u)$",
+    "tags": [
+      "Maths",
+      "Inverse Trigonometric Functions",
+      "Principal Value Evaluation",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 4,
+    "chapter": "Inverse Trigonometric Functions",
+    "topic": "Domain of Inverse Cosine Functions",
+    "questionText": "The domain of the function $f(x) = \\cos^{-1}\\left(\\frac{x - 1}{2}\\right)$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$[-1, 1]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Standard Domain Assumption",
+        "mistakeAnalysis": "Aspirants select the standard domain of $\\cos^{-1}x$ without scaling by the linear argument.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Standard Domain Assumption"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$[-1, 3]$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $-1 \\le \\frac{x - 1}{2} \\le 1 \\implies -2 \\le x - 1 \\le 2 \\implies -1 \\le x \\le 3$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "$[-2, 2]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Shift Omission",
+        "mistakeAnalysis": "Aspirants multiply by 2 but forget to add 1.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Shift Omission"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$[1, 3]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Lower Bound Sign Error",
+        "mistakeAnalysis": "Aspirants evaluate the lower bound as $2 - 1 = 1$ instead of $-2 + 1 = -1$.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Lower Bound Sign Error"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "The domain of $\\cos^{-1}(u)$ requires $-1 \\le u \\le 1$.\nHere $u = \\frac{x - 1}{2}$:\n$-1 \\le \\frac{x - 1}{2} \\le 1$\nMultiply across by 2:\n$-2 \\le x - 1 \\le 2$\nAdd 1 to all sides:\n$-1 \\le x \\le 3$.\nIn interval notation, the domain is $[-1, 3]$.",
+    "questionId": "MATH-M18-Q04",
+    "conceptId": "MATH-inverse-trigonometric-functions-domain-of-inverse-cosine-functions",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $[-1, 3]$.",
+      "concept": "The domain of $\\cos^{-1}(u)$ requires $-1 \\le u \\le 1$. Here $u = \\frac{x - 1}{2}$:\n$-1 \\le \\frac{x - 1}{2} \\le 1$\nMultiply across by 2:\n$-2 \\le x - 1 \\le 2$\nAdd 1 to all sides:\n$-1 \\le x \\le 3$.",
+      "detailed": "The domain of $\\cos^{-1}(u)$ requires $-1 \\le u \\le 1$.\nHere $u = \\frac{x - 1}{2}$:\n$-1 \\le \\frac{x - 1}{2} \\le 1$\nMultiply across by 2:\n$-2 \\le x - 1 \\le 2$\nAdd 1 to all sides:\n$-1 \\le x \\le 3$.\nIn interval notation, the domain is $[-1, 3]$."
+    },
+    "keyConcept": "Inverse Trigonometric Functions: Domain of Inverse Cosine Functions",
+    "formula": "$f(x) = \\cos^{-1}\\left(\\frac{x - 1}{2}\\right)$",
+    "tags": [
+      "Maths",
+      "Inverse Trigonometric Functions",
+      "Domain of Inverse Cosine Functions",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 5,
+    "chapter": "Matrices",
+    "topic": "Matrix Scalar Algebra and Transposition",
+    "questionText": "If $A = \\begin{bmatrix}1 & 4 \\\\ 2 & 3\\end{bmatrix}$, then $A - A^T$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\begin{bmatrix}0 & -2 \\\\ 2 & 0\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants compute $A^T - A$ instead of $A - A^T$.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion Error"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$\\begin{bmatrix}2 & 6 \\\\ 6 & 6\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Addition Instead of Subtraction",
+        "mistakeAnalysis": "Aspirants compute $A + A^T$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Addition Instead of Subtraction"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\begin{bmatrix}0 & 2 \\\\ -2 & 0\\end{bmatrix}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $A^T = \\begin{bmatrix}1 & 2 \\\\ 4 & 3\\end{bmatrix}$. $A - A^T = \\begin{bmatrix}0 & 2 \\\\ -2 & 0\\end{bmatrix}$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$\\begin{bmatrix}0 & 0 \\\\ 0 & 0\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Symmetric Assumption",
+        "mistakeAnalysis": "Aspirants assume $A$ is symmetric, concluding $A - A^T = O$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Symmetric Assumption"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "The transpose of $A = \\begin{bmatrix}1 & 4 \\\\ 2 & 3\\end{bmatrix}$ is $A^T = \\begin{bmatrix}1 & 2 \\\\ 4 & 3\\end{bmatrix}$.\nSubtracting $A^T$ from $A$:\n$A - A^T = \\begin{bmatrix}1 - 1 & 4 - 2 \\\\ 2 - 4 & 3 - 3\\end{bmatrix} = \\begin{bmatrix}0 & 2 \\\\ -2 & 0\\end{bmatrix}$.",
+    "questionId": "MATH-M18-Q05",
+    "conceptId": "MATH-matrices-matrix-scalar-algebra-and-transposition",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $\\begin{bmatrix}0 & 2 \\\\ -2 & 0\\end{bmatrix}$.",
+      "concept": "The transpose of $A = \\begin{bmatrix}1 & 4 \\\\ 2 & 3\\end{bmatrix}$ is $A^T = \\begin{bmatrix}1 & 2 \\\\ 4 & 3\\end{bmatrix}$. Subtracting $A^T$ from $A$:\n$A - A^T = \\begin{bmatrix}1 - 1 & 4 - 2 \\\\ 2 - 4 & 3 - 3\\end{bmatrix} = \\begin{bmatrix}0 & 2 \\\\ -2 & 0\\end{bmatrix}$.",
+      "detailed": "The transpose of $A = \\begin{bmatrix}1 & 4 \\\\ 2 & 3\\end{bmatrix}$ is $A^T = \\begin{bmatrix}1 & 2 \\\\ 4 & 3\\end{bmatrix}$.\nSubtracting $A^T$ from $A$:\n$A - A^T = \\begin{bmatrix}1 - 1 & 4 - 2 \\\\ 2 - 4 & 3 - 3\\end{bmatrix} = \\begin{bmatrix}0 & 2 \\\\ -2 & 0\\end{bmatrix}$."
+    },
+    "keyConcept": "Matrices: Matrix Scalar Algebra and Transposition",
+    "formula": "$A = \\begin{bmatrix}1 & 4 \\\\ 2 & 3\\end{bmatrix}$",
+    "tags": [
+      "Maths",
+      "Matrices",
+      "Matrix Scalar Algebra and Transposition",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 6,
+    "chapter": "Matrices",
+    "topic": "Scalar Multiplication of Zero Matrices",
+    "questionText": "If $A = \\begin{bmatrix}\\alpha & 0 \\\\ 1 & 1\\end{bmatrix}$ and $B = \\begin{bmatrix}1 & 0 \\\\ 5 & 1\\end{bmatrix}$ such that $A^2 = B$, then the real value of $\\alpha$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Top-Left Equality Only",
+        "mistakeAnalysis": "Aspirants evaluate $\\alpha^2 = 1 \\implies \\alpha = 1$, ignoring the bottom-left entry condition.",
+        "misconception": {
+          "type": "boundary_condition_error",
+          "description": "Top-Left Equality Only"
+        }
+      },
+      {
+        "id": "B",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Bottom-Left Equality Only",
+        "mistakeAnalysis": "Aspirants evaluate $\\alpha + 1 = 5 \\implies \\alpha = 4$, failing to verify if $\\alpha^2 = 1$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Bottom-Left Equality Only"
+        }
+      },
+      {
+        "id": "C",
+        "text": "No real value of $\\alpha$ exists",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $A^2 = \\begin{bmatrix}\\alpha^2 & 0 \\\\ \\alpha + 1 & 1\\end{bmatrix}$. Equating to $B$ gives $\\alpha^2 = 1 \\implies \\alpha = \\pm 1$, while $\\alpha + 1 = 5 \\implies \\alpha = 4$. No simultaneous value satisfies both.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "-1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Root Guess",
+        "mistakeAnalysis": "Aspirants pick $\\alpha = -1$ from $\\alpha^2 = 1$ without checking consistency.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Negative Root Guess"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Compute $A^2$:\n$A^2 = \\begin{bmatrix}\\alpha & 0 \\\\ 1 & 1\\end{bmatrix}\\begin{bmatrix}\\alpha & 0 \\\\ 1 & 1\\end{bmatrix} = \\begin{bmatrix}\\alpha^2 + 0 & 0 + 0 \\\\ \\alpha + 1 & 0 + 1\\end{bmatrix} = \\begin{bmatrix}\\alpha^2 & 0 \\\\ \\alpha + 1 & 1\\end{bmatrix}$.\nEquating $A^2$ to $B = \\begin{bmatrix}1 & 0 \\\\ 5 & 1\\end{bmatrix}$:\n1. $\\alpha^2 = 1 \\implies \\alpha = 1$ or $\\alpha = -1$.\n2. $\\alpha + 1 = 5 \\implies \\alpha = 4$.\nSince $\\alpha$ cannot simultaneously be equal to $\\pm 1$ and $4$, no real value of $\\alpha$ satisfies the matrix equation.",
+    "questionId": "MATH-M18-Q06",
+    "conceptId": "MATH-matrices-scalar-multiplication-of-zero-matrices",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is No real value of $\\alpha$ exists.",
+      "concept": "Compute $A^2$:\n$A^2 = \\begin{bmatrix}\\alpha & 0 \\\\ 1 & 1\\end{bmatrix}\\begin{bmatrix}\\alpha & 0 \\\\ 1 & 1\\end{bmatrix} = \\begin{bmatrix}\\alpha^2 + 0 & 0 + 0 \\\\ \\alpha + 1 & 0 + 1\\end{bmatrix} = \\begin{bmatrix}\\alpha^2 & 0 \\\\ \\alpha + 1 & 1\\end{bmatrix}$. Equating $A^2$ to $B = \\begin{bmatrix}1 & 0 \\\\ 5 & 1\\end{bmatrix}$:\n1.",
+      "detailed": "Compute $A^2$:\n$A^2 = \\begin{bmatrix}\\alpha & 0 \\\\ 1 & 1\\end{bmatrix}\\begin{bmatrix}\\alpha & 0 \\\\ 1 & 1\\end{bmatrix} = \\begin{bmatrix}\\alpha^2 + 0 & 0 + 0 \\\\ \\alpha + 1 & 0 + 1\\end{bmatrix} = \\begin{bmatrix}\\alpha^2 & 0 \\\\ \\alpha + 1 & 1\\end{bmatrix}$.\nEquating $A^2$ to $B = \\begin{bmatrix}1 & 0 \\\\ 5 & 1\\end{bmatrix}$:\n1. $\\alpha^2 = 1 \\implies \\alpha = 1$ or $\\alpha = -1$.\n2. $\\alpha + 1 = 5 \\implies \\alpha = 4$.\nSince $\\alpha$ cannot simultaneously be equal to $\\pm 1$ and $4$, no real value of $\\alpha$ satisfies the matrix equation."
+    },
+    "keyConcept": "Matrices: Scalar Multiplication of Zero Matrices",
+    "formula": "$A = \\begin{bmatrix}\\alpha & 0 \\\\ 1 & 1\\end{bmatrix}$",
+    "tags": [
+      "Maths",
+      "Matrices",
+      "Scalar Multiplication of Zero Matrices",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 7,
+    "chapter": "Determinants",
+    "topic": "Determinant Multiplier Properties",
+    "questionText": "If $A$ is a square matrix of order 3 such that $|A| = -4$, then the value of $|2A|$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "-8",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Scalar Multiplication Fallacy",
+        "mistakeAnalysis": "Aspirants evaluate $2 \\times (-4) = -8$, forgetting to cube the scalar for a $3 \\times 3$ matrix.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Linear Scalar Multiplication Fallacy"
+        }
+      },
+      {
+        "id": "B",
+        "text": "-16",
+        "isCorrect": false,
+        "studentSelectionTrap": "Order 2 Exponent Slip",
+        "mistakeAnalysis": "Aspirants square the scalar $2^2(-4) = -16$ instead of cubing it.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Order 2 Exponent Slip"
+        }
+      },
+      {
+        "id": "C",
+        "text": "32",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion",
+        "mistakeAnalysis": "Aspirants drop the negative sign on $|A|$.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion"
+        }
+      },
+      {
+        "id": "D",
+        "text": "-32",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For order $n = 3$, $|2A| = 2^3 |A| = 8(-4) = -32$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "For an $n \\times n$ matrix $A$ and any scalar $k$, the determinant property is:\n$|kA| = k^n |A|$.\nHere $n = 3$, $k = 2$, and $|A| = -4$:\n$|2A| = 2^3 |A| = 8 \\times (-4) = -32$.",
+    "questionId": "MATH-M18-Q07",
+    "conceptId": "MATH-determinants-determinant-multiplier-properties",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is -32.",
+      "concept": "For an $n \\times n$ matrix $A$ and any scalar $k$, the determinant property is:\n$|kA| = k^n |A|$. Here $n = 3$, $k = 2$, and $|A| = -4$:\n$|2A| = 2^3 |A| = 8 \\times (-4) = -32$.",
+      "detailed": "For an $n \\times n$ matrix $A$ and any scalar $k$, the determinant property is:\n$|kA| = k^n |A|$.\nHere $n = 3$, $k = 2$, and $|A| = -4$:\n$|2A| = 2^3 |A| = 8 \\times (-4) = -32$."
+    },
+    "keyConcept": "Determinants: Determinant Multiplier Properties",
+    "formula": "$|A| = -4$",
+    "tags": [
+      "Maths",
+      "Determinants",
+      "Determinant Multiplier Properties",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 8,
+    "chapter": "Determinants",
+    "topic": "Determinant Equation Solving",
+    "questionText": "If $\\begin{vmatrix}2x & 5 \\\\ 8 & x\\end{vmatrix} = \\begin{vmatrix}6 & -2 \\\\ 7 & 3\\end{vmatrix}$, then the value of $x$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\pm 6$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $2x^2 - 40 = 18 - (-14) = 32 \\implies 2x^2 = 72 \\implies x^2 = 36 \\implies x = \\pm 6$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "6 only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Root Omission",
+        "mistakeAnalysis": "Aspirants drop the negative square root of 36.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Negative Root Omission"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\pm 3$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by 2 Prematurely",
+        "mistakeAnalysis": "Aspirants divide by 4 or calculate $x^2 = 9$ due to arithmetic slips.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Division by 2 Prematurely"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\pm 2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Determinant Expansion Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants compute the RHS as $18 - 14 = 4$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Determinant Expansion Arithmetic Slip"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Evaluate the LHS determinant:\n$\\text{LHS} = (2x)(x) - (5)(8) = 2x^2 - 40$.\nEvaluate the RHS determinant:\n$\\text{RHS} = (6)(3) - (-2)(7) = 18 - (-14) = 18 + 14 = 32$.\nEquating LHS and RHS:\n$2x^2 - 40 = 32$\n$2x^2 = 72$\n$x^2 = 36 \\implies x = \\pm 6$.",
+    "questionId": "MATH-M18-Q08",
+    "conceptId": "MATH-determinants-determinant-equation-solving",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $\\pm 6$.",
+      "concept": "Evaluate the LHS determinant:\n$\\text{LHS} = (2x)(x) - (5)(8) = 2x^2 - 40$. Evaluate the RHS determinant:\n$\\text{RHS} = (6)(3) - (-2)(7) = 18 - (-14) = 18 + 14 = 32$.",
+      "detailed": "Evaluate the LHS determinant:\n$\\text{LHS} = (2x)(x) - (5)(8) = 2x^2 - 40$.\nEvaluate the RHS determinant:\n$\\text{RHS} = (6)(3) - (-2)(7) = 18 - (-14) = 18 + 14 = 32$.\nEquating LHS and RHS:\n$2x^2 - 40 = 32$\n$2x^2 = 72$\n$x^2 = 36 \\implies x = \\pm 6$."
+    },
+    "keyConcept": "Determinants: Determinant Equation Solving",
+    "formula": "$\\begin{vmatrix}2x & 5 \\\\ 8 & x\\end{vmatrix} = \\begin{vmatrix}6 & -2 \\\\ 7 & 3\\end{vmatrix}$",
+    "tags": [
+      "Maths",
+      "Determinants",
+      "Determinant Equation Solving",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 9,
+    "chapter": "Continuity and Differentiability",
+    "topic": "Continuity of Rational Fractions",
+    "questionText": "The function $f(x) = \\begin{cases} \\frac{x^2 - 16}{x - 4}, & x \\ne 4 \\\\ k, & x = 4 \\end{cases}$ is continuous at $x = 4$ if $k$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "8",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\lim_{x \\to 4} \\frac{(x - 4)(x + 4)}{x - 4} = \\lim_{x \\to 4} (x + 4) = 8$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Point Value Equated",
+        "mistakeAnalysis": "Aspirants set $k$ equal to the limit point $x = 4$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Point Value Equated"
+        }
+      },
+      {
+        "id": "C",
+        "text": "16",
+        "isCorrect": false,
+        "studentSelectionTrap": "Numerator Constant Selection",
+        "mistakeAnalysis": "Aspirants select the numerator constant 16.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Numerator Constant Selection"
+        }
+      },
+      {
+        "id": "D",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Indeterminate Value Assumption",
+        "mistakeAnalysis": "Aspirants substitute $x = 4$ directly into the unsimplified form $0/0$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Indeterminate Value Assumption"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For continuity at $x = 4$, we require $f(4) = \\lim_{x \\to 4} f(x)$.\nCompute the limit for $x \\ne 4$:\n$\\lim_{x \\to 4} \\frac{x^2 - 16}{x - 4} = \\lim_{x \\to 4} \\frac{(x - 4)(x + 4)}{x - 4} = \\lim_{x \\to 4} (x + 4) = 4 + 4 = 8$.\nSince $f(4) = k$, we must have $k = 8$.",
+    "questionId": "MATH-M18-Q09",
+    "conceptId": "MATH-continuity-and-differentiability-continuity-of-rational-fractions",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is 8.",
+      "concept": "For continuity at $x = 4$, we require $f(4) = \\lim_{x \\to 4} f(x)$. Compute the limit for $x \\ne 4$:\n$\\lim_{x \\to 4} \\frac{x^2 - 16}{x - 4} = \\lim_{x \\to 4} \\frac{(x - 4)(x + 4)}{x - 4} = \\lim_{x \\to 4} (x + 4) = 4 + 4 = 8$.",
+      "detailed": "For continuity at $x = 4$, we require $f(4) = \\lim_{x \\to 4} f(x)$.\nCompute the limit for $x \\ne 4$:\n$\\lim_{x \\to 4} \\frac{x^2 - 16}{x - 4} = \\lim_{x \\to 4} \\frac{(x - 4)(x + 4)}{x - 4} = \\lim_{x \\to 4} (x + 4) = 4 + 4 = 8$.\nSince $f(4) = k$, we must have $k = 8$."
+    },
+    "keyConcept": "Continuity and Differentiability: Continuity of Rational Fractions",
+    "formula": "$f(x) = \\begin{cases} \\frac{x^2 - 16}{x - 4}, & x \\ne 4 \\\\ k, & x = 4 \\end{cases}$",
+    "tags": [
+      "Maths",
+      "Continuity and Differentiability",
+      "Continuity of Rational Fractions",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 10,
+    "chapter": "Continuity and Differentiability",
+    "topic": "Differentiation of Natural Exponential Composite Functions",
+    "questionText": "If $y = e^{x^3}$, then $\\frac{dy}{dx}$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$e^{x^3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Chain Rule Omission",
+        "mistakeAnalysis": "Aspirants forget to differentiate the inner exponent $x^3$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Chain Rule Omission"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$3x^2 e^{3x^2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Exponent Replacement Error",
+        "mistakeAnalysis": "Aspirants replace the power in the exponent with its derivative.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Exponent Replacement Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$x^3 e^{x^3 - 1}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Power Rule Misapplication",
+        "mistakeAnalysis": "Aspirants apply the algebraic power rule $\\frac{d}{dx}(x^n) = n x^{n-1}$ to an exponential function.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Power Rule Misapplication"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$3x^2 e^{x^3}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. By chain rule, $\\frac{d}{dx}(e^{x^3}) = e^{x^3} \\cdot \\frac{d}{dx}(x^3) = 3x^2 e^{x^3}$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Using the chain rule $\\frac{d}{dx}(e^{u(x)}) = e^{u(x)} \\cdot u'(x)$ with $u(x) = x^3$:\n$u'(x) = 3x^2$.\n$\\frac{dy}{dx} = e^{x^3} \\cdot (3x^2) = 3x^2 e^{x^3}$.",
+    "questionId": "MATH-M18-Q10",
+    "conceptId": "MATH-continuity-and-differentiability-differentiation-of-natural-exponential-composite-functions",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $3x^2 e^{x^3}$.",
+      "concept": "Using the chain rule $\\frac{d}{dx}(e^{u(x)}) = e^{u(x)} \\cdot u'(x)$ with $u(x) = x^3$:\n$u'(x) = 3x^2$. $\\frac{dy}{dx} = e^{x^3} \\cdot (3x^2) = 3x^2 e^{x^3}$.",
+      "detailed": "Using the chain rule $\\frac{d}{dx}(e^{u(x)}) = e^{u(x)} \\cdot u'(x)$ with $u(x) = x^3$:\n$u'(x) = 3x^2$.\n$\\frac{dy}{dx} = e^{x^3} \\cdot (3x^2) = 3x^2 e^{x^3}$."
+    },
+    "keyConcept": "Continuity and Differentiability: Differentiation of Natural Exponential Composite Functions",
+    "formula": "$y = e^{x^3}$",
+    "tags": [
+      "Maths",
+      "Continuity and Differentiability",
+      "Differentiation of Natural Exponential Composite Functions",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 11,
+    "chapter": "Application of Derivatives",
+    "topic": "Related Rates of Expanding Circles",
+    "questionText": "A stone dropped into a quiet lake produces concentric circular waves. If the radius of the outer ripple increases at a steady rate of $4\\text{ cm/s}$, how fast is the enclosed area growing when the radius is $10\\text{ cm}$?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$40\\pi\\text{ cm}^2\\text{/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factor 2 Omission",
+        "mistakeAnalysis": "Aspirants differentiate $\\pi r^2$ as $\\pi r \\frac{dr}{dt}$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Factor 2 Omission"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$20\\pi\\text{ cm}^2\\text{/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Rate Multiplier Omission",
+        "mistakeAnalysis": "Aspirants compute the circumference $2\\pi r = 20\\pi$ without multiplying by the rate $\\frac{dr}{dt} = 4$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Rate Multiplier Omission"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$160\\pi\\text{ cm}^2\\text{/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Doubling Error",
+        "mistakeAnalysis": "Aspirants multiply by 2 twice.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Doubling Error"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$80\\pi\\text{ cm}^2\\text{/s}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $A = \\pi r^2 \\implies \\frac{dA}{dt} = 2\\pi r \\frac{dr}{dt} = 2\\pi(10)(4) = 80\\pi$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "The area of a circle is given by $A = \\pi r^2$.\nDifferentiating both sides with respect to time $t$ using the chain rule:\n$\\frac{dA}{dt} = 2\\pi r \\frac{dr}{dt}$.\nSubstitute $r = 10\\text{ cm}$ and $\\frac{dr}{dt} = 4\\text{ cm/s}$:\n$\\frac{dA}{dt} = 2\\pi (10)(4) = 80\\pi\\text{ cm}^2\\text{/s}$.",
+    "questionId": "MATH-M18-Q11",
+    "conceptId": "MATH-application-of-derivatives-related-rates-of-expanding-circles",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $80\\pi\\text{ cm}^2\\text{/s}$.",
+      "concept": "The area of a circle is given by $A = \\pi r^2$. Differentiating both sides with respect to time $t$ using the chain rule:\n$\\frac{dA}{dt} = 2\\pi r \\frac{dr}{dt}$.",
+      "detailed": "The area of a circle is given by $A = \\pi r^2$.\nDifferentiating both sides with respect to time $t$ using the chain rule:\n$\\frac{dA}{dt} = 2\\pi r \\frac{dr}{dt}$.\nSubstitute $r = 10\\text{ cm}$ and $\\frac{dr}{dt} = 4\\text{ cm/s}$:\n$\\frac{dA}{dt} = 2\\pi (10)(4) = 80\\pi\\text{ cm}^2\\text{/s}$."
+    },
+    "keyConcept": "Application of Derivatives: Related Rates of Expanding Circles",
+    "formula": "$A = \\pi r^2$",
+    "tags": [
+      "Maths",
+      "Application of Derivatives",
+      "Related Rates of Expanding Circles",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 12,
+    "chapter": "Application of Derivatives",
+    "topic": "Horizontal Tangents on Cubic Curves",
+    "questionText": "The points on the curve $y = x^3 - 12x + 9$ where the tangent is parallel to the $x$-axis are:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$(2, 7)$ and $(-2, -25)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Ordinate Sign Inversion",
+        "mistakeAnalysis": "Aspirants invert the signs of the calculated $y$-coordinates.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Ordinate Sign Inversion"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$(2, 0)$ and $(-2, 0)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Zero Ordinate Assumption",
+        "mistakeAnalysis": "Aspirants assume horizontal tangency implies that the points lie on the $x$-axis.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Zero Ordinate Assumption"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$(4, -7)$ and $(-4, 25)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Roots Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants take $x^2 = 16$ instead of $x^2 = 4$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Roots Arithmetic Slip"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$(2, -7)$ and $(-2, 25)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $y' = 3x^2 - 12 = 0 \\implies x = \\pm 2$. For $x = 2$, $y = 8 - 24 + 9 = -7$; for $x = -2$, $y = -8 + 24 + 9 = 25$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "A tangent is parallel to the $x$-axis if and only if $\\frac{dy}{dx} = 0$.\nDifferentiating $y = x^3 - 12x + 9$:\n$\\frac{dy}{dx} = 3x^2 - 12$.\nSetting $\\frac{dy}{dx} = 0$:\n$3x^2 - 12 = 0 \\implies x^2 = 4 \\implies x = \\pm 2$.\nEvaluate $y$ for each value:\n- For $x = 2$: $y = (2)^3 - 12(2) + 9 = 8 - 24 + 9 = -7$.\n- For $x = -2$: $y = (-2)^3 - 12(-2) + 9 = -8 + 24 + 9 = 25$.\nThus, the points are $(2, -7)$ and $(-2, 25)$.",
+    "questionId": "MATH-M18-Q12",
+    "conceptId": "MATH-application-of-derivatives-horizontal-tangents-on-cubic-curves",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $(2, -7)$ and $(-2, 25)$.",
+      "concept": "A tangent is parallel to the $x$-axis if and only if $\\frac{dy}{dx} = 0$. Differentiating $y = x^3 - 12x + 9$:\n$\\frac{dy}{dx} = 3x^2 - 12$.",
+      "detailed": "A tangent is parallel to the $x$-axis if and only if $\\frac{dy}{dx} = 0$.\nDifferentiating $y = x^3 - 12x + 9$:\n$\\frac{dy}{dx} = 3x^2 - 12$.\nSetting $\\frac{dy}{dx} = 0$:\n$3x^2 - 12 = 0 \\implies x^2 = 4 \\implies x = \\pm 2$.\nEvaluate $y$ for each value:\n- For $x = 2$: $y = (2)^3 - 12(2) + 9 = 8 - 24 + 9 = -7$.\n- For $x = -2$: $y = (-2)^3 - 12(-2) + 9 = -8 + 24 + 9 = 25$.\nThus, the points are $(2, -7)$ and $(-2, 25)$."
+    },
+    "keyConcept": "Application of Derivatives: Horizontal Tangents on Cubic Curves",
+    "formula": "$y = x^3 - 12x + 9$",
+    "tags": [
+      "Maths",
+      "Application of Derivatives",
+      "Horizontal Tangents on Cubic Curves",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 13,
+    "chapter": "Integrals",
+    "topic": "Integration of Surd Denominators",
+    "questionText": "$\\int \\frac{dx}{\\sqrt{1 - 9x^2}}$ is equal to (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{1}{3}\\sin^{-1}(3x) + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard formula with substitution $u = 3x \\implies dx = \\frac{1}{3}du$: $\\frac{1}{3}\\sin^{-1}(3x) + C$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "$\\sin^{-1}(3x) + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Divisor Omission",
+        "mistakeAnalysis": "Aspirants omit the divisor $1/3$ from the derivative of $3x$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Linear Divisor Omission"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{9}\\sin^{-1}(3x) + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Squared Coefficient Divisor Slip",
+        "mistakeAnalysis": "Aspirants divide by 9 instead of $\\sqrt{9} = 3$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Squared Coefficient Divisor Slip"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{3}\\cos^{-1}(3x) + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverse Cosine Misattribution",
+        "mistakeAnalysis": "Aspirants select inverse cosine without the necessary negative sign.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Inverse Cosine Misattribution"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Write the radicand in the form $a^2 - u^2$:\n$\\sqrt{1 - 9x^2} = \\sqrt{1^2 - (3x)^2}$.\nSubstitute $u = 3x \\implies du = 3\\,dx \\implies dx = \\frac{1}{3}du$.\nThe integral becomes:\n$\\frac{1}{3} \\int \\frac{du}{\\sqrt{1^2 - u^2}} = \\frac{1}{3}\\sin^{-1}(u) + C = \\frac{1}{3}\\sin^{-1}(3x) + C$.",
+    "questionId": "MATH-M18-Q13",
+    "conceptId": "MATH-integrals-integration-of-surd-denominators",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $\\frac{1}{3}\\sin^{-1}(3x) + C$.",
+      "concept": "Write the radicand in the form $a^2 - u^2$:\n$\\sqrt{1 - 9x^2} = \\sqrt{1^2 - (3x)^2}$. Substitute $u = 3x \\implies du = 3\\,dx \\implies dx = \\frac{1}{3}du$.",
+      "detailed": "Write the radicand in the form $a^2 - u^2$:\n$\\sqrt{1 - 9x^2} = \\sqrt{1^2 - (3x)^2}$.\nSubstitute $u = 3x \\implies du = 3\\,dx \\implies dx = \\frac{1}{3}du$.\nThe integral becomes:\n$\\frac{1}{3} \\int \\frac{du}{\\sqrt{1^2 - u^2}} = \\frac{1}{3}\\sin^{-1}(u) + C = \\frac{1}{3}\\sin^{-1}(3x) + C$."
+    },
+    "keyConcept": "Integrals: Integration of Surd Denominators",
+    "formula": "$\\int \\frac{dx}{\\sqrt{1 - 9x^2}}$",
+    "tags": [
+      "Maths",
+      "Integrals",
+      "Integration of Surd Denominators",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 14,
+    "chapter": "Integrals",
+    "topic": "Symmetric Definite Integrals of Odd Functions",
+    "questionText": "The value of $\\int_{-\\pi/4}^{\\pi/4}\\tan^3 x\\,dx$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Tangent Value Heuristic",
+        "mistakeAnalysis": "Aspirants evaluate $\\tan(\\pi/4) = 1$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Tangent Value Heuristic"
+        }
+      },
+      {
+        "id": "B",
+        "text": "0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\tan^3(-x) = -\\tan^3 x$ is an odd function integrated over a symmetric interval $[-a, a]$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Interval Bound Selection",
+        "mistakeAnalysis": "Aspirants select the upper bound.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Interval Bound Selection"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "One-Sided Value Guess",
+        "mistakeAnalysis": "Aspirants attempt one-sided integration $\\int_0^{\\pi/4} \\tan^3 x\\,dx$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "One-Sided Value Guess"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Let $f(x) = \\tan^3 x$.\nTesting for parity:\n$f(-x) = [\\tan(-x)]^3 = [-\\tan x]^3 = -\\tan^3 x = -f(x)$.\nSince $f(-x) = -f(x)$, $f(x)$ is an odd function.\nBy the definite integral property $\\int_{-a}^a f(x)\\,dx = 0$ for any odd function:\n$\\int_{-\\pi/4}^{\\pi/4} \\tan^3 x\\,dx = 0$.",
+    "questionId": "MATH-M18-Q14",
+    "conceptId": "MATH-integrals-symmetric-definite-integrals-of-odd-functions",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is 0.",
+      "concept": "Let $f(x) = \\tan^3 x$. Testing for parity:\n$f(-x) = [\\tan(-x)]^3 = [-\\tan x]^3 = -\\tan^3 x = -f(x)$.",
+      "detailed": "Let $f(x) = \\tan^3 x$.\nTesting for parity:\n$f(-x) = [\\tan(-x)]^3 = [-\\tan x]^3 = -\\tan^3 x = -f(x)$.\nSince $f(-x) = -f(x)$, $f(x)$ is an odd function.\nBy the definite integral property $\\int_{-a}^a f(x)\\,dx = 0$ for any odd function:\n$\\int_{-\\pi/4}^{\\pi/4} \\tan^3 x\\,dx = 0$."
+    },
+    "keyConcept": "Integrals: Symmetric Definite Integrals of Odd Functions",
+    "formula": "$f(x) = \\tan^3 x$",
+    "tags": [
+      "Maths",
+      "Integrals",
+      "Symmetric Definite Integrals of Odd Functions",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 15,
+    "chapter": "Application of Integrals",
+    "topic": "Area Enclosed by a Symmetrical Standard Parabola",
+    "questionText": "The area (in sq. units) of the region bounded by the parabola $y^2 = 4x$ and the line $x = 1$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{4}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Quadrant Integration",
+        "mistakeAnalysis": "Aspirants integrate only above the $x$-axis without doubling for symmetry.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Single Quadrant Integration"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{16}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Doubling Error",
+        "mistakeAnalysis": "Aspirants double the total area unnecessarily.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Doubling Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{8}{3}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $2\\int_0^1 2\\sqrt{x}\\,dx = 4 \\left[\\frac{2}{3}x^{3/2}\\right]_0^1 = 8/3$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Bounding Rectangle Fallacy",
+        "mistakeAnalysis": "Aspirants approximate the area using a bounding rectangle of base 1 and height 4.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Bounding Rectangle Fallacy"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "The curve $y^2 = 4x \\implies y = \\pm 2\\sqrt{x}$ is symmetric with respect to the $x$-axis.\nThe bounded region spans from $x = 0$ to $x = 1$:\n$\\text{Area} = 2 \\int_0^1 2\\sqrt{x}\\,dx = 4 \\int_0^1 x^{1/2}\\,dx$\n$= 4 \\left[ \\frac{x^{3/2}}{3/2} \\right]_0^1 = 4 \\cdot \\frac{2}{3} (1^{3/2} - 0) = \\frac{8}{3}\\text{ sq. units}$.",
+    "questionId": "MATH-M18-Q15",
+    "conceptId": "MATH-application-of-integrals-area-enclosed-by-a-symmetrical-standard-parabola",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $\\frac{8}{3}$.",
+      "concept": "The curve $y^2 = 4x \\implies y = \\pm 2\\sqrt{x}$ is symmetric with respect to the $x$-axis. The bounded region spans from $x = 0$ to $x = 1$:\n$\\text{Area} = 2 \\int_0^1 2\\sqrt{x}\\,dx = 4 \\int_0^1 x^{1/2}\\,dx$\n$= 4 \\left[ \\frac{x^{3/2}}{3/2} \\right]_0^1 = 4 \\cdot \\frac{2}{3} (1^{3/2} - 0) = \\frac{8}{3}\\text{ sq.",
+      "detailed": "The curve $y^2 = 4x \\implies y = \\pm 2\\sqrt{x}$ is symmetric with respect to the $x$-axis.\nThe bounded region spans from $x = 0$ to $x = 1$:\n$\\text{Area} = 2 \\int_0^1 2\\sqrt{x}\\,dx = 4 \\int_0^1 x^{1/2}\\,dx$\n$= 4 \\left[ \\frac{x^{3/2}}{3/2} \\right]_0^1 = 4 \\cdot \\frac{2}{3} (1^{3/2} - 0) = \\frac{8}{3}\\text{ sq. units}$."
+    },
+    "keyConcept": "Application of Integrals: Area Enclosed by a Symmetrical Standard Parabola",
+    "formula": "$y^2 = 4x$",
+    "tags": [
+      "Maths",
+      "Application of Integrals",
+      "Area Enclosed by a Symmetrical Standard Parabola",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 16,
+    "chapter": "Differential Equations",
+    "topic": "General Solution of Separable Variable Equations",
+    "questionText": "The general solution of the differential equation $\\frac{dy}{dx} = \\frac{y}{x}$ is (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$y = x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Additive Integration Slip",
+        "mistakeAnalysis": "Aspirants drop the logarithms and equate variables additively.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Additive Integration Slip"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$xy = C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reciprocal Integration Error",
+        "mistakeAnalysis": "Aspirants integrate as if $y\\,dx + x\\,dy = 0$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Reciprocal Integration Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$y^2 = x^2 + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Quadratic Power Fallacy",
+        "mistakeAnalysis": "Aspirants integrate as if the equation were $y\\,dy = x\\,dx$.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "Quadratic Power Fallacy"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$y = Cx$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\frac{dy}{y} = \\frac{dx}{x} \\implies \\log|y| = \\log|x| + \\log C \\implies y = Cx$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Separating variables:\n$\\frac{dy}{y} = \\frac{dx}{x}$.\nIntegrating both sides:\n$\\int \\frac{dy}{y} = \\int \\frac{dx}{x}$\n$\\log_e|y| = \\log_e|x| + \\log_e C = \\log_e|Cx|$\n$y = Cx$.",
+    "questionId": "MATH-M18-Q16",
+    "conceptId": "MATH-differential-equations-general-solution-of-separable-variable-equations",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $y = Cx$.",
+      "concept": "Separating variables:\n$\\frac{dy}{y} = \\frac{dx}{x}$. Integrating both sides:\n$\\int \\frac{dy}{y} = \\int \\frac{dx}{x}$\n$\\log_e|y| = \\log_e|x| + \\log_e C = \\log_e|Cx|$\n$y = Cx$.",
+      "detailed": "Separating variables:\n$\\frac{dy}{y} = \\frac{dx}{x}$.\nIntegrating both sides:\n$\\int \\frac{dy}{y} = \\int \\frac{dx}{x}$\n$\\log_e|y| = \\log_e|x| + \\log_e C = \\log_e|Cx|$\n$y = Cx$."
+    },
+    "keyConcept": "Differential Equations: General Solution of Separable Variable Equations",
+    "formula": "$\\frac{dy}{dx} = \\frac{y}{x}$",
+    "tags": [
+      "Maths",
+      "Differential Equations",
+      "General Solution of Separable Variable Equations",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 17,
+    "chapter": "Vector Algebra",
+    "topic": "Angle Between Two Non-Zero Vectors",
+    "questionText": "If $\\vec{a} = 3\\hat{i} - 2\\hat{j} + 6\\hat{k}$ and $\\vec{b} = 2\\hat{i} - \\hat{j} - 2\\hat{k}$, then the cosine of the angle between $\\vec{a}$ and $\\vec{b}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{4}{21}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion",
+        "mistakeAnalysis": "Aspirants omit the negative sign resulting from $6 + 2 - 12 = -4$.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$-\\frac{2}{7}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Magnitude Product Error",
+        "mistakeAnalysis": "Aspirants forget the factor 3 from $|\\vec{b}|$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Magnitude Product Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$-\\frac{4}{21}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\vec{a}\\cdot\\vec{b} = 3(2) + (-2)(-1) + 6(-2) = 6 + 2 - 12 = -4$. $|\\vec{a}| = \\sqrt{9+4+36} = 7$, $|\\vec{b}| = \\sqrt{4+1+4} = 3$. Hence $\\cos\\theta = -4/(7\\times3) = -4/21$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{7}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dot Product Arithmetic Error",
+        "mistakeAnalysis": "Aspirants compute dot product as $3(2)-2(1)-6(2) = -8$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Dot Product Arithmetic Error"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Given $\\vec{a} = 3\\hat{i} - 2\\hat{j} + 6\\hat{k}$ and $\\vec{b} = 2\\hat{i} - \\hat{j} - 2\\hat{k}$.\nThe dot product is:\n$\\vec{a} \\cdot \\vec{b} = 3(2) + (-2)(-1) + 6(-2) = 6 + 2 - 12 = -4$.\nMagnitudes:\n$|\\vec{a}| = \\sqrt{3^2 + (-2)^2 + 6^2} = \\sqrt{9 + 4 + 36} = \\sqrt{49} = 7$.\n$|\\vec{b}| = \\sqrt{2^2 + (-1)^2 + (-2)^2} = \\sqrt{4 + 1 + 4} = \\sqrt{9} = 3$.\nTherefore:\n$\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|} = \\frac{-4}{7 \\times 3} = -\\frac{4}{21}$.",
+    "questionId": "MATH-M18-Q17",
+    "conceptId": "MATH-vector-algebra-angle-between-two-non-zero-vectors",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $-\\frac{4}{21}$.",
+      "concept": "Given $\\vec{a} = 3\\hat{i} - 2\\hat{j} + 6\\hat{k}$ and $\\vec{b} = 2\\hat{i} - \\hat{j} - 2\\hat{k}$. The dot product is:\n$\\vec{a} \\cdot \\vec{b} = 3(2) + (-2)(-1) + 6(-2) = 6 + 2 - 12 = -4$.",
+      "detailed": "Given $\\vec{a} = 3\\hat{i} - 2\\hat{j} + 6\\hat{k}$ and $\\vec{b} = 2\\hat{i} - \\hat{j} - 2\\hat{k}$.\nThe dot product is:\n$\\vec{a} \\cdot \\vec{b} = 3(2) + (-2)(-1) + 6(-2) = 6 + 2 - 12 = -4$.\nMagnitudes:\n$|\\vec{a}| = \\sqrt{3^2 + (-2)^2 + 6^2} = \\sqrt{9 + 4 + 36} = \\sqrt{49} = 7$.\n$|\\vec{b}| = \\sqrt{2^2 + (-1)^2 + (-2)^2} = \\sqrt{4 + 1 + 4} = \\sqrt{9} = 3$.\nTherefore:\n$\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|} = \\frac{-4}{7 \\times 3} = -\\frac{4}{21}$."
+    },
+    "keyConcept": "Vector Algebra: Angle Between Two Non-Zero Vectors",
+    "formula": "$\\vec{a} = 3\\hat{i} - 2\\hat{j} + 6\\hat{k}$",
+    "tags": [
+      "Maths",
+      "Vector Algebra",
+      "Angle Between Two Non-Zero Vectors",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 18,
+    "chapter": "Vector Algebra",
+    "topic": "Angle Between Standard Unit Basis Vectors",
+    "questionText": "The angle between the vectors $\\vec{a} = \\hat{i} + \\hat{j}$ and $\\vec{b} = \\hat{j} + \\hat{k}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{\\pi}{3}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\vec{a}\\cdot\\vec{b} = 1$; $|\\vec{a}| = \\sqrt{2}, |\\vec{b}| = \\sqrt{2}$. $\\cos\\theta = \\frac{1}{2} \\implies \\theta = \\frac{\\pi}{3}$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Square Root Ratio Confusion",
+        "mistakeAnalysis": "Aspirants assume $\\cos\\theta = 1/\\sqrt{2}$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Square Root Ratio Confusion"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{\\pi}{6}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sine-Cosine Inversion",
+        "mistakeAnalysis": "Aspirants confuse $\\cos\\theta = 1/2$ with $\\pi/6$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Sine-Cosine Inversion"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{\\pi}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Orthogonality Assumption",
+        "mistakeAnalysis": "Aspirants assume non-identical component vectors are orthogonal.",
+        "misconception": {
+          "type": "direction_error",
+          "description": "Orthogonality Assumption"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Compute the dot product:\n$\\vec{a} \\cdot \\vec{b} = (1)(0) + (1)(1) + (0)(1) = 1$.\nCompute the magnitudes:\n$|\\vec{a}| = \\sqrt{1^2 + 1^2 + 0^2} = \\sqrt{2}$.\n$|\\vec{b}| = \\sqrt{0^2 + 1^2 + 1^2} = \\sqrt{2}$.\nCosine of the angle $\\theta$:\n$\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|} = \\frac{1}{\\sqrt{2}\\sqrt{2}} = \\frac{1}{2}$.\nSince $\\theta \\in [0, \\pi]$:\n$\\theta = \\frac{\\pi}{3}$.",
+    "questionId": "MATH-M18-Q18",
+    "conceptId": "MATH-vector-algebra-angle-between-standard-unit-basis-vectors",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $\\frac{\\pi}{3}$.",
+      "concept": "Compute the dot product:\n$\\vec{a} \\cdot \\vec{b} = (1)(0) + (1)(1) + (0)(1) = 1$. Compute the magnitudes:\n$|\\vec{a}| = \\sqrt{1^2 + 1^2 + 0^2} = \\sqrt{2}$.",
+      "detailed": "Compute the dot product:\n$\\vec{a} \\cdot \\vec{b} = (1)(0) + (1)(1) + (0)(1) = 1$.\nCompute the magnitudes:\n$|\\vec{a}| = \\sqrt{1^2 + 1^2 + 0^2} = \\sqrt{2}$.\n$|\\vec{b}| = \\sqrt{0^2 + 1^2 + 1^2} = \\sqrt{2}$.\nCosine of the angle $\\theta$:\n$\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|} = \\frac{1}{\\sqrt{2}\\sqrt{2}} = \\frac{1}{2}$.\nSince $\\theta \\in [0, \\pi]$:\n$\\theta = \\frac{\\pi}{3}$."
+    },
+    "keyConcept": "Vector Algebra: Angle Between Standard Unit Basis Vectors",
+    "formula": "$\\vec{a} = \\hat{i} + \\hat{j}$",
+    "tags": [
+      "Maths",
+      "Vector Algebra",
+      "Angle Between Standard Unit Basis Vectors",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 19,
+    "chapter": "Three Dimensional Geometry",
+    "topic": "Sum of Squares of Direction Cosines",
+    "questionText": "If $l, m, n$ are the direction cosines of a line in 3D space, then the value of $l^2 + m^2 + n^2$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard identity of direction cosines: $l^2 + m^2 + n^2 = \\cos^2\\alpha + \\cos^2\\beta + \\cos^2\\gamma = 1$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Orthogonality Fallacy",
+        "mistakeAnalysis": "Aspirants confuse the sum of squares with the scalar product of perpendicular lines.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Orthogonality Fallacy"
+        }
+      },
+      {
+        "id": "C",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Trigonometric Sine Identity Confusion",
+        "mistakeAnalysis": "Aspirants confuse with $\\sin^2\\alpha + \\sin^2\\beta + \\sin^2\\gamma = 2$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Trigonometric Sine Identity Confusion"
+        }
+      },
+      {
+        "id": "D",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dimensionality Heuristic",
+        "mistakeAnalysis": "Aspirants assume 3 dimensions sum to 3.",
+        "misconception": {
+          "type": "unit_error",
+          "description": "Dimensionality Heuristic"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Let the unit direction vector of the line be $\\hat{u} = l\\hat{i} + m\\hat{j} + n\\hat{k}$.\nSince $\\hat{u}$ is a unit vector, its magnitude is 1:\n$|\\hat{u}| = \\sqrt{l^2 + m^2 + n^2} = 1$.\nSquaring both sides:\n$l^2 + m^2 + n^2 = 1$.",
+    "questionId": "MATH-M18-Q19",
+    "conceptId": "MATH-three-dimensional-geometry-sum-of-squares-of-direction-cosines",
+    "questionType": "conceptual",
+    "difficulty": 4,
+    "estimatedTimeSeconds": 80,
+    "solution": {
+      "quick": "Correct answer is 1.",
+      "concept": "Let the unit direction vector of the line be $\\hat{u} = l\\hat{i} + m\\hat{j} + n\\hat{k}$. Since $\\hat{u}$ is a unit vector, its magnitude is 1:\n$|\\hat{u}| = \\sqrt{l^2 + m^2 + n^2} = 1$.",
+      "detailed": "Let the unit direction vector of the line be $\\hat{u} = l\\hat{i} + m\\hat{j} + n\\hat{k}$.\nSince $\\hat{u}$ is a unit vector, its magnitude is 1:\n$|\\hat{u}| = \\sqrt{l^2 + m^2 + n^2} = 1$.\nSquaring both sides:\n$l^2 + m^2 + n^2 = 1$."
+    },
+    "keyConcept": "Three Dimensional Geometry: Sum of Squares of Direction Cosines",
+    "formula": "$\\hat{u} = l\\hat{i} + m\\hat{j} + n\\hat{k}$",
+    "tags": [
+      "Maths",
+      "Three Dimensional Geometry",
+      "Sum of Squares of Direction Cosines",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 4,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 20,
+    "chapter": "Three Dimensional Geometry",
+    "topic": "Equation of Planes Parallel to Coordinate Planes",
+    "questionText": "The equation of the plane passing through the point $(2, -3, 5)$ and parallel to the $xy$-plane is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$z = 5$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. A plane parallel to the $xy$-plane has normal along the $z$-axis, so its equation is $z = c \\implies z = 5$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "$x = 2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "$yz$-Plane Confusion",
+        "mistakeAnalysis": "Aspirants choose the equation of a plane parallel to the $yz$-plane.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "$yz$-Plane Confusion"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$y = -3$",
+        "isCorrect": false,
+        "studentSelectionTrap": "$xz$-Plane Confusion",
+        "mistakeAnalysis": "Aspirants choose the equation of a plane parallel to the $xz$-plane.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "$xz$-Plane Confusion"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$x + y = -1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Coordinate Sum Equation Slip",
+        "mistakeAnalysis": "Aspirants sum the $x$ and $y$ coordinates.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "Coordinate Sum Equation Slip"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The standard equation of any plane parallel to the $xy$-plane is of the form $z = c$.\nSince the plane passes through the point $(2, -3, 5)$, substituting the $z$-coordinate gives:\n$5 = c$.\nTherefore, the equation of the plane is $z = 5$.",
+    "questionId": "MATH-M18-Q20",
+    "conceptId": "MATH-three-dimensional-geometry-equation-of-planes-parallel-to-coordinate-planes",
+    "questionType": "conceptual",
+    "difficulty": 4,
+    "estimatedTimeSeconds": 80,
+    "solution": {
+      "quick": "Correct answer is $z = 5$.",
+      "concept": "The standard equation of any plane parallel to the $xy$-plane is of the form $z = c$. Since the plane passes through the point $(2, -3, 5)$, substituting the $z$-coordinate gives:\n$5 = c$.",
+      "detailed": "The standard equation of any plane parallel to the $xy$-plane is of the form $z = c$.\nSince the plane passes through the point $(2, -3, 5)$, substituting the $z$-coordinate gives:\n$5 = c$.\nTherefore, the equation of the plane is $z = 5$."
+    },
+    "keyConcept": "Three Dimensional Geometry: Equation of Planes Parallel to Coordinate Planes",
+    "formula": "$z = c$",
+    "tags": [
+      "Maths",
+      "Three Dimensional Geometry",
+      "Equation of Planes Parallel to Coordinate Planes",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 4,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 21,
+    "chapter": "Linear Programming",
+    "topic": "Corner Point Method for Linear Minimization",
+    "questionText": "The corner points of a feasible region are $(0, 2)$, $(3, 0)$, $(6, 0)$, and $(6, 8)$. The minimum value of $Z = 3x + 2y$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "9",
+        "isCorrect": false,
+        "studentSelectionTrap": "$x$-Intercept Selection",
+        "mistakeAnalysis": "Aspirants evaluate at $(3, 0)$ and conclude it is minimum.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "$x$-Intercept Selection"
+        }
+      },
+      {
+        "id": "B",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Origin Assumption",
+        "mistakeAnalysis": "Aspirants assume the minimum value must be zero, ignoring that $(0, 0)$ is not a corner point.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Origin Assumption"
+        }
+      },
+      {
+        "id": "C",
+        "text": "18",
+        "isCorrect": false,
+        "studentSelectionTrap": "Interior Vertex Slip",
+        "mistakeAnalysis": "Aspirants evaluate at $(6, 0)$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Interior Vertex Slip"
+        }
+      },
+      {
+        "id": "D",
+        "text": "4",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $Z(0, 2) = 4, Z(3, 0) = 9, Z(6, 0) = 18, Z(6, 8) = 34$. The minimum value is 4 at $(0, 2)$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Evaluate the objective function $Z = 3x + 2y$ at each given corner point:\n- At $(0, 2)$: $Z = 3(0) + 2(2) = 4$\n- At $(3, 0)$: $Z = 3(3) + 2(0) = 9$\n- At $(6, 0)$: $Z = 3(6) + 2(0) = 18$\n- At $(6, 8)$: $Z = 3(6) + 2(8) = 18 + 16 = 34$\nThe minimum value of $Z$ is 4, which occurs at $(0, 2)$.",
+    "questionId": "MATH-M18-Q21",
+    "conceptId": "MATH-linear-programming-corner-point-method-for-linear-minimization",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is 4.",
+      "concept": "Evaluate the objective function $Z = 3x + 2y$ at each given corner point:\n- At $(0, 2)$: $Z = 3(0) + 2(2) = 4$\n- At $(3, 0)$: $Z = 3(3) + 2(0) = 9$\n- At $(6, 0)$: $Z = 3(6) + 2(0) = 18$\n- At $(6, 8)$: $Z = 3(6) + 2(8) = 18 + 16 = 34$\nThe minimum value of $Z$ is 4, which occurs at $(0, 2)$.",
+      "detailed": "Evaluate the objective function $Z = 3x + 2y$ at each given corner point:\n- At $(0, 2)$: $Z = 3(0) + 2(2) = 4$\n- At $(3, 0)$: $Z = 3(3) + 2(0) = 9$\n- At $(6, 0)$: $Z = 3(6) + 2(0) = 18$\n- At $(6, 8)$: $Z = 3(6) + 2(8) = 18 + 16 = 34$\nThe minimum value of $Z$ is 4, which occurs at $(0, 2)$."
+    },
+    "keyConcept": "Linear Programming: Corner Point Method for Linear Minimization",
+    "formula": "$Z = 3x + 2y$",
+    "tags": [
+      "Maths",
+      "Linear Programming",
+      "Corner Point Method for Linear Minimization",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 22,
+    "chapter": "Probability",
+    "topic": "Addition Theorem of Probability",
+    "questionText": "If $P(A) = 0.4$, $P(B) = 0.8$ and $P(B | A) = 0.6$, then $P(A \\cup B)$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0.24",
+        "isCorrect": false,
+        "studentSelectionTrap": "Joint Probability Selection",
+        "mistakeAnalysis": "Aspirants compute $P(A \\cap B) = 0.24$ and report it instead of $P(A \\cup B)$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Joint Probability Selection"
+        }
+      },
+      {
+        "id": "B",
+        "text": "0.96",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P(A \\cap B) = P(A)P(B|A) = (0.4)(0.6) = 0.24$. $P(A \\cup B) = 0.4 + 0.8 - 0.24 = 0.96$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "1.20",
+        "isCorrect": false,
+        "studentSelectionTrap": "Intersection Subtraction Omission",
+        "mistakeAnalysis": "Aspirants sum $0.4 + 0.8 = 1.20$, which violates the axiom $P(E) \\le 1$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Intersection Subtraction Omission"
+        }
+      },
+      {
+        "id": "D",
+        "text": "0.88",
+        "isCorrect": false,
+        "studentSelectionTrap": "Independent Events Assumption",
+        "mistakeAnalysis": "Aspirants assume independence and subtract $P(A)P(B) = 0.32$ instead of $0.24$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Independent Events Assumption"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "First find the joint probability $P(A \\cap B)$ using the conditional probability formula:\n$P(A \\cap B) = P(A) \\cdot P(B | A) = 0.4 \\times 0.6 = 0.24$.\nBy the addition theorem of probability:\n$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$\n$= 0.4 + 0.8 - 0.24 = 1.20 - 0.24 = 0.96$.",
+    "questionId": "MATH-M18-Q22",
+    "conceptId": "MATH-probability-addition-theorem-of-probability",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is 0.96.",
+      "concept": "First find the joint probability $P(A \\cap B)$ using the conditional probability formula:\n$P(A \\cap B) = P(A) \\cdot P(B | A) = 0.4 \\times 0.6 = 0.24$. By the addition theorem of probability:\n$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$\n$= 0.4 + 0.8 - 0.24 = 1.20 - 0.24 = 0.96$.",
+      "detailed": "First find the joint probability $P(A \\cap B)$ using the conditional probability formula:\n$P(A \\cap B) = P(A) \\cdot P(B | A) = 0.4 \\times 0.6 = 0.24$.\nBy the addition theorem of probability:\n$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$\n$= 0.4 + 0.8 - 0.24 = 1.20 - 0.24 = 0.96$."
+    },
+    "keyConcept": "Probability: Addition Theorem of Probability",
+    "formula": "$P(A) = 0.4$",
+    "tags": [
+      "Maths",
+      "Probability",
+      "Addition Theorem of Probability",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 23,
+    "chapter": "Probability Distributions",
+    "topic": "Expectation of Fair Die Outcomes",
+    "questionText": "A fair die is rolled once. If $X$ represents the number appearing on the top face, then $E(X)$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "3.5",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $E(X) = \\frac{1 + 2 + 3 + 4 + 5 + 6}{6} = \\frac{21}{6} = 3.5$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "3.0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Integer Truncation Error",
+        "mistakeAnalysis": "Aspirants truncate 3.5 to the integer 3.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Integer Truncation Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "4.0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Rounding Up Error",
+        "mistakeAnalysis": "Aspirants round up 3.5 to 4.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Rounding Up Error"
+        }
+      },
+      {
+        "id": "D",
+        "text": "21",
+        "isCorrect": false,
+        "studentSelectionTrap": "Summation without Normalization",
+        "mistakeAnalysis": "Aspirants report the sum of the faces without dividing by 6.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Summation without Normalization"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "For a fair die, each face $x \\in \\{1, 2, 3, 4, 5, 6\\}$ has equal probability $P(X = x) = \\frac{1}{6}$.\nThe expected value is:\n$E(X) = \\sum_{x=1}^6 x \\cdot P(X = x) = \\frac{1}{6}(1 + 2 + 3 + 4 + 5 + 6) = \\frac{21}{6} = 3.5$.",
+    "questionId": "MATH-M18-Q23",
+    "conceptId": "MATH-probability-distributions-expectation-of-fair-die-outcomes",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is 3.5.",
+      "concept": "For a fair die, each face $x \\in \\{1, 2, 3, 4, 5, 6\\}$ has equal probability $P(X = x) = \\frac{1}{6}$. The expected value is:\n$E(X) = \\sum_{x=1}^6 x \\cdot P(X = x) = \\frac{1}{6}(1 + 2 + 3 + 4 + 5 + 6) = \\frac{21}{6} = 3.5$.",
+      "detailed": "For a fair die, each face $x \\in \\{1, 2, 3, 4, 5, 6\\}$ has equal probability $P(X = x) = \\frac{1}{6}$.\nThe expected value is:\n$E(X) = \\sum_{x=1}^6 x \\cdot P(X = x) = \\frac{1}{6}(1 + 2 + 3 + 4 + 5 + 6) = \\frac{21}{6} = 3.5$."
+    },
+    "keyConcept": "Probability Distributions: Expectation of Fair Die Outcomes",
+    "formula": "$P(X = x) = \\frac{1}{6}$",
+    "tags": [
+      "Maths",
+      "Probability Distributions",
+      "Expectation of Fair Die Outcomes",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 24,
+    "chapter": "Financial Mathematics",
+    "topic": "Effective Rate with Continuous Compounding",
+    "questionText": "The effective annual rate of interest equivalent to a nominal rate of 10% per annum compounded continuously is:\n[Given: $e^{0.1} = 1.1052$]",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "10.00%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Nominal Rate Identity",
+        "mistakeAnalysis": "Aspirants assume continuous compounding does not alter the nominal rate.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Nominal Rate Identity"
+        }
+      },
+      {
+        "id": "B",
+        "text": "10.52%",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $r_{\\text{eff}} = e^r - 1 = e^{0.1} - 1 = 1.1052 - 1 = 0.1052 = 10.52\\%$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "11.05%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Decimal Shift Error",
+        "mistakeAnalysis": "Aspirants round incorrectly to 11.05%.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Decimal Shift Error"
+        }
+      },
+      {
+        "id": "D",
+        "text": "10.25%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Semi-Annual Compounding Confusion",
+        "mistakeAnalysis": "Aspirants quote the semi-annual compounding equivalent $(1.05)^2 - 1 = 10.25\\%$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Semi-Annual Compounding Confusion"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "For continuous compounding at a nominal annual interest rate $r$:\n$r_{\\text{eff}} = e^r - 1$.\nHere $r = 10\\% = 0.10$:\n$r_{\\text{eff}} = e^{0.1} - 1$.\nUsing the given value $e^{0.1} = 1.1052$:\n$r_{\\text{eff}} = 1.1052 - 1 = 0.1052 = 10.52\\%$.",
+    "questionId": "MATH-M18-Q24",
+    "conceptId": "MATH-financial-mathematics-effective-rate-with-continuous-compounding",
+    "questionType": "direct-numerical",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Correct answer is 10.52%.",
+      "concept": "For continuous compounding at a nominal annual interest rate $r$:\n$r_{\\text{eff}} = e^r - 1$. Here $r = 10\\% = 0.10$:\n$r_{\\text{eff}} = e^{0.1} - 1$.",
+      "detailed": "For continuous compounding at a nominal annual interest rate $r$:\n$r_{\\text{eff}} = e^r - 1$.\nHere $r = 10\\% = 0.10$:\n$r_{\\text{eff}} = e^{0.1} - 1$.\nUsing the given value $e^{0.1} = 1.1052$:\n$r_{\\text{eff}} = 1.1052 - 1 = 0.1052 = 10.52\\%$."
+    },
+    "keyConcept": "Financial Mathematics: Effective Rate with Continuous Compounding",
+    "formula": "$e^{0.1} = 1.1052$",
+    "tags": [
+      "Maths",
+      "Financial Mathematics",
+      "Effective Rate with Continuous Compounding",
+      "direct-numerical"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 25,
+    "chapter": "Financial Mathematics",
+    "topic": "Total Depreciation Over Useful Life",
+    "questionText": "An enterprise purchases a vehicle for Rs. 5,00,000. If its scrap value after 10 years is estimated to be Rs. 50,000, the total depreciation over its entire useful life is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Rs. 4,50,000",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Total depreciation $= \\text{Cost} - \\text{Scrap Value} = 5,00,000 - 50,000 = 4,50,000$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "Rs. 45,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Annual Depreciation Reported",
+        "mistakeAnalysis": "Aspirants report the annual depreciation $\\frac{4,50,000}{10} = 45,000$ instead of total depreciation.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Annual Depreciation Reported"
+        }
+      },
+      {
+        "id": "C",
+        "text": "Rs. 5,00,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Original Cost Selected",
+        "mistakeAnalysis": "Aspirants assume the entire cost is written off without accounting for scrap value.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Original Cost Selected"
+        }
+      },
+      {
+        "id": "D",
+        "text": "Rs. 5,50,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scrap Value Addition Fallacy",
+        "mistakeAnalysis": "Aspirants add the scrap value to the original cost.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Scrap Value Addition Fallacy"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Total depreciation over the useful life of an asset is the difference between its acquisition cost and its estimated scrap value:\n$\\text{Total Depreciation} = \\text{Cost} - \\text{Scrap Value}$\n$= 5,00,000 - 50,000 = \\text{Rs. } 4,50,000$.",
+    "questionId": "MATH-M18-Q25",
+    "conceptId": "MATH-financial-mathematics-total-depreciation-over-useful-life",
+    "questionType": "direct-numerical",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Correct answer is Rs. 4,50,000.",
+      "concept": "Total depreciation over the useful life of an asset is the difference between its acquisition cost and its estimated scrap value:\n$\\text{Total Depreciation} = \\text{Cost} - \\text{Scrap Value}$\n$= 5,00,000 - 50,000 = \\text{Rs. } 4,50,000$.",
+      "detailed": "Total depreciation over the useful life of an asset is the difference between its acquisition cost and its estimated scrap value:\n$\\text{Total Depreciation} = \\text{Cost} - \\text{Scrap Value}$\n$= 5,00,000 - 50,000 = \\text{Rs. } 4,50,000$."
+    },
+    "keyConcept": "Financial Mathematics: Total Depreciation Over Useful Life",
+    "formula": "$\\text{Total Depreciation} = \\text{Cost} - \\text{Scrap Value}$",
+    "tags": [
+      "Maths",
+      "Financial Mathematics",
+      "Total Depreciation Over Useful Life",
+      "direct-numerical"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 26,
+    "chapter": "Time Series Analysis",
+    "topic": "Seasonal Indices Sum Property",
+    "questionText": "In a quarterly time series using the ratio-to-moving-average method, the sum of the four quarterly seasonal indices should theoretically equal:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "100%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Average Confused with Sum",
+        "mistakeAnalysis": "Aspirants confuse the average quarterly index (100%) with their total sum.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Average Confused with Sum"
+        }
+      },
+      {
+        "id": "B",
+        "text": "0%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Zero Sum Error",
+        "mistakeAnalysis": "Aspirants confuse multiplicative indices with additive deviations.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Zero Sum Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "400%",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Four quarterly percentage indices average 100% each, summing to $4 \\times 100\\% = 400\\%$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "1200%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Monthly Series Sum Confusion",
+        "mistakeAnalysis": "Aspirants quote the sum for a 12-month series ($12 \\times 100\\% = 1200\\%$).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Monthly Series Sum Confusion"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "In time series analysis using the multiplicative model, seasonal indices represent percentages relative to the baseline (where baseline = 100%):\n- For quarterly data with 4 quarters, the average index is 100%.\n- Therefore, the sum of all 4 quarterly indices must equal $4 \\times 100\\% = 400\\%$ (or 4.0 in decimal form).",
+    "questionId": "MATH-M18-Q26",
+    "conceptId": "MATH-time-series-analysis-seasonal-indices-sum-property",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is 400%.",
+      "concept": "In time series analysis using the multiplicative model, seasonal indices represent percentages relative to the baseline (where baseline = 100%):\n- For quarterly data with 4 quarters, the average index is 100%. - Therefore, the sum of all 4 quarterly indices must equal $4 \\times 100\\% = 400\\%$ (or 4.0 in decimal form).",
+      "detailed": "In time series analysis using the multiplicative model, seasonal indices represent percentages relative to the baseline (where baseline = 100%):\n- For quarterly data with 4 quarters, the average index is 100%.\n- Therefore, the sum of all 4 quarterly indices must equal $4 \\times 100\\% = 400\\%$ (or 4.0 in decimal form)."
+    },
+    "keyConcept": "Time Series Analysis: Seasonal Indices Sum Property",
+    "formula": "$4 \\times 100\\% = 400\\%$",
+    "tags": [
+      "Maths",
+      "Time Series Analysis",
+      "Seasonal Indices Sum Property",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 27,
+    "chapter": "Inferential Statistics",
+    "topic": "Type I Error Definition",
+    "questionText": "In statistical hypothesis testing, a Type I error occurs when:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "The null hypothesis $H_0$ is accepted when it is actually false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Type II Error Confusion",
+        "mistakeAnalysis": "Aspirants select the definition of a Type II error (probability $\\beta$).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Type II Error Confusion"
+        }
+      },
+      {
+        "id": "B",
+        "text": "The null hypothesis $H_0$ is rejected when it is actually true",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard definition: rejecting a true null hypothesis constitutes a Type I error (probability $\\alpha$).",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "The alternative hypothesis $H_a$ is accepted when it is true",
+        "isCorrect": false,
+        "studentSelectionTrap": "Correct Decision Misclassification",
+        "mistakeAnalysis": "Aspirants mistake a correct statistical decision (statistical power) for an error.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Correct Decision Misclassification"
+        }
+      },
+      {
+        "id": "D",
+        "text": "A two-tailed test is used instead of a one-tailed test",
+        "isCorrect": false,
+        "studentSelectionTrap": "Test Formulation Confusion",
+        "mistakeAnalysis": "Aspirants confuse error classifications with hypothesis formulation choices.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "Test Formulation Confusion"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "In inferential statistics:\n- **Type I Error** (False Positive): Rejecting the null hypothesis $H_0$ when it is in fact true. The probability of committing this error is the level of significance $\\alpha$.\n- **Type II Error** (False Negative): Failing to reject (accepting) $H_0$ when it is in fact false (probability $\\beta$).",
+    "questionId": "MATH-M18-Q27",
+    "conceptId": "MATH-inferential-statistics-type-i-error-definition",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is The null hypothesis $H_0$ is rejected when it is actually true.",
+      "concept": "In inferential statistics:\n- **Type I Error** (False Positive): Rejecting the null hypothesis $H_0$ when it is in fact true. The probability of committing this error is the level of significance $\\alpha$.",
+      "detailed": "In inferential statistics:\n- **Type I Error** (False Positive): Rejecting the null hypothesis $H_0$ when it is in fact true. The probability of committing this error is the level of significance $\\alpha$.\n- **Type II Error** (False Negative): Failing to reject (accepting) $H_0$ when it is in fact false (probability $\\beta$)."
+    },
+    "keyConcept": "Inferential Statistics: Type I Error Definition",
+    "tags": [
+      "Maths",
+      "Inferential Statistics",
+      "Type I Error Definition",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 28,
+    "chapter": "Linear Programming",
+    "topic": "Objective Function Linearity",
+    "questionText": "Which of the following functions CANNOT represent the objective function of a Linear Programming Problem?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$Z = 5x - 7y$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Coefficient Confusion",
+        "mistakeAnalysis": "Aspirants assume negative coefficients make an objective function invalid.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Negative Coefficient Confusion"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$Z = 3x^2 + 4y$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Linear programming strictly requires the objective function to be a linear combination of decision variables ($ax + by$); $x^2$ is non-linear.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "$Z = 2x + 3y$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Standard Linear Objective Assumption",
+        "mistakeAnalysis": "Aspirants assume standard linear functions are invalid.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Standard Linear Objective Assumption"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$Z = \\frac{1}{2}x + \\frac{3}{4}y$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Fractional Coefficient Confusion",
+        "mistakeAnalysis": "Aspirants assume coefficients must be integers.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Fractional Coefficient Confusion"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "By definition, an objective function in a Linear Programming Problem must be a linear function of the decision variables $x$ and $y$ of degree 1 (i.e., of the form $Z = ax + by$ where $a$ and $b$ are constants).\nThe function $Z = 3x^2 + 4y$ contains a quadratic term $x^2$ (degree 2), making it non-linear. Hence, it cannot serve as an LPP objective function.",
+    "questionId": "MATH-M18-Q28",
+    "conceptId": "MATH-linear-programming-objective-function-linearity",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $Z = 3x^2 + 4y$.",
+      "concept": "By definition, an objective function in a Linear Programming Problem must be a linear function of the decision variables $x$ and $y$ of degree 1 (i.e., of the form $Z = ax + by$ where $a$ and $b$ are constants). The function $Z = 3x^2 + 4y$ contains a quadratic term $x^2$ (degree 2), making it non-linear.",
+      "detailed": "By definition, an objective function in a Linear Programming Problem must be a linear function of the decision variables $x$ and $y$ of degree 1 (i.e., of the form $Z = ax + by$ where $a$ and $b$ are constants).\nThe function $Z = 3x^2 + 4y$ contains a quadratic term $x^2$ (degree 2), making it non-linear. Hence, it cannot serve as an LPP objective function."
+    },
+    "keyConcept": "Linear Programming: Objective Function Linearity",
+    "formula": "$Z = ax + by$",
+    "tags": [
+      "Maths",
+      "Linear Programming",
+      "Objective Function Linearity",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 29,
+    "chapter": "Quantitative Aptitude",
+    "topic": "Boats and Streams Time Calculation",
+    "questionText": "A man can row at $6\\text{ km/hr}$ in still water. If the speed of the current is $2\\text{ km/hr}$, the time taken by him to row $16\\text{ km}$ downstream is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "4 hours",
+        "isCorrect": false,
+        "studentSelectionTrap": "Upstream Time Evaluated",
+        "mistakeAnalysis": "Aspirants compute time using upstream speed $v_u = 6 - 2 = 4\\text{ km/h} \\implies 16 / 4 = 4\\text{ hours}$.",
+        "misconception": {
+          "type": "careless_arithmetic",
+          "description": "Upstream Time Evaluated"
+        }
+      },
+      {
+        "id": "B",
+        "text": "2.67 hours",
+        "isCorrect": false,
+        "studentSelectionTrap": "Current Neglect",
+        "mistakeAnalysis": "Aspirants divide by still-water speed: $16 / 6 = 2.67\\text{ hours}$.",
+        "misconception": {
+          "type": "careless_arithmetic",
+          "description": "Current Neglect"
+        }
+      },
+      {
+        "id": "C",
+        "text": "1 hour",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants miscalculate speeds.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Arithmetic Slip"
+        }
+      },
+      {
+        "id": "D",
+        "text": "2 hours",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $v_d = 6 + 2 = 8\\text{ km/h}$. Time $= 16 / 8 = 2\\text{ hours}$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Speed of rowing in still water $u = 6\\text{ km/hr}$.\nSpeed of current $v = 2\\text{ km/hr}$.\nDownstream speed:\n$v_d = u + v = 6 + 2 = 8\\text{ km/hr}$.\nTime taken to cover $16\\text{ km}$ downstream:\n$T = \\frac{\\text{Distance}}{v_d} = \\frac{16\\text{ km}}{8\\text{ km/hr}} = 2\\text{ hours}$.",
+    "questionId": "MATH-M18-Q29",
+    "conceptId": "MATH-quantitative-aptitude-boats-and-streams-time-calculation",
+    "questionType": "direct-numerical",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Correct answer is 2 hours.",
+      "concept": "Speed of rowing in still water $u = 6\\text{ km/hr}$. Speed of current $v = 2\\text{ km/hr}$.",
+      "detailed": "Speed of rowing in still water $u = 6\\text{ km/hr}$.\nSpeed of current $v = 2\\text{ km/hr}$.\nDownstream speed:\n$v_d = u + v = 6 + 2 = 8\\text{ km/hr}$.\nTime taken to cover $16\\text{ km}$ downstream:\n$T = \\frac{\\text{Distance}}{v_d} = \\frac{16\\text{ km}}{8\\text{ km/hr}} = 2\\text{ hours}$."
+    },
+    "keyConcept": "Quantitative Aptitude: Boats and Streams Time Calculation",
+    "formula": "$u = 6\\text{ km/hr}$",
+    "tags": [
+      "Maths",
+      "Quantitative Aptitude",
+      "Boats and Streams Time Calculation",
+      "direct-numerical"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 30,
+    "chapter": "Numbers and Quantification",
+    "topic": "Modular Arithmetic Addition",
+    "questionText": "The value of $(17 + 28) \\pmod 5$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Remainder Slip",
+        "mistakeAnalysis": "Aspirants evaluate $17 \\equiv 2$ and $28 \\equiv 3$, but add to 6.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Arithmetic Remainder Slip"
+        }
+      },
+      {
+        "id": "B",
+        "text": "0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $17 + 28 = 45 = 5 \\times 9 + 0 \\implies 0$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "First Term Residue Selected",
+        "mistakeAnalysis": "Aspirants report $17 \\pmod 5 = 2$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "First Term Residue Selected"
+        }
+      },
+      {
+        "id": "D",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Second Term Residue Selected",
+        "mistakeAnalysis": "Aspirants report $28 \\pmod 5 = 3$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Second Term Residue Selected"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Method 1: Direct addition:\n$17 + 28 = 45$.\nDividing 45 by 5 yields a remainder of 0 ($45 = 5 \\times 9 + 0$).\nThus, $45 \\equiv 0 \\pmod 5$.\n\nMethod 2: Modular properties:\n$(17 \\pmod 5) + (28 \\pmod 5) = 2 + 3 = 5 \\equiv 0 \\pmod 5$.",
+    "questionId": "MATH-M18-Q30",
+    "conceptId": "MATH-numbers-and-quantification-modular-arithmetic-addition",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is 0.",
+      "concept": "Method 1: Direct addition:\n$17 + 28 = 45$. Dividing 45 by 5 yields a remainder of 0 ($45 = 5 \\times 9 + 0$).",
+      "detailed": "Method 1: Direct addition:\n$17 + 28 = 45$.\nDividing 45 by 5 yields a remainder of 0 ($45 = 5 \\times 9 + 0$).\nThus, $45 \\equiv 0 \\pmod 5$.\n\nMethod 2: Modular properties:\n$(17 \\pmod 5) + (28 \\pmod 5) = 2 + 3 = 5 \\equiv 0 \\pmod 5$."
+    },
+    "keyConcept": "Numbers and Quantification: Modular Arithmetic Addition",
+    "formula": "$17 + 28 = 45$",
+    "tags": [
+      "Maths",
+      "Numbers and Quantification",
+      "Modular Arithmetic Addition",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 31,
+    "chapter": "Differential Equations",
+    "topic": "Linear Differential Equation Standard Form",
+    "questionText": "The differential equation $x\\frac{dy}{dx} + 2y = x^2$ in standard linear form $\\frac{dy}{dx} + P(x)y = Q(x)$ has $P(x)$ equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{2}{x}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Dividing through by the leading coefficient $x$ gives $\\frac{dy}{dx} + \\frac{2}{x}y = x$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Leading Coefficient Divisor Omission",
+        "mistakeAnalysis": "Aspirants take the coefficient of $y$ without dividing through by $x$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Leading Coefficient Divisor Omission"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$2x$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Leading Coefficient Multiplication Error",
+        "mistakeAnalysis": "Aspirants multiply by $x$ instead of dividing.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Leading Coefficient Multiplication Error"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{x}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Constant Numerator Drop",
+        "mistakeAnalysis": "Aspirants drop the factor 2 from the numerator.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Constant Numerator Drop"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "To reduce $x\\frac{dy}{dx} + 2y = x^2$ into standard linear form, the coefficient of $\\frac{dy}{dx}$ must be 1.\nDividing the entire equation by $x$ ($x \\ne 0$):\n$\\frac{dy}{dx} + \\left(\\frac{2}{x}\\right)y = x$.\nComparing with $\\frac{dy}{dx} + P(x)y = Q(x)$:\n$P(x) = \\frac{2}{x}$ and $Q(x) = x$.",
+    "questionId": "MATH-M18-Q31",
+    "conceptId": "MATH-differential-equations-linear-differential-equation-standard-form",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $\\frac{2}{x}$.",
+      "concept": "To reduce $x\\frac{dy}{dx} + 2y = x^2$ into standard linear form, the coefficient of $\\frac{dy}{dx}$ must be 1. Dividing the entire equation by $x$ ($x \\ne 0$):\n$\\frac{dy}{dx} + \\left(\\frac{2}{x}\\right)y = x$.",
+      "detailed": "To reduce $x\\frac{dy}{dx} + 2y = x^2$ into standard linear form, the coefficient of $\\frac{dy}{dx}$ must be 1.\nDividing the entire equation by $x$ ($x \\ne 0$):\n$\\frac{dy}{dx} + \\left(\\frac{2}{x}\\right)y = x$.\nComparing with $\\frac{dy}{dx} + P(x)y = Q(x)$:\n$P(x) = \\frac{2}{x}$ and $Q(x) = x$."
+    },
+    "keyConcept": "Differential Equations: Linear Differential Equation Standard Form",
+    "formula": "$x\\frac{dy}{dx} + 2y = x^2$",
+    "tags": [
+      "Maths",
+      "Differential Equations",
+      "Linear Differential Equation Standard Form",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 32,
+    "chapter": "Matrices",
+    "topic": "Multiplication by Identity Matrix",
+    "questionText": "For any square matrix $A$ of order $n$ and identity matrix $I_n$, $A \\cdot I_n$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$I_n$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Identity Dominance Fallacy",
+        "mistakeAnalysis": "Aspirants confuse the identity matrix with absorption properties of zero.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Identity Dominance Fallacy"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$O$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Zero Matrix Fallacy",
+        "mistakeAnalysis": "Aspirants assume multiplication produces the null matrix.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Zero Matrix Fallacy"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$A^2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Idempotent Matrix Confusion",
+        "mistakeAnalysis": "Aspirants assume multiplying by $I$ squares the matrix.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Idempotent Matrix Confusion"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$A$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The identity matrix is the multiplicative identity: $A I = I A = A$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "By the fundamental definition of the identity matrix in matrix algebra, $I_n$ acts as the multiplicative identity element:\n$A I_n = I_n A = A$ for every square matrix $A$ of order $n$.",
+    "questionId": "MATH-M18-Q32",
+    "conceptId": "MATH-matrices-multiplication-by-identity-matrix",
+    "questionType": "conceptual",
+    "difficulty": 1,
+    "estimatedTimeSeconds": 35,
+    "solution": {
+      "quick": "Correct answer is $A$.",
+      "concept": "By the fundamental definition of the identity matrix in matrix algebra, $I_n$ acts as the multiplicative identity element:\n$A I_n = I_n A = A$ for every square matrix $A$ of order $n$.",
+      "detailed": "By the fundamental definition of the identity matrix in matrix algebra, $I_n$ acts as the multiplicative identity element:\n$A I_n = I_n A = A$ for every square matrix $A$ of order $n$."
+    },
+    "keyConcept": "Matrices: Multiplication by Identity Matrix",
+    "formula": "$A I_n = I_n A = A$",
+    "tags": [
+      "Maths",
+      "Matrices",
+      "Multiplication by Identity Matrix",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 1,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 33,
+    "chapter": "Application of Derivatives",
+    "topic": "Strict Monotonicity of Quadratic Functions",
+    "questionText": "The function $f(x) = 2x^2 - 8x + 3$ is strictly decreasing in the interval:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$(2, \\infty)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Increasing Interval Selected",
+        "mistakeAnalysis": "Aspirants select the interval where the function is increasing ($f'(x) > 0$).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Increasing Interval Selected"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$(-\\infty, 2)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = 4x - 8 < 0 \\iff 4x < 8 \\iff x < 2$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "$(-\\infty, 4)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Derivative Divisor Omission",
+        "mistakeAnalysis": "Aspirants solve $2x - 8 < 0 \\implies x < 4$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Derivative Divisor Omission"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$(0, 2)$ only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Domain Truncation",
+        "mistakeAnalysis": "Aspirants restrict the decreasing interval to positive numbers only.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Domain Truncation"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Differentiate $f(x) = 2x^2 - 8x + 3$ with respect to $x$:\n$f'(x) = 4x - 8$.\nFor $f(x)$ to be strictly decreasing, we require $f'(x) < 0$:\n$4x - 8 < 0 \\implies 4x < 8 \\implies x < 2$.\nIn interval notation: $(-\\infty, 2)$.",
+    "questionId": "MATH-M18-Q33",
+    "conceptId": "MATH-application-of-derivatives-strict-monotonicity-of-quadratic-functions",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $(-\\infty, 2)$.",
+      "concept": "Differentiate $f(x) = 2x^2 - 8x + 3$ with respect to $x$:\n$f'(x) = 4x - 8$. For $f(x)$ to be strictly decreasing, we require $f'(x) < 0$:\n$4x - 8 < 0 \\implies 4x < 8 \\implies x < 2$.",
+      "detailed": "Differentiate $f(x) = 2x^2 - 8x + 3$ with respect to $x$:\n$f'(x) = 4x - 8$.\nFor $f(x)$ to be strictly decreasing, we require $f'(x) < 0$:\n$4x - 8 < 0 \\implies 4x < 8 \\implies x < 2$.\nIn interval notation: $(-\\infty, 2)$."
+    },
+    "keyConcept": "Application of Derivatives: Strict Monotonicity of Quadratic Functions",
+    "formula": "$f(x) = 2x^2 - 8x + 3$",
+    "tags": [
+      "Maths",
+      "Application of Derivatives",
+      "Strict Monotonicity of Quadratic Functions",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 34,
+    "chapter": "Vector Algebra",
+    "topic": "Vector Magnitude Multiplier",
+    "questionText": "If $\\vec{a} = \\hat{i} + \\hat{j} + \\hat{k}$, then the magnitude of $3\\vec{a}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\sqrt{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scalar Multiplier Omission",
+        "mistakeAnalysis": "Aspirants evaluate the magnitude of $\\vec{a}$ without multiplying by 3.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Scalar Multiplier Omission"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$3\\sqrt{3}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|3\\vec{a}| = 3|\\vec{a}| = 3\\sqrt{1^2 + 1^2 + 1^2} = 3\\sqrt{3}$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "9",
+        "isCorrect": false,
+        "studentSelectionTrap": "Radical Squaring Error",
+        "mistakeAnalysis": "Aspirants compute $(3\\sqrt{3})^2 / 3 = 9$ or confuse square root terms.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Radical Squaring Error"
+        }
+      },
+      {
+        "id": "D",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scalar Component Selection",
+        "mistakeAnalysis": "Aspirants assume the magnitude equals the scalar multiplier 3.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Scalar Component Selection"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Using the scalar multiplication magnitude property $|k\\vec{a}| = |k||\\vec{a}|$:\n$|\\vec{a}| = \\sqrt{1^2 + 1^2 + 1^2} = \\sqrt{3}$.\nTherefore:\n$|3\\vec{a}| = 3|\\vec{a}| = 3\\sqrt{3}$.",
+    "questionId": "MATH-M18-Q34",
+    "conceptId": "MATH-vector-algebra-vector-magnitude-multiplier",
+    "questionType": "direct-numerical",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Correct answer is $3\\sqrt{3}$.",
+      "concept": "Using the scalar multiplication magnitude property $|k\\vec{a}| = |k||\\vec{a}|$:\n$|\\vec{a}| = \\sqrt{1^2 + 1^2 + 1^2} = \\sqrt{3}$. Therefore:\n$|3\\vec{a}| = 3|\\vec{a}| = 3\\sqrt{3}$.",
+      "detailed": "Using the scalar multiplication magnitude property $|k\\vec{a}| = |k||\\vec{a}|$:\n$|\\vec{a}| = \\sqrt{1^2 + 1^2 + 1^2} = \\sqrt{3}$.\nTherefore:\n$|3\\vec{a}| = 3|\\vec{a}| = 3\\sqrt{3}$."
+    },
+    "keyConcept": "Vector Algebra: Vector Magnitude Multiplier",
+    "formula": "$\\vec{a} = \\hat{i} + \\hat{j} + \\hat{k}$",
+    "tags": [
+      "Maths",
+      "Vector Algebra",
+      "Vector Magnitude Multiplier",
+      "direct-numerical"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 35,
+    "chapter": "Three Dimensional Geometry",
+    "topic": "Direction Cosines of Coordinate Axes",
+    "questionText": "The direction cosines of the $z$-axis are:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "1, 0, 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "$x$-Axis Direction Cosines Selected",
+        "mistakeAnalysis": "Aspirants select the direction cosines of the $x$-axis.",
+        "misconception": {
+          "type": "direction_error",
+          "description": "$x$-Axis Direction Cosines Selected"
+        }
+      },
+      {
+        "id": "B",
+        "text": "0, 1, 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "$y$-Axis Direction Cosines Selected",
+        "mistakeAnalysis": "Aspirants select the direction cosines of the $y$-axis.",
+        "misconception": {
+          "type": "direction_error",
+          "description": "$y$-Axis Direction Cosines Selected"
+        }
+      },
+      {
+        "id": "C",
+        "text": "0, 0, 1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The $z$-axis makes angles $90^\\circ, 90^\\circ, 0^\\circ$ with the $x, y, z$ axes, giving $\\cos 90^\\circ = 0, \\cos 90^\\circ = 0, \\cos 0^\\circ = 1$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "1, 1, 1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Equiangular Line Confusion",
+        "mistakeAnalysis": "Aspirants select unnormalized direction ratios of an equiangular line.",
+        "misconception": {
+          "type": "direction_error",
+          "description": "Equiangular Line Confusion"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "The $z$-axis makes angles $\\alpha = 90^\\circ$, $\\beta = 90^\\circ$, and $\\gamma = 0^\\circ$ with the positive directions of the $x, y$, and $z$ axes respectively.\nIts direction cosines are:\n$l = \\cos 90^\\circ = 0$\n$m = \\cos 90^\\circ = 0$\n$n = \\cos 0^\\circ = 1$\nThus, the direction cosines are $0, 0, 1$.",
+    "questionId": "MATH-M18-Q35",
+    "conceptId": "MATH-three-dimensional-geometry-direction-cosines-of-coordinate-axes",
+    "questionType": "conceptual",
+    "difficulty": 4,
+    "estimatedTimeSeconds": 80,
+    "solution": {
+      "quick": "Correct answer is 0, 0, 1.",
+      "concept": "The $z$-axis makes angles $\\alpha = 90^\\circ$, $\\beta = 90^\\circ$, and $\\gamma = 0^\\circ$ with the positive directions of the $x, y$, and $z$ axes respectively. Its direction cosines are:\n$l = \\cos 90^\\circ = 0$\n$m = \\cos 90^\\circ = 0$\n$n = \\cos 0^\\circ = 1$\nThus, the direction cosines are $0, 0, 1$.",
+      "detailed": "The $z$-axis makes angles $\\alpha = 90^\\circ$, $\\beta = 90^\\circ$, and $\\gamma = 0^\\circ$ with the positive directions of the $x, y$, and $z$ axes respectively.\nIts direction cosines are:\n$l = \\cos 90^\\circ = 0$\n$m = \\cos 90^\\circ = 0$\n$n = \\cos 0^\\circ = 1$\nThus, the direction cosines are $0, 0, 1$."
+    },
+    "keyConcept": "Three Dimensional Geometry: Direction Cosines of Coordinate Axes",
+    "formula": "$\\alpha = 90^\\circ$",
+    "tags": [
+      "Maths",
+      "Three Dimensional Geometry",
+      "Direction Cosines of Coordinate Axes",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 4,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 36,
+    "chapter": "Integrals",
+    "topic": "Standard Reciprocal Antiderivatives",
+    "questionText": "$\\int \\frac{dx}{2x + 5}$ is equal to (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\log_e|2x + 5| + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Coefficient Divisor Omission",
+        "mistakeAnalysis": "Aspirants forget to divide by the coefficient 2 of $x$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Linear Coefficient Divisor Omission"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$2\\log_e|2x + 5| + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Differentiation Multiplier Error",
+        "mistakeAnalysis": "Aspirants multiply by 2 instead of dividing.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Differentiation Multiplier Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{5}\\log_e|2x + 5| + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Constant Term Divisor Error",
+        "mistakeAnalysis": "Aspirants divide by the constant 5 instead of the coefficient 2.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Constant Term Divisor Error"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{2}\\log_e|2x + 5| + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Substitution $u = 2x + 5 \\implies dx = \\frac{1}{2}du$ yields $\\frac{1}{2}\\log_e|2x + 5| + C$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Using the standard formula $\\int \\frac{dx}{ax + b} = \\frac{1}{a}\\log_e|ax + b| + C$ for $a \\ne 0$:\nHere $a = 2$ and $b = 5$:\n$\\int \\frac{dx}{2x + 5} = \\frac{1}{2}\\log_e|2x + 5| + C$.",
+    "questionId": "MATH-M18-Q36",
+    "conceptId": "MATH-integrals-standard-reciprocal-antiderivatives",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $\\frac{1}{2}\\log_e|2x + 5| + C$.",
+      "concept": "Using the standard formula $\\int \\frac{dx}{ax + b} = \\frac{1}{a}\\log_e|ax + b| + C$ for $a \\ne 0$:\nHere $a = 2$ and $b = 5$:\n$\\int \\frac{dx}{2x + 5} = \\frac{1}{2}\\log_e|2x + 5| + C$.",
+      "detailed": "Using the standard formula $\\int \\frac{dx}{ax + b} = \\frac{1}{a}\\log_e|ax + b| + C$ for $a \\ne 0$:\nHere $a = 2$ and $b = 5$:\n$\\int \\frac{dx}{2x + 5} = \\frac{1}{2}\\log_e|2x + 5| + C$."
+    },
+    "keyConcept": "Integrals: Standard Reciprocal Antiderivatives",
+    "formula": "$\\int \\frac{dx}{2x + 5}$",
+    "tags": [
+      "Maths",
+      "Integrals",
+      "Standard Reciprocal Antiderivatives",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 37,
+    "chapter": "Differential Equations",
+    "topic": "General Solution of First Order Separation",
+    "questionText": "The general solution of the differential equation $\\frac{dy}{dx} = -y$ is (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$y = Ce^{x}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants drop the negative sign from the exponent.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion Error"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$y = Ce^{-x}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\frac{dy}{y} = -dx \\implies \\log|y| = -x + C_1 \\implies y = Ce^{-x}$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "$y = -x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Antiderivative Error",
+        "mistakeAnalysis": "Aspirants integrate $\\frac{1}{y}dy$ as $y$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Linear Antiderivative Error"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$y = -e^x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Base Negation Slip",
+        "mistakeAnalysis": "Aspirants place the negative sign in front of the base instead of inside the exponent.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Base Negation Slip"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Separating variables:\n$\\frac{dy}{y} = -dx$.\nIntegrating both sides:\n$\\int \\frac{dy}{y} = -\\int dx$\n$\\log_e|y| = -x + C_1$\n$|y| = e^{-x + C_1} = e^{C_1} e^{-x}$.\nLetting $C = \\pm e^{C_1}$:\n$y = Ce^{-x}$.",
+    "questionId": "MATH-M18-Q37",
+    "conceptId": "MATH-differential-equations-general-solution-of-first-order-separation",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $y = Ce^{-x}$.",
+      "concept": "Separating variables:\n$\\frac{dy}{y} = -dx$. Integrating both sides:\n$\\int \\frac{dy}{y} = -\\int dx$\n$\\log_e|y| = -x + C_1$\n$|y| = e^{-x + C_1} = e^{C_1} e^{-x}$.",
+      "detailed": "Separating variables:\n$\\frac{dy}{y} = -dx$.\nIntegrating both sides:\n$\\int \\frac{dy}{y} = -\\int dx$\n$\\log_e|y| = -x + C_1$\n$|y| = e^{-x + C_1} = e^{C_1} e^{-x}$.\nLetting $C = \\pm e^{C_1}$:\n$y = Ce^{-x}$."
+    },
+    "keyConcept": "Differential Equations: General Solution of First Order Separation",
+    "formula": "$\\frac{dy}{dx} = -y$",
+    "tags": [
+      "Maths",
+      "Differential Equations",
+      "General Solution of First Order Separation",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 38,
+    "chapter": "Application of Derivatives",
+    "topic": "Absolute Maximum of Linear Functions on Closed Intervals",
+    "questionText": "The maximum value of the function $f(x) = 3x + 1$ on the interval $[1, 4]$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Minimum Value Selected",
+        "mistakeAnalysis": "Aspirants evaluate at the lower endpoint $x = 1$: $3(1) + 1 = 4$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Minimum Value Selected"
+        }
+      },
+      {
+        "id": "B",
+        "text": "12",
+        "isCorrect": false,
+        "studentSelectionTrap": "Additive Constant Omission",
+        "mistakeAnalysis": "Aspirants evaluate $3(4) = 12$ and forget to add 1.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Additive Constant Omission"
+        }
+      },
+      {
+        "id": "C",
+        "text": "13",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = 3 > 0$ strictly increasing, so maximum occurs at upper endpoint $x = 4$: $3(4) + 1 = 13$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Midpoint Evaluation Slip",
+        "mistakeAnalysis": "Aspirants evaluate at an intermediate point.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Midpoint Evaluation Slip"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Differentiating $f(x) = 3x + 1$:\n$f'(x) = 3 > 0$ for all $x$.\nSince $f'(x) > 0$, the function is strictly increasing on $[1, 4]$.\nThus, its maximum value occurs at the right endpoint $x = 4$:\n$f(4) = 3(4) + 1 = 12 + 1 = 13$.",
+    "questionId": "MATH-M18-Q38",
+    "conceptId": "MATH-application-of-derivatives-absolute-maximum-of-linear-functions-on-closed-intervals",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is 13.",
+      "concept": "Differentiating $f(x) = 3x + 1$:\n$f'(x) = 3 > 0$ for all $x$. Since $f'(x) > 0$, the function is strictly increasing on $[1, 4]$.",
+      "detailed": "Differentiating $f(x) = 3x + 1$:\n$f'(x) = 3 > 0$ for all $x$.\nSince $f'(x) > 0$, the function is strictly increasing on $[1, 4]$.\nThus, its maximum value occurs at the right endpoint $x = 4$:\n$f(4) = 3(4) + 1 = 12 + 1 = 13$."
+    },
+    "keyConcept": "Application of Derivatives: Absolute Maximum of Linear Functions on Closed Intervals",
+    "formula": "$f(x) = 3x + 1$",
+    "tags": [
+      "Maths",
+      "Application of Derivatives",
+      "Absolute Maximum of Linear Functions on Closed Intervals",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 39,
+    "chapter": "Matrices",
+    "topic": "Matrix Scalar Power Identity",
+    "questionText": "If $A = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$, then $A^5$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $A = I \\implies I^5 = I$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "$\\begin{bmatrix}5 & 0 \\\\ 0 & 5\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scalar Multiplication Fallacy",
+        "mistakeAnalysis": "Aspirants multiply entries by the exponent 5 instead of taking powers.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Scalar Multiplication Fallacy"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\begin{bmatrix}1 & 0 \\\\ 0 & 5\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Entry Power Error",
+        "mistakeAnalysis": "Aspirants raise only one entry to the power.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Single Entry Power Error"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\begin{bmatrix}0 & 0 \\\\ 0 & 0\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Nilpotent Fallacy",
+        "mistakeAnalysis": "Aspirants assume powers vanish.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Nilpotent Fallacy"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The matrix $A = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$ is the identity matrix $I_2$.\nFor any positive integer $n$, $I^n = I$.\nTherefore, $A^5 = I_2^5 = I_2 = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$.",
+    "questionId": "MATH-M18-Q39",
+    "conceptId": "MATH-matrices-matrix-scalar-power-identity",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $\\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$.",
+      "concept": "The matrix $A = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$ is the identity matrix $I_2$. For any positive integer $n$, $I^n = I$.",
+      "detailed": "The matrix $A = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$ is the identity matrix $I_2$.\nFor any positive integer $n$, $I^n = I$.\nTherefore, $A^5 = I_2^5 = I_2 = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$."
+    },
+    "keyConcept": "Matrices: Matrix Scalar Power Identity",
+    "formula": "$A = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$",
+    "tags": [
+      "Maths",
+      "Matrices",
+      "Matrix Scalar Power Identity",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 40,
+    "chapter": "Probability Distributions",
+    "topic": "Mean of Poisson Distribution",
+    "questionText": "If a random variable $X$ follows a Poisson distribution with parameter $\\lambda = 4$, then the mean of $X$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Square Root Fallacy",
+        "mistakeAnalysis": "Aspirants evaluate $\\sqrt{\\lambda} = \\sqrt{4} = 2$, confusing the mean with the standard deviation.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Square Root Fallacy"
+        }
+      },
+      {
+        "id": "B",
+        "text": "16",
+        "isCorrect": false,
+        "studentSelectionTrap": "Variance Squaring Error",
+        "mistakeAnalysis": "Aspirants square the parameter $\\lambda^2 = 16$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Variance Squaring Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "8",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factor 2 Multiplication",
+        "mistakeAnalysis": "Aspirants multiply $\\lambda$ by 2.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Factor 2 Multiplication"
+        }
+      },
+      {
+        "id": "D",
+        "text": "4",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For a Poisson distribution, $\\text{Mean} = \\lambda = 4$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "For a Poisson distribution with parameter $\\lambda$, the fundamental properties are:\n- $\\text{Mean} = \\lambda$\n- $\\text{Variance} = \\lambda$\n- $\\text{Standard Deviation} = \\sqrt{\\lambda}$.\nGiven $\\lambda = 4$, the mean is 4.",
+    "questionId": "MATH-M18-Q40",
+    "conceptId": "MATH-probability-distributions-mean-of-poisson-distribution",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is 4.",
+      "concept": "For a Poisson distribution with parameter $\\lambda$, the fundamental properties are:\n- $\\text{Mean} = \\lambda$\n- $\\text{Variance} = \\lambda$\n- $\\text{Standard Deviation} = \\sqrt{\\lambda}$. Given $\\lambda = 4$, the mean is 4.",
+      "detailed": "For a Poisson distribution with parameter $\\lambda$, the fundamental properties are:\n- $\\text{Mean} = \\lambda$\n- $\\text{Variance} = \\lambda$\n- $\\text{Standard Deviation} = \\sqrt{\\lambda}$.\nGiven $\\lambda = 4$, the mean is 4."
+    },
+    "keyConcept": "Probability Distributions: Mean of Poisson Distribution",
+    "formula": "$\\lambda = 4$",
+    "tags": [
+      "Maths",
+      "Probability Distributions",
+      "Mean of Poisson Distribution",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 41,
+    "chapter": "Financial Mathematics",
+    "topic": "Simple Interest Formula",
+    "questionText": "The simple interest on Rs. 20,000 for 3 years at 5% per annum is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Rs. 3,152.50",
+        "isCorrect": false,
+        "studentSelectionTrap": "Compound Interest Evaluated",
+        "mistakeAnalysis": "Aspirants calculate compound interest $20000(1.05^3 - 1) = 3152.50$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Compound Interest Evaluated"
+        }
+      },
+      {
+        "id": "B",
+        "text": "Rs. 1,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Year Interest Reported",
+        "mistakeAnalysis": "Aspirants calculate interest for only 1 year: $20,000 \\times 0.05 = 1,000$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Single Year Interest Reported"
+        }
+      },
+      {
+        "id": "C",
+        "text": "Rs. 3,000",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $SI = \\frac{P \\times R \\times T}{100} = \\frac{20000 \\times 5 \\times 3}{100} = 3000$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "Rs. 6,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Doubling Error",
+        "mistakeAnalysis": "Aspirants multiply by an extra factor of 2.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Doubling Error"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Simple Interest formula:\n$SI = \\frac{P \\times R \\times T}{100}$.\nSubstitute $P = \\text{Rs. } 20,000, R = 5, T = 3$:\n$SI = \\frac{20,000 \\times 5 \\times 3}{100} = 200 \\times 15 = \\text{Rs. } 3,000$.",
+    "questionId": "MATH-M18-Q41",
+    "conceptId": "MATH-financial-mathematics-simple-interest-formula",
+    "questionType": "direct-numerical",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Correct answer is Rs. 3,000.",
+      "concept": "Simple Interest formula:\n$SI = \\frac{P \\times R \\times T}{100}$. Substitute $P = \\text{Rs.",
+      "detailed": "Simple Interest formula:\n$SI = \\frac{P \\times R \\times T}{100}$.\nSubstitute $P = \\text{Rs. } 20,000, R = 5, T = 3$:\n$SI = \\frac{20,000 \\times 5 \\times 3}{100} = 200 \\times 15 = \\text{Rs. } 3,000$."
+    },
+    "keyConcept": "Financial Mathematics: Simple Interest Formula",
+    "formula": "$SI = \\frac{P \\times R \\times T}{100}$",
+    "tags": [
+      "Maths",
+      "Financial Mathematics",
+      "Simple Interest Formula",
+      "direct-numerical"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 42,
+    "chapter": "Quantitative Aptitude",
+    "topic": "Work and Combined Time",
+    "questionText": "If Pipe A fills a tank in 4 hours and Pipe B fills it in 6 hours, how many hours will both pipes take to fill the tank together?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$5\\text{ hours}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Average Error",
+        "mistakeAnalysis": "Aspirants average the two times: $(4 + 6)/2 = 5$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Arithmetic Average Error"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$10\\text{ hours}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sum of Times Fallacy",
+        "mistakeAnalysis": "Aspirants add the individual durations: $4 + 6 = 10$.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Sum of Times Fallacy"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$2.4\\text{ hours}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Combined rate $= 1/4 + 1/6 = 5/12$. Time $= 12/5 = 2.4\\text{ hours}$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$2\\text{ hours}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Rounding Down Error",
+        "mistakeAnalysis": "Aspirants truncate 2.4 to 2.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Rounding Down Error"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Work rate of Pipe A $= \\frac{1}{4}$ tank/hr.\nWork rate of Pipe B $= \\frac{1}{6}$ tank/hr.\nCombined rate:\n$R = \\frac{1}{4} + \\frac{1}{6} = \\frac{3 + 2}{12} = \\frac{5}{12}\\text{ tank/hr}$.\nTime required $= \\frac{1}{5/12} = \\frac{12}{5} = 2.4\\text{ hours}$ (or 2 hours 24 minutes).",
+    "questionId": "MATH-M18-Q42",
+    "conceptId": "MATH-quantitative-aptitude-work-and-combined-time",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $2.4\\text{ hours}$.",
+      "concept": "Work rate of Pipe A $= \\frac{1}{4}$ tank/hr. Work rate of Pipe B $= \\frac{1}{6}$ tank/hr.",
+      "detailed": "Work rate of Pipe A $= \\frac{1}{4}$ tank/hr.\nWork rate of Pipe B $= \\frac{1}{6}$ tank/hr.\nCombined rate:\n$R = \\frac{1}{4} + \\frac{1}{6} = \\frac{3 + 2}{12} = \\frac{5}{12}\\text{ tank/hr}$.\nTime required $= \\frac{1}{5/12} = \\frac{12}{5} = 2.4\\text{ hours}$ (or 2 hours 24 minutes)."
+    },
+    "keyConcept": "Quantitative Aptitude: Work and Combined Time",
+    "formula": "$= \\frac{1}{4}$",
+    "tags": [
+      "Maths",
+      "Quantitative Aptitude",
+      "Work and Combined Time",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 43,
+    "chapter": "Linear Inequalities",
+    "topic": "Basic Linear Inequalities",
+    "questionText": "The solution set of $2x - 3 < 7$ for $x \\in \\mathbb{R}$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$(-\\infty, 5]$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Closed Bracket Slip",
+        "mistakeAnalysis": "Aspirants use a closed square bracket for a strict inequality.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Closed Bracket Slip"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$(5, \\infty)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inequality Reversal Error",
+        "mistakeAnalysis": "Aspirants reverse the inequality sign without dividing by a negative number.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Inequality Reversal Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$(-\\infty, 2)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Subtraction Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants subtract 3 from 7 instead of adding.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Subtraction Arithmetic Slip"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$(-\\infty, 5)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $2x < 10 \\implies x < 5$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Given $2x - 3 < 7$.\nAdd 3 to both sides:\n$2x < 7 + 3$\n$2x < 10$.\nDivide by 2 (since $2 > 0$, the inequality direction is preserved):\n$x < 5$.\nIn interval notation: $(-\\infty, 5)$.",
+    "questionId": "MATH-M18-Q43",
+    "conceptId": "MATH-linear-inequalities-basic-linear-inequalities",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $(-\\infty, 5)$.",
+      "concept": "Given $2x - 3 < 7$. Add 3 to both sides:\n$2x < 7 + 3$\n$2x < 10$.",
+      "detailed": "Given $2x - 3 < 7$.\nAdd 3 to both sides:\n$2x < 7 + 3$\n$2x < 10$.\nDivide by 2 (since $2 > 0$, the inequality direction is preserved):\n$x < 5$.\nIn interval notation: $(-\\infty, 5)$."
+    },
+    "keyConcept": "Linear Inequalities: Basic Linear Inequalities",
+    "tags": [
+      "Maths",
+      "Linear Inequalities",
+      "Basic Linear Inequalities",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 44,
+    "chapter": "Determinants",
+    "topic": "Singular Matrix Condition",
+    "questionText": "A square matrix $A$ is said to be singular if:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$|A| = 0$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard textbook definition: a matrix is singular if and only if its determinant is zero.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "$|A| \\ne 0$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Non-Singular Definition Confused",
+        "mistakeAnalysis": "Aspirants confuse singular with non-singular (invertible) matrices.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Non-Singular Definition Confused"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$A = I$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Identity Matrix Confusion",
+        "mistakeAnalysis": "Aspirants associate singularity with the identity matrix.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Identity Matrix Confusion"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$A = A^T$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Symmetric Definition Confused",
+        "mistakeAnalysis": "Aspirants confuse singular with symmetric matrices.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Symmetric Definition Confused"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "By definition in linear algebra:\n- A square matrix $A$ is **singular** if its determinant is zero: $|A| = 0$ (meaning $A^{-1}$ does not exist).\n- A square matrix $A$ is **non-singular** if its determinant is non-zero: $|A| \\ne 0$.",
+    "questionId": "MATH-M18-Q44",
+    "conceptId": "MATH-determinants-singular-matrix-condition",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $|A| = 0$.",
+      "concept": "By definition in linear algebra:\n- A square matrix $A$ is **singular** if its determinant is zero: $|A| = 0$ (meaning $A^{-1}$ does not exist). - A square matrix $A$ is **non-singular** if its determinant is non-zero: $|A| \\ne 0$.",
+      "detailed": "By definition in linear algebra:\n- A square matrix $A$ is **singular** if its determinant is zero: $|A| = 0$ (meaning $A^{-1}$ does not exist).\n- A square matrix $A$ is **non-singular** if its determinant is non-zero: $|A| \\ne 0$."
+    },
+    "keyConcept": "Determinants: Singular Matrix Condition",
+    "formula": "$|A| = 0$",
+    "tags": [
+      "Maths",
+      "Determinants",
+      "Singular Matrix Condition",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 45,
+    "chapter": "Application of Derivatives",
+    "topic": "Stationary Point of Sine Function",
+    "questionText": "In the interval $(0, \\pi)$, the function $f(x) = \\sin x$ has a stationary point at $x = $:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{\\pi}{2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = \\cos x = 0 \\implies x = \\pi/2 \\in (0, \\pi)$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{\\pi}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Maximum Value Angle Guess",
+        "mistakeAnalysis": "Aspirants guess $\\pi/4$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Maximum Value Angle Guess"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\pi$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Zero Value Root Confused with Stationary Point",
+        "mistakeAnalysis": "Aspirants confuse $f(x) = 0$ with $f'(x) = 0$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Zero Value Root Confused with Stationary Point"
+        }
+      },
+      {
+        "id": "D",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Boundary Value Confusion",
+        "mistakeAnalysis": "Aspirants confuse the root $x = 0$ with the stationary point.",
+        "misconception": {
+          "type": "boundary_condition_error",
+          "description": "Boundary Value Confusion"
+        }
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Differentiate $f(x) = \\sin x$:\n$f'(x) = \\cos x$.\nStationary points occur where $f'(x) = 0$:\n$\\cos x = 0$.\nIn the open interval $(0, \\pi)$, the only solution is:\n$x = \\frac{\\pi}{2}$.",
+    "questionId": "MATH-M18-Q45",
+    "conceptId": "MATH-application-of-derivatives-stationary-point-of-sine-function",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $\\frac{\\pi}{2}$.",
+      "concept": "Differentiate $f(x) = \\sin x$:\n$f'(x) = \\cos x$. Stationary points occur where $f'(x) = 0$:\n$\\cos x = 0$.",
+      "detailed": "Differentiate $f(x) = \\sin x$:\n$f'(x) = \\cos x$.\nStationary points occur where $f'(x) = 0$:\n$\\cos x = 0$.\nIn the open interval $(0, \\pi)$, the only solution is:\n$x = \\frac{\\pi}{2}$."
+    },
+    "keyConcept": "Application of Derivatives: Stationary Point of Sine Function",
+    "formula": "$f(x) = \\sin x$",
+    "tags": [
+      "Maths",
+      "Application of Derivatives",
+      "Stationary Point of Sine Function",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 46,
+    "chapter": "Vector Algebra",
+    "topic": "Self Cross Product",
+    "questionText": "For any vector $\\vec{a}$, $\\vec{a} \\times \\vec{a}$ is equal to:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$|\\vec{a}|^2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dot Product Formula Confusion",
+        "mistakeAnalysis": "Aspirants confuse the cross product with the scalar dot product $\\vec{a} \\cdot \\vec{a} = |\\vec{a}|^2$.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "Dot Product Formula Confusion"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$\\vec{a}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Idempotent Assumption",
+        "mistakeAnalysis": "Aspirants assume cross product acts as an idempotent operator.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Idempotent Assumption"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scalar Unit Confusion",
+        "mistakeAnalysis": "Aspirants assume cross product produces a scalar 1.",
+        "misconception": {
+          "type": "unit_error",
+          "description": "Scalar Unit Confusion"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\vec{0}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\vec{a}\\times\\vec{a} = |\\vec{a}||\\vec{a}|\\sin(0)\\hat{n} = \\vec{0}$.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "By definition of the vector cross product:\n$\\vec{a} \\times \\vec{b} = |\\vec{a}||\\vec{b}|\\sin\\theta \\,\\hat{n}$.\nWhen $\\vec{b} = \\vec{a}$, the angle between $\\vec{a}$ and itself is $\\theta = 0$:\n$\\sin(0) = 0 \\implies \\vec{a} \\times \\vec{a} = \\vec{0}$ (the zero vector).",
+    "questionId": "MATH-M18-Q46",
+    "conceptId": "MATH-vector-algebra-self-cross-product",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $\\vec{0}$.",
+      "concept": "By definition of the vector cross product:\n$\\vec{a} \\times \\vec{b} = |\\vec{a}||\\vec{b}|\\sin\\theta \\,\\hat{n}$. When $\\vec{b} = \\vec{a}$, the angle between $\\vec{a}$ and itself is $\\theta = 0$:\n$\\sin(0) = 0 \\implies \\vec{a} \\times \\vec{a} = \\vec{0}$ (the zero vector).",
+      "detailed": "By definition of the vector cross product:\n$\\vec{a} \\times \\vec{b} = |\\vec{a}||\\vec{b}|\\sin\\theta \\,\\hat{n}$.\nWhen $\\vec{b} = \\vec{a}$, the angle between $\\vec{a}$ and itself is $\\theta = 0$:\n$\\sin(0) = 0 \\implies \\vec{a} \\times \\vec{a} = \\vec{0}$ (the zero vector)."
+    },
+    "keyConcept": "Vector Algebra: Self Cross Product",
+    "formula": "$\\vec{a} \\times \\vec{b} = |\\vec{a}||\\vec{b}|\\sin\\theta \\,\\hat{n}$",
+    "tags": [
+      "Maths",
+      "Vector Algebra",
+      "Self Cross Product",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 47,
+    "chapter": "Probability",
+    "topic": "Probability Bounds",
+    "questionText": "For any event $E$ associated with a random experiment, the probability $P(E)$ always satisfies:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$-1 \\le P(E) \\le 1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Correlation Coefficient Range Confusion",
+        "mistakeAnalysis": "Aspirants confuse probability bounds with the Pearson correlation coefficient range $[-1, 1]$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Correlation Coefficient Range Confusion"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$0 < P(E) < 1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Strict Inequality Exclusion",
+        "mistakeAnalysis": "Aspirants exclude 0 and 1, forgetting that impossible and certain events have probabilities 0 and 1 respectively.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Strict Inequality Exclusion"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$P(E) \\ge 1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Measure Inversion Fallacy",
+        "mistakeAnalysis": "Aspirants invert the bounding inequality.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Measure Inversion Fallacy"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$0 \\le P(E) \\le 1$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. By Kolmogorov's probability axioms, all probabilities are bounded between 0 and 1.",
+        "misconception": null
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "By Kolmogorov's foundational axioms of probability:\n1. For every event $E$, $P(E) \\ge 0$.\n2. For the entire sample space $S$, $P(S) = 1$.\n3. Since $E \\subseteq S$, $P(E) \\le P(S) = 1$.\nTherefore, $0 \\le P(E) \\le 1$.",
+    "questionId": "MATH-M18-Q47",
+    "conceptId": "MATH-probability-probability-bounds",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is $0 \\le P(E) \\le 1$.",
+      "concept": "By Kolmogorov's foundational axioms of probability:\n1. For every event $E$, $P(E) \\ge 0$.",
+      "detailed": "By Kolmogorov's foundational axioms of probability:\n1. For every event $E$, $P(E) \\ge 0$.\n2. For the entire sample space $S$, $P(S) = 1$.\n3. Since $E \\subseteq S$, $P(E) \\le P(S) = 1$.\nTherefore, $0 \\le P(E) \\le 1$."
+    },
+    "keyConcept": "Probability: Probability Bounds",
+    "formula": "$P(S) = 1$",
+    "tags": [
+      "Maths",
+      "Probability",
+      "Probability Bounds",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 48,
+    "chapter": "Differential Equations",
+    "topic": "Order of Differential Equations",
+    "questionText": "The order of the differential equation $\\frac{d^2y}{dx^2} + \\left(\\frac{dy}{dx}\\right)^3 + y = 0$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Highest Exponent Confused with Order",
+        "mistakeAnalysis": "Aspirants confuse the exponent 3 on $\\frac{dy}{dx}$ with the derivative order.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Highest Exponent Confused with Order"
+        }
+      },
+      {
+        "id": "B",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Lowest Derivative Order Selected",
+        "mistakeAnalysis": "Aspirants pick the order of the lower derivative $\\frac{dy}{dx}$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Lowest Derivative Order Selected"
+        }
+      },
+      {
+        "id": "C",
+        "text": "2",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The highest order derivative present is $d^2y/dx^2$, so the order is 2.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "5",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sum of Orders Slip",
+        "mistakeAnalysis": "Aspirants sum the numbers $2 + 3 = 5$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Sum of Orders Slip"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "The **order** of a differential equation is the order of the highest derivative occurring in the equation.\nIn $\\frac{d^2y}{dx^2} + \\left(\\frac{dy}{dx}\\right)^3 + y = 0$:\n- The derivatives present are $\\frac{d^2y}{dx^2}$ (order 2) and $\\frac{dy}{dx}$ (order 1).\n- The highest derivative is $\\frac{d^2y}{dx^2}$.\nTherefore, the order is 2.",
+    "questionId": "MATH-M18-Q48",
+    "conceptId": "MATH-differential-equations-order-of-differential-equations",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is 2.",
+      "concept": "The **order** of a differential equation is the order of the highest derivative occurring in the equation. In $\\frac{d^2y}{dx^2} + \\left(\\frac{dy}{dx}\\right)^3 + y = 0$:\n- The derivatives present are $\\frac{d^2y}{dx^2}$ (order 2) and $\\frac{dy}{dx}$ (order 1).",
+      "detailed": "The **order** of a differential equation is the order of the highest derivative occurring in the equation.\nIn $\\frac{d^2y}{dx^2} + \\left(\\frac{dy}{dx}\\right)^3 + y = 0$:\n- The derivatives present are $\\frac{d^2y}{dx^2}$ (order 2) and $\\frac{dy}{dx}$ (order 1).\n- The highest derivative is $\\frac{d^2y}{dx^2}$.\nTherefore, the order is 2."
+    },
+    "keyConcept": "Differential Equations: Order of Differential Equations",
+    "formula": "$\\frac{d^2y}{dx^2} + \\left(\\frac{dy}{dx}\\right)^3 + y = 0$",
+    "tags": [
+      "Maths",
+      "Differential Equations",
+      "Order of Differential Equations",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 49,
+    "chapter": "Application of Derivatives",
+    "topic": "Decreasing Monotonicity of Quadratic Polynomials",
+    "questionText": "The function $f(x) = 6 - x^2$ is strictly decreasing in the interval:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$(-\\infty, 0)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Increasing Interval Selected",
+        "mistakeAnalysis": "Aspirants select the interval where $-2x > 0$ (i.e., $x < 0$).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Increasing Interval Selected"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$(0, \\infty)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = -2x < 0 \\iff x > 0$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "$(-\\infty, \\infty)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Global Monotonicity Assumption",
+        "mistakeAnalysis": "Aspirants assume downward-opening parabolas decrease everywhere.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Global Monotonicity Assumption"
+        }
+      },
+      {
+        "id": "D",
+        "text": "(-6, 6)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Root Bound Interval Slip",
+        "mistakeAnalysis": "Aspirants use the intercepts $\\pm\\sqrt{6}$ or the constant 6.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Root Bound Interval Slip"
+        }
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Differentiate $f(x) = 6 - x^2$ with respect to $x$:\n$f'(x) = -2x$.\nFor $f(x)$ to be strictly decreasing, we require $f'(x) < 0$:\n$-2x < 0$.\nDividing by $-2$ reverses the inequality:\n$x > 0$.\nIn interval notation: $(0, \\infty)$.",
+    "questionId": "MATH-M18-Q49",
+    "conceptId": "MATH-application-of-derivatives-decreasing-monotonicity-of-quadratic-polynomials",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Correct answer is $(0, \\infty)$.",
+      "concept": "Differentiate $f(x) = 6 - x^2$ with respect to $x$:\n$f'(x) = -2x$. For $f(x)$ to be strictly decreasing, we require $f'(x) < 0$:\n$-2x < 0$.",
+      "detailed": "Differentiate $f(x) = 6 - x^2$ with respect to $x$:\n$f'(x) = -2x$.\nFor $f(x)$ to be strictly decreasing, we require $f'(x) < 0$:\n$-2x < 0$.\nDividing by $-2$ reverses the inequality:\n$x > 0$.\nIn interval notation: $(0, \\infty)$."
+    },
+    "keyConcept": "Application of Derivatives: Decreasing Monotonicity of Quadratic Polynomials",
+    "formula": "$f(x) = 6 - x^2$",
+    "tags": [
+      "Maths",
+      "Application of Derivatives",
+      "Decreasing Monotonicity of Quadratic Polynomials",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 2,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "questionNumber": 50,
+    "chapter": "Integrals",
+    "topic": "Standard Definite Integral of Cosine",
+    "questionText": "The value of $\\int_{0}^{\\pi/2}\\cos x\\,dx$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cosine Value Heuristic",
+        "mistakeAnalysis": "Aspirants evaluate $\\cos(\\pi/2) = 0$ and assume the integral is zero.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Cosine Value Heuristic"
+        }
+      },
+      {
+        "id": "B",
+        "text": "-1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Antiderivative Sign Error",
+        "mistakeAnalysis": "Aspirants integrate $\\cos x$ as $-\\sin x$.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Antiderivative Sign Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $[\\sin x]_0^{\\pi/2} = \\sin(\\pi/2) - \\sin(0) = 1 - 0 = 1$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{\\pi}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Upper Bound Selection",
+        "mistakeAnalysis": "Aspirants select the upper limit.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Upper Bound Selection"
+        }
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Using the standard antiderivative $\\int \\cos x\\,dx = \\sin x$:\n$\\int_0^{\\pi/2} \\cos x\\,dx = [\\sin x]_0^{\\pi/2} = \\sin\\left(\\frac{\\pi}{2}\\right) - \\sin(0) = 1 - 0 = 1$.",
+    "questionId": "MATH-M18-Q50",
+    "conceptId": "MATH-integrals-standard-definite-integral-of-cosine",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 65,
+    "solution": {
+      "quick": "Correct answer is 1.",
+      "concept": "Using the standard antiderivative $\\int \\cos x\\,dx = \\sin x$:\n$\\int_0^{\\pi/2} \\cos x\\,dx = [\\sin x]_0^{\\pi/2} = \\sin\\left(\\frac{\\pi}{2}\\right) - \\sin(0) = 1 - 0 = 1$.",
+      "detailed": "Using the standard antiderivative $\\int \\cos x\\,dx = \\sin x$:\n$\\int_0^{\\pi/2} \\cos x\\,dx = [\\sin x]_0^{\\pi/2} = \\sin\\left(\\frac{\\pi}{2}\\right) - \\sin(0) = 1 - 0 = 1$."
+    },
+    "keyConcept": "Integrals: Standard Definite Integral of Cosine",
+    "formula": "$\\int \\cos x\\,dx = \\sin x$",
+    "tags": [
+      "Maths",
+      "Integrals",
+      "Standard Definite Integral of Cosine",
+      "conceptual"
+    ],
+    "qualityScore": 96,
+    "difficultyLevel": 3,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  }
+]

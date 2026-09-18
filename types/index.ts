@@ -20,22 +20,74 @@ export type QuestionStatus =
   | "marked_review"
   | "answered_marked_review";
 
+export type QuestionType =
+  | "conceptual"
+  | "direct-numerical"
+  | "application"
+  | "multi-statement"
+  | "assertion-reasoning"
+  | "case-based"
+  | "diagram-based"
+  | "sequence-order";
+
+export interface QuestionOption {
+  id: "A" | "B" | "C" | "D";
+  text: string;
+  isCorrect?: boolean;
+  misconception?: {
+    type: string;
+    description: string;
+  } | null;
+  studentSelectionTrap?: string | null;
+  mistakeAnalysis?: string;
+}
+
+export interface QuestionSolution {
+  quick: string;
+  concept: string;
+  detailed: string;
+}
+
+export type ContentConfidenceStatus =
+  | "unreviewed"
+  | "machine_validated"
+  | "needs_review"
+  | "human_reviewed"
+  | "approved"
+  | "deprecated";
+
 export interface Question {
   id: string;
+  questionId?: string;
+  conceptId?: string;
   subjectId: string;
   questionNumber: number;
   prompt: string;
-  options: {
-    id: "A" | "B" | "C" | "D";
-    text: string;
-  }[];
+  options: QuestionOption[];
   correctOptionId: "A" | "B" | "C" | "D";
   explanation: string;
+  solution?: QuestionSolution;
+  questionType?: QuestionType;
+  difficultyLevel?: 1 | 2 | 3 | 4 | 5;
+  difficulty: "easy" | "medium" | "hard" | 1 | 2 | 3 | 4 | 5;
+  estimatedTimeSeconds?: number;
+  formula?: string;
+  keyConcept?: string;
+  misconception?: {
+    type?: string;
+    description?: string;
+  } | null;
+  tags?: string[];
+  qualityScore?: number;
+  confidenceStatus?: ContentConfidenceStatus;
+  confidenceScore?: number;
+  validationFlags?: string[];
+  hasDiagram?: boolean;
+  diagramDescription?: string | null;
   aiDiagnosisNotes?: string;
   pyqSource?: string;
   topic: string;
   chapter?: string;
-  difficulty: "easy" | "medium" | "hard";
 }
 
 export interface UserAnswer {
@@ -116,10 +168,14 @@ export interface LeaderboardEntry {
 
 export interface RecordedQuestionAttempt {
   questionId: string;
+  conceptId?: string;
   questionNumber: number;
   subject: string;
   chapter: string;
   microTopic: string;
+  prompt?: string;
+  options?: QuestionOption[];
+  questionType?: string;
   selectedOption: "A" | "B" | "C" | "D" | null;
   correctOption: "A" | "B" | "C" | "D";
   isCorrect: boolean | null;

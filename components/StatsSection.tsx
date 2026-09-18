@@ -1,7 +1,12 @@
+"use client";
+
 import React from "react";
 import { Clock, AlertTriangle, ShieldAlert } from "lucide-react";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function StatsSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="py-6 sm:py-8 bg-white border-y-2 border-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -14,10 +19,10 @@ export default function StatsSection() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xl sm:text-2xl font-black text-black font-mono">
-                  72 Seconds
+                  {t("secondsPerQ", "72 Seconds")}
                 </span>
                 <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded bg-black text-white font-mono">
-                  Target Pace
+                  {t("targetPace", "Target Pace")}
                 </span>
               </div>
               <p className="text-xs text-black/80 font-bold mt-0.5 leading-snug">
@@ -34,7 +39,7 @@ export default function StatsSection() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xl sm:text-2xl font-black text-[#DC2626] font-mono">
-                  -6 Net Mark Cost
+                  {t("netMarkCost", "-6 Net Mark Cost")}
                 </span>
               </div>
               <p className="text-xs text-black/80 font-bold mt-0.5 leading-snug">
@@ -51,10 +56,10 @@ export default function StatsSection() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xl sm:text-2xl font-black text-black font-mono">
-                  0 Chapter Skips
+                  {t("zeroChapterSkips", "0 Chapter Skips")}
                 </span>
                 <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded bg-black text-white font-mono">
-                  50/50 Mandatory
+                  {t("mandatoryFifty", "50/50 Mandatory")}
                 </span>
               </div>
               <p className="text-xs text-black/80 font-bold mt-0.5 leading-snug">

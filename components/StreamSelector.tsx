@@ -23,6 +23,7 @@ import {
 import { CUET_SUBJECTS } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import type { StreamType } from "@/types";
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -41,6 +42,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
 };
 
 export default function StreamSelector() {
+  const { t } = useTranslation();
   const isClient = useIsClient();
   const selectedStream = useTestStore((state) => state.selectedStream);
   const setSelectedStream = useTestStore((state) => state.setSelectedStream);
@@ -51,19 +53,19 @@ export default function StreamSelector() {
   const streams: { id: StreamType; label: string; tag: string; description: string }[] = [
     {
       id: "science",
-      label: "Science",
+      label: t("scienceStream", "Science"),
       tag: "PCM / PCB",
       description: "Physics, Chemistry, Maths & Biology with formula diagnostics",
     },
     {
       id: "commerce",
-      label: "Commerce",
+      label: t("commerceStream", "Commerce"),
       tag: "Accounts & B.St",
       description: "Accountancy, Business Studies, Economics & Applied Mathematics",
     },
     {
       id: "humanities",
-      label: "Humanities",
+      label: t("humanitiesStream", "Humanities"),
       tag: "Arts & Social Sci",
       description: "Political Science, History, Geography & Psychology",
     },
@@ -80,17 +82,17 @@ export default function StreamSelector() {
           <div>
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EEF2FF] text-black text-xs font-black uppercase tracking-wider mb-3 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
               <Sparkles className="w-3.5 h-3.5 text-[#4F46E5] fill-[#4F46E5]" />
-              Stream-Specific Mock Repository
+              {t("domainStreams", "Stream-Specific Mock Repository")}
             </div>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-black">
-              Select Your Examination Stream
+              {t("domainTests", "Select Your Examination Stream")}
             </h2>
             <p className="mt-2 text-sm sm:text-base text-black/70 max-w-2xl font-medium">
               NTA CUET domain subjects structured with official shift papers, full-length CBT tests, and chapter-wise difficulty tags.
             </p>
           </div>
           <div className="mt-4 md:mt-0 text-xs font-black text-black">
-            Showing <span className="bg-white px-2 py-1 rounded border-2 border-black shadow-[1px_1px_0px_0px_#000]">{currentSubjects.length} Domain Subjects</span>
+            Showing <span className="bg-white px-2 py-1 rounded border-2 border-black shadow-[1px_1px_0px_0px_#000]">{currentSubjects.length} {t("domainTests", "Domain Subjects")}</span>
           </div>
         </div>
 
@@ -150,13 +152,13 @@ export default function StreamSelector() {
                     <div className="w-10 h-10 rounded-lg bg-[#FEF3C7] text-black border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] group-hover:scale-105 transition-transform">
                       <IconComponent className="w-5 h-5" />
                     </div>
-                    <span className="text-[11px] font-mono font-black text-black bg-[#FAF7EE] px-2 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
+                    <span className="text-[11px] font-mono font-black text-black bg-[#FAF7EE] px-2 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]" translate="no">
                       Code: {subj.code}
                     </span>
                   </div>
 
                   <h3 className="text-lg font-black text-black tracking-tight group-hover:text-[#FF5C5C] transition-colors">
-                    {subj.name}
+                    {t(subj.id.toLowerCase().replace(/-/g, ""), subj.name)}
                   </h3>
 
                   <p className="mt-2 text-xs text-black/70 line-clamp-2 leading-relaxed font-medium">
@@ -171,17 +173,17 @@ export default function StreamSelector() {
                     </span>
                     <span className="inline-flex items-center gap-1 bg-[#FAF7EE] border border-black px-2 py-0.5 rounded-full shadow-[1px_1px_0px_0px_#000]">
                       <BookMarked className="w-3 h-3 text-black" />
-                      50 Compulsory Questions
+                      {t("compulsoryBadge", "50 Compulsory Questions")}
                     </span>
                   </div>
                 </div>
 
                 <div className="mt-6 pt-4 border-t-2 border-black/10">
                   <Link
-                    href="/dashboard/pyqs"
+                    href="/dashboard/mocks"
                     className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] active:bg-[#E03E3E] text-white border-2 border-black font-black text-xs tracking-wide transition-all shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
                   >
-                    <span>Launch Free Official PYQ Mock</span>
+                    <span>{t("startTest", "Launch Free Official PYQ Mock")}</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                   <p className="text-[10px] text-center text-black/50 mt-2 font-bold">
@@ -196,3 +198,4 @@ export default function StreamSelector() {
     </section>
   );
 }
+

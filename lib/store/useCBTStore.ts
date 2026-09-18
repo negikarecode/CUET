@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Question, QuestionStatus } from "@/types";
 import { FullTestMeta } from "@/lib/data/mock50Questions";
+import { CUET_UG_2026_CONFIG, calculateExamScore } from "@/lib/config/examConfig";
 
 export interface QuestionSessionState {
   visited: boolean;
@@ -116,6 +117,23 @@ function loadSessionFromStorage(testId: string): StoredSession | null {
   }
 }
 
+function pruneOldStorageSessions(): void {
+  if (typeof window === "undefined") return;
+  try {
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const k = window.localStorage.key(i);
+      if (k && k.startsWith("cuet_cbt_session_")) {
+        keysToRemove.push(k);
+      }
+    }
+    // Remove oldest completed sessions to relieve quota pressure
+    keysToRemove.slice(0, Math.max(1, Math.ceil(keysToRemove.length / 2))).forEach((k) => {
+      window.localStorage.removeItem(k);
+    });
+  } catch {}
+}
+
 function saveSessionToStorage(state: CBTStoreState): void {
   if (typeof window === "undefined" || !state.testId) return;
   try {
@@ -132,8 +150,21 @@ function saveSessionToStorage(state: CBTStoreState): void {
     };
     const key = getStorageKey(state.testId);
     const serialized = JSON.stringify(data);
-    window.sessionStorage.setItem(key, serialized);
-    window.localStorage.setItem(key, serialized);
+    try {
+      window.sessionStorage.setItem(key, serialized);
+    } catch {}
+
+    try {
+      window.localStorage.setItem(key, serialized);
+    } catch (storageErr) {
+      // Safe Quota Handling: Prune old completed sessions and retry
+      pruneOldStorageSessions();
+      try {
+        window.localStorage.setItem(key, serialized);
+      } catch {
+        // Fallback gracefully without crashing the exam interface
+      }
+    }
   } catch {}
 }
 
@@ -145,6 +176,24 @@ function clearSessionFromStorage(testId: string): void {
     window.localStorage.removeItem(key);
     window.localStorage.removeItem("cuet_cbt_active_session");
   } catch {}
+}
+
+/**
+ * Module-level secure exam vault:
+ * Retains authentic answer keys and solutions in private closure memory during active testing.
+ * Prevents client-side answer inspection via React DevTools or Zustand state before test submission.
+ */
+const secureExamVault = new Map<string, Question[]>();
+
+export function sanitizeQuestionForActiveExam(q: Question): Question {
+  return {
+    ...q,
+    // Withhold answer key, explanation, solutions, and misconception hints during active exam
+    correctOptionId: "" as "A",
+    explanation: "",
+    solution: undefined,
+    misconception: undefined,
+  };
 }
 
 export const useCBTStore = create<CBTStoreState>()((set, get) => ({
@@ -164,6 +213,11 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
   submittedScore: null,
 
   initTest: (testId, meta, questionsList, forceFresh = false) => {
+    // Store full question payload in private vault
+    if (questionsList && questionsList.length > 0) {
+      secureExamVault.set(testId, questionsList);
+    }
+
     // If the store is already initialized for this exact testId in memory and not submitted, avoid re-init
     const current = get();
     if (
@@ -239,7 +293,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
               isInitialized: true,
               testId,
               testMeta: meta,
-              questions: questionsList,
+              questions: questionsList.map(sanitizeQuestionForActiveExam),
               currentQuestionIndex: validIndex,
               durationSeconds: stored.durationSeconds || (meta.durationMinutes || 60) * 60,
               remainingSeconds: remaining,
@@ -278,7 +332,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       isInitialized: true,
       testId,
       testMeta: meta,
-      questions: questionsList,
+      questions: questionsList.map(sanitizeQuestionForActiveExam),
       currentQuestionIndex: 0,
       durationSeconds: durationSec,
       remainingSeconds: durationSec,
@@ -609,8 +663,11 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
   },
 
   submitTest: () => {
-    const { questions, questionStates, remainingSeconds, durationSeconds } =
+    const { testId, questions, questionStates, remainingSeconds, durationSeconds } =
       get();
+
+    // Retrieve original unsanitized questions from secure vault
+    const fullQuestions = secureExamVault.get(testId) || questions;
 
     let attemptedCount = 0;
     let markedReviewCount = 0;
@@ -618,7 +675,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     let incorrectCount = 0;
     let timeSinkCount = 0;
 
-    questions.forEach((q) => {
+    fullQuestions.forEach((q) => {
       const qState = questionStates[q.id];
       const status = deriveQuestionStatus(qState);
 
@@ -643,10 +700,14 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       }
     });
 
-    const unattemptedCount = questions.length - attemptedCount;
-    // Official CUET NTA Scoring: +5 per correct, -1 per incorrect, 0 for unattempted
-    const totalMarks = correctCount * 5 - incorrectCount * 1;
-    const maxMarks = questions.length * 5; // 250
+    const unattemptedCount = fullQuestions.length - attemptedCount;
+    // Official CUET NTA 2026 Scoring: +5 per correct, -1 per incorrect, 0 for unattempted
+    const { totalMarks, maxMarks } = calculateExamScore(
+      correctCount,
+      incorrectCount,
+      unattemptedCount,
+      CUET_UG_2026_CONFIG
+    );
     const accuracyPercentage =
       attemptedCount > 0 ? Math.round((correctCount / attemptedCount) * 100) : 0;
     const timeTakenSeconds = Math.max(0, durationSeconds - remainingSeconds);
@@ -665,18 +726,65 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     };
 
     set({
+      questions: fullQuestions,
       isSubmitted: true,
       isTimerRunning: false,
       isSubmitModalOpen: false,
       submittedScore: summary,
     });
     saveSessionToStorage(get());
+
+    // If client was initialized with sanitized questions (withheld keys), retrieve authoritative answers from server upon submission
+    if (typeof window !== "undefined" && (!fullQuestions[0]?.correctOptionId)) {
+      fetch(`/api/test/${testId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "reveal" }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.questions && Array.isArray(data.questions) && data.questions.length > 0) {
+            secureExamVault.set(testId, data.questions);
+            const authQuestions = data.questions;
+            let cCount = 0;
+            let iCount = 0;
+            let aCount = 0;
+            authQuestions.forEach((q: Question) => {
+              const qState = get().questionStates[q.id];
+              if (qState?.selectedOption) {
+                aCount += 1;
+                if (qState.selectedOption === q.correctOptionId) cCount += 1;
+                else iCount += 1;
+              }
+            });
+            const updatedScore: CBTScoreSummary = {
+              attemptedCount: aCount,
+              unattemptedCount: authQuestions.length - aCount,
+              markedReviewCount: summary.markedReviewCount,
+              correctCount: cCount,
+              incorrectCount: iCount,
+              totalMarks: cCount * 5 - iCount * 1,
+              maxMarks: authQuestions.length * 5,
+              accuracyPercentage: aCount > 0 ? Math.round((cCount / aCount) * 100) : 0,
+              timeTakenSeconds: summary.timeTakenSeconds,
+              timeSinkCount: summary.timeSinkCount,
+            };
+            set({
+              questions: authQuestions,
+              submittedScore: updatedScore,
+            });
+            saveSessionToStorage(get());
+          }
+        })
+        .catch((err) => console.warn("Authoritative reveal fetch error:", err));
+    }
   },
 
   resetSession: () => {
     const { testId, testMeta, questions } = get();
     if (!testId || !testMeta) return;
-    get().initTest(testId, testMeta, questions, true);
+    const fullQuestions = secureExamVault.get(testId) || questions;
+    get().initTest(testId, testMeta, fullQuestions, true);
   },
 
   getQuestionStatus: (qId: string) => {

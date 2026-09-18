@@ -14,8 +14,10 @@ import {
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import OnboardingModal from "@/components/auth/OnboardingModal";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function BottomNav() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
@@ -54,7 +56,7 @@ export default function BottomNav() {
             >
               <Home className="w-4 h-4 stroke-[2.5]" />
             </div>
-            <span className="text-[10px] mt-0.5 tracking-tight">Home</span>
+            <span className="text-[10px] mt-0.5 tracking-tight">{t("home", "Home")}</span>
           </Link>
 
           {/* 2. Domain Tests */}
@@ -65,7 +67,7 @@ export default function BottomNav() {
             <div className="p-1 rounded-md hover:bg-[#FAF7EE]">
               <BookOpen className="w-4 h-4 stroke-[2.5]" />
             </div>
-            <span className="text-[10px] mt-0.5 tracking-tight">Tests</span>
+            <span className="text-[10px] mt-0.5 tracking-tight">{t("mocks", "Tests")}</span>
           </Link>
 
           {/* 3. Diagnostic Demo */}
@@ -76,7 +78,7 @@ export default function BottomNav() {
             <div className="p-1 rounded-md hover:bg-[#FAF7EE]">
               <Target className="w-4 h-4 stroke-[2.5] text-[#FF5C5C]" />
             </div>
-            <span className="text-[10px] mt-0.5 tracking-tight">Demo</span>
+            <span className="text-[10px] mt-0.5 tracking-tight">{t("dailyDrill", "Demo")}</span>
           </Link>
 
           {/* 4. Pricing / Ranker Pass */}
@@ -87,7 +89,7 @@ export default function BottomNav() {
             <div className="p-1 rounded-md hover:bg-[#FAF7EE]">
               <Zap className="w-4 h-4 stroke-[2.5] text-[#D97706]" />
             </div>
-            <span className="text-[10px] mt-0.5 tracking-tight">Pricing</span>
+            <span className="text-[10px] mt-0.5 tracking-tight">{t("upgrade", "Pricing")}</span>
           </Link>
 
           {/* 5. Dashboard or Join Now */}
@@ -109,7 +111,7 @@ export default function BottomNav() {
               >
                 <Trophy className="w-4 h-4 stroke-[2.5] text-[#059669]" />
               </div>
-              <span className="text-[10px] mt-0.5 tracking-tight">Hub</span>
+              <span className="text-[10px] mt-0.5 tracking-tight">{t("commandHub", "Hub")}</span>
             </Link>
           ) : (
             <button
@@ -121,7 +123,7 @@ export default function BottomNav() {
                 <UserPlus className="w-4 h-4 stroke-[2.5]" />
               </div>
               <span className="text-[10px] mt-0.5 tracking-tight text-[#DC2626]">
-                Join
+                {t("join", "Join")}
               </span>
             </button>
           )}

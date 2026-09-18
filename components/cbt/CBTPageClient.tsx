@@ -2,24 +2,45 @@
 
 import React, { useEffect } from "react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
-import { getQuestionsForTest } from "@/lib/data/mock50Questions";
+import { Question } from "@/types";
+import { FullTestMeta } from "@/lib/data/mock50Questions";
 import CBTPlayer from "@/components/cbt/CBTPlayer";
 
 interface CBTPageClientProps {
   testId: string;
   isReattempt?: boolean;
+  initialTestMeta?: FullTestMeta;
+  initialQuestions?: Question[];
 }
 
-export default function CBTPageClient({ testId, isReattempt = false }: CBTPageClientProps) {
+export default function CBTPageClient({
+  testId,
+  isReattempt = false,
+  initialTestMeta,
+  initialQuestions,
+}: CBTPageClientProps) {
   const isInitialized = useCBTStore((state) => state.isInitialized);
   const currentTestId = useCBTStore((state) => state.testId);
   const isSubmitted = useCBTStore((state) => state.isSubmitted);
   const initTest = useCBTStore((state) => state.initTest);
 
   useEffect(() => {
-    const { testMeta, questions } = getQuestionsForTest(testId);
-    initTest(testId, testMeta, questions, isReattempt);
-  }, [testId, initTest, isReattempt]);
+    if (initialTestMeta && initialQuestions && initialQuestions.length > 0) {
+      initTest(testId, initialTestMeta, initialQuestions, isReattempt);
+    } else {
+      // Secure Client-Side Fallback: Load sanitized test from server API endpoint
+      fetch(`/api/test/${testId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.testMeta && data?.questions) {
+            initTest(testId, data.testMeta, data.questions, isReattempt);
+          }
+        })
+        .catch((err) => {
+          console.error("Secure test initialization notice:", err);
+        });
+    }
+  }, [testId, initTest, isReattempt, initialTestMeta, initialQuestions]);
 
   if (!isInitialized || currentTestId !== testId || (isReattempt && isSubmitted)) {
     return (

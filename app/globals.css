@@ -53,3 +53,51 @@ body {
   outline: 3px solid #000000 !important;
   outline-offset: 2px;
 }
+
+/* ========================================================================= */
+/* Math & KaTeX Display Protection                                          */
+/* ========================================================================= */
+.notranslate,
+[translate="no"],
+.katex,
+.katex-display,
+.inline-math {
+  -webkit-transform: translateZ(0);
+}
+
+/* ========================================================================= */
+/* Google Translate System Integration & Layout Protection                   */
+/* ========================================================================= */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+.goog-te-balloon-frame,
+#goog-gt-tt {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  border: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+.skiptranslate:not(.goog-te-combo) {
+  display: none !important;
+}
+
+#google_translate_element {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+

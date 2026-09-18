@@ -8,6 +8,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 interface OptionBreakdown {
   id: "A" | "B" | "C" | "D";
@@ -184,6 +185,7 @@ const DEMO_QUESTIONS: DemoQuestion[] = [
 ];
 
 export default function LiveDiagnosticDemo() {
+  const { t, translateStem } = useTranslation();
   const [selectedStream, setSelectedStream] = useState<"physics" | "accounts" | "humanities">("physics");
   const [selectedOptionId, setSelectedOptionId] = useState<"A" | "B" | "C" | "D" | null>("B"); // Pre-selected on trap B for instant demonstration
 
@@ -206,10 +208,10 @@ export default function LiveDiagnosticDemo() {
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-[#FF5C5C] border border-black animate-pulse" />
           <span className="text-xs font-black uppercase tracking-wider text-black font-mono">
-            Live Diagnostic Demo
+            {t("liveDemoTitle", "Live Diagnostic Demo")}
           </span>
           <span className="hidden sm:inline-block text-[10px] bg-black text-white font-bold px-2 py-0.5 rounded font-mono">
-            Click Any Option Below
+            {t("clickAnyOption", "Click Any Option Below")}
           </span>
         </div>
 
@@ -228,7 +230,11 @@ export default function LiveDiagnosticDemo() {
                     : "text-black hover:bg-[#FAF7EE]"
                 }`}
               >
-                {q.streamLabel}
+                {q.streamId === "physics"
+                  ? t("physics", q.streamLabel)
+                  : q.streamId === "accounts"
+                  ? t("accountancy", q.streamLabel)
+                  : t("politicalScience", q.streamLabel)}
               </button>
             );
           })}
@@ -239,18 +245,18 @@ export default function LiveDiagnosticDemo() {
       <div className="p-6 sm:p-7 space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded bg-[#FEF3C7] border border-black font-black font-mono">
+            <span className="px-2 py-0.5 rounded bg-[#FEF3C7] border border-black font-black font-mono" translate="no">
               Q1 of 50
             </span>
             <span className="font-bold text-black/70">{activeQuestion.chapter}</span>
           </div>
           <span className="font-mono font-black text-black bg-[#FAF7EE] px-2 py-0.5 rounded border border-black">
-            +5 / -1 Marking
+            {t("markingInfo", "+5 / -1 Marking")}
           </span>
         </div>
 
         <h3 className="text-base sm:text-lg font-black text-black leading-snug">
-          {activeQuestion.prompt}
+          {translateStem(activeQuestion.prompt)}
         </h3>
 
         {/* Options List */}
@@ -278,20 +284,21 @@ export default function LiveDiagnosticDemo() {
                         : "bg-[#FF5C5C] text-white"
                       : "bg-[#FAF7EE] text-black"
                   }`}
+                  translate="no"
                 >
                   {option.id}
                 </span>
 
                 <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <span className="text-black">{option.text}</span>
+                  <span className="text-black">{translateStem(option.text)}</span>
                   {option.slipPercentage && !option.isCorrect && (
                     <span className="text-[10px] font-mono font-black text-[#DC2626] bg-white px-2 py-0.5 rounded border border-black shrink-0 self-start sm:self-auto shadow-[1px_1px_0px_0px_#000]">
-                      {option.slipPercentage}% pick this
+                      {option.slipPercentage}% {t("pickThis", "pick this")}
                     </span>
                   )}
                   {option.isCorrect && (
                     <span className="text-[10px] font-mono font-black text-[#059669] bg-white px-2 py-0.5 rounded border border-black shrink-0 self-start sm:self-auto shadow-[1px_1px_0px_0px_#000]">
-                      Official NTA Key
+                      {t("officialKey", "Official NTA Key")}
                     </span>
                   )}
                 </div>
@@ -300,7 +307,7 @@ export default function LiveDiagnosticDemo() {
           })}
         </div>
 
-        {/* Real-Time AI Distractor Breakdown Drawer (The "Aha!" Moment) */}
+        {/* Real-Time AI Distractor Breakdown Drawer */}
         {activeBreakdown && (
           <div
             className={`mt-6 p-5 sm:p-6 rounded-xl border-2 border-black animate-in fade-in zoom-in-95 duration-200 ${
@@ -319,19 +326,19 @@ export default function LiveDiagnosticDemo() {
                 <div>
                   <h4 className="text-sm font-black text-black">
                     {activeBreakdown.isCorrect
-                      ? "AI Diagnosis: Correct Conceptual Execution (+5 Marks)"
-                      : `AI Distractor Decrypter: Trap Option ${activeBreakdown.id} (-1 Mark)`}
+                      ? t("correct", "AI Diagnosis: Correct Conceptual Execution (+5 Marks)")
+                      : `${t("trapOptionAnalysisText", "NTA Trap Breakdown")}: Option ${activeBreakdown.id} (-1 Mark)`}
                   </h4>
                   {activeBreakdown.trapType && (
                     <p className="text-[11px] font-bold text-[#DC2626]">
-                      Trap Category: {activeBreakdown.trapType}
+                      {t("radar", "Trap Category")}: {activeBreakdown.trapType}
                     </p>
                   )}
                 </div>
               </div>
 
               <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-white border border-black text-black shrink-0 shadow-[1px_1px_0px_0px_#000]">
-                NCERT Verified
+                {t("ncertVerified", "NCERT Verified")}
               </span>
             </div>
 
@@ -342,14 +349,14 @@ export default function LiveDiagnosticDemo() {
             <div className="mt-4 pt-3 border-t-2 border-black/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-black/70">
               <span className="font-bold flex items-center gap-1.5">
                 <BookOpen className="w-3.5 h-3.5 text-black" />
-                <span>Concept Anchor: <strong>{activeBreakdown.ncertReference}</strong></span>
+                <span>{t("ncertCitationText", "NCERT Reference")}: <strong>{activeBreakdown.ncertReference}</strong></span>
               </span>
 
               <Link
-                href="/test/physics"
+                href="/dashboard/mocks"
                 className="inline-flex items-center gap-1.5 font-black text-black hover:underline"
               >
-                <span>Practice 49 More Questions Like This</span>
+                <span>{t("practiceMore", "Practice 49 More Questions Like This")}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>

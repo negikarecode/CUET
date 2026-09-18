@@ -12,8 +12,10 @@ import {
   EyeOff,
 } from "lucide-react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function CBTSubmitModal() {
+  const { t } = useTranslation();
   const isSubmitModalOpen = useCBTStore((state) => state.isSubmitModalOpen);
   const closeSubmitModal = useCBTStore((state) => state.closeSubmitModal);
   const submitTest = useCBTStore((state) => state.submitTest);
@@ -52,10 +54,10 @@ export default function CBTSubmitModal() {
                 id="submit-modal-title"
                 className="text-lg font-black tracking-tight text-black"
               >
-                Confirm Test Paper Submission
+                {t("confirmSubmission", "Confirm Test Paper Submission")}
               </h3>
               <p className="text-xs text-black/70 font-semibold mt-0.5">
-                NTA CUET Examination Summary ({counts.total} Compulsory Questions)
+                {t("examSummary", "NTA CUET Examination Summary")} ({counts.total} {t("compulsoryBadge", "Compulsory Questions")})
               </p>
             </div>
           </div>
@@ -74,7 +76,7 @@ export default function CBTSubmitModal() {
                 {totalAnswered}
               </p>
               <p className="text-[10px] font-black text-black uppercase tracking-wide">
-                Answered
+                {t("answered", "Answered")}
               </p>
             </div>
 
@@ -87,7 +89,7 @@ export default function CBTSubmitModal() {
                 {counts.notAnswered}
               </p>
               <p className="text-[10px] font-black text-black uppercase tracking-wide">
-                Not Answered
+                {t("notAnswered", "Not Answered")}
               </p>
             </div>
 
@@ -100,7 +102,7 @@ export default function CBTSubmitModal() {
                 {counts.markedReview + counts.answeredMarkedReview}
               </p>
               <p className="text-[10px] font-black text-black uppercase tracking-wide">
-                Marked Review
+                {t("markedReview", "Marked Review")}
               </p>
             </div>
 
@@ -113,7 +115,7 @@ export default function CBTSubmitModal() {
                 {counts.notVisited}
               </p>
               <p className="text-[10px] font-black text-black uppercase tracking-wide">
-                Not Visited
+                {t("notVisited", "Not Visited")}
               </p>
             </div>
           </div>
@@ -122,7 +124,7 @@ export default function CBTSubmitModal() {
           <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#FAF7EE] border-2 border-black text-xs font-bold text-black">
             <span className="flex items-center gap-2 text-black">
               <Clock className="w-4 h-4 text-black stroke-[2.5]" />
-              Remaining Test Time:
+              {t("timeRemaining", "Remaining Test Time:")}
             </span>
             <span className="font-mono font-black text-black bg-white px-2.5 py-1 rounded border-2 border-black shadow-[1px_1px_0px_0px_#000]">
               {timeFormatted}
@@ -134,14 +136,14 @@ export default function CBTSubmitModal() {
             <div className="p-3.5 rounded-lg bg-[#FEF3C7] border-2 border-black text-xs text-black leading-relaxed flex items-start gap-2.5 shadow-[2px_2px_0px_0px_#000]">
               <HelpCircle className="w-4 h-4 text-black shrink-0 mt-0.5 stroke-[2.5]" />
               <p className="font-medium">
-                You have <strong>{totalUnattempted} unattempted questions</strong> ({counts.notVisited} not visited, {counts.notAnswered} visited without answer). Remember: unattempted questions incur <strong>0 penalty</strong>, whereas wrong answers carry a <strong>-1 penalty</strong>.
+                {t("areYouSureSubmit", "Are you sure you want to submit your test paper? Once submitted, your score will be calculated and AI mistake diagnosis generated.")}
               </p>
             </div>
           ) : (
             <div className="p-3.5 rounded-lg bg-[#D1FAE5] border-2 border-black text-xs text-black leading-relaxed flex items-start gap-2.5 shadow-[2px_2px_0px_0px_#000]">
               <CheckCircle2 className="w-4 h-4 text-black shrink-0 mt-0.5 stroke-[2.5]" />
               <p className="font-medium">
-                Excellent pacing! You have answered <strong>all {counts.total} questions</strong>. Are you ready to submit and calculate your final score?
+                {t("areYouSureSubmit", "Are you sure you want to submit your test paper? Once submitted, your score will be calculated and AI mistake diagnosis generated.")}
               </p>
             </div>
           )}
@@ -154,7 +156,7 @@ export default function CBTSubmitModal() {
             onClick={closeSubmitModal}
             className="w-full sm:w-auto px-5 py-2.5 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] transition-all"
           >
-            Return to Test
+            {t("returnToPaper", "Return to Test")}
           </button>
 
           <button
@@ -162,7 +164,7 @@ export default function CBTSubmitModal() {
             onClick={submitTest}
             className="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs sm:text-sm tracking-wide shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2"
           >
-            <span>Final Submit & Calculate Score</span>
+            <span>{t("submitExamNow", "Submit Exam Now")}</span>
             <ArrowRight className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>

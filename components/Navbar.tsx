@@ -22,8 +22,11 @@ import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import UpgradeButton from "@/components/payments/UpgradeButton";
 import OnboardingModal from "@/components/auth/OnboardingModal";
+import LanguageSelector from "@/components/i18n/LanguageSelector";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function Navbar() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
   const isClient = useIsClient();
@@ -95,7 +98,7 @@ export default function Navbar() {
                     </span>
                   </div>
                   <span className="text-[10px] font-black tracking-wider text-black/60 uppercase mt-0.5">
-                    NTA CBT Diagnostic Engine
+                    {t("appTagline", "NTA CBT Diagnostic Engine")}
                   </span>
                 </div>
               </Link>
@@ -110,28 +113,28 @@ export default function Navbar() {
                       className="px-3 py-1.5 text-xs font-black text-black bg-[#FEF3C7] rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center gap-1.5"
                     >
                       <Trophy className="w-3.5 h-3.5 text-[#D97706]" />
-                      <span>Command Hub</span>
+                      <span>{t("commandHub", "Command Hub")}</span>
                     </Link>
                     <Link
                       href="/dashboard/mocks"
                       className="px-3 py-1.5 text-xs font-bold text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all flex items-center gap-1.5"
                     >
                       <BookOpen className="w-3.5 h-3.5 text-black/70" />
-                      <span>Practice Mocks</span>
+                      <span>{t("mocks", "Practice Mocks")}</span>
                     </Link>
                     <Link
                       href="/dashboard#radar"
                       className="px-3 py-1.5 text-xs font-bold text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all flex items-center gap-1.5"
                     >
                       <Target className="w-3.5 h-3.5 text-[#FF5C5C]" />
-                      <span>Weakness Radar</span>
+                      <span>{t("radar", "Weakness Radar")}</span>
                     </Link>
                     <Link
                       href="/dashboard#leaderboard"
                       className="px-3 py-1.5 text-xs font-bold text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all flex items-center gap-1.5"
                     >
                       <Award className="w-3.5 h-3.5 text-[#4F46E5]" />
-                      <span>Leaderboard</span>
+                      <span>{t("leaderboard", "Leaderboard")}</span>
                     </Link>
                   </nav>
                 </>
@@ -140,6 +143,8 @@ export default function Navbar() {
 
             {/* Right Action Items: Logged Out vs Logged In */}
             <div className="hidden sm:flex items-center gap-3 shrink-0">
+              <LanguageSelector variant="navbar" />
+
               {!isLoggedIn ? (
                 /* Logged Out State: Join Now & Log In CTAs */
                 <div className="flex items-center gap-2">
@@ -148,14 +153,14 @@ export default function Navbar() {
                     onClick={() => handleOpenOnboarding("login")}
                     className="px-3.5 py-2 text-xs font-black text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all cursor-pointer"
                   >
-                    Log In
+                    {t("logIn", "Log In")}
                   </button>
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("signup")}
                     className="px-4 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] active:bg-[#E03E3E] text-white font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5 cursor-pointer"
                   >
-                    <span>Join Now</span>
+                    <span>{t("joinNow", "Join Now")}</span>
                     <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
                   </button>
                 </div>
@@ -176,7 +181,7 @@ export default function Navbar() {
                           {streak}
                         </span>
                         <span className="text-black text-[11px] font-bold hidden md:inline">
-                          Days Streak
+                          {t("days", "Days")} {t("streak", "Streak")}
                         </span>
                       </div>
 
@@ -199,7 +204,7 @@ export default function Navbar() {
                         planId="ai_practice_pass_499"
                         variant="amber"
                         className="py-1.5 px-3.5 text-[11px] rounded-lg hidden sm:flex font-black border-2 border-black shadow-[2px_2px_0px_0px_#000]"
-                        buttonText="Upgrade"
+                        buttonText={t("upgrade", "Upgrade")}
                       />
                     </>
                   )}
@@ -298,19 +303,21 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="flex items-center gap-2 sm:hidden">
+            {/* Mobile Menu Button & Language Switcher */}
+            <div className="flex items-center gap-1.5 sm:hidden">
+              <LanguageSelector variant="navbar" className="scale-90 origin-right" />
+
               {!isLoggedIn ? (
                 <button
                   type="button"
                   onClick={() => handleOpenOnboarding("signup")}
-                  className="px-3 py-1.5 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:shadow-none"
+                  className="px-2.5 py-1.5 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:shadow-none"
                 >
-                  Join Now
+                  Join
                 </button>
               ) : (
                 !isHomepage && (
-                  <div className="flex items-center gap-1 px-2.5 py-1 bg-[#FEF3C7] border-2 border-black rounded-full text-black text-xs font-black shadow-[1px_1px_0px_0px_#000]">
+                  <div className="flex items-center gap-1 px-2 py-1 bg-[#FEF3C7] border-2 border-black rounded-full text-black text-xs font-black shadow-[1px_1px_0px_0px_#000]">
                     <Flame className="w-3.5 h-3.5 fill-[#F59E0B] text-[#D97706]" />
                     <span>{streak}</span>
                   </div>
@@ -369,14 +376,14 @@ export default function Navbar() {
                     onClick={() => handleOpenOnboarding("signup")}
                     className="flex-1 py-2 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] text-center"
                   >
-                    Join Now
+                    {t("joinNow", "Join Now")}
                   </button>
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("login")}
                     className="flex-1 py-2 rounded-lg bg-white text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] text-center"
                   >
-                    Log In
+                    {t("logIn", "Log In")}
                   </button>
                 </div>
               </div>
@@ -390,28 +397,28 @@ export default function Navbar() {
                     onClick={() => setMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-lg text-xs font-black bg-[#FEF3C7] border-2 border-black"
                   >
-                    Command Hub
+                    {t("commandHub", "Command Hub")}
                   </Link>
                   <Link
                     href="/dashboard/mocks"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-lg text-xs font-bold border-2 border-transparent hover:border-black hover:bg-white"
                   >
-                    Practice Mocks
+                    {t("mocks", "Practice Mocks")}
                   </Link>
                   <Link
                     href="/dashboard#radar"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-lg text-xs font-bold border-2 border-transparent hover:border-black hover:bg-white"
                   >
-                    Weakness Radar
+                    {t("radar", "Weakness Radar")}
                   </Link>
                   <Link
                     href="/dashboard#leaderboard"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-lg text-xs font-bold border-2 border-transparent hover:border-black hover:bg-white"
                   >
-                    Leaderboard
+                    {t("leaderboard", "Leaderboard")}
                   </Link>
                 </>
               ) : (
@@ -420,9 +427,14 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block px-3 py-2 rounded-lg text-sm border-2 border-transparent hover:border-black hover:bg-white"
                 >
-                  My Dashboard
+                  {t("commandHub", "My Dashboard")}
                 </Link>
               )}
+            </div>
+
+            {/* Language Selector in Mobile Menu */}
+            <div className="pt-2 border-t-2 border-black">
+              <LanguageSelector variant="mobile" />
             </div>
 
             {isLoggedIn && (
@@ -433,7 +445,7 @@ export default function Navbar() {
                   className="w-full py-2 px-3 rounded-lg bg-[#FEE2E2] text-[#DC2626] font-black text-xs border-2 border-black text-left flex items-center gap-2"
                 >
                   <LogOut className="w-4 h-4 text-[#DC2626]" />
-                  <span>Sign Out</span>
+                  <span>{t("signOut", "Sign Out")}</span>
                 </button>
               </div>
             )}

@@ -20,8 +20,10 @@ import { getTestAttemptStats } from "@/lib/analytics";
 import { Trophy, RecordedTestAttempt } from "@/types";
 import DiagnosticReportModal from "./DiagnosticReportModal";
 import MathRenderer from "./MathRenderer";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function CBTResultView() {
+  const { t, translateStem } = useTranslation();
   const testMeta = useCBTStore((state) => state.testMeta);
   const questions = useCBTStore((state) => state.questions);
   const answers = useCBTStore((state) => state.answers);
@@ -76,10 +78,14 @@ export default function CBTResultView() {
       const timeSpent = ans?.timeSpentSeconds ?? 0;
       return {
         questionId: q.id,
+        conceptId: q.conceptId,
         questionNumber: q.questionNumber,
         subject: testMeta?.subject ?? "Physics",
         chapter: q.chapter || q.topic || "Domain Core",
         microTopic: q.topic,
+        prompt: q.prompt,
+        options: q.options,
+        questionType: q.questionType,
         selectedOption,
         correctOption: q.correctOptionId,
         isCorrect,
@@ -221,7 +227,7 @@ export default function CBTResultView() {
               className="px-5 py-3 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs flex items-center gap-2 border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
             >
               <Sparkles className="w-4 h-4 fill-white" />
-              <span>AI Mistake Decrypter & Remedial Quiz</span>
+              <span>{t("aiDiagnosis", "AI Mistake Decrypter & Remedial Quiz")}</span>
             </button>
             <button
               type="button"
@@ -229,14 +235,14 @@ export default function CBTResultView() {
               className="px-5 py-3 rounded-lg bg-white text-black hover:bg-[#FAF7EE] font-black text-xs flex items-center gap-2 border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
             >
               <RotateCcw className="w-4 h-4 stroke-[2.5]" />
-              <span>Re-attempt Test</span>
+              <span>{t("retakeTest", "Re-attempt Test")}</span>
             </button>
             <Link
               href="/dashboard"
               className="px-5 py-3 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs flex items-center gap-2 shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
             >
               <Home className="w-4 h-4 stroke-[2.5]" />
-              <span>Dashboard</span>
+              <span>{t("backToDashboard", "Dashboard")}</span>
             </Link>
           </div>
         </div>
@@ -247,7 +253,7 @@ export default function CBTResultView() {
           <div className="bg-white rounded-lg p-4 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
             <div className="flex items-center justify-between">
               <p className="text-[11px] font-black uppercase tracking-wider text-black/60">
-                Net Score
+                {t("overallScore", "Net Score")}
               </p>
               {earnedXP > 0 && (
                 <span className="text-[10px] font-black font-mono bg-[#FEF3C7] text-black px-1.5 py-0.2 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
@@ -273,7 +279,7 @@ export default function CBTResultView() {
           {/* Accuracy */}
           <div className="bg-white rounded-lg p-4 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
             <p className="text-[11px] font-black uppercase tracking-wider text-black/60">
-              Accuracy
+              {t("accuracy", "Accuracy")}
             </p>
             <p className="text-3xl sm:text-4xl font-black font-mono mt-1 text-black">
               {accuracyPercentage}%
@@ -406,7 +412,7 @@ export default function CBTResultView() {
             <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
           </div>
           <div>
-            <p className="text-xs text-black/60 font-black uppercase">Correct Answers</p>
+            <p className="text-xs text-black/60 font-black uppercase">{t("correct", "Correct Answers")}</p>
             <p className="text-2xl font-black text-black font-mono">
               {correctCount}{" "}
               <span className="text-xs text-[#059669] font-black">
@@ -421,7 +427,7 @@ export default function CBTResultView() {
             <XCircle className="w-6 h-6 stroke-[2.5]" />
           </div>
           <div>
-            <p className="text-xs text-black/60 font-black uppercase">Incorrect Answers</p>
+            <p className="text-xs text-black/60 font-black uppercase">{t("incorrect", "Incorrect Answers")}</p>
             <p className="text-2xl font-black text-black font-mono">
               {incorrectCount}{" "}
               <span className="text-xs text-[#DC2626] font-black">
@@ -436,7 +442,7 @@ export default function CBTResultView() {
             <HelpCircle className="w-6 h-6 stroke-[2.5]" />
           </div>
           <div>
-            <p className="text-xs text-black/60 font-black uppercase">Unattempted</p>
+            <p className="text-xs text-black/60 font-black uppercase">{t("unattempted", "Unattempted")}</p>
             <p className="text-2xl font-black text-black font-mono">
               {unattemptedCount}{" "}
               <span className="text-xs text-black/60 font-black">
@@ -453,7 +459,7 @@ export default function CBTResultView() {
         <div className="p-6 border-b-2 border-black flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#FAF7EE]">
           <div>
             <h2 className="text-lg font-black text-black tracking-tight">
-              Detailed Question Post-Mortem & AI Diagnosis
+              {t("questionBreakdown", "Detailed Question Post-Mortem & AI Diagnosis")}
             </h2>
             <p className="text-xs text-black/70 font-semibold mt-0.5">
               Review every solution, time spent per question, and diagnostic alerts.
@@ -470,7 +476,7 @@ export default function CBTResultView() {
                   : "bg-white text-black hover:bg-[#FEF3C7] shadow-[2px_2px_0px_0px_#000]"
               }`}
             >
-              All ({questions.length})
+              {t("allQuestions", "All")} ({questions.length})
             </button>
             <button
               type="button"
@@ -481,7 +487,7 @@ export default function CBTResultView() {
                   : "bg-white text-black hover:bg-[#D1FAE5] shadow-[2px_2px_0px_0px_#000]"
               }`}
             >
-              Correct ({correctCount})
+              {t("correct", "Correct")} ({correctCount})
             </button>
             <button
               type="button"
@@ -492,7 +498,7 @@ export default function CBTResultView() {
                   : "bg-white text-black hover:bg-[#FEE2E2] shadow-[2px_2px_0px_0px_#000]"
               }`}
             >
-              Incorrect ({incorrectCount})
+              {t("incorrect", "Incorrect")} ({incorrectCount})
             </button>
             <button
               type="button"
@@ -503,7 +509,7 @@ export default function CBTResultView() {
                   : "bg-white text-black hover:bg-[#FEF3C7] shadow-[2px_2px_0px_0px_#000]"
               }`}
             >
-              Time-Sinks &gt;72s ({timeSinkCount})
+              {t("timeSinks", "Time-Sinks >72s")} ({timeSinkCount})
             </button>
             <button
               type="button"
@@ -514,7 +520,7 @@ export default function CBTResultView() {
                   : "bg-white text-black hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000]"
               }`}
             >
-              Unattempted ({unattemptedCount})
+              {t("unattempted", "Unattempted")} ({unattemptedCount})
             </button>
           </div>
         </div>
@@ -566,15 +572,15 @@ export default function CBTResultView() {
                     {/* Result Badge */}
                     {isCorrect ? (
                       <span className="bg-[#D1FAE5] text-black font-black px-2.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
-                        +5 Marks (Correct)
+                        +5 {t("correctMarks", "Marks (Correct)")}
                       </span>
                     ) : isIncorrect ? (
                       <span className="bg-[#FEE2E2] text-black font-black px-2.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
-                        -1 Mark (Penalty)
+                        -1 {t("penaltyMarks", "Mark (Penalty)")}
                       </span>
                     ) : (
                       <span className="bg-white text-black font-black px-2.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
-                        0 Marks (Skipped)
+                        0 {t("skippedMarks", "Marks (Skipped)")}
                       </span>
                     )}
                   </div>
@@ -582,7 +588,7 @@ export default function CBTResultView() {
 
                 {/* Prompt with MathRenderer */}
                 <div className="text-sm font-bold text-black leading-relaxed font-sans whitespace-pre-line">
-                  <MathRenderer text={q.prompt} />
+                  <MathRenderer text={translateStem(q.prompt)} />
                 </div>
 
                 {/* Options Review with MathRenderer */}
@@ -603,19 +609,19 @@ export default function CBTResultView() {
                         key={opt.id}
                         className={`p-3 rounded-lg border-2 flex items-start gap-2.5 ${borderClass}`}
                       >
-                        <span className="w-5 h-5 rounded-full bg-white border border-black flex items-center justify-center font-black text-[10px] shrink-0 mt-0.5">
+                        <span className="w-5 h-5 rounded-full bg-white border border-black flex items-center justify-center font-black text-[10px] shrink-0 mt-0.5" translate="no">
                           {opt.id}
                         </span>
                         <div className="flex-1">
-                          <MathRenderer text={opt.text} inline />
+                          <MathRenderer text={translateStem(opt.text)} inline />
                           {isUserPick && (
                             <span className="ml-2 text-[10px] font-black uppercase tracking-wider text-black/60">
-                              (Your Pick)
+                              {t("yourPick", "(Your Pick)")}
                             </span>
                           )}
                           {isRightAnswer && (
                             <span className="ml-2 text-[10px] font-black uppercase tracking-wider text-[#059669]">
-                              (Correct)
+                              {t("correct", "(Correct)")}
                             </span>
                           )}
                         </div>
@@ -624,12 +630,47 @@ export default function CBTResultView() {
                   })}
                 </div>
 
-                {/* Solution & AI Diagnosis with MathRenderer */}
-                <div className="mt-4 p-4 rounded-xl bg-[#FAF7EE] border-2 border-black text-xs space-y-2 shadow-[3px_3px_0px_0px_#000]">
+                {/* Solution, 3-Level Breakdown & AI Diagnosis with MathRenderer */}
+                <div className="mt-4 p-4 rounded-xl bg-[#FAF7EE] border-2 border-black text-xs space-y-3 shadow-[3px_3px_0px_0px_#000]">
                   <div className="text-black/80 font-medium leading-relaxed">
-                    <strong className="text-black font-black">Explanation: </strong>
-                    <MathRenderer text={q.explanation} className="mt-1" />
+                    <strong className="text-black font-black">{t("explanation", "Explanation:")} </strong>
+                    <MathRenderer text={q.explanation || q.solution?.detailed || "Standard verified solution based on NCERT guidelines."} className="mt-1" />
                   </div>
+
+                  {/* 3-Level Solution Cards: Quick & Concept */}
+                  {q.solution && (q.solution.quick || q.solution.concept) && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t-2 border-black/10">
+                      {q.solution.quick && (
+                        <div className="p-2.5 rounded-lg bg-white border border-black/30">
+                          <span className="text-[10px] font-black uppercase text-[#2563EB] block mb-0.5">⚡ 30-Sec Takeaway</span>
+                          <p className="text-black/90 font-semibold text-[11px] leading-snug">{q.solution.quick}</p>
+                        </div>
+                      )}
+                      {q.solution.concept && (
+                        <div className="p-2.5 rounded-lg bg-white border border-black/30">
+                          <span className="text-[10px] font-black uppercase text-[#059669] block mb-0.5">💡 Core NCERT Concept</span>
+                          <p className="text-black/90 font-semibold text-[11px] leading-snug">{q.solution.concept}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Formula / Key Concept Highlight */}
+                  {(q.formula || q.keyConcept) && (
+                    <div className="p-2.5 rounded-lg bg-[#FFFBEB] border border-[#F59E0B] text-black">
+                      <span className="text-[10px] font-black uppercase text-[#B45309] block mb-0.5">📐 Formula / Principle</span>
+                      <p className="font-bold text-[11px]">{q.formula || q.keyConcept}</p>
+                    </div>
+                  )}
+
+                  {/* Common Misconception Alert */}
+                  {q.misconception && (
+                    <div className="p-2.5 rounded-lg bg-[#FEF2F2] border border-[#EF4444] text-black">
+                      <span className="text-[10px] font-black uppercase text-[#DC2626] block mb-0.5">⚠️ Common Trap / Misconception</span>
+                      <p className="font-semibold text-[11px] text-black/90">{q.misconception.description}</p>
+                    </div>
+                  )}
+
                   {q.aiDiagnosisNotes && (
                     <div className="pt-2 border-t-2 border-black/10 flex items-start gap-2 text-black">
                       <Sparkles className="w-3.5 h-3.5 text-[#F59E0B] shrink-0 mt-0.5 fill-[#F59E0B]" />

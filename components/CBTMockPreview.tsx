@@ -12,8 +12,10 @@ import {
 import { MOCK_SAMPLE_QUESTION } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function CBTMockPreview() {
+  const { t, translateStem } = useTranslation();
   const isClient = useIsClient();
   const [selectedOption, setSelectedOption] = useState<"A" | "B" | "C" | "D" | null>("A");
   const [isMarkedReview, setIsMarkedReview] = useState(false);
@@ -96,9 +98,9 @@ export default function CBTMockPreview() {
             <Clock className="w-6 h-6 text-[#F59E0B] stroke-[2.5]" />
             <div>
               <p className="text-[10px] uppercase font-black tracking-wider text-black/60">
-                Time Remaining
+                {t("timeRemaining", "Time Remaining")}
               </p>
-              <p className="text-2xl font-black font-mono tracking-tight text-black">
+              <p className="text-2xl font-black font-mono tracking-tight text-black" translate="no">
                 {isClient ? formatTimer(secondsRemaining) : "59:42"}
               </p>
             </div>
@@ -113,7 +115,7 @@ export default function CBTMockPreview() {
             <div className="flex flex-wrap items-center justify-between px-6 py-4 bg-[#FAF7EE] border-b-2 border-black text-xs font-black text-black">
               <div className="flex items-center gap-3">
                 <span className="text-sm font-black text-black">
-                  Question No. {currentQuestionNumber}
+                  {t("question", "Question")} No. {currentQuestionNumber}
                 </span>
                 <span className="bg-[#FEF3C7] text-black px-2 py-0.5 rounded-full border border-black text-[11px] shadow-[1px_1px_0px_0px_#000]">
                   {MOCK_SAMPLE_QUESTION.topic}
@@ -121,10 +123,10 @@ export default function CBTMockPreview() {
               </div>
               <div className="flex items-center gap-3 text-[11px]">
                 <span className="text-black bg-[#D1FAE5] border border-black px-2 py-0.5 rounded font-mono font-black shadow-[1px_1px_0px_0px_#000]">
-                  Marks: +5
+                  {t("marksPlus", "Marks: +5")}
                 </span>
                 <span className="text-black bg-[#FEE2E2] border border-black px-2 py-0.5 rounded font-mono font-black shadow-[1px_1px_0px_0px_#000]">
-                  Negative: -1
+                  {t("marksMinus", "Negative: -1")}
                 </span>
                 <span className="text-black/60 hidden sm:inline font-bold">
                   {MOCK_SAMPLE_QUESTION.pyqSource}
@@ -135,7 +137,7 @@ export default function CBTMockPreview() {
             {/* Question Prompt */}
             <div className="p-6 sm:p-8">
               <p className="text-base sm:text-lg font-bold text-black leading-relaxed font-sans">
-                {MOCK_SAMPLE_QUESTION.prompt}
+                {translateStem(MOCK_SAMPLE_QUESTION.prompt)}
               </p>
 
               {/* Options */}
@@ -159,11 +161,12 @@ export default function CBTMockPreview() {
                             ? "bg-black text-white"
                             : "bg-[#FAF7EE] text-black"
                         }`}
+                        translate="no"
                       >
                         {opt.id}
                       </div>
                       <span className="font-bold text-black leading-snug">
-                        {opt.text}
+                        {translateStem(opt.text)}
                       </span>
                     </button>
                   );
@@ -178,7 +181,7 @@ export default function CBTMockPreview() {
                     onClick={handleClear}
                     className="px-3.5 py-2 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] transition-all"
                   >
-                    Clear Response
+                    {t("clearResponse", "Clear Response")}
                   </button>
                   <button
                     type="button"
@@ -190,7 +193,7 @@ export default function CBTMockPreview() {
                     }`}
                   >
                     <Bookmark className="w-3.5 h-3.5 stroke-[2.5]" />
-                    <span>{isMarkedReview ? "Marked for Review" : "Mark for Review"}</span>
+                    <span>{isMarkedReview ? t("markedReview", "Marked for Review") : t("markForReview", "Mark for Review")}</span>
                   </button>
                 </div>
 
@@ -205,7 +208,7 @@ export default function CBTMockPreview() {
                     }}
                     className="px-5 py-2.5 text-xs font-black rounded-lg bg-[#FF5C5C] text-white hover:bg-[#FF4545] border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center gap-2 transition-all"
                   >
-                    <span>Save & Next</span>
+                    <span>{t("saveAndNext", "Save & Next")}</span>
                     <ChevronRight className="w-4 h-4 stroke-[2.5]" />
                   </button>
                 </div>
@@ -218,7 +221,7 @@ export default function CBTMockPreview() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2 text-black font-black text-sm">
                     <Sparkles className="w-4 h-4 text-[#F59E0B] fill-[#F59E0B]" />
-                    <span>AI Granular Mistake Diagnosis & Concept Deep-Dive</span>
+                    <span>{t("aiDiagnosis", "AI Granular Mistake Diagnosis & Concept Deep-Dive")}</span>
                   </div>
                   <span
                     className={`text-xs font-black px-2.5 py-0.5 rounded-full border-2 border-black shadow-[1px_1px_0px_0px_#000] ${
@@ -227,12 +230,12 @@ export default function CBTMockPreview() {
                         : "bg-[#FEE2E2] text-black"
                     }`}
                   >
-                    {isCorrect ? "Correct (+5 Marks)" : "Incorrect Option Selected (-1 Mark)"}
+                    {isCorrect ? `+5 ${t("correctMarks", "Marks (Correct)")}` : `-1 ${t("penaltyMarks", "Mark (Penalty)")}`}
                   </span>
                 </div>
 
                 <p className="text-xs text-black/80 font-medium leading-relaxed mb-3">
-                  <strong className="text-black font-black">Official Solution: </strong>
+                  <strong className="text-black font-black">{t("officialSolutionText", "Official Solution")}: </strong>
                   {MOCK_SAMPLE_QUESTION.explanation}
                 </p>
 
@@ -241,7 +244,7 @@ export default function CBTMockPreview() {
                     <Lightbulb className="w-4 h-4 text-[#F59E0B] shrink-0 mt-0.5 stroke-[2.5]" />
                     <div>
                       <span className="font-black text-black">
-                        NTA Trap Analysis (AI Insight):
+                        {t("trapOptionAnalysisText", "NTA Trap Breakdown")}:
                       </span>
                       <p className="text-black/70 font-medium mt-0.5">
                         {MOCK_SAMPLE_QUESTION.aiDiagnosisNotes}
@@ -258,38 +261,38 @@ export default function CBTMockPreview() {
             <div className="bg-white rounded-xl border-2 border-black p-5 shadow-[5px_5px_0px_0px_#000]">
               <div className="flex items-center justify-between pb-3 border-b-2 border-black">
                 <h3 className="font-black text-black text-sm">
-                  Question Palette (50 Qs)
+                  {t("questionPalette", "Question Palette")} (50 Qs)
                 </h3>
                 <span className="text-[11px] text-black/60 font-bold">
-                  Physics (312)
+                  {t("physics", "Physics")} (312)
                 </span>
               </div>
 
               {/* Legend */}
               <div className="grid grid-cols-2 gap-2 my-4 text-[11px] font-bold text-black">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded bg-[#10B981] text-black text-[10px] flex items-center justify-center font-black border border-black shadow-[1px_1px_0px_0px_#000]">
+                  <span className="w-5 h-5 rounded bg-[#10B981] text-black text-[10px] flex items-center justify-center font-black border border-black shadow-[1px_1px_0px_0px_#000]" translate="no">
                     6
                   </span>
-                  <span>Answered</span>
+                  <span>{t("answered", "Answered")}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded bg-[#FF5C5C] text-white text-[10px] flex items-center justify-center font-black border border-black shadow-[1px_1px_0px_0px_#000]">
+                  <span className="w-5 h-5 rounded bg-[#FF5C5C] text-white text-[10px] flex items-center justify-center font-black border border-black shadow-[1px_1px_0px_0px_#000]" translate="no">
                     6
                   </span>
-                  <span>Not Answered</span>
+                  <span>{t("notAnswered", "Not Answered")}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded bg-[#F59E0B] text-black text-[10px] flex items-center justify-center font-black border border-black shadow-[1px_1px_0px_0px_#000]">
+                  <span className="w-5 h-5 rounded bg-[#F59E0B] text-black text-[10px] flex items-center justify-center font-black border border-black shadow-[1px_1px_0px_0px_#000]" translate="no">
                     3
                   </span>
-                  <span>Marked Review</span>
+                  <span>{t("markedReview", "Marked Review")}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded bg-white text-black text-[10px] flex items-center justify-center font-black border border-black shadow-[1px_1px_0px_0px_#000]">
+                  <span className="w-5 h-5 rounded bg-white text-black text-[10px] flex items-center justify-center font-black border border-black shadow-[1px_1px_0px_0px_#000]" translate="no">
                     35
                   </span>
-                  <span>Not Visited</span>
+                  <span>{t("notVisited", "Not Visited")}</span>
                 </div>
               </div>
 
@@ -315,6 +318,7 @@ export default function CBTMockPreview() {
                       className={`h-8 rounded text-xs transition-all flex items-center justify-center font-mono border border-black shadow-[1px_1px_0px_0px_#000] ${colorClasses} ${
                         isCurrent ? "ring-2 ring-black scale-105" : ""
                       }`}
+                      translate="no"
                     >
                       {q.num}
                     </button>
@@ -331,10 +335,11 @@ export default function CBTMockPreview() {
                   }}
                   className="w-full py-2.5 rounded-lg bg-black hover:bg-[#121212] text-white border-2 border-black font-black text-xs tracking-wider uppercase transition-all shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
                 >
-                  Submit Test Paper
+                  {t("submitTest", "Submit Test Paper")}
                 </button>
               </div>
             </div>
+
 
             {/* Preparation Tip Box */}
             <div className="rounded-xl border-2 border-black bg-[#FEF3C7] p-4 text-xs text-black shadow-[3px_3px_0px_0px_#000]">

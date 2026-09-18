@@ -17,10 +17,17 @@ import CBTSubmitModal from "./CBTSubmitModal";
 import CBTResultView from "./CBTResultView";
 import { CBTErrorBoundary } from "./CBTErrorBoundary";
 import MathRenderer from "./MathRenderer";
+import CBTCaseStudyPanel from "./CBTCaseStudyPanel";
+import CBTDiagramViewer from "./CBTDiagramViewer";
+import LanguageSelector from "@/components/i18n/LanguageSelector";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
+import { getActiveExamConfig } from "@/lib/config/examConfig";
 
 export default function CBTPlayer() {
+  const { t, translateStem } = useTranslation();
   const isClient = useIsClient();
   const [mobilePaletteOpen, setMobilePaletteOpen] = useState(false);
+  const examConfig = getActiveExamConfig();
 
   // Store state and actions
   const testMeta = useCBTStore((state) => state.testMeta);
@@ -43,15 +50,31 @@ export default function CBTPlayer() {
   const getQuestionStatus = useCBTStore((state) => state.getQuestionStatus);
   const getSummaryCounts = useCBTStore((state) => state.getSummaryCounts);
 
-  // Active interval for countdown timer and question-level time tracking
+  // Active wall-clock anchored interval for countdown timer and question-level time tracking
   useEffect(() => {
     if (!isTimerRunning || isSubmitted) return;
+
+    // Immediately synchronize timer on mount
+    tickSecond();
+
+    const handleVisibilityOrFocus = () => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        tickSecond();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityOrFocus);
+    window.addEventListener("focus", handleVisibilityOrFocus);
 
     const interval = setInterval(() => {
       tickSecond();
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibilityOrFocus);
+      window.removeEventListener("focus", handleVisibilityOrFocus);
+    };
   }, [isTimerRunning, isSubmitted, tickSecond]);
 
   // Format timer MM:SS
@@ -115,14 +138,14 @@ export default function CBTPlayer() {
               <div className="truncate">
                 <div className="flex items-center gap-2">
                   <h1 className="text-sm sm:text-base font-black text-black truncate">
-                    {testMeta?.title ?? "CUET UG Official Domain Mock Test"}
+                    {testMeta?.title ?? examConfig.name}
                   </h1>
                   <span className="hidden md:inline rounded-full bg-[#FEF3C7] text-black border border-black px-2 py-0.5 text-[10px] font-black uppercase shadow-[1px_1px_0px_0px_#000]">
-                    50 Compulsory Qs
+                    {t("compulsoryBadge", `${examConfig.totalQuestions} Compulsory Qs`)}
                   </span>
                 </div>
                 <p className="text-[11px] text-black/70 font-semibold truncate">
-                  Subject: <span className="font-black text-black">{testMeta?.subject}</span> ({testMeta?.code}) • Marking: +5 / -1 / 0
+                  {t("subjectLabel", "Subject:")} <span className="font-black text-black">{testMeta?.subject}</span> ({testMeta?.code}) • {t("markingInfo", `Marking: +${examConfig.correctMarks} / ${examConfig.incorrectMarks} / 0`)}
                 </p>
               </div>
             </div>
@@ -145,9 +168,9 @@ export default function CBTPlayer() {
                 />
                 <div className="flex flex-col items-start leading-none">
                   <span className="text-[9px] uppercase font-black text-black/60">
-                    Time Left
+                    {t("timeLeft", "Time Left")}
                   </span>
-                  <span className="text-sm sm:text-base font-black tracking-wider">
+                  <span className="text-sm sm:text-base font-black tracking-wider" translate="no">
                     {formatTimer(remainingSeconds)}
                   </span>
                 </div>
@@ -161,7 +184,7 @@ export default function CBTPlayer() {
                 aria-label="Open Question Palette"
               >
                 <Grid className="w-4 h-4 stroke-[2.5]" />
-                <span className="hidden sm:inline">Palette</span>
+                <span className="hidden sm:inline">{t("palette", "Palette")}</span>
               </button>
 
               {/* Submit Test Button */}
@@ -171,7 +194,7 @@ export default function CBTPlayer() {
                 className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs sm:text-sm tracking-wide shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5"
               >
                 <Send className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>Submit Test</span>
+                <span>{t("submitTest", "Submit Test")}</span>
               </button>
             </div>
           </div>
@@ -186,36 +209,42 @@ export default function CBTPlayer() {
           {/* ================================================================= */}
           <section className="lg:col-span-8 xl:col-span-9 flex flex-col bg-white rounded-xl border-2 border-black shadow-[5px_5px_0px_0px_#000] overflow-hidden">
             {/* Question Workspace Sub-header */}
-            <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-3.5 bg-[#FAF7EE] border-b-2 border-black text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3 bg-[#FAF7EE] border-b-2 border-black text-xs">
               <div className="flex items-center gap-2.5">
                 <span className="font-mono font-black text-black text-sm bg-[#FEF3C7] border border-black px-2.5 py-1 rounded shadow-[1px_1px_0px_0px_#000]">
-                  Question {currentQuestionIndex + 1} of {questions.length}
+                  {t("question", "Question")} {currentQuestionIndex + 1} {t("of", "of")} {questions.length}
                 </span>
                 <div className="text-black font-bold hidden sm:inline">
                   <MathRenderer text={currentQ.topic} inline />
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 font-mono text-[11px]">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 font-mono text-[11px]">
+                {/* Official NTA Language Switcher (13 CUET Official Languages) */}
+                <LanguageSelector variant="cbt" />
+
                 <span className="text-black bg-[#D1FAE5] border border-black px-2 py-0.5 rounded font-black shadow-[1px_1px_0px_0px_#000]">
-                  Marks: +5
+                  {t("marksPlus", "Marks: +5")}
                 </span>
                 <span className="text-black bg-[#FEE2E2] border border-black px-2 py-0.5 rounded font-black shadow-[1px_1px_0px_0px_#000]">
-                  Negative: -1
+                  {t("marksMinus", "Negative: -1")}
                 </span>
                 {currentAnswer?.timeSpentSeconds ? (
                   <span className="text-black/70 hidden md:inline font-bold">
-                    Spent: {currentAnswer.timeSpentSeconds}s
+                    {t("spent", "Spent:")} {currentAnswer.timeSpentSeconds}s
                   </span>
                 ) : null}
               </div>
             </div>
 
-            {/* Question Text & Content with KaTeX Math Rendering */}
+            {/* Question Text, Case Study Reading Panel, and Visual Diagram */}
             <div className="p-6 sm:p-8 flex-1">
-              <div className="text-base sm:text-lg font-bold text-black leading-relaxed font-sans whitespace-pre-line">
-                <MathRenderer text={currentQ.prompt} />
-              </div>
+              <CBTCaseStudyPanel
+                prompt={translateStem(currentQ.prompt)}
+                questionNumber={currentQuestionIndex + 1}
+              />
+
+              <CBTDiagramViewer question={currentQ} />
 
               {/* Radio Button Options (A, B, C, D) with KaTeX Math Rendering */}
               <div className="mt-8 space-y-3">
@@ -240,13 +269,14 @@ export default function CBTPlayer() {
                             ? "bg-black text-white"
                             : "bg-[#FAF7EE] text-black"
                         }`}
+                        translate="no"
                       >
                         {opt.id}
                       </div>
 
-                      {/* Option Text with MathRenderer */}
+                      {/* Option Text with MathRenderer and translation stem */}
                       <div className="text-sm font-bold leading-normal pt-0.5 flex-1">
-                        <MathRenderer text={opt.text} inline />
+                        <MathRenderer text={translateStem(opt.text)} inline />
                       </div>
                     </button>
                   );
@@ -266,7 +296,7 @@ export default function CBTPlayer() {
                   disabled={selectedOption === null}
                   className="px-3.5 py-2 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] disabled:opacity-40 disabled:pointer-events-none shadow-[2px_2px_0px_0px_#000] transition-all"
                 >
-                  Clear Response
+                  {t("clearResponse", "Clear Response")}
                 </button>
 
                 <button
@@ -279,7 +309,7 @@ export default function CBTPlayer() {
                   }`}
                 >
                   <Bookmark className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>Mark for Review & Next</span>
+                  <span>{t("markForReview", "Mark for Review & Next")}</span>
                 </button>
               </div>
 
@@ -292,7 +322,7 @@ export default function CBTPlayer() {
                   className="px-3.5 py-2 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] disabled:opacity-40 disabled:pointer-events-none shadow-[2px_2px_0px_0px_#000] transition-all flex items-center gap-1"
                 >
                   <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
-                  <span className="hidden sm:inline">Previous</span>
+                  <span className="hidden sm:inline">{t("previous", "Previous")}</span>
                 </button>
 
                 <button
@@ -301,7 +331,7 @@ export default function CBTPlayer() {
                   disabled={currentQuestionIndex >= questions.length - 1}
                   className="px-3.5 py-2 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] disabled:opacity-40 disabled:pointer-events-none shadow-[2px_2px_0px_0px_#000] transition-all flex items-center gap-1"
                 >
-                  <span className="hidden sm:inline">Next</span>
+                  <span className="hidden sm:inline">{t("next", "Next")}</span>
                   <ChevronRight className="w-4 h-4 stroke-[2.5]" />
                 </button>
 
@@ -310,7 +340,7 @@ export default function CBTPlayer() {
                   onClick={saveAndNext}
                   className="px-5 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs tracking-wide shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5"
                 >
-                  <span>Save & Next</span>
+                  <span>{t("saveAndNext", "Save & Next")}</span>
                   <ChevronRight className="w-4 h-4 stroke-[2.5]" />
                 </button>
               </div>
@@ -339,7 +369,7 @@ export default function CBTPlayer() {
             <div className="w-full max-h-[85vh] bg-white rounded-t-xl border-t-2 border-x-2 border-black p-5 overflow-y-auto shadow-[8px_8px_0px_0px_#000] animate-in slide-in-from-bottom duration-200">
               <div className="flex items-center justify-between pb-3 border-b-2 border-black mb-4">
                 <h3 className="text-sm font-black text-black">
-                  Question Palette (Questions 1 to {questions.length})
+                  {t("questionPalette", "Question Palette")} ({t("question", "Questions")} 1 {t("of", "to")} {questions.length})
                 </h3>
                 <button
                   type="button"
@@ -396,15 +426,17 @@ function PaletteCard({
   onSelectQuestion,
   counts,
 }: PaletteProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-white rounded-xl border-2 border-black shadow-[5px_5px_0px_0px_#000] p-5">
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b-2 border-black">
         <h2 className="font-black text-black text-xs uppercase tracking-wider">
-          Question Palette
+          {t("questionPalette", "Question Palette")}
         </h2>
         <span className="text-[11px] font-black text-black bg-[#FEF3C7] px-2 py-0.5 rounded-full border border-black shadow-[1px_1px_0px_0px_#000]">
-          {questions.length} Questions
+          {questions.length} {t("questionsCount", "Questions")}
         </span>
       </div>
 
@@ -415,7 +447,7 @@ function PaletteCard({
           <span className="w-5 h-5 rounded bg-[#10B981] text-black text-[10px] flex items-center justify-center font-black font-mono shrink-0 border border-black shadow-[1px_1px_0px_0px_#000]">
             {counts.answered}
           </span>
-          <span className="truncate">Answered</span>
+          <span className="truncate">{t("answered", "Answered")}</span>
         </div>
 
         {/* Not Answered: Red */}
@@ -423,7 +455,7 @@ function PaletteCard({
           <span className="w-5 h-5 rounded bg-[#FF5C5C] text-white text-[10px] flex items-center justify-center font-black font-mono shrink-0 border border-black shadow-[1px_1px_0px_0px_#000]">
             {counts.notAnswered}
           </span>
-          <span className="truncate">Not Answered</span>
+          <span className="truncate">{t("notAnswered", "Not Answered")}</span>
         </div>
 
         {/* Marked for Review: Amber */}
@@ -431,7 +463,7 @@ function PaletteCard({
           <span className="w-5 h-5 rounded bg-[#F59E0B] text-black text-[10px] flex items-center justify-center font-black font-mono shrink-0 border border-black shadow-[1px_1px_0px_0px_#000]">
             {counts.markedReview}
           </span>
-          <span className="truncate">Marked Review</span>
+          <span className="truncate">{t("markedReview", "Marked Review")}</span>
         </div>
 
         {/* Answered & Marked for Review */}
@@ -440,7 +472,7 @@ function PaletteCard({
             {counts.answeredMarkedReview}
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-black" />
           </span>
-          <span className="truncate">Ans & Marked</span>
+          <span className="truncate">{t("ansAndMarked", "Ans & Marked")}</span>
         </div>
 
         {/* Not Visited: Cream */}
@@ -448,7 +480,7 @@ function PaletteCard({
           <span className="w-5 h-5 rounded bg-[#FAF7EE] text-black text-[10px] flex items-center justify-center font-bold font-mono shrink-0 border border-black shadow-[1px_1px_0px_0px_#000]">
             {counts.notVisited}
           </span>
-          <span>Not Visited</span>
+          <span>{t("notVisited", "Not Visited")}</span>
         </div>
       </div>
 

@@ -10,8 +10,10 @@ import {
   ArrowUp,
   FileCheck2,
 } from "lucide-react";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function Footer() {
+  const { t } = useTranslation();
   const pathname = usePathname();
 
   const scrollToTop = () => {
@@ -41,21 +43,19 @@ export default function Footer() {
                   CUET <span className="text-[#FF5C5C]">AI-Prep</span>
                 </span>
                 <span className="text-[10px] font-black tracking-wider text-black/60 uppercase">
-                  NTA CBT Diagnostic Engine
+                  {t("appTagline", "NTA CBT Diagnostic Engine")}
                 </span>
               </div>
             </Link>
 
             <p className="text-xs text-black/80 font-medium leading-relaxed max-w-sm">
-              Purpose-built for the updated 2025/2026 zero-internal-choice CUET UG format.
-              We calibrate 72-second pacing and expose the exact conceptual traps that turn
-              +5s into -1s.
+              {t("footerAbout", "Purpose-built for the updated 2025/2026 zero-internal-choice CUET UG format. We calibrate 72-second pacing and expose the exact conceptual traps that turn +5s into -1s.")}
             </p>
 
             <div className="flex items-center gap-2 pt-1">
               <span className="inline-flex items-center gap-1 text-[11px] font-black text-black bg-[#D1FAE5] px-2.5 py-1 rounded-full border border-black shadow-[1px_1px_0px_0px_#000]">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#059669] stroke-[2.5]" />
-                NTA Exam Pattern Aligned
+                {t("patternAligned", "NTA Exam Pattern Aligned")}
               </span>
               <span className="inline-flex items-center gap-1 text-[11px] font-black text-black bg-[#FEF3C7] px-2.5 py-1 rounded-full border border-black shadow-[1px_1px_0px_0px_#000]">
                 100% NCERT Rules

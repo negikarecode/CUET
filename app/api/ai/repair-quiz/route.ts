@@ -7,6 +7,7 @@ import {
   incrementUsage,
   getRateLimitHeaders,
 } from "@/lib/rate-limiter";
+import { getQuestionsForTest } from "@/lib/data/mock50Questions";
 
 interface RepairQuizRequestBody {
   userId: string;
@@ -231,61 +232,49 @@ Respond with a JSON object of this format:
       }
     }
 
-    // 3. High-Fidelity Remedial Generator if database pool was empty or smaller than 5
+    // 3. Real Assessment Question Bank Selection if needed
     if (selectedQuestions.length < 5) {
       const neededCount = 5 - selectedQuestions.length;
-      const primaryTopic = primaryTopics[0] || "NCERT Core Principles";
+      const targetSubj = (subject || "physics").toLowerCase();
+      const testFallback = getQuestionsForTest(targetSubj);
+      const allSubjectQs = testFallback.questions || [];
 
-      for (let i = 1; i <= neededCount; i++) {
-        const qNum = selectedQuestions.length + 1;
-        const correctOpts: ("A" | "B" | "C" | "D")[] = ["A", "B", "C", "D"];
-        const correctOptionId = correctOpts[(i * 2) % 4]!;
+      // Find questions matching any of the primary weak topics or chapter
+      const topicMatches: Question[] = [];
+      const otherMatches: Question[] = [];
 
-        const options = [
-          {
-            id: "A" as const,
-            text: `Standard direct derivation according to NCERT textbook specifications (${primaryTopic}).`,
-          },
-          {
-            id: "B" as const,
-            text: `Frequent misinterpretation resulting from applying inverse proportionality without condition check.`,
-          },
-          {
-            id: "C" as const,
-            text: `Alternative condition valid only under isolated boundary assumptions.`,
-          },
-          {
-            id: "D" as const,
-            text: `Numerical distortion caused by sign omission during variable rearrangement.`,
-          },
-        ];
+      for (const q of allSubjectQs) {
+        if (selectedQuestions.some((sq) => sq.id === q.id)) continue;
+        const qTopicLower = (q.topic || "").toLowerCase();
+        const qChapLower = (q.chapter || "").toLowerCase();
+        const matchesTopic = primaryTopics.some((t) => {
+          const tLow = t.toLowerCase();
+          return qTopicLower.includes(tLow) || tLow.includes(qTopicLower) || qChapLower.includes(tLow);
+        });
 
-        // Ensure correct option text is at the right index
-        const currentCorrect = options[0]!;
-        const targetIdx = ["A", "B", "C", "D"].indexOf(correctOptionId);
-        if (targetIdx !== 0 && options[targetIdx]) {
-          const temp = options[targetIdx]!;
-          options[0] = { id: "A", text: temp.text };
-          options[targetIdx] = { id: correctOptionId, text: currentCorrect.text };
+        if (matchesTopic) {
+          topicMatches.push(q);
+        } else {
+          otherMatches.push(q);
         }
+      }
 
+      const poolToTakeFrom = topicMatches.length >= neededCount ? topicMatches : [...topicMatches, ...otherMatches];
+
+      for (let i = 0; i < neededCount && i < poolToTakeFrom.length; i++) {
+        const sourceQ = poolToTakeFrom[i]!;
+        const qNum = selectedQuestions.length + 1;
         selectedQuestions.push({
+          ...sourceQ,
           id: `repair_${Date.now()}_q${qNum}`,
-          subjectId: (subject || "remedial").toLowerCase(),
           questionNumber: qNum,
-          prompt: `[AI Repair Drill Q${qNum}] Which statement strictly represents the correct NCERT conceptual formulation regarding '${primaryTopic}'?`,
-          options,
-          correctOptionId,
-          explanation: `Per NCERT official guidelines for ${primaryTopic}: Option ${correctOptionId} accurately establishes the fundamental relationship without falling into common distractor traps.`,
-          aiDiagnosisNotes: `Concept Re-enforcement: Focus on the specific rule that caused mistakes in your full-length test.`,
-          pyqSource: "AI Automated Remedial Diagnostic",
-          topic: primaryTopic,
-          difficulty: "medium",
+          aiDiagnosisNotes: `Targeted Concept Remediation: Reinforcing key principles from ${sourceQ.chapter} (${sourceQ.topic}).`,
+          pyqSource: "Targeted CUET Diagnostic Repair Set",
         });
       }
     }
 
-    const testId = `repair_quiz_${Date.now()}`;
+    const testId = `repair_quiz_${(subject || "physics").toLowerCase().replace(/[^a-z0-9]/g, "_")}_${Date.now()}`;
     const responsePayload: RepairQuizResponse = {
       testId,
       title: `5-Question AI Repair Quiz: ${primaryTopics.join(", ")}`,

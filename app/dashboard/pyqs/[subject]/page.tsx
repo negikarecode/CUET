@@ -19,12 +19,136 @@ const PYQ_SUBJECT_LISTS: Record<
     subtitle: string;
     tests: Array<{ id: string; label: string; yearLabel: string; duration: string; questions: number }>;
   }
-> = {};
+> = {
+  physics: {
+    title: "Physics CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers with step-by-step NCERT solutions and pacing benchmarks.",
+    tests: [
+      { id: "physics-pyq", label: "CUET UG 2024 Physics (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "60 Minutes", questions: 50 },
+      { id: "physics-mock-2", label: "CUET UG 2024 Physics (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "60 Minutes", questions: 50 },
+      { id: "physics-mock-3", label: "CUET UG 2023 Physics (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "60 Minutes", questions: 50 },
+      { id: "physics-mock-4", label: "CUET UG 2023 Physics (Shift 2 Official CBT)", yearLabel: "2023 Official Paper", duration: "60 Minutes", questions: 50 },
+    ],
+  },
+  chemistry: {
+    title: "Chemistry CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers covering Organic, Inorganic, and Physical Chemistry.",
+    tests: [
+      { id: "chemistry-pyq", label: "CUET UG 2024 Chemistry (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "60 Minutes", questions: 50 },
+      { id: "chemistry-mock-2", label: "CUET UG 2024 Chemistry (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "60 Minutes", questions: 50 },
+      { id: "chemistry-mock-3", label: "CUET UG 2023 Chemistry (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "60 Minutes", questions: 50 },
+    ],
+  },
+  mathematics: {
+    title: "Mathematics CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers covering Calculus, Algebra, Probability, and Vectors.",
+    tests: [
+      { id: "math-sci-pyq", label: "CUET UG 2024 Mathematics (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "60 Minutes", questions: 50 },
+      { id: "maths-mock-2", label: "CUET UG 2024 Mathematics (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "60 Minutes", questions: 50 },
+      { id: "maths-mock-3", label: "CUET UG 2023 Mathematics (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "60 Minutes", questions: 50 },
+    ],
+  },
+  biology: {
+    title: "Biology CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers with comprehensive Genetics, Reproduction & Ecology keys.",
+    tests: [
+      { id: "biology-pyq", label: "CUET UG 2024 Biology (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "45 Minutes", questions: 50 },
+      { id: "biology-mock-2", label: "CUET UG 2024 Biology (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "45 Minutes", questions: 50 },
+      { id: "biology-mock-3", label: "CUET UG 2023 Biology (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "45 Minutes", questions: 50 },
+    ],
+  },
+  accountancy: {
+    title: "Accountancy CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers covering Partnership, Share Capital, and Cash Flow Statements.",
+    tests: [
+      { id: "accountancy-pyq", label: "CUET UG 2024 Accountancy (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "60 Minutes", questions: 50 },
+      { id: "accountancy-mock-2", label: "CUET UG 2024 Accountancy (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "60 Minutes", questions: 50 },
+      { id: "accountancy-mock-3", label: "CUET UG 2023 Accountancy (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "60 Minutes", questions: 50 },
+    ],
+  },
+  economics: {
+    title: "Economics CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers covering Macroeconomics, National Income, and Indian Economic Development.",
+    tests: [
+      { id: "eco-pyq", label: "CUET UG 2024 Economics (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "60 Minutes", questions: 50 },
+      { id: "eco-mock-2", label: "CUET UG 2024 Economics (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "60 Minutes", questions: 50 },
+      { id: "eco-mock-3", label: "CUET UG 2023 Economics (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "60 Minutes", questions: 50 },
+    ],
+  },
+  "business-studies": {
+    title: "Business Studies CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers covering Management Principles, Marketing, and Consumer Protection.",
+    tests: [
+      { id: "business-pyq", label: "CUET UG 2024 Business Studies (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "45 Minutes", questions: 50 },
+      { id: "bst-mock-2", label: "CUET UG 2024 Business Studies (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "45 Minutes", questions: 50 },
+      { id: "bst-mock-3", label: "CUET UG 2023 Business Studies (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "45 Minutes", questions: 50 },
+    ],
+  },
+  history: {
+    title: "History CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers covering Themes in Indian History Parts I, II, and III.",
+    tests: [
+      { id: "history-pyq", label: "CUET UG 2024 History (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "45 Minutes", questions: 50 },
+      { id: "history-mock-2", label: "CUET UG 2024 History (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "45 Minutes", questions: 50 },
+      { id: "history-mock-3", label: "CUET UG 2023 History (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "45 Minutes", questions: 50 },
+    ],
+  },
+  "political-science": {
+    title: "Political Science CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers covering Contemporary World Politics and Politics in India Since Independence.",
+    tests: [
+      { id: "pol-science-pyq", label: "CUET UG 2024 Political Science (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "45 Minutes", questions: 50 },
+      { id: "pol-science-mock-2", label: "CUET UG 2024 Political Science (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "45 Minutes", questions: 50 },
+      { id: "pol-science-mock-3", label: "CUET UG 2023 Political Science (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "45 Minutes", questions: 50 },
+    ],
+  },
+  geography: {
+    title: "Geography CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers covering Human Geography and India: People and Economy.",
+    tests: [
+      { id: "geo-pyq", label: "CUET UG 2024 Geography (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "45 Minutes", questions: 50 },
+      { id: "geo-mock-2", label: "CUET UG 2024 Geography (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "45 Minutes", questions: 50 },
+      { id: "geo-mock-3", label: "CUET UG 2023 Geography (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "45 Minutes", questions: 50 },
+    ],
+  },
+  psychology: {
+    title: "Psychology CUET Official PYQ Papers",
+    subtitle: "Official NTA CUET CBT past year papers covering Psychological Disorders, Personality, and Social Influence.",
+    tests: [
+      { id: "psychology-pyq", label: "CUET UG 2024 Psychology (Shift 1 Official CBT)", yearLabel: "2024 Official NTA CBT Paper", duration: "45 Minutes", questions: 50 },
+      { id: "psychology-mock-2", label: "CUET UG 2024 Psychology (Shift 2 Official CBT)", yearLabel: "2024 Shift 2 Official CBT", duration: "45 Minutes", questions: 50 },
+      { id: "psychology-mock-3", label: "CUET UG 2023 Psychology (Shift 1 Official CBT)", yearLabel: "2023 Official Paper", duration: "45 Minutes", questions: 50 },
+    ],
+  },
+};
+
+const ALIAS_MAP: Record<string, string> = {
+  maths: "mathematics",
+  math: "mathematics",
+  bio: "biology",
+  accounts: "accountancy",
+  accs: "accountancy",
+  eco: "economics",
+  bst: "business-studies",
+  business: "business-studies",
+  hist: "history",
+  pol: "political-science",
+  polscience: "political-science",
+  geo: "geography",
+  psy: "psychology",
+  psych: "psychology",
+};
+
+function getSubjectPYQData(subj: string) {
+  const norm = (subj || "").toLowerCase();
+  const canonical = ALIAS_MAP[norm] || norm;
+  return PYQ_SUBJECT_LISTS[canonical];
+}
 
 export default function SubjectPYQListPage({ params }: SubjectPageProps) {
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
-  const subjectData = PYQ_SUBJECT_LISTS[params.subject];
+  const subjectData = getSubjectPYQData(params.subject);
 
   if (!subjectData) {
     return (

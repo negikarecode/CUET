@@ -20,8 +20,11 @@ import {
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import UpgradeButton from "@/components/payments/UpgradeButton";
+import LanguageSelector from "@/components/i18n/LanguageSelector";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function DashboardSidebar() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
   const isClient = useIsClient();
@@ -55,35 +58,35 @@ export default function DashboardSidebar() {
   const navItems = [
     {
       id: "hub",
-      label: "Command Hub",
+      label: t("commandHub", "Command Hub"),
       href: "/dashboard",
       icon: Trophy,
       active: pathname === "/dashboard",
     },
     {
       id: "pyqs",
-      label: "PYQ Tests",
+      label: t("domainTests", "PYQ Tests"),
       href: "/dashboard/pyqs",
       icon: FileText,
       active: pathname.startsWith("/dashboard/pyqs"),
     },
     {
       id: "mocks",
-      label: "Mock Tests",
+      label: t("mocks", "Mock Tests"),
       href: "/dashboard/mocks",
       icon: ClipboardCheck,
       active: pathname.startsWith("/dashboard/mocks"),
     },
     {
       id: "radar",
-      label: "Weakness Radar",
+      label: t("radar", "Weakness Radar"),
       href: "/dashboard#radar",
       icon: Target,
       active: false,
     },
     {
       id: "leaderboard",
-      label: "Leaderboard",
+      label: t("leaderboard", "Leaderboard"),
       href: "/dashboard/leaderboard",
       icon: Award,
       active: pathname === "/dashboard/leaderboard",
@@ -187,11 +190,13 @@ export default function DashboardSidebar() {
 
       {/* Bottom: Upgrade CTA & Sign Out */}
       <div className="space-y-3 pt-6 border-t-2 border-black/10">
+        <LanguageSelector variant="sidebar" />
+
         <UpgradeButton
           planId="ai_practice_pass_499"
           variant="amber"
           className="w-full py-2.5 px-3 text-xs rounded-xl font-black border-2 border-black shadow-[3px_3px_0px_0px_#000] text-center flex items-center justify-center gap-2"
-          buttonText="Upgrade Pass"
+          buttonText={t("upgradeToPro", "Upgrade Pass")}
         />
 
         <button
@@ -200,7 +205,7 @@ export default function DashboardSidebar() {
           className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-white hover:bg-[#FEE2E2] text-black hover:text-[#DC2626] font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer"
         >
           <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
+          <span>{t("signOut", "Sign Out")}</span>
         </button>
       </div>
     </div>
@@ -220,6 +225,8 @@ export default function DashboardSidebar() {
         </Link>
 
         <div className="flex items-center gap-2">
+          <LanguageSelector variant="navbar" className="scale-90 origin-right" />
+
           <div className="flex items-center gap-1 px-2 py-1 bg-[#FEF3C7] rounded-full border-2 border-black text-xs font-black">
             <Flame className="w-3.5 h-3.5 text-[#D97706] fill-[#F59E0B]" />
             <span>{streak}d</span>

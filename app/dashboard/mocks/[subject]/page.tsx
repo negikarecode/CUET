@@ -8,6 +8,12 @@ import {
   MATHS_MOCK_TESTS,
   BIOLOGY_MOCK_TESTS,
   ACCOUNTANCY_MOCK_TESTS,
+  ECONOMICS_MOCK_TESTS,
+  BUSINESS_STUDIES_MOCK_TESTS,
+  HISTORY_MOCK_TESTS,
+  POLITICAL_SCIENCE_MOCK_TESTS,
+  GEOGRAPHY_MOCK_TESTS,
+  PSYCHOLOGY_MOCK_TESTS,
   CUET_SUBJECTS,
 } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -43,7 +49,43 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
     subjectKey === "accountancy-mock" ||
     subjectKey === "accounts" ||
     subjectKey === "accs";
-  const isLive = isPhysics || isChemistry || isMaths || isBio || isAccountancy;
+  const isEco =
+    subjectKey === "eco" ||
+    subjectKey === "economics" ||
+    subjectKey === "eco-mock" ||
+    subjectKey === "economics-mock";
+  const isBst =
+    subjectKey === "bst" ||
+    subjectKey === "business" ||
+    subjectKey === "business-studies" ||
+    subjectKey === "bst-mock" ||
+    subjectKey === "business-mock" ||
+    subjectKey === "business-studies-mock";
+  const isHistory =
+    subjectKey === "history" ||
+    subjectKey === "history-mock" ||
+    subjectKey === "hist" ||
+    subjectKey === "hist-mock";
+  const isPoliticalScience =
+    subjectKey === "political-science" ||
+    subjectKey === "pol-science" ||
+    subjectKey === "polscience" ||
+    subjectKey === "political" ||
+    subjectKey === "pol-science-mock" ||
+    subjectKey === "pol" ||
+    subjectKey === "pol-mock";
+  const isGeography =
+    subjectKey === "geography" ||
+    subjectKey === "geo" ||
+    subjectKey === "geo-mock" ||
+    subjectKey === "geography-mock";
+  const isPsychology =
+    subjectKey === "psychology" ||
+    subjectKey === "psy" ||
+    subjectKey === "psych" ||
+    subjectKey === "psychology-mock" ||
+    subjectKey === "psy-mock";
+  const isLive = isPhysics || isChemistry || isMaths || isBio || isAccountancy || isEco || isBst || isHistory || isPoliticalScience || isGeography || isPsychology;
 
   // Find subject config if available
   const subjectConfig = CUET_SUBJECTS.find(
@@ -54,7 +96,13 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
       (isChemistry && s.id === "chemistry") ||
       (isMaths && (s.id === "mathematics-sci" || s.id === "mathematics")) ||
       (isBio && s.id === "biology") ||
-      (isAccountancy && (s.id === "accountancy" || s.name.toLowerCase().includes("account")))
+      (isAccountancy && (s.id === "accountancy" || s.name.toLowerCase().includes("account"))) ||
+      (isEco && (s.id === "economics" || s.name.toLowerCase().includes("economic"))) ||
+      (isBst && (s.id === "business-studies" || s.name.toLowerCase().includes("business"))) ||
+      (isHistory && (s.id === "history" || s.name.toLowerCase().includes("histor"))) ||
+      (isPoliticalScience && (s.id === "political-science" || s.name.toLowerCase().includes("politi"))) ||
+      (isGeography && (s.id === "geography" || s.name.toLowerCase().includes("geograph"))) ||
+      (isPsychology && (s.id === "psychology" || s.name.toLowerCase().includes("psych")))
   );
 
   const subjectName = isPhysics
@@ -67,6 +115,18 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
     ? "Biology"
     : isAccountancy
     ? "Accountancy"
+    : isEco
+    ? "Economics"
+    : isBst
+    ? "Business Studies"
+    : isHistory
+    ? "History"
+    : isPoliticalScience
+    ? "Political Science"
+    : isGeography
+    ? "Geography"
+    : isPsychology
+    ? "Psychology"
     : subjectConfig?.name ?? (subjectKey.charAt(0).toUpperCase() + subjectKey.slice(1));
 
   const code = isPhysics
@@ -79,11 +139,23 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
     ? "304"
     : isAccountancy
     ? "301"
+    : isEco
+    ? "309"
+    : isBst
+    ? "305"
+    : isHistory
+    ? "314"
+    : isPoliticalScience
+    ? "323"
+    : isGeography
+    ? "313"
+    : isPsychology
+    ? "324"
     : subjectConfig?.code ?? "300";
   const title = `${subjectName} Domain Full CBT Mocks`;
 
   const subtitle = isLive
-    ? isBio
+    ? isBio || isHistory || isPoliticalScience || isGeography || isPsychology
       ? "20 Full-Length NTA CBT Mock Papers • 50 Compulsory Questions • 45 Minutes each"
       : "20 Full-Length NTA CBT Mock Papers • 50 Compulsory Questions • 60 Minutes each"
     : "50 Compulsory Questions per Paper • Standard NTA CUET CBT Syllabus (Releasing Soon)";
@@ -98,6 +170,18 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
     ? BIOLOGY_MOCK_TESTS
     : isAccountancy
     ? ACCOUNTANCY_MOCK_TESTS
+    : isEco
+    ? ECONOMICS_MOCK_TESTS
+    : isBst
+    ? BUSINESS_STUDIES_MOCK_TESTS
+    : isHistory
+    ? HISTORY_MOCK_TESTS
+    : isPoliticalScience
+    ? POLITICAL_SCIENCE_MOCK_TESTS
+    : isGeography
+    ? GEOGRAPHY_MOCK_TESTS
+    : isPsychology
+    ? PSYCHOLOGY_MOCK_TESTS
     : [];
 
   return (
