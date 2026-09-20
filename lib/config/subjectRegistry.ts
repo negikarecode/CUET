@@ -281,13 +281,229 @@ export const SUPPORTED_SUBJECTS_REGISTRY: Record<string, SubjectMetadata> = {
     contentStatus: "approved",
     disclaimer: "CUET UG 2026-pattern practice for Domain Code 324. Not endorsed by NTA.",
   },
+  sociology: {
+    id: "sociology",
+    name: "Sociology",
+    officialCode: "325",
+    syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["conceptual", "case-based", "assertion-reasoning", "multi-statement"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 8,
+      numericalTargetPercentage: 0,
+      caseBasedTargetPercentage: 20,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-21",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 325. Not endorsed by NTA.",
+  },
+  physical_education: {
+    id: "physical_education",
+    name: "Physical Education",
+    officialCode: "321",
+    syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["conceptual", "case-based", "assertion-reasoning"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 8,
+      numericalTargetPercentage: 5,
+      caseBasedTargetPercentage: 20,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-21",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 321. Not endorsed by NTA.",
+  },
+  computer_science: {
+    id: "computer_science",
+    name: "Computer Science / Informatics Practices",
+    officialCode: "308",
+    syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["conceptual", "direct-numerical", "case-based", "code-tracing"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 8,
+      numericalTargetPercentage: 20,
+      caseBasedTargetPercentage: 20,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-21",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 308. Not endorsed by NTA.",
+  },
+  home_science: {
+    id: "home_science",
+    name: "Home Science",
+    officialCode: "315",
+    syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["conceptual", "case-based", "assertion-reasoning"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 8,
+      numericalTargetPercentage: 0,
+      caseBasedTargetPercentage: 20,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-21",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 315. Not endorsed by NTA.",
+  },
+  mass_media: {
+    id: "mass_media",
+    name: "Mass Media / Mass Communication",
+    officialCode: "318",
+    syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["conceptual", "case-based", "assertion-reasoning"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 7,
+      numericalTargetPercentage: 0,
+      caseBasedTargetPercentage: 20,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-21",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 318. Not endorsed by NTA.",
+  },
+  environmental_studies: {
+    id: "environmental_studies",
+    name: "Environmental Studies",
+    officialCode: "307",
+    syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["conceptual", "case-based", "assertion-reasoning"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 5,
+      numericalTargetPercentage: 0,
+      caseBasedTargetPercentage: 20,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-21",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 307. Not endorsed by NTA.",
+  },
+  fine_arts: {
+    id: "fine_arts",
+    name: "Fine Arts / Visual Arts",
+    officialCode: "311",
+    syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["conceptual", "case-based", "assertion-reasoning"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 4,
+      numericalTargetPercentage: 0,
+      caseBasedTargetPercentage: 20,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-21",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 311. Not endorsed by NTA.",
+  },
+  agriculture: {
+    id: "agriculture",
+    name: "Agriculture",
+    officialCode: "302",
+    syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["conceptual", "case-based", "assertion-reasoning"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 4,
+      numericalTargetPercentage: 5,
+      caseBasedTargetPercentage: 20,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-21",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 302. Not endorsed by NTA.",
+  },
+  anthropology: {
+    id: "anthropology",
+    name: "Anthropology",
+    officialCode: "303",
+    syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["conceptual", "case-based", "assertion-reasoning"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 4,
+      numericalTargetPercentage: 0,
+      caseBasedTargetPercentage: 20,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-21",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 303. Not endorsed by NTA.",
+  },
 };
 
 export const SUPPORTED_SUBJECT_KEYS = Object.keys(SUPPORTED_SUBJECTS_REGISTRY);
 
 export function getSubjectMetadata(subjectKey: string): SubjectMetadata | undefined {
-  const normalized = subjectKey.toLowerCase().trim();
-  if (normalized === "accountancy") return SUPPORTED_SUBJECTS_REGISTRY["accs"];
-  if (normalized === "polscience") return SUPPORTED_SUBJECTS_REGISTRY["pol science"];
-  return SUPPORTED_SUBJECTS_REGISTRY[normalized];
+  const normalized = subjectKey.toLowerCase().trim().replace(/[-_]/g, "");
+  if (normalized === "accountancy" || normalized === "accounts" || normalized === "accs") return SUPPORTED_SUBJECTS_REGISTRY["accs"];
+  if (normalized === "polscience" || normalized === "politicalscience" || normalized === "pol") return SUPPORTED_SUBJECTS_REGISTRY["pol science"];
+  if (normalized === "sociology" || normalized === "soc") return SUPPORTED_SUBJECTS_REGISTRY["sociology"];
+  if (normalized === "physicaleducation" || normalized === "ped" || normalized === "physical") return SUPPORTED_SUBJECTS_REGISTRY["physical_education"];
+  if (normalized === "computerscience" || normalized === "cs" || normalized === "csip" || normalized === "informaticspractices") return SUPPORTED_SUBJECTS_REGISTRY["computer_science"];
+  if (normalized === "homescience" || normalized === "hsc") return SUPPORTED_SUBJECTS_REGISTRY["home_science"];
+  if (normalized === "massmedia" || normalized === "masscommunication" || normalized === "mmc") return SUPPORTED_SUBJECTS_REGISTRY["mass_media"];
+  if (normalized === "environmentalstudies" || normalized === "environmentalscience" || normalized === "evs") return SUPPORTED_SUBJECTS_REGISTRY["environmental_studies"];
+  if (normalized === "finearts" || normalized === "visualarts" || normalized === "fa") return SUPPORTED_SUBJECTS_REGISTRY["fine_arts"];
+  if (normalized === "agriculture" || normalized === "agr") return SUPPORTED_SUBJECTS_REGISTRY["agriculture"];
+  if (normalized === "anthropology" || normalized === "ant") return SUPPORTED_SUBJECTS_REGISTRY["anthropology"];
+  return SUPPORTED_SUBJECTS_REGISTRY[subjectKey.toLowerCase().trim()];
 }
