@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   getMockTestsForSubject,
@@ -10,7 +10,6 @@ import {
   ClipboardCheck,
   ArrowRight,
   ChevronDown,
-  Filter,
   Atom,
   Timer,
   FileCheck2,
@@ -370,19 +369,6 @@ export default function MocksPage() {
   const testAttempts = useTestStore((state) => state.testAttempts);
   const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
   const [selectedTab, setSelectedTab] = useState<SubjectKey>("all");
-  const [openDropdown, setOpenDropdown] = useState<StreamKey | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setOpenDropdown(null);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const allMocksList: Array<
     MockTestItem & { subjectName: string; subjectSlug: string; code: string }
@@ -425,7 +411,6 @@ export default function MocksPage() {
   const handleSelectStream = (stream: StreamKey) => {
     setSelectedStream(stream);
     setSelectedTab("all");
-    setOpenDropdown(null);
   };
 
   const handleSelectSubject = (subjKey: SubjectKey, streamKey?: StreamKey) => {
@@ -442,11 +427,6 @@ export default function MocksPage() {
     } else {
       setSelectedStream("all");
     }
-    setOpenDropdown(null);
-  };
-
-  const toggleDropdown = (stream: StreamKey) => {
-    setOpenDropdown((prev) => (prev === stream ? null : stream));
   };
 
   // Subjects to show in the subject dropdown select
@@ -487,272 +467,39 @@ export default function MocksPage() {
           </p>
         </div>
 
-        {/* ========================================================================= */}
-        {/* STREAM & SUBJECT DROPDOWN NAVIGATION BAR */}
-        {/* ========================================================================= */}
-        <div
-          ref={dropdownRef}
-          className="bg-white rounded-xl border-2 border-black p-4 md:p-5 shadow-[4px_4px_0px_0px_#000] space-y-4"
-        >
-          {/* Top Label & Quick Stats */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-black/10 pb-3">
-            <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-black/60" />
-              <span className="text-xs font-black uppercase text-black/70 tracking-wider">
-                Filter by Stream & Subject
-              </span>
-            </div>
-            <span className="text-xs font-bold text-black/60">
-              Showing <span className="font-black text-black">{displayedTests.length}</span> papers
-              {selectedStream !== "all" && (
-                <> in <span className="font-black text-[#FF5C5C]">{STREAM_CONFIGS[selectedStream].name}</span></>
-              )}
-              {selectedTab !== "all" && (
-                <> • <span className="font-black text-black">{SUBJECT_CONFIGS[selectedTab].name}</span></>
-              )}
-            </span>
-          </div>
-
-          {/* Desktop & Tablet: Interactive Stream Dropdowns Bar */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* All Mocks Button */}
-            <button
-              type="button"
-              onClick={() => handleSelectStream("all")}
-              className={`px-4 py-2.5 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer ${
-                selectedStream === "all" && selectedTab === "all"
-                  ? "bg-[#FF5C5C] text-white"
-                  : "bg-[#FAF7EE] text-black hover:bg-white"
-              }`}
-            >
-              All Live Mocks (400)
-            </button>
-
-            {/* Science Stream Dropdown */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => toggleDropdown("science")}
-                className={`px-4 py-2.5 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer flex items-center gap-2 ${
-                  selectedStream === "science"
-                    ? "bg-[#FF5C5C] text-white"
-                    : "bg-white text-black hover:bg-[#FAF7EE]"
-                }`}
-              >
-                <span>Science Stream (7)</span>
-                <ChevronDown
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                    openDropdown === "science" ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {openDropdown === "science" && (
-                <div className="absolute left-0 mt-2 w-72 bg-white rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_#000] p-2 z-30 space-y-1 animate-in fade-in zoom-in-95 duration-150">
-                  <div className="px-3 py-1.5 text-[11px] font-black uppercase text-black/50 border-b border-black/10 flex items-center justify-between">
-                    <span>Science Subjects</span>
-                    <span>140 Mocks</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleSelectStream("science")}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-xs font-black flex items-center justify-between transition-colors ${
-                      selectedStream === "science" && selectedTab === "all"
-                        ? "bg-[#FF5C5C] text-white"
-                        : "hover:bg-[#FAF7EE] text-black"
-                    }`}
-                  >
-                    <span>View All Science Mocks</span>
-                    <span className="text-[10px] opacity-70">140 Mocks</span>
-                  </button>
-                  {STREAM_CONFIGS.science.subjects.map((subKey) => {
-                    const sub = SUBJECT_CONFIGS[subKey];
-                    const Icon = sub.icon;
-                    const isSelected = selectedTab === subKey;
-                    return (
-                      <button
-                        key={subKey}
-                        type="button"
-                        onClick={() => handleSelectSubject(subKey, "science")}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-colors ${
-                          isSelected
-                            ? "bg-[#FEF3C7] text-black border border-black font-black"
-                            : "hover:bg-[#FAF7EE] text-black/80"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icon className="w-3.5 h-3.5 shrink-0" />
-                          <span>{sub.name}</span>
-                        </div>
-                        <span className="text-[10px] opacity-70">Code {sub.code}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Commerce Stream Dropdown */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => toggleDropdown("commerce")}
-                className={`px-4 py-2.5 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer flex items-center gap-2 ${
-                  selectedStream === "commerce"
-                    ? "bg-[#FF5C5C] text-white"
-                    : "bg-white text-black hover:bg-[#FAF7EE]"
-                }`}
-              >
-                <span>Commerce Stream (4)</span>
-                <ChevronDown
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                    openDropdown === "commerce" ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {openDropdown === "commerce" && (
-                <div className="absolute left-0 mt-2 w-72 bg-white rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_#000] p-2 z-30 space-y-1 animate-in fade-in zoom-in-95 duration-150">
-                  <div className="px-3 py-1.5 text-[11px] font-black uppercase text-black/50 border-b border-black/10 flex items-center justify-between">
-                    <span>Commerce Subjects</span>
-                    <span>80 Mocks</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleSelectStream("commerce")}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-xs font-black flex items-center justify-between transition-colors ${
-                      selectedStream === "commerce" && selectedTab === "all"
-                        ? "bg-[#FF5C5C] text-white"
-                        : "hover:bg-[#FAF7EE] text-black"
-                    }`}
-                  >
-                    <span>View All Commerce Mocks</span>
-                    <span className="text-[10px] opacity-70">80 Mocks</span>
-                  </button>
-                  {STREAM_CONFIGS.commerce.subjects.map((subKey) => {
-                    const sub = SUBJECT_CONFIGS[subKey];
-                    const Icon = sub.icon;
-                    const isSelected = selectedTab === subKey;
-                    return (
-                      <button
-                        key={subKey}
-                        type="button"
-                        onClick={() => handleSelectSubject(subKey, "commerce")}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-colors ${
-                          isSelected
-                            ? "bg-[#FEF3C7] text-black border border-black font-black"
-                            : "hover:bg-[#FAF7EE] text-black/80"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icon className="w-3.5 h-3.5 shrink-0" />
-                          <span>{sub.name}</span>
-                        </div>
-                        <span className="text-[10px] opacity-70">Code {sub.code}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Humanities Stream Dropdown */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => toggleDropdown("humanities")}
-                className={`px-4 py-2.5 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer flex items-center gap-2 ${
-                  selectedStream === "humanities"
-                    ? "bg-[#FF5C5C] text-white"
-                    : "bg-white text-black hover:bg-[#FAF7EE]"
-                }`}
-              >
-                <span>Humanities & Arts (10)</span>
-                <ChevronDown
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                    openDropdown === "humanities" ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {openDropdown === "humanities" && (
-                <div className="absolute left-0 mt-2 w-80 bg-white rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_#000] p-2 z-30 space-y-1 animate-in fade-in zoom-in-95 duration-150 max-h-96 overflow-y-auto">
-                  <div className="px-3 py-1.5 text-[11px] font-black uppercase text-black/50 border-b border-black/10 flex items-center justify-between">
-                    <span>Humanities Subjects</span>
-                    <span>200 Mocks</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleSelectStream("humanities")}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-xs font-black flex items-center justify-between transition-colors ${
-                      selectedStream === "humanities" && selectedTab === "all"
-                        ? "bg-[#FF5C5C] text-white"
-                        : "hover:bg-[#FAF7EE] text-black"
-                    }`}
-                  >
-                    <span>View All Humanities Mocks</span>
-                    <span className="text-[10px] opacity-70">200 Mocks</span>
-                  </button>
-                  {STREAM_CONFIGS.humanities.subjects.map((subKey) => {
-                    const sub = SUBJECT_CONFIGS[subKey];
-                    const Icon = sub.icon;
-                    const isSelected = selectedTab === subKey;
-                    return (
-                      <button
-                        key={subKey}
-                        type="button"
-                        onClick={() => handleSelectSubject(subKey, "humanities")}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-colors ${
-                          isSelected
-                            ? "bg-[#FEF3C7] text-black border border-black font-black"
-                            : "hover:bg-[#FAF7EE] text-black/80"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icon className="w-3.5 h-3.5 shrink-0" />
-                          <span>{sub.name}</span>
-                        </div>
-                        <span className="text-[10px] opacity-70">Code {sub.code}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Direct Dual Dropdown Selectors (Accessible for mobile & fast selection) */}
-          <div className="pt-3 border-t border-black/10 grid grid-cols-1 md:grid-cols-2 gap-3">
+        {/* Stream & Subject Dropdown Controls */}
+        <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Stream Dropdown Select */}
-            <div className="space-y-1">
-              <label className="text-[11px] font-black uppercase text-black/60 tracking-wider">
+            <div className="space-y-1.5">
+              <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
                 Select Stream:
               </label>
               <div className="relative">
                 <select
                   value={selectedStream}
                   onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
-                  className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-xs px-3.5 py-2.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-8"
+                  className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
                 >
                   <option value="all">All Streams (400 Total Mocks)</option>
                   <option value="science">Science Stream (7 Subjects • 140 Mocks)</option>
                   <option value="commerce">Commerce Stream (4 Subjects • 80 Mocks)</option>
                   <option value="humanities">Humanities & Arts (10 Subjects • 200 Mocks)</option>
                 </select>
-                <ChevronDown className="w-4 h-4 text-black/60 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
             </div>
 
             {/* Subject Dropdown Select */}
-            <div className="space-y-1">
-              <label className="text-[11px] font-black uppercase text-black/60 tracking-wider">
+            <div className="space-y-1.5">
+              <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
                 Select Subject:
               </label>
               <div className="relative">
                 <select
                   value={selectedTab}
                   onChange={(e) => handleSelectSubject(e.target.value as SubjectKey)}
-                  className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-xs px-3.5 py-2.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-8"
+                  className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
                 >
                   <option value="all">
                     {selectedStream === "all"
@@ -791,7 +538,7 @@ export default function MocksPage() {
                     ))
                   )}
                 </select>
-                <ChevronDown className="w-4 h-4 text-black/60 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
             </div>
           </div>
@@ -833,13 +580,6 @@ export default function MocksPage() {
                   <span>Open Full Subject Suite</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => handleSelectSubject("all")}
-                  className="px-3 py-2 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer bg-[#FAF7EE] text-black hover:bg-white"
-                >
-                  View All Mocks
-                </button>
               </div>
             </div>
           </div>
@@ -849,52 +589,18 @@ export default function MocksPage() {
         {/* STREAM HEADING BANNER: rendered when a stream is selected with all its subjects */}
         {/* =============================================================== */}
         {!activeSubjectInfo && activeStreamInfo && (
-          <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000] space-y-4 animate-in fade-in duration-200">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-xl md:text-2xl font-black text-black">
-                    {activeStreamInfo.name} Full CBT Mocks
-                  </h2>
-                  <span className="text-xs font-black uppercase bg-[#D1FAE5] text-[#065F46] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
-                    {activeStreamInfo.badge}
-                  </span>
-                </div>
-                <p className="text-sm font-semibold text-black/70">
-                  Select an individual subject below or explore all {displayedTests.length} mock tests across the {activeStreamInfo.name}.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => handleSelectStream("all")}
-                  className="px-4 py-2 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer bg-[#FAF7EE] text-black hover:bg-white"
-                >
-                  Reset to All Streams
-                </button>
-              </div>
+          <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000] space-y-2 animate-in fade-in duration-200">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-xl md:text-2xl font-black text-black">
+                {activeStreamInfo.name} Full CBT Mocks
+              </h2>
+              <span className="text-xs font-black uppercase bg-[#D1FAE5] text-[#065F46] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                {activeStreamInfo.badge}
+              </span>
             </div>
-
-            {/* Quick Pill Tabs for subjects in this stream */}
-            <div className="pt-2 flex flex-wrap gap-2">
-              {activeStreamInfo.subjects.map((subKey) => {
-                const sub = SUBJECT_CONFIGS[subKey];
-                const Icon = sub.icon;
-                return (
-                  <button
-                    key={subKey}
-                    type="button"
-                    onClick={() => handleSelectSubject(subKey, activeStreamInfo.key)}
-                    className="px-3 py-1.5 rounded-lg border-2 border-black text-xs font-black shadow-[2px_2px_0px_0px_#000] bg-[#FAF7EE] hover:bg-white text-black transition-all flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    <span>{sub.name}</span>
-                    <span className="text-[10px] opacity-70">Code {sub.code}</span>
-                  </button>
-                );
-              })}
-            </div>
+            <p className="text-sm font-semibold text-black/70">
+              Showing all {displayedTests.length} mock tests across {activeStreamInfo.name}.
+            </p>
           </div>
         )}
 
@@ -1018,49 +724,6 @@ export default function MocksPage() {
             })}
           </div>
         </div>
-
-        {/* Stream Overview Grid (shown when in "all" view) */}
-        {selectedStream === "all" && selectedTab === "all" && (
-          <div className="pt-8 border-t-2 border-black/20 space-y-4">
-            <h3 className="text-2xl font-black text-black">
-              Explore Mocks by Stream
-            </h3>
-            <p className="text-sm font-semibold text-black/60">
-              Jump directly to your stream to practice mock exams tailored to your CUET domain combinations.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {Object.values(STREAM_CONFIGS).map((stream) => (
-                <div
-                  key={stream.key}
-                  className="bg-white rounded-xl border-2 border-black p-5 shadow-[3px_3px_0px_0px_#000] hover:shadow-[5px_5px_0px_0px_#000] transition-all flex flex-col justify-between space-y-4"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-black uppercase bg-[#FEF3C7] px-2 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
-                        {stream.badge}
-                      </span>
-                    </div>
-                    <h4 className="text-xl font-black text-black">
-                      {stream.name}
-                    </h4>
-                    <p className="text-xs font-medium text-black/70 leading-relaxed">
-                      Includes {stream.subjects.map((s) => SUBJECT_CONFIGS[s].name).join(", ")}.
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleSelectStream(stream.key)}
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#FAF7EE] hover:bg-[#FF5C5C] hover:text-white text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer"
-                  >
-                    <span>View {stream.shortName} Mocks</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
