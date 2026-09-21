@@ -1,0 +1,2402 @@
+[
+  {
+    "id": "cs-mock19-q1",
+    "questionNumber": 1,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Recursive Function Stack Limit",
+    "questionText": "What exception is raised when a recursive Python function exceeds the maximum recursion call depth?",
+    "options": [
+      {
+        "id": "A",
+        "text": "StackOverflowError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'StackOverflowError'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "RecursionError (subclass of RuntimeError)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Recursive Function Stack Limit."
+      },
+      {
+        "id": "C",
+        "text": "MemoryError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'MemoryError'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "SystemError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'SystemError'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Python raises RecursionError when recursive calls exceed sys.getrecursionlimit() (default 1000).\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q1",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q2",
+    "questionNumber": 2,
+    "chapter": "Python Programming and File Handling",
+    "topic": "OverflowError Trigger",
+    "questionText": "Which mathematical operation raises an 'OverflowError' in Python?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Dividing any integer by 2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Dividing any integer by 2'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Floating-point operations that produce results too large to be represented in IEEE-754 double precision (e.g., 2.0 ** 10000)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains OverflowError Trigger."
+      },
+      {
+        "id": "C",
+        "text": "Multiplying two small integers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Multiplying two small integers'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Converting a string into a float",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Converting a string into a float'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Python arbitrary-precision handles huge integers automatically, but float operations exceeding ~1.8e308 raise OverflowError.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q2",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q3",
+    "questionNumber": 3,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Trailing Newline Stripping",
+    "questionText": "Which string method is standardly chained to line reading to remove trailing newline characters and whitespace?",
+    "options": [
+      {
+        "id": "A",
+        "text": "line.delete('\n')",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'line.delete('\n')'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "line.pop('\n')",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'line.pop('\n')'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "line.rstrip('\n') or line.strip()",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Trailing Newline Stripping."
+      },
+      {
+        "id": "D",
+        "text": "line.clean()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'line.clean()'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "line.rstrip('\n') removes the trailing newline character, cleaning line data for parsing.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q3",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q4",
+    "questionNumber": 4,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Deleting Records from Binary File",
+    "questionText": "What is the standard procedure to delete a record with id=102 from a binary file?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Read all records into a list, filter out the record where id==102, and re-write the filtered list back to the file using 'wb' mode",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Deleting Records from Binary File."
+      },
+      {
+        "id": "B",
+        "text": "Use file.delete(102)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Use file.delete(102)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Overwrite the record with whitespace characters",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Overwrite the record with whitespace characters'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Delete the hard disk partition",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Delete the hard disk partition'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Record deletion in binary files involves loading records, removing matching elements in memory, and overwriting the file with remaining records.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q4",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q5",
+    "questionNumber": 5,
+    "chapter": "Python Programming and File Handling",
+    "topic": "csv.Error Exception Class",
+    "questionText": "What built-in exception does the csv module raise when a field parsing or formatting violation occurs?",
+    "options": [
+      {
+        "id": "A",
+        "text": "CSVFormatError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'CSVFormatError'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "DelimiterError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'DelimiterError'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "csv.Error",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains csv.Error Exception Class."
+      },
+      {
+        "id": "D",
+        "text": "TableError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'TableError'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "csv.Error is the standard exception class raised by the csv module on formatting or parsing anomalies.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q5",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q6",
+    "questionNumber": 6,
+    "chapter": "Database Concepts and SQL",
+    "topic": "View Definition in SQL",
+    "questionText": "What is a 'View' in relational database systems?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A screenshot of the database table saved as an image",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A screenshot of the database table saved as an image'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "A virtual table based on the result-set of a stored SQL SELECT query, containing no physical data of its own",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains View Definition in SQL."
+      },
+      {
+        "id": "C",
+        "text": "A physical copy of the database stored on tape",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A physical copy of the database stored on tape'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "A table that cannot be queried",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A table that cannot be queried'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "A view is a virtual relation dynamically computed from underlying base tables upon execution.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q6",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q7",
+    "questionNumber": 7,
+    "chapter": "Database Concepts and SQL",
+    "topic": "DROP Column from Schema",
+    "questionText": "Which SQL command permanently removes the 'Address' column from the schema of the Customer table?",
+    "options": [
+      {
+        "id": "A",
+        "text": "DELETE Address FROM Customer;",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'DELETE Address FROM Customer;'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "ALTER TABLE Customer DROP COLUMN Address;",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains DROP Column from Schema."
+      },
+      {
+        "id": "C",
+        "text": "DROP Address FROM Customer;",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'DROP Address FROM Customer;'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "REMOVE Address FROM Customer;",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'REMOVE Address FROM Customer;'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "ALTER TABLE Customer DROP COLUMN col_name permanently drops the attribute from the table schema.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q7",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q8",
+    "questionNumber": 8,
+    "chapter": "Database Concepts and SQL",
+    "topic": "HAVING with Multiple Conditions",
+    "questionText": "Which logical operators can combine multiple conditions inside a single HAVING clause?",
+    "options": [
+      {
+        "id": "A",
+        "text": "UNION, INTERSECT, and MINUS",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'UNION, INTERSECT, and MINUS'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "PLUS, MINUS, and MULTIPLY",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'PLUS, MINUS, and MULTIPLY'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Only comma ','",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Only comma ',''. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "AND, OR, and NOT",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains HAVING with Multiple Conditions."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Conditions within a HAVING clause can be combined using standard boolean operators: HAVING COUNT(*) > 5 AND AVG(Salary) > 30000.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q8",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q9",
+    "questionNumber": 9,
+    "chapter": "Computer Networks",
+    "topic": "Bandwidth Definition in Networking",
+    "questionText": "What is 'Bandwidth' in computer communications?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The physical width of the copper cable in millimeters",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'The physical width of the copper cable in millimeters'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "The weight of the network switch in kilograms",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'The weight of the network switch in kilograms'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "The distance between the router and server",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'The distance between the router and server'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "The maximum data transfer capacity of a transmission channel, measured in Hertz (analog) or bits per second (digital, bps)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Bandwidth Definition in Networking."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Bandwidth denotes the frequency range or maximum bit-carrying capacity of a communication link over a given unit of time.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q9",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q10",
+    "questionNumber": 10,
+    "chapter": "Computer Networks",
+    "topic": "PAN vs LAN vs MAN vs WAN",
+    "questionText": "What is the correct classification of computer networks in ascending order of geographical coverage scale?",
+    "options": [
+      {
+        "id": "A",
+        "text": "WAN < MAN < LAN < PAN",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'WAN < MAN < LAN < PAN'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "LAN < PAN < WAN < MAN",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'LAN < PAN < WAN < MAN'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "MAN < LAN < PAN < WAN",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'MAN < LAN < PAN < WAN'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "PAN (Personal) < LAN (Local) < MAN (Metropolitan) < WAN (Wide Area)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains PAN vs LAN vs MAN vs WAN."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Geographic scope hierarchy: PAN (Bluetooth, few meters) < LAN (office/campus, km) < MAN (city, tens of km) < WAN (global/country).\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q10",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q11",
+    "questionNumber": 11,
+    "chapter": "Data Structures: Stacks",
+    "topic": "Stack Space Complexity",
+    "questionText": "What is the auxiliary space complexity of a stack storing n elements?",
+    "options": [
+      {
+        "id": "A",
+        "text": "O(n) linear space",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Stack Space Complexity."
+      },
+      {
+        "id": "B",
+        "text": "O(1) constant space",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'O(1) constant space'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "O(n^2) quadratic space",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'O(n^2) quadratic space'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "O(log n) logarithmic space",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'O(log n) logarithmic space'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "A stack storing n items requires memory directly proportional to the number of stored elements, O(n).\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q11",
+    "conceptId": "cs.data_structures_stac",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q12",
+    "questionNumber": 12,
+    "chapter": "Data Structures: Stacks",
+    "topic": "Evaluating 20 4 / 2 3 * +",
+    "questionText": "Evaluate the postfix expression: '20 4 / 2 3 * +':",
+    "options": [
+      {
+        "id": "A",
+        "text": "11 (20 / 4 = 5, 2 * 3 = 6, 5 + 6 = 11)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Evaluating 20 4 / 2 3 * +."
+      },
+      {
+        "id": "B",
+        "text": "15",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '15'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '10'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "26",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '26'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "20 / 4 = 5; 2 * 3 = 6; 5 + 6 = 11.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q12",
+    "conceptId": "cs.data_structures_stac",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q13",
+    "questionNumber": 13,
+    "chapter": "Search and Sorting Algorithms",
+    "topic": "Ternary Search Comparison",
+    "questionText": "How does Ternary Search divide the search space, and how many comparisons does it perform per step?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It divides into 10 parts",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It divides into 10 parts'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "It searches 3 lists simultaneously",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It searches 3 lists simultaneously'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "It operates only on prime numbers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It operates only on prime numbers'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "It divides the sorted range into 3 equal parts using two midpoints, performing up to 2 comparisons per step",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Ternary Search Comparison."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Ternary search splits the search interval into three segments with two midpoints (m1, m2), eliminating 2/3 of the space per step.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q13",
+    "conceptId": "cs.search_and_sorting_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q14",
+    "questionNumber": 14,
+    "chapter": "Search and Sorting Algorithms",
+    "topic": "Number of Swaps on Equal Elements",
+    "questionText": "If an array contains identical duplicate values [7, 7, 7, 7], how many swaps are executed by Bubble Sort?",
+    "options": [
+      {
+        "id": "A",
+        "text": "16 swaps",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '16 swaps'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "0 swaps (since 7 > 7 is False, no swaps occur)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Number of Swaps on Equal Elements."
+      },
+      {
+        "id": "C",
+        "text": "6 swaps",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '6 swaps'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "1 swap",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '1 swap'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "The comparison if L[j] > L[j+1] evaluates to False for duplicate values, resulting in zero swaps.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q14",
+    "conceptId": "cs.search_and_sorting_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q15",
+    "questionNumber": 15,
+    "chapter": "Search and Sorting Algorithms",
+    "topic": "Worst-Case Array Configuration",
+    "questionText": "Which initial configuration represents the worst-case input for Insertion Sort?",
+    "options": [
+      {
+        "id": "A",
+        "text": "An already sorted array",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'An already sorted array'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "An array with all identical elements",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'An array with all identical elements'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "An array containing random floating-point numbers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'An array containing random floating-point numbers'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "An array arranged in strictly reverse sorted order",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Worst-Case Array Configuration."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "In reverse sorted order, every element must shift across the entire sorted prefix, producing maximal quadratic O(n²) operations.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q15",
+    "conceptId": "cs.search_and_sorting_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q16",
+    "questionNumber": 16,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Autocommit Property in Connection",
+    "questionText": "What does setting connection.autocommit = True accomplish in Python?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It automatically commits every data modification statement (INSERT, UPDATE, DELETE) immediately without requiring manual conn.commit()",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Autocommit Property in Connection."
+      },
+      {
+        "id": "B",
+        "text": "It automatically deletes the database every night",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It automatically deletes the database every night'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "It types SQL code automatically",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It types SQL code automatically'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "It prevents any writing to the database",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It prevents any writing to the database'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Enabling autocommit automatically sends COMMIT after every DML statement, making modifications permanent immediately.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q16",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q17",
+    "questionNumber": 17,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Data Types Conversion in Python Cursor",
+    "questionText": "When a MySQL DATE column is retrieved via cursor.fetchone(), how does the connector present it in Python?",
+    "options": [
+      {
+        "id": "A",
+        "text": "As a Python datetime.date object",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Data Types Conversion in Python Cursor."
+      },
+      {
+        "id": "B",
+        "text": "As a raw integer timestamp",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'As a raw integer timestamp'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "As an encrypted byte string",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'As an encrypted byte string'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "As a floating-point number",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'As a floating-point number'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The MySQL connector automatically converts SQL DATE, TIME, and DATETIME types into Python native datetime objects.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q17",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q18",
+    "questionNumber": 18,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Closing Connection Aborts Uncommitted Data",
+    "questionText": "If conn.close() is called while a transaction has uncommitted INSERTs, what default action does MySQL take?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It automatically executes a rollback, discarding all uncommitted changes",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Closing Connection Aborts Uncommitted Data."
+      },
+      {
+        "id": "B",
+        "text": "It automatically commits the changes to disk",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It automatically commits the changes to disk'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "It freezes the database server",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It freezes the database server'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "It sends an email alert to the admin",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It sends an email alert to the admin'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Closing an active connection socket with pending uncommitted transactions triggers an automatic rollback by the RDBMS engine.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q18",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q19",
+    "questionNumber": 19,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Relational Algebra Cartesian Product Symbol",
+    "questionText": "What symbol represents the Cartesian Product in relational algebra?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The divide sign (/)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'The divide sign (/)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "The multiplication cross symbol (×)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Relational Algebra Cartesian Product Symbol."
+      },
+      {
+        "id": "C",
+        "text": "The plus sign (+)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'The plus sign (+)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "The minus sign (-)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'The minus sign (-)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Cartesian product is denoted in relational algebra by the cross multiplication operator (R × S).\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q19",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q20",
+    "questionNumber": 20,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Self-Referencing Foreign Key Example",
+    "questionText": "Which real-world scenario utilizes a Self-Referencing Foreign Key (where a table references its own primary key)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A table storing numbers from 1 to 10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A table storing numbers from 1 to 10'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "A table storing student grades",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A table storing student grades'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "An Employee table where ManagerId is a foreign key referencing EmpId within the same Employee table",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Self-Referencing Foreign Key Example."
+      },
+      {
+        "id": "D",
+        "text": "A table storing book titles",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A table storing book titles'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Hierarchical self-references (e.g., an employee's manager being another employee in the same table) use self-referential foreign keys.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q20",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q21",
+    "questionNumber": 21,
+    "chapter": "Python Recursion and Algorithmic Tracing",
+    "topic": "Recursive Countdown Trace",
+    "questionText": "What is the exact printed output of def count(n): if n > 0: count(n - 1); print(n) when count(3) is called?",
+    "options": [
+      {
+        "id": "A",
+        "text": "1 2 3 (printed on separate lines)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Recursive Countdown Trace."
+      },
+      {
+        "id": "B",
+        "text": "3 2 1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '3 2 1'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "0 1 2 3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '0 1 2 3'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "3 3 3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '3 3 3'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The recursive call count(n-1) precedes the print statement; unwinding from the base case executes print in ascending order: 1, 2, 3.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q21",
+    "conceptId": "cs.python_recursion_and",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q22",
+    "questionNumber": 22,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Fileless Malware Concept",
+    "questionText": "What is 'Fileless Malware' in modern cybersecurity?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Malware that can only run on computers without hard drives",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Malware that can only run on computers without hard drives'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Malware written on sheets of paper",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Malware written on sheets of paper'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Malicious code that operates purely within volatile RAM memory and legitimate OS tools (like PowerShell) without writing executable files to disk",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Fileless Malware Concept."
+      },
+      {
+        "id": "D",
+        "text": "Malware that has zero lines of code",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Malware that has zero lines of code'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Fileless malware evades disk-based signature scanners by executing scripts in memory through living-off-the-land system utilities.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q22",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q23",
+    "questionNumber": 23,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Data Tampering Definition",
+    "questionText": "What is 'Data Tampering' under Section 65 of the Indian IT Act 2000?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Knowingly or intentionally concealing, destroying, or altering computer source code or critical database records without authorization",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Data Tampering Definition."
+      },
+      {
+        "id": "B",
+        "text": "Typing code with a wireless keyboard",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Typing code with a wireless keyboard'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Installing an operating system on an empty hard drive",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Installing an operating system on an empty hard drive'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Cleaning a computer monitor with a cloth",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Cleaning a computer monitor with a cloth'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Section 65 penalizes unauthorized tampering, concealment, or destruction of computer source documents with imprisonment and fines.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q23",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q24",
+    "questionNumber": 24,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Trade Secret Protection Method",
+    "questionText": "Unlike patents and copyrights, how are 'Trade Secrets' (such as Google's search algorithm or Coca-Cola's recipe) protected?",
+    "options": [
+      {
+        "id": "A",
+        "text": "By publishing the formula on social media",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'By publishing the formula on social media'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "By filing a public document with the United Nations",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'By filing a public document with the United Nations'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Through strict confidentiality practices, Non-Disclosure Agreements (NDAs), and physical/digital security without public government registration",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Trade Secret Protection Method."
+      },
+      {
+        "id": "D",
+        "text": "Trade secrets have zero legal protection",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Trade secrets have zero legal protection'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Trade secrets rely on internal secrecy protocols and contractual NDAs; they require no registration and protect indefinitely until breached.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q24",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q25",
+    "questionNumber": 25,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Dual-Licensing Business Model",
+    "questionText": "How do commercial open-source companies (like MySQL or Qt) utilize a 'Dual-Licensing' business model?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Selling two copies of the software for the price of one",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Selling two copies of the software for the price of one'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Requiring two distinct passwords to open the program",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Requiring two distinct passwords to open the program'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Running the software on two servers simultaneously",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Running the software on two servers simultaneously'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Offering the software for free under GPL for open-source developers, while selling commercial proprietary licenses to companies who do not wish to release their code",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Dual-Licensing Business Model."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Dual licensing monetizes open source: users can comply with copyleft reciprocity or purchase proprietary commercial exemptions.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q25",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q26",
+    "questionNumber": 26,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "Series from Python Tuple",
+    "questionText": "What happens when a Series is created from a Python tuple: s = pd.Series((5, 10, 15))?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It raises a TypeError because tuples are immutable",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It raises a TypeError because tuples are immutable'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "It creates a 0-dimensional scalar",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It creates a 0-dimensional scalar'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "It creates an empty Series",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It creates an empty Series'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "It creates a standard 1D Series of length 3 with default integer index [0, 1, 2]",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Series from Python Tuple."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Pandas accepts any 1D iterable sequence, including lists and tuples, constructing a standard 1D Series.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q26",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q27",
+    "questionNumber": 27,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "s.T (Transpose) on a Series",
+    "questionText": "What is returned when calling the transpose attribute s.T on a 1D Pandas Series?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A 2D DataFrame",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A 2D DataFrame'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "The original Series unchanged (transposing a 1D vector returns itself)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains s.T (Transpose) on a Series."
+      },
+      {
+        "id": "C",
+        "text": "A list reversed backwards",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A list reversed backwards'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Raises a NotImplementedError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Raises a NotImplementedError'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Because a Series is one-dimensional, transposing it via s.T has no effect and returns the identical Series.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q27",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q28",
+    "questionNumber": 28,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "Dividing Series by Zero",
+    "questionText": "What is the result of dividing a positive number by zero in a Pandas numeric Series (e.g., s / 0)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A program crash with ZeroDivisionError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A program crash with ZeroDivisionError'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "NaN",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'NaN'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "inf (IEEE floating-point infinity) without raising a ZeroDivisionError",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Dividing Series by Zero."
+      },
+      {
+        "id": "D",
+        "text": "0.0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '0.0'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Pandas/NumPy floating-point math follows IEEE-754: non-zero divided by zero yields positive or negative 'inf' rather than raising an exception.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q28",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q29",
+    "questionNumber": 29,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "Extracting Scalar via .iat",
+    "questionText": "How does s.iat[0] compare to s.iloc[0] for accessing a single scalar value?",
+    "options": [
+      {
+        "id": "A",
+        "text": "s.iat[0] returns a list while iloc returns a number",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 's.iat[0] returns a list while iloc returns a number'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "s.iat[0] can only access strings",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 's.iat[0] can only access strings'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "There is zero difference in implementation",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'There is zero difference in implementation'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "s.iat[0] is an optimized, high-speed accessor for single scalar lookup, running slightly faster than .iloc[0]",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Extracting Scalar via .iat."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": ".iat and .at provide accelerated scalar access by bypassing general slicing overhead.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q29",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q30",
+    "questionNumber": 30,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "DataFrame to CSV Writer Method",
+    "questionText": "What method exports a DataFrame to a CSV file on disk, and how can the automatic row index be excluded?",
+    "options": [
+      {
+        "id": "A",
+        "text": "df.save_csv('output.csv')",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'df.save_csv('output.csv')'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "df.to_csv('output.csv', index=False)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains DataFrame to CSV Writer Method."
+      },
+      {
+        "id": "C",
+        "text": "df.write_csv('output.csv', no_index=True)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'df.write_csv('output.csv', no_index=True)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "df.export('output.csv')",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'df.export('output.csv')'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "df.to_csv('filename', index=False) serializes the DataFrame to CSV without writing the numerical row index column.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q30",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q31",
+    "questionNumber": 31,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Default Row Index Type",
+    "questionText": "When a DataFrame is created without supplying custom index labels, what type of Index is assigned?",
+    "options": [
+      {
+        "id": "A",
+        "text": "CategoricalIndex",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'CategoricalIndex'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "MultiIndex",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'MultiIndex'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "RangeIndex(start=0, stop=n, step=1)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Default Row Index Type."
+      },
+      {
+        "id": "D",
+        "text": "StringIndex",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'StringIndex'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "By default, Pandas assigns a RangeIndex starting at 0 up to n-1.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q31",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q32",
+    "questionNumber": 32,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "iloc Row and Column Subset Sizing",
+    "questionText": "In df.iloc[1:4, :2], how many rows and columns are contained in the result?",
+    "options": [
+      {
+        "id": "A",
+        "text": "4 rows and 2 columns",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '4 rows and 2 columns'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "3 rows and 2 columns",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains iloc Row and Column Subset Sizing."
+      },
+      {
+        "id": "C",
+        "text": "3 rows and 3 columns",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '3 rows and 3 columns'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "1 row and 2 columns",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '1 row and 2 columns'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Rows selected: positions 1, 2, 3 (3 rows). Columns selected: positions 0, 1 (2 columns). Result is 3 rows by 2 columns.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q32",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q33",
+    "questionNumber": 33,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Sorting DataFrame by Row Index",
+    "questionText": "How do you sort DataFrame df by its row index labels in ascending order?",
+    "options": [
+      {
+        "id": "A",
+        "text": "df.sort_index(ascending=True)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Sorting DataFrame by Row Index."
+      },
+      {
+        "id": "B",
+        "text": "df.sort_rows()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'df.sort_rows()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "df.order_index()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'df.order_index()'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "df.arrange_index()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'df.arrange_index()'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "df.sort_index() sorts the DataFrame along the index axis.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q33",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q34",
+    "questionNumber": 34,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Non-null Counting in describe()",
+    "questionText": "Does df.describe() count NaN entries in its summary calculations?",
+    "options": [
+      {
+        "id": "A",
+        "text": "No, the count row in describe() reflects only valid non-null entries, and statistics exclude NaNs",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Non-null Counting in describe()."
+      },
+      {
+        "id": "B",
+        "text": "Yes, NaNs are counted as 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Yes, NaNs are counted as 0'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Yes, NaNs are counted as 1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Yes, NaNs are counted as 1'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "describe() raises an error if NaNs exist",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'describe() raises an error if NaNs exist'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Summary statistics generated by describe() explicitly exclude missing observations.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q34",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q35",
+    "questionNumber": 35,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Single Mode Evaluation Trace",
+    "questionText": "For a Series containing [2, 4, 4, 4, 6], what does series.mode()[0] return?",
+    "options": [
+      {
+        "id": "A",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '3'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '2'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "4",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Single Mode Evaluation Trace."
+      },
+      {
+        "id": "D",
+        "text": "6",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '6'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "4 occurs three times (most frequent); hence 4 is the mode.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q35",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q36",
+    "questionNumber": 36,
+    "chapter": "Data Visualization using Pyplot",
+    "topic": "Clearing Active Axes",
+    "questionText": "Which Pyplot function clears the current axes while preserving the figure container?",
+    "options": [
+      {
+        "id": "A",
+        "text": "plt.wipe()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'plt.wipe()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "plt.cla()",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Clearing Active Axes."
+      },
+      {
+        "id": "C",
+        "text": "plt.clean()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'plt.clean()'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "plt.blank()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'plt.blank()'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "plt.cla() clears the current active axes (Clear Axes).\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q36",
+    "conceptId": "cs.data_visualization_u",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q37",
+    "questionNumber": 37,
+    "chapter": "Data Visualization using Pyplot",
+    "topic": "Color Shorthand 'm'",
+    "questionText": "In Matplotlib color specifications, which color is designated by the single character 'm'?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Maroon",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Maroon'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Magenta",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Color Shorthand 'm'."
+      },
+      {
+        "id": "C",
+        "text": "Mustard",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Mustard'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Mauve",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Mauve'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "'m' represents Magenta in Matplotlib color abbreviations.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q37",
+    "conceptId": "cs.data_visualization_u",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q38",
+    "questionNumber": 38,
+    "chapter": "Data Visualization using Pyplot",
+    "topic": "Horizontal Histogram Orientation",
+    "questionText": "Which parameter in plt.hist() causes the histogram bins to extend horizontally along the X-axis?",
+    "options": [
+      {
+        "id": "A",
+        "text": "orientation='horizontal'",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Horizontal Histogram Orientation."
+      },
+      {
+        "id": "B",
+        "text": "direction='horizontal'",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'direction='horizontal''. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "axis='x'",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'axis='x''. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "horizontal=True",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'horizontal=True'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "orientation='horizontal' generates horizontal histogram bins where frequencies lie on the X-axis.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q38",
+    "conceptId": "cs.data_visualization_u",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q39",
+    "questionNumber": 39,
+    "chapter": "Database Concepts, SQL Functions and Queries",
+    "topic": "SQL UCASE and LCASE",
+    "questionText": "Which functions in MySQL serve as synonyms for UPPER() and LOWER() respectively?",
+    "options": [
+      {
+        "id": "A",
+        "text": "UP() and DOWN()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'UP() and DOWN()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "TO_UPPER() and TO_LOWER()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'TO_UPPER() and TO_LOWER()'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "UCASE() and LCASE()",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains SQL UCASE and LCASE."
+      },
+      {
+        "id": "D",
+        "text": "CAPITAL() and SMALL()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'CAPITAL() and SMALL()'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "UCASE() is an exact synonym for UPPER(), and LCASE() is an exact synonym for LOWER().\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q39",
+    "conceptId": "cs.database_concepts_sq",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q40",
+    "questionNumber": 40,
+    "chapter": "Societal Impacts, Cyber Ethics and Data Protection",
+    "topic": "Spam Definition",
+    "questionText": "What is defined as 'Spam' in electronic communication?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Encrypted personal messages between friends",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Encrypted personal messages between friends'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Automated system update notifications",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Automated system update notifications'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Unsolicited, bulk electronic messages sent indiscriminately to large recipient lists, often advertising products or phishing scams",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Spam Definition."
+      },
+      {
+        "id": "D",
+        "text": "Operating system error logs",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Operating system error logs'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Spam is unsolicited bulk messaging distributed without recipient consent.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "cs-mock19-q40",
+    "conceptId": "cs.societal_impacts_cyb",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q41",
+    "questionNumber": 41,
+    "chapter": "Database Concepts and SQL",
+    "topic": "ACID Atomicity Principle",
+    "questionText": "Read the following relational database and transaction processing case study and answer the questions that follow:\n\nA core banking engine processes fund transfers between checking accounts in a MySQL database. A balance transfer of 10,000 from Account 101 to Account 102 involves two distinct database operations:\n1. UPDATE ACCOUNT SET Balance = Balance - 10000 WHERE AccNo = 101;\n2. UPDATE ACCOUNT SET Balance = Balance + 10000 WHERE AccNo = 102;\n\nTo guarantee data consistency, the transaction is managed according to ACID properties:\n- Atomicity: Either both updates succeed completely or neither update takes effect (all-or-nothing).\n- Consistency: Account balances must satisfy domain rules (e.g. Balance >= MinBalance) before and after execution.\n- Isolation: Concurrent transactions operating simultaneously do not read intermediate uncommitted balances.\n- Durability: Once con.commit() executes, balance changes persist permanently on non-volatile disk storage even if a power failure occurs.\n\nQuestion: What happens under the 'Atomicity' principle if a system crash occurs after deducting 10,000 from Acc 101 but before crediting Acc 102?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The database performs a ROLLBACK, undoing the deduction on Acc 101 so that no funds are lost",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on ACID Atomicity Principle."
+      },
+      {
+        "id": "B",
+        "text": "The 10,000 is permanently deleted from the banking system",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'The 10,000 is permanently deleted from the banking system'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Acc 102 receives double the money",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Acc 102 receives double the money'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "The database ignores the crash",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'The database ignores the crash'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Atomicity ensures all-or-nothing execution; incomplete transactions are automatically rolled back upon recovery.\nHence, Option A is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "cs-mock19-q41",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q42",
+    "questionNumber": 42,
+    "chapter": "Database Concepts and SQL",
+    "topic": "ACID Durability Principle",
+    "questionText": "Read the following relational database and transaction processing case study and answer the questions that follow:\n\nA core banking engine processes fund transfers between checking accounts in a MySQL database. A balance transfer of 10,000 from Account 101 to Account 102 involves two distinct database operations:\n1. UPDATE ACCOUNT SET Balance = Balance - 10000 WHERE AccNo = 101;\n2. UPDATE ACCOUNT SET Balance = Balance + 10000 WHERE AccNo = 102;\n\nTo guarantee data consistency, the transaction is managed according to ACID properties:\n- Atomicity: Either both updates succeed completely or neither update takes effect (all-or-nothing).\n- Consistency: Account balances must satisfy domain rules (e.g. Balance >= MinBalance) before and after execution.\n- Isolation: Concurrent transactions operating simultaneously do not read intermediate uncommitted balances.\n- Durability: Once con.commit() executes, balance changes persist permanently on non-volatile disk storage even if a power failure occurs.\n\nQuestion: Which SQL command makes transactions permanent on disk, guaranteeing 'Durability'?",
+    "options": [
+      {
+        "id": "A",
+        "text": "ROLLBACK",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'ROLLBACK'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "COMMIT",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on ACID Durability Principle."
+      },
+      {
+        "id": "C",
+        "text": "SAVEPOINT",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'SAVEPOINT'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "CHECKPOINT",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'CHECKPOINT'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "COMMIT finalizes changes permanently on storage, fulfilling the durability requirement of ACID.\nHence, Option B is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "cs-mock19-q42",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q43",
+    "questionNumber": 43,
+    "chapter": "Database Concepts and SQL",
+    "topic": "ACID Isolation Guarantee",
+    "questionText": "Read the following relational database and transaction processing case study and answer the questions that follow:\n\nA core banking engine processes fund transfers between checking accounts in a MySQL database. A balance transfer of 10,000 from Account 101 to Account 102 involves two distinct database operations:\n1. UPDATE ACCOUNT SET Balance = Balance - 10000 WHERE AccNo = 101;\n2. UPDATE ACCOUNT SET Balance = Balance + 10000 WHERE AccNo = 102;\n\nTo guarantee data consistency, the transaction is managed according to ACID properties:\n- Atomicity: Either both updates succeed completely or neither update takes effect (all-or-nothing).\n- Consistency: Account balances must satisfy domain rules (e.g. Balance >= MinBalance) before and after execution.\n- Isolation: Concurrent transactions operating simultaneously do not read intermediate uncommitted balances.\n- Durability: Once con.commit() executes, balance changes persist permanently on non-volatile disk storage even if a power failure occurs.\n\nQuestion: What does the 'Isolation' property prevent during simultaneous banking transactions?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Power outages in data centers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Power outages in data centers'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Dirty reads and concurrent transactions interfering with each other's uncommitted intermediate data",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on ACID Isolation Guarantee."
+      },
+      {
+        "id": "C",
+        "text": "Hardware hard drive crashes",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Hardware hard drive crashes'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Employees forgetting passwords",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Employees forgetting passwords'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Isolation ensures concurrently executing transactions operate independently without seeing incomplete intermediate states.\nHence, Option B is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "cs-mock19-q43",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q44",
+    "questionNumber": 44,
+    "chapter": "Database Concepts and SQL",
+    "topic": "Rolling Back to an Intermediate Point",
+    "questionText": "Read the following relational database and transaction processing case study and answer the questions that follow:\n\nA core banking engine processes fund transfers between checking accounts in a MySQL database. A balance transfer of 10,000 from Account 101 to Account 102 involves two distinct database operations:\n1. UPDATE ACCOUNT SET Balance = Balance - 10000 WHERE AccNo = 101;\n2. UPDATE ACCOUNT SET Balance = Balance + 10000 WHERE AccNo = 102;\n\nTo guarantee data consistency, the transaction is managed according to ACID properties:\n- Atomicity: Either both updates succeed completely or neither update takes effect (all-or-nothing).\n- Consistency: Account balances must satisfy domain rules (e.g. Balance >= MinBalance) before and after execution.\n- Isolation: Concurrent transactions operating simultaneously do not read intermediate uncommitted balances.\n- Durability: Once con.commit() executes, balance changes persist permanently on non-volatile disk storage even if a power failure occurs.\n\nQuestion: Which SQL command establishes an intermediate marker inside a transaction to which a partial rollback can be performed?",
+    "options": [
+      {
+        "id": "A",
+        "text": "CHECKPOINT marker_name;",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'CHECKPOINT marker_name;'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "MARK marker_name;",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'MARK marker_name;'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "RESTORE marker_name;",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'RESTORE marker_name;'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "SAVEPOINT marker_name;",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Rolling Back to an Intermediate Point."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "SAVEPOINT identifies a point in a transaction to which you can later roll back without discarding earlier work.\nHence, Option D is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "cs-mock19-q44",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q45",
+    "questionNumber": 45,
+    "chapter": "Database Concepts and SQL",
+    "topic": "DCL vs TCL Classification",
+    "questionText": "Read the following relational database and transaction processing case study and answer the questions that follow:\n\nA core banking engine processes fund transfers between checking accounts in a MySQL database. A balance transfer of 10,000 from Account 101 to Account 102 involves two distinct database operations:\n1. UPDATE ACCOUNT SET Balance = Balance - 10000 WHERE AccNo = 101;\n2. UPDATE ACCOUNT SET Balance = Balance + 10000 WHERE AccNo = 102;\n\nTo guarantee data consistency, the transaction is managed according to ACID properties:\n- Atomicity: Either both updates succeed completely or neither update takes effect (all-or-nothing).\n- Consistency: Account balances must satisfy domain rules (e.g. Balance >= MinBalance) before and after execution.\n- Isolation: Concurrent transactions operating simultaneously do not read intermediate uncommitted balances.\n- Durability: Once con.commit() executes, balance changes persist permanently on non-volatile disk storage even if a power failure occurs.\n\nQuestion: Under which SQL language subcategory do COMMIT, ROLLBACK, and SAVEPOINT belong?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Data Definition Language (DDL)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Data Definition Language (DDL)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Data Manipulation Language (DML)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Data Manipulation Language (DML)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Transaction Control Language (TCL)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on DCL vs TCL Classification."
+      },
+      {
+        "id": "D",
+        "text": "Data Control Language (DCL)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Data Control Language (DCL)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "COMMIT, ROLLBACK, and SAVEPOINT manage database transactions and belong to TCL.\nHence, Option C is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "cs-mock19-q45",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q46",
+    "questionNumber": 46,
+    "chapter": "Societal Impacts, Cyber Ethics and Data Protection",
+    "topic": "RoHS Compliance Scope",
+    "questionText": "Read the following case study on e-waste policies and circular electronics economy and answer the questions that follow:\n\nThe Ministry of Environment, Forest and Climate Change (MoEFCC) notified revised E-Waste Management Rules in India. The regulatory framework seeks to transition from a linear 'take-make-dispose' model to a Circular Electronics Economy:\n1. Restriction of Hazardous Substances (RoHS): Manufacturers must phase out hazardous materials including lead (Pb), mercury (Hg), cadmium (Cd), and hexavalent chromium in manufacturing consumer electronics.\n2. Extended Producer Responsibility (EPR) Portals: Producers must register on an online national portal, meet annual e-waste recycling targets, and purchase EPR Certificates from authorized recyclers.\n3. Scientific Material Recovery: Formal recycling plants utilize state-of-the-art smelting and automated separation to recover precious metals (gold, silver, palladium) and base metals (copper, aluminum), reintroducing them into industrial supply chains.\n\nQuestion: What is the primary objective of RoHS (Restriction of Hazardous Substances) compliance in electronics manufacturing?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Ensuring all laptops have touchscreens",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Ensuring all laptops have touchscreens'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Making all computer screens 4K resolution",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Making all computer screens 4K resolution'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Regulating software download prices",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Regulating software download prices'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Limiting the concentration of toxic substances (lead, mercury, cadmium, hexavalent chromium) in newly manufactured electrical equipment",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on RoHS Compliance Scope."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "RoHS restricts specific hazardous substances commonly used in electronic hardware and solder.\nHence, Option D is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "cs-mock19-q46",
+    "conceptId": "cs.societal_impacts_cyb",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q47",
+    "questionNumber": 47,
+    "chapter": "Societal Impacts, Cyber Ethics and Data Protection",
+    "topic": "Circular Economy Concept in IT",
+    "questionText": "Read the following case study on e-waste policies and circular electronics economy and answer the questions that follow:\n\nThe Ministry of Environment, Forest and Climate Change (MoEFCC) notified revised E-Waste Management Rules in India. The regulatory framework seeks to transition from a linear 'take-make-dispose' model to a Circular Electronics Economy:\n1. Restriction of Hazardous Substances (RoHS): Manufacturers must phase out hazardous materials including lead (Pb), mercury (Hg), cadmium (Cd), and hexavalent chromium in manufacturing consumer electronics.\n2. Extended Producer Responsibility (EPR) Portals: Producers must register on an online national portal, meet annual e-waste recycling targets, and purchase EPR Certificates from authorized recyclers.\n3. Scientific Material Recovery: Formal recycling plants utilize state-of-the-art smelting and automated separation to recover precious metals (gold, silver, palladium) and base metals (copper, aluminum), reintroducing them into industrial supply chains.\n\nQuestion: How does a 'Circular Economy' differ from a linear electronics consumption model?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Products and materials are designed for reuse, repair, refurbishment, and closed-loop material recycling, minimizing virgin resource extraction",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Circular Economy Concept in IT."
+      },
+      {
+        "id": "B",
+        "text": "Discarded laptops are thrown into landfills faster",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Discarded laptops are thrown into landfills faster'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Hardware is engineered to break after one year",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Hardware is engineered to break after one year'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Only paper computers are manufactured",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Only paper computers are manufactured'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "A circular economy keeps materials in continuous productive use through refurbishment, reuse, and closed-loop recycling.\nHence, Option A is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "cs-mock19-q47",
+    "conceptId": "cs.societal_impacts_cyb",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q48",
+    "questionNumber": 48,
+    "chapter": "Societal Impacts, Cyber Ethics and Data Protection",
+    "topic": "EPR Certificate Mechanism",
+    "questionText": "Read the following case study on e-waste policies and circular electronics economy and answer the questions that follow:\n\nThe Ministry of Environment, Forest and Climate Change (MoEFCC) notified revised E-Waste Management Rules in India. The regulatory framework seeks to transition from a linear 'take-make-dispose' model to a Circular Electronics Economy:\n1. Restriction of Hazardous Substances (RoHS): Manufacturers must phase out hazardous materials including lead (Pb), mercury (Hg), cadmium (Cd), and hexavalent chromium in manufacturing consumer electronics.\n2. Extended Producer Responsibility (EPR) Portals: Producers must register on an online national portal, meet annual e-waste recycling targets, and purchase EPR Certificates from authorized recyclers.\n3. Scientific Material Recovery: Formal recycling plants utilize state-of-the-art smelting and automated separation to recover precious metals (gold, silver, palladium) and base metals (copper, aluminum), reintroducing them into industrial supply chains.\n\nQuestion: How do electronics manufacturers demonstrate compliance with annual recycling quotas under Indian e-waste regulations?",
+    "options": [
+      {
+        "id": "A",
+        "text": "By burning discarded monitors in corporate parking lots",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'By burning discarded monitors in corporate parking lots'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "By publishing newspaper advertisements",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'By publishing newspaper advertisements'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "By generating or purchasing verified Extended Producer Responsibility (EPR) certificates from registered formal recycling facilities",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on EPR Certificate Mechanism."
+      },
+      {
+        "id": "D",
+        "text": "By paying import tariffs",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'By paying import tariffs'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "EPR certificates earned through registered recycling substantiate producer compliance with statutory recycling quotas.\nHence, Option C is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "cs-mock19-q48",
+    "conceptId": "cs.societal_impacts_cyb",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q49",
+    "questionNumber": 49,
+    "chapter": "Societal Impacts, Cyber Ethics and Data Protection",
+    "topic": "Formal vs Informal Recycling Differences",
+    "questionText": "Read the following case study on e-waste policies and circular electronics economy and answer the questions that follow:\n\nThe Ministry of Environment, Forest and Climate Change (MoEFCC) notified revised E-Waste Management Rules in India. The regulatory framework seeks to transition from a linear 'take-make-dispose' model to a Circular Electronics Economy:\n1. Restriction of Hazardous Substances (RoHS): Manufacturers must phase out hazardous materials including lead (Pb), mercury (Hg), cadmium (Cd), and hexavalent chromium in manufacturing consumer electronics.\n2. Extended Producer Responsibility (EPR) Portals: Producers must register on an online national portal, meet annual e-waste recycling targets, and purchase EPR Certificates from authorized recyclers.\n3. Scientific Material Recovery: Formal recycling plants utilize state-of-the-art smelting and automated separation to recover precious metals (gold, silver, palladium) and base metals (copper, aluminum), reintroducing them into industrial supply chains.\n\nQuestion: Why is formal recycling technologically superior to informal scrapyard recycling?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Formal plants use open bonfire burning",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Formal plants use open bonfire burning'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Formal plants do not use electricity",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Formal plants do not use electricity'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Informal scrapyards have better safety equipment",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Informal scrapyards have better safety equipment'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Formal plants achieve high precious metal recovery efficiency using closed pollution-controlled systems without venting toxic effluents",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Formal vs Informal Recycling Differences."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Formal recycling applies controlled industrial metallurgical recovery with air filtration and zero liquid discharge.\nHence, Option D is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "cs-mock19-q49",
+    "conceptId": "cs.societal_impacts_cyb",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  },
+  {
+    "id": "cs-mock19-q50",
+    "questionNumber": 50,
+    "chapter": "Societal Impacts, Cyber Ethics and Data Protection",
+    "topic": "Citizen Role in E-waste Management",
+    "questionText": "Read the following case study on e-waste policies and circular electronics economy and answer the questions that follow:\n\nThe Ministry of Environment, Forest and Climate Change (MoEFCC) notified revised E-Waste Management Rules in India. The regulatory framework seeks to transition from a linear 'take-make-dispose' model to a Circular Electronics Economy:\n1. Restriction of Hazardous Substances (RoHS): Manufacturers must phase out hazardous materials including lead (Pb), mercury (Hg), cadmium (Cd), and hexavalent chromium in manufacturing consumer electronics.\n2. Extended Producer Responsibility (EPR) Portals: Producers must register on an online national portal, meet annual e-waste recycling targets, and purchase EPR Certificates from authorized recyclers.\n3. Scientific Material Recovery: Formal recycling plants utilize state-of-the-art smelting and automated separation to recover precious metals (gold, silver, palladium) and base metals (copper, aluminum), reintroducing them into industrial supply chains.\n\nQuestion: What is the responsible protocol for individual consumers when disposing of obsolete mobile phones and laptops?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Throwing them into municipal wet waste bins",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Throwing them into municipal wet waste bins'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Burying them in home gardens",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Burying them in home gardens'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Flushing broken components down toilets",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Flushing broken components down toilets'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Handing them over to authorized e-waste collection bins or brand buyback centers rather than mixed municipal trash or ragpickers",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Citizen Role in E-waste Management."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Consumers must channel end-of-life electronics to designated authorized e-waste collection points.\nHence, Option D is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "cs-mock19-q50",
+    "conceptId": "cs.societal_impacts_cyb",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "approved",
+    "confidenceScore": 98,
+    "validationFlags": []
+  }
+]
