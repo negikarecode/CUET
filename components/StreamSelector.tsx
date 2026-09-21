@@ -85,14 +85,14 @@ export default function StreamSelector() {
               {t("domainStreams", "Stream-Specific Mock Repository")}
             </div>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-black">
-              {t("domainTests", "Select Your Examination Stream")}
+              {t("selectExamStream", "Select Your Examination Stream")}
             </h2>
             <p className="mt-2 text-sm sm:text-base text-black/70 max-w-2xl font-medium">
               NTA CUET domain subjects structured with official shift papers, full-length CBT tests, and chapter-wise difficulty tags.
             </p>
           </div>
           <div className="mt-4 md:mt-0 text-xs font-black text-black">
-            Showing <span className="bg-white px-2 py-1 rounded border-2 border-black shadow-[1px_1px_0px_0px_#000]">{currentSubjects.length} {t("domainTests", "Domain Subjects")}</span>
+            Showing <span className="bg-white px-2 py-1 rounded border-2 border-black shadow-[1px_1px_0px_0px_#000]">{currentSubjects.length} Domain Subjects</span>
           </div>
         </div>
 

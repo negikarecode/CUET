@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   getPYQTestsForSubject,
   getAllPYQTests,
-  CUET_SUBJECTS,
   PYQTestItem,
 } from "@/lib/data/subjects";
 import {
@@ -35,6 +34,7 @@ import {
   Palette,
   Sprout,
   Footprints,
+  ChevronDown,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { getTestAttemptStats } from "@/lib/analytics";
@@ -64,6 +64,8 @@ type SubjectKey =
   | "agriculture"
   | "anthropology";
 
+type StreamKey = "all" | "science" | "commerce" | "humanities";
+
 interface SubjectMeta {
   key: SubjectKey;
   name: string;
@@ -75,6 +77,70 @@ interface SubjectMeta {
   subtitle: string;
   icon: React.ComponentType<{ className?: string }>;
 }
+
+interface StreamInfo {
+  key: StreamKey;
+  name: string;
+  shortName: string;
+  badge: string;
+  accentBg: string;
+  accentText: string;
+  subjects: Array<Exclude<SubjectKey, "all">>;
+}
+
+const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
+  science: {
+    key: "science",
+    name: "Science Stream",
+    shortName: "Science",
+    badge: "7 Domains • 35 PYQ Papers",
+    accentBg: "#E0F2FE",
+    accentText: "#0369A1",
+    subjects: [
+      "physics",
+      "chemistry",
+      "mathematics",
+      "biology",
+      "computer-science",
+      "agriculture",
+      "environmental-studies",
+    ],
+  },
+  commerce: {
+    key: "commerce",
+    name: "Commerce Stream",
+    shortName: "Commerce",
+    badge: "4 Domains • 20 PYQ Papers",
+    accentBg: "#FEF3C7",
+    accentText: "#D97706",
+    subjects: [
+      "accountancy",
+      "business-studies",
+      "economics",
+      "mathematics",
+    ],
+  },
+  humanities: {
+    key: "humanities",
+    name: "Humanities & Arts",
+    shortName: "Humanities",
+    badge: "10 Domains • 50 PYQ Papers",
+    accentBg: "#FCE7F3",
+    accentText: "#BE185D",
+    subjects: [
+      "history",
+      "political-science",
+      "geography",
+      "psychology",
+      "sociology",
+      "physical-education",
+      "home-science",
+      "mass-media",
+      "fine-arts",
+      "anthropology",
+    ],
+  },
+};
 
 const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
   physics: {
@@ -323,29 +389,56 @@ export default function PYQsPage() {
   const { t } = useTranslation();
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
-  const user = useTestStore((state) => state.user);
+  const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
   const [selectedTab, setSelectedTab] = useState<SubjectKey>("all");
-
-  const selectedSubjects = useMemo(() => {
-    return user?.selectedSubjects || [];
-  }, [user?.selectedSubjects]);
-
-  const selectedSubjectDetails = useMemo(() => {
-    return CUET_SUBJECTS.filter((s) => selectedSubjects.includes(s.id));
-  }, [selectedSubjects]);
 
   const allPYQsList: PYQTestItem[] = useMemo(() => {
     return getAllPYQTests();
   }, []);
 
   const displayedTests = useMemo(() => {
-    if (selectedTab === "all") {
-      return allPYQsList;
+    let pool = allPYQsList;
+    if (selectedTab !== "all") {
+      return getPYQTestsForSubject(selectedTab);
     }
-    return getPYQTestsForSubject(selectedTab);
-  }, [allPYQsList, selectedTab]);
+    if (selectedStream !== "all") {
+      const allowed = STREAM_CONFIGS[selectedStream].subjects;
+      return pool.filter((t) => allowed.includes(t.subjectSlug as any));
+    }
+    return pool;
+  }, [allPYQsList, selectedStream, selectedTab]);
 
   const activeSubjectInfo = selectedTab !== "all" ? PYQ_SUBJECT_CONFIGS[selectedTab] : null;
+  const activeStreamInfo = selectedStream !== "all" ? STREAM_CONFIGS[selectedStream] : null;
+
+  const handleSelectStream = (stream: StreamKey) => {
+    setSelectedStream(stream);
+    setSelectedTab("all");
+  };
+
+  const handleSelectSubject = (subjKey: SubjectKey, streamKey?: StreamKey) => {
+    setSelectedTab(subjKey);
+    if (streamKey) {
+      setSelectedStream(streamKey);
+    } else if (subjKey !== "all") {
+      for (const [stKey, stInfo] of Object.entries(STREAM_CONFIGS)) {
+        if (stInfo.subjects.includes(subjKey as any)) {
+          setSelectedStream(stKey as StreamKey);
+          break;
+        }
+      }
+    } else {
+      setSelectedStream("all");
+    }
+  };
+
+  // Subjects to show in the subject dropdown select
+  const availableSubjectsForDropdown = useMemo(() => {
+    if (selectedStream === "all") {
+      return Object.values(PYQ_SUBJECT_CONFIGS);
+    }
+    return STREAM_CONFIGS[selectedStream].subjects.map((k) => PYQ_SUBJECT_CONFIGS[k]);
+  }, [selectedStream]);
 
   if (!isClient) {
     return <div className="min-h-screen bg-[#FAF7EE]" />;
@@ -374,90 +467,88 @@ export default function PYQsPage() {
             <div className="w-10 h-10 rounded-lg bg-[#FF5C5C] text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_0px_#000]">
               <FileText className="w-5 h-5" />
             </div>
-            Previous Year Questions (PYQ)
+            Previous Year Questions (PYQs)
           </h1>
           <p className="text-black/60 font-bold text-base md:text-lg">
             Practice authentic official NTA CUET UG CBT examination papers (2024, 2023, 2022) with verified solutions, continuous timer & AI diagnostics.
           </p>
         </div>
 
-        {/* User's Target Domain Subjects Banner */}
-        {selectedSubjectDetails.length > 0 && (
-          <div className="bg-white rounded-xl border-2 border-black p-4 md:p-5 shadow-[3px_3px_0px_0px_#000] space-y-3">
-            <div className="flex items-center justify-between gap-4 flex-wrap">
-              <p className="text-xs font-black text-black/70 uppercase tracking-wide">
-                Your Target Domain Subjects ({selectedSubjectDetails.length})
-              </p>
-              <span className="text-[11px] font-bold text-black/50">
-                Click any subject below to filter papers instantly
-              </span>
+        {/* Stream & Subject Dropdown Controls */}
+        <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Stream Dropdown Select */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
+                Select Stream:
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedStream}
+                  onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
+                  className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
+                >
+                  <option value="all">All Streams (100 Total PYQs)</option>
+                  <option value="science">Science Stream (7 Subjects • 35 PYQs)</option>
+                  <option value="commerce">Commerce Stream (4 Subjects • 20 PYQs)</option>
+                  <option value="humanities">Humanities & Arts (10 Subjects • 50 PYQs)</option>
+                </select>
+                <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {selectedSubjectDetails.map((subj) => {
-                const isCurrent = selectedTab === subj.id;
-                return (
-                  <button
-                    key={subj.id}
-                    type="button"
-                    onClick={() => {
-                      const canonical = (subj.id in PYQ_SUBJECT_CONFIGS)
-                        ? (subj.id as SubjectKey)
-                        : (subj.id.replace(/-sci|-com/g, "") in PYQ_SUBJECT_CONFIGS)
-                        ? (subj.id.replace(/-sci|-com/g, "") as SubjectKey)
-                        : "all";
-                      setSelectedTab(canonical);
-                    }}
-                    className={`px-3 py-1.5 rounded-lg border-2 border-black text-xs font-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer flex items-center gap-1.5 ${
-                      isCurrent
-                        ? "bg-[#FF5C5C] text-white"
-                        : "bg-[#FAF7EE] text-black hover:bg-white"
-                    }`}
-                  >
-                    <span>{subj.name}</span>
-                    <span className="text-[10px] opacity-70">Code {subj.code}</span>
-                  </button>
-                );
-              })}
+
+            {/* Subject Dropdown Select */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
+                Select Subject:
+              </label>
+              <div className="relative">
+                <select
+                  value={selectedTab}
+                  onChange={(e) => handleSelectSubject(e.target.value as SubjectKey)}
+                  className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
+                >
+                  <option value="all">
+                    {selectedStream === "all"
+                      ? "All 20 Domain Subjects"
+                      : `All Subjects in ${STREAM_CONFIGS[selectedStream].name} (${STREAM_CONFIGS[selectedStream].subjects.length} Subjects)`}
+                  </option>
+                  {selectedStream === "all" ? (
+                    <>
+                      <optgroup label="Science Stream">
+                        {STREAM_CONFIGS.science.subjects.map((k) => (
+                          <option key={`sci-${k}`} value={k}>
+                            {PYQ_SUBJECT_CONFIGS[k].name} (Code {PYQ_SUBJECT_CONFIGS[k].code} • 5 PYQs)
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Commerce Stream">
+                        {STREAM_CONFIGS.commerce.subjects.map((k) => (
+                          <option key={`com-${k}`} value={k}>
+                            {PYQ_SUBJECT_CONFIGS[k].name} (Code {PYQ_SUBJECT_CONFIGS[k].code} • 5 PYQs)
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Humanities & Arts Stream">
+                        {STREAM_CONFIGS.humanities.subjects.map((k) => (
+                          <option key={`hum-${k}`} value={k}>
+                            {PYQ_SUBJECT_CONFIGS[k].name} (Code {PYQ_SUBJECT_CONFIGS[k].code} • 5 PYQs)
+                          </option>
+                        ))}
+                      </optgroup>
+                    </>
+                  ) : (
+                    availableSubjectsForDropdown.map((sub) => (
+                      <option key={sub.key} value={sub.key}>
+                        {sub.name} (Code {sub.code} • 5 PYQs)
+                      </option>
+                    ))
+                  )}
+                </select>
+                <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
             </div>
           </div>
-        )}
-
-        {/* Filter Tabs by Subject */}
-        <div className="flex flex-wrap items-center gap-2 pb-1">
-          <button
-            type="button"
-            onClick={() => setSelectedTab("all")}
-            className={`px-4 py-2 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer ${
-              selectedTab === "all"
-                ? "bg-[#FF5C5C] text-white"
-                : "bg-white text-black hover:bg-[#FAF7EE]"
-            }`}
-          >
-            All Live PYQs ({allPYQsList.length} Papers)
-          </button>
-
-          {Object.values(PYQ_SUBJECT_CONFIGS).map((sub) => {
-            const Icon = sub.icon;
-            const isCurrent = selectedTab === sub.key;
-
-            return (
-              <button
-                key={sub.key}
-                type="button"
-                onClick={() => setSelectedTab(sub.key)}
-                className={`px-3.5 py-2 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer flex items-center gap-1.5 ${
-                  isCurrent
-                    ? "bg-[#FF5C5C] text-white"
-                    : "bg-white text-black hover:bg-[#FAF7EE]"
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span>
-                  {sub.name} ({sub.paperCount})
-                </span>
-              </button>
-            );
-          })}
         </div>
 
         {/* Active Domain Heading Banner */}
@@ -497,15 +588,25 @@ export default function PYQsPage() {
                   <span>Open Full Subject Suite</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => setSelectedTab("all")}
-                  className="px-3 py-2 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all cursor-pointer bg-[#FAF7EE] text-black hover:bg-white"
-                >
-                  View All
-                </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Stream Heading Banner */}
+        {!activeSubjectInfo && activeStreamInfo && (
+          <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000] space-y-2 animate-in fade-in duration-200">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-xl md:text-2xl font-black text-black">
+                {activeStreamInfo.name} Official CUET PYQs
+              </h2>
+              <span className="text-xs font-black uppercase bg-[#D1FAE5] text-[#065F46] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                {activeStreamInfo.badge}
+              </span>
+            </div>
+            <p className="text-sm font-semibold text-black/70">
+              Showing all {displayedTests.length} official papers across {activeStreamInfo.name}.
+            </p>
           </div>
         )}
 
@@ -515,7 +616,9 @@ export default function PYQsPage() {
             <h3 className="text-xl font-black text-black flex items-center gap-2">
               <span>
                 {selectedTab === "all"
-                  ? "Official CUET NTA CBT Examination Papers"
+                  ? selectedStream === "all"
+                    ? "Official CUET NTA CBT Examination Papers"
+                    : `${STREAM_CONFIGS[selectedStream].name} Official Papers`
                   : `${activeSubjectInfo?.name} Official Papers (${displayedTests.length} Papers)`}
               </span>
               <span className="text-xs bg-black text-white px-2 py-0.5 rounded-full font-bold">
@@ -628,45 +731,6 @@ export default function PYQsPage() {
             })}
           </div>
         </div>
-
-        {/* All Domain Subjects Overview (shown in "all" view) */}
-        {selectedTab === "all" && (
-          <div className="pt-8 border-t-2 border-black/20 space-y-4">
-            <h3 className="text-2xl font-black text-black">
-              All 20 CUET UG Domain Subjects
-            </h3>
-            <p className="text-sm font-semibold text-black/60">
-              Select any domain below to access its dedicated past year question repository with papers from 2022 to 2024.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-              {Object.values(PYQ_SUBJECT_CONFIGS).map((sub) => {
-                const Icon = sub.icon;
-                return (
-                  <Link
-                    key={sub.key}
-                    href={`/dashboard/pyqs/${sub.key}`}
-                    className="bg-white rounded-xl border-2 border-black p-4 shadow-[2px_2px_0px_0px_#000] hover:shadow-[4px_4px_0px_0px_#000] transition-all hover:-translate-y-0.5 hover:-translate-x-0.5 flex items-center justify-between group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-[#FAF7EE] border border-black flex items-center justify-center group-hover:bg-[#FF5C5C] group-hover:text-white transition-colors">
-                        <Icon className="w-4.5 h-4.5" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-black text-black group-hover:text-[#FF5C5C] transition-colors">
-                          {sub.name}
-                        </h4>
-                        <p className="text-[11px] font-bold text-black/50">
-                          Code {sub.code} • 5 Papers
-                        </p>
-                      </div>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-black/40 group-hover:text-[#FF5C5C] group-hover:translate-x-0.5 transition-all" />
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

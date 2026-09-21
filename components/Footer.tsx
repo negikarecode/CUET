@@ -63,10 +63,10 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Col 2: Domain Tests Directory (3 cols) */}
+          {/* Col 2: Mock Tests & PYQs Directory (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
             <h3 className="text-xs font-black uppercase tracking-wider text-black font-mono">
-              Domain Mock Papers
+              Mock Tests & PYQs
             </h3>
             <ul className="space-y-2 text-xs font-bold text-black/80">
               <li>

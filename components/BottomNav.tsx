@@ -59,7 +59,7 @@ export default function BottomNav() {
             <span className="text-[10px] mt-0.5 tracking-tight">{t("home", "Home")}</span>
           </Link>
 
-          {/* 2. Domain Tests */}
+          {/* 2. Mock Tests */}
           <Link
             href="/#stream-matrix"
             className="flex flex-col items-center justify-center py-1 text-black/60 hover:text-black font-bold transition-all"
@@ -67,7 +67,7 @@ export default function BottomNav() {
             <div className="p-1 rounded-md hover:bg-[#FAF7EE]">
               <BookOpen className="w-4 h-4 stroke-[2.5]" />
             </div>
-            <span className="text-[10px] mt-0.5 tracking-tight">{t("mocks", "Tests")}</span>
+            <span className="text-[10px] mt-0.5 tracking-tight">{t("mocks", "Mocks")}</span>
           </Link>
 
           {/* 3. Diagnostic Demo */}

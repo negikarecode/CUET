@@ -54,7 +54,7 @@ export default function PricingSection() {
                   <span className="w-5 h-5 rounded-full bg-[#D1FAE5] border border-black flex items-center justify-center shrink-0">
                     <Check className="w-3.5 h-3.5 text-black stroke-[3]" />
                   </span>
-                  <span>3 Domain Practice Mocks</span>
+                  <span>3 Domain Mock Tests</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <span className="w-5 h-5 rounded-full bg-[#D1FAE5] border border-black flex items-center justify-center shrink-0">

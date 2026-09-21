@@ -13,6 +13,7 @@ import {
   ChevronDown,
   Award,
   BookOpen,
+  FileText,
   LogOut,
   Trophy,
   ArrowRight,
@@ -116,11 +117,18 @@ export default function Navbar() {
                       <span>{t("commandHub", "Command Hub")}</span>
                     </Link>
                     <Link
+                      href="/dashboard/pyqs"
+                      className="px-3 py-1.5 text-xs font-bold text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all flex items-center gap-1.5"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-black/70" />
+                      <span>{t("domainTests", "PYQs")}</span>
+                    </Link>
+                    <Link
                       href="/dashboard/mocks"
                       className="px-3 py-1.5 text-xs font-bold text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all flex items-center gap-1.5"
                     >
                       <BookOpen className="w-3.5 h-3.5 text-black/70" />
-                      <span>{t("mocks", "Practice Mocks")}</span>
+                      <span>{t("mocks", "Mock Tests")}</span>
                     </Link>
                     <Link
                       href="/dashboard#radar"
@@ -277,12 +285,20 @@ export default function Navbar() {
                             <span>Trophy Cabinet & Radar</span>
                           </Link>
                           <Link
+                            href="/dashboard/pyqs"
+                            onClick={() => setProfileDropdownOpen(false)}
+                            className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
+                          >
+                            <FileText className="w-4 h-4 text-black/60" />
+                            <span>Solve PYQs</span>
+                          </Link>
+                          <Link
                             href="/dashboard/mocks"
                             onClick={() => setProfileDropdownOpen(false)}
                             className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
                           >
                             <BookOpen className="w-4 h-4 text-black/60" />
-                            <span>Practice Domain Test</span>
+                            <span>Mock Tests</span>
                           </Link>
                         </div>
 
@@ -400,11 +416,18 @@ export default function Navbar() {
                     {t("commandHub", "Command Hub")}
                   </Link>
                   <Link
+                    href="/dashboard/pyqs"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 rounded-lg text-xs font-bold border-2 border-transparent hover:border-black hover:bg-white"
+                  >
+                    {t("domainTests", "PYQs")}
+                  </Link>
+                  <Link
                     href="/dashboard/mocks"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-lg text-xs font-bold border-2 border-transparent hover:border-black hover:bg-white"
                   >
-                    {t("mocks", "Practice Mocks")}
+                    {t("mocks", "Mock Tests")}
                   </Link>
                   <Link
                     href="/dashboard#radar"

@@ -65,7 +65,7 @@ export default function DashboardSidebar() {
     },
     {
       id: "pyqs",
-      label: t("domainTests", "PYQ Tests"),
+      label: t("domainTests", "PYQs"),
       href: "/dashboard/pyqs",
       icon: FileText,
       active: pathname.startsWith("/dashboard/pyqs"),

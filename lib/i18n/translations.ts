@@ -28,7 +28,7 @@ export const translations: Record<string, TranslationDictionary> = {
 
     // Navigation
     home: "Home",
-    mocks: "Practice Mocks",
+    mocks: "Mock Tests",
     radar: "Weakness Radar",
     leaderboard: "Leaderboard",
     commandHub: "Command Hub",
@@ -38,7 +38,7 @@ export const translations: Record<string, TranslationDictionary> = {
     signOut: "Sign Out",
     profile: "Profile",
     upgrade: "Upgrade",
-    domainTests: "Domain Tests",
+    domainTests: "PYQs",
     dailyDrill: "Daily Drill",
 
     // Hero Section
@@ -255,7 +255,7 @@ export const translations: Record<string, TranslationDictionary> = {
 
     // Navigation
     home: "होम",
-    mocks: "मॉक टेस्ट अभ्यास",
+    mocks: "मॉक टेस्ट",
     radar: "कमजोरी रडार",
     leaderboard: "लीडरबोर्ड",
     commandHub: "कमांड हब",
@@ -265,7 +265,7 @@ export const translations: Record<string, TranslationDictionary> = {
     signOut: "साइन आउट",
     profile: "प्रोफ़ाइल",
     upgrade: "अपग्रेड करें",
-    domainTests: "डोमेन टेस्ट",
+    domainTests: "पीवाईक्यू (PYQs)",
     dailyDrill: "दैनिक अभ्यास",
 
     // Hero Section
