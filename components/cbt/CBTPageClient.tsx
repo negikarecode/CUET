@@ -2,8 +2,7 @@
 
 import React, { useEffect } from "react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
-import { Question } from "@/types";
-import { FullTestMeta } from "@/lib/data/mock50Questions";
+import { Question, FullTestMeta } from "@/types";
 import CBTPlayer from "@/components/cbt/CBTPlayer";
 
 interface CBTPageClientProps {

@@ -3,17 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import {
-  PHYSICS_MOCK_TESTS,
-  CHEMISTRY_MOCK_TESTS,
-  MATHS_MOCK_TESTS,
-  BIOLOGY_MOCK_TESTS,
-  ACCOUNTANCY_MOCK_TESTS,
-  BUSINESS_STUDIES_MOCK_TESTS,
-  ECONOMICS_MOCK_TESTS,
-  HISTORY_MOCK_TESTS,
-  POLITICAL_SCIENCE_MOCK_TESTS,
-  GEOGRAPHY_MOCK_TESTS,
-  PSYCHOLOGY_MOCK_TESTS,
+  getMockTestsForSubject,
   MockTestItem,
 } from "@/lib/data/subjects";
 import {
@@ -36,6 +26,15 @@ import {
   Sparkles,
   RotateCcw,
   Trophy,
+  Users,
+  Activity,
+  Laptop,
+  Home,
+  Tv,
+  Leaf,
+  Palette,
+  Sprout,
+  Footprints,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { getTestAttemptStats } from "@/lib/analytics";
@@ -54,7 +53,16 @@ type SubjectKey =
   | "history"
   | "political-science"
   | "geography"
-  | "psychology";
+  | "psychology"
+  | "sociology"
+  | "physical-education"
+  | "computer-science"
+  | "home-science"
+  | "mass-media"
+  | "environmental-studies"
+  | "fine-arts"
+  | "agriculture"
+  | "anthropology";
 
 interface SubjectMeta {
   key: SubjectKey;
@@ -76,7 +84,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     mockCount: 20,
     totalQuestions: 1000,
     subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • Complete Full Syllabus Coverage",
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Complete Full Syllabus Coverage",
     icon: Atom,
   },
   chemistry: {
@@ -87,7 +95,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     mockCount: 20,
     totalQuestions: 1000,
     subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • Complete Full Syllabus Coverage",
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Complete Full Syllabus Coverage",
     icon: FlaskConical,
   },
   mathematics: {
@@ -98,7 +106,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     mockCount: 20,
     totalQuestions: 1000,
     subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • Complete Full Syllabus Coverage",
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Complete Full Syllabus Coverage",
     icon: Binary,
   },
   biology: {
@@ -109,7 +117,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     mockCount: 20,
     totalQuestions: 1000,
     subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • Complete Full Syllabus Coverage",
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Complete Full Syllabus Coverage",
     icon: Dna,
   },
   accountancy: {
@@ -131,7 +139,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     mockCount: 20,
     totalQuestions: 1000,
     subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Standard NTA CUET CBT Syllabus",
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Standard NTA CUET CBT Syllabus",
     icon: Briefcase,
   },
   economics: {
@@ -164,7 +172,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     mockCount: 20,
     totalQuestions: 1000,
     subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Contemporary World Politics & Politics in India Since Independence",
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Contemporary World Politics & Politics in India",
     icon: Landmark,
   },
   geography: {
@@ -186,8 +194,107 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     mockCount: 20,
     totalQuestions: 1000,
     subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • NCERT Class 12 Variations, Personality, Disorders & Applied Skills",
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • NCERT Class 12 Variations, Personality & Disorders",
     icon: BrainCircuit,
+  },
+  sociology: {
+    key: "sociology",
+    name: "Sociology",
+    code: "325",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Structure of Indian Society & Social Change",
+    icon: Users,
+  },
+  "physical-education": {
+    key: "physical-education",
+    name: "Physical Education",
+    code: "321",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Sports Events, Yoga, Nutrition & Biomechanics",
+    icon: Activity,
+  },
+  "computer-science": {
+    key: "computer-science",
+    name: "Computer Science / IP",
+    code: "308",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Computational Thinking, Python, SQL & Networks",
+    icon: Laptop,
+  },
+  "home-science": {
+    key: "home-science",
+    name: "Home Science",
+    code: "315",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Clinical Nutrition, Human Development & Resource Management",
+    icon: Home,
+  },
+  "mass-media": {
+    key: "mass-media",
+    name: "Mass Media & Communication",
+    code: "318",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Communication Theories, Journalism, Cinema & New Media",
+    icon: Tv,
+  },
+  "environmental-studies": {
+    key: "environmental-studies",
+    name: "Environmental Studies",
+    code: "307",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Ecosystem Ecology, Pollution & Sustainable Development",
+    icon: Leaf,
+  },
+  "fine-arts": {
+    key: "fine-arts",
+    name: "Fine Arts / Visual Arts",
+    code: "311",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Miniature Painting, Mughal & Bengal Schools, Modern Art",
+    icon: Palette,
+  },
+  agriculture: {
+    key: "agriculture",
+    name: "Agriculture",
+    code: "302",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Agrometeorology, Genetics, Livestock, Agronomy & Horticulture",
+    icon: Sprout,
+  },
+  anthropology: {
+    key: "anthropology",
+    name: "Anthropology",
+    code: "303",
+    isLive: true,
+    mockCount: 20,
+    totalQuestions: 1000,
+    subtitle:
+      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Physical & Cultural Anthropology, Prehistory & Tribal Studies",
+    icon: Footprints,
   },
 };
 
@@ -204,113 +311,16 @@ export default function MocksPage() {
       MockTestItem & { subjectName: string; subjectSlug: string; code: string }
     > = [];
 
-    // Physics mocks (20 tests)
-    PHYSICS_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "Physics",
-        subjectSlug: "physics",
-        code: "312",
-      });
-    });
-
-    // Chemistry mocks (20 tests)
-    CHEMISTRY_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "Chemistry",
-        subjectSlug: "chemistry",
-        code: "306",
-      });
-    });
-
-    // Mathematics mocks (20 tests)
-    MATHS_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "Mathematics",
-        subjectSlug: "mathematics",
-        code: "319",
-      });
-    });
-
-    // Biology mocks (20 tests)
-    BIOLOGY_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "Biology",
-        subjectSlug: "biology",
-        code: "304",
-      });
-    });
-
-    // Accountancy mocks (20 tests)
-    ACCOUNTANCY_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "Accountancy",
-        subjectSlug: "accountancy",
-        code: "301",
-      });
-    });
-
-    // Business Studies mocks (20 tests)
-    BUSINESS_STUDIES_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "Business Studies",
-        subjectSlug: "business-studies",
-        code: "305",
-      });
-    });
-
-    // Economics mocks (20 tests)
-    ECONOMICS_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "Economics",
-        subjectSlug: "economics",
-        code: "309",
-      });
-    });
-
-    // History mocks (20 tests)
-    HISTORY_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "History",
-        subjectSlug: "history",
-        code: "314",
-      });
-    });
-
-    // Political Science mocks (20 tests)
-    POLITICAL_SCIENCE_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "Political Science",
-        subjectSlug: "political-science",
-        code: "323",
-      });
-    });
-
-    // Geography mocks (20 tests)
-    GEOGRAPHY_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "Geography",
-        subjectSlug: "geography",
-        code: "313",
-      });
-    });
-
-    // Psychology mocks (20 tests)
-    PSYCHOLOGY_MOCK_TESTS.forEach((t) => {
-      list.push({
-        ...t,
-        subjectName: "Psychology",
-        subjectSlug: "psychology",
-        code: "324",
+    (Object.keys(SUBJECT_CONFIGS) as Array<Exclude<SubjectKey, "all">>).forEach((subKey) => {
+      const config = SUBJECT_CONFIGS[subKey];
+      const tests = getMockTestsForSubject(subKey);
+      tests.forEach((t) => {
+        list.push({
+          ...t,
+          subjectName: config.name,
+          subjectSlug: config.key,
+          code: config.code,
+        });
       });
     });
 

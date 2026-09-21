@@ -13,6 +13,15 @@ export interface SubjectConfig {
   popularMockCount: number;
 }
 
+export interface FullTestMeta {
+  id: string;
+  title: string;
+  subject: string;
+  code: string;
+  totalQuestions: number;
+  durationMinutes: number;
+}
+
 export type QuestionStatus =
   | "not_visited"
   | "not_answered"

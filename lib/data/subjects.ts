@@ -72,6 +72,36 @@ export const SUBJECT_TO_MOCK: Record<string, string> = {
   "psych": "psychology-mock",
   "Psych": "psychology-mock",
   "psychology-mock": "psychology-mock",
+  "sociology": "sociology-mock",
+  "Sociology": "sociology-mock",
+  "soc": "sociology-mock",
+  "Soc": "sociology-mock",
+  "physical-education": "physical-education-mock",
+  "Physical Education": "physical-education-mock",
+  "ped": "physical-education-mock",
+  "Ped": "physical-education-mock",
+  "computer-science": "computer-science-mock",
+  "Computer Science": "computer-science-mock",
+  "cs": "computer-science-mock",
+  "csip": "computer-science-mock",
+  "home-science": "home-science-mock",
+  "Home Science": "home-science-mock",
+  "hsc": "home-science-mock",
+  "mass-media": "mass-media-mock",
+  "Mass Media": "mass-media-mock",
+  "mmc": "mass-media-mock",
+  "environmental-studies": "environmental-studies-mock",
+  "Environmental Studies": "environmental-studies-mock",
+  "evs": "environmental-studies-mock",
+  "fine-arts": "fine-arts-mock",
+  "Fine Arts": "fine-arts-mock",
+  "fa": "fine-arts-mock",
+  "agriculture": "agriculture-mock",
+  "Agriculture": "agriculture-mock",
+  "agr": "agriculture-mock",
+  "anthropology": "anthropology-mock",
+  "Anthropology": "anthropology-mock",
+  "ant": "anthropology-mock",
 };
 
 export interface MockTestItem {
@@ -82,6 +112,26 @@ export interface MockTestItem {
   duration: string;
   questions: number;
   tags: string[];
+}
+
+export function createMockTestList(
+  subjectSlug: string,
+  subjectName: string,
+  durationMinutes: number = 60,
+  count: number = 20
+): MockTestItem[] {
+  return Array.from({ length: count }, (_, i) => {
+    const num = i + 1;
+    return {
+      id: `${subjectSlug}-mock-${num}`,
+      mockNumber: num,
+      label: `${subjectName} Full Mock ${num}`,
+      mockLabel: `NTA Full Mock ${num} • Full Syllabus CBT`,
+      duration: `${durationMinutes} Minutes`,
+      questions: 50,
+      tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
+    };
+  });
 }
 
 export const PHYSICS_MOCK_TESTS: MockTestItem[] = [
@@ -1059,6 +1109,42 @@ export const PSYCHOLOGY_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, 
   tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
 }));
 
+export const SOCIOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("sociology", "Sociology", 45);
+export const PHYSICAL_EDUCATION_MOCK_TESTS: MockTestItem[] = createMockTestList("physical-education", "Physical Education", 45);
+export const COMPUTER_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("computer-science", "Computer Science / IP", 60);
+export const HOME_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("home-science", "Home Science", 45);
+export const MASS_MEDIA_MOCK_TESTS: MockTestItem[] = createMockTestList("mass-media", "Mass Media", 45);
+export const ENVIRONMENTAL_STUDIES_MOCK_TESTS: MockTestItem[] = createMockTestList("environmental-studies", "Environmental Studies", 45);
+export const FINE_ARTS_MOCK_TESTS: MockTestItem[] = createMockTestList("fine-arts", "Fine Arts / Visual Arts", 45);
+export const AGRICULTURE_MOCK_TESTS: MockTestItem[] = createMockTestList("agriculture", "Agriculture", 45);
+export const ANTHROPOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("anthropology", "Anthropology", 45);
+
+export function getMockTestsForSubject(subjectKey: string): MockTestItem[] {
+  const norm = subjectKey.toLowerCase().trim().replace(/[-_]/g, "");
+  if (norm === "physics" || norm === "phys") return PHYSICS_MOCK_TESTS;
+  if (norm === "chemistry" || norm === "chem") return CHEMISTRY_MOCK_TESTS;
+  if (norm === "maths" || norm === "mathematics" || norm === "math") return MATHS_MOCK_TESTS;
+  if (norm === "biology" || norm === "bio") return BIOLOGY_MOCK_TESTS;
+  if (norm === "accountancy" || norm === "accounts" || norm === "accs" || norm === "account") return ACCOUNTANCY_MOCK_TESTS;
+  if (norm === "economics" || norm === "eco") return ECONOMICS_MOCK_TESTS;
+  if (norm === "businessstudies" || norm === "business" || norm === "bst") return BUSINESS_STUDIES_MOCK_TESTS;
+  if (norm === "history" || norm === "hist") return HISTORY_MOCK_TESTS;
+  if (norm === "politicalscience" || norm === "polscience" || norm === "pol") return POLITICAL_SCIENCE_MOCK_TESTS;
+  if (norm === "geography" || norm === "geo") return GEOGRAPHY_MOCK_TESTS;
+  if (norm === "psychology" || norm === "psy" || norm === "psych") return PSYCHOLOGY_MOCK_TESTS;
+  if (norm === "sociology" || norm === "soc") return SOCIOLOGY_MOCK_TESTS;
+  if (norm === "physicaleducation" || norm === "ped" || norm === "physical") return PHYSICAL_EDUCATION_MOCK_TESTS;
+  if (norm === "computerscience" || norm === "cs" || norm === "csip" || norm === "informaticspractices") return COMPUTER_SCIENCE_MOCK_TESTS;
+  if (norm === "homescience" || norm === "hsc") return HOME_SCIENCE_MOCK_TESTS;
+  if (norm === "massmedia" || norm === "masscommunication" || norm === "mmc" || norm === "media") return MASS_MEDIA_MOCK_TESTS;
+  if (norm === "environmentalstudies" || norm === "environmentalscience" || norm === "evs") return ENVIRONMENTAL_STUDIES_MOCK_TESTS;
+  if (norm === "finearts" || norm === "visualarts" || norm === "fa") return FINE_ARTS_MOCK_TESTS;
+  if (norm === "agriculture" || norm === "agr") return AGRICULTURE_MOCK_TESTS;
+  if (norm === "anthropology" || norm === "ant") return ANTHROPOLOGY_MOCK_TESTS;
+
+  return createMockTestList(subjectKey, subjectKey.charAt(0).toUpperCase() + subjectKey.slice(1), 60);
+}
+
 export const CUET_SUBJECTS: SubjectConfig[] = [
   // Science Stream
   {
@@ -1204,6 +1290,114 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     stream: "humanities",
     iconName: "BrainCircuit",
     description: "Self and Personality, Psychological Disorders, Social Influence",
+    totalQuestions: 50,
+    maxToAttempt: 50,
+    durationMinutes: 45,
+    popularMockCount: 20,
+  },
+  {
+    id: "sociology",
+    name: "Sociology",
+    code: "325",
+    stream: "humanities",
+    iconName: "Users",
+    description: "Structure of Indian Society, Social Institutions, Social Change and Development",
+    totalQuestions: 50,
+    maxToAttempt: 50,
+    durationMinutes: 45,
+    popularMockCount: 20,
+  },
+  {
+    id: "physical-education",
+    name: "Physical Education / NCC / Yoga",
+    code: "321",
+    stream: "commerce",
+    iconName: "Activity",
+    description: "Management of Sporting Events, Yoga, Sports & Nutrition, Biomechanics",
+    totalQuestions: 50,
+    maxToAttempt: 50,
+    durationMinutes: 45,
+    popularMockCount: 20,
+  },
+  {
+    id: "computer-science",
+    name: "Computer Science / IP",
+    code: "308",
+    stream: "science",
+    iconName: "Laptop",
+    description: "Computational Thinking, Python, SQL, Computer Networks, Data Handling",
+    totalQuestions: 50,
+    maxToAttempt: 50,
+    durationMinutes: 60,
+    popularMockCount: 20,
+  },
+  {
+    id: "home-science",
+    name: "Home Science",
+    code: "315",
+    stream: "humanities",
+    iconName: "Home",
+    description: "Clinical Nutrition, Human Development, Fabric and Apparel, Resource Management",
+    totalQuestions: 50,
+    maxToAttempt: 50,
+    durationMinutes: 45,
+    popularMockCount: 20,
+  },
+  {
+    id: "mass-media",
+    name: "Mass Media & Communication",
+    code: "318",
+    stream: "humanities",
+    iconName: "Tv",
+    description: "Communication Theories, Journalism, Cinema, Radio & Television, New Media",
+    totalQuestions: 50,
+    maxToAttempt: 50,
+    durationMinutes: 45,
+    popularMockCount: 20,
+  },
+  {
+    id: "environmental-studies",
+    name: "Environmental Studies",
+    code: "307",
+    stream: "science",
+    iconName: "Leaf",
+    description: "Ecosystem Ecology, Biodiversity Conservation, Environmental Pollution, Sustainable Development",
+    totalQuestions: 50,
+    maxToAttempt: 50,
+    durationMinutes: 45,
+    popularMockCount: 20,
+  },
+  {
+    id: "fine-arts",
+    name: "Fine Arts / Visual Arts",
+    code: "311",
+    stream: "humanities",
+    iconName: "Palette",
+    description: "Miniature Painting, Mughal & Deccan Schools, Bengal School, Modern Indian Art",
+    totalQuestions: 50,
+    maxToAttempt: 50,
+    durationMinutes: 45,
+    popularMockCount: 20,
+  },
+  {
+    id: "agriculture",
+    name: "Agriculture",
+    code: "302",
+    stream: "science",
+    iconName: "Sprout",
+    description: "Agrometeorology, Genetics, Livestock Production, Agronomy, Horticulture",
+    totalQuestions: 50,
+    maxToAttempt: 50,
+    durationMinutes: 45,
+    popularMockCount: 20,
+  },
+  {
+    id: "anthropology",
+    name: "Anthropology",
+    code: "303",
+    stream: "humanities",
+    iconName: "Footprints",
+    description: "Physical Anthropology, Socio-Cultural Anthropology, Prehistoric Archaeology, Indian Tribal Studies",
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,

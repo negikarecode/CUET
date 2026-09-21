@@ -2,20 +2,8 @@
 
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ClipboardCheck, Lock, Sparkles, RotateCcw, Trophy } from "lucide-react";
-import {
-  PHYSICS_MOCK_TESTS,
-  CHEMISTRY_MOCK_TESTS,
-  MATHS_MOCK_TESTS,
-  BIOLOGY_MOCK_TESTS,
-  ACCOUNTANCY_MOCK_TESTS,
-  ECONOMICS_MOCK_TESTS,
-  BUSINESS_STUDIES_MOCK_TESTS,
-  HISTORY_MOCK_TESTS,
-  POLITICAL_SCIENCE_MOCK_TESTS,
-  GEOGRAPHY_MOCK_TESTS,
-  PSYCHOLOGY_MOCK_TESTS,
-  CUET_SUBJECTS,
-} from "@/lib/data/subjects";
+import { getSubjectMetadata } from "@/lib/config/subjectRegistry";
+import { getMockTestsForSubject, CUET_SUBJECTS, MockTestItem } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { getTestAttemptStats } from "@/lib/analytics";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -30,159 +18,31 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
   const subjectKey = params.subject.toLowerCase();
-  const isPhysics = subjectKey === "physics" || subjectKey === "physics-mock";
-  const isChemistry = subjectKey === "chemistry" || subjectKey === "chemistry-mock";
-  const isMaths =
-    subjectKey === "maths" ||
-    subjectKey === "mathematics" ||
-    subjectKey === "mathematics-sci" ||
-    subjectKey === "maths-mock" ||
-    subjectKey === "mathematics-mock" ||
-    subjectKey === "math-mock" ||
-    subjectKey === "math";
-  const isBio =
-    subjectKey === "bio" ||
-    subjectKey === "biology" ||
-    subjectKey === "biology-mock";
-  const isAccountancy =
-    subjectKey === "accountancy" ||
-    subjectKey === "accountancy-mock" ||
-    subjectKey === "accounts" ||
-    subjectKey === "accs";
-  const isEco =
-    subjectKey === "eco" ||
-    subjectKey === "economics" ||
-    subjectKey === "eco-mock" ||
-    subjectKey === "economics-mock";
-  const isBst =
-    subjectKey === "bst" ||
-    subjectKey === "business" ||
-    subjectKey === "business-studies" ||
-    subjectKey === "bst-mock" ||
-    subjectKey === "business-mock" ||
-    subjectKey === "business-studies-mock";
-  const isHistory =
-    subjectKey === "history" ||
-    subjectKey === "history-mock" ||
-    subjectKey === "hist" ||
-    subjectKey === "hist-mock";
-  const isPoliticalScience =
-    subjectKey === "political-science" ||
-    subjectKey === "pol-science" ||
-    subjectKey === "polscience" ||
-    subjectKey === "political" ||
-    subjectKey === "pol-science-mock" ||
-    subjectKey === "pol" ||
-    subjectKey === "pol-mock";
-  const isGeography =
-    subjectKey === "geography" ||
-    subjectKey === "geo" ||
-    subjectKey === "geo-mock" ||
-    subjectKey === "geography-mock";
-  const isPsychology =
-    subjectKey === "psychology" ||
-    subjectKey === "psy" ||
-    subjectKey === "psych" ||
-    subjectKey === "psychology-mock" ||
-    subjectKey === "psy-mock";
-  const isLive = isPhysics || isChemistry || isMaths || isBio || isAccountancy || isEco || isBst || isHistory || isPoliticalScience || isGeography || isPsychology;
 
-  // Find subject config if available
+  const metadata = getSubjectMetadata(subjectKey);
   const subjectConfig = CUET_SUBJECTS.find(
-    (s) =>
-      s.id === subjectKey ||
-      s.name.toLowerCase() === subjectKey ||
-      (isPhysics && s.id === "physics") ||
-      (isChemistry && s.id === "chemistry") ||
-      (isMaths && (s.id === "mathematics-sci" || s.id === "mathematics")) ||
-      (isBio && s.id === "biology") ||
-      (isAccountancy && (s.id === "accountancy" || s.name.toLowerCase().includes("account"))) ||
-      (isEco && (s.id === "economics" || s.name.toLowerCase().includes("economic"))) ||
-      (isBst && (s.id === "business-studies" || s.name.toLowerCase().includes("business"))) ||
-      (isHistory && (s.id === "history" || s.name.toLowerCase().includes("histor"))) ||
-      (isPoliticalScience && (s.id === "political-science" || s.name.toLowerCase().includes("politi"))) ||
-      (isGeography && (s.id === "geography" || s.name.toLowerCase().includes("geograph"))) ||
-      (isPsychology && (s.id === "psychology" || s.name.toLowerCase().includes("psych")))
+    (s) => s.id === subjectKey || s.name.toLowerCase() === subjectKey
   );
 
-  const subjectName = isPhysics
-    ? "Physics"
-    : isChemistry
-    ? "Chemistry"
-    : isMaths
-    ? "Mathematics"
-    : isBio
-    ? "Biology"
-    : isAccountancy
-    ? "Accountancy"
-    : isEco
-    ? "Economics"
-    : isBst
-    ? "Business Studies"
-    : isHistory
-    ? "History"
-    : isPoliticalScience
-    ? "Political Science"
-    : isGeography
-    ? "Geography"
-    : isPsychology
-    ? "Psychology"
-    : subjectConfig?.name ?? (subjectKey.charAt(0).toUpperCase() + subjectKey.slice(1));
+  const mockTests: MockTestItem[] = getMockTestsForSubject(subjectKey);
+  const isLive = metadata?.supportedStatus === "active" || mockTests.length > 0;
 
-  const code = isPhysics
-    ? "312"
-    : isChemistry
-    ? "306"
-    : isMaths
-    ? "319"
-    : isBio
-    ? "304"
-    : isAccountancy
-    ? "301"
-    : isEco
-    ? "309"
-    : isBst
-    ? "305"
-    : isHistory
-    ? "314"
-    : isPoliticalScience
-    ? "323"
-    : isGeography
-    ? "313"
-    : isPsychology
-    ? "324"
-    : subjectConfig?.code ?? "300";
+  const subjectName =
+    metadata?.name ??
+    subjectConfig?.name ??
+    (subjectKey.charAt(0).toUpperCase() + subjectKey.slice(1).replace(/[-_]/g, " "));
+
+  const code = metadata?.officialCode ?? subjectConfig?.code ?? "300";
   const title = `${subjectName} Domain Full CBT Mocks`;
 
-  const subtitle = isLive
-    ? isBio || isHistory || isPoliticalScience || isGeography || isPsychology
-      ? "20 Full-Length NTA CBT Mock Papers • 50 Compulsory Questions • 45 Minutes each"
-      : "20 Full-Length NTA CBT Mock Papers • 50 Compulsory Questions • 60 Minutes each"
-    : "50 Compulsory Questions per Paper • Standard NTA CUET CBT Syllabus (Releasing Soon)";
+  const durationMinutes =
+    code === "312" || code === "306" || code === "319" || code === "301" || code === "309" || code === "308"
+      ? 60
+      : 45;
 
-  const mockTests = isPhysics
-    ? PHYSICS_MOCK_TESTS
-    : isChemistry
-    ? CHEMISTRY_MOCK_TESTS
-    : isMaths
-    ? MATHS_MOCK_TESTS
-    : isBio
-    ? BIOLOGY_MOCK_TESTS
-    : isAccountancy
-    ? ACCOUNTANCY_MOCK_TESTS
-    : isEco
-    ? ECONOMICS_MOCK_TESTS
-    : isBst
-    ? BUSINESS_STUDIES_MOCK_TESTS
-    : isHistory
-    ? HISTORY_MOCK_TESTS
-    : isPoliticalScience
-    ? POLITICAL_SCIENCE_MOCK_TESTS
-    : isGeography
-    ? GEOGRAPHY_MOCK_TESTS
-    : isPsychology
-    ? PSYCHOLOGY_MOCK_TESTS
-    : [];
+  const subtitle = isLive
+    ? `20 Full-Length NTA CBT Mock Papers • 50 Compulsory Questions • ${durationMinutes} Minutes each`
+    : "50 Compulsory Questions per Paper • Standard NTA CUET CBT Syllabus (Releasing Soon)";
 
   return (
     <div className="min-h-screen bg-[#FAF7EE] p-4 md:p-6 lg:p-8">

@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { Question, QuestionStatus } from "@/types";
-import { FullTestMeta } from "@/lib/data/mock50Questions";
+import { Question, QuestionStatus, FullTestMeta } from "@/types";
 import { CUET_UG_2026_CONFIG, calculateExamScore } from "@/lib/config/examConfig";
 
 export interface QuestionSessionState {
