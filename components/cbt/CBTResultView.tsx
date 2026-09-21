@@ -334,7 +334,7 @@ export default function CBTResultView() {
                 </span>
               ) : isNewPersonalBest ? (
                 <span className="text-[10px] font-black uppercase bg-[#D1FAE5] text-[#065F46] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000] flex items-center gap-1">
-                  <span>🏆 New Personal Best!</span>
+                  <span>New Personal Best!</span>
                 </span>
               ) : (
                 <span className="text-[10px] font-black uppercase bg-[#FAF7EE] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
@@ -642,13 +642,13 @@ export default function CBTResultView() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t-2 border-black/10">
                       {q.solution.quick && (
                         <div className="p-2.5 rounded-lg bg-white border border-black/30">
-                          <span className="text-[10px] font-black uppercase text-[#2563EB] block mb-0.5">⚡ 30-Sec Takeaway</span>
+                          <span className="text-[10px] font-black uppercase text-[#2563EB] block mb-0.5">30-Sec Takeaway</span>
                           <p className="text-black/90 font-semibold text-[11px] leading-snug">{q.solution.quick}</p>
                         </div>
                       )}
                       {q.solution.concept && (
                         <div className="p-2.5 rounded-lg bg-white border border-black/30">
-                          <span className="text-[10px] font-black uppercase text-[#059669] block mb-0.5">💡 Core NCERT Concept</span>
+                          <span className="text-[10px] font-black uppercase text-[#059669] block mb-0.5">Core NCERT Concept</span>
                           <p className="text-black/90 font-semibold text-[11px] leading-snug">{q.solution.concept}</p>
                         </div>
                       )}
@@ -658,7 +658,7 @@ export default function CBTResultView() {
                   {/* Formula / Key Concept Highlight */}
                   {(q.formula || q.keyConcept) && (
                     <div className="p-2.5 rounded-lg bg-[#FFFBEB] border border-[#F59E0B] text-black">
-                      <span className="text-[10px] font-black uppercase text-[#B45309] block mb-0.5">📐 Formula / Principle</span>
+                      <span className="text-[10px] font-black uppercase text-[#B45309] block mb-0.5">Formula / Principle</span>
                       <p className="font-bold text-[11px]">{q.formula || q.keyConcept}</p>
                     </div>
                   )}
@@ -666,7 +666,7 @@ export default function CBTResultView() {
                   {/* Common Misconception Alert */}
                   {q.misconception && (
                     <div className="p-2.5 rounded-lg bg-[#FEF2F2] border border-[#EF4444] text-black">
-                      <span className="text-[10px] font-black uppercase text-[#DC2626] block mb-0.5">⚠️ Common Trap / Misconception</span>
+                      <span className="text-[10px] font-black uppercase text-[#DC2626] block mb-0.5">Common Trap / Misconception</span>
                       <p className="font-semibold text-[11px] text-black/90">{q.misconception.description}</p>
                     </div>
                   )}

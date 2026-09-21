@@ -570,7 +570,7 @@ export default function DashboardClient({
                             <p className="font-medium text-black/90">{topicItem.diagnosticInsight}</p>
                             {topicItem.remedialPrescription && (
                               <p className="text-[10px] text-black/60 font-semibold">
-                                <span className="font-black text-black">💡 Prescription:</span> {topicItem.remedialPrescription}
+                                <span className="font-black text-black">Prescription:</span> {topicItem.remedialPrescription}
                               </p>
                             )}
                           </div>
@@ -650,7 +650,7 @@ export default function DashboardClient({
                           <p className="font-medium text-black/90">{topicItem.diagnosticInsight}</p>
                           {topicItem.remedialPrescription && (
                             <p className="text-[10px] text-black/60 font-semibold">
-                              <span className="font-black text-black">✨ Strategy:</span> {topicItem.remedialPrescription}
+                              <span className="font-black text-black">Strategy:</span> {topicItem.remedialPrescription}
                             </p>
                           )}
                         </div>
@@ -665,7 +665,7 @@ export default function DashboardClient({
                               key={i}
                               className="px-1.5 py-0.5 rounded bg-white border border-black/20 text-[9px] font-bold text-[#065F46]"
                             >
-                              ✓ {sub}
+                              {sub}
                             </span>
                           ))}
                         </div>

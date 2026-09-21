@@ -140,7 +140,7 @@ function buildNaturalLanguageReport(params: {
 
   let md = `## Your Performance\n\n${overallSummary}\n\n`;
 
-  md += `## 🔥 Your Strengths\n\n`;
+  md += `## Your Strengths\n\n`;
   if (strengths.length > 0) {
     strengths.forEach((s) => {
       md += `* **${s.topic}**: ${s.accuracy}% accuracy — High retention and reliable problem-solving rhythm.\n`;
@@ -150,7 +150,7 @@ function buildNaturalLanguageReport(params: {
   }
   md += `\n`;
 
-  md += `## ⚠️ Your Weaknesses\n\n`;
+  md += `## Your Weaknesses\n\n`;
   if (weaknesses.length > 0) {
     weaknesses.forEach((w) => {
       md += `* **${w.topic}** (${w.accuracy}% accuracy): ${w.errorType}. ${w.action}\n`;
@@ -160,7 +160,7 @@ function buildNaturalLanguageReport(params: {
   }
   md += `\n`;
 
-  md += `## 🧠 Why You're Making These Mistakes\n\n`;
+  md += `## Why You Are Making These Mistakes\n\n`;
   if (whyLosingMarks.length > 0) {
     whyLosingMarks.forEach((m) => {
       md += `* **${m.cause} (${m.percentage}%)**: ${m.evidence}\n`;
@@ -170,28 +170,28 @@ function buildNaturalLanguageReport(params: {
   }
   md += `\n`;
 
-  md += `## 📉 Where You're Losing Marks\n\n`;
+  md += `## Where You Are Losing Marks\n\n`;
   md += `Your score deductions in this test were concentrated in ${weaknesses.slice(0, 2).map((w) => w.topic).join(" and ") || "isolated questions"}. Correcting distractor trap selection in these priority areas yields the highest net mark gain (+6 marks per question).\n\n`;
 
-  md += `## 🎯 What You Should Do Next\n\n`;
+  md += `## What You Should Do Next\n\n`;
   md += `* **Biggest Strength**: ${nextActions.biggest_strength}\n`;
   md += `* **Biggest Weakness**: ${nextActions.biggest_weakness}\n`;
   md += `* **Recurring Trap**: ${nextActions.biggest_recurring_mistake}\n`;
   md += `* **Highest-Impact Focus**: ${nextActions.highest_impact_topic}\n\n`;
 
-  md += `## 📚 Topics to Revise\n\n`;
+  md += `## Topics to Revise\n\n`;
   nextActions.recommended_revision.forEach((r) => {
     md += `* ${r}\n`;
   });
   md += `\n`;
 
-  md += `## 📝 Questions to Practice\n\n`;
+  md += `## Questions to Practice\n\n`;
   nextActions.recommended_practice.forEach((p) => {
     md += `* ${p}\n`;
   });
   md += `\n`;
 
-  md += `## ⏱️ Test Strategy\n\n`;
+  md += `## Test Strategy\n\n`;
   if (timeAlertsCount > 0) {
     md += `* You recorded ${timeAlertsCount} time-management bottleneck(s). Flag heavy calculation numericals on pass 1 and return to them in phase 2.\n`;
   } else {
@@ -199,7 +199,7 @@ function buildNaturalLanguageReport(params: {
   }
   md += `\n`;
 
-  md += `## 🚀 Next Test\n\n`;
+  md += `## Next Test\n\n`;
   md += `* ${nextActions.recommended_next_test}\n`;
 
   return md;

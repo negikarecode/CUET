@@ -539,7 +539,7 @@ export default function MocksPage() {
                     : "bg-white text-black hover:bg-[#FAF7EE]"
                 }`}
               >
-                <span>🧪 Science Stream (7)</span>
+                <span>Science Stream (7)</span>
                 <ChevronDown
                   className={`w-3.5 h-3.5 transition-transform duration-200 ${
                     openDropdown === "science" ? "rotate-180" : ""
@@ -603,7 +603,7 @@ export default function MocksPage() {
                     : "bg-white text-black hover:bg-[#FAF7EE]"
                 }`}
               >
-                <span>💼 Commerce Stream (4)</span>
+                <span>Commerce Stream (4)</span>
                 <ChevronDown
                   className={`w-3.5 h-3.5 transition-transform duration-200 ${
                     openDropdown === "commerce" ? "rotate-180" : ""
@@ -667,7 +667,7 @@ export default function MocksPage() {
                     : "bg-white text-black hover:bg-[#FAF7EE]"
                 }`}
               >
-                <span>🏛️ Humanities & Arts (10)</span>
+                <span>Humanities & Arts (10)</span>
                 <ChevronDown
                   className={`w-3.5 h-3.5 transition-transform duration-200 ${
                     openDropdown === "humanities" ? "rotate-180" : ""
