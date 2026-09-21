@@ -1,21 +1,81 @@
 import { SubjectConfig } from "@/types";
 
-// Mapping of subject IDs to their PYQ test IDs
+// Mapping of subject IDs to their primary PYQ test IDs
 export const SUBJECT_TO_PYQ: Record<string, string> = {
+  // Science Stream
   "physics": "physics-pyq",
+  "Physics": "physics-pyq",
   "chemistry": "chemistry-pyq",
+  "Chemistry": "chemistry-pyq",
   "mathematics-sci": "math-sci-pyq",
+  "mathematics": "math-sci-pyq",
+  "Mathematics": "math-sci-pyq",
+  "maths": "math-sci-pyq",
+  "Maths": "math-sci-pyq",
+  "math": "math-sci-pyq",
   "biology": "biology-pyq",
-  "english": "english-pyq",
+  "Biology": "biology-pyq",
+  "bio": "biology-pyq",
+  "Bio": "biology-pyq",
+  // Commerce Stream
   "accountancy": "accountancy-pyq",
+  "Accountancy": "accountancy-pyq",
+  "accounts": "accountancy-pyq",
+  "accs": "accountancy-pyq",
   "business-studies": "business-pyq",
+  "Business Studies": "business-pyq",
+  "business": "business-pyq",
+  "bst": "business-pyq",
+  "economics": "eco-pyq",
+  "Economics": "eco-pyq",
+  "eco": "eco-pyq",
+  "mathematics-com": "math-sci-pyq",
+  // Humanities Stream
   "history": "history-pyq",
+  "History": "history-pyq",
+  "hist": "history-pyq",
   "political-science": "pol-science-pyq",
+  "Political Science": "pol-science-pyq",
+  "polscience": "pol-science-pyq",
+  "pol": "pol-science-pyq",
   "geography": "geo-pyq",
+  "Geography": "geo-pyq",
   "geo": "geo-pyq",
   "psychology": "psychology-pyq",
+  "Psychology": "psychology-pyq",
   "psy": "psychology-pyq",
   "psych": "psychology-pyq",
+  "sociology": "sociology-pyq",
+  "Sociology": "sociology-pyq",
+  "soc": "sociology-pyq",
+  // Applied & Interdisciplinary Domains
+  "physical-education": "physical-education-pyq",
+  "Physical Education": "physical-education-pyq",
+  "ped": "physical-education-pyq",
+  "computer-science": "computer-science-pyq",
+  "Computer Science": "computer-science-pyq",
+  "cs": "computer-science-pyq",
+  "csip": "computer-science-pyq",
+  "home-science": "home-science-pyq",
+  "Home Science": "home-science-pyq",
+  "hsc": "home-science-pyq",
+  "mass-media": "mass-media-pyq",
+  "Mass Media": "mass-media-pyq",
+  "mmc": "mass-media-pyq",
+  "environmental-studies": "environmental-studies-pyq",
+  "Environmental Studies": "environmental-studies-pyq",
+  "evs": "environmental-studies-pyq",
+  "fine-arts": "fine-arts-pyq",
+  "Fine Arts": "fine-arts-pyq",
+  "fa": "fine-arts-pyq",
+  "agriculture": "agriculture-pyq",
+  "Agriculture": "agriculture-pyq",
+  "agr": "agriculture-pyq",
+  "anthropology": "anthropology-pyq",
+  "Anthropology": "anthropology-pyq",
+  "ant": "anthropology-pyq",
+  // Common / Language
+  "english": "english-pyq",
 };
 
 export const SUBJECT_TO_MOCK: Record<string, string> = {
@@ -1144,6 +1204,168 @@ export function getMockTestsForSubject(subjectKey: string): MockTestItem[] {
 
   return createMockTestList(subjectKey, subjectKey.charAt(0).toUpperCase() + subjectKey.slice(1), 60);
 }
+
+export interface PYQTestItem {
+  id: string;
+  subjectSlug: string;
+  subjectName: string;
+  code: string;
+  year: string;
+  shift: string;
+  label: string;
+  yearLabel: string;
+  duration: string;
+  questions: number;
+  tags: string[];
+}
+
+export function createPYQTestList(
+  subjectSlug: string,
+  subjectName: string,
+  code: string,
+  durationMinutes: number = 60
+): PYQTestItem[] {
+  return [
+    {
+      id: `${subjectSlug}-pyq`,
+      subjectSlug,
+      subjectName,
+      code,
+      year: "2024",
+      shift: "Shift 1",
+      label: `CUET UG 2024 ${subjectName} (Shift 1 Official CBT)`,
+      yearLabel: "2024 Official NTA CBT Paper (Shift 1)",
+      duration: `${durationMinutes} Minutes`,
+      questions: 50,
+      tags: ["2024 Official CBT", "Shift 1", "50 Compulsory Qs", "NTA Solved"],
+    },
+    {
+      id: `${subjectSlug}-pyq-2024-s2`,
+      subjectSlug,
+      subjectName,
+      code,
+      year: "2024",
+      shift: "Shift 2",
+      label: `CUET UG 2024 ${subjectName} (Shift 2 Official CBT)`,
+      yearLabel: "2024 Official NTA CBT Paper (Shift 2)",
+      duration: `${durationMinutes} Minutes`,
+      questions: 50,
+      tags: ["2024 Official CBT", "Shift 2", "50 Compulsory Qs", "NTA Solved"],
+    },
+    {
+      id: `${subjectSlug}-pyq-2023-s1`,
+      subjectSlug,
+      subjectName,
+      code,
+      year: "2023",
+      shift: "Shift 1",
+      label: `CUET UG 2023 ${subjectName} (Shift 1 Official CBT)`,
+      yearLabel: "2023 Official NTA CBT Paper (Shift 1)",
+      duration: `${durationMinutes} Minutes`,
+      questions: 50,
+      tags: ["2023 Official CBT", "Shift 1", "50 Compulsory Qs", "NTA Solved"],
+    },
+    {
+      id: `${subjectSlug}-pyq-2023-s2`,
+      subjectSlug,
+      subjectName,
+      code,
+      year: "2023",
+      shift: "Shift 2",
+      label: `CUET UG 2023 ${subjectName} (Shift 2 Official CBT)`,
+      yearLabel: "2023 Official NTA CBT Paper (Shift 2)",
+      duration: `${durationMinutes} Minutes`,
+      questions: 50,
+      tags: ["2023 Official CBT", "Shift 2", "50 Compulsory Qs", "NTA Solved"],
+    },
+    {
+      id: `${subjectSlug}-pyq-2022`,
+      subjectSlug,
+      subjectName,
+      code,
+      year: "2022",
+      shift: "Official",
+      label: `CUET UG 2022 ${subjectName} (Official CBT Paper)`,
+      yearLabel: "2022 Official Inaugural CBT Paper",
+      duration: `${durationMinutes} Minutes`,
+      questions: 50,
+      tags: ["2022 Official CBT", "50 Compulsory Qs", "NTA Solved"],
+    },
+  ];
+}
+
+export const PHYSICS_PYQ_TESTS: PYQTestItem[] = createPYQTestList("physics", "Physics", "312", 60);
+export const CHEMISTRY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("chemistry", "Chemistry", "306", 60);
+export const MATHS_PYQ_TESTS: PYQTestItem[] = createPYQTestList("mathematics", "Mathematics", "319", 60);
+export const BIOLOGY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("biology", "Biology", "304", 45);
+export const ACCOUNTANCY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("accountancy", "Accountancy", "301", 60);
+export const BUSINESS_STUDIES_PYQ_TESTS: PYQTestItem[] = createPYQTestList("business-studies", "Business Studies", "305", 45);
+export const ECONOMICS_PYQ_TESTS: PYQTestItem[] = createPYQTestList("economics", "Economics", "309", 60);
+export const HISTORY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("history", "History", "314", 45);
+export const POLITICAL_SCIENCE_PYQ_TESTS: PYQTestItem[] = createPYQTestList("political-science", "Political Science", "323", 45);
+export const GEOGRAPHY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("geography", "Geography", "313", 45);
+export const PSYCHOLOGY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("psychology", "Psychology", "324", 45);
+export const SOCIOLOGY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("sociology", "Sociology", "325", 45);
+export const PHYSICAL_EDUCATION_PYQ_TESTS: PYQTestItem[] = createPYQTestList("physical-education", "Physical Education", "321", 45);
+export const COMPUTER_SCIENCE_PYQ_TESTS: PYQTestItem[] = createPYQTestList("computer-science", "Computer Science / IP", "308", 60);
+export const HOME_SCIENCE_PYQ_TESTS: PYQTestItem[] = createPYQTestList("home-science", "Home Science", "315", 45);
+export const MASS_MEDIA_PYQ_TESTS: PYQTestItem[] = createPYQTestList("mass-media", "Mass Media & Communication", "318", 45);
+export const ENVIRONMENTAL_STUDIES_PYQ_TESTS: PYQTestItem[] = createPYQTestList("environmental-studies", "Environmental Studies", "307", 45);
+export const FINE_ARTS_PYQ_TESTS: PYQTestItem[] = createPYQTestList("fine-arts", "Fine Arts / Visual Arts", "311", 45);
+export const AGRICULTURE_PYQ_TESTS: PYQTestItem[] = createPYQTestList("agriculture", "Agriculture", "302", 45);
+export const ANTHROPOLOGY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("anthropology", "Anthropology", "303", 45);
+
+export function getPYQTestsForSubject(subjectKey: string): PYQTestItem[] {
+  const norm = subjectKey.toLowerCase().trim().replace(/[-_]/g, "");
+  if (norm === "physics" || norm === "phys") return PHYSICS_PYQ_TESTS;
+  if (norm === "chemistry" || norm === "chem") return CHEMISTRY_PYQ_TESTS;
+  if (norm === "maths" || norm === "mathematics" || norm === "math") return MATHS_PYQ_TESTS;
+  if (norm === "biology" || norm === "bio") return BIOLOGY_PYQ_TESTS;
+  if (norm === "accountancy" || norm === "accounts" || norm === "accs" || norm === "account") return ACCOUNTANCY_PYQ_TESTS;
+  if (norm === "economics" || norm === "eco") return ECONOMICS_PYQ_TESTS;
+  if (norm === "businessstudies" || norm === "business" || norm === "bst") return BUSINESS_STUDIES_PYQ_TESTS;
+  if (norm === "history" || norm === "hist") return HISTORY_PYQ_TESTS;
+  if (norm === "politicalscience" || norm === "polscience" || norm === "pol") return POLITICAL_SCIENCE_PYQ_TESTS;
+  if (norm === "geography" || norm === "geo") return GEOGRAPHY_PYQ_TESTS;
+  if (norm === "psychology" || norm === "psy" || norm === "psych") return PSYCHOLOGY_PYQ_TESTS;
+  if (norm === "sociology" || norm === "soc") return SOCIOLOGY_PYQ_TESTS;
+  if (norm === "physicaleducation" || norm === "ped" || norm === "physical") return PHYSICAL_EDUCATION_PYQ_TESTS;
+  if (norm === "computerscience" || norm === "cs" || norm === "csip" || norm === "informaticspractices") return COMPUTER_SCIENCE_PYQ_TESTS;
+  if (norm === "homescience" || norm === "hsc") return HOME_SCIENCE_PYQ_TESTS;
+  if (norm === "massmedia" || norm === "masscommunication" || norm === "mmc" || norm === "media") return MASS_MEDIA_PYQ_TESTS;
+  if (norm === "environmentalstudies" || norm === "environmentalscience" || norm === "evs") return ENVIRONMENTAL_STUDIES_PYQ_TESTS;
+  if (norm === "finearts" || norm === "visualarts" || norm === "fa") return FINE_ARTS_PYQ_TESTS;
+  if (norm === "agriculture" || norm === "agr") return AGRICULTURE_PYQ_TESTS;
+  if (norm === "anthropology" || norm === "ant") return ANTHROPOLOGY_PYQ_TESTS;
+
+  return createPYQTestList(subjectKey, subjectKey.charAt(0).toUpperCase() + subjectKey.slice(1), "300", 45);
+}
+
+export function getAllPYQTests(): PYQTestItem[] {
+  return [
+    ...PHYSICS_PYQ_TESTS,
+    ...CHEMISTRY_PYQ_TESTS,
+    ...MATHS_PYQ_TESTS,
+    ...BIOLOGY_PYQ_TESTS,
+    ...ACCOUNTANCY_PYQ_TESTS,
+    ...BUSINESS_STUDIES_PYQ_TESTS,
+    ...ECONOMICS_PYQ_TESTS,
+    ...HISTORY_PYQ_TESTS,
+    ...POLITICAL_SCIENCE_PYQ_TESTS,
+    ...GEOGRAPHY_PYQ_TESTS,
+    ...PSYCHOLOGY_PYQ_TESTS,
+    ...SOCIOLOGY_PYQ_TESTS,
+    ...PHYSICAL_EDUCATION_PYQ_TESTS,
+    ...COMPUTER_SCIENCE_PYQ_TESTS,
+    ...HOME_SCIENCE_PYQ_TESTS,
+    ...MASS_MEDIA_PYQ_TESTS,
+    ...ENVIRONMENTAL_STUDIES_PYQ_TESTS,
+    ...FINE_ARTS_PYQ_TESTS,
+    ...AGRICULTURE_PYQ_TESTS,
+    ...ANTHROPOLOGY_PYQ_TESTS,
+  ];
+}
+
 
 export const CUET_SUBJECTS: SubjectConfig[] = [
   // Science Stream

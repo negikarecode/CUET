@@ -216,23 +216,65 @@ export function getQuestionsForTest(testId: string): {
     };
   }
 
-  // 2. Full-length mock test
-  const match = lowerId.match(/(\d+)/);
-  const rawMockNumber = match && match[1] ? parseInt(match[1], 10) : 1;
-  const validMockNumber = rawMockNumber >= 1 && rawMockNumber <= 20 ? rawMockNumber : 1;
+  // 2. Official PYQ or Full-length Mock Test
+  let validMockNumber = 1;
+  let title = "";
+  let sourceLabel = "";
+  let notesPrefix = "";
+
+  if (lowerId.includes("pyq")) {
+    let year = "2024";
+    let shift = "Shift 1";
+
+    if (lowerId.includes("2024-s2") || lowerId.includes("2024_s2") || lowerId.endsWith("-2")) {
+      validMockNumber = 2;
+      year = "2024";
+      shift = "Shift 2";
+    } else if (lowerId.includes("2023-s1") || lowerId.includes("2023_s1") || lowerId.endsWith("-3")) {
+      validMockNumber = 3;
+      year = "2023";
+      shift = "Shift 1";
+    } else if (lowerId.includes("2023-s2") || lowerId.includes("2023_s2") || lowerId.endsWith("-4")) {
+      validMockNumber = 4;
+      year = "2023";
+      shift = "Shift 2";
+    } else if (lowerId.includes("2022") || lowerId.endsWith("-5")) {
+      validMockNumber = 5;
+      year = "2022";
+      shift = "Official CBT";
+    } else {
+      validMockNumber = 1;
+      year = "2024";
+      shift = "Shift 1";
+    }
+
+    title = shift === "Official CBT"
+      ? `CUET UG ${year} ${subjectDef.name} (Official CBT Paper)`
+      : `CUET UG ${year} ${subjectDef.name} (${shift} Official CBT)`;
+    sourceLabel = shift === "Official CBT"
+      ? `CUET UG ${year} Official NTA CBT Paper`
+      : `CUET UG ${year} (${shift} Official NTA CBT Paper)`;
+    notesPrefix = `CUET UG ${year} Official Paper (${subjectDef.name})`;
+  } else {
+    const match = lowerId.match(/(\d+)/);
+    const rawMockNumber = match && match[1] ? parseInt(match[1], 10) : 1;
+    validMockNumber = rawMockNumber >= 1 && rawMockNumber <= 20 ? rawMockNumber : 1;
+
+    const isMockTest = lowerId.includes("mock");
+    title = isMockTest
+      ? `CUET UG ${subjectDef.name} Full Mock Paper ${validMockNumber} (50 Compulsory Qs)`
+      : `CUET UG ${subjectDef.name} Official Practice Paper ${validMockNumber} (50 Compulsory Qs)`;
+    sourceLabel = title;
+    notesPrefix = `CUET UG 2026 NTA Practice (${subjectDef.name} Mock ${validMockNumber})`;
+  }
 
   const rawQuestions = loadRawMockData(subjectDef.folder, validMockNumber);
-  const isMockTest = lowerId.includes("mock");
-
-  const title = isMockTest
-    ? `CUET UG ${subjectDef.name} Full Mock Paper ${validMockNumber} (50 Compulsory Qs)`
-    : `CUET UG ${subjectDef.name} Official Practice Paper ${validMockNumber} (50 Compulsory Qs)`;
 
   const questions = mapQuestionsFromDataset(
     testId,
     subjectDef.name,
-    title,
-    `CUET UG 2026 NTA Practice (${subjectDef.name} Mock ${validMockNumber})`,
+    sourceLabel,
+    notesPrefix,
     rawQuestions
   );
 
