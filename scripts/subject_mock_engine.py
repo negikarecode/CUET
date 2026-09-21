@@ -56,44 +56,55 @@ def generate_subject_suite(subject_key, subject_prefix, out_dir, slot_specs_40, 
             
         assert len(mock_raw) == 50, f"Mock {m} has {len(mock_raw)} questions instead of 50"
 
-        # 2. Build final questions with balanced keys & QA metadata
         final_questions = []
         for q_idx, spec in enumerate(mock_raw, start=1):
             target_opt = target_keys[q_idx - 1]
             q_type = spec[0]
             
+            # Clean sol to prevent double Hence, Option lines
+            raw_sol = spec[-2]
+            clean_sol = raw_sol.replace("\nHence, Option {{CORR}} is correct.", "").replace("Hence, Option {{CORR}} is correct.", "").strip()
+            
             if q_type == "mcq":
-                _, chapter, topic, stem, corr_text, wrongs, sol, mist = spec
-                q = make_mcq_question(subject_prefix, m, q_idx, chapter, topic, stem, corr_text, wrongs, target_opt, sol, mist)
+                _, chapter, topic, stem, corr_text, wrongs, _, mist = spec
+                q = make_mcq_question(subject_prefix, m, q_idx, chapter, topic, stem, corr_text, wrongs, target_opt, clean_sol, mist)
                 q["questionType"] = "conceptual"
                 q["difficulty"] = 2
             elif q_type == "match":
-                _, chapter, topic, stem, list1, list2, corr_pair, sol, mist = spec
-                q = make_match_question(subject_prefix, m, q_idx, chapter, topic, stem, list1, list2, corr_pair, target_opt, sol, mist)
+                _, chapter, topic, stem, list1, list2, corr_pair, _, mist = spec
+                q = make_match_question(subject_prefix, m, q_idx, chapter, topic, stem, list1, list2, corr_pair, target_opt, clean_sol, mist)
                 q["questionType"] = "match-the-following"
                 q["difficulty"] = 3
             elif q_type == "seq":
-                _, chapter, topic, stem, items, corr_seq, sol, mist = spec
-                q = make_sequence_question(subject_prefix, m, q_idx, chapter, topic, stem, items, corr_seq, target_opt, sol, mist)
+                _, chapter, topic, stem, items, corr_seq, _, mist = spec
+                q = make_sequence_question(subject_prefix, m, q_idx, chapter, topic, stem, items, corr_seq, target_opt, clean_sol, mist)
                 q["questionType"] = "chronological-sequence"
                 q["difficulty"] = 3
             elif q_type == "stmt":
-                _, chapter, topic, st1, st2, corr_rel, sol, mist = spec
-                q = make_statement_question(subject_prefix, m, q_idx, chapter, topic, st1, st2, corr_rel, target_opt, sol, mist)
+                _, chapter, topic, st1, st2, corr_rel, _, mist = spec
+                q = make_statement_question(subject_prefix, m, q_idx, chapter, topic, st1, st2, corr_rel, target_opt, clean_sol, mist)
                 q["questionType"] = "multi-statement"
                 q["difficulty"] = 3
             elif q_type == "ar":
-                _, chapter, topic, assertion, reason, corr_rel, sol, mist = spec
-                q = make_assertion_question(subject_prefix, m, q_idx, chapter, topic, assertion, reason, corr_rel, target_opt, sol, mist)
+                _, chapter, topic, assertion, reason, corr_rel, _, mist = spec
+                q = make_assertion_question(subject_prefix, m, q_idx, chapter, topic, assertion, reason, corr_rel, target_opt, clean_sol, mist)
                 q["questionType"] = "assertion-reasoning"
                 q["difficulty"] = 3
             elif q_type == "case":
-                _, chapter, topic, passage, prompt, corr_text, wrongs, sol, mist = spec
-                q = make_case_question(subject_prefix, m, q_idx, chapter, topic, passage, prompt, corr_text, wrongs, target_opt, sol, mist)
+                _, chapter, topic, passage, prompt, corr_text, wrongs, _, mist = spec
+                q = make_case_question(subject_prefix, m, q_idx, chapter, topic, passage, prompt, corr_text, wrongs, target_opt, clean_sol, mist)
                 q["questionType"] = "case-based"
                 q["difficulty"] = 4
             else:
                 raise ValueError(f"Unknown question type: {q_type}")
+
+            # Deduplicate consecutive lines in detailedSolution
+            lines = [ln.strip() for ln in q["detailedSolution"].split("\n") if ln.strip()]
+            dedup = []
+            for ln in lines:
+                if not dedup or ln != dedup[-1]:
+                    dedup.append(ln)
+            q["detailedSolution"] = "\n".join(dedup)
 
             # QA Metadata
             q["questionId"] = q["id"]
