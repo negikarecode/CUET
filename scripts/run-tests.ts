@@ -233,18 +233,18 @@ async function runTestSuite() {
   console.log("👉 SUITE H: Subject Coverage & Registry");
 
   assert(
-    SUPPORTED_SUBJECT_KEYS.length === 11,
-    `Subject Registry Count: Exactly 11 core domain subjects configured (Found: ${SUPPORTED_SUBJECT_KEYS.length})`
+    SUPPORTED_SUBJECT_KEYS.length === 20,
+    `Subject Registry Count: Exactly 20 domain subjects configured (Found: ${SUPPORTED_SUBJECT_KEYS.length})`
   );
 
-  const allSubjectsValid = subjects.every((s) => {
+  const allSubjectsValid = SUPPORTED_SUBJECT_KEYS.every((s) => {
     const meta = SUPPORTED_SUBJECTS_REGISTRY[s];
     return meta && meta.supportedStatus === "active" && meta.mockCount === 20 && meta.questionCount === 1000;
   });
 
   assert(
     allSubjectsValid,
-    "Subject Registry Compliance: All 11 subjects explicitly record official code, syllabus, and 20 mocks"
+    "Subject Registry Compliance: All 20 subjects explicitly record official code, syllabus, and 20 mocks"
   );
 
   console.log();
