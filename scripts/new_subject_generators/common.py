@@ -73,12 +73,28 @@ def make_question(
     }
 
 def make_match_question(subject_prefix, mock_num, question_number, chapter, topic, stem, list1, list2, correct_pairing, target_opt, explanation, mistake_corr, traps=None):
+    norm_l1 = []
+    l1_codes = ["A", "B", "C", "D", "E", "F"]
+    for i, itm in enumerate(list1):
+        if isinstance(itm, (list, tuple)) and len(itm) == 2:
+            norm_l1.append((itm[0], itm[1]))
+        else:
+            norm_l1.append((l1_codes[i] if i < len(l1_codes) else str(i+1), str(itm)))
+
+    norm_l2 = []
+    l2_codes = ["I", "II", "III", "IV", "V", "VI"]
+    for i, itm in enumerate(list2):
+        if isinstance(itm, (list, tuple)) and len(itm) == 2:
+            norm_l2.append((itm[0], itm[1]))
+        else:
+            norm_l2.append((l2_codes[i] if i < len(l2_codes) else str(i+1), str(itm)))
+
     q_text = stem + "\n\n"
     q_text += "List I:\n"
-    for code, item in list1:
+    for code, item in norm_l1:
         q_text += f"({code}) {item}\n"
     q_text += "\nList II:\n"
-    for code, item in list2:
+    for code, item in norm_l2:
         q_text += f"({code}) {item}\n"
     q_text += "\nChoose the correct answer from the options given below:"
 
@@ -86,9 +102,23 @@ def make_match_question(subject_prefix, mock_num, question_number, chapter, topi
     l2_codes = [p.split("-")[1] for p in parts]
     
     # Generate 3 distinct plausible wrong permutations
-    w1 = f"A-{l2_codes[1]}, B-{l2_codes[0]}, C-{l2_codes[2]}, D-{l2_codes[3]}"
-    w2 = f"A-{l2_codes[0]}, B-{l2_codes[2]}, C-{l2_codes[3]}, D-{l2_codes[1]}"
-    w3 = f"A-{l2_codes[3]}, B-{l2_codes[1]}, C-{l2_codes[0]}, D-{l2_codes[2]}"
+    if len(l2_codes) == 3:
+        w1 = f"A-{l2_codes[1]}, B-{l2_codes[0]}, C-{l2_codes[2]}"
+        w2 = f"A-{l2_codes[0]}, B-{l2_codes[2]}, C-{l2_codes[1]}"
+        w3 = f"A-{l2_codes[2]}, B-{l2_codes[1]}, C-{l2_codes[0]}"
+    elif len(l2_codes) == 4:
+        w1 = f"A-{l2_codes[1]}, B-{l2_codes[0]}, C-{l2_codes[2]}, D-{l2_codes[3]}"
+        w2 = f"A-{l2_codes[0]}, B-{l2_codes[2]}, C-{l2_codes[3]}, D-{l2_codes[1]}"
+        w3 = f"A-{l2_codes[3]}, B-{l2_codes[1]}, C-{l2_codes[0]}, D-{l2_codes[2]}"
+    elif len(l2_codes) >= 5:
+        rest = ", ".join([f"{chr(65+idx)}-{l2_codes[idx]}" for idx in range(4, len(l2_codes))])
+        w1 = f"A-{l2_codes[1]}, B-{l2_codes[0]}, C-{l2_codes[2]}, D-{l2_codes[3]}, {rest}"
+        w2 = f"A-{l2_codes[0]}, B-{l2_codes[2]}, C-{l2_codes[3]}, D-{l2_codes[1]}, {rest}"
+        w3 = f"A-{l2_codes[3]}, B-{l2_codes[1]}, C-{l2_codes[0]}, D-{l2_codes[2]}, {rest}"
+    else:
+        w1 = f"A-{l2_codes[-1]}, B-{l2_codes[0]}"
+        w2 = f"A-{l2_codes[0]}, B-{l2_codes[-1]}"
+        w3 = f"A-{l2_codes[0]}, B-{l2_codes[0]}"
     
     wrong_opts = [w1, w2, w3]
     opts, corr, sol = rotate_options(
@@ -102,28 +132,40 @@ def make_match_question(subject_prefix, mock_num, question_number, chapter, topi
     return make_question(subject_prefix, mock_num, question_number, chapter, topic, q_text, opts, corr, sol)
 
 def make_sequence_question(subject_prefix, mock_num, question_number, chapter, topic, stem, items, correct_seq_str, target_opt, explanation, mistake_corr, traps=None):
+    sep = " -> " if "->" in correct_seq_str else (", " if "," in correct_seq_str else " ")
+    tokens = [t.strip() for t in (correct_seq_str.split("->") if "->" in correct_seq_str else correct_seq_str.split(","))]
+
+    has_roman = any(t in ["I", "II", "III", "IV", "V", "VI"] for t in tokens)
+    default_codes = ["I", "II", "III", "IV", "V", "VI"] if has_roman else ["A", "B", "C", "D", "E", "F"]
+
+    norm_items = []
+    for i, itm in enumerate(items):
+        if isinstance(itm, (list, tuple)) and len(itm) == 2:
+            norm_items.append((itm[0], itm[1]))
+        else:
+            norm_items.append((default_codes[i] if i < len(default_codes) else str(i+1), str(itm)))
+
     q_text = stem + "\n"
-    for code, itm in items:
+    for code, itm in norm_items:
         q_text += f"({code}) {itm}\n"
     q_text += "\nChoose the correct chronological/logical sequence from the options given below:"
 
-    tokens = [t.strip() for t in correct_seq_str.split(",")]
     if len(tokens) == 3:
-        w1 = f"{tokens[1]}, {tokens[0]}, {tokens[2]}"
-        w2 = f"{tokens[0]}, {tokens[2]}, {tokens[1]}"
-        w3 = f"{tokens[2]}, {tokens[1]}, {tokens[0]}"
+        w1 = sep.join([tokens[1], tokens[0], tokens[2]])
+        w2 = sep.join([tokens[0], tokens[2], tokens[1]])
+        w3 = sep.join([tokens[2], tokens[1], tokens[0]])
     elif len(tokens) == 4:
-        w1 = f"{tokens[1]}, {tokens[0]}, {tokens[2]}, {tokens[3]}"
-        w2 = f"{tokens[0]}, {tokens[2]}, {tokens[1]}, {tokens[3]}"
-        w3 = f"{tokens[3]}, {tokens[1]}, {tokens[2]}, {tokens[0]}"
+        w1 = sep.join([tokens[1], tokens[0], tokens[2], tokens[3]])
+        w2 = sep.join([tokens[0], tokens[2], tokens[1], tokens[3]])
+        w3 = sep.join([tokens[3], tokens[1], tokens[2], tokens[0]])
     elif len(tokens) >= 5:
-        w1 = f"{tokens[1]}, {tokens[0]}, {tokens[2]}, {tokens[3]}, " + ", ".join(tokens[4:])
-        w2 = f"{tokens[0]}, {tokens[2]}, {tokens[1]}, {tokens[3]}, " + ", ".join(tokens[4:])
-        w3 = f"{tokens[3]}, {tokens[1]}, {tokens[2]}, {tokens[0]}, " + ", ".join(tokens[4:])
+        w1 = sep.join([tokens[1], tokens[0], tokens[2], tokens[3]] + tokens[4:])
+        w2 = sep.join([tokens[0], tokens[2], tokens[1], tokens[3]] + tokens[4:])
+        w3 = sep.join([tokens[3], tokens[1], tokens[2], tokens[0]] + tokens[4:])
     else:
-        w1 = ", ".join(reversed(tokens))
-        w2 = tokens[0] if len(tokens) == 1 else f"{tokens[1]}, {tokens[0]}"
-        w3 = ", ".join(tokens)
+        w1 = sep.join(reversed(tokens))
+        w2 = tokens[0] if len(tokens) == 1 else sep.join([tokens[1], tokens[0]])
+        w3 = sep.join(tokens)
 
     opts, corr, sol = rotate_options(
         correct_seq_str,
@@ -146,10 +188,24 @@ def make_statement_question(subject_prefix, mock_num, question_number, chapter, 
         1: "Both Statement I and Statement II are correct",
         2: "Both Statement I and Statement II are incorrect",
         3: "Statement I is correct but Statement II is incorrect",
-        4: "Statement I is incorrect but Statement II is correct"
+        4: "Statement I is incorrect but Statement II is correct",
+        "both_true": "Both Statement I and Statement II are correct",
+        "both_correct": "Both Statement I and Statement II are correct",
+        "both_false": "Both Statement I and Statement II are incorrect",
+        "both_incorrect": "Both Statement I and Statement II are incorrect",
+        "s1_true_s2_false": "Statement I is correct but Statement II is incorrect",
+        "s1_correct_s2_incorrect": "Statement I is correct but Statement II is incorrect",
+        "s1_false_s2_true": "Statement I is incorrect but Statement II is correct",
+        "s1_incorrect_s2_correct": "Statement I is incorrect but Statement II is correct",
     }
+    standard_wrongs = [
+        "Both Statement I and Statement II are correct",
+        "Both Statement I and Statement II are incorrect",
+        "Statement I is correct but Statement II is incorrect",
+        "Statement I is incorrect but Statement II is correct"
+    ]
     corr_text = rel_map[correct_relation]
-    wrong_texts = [v for k, v in rel_map.items() if k != correct_relation]
+    wrong_texts = [v for v in standard_wrongs if v != corr_text]
     
     opts, corr, sol = rotate_options(
         corr_text,
@@ -172,10 +228,24 @@ def make_assertion_question(subject_prefix, mock_num, question_number, chapter, 
         1: "Both (A) and (R) are true and (R) is the correct explanation of (A)",
         2: "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
         3: "(A) is true but (R) is false",
-        4: "(A) is false but (R) is true"
+        4: "(A) is false but (R) is true",
+        "both_correct_explain": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "both_true_explain": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "both_correct_not_explain": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
+        "both_true_not_explain": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
+        "a_true_r_false": "(A) is true but (R) is false",
+        "assertion_true_reason_false": "(A) is true but (R) is false",
+        "a_false_r_true": "(A) is false but (R) is true",
+        "assertion_false_reason_true": "(A) is false but (R) is true",
     }
+    standard_wrongs = [
+        "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
+        "(A) is true but (R) is false",
+        "(A) is false but (R) is true"
+    ]
     corr_text = rel_map[correct_relation]
-    wrong_texts = [v for k, v in rel_map.items() if k != correct_relation]
+    wrong_texts = [v for v in standard_wrongs if v != corr_text]
     
     opts, corr, sol = rotate_options(
         corr_text,
