@@ -615,7 +615,7 @@ What is the immediate impact on commercial banks when RBI increases the repo rat
   for (const route of protectedDashboardRoutes) {
     const result = simulateRouteGuard(route, false);
     assert(
-      result.status === "redirect" && result.redirectTarget?.startsWith("/signup"),
+      Boolean(result.status === "redirect" && result.redirectTarget?.startsWith("/signup")),
       `Route Guard: Unauthenticated access to ${route} is strictly blocked and redirected to /signup`
     );
   }

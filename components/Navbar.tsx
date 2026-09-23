@@ -364,14 +364,6 @@ export default function Navbar() {
                     {t("joinNow", "Join Now")}
                   </button>
                 </div>
-              ) : isHomepage ? (
-                <Link
-                  href="/dashboard"
-                  className="px-3 py-1.5 rounded-lg bg-[#FEF3C7] active:bg-[#FDE68A] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none shrink-0 flex items-center gap-1.5"
-                >
-                  <LayoutDashboard className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>{t("dashboard", "Dashboard")}</span>
-                </Link>
               ) : (
                 <div className="flex items-center gap-1 px-2 py-1 bg-[#FEF3C7] border-2 border-black rounded-full text-black text-xs font-black shadow-[1px_1px_0px_0px_#000] shrink-0">
                   <Flame className="w-3.5 h-3.5 fill-[#F59E0B] text-[#D97706]" />
