@@ -13,6 +13,9 @@ import {
 } from "@/lib/ai-cache";
 import { ErrorClassificationType, EngineConfidenceRating } from "@/types";
 
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+
 interface AttemptItem {
   questionId: string;
   selectedOption: string | null;

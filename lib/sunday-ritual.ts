@@ -45,8 +45,8 @@ export async function aggregateWeeklyAttempts(userId: string): Promise<WeeklyAtt
 
   let attemptsRows: any[] = [];
   try {
-    const supabase = createClient();
-    const { data } = await supabase
+    const client = supabaseAdmin || createClient();
+    const { data } = await client
       .from("user_attempts")
       .select(`
         id,
@@ -423,8 +423,8 @@ export async function runSundayRitual(userId: string): Promise<SundayRitualResul
 
   // 1. Check if Sunday report already generated for this week
   try {
-    const supabase = createClient();
-    const { data: existingReport } = await supabase
+    const client = supabaseAdmin || createClient();
+    const { data: existingReport } = await client
       .from("sunday_mentor_reports")
       .select("*")
       .eq("user_id", userId)

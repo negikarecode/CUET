@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { createClient } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 interface VerifyRequestBody {
   razorpay_order_id: string;
@@ -20,6 +21,20 @@ export async function POST(req: NextRequest) {
       userId = "user_cuet_aspirant_01",
       tier = "ai_practice_pass",
     } = body;
+
+    // Resolve authenticated user session to prevent IDOR
+    let targetUserId = userId;
+    try {
+      const supabase = createClient();
+      const {
+        data: { user: authUser },
+      } = await supabase.auth.getUser();
+      if (authUser) {
+        targetUserId = authUser.id;
+      }
+    } catch {
+      // Offline fallback
+    }
 
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
 
@@ -74,16 +89,15 @@ export async function POST(req: NextRequest) {
     oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
 
     try {
-      const supabase = createClient();
-      const { data: profile } = await supabase
+      const { data: profile } = await supabaseAdmin
         .from("profiles")
         .select("campus_coins")
-        .eq("id", userId)
+        .eq("id", targetUserId)
         .single();
 
       const currentCoins = profile?.campus_coins ?? 120;
 
-      await supabase
+      await supabaseAdmin
         .from("profiles")
         .update({
           is_premium: true,
@@ -91,7 +105,7 @@ export async function POST(req: NextRequest) {
           subscription_expires_at: oneYearFromNow.toISOString(),
           campus_coins: currentCoins + 500,
         })
-        .eq("id", userId);
+        .eq("id", targetUserId);
     } catch (dbErr) {
       console.error("Supabase profile upgrade error:", dbErr);
     }

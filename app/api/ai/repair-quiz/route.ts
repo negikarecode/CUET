@@ -7,6 +7,9 @@ import {
   getRateLimitHeaders,
 } from "@/lib/rate-limiter";
 import { getQuestionsForTest } from "@/lib/data/mock50Questions";
+ 
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 interface RepairQuizRequestBody {
   userId: string;

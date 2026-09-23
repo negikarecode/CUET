@@ -1,21 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { runSundayRitual } from "@/lib/sunday-ritual";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("Authorization");
-  const secret = process.env.CRON_SECRET || "cuet_cron_secret_2026";
+  const secret = process.env.CRON_SECRET;
 
-  if (process.env.NODE_ENV === "production" && authHeader !== `Bearer ${secret}`) {
-    return new Response("Unauthorized", { status: 401 });
+  // Strict fail-closed check for cron endpoint
+  if (!secret || secret.includes("placeholder") || authHeader !== `Bearer ${secret}`) {
+    return new Response("Unauthorized: Valid Bearer CRON_SECRET required", { status: 401 });
   }
 
   try {
-    const supabase = createClient();
-    // Query active profiles who have attempted at least 150 questions
-    const { data: qualifiedUsers } = await supabase
+    // Query active profiles using admin client
+    const { data: qualifiedUsers } = await supabaseAdmin
       .from("profiles")
       .select("id")
       .limit(50);
