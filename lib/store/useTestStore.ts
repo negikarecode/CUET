@@ -7,7 +7,7 @@ import type {
   RecordedTestAttempt,
   UserAnalyticsSummary,
 } from "@/types";
-import { computeAnalyticsFromAttempts } from "@/lib/analytics";
+import { computeAnalyticsFromAttempts, buildDefaultSubjectCalibration } from "@/lib/analytics";
 
 interface TestStoreState {
   // Gamification & User Auth state
@@ -25,6 +25,7 @@ interface TestStoreState {
   testAttempts: RecordedTestAttempt[];
   analytics: UserAnalyticsSummary;
   recordTestAttempt: (attempt: RecordedTestAttempt) => void;
+  recoverUnrecordedCBTSessions: () => void;
   getAnalytics: () => UserAnalyticsSummary;
   clearAttempts: () => void;
 
@@ -62,6 +63,7 @@ const DEFAULT_ANALYTICS: UserAnalyticsSummary = {
     reason:
       "Complete your first 50-question diagnostic test to establish your baseline pace and detect trap options.",
   },
+  subjectCalibration: buildDefaultSubjectCalibration(),
 };
 
 const DEFAULT_USER: UserStats = {
@@ -199,6 +201,90 @@ export const useTestStore = create<TestStoreState>()(
             completedTestsCount: analytics.completedTestsCount,
           },
         }));
+      },
+
+      recoverUnrecordedCBTSessions: () => {
+        if (typeof window === "undefined") return;
+        try {
+          const currentAttempts = get().testAttempts || [];
+          const existingTestIds = new Set(currentAttempts.map((a) => a.testId));
+          const recovered: RecordedTestAttempt[] = [];
+
+          for (let i = 0; i < window.localStorage.length; i++) {
+            const key = window.localStorage.key(i);
+            if (key && key.startsWith("cuet_cbt_session_")) {
+              const raw = window.localStorage.getItem(key);
+              if (!raw) continue;
+              try {
+                const session = JSON.parse(raw);
+                if (session && session.isSubmitted && session.submittedScore && session.testId) {
+                  // Only recover if not already tracked
+                  if (!existingTestIds.has(session.testId)) {
+                    const testMeta = session.testMeta;
+                    const questionStates = session.questionStates || {};
+                    const qKeys = Object.keys(questionStates);
+
+                    const questionAttempts = qKeys.map((qId, idx) => {
+                      const qs = questionStates[qId];
+                      return {
+                        questionId: qId,
+                        questionNumber: idx + 1,
+                        subject: testMeta?.subject || "Physics",
+                        chapter: "Domain Core",
+                        microTopic: "Core Concept",
+                        selectedOption: qs?.selectedOption || null,
+                        correctOption: "" as any,
+                        isCorrect: qs?.selectedOption ? true : null,
+                        timeSpentSeconds: qs?.timeSpentSeconds || 0,
+                        isTimeSink: (qs?.timeSpentSeconds || 0) > 72,
+                      };
+                    });
+
+                    const attempt: RecordedTestAttempt = {
+                      id: `recovered_${session.testId}`,
+                      userId: get().user?.id || "guest",
+                      testId: session.testId,
+                      testTitle: testMeta?.title || "CUET Domain Examination Paper",
+                      subject: testMeta?.subject || "Physics",
+                      totalQuestions:
+                        (session.submittedScore.attemptedCount || 0) +
+                        (session.submittedScore.unattemptedCount || 0) || 50,
+                      attemptedCount: session.submittedScore.attemptedCount || 0,
+                      unattemptedCount: session.submittedScore.unattemptedCount || 0,
+                      correctCount: session.submittedScore.correctCount || 0,
+                      incorrectCount: session.submittedScore.incorrectCount || 0,
+                      totalMarks: session.submittedScore.totalMarks || 0,
+                      maxMarks: session.submittedScore.maxMarks || 250,
+                      accuracyPercentage: session.submittedScore.accuracyPercentage || 0,
+                      timeTakenSeconds: session.submittedScore.timeTakenSeconds || 0,
+                      timeSinkCount: session.submittedScore.timeSinkCount || 0,
+                      submittedAt: new Date().toISOString(),
+                      questions: questionAttempts,
+                    };
+                    recovered.push(attempt);
+                    existingTestIds.add(session.testId);
+                  }
+                }
+              } catch {}
+            }
+          }
+
+          if (recovered.length > 0) {
+            const allAttempts = [...recovered, ...currentAttempts];
+            const analytics = computeAnalyticsFromAttempts(allAttempts);
+            set((state) => ({
+              testAttempts: allAttempts,
+              analytics,
+              user: {
+                ...state.user,
+                accuracyPercentage: analytics.overallAccuracyPercentage,
+                completedTestsCount: analytics.completedTestsCount,
+              },
+            }));
+          }
+        } catch (err) {
+          console.warn("Session recovery notice:", err);
+        }
       },
 
       getAnalytics: () => {

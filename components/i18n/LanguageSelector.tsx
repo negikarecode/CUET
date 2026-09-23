@@ -230,30 +230,30 @@ export default function LanguageSelector({
   }
 
   // =========================================================================
-  // Navbar Variant: Desktop Header Button & Popover
+  // Navbar Variant: Header Button & Popover
   // =========================================================================
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-black bg-white hover:bg-[#FAF7EE] rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] transition-all cursor-pointer"
+        className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-black text-black bg-white hover:bg-[#FAF7EE] rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] transition-all cursor-pointer shrink-0"
         aria-label="Select Language (13 Official CUET Languages)"
         title="Official NTA CUET 13 Languages"
       >
-        <Globe className="w-4 h-4 text-[#FF5C5C] stroke-[2.5]" />
-        <span className="leading-none">
+        <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF5C5C] stroke-[2.5] shrink-0" />
+        <span className="leading-none max-w-[55px] sm:max-w-none truncate text-[11px] sm:text-xs">
           {currentLang.nativeName}
         </span>
         <ChevronDown
-          className={`w-3.5 h-3.5 stroke-[2.5] transition-transform ${
+          className={`w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5] shrink-0 transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-72 max-h-96 overflow-y-auto bg-white rounded-xl border-2 border-black shadow-[5px_5px_0px_0px_#000] z-50 p-2 animate-in fade-in zoom-in-95 duration-100">
+        <div className="absolute right-0 top-full mt-2 w-72 max-w-[calc(100vw-24px)] max-h-96 overflow-y-auto bg-white rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_#000] z-50 p-2 animate-in fade-in zoom-in-95 duration-100">
           <div className="p-2 mb-2 bg-[#FAF7EE] rounded-lg border border-black flex items-center justify-between">
             <div>
               <div className="text-[10px] font-black uppercase tracking-wider text-black flex items-center gap-1">

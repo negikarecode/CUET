@@ -36,12 +36,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full scroll-smooth">
-      <body className="flex min-h-full flex-col bg-[#FAF7EE] font-sans text-black antialiased selection:bg-[#FECDD3] selection:text-black pb-16 sm:pb-0">
+    <html lang="en" className="h-full scroll-smooth overflow-x-hidden">
+      <body className="flex min-h-full flex-col bg-[#FAF7EE] font-sans text-black antialiased selection:bg-[#FECDD3] selection:text-black pb-16 sm:pb-0 overflow-x-hidden w-full max-w-full">
         <LanguageProvider>
           <GoogleTranslateSync />
           <Navbar />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>
           <Footer />
           <BottomNavClient />
         </LanguageProvider>

@@ -213,24 +213,24 @@ export default function Footer() {
       </div>
 
       {/* Middle Bar: Official Marking Scheme Indicators */}
-      <div className="border-t-2 border-black bg-white py-4 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="border-t-2 border-black bg-white py-3.5 sm:py-4 px-3 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 text-xs">
           <div className="flex items-center gap-2 font-bold text-black">
-            <FileCheck2 className="w-4 h-4 text-[#FF5C5C]" />
-            <span className="font-black">Official NTA Scoring Engine:</span>
+            <FileCheck2 className="w-4 h-4 text-[#FF5C5C] shrink-0" />
+            <span className="font-black text-xs">Official NTA Scoring Engine:</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-1 rounded-full bg-[#D1FAE5] text-black font-black border border-black shadow-[1px_1px_0px_0px_#000]">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
+            <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-[#D1FAE5] text-black font-black border border-black shadow-[1px_1px_0px_0px_#000]">
               +5 Correct Attempt
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-[#FEE2E2] text-[#DC2626] font-black border border-black shadow-[1px_1px_0px_0px_#000]">
+            <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-[#FEE2E2] text-[#DC2626] font-black border border-black shadow-[1px_1px_0px_0px_#000]">
               -1 Negative Marking
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-[#FEF3C7] text-black font-black border border-black shadow-[1px_1px_0px_0px_#000]">
+            <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-[#FEF3C7] text-black font-black border border-black shadow-[1px_1px_0px_0px_#000]">
               0 Unattempted
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-black text-white font-black border border-black">
+            <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-black text-white font-black border border-black">
               250 Marks / Paper (50 Qs)
             </span>
           </div>

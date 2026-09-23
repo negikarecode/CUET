@@ -129,32 +129,32 @@ export default function CBTPlayer() {
         {/* HEADER BAR: Subject Title, Countdown Timer, Submit Action */}
         {/* =================================================================== */}
         <header className="sticky top-0 z-40 bg-[#FAF7EE] border-b-2 border-black">
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+          <div className="max-w-[1600px] mx-auto px-2.5 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
             {/* Left: Test Paper & Subject Title */}
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-lg bg-[#FF5C5C] text-white border-2 border-black flex items-center justify-center font-black text-xs shrink-0 shadow-[2px_2px_0px_0px_#000]">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#FF5C5C] text-white border-2 border-black flex items-center justify-center font-black text-xs shrink-0 shadow-[1px_1px_0px_0px_#000] sm:shadow-[2px_2px_0px_0px_#000]">
                 CBT
               </div>
-              <div className="truncate">
-                <div className="flex items-center gap-2">
-                  <h1 className="text-sm sm:text-base font-black text-black truncate">
+              <div className="truncate min-w-0">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <h1 className="text-xs sm:text-base font-black text-black truncate">
                     {testMeta?.title ?? examConfig.name}
                   </h1>
                   <span className="hidden md:inline rounded-full bg-[#FEF3C7] text-black border border-black px-2 py-0.5 text-[10px] font-black uppercase shadow-[1px_1px_0px_0px_#000]">
                     {t("compulsoryBadge", `${examConfig.totalQuestions} Compulsory Qs`)}
                   </span>
                 </div>
-                <p className="text-[11px] text-black/70 font-semibold truncate">
+                <p className="text-[10px] sm:text-[11px] text-black/70 font-semibold truncate hidden sm:block">
                   {t("subjectLabel", "Subject:")} <span className="font-black text-black">{testMeta?.subject}</span> ({testMeta?.code}) • {t("markingInfo", `Marking: +${examConfig.correctMarks} / ${examConfig.incorrectMarks} / 0`)}
                 </p>
               </div>
             </div>
 
             {/* Center / Right: Countdown Timer & Submit Button */}
-            <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-4 shrink-0">
               {/* Countdown Timer */}
               <div
-                className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg border-2 border-black font-mono transition-colors shadow-[2px_2px_0px_0px_#000] ${
+                className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-1.5 rounded-lg border-2 border-black font-mono transition-colors shadow-[1px_1px_0px_0px_#000] sm:shadow-[2px_2px_0px_0px_#000] ${
                   isUnder5Minutes
                     ? "bg-[#FEE2E2] text-black font-black animate-pulse"
                     : "bg-white text-black"
@@ -162,15 +162,15 @@ export default function CBTPlayer() {
                 title="Continuous Real Exam Countdown Timer"
               >
                 <Clock
-                  className={`w-4 h-4 stroke-[2.5] ${
+                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5] ${
                     isUnder5Minutes ? "text-[#DC2626]" : "text-[#F59E0B]"
                   }`}
                 />
                 <div className="flex flex-col items-start leading-none">
-                  <span className="text-[9px] uppercase font-black text-black/60">
+                  <span className="text-[8px] sm:text-[9px] uppercase font-black text-black/60 hidden sm:inline">
                     {t("timeLeft", "Time Left")}
                   </span>
-                  <span className="text-sm sm:text-base font-black tracking-wider" translate="no">
+                  <span className="text-xs sm:text-base font-black tracking-wider" translate="no">
                     {formatTimer(remainingSeconds)}
                   </span>
                 </div>
@@ -180,10 +180,10 @@ export default function CBTPlayer() {
               <button
                 type="button"
                 onClick={() => setMobilePaletteOpen(true)}
-                className="lg:hidden p-2 rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] flex items-center gap-1.5 text-xs font-black"
+                className="lg:hidden p-1.5 sm:p-2 rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] shadow-[1px_1px_0px_0px_#000] sm:shadow-[2px_2px_0px_0px_#000] flex items-center gap-1 text-xs font-black"
                 aria-label="Open Question Palette"
               >
-                <Grid className="w-4 h-4 stroke-[2.5]" />
+                <Grid className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
                 <span className="hidden sm:inline">{t("palette", "Palette")}</span>
               </button>
 
@@ -191,10 +191,11 @@ export default function CBTPlayer() {
               <button
                 type="button"
                 onClick={openSubmitModal}
-                className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs sm:text-sm tracking-wide shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5"
+                className="px-2.5 sm:px-5 py-1.5 sm:py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs sm:text-sm tracking-wide shadow-[2px_2px_0px_0px_#000] sm:shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1 sm:gap-1.5 shrink-0"
               >
-                <Send className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>{t("submitTest", "Submit Test")}</span>
+                <Send className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
+                <span className="hidden sm:inline">{t("submitTest", "Submit Test")}</span>
+                <span className="sm:hidden">{t("submit", "Submit")}</span>
               </button>
             </div>
           </div>
@@ -287,39 +288,41 @@ export default function CBTPlayer() {
             {/* =============================================================== */}
             {/* BOTTOM ACTION BAR: Save & Next, Clear, Mark for Review, Prev/Next */}
             {/* =============================================================== */}
-            <div className="p-4 sm:p-5 bg-[#FAF7EE] border-t-2 border-black flex flex-wrap items-center justify-between gap-3">
+            <div className="p-3 sm:p-5 bg-[#FAF7EE] border-t-2 border-black flex flex-wrap items-center justify-between gap-2 sm:gap-3">
               {/* Left Actions: Clear & Mark for Review */}
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                 <button
                   type="button"
                   onClick={clearResponse}
                   disabled={selectedOption === null}
-                  className="px-3.5 py-2 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] disabled:opacity-40 disabled:pointer-events-none shadow-[2px_2px_0px_0px_#000] transition-all"
+                  className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] disabled:opacity-40 disabled:pointer-events-none shadow-[2px_2px_0px_0px_#000] transition-all"
                 >
-                  {t("clearResponse", "Clear Response")}
+                  <span className="hidden sm:inline">{t("clearResponse", "Clear Response")}</span>
+                  <span className="sm:hidden">{t("clear", "Clear")}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={markForReviewAndNext}
-                  className={`px-3.5 py-2 text-xs font-black rounded-lg border-2 border-black transition-all flex items-center gap-1.5 shadow-[2px_2px_0px_0px_#000] ${
+                  className={`px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-black rounded-lg border-2 border-black transition-all flex items-center gap-1 sm:gap-1.5 shadow-[2px_2px_0px_0px_#000] ${
                     currentAnswer?.isMarkedForReview
                       ? "bg-[#F59E0B] text-black"
                       : "bg-[#FEF3C7] text-black hover:bg-[#FDE68A]"
                   }`}
                 >
                   <Bookmark className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>{t("markForReview", "Mark for Review & Next")}</span>
+                  <span className="hidden sm:inline">{t("markForReview", "Mark for Review & Next")}</span>
+                  <span className="sm:hidden">{t("review", "Review & Next")}</span>
                 </button>
               </div>
 
               {/* Right Actions: Prev, Next, Save & Next */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
                   type="button"
                   onClick={goToPrevious}
                   disabled={currentQuestionIndex === 0}
-                  className="px-3.5 py-2 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] disabled:opacity-40 disabled:pointer-events-none shadow-[2px_2px_0px_0px_#000] transition-all flex items-center gap-1"
+                  className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] disabled:opacity-40 disabled:pointer-events-none shadow-[2px_2px_0px_0px_#000] transition-all flex items-center gap-1"
                 >
                   <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
                   <span className="hidden sm:inline">{t("previous", "Previous")}</span>
@@ -329,7 +332,7 @@ export default function CBTPlayer() {
                   type="button"
                   onClick={goToNext}
                   disabled={currentQuestionIndex >= questions.length - 1}
-                  className="px-3.5 py-2 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] disabled:opacity-40 disabled:pointer-events-none shadow-[2px_2px_0px_0px_#000] transition-all flex items-center gap-1"
+                  className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] disabled:opacity-40 disabled:pointer-events-none shadow-[2px_2px_0px_0px_#000] transition-all flex items-center gap-1"
                 >
                   <span className="hidden sm:inline">{t("next", "Next")}</span>
                   <ChevronRight className="w-4 h-4 stroke-[2.5]" />
@@ -338,7 +341,7 @@ export default function CBTPlayer() {
                 <button
                   type="button"
                   onClick={saveAndNext}
-                  className="px-5 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs tracking-wide shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5"
+                  className="px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs tracking-wide shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1 sm:gap-1.5"
                 >
                   <span>{t("saveAndNext", "Save & Next")}</span>
                   <ChevronRight className="w-4 h-4 stroke-[2.5]" />

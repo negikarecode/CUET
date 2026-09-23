@@ -323,5 +323,23 @@ export interface UserAnalyticsSummary {
     confidence: EngineConfidenceRating;
     reasoning: string;
   };
+  subjectCalibration?: Record<string, SubjectCalibrationData>;
 }
+
+export interface SubjectCalibrationData {
+  subject: string;
+  subjectKey: string;
+  icon: string;
+  category: string;
+  totalAttempted: number;
+  totalCorrect: number;
+  totalIncorrect: number;
+  accuracyPercentage: number;
+  testsCount: number;
+  isUnlocked: boolean;
+  attemptsToUnlock: number;
+  unlockProgress: number;
+  mockUrl: string;
+}
+
 

@@ -151,8 +151,14 @@ export default function CBTResultView() {
       };
     });
 
+    const currentTId = testMeta?.id ?? "cbt_exam";
+    const existingAttempt = (testAttempts || []).find(
+      (a) => a.testId === currentTId && Math.abs(Date.now() - new Date(a.submittedAt).getTime()) < 300000
+    );
+    const attemptId = existingAttempt ? existingAttempt.id : `attempt_${currentTId}_${Date.now()}`;
+
     const attemptRecord: RecordedTestAttempt = {
-      id: `attempt_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+      id: attemptId,
       userId: user.id || "guest",
       testId: testMeta?.id ?? "cbt_exam",
       testTitle: testMeta?.title ?? "CUET Domain Examination Paper",
@@ -222,6 +228,7 @@ export default function CBTResultView() {
     user.dailyStreak,
     addXP,
     addCoins,
+    testAttempts,
   ]);
 
   if (!submittedScore) return null;

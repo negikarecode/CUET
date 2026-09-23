@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { Question, QuestionStatus, FullTestMeta } from "@/types";
+import { Question, QuestionStatus, FullTestMeta, RecordedTestAttempt, RecordedQuestionAttempt } from "@/types";
 import { CUET_UG_2026_CONFIG, calculateExamScore } from "@/lib/config/examConfig";
+import { useTestStore } from "@/lib/store/useTestStore";
 
 export interface QuestionSessionState {
   visited: boolean;
@@ -78,11 +79,12 @@ export interface CBTStoreState {
 export function deriveQuestionStatus(
   state?: QuestionSessionState
 ): QuestionStatus {
-  if (!state || !state.visited) return "not_visited";
+  if (!state) return "not_visited";
   const hasAnswer =
     state.selectedOption !== null && state.selectedOption !== undefined;
   if (hasAnswer && state.isMarkedForReview) return "answered_marked_review";
   if (hasAnswer && !state.isMarkedForReview) return "answered";
+  if (!state.visited) return "not_visited";
   if (!hasAnswer && state.isMarkedForReview) return "marked_review";
   return "not_answered";
 }
@@ -732,6 +734,71 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       submittedScore: summary,
     });
     saveSessionToStorage(get());
+
+    // Immediately record completed attempt to useTestStore & background API so all solved questions are counted
+    try {
+      const storeUser = useTestStore.getState().user;
+      const meta = get().testMeta;
+      const questionAttempts: RecordedQuestionAttempt[] = fullQuestions.map((q) => {
+        const qState = questionStates[q.id];
+        const selectedOption = qState?.selectedOption ?? null;
+        const isCorrect =
+          selectedOption !== null && selectedOption !== undefined
+            ? selectedOption === q.correctOptionId
+            : null;
+        const timeSpent = qState?.timeSpentSeconds ?? 0;
+        return {
+          questionId: q.id,
+          conceptId: q.conceptId,
+          questionNumber: q.questionNumber,
+          subject: meta?.subject ?? "Physics",
+          chapter: q.chapter || q.topic || "Domain Core",
+          microTopic: q.topic,
+          prompt: q.prompt,
+          options: q.options,
+          questionType: q.questionType,
+          selectedOption,
+          correctOption: q.correctOptionId,
+          isCorrect,
+          timeSpentSeconds: timeSpent,
+          isTimeSink: timeSpent > 72,
+          ncertReference: q.pyqSource || `NCERT Class 12 (${q.chapter || q.topic})`,
+          explanation: q.explanation,
+        };
+      });
+
+      const attemptRecord: RecordedTestAttempt = {
+        id: `attempt_${testId}_${Date.now()}`,
+        userId: storeUser?.id || "guest",
+        testId: meta?.id ?? testId ?? "cbt_exam",
+        testTitle: meta?.title ?? "CUET Domain Examination Paper",
+        subject: meta?.subject ?? "Physics",
+        totalQuestions: fullQuestions.length,
+        attemptedCount: summary.attemptedCount,
+        unattemptedCount: summary.unattemptedCount,
+        correctCount: summary.correctCount,
+        incorrectCount: summary.incorrectCount,
+        totalMarks: summary.totalMarks,
+        maxMarks: summary.maxMarks,
+        accuracyPercentage: summary.accuracyPercentage,
+        timeTakenSeconds: summary.timeTakenSeconds,
+        timeSinkCount: summary.timeSinkCount,
+        submittedAt: new Date().toISOString(),
+        questions: questionAttempts,
+      };
+
+      useTestStore.getState().recordTestAttempt(attemptRecord);
+
+      if (typeof window !== "undefined") {
+        fetch("/api/test/record-attempt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(attemptRecord),
+        }).catch((err) => console.warn("Background API attempt record notice:", err));
+      }
+    } catch (err) {
+      console.warn("Failed to immediately record test attempt:", err);
+    }
 
     // If client was initialized with sanitized questions (withheld keys), retrieve authoritative answers from server upon submission
     if (typeof window !== "undefined" && (!fullQuestions[0]?.correctOptionId)) {

@@ -55,22 +55,22 @@ export default function HomePage() {
               </div>
 
               {/* Headline - Main Attention Grabber */}
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] xl:text-[3.75rem] font-black text-black tracking-tight leading-[1.06]">
+              <h1 className="text-3xl sm:text-5xl lg:text-[3.25rem] xl:text-[3.75rem] font-black text-black tracking-tight leading-[1.1] sm:leading-[1.06] break-words">
                 {t("titlePart1", "Stop losing")}{" "}
-                <span className="inline-block bg-[#FEE2E2] text-[#DC2626] px-3 sm:px-3.5 py-0.5 sm:py-1 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_#000] -rotate-1 align-middle my-1">
+                <span className="inline-block bg-[#FEE2E2] text-[#DC2626] px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_#000] sm:shadow-[4px_4px_0px_0px_#000] -rotate-1 align-middle my-1">
                   {t("marksCallout", "-6 marks")}
                 </span>{" "}
                 {t("titlePart2", "to trick options.")}
-                <span className="block mt-2.5 sm:mt-3 text-2xl sm:text-3xl lg:text-[2.5rem] xl:text-[2.85rem] text-black font-black leading-tight">
+                <span className="block mt-2 sm:mt-3 text-xl sm:text-3xl lg:text-[2.5rem] xl:text-[2.85rem] text-black font-black leading-tight">
                   {t("titlePart3", "Master CUET's")}{" "}
-                  <span className="underline decoration-[#FF5C5C] decoration-[5px] sm:decoration-[6px] underline-offset-[6px]">
+                  <span className="underline decoration-[#FF5C5C] decoration-[4px] sm:decoration-[6px] underline-offset-[5px] sm:underline-offset-[6px]">
                     {t("titleHighlight", "zero-buffer format.")}
                   </span>
                 </span>
               </h1>
 
               {/* Sub-headline (1 sentence) */}
-              <p className="text-base sm:text-lg text-black/80 leading-relaxed font-semibold">
+              <p className="text-sm sm:text-lg text-black/80 leading-relaxed font-semibold">
                 {t("heroSubtitle", "All 50 questions are mandatory. You have 72 seconds per question. CUET AI-Prep pinpoints the trap option you fell for before exam day does.")}
               </p>
 
@@ -80,7 +80,7 @@ export default function HomePage() {
                 <a
                   href="#live-demo"
                   onClick={scrollToDemo}
-                  className="px-6 py-3.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] active:bg-[#E03E3E] text-white font-black text-sm tracking-wide border-2 border-black shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] active:bg-[#E03E3E] text-white font-black text-xs sm:text-sm tracking-wide border-2 border-black shadow-[3px_3px_0px_0px_#000] sm:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   <Zap className="w-4 h-4 fill-white" />
                   <span>{t("ctaPrimary", "Try 1 Diagnostic Question Free")}</span>
@@ -89,14 +89,14 @@ export default function HomePage() {
                 {/* Secondary CTA */}
                 <Link
                   href="#stream-matrix"
-                  className="px-6 py-3.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-sm tracking-wide shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2"
+                  className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs sm:text-sm tracking-wide shadow-[3px_3px_0px_0px_#000] sm:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
                   <span>{t("ctaSecondary", "View Stream Tests")}</span>
                 </Link>
               </div>
 
               {/* Trust Highlights */}
-              <div className="pt-4 border-t-2 border-black/10 grid grid-cols-2 gap-3 text-xs text-black font-bold">
+              <div className="pt-4 border-t-2 border-black/10 grid grid-cols-2 gap-2 sm:gap-3 text-xs text-black font-bold">
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded bg-[#D1FAE5] border border-black flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-black stroke-[3]" />

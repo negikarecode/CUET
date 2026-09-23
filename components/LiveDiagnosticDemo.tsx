@@ -201,10 +201,10 @@ export default function LiveDiagnosticDemo() {
   return (
     <div
       id="live-demo"
-      className="w-full max-w-4xl mx-auto rounded-2xl bg-white border-2 border-black shadow-[8px_8px_0px_0px_#000] overflow-hidden text-left"
+      className="w-full max-w-4xl mx-auto rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] sm:shadow-[8px_8px_0px_0px_#000] overflow-hidden text-left"
     >
       {/* Top Header Bar */}
-      <div className="bg-[#FAF7EE] p-4 sm:p-5 border-b-2 border-black flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-[#FAF7EE] p-3.5 sm:p-5 border-b-2 border-black flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-[#FF5C5C] border border-black animate-pulse" />
           <span className="text-xs font-black uppercase tracking-wider text-black font-mono">
@@ -215,26 +215,36 @@ export default function LiveDiagnosticDemo() {
           </span>
         </div>
 
-        {/* Stream Switcher Tabs */}
-        <div className="flex items-center gap-1.5 p-1 bg-white border-2 border-black rounded-lg">
+        {/* Stream Switcher Tabs: 3-column equal grid on phones, flex on larger screens */}
+        <div className="grid grid-cols-3 sm:flex items-center gap-1 sm:gap-1.5 p-1 bg-white border-2 border-black rounded-lg w-full sm:w-auto">
           {DEMO_QUESTIONS.map((q) => {
             const isActive = q.streamId === selectedStream;
+            const fullLabel =
+              q.streamId === "physics"
+                ? t("physics", q.streamLabel)
+                : q.streamId === "accounts"
+                ? t("accountancy", q.streamLabel)
+                : t("politicalScience", q.streamLabel);
+            const shortLabel =
+              q.streamId === "physics"
+                ? "Physics"
+                : q.streamId === "accounts"
+                ? "Accounts"
+                : "Pol Sci";
+
             return (
               <button
                 key={q.streamId}
                 type="button"
                 onClick={() => handleSelectStream(q.streamId)}
-                className={`px-3 py-1 text-xs font-black rounded transition-all ${
+                className={`px-2 sm:px-3 py-1 text-xs font-black rounded transition-all text-center truncate ${
                   isActive
                     ? "bg-[#FF5C5C] text-white shadow-[1px_1px_0px_0px_#000]"
                     : "text-black hover:bg-[#FAF7EE]"
                 }`}
               >
-                {q.streamId === "physics"
-                  ? t("physics", q.streamLabel)
-                  : q.streamId === "accounts"
-                  ? t("accountancy", q.streamLabel)
-                  : t("politicalScience", q.streamLabel)}
+                <span className="hidden sm:inline">{fullLabel}</span>
+                <span className="sm:hidden">{shortLabel}</span>
               </button>
             );
           })}
@@ -242,7 +252,7 @@ export default function LiveDiagnosticDemo() {
       </div>
 
       {/* Question Context & Prompt */}
-      <div className="p-6 sm:p-7 space-y-5">
+      <div className="p-4 sm:p-7 space-y-4 sm:space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 rounded bg-[#FEF3C7] border border-black font-black font-mono" translate="no">

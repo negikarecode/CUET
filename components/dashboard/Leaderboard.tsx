@@ -86,19 +86,19 @@ export default function Leaderboard() {
   const isUserInTop10 = entries.some((e) => e.userId === user.id);
 
   return (
-    <section className="bg-white rounded-xl border-2 border-black shadow-[5px_5px_0px_0px_#000] p-6 sm:p-8">
+    <section className="bg-white rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_#000] sm:shadow-[5px_5px_0px_0px_#000] p-4 sm:p-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b-2 border-black">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-lg bg-[#FEF3C7] text-black border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
-            <Trophy className="w-6 h-6 text-[#F59E0B]" />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#FEF3C7] text-black border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] shrink-0">
+            <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-[#F59E0B]" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-black text-black tracking-tight">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-lg sm:text-xl font-black text-black tracking-tight">
                 All-India CUET Weekly Leaderboard
               </h2>
-              <span className="bg-[#FEF3C7] text-black text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase font-mono border border-black shadow-[1px_1px_0px_0px_#000]">
+              <span className="bg-[#FEF3C7] text-black text-[10px] font-black px-2 py-0.5 rounded-full uppercase font-mono border border-black shadow-[1px_1px_0px_0px_#000]">
                 Live NTA Percentile
               </span>
             </div>
@@ -109,13 +109,13 @@ export default function Leaderboard() {
         </div>
 
         {/* Segmented Control to filter by stream */}
-        <div className="flex p-1 bg-[#FAF7EE] rounded-lg border-2 border-black text-xs font-black shadow-[2px_2px_0px_0px_#000] self-start md:self-auto">
+        <div className="grid grid-cols-3 sm:flex p-1 bg-[#FAF7EE] rounded-lg border-2 border-black text-xs font-black shadow-[2px_2px_0px_0px_#000] w-full sm:w-auto">
           {(["science", "commerce", "humanities"] as StreamType[]).map((st) => (
             <button
               key={st}
               type="button"
               onClick={() => setActiveStream(st)}
-              className={`px-4 py-2 rounded-md transition-all capitalize border ${
+              className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-md transition-all capitalize border text-center ${
                 activeStream === st
                   ? "bg-black text-white border-black shadow-[1px_1px_0px_0px_#000] font-black"
                   : "border-transparent text-black hover:bg-black/5"
@@ -128,41 +128,41 @@ export default function Leaderboard() {
       </div>
 
       {/* Leaderboard Table */}
-      <div className="mt-6 overflow-x-auto">
+      <div className="mt-6 overflow-x-auto w-full max-w-full">
         <table className="w-full text-left text-xs">
           <thead>
-            <tr className="border-b-2 border-black text-black uppercase tracking-wider font-black text-[11px] pb-3">
-              <th className="py-3 px-3 w-16">Rank</th>
-              <th className="py-3 px-4">Student Aspirant</th>
-              <th className="py-3 px-4 text-center">Daily Streak</th>
-              <th className="py-3 px-4 text-center">Accuracy %</th>
-              <th className="py-3 px-4 text-right">Total XP</th>
+            <tr className="border-b-2 border-black text-black uppercase tracking-wider font-black text-[10px] sm:text-[11px] pb-3">
+              <th className="py-2.5 sm:py-3 px-2 sm:px-3 w-10 sm:w-16">Rank</th>
+              <th className="py-2.5 sm:py-3 px-2 sm:px-4">Student Aspirant</th>
+              <th className="py-2.5 sm:py-3 px-2 sm:px-4 text-center hidden sm:table-cell">Daily Streak</th>
+              <th className="py-2.5 sm:py-3 px-2 sm:px-4 text-center hidden md:table-cell">Accuracy %</th>
+              <th className="py-2.5 sm:py-3 px-2 sm:px-4 text-right">Total XP</th>
             </tr>
           </thead>
           <tbody className="divide-y-2 divide-black/10">
             {entries.map((entry) => {
               const isTop3 = entry.rank <= 3;
               let rankBadge = (
-                <span className="font-mono font-black text-black w-7 h-7 rounded bg-[#FAF7EE] border border-black flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
+                <span className="font-mono font-black text-black w-6 h-6 sm:w-7 sm:h-7 rounded bg-[#FAF7EE] border border-black flex items-center justify-center text-[11px] sm:text-xs shadow-[1px_1px_0px_0px_#000]">
                   #{entry.rank}
                 </span>
               );
 
               if (entry.rank === 1) {
                 rankBadge = (
-                  <span className="w-7 h-7 rounded bg-[#FEF3C7] text-black border border-black font-mono font-black text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
+                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded bg-[#FEF3C7] text-black border border-black font-mono font-black text-[11px] sm:text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
                     #1
                   </span>
                 );
               } else if (entry.rank === 2) {
                 rankBadge = (
-                  <span className="w-7 h-7 rounded bg-white text-black border border-black font-mono font-black text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
+                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded bg-white text-black border border-black font-mono font-black text-[11px] sm:text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
                     #2
                   </span>
                 );
               } else if (entry.rank === 3) {
                 rankBadge = (
-                  <span className="w-7 h-7 rounded bg-[#FAF7EE] text-black border border-black font-mono font-black text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
+                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded bg-[#FAF7EE] text-black border border-black font-mono font-black text-[11px] sm:text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
                     #3
                   </span>
                 );
@@ -176,44 +176,44 @@ export default function Leaderboard() {
                   }`}
                 >
                   {/* Rank */}
-                  <td className="py-3.5 px-3">{rankBadge}</td>
+                  <td className="py-2.5 sm:py-3.5 px-2 sm:px-3">{rankBadge}</td>
 
                   {/* Student Info */}
-                  <td className="py-3.5 px-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-white border border-black text-black flex items-center justify-center font-black text-xs uppercase shadow-[1px_1px_0px_0px_#000]">
+                  <td className="py-2.5 sm:py-3.5 px-2 sm:px-4">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white border border-black text-black flex items-center justify-center font-black text-[10px] sm:text-xs uppercase shadow-[1px_1px_0px_0px_#000] shrink-0">
                         {entry.name.slice(0, 2)}
                       </div>
-                      <div>
-                        <p className="font-black text-black text-sm">
+                      <div className="min-w-0">
+                        <p className="font-black text-black text-xs sm:text-sm truncate">
                           {entry.name}
                         </p>
-                        <p className="text-[11px] text-black/70 flex items-center gap-1 font-semibold">
-                          <GraduationCap className="w-3 h-3 text-black" />
-                          <span>{entry.targetCollege}</span>
+                        <p className="text-[10px] sm:text-[11px] text-black/70 flex items-center gap-1 font-semibold truncate">
+                          <GraduationCap className="w-3 h-3 text-black shrink-0" />
+                          <span className="truncate">{entry.targetCollege}</span>
                         </p>
                       </div>
                     </div>
                   </td>
 
                   {/* Daily Streak */}
-                  <td className="py-3.5 px-4 text-center">
-                    <span className="inline-flex items-center gap-1 font-black text-black font-mono bg-[#FEF3C7] px-2.5 py-1 rounded-full border border-black text-xs shadow-[1px_1px_0px_0px_#000]">
+                  <td className="py-2.5 sm:py-3.5 px-2 sm:px-4 text-center hidden sm:table-cell">
+                    <span className="inline-flex items-center gap-1 font-black text-black font-mono bg-[#FEF3C7] px-2 py-0.5 rounded-full border border-black text-xs shadow-[1px_1px_0px_0px_#000]">
                       <Flame className="w-3.5 h-3.5 fill-[#F59E0B] text-[#D97706]" />
                       {entry.streak}d
                     </span>
                   </td>
 
                   {/* Accuracy */}
-                  <td className="py-3.5 px-4 text-center">
+                  <td className="py-2.5 sm:py-3.5 px-2 sm:px-4 text-center hidden md:table-cell">
                     <span className="font-mono font-black text-black bg-[#D1FAE5] px-2 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
                       {entry.accuracyPercentage}%
                     </span>
                   </td>
 
                   {/* Total XP */}
-                  <td className="py-3.5 px-4 text-right">
-                    <span className="font-mono font-black text-black text-sm">
+                  <td className="py-2.5 sm:py-3.5 px-2 sm:px-4 text-right">
+                    <span className="font-mono font-black text-black text-xs sm:text-sm whitespace-nowrap">
                       {entry.totalXp.toLocaleString()} XP
                     </span>
                   </td>

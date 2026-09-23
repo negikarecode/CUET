@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import DashboardClient, { DashboardInitialData } from "@/components/dashboard/DashboardClient";
+import { buildDefaultSubjectCalibration, normalizeSubject } from "@/lib/analytics";
 
 export const metadata: Metadata = {
   title: "Aspirant Command Hub | CUET AI-Prep",
@@ -44,6 +45,7 @@ export default async function DashboardPage() {
     },
     weaknessRadar: [],
     timeSinkAlerts: [],
+    subjectCalibration: buildDefaultSubjectCalibration(),
   };
 
   // 2. Query Supabase database to override with live data if available
@@ -107,6 +109,46 @@ export default async function DashboardPage() {
 
         serverData.kpi.totalAttempted = totalAttempted;
         serverData.kpi.accuracyPercentage = overallAccuracy;
+
+        const subMap = serverData.subjectCalibration || buildDefaultSubjectCalibration();
+        attemptedRows.forEach((ua: any) => {
+          const rawSub = ua.questions?.subject || "Physics";
+          const info = normalizeSubject(rawSub);
+          if (!subMap[info.key]) {
+            subMap[info.key] = {
+              subject: info.name,
+              subjectKey: info.key,
+              icon: info.icon,
+              category: info.category,
+              totalAttempted: 0,
+              totalCorrect: 0,
+              totalIncorrect: 0,
+              accuracyPercentage: 0,
+              testsCount: 0,
+              isUnlocked: false,
+              attemptsToUnlock: 150,
+              unlockProgress: 0,
+              mockUrl: info.mockUrl,
+            };
+          }
+          const entry = subMap[info.key];
+          if (entry) {
+            entry.totalAttempted += 1;
+            if (ua.is_correct === true) entry.totalCorrect += 1;
+            else entry.totalIncorrect += 1;
+          }
+        });
+        Object.keys(subMap).forEach((k) => {
+          const item = subMap[k];
+          if (item) {
+            item.accuracyPercentage =
+              item.totalAttempted > 0 ? Math.round((item.totalCorrect / item.totalAttempted) * 100) : 0;
+            item.isUnlocked = item.totalAttempted >= 150;
+            item.attemptsToUnlock = Math.max(0, 150 - item.totalAttempted);
+            item.unlockProgress = Math.min(100, Math.round((item.totalAttempted / 150) * 100));
+          }
+        });
+        serverData.subjectCalibration = subMap;
 
         // Group by micro_topic & chapter
         const topicMap = new Map<

@@ -220,31 +220,31 @@ export default function DashboardSidebar() {
   return (
     <>
       {/* 1. Mobile Header (Only on small screens) with Hamburger Drawer Trigger */}
-      <div className="md:hidden sticky top-0 z-40 bg-[#FAF7EE] border-b-2 border-black px-4 py-2.5 flex items-center justify-between shadow-[0_2px_0px_0px_#000]">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-[#FF5C5C] text-white border-2 border-black flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
-            <GraduationCap className="w-4 h-4 stroke-[2.5]" />
+      <div className="md:hidden sticky top-0 z-40 bg-[#FAF7EE] border-b-2 border-black px-3 sm:px-4 py-2 flex items-center justify-between shadow-[0_2px_0px_0px_#000] w-full max-w-full">
+        <Link href="/" className="flex items-center gap-1.5 min-w-0">
+          <div className="w-7 h-7 rounded-lg bg-[#FF5C5C] text-white border-2 border-black flex items-center justify-center shadow-[1px_1px_0px_0px_#000] shrink-0">
+            <GraduationCap className="w-3.5 h-3.5 stroke-[2.5]" />
           </div>
-          <span className="font-black text-sm text-black">
+          <span className="font-black text-xs sm:text-sm text-black truncate">
             CUET <span className="text-[#FF5C5C]">AI-Prep</span>
           </span>
         </Link>
 
-        <div className="flex items-center gap-2">
-          <LanguageSelector variant="navbar" className="scale-90 origin-right" />
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          <LanguageSelector variant="navbar" />
 
-          <div className="flex items-center gap-1 px-2 py-1 bg-[#FEF3C7] rounded-full border-2 border-black text-xs font-black">
-            <Flame className="w-3.5 h-3.5 text-[#D97706] fill-[#F59E0B]" />
-            <span>{streak}d</span>
+          <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 py-1 bg-[#FEF3C7] rounded-full border-2 border-black text-xs font-black shrink-0">
+            <Flame className="w-3 h-3 text-[#D97706] fill-[#F59E0B]" />
+            <span className="text-[11px] sm:text-xs">{streak}d</span>
           </div>
 
           <button
             type="button"
             onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
-            className="p-1.5 rounded-lg border-2 border-black bg-white text-black shadow-[2px_2px_0px_0px_#000]"
+            className="p-1.5 rounded-lg border-2 border-black bg-white text-black shadow-[1px_1px_0px_0px_#000] sm:shadow-[2px_2px_0px_0px_#000] shrink-0"
             aria-label="Toggle Dashboard Menu"
           >
-            {mobileDrawerOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileDrawerOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </div>

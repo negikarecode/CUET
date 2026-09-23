@@ -103,28 +103,28 @@ export default function Navbar() {
     <>
       <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#FAF7EE] transition-all">
         {/* Main Navbar */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3.5">
-          <div className="flex items-center justify-between min-h-[56px] sm:min-h-[64px] relative">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5">
+          <div className="flex items-center justify-between min-h-[52px] sm:min-h-[64px] relative">
             {/* Left: Brand Logo & Dashboard Nav Items */}
-            <div className="flex items-center gap-4 lg:gap-6 shrink-0">
+            <div className="flex items-center gap-2 sm:gap-4 lg:gap-6 min-w-0">
               <Link
                 href="/"
-                className="flex items-center gap-3 group focus:outline-none rounded-lg py-1 px-1.5"
+                className="flex items-center gap-2 sm:gap-3 group focus:outline-none rounded-lg py-1 px-1"
               >
-                <div className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-[#FF5C5C] text-black border-2 border-black shadow-[2px_2px_0px_0px_#000] group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 group-hover:shadow-[3px_3px_0px_0px_#000] transition-all shrink-0">
-                  <GraduationCap className="w-5 h-5 text-white stroke-[2.5]" />
-                  <Sparkles className="w-3.5 h-3.5 text-[#F59E0B] absolute -top-1.5 -right-1.5 fill-[#F59E0B]" />
+                <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#FF5C5C] text-black border-2 border-black shadow-[2px_2px_0px_0px_#000] group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 group-hover:shadow-[3px_3px_0px_0px_#000] transition-all shrink-0">
+                  <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[2.5]" />
+                  <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#F59E0B] absolute -top-1.5 -right-1.5 fill-[#F59E0B]" />
                 </div>
-                <div className="flex flex-col justify-center">
-                  <div className="flex items-center gap-1.5 leading-none">
-                    <span className="text-xl sm:text-2xl font-black tracking-tight text-black font-sans leading-tight">
+                <div className="flex flex-col justify-center min-w-0">
+                  <div className="flex items-center gap-1 sm:gap-1.5 leading-none">
+                    <span className="text-lg sm:text-2xl font-black tracking-tight text-black font-sans leading-tight whitespace-nowrap">
                       CUET <span className="text-[#FF5C5C]">AI-Prep</span>
                     </span>
-                    <span className="rounded-full bg-[#FEF3C7] border-2 border-black px-1.5 py-0.2 text-[10px] font-black text-black uppercase tracking-wide shadow-[1px_1px_0px_0px_#000]">
+                    <span className="rounded-full bg-[#FEF3C7] border-2 border-black px-1.5 py-0.2 text-[9px] sm:text-[10px] font-black text-black uppercase tracking-wide shadow-[1px_1px_0px_0px_#000]">
                       UG
                     </span>
                   </div>
-                  <span className="text-[10px] font-black tracking-wider text-black/60 uppercase mt-0.5">
+                  <span className="text-[10px] font-black tracking-wider text-black/60 uppercase mt-0.5 hidden sm:block">
                     {t("appTagline", "NTA CBT Diagnostic Engine")}
                   </span>
                 </div>
@@ -346,20 +346,20 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Menu Button & Language Switcher */}
-            <div className="flex items-center gap-1.5 sm:hidden">
-              <LanguageSelector variant="navbar" className="scale-90 origin-right" />
+            <div className="flex items-center gap-1 sm:hidden shrink-0">
+              <LanguageSelector variant="navbar" />
 
               {!isLoggedIn ? (
                 <button
                   type="button"
                   onClick={() => handleOpenOnboarding("signup")}
-                  className="px-2.5 py-1.5 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:shadow-none"
+                  className="px-2.5 py-1.5 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:shadow-none shrink-0"
                 >
                   Join
                 </button>
               ) : (
                 !isHomepage && (
-                  <div className="flex items-center gap-1 px-2 py-1 bg-[#FEF3C7] border-2 border-black rounded-full text-black text-xs font-black shadow-[1px_1px_0px_0px_#000]">
+                  <div className="flex items-center gap-1 px-2 py-1 bg-[#FEF3C7] border-2 border-black rounded-full text-black text-xs font-black shadow-[1px_1px_0px_0px_#000] shrink-0">
                     <Flame className="w-3.5 h-3.5 fill-[#F59E0B] text-[#D97706]" />
                     <span>{streak}</span>
                   </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -16,14 +16,16 @@ import {
   Award,
   Lock,
   Sparkles,
+  BrainCircuit,
 } from "lucide-react";
 import TrophyCabinet from "@/components/dashboard/TrophyCabinet";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { RepairQuizResponse } from "@/app/api/ai/repair-quiz/route";
-import { TopicMastery, TimeSinkAlertData } from "@/types";
+import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData } from "@/types";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
+import { normalizeSubject } from "@/lib/analytics";
 
 export interface DashboardInitialData {
   user: {
@@ -56,6 +58,7 @@ export interface DashboardInitialData {
   };
   weaknessRadar: TopicMastery[];
   timeSinkAlerts: TimeSinkAlertData[];
+  subjectCalibration?: Record<string, SubjectCalibrationData>;
 }
 
 export default function DashboardClient({
@@ -73,68 +76,147 @@ export default function DashboardClient({
 
   const [activeRepairTopic, setActiveRepairTopic] = useState<string | null>(null);
   const [radarTab, setRadarTab] = useState<"weaknesses" | "strengths" | "all">("weaknesses");
+  const [selectedRadarSubject, setSelectedRadarSubject] = useState<string>("all");
+  const [calibrationCategoryFilter, setCalibrationCategoryFilter] = useState<"all" | "in_progress" | "unlocked">("all");
+
+  // Attempt recovery on mount: ingests any completed CBT session from localStorage that was missed
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const { recoverUnrecordedCBTSessions } = useTestStore.getState();
+        if (typeof recoverUnrecordedCBTSessions === "function") {
+          recoverUnrecordedCBTSessions();
+        }
+      } catch (err) {
+        console.warn("Session recovery notice:", err);
+      }
+    }
+  }, []);
 
   const isServerUser = initialData.user && initialData.user.id !== "guest";
 
-  // Merge client attempts strictly when belonging to the active user
-  const hasClientAttempts =
-    isClient &&
-    storeUser.id === initialData.user.id &&
-    clientAnalytics.totalQuestionsAttempted > 0;
+  // Robust attempted count: Never drop questions solved on client or server
+  const clientQuestionsAttempted =
+    isClient && clientAnalytics ? (clientAnalytics.totalQuestionsAttempted || 0) : 0;
+  const storeAttemptsSum =
+    isClient && testAttempts && testAttempts.length > 0
+      ? testAttempts.reduce((sum, a) => sum + (a.attemptedCount || 0), 0)
+      : 0;
+  const activeClientAttempted = Math.max(clientQuestionsAttempted, storeAttemptsSum);
 
-  const totalAttempted = isServerUser
-    ? initialData.kpi.totalAttempted
-    : hasClientAttempts
-    ? clientAnalytics.totalQuestionsAttempted
-    : initialData.kpi.totalAttempted;
+  const serverAttempted = initialData?.kpi?.totalAttempted || 0;
+  const totalAttempted = Math.max(serverAttempted, activeClientAttempted);
 
-  const accuracyPercentage = isServerUser
-    ? initialData.kpi.accuracyPercentage
-    : hasClientAttempts
-    ? clientAnalytics.overallAccuracyPercentage
-    : initialData.kpi.accuracyPercentage;
+  const accuracyPercentage =
+    activeClientAttempted > 0 && clientAnalytics?.overallAccuracyPercentage !== undefined
+      ? clientAnalytics.overallAccuracyPercentage
+      : initialData?.kpi?.accuracyPercentage || 0;
 
   const completedTestsCount =
-    isClient && testAttempts && testAttempts.length > 0 && storeUser.id === initialData.user.id
+    isClient && testAttempts && testAttempts.length > 0
       ? testAttempts.length
       : totalAttempted > 0
       ? Math.ceil(totalAttempted / 50)
       : 0;
 
-  // AI Unlock Gate: 150 attempts required for statistical calibration
-  const isAiMentorUnlocked = totalAttempted >= 150;
-  const attemptsToUnlock = Math.max(0, 150 - totalAttempted);
-  const unlockProgress = Math.min(100, Math.round((totalAttempted / 150) * 100));
+  // Active Subject Calibration Map
+  const subjectCalibrationMap =
+    isClient && clientAnalytics?.subjectCalibration && Object.keys(clientAnalytics.subjectCalibration).length > 0
+      ? clientAnalytics.subjectCalibration
+      : initialData?.subjectCalibration || {};
 
-  const weaknessRadar =
-    hasClientAttempts && clientAnalytics.weaknessRadar.length > 0
+  const allSubjectCalibrations: SubjectCalibrationData[] = Object.values(subjectCalibrationMap);
+
+  // Determine current active subject for AI Weakness Radar
+  const activeSubjectCal =
+    selectedRadarSubject !== "all" ? subjectCalibrationMap[selectedRadarSubject] : null;
+
+  // Subject-specific unlock metrics for active radar subject
+  const isAiMentorUnlocked = activeSubjectCal
+    ? activeSubjectCal.isUnlocked
+    : totalAttempted >= 150;
+  const attemptsToUnlock = activeSubjectCal
+    ? activeSubjectCal.attemptsToUnlock
+    : Math.max(0, 150 - totalAttempted);
+  const unlockProgress = activeSubjectCal
+    ? activeSubjectCal.unlockProgress
+    : Math.min(100, Math.round((totalAttempted / 150) * 100));
+
+  // Base raw analytics from client or server
+  const rawWeaknessRadar =
+    isClient && clientAnalytics && clientAnalytics.weaknessRadar.length > 0
       ? clientAnalytics.weaknessRadar
       : initialData.weaknessRadar;
 
-  const strengthList =
-    hasClientAttempts && clientAnalytics.strengthList.length > 0
+  const rawStrengthList =
+    isClient && clientAnalytics && clientAnalytics.strengthList.length > 0
       ? clientAnalytics.strengthList
       : initialData.weaknessRadar.filter(
           (t) => t.status === "mastered" || t.accuracyPercentage >= 75
         );
 
-  const timeSinkAlerts =
-    hasClientAttempts && clientAnalytics.timeSinkAlerts.length > 0
+  const rawTimeSinkAlerts =
+    isClient && clientAnalytics && clientAnalytics.timeSinkAlerts.length > 0
       ? clientAnalytics.timeSinkAlerts
       : initialData.timeSinkAlerts;
 
-  const recommendedPractice =
-    hasClientAttempts && clientAnalytics.recommendedPractice
+  const rawRecommendedPractice =
+    isClient && clientAnalytics && clientAnalytics.recommendedPractice
       ? clientAnalytics.recommendedPractice
       : initialData.recommendedPractice;
+
+  const rawAllDomainTopics =
+    isClient && clientAnalytics && clientAnalytics.allTopics && clientAnalytics.allTopics.length > 0
+      ? clientAnalytics.allTopics
+      : [...rawWeaknessRadar, ...rawStrengthList];
+
+  // Subject-partitioned topics
+  const weaknessRadar =
+    selectedRadarSubject === "all"
+      ? rawWeaknessRadar
+      : rawWeaknessRadar.filter((t) => normalizeSubject(t.subject).key === selectedRadarSubject);
+
+  const strengthList =
+    selectedRadarSubject === "all"
+      ? rawStrengthList
+      : rawStrengthList.filter((t) => normalizeSubject(t.subject).key === selectedRadarSubject);
+
+  const allDomainTopics =
+    selectedRadarSubject === "all"
+      ? rawAllDomainTopics
+      : rawAllDomainTopics.filter((t) => normalizeSubject(t.subject).key === selectedRadarSubject);
+
+  const timeSinkAlerts =
+    selectedRadarSubject === "all"
+      ? rawTimeSinkAlerts
+      : rawTimeSinkAlerts.filter((t) => normalizeSubject(t.chapter || t.topic).key === selectedRadarSubject);
+
+  // Dynamic recommended practice for the selected subject
+  let recommendedPractice = rawRecommendedPractice;
+  if (selectedRadarSubject !== "all" && weaknessRadar.length > 0 && weaknessRadar[0]) {
+    const topW = weaknessRadar[0];
+    recommendedPractice = {
+      topic: topW.troubleTopics?.[0] || topW.chapter,
+      chapter: topW.chapter,
+      subject: topW.subject,
+      durationMinutes: 5,
+      questionCount: 5,
+      reason: `${topW.diagnosisLabel || "Targeted Fix"} (${topW.accuracyPercentage}% accuracy). Focus drill on ${topW.chapter} to eliminate distractor traps.`,
+    };
+  } else if (selectedRadarSubject !== "all" && activeSubjectCal) {
+    recommendedPractice = {
+      topic: `${activeSubjectCal.subject} Diagnostic Mock`,
+      chapter: `${activeSubjectCal.subject} Core Syllabus`,
+      subject: activeSubjectCal.subject,
+      durationMinutes: 60,
+      questionCount: 50,
+      reason: `Complete a 50-question ${activeSubjectCal.subject} mock test to calibrate your baseline and unlock AI Weak Area Detection.`,
+    };
+  }
 
   const weakTopics = weaknessRadar.filter(
     (t) => t.status === "critical" || t.status === "polish"
   );
-  const allDomainTopics =
-    hasClientAttempts && clientAnalytics.allTopics && clientAnalytics.allTopics.length > 0
-      ? clientAnalytics.allTopics
-      : [...weaknessRadar, ...strengthList];
   const strengthsCount = strengthList.length;
   const weakCount = weakTopics.length;
   const allCount = allDomainTopics.length;
@@ -381,6 +463,209 @@ export default function DashboardClient({
         </div>
       </div>
 
+      {/* =================================================================== */}
+      {/* 2.5 SUBJECT-WISE AI CALIBRATION MATRIX (150 Qs Goal Per Subject)   */}
+      {/* =================================================================== */}
+      <section className="bg-white rounded-xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] space-y-5 w-full max-w-full overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b-2 border-black">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center shrink-0 shadow-[1px_1px_0px_0px_#000]">
+                <BrainCircuit className="w-4 h-4 text-[#10B981]" />
+              </div>
+              <h2 className="text-base sm:text-lg font-black text-black tracking-tight">
+                Subject-Wise AI Calibration Matrix
+              </h2>
+              <span className="px-2 py-0.5 rounded-full bg-[#FEF3C7] border border-black text-[10px] font-black text-black">
+                150 Qs / Subject Goal
+              </span>
+            </div>
+            <p className="text-xs text-black/70 font-medium max-w-2xl">
+              Each CUET domain requires <strong>150 questions of the same subject</strong> for the AI Performance Intelligence Engine to eliminate statistical noise, diagnose trap options, and unlock personalized weakness remediation.
+            </p>
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex items-center gap-1.5 self-start md:self-auto overflow-x-auto max-w-full pb-1 scrollbar-none">
+            <button
+              type="button"
+              onClick={() => setCalibrationCategoryFilter("all")}
+              className={`px-3 py-1.5 rounded-lg border-2 border-black text-xs font-black transition-all ${
+                calibrationCategoryFilter === "all"
+                  ? "bg-black text-white shadow-[2px_2px_0px_0px_#000]"
+                  : "bg-white text-black hover:bg-[#FAF7EE]"
+              }`}
+            >
+              All Domains ({allSubjectCalibrations.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setCalibrationCategoryFilter("in_progress")}
+              className={`px-3 py-1.5 rounded-lg border-2 border-black text-xs font-black transition-all flex items-center gap-1.5 ${
+                calibrationCategoryFilter === "in_progress"
+                  ? "bg-[#FEF3C7] text-black shadow-[2px_2px_0px_0px_#000]"
+                  : "bg-white text-black hover:bg-[#FAF7EE]"
+              }`}
+            >
+              <span>Calibrating</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-black text-white">
+                {allSubjectCalibrations.filter((s) => s.totalAttempted > 0 && !s.isUnlocked).length}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setCalibrationCategoryFilter("unlocked")}
+              className={`px-3 py-1.5 rounded-lg border-2 border-black text-xs font-black transition-all flex items-center gap-1.5 ${
+                calibrationCategoryFilter === "unlocked"
+                  ? "bg-[#10B981] text-black shadow-[2px_2px_0px_0px_#000]"
+                  : "bg-white text-black hover:bg-[#FAF7EE]"
+              }`}
+            >
+              <span>Unlocked 🚀</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-black text-white">
+                {allSubjectCalibrations.filter((s) => s.isUnlocked).length}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* Subject Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {allSubjectCalibrations
+            .filter((sub) => {
+              if (calibrationCategoryFilter === "in_progress") {
+                return sub.totalAttempted > 0 && !sub.isUnlocked;
+              }
+              if (calibrationCategoryFilter === "unlocked") {
+                return sub.isUnlocked;
+              }
+              return true;
+            })
+            .map((sub) => {
+              const isSelected = selectedRadarSubject === sub.subjectKey;
+              return (
+                <div
+                  key={sub.subjectKey}
+                  className={`rounded-xl border-2 border-black p-4 flex flex-col justify-between transition-all shadow-[3px_3px_0px_0px_#000] hover:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 ${
+                    sub.isUnlocked
+                      ? "bg-[#F0FDF4]"
+                      : sub.totalAttempted > 0
+                      ? "bg-[#FFFBEB]"
+                      : "bg-[#FAF7EE]"
+                  } ${isSelected ? "ring-2 ring-black" : ""}`}
+                >
+                  <div className="space-y-3">
+                    {/* Top Row: Icon, Title, Status */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="w-9 h-9 rounded-lg bg-white border-2 border-black flex items-center justify-center text-lg shrink-0 shadow-[1px_1px_0px_0px_#000]">
+                          {sub.icon}
+                        </span>
+                        <div className="min-w-0">
+                          <h3 className="font-black text-xs sm:text-sm text-black truncate">
+                            {sub.subject}
+                          </h3>
+                          <span className="text-[10px] font-bold text-black/60 block">
+                            {sub.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      <span
+                        className={`px-2 py-0.5 rounded-full border border-black text-[9px] font-black uppercase tracking-wider shrink-0 shadow-[1px_1px_0px_0px_#000] ${
+                          sub.isUnlocked
+                            ? "bg-[#10B981] text-black"
+                            : sub.totalAttempted > 0
+                            ? "bg-[#FEF3C7] text-[#92400E]"
+                            : "bg-[#F3F4F6] text-black/60"
+                        }`}
+                      >
+                        {sub.isUnlocked
+                          ? "AI Unlocked 🚀"
+                          : sub.totalAttempted > 0
+                          ? `${sub.unlockProgress}% Calibrated`
+                          : "Not Started"}
+                      </span>
+                    </div>
+
+                    {/* Progress Bar & Questions Count */}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs font-black">
+                        <span className="font-mono text-black">
+                          {sub.totalAttempted} / 150 <span className="text-[10px] font-normal text-black/60">Qs</span>
+                        </span>
+                        <span className="text-[10px] font-bold text-black/70">
+                          {sub.isUnlocked
+                            ? "Calibrated ✓"
+                            : `${sub.attemptsToUnlock} Qs left to unlock`}
+                        </span>
+                      </div>
+                      <div className="w-full h-2.5 bg-white border-2 border-black rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-[#F59E0B] to-[#10B981] rounded-full transition-all duration-500"
+                          style={{
+                            width: `${Math.max(sub.totalAttempted > 0 ? 5 : 0, sub.unlockProgress)}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Micro Metrics: Accuracy & Tests */}
+                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10 text-center">
+                      <div className="p-1.5 rounded-md bg-white border border-black/20">
+                        <p className="text-[9px] uppercase tracking-wider font-bold text-black/60">
+                          Accuracy
+                        </p>
+                        <p className="font-mono font-black text-xs text-black">
+                          {sub.totalAttempted > 0 ? `${sub.accuracyPercentage}%` : "--"}
+                        </p>
+                      </div>
+                      <div className="p-1.5 rounded-md bg-white border border-black/20">
+                        <p className="text-[9px] uppercase tracking-wider font-bold text-black/60">
+                          Mocks Given
+                        </p>
+                        <p className="font-mono font-black text-xs text-black">
+                          {sub.testsCount}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions: View AI Radar & Launch Mock */}
+                  <div className="pt-3 mt-3 border-t-2 border-black flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedRadarSubject(sub.subjectKey);
+                        const radarEl = document.getElementById("radar");
+                        if (radarEl) {
+                          radarEl.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                      className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-black border border-black transition-all flex items-center justify-center gap-1 ${
+                        isSelected
+                          ? "bg-black text-white shadow-[1px_1px_0px_0px_#000]"
+                          : "bg-white text-black hover:bg-[#FAF7EE] shadow-[1px_1px_0px_0px_#000]"
+                      }`}
+                    >
+                      <span>AI Radar</span>
+                      <Target className="w-3 h-3" />
+                    </button>
+
+                    <Link
+                      href={sub.mockUrl}
+                      className="py-1.5 px-3 rounded-lg text-[11px] font-black bg-[#FF5C5C] hover:bg-[#FF4545] text-white border border-black shadow-[1px_1px_0px_0px_#000] flex items-center justify-center gap-1 shrink-0 transition-all"
+                    >
+                      <span>Practice Mock</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      </section>
+
       {/* 3. CORE 2-COLUMN WORKSPACE: MOCK PAPERS & WEAKNESS RADAR */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Domain Mock Papers (7 Cols) */}
@@ -556,6 +841,45 @@ export default function DashboardClient({
               )}
             </div>
 
+            {/* Subject Selector Bar */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none max-w-full">
+              <button
+                type="button"
+                onClick={() => setSelectedRadarSubject("all")}
+                className={`px-2.5 py-1 rounded-md text-xs font-black shrink-0 transition-all border ${
+                  selectedRadarSubject === "all"
+                    ? "bg-black text-white border-black shadow-[1px_1px_0px_0px_#000]"
+                    : "bg-[#FAF7EE] text-black/70 border-black/30 hover:border-black"
+                }`}
+              >
+                All Subjects ({totalAttempted} Qs)
+              </button>
+              {allSubjectCalibrations
+                .filter(
+                  (s) =>
+                    s.totalAttempted > 0 ||
+                    candidateSubjects.some((cs) => normalizeSubject(cs).key === s.subjectKey)
+                )
+                .map((s) => (
+                  <button
+                    key={s.subjectKey}
+                    type="button"
+                    onClick={() => setSelectedRadarSubject(s.subjectKey)}
+                    className={`px-2.5 py-1 rounded-md text-xs font-black shrink-0 transition-all border flex items-center gap-1 ${
+                      selectedRadarSubject === s.subjectKey
+                        ? "bg-[#FF5C5C] text-white border-black shadow-[1px_1px_0px_0px_#000]"
+                        : "bg-[#FAF7EE] text-black/70 border-black/30 hover:border-black"
+                    }`}
+                  >
+                    <span>{s.icon}</span>
+                    <span>{s.subject}</span>
+                    <span className="font-mono text-[10px] opacity-80">
+                      ({s.totalAttempted}/150)
+                    </span>
+                  </button>
+                ))}
+            </div>
+
             {/* Empty State vs Radar Items */}
             {!isAiMentorUnlocked ? (
               <div className="py-8 px-4 text-center rounded-lg bg-[#FAF7EE] border-2 border-dashed border-black/30 space-y-2.5">
@@ -564,19 +888,26 @@ export default function DashboardClient({
                 </div>
                 <div className="space-y-1">
                   <p className="text-xs font-black text-black">
-                    AI Diagnostic Matrix Calibrating
+                    {activeSubjectCal
+                      ? `${activeSubjectCal.subject} AI Diagnostic Matrix Calibrating`
+                      : "AI Diagnostic Matrix Calibrating"}
                   </p>
                   <p className="text-[11px] text-black/70 leading-relaxed max-w-xs mx-auto">
-                    Unlocking AI Mentor: <strong>{totalAttempted}/150 questions attempted</strong>.
-                    Solve {attemptsToUnlock} more questions in CBT mocks to eliminate statistical noise and reveal your calibrated Weakness Radar.
+                    {activeSubjectCal
+                      ? `Unlocking ${activeSubjectCal.subject} AI Mentor: ${activeSubjectCal.totalAttempted}/150 questions attempted. Solve ${activeSubjectCal.attemptsToUnlock} more ${activeSubjectCal.subject} questions to eliminate noise and reveal your calibrated Weakness Radar.`
+                      : `Unlocking AI Mentor: ${totalAttempted}/150 questions attempted. Solve ${attemptsToUnlock} more questions in CBT mocks to eliminate statistical noise and reveal your calibrated Weakness Radar.`}
                   </p>
                 </div>
                 <Link
-                  href="/dashboard/mocks"
+                  href={activeSubjectCal ? activeSubjectCal.mockUrl : "/dashboard/mocks"}
                   className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#FF5C5C] text-white font-black text-xs border border-black shadow-[2px_2px_0px_0px_#000]"
                 >
                   <Play className="w-3 h-3 fill-white" />
-                  <span>Continue Mock Practice</span>
+                  <span>
+                    {activeSubjectCal
+                      ? `Practice ${activeSubjectCal.subject} Mock`
+                      : "Continue Mock Practice"}
+                  </span>
                 </Link>
               </div>
             ) : allCount === 0 ? (

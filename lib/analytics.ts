@@ -4,7 +4,212 @@ import {
   TopicMastery,
   TimeSinkAlertData,
   UserAnalyticsSummary,
+  SubjectCalibrationData,
 } from "@/types";
+
+export interface CanonicalSubjectInfo {
+  key: string;
+  name: string;
+  icon: string;
+  category: "Science" | "Commerce" | "Humanities" | "Common" | "Arts & Performing";
+  mockUrl: string;
+}
+
+export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
+  const clean = (rawSubject || "physics").trim().toLowerCase().replace(/[-_]/g, " ");
+
+  if (clean.includes("math")) {
+    return {
+      key: "mathematics",
+      name: "Mathematics",
+      icon: "📐",
+      category: "Science",
+      mockUrl: "/dashboard/mocks/maths",
+    };
+  }
+  if (clean.includes("chem")) {
+    return {
+      key: "chemistry",
+      name: "Chemistry",
+      icon: "🧪",
+      category: "Science",
+      mockUrl: "/dashboard/mocks/chemistry",
+    };
+  }
+  if (clean.includes("phys")) {
+    return {
+      key: "physics",
+      name: "Physics",
+      icon: "⚡",
+      category: "Science",
+      mockUrl: "/dashboard/mocks/physics",
+    };
+  }
+  if (clean.includes("bio")) {
+    return {
+      key: "biology",
+      name: "Biology",
+      icon: "🧬",
+      category: "Science",
+      mockUrl: "/dashboard/mocks/bio",
+    };
+  }
+  if (clean.includes("account") || clean === "accs" || clean === "accounts") {
+    return {
+      key: "accountancy",
+      name: "Accountancy",
+      icon: "📊",
+      category: "Commerce",
+      mockUrl: "/dashboard/mocks/accountancy",
+    };
+  }
+  if (clean.includes("eco")) {
+    return {
+      key: "economics",
+      name: "Economics",
+      icon: "📈",
+      category: "Commerce",
+      mockUrl: "/dashboard/mocks/eco",
+    };
+  }
+  if (clean.includes("business") || clean === "bst") {
+    return {
+      key: "business-studies",
+      name: "Business Studies",
+      icon: "💼",
+      category: "Commerce",
+      mockUrl: "/dashboard/mocks/bst",
+    };
+  }
+  if (clean.includes("pol")) {
+    return {
+      key: "political-science",
+      name: "Political Science",
+      icon: "⚖️",
+      category: "Humanities",
+      mockUrl: "/dashboard/mocks/pol%20science",
+    };
+  }
+  if (clean.includes("hist")) {
+    return {
+      key: "history",
+      name: "History",
+      icon: "🏛️",
+      category: "Humanities",
+      mockUrl: "/dashboard/mocks/history",
+    };
+  }
+  if (clean.includes("geo")) {
+    return {
+      key: "geography",
+      name: "Geography",
+      icon: "🌍",
+      category: "Humanities",
+      mockUrl: "/dashboard/mocks/geo",
+    };
+  }
+  if (clean.includes("psych")) {
+    return {
+      key: "psychology",
+      name: "Psychology",
+      icon: "🧠",
+      category: "Humanities",
+      mockUrl: "/dashboard/mocks/psychology",
+    };
+  }
+  if (clean.includes("soc")) {
+    return {
+      key: "sociology",
+      name: "Sociology",
+      icon: "👥",
+      category: "Humanities",
+      mockUrl: "/dashboard/mocks/sociology",
+    };
+  }
+  if (clean.includes("eng")) {
+    return {
+      key: "english",
+      name: "English",
+      icon: "📖",
+      category: "Common",
+      mockUrl: "/dashboard/mocks/english",
+    };
+  }
+  if (clean.includes("general") || clean === "gt") {
+    return {
+      key: "general-test",
+      name: "General Test",
+      icon: "🎯",
+      category: "Common",
+      mockUrl: "/dashboard/mocks/general-test",
+    };
+  }
+  if (clean.includes("computer") || clean === "cs" || clean === "csip") {
+    return {
+      key: "computer-science",
+      name: "Computer Science",
+      icon: "💻",
+      category: "Science",
+      mockUrl: "/dashboard/mocks/computer_science",
+    };
+  }
+  if (clean.includes("physical") || clean === "ped") {
+    return {
+      key: "physical-education",
+      name: "Physical Education",
+      icon: "🏅",
+      category: "Arts & Performing",
+      mockUrl: "/dashboard/mocks/physical_education",
+    };
+  }
+
+  const title = (rawSubject || "General").trim();
+  return {
+    key: clean.replace(/\s+/g, "-"),
+    name: title.charAt(0).toUpperCase() + title.slice(1),
+    icon: "📚",
+    category: "Science",
+    mockUrl: `/dashboard/mocks/${clean.replace(/\s+/g, "-")}`,
+  };
+}
+
+export function buildDefaultSubjectCalibration(): Record<string, SubjectCalibrationData> {
+  const defaults = [
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Accountancy",
+    "Economics",
+    "Business Studies",
+    "Political Science",
+    "History",
+    "Geography",
+    "English",
+    "General Test",
+  ];
+
+  const map: Record<string, SubjectCalibrationData> = {};
+  defaults.forEach((sub) => {
+    const info = normalizeSubject(sub);
+    map[info.key] = {
+      subject: info.name,
+      subjectKey: info.key,
+      icon: info.icon,
+      category: info.category,
+      totalAttempted: 0,
+      totalCorrect: 0,
+      totalIncorrect: 0,
+      accuracyPercentage: 0,
+      testsCount: 0,
+      isUnlocked: false,
+      attemptsToUnlock: 150,
+      unlockProgress: 0,
+      mockUrl: info.mockUrl,
+    };
+  });
+  return map;
+}
 
 /**
  * Deterministically creates an RFC 4122 compliant UUID from an arbitrary string.
@@ -34,6 +239,7 @@ export function stringToUuid(str: string): string {
  * - Core strengths (mastered topics)
  * - Pacing & time-sink alerts
  * - Dynamic targeted remedial practice
+ * - Subject-wise AI Calibration (150 questions milestone per subject)
  */
 export function computeAnalyticsFromAttempts(
   attempts: RecordedTestAttempt[]
@@ -58,6 +264,7 @@ export function computeAnalyticsFromAttempts(
         reason:
           "Complete your first 50-question diagnostic test to establish your baseline pace and detect trap options.",
       },
+      subjectCalibration: buildDefaultSubjectCalibration(),
     };
   }
 
@@ -95,11 +302,57 @@ export function computeAnalyticsFromAttempts(
   }
 
   const chapterMap = new Map<string, ChapterDiagnosticBucket>();
+  const subjectMap = new Map<string, SubjectCalibrationData>();
+  const defaultSubjectCalibration = buildDefaultSubjectCalibration();
+  Object.keys(defaultSubjectCalibration).forEach((key) => {
+    const item = defaultSubjectCalibration[key];
+    if (item) {
+      subjectMap.set(key, { ...item });
+    }
+  });
+  const testIdsBySubject = new Map<string, Set<string>>();
 
   attempts.forEach((attempt) => {
+    let hasAttemptQuestions = false;
+
     (attempt.questions || []).forEach((q) => {
       // Only count questions that the user actually attempted (selectedOption is not null)
       if (q.selectedOption === null || q.selectedOption === undefined) return;
+      hasAttemptQuestions = true;
+
+      // Subject Calibration tally
+      const qSubRaw = q.subject || attempt.subject || "Physics";
+      const subInfo = normalizeSubject(qSubRaw);
+      let subCal = subjectMap.get(subInfo.key);
+      if (!subCal) {
+        subCal = {
+          subject: subInfo.name,
+          subjectKey: subInfo.key,
+          icon: subInfo.icon,
+          category: subInfo.category,
+          totalAttempted: 0,
+          totalCorrect: 0,
+          totalIncorrect: 0,
+          accuracyPercentage: 0,
+          testsCount: 0,
+          isUnlocked: false,
+          attemptsToUnlock: 150,
+          unlockProgress: 0,
+          mockUrl: subInfo.mockUrl,
+        };
+        subjectMap.set(subInfo.key, subCal);
+      }
+      subCal.totalAttempted += 1;
+      if (q.isCorrect === true) {
+        subCal.totalCorrect += 1;
+      } else if (q.isCorrect === false) {
+        subCal.totalIncorrect += 1;
+      }
+
+      if (!testIdsBySubject.has(subInfo.key)) {
+        testIdsBySubject.set(subInfo.key, new Set());
+      }
+      testIdsBySubject.get(subInfo.key)!.add(attempt.testId || attempt.id);
 
       const subject = q.subject || attempt.subject || "Physics";
       let rawChapter = (q.chapter || "Domain Core").trim();
@@ -160,6 +413,50 @@ export function computeAnalyticsFromAttempts(
         }
       }
     });
+
+    // Fallback if attempt recorded without detailed questions array
+    if (!hasAttemptQuestions && (attempt.attemptedCount || 0) > 0) {
+      const subInfo = normalizeSubject(attempt.subject || "Physics");
+      let subCal = subjectMap.get(subInfo.key);
+      if (!subCal) {
+        subCal = {
+          subject: subInfo.name,
+          subjectKey: subInfo.key,
+          icon: subInfo.icon,
+          category: subInfo.category,
+          totalAttempted: 0,
+          totalCorrect: 0,
+          totalIncorrect: 0,
+          accuracyPercentage: 0,
+          testsCount: 0,
+          isUnlocked: false,
+          attemptsToUnlock: 150,
+          unlockProgress: 0,
+          mockUrl: subInfo.mockUrl,
+        };
+        subjectMap.set(subInfo.key, subCal);
+      }
+      subCal.totalAttempted += attempt.attemptedCount;
+      subCal.totalCorrect += attempt.correctCount || 0;
+      subCal.totalIncorrect += attempt.incorrectCount || 0;
+
+      if (!testIdsBySubject.has(subInfo.key)) {
+        testIdsBySubject.set(subInfo.key, new Set());
+      }
+      testIdsBySubject.get(subInfo.key)!.add(attempt.testId || attempt.id);
+    }
+  });
+
+  // Finalize subject-wise calibration calculations
+  subjectMap.forEach((subCal, key) => {
+    subCal.accuracyPercentage =
+      subCal.totalAttempted > 0
+        ? Math.round((subCal.totalCorrect / subCal.totalAttempted) * 100)
+        : 0;
+    subCal.isUnlocked = subCal.totalAttempted >= 150;
+    subCal.attemptsToUnlock = Math.max(0, 150 - subCal.totalAttempted);
+    subCal.unlockProgress = Math.min(100, Math.round((subCal.totalAttempted / 150) * 100));
+    subCal.testsCount = testIdsBySubject.get(key)?.size || (subCal.totalAttempted > 0 ? 1 : 0);
   });
 
   const allTopics: TopicMastery[] = [];
@@ -583,6 +880,7 @@ export function computeAnalyticsFromAttempts(
       confidence: readinessConfidence,
       reasoning: readinessReasoning,
     },
+    subjectCalibration: Object.fromEntries(subjectMap),
   };
 }
 
