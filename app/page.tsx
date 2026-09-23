@@ -24,7 +24,7 @@ export default function HomePage() {
   const { t } = useTranslation();
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
-  const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name);
+  const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name && user?.id !== "guest");
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
   const scrollToDemo = (e: React.MouseEvent<HTMLAnchorElement>) => {

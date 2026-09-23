@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   Flame,
   Zap,
@@ -30,7 +30,6 @@ import { useTranslation } from "@/lib/i18n/LanguageContext";
 export default function Navbar() {
   const { t } = useTranslation();
   const pathname = usePathname();
-  const router = useRouter();
   const isClient = useIsClient();
   const isHomepage = pathname === "/";
   const isDashboard = pathname === "/dashboard";
@@ -43,7 +42,29 @@ export default function Navbar() {
   const [onboardingOpen, setOnboardingOpen] = useState(false);
   const [onboardingMode, setOnboardingMode] = useState<"signup" | "login">("signup");
 
-  const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name);
+  const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name && user?.id !== "guest");
+
+  // Verify authentic Supabase session state and listen for sign-outs
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session && user?.isLoggedIn) {
+        logout();
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT" || !session) {
+        logout();
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [user?.isLoggedIn, logout]);
 
   // Safe defaults
   const streak = isClient && isLoggedIn ? user.dailyStreak : 0;
@@ -73,8 +94,7 @@ export default function Navbar() {
     logout();
     setProfileDropdownOpen(false);
     setMobileMenuOpen(false);
-    router.push("/");
-    router.refresh();
+    window.location.href = "/";
   };
 
   if (pathname.startsWith("/test/") || pathname === "/dashboard") return null;

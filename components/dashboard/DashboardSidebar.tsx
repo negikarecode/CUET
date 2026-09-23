@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   GraduationCap,
   Sparkles,
@@ -27,14 +27,13 @@ import { useTranslation } from "@/lib/i18n/LanguageContext";
 export default function DashboardSidebar() {
   const { t } = useTranslation();
   const pathname = usePathname();
-  const router = useRouter();
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
   const logout = useTestStore((state) => state.logout);
 
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
-  const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name);
+  const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name && user?.id !== "guest");
   const streak = isClient && isLoggedIn ? user.dailyStreak : 1;
   const xp = isClient && isLoggedIn ? user.xpPoints : 0;
   const userName = isClient && isLoggedIn && user.name ? user.name : "CUET Aspirant";
@@ -59,8 +58,7 @@ export default function DashboardSidebar() {
     }
     logout();
     setMobileDrawerOpen(false);
-    router.push("/");
-    router.refresh();
+    window.location.href = "/";
   };
 
   const navItems = [

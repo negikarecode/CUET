@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -75,22 +75,6 @@ export default function DashboardClient({
   const [radarTab, setRadarTab] = useState<"weaknesses" | "strengths" | "all">("weaknesses");
 
   const isServerUser = initialData.user && initialData.user.id !== "guest";
-
-  // Synchronize client store with authenticated database profile
-  useEffect(() => {
-    if (isServerUser && storeUser.id !== initialData.user.id) {
-      useTestStore.getState().loginUser({
-        id: initialData.user.id,
-        name: initialData.user.fullName,
-        targetCollege: initialData.user.targetCollege,
-        targetUniversity: initialData.user.targetUniversity,
-        preferredStream: (initialData.user.targetStream?.toLowerCase() || "commerce") as any,
-        xpPoints: initialData.user.xp,
-        campusCoins: initialData.user.campusCoins,
-        dailyStreak: initialData.user.currentStreak,
-      });
-    }
-  }, [isServerUser, initialData.user.id, initialData.user.fullName, storeUser.id]);
 
   // Merge client attempts strictly when belonging to the active user
   const hasClientAttempts =
