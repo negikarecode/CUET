@@ -53,26 +53,26 @@ export function ScoreTrend({
       case "improving":
         return {
           icon: <TrendingUp className="h-4 w-4 text-emerald-600" />,
-          label: "Improving Trajectory 🚀",
+          label: "Improving Trajectory ",
           className: "bg-emerald-50 text-emerald-800 border-emerald-200",
         };
       case "declining":
         return {
           icon: <TrendingDown className="h-4 w-4 text-rose-600" />,
-          label: "Dip Detected ⚠️",
+          label: "Dip Detected ",
           className: "bg-rose-50 text-rose-800 border-rose-200",
         };
       case "stable":
         return {
           icon: <Minus className="h-4 w-4 text-blue-600" />,
-          label: "Consistent Performance 🎯",
+          label: "Consistent Performance ",
           className: "bg-blue-50 text-blue-800 border-blue-200",
         };
       case "first_test":
       default:
         return {
           icon: <Award className="h-4 w-4 text-indigo-600" />,
-          label: "Baseline Established ⭐",
+          label: "Baseline Established ",
           className: "bg-indigo-50 text-indigo-800 border-indigo-200",
         };
     }

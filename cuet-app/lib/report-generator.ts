@@ -97,7 +97,7 @@ export async function generateFullAnalysis(
 
     // ─── STEP 4: GENERATE AI REPORT ───────────────
     let aiContent: any = {
-      coaching_message: `${student?.name || 'Aspirant'}, you scored ${metrics.raw_score}/${metrics.max_possible_score} marks with ${metrics.accuracy_rate}% accuracy. Emergency Provisions aur Fundamental Rights mein improvement dikh rahi hai, but Money & Banking needs active revision before exam day! Keep the momentum going! — CUETBot 🤖`,
+      coaching_message: `${student?.name || 'Aspirant'}, you scored ${metrics.raw_score}/${metrics.max_possible_score} marks with ${metrics.accuracy_rate}% accuracy. Emergency Provisions aur Fundamental Rights mein improvement dikh rahi hai, but Money & Banking needs active revision before exam day! Keep the momentum going! — CUETBot`,
       strengths: [
         `High accuracy in ${metrics.subject_breakdown[0]?.subject_name || 'General Domain'} (${metrics.subject_breakdown[0]?.accuracy || 85}%)`,
         `Managed good speed on easy questions (~${metrics.difficulty_breakdown.easy.avg_time || 28}s per question)`,
@@ -137,7 +137,7 @@ export async function generateFullAnalysis(
       exam_strategy: 'In the actual CUET paper, aim to clear the first 25 easy questions in 20 minutes. Keep a strict 45-second cap on difficult calculations.',
       time_strategy: `You spent an average of ${metrics.avg_time_wrong}s on wrong answers, resulting in ${Math.round(metrics.time_wasted_seconds / 60)} minutes wasted. Skip faster to safeguard high-confidence questions.`,
       mistake_insight: `Your ${metrics.mistake_patterns.careless_mistakes} careless mistakes resulted in a total penalty of -${metrics.mistake_patterns.careless_mistakes * 6} marks. Read question stems with care.`,
-      motivational_quote: '"CUET jita wahi hai jo galtiyon se seekhta hai aur har mock mein behtar banta hai." — CUETBot 🤖',
+      motivational_quote: '"CUET jita wahi hai jo galtiyon se seekhta hai aur har mock mein behtar banta hai." — CUETBot',
       next_mock_goal: `Target: ${Math.min(200, metrics.raw_score + 15)} marks on next mock by fixing high-frequency errors.`,
     };
 

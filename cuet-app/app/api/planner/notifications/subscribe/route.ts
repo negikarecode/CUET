@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     // Send immediate test welcome notification
     sendPushNotification(studentId, {
-      title: '🔔 Notifications Enabled!',
+      title: 'Notifications Enabled!',
       body: `You'll get daily study reminders at ${study_reminder_time.substring(0, 5)} AM/PM.`,
       url: '/planner',
       tag: 'welcome-notification',

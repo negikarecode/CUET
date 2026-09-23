@@ -9,12 +9,12 @@ interface StreakCounterProps {
 
 export default function StreakCounter({ streak }: StreakCounterProps) {
   const MILESTONES = [
-    { days: 3, label: '3d', emoji: '🌱' },
-    { days: 7, label: '7d', emoji: '🎯' },
-    { days: 14, label: '14d', emoji: '🔥' },
-    { days: 21, label: '21d', emoji: '⚡' },
-    { days: 30, label: '30d', emoji: '🌟' },
-    { days: 60, label: '60d', emoji: '👑' },
+    { days: 3, label: '3d', emoji: '' },
+    { days: 7, label: '7d', emoji: '' },
+    { days: 14, label: '14d', emoji: '' },
+    { days: 21, label: '21d', emoji: '' },
+    { days: 30, label: '30d', emoji: '' },
+    { days: 60, label: '60d', emoji: '' },
   ];
 
   return (
@@ -22,7 +22,7 @@ export default function StreakCounter({ streak }: StreakCounterProps) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
           <span className="text-2xl select-none" role="img" aria-label="streak emoji">
-            {streak.streak_emoji || '🔥'}
+            {streak.streak_emoji || ''}
           </span>
           <div>
             <div className="flex items-center gap-2">

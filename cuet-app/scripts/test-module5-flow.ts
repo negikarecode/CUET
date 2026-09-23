@@ -13,7 +13,7 @@ import { generatePerformancePDF } from '../lib/pdf-generator';
 
 async function runModule5Tests() {
   console.log('================================================================');
-  console.log('🚀 TESTING MODULE 5: AI PERFORMANCE ANALYZER ENGINE & INTEGRATIONS');
+  console.log('TESTING MODULE 5: AI PERFORMANCE ANALYZER ENGINE & INTEGRATIONS');
   console.log('================================================================\n');
 
   let passed = 0;
@@ -22,10 +22,10 @@ async function runModule5Tests() {
   function assert(condition: boolean, testName: string) {
     total++;
     if (condition) {
-      console.log(`✅ TEST ${total}: ${testName}`);
+      console.log(`TEST ${total}: ${testName}`);
       passed++;
     } else {
-      console.error(`❌ TEST ${total} FAILED: ${testName}`);
+      console.error(`TEST ${total} FAILED: ${testName}`);
     }
   }
 
@@ -241,13 +241,13 @@ async function runModule5Tests() {
   // Final Test Summary
   // ----------------------------------------------------
   console.log('\n================================================================');
-  console.log(`📊 MODULE 5 TEST RESULTS: ${passed}/${total} TESTS PASSED (${Math.round((passed / total) * 100)}%)`);
+  console.log(`MODULE 5 TEST RESULTS: ${passed}/${total} TESTS PASSED (${Math.round((passed / total) * 100)}%)`);
   console.log('================================================================\n');
 
   if (passed === total) {
-    console.log('🎉 ALL MODULE 5 TESTS PASSED WITH 100% SUCCESS!\n');
+    console.log('ALL MODULE 5 TESTS PASSED WITH 100% SUCCESS!\n');
   } else {
-    console.error('⚠️ Some tests failed. Please inspect the output above.');
+    console.error('Some tests failed. Please inspect the output above.');
     process.exit(1);
   }
 }

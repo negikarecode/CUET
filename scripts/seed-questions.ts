@@ -418,7 +418,7 @@ async function main() {
   const questionsList = Array.from(questionsMap.values());
   const testQuestionsList = Array.from(testQuestionsMap.values());
 
-  console.log(`${c.green}✓${c.reset} Parsing and deduplication complete:`);
+  console.log(`${c.green}${c.reset} Parsing and deduplication complete:`);
   console.log(`  • Tests to upsert:          ${c.bold}${testsList.length}${c.reset}`);
   console.log(`  • Unique Questions:         ${c.bold}${questionsList.length}${c.reset} (from ${totalParsedQuestions} raw entries)`);
   console.log(`  • Test-Question Junctions:  ${c.bold}${testQuestionsList.length}${c.reset}\n`);

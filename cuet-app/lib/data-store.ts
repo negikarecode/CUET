@@ -138,10 +138,10 @@ DPSPs are classified as Socialistic, Gandhian, and Liberal-Intellectual principl
 
 
 export const SEED_SUBJECTS: Subject[] = [
-  { id: 1, name: "Political Science", code: "POL", color: "#dc2626", icon: "🏛️", total_chapters: 10 },
-  { id: 2, name: "History", code: "HIS", color: "#b45309", icon: "📜", total_chapters: 12 },
-  { id: 3, name: "Economics", code: "ECO", color: "#16a34a", icon: "📊", total_chapters: 9 },
-  { id: 4, name: "English", code: "ENG", color: "#7c3aed", icon: "📖", total_chapters: 8 },
+  { id: 1, name: "Political Science", code: "POL", color: "#dc2626", icon: "Landmark", total_chapters: 10 },
+  { id: 2, name: "History", code: "HIS", color: "#b45309", icon: "ScrollText", total_chapters: 12 },
+  { id: 3, name: "Economics", code: "ECO", color: "#16a34a", icon: "TrendingUp", total_chapters: 9 },
+  { id: 4, name: "English", code: "ENG", color: "#7c3aed", icon: "BookOpen", total_chapters: 8 },
 ];
 
 export const SEED_CHAPTERS: Chapter[] = [

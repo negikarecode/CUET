@@ -399,7 +399,7 @@ async function main() {
       validatedQuestions.push(q);
     } else {
       invalidCount++;
-      console.warn(`  ${colors.red}✗ Question #${idx + 1} validation failed:${colors.reset} ${errors.join("; ")}`);
+      console.warn(`  ${colors.red}Question #${idx + 1} validation failed:${colors.reset} ${errors.join("; ")}`);
     }
   });
 

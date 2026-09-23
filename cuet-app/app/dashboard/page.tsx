@@ -60,7 +60,7 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Welcome back, {student?.name || "Aspirant"}! 👋
+              Welcome back, {student?.name || "Aspirant"}! 
             </h1>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -132,17 +132,17 @@ export default function DashboardPage() {
           <div className="space-y-1.5 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <Badge className="bg-indigo-500/30 text-indigo-300 border-indigo-400/40 text-[11px] font-bold uppercase tracking-wider">
-                📅 Day {plannerData?.day_number || 1} • Today&apos;s Plan
+                Day {plannerData?.day_number || 1} • Today&apos;s Plan
               </Badge>
               {plannerData?.streak?.current !== undefined && (
                 <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">
-                  🔥 {plannerData.streak.current} Day Streak
+                  {plannerData.streak.current} Day Streak
                 </span>
               )}
             </div>
             <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
               {plannerData?.completion?.is_day_complete
-                ? "🎉 Today's Study Plan Completed!"
+                ? "Today's Study Plan Completed!"
                 : plannerData?.tasks?.find((t: any) => t.status !== "completed")?.title
                 ? `Next up: ${plannerData.tasks.find((t: any) => t.status !== "completed").title}`
                 : "Your Personalized Plan is Ready!"}
@@ -265,7 +265,7 @@ export default function DashboardPage() {
 
         <div className="p-4 rounded-xl bg-white border border-slate-200">
           <span className="text-xs font-bold text-slate-400 block uppercase">Study Streak</span>
-          <span className="text-2xl font-black text-amber-600 mt-1 block">5 Days 🔥</span>
+          <span className="text-2xl font-black text-amber-600 mt-1 block">5 Days </span>
           <span className="text-[11px] text-slate-500">Active engagement</span>
         </div>
 
@@ -321,7 +321,7 @@ export default function DashboardPage() {
             >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center font-bold text-indigo-600">
-                  ✓
+                  
                 </div>
                 <div>
                   <span className="font-bold text-slate-900 block">{act.topic}</span>

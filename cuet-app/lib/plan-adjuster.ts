@@ -75,7 +75,7 @@ export async function adjustPlanForTomorrow(
       completionRate: 1.0,
       rescheduledCount: 0,
       streakUpdated: true,
-      statusMessage: `Amazing work! 100% completed today. Streak is now ${streak.current_streak} days. 🔥`,
+      statusMessage: `Amazing work! 100% completed today. Streak is now ${streak.current_streak} days.`,
     };
   }
 

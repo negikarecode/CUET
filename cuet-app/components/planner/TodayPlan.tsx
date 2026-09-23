@@ -174,7 +174,7 @@ export default function TodayPlan() {
 
         <div className="space-y-2">
           <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-            🎓 You Don&apos;t Have a Study Plan Yet!
+            You Don&apos;t Have a Study Plan Yet!
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
             Let our AI build a personalized day-by-day CUET preparation plan based on your verified weakness scores, target college, and exam countdown.
@@ -205,7 +205,7 @@ export default function TodayPlan() {
           disabled={isGenerating}
           className="px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-xl shadow-indigo-500/25 transition active:scale-95 disabled:opacity-50"
         >
-          {isGenerating ? 'Building Your Plan (~10s)...' : '🚀 Generate My Study Plan →'}
+          {isGenerating ? 'Building Your Plan (~10s)...' : 'Generate My Study Plan →'}
         </button>
       </div>
     );
@@ -302,7 +302,7 @@ export default function TodayPlan() {
       {/* Daily Tip */}
       {data.daily_tip && (
         <div className="p-3 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 text-xs text-amber-900 dark:text-amber-300 flex items-center gap-2">
-          <span>💡 <strong>Today&apos;s Tip:</strong> {data.daily_tip}</span>
+          <span><strong>Today&apos;s Tip:</strong> {data.daily_tip}</span>
         </div>
       )}
 

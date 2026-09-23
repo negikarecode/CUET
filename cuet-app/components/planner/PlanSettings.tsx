@@ -89,7 +89,7 @@ export default function PlanSettings({
           }),
         });
 
-        alert('🔔 Push notifications enabled successfully!');
+        alert('Push notifications enabled successfully!');
       } else {
         alert('Notification permission was denied in your browser settings.');
       }
@@ -104,7 +104,7 @@ export default function PlanSettings({
     <div className="max-w-3xl mx-auto space-y-6">
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
         <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">
-          ⚙️ Study Plan Preferences
+          Study Plan Preferences
         </h2>
 
         {/* Section 1: Exam Details */}
@@ -230,7 +230,7 @@ export default function PlanSettings({
             disabled={isSubscribing}
             className="w-full py-2.5 px-4 rounded-xl border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 font-semibold text-xs hover:bg-indigo-100 transition"
           >
-            {isSubscribing ? 'Subscribing...' : '🔔 Enable Browser Push Notifications'}
+            {isSubscribing ? 'Subscribing...' : 'Enable Browser Push Notifications'}
           </button>
         </div>
 

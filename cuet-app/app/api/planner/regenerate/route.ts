@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     }
 
     sendPushNotification(student.id, {
-      title: '🔄 Study Plan Rebuilt!',
+      title: 'Study Plan Rebuilt!',
       body: 'Your plan has been updated with fresh priorities and schedule.',
       url: '/planner',
       tag: 'plan-regenerated',

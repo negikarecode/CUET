@@ -84,9 +84,9 @@ export function TopicBreakdown({ topics = [] }: TopicBreakdownProps) {
             className="text-xs rounded-xl border border-slate-200 py-1.5 px-3 bg-white font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="all">All Signals</option>
-            <option value="critical">🚨 Critical Only</option>
-            <option value="weak">⚠️ Needs Work</option>
-            <option value="strong">✅ Mastered</option>
+            <option value="critical">Critical Only</option>
+            <option value="weak">Needs Work</option>
+            <option value="strong">Mastered</option>
           </select>
         </div>
       </div>

@@ -29,7 +29,7 @@ export function RecommendationBox({ recommendations, totalAttempts = 0 }: Recomm
           </div>
           <div>
             <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              🎯 AI Recommends — Focus on These Today
+              AI Recommends — Focus on These Today
             </h3>
             <p className="text-xs text-indigo-200">
               Personalized algorithm analyzing high-yield CUET topics with low student mastery
@@ -64,7 +64,7 @@ export function RecommendationBox({ recommendations, totalAttempts = 0 }: Recomm
                       ? "bg-indigo-500/40 text-amber-300 border border-indigo-400/40"
                       : "bg-slate-700/60 text-slate-300"
                   }`}>
-                    {rec.has_ai_content !== false ? "🤖 AI Personalized" : "📝 Standard Practice"}
+                    {rec.has_ai_content !== false ? "AI Personalized" : "Standard Practice"}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-indigo-200 mt-1">
@@ -73,7 +73,7 @@ export function RecommendationBox({ recommendations, totalAttempts = 0 }: Recomm
                   <span className="flex items-center gap-1 font-semibold text-indigo-100">
                     <Target className="w-3 h-3 text-amber-300" />
                     {rec.has_ai_content !== false
-                      ? `🤖 ${rec.questions_ready} AI questions ready`
+                      ? `${rec.questions_ready} AI questions ready`
                       : `${rec.questions_ready} questions ready`}
                   </span>
                   <span>•</span>

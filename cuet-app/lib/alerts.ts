@@ -15,7 +15,7 @@ export function generateSmartAlerts(scores: WeaknessScore[]): Alert[] {
       alerts.push({
         id: alertId++,
         type: 'critical_weakness',
-        title: `🔴 Urgent: ${topicName} needs immediate attention`,
+        title: `Urgent: ${topicName} needs immediate attention`,
         message: `Your accuracy in ${topicName} is only ${score.accuracy_score}%. Practice 10 questions today to raise your score above the critical zone.`,
         action_text: 'Fix This First →',
         action_url: `/practice/${score.topic_id}`,
@@ -29,7 +29,7 @@ export function generateSmartAlerts(scores: WeaknessScore[]): Alert[] {
       alerts.push({
         id: alertId++,
         type: 'neglected_topic',
-        title: `⚠️ ${topicName} not practiced in ${daysSinceLast} days!`,
+        title: `${topicName} not practiced in ${daysSinceLast} days!`,
         message: `Retention drops by 40% after 4 days without revision. Spend 15 minutes reviewing key concepts.`,
         action_text: 'Quick Revision →',
         action_url: `/practice/${score.topic_id}`,
@@ -43,7 +43,7 @@ export function generateSmartAlerts(scores: WeaknessScore[]): Alert[] {
       alerts.push({
         id: alertId++,
         type: 'speed_warning',
-        title: `⏱️ Speed Alert in ${topicName}`,
+        title: `Speed Alert in ${topicName}`,
         message: `You're taking ${Math.round(score.avg_time_seconds)}s per question on average. CUET target is 45s. Practice time-management drills.`,
         action_text: 'Speed Drill →',
         action_url: `/practice/${score.topic_id}`,

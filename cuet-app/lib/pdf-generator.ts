@@ -99,7 +99,7 @@ export function generatePerformancePDF(params: {
   doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...primaryColor);
-  doc.text('🤖 AI COACH PERSONALIZED DIAGNOSIS', 20, coachY + 8);
+  doc.text('AI COACH PERSONALIZED DIAGNOSIS', 20, coachY + 8);
 
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
@@ -254,7 +254,7 @@ export function generatePerformancePDF(params: {
   doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(22, 101, 52); // Emerald 800
-  doc.text('🎯 OFFICIAL CUET PREDICTION & TARGET COLLEGES', 20, predBoxY + 8);
+  doc.text('OFFICIAL CUET PREDICTION & TARGET COLLEGES', 20, predBoxY + 8);
 
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');

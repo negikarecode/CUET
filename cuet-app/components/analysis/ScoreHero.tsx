@@ -71,7 +71,7 @@ export function ScoreHero({
   }, [rawScore, isImproved, isPersonalBest]);
 
   const handleShare = async () => {
-    const text = `🎯 I just scored ${rawScore}/${maxScore} (${percentage}%) in CUET Mock Test #${testNumber}! Targeting Delhi University. Check out my performance report 🚀`;
+    const text = `I just scored ${rawScore}/${maxScore} (${percentage}%) in CUET Mock Test #${testNumber}! Targeting Delhi University. Check out my performance report `;
     if (navigator.share) {
       try {
         await navigator.share({ title: `CUET Mock #${testNumber} Result`, text });
@@ -92,19 +92,19 @@ export function ScoreHero({
       <div className="flex flex-col items-center justify-center gap-2">
         {isPersonalBest ? (
           <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 text-xs sm:text-sm font-black px-3.5 py-1 rounded-full gap-1.5 shadow-xs">
-            🎉 New Personal Best Score!
+            New Personal Best Score!
           </Badge>
         ) : isImproved ? (
           <Badge className="bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 border-indigo-300 dark:border-indigo-800 text-xs sm:text-sm font-bold px-3.5 py-1 rounded-full gap-1.5">
-            📈 Score Improved by +{scoreVsLast} Marks!
+            Score Improved by +{scoreVsLast} Marks!
           </Badge>
         ) : isFirstTest ? (
           <Badge className="bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 border-indigo-300 dark:border-indigo-800 text-xs sm:text-sm font-bold px-3.5 py-1 rounded-full gap-1.5">
-            🎓 First Full Mock Test Complete!
+            First Full Mock Test Complete!
           </Badge>
         ) : (
           <Badge className="bg-amber-500/15 text-amber-800 dark:text-amber-400 border-amber-300 dark:border-amber-800 text-xs font-bold px-3.5 py-1 rounded-full gap-1.5">
-            ⚠️ {Math.abs(scoreVsLast)} Marks Below Last Mock — Let&apos;s Review
+            {Math.abs(scoreVsLast)} Marks Below Last Mock — Let&apos;s Review
           </Badge>
         )}
 

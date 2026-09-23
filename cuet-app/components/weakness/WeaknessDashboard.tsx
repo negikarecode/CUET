@@ -76,7 +76,7 @@ export function WeaknessDashboard({
     return (
       <div className="w-full max-w-xl mx-auto my-12 p-8 bg-white border border-slate-200 rounded-2xl text-center shadow-sm space-y-5">
         <div className="w-16 h-16 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center mx-auto text-3xl">
-          🎯
+          
         </div>
         <div>
           <h3 className="text-xl font-bold text-slate-900">
@@ -117,7 +117,7 @@ export function WeaknessDashboard({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-2xl">⚡</span>
+            <span className="text-2xl"></span>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               AI Weakness Detector
             </h1>

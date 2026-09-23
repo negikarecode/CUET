@@ -28,12 +28,12 @@ export function getStreakStatus(streak: {
 }
 
 export function getStreakEmoji(streak: number): string {
-  if (streak === 0) return '💔';
-  if (streak < 3) return '🌱';
-  if (streak < 7) return '🔥';
-  if (streak < 14) return '⚡';
-  if (streak < 30) return '🌟';
-  return '👑';
+  if (streak === 0) return '';
+  if (streak < 3) return 'Zap';
+  if (streak < 7) return 'Flame';
+  if (streak < 14) return 'Zap';
+  if (streak < 30) return 'Award';
+  return 'Crown';
 }
 
 export function getStreakMessage(
@@ -44,21 +44,21 @@ export function getStreakMessage(
   const firstName = studentName ? studentName.split(' ')[0] : 'Champion';
   
   if (status === 'broken') {
-    return `Start fresh today, ${firstName}! Every expert had a Day 1. 💪`;
+    return `Start fresh today, ${firstName}! Every expert had a Day 1.`;
   }
   
   if (status === 'at_risk') {
-    return `Study today to keep your ${streak}-day streak alive! ⚡`;
+    return `Study today to keep your ${streak}-day streak alive!`;
   }
   
-  if (streak === 1) return 'First day! Keep it up! 🌱';
-  if (streak === 3) return '3 days! Building a solid habit! 🎯';
-  if (streak === 7) return '1 WEEK! You\'re on fire! 🔥';
-  if (streak === 14) return '2 weeks strong! Amazing consistency! ⚡';
-  if (streak === 21) return '3 weeks! This is a lifestyle now! 🌟';
-  if (streak >= 30) return `${streak} DAYS! Absolute legend! 👑`;
+  if (streak === 1) return 'First day! Keep it up!';
+  if (streak === 3) return '3 days! Building a solid habit!';
+  if (streak === 7) return '1 WEEK! You are doing amazing!';
+  if (streak === 14) return '2 weeks strong! Amazing consistency!';
+  if (streak === 21) return '3 weeks! This is a lifestyle now!';
+  if (streak >= 30) return `${streak} DAYS! Absolute legend!`;
   
-  return `${streak} days in a row! Stay consistent! 💪`;
+  return `${streak} days in a row! Stay consistent!`;
 }
 
 export function getNextMilestone(current: number): number | null {

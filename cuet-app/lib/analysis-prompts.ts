@@ -175,7 +175,7 @@ YOUR TASK - Generate report in JSON format:
   "exam_strategy": "2-3 sentences of concrete CUET exam strategy based on THIS student's numbers.",
   "time_strategy": "1-2 sentences about their specific time management issue.",
   "mistake_insight": "1-2 sentences about their biggest mistake pattern and marks lost.",
-  "motivational_quote": "One short motivational quote in Hindi or Hinglish tailored to their trajectory. End with: — CUETBot 🤖",
+  "motivational_quote": "One short motivational quote in Hindi or Hinglish tailored to their trajectory. End with: — CUETBot",
   "next_mock_goal": "One specific measurable target for next mock test (e.g. Target: ${Math.min(200, metrics.raw_score + 15)} marks by fixing X + Y)."
 }
 

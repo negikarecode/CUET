@@ -4,7 +4,7 @@ import { GET as getDashboard } from "../app/api/weakness/dashboard/route";
 
 async function runApiTest() {
   console.log("=================================================");
-  console.log("🚀 TESTING END-TO-END API ATTEMPTS & DASHBOARD");
+  console.log("TESTING END-TO-END API ATTEMPTS & DASHBOARD");
   console.log("=================================================");
 
   AppDataStore.initialize();
@@ -78,7 +78,7 @@ async function runApiTest() {
   }
 
   console.log("\n=================================================");
-  console.log("✅ FULL END-TO-END FLOW VERIFIED SUCCESSFULLY!");
+  console.log("FULL END-TO-END FLOW VERIFIED SUCCESSFULLY!");
   console.log("=================================================");
 }
 

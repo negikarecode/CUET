@@ -59,7 +59,7 @@ export function SessionSummary({
 
       <div>
         <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-          Session Completed! 🎉
+          Session Completed! 
         </h2>
         <p className="text-sm sm:text-base text-slate-500 mt-1 font-medium">
           Practice report for <span className="font-bold text-slate-800">{topicName}</span>
@@ -104,7 +104,7 @@ export function SessionSummary({
           {wrongCount} Wrong
         </span>
         <span className="flex items-center gap-1.5 text-slate-500">
-          ⏭️ {skippedCount} Skipped
+          {skippedCount} Skipped
         </span>
       </div>
 

@@ -6,7 +6,7 @@ import { AppDataStore } from '../lib/data-store';
 
 async function runModule3Tests() {
   console.log('====================================================');
-  console.log('🚀 TESTING MODULE 3: AI DOUBT SOLVER CHATBOT FLOW');
+  console.log('TESTING MODULE 3: AI DOUBT SOLVER CHATBOT FLOW');
   console.log('====================================================\n');
 
   let passed = 0;
@@ -15,10 +15,10 @@ async function runModule3Tests() {
   function assert(condition: boolean, testName: string) {
     total++;
     if (condition) {
-      console.log(`✅ TEST ${total}: ${testName}`);
+      console.log(`TEST ${total}: ${testName}`);
       passed++;
     } else {
-      console.error(`❌ TEST ${total} FAILED: ${testName}`);
+      console.error(`TEST ${total} FAILED: ${testName}`);
     }
   }
 
@@ -166,14 +166,14 @@ async function runModule3Tests() {
   );
 
   console.log('\n====================================================');
-  console.log(`📊 TEST SUMMARY: ${passed} / ${total} TESTS PASSED`);
+  console.log(`TEST SUMMARY: ${passed} / ${total} TESTS PASSED`);
   console.log('====================================================\n');
 
   if (passed === total) {
-    console.log('🎉 ALL MODULE 3 FUNCTIONAL TESTS PASSED SUCCESSFULLY!');
+    console.log('ALL MODULE 3 FUNCTIONAL TESTS PASSED SUCCESSFULLY!');
     process.exit(0);
   } else {
-    console.error('❌ SOME TESTS FAILED');
+    console.error('SOME TESTS FAILED');
     process.exit(1);
   }
 }

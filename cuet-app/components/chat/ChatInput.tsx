@@ -48,21 +48,21 @@ export default function ChatInput({
           onClick={() => handleChipClick('ek practice MCQ pucho!')}
           className="px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-slate-800 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 font-medium transition"
         >
-          ⚡ Ask MCQ
+          Ask MCQ
         </button>
         <button
           type="button"
           onClick={() => handleChipClick('Hinglish me simple example ke saath samjhao')}
           className="px-2.5 py-1 rounded-full bg-purple-50 dark:bg-slate-800 hover:bg-purple-100 text-purple-700 dark:text-purple-300 font-medium transition"
         >
-          🗣️ Hinglish
+          Hinglish
         </button>
         <button
           type="button"
           onClick={() => handleChipClick('DU North campus ke liye cutoff aur safe score kya hai?')}
           className="px-2.5 py-1 rounded-full bg-amber-50 dark:bg-slate-800 hover:bg-amber-100 text-amber-700 dark:text-amber-300 font-medium transition"
         >
-          🎯 DU Cutoff
+          DU Cutoff
         </button>
       </div>
 

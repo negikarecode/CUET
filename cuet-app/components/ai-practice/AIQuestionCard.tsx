@@ -240,7 +240,7 @@ export function AIQuestionCard({
                 </div>
                 <div>
                   <h4 className="font-bold text-sm sm:text-base">
-                    {isCorrect ? "✅ Correct Answer! (+5 marks)" : "❌ Incorrect Answer (-1 mark)"}
+                    {isCorrect ? "Correct Answer! (+5 marks)" : "Incorrect Answer (-1 mark)"}
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed">
                     {explanation || "Refer to NCERT CUET preparation material for detailed review."}

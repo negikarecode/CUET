@@ -78,7 +78,7 @@ export default function CalendarView({ days = [], examDate = 'May 15, 2026' }: C
         </div>
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <span className="w-3 h-3 rounded bg-amber-500"></span>
-          <span>Exam Day 🎓</span>
+          <span>Exam Day </span>
         </div>
       </div>
 

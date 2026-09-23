@@ -8,7 +8,7 @@ import {
 import { StudentAttempt } from "../lib/types";
 
 console.log("=================================================");
-console.log("🧪 TESTING MODULE 1: AI WEAKNESS DETECTOR ENGINE");
+console.log("TESTING MODULE 1: AI WEAKNESS DETECTOR ENGINE");
 console.log("=================================================");
 
 // TEST 1: Accuracy verification (3 / 10 correct = 30%)
@@ -62,5 +62,5 @@ console.log(`[TEST 5B] Weakness Level for score 38 -> '${criticalLevel}' (Expect
 if (criticalLevel !== "critical") throw new Error(`Critical level mismatch`);
 
 console.log("=================================================");
-console.log("✅ ALL WEAKNESS ENGINE TESTS PASSED PERFECTLY!");
+console.log("ALL WEAKNESS ENGINE TESTS PASSED PERFECTLY!");
 console.log("=================================================");

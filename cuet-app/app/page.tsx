@@ -175,7 +175,7 @@ export default function LandingPage() {
             href="/planner"
             className="font-bold text-indigo-600 hover:text-indigo-800 underline underline-offset-4"
           >
-            📅 AI Study Planner (Mod 4) →
+            AI Study Planner (Mod 4) →
           </Link>
           <span className="text-slate-300">•</span>
           <Link
@@ -189,7 +189,7 @@ export default function LandingPage() {
             href="/chat"
             className="font-bold text-indigo-600 hover:text-indigo-800 underline underline-offset-4"
           >
-            💬 24/7 AI Doubt Solver (Mod 3) →
+            24/7 AI Doubt Solver (Mod 3) →
           </Link>
           <span className="text-slate-300">•</span>
           <Link
@@ -300,7 +300,7 @@ export default function LandingPage() {
                             : "bg-slate-50 border-slate-200 text-slate-600"
                         }`}
                       >
-                        ✓ {subj}
+                        {subj}
                       </button>
                     ))}
                   </div>

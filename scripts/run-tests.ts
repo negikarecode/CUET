@@ -17,10 +17,10 @@ function assert(condition: boolean, testName: string, detail?: string) {
   totalTests += 1;
   if (condition) {
     passedTests += 1;
-    console.log(`  ✅ PASS: ${testName}`);
+    console.log(`  PASS: ${testName}`);
   } else {
     failedTests += 1;
-    console.error(`  ❌ FAIL: ${testName}`);
+    console.error(`  FAIL: ${testName}`);
     if (detail) {
       console.error(`     Detail: ${detail}`);
     }
@@ -29,7 +29,7 @@ function assert(condition: boolean, testName: string, detail?: string) {
 
 async function runTestSuite() {
   console.log("===============================================================");
-  console.log("🚀 CUET UG 2026 PRODUCTION TEST SUITE & COMPLIANCE VERIFICATION");
+  console.log("CUET UG 2026 PRODUCTION TEST SUITE & COMPLIANCE VERIFICATION");
   console.log("===============================================================\n");
 
   const mockDir = path.join(process.cwd(), "mock");
@@ -50,7 +50,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE A & B: Question Schema & Answer Validation (11,000 Questions across 220 Mocks)
   // -------------------------------------------------------------
-  console.log("👉 SUITE A & B: Question Schema & Answer Validation");
+  console.log("SUITE A & B: Question Schema & Answer Validation");
 
   let totalQuestionsCount = 0;
   let optionCountErrors = 0;
@@ -165,7 +165,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE E: Answer Key Balance & Position Randomization
   // -------------------------------------------------------------
-  console.log("👉 SUITE E: Answer Key Balance (A/B/C/D Distribution across All 11 Subjects)");
+  console.log("SUITE E: Answer Key Balance (A/B/C/D Distribution across All 11 Subjects)");
 
   let severeSkewMocks = 0;
   const subjectDistribution: Record<string, Record<string, number>> = {};
@@ -230,7 +230,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE H: Subject Registry & Metadata Layer
   // -------------------------------------------------------------
-  console.log("👉 SUITE H: Subject Coverage & Registry");
+  console.log("SUITE H: Subject Coverage & Registry");
 
   assert(
     SUPPORTED_SUBJECT_KEYS.length === 20,
@@ -252,7 +252,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE J & K: Authoritative CUET UG 2026 Scoring (+5 / -1 / 0, Max Marks 250)
   // -------------------------------------------------------------
-  console.log("👉 SUITE J & K: Authoritative Exam Config & Scoring Engine");
+  console.log("SUITE J & K: Authoritative Exam Config & Scoring Engine");
 
   const config = getExamConfig("CUET_2026");
   assert(
@@ -285,7 +285,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE L: Wall-Clock Anchored Timer Validation
   // -------------------------------------------------------------
-  console.log("👉 SUITE L: Wall-Clock Timer Reliability");
+  console.log("SUITE L: Wall-Clock Timer Reliability");
 
   const now = Date.now();
   const durationSec = 3600;
@@ -304,7 +304,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE M: Security & Answer Key Sanitization
   // -------------------------------------------------------------
-  console.log("👉 SUITE M: Security & Answer Key Sanitization");
+  console.log("SUITE M: Security & Answer Key Sanitization");
 
   const mockQuestion: Question = {
     id: "sec-test-1",
@@ -358,7 +358,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE N: Payment Verification Fail-Closed Security
   // -------------------------------------------------------------
-  console.log("👉 SUITE N: Payment Verification Fail-Closed Policy");
+  console.log("SUITE N: Payment Verification Fail-Closed Policy");
 
   // Verify HMAC signature validation function
   const testSecret = "live_secret_key_sample_123456";
@@ -395,7 +395,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE O & P: Storage Quota & Storage Failure Handling
   // -------------------------------------------------------------
-  console.log("👉 SUITE O & P: Safe Storage Quota & Graceful Fallback");
+  console.log("SUITE O & P: Safe Storage Quota & Graceful Fallback");
 
   let quotaHandledGracefully = false;
   try {
@@ -425,7 +425,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE Q & R: Deterministic Analytics & Weakness Detection
   // -------------------------------------------------------------
-  console.log("👉 SUITE Q & R: Deterministic Analytics Pipeline & AI Fallback");
+  console.log("SUITE Q & R: Deterministic Analytics Pipeline & AI Fallback");
 
   const sampleAttempt: RecordedTestAttempt = {
     id: "sample-test-uuid-1",
@@ -508,7 +508,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE S: Mock Blueprint Engine & Generator Validation
   // -------------------------------------------------------------
-  console.log("👉 SUITE S: Mock Blueprint Engine & Generator");
+  console.log("SUITE S: Mock Blueprint Engine & Generator");
 
   const rawMock = JSON.parse(
     fs.readFileSync(path.join(mockDir, "physics/1.json"), "utf-8")
@@ -558,7 +558,7 @@ async function runTestSuite() {
   // -------------------------------------------------------------
   // SUITE T: Case Study & Passage UX Parser Validation
   // -------------------------------------------------------------
-  console.log("👉 SUITE T: Case-Based / Passage UX Parsing");
+  console.log("SUITE T: Case-Based / Passage UX Parsing");
 
   const samplePassagePrompt = `Read the following passage carefully and answer the questions that follow:
 
@@ -583,7 +583,7 @@ What is the immediate impact on commercial banks when RBI increases the repo rat
 
   console.log();
   console.log("===============================================================");
-  console.log(`📊 FINAL TEST SUITE SUMMARY: ${passedTests} / ${totalTests} PASSED (${failedTests} FAILED)`);
+  console.log(`FINAL TEST SUITE SUMMARY: ${passedTests} / ${totalTests} PASSED (${failedTests} FAILED)`);
   console.log("===============================================================");
 
   if (failedTests > 0) {

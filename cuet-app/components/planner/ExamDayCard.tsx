@@ -22,7 +22,7 @@ export default function ExamDayCard() {
             D-DAY HAS ARRIVED
           </span>
           <h2 className="text-2xl sm:text-3xl font-black mt-1">
-            Today is Your Day to Shine! 🎓
+            Today is Your Day to Shine! 
           </h2>
         </div>
       </div>

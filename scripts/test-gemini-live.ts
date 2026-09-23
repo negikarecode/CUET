@@ -19,10 +19,10 @@ function assert(condition: boolean, title: string, detail?: string) {
   totalAssertions += 1;
   if (condition) {
     passedAssertions += 1;
-    console.log(`  ✅ [PASS] ${title}`);
+    console.log(`  [PASS] ${title}`);
   } else {
     failedAssertions += 1;
-    console.error(`  ❌ [FAIL] ${title}`);
+    console.error(`  [FAIL] ${title}`);
     if (detail) {
       console.error(`     Detail: ${detail}`);
     }
@@ -86,23 +86,23 @@ async function createTestServer(): Promise<http.Server> {
 
 async function runLiveVerification() {
   console.log("================================================================================");
-  console.log("🚀 CUET AI DIAGNOSTIC ENGINE: PRODUCTION GEMINI 2.0 FLASH LIVE VERIFICATION");
+  console.log("CUET AI DIAGNOSTIC ENGINE: PRODUCTION GEMINI 2.0 FLASH LIVE VERIFICATION");
   console.log("================================================================================\n");
 
   const apiKey = process.env.GEMINI_API_KEY;
-  console.log(`🔑 Gemini API Key configured: ${apiKey ? `[Configured: ${apiKey.slice(0, 8)}...${apiKey.slice(-4)}]` : "[MISSING]"}`);
+  console.log(`Gemini API Key configured: ${apiKey ? `[Configured: ${apiKey.slice(0, 8)}...${apiKey.slice(-4)}]` : "[MISSING]"}`);
   assert(Boolean(apiKey && !apiKey.includes("placeholder")), "API Key is valid and non-placeholder");
 
-  console.log(`📡 Starting local test HTTP harness on port ${PORT}...`);
+  console.log(`Starting local test HTTP harness on port ${PORT}...`);
   const server = await createTestServer();
-  console.log(`✅ Harness listening at ${BASE_URL}\n`);
+  console.log(`Harness listening at ${BASE_URL}\n`);
 
   try {
     // ──────────────────────────────────────────────────────────────────────────
     // TEST 1: LIVE DIAGNOSTIC CALL (CACHE MISS / GEMINI API INVOCATION)
     // ──────────────────────────────────────────────────────────────────────────
     console.log("────────────────────────────────────────────────────────────────────────────────");
-    console.log("👉 STEP 1: Live Diagnostic Call with Sample CUET Mock Telemetry");
+    console.log("STEP 1: Live Diagnostic Call with Sample CUET Mock Telemetry");
     console.log("   Topic: Accountancy / Partnership Fundamentals (Loan Interest Trap)");
     console.log("────────────────────────────────────────────────────────────────────────────────");
 
@@ -117,7 +117,7 @@ async function runLiveVerification() {
     assert(res1.status === 200, "Request 1 returns HTTP status 200", `Got status ${res1.status}`);
 
     const body1 = (await res1.json()) as MistakeDiagnosticResult;
-    console.log(`   ⏱️  Request 1 latency: ${t1Duration}ms | X-Cache: ${res1.headers.get("X-Cache")} | Tokens: ${res1.headers.get("X-Tokens-Used")}`);
+    console.log(`    Request 1 latency: ${t1Duration}ms | X-Cache: ${res1.headers.get("X-Cache")} | Tokens: ${res1.headers.get("X-Tokens-Used")}`);
     console.log(`   Diagnosis: "${body1.diagnosisMessage?.slice(0, 90)}..."`);
     console.log(`   Classification: [${body1.errorClassification}] | NCERT: "${body1.ncertCorrection?.slice(0, 70)}..."`);
 
@@ -151,7 +151,7 @@ async function runLiveVerification() {
     // TEST 2: VERIFY ZERO-TOKEN CACHING FLOW (PUBLIC.AI_DIAGNOSIS_CACHE)
     // ──────────────────────────────────────────────────────────────────────────
     console.log("\n────────────────────────────────────────────────────────────────────────────────");
-    console.log("👉 STEP 2: Verify Caching Flow (Identical Request 2)");
+    console.log("STEP 2: Verify Caching Flow (Identical Request 2)");
     console.log("   Confirm Request 2 fetches from ai_diagnosis_cache with 0 token latency");
     console.log("────────────────────────────────────────────────────────────────────────────────");
 
@@ -170,7 +170,7 @@ async function runLiveVerification() {
     );
 
     const body2 = (await res2.json()) as MistakeDiagnosticResult;
-    console.log(`   ⏱️  Request 2 latency: ${t2Duration}ms | X-Cache: ${res2.headers.get("X-Cache")} | Tokens: ${res2.headers.get("X-Tokens-Used")}`);
+    console.log(`    Request 2 latency: ${t2Duration}ms | X-Cache: ${res2.headers.get("X-Cache")} | Tokens: ${res2.headers.get("X-Tokens-Used")}`);
 
     assert(
       body2.fromCache === true,
@@ -197,7 +197,7 @@ async function runLiveVerification() {
     // TEST 3: MALFORMED INPUT RESILIENCE
     // ──────────────────────────────────────────────────────────────────────────
     console.log("\n────────────────────────────────────────────────────────────────────────────────");
-    console.log("👉 STEP 3: Malformed Input & Error Resilience");
+    console.log("STEP 3: Malformed Input & Error Resilience");
     console.log("────────────────────────────────────────────────────────────────────────────────");
 
     const resMalformed = await fetch(`${BASE_URL}/api/ai/diagnose-mistake`, {
@@ -212,14 +212,14 @@ async function runLiveVerification() {
     );
 
     console.log("\n================================================================================");
-    console.log(`📊 AI VERIFICATION SUMMARY: ${passedAssertions}/${totalAssertions} Passed`);
+    console.log(`AI VERIFICATION SUMMARY: ${passedAssertions}/${totalAssertions} Passed`);
     console.log("================================================================================");
 
     if (failedAssertions > 0) {
-      console.error(`❌ Verification finished with ${failedAssertions} failures.`);
+      console.error(`Verification finished with ${failedAssertions} failures.`);
       process.exit(1);
     } else {
-      console.log("🎉 ALL TESTS PASSED: Gemini production integration verified successfully!\n");
+      console.log("ALL TESTS PASSED: Gemini production integration verified successfully!\n");
       process.exit(0);
     }
   } finally {

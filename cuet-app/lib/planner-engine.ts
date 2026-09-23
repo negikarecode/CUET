@@ -160,7 +160,7 @@ export async function generateStudyPlan(
 
   // 9. AI Enhancement / Coaching message
   let planEnhancements: any = {
-    coaching_message: `Welcome to your CUET study plan, ${student.name}! We've balanced your critical Political Science topics with regular mock tests and revision cycles. Stay consistent! — CUETBot 🤖`,
+    coaching_message: `Welcome to your CUET study plan, ${student.name}! We've balanced your critical Political Science topics with regular mock tests and revision cycles. Stay consistent! — CUETBot`,
     plan_summary: [
       `Focus on critical topics like Fundamental Rights & DPSP in the first phase.`,
       `Weekly mock tests every Saturday to build exam stamina.`,

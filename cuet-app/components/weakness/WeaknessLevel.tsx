@@ -40,7 +40,7 @@ export function WeaknessLevel({
           <div className="flex items-center justify-between">
             <h3 id="critical-heading" className="text-base sm:text-lg font-bold text-red-700 flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" />
-              🔴 Fix These First ({critical.length})
+              Fix These First ({critical.length})
             </h3>
             <span className="text-xs text-red-600 font-medium hidden sm:inline">
               High priority for score boost
@@ -61,7 +61,7 @@ export function WeaknessLevel({
           <div className="flex items-center justify-between">
             <h3 id="weak-heading" className="text-base sm:text-lg font-bold text-orange-700 flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-              🟠 Needs Regular Practice ({weak.length})
+              Needs Regular Practice ({weak.length})
             </h3>
             {weak.length > 4 && (
               <Button
@@ -93,7 +93,7 @@ export function WeaknessLevel({
           >
             <h3 id="average-heading" className="text-sm sm:text-base font-bold text-yellow-800 flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-              🟡 Moderate Mastery Topics ({average.length})
+              Moderate Mastery Topics ({average.length})
             </h3>
             <span className="text-xs text-yellow-700 flex items-center gap-1 font-semibold">
               {expandAverage ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -120,7 +120,7 @@ export function WeaknessLevel({
           >
             <h3 id="mastered-heading" className="text-sm sm:text-base font-bold text-green-800 flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-green-600" />
-              🟢 Mastered & Strong Topics ({mastered.length})
+              Mastered & Strong Topics ({mastered.length})
             </h3>
             <span className="text-xs text-green-700 flex items-center gap-1 font-semibold">
               {expandMastered ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}

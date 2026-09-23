@@ -107,7 +107,7 @@ export async function sendDailyStudyReminder(
   const firstName = studentName ? studentName.split(' ')[0] : 'Champion';
 
   await sendPushNotification(studentId, {
-    title: `📚 Study Time, ${firstName}!`,
+    title: `Study Time, ${firstName}!`,
     body: daysToExam <= 7
       ? `${daysToExam} days to CUET! Focus on: ${todayTasks[0] || 'your plan'}. You've got this!`
       : `Today: ${todayTasks.slice(0, 2).join(' + ')}. ${daysToExam} days to go!`,
@@ -121,7 +121,7 @@ export async function sendStreakAlertNotification(
   currentStreak: number
 ): Promise<void> {
   await sendPushNotification(studentId, {
-    title: `⚡ Don't break your ${currentStreak}-day streak!`,
+    title: `Don't break your ${currentStreak}-day streak!`,
     body: 'You haven\'t studied today yet. Quick — even 1 task keeps the streak alive!',
     url: '/planner',
     tag: 'streak-alert',
@@ -133,15 +133,15 @@ export async function sendMilestoneNotification(
   milestone: number
 ): Promise<void> {
   const messages: Record<number, { title: string; body: string }> = {
-    3:  { title: '🌱 3-Day Streak!', body: 'You\'re building a habit. Keep going!' },
-    7:  { title: '🔥 ONE WEEK!', body: 'A full week of consistent study. Incredible!' },
-    14: { title: '⚡ 14 DAYS!', body: 'Two weeks strong. You\'re unstoppable!' },
-    21: { title: '🌟 21 DAYS!', body: 'Three weeks! This is now your lifestyle. 🏆' },
-    30: { title: '👑 30 DAYS!', body: 'ONE MONTH! You\'re a legend. DU/JNU is yours!' },
+    3:  { title: '3-Day Streak!', body: 'You\'re building a habit. Keep going!' },
+    7:  { title: 'ONE WEEK!', body: 'A full week of consistent study. Incredible!' },
+    14: { title: '14 DAYS!', body: 'Two weeks strong. You\'re unstoppable!' },
+    21: { title: '21 DAYS!', body: 'Three weeks! This is now your lifestyle.' },
+    30: { title: '30 DAYS!', body: 'ONE MONTH! You\'re a legend. DU/JNU is yours!' },
   };
 
   const msg = messages[milestone] || {
-    title: `🎉 ${milestone}-Day Streak!`,
+    title: `${milestone}-Day Streak!`,
     body: 'Incredible consistency. Keep going!',
   };
 
@@ -156,8 +156,8 @@ export async function sendMissedStudyNotification(
   studentId: string
 ): Promise<void> {
   await sendPushNotification(studentId, {
-    title: '📚 We missed you today!',
-    body: 'Koi baat nahi — kal fresh start karo. Your plan is ready! 💪',
+    title: 'We missed you today!',
+    body: 'Koi baat nahi — kal fresh start karo. Your plan is ready!',
     url: '/planner',
     tag: 'missed-study',
   });

@@ -56,7 +56,7 @@ export function TopicCard({ score, isScheduled, scheduledLabel }: TopicCardProps
                     href="/planner"
                     className="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md hover:bg-indigo-100 transition-colors"
                   >
-                    <span>📅</span>
+                    <span></span>
                     <span>{scheduledLabel || (level === "critical" ? "Priority in Plan" : "In Active Plan")}</span>
                   </Link>
                 )}
@@ -116,9 +116,9 @@ export function TopicCard({ score, isScheduled, scheduledLabel }: TopicCardProps
         {/* Stats Row & Avg Time */}
         <div className="flex flex-wrap items-center justify-between gap-3 mt-4 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg">
           <div className="flex items-center gap-3">
-            <span className="text-emerald-700 font-medium">✅ {score.correct_count} correct</span>
-            <span className="text-red-600 font-medium">❌ {score.wrong_count} wrong</span>
-            <span className="text-slate-500 font-medium">⏭️ {score.skipped_count} skipped</span>
+            <span className="text-emerald-700 font-medium">{score.correct_count} correct</span>
+            <span className="text-red-600 font-medium">{score.wrong_count} wrong</span>
+            <span className="text-slate-500 font-medium">{score.skipped_count} skipped</span>
           </div>
 
           <div className="flex items-center gap-1">

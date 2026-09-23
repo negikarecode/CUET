@@ -53,7 +53,7 @@ export function AISessionSummary({
   const cuetMarks = correctCount * 5 - wrongCount * 1;
 
   const handleShare = async () => {
-    const text = `🎯 I scored ${correctCount}/${totalQuestions} (${percentage}%) in CUET AI Practice on "${topicName}"! My topic score improved from ${initialScore} → ${updatedScore} 🚀`;
+    const text = `I scored ${correctCount}/${totalQuestions} (${percentage}%) in CUET AI Practice on "${topicName}"! My topic score improved from ${initialScore} → ${updatedScore} `;
     if (navigator.share) {
       try {
         await navigator.share({
@@ -131,7 +131,7 @@ export function AISessionSummary({
             <span>Weakness Progression</span>
           </div>
           <h3 className="text-base sm:text-lg font-bold text-white mt-1">
-            Your {topicName} Score: {initialScore} → {updatedScore} 📈
+            Your {topicName} Score: {initialScore} → {updatedScore} 
           </h3>
           <p className="text-xs text-indigo-300 mt-0.5">
             Module 1 calibrated your mastery using updated accuracy, speed, and streak metrics.
@@ -178,7 +178,7 @@ export function AISessionSummary({
             <Button
               className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold gap-2 h-11 px-6 rounded-xl shadow-md"
             >
-              <span>📅</span>
+              <span></span>
               <span>Return to Study Plan</span>
             </Button>
           </Link>

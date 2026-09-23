@@ -37,7 +37,7 @@ export default function DailyProgress({ completion }: DailyProgressProps) {
             </h3>
             {is_day_complete && (
               <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full">
-                Day Complete! 🎉
+                Day Complete! 
               </span>
             )}
           </div>

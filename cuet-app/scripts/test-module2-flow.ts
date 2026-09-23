@@ -15,7 +15,7 @@ import { POST as generateBatchRoute } from '../app/api/ai/generate-batch/route';
 
 async function runModule2Tests() {
   console.log('=================================================');
-  console.log('🤖 TESTING MODULE 2: AI QUESTION GENERATOR SYSTEM');
+  console.log('TESTING MODULE 2: AI QUESTION GENERATOR SYSTEM');
   console.log('=================================================');
 
   AppDataStore.initialize();
@@ -38,7 +38,7 @@ Dr. B.R. Ambedkar called Article 32 the Heart and Soul of the Constitution.`;
   const chunks = await splitTextIntoChunks(sampleNCERTText, 300, 50);
   console.log(`Generated ${chunks.length} chunks from sample text.`);
   if (chunks.length === 0) throw new Error('Chunking failed: 0 chunks created');
-  console.log('✅ Chunking verified.');
+  console.log('Chunking verified.');
 
   // ─────────────────────────────────────────────────────
   // TEST 2: RAG Engine Search (Verified Seed Chunks)
@@ -57,7 +57,7 @@ Dr. B.R. Ambedkar called Article 32 the Heart and Soul of the Constitution.`;
   if (ragResult.chunksFound === 0 || !ragResult.contextText.includes('Part III')) {
     throw new Error('RAG search did not retrieve verified Fundamental Rights content');
   }
-  console.log('✅ RAG retrieval from verified content verified.');
+  console.log('RAG retrieval from verified content verified.');
 
   // ─────────────────────────────────────────────────────
   // TEST 3: Question Validator & Quality Gate
@@ -107,7 +107,7 @@ Dr. B.R. Ambedkar called Article 32 the Heart and Soul of the Constitution.`;
   if (halResult.autoApprove) {
     throw new Error('Hallucinated question was incorrectly auto-approved');
   }
-  console.log('✅ Question Validator passed all safety checks.');
+  console.log('Question Validator passed all safety checks.');
 
   // ─────────────────────────────────────────────────────
   // TEST 4: Prompt Engineering
@@ -137,7 +137,7 @@ Dr. B.R. Ambedkar called Article 32 the Heart and Soul of the Constitution.`;
   if (!batchPrompt.includes('Generate exactly 3 different')) {
     throw new Error('Batch generation prompt count mismatch');
   }
-  console.log('✅ Prompt engineering verified.');
+  console.log('Prompt engineering verified.');
 
   // ─────────────────────────────────────────────────────
   // TEST 5: Rate Limiter & Cost Tracker
@@ -161,7 +161,7 @@ Dr. B.R. Ambedkar called Article 32 the Heart and Soul of the Constitution.`;
   if (checkBlocked.allowed) {
     throw new Error('Rate limiter failed to block after reaching daily free limit');
   }
-  console.log('✅ Rate limiter enforcement verified.');
+  console.log('Rate limiter enforcement verified.');
 
   // ─────────────────────────────────────────────────────
   // TEST 6: Response Caching
@@ -175,7 +175,7 @@ Dr. B.R. Ambedkar called Article 32 the Heart and Soul of the Constitution.`;
   if (!retrievedFromCache || retrievedFromCache.correct_option !== 'C') {
     throw new Error('Failed to retrieve question from cache');
   }
-  console.log('✅ Response caching verified.');
+  console.log('Response caching verified.');
 
   // ─────────────────────────────────────────────────────
   // TEST 7: Answer Verification & Module 1 Weakness Update
@@ -199,7 +199,7 @@ Dr. B.R. Ambedkar called Article 32 the Heart and Soul of the Constitution.`;
   if (!verifyJson.is_correct || verifyJson.correct_option !== 'C') {
     throw new Error('Answer verification logic failed');
   }
-  console.log('✅ Answer verification and Module 1 connection verified.');
+  console.log('Answer verification and Module 1 connection verified.');
 
   // ─────────────────────────────────────────────────────
   // TEST 8: SME Review Queue & Approval Flow
@@ -251,7 +251,7 @@ Dr. B.R. Ambedkar called Article 32 the Heart and Soul of the Constitution.`;
   if (approvedInStore?.review_status !== 'approved') {
     throw new Error('Question status not updated to approved');
   }
-  console.log('✅ SME Review Queue & Approval flow verified.');
+  console.log('SME Review Queue & Approval flow verified.');
 
   // ─────────────────────────────────────────────────────
   // TEST 9: AI Generation Endpoint Fallback & Payload Safety
@@ -275,7 +275,7 @@ Dr. B.R. Ambedkar called Article 32 the Heart and Soul of the Constitution.`;
   if (genJson.question.correct_option !== undefined || genJson.question.explanation !== undefined) {
     throw new Error('SECURITY VIOLATION: correct_option or explanation exposed to student payload before answering!');
   }
-  console.log('✅ Security check passed: correct_option & explanation are safely hidden.');
+  console.log('Security check passed: correct_option & explanation are safely hidden.');
 
   // ─────────────────────────────────────────────────────
   // TEST 10: Usage and Cost Monitoring API
@@ -290,14 +290,14 @@ Dr. B.R. Ambedkar called Article 32 the Heart and Soul of the Constitution.`;
   if (!usageJson.success || usageJson.monitoring?.todaySpendUsd === undefined) {
     throw new Error('Usage monitoring endpoint failed');
   }
-  console.log('✅ Cost monitoring endpoint verified.');
+  console.log('Cost monitoring endpoint verified.');
 
   console.log('\n=================================================');
-  console.log('🎉 ALL 10 MODULE 2 TEST SUITES PASSED PERFECTLY!');
+  console.log('ALL 10 MODULE 2 TEST SUITES PASSED PERFECTLY!');
   console.log('=================================================');
 }
 
 runModule2Tests().catch((err) => {
-  console.error('\n❌ Module 2 Test Suite Failed:', err);
+  console.error('\nModule 2 Test Suite Failed:', err);
   process.exit(1);
 });

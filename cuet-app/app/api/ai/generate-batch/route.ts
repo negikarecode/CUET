@@ -91,7 +91,7 @@ export async function POST(req: Request) {
               name: (dbTopic.subjects as any).name,
               code: (dbTopic.subjects as any).code,
               color: '#dc2626',
-              icon: '🏛️',
+              icon: '',
               total_chapters: 10,
             };
           }

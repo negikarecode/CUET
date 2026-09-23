@@ -118,7 +118,7 @@ export function ContentUploader() {
         throw new Error(data.error || "Failed to upload and embed content");
       }
 
-      setCurrentStep("✅ Content ready! AI can now generate questions.");
+      setCurrentStep("Content ready! AI can now generate questions.");
       setResultMessage(
         `Successfully embedded! ${data.result?.chunksCreated || 0} chunks created and indexed.`
       );

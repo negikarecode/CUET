@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     const { student_id = AppDataStore.student.id, title, body: content, url = '/planner', tag = 'manual-reminder' } = body;
 
     await sendPushNotification(student_id, {
-      title: title || '📚 Time for CUET Prep!',
+      title: title || 'Time for CUET Prep!',
       body: content || 'Your daily tasks are waiting. Complete them to keep your streak alive!',
       url,
       tag,

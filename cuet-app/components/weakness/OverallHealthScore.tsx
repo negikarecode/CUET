@@ -125,16 +125,16 @@ export function OverallHealthScore({
         {/* Sub-stats pills */}
         <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
-            🔴 {criticalCount} Critical
+            {criticalCount} Critical
           </span>
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200">
-            🟠 {weakCount} Weak
+            {weakCount} Weak
           </span>
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-50 text-yellow-700 border border-yellow-200">
-            🟡 {averageCount} Average
+            {averageCount} Average
           </span>
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200">
-            🟢 {strongCount} Strong
+            {strongCount} Strong
           </span>
         </div>
       </div>

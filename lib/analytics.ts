@@ -22,7 +22,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "mathematics",
       name: "Mathematics",
-      icon: "📐",
+      icon: "Calculator",
       category: "Science",
       mockUrl: "/dashboard/mocks/maths",
     };
@@ -31,7 +31,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "chemistry",
       name: "Chemistry",
-      icon: "🧪",
+      icon: "FlaskConical",
       category: "Science",
       mockUrl: "/dashboard/mocks/chemistry",
     };
@@ -40,7 +40,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "physics",
       name: "Physics",
-      icon: "⚡",
+      icon: "Zap",
       category: "Science",
       mockUrl: "/dashboard/mocks/physics",
     };
@@ -49,7 +49,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "biology",
       name: "Biology",
-      icon: "🧬",
+      icon: "Dna",
       category: "Science",
       mockUrl: "/dashboard/mocks/bio",
     };
@@ -58,7 +58,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "accountancy",
       name: "Accountancy",
-      icon: "📊",
+      icon: "BarChart3",
       category: "Commerce",
       mockUrl: "/dashboard/mocks/accountancy",
     };
@@ -67,7 +67,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "economics",
       name: "Economics",
-      icon: "📈",
+      icon: "TrendingUp",
       category: "Commerce",
       mockUrl: "/dashboard/mocks/eco",
     };
@@ -76,7 +76,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "business-studies",
       name: "Business Studies",
-      icon: "💼",
+      icon: "Briefcase",
       category: "Commerce",
       mockUrl: "/dashboard/mocks/bst",
     };
@@ -85,7 +85,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "political-science",
       name: "Political Science",
-      icon: "⚖️",
+      icon: "Scale",
       category: "Humanities",
       mockUrl: "/dashboard/mocks/pol%20science",
     };
@@ -94,7 +94,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "history",
       name: "History",
-      icon: "🏛️",
+      icon: "Landmark",
       category: "Humanities",
       mockUrl: "/dashboard/mocks/history",
     };
@@ -103,7 +103,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "geography",
       name: "Geography",
-      icon: "🌍",
+      icon: "Globe",
       category: "Humanities",
       mockUrl: "/dashboard/mocks/geo",
     };
@@ -112,7 +112,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "psychology",
       name: "Psychology",
-      icon: "🧠",
+      icon: "Brain",
       category: "Humanities",
       mockUrl: "/dashboard/mocks/psychology",
     };
@@ -121,7 +121,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "sociology",
       name: "Sociology",
-      icon: "👥",
+      icon: "Users",
       category: "Humanities",
       mockUrl: "/dashboard/mocks/sociology",
     };
@@ -130,7 +130,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "english",
       name: "English",
-      icon: "📖",
+      icon: "BookOpen",
       category: "Common",
       mockUrl: "/dashboard/mocks/english",
     };
@@ -139,7 +139,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "general-test",
       name: "General Test",
-      icon: "🎯",
+      icon: "Target",
       category: "Common",
       mockUrl: "/dashboard/mocks/general-test",
     };
@@ -148,7 +148,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "computer-science",
       name: "Computer Science",
-      icon: "💻",
+      icon: "Laptop",
       category: "Science",
       mockUrl: "/dashboard/mocks/computer_science",
     };
@@ -157,7 +157,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     return {
       key: "physical-education",
       name: "Physical Education",
-      icon: "🏅",
+      icon: "Medal",
       category: "Arts & Performing",
       mockUrl: "/dashboard/mocks/physical_education",
     };
@@ -167,7 +167,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
   return {
     key: clean.replace(/\s+/g, "-"),
     name: title.charAt(0).toUpperCase() + title.slice(1),
-    icon: "📚",
+    icon: "GraduationCap",
     category: "Science",
     mockUrl: `/dashboard/mocks/${clean.replace(/\s+/g, "-")}`,
   };

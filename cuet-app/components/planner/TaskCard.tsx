@@ -203,7 +203,7 @@ export default function TaskCard({
                 disabled={disabled || isSubmitting}
                 className="px-3 py-1.5 rounded-xl border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 font-semibold text-xs transition active:scale-95 disabled:opacity-50"
               >
-                {isSubmitting ? 'Updating...' : 'Mark Done ✓'}
+                {isSubmitting ? 'Updating...' : 'Mark Done '}
               </button>
             </div>
           )}

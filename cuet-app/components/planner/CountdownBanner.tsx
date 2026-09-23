@@ -36,7 +36,7 @@ export default function CountdownBanner({
                 <span className="text-xs text-rose-100 font-medium">{examDate}</span>
               </div>
               <h2 className="text-lg sm:text-xl font-black mt-0.5">
-                🚨 CUET IN {daysToExam} {daysToExam === 1 ? 'DAY' : 'DAYS'}!
+                CUET IN {daysToExam} {daysToExam === 1 ? 'DAY' : 'DAYS'}!
               </h2>
             </div>
           </div>
@@ -77,7 +77,7 @@ export default function CountdownBanner({
                 <span className="text-xs text-amber-100">{examDate}</span>
               </div>
               <h2 className="text-lg sm:text-xl font-black mt-0.5">
-                ⚠️ {daysToExam} DAYS TO CUET — Final Phase!
+                {daysToExam} DAYS TO CUET — Final Phase!
               </h2>
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function CountdownBanner({
               <span className="text-xs text-indigo-200">• {examDate}</span>
             </div>
             <h2 className="text-lg sm:text-xl font-black mt-0.5">
-              📅 {daysToExam} Days to CUET
+              {daysToExam} Days to CUET
             </h2>
           </div>
         </div>

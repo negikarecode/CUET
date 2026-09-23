@@ -39,16 +39,16 @@ Days Remaining: ${daysToExam} days
 Daily Study Time: ${dailyHours} hours/day
 Subjects: ${selectedSubjects.join(', ')}
 Average Mock Test Score: ${avgMockScore}/200
-Recently Missing Sessions: ${missedSessionsLately ? 'Yes ⚠️' : 'No ✅'}
+Recently Missing Sessions: ${missedSessionsLately ? 'Yes' : 'No'}
 
 WEAKNESS ANALYSIS:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔴 CRITICAL (must fix): ${criticalTopics.join(', ') || 'None'}
-🟠 WEAK (needs work): ${weakTopics.slice(0, 5).join(', ') || 'None'}
-🟢 STRONG (maintain): ${strongTopics.slice(0, 3).join(', ') || 'None'}
-⬜ UNTESTED (not covered): ${untestedTopics.slice(0, 3).join(', ') || 'None'}
+CRITICAL (must fix): ${criticalTopics.join(', ') || 'None'}
+WEAK (needs work): ${weakTopics.slice(0, 5).join(', ') || 'None'}
+STRONG (maintain): ${strongTopics.slice(0, 3).join(', ') || 'None'}
+UNTESTED (not covered): ${untestedTopics.slice(0, 3).join(', ') || 'None'}
 
-FEASIBILITY: ${isFeasible ? '✅ Plan is achievable' : '⚠️ Tight schedule'}
+FEASIBILITY: ${isFeasible ? 'Plan is achievable' : 'Tight schedule'}
 NOTE: ${feasibilityNote}
 
 YOUR TASK:
@@ -65,7 +65,7 @@ The message must include:
 Keep total under 120 words.
 Tone: Like a caring, experienced CUET coach.
 Not generic — reference their SPECIFIC weak topics.
-End with: "— CUETBot 🤖"
+End with: "— CUETBot"
 
 Also generate:
 - A "Plan Summary" in exactly 3 bullet points
@@ -114,11 +114,11 @@ Rules:
 - Reference their streak or yesterday's performance
 - Include today's main topic naturally
 - Half in English, half in Hindi/Hinglish
-- End with a small emoji
+- Clean tone, no emojis
 
 Examples of good messages:
-"Kal aapne ${yesterdayCompletion}% complete kiya — great effort! Aaj ${todayTopics[0] || 'study'} ke saath uss momentum ko continue karo! 💪"
-"${currentStreak} din ki streak — amazing! Aaj bas target finish karo aur aap track pe rahoge. 🔥"
+"Kal aapne ${yesterdayCompletion}% complete kiya — great effort! Aaj ${todayTopics[0] || 'study'} ke saath uss momentum ko continue karo!"
+"${currentStreak} din ki streak — amazing! Aaj bas target finish karo aur aap track pe rahoge."
 
 Output ONLY the message text. No JSON. No quotes.
 `;

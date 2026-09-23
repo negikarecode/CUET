@@ -214,14 +214,14 @@ export default function MessageBubble({ message, onFeedback, onMcqAnswered }: Me
               {isAnswerSubmitted && (
                 <div className="pt-2 border-t border-slate-200 dark:border-slate-800 text-xs space-y-1 animate-fadeIn">
                   <p className="font-semibold text-slate-800 dark:text-slate-200">
-                    {mcqResult?.isCorrect ? '🎉 Correct!' : '❌ Incorrect!'}
+                    {mcqResult?.isCorrect ? 'Correct!' : 'Incorrect!'}
                   </p>
                   <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
                     {message.inline_mcq_data.explanation}
                   </p>
                   {mcqResult?.updatedLevel && (
                     <p className="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium">
-                      ✓ Weakness Tracker Updated: Level is now {mcqResult.updatedLevel.toUpperCase()}
+                      Weakness Tracker Updated: Level is now {mcqResult.updatedLevel.toUpperCase()}
                     </p>
                   )}
                 </div>

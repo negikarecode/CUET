@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
         subject_id: 1,
         chapter_id: 10,
         topic_id: 4,
-        title: `🎯 ${item.action}`,
+        title: `${item.action}`,
         description: item.why || 'Targeted fix from mock test analysis',
         planned_minutes: item.time_minutes || 35,
         actual_minutes: 0,

@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     // Send push notification
     sendPushNotification(studentId, {
-      title: '🎯 Your Study Plan is Ready!',
+      title: 'Your Study Plan is Ready!',
       body: 'Your personalized day-by-day CUET schedule has been generated.',
       url: '/planner',
       tag: 'plan-ready',

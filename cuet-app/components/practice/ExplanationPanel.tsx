@@ -54,7 +54,7 @@ export function ExplanationPanel({
             Time: {timeTakenSeconds}s
           </span>
           <span className={isFast ? "text-emerald-700" : "text-amber-700"}>
-            {isFast ? "⚡ On Pace" : "⚠️ Slower than 45s target"}
+            {isFast ? "On Pace" : "Slower than 45s target"}
           </span>
         </div>
       </div>

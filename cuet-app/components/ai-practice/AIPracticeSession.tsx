@@ -460,7 +460,7 @@ export function AIPracticeSession({ topicId }: AIPracticeSessionProps) {
       {fromPlanner && (
         <div className="max-w-3xl mx-auto mb-4 p-3.5 bg-indigo-50/90 border border-indigo-200 rounded-2xl flex items-center justify-between gap-3 shadow-xs">
           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-indigo-950">
-            <span className="text-base">📅</span>
+            <span className="text-base"></span>
             <span>Today&apos;s Plan: Task Session ({plannedMinutes} min)</span>
           </div>
           <Button

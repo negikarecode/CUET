@@ -353,23 +353,23 @@ function generateRealisticFallbackResponse(params: {
 
   if (intent === 'smalltalk') {
     if (language === 'hinglish') {
-      return `Hey dost! 👋 Main CUETBot hoon, tumhara 24/7 AI tutor. Political Science, General Test ya kisi bhi subject me koi doubt ho toh bejhijhak pucho! Aaj kya revise kar rahe ho?`;
+      return `Hey dost! Main CUETBot hoon, tumhara 24/7 AI tutor. Political Science, General Test ya kisi bhi subject me koi doubt ho toh bejhijhak pucho! Aaj kya revise kar rahe ho?`;
     } else if (language === 'hindi') {
-      return `नमस्ते दोस्त! 🙏 मैं CUETBot हूँ, आपका 24/7 साथी। CUET के किसी भी विषय या अध्याय में कोई भी संदेह हो, तो तुरंत पूछिए। आज क्या तैयारी कर रहे हैं?`;
+      return `नमस्ते दोस्त! मैं CUETBot हूँ, आपका 24/7 साथी। CUET के किसी भी विषय या अध्याय में कोई भी संदेह हो, तो तुरंत पूछिए। आज क्या तैयारी कर रहे हैं?`;
     } else {
-      return `Hello future topper! 👋 I'm CUETBot, your 24/7 AI CUET tutor. Ready to conquer your doubts in Political Science, General Test, or domain subjects. What are we mastering today?`;
+      return `Hello future topper! I'm CUETBot, your 24/7 AI CUET tutor. Ready to conquer your doubts in Political Science, General Test, or domain subjects. What are we mastering today?`;
     }
   }
 
   if (intent === 'frustration') {
     if (language === 'hinglish') {
-      return `Deep breath lo dost! 🧘‍♂️ Normal hai darr lagna, main bhi jab DU ke liye prep kar raha tha toh aisi anxiety hoti thi. 
+      return `Deep breath lo dost! ‍Normal hai darr lagna, main bhi jab DU ke liye prep kar raha tha toh aisi anxiety hoti thi. 
 
 CUET me smart revision aur daily 20-30 MCQs practice se score drastically improve hota hai. Ek saath pura syllabus mat dekho — bas ek chapter uthao, aur usko step-by-step khatam karte hain. Main yahan hoon tumhare har doubt ko clear karne ke liye! 
 
 Batao, kaunsa topic sabse mushkil lag raha hai abhi?`;
     } else {
-      return `Take a deep breath champion! 🧘‍♂️ Exam anxiety is completely normal, especially when juggling boards and CUET. Remember: CUET tests conceptual clarity from NCERT, not rote memorization. 
+      return `Take a deep breath champion! ‍Exam anxiety is completely normal, especially when juggling boards and CUET. Remember: CUET tests conceptual clarity from NCERT, not rote memorization. 
 
 Break your syllabus into bite-sized daily targets of 20-30 MCQs. You don't have to master everything in one day. Let's tackle your weakest chapter together right now — what topic should we break down first?`;
     }
@@ -377,16 +377,16 @@ Break your syllabus into bite-sized daily targets of 20-30 MCQs. You don't have 
 
   if (intent === 'non_cuet') {
     if (language === 'hinglish') {
-      return `Haha dost! 😄 Yeh sab exam ke baad pakka discuss karenge jab tum DU North Campus (SRCC / Hindu) me enter kar jaoge! 
+      return `Haha dost! Yeh sab exam ke baad pakka discuss karenge jab tum DU North Campus (SRCC / Hindu) me enter kar jaoge! 
 
 Abhi hamara mission CUET 2026 hai. Chalo focus wapas laate hain — batao Political Science ya General Test me kya doubt hai?`;
     } else {
-      return `Haha, let's keep that for your college fest after you crack CUET! 🎯 Right now, every minute counts towards your dream university cutoff. Tell me, which subject or chapter are we revising right now?`;
+      return `Haha, let's keep that for your college fest after you crack CUET! Right now, every minute counts towards your dream university cutoff. Tell me, which subject or chapter are we revising right now?`;
     }
   }
 
   if (intent === 'cutoff_query') {
-    return `🎯 **DU North Campus CUET Cutoff Strategy (Target 2026):**
+    return `**DU North Campus CUET Cutoff Strategy (Target 2026):**
 
 1. **Top Tier Colleges (SRCC, Hindu, St. Stephen's, Miranda):**
    - General Category raw score target: **760+ out of 800** (99.2+ percentile).
@@ -401,7 +401,7 @@ Abhi hamara mission CUET 2026 hai. Chalo focus wapas laate hain — batao Politi
 
   // Default Concept Doubt Response
   if (language === 'hinglish') {
-    return `Dekho dost! **${topicName || 'Fundamental Rights'}** ka funda bahut clear aur high-yield hai CUET ke liye! 🎯
+    return `Dekho dost! **${topicName || 'Fundamental Rights'}** ka funda bahut clear aur high-yield hai CUET ke liye! 
 
 1. **Constitutional Basis:**
    - Indian Constitution ke **Part III (Articles 12-35)** me diye gaye hain.

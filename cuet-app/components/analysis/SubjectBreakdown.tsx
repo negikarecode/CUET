@@ -130,7 +130,7 @@ export function SubjectBreakdown({ subjects = [], chapters = [] }: SubjectBreakd
                     <span><b>{subj.wrong}</b> Wrong (-{subj.wrong})</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-slate-600 bg-white p-2 rounded-lg border border-slate-200">
-                    <span className="shrink-0">⏭️</span>
+                    <span className="shrink-0"></span>
                     <span><b>{subj.skipped}</b> Skipped (0)</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-indigo-700 bg-indigo-50/70 p-2 rounded-lg border border-indigo-100">

@@ -18,10 +18,10 @@ const STEPS = [
 ];
 
 const FUN_FACTS = [
-  "💡 Did you know? Students who review mock test wrong answers improve 20% faster!",
-  "🎯 Speed Tip: Skipping an unsure question in 40s saves you 1 full negative penalty mark.",
-  "🏛️ Fun Fact: Top Delhi University North Campus cutoffs typically range between 170-195/200.",
-  "📈 Consistency Wins: 5 mocks with deep analysis beat 20 mocks with no review.",
+  "Did you know? Students who review mock test wrong answers improve 20% faster!",
+  "Speed Tip: Skipping an unsure question in 40s saves you 1 full negative penalty mark.",
+  "Fun Fact: Top Delhi University North Campus cutoffs typically range between 170-195/200.",
+  "Consistency Wins: 5 mocks with deep analysis beat 20 mocks with no review.",
 ];
 
 export function AnalyzingScreen({ sessionId, testNumber, onComplete }: AnalyzingScreenProps) {

@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     if (check.shouldRegenerate) {
       await sendPushNotification(student.id, {
-        title: '📅 Weekly Plan Check',
+        title: 'Weekly Plan Check',
         body: check.reason || 'Your study plan needs an update! Tap to re-balance.',
         url: '/planner/settings',
         tag: 'weekly-check',

@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
 
     // 7. Daily personalized motivation message
     const mainTopicName = tasks.find((t) => t.task_type === 'ai_practice' || t.task_type === 'practice')?.title || 'CUET topics';
-    const motivationMessage = `Kal aapne solid effort kiya — streak is ${streakDetails.current_streak} days! Aaj ${mainTopicName} complete karo aur track pe raho! 💪`;
+    const motivationMessage = `Kal aapne solid effort kiya — streak is ${streakDetails.current_streak} days! Aaj ${mainTopicName} complete karo aur track pe raho! `;
 
     return NextResponse.json({
       success: true,

@@ -17,6 +17,19 @@ import {
   Lock,
   Sparkles,
   BrainCircuit,
+  Calculator,
+  FlaskConical,
+  Zap,
+  Dna,
+  BarChart3,
+  Briefcase,
+  Scale,
+  Landmark,
+  Globe,
+  Brain,
+  Users,
+  Laptop,
+  Medal,
 } from "lucide-react";
 import TrophyCabinet from "@/components/dashboard/TrophyCabinet";
 import { useCBTStore } from "@/lib/store/useCBTStore";
@@ -26,6 +39,37 @@ import { RepairQuizResponse } from "@/app/api/ai/repair-quiz/route";
 import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData } from "@/types";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { normalizeSubject } from "@/lib/analytics";
+
+const SUBJECT_ICON_MAP: Record<string, React.ElementType> = {
+  Calculator,
+  FlaskConical,
+  Zap,
+  Dna,
+  BarChart3,
+  TrendingUp,
+  Briefcase,
+  Scale,
+  Landmark,
+  Globe,
+  Brain,
+  Users,
+  BookOpen,
+  Target,
+  Laptop,
+  Medal,
+  GraduationCap,
+};
+
+function SubjectIcon({
+  name,
+  className = "w-5 h-5 text-black",
+}: {
+  name: string;
+  className?: string;
+}) {
+  const IconComponent = SUBJECT_ICON_MAP[name] || GraduationCap;
+  return <IconComponent className={className} />;
+}
 
 export interface DashboardInitialData {
   user: {
@@ -388,8 +432,9 @@ export default function DashboardClient({
               </p>
             </div>
           </div>
-          <span className="px-2.5 py-1 rounded bg-[#10B981] text-black text-[10px] font-black uppercase border border-black shadow-[1px_1px_0px_0px_#000] shrink-0">
-            AI Mentor Active 🚀
+          <span className="px-2.5 py-1 rounded bg-[#10B981] text-black text-[10px] font-black uppercase border border-black shadow-[1px_1px_0px_0px_#000] shrink-0 flex items-center gap-1">
+            <Sparkles className="w-3 h-3 text-black fill-black" />
+            AI Mentor Active
           </span>
         </div>
       )}
@@ -521,7 +566,7 @@ export default function DashboardClient({
                   : "bg-white text-black hover:bg-[#FAF7EE]"
               }`}
             >
-              <span>Unlocked 🚀</span>
+              <span>Unlocked</span>
               <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-black text-white">
                 {allSubjectCalibrations.filter((s) => s.isUnlocked).length}
               </span>
@@ -558,8 +603,8 @@ export default function DashboardClient({
                     {/* Top Row: Icon, Title, Status */}
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="w-9 h-9 rounded-lg bg-white border-2 border-black flex items-center justify-center text-lg shrink-0 shadow-[1px_1px_0px_0px_#000]">
-                          {sub.icon}
+                        <span className="w-9 h-9 rounded-lg bg-white border-2 border-black flex items-center justify-center shrink-0 shadow-[1px_1px_0px_0px_#000]">
+                          <SubjectIcon name={sub.icon} className="w-5 h-5 text-black" />
                         </span>
                         <div className="min-w-0">
                           <h3 className="font-black text-xs sm:text-sm text-black truncate">
@@ -581,7 +626,7 @@ export default function DashboardClient({
                         }`}
                       >
                         {sub.isUnlocked
-                          ? "AI Unlocked 🚀"
+                          ? "AI Unlocked"
                           : sub.totalAttempted > 0
                           ? `${sub.unlockProgress}% Calibrated`
                           : "Not Started"}
@@ -596,7 +641,7 @@ export default function DashboardClient({
                         </span>
                         <span className="text-[10px] font-bold text-black/70">
                           {sub.isUnlocked
-                            ? "Calibrated ✓"
+                            ? "Calibrated"
                             : `${sub.attemptsToUnlock} Qs left to unlock`}
                         </span>
                       </div>
@@ -871,7 +916,7 @@ export default function DashboardClient({
                         : "bg-[#FAF7EE] text-black/70 border-black/30 hover:border-black"
                     }`}
                   >
-                    <span>{s.icon}</span>
+                    <SubjectIcon name={s.icon} className="w-3.5 h-3.5 shrink-0" />
                     <span>{s.subject}</span>
                     <span className="font-mono text-[10px] opacity-80">
                       ({s.totalAttempted}/150)

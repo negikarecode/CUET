@@ -42,7 +42,7 @@ export default function WeekView({
       case 'rest':
         return <Moon className="w-4 h-4 text-slate-400" />;
       case 'exam_day':
-        return <span className="text-sm">🎓</span>;
+        return <span className="text-sm"></span>;
       default:
         return <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{percentage}%</span>;
     }

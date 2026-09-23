@@ -101,7 +101,7 @@ export function buildCompleteSchedule(params: {
         subject_id:       0,
         chapter_id:       0,
         topic_id:         null,
-        title:            '🎓 Exam Day — You\'ve got this!',
+        title:            'Exam Day — You\'ve got this!',
         description:      'Light revision only. Review your notes. Eat well, sleep early. You\'ve prepared hard for this moment. Trust yourself!',
         planned_minutes:  30,
         priority:         'high',
@@ -118,7 +118,7 @@ export function buildCompleteSchedule(params: {
         subject_id:       0,
         chapter_id:       0,
         topic_id:         null,
-        title:            '📝 Full Mock Test — All Subjects',
+        title:            'Full Mock Test — All Subjects',
         description:      'Simulate real CUET conditions. No pausing, no checking notes. 50 questions per subject, 60 min each. After test: review ALL wrong answers.',
         planned_minutes:  120,
         priority:         'critical',
@@ -134,7 +134,7 @@ export function buildCompleteSchedule(params: {
         subject_id:       0,
         chapter_id:       0,
         topic_id:         null,
-        title:            '🔍 Mock Test Analysis',
+        title:            'Mock Test Analysis',
         description:      'Review every wrong answer. Note the topic. Add to your weak list. This is the most important part of mock tests!',
         planned_minutes:  45,
         priority:         'high',
@@ -151,7 +151,7 @@ export function buildCompleteSchedule(params: {
         subject_id:       0,
         chapter_id:       0,
         topic_id:         null,
-        title:            '🔄 Revision Day',
+        title:            'Revision Day',
         description:      'Go through your notes for topics covered in the last 7 days. Focus on things you got wrong in practice.',
         planned_minutes:  Math.round(dailyMinutes * 0.6),
         priority:         'high',
@@ -167,7 +167,7 @@ export function buildCompleteSchedule(params: {
         subject_id:       0,
         chapter_id:       0,
         topic_id:         null,
-        title:            '⚡ Speed Drill — 30 Questions in 20 Min',
+        title:            'Speed Drill — 30 Questions in 20 Min',
         description:      'Mixed questions from all topics. Practice answering fast (40 sec/question). This builds CUET exam stamina.',
         planned_minutes:  20,
         priority:         'medium',
@@ -191,7 +191,7 @@ export function buildCompleteSchedule(params: {
         subject_id:       0,
         chapter_id:       0,
         topic_id:         null,
-        title:            '💬 Quick CUETBot Session',
+        title:            'Quick CUETBot Session',
         description:      'Ask CUETBot about anything confusing from this week. Use this relaxed Sunday to clear pending doubts.',
         planned_minutes:  20,
         priority:         'low',
@@ -212,7 +212,7 @@ export function buildCompleteSchedule(params: {
           subject_id:       0,
           chapter_id:       0,
           topic_id:         null,
-          title:            '🔄 Quick Warm-up: Yesterday\'s Review',
+          title:            'Quick Warm-up: Yesterday\'s Review',
           description:      'Spend 15 minutes reviewing yesterday\'s wrong answers before starting today\'s plan.',
           planned_minutes:  15,
           priority:         'high',
@@ -272,7 +272,7 @@ export function buildCompleteSchedule(params: {
           subject_id:       0,
           chapter_id:       0,
           topic_id:         null,
-          title:            '💬 End-of-Day: Ask CUETBot Anything',
+          title:            'End-of-Day: Ask CUETBot Anything',
           description:      'Anything confusing from today\'s study? Ask CUETBot now. Don\'t let doubts pile up!',
           planned_minutes:  15,
           priority:         'medium',
@@ -312,15 +312,6 @@ function buildStudyTask(
     ? 'notes_review'
     : 'practice';
   
-  const emoji = {
-    critical: '🔴',
-    weak:     '🟠',
-    average:  '🟡',
-    strong:   '🟢',
-    excellent:'✅',
-    untested: '⬜',
-  }[topic.weakness_level] || '📚';
-  
   const targetQ = Math.max(5, Math.floor(minutes / 2));
   
   const targetAcc = {
@@ -343,7 +334,7 @@ function buildStudyTask(
     subject_id:       topic.subject_id,
     chapter_id:       topic.chapter_id,
     topic_id:         topic.topic_id,
-    title:            `${emoji} ${topic.topic_name} — ${topic.subject_name}`,
+    title:            `${topic.topic_name} — ${topic.subject_name}`,
     description:      buildTaskDescription(topic, minutes, targetQ, targetAcc),
     planned_minutes:  minutes,
     priority,
@@ -367,7 +358,7 @@ function buildTaskDescription(
   targetAcc: number
 ): string {
   const levelMessages: Record<string, string> = {
-    critical: `⚠️ Critical weak area! Current score: ${Math.round(topic.weakness_score)}/100. Do ${targetQ} AI questions. Target: ${targetAcc}% accuracy. Ask CUETBot if anything is confusing.`,
+    critical: `Critical weak area! Current score: ${Math.round(topic.weakness_score)}/100. Do ${targetQ} AI questions. Target: ${targetAcc}% accuracy. Ask CUETBot if anything is confusing.`,
     weak:     `This topic needs work. Current score: ${Math.round(topic.weakness_score)}/100. Do ${targetQ} questions. Target: ${targetAcc}% accuracy.`,
     average:  `Keep improving! Current score: ${Math.round(topic.weakness_score)}/100. Complete ${targetQ} practice questions today.`,
     strong:   `You're good here! Quick revision — ${targetQ} questions to maintain high retention.`,
@@ -385,7 +376,7 @@ function buildBreakTask(order: number): TaskPlan {
     subject_id:       0,
     chapter_id:       0,
     topic_id:         null,
-    title:            '☕ Short Break (5 min)',
+    title:            'Short Break (5 min)',
     description:      'Stretch, drink water, rest your eyes. Short breaks improve retention!',
     planned_minutes:  5,
     priority:         'low',

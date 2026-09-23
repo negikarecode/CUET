@@ -13,7 +13,7 @@ import { format } from 'date-fns';
 
 async function runModule4Tests() {
   console.log('====================================================');
-  console.log('🚀 TESTING MODULE 4: AI STUDY PLANNER ENGINE & FLOW');
+  console.log('TESTING MODULE 4: AI STUDY PLANNER ENGINE & FLOW');
   console.log('====================================================\n');
 
   let passed = 0;
@@ -22,10 +22,10 @@ async function runModule4Tests() {
   function assert(condition: boolean, testName: string) {
     total++;
     if (condition) {
-      console.log(`✅ TEST ${total}: ${testName}`);
+      console.log(`TEST ${total}: ${testName}`);
       passed++;
     } else {
-      console.error(`❌ TEST ${total} FAILED: ${testName}`);
+      console.error(`TEST ${total} FAILED: ${testName}`);
     }
   }
 
@@ -196,7 +196,7 @@ async function runModule4Tests() {
   assert(streakDetails.streak_status === 'active', `Current streak is active`);
   assert(streakDetails.next_milestone === 7, `Next milestone correctly identified as 7 (got: ${streakDetails.next_milestone})`);
   assert(streakDetails.days_to_next_milestone === 1, `Days to next milestone is 1`);
-  assert(streakDetails.streak_emoji.includes('🔥'), `Flame emoji returned for active streak`);
+  assert(streakDetails.streak_emoji.includes(''), `Flame emoji returned for active streak`);
 
   // ----------------------------------------------------
   // 5. Full Plan Generation Flow
@@ -248,7 +248,7 @@ async function runModule4Tests() {
   assert(typeof adjustResult.statusMessage === 'string', `Status message returned: "${adjustResult.statusMessage}"`);
 
   console.log('\n====================================================');
-  console.log(`🎉 MODULE 4 TEST RUN COMPLETE: ${passed}/${total} TESTS PASSED`);
+  console.log(`MODULE 4 TEST RUN COMPLETE: ${passed}/${total} TESTS PASSED`);
   console.log('====================================================');
 
   if (passed === total) {

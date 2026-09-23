@@ -112,7 +112,7 @@ export function getWeaknessLevel(score: number): WeaknessLevel {
 // ─────────────────────────────────────────────────
 export const WEAKNESS_CONFIG = {
   critical:  { 
-    emoji: '🔴', 
+    emoji: '', 
     color: 'red',
     bgColor: 'bg-red-50',
     borderColor: 'border-red-200',
@@ -123,7 +123,7 @@ export const WEAKNESS_CONFIG = {
     priority: 1
   },
   weak:      { 
-    emoji: '🟠', 
+    emoji: '', 
     color: 'orange',
     bgColor: 'bg-orange-50',
     borderColor: 'border-orange-200',
@@ -134,7 +134,7 @@ export const WEAKNESS_CONFIG = {
     priority: 2
   },
   average:   { 
-    emoji: '🟡', 
+    emoji: '', 
     color: 'yellow',
     bgColor: 'bg-yellow-50',
     borderColor: 'border-yellow-200',
@@ -145,7 +145,7 @@ export const WEAKNESS_CONFIG = {
     priority: 3
   },
   strong:    { 
-    emoji: '🟢', 
+    emoji: '', 
     color: 'green',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
@@ -156,7 +156,7 @@ export const WEAKNESS_CONFIG = {
     priority: 4
   },
   excellent: { 
-    emoji: '✅', 
+    emoji: '', 
     color: 'blue',
     bgColor: 'bg-blue-50',
     borderColor: 'border-blue-200',
@@ -344,7 +344,7 @@ export function calculateWeaknessFromPacingSummary(
         code: data.subject.substring(0, 3).toUpperCase(),
         total_chapters: 10,
         color: "#6366f1",
-        icon: "📚",
+        icon: "BookOpen",
       },
       chapter: {
         id: 1,
