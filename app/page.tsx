@@ -10,6 +10,7 @@ import {
   RotateCcw,
   Flame,
   ArrowRight,
+  LayoutDashboard,
 } from "lucide-react";
 import LiveDiagnosticDemo from "@/components/LiveDiagnosticDemo";
 import StatsSection from "@/components/StatsSection";
@@ -48,6 +49,26 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             {/* Left Column: Value Prop & CTAs */}
             <div className="lg:col-span-6 xl:col-span-6 space-y-6 text-left">
+              {/* Mobile-Only Dashboard Button at Start of Landing Page */}
+              <div className="block sm:hidden">
+                <Link
+                  href="/dashboard"
+                  className="w-full py-2.5 px-3.5 rounded-xl bg-[#FEF3C7] active:bg-[#FDE68A] text-black font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center justify-between transition-all"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded bg-black text-white flex items-center justify-center shrink-0">
+                      <LayoutDashboard className="w-3.5 h-3.5 stroke-[2.5]" />
+                    </div>
+                    <span className="uppercase tracking-wider font-black text-[11px]">
+                      {isLoggedIn ? "Open Student Dashboard" : "Go to Dashboard"}
+                    </span>
+                  </div>
+                  <span className="flex items-center gap-1 font-black text-[11px] bg-[#FF5C5C] text-white px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
+                    Dashboard <ArrowRight className="w-3 h-3 stroke-[2.5]" />
+                  </span>
+                </Link>
+              </div>
+
               {/* Eyebrow Tag */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FEF3C7] border-2 border-black text-black text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_#000]">
                 <span className="w-2 h-2 rounded-full bg-[#FF5C5C] border border-black animate-pulse" />
@@ -76,6 +97,17 @@ export default function HomePage() {
 
               {/* Primary & Secondary CTAs */}
               <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                {isLoggedIn && (
+                  <Link
+                    href="/dashboard"
+                    className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-lg bg-[#FEF3C7] hover:bg-[#FDE68A] active:bg-[#FCD34D] text-black font-black text-xs sm:text-sm tracking-wide border-2 border-black shadow-[3px_3px_0px_0px_#000] sm:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <LayoutDashboard className="w-4 h-4 stroke-[2.5]" />
+                    <span>Go to Dashboard</span>
+                    <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                  </Link>
+                )}
+
                 {/* Primary CTA */}
                 <a
                   href="#live-demo"

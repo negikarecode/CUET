@@ -18,6 +18,7 @@ import {
   Trophy,
   ArrowRight,
   Target,
+  LayoutDashboard,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -248,15 +249,12 @@ export default function Navbar() {
                     {isHomepage ? (
                       <Link
                         href="/dashboard"
-                        className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full border-2 border-black bg-white hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
+                        className="px-4 py-2 rounded-lg bg-[#FEF3C7] hover:bg-[#FDE68A] text-black font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5"
                         aria-label="Go to dashboard"
                       >
-                        <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center font-black text-xs">
-                          {userInitials}
-                        </div>
-                        <span className="text-xs font-black text-black hidden lg:inline max-w-[110px] truncate">
-                          {userName}
-                        </span>
+                        <LayoutDashboard className="w-3.5 h-3.5 stroke-[2.5]" />
+                        <span>{t("dashboard", "Dashboard")}</span>
+                        <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
                       </Link>
                     ) : (
                       <button
@@ -350,20 +348,35 @@ export default function Navbar() {
               <LanguageSelector variant="navbar" />
 
               {!isLoggedIn ? (
-                <button
-                  type="button"
-                  onClick={() => handleOpenOnboarding("signup")}
-                  className="px-2.5 py-1.5 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:shadow-none shrink-0"
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => handleOpenOnboarding("login")}
+                    className="px-2.5 py-1.5 rounded-lg bg-white text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none shrink-0"
+                  >
+                    {t("logIn", "Log In")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenOnboarding("signup")}
+                    className="px-2.5 py-1.5 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none shrink-0"
+                  >
+                    {t("joinNow", "Join Now")}
+                  </button>
+                </div>
+              ) : isHomepage ? (
+                <Link
+                  href="/dashboard"
+                  className="px-3 py-1.5 rounded-lg bg-[#FEF3C7] active:bg-[#FDE68A] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none shrink-0 flex items-center gap-1.5"
                 >
-                  Join
-                </button>
+                  <LayoutDashboard className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>{t("dashboard", "Dashboard")}</span>
+                </Link>
               ) : (
-                !isHomepage && (
-                  <div className="flex items-center gap-1 px-2 py-1 bg-[#FEF3C7] border-2 border-black rounded-full text-black text-xs font-black shadow-[1px_1px_0px_0px_#000] shrink-0">
-                    <Flame className="w-3.5 h-3.5 fill-[#F59E0B] text-[#D97706]" />
-                    <span>{streak}</span>
-                  </div>
-                )
+                <div className="flex items-center gap-1 px-2 py-1 bg-[#FEF3C7] border-2 border-black rounded-full text-black text-xs font-black shadow-[1px_1px_0px_0px_#000] shrink-0">
+                  <Flame className="w-3.5 h-3.5 fill-[#F59E0B] text-[#D97706]" />
+                  <span>{streak}</span>
+                </div>
               )}
 
               {!isHomepage && (

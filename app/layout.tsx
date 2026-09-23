@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import Navbar from "@/components/Navbar";
-import BottomNavClient from "@/components/BottomNavClient";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import GoogleTranslateSync from "@/components/i18n/GoogleTranslateSync";
@@ -37,13 +36,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full scroll-smooth overflow-x-hidden">
-      <body className="flex min-h-full flex-col bg-[#FAF7EE] font-sans text-black antialiased selection:bg-[#FECDD3] selection:text-black pb-16 sm:pb-0 overflow-x-hidden w-full max-w-full">
+      <body className="flex min-h-full flex-col bg-[#FAF7EE] font-sans text-black antialiased selection:bg-[#FECDD3] selection:text-black overflow-x-hidden w-full max-w-full">
         <LanguageProvider>
           <GoogleTranslateSync />
           <Navbar />
           <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>
           <Footer />
-          <BottomNavClient />
         </LanguageProvider>
       </body>
     </html>
