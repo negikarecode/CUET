@@ -132,6 +132,9 @@ export const useTestStore = create<TestStoreState>()(
       },
 
       loginUser: (profile: Partial<UserStats>) => {
+        if (typeof document !== "undefined") {
+          document.cookie = "cuet_auth=1; path=/; max-age=2592000; SameSite=Lax";
+        }
         const stream = (profile.preferredStream || "science") as StreamType;
         set((state) => {
           const isDifferentUser = state.user?.id !== profile.id;
@@ -164,6 +167,9 @@ export const useTestStore = create<TestStoreState>()(
       },
 
       logout: () => {
+        if (typeof document !== "undefined") {
+          document.cookie = "cuet_auth=; path=/; max-age=0; SameSite=Lax";
+        }
         set({
           user: DEFAULT_USER,
           testAttempts: [],

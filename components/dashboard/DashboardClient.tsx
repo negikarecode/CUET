@@ -137,6 +137,19 @@ export default function DashboardClient({
     }
   }, []);
 
+  // Client-side authentication guard: redirect to /signup if unauthenticated
+  useEffect(() => {
+    if (isClient) {
+      const isAuth = Boolean(
+        (storeUser?.isLoggedIn && storeUser?.name && storeUser?.id !== "guest") ||
+        (initialData?.user && initialData.user.id !== "guest")
+      );
+      if (!isAuth) {
+        router.replace("/signup?redirect=/dashboard");
+      }
+    }
+  }, [isClient, storeUser, initialData, router]);
+
   const isServerUser = initialData.user && initialData.user.id !== "guest";
 
   // Robust attempted count: Never drop questions solved on client or server

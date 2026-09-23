@@ -2,8 +2,9 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
- * Updates the user's Supabase session in Next.js middleware.
- * Ensures access tokens are refreshed and auth cookies are synced.
+ * Updates the user's Supabase session in Next.js middleware and guards protected routes.
+ * Ensures access tokens are refreshed, auth cookies are synced,
+ * and unauthenticated visitors cannot access /dashboard or its sub-routes.
  */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -43,13 +44,52 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  // Do not run Supabase code between createServerClient and supabase.auth.getUser().
-  // A simple call to getUser ensures auth tokens are refreshed if needed.
+  let authUser = null;
   try {
-    await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    authUser = data.user;
   } catch (error) {
     // If Supabase URL or key is placeholder or network fails, proceed gracefully
     console.debug("Supabase auth check skipped/failed:", error);
+  }
+
+  const pathname = request.nextUrl.pathname;
+  const isDashboardRoute =
+    pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+  const isAuthRoute = pathname === "/signup" || pathname === "/login";
+
+  const cuetAuthCookie = request.cookies.get("cuet_auth")?.value === "1";
+  const isAuthenticated = Boolean(authUser || cuetAuthCookie);
+
+  // 1. Unauthenticated users cannot enter dashboard routes -> redirect to /signup
+  if (isDashboardRoute && !isAuthenticated) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/signup";
+    redirectUrl.search = "";
+    redirectUrl.searchParams.set("redirect", pathname + request.nextUrl.search);
+
+    const redirectResponse = NextResponse.redirect(redirectUrl);
+    // Preserve cookies set by Supabase
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
+  }
+
+  // 2. Authenticated candidates visiting /signup or /login are redirected to dashboard
+  if (isAuthRoute && isAuthenticated) {
+    const redirectParam = request.nextUrl.searchParams.get("redirect");
+    const targetPath =
+      redirectParam && redirectParam.startsWith("/")
+        ? redirectParam
+        : "/dashboard";
+
+    const redirectUrl = new URL(targetPath, request.nextUrl.origin);
+    const redirectResponse = NextResponse.redirect(redirectUrl);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
   }
 
   return supabaseResponse;

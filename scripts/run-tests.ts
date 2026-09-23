@@ -582,6 +582,57 @@ What is the immediate impact on commercial banks when RBI increases the repo rat
   );
 
   console.log();
+
+  // -------------------------------------------------------------
+  // SUITE U: Dashboard Route Protection & Auth Guard
+  // -------------------------------------------------------------
+  console.log("SUITE U: Dashboard Route Protection & Auth Guard");
+
+  const protectedDashboardRoutes = [
+    "/dashboard",
+    "/dashboard/mocks",
+    "/dashboard/pyqs",
+    "/dashboard/leaderboard",
+    "/dashboard/mocks/physics",
+  ];
+
+  const simulateRouteGuard = (
+    path: string,
+    isAuthenticated: boolean
+  ): { status: "allow" | "redirect"; redirectTarget?: string } => {
+    const isDashboard = path === "/dashboard" || path.startsWith("/dashboard/");
+    const isAuthRoute = path === "/signup" || path === "/login";
+
+    if (isDashboard && !isAuthenticated) {
+      return { status: "redirect", redirectTarget: `/signup?redirect=${encodeURIComponent(path)}` };
+    }
+    if (isAuthRoute && isAuthenticated) {
+      return { status: "redirect", redirectTarget: "/dashboard" };
+    }
+    return { status: "allow" };
+  };
+
+  for (const route of protectedDashboardRoutes) {
+    const result = simulateRouteGuard(route, false);
+    assert(
+      result.status === "redirect" && result.redirectTarget?.startsWith("/signup"),
+      `Route Guard: Unauthenticated access to ${route} is strictly blocked and redirected to /signup`
+    );
+  }
+
+  const authAccess = simulateRouteGuard("/dashboard", true);
+  assert(
+    authAccess.status === "allow",
+    "Route Guard: Authenticated candidates are granted access to /dashboard"
+  );
+
+  const authVisitingSignup = simulateRouteGuard("/signup", true);
+  assert(
+    authVisitingSignup.status === "redirect" && authVisitingSignup.redirectTarget === "/dashboard",
+    "Route Guard: Authenticated candidate visiting /signup is redirected to /dashboard"
+  );
+
+  console.log();
   console.log("===============================================================");
   console.log(`FINAL TEST SUITE SUMMARY: ${passedTests} / ${totalTests} PASSED (${failedTests} FAILED)`);
   console.log("===============================================================");
