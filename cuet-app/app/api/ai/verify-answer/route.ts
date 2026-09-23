@@ -9,6 +9,7 @@ import {
   getWeaknessLevel,
 } from '@/lib/weakness-engine';
 import { StudentAttempt, WeaknessScore } from '@/lib/types';
+import { stringToUuid } from '@/lib/utils';
 
 export async function POST(req: Request) {
   try {
@@ -93,7 +94,21 @@ export async function POST(req: Request) {
 
     if (isSupabaseConfigured()) {
       try {
-        await supabase.from('student_attempts').insert([newAttempt]);
+        const testUuid = session_id
+          ? stringToUuid(session_id)
+          : stringToUuid(`ai_verify_${actualTopicId}`);
+        const qUuid = stringToUuid(String(question_id));
+
+        await supabase.from('user_attempts').insert([
+          {
+            user_id: studentId,
+            test_id: testUuid,
+            question_id: qUuid,
+            selected_option: selected_option || null,
+            is_correct: isCorrect,
+            time_spent_seconds: time_taken_seconds || 0,
+          },
+        ]);
       } catch (err) {
         console.warn('Supabase attempt insert fallback:', err);
       }

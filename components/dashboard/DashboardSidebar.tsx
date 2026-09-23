@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { createClient } from "@/lib/supabase/client";
 import UpgradeButton from "@/components/payments/UpgradeButton";
 import LanguageSelector from "@/components/i18n/LanguageSelector";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
@@ -49,10 +50,17 @@ export default function DashboardSidebar() {
       .slice(0, 2)
       .toUpperCase() || "CU";
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.error("Sign out error:", e);
+    }
     logout();
     setMobileDrawerOpen(false);
     router.push("/");
+    router.refresh();
   };
 
   const navItems = [

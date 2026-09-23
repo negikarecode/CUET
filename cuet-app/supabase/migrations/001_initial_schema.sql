@@ -2,13 +2,13 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ─────────────────────────────────────────
--- TABLE 1: students
+-- TABLE 1: students (Bridged to public.profiles)
 -- ─────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS students (
-  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id                UUID PRIMARY KEY REFERENCES public.profiles(id) ON DELETE CASCADE,
   auth_user_id      UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   name              VARCHAR(100) NOT NULL,
-  email             VARCHAR(150) UNIQUE NOT NULL,
+  email             VARCHAR(150),
   phone             VARCHAR(15),
   selected_subjects TEXT[] DEFAULT '{}',
   target_college    VARCHAR(200),
@@ -19,6 +19,24 @@ CREATE TABLE IF NOT EXISTS students (
   created_at        TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at        TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- Compatibility view mapping public.profiles into students
+CREATE OR REPLACE VIEW public.vw_students AS
+SELECT 
+  p.id,
+  p.id AS auth_user_id,
+  p.full_name AS name,
+  p.target_stream,
+  p.target_college,
+  p.target_university,
+  p.xp,
+  p.campus_coins,
+  p.current_streak,
+  p.is_premium,
+  p.subscription_tier AS plan_type,
+  p.created_at,
+  p.updated_at
+FROM public.profiles p;
 
 -- ─────────────────────────────────────────
 -- TABLE 2: subjects
@@ -125,7 +143,7 @@ CREATE TABLE IF NOT EXISTS student_attempts (
 -- ─────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS weakness_scores (
   id                    BIGSERIAL PRIMARY KEY,
-  student_id            UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id            UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   topic_id              INTEGER REFERENCES topics(id) ON DELETE CASCADE,
   subject_id            INTEGER REFERENCES subjects(id),
   chapter_id            INTEGER REFERENCES chapters(id),
@@ -157,7 +175,7 @@ CREATE TABLE IF NOT EXISTS weakness_scores (
 -- ─────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS student_alerts (
   id          BIGSERIAL PRIMARY KEY,
-  student_id  UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id  UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   alert_type  VARCHAR(50) NOT NULL,
   title       VARCHAR(200) NOT NULL,
   message     TEXT NOT NULL,
@@ -193,7 +211,7 @@ DO $$ BEGIN
     SELECT 1 FROM pg_policies WHERE policyname = 'Students can only see their own data' AND tablename = 'students'
   ) THEN
     CREATE POLICY "Students can only see their own data" ON students
-      FOR ALL USING (auth.uid() = auth_user_id);
+      FOR ALL USING (auth.uid() = id OR auth.uid() = auth_user_id);
   END IF;
 
   IF NOT EXISTS (
@@ -201,11 +219,7 @@ DO $$ BEGIN
   ) THEN
     CREATE POLICY "Students can only see their own attempts" 
       ON student_attempts
-      FOR ALL USING (
-        student_id = (
-          SELECT id FROM students WHERE auth_user_id = auth.uid()
-        )
-      );
+      FOR ALL USING (student_id = auth.uid());
   END IF;
 
   IF NOT EXISTS (
@@ -213,11 +227,7 @@ DO $$ BEGIN
   ) THEN
     CREATE POLICY "Students can only see their own weakness scores" 
       ON weakness_scores
-      FOR ALL USING (
-        student_id = (
-          SELECT id FROM students WHERE auth_user_id = auth.uid()
-        )
-      );
+      FOR ALL USING (student_id = auth.uid());
   END IF;
 END $$;
 

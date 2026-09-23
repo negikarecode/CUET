@@ -96,59 +96,12 @@ export async function POST(req: NextRequest) {
       try {
         const supabaseAdmin = createAdminClient();
 
-        // 1. Ensure test paper exists in public.tests
+        // 1. Prepare user_attempts batch (questions and tests are pre-seeded in the database)
         const testUuid = stringToUuid(attempt.testId);
-        await supabaseAdmin.from("tests").upsert(
-          {
-            id: testUuid,
-            title: attempt.testTitle || `CUET ${attempt.subject} Mock Paper`,
-            subject: attempt.subject || "Physics",
-            total_questions: attempt.totalQuestions || attempt.questions.length,
-            duration_minutes: Math.ceil((attempt.timeTakenSeconds || 3600) / 60),
-            is_active: true,
-          },
-          { onConflict: "id" }
-        );
-
-        // 2. Prepare questions and user_attempts batches
-        const questionsToUpsert: any[] = [];
         const attemptsToInsert: any[] = [];
 
         attempt.questions.forEach((q, idx) => {
           const qUuid = stringToUuid(q.questionId || `${attempt.testId}_q_${idx + 1}`);
-          const optA = q.options?.[0]?.text || "Option A";
-          const optB = q.options?.[1]?.text || "Option B";
-          const optC = q.options?.[2]?.text || "Option C";
-          const optD = q.options?.[3]?.text || "Option D";
-          const qText = q.prompt || `Question ${q.questionNumber || idx + 1}`;
-          const archetype =
-            q.questionType === "assertion-reasoning"
-              ? "Assertion-Reasoning"
-              : q.questionType === "direct-numerical"
-              ? "Numerical"
-              : q.questionType === "case-based"
-              ? "Case-Study MCQ"
-              : "Direct Fact";
-
-          questionsToUpsert.push({
-            id: qUuid,
-            subject: q.subject || attempt.subject || "Physics",
-            chapter: q.chapter || "Domain Core",
-            micro_topic: q.microTopic || "Key Concept",
-            ncert_reference:
-              q.ncertReference ||
-              `NCERT Class 12 (${q.chapter || "General"}), Section Focus`,
-            archetype,
-            question_text: qText,
-            option_a: optA,
-            option_b: optB,
-            option_c: optC,
-            option_d: optD,
-            correct_option: q.correctOption || "A",
-            explanation: q.explanation || "Detailed solution based on NCERT guidelines.",
-            is_pyq: (attempt.testId || "").includes("pyq"),
-            pyq_year: 2024,
-          });
 
           attemptsToInsert.push({
             user_id: targetUserId,
@@ -160,14 +113,7 @@ export async function POST(req: NextRequest) {
           });
         });
 
-        // Batch upsert questions (ignore duplicate errors)
-        if (questionsToUpsert.length > 0) {
-          await supabaseAdmin
-            .from("questions")
-            .upsert(questionsToUpsert, { onConflict: "id" });
-        }
-
-        // Batch insert user_attempts
+        // 2. Batch insert user_attempts
         if (attemptsToInsert.length > 0) {
           await supabaseAdmin.from("user_attempts").insert(attemptsToInsert);
         }

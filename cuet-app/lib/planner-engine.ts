@@ -17,11 +17,18 @@ export async function generateStudyPlan(
   try {
     if (supabase) {
       const { data } = await supabase
-        .from('students')
+        .from('profiles')
         .select('*')
         .eq('id', studentId)
         .maybeSingle();
-      if (data) student = data;
+      if (data) {
+        student = {
+          ...student,
+          ...data,
+          name: data.full_name || student.name,
+          target_college: data.target_college || student.target_college,
+        };
+      }
     }
   } catch (err) {
     console.warn('[PlannerEngine] Supabase student fetch fallback:', err);

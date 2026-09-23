@@ -131,33 +131,44 @@ export const useTestStore = create<TestStoreState>()(
 
       loginUser: (profile: Partial<UserStats>) => {
         const stream = (profile.preferredStream || "science") as StreamType;
-        set((state) => ({
-          user: {
-            ...state.user,
-            ...profile,
-            id: profile.id || `user_${Date.now()}`,
-            name: profile.name || "Aspirant",
-            email: profile.email || `${(profile.name || "aspirant").toLowerCase().replace(/\s+/g, "")}@example.com`,
-            age: profile.age || "17",
-            targetCollege: profile.targetCollege || "SRCC / St. Stephen's (Delhi University)",
-            targetUniversity: profile.targetUniversity || "Delhi University",
-            targetCourse: profile.targetCourse || "B.Com (Hons)",
-            preferredStream: stream,
-            selectedSubjects: profile.selectedSubjects || [],
-            dailyStreak: 1, // Day 1 streak
-            xpPoints: 150, // Welcome bonus XP
-            campusCoins: 50, // Welcome bonus coins
-            isLoggedIn: true,
-            lastActiveDate: new Date().toISOString(),
-          },
-          selectedStream: stream,
-        }));
+        set((state) => {
+          const isDifferentUser = state.user?.id !== profile.id;
+          return {
+            user: {
+              ...DEFAULT_USER,
+              ...profile,
+              id: profile.id || `user_${Date.now()}`,
+              name: profile.name || "Aspirant",
+              email: profile.email || `${(profile.name || "aspirant").toLowerCase().replace(/\s+/g, "")}@example.com`,
+              age: profile.age || "17",
+              targetCollege: profile.targetCollege || "SRCC / St. Stephen's (Delhi University)",
+              targetUniversity: profile.targetUniversity || "Delhi University",
+              targetCourse: profile.targetCourse || "B.Com (Hons)",
+              preferredStream: stream,
+              selectedSubjects: profile.selectedSubjects || [],
+              dailyStreak: profile.dailyStreak ?? 1,
+              xpPoints: profile.xpPoints ?? 150,
+              campusCoins: profile.campusCoins ?? 50,
+              isLoggedIn: true,
+              lastActiveDate: new Date().toISOString(),
+            },
+            selectedStream: stream,
+            testAttempts: isDifferentUser ? [] : state.testAttempts,
+            analytics: isDifferentUser ? DEFAULT_ANALYTICS : state.analytics,
+            isSessionActive: false,
+            recordedAnswers: {},
+          };
+        });
       },
 
       logout: () => {
         set({
           user: DEFAULT_USER,
+          testAttempts: [],
+          analytics: DEFAULT_ANALYTICS,
           isSessionActive: false,
+          activeSubject: null,
+          recordedAnswers: {},
         });
       },
 

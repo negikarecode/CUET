@@ -6,12 +6,48 @@ import {
   calculateConsistencyScore,
   calculateFinalWeaknessScore,
   getWeaknessLevel,
+  calculateWeaknessFromPacingSummary,
 } from "@/lib/weakness-engine";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 export async function POST() {
   try {
     AppDataStore.initialize();
-    const studentId = AppDataStore.student.id;
+    let studentId = AppDataStore.student.id;
+
+    // Direct calculation off public.pacing_analytics_summary
+    if (isSupabaseConfigured()) {
+      try {
+        const { data: authData } = await supabase.auth.getUser();
+        if (authData?.user?.id) {
+          studentId = authData.user.id;
+        }
+
+        const { data: pacingRows } = await supabase
+          .from("pacing_analytics_summary")
+          .select("*")
+          .eq("user_id", studentId);
+
+        if (pacingRows && pacingRows.length > 0) {
+          const computedScores = calculateWeaknessFromPacingSummary(
+            pacingRows as any,
+            studentId
+          );
+          for (const score of computedScores) {
+            AppDataStore.weaknessScores.set(score.topic_id, score);
+          }
+
+          return NextResponse.json({
+            success: true,
+            message: "Recalculated weakness scores directly from pacing_analytics_summary",
+            source: "public.pacing_analytics_summary",
+            totalUpdated: computedScores.length,
+          });
+        }
+      } catch (err) {
+        console.warn("Pacing summary recalculation fallback to in-memory:", err);
+      }
+    }
 
     for (const topic of SEED_TOPICS) {
       const topicAttempts = AppDataStore.attempts.filter(

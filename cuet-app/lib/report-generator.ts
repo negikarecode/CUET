@@ -42,8 +42,15 @@ export async function generateFullAnalysis(
     let student = AppDataStore.student;
     if (sb) {
       try {
-        const { data } = await sb.from('students').select('*').eq('id', studentId).single();
-        if (data) student = data;
+        const { data } = await sb.from('profiles').select('*').eq('id', studentId).single();
+        if (data) {
+          student = {
+            ...student,
+            ...data,
+            name: data.full_name || student.name,
+            target_college: data.target_college || student.target_college,
+          };
+        }
       } catch {}
     }
 

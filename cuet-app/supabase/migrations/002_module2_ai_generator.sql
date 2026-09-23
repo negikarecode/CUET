@@ -1,5 +1,9 @@
 -- ─────────────────────────────────────────────────────
--- MODULE 2: AI QUESTION GENERATOR TABLES & SEED DATA
+-- MODULE 2: AI QUESTION GENERATOR TABLES & SEED DATA [DEPRECATED]
+-- DEPRECATION NOTICE: Runtime LLM question synthesis into `ai_generated_questions`
+-- is completely DEPRECATED. All test generation and question retrieval must
+-- query the curated, verified question bank in `public.questions` (sourced from the
+-- 484 official mock papers) with 0 runtime token consumption.
 -- ─────────────────────────────────────────────────────
 
 -- ─────────────────────────────────────────────────────
@@ -52,7 +56,7 @@ CREATE TABLE IF NOT EXISTS ai_generated_questions (
                     CHECK (difficulty IN ('easy','medium','hard')),
   
   -- AI metadata
-  generated_for_student UUID REFERENCES students(id) ON DELETE SET NULL,
+  generated_for_student UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
   prompt_used       TEXT,
   model_used        VARCHAR(50) DEFAULT 'gpt-4o-mini',
   content_chunks_used TEXT[],
@@ -84,7 +88,7 @@ CREATE TABLE IF NOT EXISTS ai_generated_questions (
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS ai_usage_tracking (
   id                BIGSERIAL PRIMARY KEY,
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   usage_date        DATE DEFAULT CURRENT_DATE,
   
   call_type         VARCHAR(30),

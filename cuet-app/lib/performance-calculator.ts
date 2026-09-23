@@ -46,28 +46,74 @@ export async function calculateAllMetrics(
 
   let rawAttempts: any[] = [];
 
-  // Try Supabase first if available
+  // Try Supabase user_attempts and pacing_analytics_summary first if available
+  let pacingSummaryRows: any[] = [];
   if (sb) {
     try {
+      // 1. Fetch user attempts for this session
       const { data } = await sb
-        .from('student_attempts')
+        .from('user_attempts')
         .select(`
-          *,
+          id,
+          user_id,
+          test_id,
+          question_id,
+          selected_option,
+          is_correct,
+          time_spent_seconds,
+          is_time_sink,
+          created_at,
           question:questions(
-            id, difficulty, correct_option,
-            subject_id, chapter_id, topic_id
+            id,
+            subject,
+            chapter,
+            micro_topic,
+            archetype,
+            correct_option
           )
         `)
-        .eq('session_id', sessionId)
-        .eq('student_id', studentId)
-        .eq('attempt_source', 'mock_test')
-        .order('attempted_at', { ascending: true });
+        .eq('test_id', sessionId)
+        .eq('user_id', studentId)
+        .order('created_at', { ascending: true });
 
       if (data && data.length > 0) {
-        rawAttempts = data;
+        rawAttempts = data.map((d: any, idx: number) => ({
+          id: d.id,
+          student_id: d.user_id,
+          question_id: d.question_id,
+          subject_id: 1,
+          chapter_id: 1,
+          topic_id: idx + 1,
+          selected_option: d.selected_option,
+          is_correct: d.is_correct,
+          is_skipped: d.selected_option === null,
+          time_taken_seconds: d.time_spent_seconds,
+          attempt_source: 'mock_test',
+          session_id: d.test_id,
+          question: {
+            id: d.question_id,
+            difficulty: 'medium',
+            correct_option: d.question?.correct_option || 'A',
+            subject: d.question?.subject || 'Domain',
+            chapter: d.question?.chapter || 'Chapter 1',
+            topic: d.question?.micro_topic || 'Topic 1',
+            subject_id: 1,
+            chapter_id: 1,
+            topic_id: idx + 1,
+          },
+        }));
+      }
+
+      // 2. Fetch directly from public.pacing_analytics_summary view
+      const { data: pData } = await sb
+        .from('pacing_analytics_summary')
+        .select('*')
+        .eq('user_id', studentId);
+      if (pData && pData.length > 0) {
+        pacingSummaryRows = pData;
       }
     } catch (err) {
-      console.warn('[PerformanceCalculator] Supabase fetch fallback to AppDataStore:', err);
+      console.warn('[PerformanceCalculator] Supabase user_attempts/pacing fetch fallback:', err);
     }
   }
 
@@ -141,8 +187,18 @@ export async function calculateAllMetrics(
   const fastestQ = timeValues.length > 0 ? Math.min(...timeValues) : 0;
   const slowestQ = timeValues.length > 0 ? Math.max(...timeValues) : 0;
 
-  // Time wasted = time spent on wrong answers (which could have been skipped)
-  const timeWasted = wrongTimes.reduce((s, t) => s + t, 0);
+  // Time wasted = time spent on wrong answers (which could have been skipped), enriched with pacing_analytics_summary
+  let timeWasted = wrongTimes.reduce((s, t) => s + t, 0);
+  if (pacingSummaryRows.length > 0) {
+    const totalPacingWaste = pacingSummaryRows.reduce((sum, r) => {
+      const sinks = Number(r.time_sink_count) || 0;
+      const avgT = Number(r.avg_time_seconds) || 0;
+      return sum + sinks * Math.max(0, avgT - 60);
+    }, 0);
+    if (totalPacingWaste > 0) {
+      timeWasted = Math.max(timeWasted, Math.round(totalPacingWaste));
+    }
+  }
 
   // ── SUBJECT BREAKDOWN ─────────────────────────────
   const subjectIds = Array.from(new Set(rawAttempts.map((a) => a.subject_id)));
@@ -311,20 +367,25 @@ export async function calculateAllMetrics(
     sortedByTime.map((a, i) => [a.question_id, i + 1])
   );
 
-  // Get previous mock attempts for repeated mistake detection
-  let prevWrongTopics = new Set<number>();
-  if (sb) {
+  // Get previous mock attempts and pacing summary for repeated mistake detection
+  const prevWrongTopics = new Set<string | number>();
+  if (pacingSummaryRows.length > 0) {
+    pacingSummaryRows.forEach((r: any) => {
+      if (Number(r.fatal_time_sinks) > 0 || Number(r.accuracy_percentage) < 50) {
+        prevWrongTopics.add(r.micro_topic);
+      }
+    });
+  } else if (sb) {
     try {
       const { data: prevAttempts } = await sb
-        .from('student_attempts')
-        .select('topic_id, is_correct')
-        .eq('student_id', studentId)
-        .eq('attempt_source', 'mock_test')
-        .neq('session_id', sessionId)
+        .from('user_attempts')
+        .select('question_id, is_correct')
+        .eq('user_id', studentId)
+        .neq('test_id', sessionId)
         .eq('is_correct', false);
 
       if (prevAttempts) {
-        prevWrongTopics = new Set(prevAttempts.map((a: any) => a.topic_id));
+        prevAttempts.forEach((a: any) => prevWrongTopics.add(a.question_id));
       }
     } catch {}
   }
@@ -357,8 +418,12 @@ export async function calculateAllMetrics(
     const isTimePressure =
       !a.is_correct && !a.is_skipped && time > avgTimeForDiff * 1.8;
 
-    // Repeated mistake: wrong in this test AND previous tests
-    const isRepeated = !a.is_correct && prevWrongTopics.has(a.topic_id);
+    // Repeated mistake: wrong in this test AND previous tests / pacing summary
+    const isRepeated =
+      !a.is_correct &&
+      (prevWrongTopics.has(a.topic_id) ||
+        prevWrongTopics.has(a.question?.topic) ||
+        prevWrongTopics.has(a.question_id));
 
     // Lucky guess: correct but very fast (< 10 seconds)
     const isGuessed = a.is_correct === true && time < 10;

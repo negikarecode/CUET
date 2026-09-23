@@ -1,5 +1,7 @@
 // ─────────────────────────────────────────────────────
-// SYSTEM PROMPT: Who the AI is and its rules
+// SYSTEM PROMPT: Who the AI is and its rules [DEPRECATED]
+// DEPRECATION NOTICE: Runtime LLM question synthesis is deprecated.
+// All questions are served directly from the curated verified question bank.
 // ─────────────────────────────────────────────────────
 export const QUESTION_GENERATOR_SYSTEM_PROMPT = `
 You are an expert CUET (Common University Entrance Test) 

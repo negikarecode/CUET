@@ -9,6 +9,7 @@ import {
   getWeaknessLevel,
 } from "@/lib/weakness-engine";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { stringToUuid } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
@@ -44,10 +45,24 @@ export async function POST(req: Request) {
 
     AppDataStore.attempts.push(newAttempt);
 
-    // If Supabase is active, persist in database
+    // If Supabase is active, persist in public.user_attempts
     if (isSupabaseConfigured()) {
       try {
-        await supabase.from("student_attempts").insert([newAttempt]);
+        const testUuid = body.session_id
+          ? stringToUuid(body.session_id)
+          : stringToUuid(`topic_practice_${body.topic_id}`);
+        const qUuid = stringToUuid(String(body.question_id));
+
+        await supabase.from("user_attempts").insert([
+          {
+            user_id: studentId,
+            test_id: testUuid,
+            question_id: qUuid,
+            selected_option: body.selected_option,
+            is_correct: body.is_correct,
+            time_spent_seconds: body.time_taken_seconds || 0,
+          },
+        ]);
       } catch (err) {
         console.warn("Supabase insert attempt fallback:", err);
       }

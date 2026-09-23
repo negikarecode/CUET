@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AppDataStore } from '@/lib/data-store';
 import { supabase } from '@/lib/supabase';
+import { stringToUuid } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,21 +29,21 @@ export async function POST(request: NextRequest) {
 
     const isCorrect = selected_option.trim().toUpperCase() === correct_option.trim().toUpperCase();
 
-    // 1. Record attempt in Supabase if configured
+    // 1. Record attempt in Supabase user_attempts if configured
     try {
       if (supabase) {
-        await supabase.from('student_attempts').insert({
-          student_id,
-          question_id: question_id || null,
-          subject_id,
-          chapter_id,
-          topic_id,
+        const testUuid = session_id
+          ? stringToUuid(session_id)
+          : stringToUuid(`chat_doubt_${topic_id}`);
+        const qUuid = stringToUuid(`chat_mcq_${topic_id}_${question_id}`);
+
+        await supabase.from('user_attempts').insert({
+          user_id: student_id,
+          test_id: testUuid,
+          question_id: qUuid,
           selected_option,
           is_correct: isCorrect,
-          is_skipped: false,
-          time_taken_seconds,
-          attempt_source: 'chat_doubt',
-          session_id: session_id || null,
+          time_spent_seconds: time_taken_seconds || 0,
         });
       }
     } catch (err) {

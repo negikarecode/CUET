@@ -4,14 +4,22 @@ export type WeaknessLevel =
 export interface Student {
   id: string;
   name: string;
+  full_name?: string;
   email: string;
   phone?: string;
   selected_subjects: string[];
   target_college?: string;
+  target_stream?: string;
+  target_university?: string;
   exam_date: string;
   daily_study_hours: number;
   plan_type: 'free' | 'basic' | 'pro' | 'ultimate';
   avatar_url?: string;
+  xp?: number;
+  campus_coins?: number;
+  current_streak?: number;
+  is_premium?: boolean;
+  subscription_tier?: string;
 }
 
 export interface Subject {

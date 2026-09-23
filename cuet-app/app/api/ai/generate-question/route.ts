@@ -27,14 +27,14 @@ export async function POST(req: Request) {
         const { data: authData } = await supabase.auth.getUser();
         if (authData?.user) {
           const { data: profile } = await supabase
-            .from('students')
-            .select('id, plan_type')
-            .eq('auth_user_id', authData.user.id)
+            .from('profiles')
+            .select('id, subscription_tier')
+            .eq('id', authData.user.id)
             .maybeSingle();
 
           if (profile) {
             studentId = profile.id;
-            studentPlan = profile.plan_type || 'free';
+            studentPlan = profile.subscription_tier || 'free';
           }
         }
       } catch (err) {
@@ -330,7 +330,7 @@ export async function POST(req: Request) {
         option_c: aiQ.option_c,
         option_d: aiQ.option_d,
         difficulty: aiQ.difficulty,
-        is_ai_generated: true,
+        is_ai_generated: false,
         from_cache: genResult.fromCache,
       },
       usage: {

@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { createClient } from "@/lib/supabase/client";
 import UpgradeButton from "@/components/payments/UpgradeButton";
 import OnboardingModal from "@/components/auth/OnboardingModal";
 import LanguageSelector from "@/components/i18n/LanguageSelector";
@@ -62,13 +63,18 @@ export default function Navbar() {
     setMobileMenuOpen(false);
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error("Sign out error:", err);
+    }
     logout();
     setProfileDropdownOpen(false);
     setMobileMenuOpen(false);
-    if (pathname === "/dashboard") {
-      router.push("/");
-    }
+    router.push("/");
+    router.refresh();
   };
 
   if (pathname.startsWith("/test/") || pathname === "/dashboard") return null;

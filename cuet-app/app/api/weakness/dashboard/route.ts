@@ -5,15 +5,51 @@ import {
   calculateOverallHealthScore,
   getWeaknessLevel,
   getTopRecommendations,
+  calculateWeaknessFromPacingSummary,
 } from "@/lib/weakness-engine";
 import { generateSmartAlerts } from "@/lib/alerts";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 export async function GET() {
   try {
     AppDataStore.initialize();
 
-    const student = AppDataStore.student;
-    const scores = Array.from(AppDataStore.weaknessScores.values());
+    let student = AppDataStore.student;
+    let scores = Array.from(AppDataStore.weaknessScores.values());
+
+    // Connect directly to public.pacing_analytics_summary and public.profiles
+    if (isSupabaseConfigured()) {
+      try {
+        const { data: authData } = await supabase.auth.getUser();
+        const currentUserId = authData?.user?.id || student.id;
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", currentUserId)
+          .maybeSingle();
+
+        if (profile) {
+          student = {
+            ...student,
+            id: profile.id,
+            name: profile.full_name || student.name,
+            target_college: profile.target_college || student.target_college,
+          };
+        }
+
+        const { data: pacingRows } = await supabase
+          .from("pacing_analytics_summary")
+          .select("*")
+          .eq("user_id", currentUserId);
+
+        if (pacingRows && pacingRows.length > 0) {
+          scores = calculateWeaknessFromPacingSummary(pacingRows as any, currentUserId);
+        }
+      } catch (err) {
+        console.warn("Pacing analytics summary fetch fallback:", err);
+      }
+    }
 
     // Tested topic IDs
     const testedTopicIds = new Set(scores.map((s) => s.topic_id));

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -14,6 +14,8 @@ import {
   BookOpen,
   GraduationCap,
   Award,
+  Lock,
+  Sparkles,
 } from "lucide-react";
 import TrophyCabinet from "@/components/dashboard/TrophyCabinet";
 import { useCBTStore } from "@/lib/store/useCBTStore";
@@ -72,22 +74,53 @@ export default function DashboardClient({
   const [activeRepairTopic, setActiveRepairTopic] = useState<string | null>(null);
   const [radarTab, setRadarTab] = useState<"weaknesses" | "strengths" | "all">("weaknesses");
 
-  // Merge client attempts with server initialData
-  const hasClientAttempts = isClient && clientAnalytics.totalQuestionsAttempted > 0;
-  const totalAttempted = hasClientAttempts
-    ? Math.max(initialData.kpi.totalAttempted, clientAnalytics.totalQuestionsAttempted)
+  const isServerUser = initialData.user && initialData.user.id !== "guest";
+
+  // Synchronize client store with authenticated database profile
+  useEffect(() => {
+    if (isServerUser && storeUser.id !== initialData.user.id) {
+      useTestStore.getState().loginUser({
+        id: initialData.user.id,
+        name: initialData.user.fullName,
+        targetCollege: initialData.user.targetCollege,
+        targetUniversity: initialData.user.targetUniversity,
+        preferredStream: (initialData.user.targetStream?.toLowerCase() || "commerce") as any,
+        xpPoints: initialData.user.xp,
+        campusCoins: initialData.user.campusCoins,
+        dailyStreak: initialData.user.currentStreak,
+      });
+    }
+  }, [isServerUser, initialData.user.id, initialData.user.fullName, storeUser.id]);
+
+  // Merge client attempts strictly when belonging to the active user
+  const hasClientAttempts =
+    isClient &&
+    storeUser.id === initialData.user.id &&
+    clientAnalytics.totalQuestionsAttempted > 0;
+
+  const totalAttempted = isServerUser
+    ? initialData.kpi.totalAttempted
+    : hasClientAttempts
+    ? clientAnalytics.totalQuestionsAttempted
     : initialData.kpi.totalAttempted;
 
-  const accuracyPercentage = hasClientAttempts
+  const accuracyPercentage = isServerUser
+    ? initialData.kpi.accuracyPercentage
+    : hasClientAttempts
     ? clientAnalytics.overallAccuracyPercentage
     : initialData.kpi.accuracyPercentage;
 
   const completedTestsCount =
-    isClient && testAttempts && testAttempts.length > 0
+    isClient && testAttempts && testAttempts.length > 0 && storeUser.id === initialData.user.id
       ? testAttempts.length
       : totalAttempted > 0
       ? Math.ceil(totalAttempted / 50)
       : 0;
+
+  // AI Unlock Gate: 150 attempts required for statistical calibration
+  const isAiMentorUnlocked = totalAttempted >= 150;
+  const attemptsToUnlock = Math.max(0, 150 - totalAttempted);
+  const unlockProgress = Math.min(100, Math.round((totalAttempted / 150) * 100));
 
   const weaknessRadar =
     hasClientAttempts && clientAnalytics.weaknessRadar.length > 0
@@ -122,12 +155,36 @@ export default function DashboardClient({
   const weakCount = weakTopics.length;
   const allCount = allDomainTopics.length;
 
-  // Client user data fallback
-  const fullName = isClient && storeUser.name ? storeUser.name : initialData.user.fullName;
-  const xpPoints = isClient && storeUser.xpPoints !== undefined ? storeUser.xpPoints : initialData.user.xp;
-  const targetCollege = isClient && storeUser.targetCollege ? storeUser.targetCollege : initialData.user.targetCollege;
-  const targetCourse = isClient && storeUser.targetCourse ? storeUser.targetCourse : initialData.user.targetCourse;
-  const targetStream = isClient && storeUser.preferredStream ? storeUser.preferredStream : initialData.user.targetStream;
+  // Authentic user display: Server profile is the primary source of truth
+  const fullName = isServerUser
+    ? initialData.user.fullName
+    : isClient && storeUser.name
+    ? storeUser.name
+    : initialData.user.fullName;
+
+  const xpPoints = isServerUser
+    ? initialData.user.xp
+    : isClient && storeUser.xpPoints !== undefined
+    ? storeUser.xpPoints
+    : initialData.user.xp;
+
+  const targetCollege = isServerUser
+    ? initialData.user.targetCollege
+    : isClient && storeUser.targetCollege
+    ? storeUser.targetCollege
+    : initialData.user.targetCollege;
+
+  const targetCourse = isServerUser
+    ? initialData.user.targetCourse
+    : isClient && storeUser.targetCourse
+    ? storeUser.targetCourse
+    : initialData.user.targetCourse;
+
+  const targetStream = isServerUser
+    ? initialData.user.targetStream
+    : isClient && storeUser.preferredStream
+    ? storeUser.preferredStream
+    : initialData.user.targetStream;
 
   // Selected Domain Subjects (from onboarding)
   const candidateSubjects =
@@ -218,6 +275,58 @@ export default function DashboardClient({
           <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
         </Link>
       </div>
+
+      {/* Dynamic Cold-Start Qualification Progress Meter */}
+      {!isAiMentorUnlocked ? (
+        <div className="p-4 rounded-xl border-2 border-black bg-[#FFFBEB] shadow-[3px_3px_0px_0px_#000] space-y-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-lg bg-black text-white shrink-0 shadow-[1px_1px_0px_0px_#000]">
+                <Sparkles className="w-4 h-4 text-[#F59E0B]" />
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm font-black text-black flex items-center gap-2">
+                  <span>Unlocking AI Mentor: {totalAttempted}/150 questions attempted</span>
+                  <span className="px-2 py-0.2 rounded bg-amber-200 border border-black text-[9px] font-black uppercase">
+                    Calibration Gate
+                  </span>
+                </p>
+                <p className="text-[11px] text-black/70 font-medium mt-0.5">
+                  Complete {attemptsToUnlock} more question{attemptsToUnlock === 1 ? "" : "s"} across CBT mocks to calibrate your baseline and unlock Adaptive Drills &amp; Deep Mistake Diagnostics.
+                </p>
+              </div>
+            </div>
+            <span className="px-2.5 py-1 rounded bg-black text-white text-xs font-mono font-black shrink-0 self-start sm:self-auto shadow-[1px_1px_0px_0px_#000]">
+              {unlockProgress}% Calibrated
+            </span>
+          </div>
+          <div className="w-full h-2.5 bg-white border-2 border-black rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-[#F59E0B] to-[#10B981] rounded-full transition-all duration-500"
+              style={{ width: `${Math.max(3, unlockProgress)}%` }}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="p-3.5 rounded-xl border-2 border-black bg-[#ECFDF5] shadow-[3px_3px_0px_0px_#000] flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1 rounded-md bg-[#10B981] border border-black text-white shadow-[1px_1px_0px_0px_#000]">
+              <CheckCircle2 className="w-4 h-4 text-black stroke-[2.5]" />
+            </div>
+            <div>
+              <p className="text-xs sm:text-sm font-black text-black">
+                AI Diagnostic Matrix &amp; Adaptive Drills Unlocked
+              </p>
+              <p className="text-[10px] text-black/70 font-semibold">
+                Sufficient calibration data ({totalAttempted} Qs evaluated). Active deep intelligence &amp; precision remediation.
+              </p>
+            </div>
+          </div>
+          <span className="px-2.5 py-1 rounded bg-[#10B981] text-black text-[10px] font-black uppercase border border-black shadow-[1px_1px_0px_0px_#000] shrink-0">
+            AI Mentor Active 🚀
+          </span>
+        </div>
+      )}
 
       {/* 2. MINIMAL 3-CARD VITAL METRICS ROW */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -342,31 +451,48 @@ export default function DashboardClient({
             </div>
 
             {/* Quick Diagnostic Sprint Box */}
-            <div className="p-3.5 rounded-lg bg-[#FEF3C7] border-2 border-black flex items-center justify-between gap-3">
+            <div className={`p-3.5 rounded-lg border-2 border-black flex items-center justify-between gap-3 ${
+              isAiMentorUnlocked ? "bg-[#FEF3C7]" : "bg-[#F3F4F6] opacity-90"
+            }`}>
               <div className="space-y-0.5 min-w-0">
                 <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-black text-white">
-                  5-Min Target Drill
+                  {isAiMentorUnlocked ? "5-Min Target Drill" : "Target Drill (Locked)"}
                 </span>
                 <p className="font-black text-xs text-black truncate">
-                  {recommendedPractice.topic} ({recommendedPractice.subject})
+                  {isAiMentorUnlocked
+                    ? `${recommendedPractice.topic} (${recommendedPractice.subject})`
+                    : "Personalized Adaptive Weakness Drill"}
                 </p>
                 <p className="text-[10px] text-black/70 font-medium truncate">
-                  {recommendedPractice.reason}
+                  {isAiMentorUnlocked
+                    ? recommendedPractice.reason
+                    : `Unlocks at 150 questions (${totalAttempted}/150 solved). Complete CBT mocks to unlock.`}
                 </p>
               </div>
 
               <button
                 type="button"
-                disabled={activeRepairTopic !== null}
+                disabled={!isAiMentorUnlocked || activeRepairTopic !== null}
                 onClick={() =>
+                  isAiMentorUnlocked &&
                   handleLaunchInstantRepair(
                     recommendedPractice.topic,
                     recommendedPractice.subject
                   )
                 }
-                className="px-3 py-1.5 rounded-md bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs shrink-0 flex items-center gap-1 border border-black shadow-[1px_1px_0px_0px_#000] cursor-pointer disabled:opacity-50"
+                className={`px-3 py-1.5 rounded-md font-black text-xs shrink-0 flex items-center gap-1 border border-black shadow-[1px_1px_0px_0px_#000] ${
+                  !isAiMentorUnlocked
+                    ? "bg-[#E5E7EB] text-black/60 cursor-not-allowed"
+                    : "bg-[#FF5C5C] hover:bg-[#FF4545] text-white cursor-pointer"
+                }`}
+                title={!isAiMentorUnlocked ? "Complete 150 questions to unlock" : "Start targeted drill"}
               >
-                {activeRepairTopic === recommendedPractice.topic ? (
+                {!isAiMentorUnlocked ? (
+                  <>
+                    <Lock className="w-3 h-3 text-black/60" />
+                    <span>Locked</span>
+                  </>
+                ) : activeRepairTopic === recommendedPractice.topic ? (
                   <span>{t("loading", "Loading...")}</span>
                 ) : (
                   <>
@@ -447,7 +573,29 @@ export default function DashboardClient({
             </div>
 
             {/* Empty State vs Radar Items */}
-            {allCount === 0 ? (
+            {!isAiMentorUnlocked ? (
+              <div className="py-8 px-4 text-center rounded-lg bg-[#FAF7EE] border-2 border-dashed border-black/30 space-y-2.5">
+                <div className="w-10 h-10 rounded-lg bg-white border-2 border-black mx-auto flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
+                  <Lock className="w-5 h-5 text-[#F59E0B]" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-black text-black">
+                    AI Diagnostic Matrix Calibrating
+                  </p>
+                  <p className="text-[11px] text-black/70 leading-relaxed max-w-xs mx-auto">
+                    Unlocking AI Mentor: <strong>{totalAttempted}/150 questions attempted</strong>.
+                    Solve {attemptsToUnlock} more questions in CBT mocks to eliminate statistical noise and reveal your calibrated Weakness Radar.
+                  </p>
+                </div>
+                <Link
+                  href="/dashboard/mocks"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#FF5C5C] text-white font-black text-xs border border-black shadow-[2px_2px_0px_0px_#000]"
+                >
+                  <Play className="w-3 h-3 fill-white" />
+                  <span>Continue Mock Practice</span>
+                </Link>
+              </div>
+            ) : allCount === 0 ? (
               <div className="py-8 px-4 text-center rounded-lg bg-[#FAF7EE] border-2 border-dashed border-black/30 space-y-2.5">
                 <div className="w-10 h-10 rounded-lg bg-white border-2 border-black mx-auto flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
                   <Target className="w-5 h-5 text-[#FF5C5C]" />

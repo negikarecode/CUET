@@ -34,6 +34,25 @@ export default function DashboardPage() {
   const weakCount = data?.topics_by_level.weak.length || 0;
   const overallScore = data?.overall_score || 0;
 
+  // AI Unlock Gate: 150 attempts required
+  const totalAttempts = useMemo(() => {
+    if (data?.topics_by_level) {
+      const allScores = [
+        ...data.topics_by_level.critical,
+        ...data.topics_by_level.weak,
+        ...data.topics_by_level.average,
+        ...data.topics_by_level.strong,
+        ...data.topics_by_level.excellent,
+      ];
+      return allScores.reduce((acc: number, s: any) => acc + (s.total_attempts || 0), 0);
+    }
+    return student?.xp ? Math.floor(student.xp / 5) : 0;
+  }, [data, student]);
+
+  const isAiUnlocked = totalAttempts >= 150;
+  const attemptsNeeded = Math.max(0, 150 - totalAttempts);
+  const unlockPercent = Math.min(100, Math.round((totalAttempts / 150) * 100));
+
   return (
     <div className="w-full max-w-6xl mx-auto space-y-8 p-4 sm:p-6 lg:p-8">
       {/* Top Welcome Header */}
@@ -64,6 +83,48 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* AI Cold-Start Qualification Gate Progress Meter */}
+      {!isAiUnlocked ? (
+        <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 sm:p-5 shadow-sm space-y-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-amber-500 text-white font-bold shrink-0">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-amber-950">
+                  Unlocking AI Mentor: {totalAttempts}/150 questions attempted
+                </p>
+                <p className="text-xs text-amber-800">
+                  Attempt {attemptsNeeded} more questions across mocks to calibrate your baseline and unlock the AI Diagnostic Matrix and Adaptive Drills.
+                </p>
+              </div>
+            </div>
+            <span className="text-xs font-black text-amber-900 bg-amber-200 px-3 py-1 rounded-full shrink-0">
+              {unlockPercent}% Calibrated
+            </span>
+          </div>
+          <div className="w-full bg-amber-200/60 rounded-full h-2 overflow-hidden">
+            <div
+              className="bg-amber-500 h-full rounded-full transition-all duration-500"
+              style={{ width: `${Math.max(4, unlockPercent)}%` }}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+            <span className="text-xs sm:text-sm font-bold text-emerald-900">
+              AI Diagnostic Matrix &amp; Adaptive Drills Unlocked ({totalAttempts} questions evaluated)
+            </span>
+          </div>
+          <Badge className="bg-emerald-600 text-white font-bold text-[10px] uppercase">
+            Active
+          </Badge>
+        </div>
+      )}
 
       {/* Today's Study Plan Highlight Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-purple-950 text-white rounded-3xl p-5 sm:p-7 shadow-xl border border-indigo-900/50">

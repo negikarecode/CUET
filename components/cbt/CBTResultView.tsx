@@ -44,6 +44,61 @@ export default function CBTResultView() {
   const [unlockedTrophies, setUnlockedTrophies] = useState<Trophy[]>([]);
   const hasProcessedRef = useRef(false);
 
+  // Phase 4: Low-token Mistake Diagnostic & Response Cache
+  const [mistakeDiagnostics, setMistakeDiagnostics] = useState<
+    Record<
+      string,
+      {
+        loading: boolean;
+        data?: {
+          errorClassification: string;
+          diagnosisMessage: string;
+          ncertCorrection: string;
+          fromCache: boolean;
+        };
+      }
+    >
+  >({});
+
+  const handleDiagnoseMistake = async (
+    q: (typeof questions)[number],
+    userChoice: string,
+    timeSpent: number
+  ) => {
+    const key = `${q.id}_${userChoice}`;
+    setMistakeDiagnostics((prev) => ({ ...prev, [key]: { loading: true } }));
+    try {
+      const res = await fetch("/api/ai/diagnose-mistake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          questionId: q.id,
+          selectedOption: userChoice,
+          questionText: q.prompt,
+          selectedOptionText: q.options.find((o) => o.id === userChoice)?.text,
+          correctOption: q.correctOptionId,
+          correctOptionText: q.options.find((o) => o.id === q.correctOptionId)?.text,
+          explanation: q.explanation,
+          microTopic: q.topic,
+          timeSpentSeconds: timeSpent,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMistakeDiagnostics((prev) => ({
+          ...prev,
+          [key]: { loading: false, data },
+        }));
+      } else {
+        setMistakeDiagnostics((prev) => ({ ...prev, [key]: { loading: false } }));
+      }
+    } catch (err) {
+      console.error("Diagnosis error:", err);
+      setMistakeDiagnostics((prev) => ({ ...prev, [key]: { loading: false } }));
+    }
+  };
+
   // Derive all-time personal best stats for this specific test
   const currentTestId = testMeta?.id ?? "cbt_exam";
   const testStats = getTestAttemptStats(testAttempts, currentTestId);
@@ -668,6 +723,76 @@ export default function CBTResultView() {
                     <div className="p-2.5 rounded-lg bg-[#FEF2F2] border border-[#EF4444] text-black">
                       <span className="text-[10px] font-black uppercase text-[#DC2626] block mb-0.5">Common Trap / Misconception</span>
                       <p className="font-semibold text-[11px] text-black/90">{q.misconception.description}</p>
+                    </div>
+                  )}
+
+                  {/* Phase 4: Mistake Diagnostic Coaching (0-Token Response Cache) */}
+                  {isIncorrect && userChoice && (
+                    <div className="pt-2 border-t-2 border-black/10">
+                      {(() => {
+                        const diagKey = `${q.id}_${userChoice}`;
+                        const diagState = mistakeDiagnostics[diagKey];
+
+                        if (diagState?.data) {
+                          const d = diagState.data;
+                          const isPanic = d.errorClassification === "Time Pressure Panic";
+                          const isTrap = d.errorClassification === "Trap Option";
+                          const badgeStyle = isPanic
+                            ? "bg-[#EDE9FE] text-[#6D28D9] border-[#7C3AED]"
+                            : isTrap
+                            ? "bg-[#FFEDD5] text-[#C2410C] border-[#EA580C]"
+                            : "bg-[#FEE2E2] text-[#DC2626] border-[#DC2626]";
+
+                          return (
+                            <div className="p-3 rounded-lg bg-white border-2 border-black space-y-2 shadow-[2px_2px_0px_0px_#000]">
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-1.5">
+                                  <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase border ${badgeStyle}`}>
+                                    {d.errorClassification}
+                                  </span>
+                                  <span className="text-[10px] font-bold text-black/50 uppercase">
+                                    Option {userChoice} Trap Breakdown
+                                  </span>
+                                </div>
+                                <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase border border-black/20">
+                                  {d.fromCache ? "0 Tokens (Cached)" : "AI Evaluated"}
+                                </span>
+                              </div>
+                              <p className="text-xs text-black font-semibold leading-relaxed">
+                                {d.diagnosisMessage}
+                              </p>
+                              {d.ncertCorrection && (
+                                <div className="p-2 rounded bg-[#FAF7EE] border border-black/20 text-[11px] text-black/90 font-medium">
+                                  <strong className="text-black font-black">NCERT Rule Reminder: </strong>
+                                  {d.ncertCorrection}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <div className="flex items-center justify-between gap-2 p-2.5 rounded-lg bg-red-50 border border-red-200">
+                            <div className="space-y-0.5">
+                              <p className="text-xs font-black text-red-950">
+                                Mistake Diagnostic: Why Option {userChoice} was chosen
+                              </p>
+                              <p className="text-[10px] text-red-700">
+                                Analyze specific distractor trap and get exact NCERT rule reminder.
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              disabled={diagState?.loading}
+                              onClick={() => handleDiagnoseMistake(q, userChoice, timeSpent)}
+                              className="px-3 py-1.5 rounded-md bg-black hover:bg-black/80 text-white font-black text-xs shrink-0 flex items-center gap-1 shadow-[1px_1px_0px_0px_#000] cursor-pointer disabled:opacity-50"
+                            >
+                              <Sparkles className="w-3 h-3 text-[#F59E0B]" />
+                              <span>{diagState?.loading ? "Diagnosing..." : "Diagnose Mistake"}</span>
+                            </button>
+                          </div>
+                        );
+                      })()}
                     </div>
                   )}
 

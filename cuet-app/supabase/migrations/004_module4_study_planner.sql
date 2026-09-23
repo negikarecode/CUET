@@ -8,7 +8,7 @@
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS study_plans (
   id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   
   -- Plan metadata
   plan_version      INTEGER DEFAULT 1,
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS study_plan_days (
   id                BIGSERIAL PRIMARY KEY,
   plan_id           UUID REFERENCES study_plans(id) 
                     ON DELETE CASCADE,
-  student_id        UUID REFERENCES students(id),
+  student_id        UUID REFERENCES public.profiles(id),
   
   plan_date         DATE NOT NULL,
   day_number        INTEGER NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS study_tasks (
                     ON DELETE CASCADE,
   plan_day_id       BIGINT REFERENCES study_plan_days(id)
                     ON DELETE CASCADE,
-  student_id        UUID REFERENCES students(id),
+  student_id        UUID REFERENCES public.profiles(id),
   
   -- Task details
   task_order        INTEGER DEFAULT 1,
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS study_tasks (
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS study_streaks (
   id                BIGSERIAL PRIMARY KEY,
-  student_id        UUID REFERENCES students(id) 
+  student_id        UUID REFERENCES public.profiles(id) 
                     ON DELETE CASCADE UNIQUE,
   
   current_streak    INTEGER DEFAULT 0,
@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS study_streaks (
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS push_subscriptions (
   id                BIGSERIAL PRIMARY KEY,
-  student_id        UUID REFERENCES students(id) 
+  student_id        UUID REFERENCES public.profiles(id) 
                     ON DELETE CASCADE,
   
   endpoint          TEXT NOT NULL,
@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS push_subscriptions (
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS plan_generation_log (
   id                BIGSERIAL PRIMARY KEY,
-  student_id        UUID REFERENCES students(id),
+  student_id        UUID REFERENCES public.profiles(id),
   plan_id           UUID REFERENCES study_plans(id),
   
   trigger_reason    VARCHAR(100),

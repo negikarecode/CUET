@@ -207,8 +207,6 @@ export function getTopRecommendations(
   weaknessScores: WeaknessScore[],
   limit: number = 3
 ): Recommendation[] {
-  // Sort by weakness level (critical first) 
-  // then by final score (lowest first)
   const sorted = weaknessScores
     .filter(w => 
       w.weakness_level === 'critical' || 
@@ -223,8 +221,141 @@ export function getTopRecommendations(
     subject_name: w.subject?.name || 'Unknown Subject',
     weakness_score: w.final_weakness_score,
     weakness_level: w.weakness_level,
-    questions_ready: Math.floor(Math.random() * 10) + 15, // 15-25 questions
-    estimated_minutes: Math.floor(Math.random() * 15) + 15, // 15-30 mins
+    questions_ready: Math.floor(Math.random() * 10) + 15,
+    estimated_minutes: Math.floor(Math.random() * 15) + 15,
     priority: index + 1
   }));
 }
+
+// ─────────────────────────────────────────────────
+// PACING ANALYTICS: Direct calculation off public.pacing_analytics_summary
+// ─────────────────────────────────────────────────
+export interface PacingAnalyticsRow {
+  user_id: string;
+  subject: string;
+  chapter: string;
+  micro_topic: string;
+  archetype?: string;
+  total_attempts: number;
+  correct_attempts: number;
+  avg_time_seconds: number;
+  time_sink_count: number;
+  fatal_time_sinks: number;
+  accuracy_percentage: number;
+}
+
+export function calculateWeaknessFromPacingSummary(
+  rows: PacingAnalyticsRow[],
+  studentId: string
+): WeaknessScore[] {
+  // Aggregate by micro_topic across archetypes if needed
+  const topicMap = new Map<string, {
+    subject: string;
+    chapter: string;
+    microTopic: string;
+    totalAttempts: number;
+    correctAttempts: number;
+    totalTime: number;
+    timeSinkCount: number;
+    fatalTimeSinks: number;
+  }>();
+
+  rows.forEach((r) => {
+    const key = `${r.subject}:::${r.chapter}:::${r.micro_topic}`;
+    const existing = topicMap.get(key);
+    const attempts = Number(r.total_attempts) || 0;
+    const correct = Number(r.correct_attempts) || 0;
+    const avgTime = Number(r.avg_time_seconds) || 0;
+    const timeSinks = Number(r.time_sink_count) || 0;
+    const fatal = Number(r.fatal_time_sinks) || 0;
+
+    if (!existing) {
+      topicMap.set(key, {
+        subject: r.subject,
+        chapter: r.chapter,
+        microTopic: r.micro_topic,
+        totalAttempts: attempts,
+        correctAttempts: correct,
+        totalTime: avgTime * attempts,
+        timeSinkCount: timeSinks,
+        fatalTimeSinks: fatal,
+      });
+    } else {
+      existing.totalAttempts += attempts;
+      existing.correctAttempts += correct;
+      existing.totalTime += avgTime * attempts;
+      existing.timeSinkCount += timeSinks;
+      existing.fatalTimeSinks += fatal;
+    }
+  });
+
+  const scores: WeaknessScore[] = [];
+  let syntheticId = 1000;
+
+  topicMap.forEach((data, _key) => {
+    syntheticId++;
+    const total = data.totalAttempts;
+    const correct = data.correctAttempts;
+    const wrong = Math.max(0, total - correct);
+    const avgTime = total > 0 ? data.totalTime / total : 0;
+
+    const accuracyScore = total > 0 ? Math.round((correct / total) * 10000) / 100 : 0;
+    const speedScore = calculateSpeedScore(avgTime, "medium");
+
+    // Consistency score incorporating fatal time-sinks
+    let consistencyScore = 50;
+    if (total >= 3) {
+      const penalty = data.fatalTimeSinks * 12;
+      consistencyScore = Math.max(10, Math.min(100, Math.round(accuracyScore - penalty)));
+    }
+
+    const finalScore = calculateFinalWeaknessScore(accuracyScore, speedScore, consistencyScore);
+    const level = getWeaknessLevel(finalScore);
+
+    scores.push({
+      id: syntheticId,
+      student_id: studentId,
+      topic_id: syntheticId,
+      subject_id: 1,
+      chapter_id: 1,
+      total_attempts: total,
+      correct_count: correct,
+      wrong_count: wrong,
+      skipped_count: 0,
+      accuracy_score: accuracyScore,
+      speed_score: speedScore,
+      consistency_score: consistencyScore,
+      final_weakness_score: finalScore,
+      weakness_level: level,
+      avg_time_seconds: Math.round(avgTime * 10) / 10,
+      last_attempted: new Date().toISOString(),
+      last_updated: new Date().toISOString(),
+      topic: {
+        id: syntheticId,
+        chapter_id: 1,
+        subject_id: 1,
+        topic_name: data.microTopic,
+        importance: data.fatalTimeSinks > 0 ? "high" : "medium",
+        estimated_time: Math.round(avgTime),
+      },
+      subject: {
+        id: 1,
+        name: data.subject,
+        code: data.subject.substring(0, 3).toUpperCase(),
+        total_chapters: 10,
+        color: "#6366f1",
+        icon: "📚",
+      },
+      chapter: {
+        id: 1,
+        subject_id: 1,
+        chapter_number: 1,
+        chapter_name: data.chapter,
+        weightage: 5,
+      },
+    });
+  });
+
+  return scores;
+}
+

@@ -2,17 +2,12 @@
 -- MODULE 3: AI DOUBT SOLVER CHATBOT TABLES & PROCEDURES
 -- ─────────────────────────────────────────────────────
 
--- Allow chat_doubt and ai_practice in student_attempts
-ALTER TABLE student_attempts DROP CONSTRAINT IF EXISTS student_attempts_attempt_source_check;
-ALTER TABLE student_attempts ADD CONSTRAINT student_attempts_attempt_source_check 
-  CHECK (attempt_source IN ('mock_test', 'practice', 'pyq', 'diagnostic', 'chat_doubt', 'ai_practice'));
-
 -- ─────────────────────────────────────────────────────
 -- TABLE 1: chat_conversations
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS chat_conversations (
   id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   subject_id        INTEGER REFERENCES subjects(id) ON DELETE SET NULL,
   topic_id          INTEGER REFERENCES topics(id) ON DELETE SET NULL,
   title             VARCHAR(200) NOT NULL DEFAULT 'New Doubt Session',
@@ -30,7 +25,7 @@ CREATE INDEX IF NOT EXISTS idx_chat_conversations_student
 CREATE TABLE IF NOT EXISTS chat_messages (
   id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   conversation_id   UUID REFERENCES chat_conversations(id) ON DELETE CASCADE,
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   role              VARCHAR(20) NOT NULL CHECK (role IN ('student', 'cuetbot', 'system', 'user', 'assistant')),
   message_text      TEXT NOT NULL,
   language_detected VARCHAR(20) DEFAULT 'english' CHECK (language_detected IN ('hindi', 'hinglish', 'english', 'mixed')),
@@ -55,7 +50,7 @@ CREATE INDEX IF NOT EXISTS idx_chat_messages_student
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS chat_usage_tracking (
   id                BIGSERIAL PRIMARY KEY,
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   usage_date        DATE DEFAULT CURRENT_DATE,
   message_count     INTEGER DEFAULT 0,
   tokens_used       INTEGER DEFAULT 0,
@@ -74,7 +69,7 @@ CREATE INDEX IF NOT EXISTS idx_chat_usage_student_date
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS doubt_topics_log (
   id                BIGSERIAL PRIMARY KEY,
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   conversation_id   UUID REFERENCES chat_conversations(id) ON DELETE SET NULL,
   subject_id        INTEGER REFERENCES subjects(id) ON DELETE SET NULL,
   chapter_id        INTEGER REFERENCES chapters(id) ON DELETE SET NULL,
@@ -96,7 +91,7 @@ CREATE INDEX IF NOT EXISTS idx_doubt_topics_created
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS suggested_questions_log (
   id                BIGSERIAL PRIMARY KEY,
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   conversation_id   UUID REFERENCES chat_conversations(id) ON DELETE CASCADE,
   question_text     TEXT NOT NULL,
   topic_id          INTEGER REFERENCES topics(id) ON DELETE SET NULL,

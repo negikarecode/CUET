@@ -152,6 +152,7 @@ export default function OnboardingModal({
 
         onClose();
         router.push("/dashboard");
+        router.refresh();
       }
     } catch (err: any) {
       setErrorMessage(err?.message || "Authentication error. Please try again.");
@@ -199,6 +200,14 @@ export default function OnboardingModal({
 
     try {
       const supabase = createClient();
+
+      // Ensure any previous session is cleared before new signup
+      try {
+        await supabase.auth.signOut();
+      } catch {
+        // Ignore if already signed out
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
@@ -221,44 +230,59 @@ export default function OnboardingModal({
         return;
       }
 
-      const createdUserId = data.user?.id || `user_${Date.now()}`;
+      if (data.user) {
+        // Guarantee cookies and session are active in the browser
+        if (!data.session) {
+          try {
+            await supabase.auth.signInWithPassword({
+              email: cleanEmail,
+              password,
+            });
+          } catch (signInErr) {
+            console.warn("Auto-signin error:", signInErr);
+          }
+        }
 
-      // Persist authentic profile to Supabase database via server route
-      try {
-        await fetch("/api/auth/profile", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id: createdUserId,
-            fullName: cleanName,
-            targetStream: stream,
-            targetUniversity: finalUniversity,
-            targetCollege: finalCollege,
-            targetCourse: finalCourse,
-          }),
+        const createdUserId = data.user.id;
+
+        // Persist authentic profile to Supabase database via server route
+        try {
+          await fetch("/api/auth/profile", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: createdUserId,
+              fullName: cleanName,
+              targetStream: stream,
+              targetUniversity: finalUniversity,
+              targetCollege: finalCollege,
+              targetCourse: finalCourse,
+            }),
+          });
+        } catch (profileErr) {
+          console.warn("[Profile Persistence Notice]:", profileErr);
+        }
+
+        // Initialize clean Zustand store session
+        loginUser({
+          id: createdUserId,
+          name: cleanName,
+          email: cleanEmail,
+          age,
+          targetCollege: finalCollege,
+          targetUniversity: finalUniversity,
+          targetCourse: finalCourse,
+          preferredStream: stream,
+          selectedSubjects,
+          dailyStreak: 1,
+          xpPoints: 50,
+          campusCoins: 25,
         });
-      } catch (profileErr) {
-        console.warn("[Profile Persistence Notice]:", profileErr);
+
+        onClose();
+        router.push("/dashboard");
+        router.refresh();
       }
-
-      // Initialize Zustand store session
-      loginUser({
-        id: createdUserId,
-        name: cleanName,
-        email: cleanEmail,
-        age,
-        targetCollege: finalCollege,
-        targetUniversity: finalUniversity,
-        targetCourse: finalCourse,
-        preferredStream: stream,
-        selectedSubjects,
-        dailyStreak: 1,
-        xpPoints: 50,
-        campusCoins: 25,
-      });
-
-      onClose();
-      router.push("/dashboard");
     } catch (err: any) {
       setErrorMessage(err?.message || "Sign up failed. Please try again.");
     } finally {

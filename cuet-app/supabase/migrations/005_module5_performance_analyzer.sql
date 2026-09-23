@@ -9,7 +9,7 @@
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS mock_test_sessions (
   id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   
   -- Test identification
   session_name      VARCHAR(200),
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS mock_test_sessions (
 CREATE TABLE IF NOT EXISTS mock_test_analyses (
   id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   session_id        UUID REFERENCES mock_test_sessions(id) ON DELETE CASCADE,
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   
   -- ─── SCORE METRICS ───────────────────────────────
   raw_score         INTEGER,
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS question_level_analysis (
   id                BIGSERIAL PRIMARY KEY,
   analysis_id       UUID REFERENCES mock_test_analyses(id) ON DELETE CASCADE,
   session_id        UUID REFERENCES mock_test_sessions(id) ON DELETE CASCADE,
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   
   question_id       INTEGER REFERENCES questions(id),
   subject_id        INTEGER REFERENCES subjects(id),
@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS question_level_analysis (
 -- ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS score_history (
   id                BIGSERIAL PRIMARY KEY,
-  student_id        UUID REFERENCES students(id) ON DELETE CASCADE,
+  student_id        UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   session_id        UUID REFERENCES mock_test_sessions(id) ON DELETE CASCADE,
   
   test_number       INTEGER,
@@ -207,24 +207,16 @@ ALTER TABLE score_history ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Students see own sessions"
   ON mock_test_sessions FOR ALL
-  USING (student_id = (
-    SELECT id FROM students WHERE auth_user_id = auth.uid()
-  ));
+  USING (student_id = auth.uid());
 
 CREATE POLICY "Students see own analyses"
   ON mock_test_analyses FOR ALL
-  USING (student_id = (
-    SELECT id FROM students WHERE auth_user_id = auth.uid()
-  ));
+  USING (student_id = auth.uid());
 
 CREATE POLICY "Students see own question analysis"
   ON question_level_analysis FOR ALL
-  USING (student_id = (
-    SELECT id FROM students WHERE auth_user_id = auth.uid()
-  ));
+  USING (student_id = auth.uid());
 
 CREATE POLICY "Students see own score history"
   ON score_history FOR ALL
-  USING (student_id = (
-    SELECT id FROM students WHERE auth_user_id = auth.uid()
-  ));
+  USING (student_id = auth.uid());
