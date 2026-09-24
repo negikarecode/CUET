@@ -186,14 +186,18 @@ export async function POST(req: NextRequest) {
               (expectedOption && q.selectedOption === expectedOption) || q.isCorrect === true
             );
 
+            const rawOpt =
+              typeof q.selectedOption === "string" ? q.selectedOption.trim().toUpperCase() : null;
+            const validOption =
+              rawOpt && ["A", "B", "C", "D"].includes(rawOpt) ? rawOpt : null;
+
             return {
               user_id: targetUserId,
               test_id: testUuid,
               question_id: qUuid,
-              selected_option: q.selectedOption,
+              selected_option: validOption,
               is_correct: isCorrect,
-              time_spent_seconds: q.timeSpentSeconds || 0,
-              is_time_sink: (q.timeSpentSeconds || 0) > 72,
+              time_spent_seconds: Math.max(0, q.timeSpentSeconds || 0),
             };
           });
 

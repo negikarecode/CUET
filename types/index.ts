@@ -172,6 +172,9 @@ export interface LeaderboardEntry {
   streak: number;
   accuracyPercentage: number;
   totalXp: number;
+  totalTrophies: number;
+  subjectTrophies?: Record<string, number>;
+  completedTestsCount?: number;
   isCurrentUser?: boolean;
 }
 

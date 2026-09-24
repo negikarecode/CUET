@@ -1,287 +1,603 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Trophy,
   Flame,
   GraduationCap,
+  RefreshCw,
+  Lock,
+  Award,
+  Sparkles,
+  BookOpen,
+  Filter,
 } from "lucide-react";
 import { StreamType, LeaderboardEntry } from "@/types";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { useIsClient } from "@/lib/hooks/useIsClient";
 
-// Seeded Leaderboard Data across Science, Commerce, Humanities
-const LEADERBOARD_DATABASE: Record<StreamType, LeaderboardEntry[]> = {
-  science: [
-    { rank: 1, userId: "u_sci_01", name: "Ishanvi Varma", stream: "science", targetCollege: "St. Stephen's College", streak: 21, accuracyPercentage: 96, totalXp: 4890 },
-    { rank: 2, userId: "u_sci_02", name: "Devansh Patel", stream: "science", targetCollege: "Hindu College", streak: 18, accuracyPercentage: 94, totalXp: 4420 },
-    { rank: 3, userId: "u_sci_03", name: "Ananya Iyer", stream: "science", targetCollege: "Miranda House", streak: 15, accuracyPercentage: 92, totalXp: 3980 },
-    { rank: 4, userId: "u_sci_04", name: "Rohan Kulkarni", stream: "science", targetCollege: "Hansraj College", streak: 14, accuracyPercentage: 91, totalXp: 3650 },
-    { rank: 5, userId: "u_sci_05", name: "Meera Nair", stream: "science", targetCollege: "St. Stephen's College", streak: 12, accuracyPercentage: 89, totalXp: 3340 },
-    { rank: 6, userId: "u_sci_06", name: "Kabir Sengupta", stream: "science", targetCollege: "Ramjas College", streak: 11, accuracyPercentage: 88, totalXp: 3100 },
-    { rank: 7, userId: "u_sci_07", name: "Pooja Hegde", stream: "science", targetCollege: "Sri Venkateswara", streak: 9, accuracyPercentage: 87, totalXp: 2950 },
-    { rank: 8, userId: "u_sci_08", name: "Tanmay Bansal", stream: "science", targetCollege: "Kirori Mal College", streak: 8, accuracyPercentage: 86, totalXp: 2820 },
-    { rank: 9, userId: "u_sci_09", name: "Shreya Joshi", stream: "science", targetCollege: "Gargi College", streak: 7, accuracyPercentage: 84, totalXp: 2650 },
-    { rank: 10, userId: "u_sci_10", name: "Aditya Chopra", stream: "science", targetCollege: "Atma Ram Sanatan", streak: 6, accuracyPercentage: 83, totalXp: 2510 },
-  ],
-  commerce: [
-    { rank: 1, userId: "u_com_01", name: "Siddharth Goel", stream: "commerce", targetCollege: "SRCC", streak: 25, accuracyPercentage: 98, totalXp: 5450 },
-    { rank: 2, userId: "u_com_02", name: "Rhea Singhania", stream: "commerce", targetCollege: "Lady Shri Ram (LSR)", streak: 20, accuracyPercentage: 95, totalXp: 4670 },
-    { rank: 3, userId: "u_com_03", name: "Pranav Maheshwari", stream: "commerce", targetCollege: "SRCC", streak: 19, accuracyPercentage: 93, totalXp: 4210 },
-    { rank: 4, userId: "u_com_04", name: "Kritika Mittal", stream: "commerce", targetCollege: "Hindu College", streak: 16, accuracyPercentage: 91, totalXp: 3780 },
-    { rank: 5, userId: "u_com_05", name: "Varun Bajaj", stream: "commerce", targetCollege: "Hansraj College", streak: 13, accuracyPercentage: 89, totalXp: 3410 },
-    { rank: 6, userId: "u_com_06", name: "Tanya Aggarwal", stream: "commerce", targetCollege: "Sri Venkateswara", streak: 12, accuracyPercentage: 88, totalXp: 3190 },
-    { rank: 7, userId: "u_com_07", name: "Nikhil Chawla", stream: "commerce", targetCollege: "Delhi College of Arts & Comm", streak: 10, accuracyPercentage: 86, totalXp: 2980 },
-    { rank: 8, userId: "u_com_08", name: "Sanya Arora", stream: "commerce", targetCollege: "Jesus and Mary (JMC)", streak: 9, accuracyPercentage: 85, totalXp: 2840 },
-    { rank: 9, userId: "u_com_09", name: "Harshvardhan Jain", stream: "commerce", targetCollege: "Ramjas College", streak: 7, accuracyPercentage: 83, totalXp: 2620 },
-    { rank: 10, userId: "u_com_10", name: "Divya Kapoor", stream: "commerce", targetCollege: "IP College for Women", streak: 6, accuracyPercentage: 82, totalXp: 2490 },
-  ],
-  humanities: [
-    { rank: 1, userId: "u_hum_01", name: "Tarini Roy", stream: "humanities", targetCollege: "St. Stephen's College", streak: 22, accuracyPercentage: 97, totalXp: 5120 },
-    { rank: 2, userId: "u_hum_02", name: "Shaurya Dixit", stream: "humanities", targetCollege: "Hindu College", streak: 20, accuracyPercentage: 95, totalXp: 4720 },
-    { rank: 3, userId: "u_hum_03", name: "Lavanya Sen", stream: "humanities", targetCollege: "Lady Shri Ram (LSR)", streak: 17, accuracyPercentage: 93, totalXp: 4150 },
-    { rank: 4, userId: "u_hum_04", name: "Arjun Bhatia", stream: "humanities", targetCollege: "Miranda House", streak: 15, accuracyPercentage: 90, totalXp: 3690 },
-    { rank: 5, userId: "u_hum_05", name: "Zoya Farooqui", stream: "humanities", targetCollege: "St. Stephen's College", streak: 13, accuracyPercentage: 89, totalXp: 3380 },
-    { rank: 6, userId: "u_hum_06", name: "Advait Sharma", stream: "humanities", targetCollege: "Ramjas College", streak: 11, accuracyPercentage: 87, totalXp: 3120 },
-    { rank: 7, userId: "u_hum_07", name: "Kavya Menon", stream: "humanities", targetCollege: "Gargi College", streak: 9, accuracyPercentage: 86, totalXp: 2910 },
-    { rank: 8, userId: "u_hum_08", name: "Dhruv Saxena", stream: "humanities", targetCollege: "Kirori Mal College", streak: 8, accuracyPercentage: 84, totalXp: 2780 },
-    { rank: 9, userId: "u_hum_09", name: "Pallavi Das", stream: "humanities", targetCollege: "Kamala Nehru College", streak: 7, accuracyPercentage: 83, totalXp: 2610 },
-    { rank: 10, userId: "u_hum_10", name: "Manan Verma", stream: "humanities", targetCollege: "Shaheed Bhagat Singh", streak: 5, accuracyPercentage: 81, totalXp: 2430 },
-  ],
-};
+type ViewMode = "overall" | "subject";
+type StreamFilter = "all" | StreamType;
+
+const DEFAULT_SUBJECTS = [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Accountancy",
+  "Economics",
+  "Business Studies",
+  "History",
+  "Political Science",
+  "Biology",
+  "Computer Science",
+  "English",
+  "General Test",
+];
+
+interface RawLeaderboardUser {
+  userId: string;
+  name: string;
+  stream: StreamType;
+  targetCollege: string;
+  targetUniversity?: string;
+  streak: number;
+  accuracyPercentage: number;
+  totalXp: number;
+  totalTrophies: number;
+  subjectTrophies?: Record<string, number>;
+  completedTestsCount?: number;
+  selectedSubjects?: string[];
+  isCurrentUser?: boolean;
+}
 
 export default function Leaderboard() {
-  const isClient = useIsClient();
-  const user = useTestStore((state) => state.user);
-  const selectedStream = useTestStore((state) => state.selectedStream);
-  const [activeStream, setActiveStream] = useState<StreamType>(selectedStream);
+  const currentUser = useTestStore((state) => state.user);
+  const userStream = useTestStore((state) => state.selectedStream);
+  const clientAttempts = useTestStore((state) => state.testAttempts);
 
-  const entries = LEADERBOARD_DATABASE[activeStream] || LEADERBOARD_DATABASE.science;
+  // Leaderboard filters
+  const [viewMode, setViewMode] = useState<ViewMode>("overall");
+  const [selectedSubject, setSelectedSubject] = useState<string>("Physics");
+  const [activeStreamFilter, setActiveStreamFilter] = useState<StreamFilter>("all");
 
-  // Current logged in user status in this stream
-  const clientAnalytics = useTestStore((state) => state.analytics);
-  const userXp = isClient && user.xpPoints ? user.xpPoints : 0;
-  const userStreak = isClient && user.dailyStreak ? user.dailyStreak : 0;
-  const userAccuracy =
-    isClient && user.accuracyPercentage
-      ? user.accuracyPercentage
-      : isClient && clientAnalytics.overallAccuracyPercentage > 0
-      ? clientAnalytics.overallAccuracyPercentage
-      : 0;
-  const userName = isClient && user.name ? user.name : "You";
+  // Data fetching state
+  const [serverUsers, setServerUsers] = useState<RawLeaderboardUser[]>([]);
+  const [availableSubjects, setAvailableSubjects] = useState<string[]>(DEFAULT_SUBJECTS);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const currentUserEntry: LeaderboardEntry = {
-    rank: userXp > 0 ? Math.max(11, 80 - Math.floor(userXp / 100)) : 0,
-    userId: user.id || "guest",
-    name: userName,
-    stream: activeStream,
-    targetCollege: user.targetCollege || "Central University",
-    streak: userStreak,
-    accuracyPercentage: userAccuracy,
-    totalXp: userXp,
-    isCurrentUser: true,
-  };
+  // Fetch real users and test trophy calculations from Supabase backend
+  const fetchLeaderboardData = useCallback(async (showRefreshing = false) => {
+    if (showRefreshing) setIsRefreshing(true);
+    try {
+      const res = await fetch("/api/leaderboard", { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to load leaderboard");
+      const data = await res.json();
+      if (data && data.success && Array.isArray(data.users)) {
+        setServerUsers(data.users);
+        if (Array.isArray(data.availableSubjects) && data.availableSubjects.length > 0) {
+          // Merge unique subjects
+          const subjSet = new Set([...DEFAULT_SUBJECTS, ...data.availableSubjects]);
+          setAvailableSubjects(Array.from(subjSet));
+        }
+        setLastUpdated(new Date());
+      }
+    } catch (err) {
+      console.warn("[Leaderboard Fetch Error]:", err);
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  }, []);
 
-  // Check if current user is within top 10
-  const isUserInTop10 = entries.some((e) => e.userId === user.id);
+  useEffect(() => {
+    fetchLeaderboardData();
+  }, [fetchLeaderboardData]);
+
+  // Compute local locked trophies for the active client user from Zustand testAttempts
+  // Rule: Locked per unique testId. Re-attempting the same test awards 0 additional trophies.
+  const localClientTrophies = useMemo(() => {
+    if (!clientAttempts || clientAttempts.length === 0) {
+      return { total: 0, bySubject: {} as Record<string, number>, count: 0 };
+    }
+
+    const testMap = new Map<string, { subject: string; marks: number }>();
+    // Group by testId and lock to first attempt score
+    clientAttempts.forEach((att) => {
+      const tId = att.testId || att.id;
+      if (tId && !testMap.has(tId)) {
+        const marks = Math.max(
+          0,
+          att.totalMarks ?? (att.correctCount || 0) * 5 - (att.incorrectCount || 0) * 1
+        );
+        testMap.set(tId, {
+          subject: att.subject || "General",
+          marks,
+        });
+      }
+    });
+
+    let total = 0;
+    const bySubject: Record<string, number> = {};
+    testMap.forEach(({ subject, marks }) => {
+      total += marks;
+      bySubject[subject] = (bySubject[subject] || 0) + marks;
+    });
+
+    return { total, bySubject, count: testMap.size };
+  }, [clientAttempts]);
+
+  // Merge server data with active client user state
+  const mergedUsers = useMemo(() => {
+    const list = [...serverUsers];
+    const currentId = currentUser.id;
+
+    // Check if current user is already present in serverUsers
+    const existingIndex = list.findIndex(
+      (u) => (currentId && u.userId === currentId) || u.isCurrentUser
+    );
+
+    if (existingIndex >= 0) {
+      const existing = list[existingIndex]!;
+      // Reconcile: Take max trophies between server and client local attempts
+      const updatedTotal = Math.max(existing.totalTrophies, localClientTrophies.total);
+      const mergedSubj: Record<string, number> = { ...(existing.subjectTrophies || {}) };
+
+      Object.entries(localClientTrophies.bySubject).forEach(([s, val]) => {
+        mergedSubj[s] = Math.max(mergedSubj[s] || 0, val);
+      });
+
+      list[existingIndex] = {
+        ...existing,
+        name: currentUser.name && currentUser.name !== "guest" ? currentUser.name : existing.name,
+        targetCollege: currentUser.targetCollege || existing.targetCollege,
+        streak: Math.max(existing.streak, currentUser.dailyStreak || 0),
+        totalTrophies: updatedTotal,
+        subjectTrophies: mergedSubj,
+        completedTestsCount: Math.max(
+          existing.completedTestsCount || 0,
+          localClientTrophies.count
+        ),
+        isCurrentUser: true,
+      };
+    } else if (currentUser.isLoggedIn || currentUser.xpPoints > 0 || localClientTrophies.total > 0) {
+      // Current user not yet in backend list (e.g. offline or newly registered)
+      list.push({
+        userId: currentId || "client-current-user",
+        name: currentUser.name || "You",
+        stream: (currentUser.preferredStream || userStream || "science") as StreamType,
+        targetCollege: currentUser.targetCollege || "Central University",
+        targetUniversity: currentUser.targetUniversity || "Delhi University",
+        streak: currentUser.dailyStreak || 1,
+        accuracyPercentage: currentUser.accuracyPercentage || 0,
+        totalXp: currentUser.xpPoints || 0,
+        totalTrophies: localClientTrophies.total,
+        subjectTrophies: localClientTrophies.bySubject,
+        completedTestsCount: localClientTrophies.count,
+        isCurrentUser: true,
+      });
+    }
+
+    return list;
+  }, [serverUsers, currentUser, userStream, localClientTrophies]);
+
+  // Filter and sort entries based on active filters and viewMode
+  const rankedEntries = useMemo(() => {
+    // 1. Filter by stream if not 'all'
+    let filtered = mergedUsers;
+    if (activeStreamFilter !== "all") {
+      filtered = filtered.filter((u) => u.stream === activeStreamFilter);
+    }
+
+    // 2. Sort by trophies depending on viewMode
+    const sorted = [...filtered].sort((a, b) => {
+      if (viewMode === "overall") {
+        if (b.totalTrophies !== a.totalTrophies) {
+          return b.totalTrophies - a.totalTrophies;
+        }
+        return b.totalXp - a.totalXp;
+      } else {
+        // Subject-wise view
+        const trophiesA = a.subjectTrophies?.[selectedSubject] || 0;
+        const trophiesB = b.subjectTrophies?.[selectedSubject] || 0;
+        if (trophiesB !== trophiesA) {
+          return trophiesB - trophiesA;
+        }
+        return b.totalTrophies - a.totalTrophies;
+      }
+    });
+
+    // 3. Assign ranks
+    return sorted.map((entry, idx): LeaderboardEntry => ({
+      rank: idx + 1,
+      userId: entry.userId,
+      name: entry.name,
+      stream: entry.stream,
+      targetCollege: entry.targetCollege,
+      streak: entry.streak,
+      accuracyPercentage: entry.accuracyPercentage,
+      totalXp: entry.totalXp,
+      totalTrophies:
+        viewMode === "overall"
+          ? entry.totalTrophies
+          : entry.subjectTrophies?.[selectedSubject] || 0,
+      subjectTrophies: entry.subjectTrophies,
+      completedTestsCount: entry.completedTestsCount,
+      isCurrentUser: entry.isCurrentUser || entry.userId === currentUser.id,
+    }));
+  }, [mergedUsers, activeStreamFilter, viewMode, selectedSubject, currentUser.id]);
+
+  // Find current user's standing in this view
+  const currentUserRanked = rankedEntries.find((e) => e.isCurrentUser);
+  const isCurrentUserInTop3 = currentUserRanked && currentUserRanked.rank <= 3;
 
   return (
     <section className="bg-white rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_#000] sm:shadow-[5px_5px_0px_0px_#000] p-4 sm:p-8">
-      {/* Header */}
+      {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b-2 border-black">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#FEF3C7] text-black border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] shrink-0">
-            <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-[#F59E0B]" />
+          <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl bg-[#FEF3C7] text-black border-2 border-black flex items-center justify-center shadow-[3px_3px_0px_0px_#000] shrink-0">
+            <Trophy className="w-6 h-6 sm:w-7 sm:h-7 text-[#D97706]" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-lg sm:text-xl font-black text-black tracking-tight">
-                All-India CUET Weekly Leaderboard
+              <h2 className="text-xl sm:text-2xl font-black text-black tracking-tight">
+                All-India CUET Trophy Leaderboard
               </h2>
-              <span className="bg-[#FEF3C7] text-black text-[10px] font-black px-2 py-0.5 rounded-full uppercase font-mono border border-black shadow-[1px_1px_0px_0px_#000]">
-                Live NTA Percentile
+              <span className="bg-[#FEF3C7] text-black text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase font-mono border border-black shadow-[1px_1px_0px_0px_#000]">
+                Live Supabase Verified
               </span>
             </div>
-            <p className="text-xs text-black/70 font-semibold mt-0.5">
-              Rankings updated live based on official mock tests solved, accuracy, and practice streaks.
+            <p className="text-xs sm:text-sm text-black/75 font-semibold mt-0.5">
+              Rankings determined by locked mock exam trophies (+5 marks per correct, -1 per negative). Each mock is locked on first attempt.
             </p>
           </div>
         </div>
 
-        {/* Segmented Control to filter by stream */}
-        <div className="grid grid-cols-3 sm:flex p-1 bg-[#FAF7EE] rounded-lg border-2 border-black text-xs font-black shadow-[2px_2px_0px_0px_#000] w-full sm:w-auto">
-          {(["science", "commerce", "humanities"] as StreamType[]).map((st) => (
-            <button
-              key={st}
-              type="button"
-              onClick={() => setActiveStream(st)}
-              className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-md transition-all capitalize border text-center ${
-                activeStream === st
-                  ? "bg-black text-white border-black shadow-[1px_1px_0px_0px_#000] font-black"
-                  : "border-transparent text-black hover:bg-black/5"
-              }`}
-            >
-              {st}
-            </button>
-          ))}
+        {/* Refresh Action */}
+        <div className="flex items-center gap-2 self-start md:self-auto">
+          <button
+            type="button"
+            onClick={() => fetchLeaderboardData(true)}
+            disabled={isRefreshing}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-[#FAF7EE] hover:bg-[#FEF3C7] text-xs font-black text-black transition-all shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 cursor-pointer disabled:opacity-50"
+            title="Refresh real-time data from Supabase backend"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin text-[#D97706]" : ""}`} />
+            <span>{isRefreshing ? "Syncing..." : "Live Refresh"}</span>
+          </button>
         </div>
       </div>
 
-      {/* Leaderboard Table */}
-      <div className="mt-6 overflow-x-auto w-full max-w-full">
-        <table className="w-full text-left text-xs">
-          <thead>
-            <tr className="border-b-2 border-black text-black uppercase tracking-wider font-black text-[10px] sm:text-[11px] pb-3">
-              <th className="py-2.5 sm:py-3 px-2 sm:px-3 w-10 sm:w-16">Rank</th>
-              <th className="py-2.5 sm:py-3 px-2 sm:px-4">Student Aspirant</th>
-              <th className="py-2.5 sm:py-3 px-2 sm:px-4 text-center hidden sm:table-cell">Daily Streak</th>
-              <th className="py-2.5 sm:py-3 px-2 sm:px-4 text-center hidden md:table-cell">Accuracy %</th>
-              <th className="py-2.5 sm:py-3 px-2 sm:px-4 text-right">Total XP</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y-2 divide-black/10">
-            {entries.map((entry) => {
-              const isTop3 = entry.rank <= 3;
-              let rankBadge = (
-                <span className="font-mono font-black text-black w-6 h-6 sm:w-7 sm:h-7 rounded bg-[#FAF7EE] border border-black flex items-center justify-center text-[11px] sm:text-xs shadow-[1px_1px_0px_0px_#000]">
-                  #{entry.rank}
-                </span>
-              );
+      {/* Filter and Mode Control Bar */}
+      <div className="mt-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 rounded-xl bg-[#FAF7EE] border-2 border-black shadow-[3px_3px_0px_0px_#000]">
+        {/* Left: Overall vs Subject Tabs */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[11px] font-black text-black/70 uppercase tracking-wider mr-1 flex items-center gap-1">
+            <Award className="w-3.5 h-3.5 text-black" />
+            Mode:
+          </span>
+          <div className="inline-flex p-1 bg-white rounded-lg border-2 border-black shadow-[1px_1px_0px_0px_#000]">
+            <button
+              type="button"
+              onClick={() => setViewMode("overall")}
+              className={`px-3 py-1.5 rounded-md text-xs font-black transition-all flex items-center gap-1.5 ${
+                viewMode === "overall"
+                  ? "bg-black text-white shadow-[1px_1px_0px_0px_#000]"
+                  : "text-black hover:bg-black/5"
+              }`}
+            >
+              <Trophy className="w-3.5 h-3.5 text-[#F59E0B]" />
+              <span>Overall Trophies</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("subject")}
+              className={`px-3 py-1.5 rounded-md text-xs font-black transition-all flex items-center gap-1.5 ${
+                viewMode === "subject"
+                  ? "bg-black text-white shadow-[1px_1px_0px_0px_#000]"
+                  : "text-black hover:bg-black/5"
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5 text-[#3B82F6]" />
+              <span>Subject-Wise</span>
+            </button>
+          </div>
 
-              if (entry.rank === 1) {
-                rankBadge = (
-                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded bg-[#FEF3C7] text-black border border-black font-mono font-black text-[11px] sm:text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
-                    #1
-                  </span>
-                );
-              } else if (entry.rank === 2) {
-                rankBadge = (
-                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded bg-white text-black border border-black font-mono font-black text-[11px] sm:text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
-                    #2
-                  </span>
-                );
-              } else if (entry.rank === 3) {
-                rankBadge = (
-                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded bg-[#FAF7EE] text-black border border-black font-mono font-black text-[11px] sm:text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
-                    #3
-                  </span>
-                );
-              }
+          {/* If Subject Mode is active, render Subject Dropdown */}
+          {viewMode === "subject" && (
+            <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-2 duration-150">
+              <label htmlFor="subject-select" className="sr-only">
+                Select Subject
+              </label>
+              <select
+                id="subject-select"
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
+                className="px-3 py-1.5 bg-white border-2 border-black rounded-lg text-xs font-black text-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer"
+              >
+                {availableSubjects.map((sub) => (
+                  <option key={sub} value={sub}>
+                    {sub}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
 
-              return (
-                <tr
-                  key={entry.userId}
-                  className={`hover:bg-[#FAF7EE] transition-colors ${
-                    isTop3 ? "bg-[#FEF3C7]/20" : ""
-                  }`}
-                >
-                  {/* Rank */}
-                  <td className="py-2.5 sm:py-3.5 px-2 sm:px-3">{rankBadge}</td>
-
-                  {/* Student Info */}
-                  <td className="py-2.5 sm:py-3.5 px-2 sm:px-4">
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white border border-black text-black flex items-center justify-center font-black text-[10px] sm:text-xs uppercase shadow-[1px_1px_0px_0px_#000] shrink-0">
-                        {entry.name.slice(0, 2)}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="font-black text-black text-xs sm:text-sm truncate">
-                          {entry.name}
-                        </p>
-                        <p className="text-[10px] sm:text-[11px] text-black/70 flex items-center gap-1 font-semibold truncate">
-                          <GraduationCap className="w-3 h-3 text-black shrink-0" />
-                          <span className="truncate">{entry.targetCollege}</span>
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-
-                  {/* Daily Streak */}
-                  <td className="py-2.5 sm:py-3.5 px-2 sm:px-4 text-center hidden sm:table-cell">
-                    <span className="inline-flex items-center gap-1 font-black text-black font-mono bg-[#FEF3C7] px-2 py-0.5 rounded-full border border-black text-xs shadow-[1px_1px_0px_0px_#000]">
-                      <Flame className="w-3.5 h-3.5 fill-[#F59E0B] text-[#D97706]" />
-                      {entry.streak}d
-                    </span>
-                  </td>
-
-                  {/* Accuracy */}
-                  <td className="py-2.5 sm:py-3.5 px-2 sm:px-4 text-center hidden md:table-cell">
-                    <span className="font-mono font-black text-black bg-[#D1FAE5] px-2 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
-                      {entry.accuracyPercentage}%
-                    </span>
-                  </td>
-
-                  {/* Total XP */}
-                  <td className="py-2.5 sm:py-3.5 px-2 sm:px-4 text-right">
-                    <span className="font-mono font-black text-black text-xs sm:text-sm whitespace-nowrap">
-                      {entry.totalXp.toLocaleString()} XP
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        {/* Right: Stream Filter Tabs */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[11px] font-black text-black/70 uppercase tracking-wider mr-1 flex items-center gap-1">
+            <Filter className="w-3.5 h-3.5 text-black" />
+            Stream:
+          </span>
+          <div className="grid grid-cols-4 sm:flex p-1 bg-white rounded-lg border-2 border-black text-xs font-black shadow-[1px_1px_0px_0px_#000] w-full sm:w-auto">
+            {(["all", "science", "commerce", "humanities"] as StreamFilter[]).map((st) => (
+              <button
+                key={st}
+                type="button"
+                onClick={() => setActiveStreamFilter(st)}
+                className={`px-2.5 sm:px-3 py-1 rounded-md transition-all capitalize text-center ${
+                  activeStreamFilter === st
+                    ? "bg-black text-white shadow-[1px_1px_0px_0px_#000]"
+                    : "text-black hover:bg-black/5"
+                }`}
+              >
+                {st === "all" ? "All Streams" : st}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* Pinned Current User Row if outside Top 10 */}
-      {!isUserInTop10 && (
+      {/* View Context Banner */}
+      <div className="mt-4 flex items-center justify-between text-xs text-black/70 font-semibold px-1">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>
+            Showing{" "}
+            <strong className="text-black font-black">
+              {viewMode === "overall" ? "Overall Mock Trophies" : `${selectedSubject} Trophies`}
+            </strong>{" "}
+            for{" "}
+            <strong className="text-black font-black capitalize">
+              {activeStreamFilter === "all" ? "All Aspirants" : `${activeStreamFilter} Stream`}
+            </strong>
+          </span>
+        </div>
+        {lastUpdated && (
+          <span className="text-[11px] text-black/50 font-mono hidden sm:inline">
+            Updated {lastUpdated.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          </span>
+        )}
+      </div>
+
+      {/* Loading Skeleton */}
+      {isLoading && (
+        <div className="mt-6 space-y-3">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="h-16 bg-[#FAF7EE] border-2 border-black rounded-xl animate-pulse"
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!isLoading && rankedEntries.length === 0 && (
+        <div className="mt-8 text-center py-12 px-4 rounded-xl bg-[#FAF7EE] border-2 border-dashed border-black">
+          <div className="w-12 h-12 mx-auto rounded-xl bg-white border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] mb-3">
+            <Trophy className="w-6 h-6 text-black/40" />
+          </div>
+          <h3 className="text-base font-black text-black">No Aspirants Found</h3>
+          <p className="text-xs text-black/70 max-w-sm mx-auto mt-1 font-medium">
+            No students have registered in this stream or completed a mock test in {selectedSubject} yet.
+            Take a mock test to establish your #1 position!
+          </p>
+        </div>
+      )}
+
+      {/* Leaderboard Table */}
+      {!isLoading && rankedEntries.length > 0 && (
+        <div className="mt-6 overflow-x-auto w-full max-w-full">
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="border-b-2 border-black text-black uppercase tracking-wider font-black text-[10px] sm:text-[11px] pb-3">
+                <th className="py-2.5 sm:py-3 px-2 sm:px-3 w-10 sm:w-16">Rank</th>
+                <th className="py-2.5 sm:py-3 px-2 sm:px-4">Aspirant</th>
+                <th className="py-2.5 sm:py-3 px-2 sm:px-4 hidden sm:table-cell">Stream</th>
+                <th className="py-2.5 sm:py-3 px-2 sm:px-4 text-center hidden md:table-cell">Streak</th>
+                <th className="py-2.5 sm:py-3 px-2 sm:px-4 text-center hidden lg:table-cell">Mocks Solved</th>
+                <th className="py-2.5 sm:py-3 px-2 sm:px-4 text-right">
+                  {viewMode === "overall" ? "Total Trophies" : `${selectedSubject} Trophies`}
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y-2 divide-black/10">
+              {rankedEntries.map((entry) => {
+                const isTop1 = entry.rank === 1;
+                const isTop2 = entry.rank === 2;
+                const isTop3 = entry.rank === 3;
+                const isCurrentUser = entry.isCurrentUser;
+
+                let rankBadge = (
+                  <span className="font-mono font-black text-black w-6 h-6 sm:w-7 sm:h-7 rounded bg-[#FAF7EE] border border-black flex items-center justify-center text-[11px] sm:text-xs shadow-[1px_1px_0px_0px_#000]">
+                    #{entry.rank}
+                  </span>
+                );
+
+                if (isTop1) {
+                  rankBadge = (
+                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded bg-[#FEF3C7] text-black border border-black font-mono font-black text-[11px] sm:text-xs flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
+                      🥇
+                    </span>
+                  );
+                } else if (isTop2) {
+                  rankBadge = (
+                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded bg-[#F3F4F6] text-black border border-black font-mono font-black text-[11px] sm:text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
+                      🥈
+                    </span>
+                  );
+                } else if (isTop3) {
+                  rankBadge = (
+                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded bg-[#FFEDD5] text-black border border-black font-mono font-black text-[11px] sm:text-xs flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
+                      🥉
+                    </span>
+                  );
+                }
+
+                return (
+                  <tr
+                    key={entry.userId}
+                    className={`transition-colors ${
+                      isCurrentUser
+                        ? "bg-[#FEF3C7]/40 hover:bg-[#FEF3C7]/60 font-bold"
+                        : isTop1
+                        ? "bg-[#FEF3C7]/20 hover:bg-[#FEF3C7]/30"
+                        : "hover:bg-[#FAF7EE]"
+                    }`}
+                  >
+                    {/* Rank */}
+                    <td className="py-3 px-2 sm:px-3">{rankBadge}</td>
+
+                    {/* Aspirant Info */}
+                    <td className="py-3 px-2 sm:px-4">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div
+                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-black text-black flex items-center justify-center font-black text-[10px] sm:text-xs uppercase shadow-[1px_1px_0px_0px_#000] shrink-0 ${
+                            isCurrentUser
+                              ? "bg-black text-white"
+                              : isTop1
+                              ? "bg-[#FEF3C7]"
+                              : "bg-white"
+                          }`}
+                        >
+                          {entry.name.slice(0, 2)}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-black text-black text-xs sm:text-sm flex items-center gap-1.5 truncate">
+                            <span className="truncate">{entry.name}</span>
+                            {isCurrentUser && (
+                              <span className="bg-black text-white text-[9px] px-1.5 py-0.5 rounded font-black uppercase shrink-0">
+                                You
+                              </span>
+                            )}
+                          </p>
+                          <p className="text-[10px] sm:text-[11px] text-black/70 flex items-center gap-1 font-semibold truncate">
+                            <GraduationCap className="w-3 h-3 text-black shrink-0" />
+                            <span className="truncate">{entry.targetCollege}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Stream Badge */}
+                    <td className="py-3 px-2 sm:px-4 hidden sm:table-cell">
+                      <span className="capitalize text-[10px] font-black px-2 py-0.5 rounded border border-black bg-white shadow-[1px_1px_0px_0px_#000]">
+                        {entry.stream}
+                      </span>
+                    </td>
+
+                    {/* Daily Streak */}
+                    <td className="py-3 px-2 sm:px-4 text-center hidden md:table-cell">
+                      <span className="inline-flex items-center gap-1 font-black text-black font-mono bg-[#FEF3C7] px-2 py-0.5 rounded-full border border-black text-xs shadow-[1px_1px_0px_0px_#000]">
+                        <Flame className="w-3.5 h-3.5 fill-[#F59E0B] text-[#D97706]" />
+                        {entry.streak}d
+                      </span>
+                    </td>
+
+                    {/* Mocks Solved */}
+                    <td className="py-3 px-2 sm:px-4 text-center hidden lg:table-cell">
+                      <span className="font-mono font-black text-black bg-[#FAF7EE] px-2 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
+                        {entry.completedTestsCount || 0} mocks
+                      </span>
+                    </td>
+
+                    {/* Trophies */}
+                    <td className="py-3 px-2 sm:px-4 text-right">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FEF3C7] border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                        <Trophy className="w-4 h-4 text-[#D97706] shrink-0" />
+                        <span className="font-mono font-black text-black text-xs sm:text-sm whitespace-nowrap">
+                          {entry.totalTrophies.toLocaleString()} 🏆
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Pinned Current User Row if outside Top Ranks or unranked */}
+      {!isLoading && currentUserRanked && !isCurrentUserInTop3 && (
         <div className="mt-6 pt-4 border-t-2 border-dashed border-black">
           <div className="text-[11px] font-black text-black/70 uppercase tracking-wider mb-2 flex items-center justify-between">
-            <span>Your Current Standing</span>
+            <span>Your Live Standing</span>
             <span className="text-black font-bold">
-              {currentUserEntry.totalXp > 0
-                ? "Solve more mocks to break into Top 10"
-                : "Complete your first mock to establish your live rank"}
+              {currentUserRanked.totalTrophies > 0
+                ? "Attempt new tests to earn more locked trophies!"
+                : "Complete a mock exam to unlock your first trophies!"}
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#FAF7EE] border-2 border-black text-black flex flex-wrap items-center justify-between gap-4 shadow-[4px_4px_0px_0px_#000]">
+          <div className="p-4 rounded-xl bg-[#FEF3C7]/40 border-2 border-black text-black flex flex-wrap items-center justify-between gap-4 shadow-[4px_4px_0px_0px_#000]">
             <div className="flex items-center gap-4">
-              <span className="font-mono font-black text-black bg-[#FEF3C7] px-3 py-1.5 rounded-lg border-2 border-black text-sm shadow-[1px_1px_0px_0px_#000]">
-                {currentUserEntry.rank > 0 ? `#${currentUserEntry.rank}` : "#--"}
+              <span className="font-mono font-black text-black bg-[#FEF3C7] px-3 py-1.5 rounded-lg border-2 border-black text-sm shadow-[2px_2px_0px_0px_#000]">
+                #{currentUserRanked.rank}
               </span>
               <div>
                 <p className="font-black text-sm flex items-center gap-2 text-black">
-                  <span>{currentUserEntry.name} (You)</span>
-                  <span className="bg-[#D1FAE5] text-black text-[10px] px-2 py-0.2 rounded-full font-black uppercase border border-black shadow-[1px_1px_0px_0px_#000]">
-                    {currentUserEntry.totalXp > 0 ? "Active" : "New Aspirant"}
+                  <span>{currentUserRanked.name} (You)</span>
+                  <span className="bg-black text-white text-[10px] px-2 py-0.5 rounded-full font-black uppercase">
+                    Active Aspirant
                   </span>
                 </p>
-                <p className="text-xs text-black/70 font-semibold mt-0.5">
-                  Target: {currentUserEntry.targetCollege}
+                <p className="text-xs text-black/75 font-semibold mt-0.5">
+                  Target: {currentUserRanked.targetCollege}
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-6 text-xs">
               <div className="text-center">
-                <p className="text-[10px] text-black/60 uppercase font-black">Streak</p>
+                <p className="text-[10px] text-black/60 uppercase font-black">Daily Streak</p>
                 <p className="font-mono font-black text-black text-sm flex items-center gap-1 justify-center">
                   <Flame className="w-3.5 h-3.5 fill-[#F59E0B] text-[#D97706]" />
-                  {currentUserEntry.streak}d
-                </p>
-              </div>
-
-              <div className="text-center">
-                <p className="text-[10px] text-black/60 uppercase font-black">Accuracy</p>
-                <p className="font-mono font-black text-black text-sm">
-                  {currentUserEntry.accuracyPercentage > 0
-                    ? `${currentUserEntry.accuracyPercentage}%`
-                    : "--"}
+                  {currentUserRanked.streak}d
                 </p>
               </div>
 
               <div className="text-right">
-                <p className="text-[10px] text-black/60 uppercase font-black">Total XP</p>
-                <p className="font-mono font-black text-black text-base">
-                  {currentUserEntry.totalXp.toLocaleString()} XP
+                <p className="text-[10px] text-black/60 uppercase font-black">
+                  {viewMode === "overall" ? "Total Trophies" : `${selectedSubject} Trophies`}
+                </p>
+                <p className="font-mono font-black text-black text-base flex items-center gap-1 justify-end">
+                  <Trophy className="w-4 h-4 text-[#D97706]" />
+                  {currentUserRanked.totalTrophies.toLocaleString()} 🏆
                 </p>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* Fair Play & Trophy Rule Footer */}
+      <div className="mt-8 pt-4 border-t-2 border-black/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[11px] text-black/70">
+        <div className="flex items-center gap-2">
+          <Lock className="w-3.5 h-3.5 text-black shrink-0" />
+          <span className="font-medium">
+            <strong className="text-black font-black">Anti-Farming Rule:</strong> Trophies for each mock are permanently locked on first completion. Re-attempting the same test awards 0 additional trophies.
+          </span>
+        </div>
+        <div className="flex items-center gap-2 font-mono">
+          <Sparkles className="w-3.5 h-3.5 text-[#D97706] shrink-0" />
+          <span>CUET Marking: +5 Correct, -1 Incorrect</span>
+        </div>
+      </div>
     </section>
   );
 }

@@ -2,9 +2,9 @@ import { Metadata } from "next";
 import Leaderboard from "@/components/dashboard/Leaderboard";
 
 export const metadata: Metadata = {
-  title: "All-India Weekly Leaderboard | CUET AI-Prep",
+  title: "All-India Trophy Leaderboard | CUET AI-Prep",
   description:
-    "Real-time All-India CUET UG weekly leaderboard tracking rank percentiles, mock accuracy, study streaks, and XP points across Science, Commerce, and Humanities.",
+    "Real-time All-India CUET UG leaderboard tracking locked trophies, subject-wise mastery, and study streaks across Science, Commerce, and Humanities.",
 };
 
 export default function LeaderboardPage() {
@@ -14,13 +14,13 @@ export default function LeaderboardPage() {
         {/* Page Title & Context Banner */}
         <div className="space-y-1">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FEF3C7] border-2 border-black rounded-full text-black text-xs font-black shadow-[2px_2px_0px_0px_#000]">
-            <span>National Percentile Standings</span>
+            <span>🏆 National Trophy Standings</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-black tracking-tight">
-            All-India Weekly Leaderboard
+            All-India CUET Trophy Leaderboard
           </h1>
           <p className="text-xs sm:text-sm text-black/70 font-medium max-w-2xl">
-            Live rankings calibrated against 2024 cutoff benchmarks for North Campus flagships (SRCC, St. Stephen&apos;s, Hindu, LSR).
+            Live rankings based on locked mock exam trophies (+5 per correct, -1 per negative). Track overall rankings or toggle subject-wise domain leaderboards.
           </p>
         </div>
 
