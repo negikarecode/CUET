@@ -148,14 +148,14 @@ export default function CBTSubmitModal() {
             <div className="p-3.5 rounded-lg bg-[#FEF3C7] border-2 border-black text-xs text-black leading-relaxed flex items-start gap-2.5 shadow-[2px_2px_0px_0px_#000]">
               <HelpCircle className="w-4 h-4 text-black shrink-0 mt-0.5 stroke-[2.5]" />
               <p className="font-medium">
-                {t("areYouSureSubmit", "Are you sure you want to submit your test paper? Once submitted, your score will be calculated and AI mistake diagnosis generated.")}
+                {t("areYouSureSubmit", "Are you sure you want to submit your test paper? Once submitted, your score will be calculated and official solutions displayed.")}
               </p>
             </div>
           ) : (
             <div className="p-3.5 rounded-lg bg-[#D1FAE5] border-2 border-black text-xs text-black leading-relaxed flex items-start gap-2.5 shadow-[2px_2px_0px_0px_#000]">
               <CheckCircle2 className="w-4 h-4 text-black shrink-0 mt-0.5 stroke-[2.5]" />
               <p className="font-medium">
-                {t("areYouSureSubmit", "Are you sure you want to submit your test paper? Once submitted, your score will be calculated and AI mistake diagnosis generated.")}
+                {t("areYouSureSubmit", "Are you sure you want to submit your test paper? Once submitted, your score will be calculated and official solutions displayed.")}
               </p>
             </div>
           )}

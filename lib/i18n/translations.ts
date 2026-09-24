@@ -82,7 +82,7 @@ export const translations: Record<string, TranslationDictionary> = {
     ansAndMarked: "Ans & Marked Review",
     confirmSubmission: "Confirm Test Paper Submission",
     examSummary: "NTA CUET Examination Summary",
-    areYouSureSubmit: "Are you sure you want to submit your test paper? Once submitted, your score will be calculated and AI mistake diagnosis generated.",
+    areYouSureSubmit: "Are you sure you want to submit your test paper? Once submitted, your score will be calculated and official solutions displayed.",
     returnToPaper: "Return to Paper",
     submitExamNow: "Submit Exam Now",
     timeRemaining: "Time Remaining:",
