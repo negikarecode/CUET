@@ -34,6 +34,7 @@ import { useIsClient } from "@/lib/hooks/useIsClient";
 import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData } from "@/types";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { normalizeSubject } from "@/lib/analytics";
+import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 
 const SUBJECT_ICON_MAP: Record<string, React.ElementType> = {
   Calculator,
@@ -226,17 +227,8 @@ export default function DashboardClient({
     ? storeUser.preferredStream
     : initialData.user.targetStream;
 
-  // Selected Domain Subjects (from onboarding / profile)
-  const candidateSubjects =
-    isClient && storeUser.selectedSubjects && storeUser.selectedSubjects.length > 0
-      ? storeUser.selectedSubjects
-      : initialData?.user?.selectedSubjects && initialData.user.selectedSubjects.length > 0
-      ? initialData.user.selectedSubjects
-      : targetStream.toLowerCase() === "commerce"
-      ? ["Accountancy", "Business Studies", "Economics", "English"]
-      : targetStream.toLowerCase() === "humanities"
-      ? ["Political Science", "History", "Economics", "English"]
-      : ["Physics", "Chemistry", "Mathematics", "English"];
+  // Stream Domain Subjects (calibrated automatically from stream)
+  const candidateSubjects = getSubjectsForStream(targetStream);
 
   // Candidate Subject Calibrations (strictly only candidate's selected subjects)
   const candidateSubjectCalibrations: SubjectCalibrationData[] = candidateSubjects.map((subName) => {

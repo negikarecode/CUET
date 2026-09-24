@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 
 export const dynamic = "force-dynamic";
 
@@ -60,7 +61,10 @@ export async function POST(req: Request) {
       .eq("id", id)
       .maybeSingle();
 
-    const subjectsToPersist = selectedSubjects;
+    const subjectsToPersist =
+      selectedSubjects && Array.isArray(selectedSubjects) && selectedSubjects.length > 0
+        ? selectedSubjects
+        : getSubjectsForStream(formattedStream);
 
     const profilePayload: Record<string, any> = {
       id,
@@ -68,12 +72,9 @@ export async function POST(req: Request) {
       target_stream: formattedStream,
       target_university: targetUniversity || "Delhi University",
       target_college: targetCollege || "SRCC",
+      selected_subjects: subjectsToPersist,
       updated_at: new Date().toISOString(),
     };
-
-    if (subjectsToPersist && Array.isArray(subjectsToPersist) && subjectsToPersist.length > 0) {
-      profilePayload.selected_subjects = subjectsToPersist;
-    }
 
     if (!existingProfile) {
       // First-time initialization

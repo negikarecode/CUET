@@ -73,3 +73,14 @@ export const DEFAULT_STREAM_SUBJECTS: Record<
     "English",
   ],
 };
+
+/**
+ * Returns official domain subjects automatically based on the user's chosen stream.
+ */
+export function getSubjectsForStream(stream?: string | null): string[] {
+  if (!stream) return DEFAULT_STREAM_SUBJECTS.science;
+  const s = stream.toLowerCase();
+  if (s.includes("commerce")) return DEFAULT_STREAM_SUBJECTS.commerce;
+  if (s.includes("humanities") || s.includes("arts")) return DEFAULT_STREAM_SUBJECTS.humanities;
+  return DEFAULT_STREAM_SUBJECTS.science;
+}

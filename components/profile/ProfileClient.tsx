@@ -37,6 +37,7 @@ import {
 } from "@/types/profile";
 import { StreamOption } from "@/types/database";
 import { calculateCollegeReadiness } from "@/lib/college-benchmarks";
+import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import {
   isPushNotificationSupported,
   getNotificationPermissionState,
@@ -187,6 +188,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
     selectedSubjects: string[];
   }) => {
     const previousProfile = { ...profile };
+    const finalSubjects = getSubjectsForStream(updatedData.targetStream);
 
     // 1. Optimistic UI update
     setProfile((prev) => ({
@@ -195,7 +197,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       targetUniversity: updatedData.targetUniversity,
       targetCollege: updatedData.targetCollege,
       fullName: updatedData.fullName,
-      selectedSubjects: updatedData.selectedSubjects,
+      selectedSubjects: finalSubjects,
     }));
 
     // Update Zustand client store
@@ -204,12 +206,12 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       preferredStream: updatedData.targetStream.toLowerCase() as any,
       targetUniversity: updatedData.targetUniversity,
       targetCollege: updatedData.targetCollege,
-      selectedSubjects: updatedData.selectedSubjects,
+      selectedSubjects: finalSubjects,
     });
 
     setStatusMessage({
       type: "info",
-      text: "Syncing your updated academic targets and subjects...",
+      text: "Syncing your updated academic targets and stream subjects...",
     });
 
     try {
@@ -219,7 +221,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         targetUniversity: updatedData.targetUniversity,
         targetCollege: updatedData.targetCollege,
         fullName: updatedData.fullName,
-        selectedSubjects: updatedData.selectedSubjects,
+        selectedSubjects: finalSubjects,
       });
 
       if (!result.success) {
@@ -228,7 +230,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
       setStatusMessage({
         type: "success",
-        text: `Target goals updated: ${updatedData.targetUniversity} — ${updatedData.targetCollege} (${updatedData.selectedSubjects.length} subjects)`,
+        text: `Target goals updated: ${updatedData.targetUniversity} — ${updatedData.targetCollege} (${finalSubjects.length} domains)`,
       });
 
       // Recalculate college readiness in state
@@ -518,39 +520,41 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
         </div>
 
-        {/* Selected Domain Subjects Aspirant is Preparing For */}
-        <div className="p-4 bg-[#FAF7EE] rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_#000] space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
-              <Layers className="w-3.5 h-3.5 text-[#FF5C5C]" />
-              <span>Target Domain Subjects ({profile.selectedSubjects?.length || 0} Preparing)</span>
-            </span>
-            <button
-              type="button"
-              onClick={() => setIsEditGoalsOpen(true)}
-              className="text-xs font-black text-black hover:text-[#FF5C5C] flex items-center gap-1 cursor-pointer transition-colors"
-            >
-              <Edit3 className="w-3 h-3" />
-              <span>Edit Subjects</span>
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2 pt-1">
-            {(profile.selectedSubjects || []).length === 0 ? (
-              <p className="text-xs text-black/60 font-semibold italic">
-                No subjects selected yet. Click Edit Subjects to choose your domain papers.
-              </p>
-            ) : (
-              (profile.selectedSubjects || []).map((subj) => (
-                <span
-                  key={subj}
-                  className="px-3 py-1 rounded-lg bg-white border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_0px_#000]"
-                >
-                  {subj}
+        {/* Stream Domain Subjects Calibrated for Candidate */}
+        {(() => {
+          const displaySubjects =
+            profile.selectedSubjects && profile.selectedSubjects.length > 0
+              ? profile.selectedSubjects
+              : getSubjectsForStream(profile.targetStream);
+          return (
+            <div className="p-4 bg-[#FAF7EE] rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_#000] space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-[#FF5C5C]" />
+                  <span>Stream Domain Subjects ({profile.targetStream || "Science"} Stream • {displaySubjects.length} Domains)</span>
                 </span>
-              ))
-            )}
-          </div>
-        </div>
+                <button
+                  type="button"
+                  onClick={() => setIsEditGoalsOpen(true)}
+                  className="text-xs font-black text-black hover:text-[#FF5C5C] flex items-center gap-1 cursor-pointer transition-colors"
+                >
+                  <Edit3 className="w-3 h-3" />
+                  <span>Change Stream</span>
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2 pt-1">
+                {displaySubjects.map((subj) => (
+                  <span
+                    key={subj}
+                    className="px-3 py-1 rounded-lg bg-white border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_0px_#000]"
+                  >
+                    {subj}
+                  </span>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Quick Stats Pills: XP, Active Streak Flame, Campus Coins */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

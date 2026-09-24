@@ -38,9 +38,9 @@ import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { RepairQuizResponse } from "@/app/api/ai/repair-quiz/route";
-import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData, StreamType } from "@/types";
+import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData } from "@/types";
 import { normalizeSubject } from "@/lib/analytics";
-import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
+import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 
 const SUBJECT_ICON_MAP: Record<string, React.ElementType> = {
   Calculator,
@@ -485,18 +485,10 @@ export default function WeaknessRadarClient({
     }
   }, [isClient, storeUser, initialData, router]);
 
-  // Determine Candidate Subjects
-  const candidateSubjects =
-    isClient && storeUser.selectedSubjects && storeUser.selectedSubjects.length > 0
-      ? storeUser.selectedSubjects
-      : initialData.user.selectedSubjects && initialData.user.selectedSubjects.length > 0
-      ? initialData.user.selectedSubjects
-      : DEFAULT_STREAM_SUBJECTS[(initialData.user.targetStream?.toLowerCase() as StreamType) || "commerce"] || [
-          "Physics",
-          "Chemistry",
-          "Mathematics",
-          "English",
-        ];
+  // Automatically calibrate Candidate Subjects directly from academic stream
+  const activeStream =
+    (storeUser.preferredStream || initialData.user.targetStream || "commerce").toLowerCase();
+  const candidateSubjects = getSubjectsForStream(activeStream);
 
   // Attempt count calculations
   const clientQuestionsAttempted =
@@ -691,8 +683,8 @@ export default function WeaknessRadarClient({
             <Target className="w-3.5 h-3.5 text-[#FF5C5C]" />
             <span>Filter By Domain Subject</span>
           </span>
-          <span className="text-[11px] font-bold text-black/60">
-            {candidateSubjects.length} Active Selected Subjects
+          <span className="text-[11px] font-bold text-black/60 capitalize">
+            {activeStream} Stream ({candidateSubjects.length} Calibrated Domains)
           </span>
         </div>
 
@@ -710,7 +702,7 @@ export default function WeaknessRadarClient({
             }`}
           >
             <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
-            <span>All Selected Domains ({totalAttempted} Qs)</span>
+            <span>All Stream Domains ({totalAttempted} Qs)</span>
           </button>
 
           {candidateSubjectCalibrations.map((sub) => {

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { StreamOption } from "@/types/database";
 import CollegeSearchDropdown from "@/components/auth/CollegeSearchDropdown";
-import SubjectMultiSelector from "@/components/auth/SubjectMultiSelector";
+import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 
 interface EditGoalsModalProps {
   isOpen: boolean;
@@ -46,13 +46,9 @@ export default function EditGoalsModal({
   const [college, setCollege] = useState<string>(initialCollege || "SRCC");
   const [fullName, setFullName] = useState<string>(initialFullName || "");
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>(
-    initialSelectedSubjects.length > 0
+    initialSelectedSubjects && initialSelectedSubjects.length > 0
       ? initialSelectedSubjects
-      : initialStream === "Commerce"
-      ? ["Accountancy", "Business Studies", "Economics"]
-      : initialStream === "Humanities"
-      ? ["History", "Political Science", "Psychology"]
-      : ["Physics", "Chemistry", "Mathematics"]
+      : getSubjectsForStream(initialStream || "Science")
   );
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -172,7 +168,10 @@ export default function EditGoalsModal({
                   <button
                     key={opt.id}
                     type="button"
-                    onClick={() => setStream(opt.id)}
+                    onClick={() => {
+                      setStream(opt.id);
+                      setSelectedSubjects(getSubjectsForStream(opt.id));
+                    }}
                     className={`p-3 rounded-lg border-2 text-left transition-all relative ${
                       isSelected
                         ? `${opt.color} border-black shadow-[3px_3px_0px_0px_#000] font-black`
@@ -198,12 +197,30 @@ export default function EditGoalsModal({
             </div>
           </div>
 
-          {/* Target Domain Subjects Multi-Selector */}
+          {/* Stream Domain Subjects (Auto-Calibrated) */}
           <div className="p-3.5 rounded-xl border-2 border-black bg-[#FAF7EE] space-y-2">
-            <SubjectMultiSelector
-              selectedSubjects={selectedSubjects}
-              onChangeSubjects={setSelectedSubjects}
-            />
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#FF5C5C]" />
+                <span>Stream Domain Subjects (Auto-Calibrated)</span>
+              </label>
+              <span className="text-[10px] font-black bg-white px-2 py-0.5 rounded border border-black text-black/70">
+                {selectedSubjects.length} Domains
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {selectedSubjects.map((sub) => (
+                <span
+                  key={sub}
+                  className="px-2.5 py-1 text-xs font-black bg-white text-black border-2 border-black rounded-lg shadow-[1px_1px_0px_0px_#000]"
+                >
+                  {sub}
+                </span>
+              ))}
+            </div>
+            <p className="text-[11px] font-bold text-black/60 pt-0.5">
+              Domain subjects are calibrated automatically based on your {stream} stream.
+            </p>
           </div>
 
           {/* Dream College Dropdown */}

@@ -24,8 +24,7 @@ import { useIsClient } from "@/lib/hooks/useIsClient";
 import { createClient } from "@/lib/supabase/client";
 import CollegeSearchDropdown from "./CollegeSearchDropdown";
 import CourseSearchDropdown from "./CourseSearchDropdown";
-import SubjectMultiSelector from "./SubjectMultiSelector";
-import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
+import { DEFAULT_STREAM_SUBJECTS, getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 
 interface AuthPageContentProps {
   initialMode?: "signup" | "login";
@@ -79,9 +78,7 @@ export default function AuthPageContent({
 
   const handleStreamChange = (newStream: StreamType) => {
     setStream(newStream);
-    setSelectedSubjects(
-      DEFAULT_STREAM_SUBJECTS[newStream] || DEFAULT_STREAM_SUBJECTS.commerce
-    );
+    setSelectedSubjects(getSubjectsForStream(newStream));
   };
 
   // Sign In with real Supabase Auth credentials
@@ -631,11 +628,31 @@ export default function AuthPageContent({
                       placeholder="Search top degrees..."
                     />
 
-                    {/* Subject Multi-Selector */}
-                    <SubjectMultiSelector
-                      selectedSubjects={selectedSubjects}
-                      onChangeSubjects={setSelectedSubjects}
-                    />
+                    {/* Auto-Assigned Stream Domain Subjects */}
+                    <div className="p-3.5 bg-[#FAF7EE] border-2 border-black rounded-xl space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5 text-[#FF5C5C]" />
+                          <span>Stream Domain Subjects (Auto-Calibrated)</span>
+                        </label>
+                        <span className="text-[10px] font-black bg-white px-2 py-0.5 rounded border border-black text-black/70">
+                          {selectedSubjects.length} Domains
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {selectedSubjects.map((subj) => (
+                          <span
+                            key={subj}
+                            className="px-2.5 py-1 text-xs font-black bg-white text-black border-2 border-black rounded-lg shadow-[1px_1px_0px_0px_#000]"
+                          >
+                            {subj}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="text-[11px] font-bold text-black/60">
+                        Diagnostic radars and mock tests are automatically calibrated for your {stream} stream.
+                      </p>
+                    </div>
 
                     {/* Buttons: Back and Submit */}
                     <div className="flex items-center gap-3 pt-3">

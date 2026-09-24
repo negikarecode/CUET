@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { StreamOption } from "@/types/database";
+import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 
 export const dynamic = "force-dynamic";
 
@@ -59,14 +60,22 @@ export async function POST(req: NextRequest) {
       updated_at: new Date().toISOString(),
     };
 
-    if (targetStream) updatePayload.target_stream = formattedStream;
+    if (targetStream) {
+      updatePayload.target_stream = formattedStream;
+      const subjectsToUpdate = selectedSubjects || selected_subjects;
+      updatePayload.selected_subjects =
+        subjectsToUpdate && Array.isArray(subjectsToUpdate) && subjectsToUpdate.length > 0
+          ? subjectsToUpdate
+          : getSubjectsForStream(formattedStream);
+    } else {
+      const subjectsToUpdate = selectedSubjects || selected_subjects;
+      if (subjectsToUpdate && Array.isArray(subjectsToUpdate)) {
+        updatePayload.selected_subjects = subjectsToUpdate;
+      }
+    }
     if (targetUniversity !== undefined) updatePayload.target_university = targetUniversity;
     if (targetCollege !== undefined) updatePayload.target_college = targetCollege;
     if (fullName) updatePayload.full_name = fullName;
-    const subjectsToUpdate = selectedSubjects || selected_subjects;
-    if (subjectsToUpdate && Array.isArray(subjectsToUpdate)) {
-      updatePayload.selected_subjects = subjectsToUpdate;
-    }
 
     // Execute update
     const { data: updatedProfile, error } = await supabaseAdmin

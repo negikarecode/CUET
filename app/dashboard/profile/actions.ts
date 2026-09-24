@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { StreamOption } from "@/types/database";
+import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 
 export interface UpdateProfileGoalsInput {
   targetStream?: StreamOption | string;
@@ -38,13 +39,18 @@ export async function updateProfileGoalsAction(input: UpdateProfileGoalsInput) {
       updated_at: new Date().toISOString(),
     };
 
-    if (input.targetStream) updatePayload.target_stream = formattedStream;
+    if (input.targetStream) {
+      updatePayload.target_stream = formattedStream;
+      updatePayload.selected_subjects =
+        input.selectedSubjects && Array.isArray(input.selectedSubjects) && input.selectedSubjects.length > 0
+          ? input.selectedSubjects
+          : getSubjectsForStream(formattedStream);
+    } else if (input.selectedSubjects && Array.isArray(input.selectedSubjects)) {
+      updatePayload.selected_subjects = input.selectedSubjects;
+    }
     if (input.targetUniversity !== undefined) updatePayload.target_university = input.targetUniversity;
     if (input.targetCollege !== undefined) updatePayload.target_college = input.targetCollege;
     if (input.fullName) updatePayload.full_name = input.fullName;
-    if (input.selectedSubjects && Array.isArray(input.selectedSubjects)) {
-      updatePayload.selected_subjects = input.selectedSubjects;
-    }
 
     const { data: updatedProfile, error: dbError } = await supabaseAdmin
       .from("profiles")
