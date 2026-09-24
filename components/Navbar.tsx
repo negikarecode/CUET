@@ -99,7 +99,7 @@ export default function Navbar() {
     window.location.href = "/";
   };
 
-  if (pathname.startsWith("/test/") || pathname === "/dashboard") return null;
+  if (pathname.startsWith("/test/") || pathname.startsWith("/dashboard")) return null;
 
   return (
     <>

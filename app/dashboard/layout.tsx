@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 
 export default async function DashboardLayout({
   children,
@@ -29,13 +30,18 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-[#FAF7EE] flex flex-col md:flex-row w-full max-w-full overflow-x-hidden">
-      {/* Persistent Left Navbar Sidebar */}
+      {/* Left Sidebar (sticky top-0 h-screen overflow-y-auto on desktop) */}
       <DashboardSidebar />
 
-      {/* Main Content Area (Offset on Desktop to accommodate Left Navbar) */}
-      <main className="flex-1 md:pl-64 lg:pl-72 min-w-0 transition-all w-full max-w-full overflow-x-hidden">
-        {children}
-      </main>
+      {/* Main Content Area (flex-1 overflow-y-auto min-h-screen) */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto min-h-screen w-full max-w-full">
+        {/* Top Horizontal Bar (sticky top-0 z-30 with right-aligned student utilities & no logo) */}
+        <DashboardNavbar />
+
+        <main className="flex-1 min-w-0 w-full max-w-full">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
