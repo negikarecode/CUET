@@ -29,7 +29,11 @@ import {
   Laptop,
   Medal,
   GraduationCap,
+  ChevronDown,
+  ChevronUp,
+  AlertTriangle,
 } from "lucide-react";
+import LatexRenderer from "@/components/common/LatexRenderer";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -98,6 +102,331 @@ export interface WeaknessRadarInitialData {
   subjectCalibration: Record<string, SubjectCalibrationData>;
 }
 
+function getSeverityBadge(accuracy: number, diagnosisLabel?: string) {
+  if (accuracy < 25) {
+    return {
+      bg: "bg-[#FEE2E2]",
+      text: "text-[#DC2626]",
+      label: diagnosisLabel || "Critical (<25%)",
+      colorName: "red",
+    };
+  } else if (accuracy <= 50) {
+    return {
+      bg: "bg-[#FEF3C7]",
+      text: "text-[#B45309]",
+      label: diagnosisLabel || "Needs Polish (25-50%)",
+      colorName: "amber",
+    };
+  } else if (accuracy < 75) {
+    return {
+      bg: "bg-[#DBEAFE]",
+      text: "text-[#1D4ED8]",
+      label: diagnosisLabel || "Moderate (>50%)",
+      colorName: "blue",
+    };
+  } else {
+    return {
+      bg: "bg-[#D1FAE5]",
+      text: "text-[#065F46]",
+      label: diagnosisLabel || "Mastered (≥75%)",
+      colorName: "green",
+    };
+  }
+}
+
+function getPrimaryDistractorTrap(topic: TopicMastery): string {
+  if (
+    topic.diagnosticInsight &&
+    (topic.diagnosticInsight.toLowerCase().includes("trap choices") ||
+      topic.diagnosticInsight.toLowerCase().includes("negative marking") ||
+      topic.diagnosticInsight.toLowerCase().includes("clock drain"))
+  ) {
+    return topic.diagnosticInsight;
+  }
+
+  const primaryTopic = topic.troubleTopics?.[0] || topic.microTopic || topic.chapter;
+
+  if (topic.diagnosisLabel === "Impulsive Trap Exposure") {
+    return `Impulsive Negation Trap: Falling for tempting distractor choices in ${primaryTopic} without verifying 'NOT/INCORRECT' qualifiers.`;
+  }
+  if (topic.diagnosisLabel === "Calculation & Clock Drain") {
+    return `Clock-Drain Trap: Multi-step algebraic dead-ends in ${primaryTopic} exceeding standard 72s NTA pacing. Practice formula shortcuts and dimensional elimination.`;
+  }
+  if (topic.diagnosisLabel === "Critical Conceptual Gap") {
+    return `Conceptual Reversal Trap: Confusing inverse reaction mechanisms, boundary conditions, or core formulas in ${primaryTopic}.`;
+  }
+  if (topic.diagnosisLabel === "Careless / Precision Slip") {
+    return `Precision Slip: Sign reversal or unit conversion slip on the final arithmetic step of ${primaryTopic}.`;
+  }
+  if (topic.diagnosisLabel === "Needs Polish & Consistency") {
+    return `Variant Vulnerability: Sub-optimal accuracy on indirect or multi-concept application questions in ${primaryTopic}.`;
+  }
+  if (topic.status === "mastered" || topic.accuracyPercentage >= 75) {
+    return `Low Vulnerability: High resistance against distractor options in ${primaryTopic} under timed exam conditions.`;
+  }
+
+  return `Distractor Trap: Susceptible to high-frequency wrong answer choices in ${primaryTopic}. Verify question qualifiers before locking.`;
+}
+
+function getTargetNcertReference(topic: TopicMastery): string {
+  if (topic.ncertReference && topic.ncertReference.trim()) {
+    return topic.ncertReference;
+  }
+  return `NCERT Class 12 ${topic.subject} • Chapter: ${topic.chapter}`;
+}
+
+function MicroConceptPills({
+  concepts,
+  label = "Vulnerable Micro-Concepts:",
+}: {
+  concepts: string[];
+  label?: string;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  if (!concepts || concepts.length === 0) return null;
+
+  const visibleConcepts = expanded ? concepts : concepts.slice(0, 3);
+  const remainingCount = concepts.length - 3;
+
+  return (
+    <div className="flex items-center gap-1.5 flex-wrap pt-1">
+      <span className="text-[10px] font-black text-black/60 uppercase tracking-wider shrink-0">
+        {label}
+      </span>
+      {visibleConcepts.map((concept, i) => (
+        <span
+          key={i}
+          className="px-2 py-0.5 rounded-md bg-white border border-black text-[10px] font-bold text-black shadow-[1px_1px_0px_0px_#000] inline-flex items-center"
+        >
+          <LatexRenderer content={concept} inline />
+        </span>
+      ))}
+      {remainingCount > 0 && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded(!expanded);
+          }}
+          className="px-2 py-0.5 rounded-md bg-[#FEF3C7] hover:bg-[#FDE68A] border border-black text-[10px] font-black text-black shadow-[1px_1px_0px_0px_#000] transition-colors cursor-pointer shrink-0"
+          title={expanded ? "Show fewer micro-concepts" : `Show ${remainingCount} more micro-concepts`}
+        >
+          {expanded ? "Show less" : `+${remainingCount} more`}
+        </button>
+      )}
+    </div>
+  );
+}
+
+interface DiagnosticChapterRowProps {
+  topicItem: TopicMastery;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
+  onLaunchRepair: (topic: string, subject: string) => void;
+  isRepairing: boolean;
+}
+
+function DiagnosticChapterRow({
+  topicItem,
+  isExpanded,
+  onToggleExpand,
+  onLaunchRepair,
+  isRepairing,
+}: DiagnosticChapterRowProps) {
+  const severity = getSeverityBadge(
+    topicItem.accuracyPercentage,
+    topicItem.diagnosisLabel
+  );
+  const isPacingCalibrated = topicItem.avgTimeSeconds > 2;
+  const pacingText = isPacingCalibrated
+    ? `${topicItem.avgTimeSeconds}s avg/Q`
+    : "Pacing not calibrated (Mocks rushed)";
+  const drillTargetTopic = topicItem.troubleTopics?.[0] || topicItem.chapter;
+  const distractorTrap = getPrimaryDistractorTrap(topicItem);
+  const ncertRef = getTargetNcertReference(topicItem);
+  const troubleConcepts =
+    topicItem.troubleTopics && topicItem.troubleTopics.length > 0
+      ? topicItem.troubleTopics
+      : [topicItem.microTopic || topicItem.chapter].filter(Boolean);
+
+  return (
+    <div className="bg-white rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:shadow-[4px_4px_0px_0px_#000] transition-all overflow-hidden">
+      {/* 1. Collapsible Compact Row Header */}
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={onToggleExpand}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onToggleExpand();
+          }
+        }}
+        className="p-3.5 sm:p-4 hover:bg-[#FAF7EE] transition-colors cursor-pointer select-none flex flex-col md:flex-row md:items-center justify-between gap-3"
+      >
+        {/* Left: Chapter name, subject tag, severity badge, subtitle */}
+        <div className="min-w-0 flex-1 space-y-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-black text-black text-sm sm:text-base tracking-tight">
+              {topicItem.chapter || topicItem.microTopic}
+            </span>
+            <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-black/5 text-black/70 border border-black/10">
+              {topicItem.subject}
+            </span>
+            <span
+              className={`px-2 py-0.5 rounded text-[9px] font-black uppercase border border-black ${severity.bg} ${severity.text}`}
+            >
+              {severity.label}
+            </span>
+          </div>
+
+          <div className="text-[11px] text-black/60 font-bold flex items-center gap-1.5 flex-wrap">
+            <span>{topicItem.attemptsCount} Qs tested</span>
+            <span>•</span>
+            <span className={!isPacingCalibrated ? "text-amber-700 italic" : ""}>
+              {pacingText}
+            </span>
+            {topicItem.masteryScore !== undefined && (
+              <>
+                <span>•</span>
+                <span>Mastery: {topicItem.masteryScore}/100</span>
+              </>
+            )}
+            {topicItem.timeSinksCount > 0 && (
+              <>
+                <span>•</span>
+                <span className="text-[#DC2626] font-black">
+                  {topicItem.timeSinksCount} time-sink{topicItem.timeSinksCount > 1 ? "s" : ""}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Right: Mini progress bar + percentage, CTA button, expand/collapse chevron */}
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 self-end md:self-center">
+          {/* Mini Accuracy Progress Bar and percentage */}
+          <div className="flex items-center gap-2">
+            <div className="w-14 sm:w-20 h-2 bg-[#FAF7EE] border border-black rounded-full overflow-hidden hidden sm:block">
+              <div
+                className={`h-full rounded-full transition-all ${
+                  topicItem.accuracyPercentage < 25
+                    ? "bg-[#EF4444]"
+                    : topicItem.accuracyPercentage <= 50
+                    ? "bg-[#F59E0B]"
+                    : topicItem.accuracyPercentage < 75
+                    ? "bg-[#3B82F6]"
+                    : "bg-[#10B981]"
+                }`}
+                style={{ width: `${Math.max(5, Math.min(100, topicItem.accuracyPercentage))}%` }}
+              />
+            </div>
+            <span
+              className={`font-mono font-black text-xs sm:text-sm ${
+                topicItem.accuracyPercentage < 25
+                  ? "text-[#DC2626]"
+                  : topicItem.accuracyPercentage <= 50
+                  ? "text-[#D97706]"
+                  : topicItem.accuracyPercentage < 75
+                  ? "text-[#2563EB]"
+                  : "text-[#059669]"
+              }`}
+            >
+              {topicItem.accuracyPercentage}%
+            </span>
+          </div>
+
+          {/* Primary CTA: Fix with 5-Q Drill */}
+          <button
+            type="button"
+            disabled={isRepairing}
+            onClick={(e) => {
+              e.stopPropagation();
+              onLaunchRepair(drillTargetTopic, topicItem.subject);
+            }}
+            className="px-3 py-1.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shrink-0"
+            title={`Launch 5-Question Instant Fix Drill for ${drillTargetTopic}`}
+          >
+            <Play className="w-3 h-3 fill-white" />
+            <span>{isRepairing ? "Building Drill..." : "Fix with 5-Q Drill"}</span>
+          </button>
+
+          {/* Expand/Collapse chevron toggle */}
+          <div
+            className="p-1 rounded-md border border-black bg-white hover:bg-[#FAF7EE] text-black transition-transform"
+            aria-label={isExpanded ? "Collapse chapter details" : "Expand chapter details"}
+          >
+            {isExpanded ? (
+              <ChevronUp className="w-4 h-4 stroke-[2.5]" />
+            ) : (
+              <ChevronDown className="w-4 h-4 stroke-[2.5]" />
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Expanded Detailed Diagnostic Panel */}
+      {isExpanded && (
+        <div className="p-4 pt-3 border-t-2 border-black bg-white space-y-3.5">
+          {/* Detailed Progress Line */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-[11px] font-black text-black">
+              <span>Curriculum Retention Metric</span>
+              <span className="font-mono">{topicItem.accuracyPercentage}% Accuracy</span>
+            </div>
+            <div className="w-full h-2 bg-[#FAF7EE] border border-black rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all ${
+                  topicItem.accuracyPercentage < 25
+                    ? "bg-[#EF4444]"
+                    : topicItem.accuracyPercentage <= 50
+                    ? "bg-[#F59E0B]"
+                    : topicItem.accuracyPercentage < 75
+                    ? "bg-[#3B82F6]"
+                    : "bg-[#10B981]"
+                }`}
+                style={{
+                  width: `${Math.min(100, Math.max(5, topicItem.masteryScore ?? topicItem.accuracyPercentage))}%`,
+                }}
+              />
+            </div>
+          </div>
+
+          {/* High-Signal Remediation Box: Crisp 2-column summary */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3.5 rounded-lg bg-[#FAF7EE] border-2 border-black text-xs shadow-[2px_2px_0px_0px_#000]">
+            <div className="space-y-1">
+              <div className="flex items-center gap-1.5 font-black text-black">
+                <AlertTriangle className="w-3.5 h-3.5 text-[#DC2626]" />
+                <span>Primary Distractor Trap</span>
+              </div>
+              <p className="text-[11px] text-black/80 font-medium leading-relaxed">
+                {distractorTrap}
+              </p>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex items-center gap-1.5 font-black text-black">
+                <BookOpen className="w-3.5 h-3.5 text-[#2563EB]" />
+                <span>Target NCERT Reference</span>
+              </div>
+              <p className="text-[11px] text-black/90 font-bold leading-relaxed font-mono">
+                {ncertRef}
+              </p>
+            </div>
+          </div>
+
+          {/* Vulnerable Micro-Concepts with Rule of 3 Limiter */}
+          <MicroConceptPills
+            concepts={troubleConcepts}
+            label={topicItem.accuracyPercentage >= 75 ? "Tested Micro-Concepts:" : "Vulnerable Micro-Concepts:"}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function WeaknessRadarClient({
   initialData,
 }: {
@@ -116,6 +445,11 @@ export default function WeaknessRadarClient({
   const [selectedRadarSubject, setSelectedRadarSubject] = useState<string>(paramSubject);
   const [radarTab, setRadarTab] = useState<"weaknesses" | "strengths" | "all">("weaknesses");
   const [activeRepairTopic, setActiveRepairTopic] = useState<string | null>(null);
+  const [expandedChapterKey, setExpandedChapterKey] = useState<string | null>(null);
+
+  const toggleChapterExpand = (key: string) => {
+    setExpandedChapterKey((prev) => (prev === key ? null : key));
+  };
 
   // Sync state if URL search param changes
   useEffect(() => {
@@ -240,11 +574,6 @@ export default function WeaknessRadarClient({
       ? clientAnalytics.timeSinkAlerts
       : initialData.timeSinkAlerts;
 
-  const rawAllTopics =
-    isClient && clientAnalytics && clientAnalytics.allTopics && clientAnalytics.allTopics.length > 0
-      ? clientAnalytics.allTopics
-      : [...rawWeaknessRadar, ...rawStrengthList];
-
   // Filtered by selected subject
   const weaknessRadar =
     selectedRadarSubject === "all"
@@ -255,11 +584,6 @@ export default function WeaknessRadarClient({
     selectedRadarSubject === "all"
       ? rawStrengthList
       : rawStrengthList.filter((t) => normalizeSubject(t.subject).key === selectedRadarSubject);
-
-  const allDomainTopics =
-    selectedRadarSubject === "all"
-      ? rawAllTopics
-      : rawAllTopics.filter((t) => normalizeSubject(t.subject).key === selectedRadarSubject);
 
   const timeSinkAlerts =
     selectedRadarSubject === "all"
@@ -273,11 +597,17 @@ export default function WeaknessRadarClient({
         );
 
   const weakTopics = weaknessRadar.filter(
-    (t) => t.status === "critical" || t.status === "polish"
+    (t) => (t.status === "critical" || t.status === "polish") && t.accuracyPercentage < 75
   );
-  const strengthsCount = strengthList.length;
+  const strengthListFiltered = strengthList.filter(
+    (t) =>
+      (t.status === "mastered" || t.accuracyPercentage >= 75) &&
+      !weakTopics.some((w) => w.chapter === t.chapter && w.subject === t.subject)
+  );
+  const allTestedChapters = [...weakTopics, ...strengthListFiltered];
+  const strengthsCount = strengthListFiltered.length;
   const weakCount = weakTopics.length;
-  const allCount = allDomainTopics.length;
+  const testedChaptersCount = weakCount + strengthsCount;
 
   // Handle launching the 5-Question Instant AI Repair Drill
   const handleLaunchInstantRepair = async (topic: string, subject: string) => {
@@ -497,7 +827,10 @@ export default function WeaknessRadarClient({
               <div className="flex items-center gap-1 p-0.5 bg-[#FAF7EE] rounded-lg border border-black text-[11px] font-black self-start sm:self-auto">
                 <button
                   type="button"
-                  onClick={() => setRadarTab("weaknesses")}
+                  onClick={() => {
+                    setRadarTab("weaknesses");
+                    setExpandedChapterKey(null);
+                  }}
                   className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
                     radarTab === "weaknesses"
                       ? "bg-[#FF5C5C] text-white shadow-[1px_1px_0px_0px_#000]"
@@ -511,7 +844,10 @@ export default function WeaknessRadarClient({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setRadarTab("strengths")}
+                  onClick={() => {
+                    setRadarTab("strengths");
+                    setExpandedChapterKey(null);
+                  }}
                   className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
                     radarTab === "strengths"
                       ? "bg-[#10B981] text-white shadow-[1px_1px_0px_0px_#000]"
@@ -525,16 +861,19 @@ export default function WeaknessRadarClient({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setRadarTab("all")}
+                  onClick={() => {
+                    setRadarTab("all");
+                    setExpandedChapterKey(null);
+                  }}
                   className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
                     radarTab === "all"
                       ? "bg-black text-white shadow-[1px_1px_0px_0px_#000]"
                       : "text-black/70 hover:text-black"
                   }`}
                 >
-                  <span>All Topics</span>
+                  <span>Chapters Tested</span>
                   <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-black/20 text-black">
-                    {allCount}
+                    {testedChaptersCount}
                   </span>
                 </button>
               </div>
@@ -564,7 +903,7 @@ export default function WeaknessRadarClient({
                   </span>
                 </Link>
               </div>
-            ) : allCount === 0 ? (
+            ) : testedChaptersCount === 0 ? (
               <div className="py-12 px-6 text-center rounded-xl bg-[#FAF7EE] border-2 border-dashed border-black/30 space-y-3">
                 <div className="w-12 h-12 rounded-xl bg-white border-2 border-black mx-auto flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
                   <Target className="w-6 h-6 text-[#FF5C5C]" />
@@ -593,129 +932,24 @@ export default function WeaknessRadarClient({
                   </p>
                 </div>
               ) : (
-                <div className="space-y-4 divide-y-2 divide-black/10">
+                <div className="space-y-3">
                   {weakTopics.map((topicItem, idx) => {
-                    const isCritical = topicItem.status === "critical";
-                    const isClockDrain = topicItem.diagnosisLabel === "Calculation & Clock Drain";
-                    const isTrapExposure = topicItem.diagnosisLabel === "Impulsive Trap Exposure";
-
-                    const badgeStyle = isClockDrain
-                      ? "bg-[#EDE9FE] text-[#7C3AED]"
-                      : isTrapExposure
-                      ? "bg-[#FFEDD5] text-[#C2410C]"
-                      : isCritical
-                      ? "bg-[#FEE2E2] text-[#DC2626]"
-                      : "bg-[#FEF3C7] text-[#D97706]";
-
-                    const drillTargetTopic = topicItem.troubleTopics?.[0] || topicItem.chapter;
-
+                    const key = `weak-${topicItem.subject}-${topicItem.chapter}-${idx}`;
                     return (
-                      <div key={idx} className="pt-4 first:pt-0 space-y-2.5">
-                        <div className="flex items-start justify-between gap-3 text-xs">
-                          <div className="min-w-0 pr-1 space-y-1">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-black text-black text-sm">
-                                {topicItem.chapter || topicItem.microTopic}
-                              </span>
-                              <span
-                                className={`px-2 py-0.5 rounded text-[9px] font-black uppercase border border-black ${badgeStyle}`}
-                              >
-                                {topicItem.diagnosisLabel || (isCritical ? "Critical Trap" : "Needs Polish")}
-                              </span>
-                              <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-black/5 text-black/60 border border-black/10">
-                                {topicItem.subject}
-                              </span>
-                            </div>
-
-                            <span className="text-[11px] text-black/60 font-bold block">
-                              {topicItem.attemptsCount} Qs tested &bull; {topicItem.avgTimeSeconds}s avg/Q
-                              {topicItem.masteryScore !== undefined && ` &bull; Mastery: ${topicItem.masteryScore}/100`}
-                              {topicItem.timeSinksCount > 0 && ` &bull; ${topicItem.timeSinksCount} time-sinks`}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-2 shrink-0">
-                            <span
-                              className={`font-mono font-black text-sm ${
-                                isCritical ? "text-[#DC2626]" : "text-[#D97706]"
-                              }`}
-                            >
-                              {topicItem.accuracyPercentage}%
-                            </span>
-
-                            <button
-                              type="button"
-                              disabled={activeRepairTopic !== null}
-                              onClick={() =>
-                                handleLaunchInstantRepair(
-                                  drillTargetTopic,
-                                  topicItem.subject
-                                )
-                              }
-                              className="px-3 py-1.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
-                              title={`Launch 5-Question Instant Fix Drill for ${drillTargetTopic}`}
-                            >
-                              <Play className="w-3 h-3 fill-white" />
-                              <span>{activeRepairTopic === drillTargetTopic ? "Building Drill..." : "Fix with 5-Q Drill"}</span>
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Progress Line */}
-                        <div className="w-full h-2 bg-[#FAF7EE] border border-black rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full transition-all ${
-                              isCritical ? "bg-[#FF5C5C]" : "bg-[#F59E0B]"
-                            }`}
-                            style={{
-                              width: `${Math.min(100, Math.max(5, topicItem.masteryScore ?? topicItem.accuracyPercentage))}%`,
-                            }}
-                          />
-                        </div>
-
-                        {/* Diagnostic Insight Callout */}
-                        {topicItem.diagnosticInsight && (
-                          <div className="p-3 rounded-lg bg-[#FAF7EE] border border-black text-xs text-black/90 leading-relaxed space-y-1">
-                            <p className="font-semibold">{topicItem.diagnosticInsight}</p>
-                            {topicItem.remedialPrescription && (
-                              <p className="text-[11px] text-black/70">
-                                <strong className="text-black">Remediation Prescription:</strong> {topicItem.remedialPrescription}
-                              </p>
-                            )}
-                          </div>
-                        )}
-
-                        {/* NCERT Textbook Citation */}
-                        {topicItem.ncertReference && (
-                          <div className="flex items-center gap-1.5 text-[11px] font-bold text-black/60 pt-0.5">
-                            <BookOpen className="w-3.5 h-3.5 text-black/50" />
-                            <span>NCERT Reference: <strong>{topicItem.ncertReference}</strong></span>
-                          </div>
-                        )}
-
-                        {/* Vulnerable Concepts Tags */}
-                        {topicItem.troubleTopics && topicItem.troubleTopics.length > 0 && (
-                          <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-                            <span className="text-[10px] font-black text-black/50 uppercase">
-                              Vulnerable Micro-Concepts:
-                            </span>
-                            {topicItem.troubleTopics.map((sub, i) => (
-                              <span
-                                key={i}
-                                className="px-2 py-0.5 rounded-md bg-white border border-black text-[10px] font-bold text-black shadow-[1px_1px_0px_0px_#000]"
-                              >
-                                {sub}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                      <DiagnosticChapterRow
+                        key={key}
+                        topicItem={topicItem}
+                        isExpanded={expandedChapterKey === key}
+                        onToggleExpand={() => toggleChapterExpand(key)}
+                        onLaunchRepair={handleLaunchInstantRepair}
+                        isRepairing={activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter)}
+                      />
                     );
                   })}
                 </div>
               )
             ) : radarTab === "strengths" ? (
-              strengthList.length === 0 ? (
+              strengthsCount === 0 ? (
                 <div className="py-8 px-6 text-center rounded-xl bg-[#FAF7EE] border-2 border-dashed border-black/30 text-xs font-bold text-black/70 space-y-2">
                   <Award className="w-8 h-8 text-[#F59E0B] mx-auto" />
                   <p className="font-black text-base text-black">No Core Strengths Established Yet</p>
@@ -724,141 +958,35 @@ export default function WeaknessRadarClient({
                   </p>
                 </div>
               ) : (
-                <div className="space-y-4 divide-y-2 divide-black/10">
-                  {strengthList.map((topicItem, idx) => (
-                    <div key={idx} className="pt-4 first:pt-0 space-y-2.5">
-                      <div className="flex items-start justify-between text-xs gap-3">
-                        <div className="min-w-0 pr-1 space-y-1">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-black text-black text-sm">
-                              {topicItem.chapter || topicItem.microTopic}
-                            </span>
-                            <span className="px-2 py-0.5 rounded bg-[#D1FAE5] border border-black text-[9px] font-black text-[#065F46] uppercase">
-                              {topicItem.diagnosisLabel || "Core Pillar"}
-                            </span>
-                            <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-black/5 text-black/60 border border-black/10">
-                              {topicItem.subject}
-                            </span>
-                          </div>
-                          <span className="text-[11px] text-black/60 font-bold block">
-                            {topicItem.attemptsCount} Qs solved &bull; {topicItem.avgTimeSeconds}s avg/Q
-                            {topicItem.masteryScore !== undefined && ` &bull; Mastery: ${topicItem.masteryScore}/100`}
-                          </span>
-                        </div>
-                        <span className="font-mono font-black text-base text-[#059669] shrink-0">
-                          {topicItem.accuracyPercentage}%
-                        </span>
-                      </div>
-
-                      <div className="w-full h-2 bg-[#FAF7EE] border border-black rounded-full overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-[#10B981] transition-all"
-                          style={{
-                            width: `${Math.min(100, Math.max(10, topicItem.masteryScore ?? topicItem.accuracyPercentage))}%`,
-                          }}
-                        />
-                      </div>
-
-                      {topicItem.diagnosticInsight && (
-                        <div className="p-3 rounded-lg bg-[#FAF7EE] border border-black text-xs text-black/90 leading-relaxed space-y-1">
-                          <p className="font-semibold">{topicItem.diagnosticInsight}</p>
-                          {topicItem.remedialPrescription && (
-                            <p className="text-[11px] text-black/70">
-                              <strong className="text-black">Strategy:</strong> {topicItem.remedialPrescription}
-                            </p>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                <div className="space-y-3">
+                  {strengthListFiltered.map((topicItem, idx) => {
+                    const key = `strength-${topicItem.subject}-${topicItem.chapter}-${idx}`;
+                    return (
+                      <DiagnosticChapterRow
+                        key={key}
+                        topicItem={topicItem}
+                        isExpanded={expandedChapterKey === key}
+                        onToggleExpand={() => toggleChapterExpand(key)}
+                        onLaunchRepair={handleLaunchInstantRepair}
+                        isRepairing={activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter)}
+                      />
+                    );
+                  })}
                 </div>
               )
             ) : (
-              <div className="space-y-4 divide-y-2 divide-black/10">
-                {allDomainTopics.map((topicItem, idx) => {
-                  const isCritical = topicItem.status === "critical";
-                  const isPolish = topicItem.status === "polish";
-                  const isMastered = topicItem.status === "mastered" || (!isCritical && !isPolish);
-
-                  const badgeStyle = isCritical
-                    ? "bg-[#FEE2E2] text-[#DC2626]"
-                    : isPolish
-                    ? "bg-[#FEF3C7] text-[#D97706]"
-                    : "bg-[#D1FAE5] text-[#065F46]";
-
-                  const drillTargetTopic = topicItem.troubleTopics?.[0] || topicItem.chapter;
-
+              <div className="space-y-3">
+                {allTestedChapters.map((topicItem, idx) => {
+                  const key = `all-${topicItem.subject}-${topicItem.chapter}-${idx}`;
                   return (
-                    <div key={idx} className="pt-4 first:pt-0 space-y-2">
-                      <div className="flex items-center justify-between text-xs gap-3">
-                        <div className="min-w-0 pr-1 truncate">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-black text-black truncate block text-sm">
-                              {topicItem.chapter || topicItem.microTopic}
-                            </span>
-                            <span
-                              className={`px-2 py-0.5 rounded text-[9px] font-black uppercase border border-black shrink-0 ${badgeStyle}`}
-                            >
-                              {topicItem.diagnosisLabel || (isCritical ? "Critical Trap" : isPolish ? "Needs Polish" : "Mastered")}
-                            </span>
-                            <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-black/5 text-black/60 border border-black/10">
-                              {topicItem.subject}
-                            </span>
-                          </div>
-                          <span className="text-[11px] text-black/60 font-bold block truncate mt-1">
-                            {topicItem.attemptsCount} Qs &bull; {topicItem.avgTimeSeconds}s avg/Q
-                            {topicItem.masteryScore !== undefined && ` &bull; Score: ${topicItem.masteryScore}/100`}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 shrink-0">
-                          <span
-                            className={`font-mono font-black text-sm ${
-                              isCritical
-                                ? "text-[#DC2626]"
-                                : isPolish
-                                ? "text-[#D97706]"
-                                : "text-[#059669]"
-                            }`}
-                          >
-                            {topicItem.accuracyPercentage}%
-                          </span>
-
-                          {!isMastered && (
-                            <button
-                              type="button"
-                              disabled={activeRepairTopic !== null}
-                              onClick={() =>
-                                handleLaunchInstantRepair(
-                                  drillTargetTopic,
-                                  topicItem.subject
-                                )
-                              }
-                              className="px-2.5 py-1 rounded bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border border-black shadow-[1px_1px_0px_0px_#000] flex items-center gap-1 disabled:opacity-50 cursor-pointer"
-                              title={`Launch targeted drill for ${drillTargetTopic}`}
-                            >
-                              <Play className="w-2.5 h-2.5 fill-white" />
-                              <span>{activeRepairTopic === drillTargetTopic ? "..." : "Fix"}</span>
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="w-full h-2 bg-[#FAF7EE] border border-black rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full transition-all ${
-                            isCritical
-                              ? "bg-[#FF5C5C]"
-                              : isPolish
-                              ? "bg-[#F59E0B]"
-                              : "bg-[#10B981]"
-                          }`}
-                          style={{
-                            width: `${Math.min(100, Math.max(5, topicItem.masteryScore ?? topicItem.accuracyPercentage))}%`,
-                          }}
-                        />
-                      </div>
-                    </div>
+                    <DiagnosticChapterRow
+                      key={key}
+                      topicItem={topicItem}
+                      isExpanded={expandedChapterKey === key}
+                      onToggleExpand={() => toggleChapterExpand(key)}
+                      onLaunchRepair={handleLaunchInstantRepair}
+                      isRepairing={activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter)}
+                    />
                   );
                 })}
               </div>
@@ -900,7 +1028,7 @@ export default function WeaknessRadarClient({
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-black text-black truncate">{alert.topic}</span>
                       <span className="font-mono font-black text-[#DC2626] shrink-0">
-                        {alert.avgTimeSpent}s / {alert.errorRate}% Error
+                        {alert.avgTimeSpent <= 2 ? "Pacing uncalibrated" : `${alert.avgTimeSpent}s`} / {alert.errorRate}% Error
                       </span>
                     </div>
                     <p className="text-[11px] text-black/80 font-medium leading-snug">
