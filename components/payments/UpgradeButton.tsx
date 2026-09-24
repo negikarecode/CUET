@@ -18,7 +18,7 @@ declare global {
 }
 
 interface UpgradeButtonProps {
-  planId?: "ai_practice_pass_499" | "all_access_pass_799";
+  planId?: "ai_pass_399" | "ai_practice_pass_499" | "all_access_pass_799";
   className?: string;
   buttonText?: string;
   variant?: "primary" | "amber" | "outline";
@@ -61,9 +61,10 @@ export default function UpgradeButton({
   const [loading, setLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  const is399 = planId === "ai_pass_399";
   const isAllAccess = planId === "all_access_pass_799";
-  const price = isAllAccess ? "₹799" : "₹499";
-  const planTitle = isAllAccess ? "All-Access Pass" : "AI Practice Pass";
+  const price = is399 ? "₹399" : isAllAccess ? "₹799" : "₹499";
+  const planTitle = is399 ? "CUET AI Pass" : isAllAccess ? "All-Access Pass" : "AI Practice Pass";
 
   const handleCheckout = async () => {
     setLoading(true);

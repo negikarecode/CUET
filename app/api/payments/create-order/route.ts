@@ -3,7 +3,7 @@ import Razorpay from "razorpay";
 import { createClient } from "@/lib/supabase/server";
 
 interface CreateOrderRequestBody {
-  planId?: "ai_practice_pass_499" | "all_access_pass_799";
+  planId?: "ai_pass_399" | "ai_practice_pass_499" | "all_access_pass_799";
   userId?: string;
   email?: string;
   name?: string;
@@ -39,9 +39,10 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Determine Pricing Tier
+    const is399 = body.planId === "ai_pass_399";
     const isAllAccess = body.planId === "all_access_pass_799";
-    const amountInPaise = isAllAccess ? 79900 : 49900; // ₹799 or ₹499
-    const tierName = isAllAccess ? "all_access_pass" : "ai_practice_pass";
+    const amountInPaise = is399 ? 39900 : isAllAccess ? 79900 : 49900; // ₹399, ₹799 or ₹499
+    const tierName = is399 ? "ai_pass_399" : isAllAccess ? "all_access_pass" : "ai_practice_pass";
 
     const keyId = process.env.RAZORPAY_KEY_ID;
     const keySecret = process.env.RAZORPAY_KEY_SECRET;

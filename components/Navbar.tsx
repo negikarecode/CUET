@@ -19,6 +19,7 @@ import {
   ArrowRight,
   Target,
   LayoutDashboard,
+  User,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -300,6 +301,14 @@ export default function Navbar() {
                         </div>
 
                         <div className="py-1 font-bold">
+                          <Link
+                            href="/dashboard/profile"
+                            onClick={() => setProfileDropdownOpen(false)}
+                            className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
+                          >
+                            <User className="w-4 h-4 text-black" />
+                            <span>Aspirant Profile</span>
+                          </Link>
                           <Link
                             href="/dashboard"
                             onClick={() => setProfileDropdownOpen(false)}

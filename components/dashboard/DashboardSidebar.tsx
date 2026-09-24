@@ -16,6 +16,7 @@ import {
   X,
   FileText,
   ClipboardCheck,
+  User,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -97,6 +98,13 @@ export default function DashboardSidebar() {
       icon: Award,
       active: pathname === "/dashboard/leaderboard",
     },
+    {
+      id: "profile",
+      label: "Aspirant Profile",
+      href: "/dashboard/profile",
+      icon: User,
+      active: pathname === "/dashboard/profile",
+    },
   ];
 
   const SidebarContent = () => (
@@ -128,13 +136,17 @@ export default function DashboardSidebar() {
         </Link>
 
         {/* Aspirant Profile Card */}
-        <div className="p-3.5 bg-white rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_#000] space-y-3">
+        <Link
+          href="/dashboard/profile"
+          onClick={() => setMobileDrawerOpen(false)}
+          className="block p-3.5 bg-white hover:bg-[#FEF3C7]/20 rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all space-y-3 group"
+        >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-black text-white flex items-center justify-center font-black text-sm border-2 border-black shadow-[2px_2px_0px_0px_#FF5C5C] shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-black text-white flex items-center justify-center font-black text-sm border-2 border-black shadow-[2px_2px_0px_0px_#FF5C5C] shrink-0 group-hover:rotate-3 transition-transform">
               {userInitials}
             </div>
             <div className="flex flex-col min-w-0 flex-1">
-              <span className="font-black text-black text-sm truncate leading-tight">
+              <span className="font-black text-black text-sm truncate leading-tight group-hover:text-[#FF5C5C] transition-colors">
                 {userName}
               </span>
               <div className="flex items-center gap-1.5 mt-0.5">
@@ -159,7 +171,7 @@ export default function DashboardSidebar() {
               <span className="truncate">{xp} XP</span>
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Vertical Left Navbar Links */}
         <div className="space-y-1">
