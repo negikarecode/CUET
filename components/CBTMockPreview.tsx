@@ -13,6 +13,7 @@ import { MOCK_SAMPLE_QUESTION } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
+import LatexRenderer from "@/components/common/LatexRenderer";
 
 export default function CBTMockPreview() {
   const { t, translateStem } = useTranslation();
@@ -136,9 +137,9 @@ export default function CBTMockPreview() {
 
             {/* Question Prompt */}
             <div className="p-6 sm:p-8">
-              <p className="text-base sm:text-lg font-bold text-black leading-relaxed font-sans">
-                {translateStem(MOCK_SAMPLE_QUESTION.prompt)}
-              </p>
+              <div className="text-base sm:text-lg font-bold text-black leading-relaxed font-sans">
+                <LatexRenderer content={translateStem(MOCK_SAMPLE_QUESTION.prompt)} />
+              </div>
 
               {/* Options */}
               <div className="mt-8 space-y-3">
@@ -165,9 +166,9 @@ export default function CBTMockPreview() {
                       >
                         {opt.id}
                       </div>
-                      <span className="font-bold text-black leading-snug">
-                        {translateStem(opt.text)}
-                      </span>
+                      <div className="font-bold text-black leading-snug flex-1">
+                        <LatexRenderer content={translateStem(opt.text)} inline />
+                      </div>
                     </button>
                   );
                 })}
@@ -234,21 +235,19 @@ export default function CBTMockPreview() {
                   </span>
                 </div>
 
-                <p className="text-xs text-black/80 font-medium leading-relaxed mb-3">
+                <div className="text-xs text-black/80 font-medium leading-relaxed mb-3">
                   <strong className="text-black font-black">{t("officialSolutionText", "Official Solution")}: </strong>
-                  {MOCK_SAMPLE_QUESTION.explanation}
-                </p>
+                  <LatexRenderer content={MOCK_SAMPLE_QUESTION.explanation} className="mt-1" />
+                </div>
 
                 <div className="rounded-xl bg-white border-2 border-black p-3.5 text-xs shadow-[2px_2px_0px_0px_#000]">
                   <div className="flex items-start gap-2.5">
                     <Lightbulb className="w-4 h-4 text-[#F59E0B] shrink-0 mt-0.5 stroke-[2.5]" />
-                    <div>
-                      <span className="font-black text-black">
+                    <div className="flex-1">
+                      <span className="font-black text-black block mb-0.5">
                         {t("trapOptionAnalysisText", "NTA Trap Breakdown")}:
                       </span>
-                      <p className="text-black/70 font-medium mt-0.5">
-                        {MOCK_SAMPLE_QUESTION.aiDiagnosisNotes}
-                      </p>
+                      <LatexRenderer content={MOCK_SAMPLE_QUESTION.aiDiagnosisNotes} className="text-black/70 font-medium text-xs leading-relaxed" />
                     </div>
                   </div>
                 </div>

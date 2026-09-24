@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -10,17 +10,29 @@ import {
   Clock,
   ArrowRight,
   EyeOff,
+  Loader2,
 } from "lucide-react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function CBTSubmitModal() {
   const { t } = useTranslation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const isSubmitModalOpen = useCBTStore((state) => state.isSubmitModalOpen);
   const closeSubmitModal = useCBTStore((state) => state.closeSubmitModal);
   const submitTest = useCBTStore((state) => state.submitTest);
   const getSummaryCounts = useCBTStore((state) => state.getSummaryCounts);
   const remainingSeconds = useCBTStore((state) => state.remainingSeconds);
+
+  const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      await submitTest();
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (!isSubmitModalOpen) return null;
 
@@ -153,19 +165,30 @@ export default function CBTSubmitModal() {
         <div className="px-6 py-4 bg-[#FAF7EE] border-t-2 border-black flex flex-col sm:flex-row items-center justify-end gap-3">
           <button
             type="button"
+            disabled={isSubmitting}
             onClick={closeSubmitModal}
-            className="w-full sm:w-auto px-5 py-2.5 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] transition-all"
+            className="w-full sm:w-auto px-5 py-2.5 text-xs font-black rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] disabled:opacity-50 disabled:pointer-events-none transition-all"
           >
             {t("returnToPaper", "Return to Test")}
           </button>
 
           <button
             type="button"
-            onClick={submitTest}
-            className="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs sm:text-sm tracking-wide shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2"
+            disabled={isSubmitting}
+            onClick={handleSubmit}
+            className="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs sm:text-sm tracking-wide shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none disabled:opacity-75 disabled:pointer-events-none transition-all flex items-center justify-center gap-2"
           >
-            <span>{t("submitExamNow", "Submit Exam Now")}</span>
-            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin stroke-[2.5]" />
+                <span>Evaluating Official Answers...</span>
+              </>
+            ) : (
+              <>
+                <span>{t("submitExamNow", "Submit Exam Now")}</span>
+                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+              </>
+            )}
           </button>
         </div>
       </div>

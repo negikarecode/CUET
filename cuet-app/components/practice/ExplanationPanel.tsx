@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, XCircle, Lightbulb, Clock, BookCheck } from "lucide-react";
+import LatexRenderer from "@/components/common/LatexRenderer";
 
 interface ExplanationPanelProps {
   isCorrect: boolean;
@@ -71,9 +72,9 @@ export function ExplanationPanel({
           <Lightbulb className="w-4 h-4 text-amber-500" />
           Explanation & NCERT Insight:
         </div>
-        <p className="text-sm sm:text-base text-slate-800 leading-relaxed pl-5 whitespace-pre-line">
-          {explanation}
-        </p>
+        <div className="text-sm sm:text-base text-slate-800 leading-relaxed pl-5">
+          <LatexRenderer content={explanation} />
+        </div>
       </div>
     </motion.div>
   );

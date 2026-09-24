@@ -3,6 +3,7 @@
 import React from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import LatexRenderer from "@/components/common/LatexRenderer";
 
 interface OptionButtonProps {
   id: "A" | "B" | "C" | "D";
@@ -63,7 +64,9 @@ export function OptionButton({
         >
           {id}
         </div>
-        <span className="text-sm sm:text-base leading-relaxed break-words">{text}</span>
+        <div className="text-sm sm:text-base leading-relaxed break-words flex-1">
+          <LatexRenderer content={text} inline />
+        </div>
       </div>
 
       {isSubmitted && (

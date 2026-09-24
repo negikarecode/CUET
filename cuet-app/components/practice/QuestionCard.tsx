@@ -8,6 +8,7 @@ import { ExplanationPanel } from "./ExplanationPanel";
 import { ProgressBar } from "@/components/weakness/ProgressBar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import LatexRenderer from "@/components/common/LatexRenderer";
 
 interface QuestionCardProps {
   question: Question;
@@ -118,9 +119,9 @@ export function QuestionCard({
 
         {/* Question Text */}
         <div className="space-y-2">
-          <p className="text-base sm:text-xl font-bold text-slate-900 leading-relaxed sm:leading-relaxed">
-            {question.question_text}
-          </p>
+          <div className="text-base sm:text-xl font-bold text-slate-900 leading-relaxed sm:leading-relaxed">
+            <LatexRenderer content={question.question_text} />
+          </div>
         </div>
 
         {/* Option Buttons (A, B, C, D) */}

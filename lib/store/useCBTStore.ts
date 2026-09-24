@@ -57,7 +57,7 @@ export interface CBTStoreState {
   tickSecond: () => void;
   openSubmitModal: () => void;
   closeSubmitModal: () => void;
-  submitTest: () => void;
+  submitTest: () => Promise<void>;
   resetSession: () => void;
 
   // Selectors
@@ -663,12 +663,30 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     set({ isSubmitModalOpen: false });
   },
 
-  submitTest: () => {
+  submitTest: async () => {
     const { testId, questions, questionStates, remainingSeconds, durationSeconds } =
       get();
 
-    // Retrieve original unsanitized questions from secure vault
-    const fullQuestions = secureExamVault.get(testId) || questions;
+    // Check if we need to reveal authoritative questions from server first
+    let authQuestions = secureExamVault.get(testId) || questions;
+    if (typeof window !== "undefined" && (!authQuestions[0]?.correctOptionId)) {
+      try {
+        const res = await fetch(`/api/test/${testId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "reveal" }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.questions && Array.isArray(data.questions) && data.questions.length > 0) {
+            authQuestions = data.questions;
+            secureExamVault.set(testId, authQuestions);
+          }
+        }
+      } catch (err) {
+        console.warn("Error fetching authoritative exam solutions:", err);
+      }
+    }
 
     let attemptedCount = 0;
     let markedReviewCount = 0;
@@ -676,7 +694,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     let incorrectCount = 0;
     let timeSinkCount = 0;
 
-    fullQuestions.forEach((q) => {
+    authQuestions.forEach((q) => {
       const qState = questionStates[q.id];
       const status = deriveQuestionStatus(qState);
 
@@ -701,7 +719,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       }
     });
 
-    const unattemptedCount = fullQuestions.length - attemptedCount;
+    const unattemptedCount = authQuestions.length - attemptedCount;
     // Official CUET NTA 2026 Scoring: +5 per correct, -1 per incorrect, 0 for unattempted
     const { totalMarks, maxMarks } = calculateExamScore(
       correctCount,
@@ -727,7 +745,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     };
 
     set({
-      questions: fullQuestions,
+      questions: authQuestions,
       isSubmitted: true,
       isTimerRunning: false,
       isSubmitModalOpen: false,
@@ -739,7 +757,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     try {
       const storeUser = useTestStore.getState().user;
       const meta = get().testMeta;
-      const questionAttempts: RecordedQuestionAttempt[] = fullQuestions.map((q) => {
+      const questionAttempts: RecordedQuestionAttempt[] = authQuestions.map((q) => {
         const qState = questionStates[q.id];
         const selectedOption = qState?.selectedOption ?? null;
         const isCorrect =
@@ -773,7 +791,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
         testId: meta?.id ?? testId ?? "cbt_exam",
         testTitle: meta?.title ?? "CUET Domain Examination Paper",
         subject: meta?.subject ?? "Physics",
-        totalQuestions: fullQuestions.length,
+        totalQuestions: authQuestions.length,
         attemptedCount: summary.attemptedCount,
         unattemptedCount: summary.unattemptedCount,
         correctCount: summary.correctCount,
@@ -798,51 +816,6 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       }
     } catch (err) {
       console.warn("Failed to immediately record test attempt:", err);
-    }
-
-    // If client was initialized with sanitized questions (withheld keys), retrieve authoritative answers from server upon submission
-    if (typeof window !== "undefined" && (!fullQuestions[0]?.correctOptionId)) {
-      fetch(`/api/test/${testId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "reveal" }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.questions && Array.isArray(data.questions) && data.questions.length > 0) {
-            secureExamVault.set(testId, data.questions);
-            const authQuestions = data.questions;
-            let cCount = 0;
-            let iCount = 0;
-            let aCount = 0;
-            authQuestions.forEach((q: Question) => {
-              const qState = get().questionStates[q.id];
-              if (qState?.selectedOption) {
-                aCount += 1;
-                if (qState.selectedOption === q.correctOptionId) cCount += 1;
-                else iCount += 1;
-              }
-            });
-            const updatedScore: CBTScoreSummary = {
-              attemptedCount: aCount,
-              unattemptedCount: authQuestions.length - aCount,
-              markedReviewCount: summary.markedReviewCount,
-              correctCount: cCount,
-              incorrectCount: iCount,
-              totalMarks: cCount * 5 - iCount * 1,
-              maxMarks: authQuestions.length * 5,
-              accuracyPercentage: aCount > 0 ? Math.round((cCount / aCount) * 100) : 0,
-              timeTakenSeconds: summary.timeTakenSeconds,
-              timeSinkCount: summary.timeSinkCount,
-            };
-            set({
-              questions: authQuestions,
-              submittedScore: updatedScore,
-            });
-            saveSessionToStorage(get());
-          }
-        })
-        .catch((err) => console.warn("Authoritative reveal fetch error:", err));
     }
   },
 

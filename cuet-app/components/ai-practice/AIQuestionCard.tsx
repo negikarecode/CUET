@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import LatexRenderer from "@/components/common/LatexRenderer";
 
 export interface AIQuestionView {
   id: number;
@@ -139,9 +140,9 @@ export function AIQuestionCard({
 
         {/* Question Text */}
         <div>
-          <h2 className="text-lg sm:text-xl font-bold text-slate-900 leading-relaxed">
-            {question.question_text}
-          </h2>
+          <div className="text-lg sm:text-xl font-bold text-slate-900 leading-relaxed">
+            <LatexRenderer content={question.question_text} />
+          </div>
         </div>
 
         {/* Options Grid */}
@@ -190,7 +191,9 @@ export function AIQuestionCard({
                   >
                     {opt.key}
                   </span>
-                  <span className="leading-snug">{opt.text}</span>
+                  <div className="leading-snug flex-1">
+                    <LatexRenderer content={opt.text} inline />
+                  </div>
                 </div>
 
                 {isAnswered && (
@@ -238,13 +241,13 @@ export function AIQuestionCard({
                     <AlertCircle className="w-5 h-5 text-red-600" />
                   )}
                 </div>
-                <div>
+                <div className="flex-1">
                   <h4 className="font-bold text-sm sm:text-base">
                     {isCorrect ? "Correct Answer! (+5 marks)" : "Incorrect Answer (-1 mark)"}
                   </h4>
-                  <p className="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed">
-                    {explanation || "Refer to NCERT CUET preparation material for detailed review."}
-                  </p>
+                  <div className="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed">
+                    <LatexRenderer content={explanation || "Refer to NCERT CUET preparation material for detailed review."} />
+                  </div>
                 </div>
               </div>
 

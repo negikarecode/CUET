@@ -12,6 +12,7 @@ import {
   HelpCircle,
   Hourglass,
   Trophy as TrophyIcon,
+  Loader2,
 } from "lucide-react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -231,7 +232,21 @@ export default function CBTResultView() {
     testAttempts,
   ]);
 
-  if (!submittedScore) return null;
+  if (!submittedScore || (questions.length > 0 && !questions[0]?.correctOptionId)) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-12 h-12 rounded-xl bg-[#FAF7EE] border-2 border-black flex items-center justify-center mb-4 shadow-[3px_3px_0px_0px_#000]">
+          <Loader2 className="w-6 h-6 animate-spin text-black stroke-[2.5]" />
+        </div>
+        <h3 className="text-base font-black text-black">
+          Compiling Official CBT Scorecard...
+        </h3>
+        <p className="text-xs text-black/60 font-semibold mt-1">
+          Validating answer keys and generating NCERT performance diagnostics.
+        </p>
+      </div>
+    );
+  }
 
   const {
     totalMarks,
@@ -705,13 +720,13 @@ export default function CBTResultView() {
                       {q.solution.quick && (
                         <div className="p-2.5 rounded-lg bg-white border border-black/30">
                           <span className="text-[10px] font-black uppercase text-[#2563EB] block mb-0.5">30-Sec Takeaway</span>
-                          <p className="text-black/90 font-semibold text-[11px] leading-snug">{q.solution.quick}</p>
+                          <MathRenderer text={q.solution.quick} className="text-black/90 font-semibold text-[11px] leading-relaxed" />
                         </div>
                       )}
                       {q.solution.concept && (
                         <div className="p-2.5 rounded-lg bg-white border border-black/30">
                           <span className="text-[10px] font-black uppercase text-[#059669] block mb-0.5">Core NCERT Concept</span>
-                          <p className="text-black/90 font-semibold text-[11px] leading-snug">{q.solution.concept}</p>
+                          <MathRenderer text={q.solution.concept} className="text-black/90 font-semibold text-[11px] leading-relaxed" />
                         </div>
                       )}
                     </div>
@@ -721,7 +736,7 @@ export default function CBTResultView() {
                   {(q.formula || q.keyConcept) && (
                     <div className="p-2.5 rounded-lg bg-[#FFFBEB] border border-[#F59E0B] text-black">
                       <span className="text-[10px] font-black uppercase text-[#B45309] block mb-0.5">Formula / Principle</span>
-                      <p className="font-bold text-[11px]">{q.formula || q.keyConcept}</p>
+                      <MathRenderer text={q.formula || q.keyConcept} className="font-bold text-[11px] leading-relaxed text-black" />
                     </div>
                   )}
 
@@ -729,7 +744,7 @@ export default function CBTResultView() {
                   {q.misconception && (
                     <div className="p-2.5 rounded-lg bg-[#FEF2F2] border border-[#EF4444] text-black">
                       <span className="text-[10px] font-black uppercase text-[#DC2626] block mb-0.5">Common Trap / Misconception</span>
-                      <p className="font-semibold text-[11px] text-black/90">{q.misconception.description}</p>
+                      <MathRenderer text={q.misconception.description} className="font-semibold text-[11px] leading-relaxed text-black/90" />
                     </div>
                   )}
 
@@ -765,13 +780,11 @@ export default function CBTResultView() {
                                   {d.fromCache ? "0 Tokens (Cached)" : "AI Evaluated"}
                                 </span>
                               </div>
-                              <p className="text-xs text-black font-semibold leading-relaxed">
-                                {d.diagnosisMessage}
-                              </p>
+                              <MathRenderer text={d.diagnosisMessage} className="text-xs text-black font-semibold leading-relaxed" />
                               {d.ncertCorrection && (
                                 <div className="p-2 rounded bg-[#FAF7EE] border border-black/20 text-[11px] text-black/90 font-medium">
                                   <strong className="text-black font-black">NCERT Rule Reminder: </strong>
-                                  {d.ncertCorrection}
+                                  <MathRenderer text={d.ncertCorrection} inline />
                                 </div>
                               )}
                             </div>

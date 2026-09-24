@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import "katex/dist/katex.min.css";
 import { LayoutDashboard, Target, BookOpen, User, Flame, Calendar, MessageSquare, BarChart3 } from "lucide-react";
 
 export const metadata: Metadata = {

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
+import LatexRenderer from "@/components/common/LatexRenderer";
 
 interface OptionBreakdown {
   id: "A" | "B" | "C" | "D";
@@ -265,9 +266,9 @@ export default function LiveDiagnosticDemo() {
           </span>
         </div>
 
-        <h3 className="text-base sm:text-lg font-black text-black leading-snug">
-          {translateStem(activeQuestion.prompt)}
-        </h3>
+        <div className="text-base sm:text-lg font-black text-black leading-snug">
+          <LatexRenderer content={translateStem(activeQuestion.prompt)} />
+        </div>
 
         {/* Options List */}
         <div className="space-y-2.5 pt-1">
@@ -300,7 +301,9 @@ export default function LiveDiagnosticDemo() {
                 </span>
 
                 <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <span className="text-black">{translateStem(option.text)}</span>
+                  <div className="text-black flex-1">
+                    <LatexRenderer content={translateStem(option.text)} inline />
+                  </div>
                   {option.slipPercentage && !option.isCorrect && (
                     <span className="text-[10px] font-mono font-black text-[#DC2626] bg-white px-2 py-0.5 rounded border border-black shrink-0 self-start sm:self-auto shadow-[1px_1px_0px_0px_#000]">
                       {option.slipPercentage}% {t("pickThis", "pick this")}
@@ -352,9 +355,9 @@ export default function LiveDiagnosticDemo() {
               </span>
             </div>
 
-            <p className="text-xs sm:text-sm text-black/90 font-medium leading-relaxed mt-3">
-              {activeBreakdown.explanation}
-            </p>
+            <div className="text-xs sm:text-sm text-black/90 font-medium leading-relaxed mt-3">
+              <LatexRenderer content={activeBreakdown.explanation} />
+            </div>
 
             <div className="mt-4 pt-3 border-t-2 border-black/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-black/70">
               <span className="font-bold flex items-center gap-1.5">
