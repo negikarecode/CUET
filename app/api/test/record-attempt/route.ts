@@ -26,7 +26,15 @@ export async function POST(req: NextRequest) {
       const { questions: trueQuestions } = getQuestionsForTest(attempt.testId);
       if (trueQuestions && trueQuestions.length > 0) {
         authoritativeQuestions = trueQuestions;
-        authMap = new Map(trueQuestions.map((tq) => [tq.id, tq.correctOptionId]));
+        trueQuestions.forEach((tq) => {
+          if (tq.correctOptionId) {
+            authMap.set(tq.id, tq.correctOptionId);
+            if (tq.questionId) authMap.set(tq.questionId, tq.correctOptionId);
+            authMap.set(String(tq.questionNumber), tq.correctOptionId);
+            authMap.set(`q_${tq.questionNumber}`, tq.correctOptionId);
+            authMap.set(tq.questionNumber.toString().padStart(2, "0"), tq.correctOptionId);
+          }
+        });
       }
     } catch {
       // Fallback for ad-hoc custom tests
@@ -36,11 +44,24 @@ export async function POST(req: NextRequest) {
     let verifiedIncorrectCount = 0;
     let verifiedAttemptedCount = 0;
 
-    attempt.questions.forEach((q) => {
+    attempt.questions.forEach((q, idx) => {
       if (q.selectedOption !== null && q.selectedOption !== undefined) {
         verifiedAttemptedCount += 1;
-        const expectedOption = authMap.get(q.questionId) || q.correctOption;
-        if (q.selectedOption === expectedOption) {
+        const expectedOption =
+          authMap.get(q.questionId) ||
+          authMap.get(String(q.questionNumber)) ||
+          authMap.get(String(idx + 1)) ||
+          authMap.get((idx + 1).toString().padStart(2, "0")) ||
+          authMap.get((q as any).id || "") ||
+          q.correctOption;
+
+        const isMatch = Boolean(expectedOption && q.selectedOption === expectedOption);
+        q.isCorrect = isMatch;
+        if (expectedOption) {
+          q.correctOption = expectedOption as "A" | "B" | "C" | "D";
+        }
+
+        if (isMatch) {
           verifiedCorrectCount += 1;
         } else {
           verifiedIncorrectCount += 1;
@@ -96,29 +117,96 @@ export async function POST(req: NextRequest) {
       try {
         const supabaseAdmin = createAdminClient();
 
-        // 1. Prepare user_attempts batch (questions and tests are pre-seeded in the database)
+        // 1. Ensure test record exists in tests table so foreign key constraint is satisfied
         const testUuid = stringToUuid(attempt.testId);
-        const attemptsToInsert: any[] = [];
+        await supabaseAdmin.from("tests").upsert(
+          {
+            id: testUuid,
+            title: attempt.testTitle || `CUET ${attempt.subject || "Domain"} Mock Test`,
+            subject: attempt.subject || "Physics",
+            total_questions: attempt.totalQuestions || attempt.questions.length || 50,
+            duration_minutes: 60,
+            is_active: true,
+          },
+          { onConflict: "id" }
+        );
 
-        attempt.questions.forEach((q, idx) => {
+        // 2. Ensure question records exist in questions table with metadata
+        const questionsToUpsert = attempt.questions.map((q, idx) => {
           const qUuid = stringToUuid(q.questionId || `${attempt.testId}_q_${idx + 1}`);
+          const optA =
+            q.options?.find((o: any) => o.id === "A")?.text || (q as any).optionA || "Option A";
+          const optB =
+            q.options?.find((o: any) => o.id === "B")?.text || (q as any).optionB || "Option B";
+          const optC =
+            q.options?.find((o: any) => o.id === "C")?.text || (q as any).optionC || "Option C";
+          const optD =
+            q.options?.find((o: any) => o.id === "D")?.text || (q as any).optionD || "Option D";
+          const expectedOption =
+            authMap.get(q.questionId) ||
+            authMap.get(String(q.questionNumber)) ||
+            authMap.get(String(idx + 1)) ||
+            authMap.get((idx + 1).toString().padStart(2, "0")) ||
+            q.correctOption ||
+            "A";
 
-          attemptsToInsert.push({
-            user_id: targetUserId,
-            test_id: testUuid,
-            question_id: qUuid,
-            selected_option: q.selectedOption,
-            is_correct: q.isCorrect,
-            time_spent_seconds: q.timeSpentSeconds || 0,
-          });
+          return {
+            id: qUuid,
+            subject: q.subject || attempt.subject || "Physics",
+            chapter: q.chapter || "Domain Core",
+            micro_topic: q.microTopic || q.chapter || "Core Concept",
+            ncert_reference: q.ncertReference || `NCERT Class 12 (${q.chapter || "Core"})`,
+            archetype: "Direct Fact",
+            question_text: q.prompt || `Question ${q.questionNumber || idx + 1}`,
+            option_a: optA,
+            option_b: optB,
+            option_c: optC,
+            option_d: optD,
+            correct_option: expectedOption,
+            explanation: q.explanation || "Official Solution",
+          };
         });
 
-        // 2. Batch insert user_attempts
-        if (attemptsToInsert.length > 0) {
-          await supabaseAdmin.from("user_attempts").insert(attemptsToInsert);
+        if (questionsToUpsert.length > 0) {
+          await supabaseAdmin.from("questions").upsert(questionsToUpsert, { onConflict: "id" });
         }
 
-        // 3. Update profile XP and practice streak if profile exists
+        // 3. Prepare and insert user_attempts for all attempted questions
+        const attemptsToInsert = attempt.questions
+          .filter((q) => q.selectedOption !== null && q.selectedOption !== undefined)
+          .map((q, idx) => {
+            const qUuid = stringToUuid(q.questionId || `${attempt.testId}_q_${idx + 1}`);
+            const expectedOption =
+              authMap.get(q.questionId) ||
+              authMap.get(String(q.questionNumber)) ||
+              authMap.get(String(idx + 1)) ||
+              authMap.get((idx + 1).toString().padStart(2, "0")) ||
+              q.correctOption;
+            const isCorrect = Boolean(
+              (expectedOption && q.selectedOption === expectedOption) || q.isCorrect === true
+            );
+
+            return {
+              user_id: targetUserId,
+              test_id: testUuid,
+              question_id: qUuid,
+              selected_option: q.selectedOption,
+              is_correct: isCorrect,
+              time_spent_seconds: q.timeSpentSeconds || 0,
+              is_time_sink: (q.timeSpentSeconds || 0) > 72,
+            };
+          });
+
+        if (attemptsToInsert.length > 0) {
+          const { error: insertErr } = await supabaseAdmin
+            .from("user_attempts")
+            .insert(attemptsToInsert);
+          if (insertErr) {
+            console.error("[Record Attempt Insert DB Error]:", insertErr);
+          }
+        }
+
+        // 4. Update profile XP and practice streak if profile exists
         const { data: profile } = await supabaseAdmin
           .from("profiles")
           .select("xp, current_streak, last_practice_date")

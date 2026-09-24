@@ -156,10 +156,27 @@ export default function DashboardClient({
   const serverAttempted = initialData?.kpi?.totalAttempted || 0;
   const totalAttempted = Math.max(serverAttempted, activeClientAttempted);
 
+  // Compute robust client accuracy from testAttempts directly if clientAnalytics is stale
+  const clientCorrectCount =
+    isClient && testAttempts && testAttempts.length > 0
+      ? testAttempts.reduce((sum, a) => sum + (a.correctCount || 0), 0)
+      : clientAnalytics?.totalCorrectAnswers || 0;
+
+  const directClientAccuracy =
+    activeClientAttempted > 0
+      ? Math.round((clientCorrectCount / activeClientAttempted) * 100)
+      : clientAnalytics?.overallAccuracyPercentage || 0;
+
+  const serverAccuracy = initialData?.kpi?.accuracyPercentage || 0;
+
   const accuracyPercentage =
-    activeClientAttempted > 0 && clientAnalytics?.overallAccuracyPercentage !== undefined
-      ? clientAnalytics.overallAccuracyPercentage
-      : initialData?.kpi?.accuracyPercentage || 0;
+    directClientAccuracy > 0 && serverAccuracy > 0
+      ? activeClientAttempted >= serverAttempted
+        ? directClientAccuracy
+        : serverAccuracy
+      : directClientAccuracy > 0
+      ? directClientAccuracy
+      : serverAccuracy;
 
   const completedTestsCount =
     isClient && testAttempts && testAttempts.length > 0

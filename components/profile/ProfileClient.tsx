@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition, useEffect } from "react";
+import React, { useState, useTransition, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -65,6 +65,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
   // Zustand stores
   const zustandUser = useTestStore((state) => state.user);
+  const testAttempts = useTestStore((state) => state.testAttempts);
+  const clientAnalytics = useTestStore((state) => state.analytics);
   const loginUser = useTestStore((state) => state.loginUser);
   const logout = useTestStore((state) => state.logout);
 
@@ -98,6 +100,17 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
     setPushStatus(getNotificationPermissionState());
     setPushEnabled(isPushPreferenceEnabled());
 
+    if (typeof window !== "undefined") {
+      try {
+        const { recoverUnrecordedCBTSessions } = useTestStore.getState();
+        if (typeof recoverUnrecordedCBTSessions === "function") {
+          recoverUnrecordedCBTSessions();
+        }
+      } catch (err) {
+        console.warn("Session recovery notice:", err);
+      }
+    }
+
     // If Zustand user has more recent local xp or streak, synchronize gracefully
     if (zustandUser && zustandUser.id === profile.id) {
       if (zustandUser.dailyStreak > profile.currentStreak || zustandUser.xpPoints > profile.xp) {
@@ -111,12 +124,50 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
     }
   }, [profile.id, zustandUser, profile.currentStreak, profile.xp]);
 
+  // Robust accuracy reconciliation between server and client store attempts
+  const clientAttempted =
+    testAttempts && testAttempts.length > 0
+      ? testAttempts.reduce((sum, a) => sum + (a.attemptedCount || 0), 0)
+      : clientAnalytics?.totalQuestionsAttempted || 0;
+
+  const clientCorrect =
+    testAttempts && testAttempts.length > 0
+      ? testAttempts.reduce((sum, a) => sum + (a.correctCount || 0), 0)
+      : clientAnalytics?.totalCorrectAnswers || 0;
+
+  const clientAccuracy =
+    clientAttempted > 0
+      ? Math.round((clientCorrect / clientAttempted) * 100)
+      : clientAnalytics?.overallAccuracyPercentage || 0;
+
+  const effectiveTotalAttempts = Math.max(diagnostic.totalAttempts, clientAttempted);
+  const effectiveAccuracy =
+    diagnostic.accuracyPercentage > 0 && clientAccuracy > 0
+      ? diagnostic.totalAttempts >= clientAttempted
+        ? diagnostic.accuracyPercentage
+        : clientAccuracy
+      : diagnostic.accuracyPercentage > 0
+      ? diagnostic.accuracyPercentage
+      : clientAccuracy;
+
+  const effectiveDiagnostic = useMemo(() => {
+    const isUnlocked = effectiveTotalAttempts >= 150;
+    const progress = Math.min(100, Math.round((effectiveTotalAttempts / 150) * 100));
+    return {
+      ...diagnostic,
+      totalAttempts: effectiveTotalAttempts,
+      accuracyPercentage: effectiveAccuracy,
+      calibrationProgress: progress,
+      isAiMentorUnlocked: isUnlocked,
+    };
+  }, [diagnostic, effectiveTotalAttempts, effectiveAccuracy]);
+
   // Recalculate College Benchmark dynamically whenever target college or university changes
   const collegeBenchmark = calculateCollegeReadiness(
     profile.targetCollege,
     profile.targetUniversity,
-    diagnostic.accuracyPercentage,
-    diagnostic.totalAttempts
+    effectiveDiagnostic.accuracyPercentage,
+    effectiveDiagnostic.totalAttempts
   );
 
   // Format stream badge color
@@ -184,8 +235,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       const newBenchmark = calculateCollegeReadiness(
         updatedData.targetCollege,
         updatedData.targetUniversity,
-        diagnostic.accuracyPercentage,
-        diagnostic.totalAttempts
+        effectiveDiagnostic.accuracyPercentage,
+        effectiveDiagnostic.totalAttempts
       );
       setDiagnostic((prev) => ({
         ...prev,
@@ -226,7 +277,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       } else if (data.error === "QUALIFICATION_GATE_LOCKED") {
         setStatusMessage({
           type: "info",
-          text: `AI Adaptive Drill requires 150 baseline questions. You're at ${diagnostic.totalAttempts}/150! Complete domain mocks to unlock.`,
+          text: `AI Adaptive Drill requires 150 baseline questions. You're at ${effectiveDiagnostic.totalAttempts}/150! Complete domain mocks to unlock.`,
         });
         setIsLaunchingDrill(false);
       } else if (data.error === "CADENCE_LIMIT_EXCEEDED") {
@@ -591,7 +642,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               </div>
 
               {/* Active Pulse Badge or Calibration Badge */}
-              {diagnostic.isAiMentorUnlocked ? (
+              {effectiveDiagnostic.isAiMentorUnlocked ? (
                 <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] border-2 border-black text-[11px] font-black text-black font-mono shadow-[1px_1px_0px_0px_#000]">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75" />
@@ -615,7 +666,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                   <span>AI Calibration Progress</span>
                 </span>
                 <span className="font-mono text-black">
-                  {diagnostic.totalAttempts} / 150 Qs ({diagnostic.calibrationProgress}%)
+                  {effectiveDiagnostic.totalAttempts} / 150 Qs ({effectiveDiagnostic.calibrationProgress}%)
                 </span>
               </div>
 
@@ -623,23 +674,23 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               <div className="w-full h-3.5 bg-white rounded-full border-2 border-black overflow-hidden shadow-[1px_1px_0px_0px_#000]">
                 <div
                   className="h-full bg-[#10B981] transition-all duration-500 rounded-full"
-                  style={{ width: `${diagnostic.calibrationProgress}%` }}
+                  style={{ width: `${effectiveDiagnostic.calibrationProgress}%` }}
                 />
               </div>
 
               <div className="flex items-center justify-between text-[11px] font-bold text-black/70">
-                {diagnostic.isAiMentorUnlocked ? (
+                {effectiveDiagnostic.isAiMentorUnlocked ? (
                   <span className="text-[#059669] font-black flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
                     Baseline complete. Sub-second trap remediation active.
                   </span>
                 ) : (
                   <span>
-                    {Math.max(0, 150 - diagnostic.totalAttempts)} more questions to establish full NTA timing accuracy.
+                    {Math.max(0, 150 - effectiveDiagnostic.totalAttempts)} more questions to establish full NTA timing accuracy.
                   </span>
                 )}
                 <span className="font-mono font-black text-black">
-                  Acc: {diagnostic.accuracyPercentage}%
+                  Acc: {effectiveDiagnostic.accuracyPercentage}%
                 </span>
               </div>
             </div>

@@ -274,9 +274,42 @@ export function computeAnalyticsFromAttempts(
   let totalTimeSpentSeconds = 0;
 
   attempts.forEach((a) => {
-    totalQuestionsAttempted += a.attemptedCount ?? 0;
-    totalCorrectAnswers += a.correctCount ?? 0;
-    totalIncorrectAnswers += a.incorrectCount ?? 0;
+    let aAttempted = a.attemptedCount ?? 0;
+    let aCorrect = a.correctCount ?? 0;
+
+    // Self-healing: if correctCount was saved as 0 but accuracyPercentage > 0
+    if (aCorrect === 0 && (a.accuracyPercentage || 0) > 0 && aAttempted > 0) {
+      aCorrect = Math.round(((a.accuracyPercentage || 0) * aAttempted) / 100);
+    }
+
+    // Self-healing: if individual question attempts exist, check matching answers
+    if (Array.isArray(a.questions) && a.questions.length > 0) {
+      let qAttempted = 0;
+      let qCorrect = 0;
+      a.questions.forEach((q) => {
+        if (q.selectedOption !== null && q.selectedOption !== undefined) {
+          qAttempted += 1;
+          const trueOption =
+            q.correctOption ||
+            (q as any).correctOptionId ||
+            q.options?.find((o: any) => o.isCorrect === true)?.id;
+          if (
+            q.isCorrect === true ||
+            (trueOption && q.selectedOption === trueOption)
+          ) {
+            qCorrect += 1;
+            q.isCorrect = true;
+            if (trueOption) q.correctOption = trueOption;
+          }
+        }
+      });
+      if (qCorrect > aCorrect) aCorrect = qCorrect;
+      if (qAttempted > aAttempted) aAttempted = qAttempted;
+    }
+
+    totalQuestionsAttempted += aAttempted;
+    totalCorrectAnswers += aCorrect;
+    totalIncorrectAnswers += Math.max(0, aAttempted - aCorrect);
     totalTimeSpentSeconds += a.timeTakenSeconds ?? 0;
   });
 

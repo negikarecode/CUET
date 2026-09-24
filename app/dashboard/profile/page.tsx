@@ -101,17 +101,21 @@ export default async function ProfilePage() {
       }
 
       // 2b. Query attempts count & accuracy from public.user_attempts
-      const { data: attemptsRows, count: attemptsCount } = await supabase
+      const { data: attemptsRows } = await supabase
         .from("user_attempts")
-        .select("id, is_correct, selected_option", { count: "exact" })
+        .select("id, is_correct, selected_option, questions(correct_option)")
         .eq("user_id", authUser.id);
 
       if (attemptsRows) {
         const attemptedQuestions = attemptsRows.filter(
           (a) => a.selected_option !== null && a.selected_option !== undefined
         );
-        totalAttempts = attemptsCount ?? attemptedQuestions.length;
-        correctAttempts = attemptedQuestions.filter((a) => a.is_correct === true).length;
+        totalAttempts = attemptedQuestions.length;
+        correctAttempts = attemptedQuestions.filter((a: any) => {
+          if (a.is_correct === true || a.is_correct === "true" || a.is_correct === 1) return true;
+          if (a.selected_option && a.questions?.correct_option && a.selected_option === a.questions.correct_option) return true;
+          return false;
+        }).length;
         accuracyPercentage =
           totalAttempts > 0 ? Math.round((correctAttempts / totalAttempts) * 100) : 0;
       }

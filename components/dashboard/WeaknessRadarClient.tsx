@@ -124,6 +124,20 @@ export default function WeaknessRadarClient({
     }
   }, [paramSubject]);
 
+  // Attempt recovery on mount: ingests any completed CBT session from localStorage that was missed
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const { recoverUnrecordedCBTSessions } = useTestStore.getState();
+        if (typeof recoverUnrecordedCBTSessions === "function") {
+          recoverUnrecordedCBTSessions();
+        }
+      } catch (err) {
+        console.warn("Session recovery notice:", err);
+      }
+    }
+  }, []);
+
   // Client authentication check
   useEffect(() => {
     if (isClient) {

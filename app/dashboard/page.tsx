@@ -113,7 +113,8 @@ export default async function DashboardPage() {
             subject,
             chapter,
             micro_topic,
-            ncert_reference
+            ncert_reference,
+            correct_option
           )
         `)
         .eq("user_id", authUser.id);
@@ -123,7 +124,11 @@ export default async function DashboardPage() {
           (ua) => ua.selected_option !== null && ua.selected_option !== undefined
         );
         const totalAttempted = attemptedRows.length;
-        const correctCount = attemptedRows.filter((ua) => ua.is_correct === true).length;
+        const correctCount = attemptedRows.filter((ua: any) => {
+          if (ua.is_correct === true || ua.is_correct === "true" || ua.is_correct === 1) return true;
+          if (ua.selected_option && ua.questions?.correct_option && ua.selected_option === ua.questions.correct_option) return true;
+          return false;
+        }).length;
         const overallAccuracy =
           totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0;
 
@@ -154,7 +159,12 @@ export default async function DashboardPage() {
           const entry = subMap[info.key];
           if (entry) {
             entry.totalAttempted += 1;
-            if (ua.is_correct === true) entry.totalCorrect += 1;
+            const isMatch =
+              ua.is_correct === true ||
+              ua.is_correct === "true" ||
+              ua.is_correct === 1 ||
+              (ua.selected_option && ua.questions?.correct_option && ua.selected_option === ua.questions.correct_option);
+            if (isMatch) entry.totalCorrect += 1;
             else entry.totalIncorrect += 1;
           }
         });
