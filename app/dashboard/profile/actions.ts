@@ -10,6 +10,7 @@ export interface UpdateProfileGoalsInput {
   targetUniversity?: string;
   targetCollege?: string;
   fullName?: string;
+  selectedSubjects?: string[];
 }
 
 export async function updateProfileGoalsAction(input: UpdateProfileGoalsInput) {
@@ -41,6 +42,9 @@ export async function updateProfileGoalsAction(input: UpdateProfileGoalsInput) {
     if (input.targetUniversity !== undefined) updatePayload.target_university = input.targetUniversity;
     if (input.targetCollege !== undefined) updatePayload.target_college = input.targetCollege;
     if (input.fullName) updatePayload.full_name = input.fullName;
+    if (input.selectedSubjects && Array.isArray(input.selectedSubjects)) {
+      updatePayload.selected_subjects = input.selectedSubjects;
+    }
 
     const { data: updatedProfile, error: dbError } = await supabaseAdmin
       .from("profiles")

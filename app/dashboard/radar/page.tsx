@@ -1,26 +1,28 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
-import DashboardClient, { DashboardInitialData } from "@/components/dashboard/DashboardClient";
+import WeaknessRadarClient, {
+  WeaknessRadarInitialData,
+} from "@/components/dashboard/WeaknessRadarClient";
 import { buildDefaultSubjectCalibration, normalizeSubject } from "@/lib/analytics";
 import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
 import { StreamType } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Aspirant Command Hub | CUET AI-Prep",
+  title: "Subject Weakness Radar & AI Diagnostic | CUET AI-Prep",
   description:
-    "Real-time CUET UG preparation command center with AI diagnostic insights, chapter mastery radar, time-sink alerts, daily practice streaks, and trophies.",
+    "AI diagnostic matrix and weak topic radar for CUET UG aspirants. Pinpoint distractor traps, clock-drain calculations, and NCERT-backed micro-topic weaknesses.",
 };
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardPage() {
+export default async function WeaknessRadarPage() {
   const cookieStore = cookies();
   const cuetAuth = cookieStore.get("cuet_auth")?.value === "1";
 
-  // 1. Clean real initial state (no fake mock attempts)
-  let serverData: DashboardInitialData = {
+  let serverData: WeaknessRadarInitialData = {
     user: {
       id: "guest",
       fullName: "CUET Aspirant",
@@ -33,30 +35,22 @@ export default async function DashboardPage() {
       campusCoins: 0,
       currentStreak: 1,
     },
-    kpi: {
-      totalAttempted: 0,
-      accuracyPercentage: 0,
-      dailyStreak: 1,
-      xpLevel: "Level 1 - Aspirant",
-      xpLevelNumber: 1,
-      xpProgressInLevel: 0,
-      xpForNextLevel: 500,
-    },
+    totalAttempted: 0,
+    accuracyPercentage: 0,
+    weaknessRadar: [],
+    strengthList: [],
+    timeSinkAlerts: [],
     recommendedPractice: {
-      topic: "Initial Diagnostic Mock",
-      chapter: "Domain Knowledge Calibration",
+      topic: "Domain Calibration Mock",
+      chapter: "Core Syllabus",
       subject: "Physics",
       durationMinutes: 60,
       questionCount: 50,
-      reason:
-        "Complete your first 50-question diagnostic test to establish your baseline pace and detect trap options.",
+      reason: "Complete a full 50-question diagnostic mock to calibrate baseline accuracy and uncover trap options.",
     },
-    weaknessRadar: [],
-    timeSinkAlerts: [],
     subjectCalibration: buildDefaultSubjectCalibration(),
   };
 
-  // 2. Query Supabase database to override with live data if available
   try {
     const supabase = createClient();
     const {
@@ -64,7 +58,7 @@ export default async function DashboardPage() {
     } = await supabase.auth.getUser();
 
     if (!authUser && !cuetAuth) {
-      redirect("/signup");
+      redirect("/signup?redirect=/dashboard/radar");
     }
 
     if (authUser) {
@@ -94,10 +88,9 @@ export default async function DashboardPage() {
           campusCoins: profile.campus_coins,
           currentStreak: profile.current_streak,
         };
-        serverData.kpi.dailyStreak = profile.current_streak;
       }
 
-      // Query real attempts count and attempt history with question metadata
+      // Query authentic attempt history
       const { data: userAttempts } = await supabase
         .from("user_attempts")
         .select(`
@@ -127,8 +120,8 @@ export default async function DashboardPage() {
         const overallAccuracy =
           totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0;
 
-        serverData.kpi.totalAttempted = totalAttempted;
-        serverData.kpi.accuracyPercentage = overallAccuracy;
+        serverData.totalAttempted = totalAttempted;
+        serverData.accuracyPercentage = overallAccuracy;
 
         const subMap = serverData.subjectCalibration || buildDefaultSubjectCalibration();
         attemptedRows.forEach((ua: any) => {
@@ -162,7 +155,9 @@ export default async function DashboardPage() {
           const item = subMap[k];
           if (item) {
             item.accuracyPercentage =
-              item.totalAttempted > 0 ? Math.round((item.totalCorrect / item.totalAttempted) * 100) : 0;
+              item.totalAttempted > 0
+                ? Math.round((item.totalCorrect / item.totalAttempted) * 100)
+                : 0;
             item.isUnlocked = item.totalAttempted >= 150;
             item.attemptsToUnlock = Math.max(0, 150 - item.totalAttempted);
             item.unlockProgress = Math.min(100, Math.round((item.totalAttempted / 150) * 100));
@@ -224,7 +219,7 @@ export default async function DashboardPage() {
           }
         });
 
-        const computedRadar = Array.from(topicMap.values()).map((item) => {
+        const computedTopics = Array.from(topicMap.values()).map((item) => {
           const acc = Math.round((item.correctCount / item.attemptsCount) * 100);
           const status: "critical" | "polish" | "mastered" =
             acc < 50 ? "critical" : acc < 80 ? "polish" : "mastered";
@@ -244,19 +239,21 @@ export default async function DashboardPage() {
           };
         });
 
-        // Sort: lowest accuracy first
-        computedRadar.sort((a, b) => {
-          const statusWeight = { critical: 1, polish: 2, mastered: 3 };
-          if (statusWeight[a.status] !== statusWeight[b.status]) {
-            return statusWeight[a.status] - statusWeight[b.status];
-          }
-          return a.accuracyPercentage - b.accuracyPercentage;
-        });
+        // Weakness radar: status critical/polish sorted by lowest accuracy
+        const weaknesses = computedTopics
+          .filter((t) => t.status === "critical" || t.status === "polish")
+          .sort((a, b) => a.accuracyPercentage - b.accuracyPercentage);
 
-        serverData.weaknessRadar = computedRadar;
+        // Strength list: status mastered or >= 75%
+        const strengths = computedTopics
+          .filter((t) => t.status === "mastered" || t.accuracyPercentage >= 75)
+          .sort((a, b) => b.accuracyPercentage - a.accuracyPercentage);
+
+        serverData.weaknessRadar = weaknesses;
+        serverData.strengthList = strengths;
 
         // Pacing / time sink alerts
-        const timeSinkAlerts = Array.from(topicMap.values())
+        serverData.timeSinkAlerts = Array.from(topicMap.values())
           .filter((item) => item.timeSinksCount > 0)
           .map((item) => {
             const errorRate = Math.round((item.incorrectCount / item.attemptsCount) * 100);
@@ -273,33 +270,36 @@ export default async function DashboardPage() {
             };
           });
 
-        serverData.timeSinkAlerts = timeSinkAlerts;
-
-        // Update recommended practice if weak topics found
-        if (computedRadar.length > 0 && computedRadar[0]) {
-          const topWeak = computedRadar[0];
+        if (weaknesses.length > 0 && weaknesses[0]) {
+          const topWeak = weaknesses[0];
           serverData.recommendedPractice = {
             topic: topWeak.microTopic,
             chapter: topWeak.chapter,
             subject: topWeak.subject,
             durationMinutes: 5,
             questionCount: 5,
-            reason:
-              topWeak.status === "critical"
-                ? `Critical Weakness (${topWeak.accuracyPercentage}% accuracy). Focus on eliminating trap options.`
-                : `Targeted Polish (${topWeak.accuracyPercentage}% accuracy). Fast 5-minute drill to achieve mastery.`,
+            reason: `Targeted repair drill on ${topWeak.microTopic} (${topWeak.accuracyPercentage}% accuracy). Eliminate distractor traps.`,
           };
         }
       }
     }
   } catch {
-    // Graceful fallback to serverData
+    // Graceful fallback
   }
 
   return (
     <div className="min-h-screen bg-[#FAF7EE] pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <DashboardClient initialData={serverData} />
+        <Suspense
+          fallback={
+            <div className="py-20 flex flex-col items-center justify-center space-y-3">
+              <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+              <p className="text-xs font-black text-black">Loading Subject Weakness Radar...</p>
+            </div>
+          }
+        >
+          <WeaknessRadarClient initialData={serverData} />
+        </Suspense>
       </div>
     </div>
   );

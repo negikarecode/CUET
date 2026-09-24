@@ -17,6 +17,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   Play,
+  Layers,
   Trophy as TrophyIcon,
   Lock,
   Crown,
@@ -132,6 +133,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
     targetUniversity: string;
     targetCollege: string;
     fullName: string;
+    selectedSubjects: string[];
   }) => {
     const previousProfile = { ...profile };
 
@@ -142,6 +144,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       targetUniversity: updatedData.targetUniversity,
       targetCollege: updatedData.targetCollege,
       fullName: updatedData.fullName,
+      selectedSubjects: updatedData.selectedSubjects,
     }));
 
     // Update Zustand client store
@@ -150,11 +153,12 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       preferredStream: updatedData.targetStream.toLowerCase() as any,
       targetUniversity: updatedData.targetUniversity,
       targetCollege: updatedData.targetCollege,
+      selectedSubjects: updatedData.selectedSubjects,
     });
 
     setStatusMessage({
       type: "info",
-      text: "Syncing your updated academic targets...",
+      text: "Syncing your updated academic targets and subjects...",
     });
 
     try {
@@ -164,6 +168,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         targetUniversity: updatedData.targetUniversity,
         targetCollege: updatedData.targetCollege,
         fullName: updatedData.fullName,
+        selectedSubjects: updatedData.selectedSubjects,
       });
 
       if (!result.success) {
@@ -172,7 +177,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
       setStatusMessage({
         type: "success",
-        text: `Target goals updated: ${updatedData.targetUniversity} — ${updatedData.targetCollege} (${updatedData.targetStream})`,
+        text: `Target goals updated: ${updatedData.targetUniversity} — ${updatedData.targetCollege} (${updatedData.selectedSubjects.length} subjects)`,
       });
 
       // Recalculate college readiness in state
@@ -459,6 +464,40 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             >
               <Edit3 className="w-3.5 h-3.5" />
             </button>
+          </div>
+        </div>
+
+        {/* Selected Domain Subjects Aspirant is Preparing For */}
+        <div className="p-4 bg-[#FAF7EE] rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_#000] space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5 text-[#FF5C5C]" />
+              <span>Target Domain Subjects ({profile.selectedSubjects?.length || 0} Preparing)</span>
+            </span>
+            <button
+              type="button"
+              onClick={() => setIsEditGoalsOpen(true)}
+              className="text-xs font-black text-black hover:text-[#FF5C5C] flex items-center gap-1 cursor-pointer transition-colors"
+            >
+              <Edit3 className="w-3 h-3" />
+              <span>Edit Subjects</span>
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2 pt-1">
+            {(profile.selectedSubjects || []).length === 0 ? (
+              <p className="text-xs text-black/60 font-semibold italic">
+                No subjects selected yet. Click Edit Subjects to choose your domain papers.
+              </p>
+            ) : (
+              (profile.selectedSubjects || []).map((subj) => (
+                <span
+                  key={subj}
+                  className="px-3 py-1 rounded-lg bg-white border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_0px_#000]"
+                >
+                  {subj}
+                </span>
+              ))
+            )}
           </div>
         </div>
 
@@ -1059,6 +1098,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         initialUniversity={profile.targetUniversity}
         initialCollege={profile.targetCollege}
         initialFullName={profile.fullName}
+        initialSelectedSubjects={profile.selectedSubjects || []}
         onSave={handleSaveGoals}
       />
 

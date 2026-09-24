@@ -107,12 +107,12 @@ export default function OnboardingModal({
       }
 
       if (data.user) {
-        // Fetch the user's authentic database profile
         let userFullName = data.user.user_metadata?.full_name || cleanEmail.split("@")[0];
         let userStream: StreamType = (data.user.user_metadata?.target_stream?.toLowerCase() as StreamType) || "commerce";
         let userCollege = data.user.user_metadata?.target_college || "Central University";
         let userUniversity = data.user.user_metadata?.target_university || "Delhi University";
         let userCourse = data.user.user_metadata?.target_course || "Undergraduate Program";
+        let userSelectedSubjects = data.user.user_metadata?.selected_subjects || DEFAULT_STREAM_SUBJECTS[userStream] || DEFAULT_STREAM_SUBJECTS.commerce;
         let userXp = 0;
         let userStreak = 1;
         let userCoins = 0;
@@ -126,6 +126,9 @@ export default function OnboardingModal({
               userStream = (json.profile.target_stream?.toLowerCase() as StreamType) || userStream;
               userCollege = json.profile.target_college || userCollege;
               userUniversity = json.profile.target_university || userUniversity;
+              if (Array.isArray(json.profile.selected_subjects) && json.profile.selected_subjects.length > 0) {
+                userSelectedSubjects = json.profile.selected_subjects;
+              }
               userXp = json.profile.xp ?? 0;
               userStreak = json.profile.current_streak ?? 1;
               userCoins = json.profile.campus_coins ?? 0;
@@ -144,7 +147,7 @@ export default function OnboardingModal({
           targetUniversity: userUniversity,
           targetCourse: userCourse,
           preferredStream: userStream,
-          selectedSubjects: data.user.user_metadata?.selected_subjects || DEFAULT_STREAM_SUBJECTS[userStream] || DEFAULT_STREAM_SUBJECTS.commerce,
+          selectedSubjects: userSelectedSubjects,
           dailyStreak: userStreak,
           xpPoints: userXp,
           campusCoins: userCoins,
@@ -257,6 +260,7 @@ export default function OnboardingModal({
               targetUniversity: finalUniversity,
               targetCollege: finalCollege,
               targetCourse: finalCourse,
+              selectedSubjects,
             }),
           });
         } catch (profileErr) {

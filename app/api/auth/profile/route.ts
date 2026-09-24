@@ -12,13 +12,12 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const {
-      id,
-      fullName,
-      targetStream,
-      targetUniversity,
-      targetCollege,
-    } = body;
+    const id = body.id;
+    const fullName = body.fullName || body.full_name;
+    const targetStream = body.targetStream || body.target_stream;
+    const targetUniversity = body.targetUniversity || body.target_university;
+    const targetCollege = body.targetCollege || body.target_college;
+    const selectedSubjects = body.selectedSubjects || body.selected_subjects;
 
     if (!id || !fullName) {
       return NextResponse.json(
@@ -61,6 +60,8 @@ export async function POST(req: Request) {
       .eq("id", id)
       .maybeSingle();
 
+    const subjectsToPersist = selectedSubjects;
+
     const profilePayload: Record<string, any> = {
       id,
       full_name: fullName,
@@ -69,6 +70,10 @@ export async function POST(req: Request) {
       target_college: targetCollege || "SRCC",
       updated_at: new Date().toISOString(),
     };
+
+    if (subjectsToPersist && Array.isArray(subjectsToPersist) && subjectsToPersist.length > 0) {
+      profilePayload.selected_subjects = subjectsToPersist;
+    }
 
     if (!existingProfile) {
       // First-time initialization

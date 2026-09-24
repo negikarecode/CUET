@@ -40,6 +40,7 @@ export default async function ProfilePage() {
     isPremium: false,
     subscriptionTier: "free",
     subscriptionExpiresAt: null,
+    selectedSubjects: ["Physics", "Chemistry", "Mathematics"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
@@ -86,6 +87,14 @@ export default async function ProfilePage() {
           isPremium: Boolean(profileRow.is_premium),
           subscriptionTier: profileRow.subscription_tier || "free",
           subscriptionExpiresAt: profileRow.subscription_expires_at ?? null,
+          selectedSubjects:
+            profileRow.selected_subjects && profileRow.selected_subjects.length > 0
+              ? profileRow.selected_subjects
+              : profileRow.target_stream === "Commerce"
+              ? ["Accountancy", "Business Studies", "Economics"]
+              : profileRow.target_stream === "Humanities"
+              ? ["History", "Political Science", "Psychology"]
+              : ["Physics", "Chemistry", "Mathematics"],
           createdAt: profileRow.created_at,
           updatedAt: profileRow.updated_at,
         };

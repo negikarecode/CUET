@@ -11,12 +11,14 @@ interface ProfileUpdatePayload {
   targetUniversity?: string;
   targetCollege?: string;
   fullName?: string;
+  selectedSubjects?: string[];
+  selected_subjects?: string[];
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json().catch(() => ({}))) as ProfileUpdatePayload;
-    const { targetStream, targetUniversity, targetCollege, fullName } = body;
+    const { targetStream, targetUniversity, targetCollege, fullName, selectedSubjects, selected_subjects } = body;
 
     let targetUserId = body.userId;
 
@@ -61,6 +63,10 @@ export async function POST(req: NextRequest) {
     if (targetUniversity !== undefined) updatePayload.target_university = targetUniversity;
     if (targetCollege !== undefined) updatePayload.target_college = targetCollege;
     if (fullName) updatePayload.full_name = fullName;
+    const subjectsToUpdate = selectedSubjects || selected_subjects;
+    if (subjectsToUpdate && Array.isArray(subjectsToUpdate)) {
+      updatePayload.selected_subjects = subjectsToUpdate;
+    }
 
     // Execute update
     const { data: updatedProfile, error } = await supabaseAdmin

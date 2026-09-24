@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { StreamOption } from "@/types/database";
 import CollegeSearchDropdown from "@/components/auth/CollegeSearchDropdown";
+import SubjectMultiSelector from "@/components/auth/SubjectMultiSelector";
 
 interface EditGoalsModalProps {
   isOpen: boolean;
@@ -20,11 +21,13 @@ interface EditGoalsModalProps {
   initialUniversity: string;
   initialCollege: string;
   initialFullName: string;
+  initialSelectedSubjects?: string[];
   onSave: (data: {
     targetStream: StreamOption;
     targetUniversity: string;
     targetCollege: string;
     fullName: string;
+    selectedSubjects: string[];
   }) => Promise<void>;
 }
 
@@ -35,12 +38,22 @@ export default function EditGoalsModal({
   initialUniversity,
   initialCollege,
   initialFullName,
+  initialSelectedSubjects = [],
   onSave,
 }: EditGoalsModalProps) {
   const [stream, setStream] = useState<StreamOption>(initialStream || "Science");
   const [university, setUniversity] = useState<string>(initialUniversity || "Delhi University");
   const [college, setCollege] = useState<string>(initialCollege || "SRCC");
   const [fullName, setFullName] = useState<string>(initialFullName || "");
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>(
+    initialSelectedSubjects.length > 0
+      ? initialSelectedSubjects
+      : initialStream === "Commerce"
+      ? ["Accountancy", "Business Studies", "Economics"]
+      : initialStream === "Humanities"
+      ? ["History", "Political Science", "Psychology"]
+      : ["Physics", "Chemistry", "Mathematics"]
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -48,6 +61,11 @@ export default function EditGoalsModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (selectedSubjects.length === 0) {
+      setErrorMessage("Please select at least 1 CUET domain subject.");
+      return;
+    }
+
     setIsSaving(true);
     setErrorMessage(null);
 
@@ -57,6 +75,7 @@ export default function EditGoalsModal({
         targetUniversity: university.trim() || "Delhi University",
         targetCollege: college.trim() || "SRCC",
         fullName: fullName.trim() || initialFullName,
+        selectedSubjects,
       });
       onClose();
     } catch (err: any) {
@@ -93,7 +112,7 @@ export default function EditGoalsModal({
       aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
     >
-      <div className="w-full max-w-lg bg-white rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_#000] p-6 text-left animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-xl bg-white rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_#000] p-6 text-left animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b-2 border-black mb-5">
           <div className="flex items-center gap-2.5">
@@ -102,17 +121,17 @@ export default function EditGoalsModal({
             </div>
             <div>
               <h3 className="text-lg font-black text-black tracking-tight">
-                Edit Academic Goals
+                Edit Academic Goals & Domain Subjects
               </h3>
               <p className="text-xs text-black/60 font-semibold">
-                Update your dream college target and domain stream
+                Update your dream college target and domain subjects you are preparing for
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
+            className="p-1.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -179,6 +198,14 @@ export default function EditGoalsModal({
             </div>
           </div>
 
+          {/* Target Domain Subjects Multi-Selector */}
+          <div className="p-3.5 rounded-xl border-2 border-black bg-[#FAF7EE] space-y-2">
+            <SubjectMultiSelector
+              selectedSubjects={selectedSubjects}
+              onChangeSubjects={setSelectedSubjects}
+            />
+          </div>
+
           {/* Dream College Dropdown */}
           <div className="space-y-1.5">
             <CollegeSearchDropdown
@@ -213,24 +240,24 @@ export default function EditGoalsModal({
               type="button"
               disabled={isSaving}
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all disabled:opacity-50"
+              className="px-4 py-2 rounded-lg bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all disabled:opacity-50 cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="px-5 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-2 disabled:opacity-50"
+              className="px-5 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {isSaving ? (
                 <>
                   <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Saving Goals...</span>
+                  <span>Saving Goals & Subjects...</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Save Academic Goals</span>
+                  <span>Save Academic Goals & Subjects</span>
                 </>
               )}
             </button>

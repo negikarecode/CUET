@@ -14,6 +14,7 @@ export interface StudentProfileData {
   isPremium: boolean;
   subscriptionTier: string;
   subscriptionExpiresAt: string | null;
+  selectedSubjects: string[];
   createdAt: string;
   updatedAt: string;
 }

@@ -32,6 +32,7 @@ export interface Database {
           is_premium: boolean;
           subscription_tier: string;
           subscription_expires_at: string | null;
+          selected_subjects?: string[];
           created_at: string;
           updated_at: string;
         };
@@ -48,6 +49,7 @@ export interface Database {
           is_premium?: boolean;
           subscription_tier?: string;
           subscription_expires_at?: string | null;
+          selected_subjects?: string[];
           created_at?: string;
           updated_at?: string;
         };
@@ -64,6 +66,7 @@ export interface Database {
           is_premium?: boolean;
           subscription_tier?: string;
           subscription_expires_at?: string | null;
+          selected_subjects?: string[];
           created_at?: string;
           updated_at?: string;
         };

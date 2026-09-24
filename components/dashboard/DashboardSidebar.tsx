@@ -87,9 +87,9 @@ export default function DashboardSidebar() {
     {
       id: "radar",
       label: t("radar", "Weakness Radar"),
-      href: "/dashboard#radar",
+      href: "/dashboard/radar",
       icon: Target,
-      active: false,
+      active: pathname.startsWith("/dashboard/radar"),
     },
     {
       id: "leaderboard",

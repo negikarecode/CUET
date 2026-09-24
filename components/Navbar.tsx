@@ -159,7 +159,7 @@ export default function Navbar() {
                       <span>{t("mocks", "Mock Tests")}</span>
                     </Link>
                     <Link
-                      href="/dashboard#radar"
+                      href="/dashboard/radar"
                       className="px-3 py-1.5 text-xs font-bold text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all flex items-center gap-1.5"
                     >
                       <Target className="w-3.5 h-3.5 text-[#FF5C5C]" />
@@ -470,7 +470,7 @@ export default function Navbar() {
                     {t("mocks", "Mock Tests")}
                   </Link>
                   <Link
-                    href="/dashboard#radar"
+                    href="/dashboard/radar"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-lg text-xs font-bold border-2 border-transparent hover:border-black hover:bg-white"
                   >
