@@ -170,12 +170,21 @@ export async function GET(_req: NextRequest) {
       };
     });
 
-    return NextResponse.json({
-      success: true,
-      users: entries,
-      currentUserId,
-      availableSubjects: Array.from(allSubjectsSet),
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        users: entries,
+        currentUserId,
+        availableSubjects: Array.from(allSubjectsSet),
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
+    );
   } catch (error: any) {
     console.error("[Leaderboard Route Error]:", error);
     return NextResponse.json(

@@ -51,7 +51,6 @@ interface RawLeaderboardUser {
 
 export default function Leaderboard() {
   const currentUser = useTestStore((state) => state.user);
-  const userStream = useTestStore((state) => state.selectedStream);
   const clientAttempts = useTestStore((state) => state.testAttempts);
 
   // Leaderboard filters
@@ -134,7 +133,9 @@ export default function Leaderboard() {
 
     // Check if current user is already present in serverUsers
     const existingIndex = list.findIndex(
-      (u) => (currentId && u.userId === currentId) || u.isCurrentUser
+      (u) =>
+        (currentId && currentId !== "guest" && u.userId === currentId) ||
+        u.isCurrentUser
     );
 
     if (existingIndex >= 0) {
@@ -160,26 +161,10 @@ export default function Leaderboard() {
         ),
         isCurrentUser: true,
       };
-    } else if (currentUser.isLoggedIn || currentUser.xpPoints > 0 || localClientTrophies.total > 0) {
-      // Current user not yet in backend list (e.g. offline or newly registered)
-      list.push({
-        userId: currentId || "client-current-user",
-        name: currentUser.name || "You",
-        stream: (currentUser.preferredStream || userStream || "science") as StreamType,
-        targetCollege: currentUser.targetCollege || "Central University",
-        targetUniversity: currentUser.targetUniversity || "Delhi University",
-        streak: currentUser.dailyStreak || 1,
-        accuracyPercentage: currentUser.accuracyPercentage || 0,
-        totalXp: currentUser.xpPoints || 0,
-        totalTrophies: localClientTrophies.total,
-        subjectTrophies: localClientTrophies.bySubject,
-        completedTestsCount: localClientTrophies.count,
-        isCurrentUser: true,
-      });
     }
 
     return list;
-  }, [serverUsers, currentUser, userStream, localClientTrophies]);
+  }, [serverUsers, currentUser, localClientTrophies]);
 
   // Filter and sort entries based on active filters and viewMode
   const rankedEntries = useMemo(() => {
@@ -223,7 +208,7 @@ export default function Leaderboard() {
           : entry.subjectTrophies?.[selectedSubject] || 0,
       subjectTrophies: entry.subjectTrophies,
       completedTestsCount: entry.completedTestsCount,
-      isCurrentUser: entry.isCurrentUser || entry.userId === currentUser.id,
+      isCurrentUser: entry.isCurrentUser || (Boolean(currentUser.id) && currentUser.id !== "guest" && entry.userId === currentUser.id),
     }));
   }, [mergedUsers, activeStreamFilter, viewMode, selectedSubject, currentUser.id]);
 

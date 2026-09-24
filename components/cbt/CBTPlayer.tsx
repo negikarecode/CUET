@@ -9,11 +9,13 @@ import {
   Bookmark,
   Grid,
   X,
+  ArrowLeft,
 } from "lucide-react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { Question, QuestionStatus } from "@/types";
 import CBTSubmitModal from "./CBTSubmitModal";
+import CBTExitWarningModal from "./CBTExitWarningModal";
 import CBTResultView from "./CBTResultView";
 import { CBTErrorBoundary } from "./CBTErrorBoundary";
 import MathRenderer from "./MathRenderer";
@@ -47,6 +49,7 @@ export default function CBTPlayer() {
   const jumpToQuestion = useCBTStore((state) => state.jumpToQuestion);
   const tickSecond = useCBTStore((state) => state.tickSecond);
   const openSubmitModal = useCBTStore((state) => state.openSubmitModal);
+  const openExitModal = useCBTStore((state) => state.openExitModal);
   const getQuestionStatus = useCBTStore((state) => state.getQuestionStatus);
   const getSummaryCounts = useCBTStore((state) => state.getSummaryCounts);
 
@@ -76,6 +79,48 @@ export default function CBTPlayer() {
       window.removeEventListener("focus", handleVisibilityOrFocus);
     };
   }, [isTimerRunning, isSubmitted, tickSecond]);
+
+  // Intercept window/tab close or refresh attempts during active test with standard browser confirmation
+  useEffect(() => {
+    if (isSubmitted) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      const msg = "Warning: No test data will be recorded if you close or leave this test.";
+      e.returnValue = msg;
+      return msg;
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.onbeforeunload = handleBeforeUnload;
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.onbeforeunload = null;
+    };
+  }, [isSubmitted]);
+
+  // Intercept browser back button / swipe back gesture during active test
+  useEffect(() => {
+    if (isSubmitted) return;
+
+    // Push initial history state to intercept the back action
+    window.history.pushState({ cbtActiveSession: true }, "", window.location.href);
+
+    const handlePopState = () => {
+      if (!isSubmitted) {
+        // Prevent navigating away immediately by re-pushing current state
+        window.history.pushState({ cbtActiveSession: true }, "", window.location.href);
+        // Show the exit warning modal informing user that no data will be recorded
+        openExitModal();
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [isSubmitted, openExitModal]);
 
   // Format timer MM:SS
   const formatTimer = (totalSeconds: number) => {
@@ -130,8 +175,19 @@ export default function CBTPlayer() {
         {/* =================================================================== */}
         <header className="sticky top-0 z-40 bg-[#FAF7EE] border-b-2 border-black">
           <div className="max-w-[1600px] mx-auto px-2.5 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
-            {/* Left: Test Paper & Subject Title */}
+            {/* Left: Exit/Back Button, Test Paper & Subject Title */}
             <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+              <button
+                type="button"
+                onClick={openExitModal}
+                className="px-2 sm:px-3 py-1.5 rounded-lg border-2 border-black bg-white hover:bg-[#FEE2E2] text-black font-black text-xs shadow-[1px_1px_0px_0px_#000] sm:shadow-[2px_2px_0px_0px_#000] flex items-center gap-1 shrink-0 transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none cursor-pointer"
+                title={t("exitTestTooltip", "Exit Test (Warning: No data will be recorded)")}
+                aria-label="Exit Test"
+              >
+                <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+                <span className="hidden sm:inline">{t("back", "Back")}</span>
+              </button>
+
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#FF5C5C] text-white border-2 border-black flex items-center justify-center font-black text-xs shrink-0 shadow-[1px_1px_0px_0px_#000] sm:shadow-[2px_2px_0px_0px_#000]">
                 CBT
               </div>
@@ -401,6 +457,11 @@ export default function CBTPlayer() {
         {/* SUBMISSION CONFIRMATION MODAL */}
         {/* =================================================================== */}
         <CBTSubmitModal />
+
+        {/* =================================================================== */}
+        {/* EXIT WARNING MODAL (NO DATA RECORDED WARNING) */}
+        {/* =================================================================== */}
+        <CBTExitWarningModal />
       </div>
     </CBTErrorBoundary>
   );

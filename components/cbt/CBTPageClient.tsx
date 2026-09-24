@@ -41,6 +41,26 @@ export default function CBTPageClient({
     }
   }, [testId, initTest, isReattempt, initialTestMeta, initialQuestions]);
 
+  // Intercept tab/window close or refresh at page root during active exam
+  useEffect(() => {
+    if (isSubmitted) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      const msg = "Warning: No test data will be recorded if you close or leave this test.";
+      e.returnValue = msg;
+      return msg;
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.onbeforeunload = handleBeforeUnload;
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.onbeforeunload = null;
+    };
+  }, [isSubmitted]);
+
   if (!isInitialized || currentTestId !== testId || (isReattempt && isSubmitted)) {
     return (
       <div className="min-h-screen bg-[#FAF7EE] flex items-center justify-center p-4">

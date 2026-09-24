@@ -37,6 +37,7 @@ export interface CBTStoreState {
   /** Backward compatibility alias for questionStates */
   answers: Record<string, QuestionSessionState>;
   isSubmitModalOpen: boolean;
+  isExitModalOpen: boolean;
   isSubmitted: boolean;
   submittedScore: CBTScoreSummary | null;
 
@@ -57,6 +58,9 @@ export interface CBTStoreState {
   tickSecond: () => void;
   openSubmitModal: () => void;
   closeSubmitModal: () => void;
+  openExitModal: () => void;
+  closeExitModal: () => void;
+  abandonTest: () => void;
   submitTest: () => Promise<void>;
   resetSession: () => void;
 
@@ -169,7 +173,7 @@ function saveSessionToStorage(state: CBTStoreState): void {
   } catch {}
 }
 
-function clearSessionFromStorage(testId: string): void {
+export function clearSessionFromStorage(testId: string): void {
   if (typeof window === "undefined" || !testId) return;
   try {
     const key = getStorageKey(testId);
@@ -210,6 +214,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
   questionStates: {},
   answers: {},
   isSubmitModalOpen: false,
+  isExitModalOpen: false,
   isSubmitted: false,
   submittedScore: null,
 
@@ -661,6 +666,38 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
 
   closeSubmitModal: () => {
     set({ isSubmitModalOpen: false });
+  },
+
+  openExitModal: () => {
+    set({ isExitModalOpen: true });
+  },
+
+  closeExitModal: () => {
+    set({ isExitModalOpen: false });
+  },
+
+  abandonTest: () => {
+    const { testId } = get();
+    if (testId) {
+      clearSessionFromStorage(testId);
+    }
+    set({
+      isInitialized: false,
+      testId: "",
+      testMeta: null,
+      questions: [],
+      currentQuestionIndex: 0,
+      durationSeconds: 3600,
+      remainingSeconds: 3600,
+      expiresAt: null,
+      isTimerRunning: false,
+      questionStates: {},
+      answers: {},
+      isSubmitModalOpen: false,
+      isExitModalOpen: false,
+      isSubmitted: false,
+      submittedScore: null,
+    });
   },
 
   submitTest: async () => {

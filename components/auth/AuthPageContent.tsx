@@ -138,6 +138,22 @@ export default function AuthPageContent({
               userStreak = json.profile.current_streak ?? 1;
               userCoins = json.profile.campus_coins ?? 0;
             }
+          } else {
+            // Auto-heal missing profile row in public.profiles
+            fetch("/api/auth/profile", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                id: data.user.id,
+                full_name: userFullName,
+                target_stream: userStream.charAt(0).toUpperCase() + userStream.slice(1),
+                target_college: userCollege,
+                target_university: userUniversity,
+                target_course: userCourse,
+                selected_subjects: userSelectedSubjects,
+                age: data.user.user_metadata?.age || "18",
+              }),
+            }).catch(() => {});
           }
         } catch {
           // Fallback to metadata
