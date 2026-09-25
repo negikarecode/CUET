@@ -87,11 +87,8 @@ export function loadRawMockData(folder: string, mockNumber: number): RawQuestion
 
   const basePath = path.join(process.cwd(), "mock", folder, `${mockNumber}.json`);
   if (!fs.existsSync(basePath)) {
-    console.warn(`[MockLoader] Mock file not found at ${basePath}. Falling back to physics/1.json.`);
-    const fallbackPath = path.join(process.cwd(), "mock", "physics", "1.json");
-    const fallbackContent = fs.readFileSync(fallbackPath, "utf-8");
-    const fallbackParsed = JSON.parse(fallbackContent) as RawQuestion[];
-    return fallbackParsed;
+    console.warn(`[MockLoader] Mock file not found at ${basePath}. Returning empty bank pending rebuild.`);
+    return [];
   }
 
   const content = fs.readFileSync(basePath, "utf-8");
