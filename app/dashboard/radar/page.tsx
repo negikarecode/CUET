@@ -7,6 +7,7 @@ import WeaknessRadarClient, {
   WeaknessRadarInitialData,
 } from "@/components/dashboard/WeaknessRadarClient";
 import { buildDefaultSubjectCalibration, normalizeSubject } from "@/lib/analytics";
+import { generateFullTopicDiagnosis } from "@/lib/diagnostic-engine";
 import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
 import { StreamType } from "@/types";
 
@@ -228,6 +229,16 @@ export default async function WeaknessRadarPage() {
           const acc = Math.round((item.correctCount / item.attemptsCount) * 100);
           const status: "critical" | "polish" | "mastered" =
             acc < 50 ? "critical" : acc < 80 ? "polish" : "mastered";
+          const avgTime = Math.round(item.totalTimeSpent / item.attemptsCount);
+          const fullDiagnosis = generateFullTopicDiagnosis(
+            item.subject,
+            item.chapter,
+            item.microTopic,
+            item.attemptsCount,
+            item.correctCount,
+            item.incorrectCount,
+            avgTime
+          );
 
           return {
             chapter: item.chapter,
@@ -238,9 +249,10 @@ export default async function WeaknessRadarPage() {
             attemptsCount: item.attemptsCount,
             correctCount: item.correctCount,
             incorrectCount: item.incorrectCount,
-            avgTimeSeconds: Math.round(item.totalTimeSpent / item.attemptsCount),
+            avgTimeSeconds: avgTime,
             timeSinksCount: item.timeSinksCount,
             status,
+            fullDiagnosis,
           };
         });
 

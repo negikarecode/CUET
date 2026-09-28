@@ -6,6 +6,7 @@ import {
   UserAnalyticsSummary,
   SubjectCalibrationData,
 } from "@/types";
+import { generateFullTopicDiagnosis } from "@/lib/diagnostic-engine";
 
 export interface CanonicalSubjectInfo {
   key: string;
@@ -656,6 +657,16 @@ export function computeAnalyticsFromAttempts(
       remedialPrescription = `Review formulas for ${troubleListStr || bucket.chapter}. Target 80%+ accuracy threshold to turn this into a core strength.`;
     }
 
+    const fullDiagnosis = generateFullTopicDiagnosis(
+      bucket.subject,
+      bucket.chapter,
+      bucket.chapter,
+      attempts,
+      bucket.correctCount,
+      bucket.incorrectCount,
+      avgTime
+    );
+
     allTopics.push({
       subject: bucket.subject,
       chapter: bucket.chapter,
@@ -680,6 +691,7 @@ export function computeAnalyticsFromAttempts(
       strengthTier,
       primaryErrorType,
       scoreImpactPotentialMarks,
+      fullDiagnosis,
     });
   });
 

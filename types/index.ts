@@ -250,6 +250,138 @@ export type EngineConfidenceRating =
   | "Low"
   | "Insufficient Evidence";
 
+export type DetailedErrorCategory =
+  | "Conceptual Gap"
+  | "Factual / Recall Gap"
+  | "Formula / Method Error"
+  | "Calculation Error"
+  | "Question Interpretation Error"
+  | "Distractor Trap"
+  | "Careless Error"
+  | "Multi-Step Reasoning Failure"
+  | "Application Gap"
+  | "Time / Pacing Issue"
+  | "Guessing / Uncertainty"
+  | "Memory Confusion";
+
+export interface ErrorTaxonomyBreakdown {
+  conceptualGapCount: number;
+  factualRecallCount: number;
+  formulaMethodCount: number;
+  calculationCount: number;
+  questionInterpretationCount: number;
+  distractorTrapCount: number;
+  carelessCount: number;
+  multiStepReasoningCount: number;
+  applicationGapCount: number;
+  timePacingCount: number;
+  guessingCount: number;
+  memoryConfusionCount: number;
+  totalErrors: number;
+  percentages?: Record<DetailedErrorCategory, number>;
+}
+
+export interface DiagnosticSubtopic {
+  name: string;
+  accuracyPercentage: number;
+  attemptsCount: number;
+  confidence: "High" | "Medium" | "Low" | "Insufficient Evidence" | "HIGH" | "MEDIUM" | "LOW" | "INSUFFICIENT_EVIDENCE";
+  status: "Critical" | "Moderate" | "Developing" | "Strong";
+  errorPattern: string;
+}
+
+export interface PracticePhase {
+  phase: number;
+  title: string;
+  questionType: string;
+  questionCount: number;
+  targetAccuracyPercentage: number;
+  targetPacingSeconds?: number;
+  description: string;
+}
+
+export interface RemediationPlan {
+  step1Rebuild: {
+    title: string;
+    topicsToReview: string[];
+  };
+  step2DecisionFramework: {
+    title: string;
+    checklist: string[];
+  };
+  step3Practice: {
+    title: string;
+    phases: PracticePhase[];
+  };
+  step4Retest: {
+    title: string;
+    questionCount: number;
+    description: string;
+  };
+}
+
+export interface ExamTactic {
+  topic: string;
+  quickMethod: string;
+  fullMethod: string;
+  caution: string;
+  whenToUse: string;
+}
+
+export interface MultiDimensionalMastery {
+  conceptMastery: number | null;
+  applicationMastery: number | null;
+  accuracy: number | null;
+  speed: number | null;
+  consistency: number | null;
+  overallStatus: string;
+  isSufficientData: boolean;
+}
+
+export interface FullTopicDiagnosis {
+  subject: string;
+  chapter: string;
+  microTopic: string;
+  ncertReference: string;
+  observedPerformance: {
+    attemptsCount: number;
+    correctCount: number;
+    incorrectCount: number;
+    accuracyPercentage: number;
+    avgTimeSeconds: number;
+    targetTimeSeconds: number;
+    speedVsAccuracyState: "Concept/Knowledge Gap" | "Pacing/Fluency Deficit" | "Validated Core Strength" | "Major Systemic Weakness" | "Impulsive Rushing / Careless";
+  };
+  diagnosticConfidence: "HIGH" | "MEDIUM" | "LOW" | "INSUFFICIENT_EVIDENCE";
+  confidenceRationale: string;
+  evidenceThresholdLabel: "Insufficient evidence" | "Early signal" | "Emerging weakness" | "Established weakness";
+  primaryFailurePattern: string;
+  secondaryFailurePattern?: string;
+  specificWeakness: string;
+  evidenceList: string[];
+  interpretation: string;
+  errorTaxonomy: ErrorTaxonomyBreakdown;
+  weakSubtopics: DiagnosticSubtopic[];
+  masteryModel: MultiDimensionalMastery;
+  remediationPlan: RemediationPlan;
+  examTactic?: ExamTactic;
+  commonTrap: string;
+  recommendedPracticeType: "5-Question Concept Repair" | "10-Question Application Drill" | "15-Question Mixed Remediation" | "10-Question Timed Drill" | "Calculation Drill" | "Misconception Repair Drill";
+  retestCriteria: {
+    targetAccuracy: number;
+    targetPacingSeconds: number;
+    minimumNewAttemptsRequired: number;
+  };
+  progressTracking?: {
+    beforeAccuracy: number;
+    beforeAvgTime: number;
+    afterAccuracy?: number;
+    afterAvgTime?: number;
+    hasRetested: boolean;
+    verdict?: string;
+  };
+}
+
 export interface TopicMastery {
   chapter: string;
   microTopic: string;
@@ -275,6 +407,8 @@ export interface TopicMastery {
   strengthTier?: StrengthMasteryTier;
   primaryErrorType?: ErrorClassificationType;
   scoreImpactPotentialMarks?: number;
+  // Comprehensive Diagnostic Engine Fields
+  fullDiagnosis?: FullTopicDiagnosis;
 }
 
 export interface TimeSinkAlertData {

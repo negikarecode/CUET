@@ -5,13 +5,10 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
-  ArrowRight,
   Play,
   Target,
-  Clock,
   BookOpen,
   Award,
-  Lock,
   Sparkles,
   CheckCircle2,
   Zap,
@@ -32,15 +29,30 @@ import {
   ChevronDown,
   ChevronUp,
   AlertTriangle,
+  X,
+  FileText,
+  Lightbulb,
+  Layers,
+  Activity,
+  Check,
+  ShieldAlert,
 } from "lucide-react";
-import LatexRenderer from "@/components/common/LatexRenderer";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { RepairQuizResponse } from "@/app/api/ai/repair-quiz/route";
-import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData } from "@/types";
+import {
+  TopicMastery,
+  TimeSinkAlertData,
+  SubjectCalibrationData,
+  FullTopicDiagnosis,
+} from "@/types";
 import { normalizeSubject } from "@/lib/analytics";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
+import {
+  generateFullTopicDiagnosis,
+  generateDiagnosticSummaryReport,
+} from "@/lib/diagnostic-engine";
 
 const SUBJECT_ICON_MAP: Record<string, React.ElementType> = {
   Calculator,
@@ -102,328 +114,19 @@ export interface WeaknessRadarInitialData {
   subjectCalibration: Record<string, SubjectCalibrationData>;
 }
 
-function getSeverityBadge(accuracy: number, diagnosisLabel?: string) {
-  if (accuracy < 25) {
-    return {
-      bg: "bg-[#FEE2E2]",
-      text: "text-[#DC2626]",
-      label: diagnosisLabel || "Critical (<25%)",
-      colorName: "red",
-    };
-  } else if (accuracy <= 50) {
-    return {
-      bg: "bg-[#FEF3C7]",
-      text: "text-[#B45309]",
-      label: diagnosisLabel || "Needs Polish (25-50%)",
-      colorName: "amber",
-    };
-  } else if (accuracy < 75) {
-    return {
-      bg: "bg-[#DBEAFE]",
-      text: "text-[#1D4ED8]",
-      label: diagnosisLabel || "Moderate (>50%)",
-      colorName: "blue",
-    };
-  } else {
-    return {
-      bg: "bg-[#D1FAE5]",
-      text: "text-[#065F46]",
-      label: diagnosisLabel || "Mastered (≥75%)",
-      colorName: "green",
-    };
+// Helper to ensure full diagnosis exists on a TopicMastery
+function getOrGenerateDiagnosis(topic: TopicMastery): FullTopicDiagnosis {
+  if (topic.fullDiagnosis) {
+    return topic.fullDiagnosis;
   }
-}
-
-function getPrimaryDistractorTrap(topic: TopicMastery): string {
-  if (
-    topic.diagnosticInsight &&
-    (topic.diagnosticInsight.toLowerCase().includes("trap choices") ||
-      topic.diagnosticInsight.toLowerCase().includes("negative marking") ||
-      topic.diagnosticInsight.toLowerCase().includes("clock drain"))
-  ) {
-    return topic.diagnosticInsight;
-  }
-
-  const primaryTopic = topic.troubleTopics?.[0] || topic.microTopic || topic.chapter;
-
-  if (topic.diagnosisLabel === "Impulsive Trap Exposure") {
-    return `Impulsive Negation Trap: Falling for tempting distractor choices in ${primaryTopic} without verifying 'NOT/INCORRECT' qualifiers.`;
-  }
-  if (topic.diagnosisLabel === "Calculation & Clock Drain") {
-    return `Clock-Drain Trap: Multi-step algebraic dead-ends in ${primaryTopic} exceeding standard 72s NTA pacing. Practice formula shortcuts and dimensional elimination.`;
-  }
-  if (topic.diagnosisLabel === "Critical Conceptual Gap") {
-    return `Conceptual Reversal Trap: Confusing inverse reaction mechanisms, boundary conditions, or core formulas in ${primaryTopic}.`;
-  }
-  if (topic.diagnosisLabel === "Careless / Precision Slip") {
-    return `Precision Slip: Sign reversal or unit conversion slip on the final arithmetic step of ${primaryTopic}.`;
-  }
-  if (topic.diagnosisLabel === "Needs Polish & Consistency") {
-    return `Variant Vulnerability: Sub-optimal accuracy on indirect or multi-concept application questions in ${primaryTopic}.`;
-  }
-  if (topic.status === "mastered" || topic.accuracyPercentage >= 75) {
-    return `Low Vulnerability: High resistance against distractor options in ${primaryTopic} under timed exam conditions.`;
-  }
-
-  return `Distractor Trap: Susceptible to high-frequency wrong answer choices in ${primaryTopic}. Verify question qualifiers before locking.`;
-}
-
-function getTargetNcertReference(topic: TopicMastery): string {
-  if (topic.ncertReference && topic.ncertReference.trim()) {
-    return topic.ncertReference;
-  }
-  return `NCERT Class 12 ${topic.subject} • Chapter: ${topic.chapter}`;
-}
-
-function MicroConceptPills({
-  concepts,
-  label = "Vulnerable Micro-Concepts:",
-}: {
-  concepts: string[];
-  label?: string;
-}) {
-  const [expanded, setExpanded] = useState(false);
-
-  if (!concepts || concepts.length === 0) return null;
-
-  const visibleConcepts = expanded ? concepts : concepts.slice(0, 3);
-  const remainingCount = concepts.length - 3;
-
-  return (
-    <div className="flex items-center gap-1.5 flex-wrap pt-1">
-      <span className="text-[10px] font-black text-black/60 uppercase tracking-wider shrink-0">
-        {label}
-      </span>
-      {visibleConcepts.map((concept, i) => (
-        <span
-          key={i}
-          className="px-2 py-0.5 rounded-md bg-white border border-black text-[10px] font-bold text-black shadow-[1px_1px_0px_0px_#000] inline-flex items-center"
-        >
-          <LatexRenderer content={concept} inline />
-        </span>
-      ))}
-      {remainingCount > 0 && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setExpanded(!expanded);
-          }}
-          className="px-2 py-0.5 rounded-md bg-[#FEF3C7] hover:bg-[#FDE68A] border border-black text-[10px] font-black text-black shadow-[1px_1px_0px_0px_#000] transition-colors cursor-pointer shrink-0"
-          title={expanded ? "Show fewer micro-concepts" : `Show ${remainingCount} more micro-concepts`}
-        >
-          {expanded ? "Show less" : `+${remainingCount} more`}
-        </button>
-      )}
-    </div>
-  );
-}
-
-interface DiagnosticChapterRowProps {
-  topicItem: TopicMastery;
-  isExpanded: boolean;
-  onToggleExpand: () => void;
-  onLaunchRepair: (topic: string, subject: string) => void;
-  isRepairing: boolean;
-}
-
-function DiagnosticChapterRow({
-  topicItem,
-  isExpanded,
-  onToggleExpand,
-  onLaunchRepair,
-  isRepairing,
-}: DiagnosticChapterRowProps) {
-  const severity = getSeverityBadge(
-    topicItem.accuracyPercentage,
-    topicItem.diagnosisLabel
-  );
-  const isPacingCalibrated = topicItem.avgTimeSeconds > 2;
-  const pacingText = isPacingCalibrated
-    ? `${topicItem.avgTimeSeconds}s avg/Q`
-    : "Pacing not calibrated (Mocks rushed)";
-  const drillTargetTopic = topicItem.troubleTopics?.[0] || topicItem.chapter;
-  const distractorTrap = getPrimaryDistractorTrap(topicItem);
-  const ncertRef = getTargetNcertReference(topicItem);
-  const troubleConcepts =
-    topicItem.troubleTopics && topicItem.troubleTopics.length > 0
-      ? topicItem.troubleTopics
-      : [topicItem.microTopic || topicItem.chapter].filter(Boolean);
-
-  return (
-    <div className="bg-white rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:shadow-[4px_4px_0px_0px_#000] transition-all overflow-hidden">
-      {/* 1. Collapsible Compact Row Header */}
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={onToggleExpand}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onToggleExpand();
-          }
-        }}
-        className="p-3.5 sm:p-4 hover:bg-[#FAF7EE] transition-colors cursor-pointer select-none flex flex-col md:flex-row md:items-center justify-between gap-3"
-      >
-        {/* Left: Chapter name, subject tag, severity badge, subtitle */}
-        <div className="min-w-0 flex-1 space-y-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-black text-black text-sm sm:text-base tracking-tight">
-              {topicItem.chapter || topicItem.microTopic}
-            </span>
-            <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-black/5 text-black/70 border border-black/10">
-              {topicItem.subject}
-            </span>
-            <span
-              className={`px-2 py-0.5 rounded text-[9px] font-black uppercase border border-black ${severity.bg} ${severity.text}`}
-            >
-              {severity.label}
-            </span>
-          </div>
-
-          <div className="text-[11px] text-black/60 font-bold flex items-center gap-1.5 flex-wrap">
-            <span>{topicItem.attemptsCount} Qs tested</span>
-            <span>•</span>
-            <span className={!isPacingCalibrated ? "text-amber-700 italic" : ""}>
-              {pacingText}
-            </span>
-            {topicItem.masteryScore !== undefined && (
-              <>
-                <span>•</span>
-                <span>Mastery: {topicItem.masteryScore}/100</span>
-              </>
-            )}
-            {topicItem.timeSinksCount > 0 && (
-              <>
-                <span>•</span>
-                <span className="text-[#DC2626] font-black">
-                  {topicItem.timeSinksCount} time-sink{topicItem.timeSinksCount > 1 ? "s" : ""}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Right: Mini progress bar + percentage, CTA button, expand/collapse chevron */}
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 self-end md:self-center">
-          {/* Mini Accuracy Progress Bar and percentage */}
-          <div className="flex items-center gap-2">
-            <div className="w-14 sm:w-20 h-2 bg-[#FAF7EE] border border-black rounded-full overflow-hidden hidden sm:block">
-              <div
-                className={`h-full rounded-full transition-all ${
-                  topicItem.accuracyPercentage < 25
-                    ? "bg-[#EF4444]"
-                    : topicItem.accuracyPercentage <= 50
-                    ? "bg-[#F59E0B]"
-                    : topicItem.accuracyPercentage < 75
-                    ? "bg-[#3B82F6]"
-                    : "bg-[#10B981]"
-                }`}
-                style={{ width: `${Math.max(5, Math.min(100, topicItem.accuracyPercentage))}%` }}
-              />
-            </div>
-            <span
-              className={`font-mono font-black text-xs sm:text-sm ${
-                topicItem.accuracyPercentage < 25
-                  ? "text-[#DC2626]"
-                  : topicItem.accuracyPercentage <= 50
-                  ? "text-[#D97706]"
-                  : topicItem.accuracyPercentage < 75
-                  ? "text-[#2563EB]"
-                  : "text-[#059669]"
-              }`}
-            >
-              {topicItem.accuracyPercentage}%
-            </span>
-          </div>
-
-          {/* Primary CTA: Fix with 5-Q Drill */}
-          <button
-            type="button"
-            disabled={isRepairing}
-            onClick={(e) => {
-              e.stopPropagation();
-              onLaunchRepair(drillTargetTopic, topicItem.subject);
-            }}
-            className="px-3 py-1.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shrink-0"
-            title={`Launch 5-Question Instant Fix Drill for ${drillTargetTopic}`}
-          >
-            <Play className="w-3 h-3 fill-white" />
-            <span>{isRepairing ? "Building Drill..." : "Fix with 5-Q Drill"}</span>
-          </button>
-
-          {/* Expand/Collapse chevron toggle */}
-          <div
-            className="p-1 rounded-md border border-black bg-white hover:bg-[#FAF7EE] text-black transition-transform"
-            aria-label={isExpanded ? "Collapse chapter details" : "Expand chapter details"}
-          >
-            {isExpanded ? (
-              <ChevronUp className="w-4 h-4 stroke-[2.5]" />
-            ) : (
-              <ChevronDown className="w-4 h-4 stroke-[2.5]" />
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Expanded Detailed Diagnostic Panel */}
-      {isExpanded && (
-        <div className="p-4 pt-3 border-t-2 border-black bg-white space-y-3.5">
-          {/* Detailed Progress Line */}
-          <div className="space-y-1">
-            <div className="flex items-center justify-between text-[11px] font-black text-black">
-              <span>Curriculum Retention Metric</span>
-              <span className="font-mono">{topicItem.accuracyPercentage}% Accuracy</span>
-            </div>
-            <div className="w-full h-2 bg-[#FAF7EE] border border-black rounded-full overflow-hidden">
-              <div
-                className={`h-full rounded-full transition-all ${
-                  topicItem.accuracyPercentage < 25
-                    ? "bg-[#EF4444]"
-                    : topicItem.accuracyPercentage <= 50
-                    ? "bg-[#F59E0B]"
-                    : topicItem.accuracyPercentage < 75
-                    ? "bg-[#3B82F6]"
-                    : "bg-[#10B981]"
-                }`}
-                style={{
-                  width: `${Math.min(100, Math.max(5, topicItem.masteryScore ?? topicItem.accuracyPercentage))}%`,
-                }}
-              />
-            </div>
-          </div>
-
-          {/* High-Signal Remediation Box: Crisp 2-column summary */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3.5 rounded-lg bg-[#FAF7EE] border-2 border-black text-xs shadow-[2px_2px_0px_0px_#000]">
-            <div className="space-y-1">
-              <div className="flex items-center gap-1.5 font-black text-black">
-                <AlertTriangle className="w-3.5 h-3.5 text-[#DC2626]" />
-                <span>Primary Distractor Trap</span>
-              </div>
-              <p className="text-[11px] text-black/80 font-medium leading-relaxed">
-                {distractorTrap}
-              </p>
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex items-center gap-1.5 font-black text-black">
-                <BookOpen className="w-3.5 h-3.5 text-[#2563EB]" />
-                <span>Target NCERT Reference</span>
-              </div>
-              <p className="text-[11px] text-black/90 font-bold leading-relaxed font-mono">
-                {ncertRef}
-              </p>
-            </div>
-          </div>
-
-          {/* Vulnerable Micro-Concepts with Rule of 3 Limiter */}
-          <MicroConceptPills
-            concepts={troubleConcepts}
-            label={topicItem.accuracyPercentage >= 75 ? "Tested Micro-Concepts:" : "Vulnerable Micro-Concepts:"}
-          />
-        </div>
-      )}
-    </div>
+  return generateFullTopicDiagnosis(
+    topic.subject,
+    topic.chapter,
+    topic.microTopic || topic.chapter,
+    topic.attemptsCount,
+    topic.correctCount,
+    topic.incorrectCount,
+    topic.avgTimeSeconds
   );
 }
 
@@ -440,25 +143,24 @@ export default function WeaknessRadarClient({
   const clientAnalytics = useTestStore((state) => state.analytics);
   const testAttempts = useTestStore((state) => state.testAttempts);
 
-  // Subject selector state from URL query or default to "all"
+  // Subject selector & tab state
   const paramSubject = searchParams.get("subject") || "all";
   const [selectedRadarSubject, setSelectedRadarSubject] = useState<string>(paramSubject);
-  const [radarTab, setRadarTab] = useState<"weaknesses" | "strengths" | "all">("weaknesses");
   const [activeRepairTopic, setActiveRepairTopic] = useState<string | null>(null);
   const [expandedChapterKey, setExpandedChapterKey] = useState<string | null>(null);
+  const [selectedModalDiagnosis, setSelectedModalDiagnosis] = useState<FullTopicDiagnosis | null>(null);
 
   const toggleChapterExpand = (key: string) => {
     setExpandedChapterKey((prev) => (prev === key ? null : key));
   };
 
-  // Sync state if URL search param changes
   useEffect(() => {
     if (paramSubject) {
       setSelectedRadarSubject(paramSubject);
     }
   }, [paramSubject]);
 
-  // Attempt recovery on mount: ingests any completed CBT session from localStorage that was missed
+  // Session recovery on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
@@ -472,7 +174,7 @@ export default function WeaknessRadarClient({
     }
   }, []);
 
-  // Client authentication check
+  // Auth check
   useEffect(() => {
     if (isClient) {
       const isAuth = Boolean(
@@ -485,12 +187,10 @@ export default function WeaknessRadarClient({
     }
   }, [isClient, storeUser, initialData, router]);
 
-  // Automatically calibrate Candidate Subjects directly from academic stream
   const activeStream =
-    (storeUser.preferredStream || initialData.user.targetStream || "commerce").toLowerCase();
+    (storeUser.preferredStream || initialData.user.targetStream || "science").toLowerCase();
   const candidateSubjects = getSubjectsForStream(activeStream);
 
-  // Attempt count calculations
   const clientQuestionsAttempted =
     isClient && clientAnalytics ? clientAnalytics.totalQuestionsAttempted || 0 : 0;
   const storeAttemptsSum =
@@ -500,8 +200,11 @@ export default function WeaknessRadarClient({
   const activeClientAttempted = Math.max(clientQuestionsAttempted, storeAttemptsSum);
   const serverAttempted = initialData.totalAttempted || 0;
   const totalAttempted = Math.max(serverAttempted, activeClientAttempted);
+  const completedTestsCount =
+    isClient && clientAnalytics
+      ? clientAnalytics.completedTestsCount || (testAttempts?.length || 1)
+      : 1;
 
-  // Subject Calibration Map
   const subjectCalibrationMap =
     isClient &&
     clientAnalytics?.subjectCalibration &&
@@ -509,13 +212,10 @@ export default function WeaknessRadarClient({
       ? clientAnalytics.subjectCalibration
       : initialData.subjectCalibration || {};
 
-  // Build subject calibrations specifically for candidate subjects
   const candidateSubjectCalibrations: SubjectCalibrationData[] = candidateSubjects.map((subName) => {
     const info = normalizeSubject(subName);
     const existing = subjectCalibrationMap[info.key];
-    if (existing) {
-      return existing;
-    }
+    if (existing) return existing;
     return {
       subject: info.name,
       subjectKey: info.key,
@@ -533,20 +233,6 @@ export default function WeaknessRadarClient({
     };
   });
 
-  // Active Subject details
-  const activeSubjectCal =
-    selectedRadarSubject !== "all" ? subjectCalibrationMap[selectedRadarSubject] : null;
-
-  // Calibration gate status
-  const isSubjectUnlocked = activeSubjectCal ? activeSubjectCal.isUnlocked : totalAttempted >= 150;
-  const attemptsToUnlock = activeSubjectCal
-    ? activeSubjectCal.attemptsToUnlock
-    : Math.max(0, 150 - totalAttempted);
-  const unlockProgress = activeSubjectCal
-    ? activeSubjectCal.unlockProgress
-    : Math.min(100, Math.round((totalAttempted / 150) * 100));
-
-  // Analytics sources
   const rawWeaknessRadar =
     isClient && clientAnalytics && clientAnalytics.weaknessRadar.length > 0
       ? clientAnalytics.weaknessRadar
@@ -557,16 +243,8 @@ export default function WeaknessRadarClient({
       ? clientAnalytics.strengthList
       : initialData.strengthList && initialData.strengthList.length > 0
       ? initialData.strengthList
-      : initialData.weaknessRadar.filter(
-          (t) => t.status === "mastered" || t.accuracyPercentage >= 75
-        );
+      : initialData.weaknessRadar.filter((t) => t.status === "mastered" || t.accuracyPercentage >= 75);
 
-  const rawTimeSinkAlerts =
-    isClient && clientAnalytics && clientAnalytics.timeSinkAlerts.length > 0
-      ? clientAnalytics.timeSinkAlerts
-      : initialData.timeSinkAlerts;
-
-  // Filtered by selected subject
   const weaknessRadar =
     selectedRadarSubject === "all"
       ? rawWeaknessRadar
@@ -577,32 +255,12 @@ export default function WeaknessRadarClient({
       ? rawStrengthList
       : rawStrengthList.filter((t) => normalizeSubject(t.subject).key === selectedRadarSubject);
 
-  const timeSinkAlerts =
-    selectedRadarSubject === "all"
-      ? rawTimeSinkAlerts
-      : rawTimeSinkAlerts.filter(
-          (t) =>
-            normalizeSubject(t.chapter || t.topic).key === selectedRadarSubject ||
-            (activeSubjectCal &&
-              (t.topic?.toLowerCase().includes(activeSubjectCal.subject.toLowerCase()) ||
-                t.chapter?.toLowerCase().includes(activeSubjectCal.subject.toLowerCase())))
-        );
+  // Generate all topic diagnoses
+  const allDiagnoses: FullTopicDiagnosis[] = [...weaknessRadar, ...strengthList].map(getOrGenerateDiagnosis);
+  const summaryReport = generateDiagnosticSummaryReport(allDiagnoses, totalAttempted, completedTestsCount);
 
-  const weakTopics = weaknessRadar.filter(
-    (t) => (t.status === "critical" || t.status === "polish") && t.accuracyPercentage < 75
-  );
-  const strengthListFiltered = strengthList.filter(
-    (t) =>
-      (t.status === "mastered" || t.accuracyPercentage >= 75) &&
-      !weakTopics.some((w) => w.chapter === t.chapter && w.subject === t.subject)
-  );
-  const allTestedChapters = [...weakTopics, ...strengthListFiltered];
-  const strengthsCount = strengthListFiltered.length;
-  const weakCount = weakTopics.length;
-  const testedChaptersCount = weakCount + strengthsCount;
-
-  // Handle launching the 5-Question Instant AI Repair Drill
-  const handleLaunchInstantRepair = async (topic: string, subject: string) => {
+  // Launch targeted practice drill
+  const handleLaunchTargetedPractice = async (topic: string, subject: string, practiceType?: string) => {
     setActiveRepairTopic(topic);
     try {
       const res = await fetch("/api/ai/repair-quiz", {
@@ -612,6 +270,7 @@ export default function WeaknessRadarClient({
           userId: initialData.user.id,
           weakMicroTopics: [topic],
           subject,
+          practiceType,
         }),
       });
 
@@ -626,42 +285,42 @@ export default function WeaknessRadarClient({
           title: quizData.title,
           subject: quizData.subject,
           code: quizData.code,
-          totalQuestions: 5,
-          durationMinutes: 8,
+          totalQuestions: quizData.totalQuestions || 5,
+          durationMinutes: quizData.durationMinutes || 8,
         },
         quizData.questions
       );
 
       router.push(`/test/${quizData.testId}`);
     } catch (err) {
-      console.error("Instant repair launch failed:", err);
-      alert("Unable to generate repair drill. Please retry.");
+      console.error("Targeted practice launch failed:", err);
+      alert("Unable to generate targeted practice drill. Please retry.");
       setActiveRepairTopic(null);
     }
   };
 
   return (
     <div className="space-y-6">
-      {/* 1. TOP HEADER & BREADCRUMBS */}
+      {/* 1. TOP HEADER & NAVIGATION */}
       <div className="bg-white rounded-xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Link
               href="/dashboard"
               className="p-1 rounded-lg border border-black bg-[#FAF7EE] hover:bg-white text-black transition-all"
-              title="Return to Command Hub"
+              title="Return to Dashboard"
             >
               <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
             </Link>
             <h1 className="text-xl sm:text-2xl font-black text-black tracking-tight flex items-center gap-2">
-              <span>Subject Weakness Radar</span>
+              <span>Diagnostic & Remediation Engine</span>
               <span className="px-2 py-0.5 rounded bg-[#FEF3C7] border border-black text-[10px] font-black uppercase">
-                AI Diagnostic Engine
+                Weakness Radar
               </span>
             </h1>
           </div>
           <p className="text-xs text-black/70 font-semibold pl-7">
-            Identify fatal distractor traps, clock-drain calculations, and NCERT-backed micro-topic weaknesses across your selected domains.
+            Root-cause analysis, error taxonomy, exam tactics, and adaptive remediation plans for your CUET domain subjects.
           </p>
         </div>
 
@@ -671,12 +330,70 @@ export default function WeaknessRadarClient({
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
           >
             <Play className="w-3 h-3 fill-white" />
-            <span>Practice Full CBT Mock</span>
+            <span>Take Full CBT Mock</span>
           </Link>
         </div>
       </div>
 
-      {/* 2. CANDIDATE SUBJECT SELECTOR PILLS */}
+      {/* 2. REAL DIAGNOSTIC SUMMARY DASHBOARD REPORT (SECTIONS 18 & 25) */}
+      <div className="bg-white rounded-xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] space-y-4">
+        <div className="flex items-center justify-between border-b-2 border-black/10 pb-3">
+          <div className="flex items-center gap-2">
+            <Activity className="w-5 h-5 text-[#FF5C5C]" />
+            <h2 className="text-base sm:text-lg font-black text-black tracking-tight">
+              YOUR CURRENT DIAGNOSTIC SUMMARY
+            </h2>
+          </div>
+          <span className="text-[11px] font-black uppercase text-black/60 font-mono">
+            {totalAttempted} Questions Analyzed Across {completedTestsCount} Mock{completedTestsCount === 1 ? "" : "s"}
+          </span>
+        </div>
+
+        {/* 4 Metric Summary Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="p-3.5 rounded-lg bg-[#FAF7EE] border-2 border-black shadow-[2px_2px_0px_0px_#000] space-y-1">
+            <span className="text-[10px] font-black text-black/60 uppercase tracking-wider">Overall Accuracy</span>
+            <p className="text-2xl font-black text-black font-mono">{summaryReport.overallAccuracy}%</p>
+            <p className="text-[10px] text-black/70 font-semibold">{totalAttempted} Total Attempts</p>
+          </div>
+
+          <div className="p-3.5 rounded-lg bg-[#F0FDF4] border-2 border-black shadow-[2px_2px_0px_0px_#000] space-y-1">
+            <span className="text-[10px] font-black text-[#15803D] uppercase tracking-wider">Strongest Domain</span>
+            <p className="text-sm font-black text-black truncate">
+              {summaryReport.strongestArea ? summaryReport.strongestArea.topic : "Pending Calibration"}
+            </p>
+            <p className="text-[10px] text-black/70 font-semibold">
+              {summaryReport.strongestArea ? `${summaryReport.strongestArea.accuracy}% accuracy` : "Requires more attempts"}
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-lg bg-[#FEF2F2] border-2 border-black shadow-[2px_2px_0px_0px_#000] space-y-1">
+            <span className="text-[10px] font-black text-[#DC2626] uppercase tracking-wider">Primary Weakness</span>
+            <p className="text-sm font-black text-black truncate">
+              {summaryReport.biggestWeakness ? summaryReport.biggestWeakness.topic : "None Detected"}
+            </p>
+            <p className="text-[10px] text-black/70 font-semibold">
+              {summaryReport.biggestWeakness ? `${summaryReport.biggestWeakness.accuracy}% accuracy` : "Maintain practice pace"}
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-lg bg-[#FEF3C7] border-2 border-black shadow-[2px_2px_0px_0px_#000] space-y-1">
+            <span className="text-[10px] font-black text-[#B45309] uppercase tracking-wider">Pacing Alert</span>
+            <p className="text-xs font-black text-black line-clamp-2">{summaryReport.pacingIssue}</p>
+          </div>
+        </div>
+
+        {/* Priority Action Highlight */}
+        <div className="p-3.5 rounded-lg bg-[#FFFBEB] border-2 border-black text-xs shadow-[2px_2px_0px_0px_#000] flex items-start gap-2.5">
+          <ShieldAlert className="w-4 h-4 text-[#D97706] shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <span className="font-black text-black uppercase tracking-wider text-[11px]">Priority Action Before Next Mock:</span>
+            <p className="text-black/90 font-bold">{summaryReport.priorityAction}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. FILTER BY DOMAIN SUBJECT */}
       <div className="bg-white rounded-xl border-2 border-black p-4 shadow-[4px_4px_0px_0px_#000] space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
@@ -684,7 +401,7 @@ export default function WeaknessRadarClient({
             <span>Filter By Domain Subject</span>
           </span>
           <span className="text-[11px] font-bold text-black/60 capitalize">
-            {activeStream} Stream ({candidateSubjects.length} Calibrated Domains)
+            {activeStream} Stream ({candidateSubjects.length} Domains)
           </span>
         </div>
 
@@ -702,7 +419,7 @@ export default function WeaknessRadarClient({
             }`}
           >
             <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
-            <span>All Stream Domains ({totalAttempted} Qs)</span>
+            <span>All Domains ({totalAttempted} Qs)</span>
           </button>
 
           {candidateSubjectCalibrations.map((sub) => {
@@ -728,7 +445,7 @@ export default function WeaknessRadarClient({
                     isSelected ? "bg-white text-black" : "bg-[#FEF3C7] text-black"
                   }`}
                 >
-                  {sub.totalAttempted}/150
+                  {sub.totalAttempted} Qs
                 </span>
               </button>
             );
@@ -736,333 +453,456 @@ export default function WeaknessRadarClient({
         </div>
       </div>
 
-      {/* 3. CALIBRATION GATE METER FOR CURRENT SELECTION */}
-      {!isSubjectUnlocked ? (
-        <div className="p-4 rounded-xl border-2 border-black bg-[#FFFBEB] shadow-[3px_3px_0px_0px_#000] space-y-2">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-lg bg-black text-white shrink-0 shadow-[1px_1px_0px_0px_#000]">
-                <Lock className="w-4 h-4 text-[#F59E0B]" />
-              </div>
-              <div>
-                <p className="text-xs sm:text-sm font-black text-black flex items-center gap-2">
-                  <span>
-                    {activeSubjectCal
-                      ? `${activeSubjectCal.subject} Calibration Gate: ${activeSubjectCal.totalAttempted}/150 Questions`
-                      : `Overall AI Mentor Calibration: ${totalAttempted}/150 Questions`}
-                  </span>
-                  <span className="px-2 py-0.2 rounded bg-amber-200 border border-black text-[9px] font-black uppercase">
-                    Statistical Gate
-                  </span>
-                </p>
-                <p className="text-[11px] text-black/70 font-medium mt-0.5">
-                  Complete {attemptsToUnlock} more question{attemptsToUnlock === 1 ? "" : "s"} in {activeSubjectCal ? activeSubjectCal.subject : "domain"} CBT mocks to eliminate false positives and unlock personalized trap diagnostics.
-                </p>
-              </div>
-            </div>
-            <span className="px-2.5 py-1 rounded bg-black text-white text-xs font-mono font-black shrink-0 self-start sm:self-auto shadow-[1px_1px_0px_0px_#000]">
-              {unlockProgress}% Calibrated
+      {/* 4. DIAGNOSTIC WEAKNESS CARDS */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-black text-black tracking-tight flex items-center gap-2">
+            <span>Diagnosed Weak Areas</span>
+            <span className="px-2 py-0.5 rounded bg-[#FEF2F2] text-[#DC2626] border border-black text-xs font-black font-mono">
+              {weaknessRadar.length} Topic{weaknessRadar.length === 1 ? "" : "s"}
             </span>
-          </div>
-          <div className="w-full h-2.5 bg-white border-2 border-black rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-[#F59E0B] to-[#10B981] rounded-full transition-all duration-500"
-              style={{ width: `${Math.max(3, unlockProgress)}%` }}
-            />
-          </div>
+          </h2>
         </div>
-      ) : (
-        <div className="p-3.5 rounded-xl border-2 border-black bg-[#ECFDF5] shadow-[3px_3px_0px_0px_#000] flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1 rounded-md bg-[#10B981] border border-black text-white shadow-[1px_1px_0px_0px_#000]">
-              <CheckCircle2 className="w-4 h-4 text-black stroke-[2.5]" />
-            </div>
-            <div>
-              <p className="text-xs sm:text-sm font-black text-black">
-                {activeSubjectCal
-                  ? `${activeSubjectCal.subject} Intelligence Engine Active`
-                  : "AI Diagnostic Engine Active Across All Domains"}
-              </p>
-              <p className="text-[10px] text-black/70 font-semibold">
-                Baseline calibrated with high sample statistical significance. Real-time distractor analysis active.
+
+        {weaknessRadar.length === 0 ? (
+          <div className="p-8 rounded-xl border-2 border-black bg-white shadow-[4px_4px_0px_0px_#000] text-center space-y-3">
+            <CheckCircle2 className="w-10 h-10 text-[#16A34A] mx-auto stroke-[2.5]" />
+            <div className="space-y-1">
+              <p className="text-base font-black text-black">No Critical Weaknesses Detected</p>
+              <p className="text-xs text-black/70 font-semibold max-w-md mx-auto">
+                Your performance across tested questions is solid. Continue solving full CBT mocks to unlock deeper micro-topic analysis as sample size grows.
               </p>
             </div>
+            <Link
+              href="/dashboard/mocks"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-black text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all"
+            >
+              <span>Attempt Full Practice Mock</span>
+            </Link>
           </div>
-          <span className="px-2.5 py-1 rounded bg-[#10B981] text-black text-[10px] font-black uppercase border border-black shadow-[1px_1px_0px_0px_#000] shrink-0 flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-black fill-black" />
-            AI Calibrated
+        ) : (
+          weaknessRadar.map((topicItem) => {
+            const diag = getOrGenerateDiagnosis(topicItem);
+            const isExpanded = expandedChapterKey === topicItem.chapter;
+            const isRepairing = activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter);
+
+            return (
+              <div
+                key={topicItem.chapter}
+                className="bg-white rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_#000] overflow-hidden transition-all"
+              >
+                {/* Topic Card Header */}
+                <div className="p-4 sm:p-5 border-b-2 border-black space-y-3">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-black text-black text-base sm:text-lg tracking-tight">
+                          {diag.chapter}
+                        </span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-black/5 text-black/70 border border-black/10">
+                          {diag.subject}
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded text-[10px] font-black uppercase border border-black ${
+                            diag.observedPerformance.accuracyPercentage < 35
+                              ? "bg-[#FEF2F2] text-[#DC2626]"
+                              : diag.observedPerformance.accuracyPercentage < 60
+                              ? "bg-[#FEF3C7] text-[#B45309]"
+                              : "bg-[#DBEAFE] text-[#1D4ED8]"
+                          }`}
+                        >
+                          {diag.evidenceThresholdLabel} ({diag.observedPerformance.accuracyPercentage}%)
+                        </span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-[#FAF7EE] text-black border border-black">
+                          {diag.observedPerformance.speedVsAccuracyState}
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-black/80 font-bold">
+                        Evidence: {diag.observedPerformance.attemptsCount} attempted · {diag.observedPerformance.incorrectCount} incorrect · Avg time {diag.observedPerformance.avgTimeSeconds}s (Target ≤{diag.observedPerformance.targetTimeSeconds}s)
+                      </p>
+                    </div>
+
+                    {/* CTAs */}
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedModalDiagnosis(diag)}
+                        className="px-3 py-1.5 rounded-lg bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all cursor-pointer flex items-center gap-1.5"
+                      >
+                        <FileText className="w-3.5 h-3.5" />
+                        <span>View Full Diagnosis</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={isRepairing}
+                        onClick={() =>
+                          handleLaunchTargetedPractice(
+                            topicItem.troubleTopics?.[0] || topicItem.chapter,
+                            topicItem.subject,
+                            diag.recommendedPracticeType
+                          )
+                        }
+                        className="px-3.5 py-1.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                      >
+                        <Play className="w-3 h-3 fill-white" />
+                        <span>{isRepairing ? "Building Drill..." : "Start Targeted Practice"}</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => toggleChapterExpand(topicItem.chapter)}
+                        className="p-1.5 rounded-lg border-2 border-black bg-[#FAF7EE] hover:bg-white text-black transition-colors"
+                        aria-label={isExpanded ? "Collapse card" : "Expand card"}
+                      >
+                        {isExpanded ? <ChevronUp className="w-4 h-4 stroke-[2.5]" /> : <ChevronDown className="w-4 h-4 stroke-[2.5]" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Primary Issue Summary */}
+                  <div className="p-3 rounded-lg bg-[#FAF7EE] border-2 border-black text-xs space-y-1">
+                    <span className="font-black text-black uppercase tracking-wider text-[10px] text-[#DC2626] block">
+                      PRIMARY DIAGNOSED ISSUE:
+                    </span>
+                    <p className="text-black/90 font-bold">{diag.specificWeakness}</p>
+                  </div>
+                </div>
+
+                {/* Collapsible / Expandable Details */}
+                {isExpanded && (
+                  <div className="p-5 bg-white space-y-5">
+                    {/* SECTION: WHY YOU'RE LOSING MARKS (SECTION 7) */}
+                    <div className="space-y-2">
+                      <h3 className="text-xs font-black text-black uppercase tracking-wider flex items-center gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5 text-[#DC2626]" />
+                        <span>WHY YOU'RE LOSING MARKS</span>
+                      </h3>
+
+                      {diag.errorTaxonomy.percentages ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                          {Object.entries(diag.errorTaxonomy.percentages)
+                            .filter(([_, pct]) => pct > 0)
+                            .map(([cat, pct]) => (
+                              <div key={cat} className="p-2.5 rounded-lg bg-[#FAF7EE] border border-black text-center space-y-0.5">
+                                <span className="text-[10px] font-bold text-black/70 block truncate">{cat}</span>
+                                <span className="text-base font-black text-black font-mono">{pct}%</span>
+                              </div>
+                            ))}
+                        </div>
+                      ) : (
+                        <div className="p-3 rounded-lg bg-[#FAF7EE] border border-black text-xs space-y-1">
+                          <span className="font-bold text-black/80 block">Error Distribution (Counts from {diag.errorTaxonomy.totalErrors} total errors):</span>
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {diag.errorTaxonomy.conceptualGapCount > 0 && (
+                              <span className="px-2 py-1 bg-white border border-black rounded text-[11px] font-bold">
+                                Conceptual: {diag.errorTaxonomy.conceptualGapCount} error{diag.errorTaxonomy.conceptualGapCount > 1 ? "s" : ""}
+                              </span>
+                            )}
+                            {diag.errorTaxonomy.applicationGapCount > 0 && (
+                              <span className="px-2 py-1 bg-white border border-black rounded text-[11px] font-bold">
+                                Application: {diag.errorTaxonomy.applicationGapCount} error{diag.errorTaxonomy.applicationGapCount > 1 ? "s" : ""}
+                              </span>
+                            )}
+                            {diag.errorTaxonomy.calculationCount > 0 && (
+                              <span className="px-2 py-1 bg-white border border-black rounded text-[11px] font-bold">
+                                Calculation: {diag.errorTaxonomy.calculationCount} error{diag.errorTaxonomy.calculationCount > 1 ? "s" : ""}
+                              </span>
+                            )}
+                            {diag.errorTaxonomy.distractorTrapCount > 0 && (
+                              <span className="px-2 py-1 bg-white border border-black rounded text-[11px] font-bold">
+                                Distractor Trap: {diag.errorTaxonomy.distractorTrapCount} error{diag.errorTaxonomy.distractorTrapCount > 1 ? "s" : ""}
+                              </span>
+                            )}
+                            {diag.errorTaxonomy.questionInterpretationCount > 0 && (
+                              <span className="px-2 py-1 bg-white border border-black rounded text-[11px] font-bold">
+                                Interpretation: {diag.errorTaxonomy.questionInterpretationCount} error{diag.errorTaxonomy.questionInterpretationCount > 1 ? "s" : ""}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* SECTION: EXACT SUBTOPICS (SECTION 8) */}
+                    <div className="space-y-2">
+                      <h3 className="text-xs font-black text-black uppercase tracking-wider flex items-center gap-1.5">
+                        <Layers className="w-3.5 h-3.5 text-[#2563EB]" />
+                        <span>WEAK SUBTOPICS BREAKDOWN</span>
+                      </h3>
+
+                      <div className="space-y-1.5">
+                        {diag.weakSubtopics.map((sub, idx) => (
+                          <div key={idx} className="p-2.5 rounded-lg border border-black bg-white flex items-center justify-between text-xs gap-2">
+                            <div className="min-w-0 flex-1">
+                              <span className="font-bold text-black block truncate">{sub.name}</span>
+                              <span className="text-[10px] text-black/60 font-semibold">{sub.errorPattern}</span>
+                            </div>
+
+                            <div className="flex items-center gap-2 shrink-0 font-mono">
+                              <span
+                                className={`px-2 py-0.5 rounded text-[10px] font-black uppercase border border-black ${
+                                  sub.status === "Critical"
+                                    ? "bg-[#FEF2F2] text-[#DC2626]"
+                                    : sub.status === "Moderate"
+                                    ? "bg-[#FEF3C7] text-[#B45309]"
+                                    : "bg-[#DCFCE7] text-[#16A34A]"
+                                }`}
+                              >
+                                {sub.status}
+                              </span>
+                              <span className="font-black text-black text-xs">{sub.accuracyPercentage}%</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* SECTION: HOW TO FIX THIS (SECTION 9) */}
+                    <div className="p-4 rounded-xl border-2 border-black bg-[#FAF7EE] space-y-3">
+                      <h3 className="text-xs font-black text-black uppercase tracking-wider flex items-center gap-1.5">
+                        <Lightbulb className="w-3.5 h-3.5 text-[#F59E0B]" />
+                        <span>HOW TO FIX THIS</span>
+                      </h3>
+
+                      <div className="space-y-2 text-xs">
+                        <div className="space-y-1">
+                          <span className="font-black text-black uppercase text-[10px] block">{diag.remediationPlan.step1Rebuild.title}:</span>
+                          <ul className="list-disc pl-4 space-y-0.5 text-black/80 font-semibold">
+                            {diag.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => (
+                              <li key={i}>{t}</li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div className="space-y-1">
+                          <span className="font-black text-black uppercase text-[10px] block">{diag.remediationPlan.step2DecisionFramework.title}:</span>
+                          <ol className="list-decimal pl-4 space-y-0.5 text-black/80 font-semibold">
+                            {diag.remediationPlan.step2DecisionFramework.checklist.map((c, i) => (
+                              <li key={i}>{c}</li>
+                            ))}
+                          </ol>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* EXAM TACTIC & TRAP (SECTIONS 10 & 11) */}
+                    {diag.examTactic && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                        <div className="p-3.5 rounded-lg border-2 border-black bg-[#EFF6FF] space-y-1.5 shadow-[2px_2px_0px_0px_#000]">
+                          <span className="font-black text-[#1D4ED8] uppercase text-[10px] block flex items-center gap-1">
+                            <Zap className="w-3 h-3 fill-[#1D4ED8]" />
+                            EXAM TACTIC / SHORTCUT
+                          </span>
+                          <p className="font-bold text-black">QUICK METHOD: {diag.examTactic.quickMethod}</p>
+                          <p className="text-[10px] text-[#DC2626] font-bold">CAUTION: {diag.examTactic.caution}</p>
+                        </div>
+
+                        <div className="p-3.5 rounded-lg border-2 border-black bg-[#FEF2F2] space-y-1.5 shadow-[2px_2px_0px_0px_#000]">
+                          <span className="font-black text-[#DC2626] uppercase text-[10px] block flex items-center gap-1">
+                            <AlertTriangle className="w-3 h-3 fill-[#DC2626]" />
+                            COMMON EXAM TRAP
+                          </span>
+                          <p className="font-semibold text-black/90 leading-relaxed">{diag.commonTrap}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* 5. STRENGTHS SECTION ("WHAT YOU'RE GOOD AT") (SECTION 19) */}
+      <div className="bg-white rounded-xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] space-y-4">
+        <div className="flex items-center justify-between border-b-2 border-black/10 pb-3">
+          <div className="flex items-center gap-2">
+            <Award className="w-5 h-5 text-[#16A34A]" />
+            <h2 className="text-base sm:text-lg font-black text-black tracking-tight">
+              WHAT YOU'RE GOOD AT (CORE STRENGTHS)
+            </h2>
+          </div>
+          <span className="text-[11px] font-black uppercase text-[#16A34A] font-mono">
+            {strengthList.length} Mastered Topic{strengthList.length === 1 ? "" : "s"}
           </span>
         </div>
-      )}
 
-      {/* 4. MAIN RADAR WORKSPACE */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Topic Mastery Radar (8 Cols) */}
-        <div className="lg:col-span-8 space-y-4">
-          <div className="bg-white rounded-xl border-2 border-black p-5 shadow-[4px_4px_0px_0px_#000] space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b-2 border-black">
-              <div>
-                <h2 className="text-base font-black text-black tracking-tight flex items-center gap-2">
-                  <span>Diagnostic Topic Radar</span>
-                  {selectedRadarSubject !== "all" && (
-                    <span className="px-2 py-0.5 rounded bg-[#FEF3C7] border border-black text-[10px] font-black">
-                      {activeSubjectCal?.subject || selectedRadarSubject}
-                    </span>
-                  )}
-                </h2>
-                <p className="text-xs text-black/60 font-medium">
-                  Micro-topic accuracy, clock drains, and distractor trap exposure
+        {strengthList.length === 0 ? (
+          <p className="text-xs text-black/60 font-semibold italic">
+            Complete more question attempts to establish verified core strengths (≥75% accuracy threshold).
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {strengthList.map((st) => (
+              <div key={st.chapter} className="p-3.5 rounded-lg border-2 border-black bg-[#F0FDF4] space-y-1 shadow-[2px_2px_0px_0px_#000]">
+                <div className="flex items-center justify-between">
+                  <span className="font-black text-black text-xs sm:text-sm">{st.chapter}</span>
+                  <span className="font-mono font-black text-xs text-[#16A34A]">{st.accuracyPercentage}%</span>
+                </div>
+                <p className="text-[11px] text-black/70 font-semibold">
+                  Tested across {st.attemptsCount} questions · Avg speed {st.avgTimeSeconds}s/Q.
                 </p>
+                <div className="pt-1 flex items-center gap-1.5 text-[10px] font-bold text-[#15803D]">
+                  <Check className="w-3 h-3 stroke-[3]" />
+                  <span>Maintain with 5–10 mixed practice questions per week.</span>
+                </div>
               </div>
-
-              {/* View Tabs */}
-              <div className="flex items-center gap-1 p-0.5 bg-[#FAF7EE] rounded-lg border border-black text-[11px] font-black self-start sm:self-auto">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setRadarTab("weaknesses");
-                    setExpandedChapterKey(null);
-                  }}
-                  className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
-                    radarTab === "weaknesses"
-                      ? "bg-[#FF5C5C] text-white shadow-[1px_1px_0px_0px_#000]"
-                      : "text-black/70 hover:text-black"
-                  }`}
-                >
-                  <span>Weak Areas</span>
-                  <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-black text-white">
-                    {weakCount}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setRadarTab("strengths");
-                    setExpandedChapterKey(null);
-                  }}
-                  className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
-                    radarTab === "strengths"
-                      ? "bg-[#10B981] text-white shadow-[1px_1px_0px_0px_#000]"
-                      : "text-black/70 hover:text-black"
-                  }`}
-                >
-                  <span>Strengths</span>
-                  <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-black text-white">
-                    {strengthsCount}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setRadarTab("all");
-                    setExpandedChapterKey(null);
-                  }}
-                  className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
-                    radarTab === "all"
-                      ? "bg-black text-white shadow-[1px_1px_0px_0px_#000]"
-                      : "text-black/70 hover:text-black"
-                  }`}
-                >
-                  <span>Chapters Tested</span>
-                  <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-black/20 text-black">
-                    {testedChaptersCount}
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            {/* List Content */}
-            {!isSubjectUnlocked ? (
-              <div className="py-12 px-6 text-center rounded-xl bg-[#FAF7EE] border-2 border-dashed border-black/30 space-y-3">
-                <div className="w-12 h-12 rounded-xl bg-white border-2 border-black mx-auto flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
-                  <Lock className="w-6 h-6 text-[#F59E0B]" />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-sm font-black text-black">
-                    Diagnostic Radar Calibrating ({activeSubjectCal ? activeSubjectCal.totalAttempted : totalAttempted}/150 Questions)
-                  </h3>
-                  <p className="text-xs text-black/70 max-w-md mx-auto leading-relaxed">
-                    NTA CBT preparation requires at least 150 questions evaluated per subject to reliably classify your errors into concept gaps vs. calculation traps.
-                  </p>
-                </div>
-                <Link
-                  href={activeSubjectCal ? activeSubjectCal.mockUrl : "/dashboard/mocks"}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000]"
-                >
-                  <Play className="w-3.5 h-3.5 fill-white" />
-                  <span>
-                    {activeSubjectCal ? `Practice ${activeSubjectCal.subject} CBT Mock` : "Start Full CBT Mock"}
-                  </span>
-                </Link>
-              </div>
-            ) : testedChaptersCount === 0 ? (
-              <div className="py-12 px-6 text-center rounded-xl bg-[#FAF7EE] border-2 border-dashed border-black/30 space-y-3">
-                <div className="w-12 h-12 rounded-xl bg-white border-2 border-black mx-auto flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
-                  <Target className="w-6 h-6 text-[#FF5C5C]" />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-sm font-black text-black">No Diagnostic Attempts Recorded</h3>
-                  <p className="text-xs text-black/70 max-w-md mx-auto leading-relaxed">
-                    Complete your first 50-question mock test to calibrate your Weakness Radar, Accuracy, and Strengths for this domain.
-                  </p>
-                </div>
-                <Link
-                  href="/dashboard/mocks"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000]"
-                >
-                  <span>Launch Baseline Mock</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            ) : radarTab === "weaknesses" ? (
-              weakTopics.length === 0 ? (
-                <div className="py-8 px-6 text-center rounded-xl bg-[#D1FAE5] border-2 border-black text-xs font-bold text-[#065F46] space-y-1.5 shadow-[2px_2px_0px_0px_#000]">
-                  <CheckCircle2 className="w-7 h-7 text-[#059669] mx-auto stroke-[2.5]" />
-                  <p className="font-black text-base text-black">Zero Critical Weaknesses Detected!</p>
-                  <p className="text-xs text-black/70 max-w-md mx-auto">
-                    You have demonstrated high accuracy and stable time management across all tested chapters in this domain.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {weakTopics.map((topicItem, idx) => {
-                    const key = `weak-${topicItem.subject}-${topicItem.chapter}-${idx}`;
-                    return (
-                      <DiagnosticChapterRow
-                        key={key}
-                        topicItem={topicItem}
-                        isExpanded={expandedChapterKey === key}
-                        onToggleExpand={() => toggleChapterExpand(key)}
-                        onLaunchRepair={handleLaunchInstantRepair}
-                        isRepairing={activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter)}
-                      />
-                    );
-                  })}
-                </div>
-              )
-            ) : radarTab === "strengths" ? (
-              strengthsCount === 0 ? (
-                <div className="py-8 px-6 text-center rounded-xl bg-[#FAF7EE] border-2 border-dashed border-black/30 text-xs font-bold text-black/70 space-y-2">
-                  <Award className="w-8 h-8 text-[#F59E0B] mx-auto" />
-                  <p className="font-black text-base text-black">No Core Strengths Established Yet</p>
-                  <p className="text-xs text-black/70 max-w-md mx-auto">
-                    Achieve &ge;75% accuracy with consistent question pacing across curriculum chapters to establish verified strongholds.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {strengthListFiltered.map((topicItem, idx) => {
-                    const key = `strength-${topicItem.subject}-${topicItem.chapter}-${idx}`;
-                    return (
-                      <DiagnosticChapterRow
-                        key={key}
-                        topicItem={topicItem}
-                        isExpanded={expandedChapterKey === key}
-                        onToggleExpand={() => toggleChapterExpand(key)}
-                        onLaunchRepair={handleLaunchInstantRepair}
-                        isRepairing={activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter)}
-                      />
-                    );
-                  })}
-                </div>
-              )
-            ) : (
-              <div className="space-y-3">
-                {allTestedChapters.map((topicItem, idx) => {
-                  const key = `all-${topicItem.subject}-${topicItem.chapter}-${idx}`;
-                  return (
-                    <DiagnosticChapterRow
-                      key={key}
-                      topicItem={topicItem}
-                      isExpanded={expandedChapterKey === key}
-                      onToggleExpand={() => toggleChapterExpand(key)}
-                      onLaunchRepair={handleLaunchInstantRepair}
-                      isRepairing={activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter)}
-                    />
-                  );
-                })}
-              </div>
-            )}
+            ))}
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* Right Column: Time Sinks & Exam Tactics (4 Cols) */}
-        <div className="lg:col-span-4 space-y-4">
-          {/* Time Sinks Card */}
-          <div className="bg-white rounded-xl border-2 border-black p-5 shadow-[4px_4px_0px_0px_#000] space-y-3">
-            <div className="flex items-center justify-between pb-3 border-b-2 border-black">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#DC2626] stroke-[2.5]" />
-                <h3 className="font-black text-sm text-black">
-                  Pacing &gt;72s Time Sinks
-                </h3>
+      {/* 6. FULL TOPIC DIAGNOSIS MODAL (SECTION 20) */}
+      {selectedModalDiagnosis && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl border-4 border-black max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-6 shadow-[8px_8px_0px_0px_#000]">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between border-b-2 border-black pb-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h2 className="text-xl font-black text-black tracking-tight">{selectedModalDiagnosis.chapter}</h2>
+                  <span className="px-2 py-0.5 rounded bg-black text-white text-[10px] font-black uppercase">
+                    {selectedModalDiagnosis.subject}
+                  </span>
+                </div>
+                <p className="text-xs text-black/70 font-mono font-bold">{selectedModalDiagnosis.ncertReference}</p>
               </div>
-              <span className="px-2 py-0.5 rounded-full bg-[#FEE2E2] border border-black text-[9px] font-black text-[#DC2626]">
-                Exam Lethal
-              </span>
-            </div>
 
-            {timeSinkAlerts.length === 0 ? (
-              <div className="p-4 rounded-lg bg-[#FAF7EE] border border-black text-center space-y-1">
-                <CheckCircle2 className="w-5 h-5 text-[#059669] mx-auto" />
-                <p className="text-xs font-black text-black">Zero Fatal Time Sinks</p>
-                <p className="text-[11px] text-black/60">
-                  You are keeping pace within the 72-second NTA question threshold.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {timeSinkAlerts.map((alert, i) => (
-                  <div
-                    key={i}
-                    className="p-3 rounded-lg border-2 border-black bg-[#FFFBEB] space-y-1.5 shadow-[2px_2px_0px_0px_#000]"
-                  >
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-black text-black truncate">{alert.topic}</span>
-                      <span className="font-mono font-black text-[#DC2626] shrink-0">
-                        {alert.avgTimeSpent <= 2 ? "Pacing uncalibrated" : `${alert.avgTimeSpent}s`} / {alert.errorRate}% Error
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-black/80 font-medium leading-snug">
-                      {alert.recoveryTactic}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Quick Target Practice Recommendation */}
-          <div className="bg-[#FEF3C7] rounded-xl border-2 border-black p-5 shadow-[4px_4px_0px_0px_#000] space-y-3">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#D97706] fill-[#D97706]" />
-              <h3 className="font-black text-sm text-black">
-                AI Remediation Practice
-              </h3>
-            </div>
-            <p className="text-xs text-black/80 font-medium leading-relaxed">
-              Targeted 5-minute drills dynamically rebalance your question accuracy by training you on distractor traps from actual NTA CBT exams.
-            </p>
-            {weakTopics.length > 0 && weakTopics[0] && (
               <button
                 type="button"
-                onClick={() => {
-                  const topTopic = weakTopics[0];
-                  if (!topTopic) return;
-                  handleLaunchInstantRepair(
-                    topTopic.troubleTopics?.[0] || topTopic.chapter,
-                    topTopic.subject
-                  );
-                }}
-                className="w-full py-2.5 px-3 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                onClick={() => setSelectedModalDiagnosis(null)}
+                className="p-1.5 rounded-lg border-2 border-black bg-[#FAF7EE] hover:bg-[#FF5C5C] hover:text-white text-black transition-colors"
               >
-                <Play className="w-3 h-3 fill-white" />
-                <span>Launch Priority Fix: {weakTopics[0].chapter}</span>
+                <X className="w-5 h-5 stroke-[2.5]" />
               </button>
-            )}
+            </div>
+
+            {/* Modal Content Sections */}
+            <div className="space-y-6 text-xs">
+              {/* 1. TOPIC OVERVIEW */}
+              <div className="p-4 rounded-xl border-2 border-black bg-[#FAF7EE] space-y-3">
+                <h3 className="font-black text-black uppercase text-xs tracking-wider">TOPIC OVERVIEW</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-center">
+                  <div className="p-2 bg-white rounded border border-black">
+                    <span className="text-[10px] text-black/60 block uppercase">Accuracy</span>
+                    <span className="text-base font-black">{selectedModalDiagnosis.observedPerformance.accuracyPercentage}%</span>
+                  </div>
+                  <div className="p-2 bg-white rounded border border-black">
+                    <span className="text-[10px] text-black/60 block uppercase">Attempts</span>
+                    <span className="text-base font-black">{selectedModalDiagnosis.observedPerformance.attemptsCount}</span>
+                  </div>
+                  <div className="p-2 bg-white rounded border border-black">
+                    <span className="text-[10px] text-black/60 block uppercase">Avg Time</span>
+                    <span className="text-base font-black">{selectedModalDiagnosis.observedPerformance.avgTimeSeconds}s</span>
+                  </div>
+                  <div className="p-2 bg-white rounded border border-black">
+                    <span className="text-[10px] text-black/60 block uppercase">Confidence</span>
+                    <span className="text-base font-black">{selectedModalDiagnosis.diagnosticConfidence}</span>
+                  </div>
+                </div>
+                <p className="text-[11px] font-semibold text-black/80">{selectedModalDiagnosis.confidenceRationale}</p>
+              </div>
+
+              {/* 2. WHAT EXACTLY IS GOING WRONG? */}
+              <div className="space-y-2">
+                <h3 className="font-black text-black uppercase text-xs tracking-wider">WHAT EXACTLY IS GOING WRONG?</h3>
+                <p className="font-bold text-black/90">{selectedModalDiagnosis.specificWeakness}</p>
+                <div className="p-3 rounded-lg border border-black bg-white space-y-1">
+                  <span className="font-bold text-black text-[11px] block">Observed Evidence Signals:</span>
+                  <ul className="list-disc pl-4 space-y-0.5 text-black/80 font-semibold">
+                    {selectedModalDiagnosis.evidenceList.map((ev, i) => (
+                      <li key={i}>{ev}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* 3. ROOT CAUSE EXPLANATION */}
+              <div className="space-y-2">
+                <h3 className="font-black text-black uppercase text-xs tracking-wider">WHY THIS IS HAPPENING</h3>
+                <p className="font-medium text-black/90 leading-relaxed">{selectedModalDiagnosis.interpretation}</p>
+              </div>
+
+              {/* 4. WHAT TO STUDY & HOW TO STUDY */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="p-3.5 rounded-lg border-2 border-black bg-[#F0FDF4] space-y-2">
+                  <h4 className="font-black text-black uppercase text-[11px]">WHAT TO STUDY</h4>
+                  <ul className="list-disc pl-4 space-y-1 font-semibold text-black/80">
+                    {selectedModalDiagnosis.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => (
+                      <li key={i}>{t}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="p-3.5 rounded-lg border-2 border-black bg-[#EFF6FF] space-y-2">
+                  <h4 className="font-black text-black uppercase text-[11px]">HOW TO STUDY (DECISION TREE)</h4>
+                  <ol className="list-decimal pl-4 space-y-1 font-semibold text-black/80">
+                    {selectedModalDiagnosis.remediationPlan.step2DecisionFramework.checklist.map((c, i) => (
+                      <li key={i}>{c}</li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+
+              {/* 5. SHORTCUTS & COMMON TRAPS */}
+              {selectedModalDiagnosis.examTactic && (
+                <div className="p-4 rounded-xl border-2 border-black bg-[#FFFBEB] space-y-2">
+                  <h3 className="font-black text-black uppercase text-xs tracking-wider">SHORTCUTS & EXAM TACTICS</h3>
+                  <p className="font-bold text-black">QUICK METHOD: {selectedModalDiagnosis.examTactic.quickMethod}</p>
+                  <p className="font-semibold text-black/80">FULL METHOD: {selectedModalDiagnosis.examTactic.fullMethod}</p>
+                  <p className="font-bold text-[#DC2626]">CAUTION: {selectedModalDiagnosis.examTactic.caution}</p>
+                </div>
+              )}
+
+              {/* 6. WHAT TO PRACTICE */}
+              <div className="p-4 rounded-xl border-2 border-black bg-white space-y-3">
+                <h3 className="font-black text-black uppercase text-xs tracking-wider">STRUCTURED PRACTICE PLAN</h3>
+                <div className="space-y-2">
+                  {selectedModalDiagnosis.remediationPlan.step3Practice.phases.map((ph) => (
+                    <div key={ph.phase} className="p-3 rounded-lg border border-black bg-[#FAF7EE] flex items-center justify-between gap-3">
+                      <div>
+                        <span className="font-black text-black block">{ph.title} ({ph.questionCount} Qs)</span>
+                        <span className="text-[11px] font-semibold text-black/70">{ph.description}</span>
+                      </div>
+                      <span className="px-2 py-1 bg-black text-white rounded font-mono font-black text-[10px] shrink-0">
+                        Target ≥{ph.targetAccuracyPercentage}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Modal Action CTA */}
+              <div className="pt-2 flex items-center justify-end gap-3 border-t-2 border-black">
+                <button
+                  type="button"
+                  onClick={() => setSelectedModalDiagnosis(null)}
+                  className="px-4 py-2 rounded-lg bg-[#FAF7EE] hover:bg-white text-black font-black text-xs border-2 border-black transition-all"
+                >
+                  Close Diagnosis
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const topic = selectedModalDiagnosis.chapter;
+                    const subject = selectedModalDiagnosis.subject;
+                    const practiceType = selectedModalDiagnosis.recommendedPracticeType;
+                    setSelectedModalDiagnosis(null);
+                    handleLaunchTargetedPractice(topic, subject, practiceType);
+                  }}
+                  className="px-5 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center gap-1.5"
+                >
+                  <Play className="w-3.5 h-3.5 fill-white" />
+                  <span>Start Targeted Practice</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
