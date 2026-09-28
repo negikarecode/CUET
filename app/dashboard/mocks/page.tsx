@@ -11,8 +11,6 @@ import {
   ArrowRight,
   ChevronDown,
   Atom,
-  Timer,
-  FileCheck2,
   FlaskConical,
   Binary,
   Dna,
@@ -91,7 +89,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "science",
     name: "Science Stream",
     shortName: "Science",
-    badge: "7 Domains • In Preparation",
+    badge: "7 Domains",
     accentBg: "#E0F2FE",
     accentText: "#0369A1",
     subjects: [
@@ -108,7 +106,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "commerce",
     name: "Commerce Stream",
     shortName: "Commerce",
-    badge: "4 Domains • In Preparation",
+    badge: "4 Domains",
     accentBg: "#FEF3C7",
     accentText: "#92400E",
     subjects: [
@@ -122,7 +120,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "humanities",
     name: "Humanities & Arts",
     shortName: "Humanities",
-    badge: "10 Domains • In Preparation",
+    badge: "10 Domains",
     accentBg: "#FCE7F3",
     accentText: "#9D174D",
     subjects: [
@@ -148,8 +146,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Complete Full Syllabus Coverage",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 60 minutes per paper",
     icon: Atom,
   },
   chemistry: {
@@ -159,8 +156,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Complete Full Syllabus Coverage",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 60 minutes per paper",
     icon: FlaskConical,
   },
   mathematics: {
@@ -170,8 +166,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Complete Full Syllabus Coverage",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 60 minutes per paper",
     icon: Binary,
   },
   biology: {
@@ -181,8 +176,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 12,
     totalQuestions: 600,
-    subtitle:
-      "600 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Complete Full Syllabus Coverage",
+    subtitle: "12 full-length CBT mocks · 600 questions · 45 minutes per paper",
     icon: Dna,
   },
   accountancy: {
@@ -192,8 +186,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 18,
     totalQuestions: 900,
-    subtitle:
-      "900 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Complete Full Syllabus Coverage",
+    subtitle: "18 full-length CBT mocks · 900 questions · 60 minutes per paper",
     icon: Calculator,
   },
   "business-studies": {
@@ -203,8 +196,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Standard NTA CUET CBT Syllabus",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Briefcase,
   },
   economics: {
@@ -214,8 +206,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Standard NTA CUET CBT Syllabus",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 60 minutes per paper",
     icon: TrendingUp,
   },
   history: {
@@ -225,8 +216,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Themes in Indian History Parts I, II & III",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: ScrollText,
   },
   "political-science": {
@@ -236,8 +226,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Contemporary World Politics & Politics in India",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Landmark,
   },
   geography: {
@@ -247,8 +236,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Fundamentals of Human Geography & India: People and Economy",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Globe,
   },
   psychology: {
@@ -258,8 +246,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • NCERT Class 12 Variations, Personality & Disorders",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: BrainCircuit,
   },
   sociology: {
@@ -269,8 +256,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Structure of Indian Society & Social Change",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Users,
   },
   "physical-education": {
@@ -280,8 +266,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Sports Events, Yoga, Nutrition & Biomechanics",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Activity,
   },
   "computer-science": {
@@ -291,8 +276,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Computational Thinking, Python, SQL & Networks",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 60 minutes per paper",
     icon: Laptop,
   },
   "home-science": {
@@ -302,8 +286,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Clinical Nutrition, Human Development & Resource Management",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Home,
   },
   "mass-media": {
@@ -313,8 +296,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Communication Theories, Journalism, Cinema & New Media",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Tv,
   },
   "environmental-studies": {
@@ -324,8 +306,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Ecosystem Ecology, Pollution & Sustainable Development",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Leaf,
   },
   "fine-arts": {
@@ -335,8 +316,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Miniature Painting, Mughal & Bengal Schools, Modern Art",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Palette,
   },
   agriculture: {
@@ -346,8 +326,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Agrometeorology, Genetics, Livestock, Agronomy & Horticulture",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Sprout,
   },
   anthropology: {
@@ -357,8 +336,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
-    subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Physical & Cultural Anthropology, Prehistory & Tribal Studies",
+    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
     icon: Footprints,
   },
 };
@@ -370,9 +348,7 @@ export default function MocksPage() {
   const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
   const [selectedTab, setSelectedTab] = useState<SubjectKey>("all");
 
-  const allMocksList: Array<
-    MockTestItem & { subjectName: string; subjectSlug: string; code: string }
-  > = useMemo(() => {
+  const allMocksList = useMemo(() => {
     const list: Array<
       MockTestItem & { subjectName: string; subjectSlug: string; code: string }
     > = [];
@@ -393,7 +369,6 @@ export default function MocksPage() {
     return list;
   }, []);
 
-  // Filter tests based on selected stream and subject
   const displayedTests = useMemo(() => {
     if (selectedTab !== "all") {
       return allMocksList.filter((m) => m.subjectSlug === selectedTab);
@@ -429,7 +404,6 @@ export default function MocksPage() {
     }
   };
 
-  // Subjects to show in the subject dropdown select
   const availableSubjectsForDropdown = useMemo(() => {
     if (selectedStream === "all") {
       return Object.values(SUBJECT_CONFIGS);
@@ -438,191 +412,157 @@ export default function MocksPage() {
   }, [selectedStream]);
 
   return (
-    <div className="min-h-screen bg-[#FAF7EE] p-4 md:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto mb-10 space-y-8">
-        {/* Header */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-black uppercase bg-[#FEF3C7] text-black px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
-              In Preparation / Rebuilding
-            </span>
-            <span className="text-[11px] font-black uppercase bg-[#FEE2E2] text-[#DC2626] px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
-              0 Mocks Live
-            </span>
-            <span className="text-[11px] font-black uppercase bg-white text-black px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
-              20,000 Questions
-            </span>
-            <span className="text-[11px] font-black uppercase bg-[#E0F2FE] text-[#0369A1] px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
-              Official NTA CBT Pattern (+5 / -1)
-            </span>
+    <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-8">
+      {/* Page Header */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-[#FF5C5C] text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_0px_#000] shrink-0">
+            <ClipboardCheck className="w-5 h-5 stroke-[2.5]" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-black flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-[#FF5C5C] text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-              <ClipboardCheck className="w-5 h-5" />
-            </div>
-            Full-Length Mock Tests
-          </h1>
-          <p className="text-black/60 font-bold text-base md:text-lg">
-            Complete full-length NTA CUET UG CBT mock papers with real-time timer, +5 / -1 scoring & AI diagnostics.
-          </p>
-        </div>
-
-        {/* Stream & Subject Dropdown Controls */}
-        <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000]">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Stream Dropdown Select */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
-                Select Stream:
-              </label>
-              <div className="relative">
-                <select
-                  value={selectedStream}
-                  onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
-                  className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
-                >
-                  <option value="all">All Streams (Under Rebuild)</option>
-                  <option value="science">Science Stream (7 Subjects • In Preparation)</option>
-                  <option value="commerce">Commerce Stream (4 Subjects • In Preparation)</option>
-                  <option value="humanities">Humanities & Arts (10 Subjects • In Preparation)</option>
-                </select>
-                <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Subject Dropdown Select */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
-                Select Subject:
-              </label>
-              <div className="relative">
-                <select
-                  value={selectedTab}
-                  onChange={(e) => handleSelectSubject(e.target.value as SubjectKey)}
-                  className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
-                >
-                  <option value="all">
-                    {selectedStream === "all"
-                      ? "All 20 Domain Subjects"
-                      : `All Subjects in ${STREAM_CONFIGS[selectedStream].name} (${STREAM_CONFIGS[selectedStream].subjects.length} Subjects)`}
-                  </option>
-                  {selectedStream === "all" ? (
-                    <>
-                      <optgroup label="Science Stream">
-                        {STREAM_CONFIGS.science.subjects.map((k) => (
-                          <option key={`sci-${k}`} value={k}>
-                            {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code} • In Preparation)
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label="Commerce Stream">
-                        {STREAM_CONFIGS.commerce.subjects.map((k) => (
-                          <option key={`com-${k}`} value={k}>
-                            {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code} • In Preparation)
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label="Humanities & Arts Stream">
-                        {STREAM_CONFIGS.humanities.subjects.map((k) => (
-                          <option key={`hum-${k}`} value={k}>
-                            {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code} • In Preparation)
-                          </option>
-                        ))}
-                      </optgroup>
-                    </>
-                  ) : (
-                    availableSubjectsForDropdown.map((sub) => (
-                      <option key={sub.key} value={sub.key}>
-                        {sub.name} (Code {sub.code} • In Preparation)
-                      </option>
-                    ))
-                  )}
-                </select>
-                <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* =============================================================== */}
-        {/* DOMAIN HEADING BANNER: rendered when a specific subject is selected */}
-        {/* =============================================================== */}
-        {activeSubjectInfo && (
-          <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000] space-y-4 animate-in fade-in duration-200">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex items-start gap-3.5">
-                <div className="w-11 h-11 rounded-lg bg-[#E0F2FE] border-2 border-black flex items-center justify-center shrink-0 shadow-[2px_2px_0px_0px_#000]">
-                  <activeSubjectInfo.icon className="w-6 h-6 text-[#0369A1]" />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="text-xl md:text-2xl font-black text-black">
-                      {activeSubjectInfo.name} Domain Full CBT Mocks
-                    </h2>
-                    <span className="text-xs font-black uppercase bg-[#FEF3C7] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
-                      {activeSubjectInfo.isLive ? `${activeSubjectInfo.mockCount} Mocks Live` : "In Preparation / Rebuilding"}
-                    </span>
-                    <span className="text-xs font-black uppercase bg-[#FEF3C7] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
-                      Code: {activeSubjectInfo.code}
-                    </span>
-                  </div>
-                  <p className="text-sm font-semibold text-black/70">
-                    {activeSubjectInfo.subtitle}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <Link
-                  href={`/dashboard/mocks/${activeSubjectInfo.key}`}
-                  className="px-4 py-2 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all bg-[#FF5C5C] text-white hover:bg-[#FF4545] flex items-center gap-1.5"
-                >
-                  <span>Open Full Subject Suite</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* =============================================================== */}
-        {/* STREAM HEADING BANNER: rendered when a stream is selected with all its subjects */}
-        {/* =============================================================== */}
-        {!activeSubjectInfo && activeStreamInfo && (
-          <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000] space-y-2 animate-in fade-in duration-200">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-xl md:text-2xl font-black text-black">
-                {activeStreamInfo.name} Full CBT Mocks
-              </h2>
-              <span className="text-xs font-black uppercase bg-[#D1FAE5] text-[#065F46] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
-                {activeStreamInfo.badge}
-              </span>
-            </div>
-            <p className="text-sm font-semibold text-black/70">
-              Showing all {displayedTests.length} mock tests across {activeStreamInfo.name}.
+          <div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-black tracking-tight">
+              Full-Length Mock Tests
+            </h1>
+            <p className="text-xs sm:text-sm text-black/60 font-semibold mt-0.5">
+              390 full-length CBT papers across 20 domain subjects · Real-time timer · Official NTA pattern (+5 / -1)
             </p>
           </div>
-        )}
+        </div>
+      </div>
 
-        {/* Mock Test Cards Grid / Content */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-black text-black flex items-center gap-2">
-              <span>
-                {selectedTab === "all"
-                  ? selectedStream === "all"
-                    ? "Available Full-Length Mock Papers"
-                    : `${STREAM_CONFIGS[selectedStream].name} Papers`
-                  : `${activeSubjectInfo?.name} CBT Mock Papers (${displayedTests.length} Mocks)`}
-              </span>
-              <span className="text-xs bg-black text-white px-2 py-0.5 rounded-full font-bold">
-                {displayedTests.length}
-              </span>
-            </h3>
+      {/* Stream & Subject Dropdown Controls */}
+      <div className="bg-white rounded-2xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Select Stream */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
+              Filter by Stream:
+            </label>
+            <div className="relative">
+              <select
+                value={selectedStream}
+                onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
+                className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
+              >
+                <option value="all">All Domain Streams (20 Subjects)</option>
+                <option value="science">Science Stream (7 Subjects)</option>
+                <option value="commerce">Commerce Stream (4 Subjects)</option>
+                <option value="humanities">Humanities & Arts (10 Subjects)</option>
+              </select>
+              <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
           </div>
 
-          {displayedTests.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Select Subject */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
+              Filter by Subject:
+            </label>
+            <div className="relative">
+              <select
+                value={selectedTab}
+                onChange={(e) => handleSelectSubject(e.target.value as SubjectKey)}
+                className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
+              >
+                <option value="all">
+                  {selectedStream === "all"
+                    ? "All 20 Domain Subjects"
+                    : `All Subjects in ${STREAM_CONFIGS[selectedStream].name} (${STREAM_CONFIGS[selectedStream].subjects.length} Subjects)`}
+                </option>
+                {selectedStream === "all" ? (
+                  <>
+                    <optgroup label="Science Stream">
+                      {STREAM_CONFIGS.science.subjects.map((k) => (
+                        <option key={`sci-${k}`} value={k}>
+                          {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code})
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Commerce Stream">
+                      {STREAM_CONFIGS.commerce.subjects.map((k) => (
+                        <option key={`com-${k}`} value={k}>
+                          {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code})
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Humanities & Arts Stream">
+                      {STREAM_CONFIGS.humanities.subjects.map((k) => (
+                        <option key={`hum-${k}`} value={k}>
+                          {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code})
+                        </option>
+                      ))}
+                    </optgroup>
+                  </>
+                ) : (
+                  availableSubjectsForDropdown.map((sub) => (
+                    <option key={sub.key} value={sub.key}>
+                      {sub.name} (Code {sub.code})
+                    </option>
+                  ))
+                )}
+              </select>
+              <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Active Subject Banner */}
+      {activeSubjectInfo && (
+        <div className="bg-white rounded-2xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <div className="w-11 h-11 rounded-xl bg-[#EEF2FF] border-2 border-black flex items-center justify-center shrink-0 shadow-[2px_2px_0px_0px_#000] text-[#4F46E5]">
+              <activeSubjectInfo.icon className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-xl sm:text-2xl font-black text-black tracking-tight">
+                {activeSubjectInfo.name}
+              </h2>
+              <p className="text-xs sm:text-sm font-semibold text-black/60">
+                {activeSubjectInfo.mockCount} full-length CBT mocks · {activeSubjectInfo.totalQuestions.toLocaleString()} questions · Code {activeSubjectInfo.code}
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href={`/dashboard/mocks/${activeSubjectInfo.key}`}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] bg-[#FF5C5C] text-white hover:bg-[#FF4545] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] transition-all shrink-0 self-start md:self-auto"
+          >
+            <span>Open Full Subject Suite</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      )}
+
+      {/* Active Stream Banner */}
+      {!activeSubjectInfo && activeStreamInfo && (
+        <div className="bg-white rounded-2xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] space-y-1">
+          <h2 className="text-xl sm:text-2xl font-black text-black tracking-tight">
+            {activeStreamInfo.name}
+          </h2>
+          <p className="text-xs sm:text-sm font-semibold text-black/60">
+            {displayedTests.length} full-length CBT mocks available across {activeStreamInfo.name.toLowerCase()}
+          </p>
+        </div>
+      )}
+
+      {/* Mock Test Cards Grid */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg sm:text-xl font-black text-black tracking-tight">
+            {selectedTab === "all"
+              ? selectedStream === "all"
+                ? "Available Mock Papers"
+                : `${STREAM_CONFIGS[selectedStream].name} Papers`
+              : `${activeSubjectInfo?.name} CBT Papers`}
+            <span className="text-xs font-semibold text-black/50 ml-2">
+              ({displayedTests.length} papers)
+            </span>
+          </h3>
+        </div>
+
+        {displayedTests.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
             {displayedTests.map((test) => {
               const stats = isClient
                 ? getTestAttemptStats(testAttempts, test.id)
@@ -633,79 +573,51 @@ export default function MocksPage() {
               return (
                 <div
                   key={test.id}
-                  className="bg-white rounded-xl border-2 border-black p-5 shadow-[3px_3px_0px_0px_#000] hover:shadow-[5px_5px_0px_0px_#000] transition-all hover:-translate-y-1 hover:-translate-x-1 flex flex-col justify-between"
+                  className="bg-white rounded-2xl border-2 border-black p-5 sm:p-6 shadow-[3px_3px_0px_0px_#000] hover:shadow-[5px_5px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col justify-between space-y-4 min-w-0"
                 >
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-black uppercase bg-[#FEF3C7] px-2 py-0.5 rounded border border-black">
-                        {test.subjectName} • Code {test.code}
-                      </span>
-                      <span className="text-[10px] font-black uppercase bg-[#D1FAE5] text-[#065F46] px-2 py-0.5 rounded border border-black">
-                        Full CBT Mock
-                      </span>
-                    </div>
-
                     <div>
-                      <h4 className="text-lg font-black text-black leading-snug">
+                      <p className="text-[11px] font-bold text-black/50 uppercase tracking-wider">
+                        {test.subjectName} · Code {test.code}
+                      </p>
+                      <h4 className="text-lg font-black text-black leading-snug mt-0.5">
                         {test.label}
                       </h4>
-                      <p className="text-xs text-black/70 font-bold mt-1">
-                        {test.mockLabel}
+                      <p className="text-xs font-medium text-black/60 mt-0.5">
+                        {test.mockLabel} · Full Syllabus CBT
                       </p>
                     </div>
 
-                    {/* Best Score Badge if attempted */}
                     {hasAttempted && best && (
-                      <div className="p-2 rounded-lg bg-[#FEF3C7] border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center justify-between gap-2">
+                      <div className="px-3 py-2 rounded-xl bg-[#FEF3C7] border border-black/20 flex items-center justify-between gap-2 text-xs font-bold text-black">
                         <div className="flex items-center gap-1.5">
                           <Trophy className="w-3.5 h-3.5 text-[#D97706] shrink-0" />
-                          <span className="text-[11px] font-black text-black">
-                            Best: {best.totalMarks} / {best.maxMarks}
-                          </span>
+                          <span>Best: {best.totalMarks} / {best.maxMarks}</span>
                         </div>
-                        <span className="text-[10px] font-black text-black/70 font-mono">
-                          {best.accuracyPercentage}% Acc • {stats.attemptsCount} {stats.attemptsCount === 1 ? "attempt" : "attempts"}
+                        <span className="text-black/60 text-[11px] font-mono">
+                          {best.accuracyPercentage}% Acc ({stats.attemptsCount} {stats.attemptsCount === 1 ? "attempt" : "attempts"})
                         </span>
                       </div>
                     )}
 
-                    <div className="flex items-center gap-2 text-xs font-bold text-black/60">
-                      <span className="flex items-center gap-1">
-                        <FileCheck2 className="w-3.5 h-3.5" />
-                        {test.questions} Questions
-                      </span>
-                      <span>•</span>
-                      <span className="flex items-center gap-1">
-                        <Timer className="w-3.5 h-3.5" />
-                        {test.duration}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {test.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[10px] font-bold bg-[#FAF7EE] text-black/80 px-1.5 py-0.5 rounded border border-black/30"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                    <p className="text-xs font-semibold text-black/60">
+                      50 Questions · {test.duration}
+                    </p>
                   </div>
 
-                  <div className="pt-4 mt-4 border-t border-black/10">
+                  <div className="pt-3 border-t border-black/10">
                     {hasAttempted ? (
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/test/${test.id}?reattempt=true`}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] transition-all"
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] transition-all"
                         >
                           <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
                           <span>{t("reattemptTest", "Re-attempt")}</span>
                         </Link>
                         <Link
                           href={`/test/${test.id}`}
-                          className="px-3 py-2.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all"
+                          className="px-3 py-2.5 rounded-xl border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all"
                         >
                           {t("scorecardTitle", "Result")}
                         </Link>
@@ -713,9 +625,9 @@ export default function MocksPage() {
                     ) : (
                       <Link
                         href={`/test/${test.id}`}
-                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] transition-all"
+                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all"
                       >
-                        <span>{t("startTest", "Start This Mock")}</span>
+                        <span>{t("startTest", "Start Test")}</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                     )}
@@ -725,32 +637,28 @@ export default function MocksPage() {
             })}
           </div>
         ) : (
-          <div className="bg-white rounded-xl border-2 border-black p-8 md:p-12 shadow-[4px_4px_0px_0px_#000] text-center space-y-4">
+          <div className="bg-white rounded-2xl border-2 border-black p-8 md:p-12 shadow-[4px_4px_0px_0px_#000] text-center space-y-4">
             <div className="w-14 h-14 rounded-2xl bg-[#FEF3C7] border-2 border-black flex items-center justify-center mx-auto shadow-[3px_3px_0px_0px_#000]">
               <RotateCcw className="w-7 h-7 text-black stroke-[2.5]" />
             </div>
             <div className="space-y-2 max-w-lg mx-auto">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEF3C7] border border-black text-[11px] font-black uppercase tracking-wider">
-                <span>Under Active Reconstruction</span>
-              </div>
               <h3 className="text-2xl font-black text-black">
-                {activeSubjectInfo ? `${activeSubjectInfo.name} Mocks Being Remade` : "Mock Papers Under Reconstruction"}
+                {activeSubjectInfo ? `${activeSubjectInfo.name} Mocks Being Prepared` : "Mock Papers Under Preparation"}
               </h3>
               <p className="text-sm text-black/70 font-semibold leading-relaxed">
-                All CUET UG domain mock papers are currently being reconstructed and recalibrated from the ground up using authentic NTA question papers. New 50-compulsory-question CBT mock papers with verified NCERT explanations will be published shortly.
+                Full CBT mock papers for this subject are being calibrated according to the latest NTA CUET UG CBT pattern and will be published shortly.
               </p>
             </div>
             <div className="pt-2">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
               >
                 <span>Back to Command Dashboard</span>
               </Link>
             </div>
           </div>
         )}
-        </div>
       </div>
     </div>
   );
