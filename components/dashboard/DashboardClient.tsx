@@ -27,6 +27,8 @@ import {
   Users,
   Laptop,
   Medal,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import TrophyCabinet from "@/components/dashboard/TrophyCabinet";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -114,7 +116,27 @@ export default function DashboardClient({
   const clientAnalytics = useTestStore((state) => state.analytics);
   const testAttempts = useTestStore((state) => state.testAttempts);
 
-  const [calibrationCategoryFilter, setCalibrationCategoryFilter] = useState<"all" | "in_progress" | "unlocked">("all");
+  const subjectScrollRef = React.useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScroll = React.useCallback(() => {
+    const el = subjectScrollRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 4);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 4);
+  }, []);
+
+  const handleScroll = (direction: "left" | "right") => {
+    const el = subjectScrollRef.current;
+    if (!el) return;
+    const scrollAmount = 340;
+    el.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
 
   // Attempt recovery on mount: ingests any completed CBT session from localStorage that was missed
   useEffect(() => {
@@ -142,6 +164,28 @@ export default function DashboardClient({
       }
     }
   }, [isClient, storeUser, initialData, router]);
+
+  useEffect(() => {
+    checkScroll();
+    const el = subjectScrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    window.addEventListener("resize", checkScroll);
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(() => {
+        checkScroll();
+      });
+      resizeObserver.observe(el);
+    }
+
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
+  }, [checkScroll]);
 
   const isServerUser = initialData.user && initialData.user.id !== "guest";
 
@@ -227,11 +271,38 @@ export default function DashboardClient({
     ? storeUser.preferredStream
     : initialData.user.targetStream;
 
-  // Stream Domain Subjects (calibrated automatically from stream)
-  const candidateSubjects = getSubjectsForStream(targetStream);
+  // Stream Domain Subjects & User Selected Subjects
+  const userChosenSubjects = isServerUser
+    ? initialData.user.selectedSubjects
+    : isClient && storeUser.selectedSubjects && storeUser.selectedSubjects.length > 0
+    ? storeUser.selectedSubjects
+    : initialData.user.selectedSubjects;
 
-  // Candidate Subject Calibrations (strictly only candidate's selected subjects)
-  const candidateSubjectCalibrations: SubjectCalibrationData[] = candidateSubjects.map((subName) => {
+  const baseSubjects =
+    userChosenSubjects && userChosenSubjects.length > 0
+      ? userChosenSubjects
+      : getSubjectsForStream(targetStream);
+
+  const seenSubjectKeys = new Set<string>();
+  const candidateSubjectsList: string[] = [];
+
+  baseSubjects.forEach((subName) => {
+    const key = normalizeSubject(subName).key;
+    if (!seenSubjectKeys.has(key)) {
+      seenSubjectKeys.add(key);
+      candidateSubjectsList.push(subName);
+    }
+  });
+
+  Object.values(subjectCalibrationMap).forEach((cal) => {
+    if (cal.totalAttempted > 0 && !seenSubjectKeys.has(cal.subjectKey)) {
+      seenSubjectKeys.add(cal.subjectKey);
+      candidateSubjectsList.push(cal.subject);
+    }
+  });
+
+  // Candidate Subject Calibrations
+  const candidateSubjectCalibrations: SubjectCalibrationData[] = candidateSubjectsList.map((subName) => {
     const info = normalizeSubject(subName);
     const existing = subjectCalibrationMap[info.key];
     if (existing) {
@@ -421,7 +492,7 @@ export default function DashboardClient({
       {/* 2.5 SUBJECT-WISE AI CALIBRATION MATRIX (150 Qs Goal Per Subject)   */}
       {/* =================================================================== */}
       <section className="bg-white rounded-xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] space-y-5 w-full max-w-full overflow-hidden">
-        <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b-2 border-black">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b-2 border-black">
           <div className="flex-[1_1_320px] min-w-0 space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
               <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center shrink-0 shadow-[1px_1px_0px_0px_#000]">
@@ -430,76 +501,58 @@ export default function DashboardClient({
               <h2 className="text-base sm:text-lg font-black text-black tracking-tight">
                 Subject-Wise AI Calibration Matrix
               </h2>
-              <span className="px-2 py-0.5 rounded-full bg-[#FEF3C7] border border-black text-[10px] font-black text-black">
-                {candidateSubjectCalibrations.length} Selected Domain Subjects
-              </span>
             </div>
             <p className="text-xs text-black/70 font-medium max-w-2xl">
               Each of your chosen CUET domain subjects requires <strong>150 questions</strong> for the AI Performance Intelligence Engine to eliminate statistical noise, calibrate accuracy, and unlock personalized weakness remediation.
             </p>
           </div>
 
-          {/* Filter Pills */}
-          <div className="flex items-center gap-2 shrink-0 overflow-x-auto max-w-full p-[0_6px_6px_0] scrollbar-none">
+          {/* Scroll Navigation Arrows */}
+          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
             <button
               type="button"
-              onClick={() => setCalibrationCategoryFilter("all")}
-              className={`h-10 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black whitespace-nowrap inline-flex items-center gap-1.5 transition-all shrink-0 ${
-                calibrationCategoryFilter === "all"
-                  ? "bg-black text-white shadow-[3px_3px_0px_0px_#000]"
-                  : "bg-white text-black hover:bg-[#FAF7EE]"
-              }`}
+              onClick={() => handleScroll("left")}
+              disabled={!canScrollLeft}
+              aria-label="Scroll left"
+              className="w-10 h-10 rounded-lg border-2 border-black flex items-center justify-center bg-white hover:bg-[#FAF7EE] disabled:opacity-30 disabled:cursor-not-allowed shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
             >
-              All ({candidateSubjectCalibrations.length})
+              <ChevronLeft className="w-5 h-5 text-black stroke-[2.5]" />
             </button>
             <button
               type="button"
-              onClick={() => setCalibrationCategoryFilter("in_progress")}
-              className={`h-10 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black whitespace-nowrap inline-flex items-center gap-1.5 transition-all shrink-0 ${
-                calibrationCategoryFilter === "in_progress"
-                  ? "bg-[#FEF3C7] text-black shadow-[3px_3px_0px_0px_#000]"
-                  : "bg-white text-black hover:bg-[#FAF7EE]"
-              }`}
+              onClick={() => handleScroll("right")}
+              disabled={!canScrollRight}
+              aria-label="Scroll right"
+              className="w-10 h-10 rounded-lg border-2 border-black flex items-center justify-center bg-white hover:bg-[#FAF7EE] disabled:opacity-30 disabled:cursor-not-allowed shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
             >
-              <span>Calibrating</span>
-              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-black text-white">
-                {candidateSubjectCalibrations.filter((s) => s.totalAttempted > 0 && !s.isUnlocked).length}
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setCalibrationCategoryFilter("unlocked")}
-              className={`h-10 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black whitespace-nowrap inline-flex items-center gap-1.5 transition-all shrink-0 ${
-                calibrationCategoryFilter === "unlocked"
-                  ? "bg-[#10B981] text-black shadow-[3px_3px_0px_0px_#000]"
-                  : "bg-white text-black hover:bg-[#FAF7EE]"
-              }`}
-            >
-              <span>Unlocked</span>
-              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-black text-white">
-                {candidateSubjectCalibrations.filter((s) => s.isUnlocked).length}
-              </span>
+              <ChevronRight className="w-5 h-5 text-black stroke-[2.5]" />
             </button>
           </div>
         </div>
 
-        {/* Subject Cards Grid - Strictly for Candidate Selected Subjects */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {candidateSubjectCalibrations
-            .filter((sub) => {
-              if (calibrationCategoryFilter === "in_progress") {
-                return sub.totalAttempted > 0 && !sub.isUnlocked;
-              }
-              if (calibrationCategoryFilter === "unlocked") {
-                return sub.isUnlocked;
-              }
-              return true;
-            })
-            .map((sub) => {
+        {/* Subject Cards Horizontal Scrollable List */}
+        <div className="relative group">
+          {canScrollLeft && (
+            <button
+              type="button"
+              onClick={() => handleScroll("left")}
+              aria-label="Scroll left"
+              className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center justify-center hover:bg-[#FAF7EE] active:scale-95 transition-all"
+            >
+              <ChevronLeft className="w-4 h-4 text-black stroke-[2.5]" />
+            </button>
+          )}
+
+          <div
+            ref={subjectScrollRef}
+            className="flex items-stretch gap-4 overflow-x-auto scroll-smooth pb-3 pt-1 px-1 scrollbar-none snap-x snap-mandatory"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {candidateSubjectCalibrations.map((sub) => {
               return (
                 <div
                   key={sub.subjectKey}
-                  className={`rounded-xl border-2 border-black p-4 flex flex-col justify-between transition-all shadow-[3px_3px_0px_0px_#000] hover:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 ${
+                  className={`w-[280px] sm:w-[320px] shrink-0 snap-start rounded-xl border-2 border-black p-4 flex flex-col justify-between transition-all shadow-[3px_3px_0px_0px_#000] hover:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 ${
                     sub.isUnlocked
                       ? "bg-[#F0FDF4]"
                       : sub.totalAttempted > 0
@@ -605,6 +658,18 @@ export default function DashboardClient({
                 </div>
               );
             })}
+          </div>
+
+          {canScrollRight && (
+            <button
+              type="button"
+              onClick={() => handleScroll("right")}
+              aria-label="Scroll right"
+              className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center justify-center hover:bg-[#FAF7EE] active:scale-95 transition-all"
+            >
+              <ChevronRight className="w-4 h-4 text-black stroke-[2.5]" />
+            </button>
+          )}
         </div>
       </section>
 

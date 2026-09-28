@@ -577,7 +577,7 @@ export default function WeaknessRadarClient({
                     <div className="space-y-2">
                       <h3 className="text-xs font-black text-black uppercase tracking-wider flex items-center gap-1.5">
                         <AlertTriangle className="w-3.5 h-3.5 text-[#DC2626]" />
-                        <span>WHY YOU'RE LOSING MARKS</span>
+                        <span>WHY YOU&apos;RE LOSING MARKS</span>
                       </h3>
 
                       {diag.errorTaxonomy.percentages ? (
@@ -722,7 +722,7 @@ export default function WeaknessRadarClient({
           <div className="flex items-center gap-2">
             <Award className="w-5 h-5 text-[#16A34A]" />
             <h2 className="text-base sm:text-lg font-black text-black tracking-tight">
-              WHAT YOU'RE GOOD AT (CORE STRENGTHS)
+              WHAT YOU&apos;RE GOOD AT (CORE STRENGTHS)
             </h2>
           </div>
           <span className="text-[11px] font-black uppercase text-[#16A34A] font-mono">
