@@ -174,1035 +174,153 @@ export interface MockTestItem {
   tags: string[];
 }
 
+export const SUBJECT_MOCK_COUNTS: Record<string, number> = {
+  physics: 20,
+  chemistry: 20,
+  mathematics: 20,
+  "mathematics-sci": 20,
+  "mathematics-com": 20,
+  maths: 20,
+  biology: 12,
+  bio: 12,
+  accountancy: 18,
+  accounts: 18,
+  accs: 18,
+  economics: 20,
+  eco: 20,
+  "business-studies": 20,
+  business: 20,
+  bst: 20,
+  history: 20,
+  "political-science": 20,
+  polscience: 20,
+  pol: 20,
+  "pol science": 20,
+  geography: 20,
+  geo: 20,
+  psychology: 20,
+  psy: 20,
+  sociology: 20,
+  "physical-education": 20,
+  ped: 20,
+  "computer-science": 20,
+  cs: 20,
+  "home-science": 20,
+  hsc: 20,
+  "mass-media": 20,
+  mmc: 20,
+  "environmental-studies": 20,
+  evs: 20,
+  "fine-arts": 20,
+  fa: 20,
+  agriculture: 20,
+  agr: 20,
+  anthropology: 20,
+  ant: 20,
+};
+
+export const SUBJECT_DURATION_MINUTES: Record<string, number> = {
+  physics: 60,
+  chemistry: 60,
+  mathematics: 60,
+  "mathematics-sci": 60,
+  "mathematics-com": 60,
+  maths: 60,
+  biology: 45,
+  bio: 45,
+  accountancy: 60,
+  accounts: 60,
+  accs: 60,
+  economics: 60,
+  eco: 60,
+  "business-studies": 45,
+  business: 45,
+  bst: 45,
+  history: 45,
+  "political-science": 45,
+  polscience: 45,
+  pol: 45,
+  "pol science": 45,
+  geography: 45,
+  geo: 45,
+  psychology: 45,
+  psy: 45,
+  sociology: 45,
+  "physical-education": 45,
+  ped: 45,
+  "computer-science": 60,
+  cs: 60,
+  "home-science": 45,
+  hsc: 45,
+  "mass-media": 45,
+  mmc: 45,
+  "environmental-studies": 45,
+  evs: 45,
+  "fine-arts": 45,
+  fa: 45,
+  agriculture: 45,
+  agr: 45,
+  anthropology: 45,
+  ant: 45,
+};
+
 export function createMockTestList(
   subjectSlug: string,
-  subjectName: string,
+  _subjectName: string,
   durationMinutes: number = 60,
-  count: number = 20
+  count?: number
 ): MockTestItem[] {
-  return Array.from({ length: count }, (_, i) => {
-    const num = i + 1;
-    return {
-      id: `${subjectSlug}-mock-${num}`,
-      mockNumber: num,
-      label: `${subjectName} Full Mock ${num}`,
-      mockLabel: `NTA Full Mock ${num} • Full Syllabus CBT`,
-      duration: `${durationMinutes} Minutes`,
+  const actualCount =
+    count ??
+    SUBJECT_MOCK_COUNTS[subjectSlug] ??
+    SUBJECT_MOCK_COUNTS[subjectSlug.toLowerCase()] ??
+    20;
+  const baseMockId =
+    SUBJECT_TO_MOCK[subjectSlug] ||
+    SUBJECT_TO_MOCK[subjectSlug.toLowerCase()] ||
+    `${subjectSlug}-mock`;
+  const list: MockTestItem[] = [];
+  for (let i = 1; i <= actualCount; i++) {
+    list.push({
+      id: `${baseMockId}-${i}`,
+      mockNumber: i,
+      label: `Mock Test ${i}`,
+      mockLabel: `Full Syllabus Mock ${i}`,
+      duration: `${durationMinutes} Mins`,
       questions: 50,
-      tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-    };
-  });
+      tags: ["CUET UG 2026", "Full Syllabus", "NTA CBT Pattern"],
+    });
+  }
+  return list;
 }
 
-export const PHYSICS_MOCK_TESTS: MockTestItem[] = [
-  {
-    id: "physics-mock-1",
-    mockNumber: 1,
-    label: "Physics Full Mock 1",
-    mockLabel: "NTA Full Mock 1 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-2",
-    mockNumber: 2,
-    label: "Physics Full Mock 2",
-    mockLabel: "NTA Full Mock 2 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-3",
-    mockNumber: 3,
-    label: "Physics Full Mock 3",
-    mockLabel: "NTA Full Mock 3 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-4",
-    mockNumber: 4,
-    label: "Physics Full Mock 4",
-    mockLabel: "NTA Full Mock 4 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-5",
-    mockNumber: 5,
-    label: "Physics Full Mock 5",
-    mockLabel: "NTA Full Mock 5 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-6",
-    mockNumber: 6,
-    label: "Physics Full Mock 6",
-    mockLabel: "NTA Full Mock 6 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-7",
-    mockNumber: 7,
-    label: "Physics Full Mock 7",
-    mockLabel: "NTA Full Mock 7 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-8",
-    mockNumber: 8,
-    label: "Physics Full Mock 8",
-    mockLabel: "NTA Full Mock 8 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-9",
-    mockNumber: 9,
-    label: "Physics Full Mock 9",
-    mockLabel: "NTA Full Mock 9 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-10",
-    mockNumber: 10,
-    label: "Physics Full Mock 10",
-    mockLabel: "NTA Full Mock 10 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-11",
-    mockNumber: 11,
-    label: "Physics Full Mock 11",
-    mockLabel: "NTA Full Mock 11 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-12",
-    mockNumber: 12,
-    label: "Physics Full Mock 12",
-    mockLabel: "NTA Full Mock 12 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-13",
-    mockNumber: 13,
-    label: "Physics Full Mock 13",
-    mockLabel: "NTA Full Mock 13 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-14",
-    mockNumber: 14,
-    label: "Physics Full Mock 14",
-    mockLabel: "NTA Full Mock 14 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-15",
-    mockNumber: 15,
-    label: "Physics Full Mock 15",
-    mockLabel: "NTA Full Mock 15 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-16",
-    mockNumber: 16,
-    label: "Physics Full Mock 16",
-    mockLabel: "NTA Full Mock 16 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-17",
-    mockNumber: 17,
-    label: "Physics Full Mock 17",
-    mockLabel: "NTA Full Mock 17 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-18",
-    mockNumber: 18,
-    label: "Physics Full Mock 18",
-    mockLabel: "NTA Full Mock 18 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-19",
-    mockNumber: 19,
-    label: "Physics Full Mock 19",
-    mockLabel: "NTA Full Mock 19 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "physics-mock-20",
-    mockNumber: 20,
-    label: "Physics Full Mock 20",
-    mockLabel: "NTA Full Mock 20 • Full Syllabus CBT (Grand Final)",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "Grand Final", "NTA CBT Pattern"],
-  },
-];
-
-export const CHEMISTRY_MOCK_TESTS: MockTestItem[] = [
-  {
-    id: "chemistry-mock-1",
-    mockNumber: 1,
-    label: "Chemistry Full Mock 1",
-    mockLabel: "NTA Full Mock 1 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-2",
-    mockNumber: 2,
-    label: "Chemistry Full Mock 2",
-    mockLabel: "NTA Full Mock 2 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-3",
-    mockNumber: 3,
-    label: "Chemistry Full Mock 3",
-    mockLabel: "NTA Full Mock 3 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-4",
-    mockNumber: 4,
-    label: "Chemistry Full Mock 4",
-    mockLabel: "NTA Full Mock 4 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-5",
-    mockNumber: 5,
-    label: "Chemistry Full Mock 5",
-    mockLabel: "NTA Full Mock 5 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-6",
-    mockNumber: 6,
-    label: "Chemistry Full Mock 6",
-    mockLabel: "NTA Full Mock 6 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-7",
-    mockNumber: 7,
-    label: "Chemistry Full Mock 7",
-    mockLabel: "NTA Full Mock 7 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-8",
-    mockNumber: 8,
-    label: "Chemistry Full Mock 8",
-    mockLabel: "NTA Full Mock 8 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-9",
-    mockNumber: 9,
-    label: "Chemistry Full Mock 9",
-    mockLabel: "NTA Full Mock 9 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-10",
-    mockNumber: 10,
-    label: "Chemistry Full Mock 10",
-    mockLabel: "NTA Full Mock 10 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-11",
-    mockNumber: 11,
-    label: "Chemistry Full Mock 11",
-    mockLabel: "NTA Full Mock 11 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-12",
-    mockNumber: 12,
-    label: "Chemistry Full Mock 12",
-    mockLabel: "NTA Full Mock 12 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-13",
-    mockNumber: 13,
-    label: "Chemistry Full Mock 13",
-    mockLabel: "NTA Full Mock 13 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-14",
-    mockNumber: 14,
-    label: "Chemistry Full Mock 14",
-    mockLabel: "NTA Full Mock 14 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-15",
-    mockNumber: 15,
-    label: "Chemistry Full Mock 15",
-    mockLabel: "NTA Full Mock 15 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-16",
-    mockNumber: 16,
-    label: "Chemistry Full Mock 16",
-    mockLabel: "NTA Full Mock 16 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-17",
-    mockNumber: 17,
-    label: "Chemistry Full Mock 17",
-    mockLabel: "NTA Full Mock 17 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-18",
-    mockNumber: 18,
-    label: "Chemistry Full Mock 18",
-    mockLabel: "NTA Full Mock 18 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-19",
-    mockNumber: 19,
-    label: "Chemistry Full Mock 19",
-    mockLabel: "NTA Full Mock 19 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "chemistry-mock-20",
-    mockNumber: 20,
-    label: "Chemistry Full Mock 20",
-    mockLabel: "NTA Full Mock 20 • Full Syllabus CBT (Grand Final)",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "Grand Final", "NTA CBT Pattern"],
-  },
-];
-
-export const MATHS_MOCK_TESTS: MockTestItem[] = [
-  {
-    id: "maths-mock-1",
-    mockNumber: 1,
-    label: "Mathematics Full Mock 1",
-    mockLabel: "NTA Full Mock 1 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-2",
-    mockNumber: 2,
-    label: "Mathematics Full Mock 2",
-    mockLabel: "NTA Full Mock 2 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-3",
-    mockNumber: 3,
-    label: "Mathematics Full Mock 3",
-    mockLabel: "NTA Full Mock 3 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-4",
-    mockNumber: 4,
-    label: "Mathematics Full Mock 4",
-    mockLabel: "NTA Full Mock 4 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-5",
-    mockNumber: 5,
-    label: "Mathematics Full Mock 5",
-    mockLabel: "NTA Full Mock 5 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-6",
-    mockNumber: 6,
-    label: "Mathematics Full Mock 6",
-    mockLabel: "NTA Full Mock 6 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-7",
-    mockNumber: 7,
-    label: "Mathematics Full Mock 7",
-    mockLabel: "NTA Full Mock 7 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-8",
-    mockNumber: 8,
-    label: "Mathematics Full Mock 8",
-    mockLabel: "NTA Full Mock 8 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-9",
-    mockNumber: 9,
-    label: "Mathematics Full Mock 9",
-    mockLabel: "NTA Full Mock 9 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-10",
-    mockNumber: 10,
-    label: "Mathematics Full Mock 10",
-    mockLabel: "NTA Full Mock 10 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-11",
-    mockNumber: 11,
-    label: "Mathematics Full Mock 11",
-    mockLabel: "NTA Full Mock 11 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-12",
-    mockNumber: 12,
-    label: "Mathematics Full Mock 12",
-    mockLabel: "NTA Full Mock 12 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-13",
-    mockNumber: 13,
-    label: "Mathematics Full Mock 13",
-    mockLabel: "NTA Full Mock 13 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-14",
-    mockNumber: 14,
-    label: "Mathematics Full Mock 14",
-    mockLabel: "NTA Full Mock 14 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-15",
-    mockNumber: 15,
-    label: "Mathematics Full Mock 15",
-    mockLabel: "NTA Full Mock 15 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-16",
-    mockNumber: 16,
-    label: "Mathematics Full Mock 16",
-    mockLabel: "NTA Full Mock 16 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-17",
-    mockNumber: 17,
-    label: "Mathematics Full Mock 17",
-    mockLabel: "NTA Full Mock 17 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-18",
-    mockNumber: 18,
-    label: "Mathematics Full Mock 18",
-    mockLabel: "NTA Full Mock 18 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-19",
-    mockNumber: 19,
-    label: "Mathematics Full Mock 19",
-    mockLabel: "NTA Full Mock 19 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "maths-mock-20",
-    mockNumber: 20,
-    label: "Mathematics Full Mock 20",
-    mockLabel: "NTA Full Mock 20 • Full Syllabus CBT (Grand Final)",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "Grand Final", "NTA CBT Pattern"],
-  },
-];
-
-export const BIOLOGY_MOCK_TESTS: MockTestItem[] = [
-  {
-    id: "biology-mock-1",
-    mockNumber: 1,
-    label: "Biology Full Mock 1",
-    mockLabel: "NTA Full Mock 1 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-2",
-    mockNumber: 2,
-    label: "Biology Full Mock 2",
-    mockLabel: "NTA Full Mock 2 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-3",
-    mockNumber: 3,
-    label: "Biology Full Mock 3",
-    mockLabel: "NTA Full Mock 3 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-4",
-    mockNumber: 4,
-    label: "Biology Full Mock 4",
-    mockLabel: "NTA Full Mock 4 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-5",
-    mockNumber: 5,
-    label: "Biology Full Mock 5",
-    mockLabel: "NTA Full Mock 5 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-6",
-    mockNumber: 6,
-    label: "Biology Full Mock 6",
-    mockLabel: "NTA Full Mock 6 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-7",
-    mockNumber: 7,
-    label: "Biology Full Mock 7",
-    mockLabel: "NTA Full Mock 7 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-8",
-    mockNumber: 8,
-    label: "Biology Full Mock 8",
-    mockLabel: "NTA Full Mock 8 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-9",
-    mockNumber: 9,
-    label: "Biology Full Mock 9",
-    mockLabel: "NTA Full Mock 9 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-10",
-    mockNumber: 10,
-    label: "Biology Full Mock 10",
-    mockLabel: "NTA Full Mock 10 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-11",
-    mockNumber: 11,
-    label: "Biology Full Mock 11",
-    mockLabel: "NTA Full Mock 11 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-12",
-    mockNumber: 12,
-    label: "Biology Full Mock 12",
-    mockLabel: "NTA Full Mock 12 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-13",
-    mockNumber: 13,
-    label: "Biology Full Mock 13",
-    mockLabel: "NTA Full Mock 13 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-14",
-    mockNumber: 14,
-    label: "Biology Full Mock 14",
-    mockLabel: "NTA Full Mock 14 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-15",
-    mockNumber: 15,
-    label: "Biology Full Mock 15",
-    mockLabel: "NTA Full Mock 15 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-16",
-    mockNumber: 16,
-    label: "Biology Full Mock 16",
-    mockLabel: "NTA Full Mock 16 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-17",
-    mockNumber: 17,
-    label: "Biology Full Mock 17",
-    mockLabel: "NTA Full Mock 17 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-18",
-    mockNumber: 18,
-    label: "Biology Full Mock 18",
-    mockLabel: "NTA Full Mock 18 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-19",
-    mockNumber: 19,
-    label: "Biology Full Mock 19",
-    mockLabel: "NTA Full Mock 19 • Full Syllabus CBT",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "biology-mock-20",
-    mockNumber: 20,
-    label: "Biology Full Mock 20",
-    mockLabel: "NTA Full Mock 20 • Full Syllabus CBT (Grand Final)",
-    duration: "45 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "Grand Final", "NTA CBT Pattern"],
-  },
-];
-
-export const ACCOUNTANCY_MOCK_TESTS: MockTestItem[] = [
-  {
-    id: "accountancy-mock-1",
-    mockNumber: 1,
-    label: "Accountancy Full Mock 1",
-    mockLabel: "NTA Full Mock 1 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-2",
-    mockNumber: 2,
-    label: "Accountancy Full Mock 2",
-    mockLabel: "NTA Full Mock 2 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-3",
-    mockNumber: 3,
-    label: "Accountancy Full Mock 3",
-    mockLabel: "NTA Full Mock 3 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-4",
-    mockNumber: 4,
-    label: "Accountancy Full Mock 4",
-    mockLabel: "NTA Full Mock 4 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-5",
-    mockNumber: 5,
-    label: "Accountancy Full Mock 5",
-    mockLabel: "NTA Full Mock 5 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-6",
-    mockNumber: 6,
-    label: "Accountancy Full Mock 6",
-    mockLabel: "NTA Full Mock 6 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-7",
-    mockNumber: 7,
-    label: "Accountancy Full Mock 7",
-    mockLabel: "NTA Full Mock 7 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-8",
-    mockNumber: 8,
-    label: "Accountancy Full Mock 8",
-    mockLabel: "NTA Full Mock 8 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-9",
-    mockNumber: 9,
-    label: "Accountancy Full Mock 9",
-    mockLabel: "NTA Full Mock 9 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-10",
-    mockNumber: 10,
-    label: "Accountancy Full Mock 10",
-    mockLabel: "NTA Full Mock 10 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-11",
-    mockNumber: 11,
-    label: "Accountancy Full Mock 11",
-    mockLabel: "NTA Full Mock 11 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-12",
-    mockNumber: 12,
-    label: "Accountancy Full Mock 12",
-    mockLabel: "NTA Full Mock 12 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-13",
-    mockNumber: 13,
-    label: "Accountancy Full Mock 13",
-    mockLabel: "NTA Full Mock 13 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-14",
-    mockNumber: 14,
-    label: "Accountancy Full Mock 14",
-    mockLabel: "NTA Full Mock 14 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-15",
-    mockNumber: 15,
-    label: "Accountancy Full Mock 15",
-    mockLabel: "NTA Full Mock 15 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-16",
-    mockNumber: 16,
-    label: "Accountancy Full Mock 16",
-    mockLabel: "NTA Full Mock 16 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-17",
-    mockNumber: 17,
-    label: "Accountancy Full Mock 17",
-    mockLabel: "NTA Full Mock 17 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-18",
-    mockNumber: 18,
-    label: "Accountancy Full Mock 18",
-    mockLabel: "NTA Full Mock 18 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-19",
-    mockNumber: 19,
-    label: "Accountancy Full Mock 19",
-    mockLabel: "NTA Full Mock 19 • Full Syllabus CBT",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-  },
-  {
-    id: "accountancy-mock-20",
-    mockNumber: 20,
-    label: "Accountancy Full Mock 20",
-    mockLabel: "NTA Full Mock 20 • Full Syllabus CBT (Grand Final)",
-    duration: "60 Minutes",
-    questions: 50,
-    tags: ["Full Syllabus", "Grand Final", "NTA CBT Pattern"],
-  },
-];
-
-export const ECONOMICS_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
-  id: `eco-mock-${i + 1}`,
-  mockNumber: i + 1,
-  label: `Economics Full Mock ${i + 1}`,
-  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
-  duration: "60 Minutes",
-  questions: 50,
-  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-}));
-
-export const BUSINESS_STUDIES_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
-  id: `bst-mock-${i + 1}`,
-  mockNumber: i + 1,
-  label: `Business Studies Full Mock ${i + 1}`,
-  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
-  duration: "60 Minutes",
-  questions: 50,
-  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-}));
-
-export const HISTORY_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
-  id: `history-mock-${i + 1}`,
-  mockNumber: i + 1,
-  label: `History Full Mock ${i + 1}`,
-  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
-  duration: "45 Minutes",
-  questions: 50,
-  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-}));
-
-export const POLITICAL_SCIENCE_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
-  id: `pol-science-mock-${i + 1}`,
-  mockNumber: i + 1,
-  label: `Political Science Full Mock ${i + 1}`,
-  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
-  duration: "45 Minutes",
-  questions: 50,
-  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-}));
-
-export const GEOGRAPHY_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
-  id: `geo-mock-${i + 1}`,
-  mockNumber: i + 1,
-  label: `Geography Full Mock ${i + 1}`,
-  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
-  duration: "45 Minutes",
-  questions: 50,
-  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-}));
-
-export const PSYCHOLOGY_MOCK_TESTS: MockTestItem[] = Array.from({ length: 20 }, (_, i) => ({
-  id: `psychology-mock-${i + 1}`,
-  mockNumber: i + 1,
-  label: `Psychology Full Mock ${i + 1}`,
-  mockLabel: `NTA Full Mock ${i + 1} • Full Syllabus CBT${i === 19 ? " (Grand Final)" : ""}`,
-  duration: "45 Minutes",
-  questions: 50,
-  tags: ["Full Syllabus", "NTA CBT Pattern", "50 Compulsory Qs"],
-}));
-
-export const SOCIOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("sociology", "Sociology", 45);
-export const PHYSICAL_EDUCATION_MOCK_TESTS: MockTestItem[] = createMockTestList("physical-education", "Physical Education", 45);
-export const COMPUTER_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("computer-science", "Computer Science / IP", 60);
-export const HOME_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("home-science", "Home Science", 45);
-export const MASS_MEDIA_MOCK_TESTS: MockTestItem[] = createMockTestList("mass-media", "Mass Media", 45);
-export const ENVIRONMENTAL_STUDIES_MOCK_TESTS: MockTestItem[] = createMockTestList("environmental-studies", "Environmental Studies", 45);
-export const FINE_ARTS_MOCK_TESTS: MockTestItem[] = createMockTestList("fine-arts", "Fine Arts / Visual Arts", 45);
-export const AGRICULTURE_MOCK_TESTS: MockTestItem[] = createMockTestList("agriculture", "Agriculture", 45);
-export const ANTHROPOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("anthropology", "Anthropology", 45);
+export const PHYSICS_MOCK_TESTS: MockTestItem[] = createMockTestList("physics", "Physics", 60, 20);
+export const CHEMISTRY_MOCK_TESTS: MockTestItem[] = createMockTestList("chemistry", "Chemistry", 60, 20);
+export const MATHS_MOCK_TESTS: MockTestItem[] = createMockTestList("maths", "Mathematics", 60, 20);
+export const BIOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("biology", "Biology", 45, 12);
+export const ACCOUNTANCY_MOCK_TESTS: MockTestItem[] = createMockTestList("accountancy", "Accountancy", 60, 18);
+export const ECONOMICS_MOCK_TESTS: MockTestItem[] = createMockTestList("economics", "Economics", 60, 20);
+export const BUSINESS_STUDIES_MOCK_TESTS: MockTestItem[] = createMockTestList("business-studies", "Business Studies", 45, 20);
+export const HISTORY_MOCK_TESTS: MockTestItem[] = createMockTestList("history", "History", 45, 20);
+export const POLITICAL_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("political-science", "Political Science", 45, 20);
+export const GEOGRAPHY_MOCK_TESTS: MockTestItem[] = createMockTestList("geography", "Geography", 45, 20);
+export const PSYCHOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("psychology", "Psychology", 45, 20);
+export const SOCIOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("sociology", "Sociology", 45, 20);
+export const PHYSICAL_EDUCATION_MOCK_TESTS: MockTestItem[] = createMockTestList("physical-education", "Physical Education", 45, 20);
+export const COMPUTER_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("computer-science", "Computer Science", 60, 20);
+export const HOME_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("home-science", "Home Science", 45, 20);
+export const MASS_MEDIA_MOCK_TESTS: MockTestItem[] = createMockTestList("mass-media", "Mass Media", 45, 20);
+export const ENVIRONMENTAL_STUDIES_MOCK_TESTS: MockTestItem[] = createMockTestList("environmental-studies", "Environmental Studies", 45, 20);
+export const FINE_ARTS_MOCK_TESTS: MockTestItem[] = createMockTestList("fine-arts", "Fine Arts", 45, 20);
+export const AGRICULTURE_MOCK_TESTS: MockTestItem[] = createMockTestList("agriculture", "Agriculture", 45, 20);
+export const ANTHROPOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("anthropology", "Anthropology", 45, 20);
 
 export function getMockTestsForSubject(subjectKey: string): MockTestItem[] {
-  const norm = subjectKey.toLowerCase().trim().replace(/[-_]/g, "");
-  if (norm === "physics" || norm === "phys") return PHYSICS_MOCK_TESTS;
-  if (norm === "chemistry" || norm === "chem") return CHEMISTRY_MOCK_TESTS;
-  if (norm === "maths" || norm === "mathematics" || norm === "math") return MATHS_MOCK_TESTS;
-  if (norm === "biology" || norm === "bio") return BIOLOGY_MOCK_TESTS;
-  if (norm === "accountancy" || norm === "accounts" || norm === "accs" || norm === "account") return ACCOUNTANCY_MOCK_TESTS;
-  if (norm === "economics" || norm === "eco") return ECONOMICS_MOCK_TESTS;
-  if (norm === "businessstudies" || norm === "business" || norm === "bst") return BUSINESS_STUDIES_MOCK_TESTS;
-  if (norm === "history" || norm === "hist") return HISTORY_MOCK_TESTS;
-  if (norm === "politicalscience" || norm === "polscience" || norm === "pol") return POLITICAL_SCIENCE_MOCK_TESTS;
-  if (norm === "geography" || norm === "geo") return GEOGRAPHY_MOCK_TESTS;
-  if (norm === "psychology" || norm === "psy" || norm === "psych") return PSYCHOLOGY_MOCK_TESTS;
-  if (norm === "sociology" || norm === "soc") return SOCIOLOGY_MOCK_TESTS;
-  if (norm === "physicaleducation" || norm === "ped" || norm === "physical") return PHYSICAL_EDUCATION_MOCK_TESTS;
-  if (norm === "computerscience" || norm === "cs" || norm === "csip" || norm === "informaticspractices") return COMPUTER_SCIENCE_MOCK_TESTS;
-  if (norm === "homescience" || norm === "hsc") return HOME_SCIENCE_MOCK_TESTS;
-  if (norm === "massmedia" || norm === "masscommunication" || norm === "mmc" || norm === "media") return MASS_MEDIA_MOCK_TESTS;
-  if (norm === "environmentalstudies" || norm === "environmentalscience" || norm === "evs") return ENVIRONMENTAL_STUDIES_MOCK_TESTS;
-  if (norm === "finearts" || norm === "visualarts" || norm === "fa") return FINE_ARTS_MOCK_TESTS;
-  if (norm === "agriculture" || norm === "agr") return AGRICULTURE_MOCK_TESTS;
-  if (norm === "anthropology" || norm === "ant") return ANTHROPOLOGY_MOCK_TESTS;
-
-  return createMockTestList(subjectKey, subjectKey.charAt(0).toUpperCase() + subjectKey.slice(1), 60);
+  if (!subjectKey) return [];
+  const key = subjectKey.toLowerCase().trim();
+  const count = SUBJECT_MOCK_COUNTS[key] ?? 20;
+  const duration = SUBJECT_DURATION_MINUTES[key] ?? 45;
+  return createMockTestList(key, subjectKey, duration, count);
 }
 
 export interface PYQTestItem {
@@ -1220,152 +338,45 @@ export interface PYQTestItem {
 }
 
 export function createPYQTestList(
-  subjectSlug: string,
-  subjectName: string,
-  code: string,
-  durationMinutes: number = 60
+  _subjectSlug: string,
+  _subjectName: string,
+  _code: string,
+  _durationMinutes: number = 60
 ): PYQTestItem[] {
-  return [
-    {
-      id: `${subjectSlug}-pyq`,
-      subjectSlug,
-      subjectName,
-      code,
-      year: "2024",
-      shift: "Shift 1",
-      label: `CUET UG 2024 ${subjectName} (Shift 1 Official CBT)`,
-      yearLabel: "2024 Official NTA CBT Paper (Shift 1)",
-      duration: `${durationMinutes} Minutes`,
-      questions: 50,
-      tags: ["2024 Official CBT", "Shift 1", "50 Compulsory Qs", "NTA Solved"],
-    },
-    {
-      id: `${subjectSlug}-pyq-2024-s2`,
-      subjectSlug,
-      subjectName,
-      code,
-      year: "2024",
-      shift: "Shift 2",
-      label: `CUET UG 2024 ${subjectName} (Shift 2 Official CBT)`,
-      yearLabel: "2024 Official NTA CBT Paper (Shift 2)",
-      duration: `${durationMinutes} Minutes`,
-      questions: 50,
-      tags: ["2024 Official CBT", "Shift 2", "50 Compulsory Qs", "NTA Solved"],
-    },
-    {
-      id: `${subjectSlug}-pyq-2023-s1`,
-      subjectSlug,
-      subjectName,
-      code,
-      year: "2023",
-      shift: "Shift 1",
-      label: `CUET UG 2023 ${subjectName} (Shift 1 Official CBT)`,
-      yearLabel: "2023 Official NTA CBT Paper (Shift 1)",
-      duration: `${durationMinutes} Minutes`,
-      questions: 50,
-      tags: ["2023 Official CBT", "Shift 1", "50 Compulsory Qs", "NTA Solved"],
-    },
-    {
-      id: `${subjectSlug}-pyq-2023-s2`,
-      subjectSlug,
-      subjectName,
-      code,
-      year: "2023",
-      shift: "Shift 2",
-      label: `CUET UG 2023 ${subjectName} (Shift 2 Official CBT)`,
-      yearLabel: "2023 Official NTA CBT Paper (Shift 2)",
-      duration: `${durationMinutes} Minutes`,
-      questions: 50,
-      tags: ["2023 Official CBT", "Shift 2", "50 Compulsory Qs", "NTA Solved"],
-    },
-    {
-      id: `${subjectSlug}-pyq-2022`,
-      subjectSlug,
-      subjectName,
-      code,
-      year: "2022",
-      shift: "Official",
-      label: `CUET UG 2022 ${subjectName} (Official CBT Paper)`,
-      yearLabel: "2022 Official Inaugural CBT Paper",
-      duration: `${durationMinutes} Minutes`,
-      questions: 50,
-      tags: ["2022 Official CBT", "50 Compulsory Qs", "NTA Solved"],
-    },
-  ];
+  // All PYQ papers are currently being remade from official NTA shifts
+  return [];
 }
 
-export const PHYSICS_PYQ_TESTS: PYQTestItem[] = createPYQTestList("physics", "Physics", "312", 60);
-export const CHEMISTRY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("chemistry", "Chemistry", "306", 60);
-export const MATHS_PYQ_TESTS: PYQTestItem[] = createPYQTestList("mathematics", "Mathematics", "319", 60);
-export const BIOLOGY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("biology", "Biology", "304", 45);
-export const ACCOUNTANCY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("accountancy", "Accountancy", "301", 60);
-export const BUSINESS_STUDIES_PYQ_TESTS: PYQTestItem[] = createPYQTestList("business-studies", "Business Studies", "305", 45);
-export const ECONOMICS_PYQ_TESTS: PYQTestItem[] = createPYQTestList("economics", "Economics", "309", 60);
-export const HISTORY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("history", "History", "314", 45);
-export const POLITICAL_SCIENCE_PYQ_TESTS: PYQTestItem[] = createPYQTestList("political-science", "Political Science", "323", 45);
-export const GEOGRAPHY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("geography", "Geography", "313", 45);
-export const PSYCHOLOGY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("psychology", "Psychology", "324", 45);
-export const SOCIOLOGY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("sociology", "Sociology", "325", 45);
-export const PHYSICAL_EDUCATION_PYQ_TESTS: PYQTestItem[] = createPYQTestList("physical-education", "Physical Education", "321", 45);
-export const COMPUTER_SCIENCE_PYQ_TESTS: PYQTestItem[] = createPYQTestList("computer-science", "Computer Science / IP", "308", 60);
-export const HOME_SCIENCE_PYQ_TESTS: PYQTestItem[] = createPYQTestList("home-science", "Home Science", "315", 45);
-export const MASS_MEDIA_PYQ_TESTS: PYQTestItem[] = createPYQTestList("mass-media", "Mass Media & Communication", "318", 45);
-export const ENVIRONMENTAL_STUDIES_PYQ_TESTS: PYQTestItem[] = createPYQTestList("environmental-studies", "Environmental Studies", "307", 45);
-export const FINE_ARTS_PYQ_TESTS: PYQTestItem[] = createPYQTestList("fine-arts", "Fine Arts / Visual Arts", "311", 45);
-export const AGRICULTURE_PYQ_TESTS: PYQTestItem[] = createPYQTestList("agriculture", "Agriculture", "302", 45);
-export const ANTHROPOLOGY_PYQ_TESTS: PYQTestItem[] = createPYQTestList("anthropology", "Anthropology", "303", 45);
+export const PHYSICS_PYQ_TESTS: PYQTestItem[] = [];
+export const CHEMISTRY_PYQ_TESTS: PYQTestItem[] = [];
+export const MATHS_PYQ_TESTS: PYQTestItem[] = [];
+export const BIOLOGY_PYQ_TESTS: PYQTestItem[] = [];
+export const ACCOUNTANCY_PYQ_TESTS: PYQTestItem[] = [];
+export const BUSINESS_STUDIES_PYQ_TESTS: PYQTestItem[] = [];
+export const ECONOMICS_PYQ_TESTS: PYQTestItem[] = [];
+export const HISTORY_PYQ_TESTS: PYQTestItem[] = [];
+export const POLITICAL_SCIENCE_PYQ_TESTS: PYQTestItem[] = [];
+export const GEOGRAPHY_PYQ_TESTS: PYQTestItem[] = [];
+export const PSYCHOLOGY_PYQ_TESTS: PYQTestItem[] = [];
+export const SOCIOLOGY_PYQ_TESTS: PYQTestItem[] = [];
+export const PHYSICAL_EDUCATION_PYQ_TESTS: PYQTestItem[] = [];
+export const COMPUTER_SCIENCE_PYQ_TESTS: PYQTestItem[] = [];
+export const HOME_SCIENCE_PYQ_TESTS: PYQTestItem[] = [];
+export const MASS_MEDIA_PYQ_TESTS: PYQTestItem[] = [];
+export const ENVIRONMENTAL_STUDIES_PYQ_TESTS: PYQTestItem[] = [];
+export const FINE_ARTS_PYQ_TESTS: PYQTestItem[] = [];
+export const AGRICULTURE_PYQ_TESTS: PYQTestItem[] = [];
+export const ANTHROPOLOGY_PYQ_TESTS: PYQTestItem[] = [];
 
-export function getPYQTestsForSubject(subjectKey: string): PYQTestItem[] {
-  const norm = subjectKey.toLowerCase().trim().replace(/[-_]/g, "");
-  if (norm === "physics" || norm === "phys") return PHYSICS_PYQ_TESTS;
-  if (norm === "chemistry" || norm === "chem") return CHEMISTRY_PYQ_TESTS;
-  if (norm === "maths" || norm === "mathematics" || norm === "math") return MATHS_PYQ_TESTS;
-  if (norm === "biology" || norm === "bio") return BIOLOGY_PYQ_TESTS;
-  if (norm === "accountancy" || norm === "accounts" || norm === "accs" || norm === "account") return ACCOUNTANCY_PYQ_TESTS;
-  if (norm === "economics" || norm === "eco") return ECONOMICS_PYQ_TESTS;
-  if (norm === "businessstudies" || norm === "business" || norm === "bst") return BUSINESS_STUDIES_PYQ_TESTS;
-  if (norm === "history" || norm === "hist") return HISTORY_PYQ_TESTS;
-  if (norm === "politicalscience" || norm === "polscience" || norm === "pol") return POLITICAL_SCIENCE_PYQ_TESTS;
-  if (norm === "geography" || norm === "geo") return GEOGRAPHY_PYQ_TESTS;
-  if (norm === "psychology" || norm === "psy" || norm === "psych") return PSYCHOLOGY_PYQ_TESTS;
-  if (norm === "sociology" || norm === "soc") return SOCIOLOGY_PYQ_TESTS;
-  if (norm === "physicaleducation" || norm === "ped" || norm === "physical") return PHYSICAL_EDUCATION_PYQ_TESTS;
-  if (norm === "computerscience" || norm === "cs" || norm === "csip" || norm === "informaticspractices") return COMPUTER_SCIENCE_PYQ_TESTS;
-  if (norm === "homescience" || norm === "hsc") return HOME_SCIENCE_PYQ_TESTS;
-  if (norm === "massmedia" || norm === "masscommunication" || norm === "mmc" || norm === "media") return MASS_MEDIA_PYQ_TESTS;
-  if (norm === "environmentalstudies" || norm === "environmentalscience" || norm === "evs") return ENVIRONMENTAL_STUDIES_PYQ_TESTS;
-  if (norm === "finearts" || norm === "visualarts" || norm === "fa") return FINE_ARTS_PYQ_TESTS;
-  if (norm === "agriculture" || norm === "agr") return AGRICULTURE_PYQ_TESTS;
-  if (norm === "anthropology" || norm === "ant") return ANTHROPOLOGY_PYQ_TESTS;
-
-  return createPYQTestList(subjectKey, subjectKey.charAt(0).toUpperCase() + subjectKey.slice(1), "300", 45);
+export function getPYQTestsForSubject(_subjectKey: string): PYQTestItem[] {
+  // All PYQs under reconstruction pending remake
+  return [];
 }
 
 export function getAllPYQTests(): PYQTestItem[] {
-  return [
-    ...PHYSICS_PYQ_TESTS,
-    ...CHEMISTRY_PYQ_TESTS,
-    ...MATHS_PYQ_TESTS,
-    ...BIOLOGY_PYQ_TESTS,
-    ...ACCOUNTANCY_PYQ_TESTS,
-    ...BUSINESS_STUDIES_PYQ_TESTS,
-    ...ECONOMICS_PYQ_TESTS,
-    ...HISTORY_PYQ_TESTS,
-    ...POLITICAL_SCIENCE_PYQ_TESTS,
-    ...GEOGRAPHY_PYQ_TESTS,
-    ...PSYCHOLOGY_PYQ_TESTS,
-    ...SOCIOLOGY_PYQ_TESTS,
-    ...PHYSICAL_EDUCATION_PYQ_TESTS,
-    ...COMPUTER_SCIENCE_PYQ_TESTS,
-    ...HOME_SCIENCE_PYQ_TESTS,
-    ...MASS_MEDIA_PYQ_TESTS,
-    ...ENVIRONMENTAL_STUDIES_PYQ_TESTS,
-    ...FINE_ARTS_PYQ_TESTS,
-    ...AGRICULTURE_PYQ_TESTS,
-    ...ANTHROPOLOGY_PYQ_TESTS,
-  ];
+  // All PYQs under reconstruction pending remake
+  return [];
 }
-
 
 export const CUET_SUBJECTS: SubjectConfig[] = [
   // Science Stream
@@ -1379,7 +390,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 24,
+    popularMockCount: 20,
   },
   {
     id: "chemistry",
@@ -1403,7 +414,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 32,
+    popularMockCount: 20,
   },
   {
     id: "biology",
@@ -1415,7 +426,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 12,
   },
 
   // Commerce Stream
@@ -1429,7 +440,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 20,
+    popularMockCount: 18,
   },
   {
     id: "business-studies",
@@ -1441,7 +452,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 22,
+    popularMockCount: 20,
   },
   {
     id: "economics",
@@ -1453,7 +464,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 30,
+    popularMockCount: 20,
   },
   {
     id: "mathematics-com",
@@ -1465,7 +476,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 18,
+    popularMockCount: 20,
   },
 
   // Humanities Stream
@@ -1479,7 +490,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 27,
+    popularMockCount: 20,
   },
   {
     id: "history",
@@ -1491,7 +502,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 25,
+    popularMockCount: 20,
   },
   {
     id: "geography",
@@ -1637,7 +648,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 10,
+    popularMockCount: 20,
   },
 ];
 

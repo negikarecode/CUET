@@ -378,3 +378,21 @@ Add a `vercel.json` file in your repository:
 ## 👥 Contributors & Maintainers
 - **Engineering & Product:** negikarecode
 - **Exam Research & Content:** CUET Academic Team
+
+# CUET PYQ ingestion (Stage 1)
+
+The PDF ingestion pipeline stores source pages, extracted/raw text, normalized question text, options, answer-key evidence, taxonomy estimates, confidence, duplicate flags, and review reasons in `data/cuet_pyq_master.db` (SQLite). Page renders and question image crops are written under `public/pyq_pages` and `public/pyq_images` for source review.
+
+Install Python packages with `python3 -m pip install -r scripts/pyq_pipeline/requirements.txt` and install the system Tesseract OCR binary for scanned PDFs. Then run one PDF or a folder catalog:
+
+```bash
+python3 scripts/ingest_pyq.py cuet_ug_pyqs
+python3 scripts/ingest_pyq.py cuet_ug_pyqs/physics/example.pdf --subject physics
+```
+
+The folder runner is also available as `npm run ingest:pdf -- cuet_ug_pyqs`.
+After a corpus run, `python3 scripts/audit_pyq_ingestion.py` checks question/option completeness, answer-key consistency, source-page references, and JSON/JSONL agreement against the input PDFs.
+
+Processing is resumable; `--force` reprocesses a completed PDF. The extractor does not synthesize correct answers: it only maps answers found in an explicitly labeled answer-key section. Missing keys stay `NULL` and are routed to review. Batch exports from the protected review screen are JSON and JSONL.
+
+For the review UI, set `PYQ_ADMIN_TOKEN` in the server environment and open `/dashboard/admin/pyq`. The token is required by all admin data and export endpoints. The UI shows the source page beside preserved raw extraction, supports editing clean text/options/taxonomy, and only creates a manual answer-key record when a reviewer explicitly selects one.

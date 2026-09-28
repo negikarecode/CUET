@@ -91,7 +91,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "science",
     name: "Science Stream",
     shortName: "Science",
-    badge: "7 Domains • 140 Mocks",
+    badge: "7 Domains • In Preparation",
     accentBg: "#E0F2FE",
     accentText: "#0369A1",
     subjects: [
@@ -108,7 +108,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "commerce",
     name: "Commerce Stream",
     shortName: "Commerce",
-    badge: "4 Domains • 80 Mocks",
+    badge: "4 Domains • In Preparation",
     accentBg: "#FEF3C7",
     accentText: "#92400E",
     subjects: [
@@ -122,7 +122,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "humanities",
     name: "Humanities & Arts",
     shortName: "Humanities",
-    badge: "10 Domains • 200 Mocks",
+    badge: "10 Domains • In Preparation",
     accentBg: "#FCE7F3",
     accentText: "#9D174D",
     subjects: [
@@ -179,10 +179,10 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Biology",
     code: "304",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
+    mockCount: 12,
+    totalQuestions: 600,
     subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Complete Full Syllabus Coverage",
+      "600 Total Questions • 50 Compulsory Questions per Paper • 45 Minutes • Complete Full Syllabus Coverage",
     icon: Dna,
   },
   accountancy: {
@@ -190,10 +190,10 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Accountancy",
     code: "301",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
+    mockCount: 18,
+    totalQuestions: 900,
     subtitle:
-      "1,000 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Complete Full Syllabus Coverage",
+      "900 Total Questions • 50 Compulsory Questions per Paper • 60 Minutes • Complete Full Syllabus Coverage",
     icon: Calculator,
   },
   "business-studies": {
@@ -443,11 +443,11 @@ export default function MocksPage() {
         {/* Header */}
         <div className="space-y-2">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-black uppercase bg-[#D1FAE5] text-[#065F46] px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
-              20 Subjects Live
-            </span>
             <span className="text-[11px] font-black uppercase bg-[#FEF3C7] text-black px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
-              400 Full Mocks
+              In Preparation / Rebuilding
+            </span>
+            <span className="text-[11px] font-black uppercase bg-[#FEE2E2] text-[#DC2626] px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
+              0 Mocks Live
             </span>
             <span className="text-[11px] font-black uppercase bg-white text-black px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
               20,000 Questions
@@ -481,10 +481,10 @@ export default function MocksPage() {
                   onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
                   className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
                 >
-                  <option value="all">All Streams (400 Total Mocks)</option>
-                  <option value="science">Science Stream (7 Subjects • 140 Mocks)</option>
-                  <option value="commerce">Commerce Stream (4 Subjects • 80 Mocks)</option>
-                  <option value="humanities">Humanities & Arts (10 Subjects • 200 Mocks)</option>
+                  <option value="all">All Streams (Under Rebuild)</option>
+                  <option value="science">Science Stream (7 Subjects • In Preparation)</option>
+                  <option value="commerce">Commerce Stream (4 Subjects • In Preparation)</option>
+                  <option value="humanities">Humanities & Arts (10 Subjects • In Preparation)</option>
                 </select>
                 <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
@@ -511,21 +511,21 @@ export default function MocksPage() {
                       <optgroup label="Science Stream">
                         {STREAM_CONFIGS.science.subjects.map((k) => (
                           <option key={`sci-${k}`} value={k}>
-                            {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code} • 20 Mocks)
+                            {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code} • In Preparation)
                           </option>
                         ))}
                       </optgroup>
                       <optgroup label="Commerce Stream">
                         {STREAM_CONFIGS.commerce.subjects.map((k) => (
                           <option key={`com-${k}`} value={k}>
-                            {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code} • 20 Mocks)
+                            {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code} • In Preparation)
                           </option>
                         ))}
                       </optgroup>
                       <optgroup label="Humanities & Arts Stream">
                         {STREAM_CONFIGS.humanities.subjects.map((k) => (
                           <option key={`hum-${k}`} value={k}>
-                            {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code} • 20 Mocks)
+                            {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code} • In Preparation)
                           </option>
                         ))}
                       </optgroup>
@@ -533,7 +533,7 @@ export default function MocksPage() {
                   ) : (
                     availableSubjectsForDropdown.map((sub) => (
                       <option key={sub.key} value={sub.key}>
-                        {sub.name} (Code {sub.code} • 20 Mocks)
+                        {sub.name} (Code {sub.code} • In Preparation)
                       </option>
                     ))
                   )}
@@ -559,8 +559,8 @@ export default function MocksPage() {
                     <h2 className="text-xl md:text-2xl font-black text-black">
                       {activeSubjectInfo.name} Domain Full CBT Mocks
                     </h2>
-                    <span className="text-xs font-black uppercase bg-[#D1FAE5] text-[#065F46] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
-                      {activeSubjectInfo.mockCount} Mocks Live
+                    <span className="text-xs font-black uppercase bg-[#FEF3C7] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                      {activeSubjectInfo.isLive ? `${activeSubjectInfo.mockCount} Mocks Live` : "In Preparation / Rebuilding"}
                     </span>
                     <span className="text-xs font-black uppercase bg-[#FEF3C7] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
                       Code: {activeSubjectInfo.code}
@@ -621,6 +621,7 @@ export default function MocksPage() {
             </h3>
           </div>
 
+          {displayedTests.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayedTests.map((test) => {
               const stats = isClient
@@ -723,6 +724,32 @@ export default function MocksPage() {
               );
             })}
           </div>
+        ) : (
+          <div className="bg-white rounded-xl border-2 border-black p-8 md:p-12 shadow-[4px_4px_0px_0px_#000] text-center space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-[#FEF3C7] border-2 border-black flex items-center justify-center mx-auto shadow-[3px_3px_0px_0px_#000]">
+              <RotateCcw className="w-7 h-7 text-black stroke-[2.5]" />
+            </div>
+            <div className="space-y-2 max-w-lg mx-auto">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEF3C7] border border-black text-[11px] font-black uppercase tracking-wider">
+                <span>Under Active Reconstruction</span>
+              </div>
+              <h3 className="text-2xl font-black text-black">
+                {activeSubjectInfo ? `${activeSubjectInfo.name} Mocks Being Remade` : "Mock Papers Under Reconstruction"}
+              </h3>
+              <p className="text-sm text-black/70 font-semibold leading-relaxed">
+                All CUET UG domain mock papers are currently being reconstructed and recalibrated from the ground up using authentic NTA question papers. New 50-compulsory-question CBT mock papers with verified NCERT explanations will be published shortly.
+              </p>
+            </div>
+            <div className="pt-2">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
+              >
+                <span>Back to Command Dashboard</span>
+              </Link>
+            </div>
+          </div>
+        )}
         </div>
       </div>
     </div>

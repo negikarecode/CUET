@@ -11,12 +11,14 @@
     "test": "tsx scripts/run-tests.ts",
     "test:ai": "tsx scripts/test-gemini-live.ts",
     "ingest": "tsx scripts/ingest-questions.ts",
+    "ingest:pdf": "python3 scripts/ingest_pyq.py",
     "seed": "tsx scripts/seed-questions.ts"
   },
   "dependencies": {
     "@google/genai": "^2.24.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.48.1",
+    "better-sqlite3": "^13.0.3",
     "clsx": "^2.1.1",
     "groq-sdk": "^1.6.0",
     "katex": "^0.18.5",
@@ -32,6 +34,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
     "@types/katex": "^0.16.8",
     "@types/node": "^20.17.19",
     "@types/react": "^18.3.18",

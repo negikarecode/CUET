@@ -62,8 +62,12 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
               <span className="text-[11px] font-black uppercase bg-[#FEF3C7] px-2 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
                 Code: {code}
               </span>
-              <span className="text-[10px] font-black uppercase border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000] bg-[#D1FAE5] text-[#065F46]">
-                {pyqTests.length} Official Papers Live
+              <span
+                className={`text-[10px] font-black uppercase border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000] ${
+                  isLive && pyqTests.length > 0 ? "bg-[#D1FAE5] text-[#065F46]" : "bg-[#FEF3C7] text-black"
+                }`}
+              >
+                {isLive && pyqTests.length > 0 ? `${pyqTests.length} Official Papers Live` : "In Preparation / Rebuilding"}
               </span>
               <span className="text-[10px] font-black uppercase border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000] bg-[#FAF7EE] text-black">
                 50 Compulsory Qs • {durationMinutes} Mins
@@ -80,7 +84,8 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
         </div>
 
         {/* PYQ Tests Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {isLive && pyqTests.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {pyqTests.map((test) => {
             const stats = isClient
               ? getTestAttemptStats(testAttempts, test.id)
@@ -178,6 +183,35 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
             );
           })}
         </div>
+        ) : (
+          <div className="bg-white rounded-xl border-2 border-black p-8 shadow-[4px_4px_0px_0px_#000] text-center space-y-4">
+            <div className="w-12 h-12 rounded-full bg-[#FEF3C7] border-2 border-black flex items-center justify-center mx-auto shadow-[2px_2px_0px_0px_#000]">
+              <RotateCcw className="w-6 h-6 text-black stroke-[2.5]" />
+            </div>
+            <div className="space-y-1 max-w-md mx-auto">
+              <h3 className="text-xl font-black text-black">
+                {title} In Preparation
+              </h3>
+              <p className="text-xs text-black/70 font-semibold leading-relaxed">
+                Official NTA past year papers for {subjectName} (Code {code}) are currently being remade and digitized from verified answer keys and shifts. They will be published shortly.
+              </p>
+            </div>
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                href="/dashboard/pyqs"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
+              >
+                <span>Back to All PYQ Papers</span>
+              </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:bg-white transition-all"
+              >
+                <span>Go to Command Dashboard</span>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

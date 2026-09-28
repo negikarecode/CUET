@@ -1,0 +1,2902 @@
+[
+  {
+    "questionNumber": 1,
+    "chapter": "Data Structures: Stacks",
+    "topic": "Handling Left Parenthesis in Infix to Postfix",
+    "questionText": "When scanning an Infix expression, what is done when an open parenthesis '(' is encountered?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It is pushed directly onto the operator stack without checking precedence",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Handling Left Parenthesis in Infix to Postfix."
+      },
+      {
+        "id": "B",
+        "text": "It is appended directly to the postfix output string",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It is appended directly to the postfix output string'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "It pops all operators currently in the stack",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It pops all operators currently in the stack'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "It raises an exception",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It raises an exception'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Open parentheses '(' are pushed onto the operator stack to demarcate a new local evaluation sub-scope.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q01",
+    "conceptId": "cs.data_structures_stac",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is It is pushed directly onto the operator stack without checking precedence.",
+      "concept": "Open parentheses '(' are pushed onto the operator stack to demarcate a new local evaluation sub-scope.\nHence, Option A is correct.",
+      "detailed": "Open parentheses '(' are pushed onto the operator stack to demarcate a new local evaluation sub-scope.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock11-q12",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 2,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Row Count via len()",
+    "questionText": "What does len(df) evaluate to for a DataFrame with 8 rows and 4 columns?",
+    "options": [
+      {
+        "id": "A",
+        "text": "4 (the number of columns)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '4 (the number of columns)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "32 (the total elements)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '32 (the total elements)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "2 (the dimensions)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '2 (the dimensions)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "8 (the number of rows in the DataFrame)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Row Count via len()."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "len(df) returns the number of rows (the length of the index axis).\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q02",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is 8 (the number of rows in the DataFrame).",
+      "concept": "len(df) returns the number of rows (the length of the index axis).\nHence, Option D is correct.",
+      "detailed": "len(df) returns the number of rows (the length of the index axis).\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock8-q31",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 3,
+    "chapter": "Computer Networks",
+    "topic": "Star Topology Fault Isolation",
+    "questionText": "Read the following enterprise network architecture case study and answer the questions that follow:\n\nNational Trust Bank is upgrading its network architecture connecting its Regional Headquarters with five local branches. The network design specifications are established as follows:\n1. Headquarters houses the core transactional database cluster, protected behind a stateful Packet Filtering Firewall and Intrusion Detection System (IDS).\n2. Inside each local branch, all teller workstations are wired to a high-speed Central Switch configured in a Star Topology.\n3. The connection between Headquarters and Branch 1 (distance 35 km) utilizes a dedicated High-Speed Leased Line over Optical Fiber.\n4. Wireless connectivity within the customer lounge is segregated on a guest VLAN protected with WPA3 Wi-Fi encryption.\n5. Inter-branch communication over public telecommunication networks is encrypted inside a Virtual Private Network (VPN) tunnel.\n\nQuestion: Why is a Star Topology using a central switch preferred for wiring workstations within each bank branch?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It requires less cable than a linear bus topology",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It requires less cable than a linear bus topology'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Failure of a single workstation or cable does not disrupt network communication among other workstations",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Star Topology Fault Isolation."
+      },
+      {
+        "id": "C",
+        "text": "It eliminates the need for network interface cards",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It eliminates the need for network interface cards'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "It works without any electrical power",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It works without any electrical power'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "In a star topology, each node connects independently to the switch; a single node failure does not affect the rest of the LAN.\nHence, Option B is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "COMPUTER_SCI-M07-Q03",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Failure of a single workstation or cable does not disrupt network communication among other workstations.",
+      "concept": "In a star topology, each node connects independently to the switch; a single node failure does not affect the rest of the LAN.\nHence, Option B is correct.",
+      "detailed": "In a star topology, each node connects independently to the switch; a single node failure does not affect the rest of the LAN.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock10-q47",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 4,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Docstring Access in Python",
+    "questionText": "How can the documentation string (docstring) of a function my_func() be programmatically accessed?",
+    "options": [
+      {
+        "id": "A",
+        "text": "my_func.__doc__",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Docstring Access in Python."
+      },
+      {
+        "id": "B",
+        "text": "my_func.get_doc()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'my_func.get_doc()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "my_func.__help__",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'my_func.__help__'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "doc(my_func)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'doc(my_func)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "A function's triple-quoted documentation string is stored in its __doc__ attribute.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q04",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is my_func.__doc__.",
+      "concept": "A function's triple-quoted documentation string is stored in its __doc__ attribute.\nHence, Option A is correct.",
+      "detailed": "A function's triple-quoted documentation string is stored in its __doc__ attribute.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock14-q1",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 5,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Heuristic Antivirus Analysis",
+    "questionText": "What is 'Heuristic Analysis' in modern anti-malware software?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Detecting previously unknown malware by analyzing suspicious behavioral patterns, API calls, and code structures rather than fixed signatures",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Heuristic Antivirus Analysis."
+      },
+      {
+        "id": "B",
+        "text": "Scanning only files written in Python",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Scanning only files written in Python'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Deleting all files older than five years",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Deleting all files older than five years'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Running scans exclusively while the user is typing",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Running scans exclusively while the user is typing'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Heuristic engines inspect code behavior and anomalies, identifying potential novel zero-day threats without pre-existing signatures.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q05",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Detecting previously unknown malware by analyzing suspicious behavioral patterns, API calls, and code structures rather than fixed signatures.",
+      "concept": "Heuristic engines inspect code behavior and anomalies, identifying potential novel zero-day threats without pre-existing signatures.\nHence, Option A is correct.",
+      "detailed": "Heuristic engines inspect code behavior and anomalies, identifying potential novel zero-day threats without pre-existing signatures.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock9-q22",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 6,
+    "chapter": "Societal Impacts, Cyber Ethics and Data Protection",
+    "topic": "Precious Metal Recovery from E-waste",
+    "questionText": "What valuable resources can be reclaimed through scientific e-waste recycling?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Precious metals including gold, silver, copper, and platinum from circuit boards and contacts",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Precious Metal Recovery from E-waste."
+      },
+      {
+        "id": "B",
+        "text": "Petroleum fuel",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Petroleum fuel'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Organic fertilizers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Organic fertilizers'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Fresh drinking water",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Fresh drinking water'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Printed circuit boards contain significant concentrations of precious metals (gold, silver, palladium, copper).\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q06",
+    "conceptId": "cs.societal_impacts_cyb",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Precious metals including gold, silver, copper, and platinum from circuit boards and contacts.",
+      "concept": "Printed circuit boards contain significant concentrations of precious metals (gold, silver, palladium, copper).\nHence, Option A is correct.",
+      "detailed": "Printed circuit boards contain significant concentrations of precious metals (gold, silver, palladium, copper).\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock13-q40",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 7,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "df.ndim for DataFrame",
+    "questionText": "What integer value does the df.ndim attribute return for any Pandas DataFrame?",
+    "options": [
+      {
+        "id": "A",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '1'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "2 (representing two-dimensional data)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains df.ndim for DataFrame."
+      },
+      {
+        "id": "C",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '3'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '0'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "A DataFrame is strictly two-dimensional, so df.ndim is invariant and always equals integer 2.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q07",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is 2 (representing two-dimensional data).",
+      "concept": "A DataFrame is strictly two-dimensional, so df.ndim is invariant and always equals integer 2.\nHence, Option B is correct.",
+      "detailed": "A DataFrame is strictly two-dimensional, so df.ndim is invariant and always equals integer 2.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock14-q30",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 8,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "DataFrame Dimensionality Property",
+    "questionText": "Which attribute explicitly returns the number of axes / dimensions (always 2 for DataFrame)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "df.ndim",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains DataFrame Dimensionality Property."
+      },
+      {
+        "id": "B",
+        "text": "df.dims",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'df.dims'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "df.dimension",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'df.dimension'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "df.axes_count",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'df.axes_count'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "df.ndim indicates the number of dimensions, which is 2 for DataFrames and 1 for Series.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q08",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is df.ndim.",
+      "concept": "df.ndim indicates the number of dimensions, which is 2 for DataFrames and 1 for Series.\nHence, Option A is correct.",
+      "detailed": "df.ndim indicates the number of dimensions, which is 2 for DataFrames and 1 for Series.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock15-q31",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 9,
+    "chapter": "Python Programming and File Handling",
+    "topic": "CSV vs Binary File Portability",
+    "questionText": "Why are CSV files often preferred over pickle binary files for sharing data between different programming languages?",
+    "options": [
+      {
+        "id": "A",
+        "text": "CSV files take up zero bytes of storage space",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'CSV files take up zero bytes of storage space'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "CSV files are faster than computer RAM",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'CSV files are faster than computer RAM'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "CSV is universal plain human-readable text that can be ingested by Python, R, SQL, Java, Excel, and C without compatibility hurdles",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains CSV vs Binary File Portability."
+      },
+      {
+        "id": "D",
+        "text": "Pickle files can only be read on calculators",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Pickle files can only be read on calculators'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "CSV is an open, language-agnostic text standard, whereas pickle is Python-specific and poses security and cross-language barriers.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q09",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is CSV is universal plain human-readable text that can be ingested by Python, R, SQL, Java, Excel, and C without compatibility hurdles.",
+      "concept": "CSV is an open, language-agnostic text standard, whereas pickle is Python-specific and poses security and cross-language barriers.\nHence, Option C is correct.",
+      "detailed": "CSV is an open, language-agnostic text standard, whereas pickle is Python-specific and poses security and cross-language barriers.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock20-q5",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 10,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Two-Factor Authentication (2FA) Security",
+    "questionText": "Why does enabling Two-Factor Authentication (2FA) protect an account even if an attacker steals the password via phishing?",
+    "options": [
+      {
+        "id": "A",
+        "text": "2FA deletes the attacker's computer",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '2FA deletes the attacker's computer'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "The attacker cannot log in without the second independent authentication factor (e.g., biometric scan or hardware OTP authenticator app)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Two-Factor Authentication (2FA) Security."
+      },
+      {
+        "id": "C",
+        "text": "2FA changes the password every second automatically",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '2FA changes the password every second automatically'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "2FA prevents the computer from turning off",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '2FA prevents the computer from turning off'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "2FA requires two distinct authentication factors (something you know + something you have), neutralizing stolen passwords.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q10",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is The attacker cannot log in without the second independent authentication factor (e.g., biometric scan or hardware OTP authenticator app).",
+      "concept": "2FA requires two distinct authentication factors (something you know + something you have), neutralizing stolen passwords.\nHence, Option B is correct.",
+      "detailed": "2FA requires two distinct authentication factors (something you know + something you have), neutralizing stolen passwords.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock8-q23",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 11,
+    "chapter": "Computer Networks",
+    "topic": "Role of Repeaters in Long-Distance Networks",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): A Repeater is installed at regular intervals along network transmission cabling to extend the maximum geographical reach of a network.\nReason (R): As electrical or optical signals travel through a physical medium, signal strength naturally degrades due to attenuation, requiring amplification or regeneration.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Both (A) and (R) are true but (R) is not the correct explanation of (A)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Analyzes causal relationship regarding Role of Repeaters in Long-Distance Networks correctly."
+      },
+      {
+        "id": "C",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '(A) is true but (R) is false'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '(A) is false but (R) is true'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Both (A) and (R) are true, and (R) correctly explains (A). Signal attenuation over distance causes data degradation; repeaters regenerate clean signals.\nHence, Option B is correct.",
+    "questionType": "assertion-reasoning",
+    "difficulty": 3,
+    "questionId": "COMPUTER_SCI-M07-Q11",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Both (A) and (R) are true and (R) is the correct explanation of (A).",
+      "concept": "Both (A) and (R) are true, and (R) correctly explains (A). Signal attenuation over distance causes data degradation; repeaters regenerate clean signals.\nHence, Option B is correct.",
+      "detailed": "Both (A) and (R) are true, and (R) correctly explains (A). Signal attenuation over distance causes data degradation; repeaters regenerate clean signals.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock3-q9",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 12,
+    "chapter": "Data Visualization using Pyplot",
+    "topic": "Axis-Specific Grid Activation",
+    "questionText": "Read the following climate data visualization case study and answer the questions that follow:\n\nA climatologist is analyzing annual rainfall across five meteorological zones: ['Coastal', 'Plains', 'Desert', 'Hills', 'Plateau']. Rainfall measurements (in cm) are [240, 110, 25, 180, 85]. Because the zone names are long and readable horizontally, the climatologist chooses a Horizontal Bar Chart using plt.barh().\n\nShe writes the visualization script:\nzones = ['Coastal', 'Plains', 'Desert', 'Hills', 'Plateau']\nrainfall = [240, 110, 25, 180, 85]\ncolors = ['navy', 'blue', 'gold', 'darkgreen', 'teal']\nplt.barh(zones, rainfall, height=0.6, color=colors)\nplt.xlabel('Annual Rainfall (cm)')\nplt.ylabel('Geographic Zones')\nplt.title('Regional Annual Rainfall Distribution')\nplt.grid(axis='x', linestyle='--', alpha=0.7)\nplt.show()\n\nQuestion: What does plt.grid(axis='x', linestyle='--', alpha=0.7) accomplish?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Displays horizontal grid lines only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Displays horizontal grid lines only'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Draws an X over the entire chart",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Draws an X over the entire chart'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Displays vertical dashed grid lines along the X-axis with 70% opacity, omitting horizontal grid lines",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Axis-Specific Grid Activation."
+      },
+      {
+        "id": "D",
+        "text": "Removes all axes",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Removes all axes'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "axis='x' restricts grid lines to the X-axis coordinate intervals.\nHence, Option C is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "COMPUTER_SCI-M07-Q12",
+    "conceptId": "cs.data_visualization_u",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Displays vertical dashed grid lines along the X-axis with 70% opacity, omitting horizontal grid lines.",
+      "concept": "axis='x' restricts grid lines to the X-axis coordinate intervals.\nHence, Option C is correct.",
+      "detailed": "axis='x' restricts grid lines to the X-axis coordinate intervals.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock16-q43",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 13,
+    "chapter": "Database Concepts and SQL",
+    "topic": "HAVING Without GROUP BY",
+    "questionText": "Can an SQL query contain a HAVING clause without an explicit GROUP BY clause?",
+    "options": [
+      {
+        "id": "A",
+        "text": "No, HAVING without GROUP BY raises a mandatory syntax error",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'No, HAVING without GROUP BY raises a mandatory syntax error'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Only if the table has zero rows",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Only if the table has zero rows'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Only in MySQL version 1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Only in MySQL version 1'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Yes, the entire table is treated as a single aggregate group, and HAVING filters the overall table aggregate",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains HAVING Without GROUP BY."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Without GROUP BY, HAVING applies to the single implicit aggregate group formed by the entire table.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q13",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Yes, the entire table is treated as a single aggregate group, and HAVING filters the overall table aggregate.",
+      "concept": "Without GROUP BY, HAVING applies to the single implicit aggregate group formed by the entire table.\nHence, Option D is correct.",
+      "detailed": "Without GROUP BY, HAVING applies to the single implicit aggregate group formed by the entire table.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock10-q8",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 14,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Else Block Execution Condition",
+    "questionText": "Under what exact circumstance does the 'else' block of a try-except structure execute?",
+    "options": [
+      {
+        "id": "A",
+        "text": "When the 'try' block completes successfully without raising any exceptions",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Else Block Execution Condition."
+      },
+      {
+        "id": "B",
+        "text": "Whenever an exception is caught and handled by except",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Whenever an exception is caught and handled by except'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Only when a finally block is omitted",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Only when a finally block is omitted'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "At the very start before the try block",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'At the very start before the try block'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "The else block executes if and only if the code in the try block did not raise any exception.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q14",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is When the 'try' block completes successfully without raising any exceptions.",
+      "concept": "The else block executes if and only if the code in the try block did not raise any exception.\nHence, Option A is correct.",
+      "detailed": "The else block executes if and only if the code in the try block did not raise any exception.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock16-q2",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 15,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "CHECK Constraint and Domain Integrity",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): A CHECK constraint enforces Domain Integrity by ensuring all values in a column satisfy a specific boolean logical condition.\nReason (R): If an INSERT or UPDATE statement attempts to store a value that evaluates the CHECK condition to FALSE (e.g., CHECK (Age >= 18)), the DBMS rejects the operation.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Both (A) and (R) are true but (R) is not the correct explanation of (A)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Analyzes causal relationship regarding CHECK Constraint and Domain Integrity correctly."
+      },
+      {
+        "id": "C",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '(A) is true but (R) is false'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '(A) is false but (R) is true'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Both (A) and (R) are true, and (R) correctly explains (A). CHECK constraints validate data values against business rules before permitting writes.\nHence, Option B is correct.",
+    "questionType": "assertion-reasoning",
+    "difficulty": 3,
+    "questionId": "COMPUTER_SCI-M07-Q15",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Both (A) and (R) are true and (R) is the correct explanation of (A).",
+      "concept": "Both (A) and (R) are true, and (R) correctly explains (A). CHECK constraints validate data values against business rules before permitting writes.\nHence, Option B is correct.",
+      "detailed": "Both (A) and (R) are true, and (R) correctly explains (A). CHECK constraints validate data values against business rules before permitting writes.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock3-q20",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 16,
+    "chapter": "Database Concepts and SQL",
+    "topic": "UPDATE Statement Syntax",
+    "questionText": "Which SQL command increases the salary of all employees in department 10 by 5000?",
+    "options": [
+      {
+        "id": "A",
+        "text": "UPDATE Employee SET Salary = Salary + 5000 WHERE DeptId = 10;",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains UPDATE Statement Syntax."
+      },
+      {
+        "id": "B",
+        "text": "MODIFY Employee SET Salary = Salary + 5000 WHERE DeptId = 10;",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'MODIFY Employee SET Salary = Salary + 5000 WHERE DeptId = 10;'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "ALTER Employee ADD Salary = 5000 WHERE DeptId = 10;",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'ALTER Employee ADD Salary = 5000 WHERE DeptId = 10;'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "SELECT Salary + 5000 FROM Employee;",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'SELECT Salary + 5000 FROM Employee;'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "UPDATE table_name SET col = expr WHERE condition; is the standard syntax for modifying existing row values.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q16",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is UPDATE Employee SET Salary = Salary + 5000 WHERE DeptId = 10;.",
+      "concept": "UPDATE table_name SET col = expr WHERE condition; is the standard syntax for modifying existing row values.\nHence, Option A is correct.",
+      "detailed": "UPDATE table_name SET col = expr WHERE condition; is the standard syntax for modifying existing row values.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock7-q7",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 17,
+    "chapter": "Data Handling using Pandas - II",
+    "topic": "loc vs iloc Equivalence",
+    "questionText": "Read the following case study on financial data manipulation using Pandas DataFrames and answer the questions that follow:\n\nA quantitative financial analyst tracks portfolio holdings using a Pandas DataFrame named portfolio:\nportfolio = pd.DataFrame({\n    'Ticker': ['INFY', 'TCS', 'RELIANCE', 'HDFCBANK'],\n    'Shares': [150, 80, 100, 200],\n    'BuyPrice': [1450.0, 3200.0, 2400.0, 1600.0],\n    'CurrentPrice': [1620.0, 3450.0, 2350.0, 1720.0]\n}, index=['Stock1', 'Stock2', 'Stock3', 'Stock4'])\n\nThe analyst performs several operations:\n1. Vectorized calculation of current market value: portfolio['MarketVal'] = portfolio['Shares'] * portfolio['CurrentPrice']\n2. Vectorized calculation of profit/loss: portfolio['GainLoss'] = portfolio['MarketVal'] - (portfolio['Shares'] * portfolio['BuyPrice'])\n3. Slicing profitable stocks using boolean masking: profitable = portfolio[portfolio['GainLoss'] > 0]\n4. Extracting specific cells using df.loc['Stock2', 'BuyPrice'] and df.iloc[1, 2].\n\nQuestion: Why do portfolio.loc['Stock2', 'BuyPrice'] and portfolio.iloc[1, 2] access the exact same cell value (3200.0)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Because loc and iloc always return 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Because loc and iloc always return 0'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Because 'Stock2' is the label of row index position 1, and 'BuyPrice' is the label of column index position 2",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on loc vs iloc Equivalence."
+      },
+      {
+        "id": "C",
+        "text": "Because Python randomly picks a number",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Because Python randomly picks a number'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Because financial data is sorted",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Because financial data is sorted'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "loc uses row and column labels ('Stock2', 'BuyPrice'); iloc uses 0-based integer positions (row 1, column 2).\nHence, Option B is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "COMPUTER_SCI-M07-Q17",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Because 'Stock2' is the label of row index position 1, and 'BuyPrice' is the label of column index position 2.",
+      "concept": "loc uses row and column labels ('Stock2', 'BuyPrice'); iloc uses 0-based integer positions (row 1, column 2).\nHence, Option B is correct.",
+      "detailed": "loc uses row and column labels ('Stock2', 'BuyPrice'); iloc uses 0-based integer positions (row 1, column 2).\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock13-q46",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 18,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Relational Join Types and Output Behaviors",
+    "questionText": "Match the SQL JOIN type in List I with its operational output rule in List II:\n\nList I:\n(A) INNER JOIN\n(B) LEFT OUTER JOIN\n(C) RIGHT OUTER JOIN\n(D) CROSS JOIN\n\nList II:\n(I) Returns only matching tuples where the join condition evaluates to True in both tables\n(II) Returns all tuples from the left table, with matched values from the right table or NULL if unmatched\n(III) Returns all tuples from the right table, with matched values from the left table or NULL if unmatched\n(IV) Returns the unrestricted Cartesian product pairing every tuple of both tables\n\nChoose the correct answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A-II, B-I, C-III, D-IV'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A-I, B-III, C-IV, D-II'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Matches conceptual categories for Relational Join Types and Output Behaviors correctly."
+      },
+      {
+        "id": "D",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A-IV, B-II, C-I, D-III'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "INNER JOIN returns matched only; LEFT JOIN preserves all left rows; RIGHT JOIN preserves all right rows; CROSS JOIN returns full product.\nHence, Option C is correct.",
+    "questionType": "match-the-following",
+    "difficulty": 3,
+    "questionId": "COMPUTER_SCI-M07-Q18",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A-I, B-II, C-III, D-IV.",
+      "concept": "INNER JOIN returns matched only; LEFT JOIN preserves all left rows; RIGHT JOIN preserves all right rows; CROSS JOIN returns full product.\nHence, Option C is correct.",
+      "detailed": "INNER JOIN returns matched only; LEFT JOIN preserves all left rows; RIGHT JOIN preserves all right rows; CROSS JOIN returns full product.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock4-q19",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 19,
+    "chapter": "Search and Sorting Algorithms",
+    "topic": "Difference Between Shifting and Swapping",
+    "questionText": "How does Insertion Sort's element displacement mechanism differ from Bubble Sort?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Insertion Sort shifts elements one position right using assignments (L[j+1] = L[j]), whereas Bubble Sort executes full 3-step swaps",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Difference Between Shifting and Swapping."
+      },
+      {
+        "id": "B",
+        "text": "Bubble sort deletes elements while insertion sort adds elements",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Bubble sort deletes elements while insertion sort adds elements'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Insertion sort requires double memory",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Insertion sort requires double memory'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "There is zero difference between them",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'There is zero difference between them'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "A single assignment shift uses fewer memory bus writes than a 3-statement swap, making insertion sort practically faster than bubble sort.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q19",
+    "conceptId": "cs.search_and_sorting_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Insertion Sort shifts elements one position right using assignments (L[j+1] = L[j]), whereas Bubble Sort executes full 3-step swaps.",
+      "concept": "A single assignment shift uses fewer memory bus writes than a 3-statement swap, making insertion sort practically faster than bubble sort.\nHence, Option A is correct.",
+      "detailed": "A single assignment shift uses fewer memory bus writes than a 3-statement swap, making insertion sort practically faster than bubble sort.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock17-q15",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 20,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Custom Delimiter Specification",
+    "questionText": "How can a tab-delimited file (TSV) be read using the csv module?",
+    "options": [
+      {
+        "id": "A",
+        "text": "csv.reader(file, tab=True)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'csv.reader(file, tab=True)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "csv.reader(file, delimiter='\t')",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Custom Delimiter Specification."
+      },
+      {
+        "id": "C",
+        "text": "csv.tsv_reader(file)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'csv.tsv_reader(file)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "csv.reader(file, split='\t')",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'csv.reader(file, split='\t')'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Passing delimiter='\t' configures the reader object to parse tab-separated value streams.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q20",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is csv.reader(file, delimiter='\t').",
+      "concept": "Passing delimiter='\t' configures the reader object to parse tab-separated value streams.\nHence, Option B is correct.",
+      "detailed": "Passing delimiter='\t' configures the reader object to parse tab-separated value streams.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock7-q5",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 21,
+    "chapter": "Search and Sorting Algorithms",
+    "topic": "Bubble Sort on Reverse Sorted Array",
+    "questionText": "For an array of 5 elements sorted in reverse order [5, 4, 3, 2, 1], how many total swaps occur during Bubble Sort?",
+    "options": [
+      {
+        "id": "A",
+        "text": "4 swaps",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '4 swaps'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "5 swaps",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '5 swaps'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "10 swaps (5 × 4 / 2 = 10)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Bubble Sort on Reverse Sorted Array."
+      },
+      {
+        "id": "D",
+        "text": "20 swaps",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '20 swaps'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "In reverse order, every single comparison triggers a swap: 4 + 3 + 2 + 1 = 10 total swaps.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q21",
+    "conceptId": "cs.search_and_sorting_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is 10 swaps (5 × 4 / 2 = 10).",
+      "concept": "In reverse order, every single comparison triggers a swap: 4 + 3 + 2 + 1 = 10 total swaps.\nHence, Option C is correct.",
+      "detailed": "In reverse order, every single comparison triggers a swap: 4 + 3 + 2 + 1 = 10 total swaps.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock9-q14",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 22,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Linus Torvalds' Contribution",
+    "questionText": "What foundational open-source component did Linus Torvalds create in 1991 that completed the GNU operating system?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The Python programming language",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'The Python programming language'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "The Linux Operating System Kernel",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Linus Torvalds' Contribution."
+      },
+      {
+        "id": "C",
+        "text": "The World Wide Web browser",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'The World Wide Web browser'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "The SQL relational database",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'The SQL relational database'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Linus Torvalds created the Linux kernel, which combined with GNU utilities to form the complete GNU/Linux operating system.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q22",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is The Linux Operating System Kernel.",
+      "concept": "Linus Torvalds created the Linux kernel, which combined with GNU utilities to form the complete GNU/Linux operating system.\nHence, Option B is correct.",
+      "detailed": "Linus Torvalds created the Linux kernel, which combined with GNU utilities to form the complete GNU/Linux operating system.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock10-q25",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 23,
+    "chapter": "File Handling in Python",
+    "topic": "Safe File Opening with 'with'",
+    "questionText": "Read the following case excerpt on school file handling and answer the questions that follow:\n\nSunita, a Class 12 Computer Science student, is developing an automated Student Record Management system for her school. She stores student attendance logs and academic marks in two distinct files: 'attendance.txt' (a plain text file) and 'marks.csv' (a comma-separated values file). In 'attendance.txt', each line contains a student's roll number, name, and status separated by spaces. Sunita writes a Python function that uses the with open('attendance.txt', 'r') statement to safely read the file line-by-line using readline() inside a loop, stripping the trailing newline character with strip(). For 'marks.csv', Sunita utilizes Python's built-in csv module. She opens the file in read mode ('r', newline='') and creates a csv.reader object to iterate through records, where each record is returned as a Python list of strings. She discovers that numeric marks must be explicitly converted to integers using int() before computing aggregate sums and class averages.\n\nQuestion: Why is opening 'attendance.txt' using the 'with open(...)' construct considered best practice in Python?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It executes the code twice as fast as open()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It executes the code twice as fast as open()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "It encrypts the text file automatically",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It encrypts the text file automatically'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "It prevents other programs from reading the file permanently",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It prevents other programs from reading the file permanently'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "It guarantees that the file stream is automatically and cleanly closed when execution leaves the block, even if an exception occurs",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Safe File Opening with 'with'."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "The 'with' statement creates a context manager that guarantees the file descriptor is closed automatically upon exit.\nHence, Option D is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "COMPUTER_SCI-M07-Q23",
+    "conceptId": "cs.file_handling_in_pyt",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is It guarantees that the file stream is automatically and cleanly closed when execution leaves the block, even if an exception occurs.",
+      "concept": "The 'with' statement creates a context manager that guarantees the file descriptor is closed automatically upon exit.\nHence, Option D is correct.",
+      "detailed": "The 'with' statement creates a context manager that guarantees the file descriptor is closed automatically upon exit.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock1-q41",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 24,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Context Manager File Closure",
+    "questionText": "Why does the 'with open(...) as f:' construct eliminate the need for an explicit try-finally file close?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It converts the text file into an immutable string",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It converts the text file into an immutable string'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "It deletes all error messages from the console",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It deletes all error messages from the console'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "It runs the program in parallel on multiple CPUs",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It runs the program in parallel on multiple CPUs'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "The context manager automatically invokes the file object's __exit__() method to close the file upon exiting the block, even if an exception occurs",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Context Manager File Closure."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "The with statement guarantees execution of __exit__(), closing the file handle reliably even during abnormal runtime exits.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q24",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is The context manager automatically invokes the file object's __exit__() method to close the file upon exiting the block, even if an exception occurs.",
+      "concept": "The with statement guarantees execution of __exit__(), closing the file handle reliably even during abnormal runtime exits.\nHence, Option D is correct.",
+      "detailed": "The with statement guarantees execution of __exit__(), closing the file handle reliably even during abnormal runtime exits.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock18-q2",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 25,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Patent Application and Examination Workflow",
+    "questionText": "Arrange the sequential operational steps for legally securing a Patent for an innovative software-hardware invention:\n(A) Conduct comprehensive prior-art search to verify novelty and non-obviousness of the invention\n(B) Draft and submit formal patent application detailing claims, architecture diagrams, and best mode of operation\n(C) Patent office examiner conducts substantive examination against global patent databases\n(D) Address official examination objections; upon satisfying statutory requirements, patent is granted and published\n\nChoose the correct chronological/logical sequence from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "B, A, C, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'B, A, C, D'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "A, B, C, D",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly sequences Patent Application and Examination Workflow."
+      },
+      {
+        "id": "C",
+        "text": "A, C, B, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A, C, B, D'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "D, B, C, A",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'D, B, C, A'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Patent workflow: prior-art search -> application filing -> substantive examination -> objection response and grant.\nHence, Option B is correct.",
+    "questionType": "chronological-sequence",
+    "difficulty": 3,
+    "questionId": "COMPUTER_SCI-M07-Q25",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A, B, C, D.",
+      "concept": "Patent workflow: prior-art search -> application filing -> substantive examination -> objection response and grant.\nHence, Option B is correct.",
+      "detailed": "Patent workflow: prior-art search -> application filing -> substantive examination -> objection response and grant.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock5-q24",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 26,
+    "chapter": "Computer Networks",
+    "topic": "TCP vs UDP Distinction",
+    "questionText": "What is the fundamental functional difference between Transmission Control Protocol (TCP) and User Datagram Protocol (UDP)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "TCP is used only for text while UDP is used only for numbers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'TCP is used only for text while UDP is used only for numbers'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "TCP is wireless while UDP is wired",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'TCP is wireless while UDP is wired'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "TCP is a connection-oriented, reliable protocol that guarantees packet delivery and ordering; UDP is a connectionless, fast, best-effort protocol without guarantees",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains TCP vs UDP Distinction."
+      },
+      {
+        "id": "D",
+        "text": "There is zero difference between them",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'There is zero difference between them'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "TCP provides reliable, sequenced data delivery via acknowledgments and retransmissions; UDP prioritizes low-latency speed (video/gaming) without acknowledgments.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q26",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is TCP is a connection-oriented, reliable protocol that guarantees packet delivery and ordering; UDP is a connectionless, fast, best-effort protocol without guarantees.",
+      "concept": "TCP provides reliable, sequenced data delivery via acknowledgments and retransmissions; UDP prioritizes low-latency speed (video/gaming) without acknowledgments.\nHence, Option C is correct.",
+      "detailed": "TCP provides reliable, sequenced data delivery via acknowledgments and retransmissions; UDP prioritizes low-latency speed (video/gaming) without acknowledgments.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock12-q10",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 27,
+    "chapter": "Database Concepts and SQL",
+    "topic": "Primary Key Integrity Rule",
+    "questionText": "Read the following database integrity constraints case study and answer the questions that follow:\n\nA retail inventory database manager designs a relational table PRODUCT in MySQL to enforce data integrity:\nCREATE TABLE PRODUCT (\n    PCode INT PRIMARY KEY,\n    PName VARCHAR(40) NOT NULL UNIQUE,\n    Category VARCHAR(20) DEFAULT 'General',\n    Price DECIMAL(8,2) CHECK (Price > 0),\n    StockQty INT CHECK (StockQty >= 0)\n);\n\nDuring daily operations, several transactions are tested:\n- Insertion 1: Inserting a duplicate PCode raises an integrity violation error.\n- Insertion 2: Inserting a record without specifying Category automatically assigns 'General'.\n- Insertion 3: Inserting a negative Price (-15.00) is rejected by the CHECK constraint.\n- Insertion 4: Inserting NULL for PName is rejected by the NOT NULL constraint.\n\nQuestion: Why is an attempt to insert a duplicate PCode rejected by MySQL?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Because PCode must be negative",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Because PCode must be negative'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Because tables can only store 10 rows",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Because tables can only store 10 rows'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Because the PRIMARY KEY constraint enforces entity integrity, requiring every key value to be unique and non-null",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Primary Key Integrity Rule."
+      },
+      {
+        "id": "D",
+        "text": "Because numbers are not allowed",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Because numbers are not allowed'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "A PRIMARY KEY uniquely identifies each tuple in a relation, forbidding duplicate and NULL values.\nHence, Option C is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "COMPUTER_SCI-M07-Q27",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Because the PRIMARY KEY constraint enforces entity integrity, requiring every key value to be unique and non-null.",
+      "concept": "A PRIMARY KEY uniquely identifies each tuple in a relation, forbidding duplicate and NULL values.\nHence, Option C is correct.",
+      "detailed": "A PRIMARY KEY uniquely identifies each tuple in a relation, forbidding duplicate and NULL values.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock11-q46",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 28,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Default Axis in df.drop()",
+    "questionText": "What happens if you execute df.drop('ColA') without specifying the axis parameter?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It automatically drops the column 'ColA'",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It automatically drops the column 'ColA''. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "It drops both row and column 'ColA'",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It drops both row and column 'ColA''. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "It deletes the entire DataFrame",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It deletes the entire DataFrame'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Pandas searches for a row with index label 'ColA' (axis=0) and raises a KeyError if no such row label exists",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Default Axis in df.drop()."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "The default parameter in df.drop() is axis=0 (rows); to drop a column, axis=1 or columns='ColA' must be specified.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q28",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Pandas searches for a row with index label 'ColA' (axis=0) and raises a KeyError if no such row label exists.",
+      "concept": "The default parameter in df.drop() is axis=0 (rows); to drop a column, axis=1 or columns='ColA' must be specified.\nHence, Option D is correct.",
+      "detailed": "The default parameter in df.drop() is axis=0 (rows); to drop a column, axis=1 or columns='ColA' must be specified.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock7-q33",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 29,
+    "chapter": "Societal Impacts, Cyber Ethics and Data Protection",
+    "topic": "Digital Divide and Netiquette Concepts",
+    "questionText": "Given below are two statements:\nStatement I: The Digital Divide refers to socioeconomic and geographic inequality in access to information and communications technology.\nStatement II: Netiquette refers to informal codes of ethical, polite, and respectful communication conduct in online digital interactions.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Evaluates dual statements on Digital Divide and Netiquette Concepts correctly."
+      },
+      {
+        "id": "B",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Both Statement I and Statement II are incorrect'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is correct but Statement II is incorrect'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is incorrect but Statement II is correct'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Both Statement I and Statement II are correct. Digital divide describes ICT access disparity, and netiquette encompasses online behavioral norms.\nHence, Option A is correct.",
+    "questionType": "multi-statement",
+    "difficulty": 3,
+    "questionId": "COMPUTER_SCI-M07-Q29",
+    "conceptId": "cs.societal_impacts_cyb",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Both Statement I and Statement II are correct.",
+      "concept": "Both Statement I and Statement II are correct. Digital divide describes ICT access disparity, and netiquette encompasses online behavioral norms.\nHence, Option A is correct.",
+      "detailed": "Both Statement I and Statement II are correct. Digital divide describes ICT access disparity, and netiquette encompasses online behavioral norms.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock2-q40",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 30,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Resetting Row Index",
+    "questionText": "Which method resets the DataFrame row index back to standard sequential integers 0, 1, 2...?",
+    "options": [
+      {
+        "id": "A",
+        "text": "df.reindex_default()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'df.reindex_default()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "df.clean_index()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'df.clean_index()'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "df.reset_index(drop=True)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Resetting Row Index."
+      },
+      {
+        "id": "D",
+        "text": "df.zero_index()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'df.zero_index()'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "df.reset_index(drop=True) replaces the existing index with RangeIndex(0, n) and drops the old index.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q30",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is df.reset_index(drop=True).",
+      "concept": "df.reset_index(drop=True) replaces the existing index with RangeIndex(0, n) and drops the old index.\nHence, Option C is correct.",
+      "detailed": "df.reset_index(drop=True) replaces the existing index with RangeIndex(0, n) and drops the old index.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock11-q33",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 31,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Checking File Size of Binary File",
+    "questionText": "How can the total byte size of an open binary file f be determined using seek and tell?",
+    "options": [
+      {
+        "id": "A",
+        "text": "size = f.length()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'size = f.length()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "size = len(f)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'size = len(f)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "size = f.size()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'size = f.size()'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "f.seek(0, 2); size = f.tell()",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Checking File Size of Binary File."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Moving the file pointer to the end with f.seek(0, 2) and calling f.tell() returns the total byte length of the file.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q31",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is f.seek(0, 2); size = f.tell().",
+      "concept": "Moving the file pointer to the end with f.seek(0, 2) and calling f.tell() returns the total byte length of the file.\nHence, Option D is correct.",
+      "detailed": "Moving the file pointer to the end with f.seek(0, 2) and calling f.tell() returns the total byte length of the file.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock17-q4",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 32,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "Extracting Column as DataFrame",
+    "questionText": "What data type is returned by df[['Score']] (double square brackets)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "pandas.core.frame.DataFrame (a 2D DataFrame with 1 column)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Extracting Column as DataFrame."
+      },
+      {
+        "id": "B",
+        "text": "pandas.Series",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'pandas.Series'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "list",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'list'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "tuple",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'tuple'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Passing a list of column names df[['Score']] returns a 2D DataFrame retaining table dimensions.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q32",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is pandas.core.frame.DataFrame (a 2D DataFrame with 1 column).",
+      "concept": "Passing a list of column names df[['Score']] returns a 2D DataFrame retaining table dimensions.\nHence, Option A is correct.",
+      "detailed": "Passing a list of column names df[['Score']] returns a 2D DataFrame retaining table dimensions.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock11-q30",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 33,
+    "chapter": "File Handling in Python",
+    "topic": "Memory-Efficient Line Iteration",
+    "questionText": "Read the following case study on text log analysis in Python and answer the questions that follow:\n\nA cloud system reliability engineer writes a Python diagnostic utility to analyze server events from 'server_log.txt'. The log file contains thousands of lines formatted as: '2026-03-31 14:22:01 [ERROR] Database connection failed on port 3306'. The engineer defines a function parse_logs() that:\n1. Opens the file using with open('server_log.txt', 'r') as file:\n2. Reads all lines using lines = file.readlines()\n3. Counts total lines, lines starting with timestamps, and error entries containing '[ERROR]'\n4. Splits each error line into individual words using line.split() to compute frequency statistics of error codes.\nThe script summarizes critical system failures without loading the entire unneeded raw payload into memory all at once.\n\nQuestion: For massive multi-gigabyte log files, why is 'for line in file:' superior to 'file.readlines()'?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It iterates lazily line-by-line via a file generator, consuming minimal RAM instead of loading all lines into memory at once",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Memory-Efficient Line Iteration."
+      },
+      {
+        "id": "B",
+        "text": "It automatically corrects spelling mistakes",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It automatically corrects spelling mistakes'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "It translates text into Python code",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It translates text into Python code'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "It prevents file modification",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It prevents file modification'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Iterating over the file object directly streams one line at a time, avoiding memory exhaustion on large files.\nHence, Option A is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "COMPUTER_SCI-M07-Q33",
+    "conceptId": "cs.file_handling_in_pyt",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is It iterates lazily line-by-line via a file generator, consuming minimal RAM instead of loading all lines into memory at once.",
+      "concept": "Iterating over the file object directly streams one line at a time, avoiding memory exhaustion on large files.\nHence, Option A is correct.",
+      "detailed": "Iterating over the file object directly streams one line at a time, avoiding memory exhaustion on large files.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock9-q44",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 34,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Botnet and Zombie Computers",
+    "questionText": "What is a 'Botnet' in cybersecurity terminology?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A collection of industrial factory robots",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A collection of industrial factory robots'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "A software tool used to speed up typing",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A software tool used to speed up typing'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "A legal group of internet search engines",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A legal group of internet search engines'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "A network of compromised private computers ('zombies') infected with malware and controlled remotely by a central 'botmaster'",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Botnet and Zombie Computers."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Botnets are armies of infected, remotely-commanded devices hijacked to launch coordinated DDoS attacks or spam campaigns.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q34",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A network of compromised private computers ('zombies') infected with malware and controlled remotely by a central 'botmaster'.",
+      "concept": "Botnets are armies of infected, remotely-commanded devices hijacked to launch coordinated DDoS attacks or spam campaigns.\nHence, Option D is correct.",
+      "detailed": "Botnets are armies of infected, remotely-commanded devices hijacked to launch coordinated DDoS attacks or spam campaigns.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock6-q22",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 35,
+    "chapter": "Computer Networks",
+    "topic": "VPN Privacy Mechanism",
+    "questionText": "Read the following enterprise network architecture case study and answer the questions that follow:\n\nNational Trust Bank is upgrading its network architecture connecting its Regional Headquarters with five local branches. The network design specifications are established as follows:\n1. Headquarters houses the core transactional database cluster, protected behind a stateful Packet Filtering Firewall and Intrusion Detection System (IDS).\n2. Inside each local branch, all teller workstations are wired to a high-speed Central Switch configured in a Star Topology.\n3. The connection between Headquarters and Branch 1 (distance 35 km) utilizes a dedicated High-Speed Leased Line over Optical Fiber.\n4. Wireless connectivity within the customer lounge is segregated on a guest VLAN protected with WPA3 Wi-Fi encryption.\n5. Inter-branch communication over public telecommunication networks is encrypted inside a Virtual Private Network (VPN) tunnel.\n\nQuestion: How does a Virtual Private Network (VPN) protect sensitive financial transactions transmitted across public networks?",
+    "options": [
+      {
+        "id": "A",
+        "text": "By physically disconnecting the bank from the internet",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'By physically disconnecting the bank from the internet'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "By deleting all logs of financial transfers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'By deleting all logs of financial transfers'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "By replacing IP addresses with telephone numbers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'By replacing IP addresses with telephone numbers'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "By creating an encrypted virtual tunnel that encapsulates and encrypts financial data packets across untrusted networks",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on VPN Privacy Mechanism."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "A VPN encrypts data packets and encapsulates them in a secure tunnel across public networks, ensuring confidentiality.\nHence, Option D is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "COMPUTER_SCI-M07-Q35",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is By creating an encrypted virtual tunnel that encapsulates and encrypts financial data packets across untrusted networks.",
+      "concept": "A VPN encrypts data packets and encapsulates them in a secure tunnel across public networks, ensuring confidentiality.\nHence, Option D is correct.",
+      "detailed": "A VPN encrypts data packets and encapsulates them in a secure tunnel across public networks, ensuring confidentiality.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock10-q49",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 36,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Salami Slicing Cyber Attack",
+    "questionText": "What is a 'Salami Slicing' (Salami Technique) financial cyber fraud?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Physically slicing computer chips with knives",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Physically slicing computer chips with knives'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Stealing meat from grocery store websites",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Stealing meat from grocery store websites'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Hacking into food delivery applications",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Hacking into food delivery applications'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Executing a series of microscopic, imperceptible financial thefts (e.g., skimming 2 paise from millions of bank accounts) that accumulate into massive sums",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Salami Slicing Cyber Attack."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Salami attacks divert negligible fractions of currency from high-volume transaction databases, escaping individual notice while amassing fortune.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q36",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Executing a series of microscopic, imperceptible financial thefts (e.g., skimming 2 paise from millions of bank accounts) that accumulate into massive sums.",
+      "concept": "Salami attacks divert negligible fractions of currency from high-volume transaction databases, escaping individual notice while amassing fortune.\nHence, Option D is correct.",
+      "detailed": "Salami attacks divert negligible fractions of currency from high-volume transaction databases, escaping individual notice while amassing fortune.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock17-q23",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 37,
+    "chapter": "Search and Sorting Algorithms",
+    "topic": "Number of Elements Fixed Per Pass",
+    "questionText": "In standard Bubble Sort, exactly how many elements are guaranteed to reach their final sorted position after k passes?",
+    "options": [
+      {
+        "id": "A",
+        "text": "All n elements",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'All n elements'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "0 elements",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '0 elements'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "At least k elements",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Number of Elements Fixed Per Pass."
+      },
+      {
+        "id": "D",
+        "text": "n / k elements",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'n / k elements'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Each pass bubbles the largest remaining element to its terminal position; hence k passes guarantee at least k elements are fixed.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q37",
+    "conceptId": "cs.search_and_sorting_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is At least k elements.",
+      "concept": "Each pass bubbles the largest remaining element to its terminal position; hence k passes guarantee at least k elements are fixed.\nHence, Option C is correct.",
+      "detailed": "Each pass bubbles the largest remaining element to its terminal position; hence k passes guarantee at least k elements are fixed.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock16-q14",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 38,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Correlation Matrix Method",
+    "questionText": "Which method computes pairwise Pearson correlation coefficients between all numerical columns in DataFrame df?",
+    "options": [
+      {
+        "id": "A",
+        "text": "df.correlate()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'df.correlate()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "df.corr()",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Correlation Matrix Method."
+      },
+      {
+        "id": "C",
+        "text": "df.pearson()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'df.pearson()'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "df.covariance_matrix()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'df.covariance_matrix()'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "df.corr() calculates the pairwise correlation matrix for numerical columns.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q38",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is df.corr().",
+      "concept": "df.corr() calculates the pairwise correlation matrix for numerical columns.\nHence, Option B is correct.",
+      "detailed": "df.corr() calculates the pairwise correlation matrix for numerical columns.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock18-q35",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 39,
+    "chapter": "Database Concepts and SQL",
+    "topic": "NOT IN Operator Evaluation",
+    "questionText": "What does the condition WHERE DeptId NOT IN (10, 20) evaluate to?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Selects records where DeptId is either 10 or 20",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Selects records where DeptId is either 10 or 20'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Selects only records where DeptId is 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Selects only records where DeptId is 0'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Selects records whose DeptId is neither 10 nor 20 (DeptId <> 10 AND DeptId <> 20)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains NOT IN Operator Evaluation."
+      },
+      {
+        "id": "D",
+        "text": "Produces a syntax error",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Produces a syntax error'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "NOT IN excludes all values in the set, equivalent to chaining inequality conditions with AND.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q39",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Selects records whose DeptId is neither 10 nor 20 (DeptId <> 10 AND DeptId <> 20).",
+      "concept": "NOT IN excludes all values in the set, equivalent to chaining inequality conditions with AND.\nHence, Option C is correct.",
+      "detailed": "NOT IN excludes all values in the set, equivalent to chaining inequality conditions with AND.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock17-q7",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 40,
+    "chapter": "Data Structures: Stacks",
+    "topic": "Infix to Postfix Operator Precedence",
+    "questionText": "During infix to postfix conversion, what happens when the current scanned operator has LOWER precedence than the operator on top of the stack?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The current operator is immediately discarded",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'The current operator is immediately discarded'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "The program crashes with a SyntaxError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'The program crashes with a SyntaxError'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "The stack is completely emptied and deleted",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'The stack is completely emptied and deleted'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Operators of higher or equal precedence are repeatedly popped from the stack and appended to output before pushing the current operator",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Infix to Postfix Operator Precedence."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "An operator cannot sit on top of an operator with equal or higher precedence; higher precedence operators must be popped first.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q40",
+    "conceptId": "cs.data_structures_stac",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Operators of higher or equal precedence are repeatedly popped from the stack and appended to output before pushing the current operator.",
+      "concept": "An operator cannot sit on top of an operator with equal or higher precedence; higher precedence operators must be popped first.\nHence, Option D is correct.",
+      "detailed": "An operator cannot sit on top of an operator with equal or higher precedence; higher precedence operators must be popped first.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock10-q12",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 41,
+    "chapter": "Data Visualization using Pyplot",
+    "topic": "Bar Chart Parameters and Roles",
+    "questionText": "Match the bar chart parameter in List I with its functionality in List II:\n\nList I:\n(A) width=0.4\n(B) height=0.5\n(C) edgecolor='black'\n(D) bottom=series1\n\nList II:\n(I) Sets horizontal bar thickness in vertical bar charts plt.bar()\n(II) Sets vertical bar thickness in horizontal bar charts plt.barh()\n(III) Configures the outline border color surrounding each bar\n(IV) Sets vertical offset baseline to create stacked vertical bar charts\n\nChoose the correct answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A-II, B-I, C-III, D-IV'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A-I, B-III, C-IV, D-II'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Matches conceptual categories for Bar Chart Parameters and Roles correctly."
+      },
+      {
+        "id": "D",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A-IV, B-II, C-I, D-III'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "width sets vertical bar width, height sets horizontal bar thickness, edgecolor sets border stroke, and bottom stacks bars vertically.\nHence, Option C is correct.",
+    "questionType": "match-the-following",
+    "difficulty": 3,
+    "questionId": "COMPUTER_SCI-M07-Q41",
+    "conceptId": "cs.data_visualization_u",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A-I, B-II, C-III, D-IV.",
+      "concept": "width sets vertical bar width, height sets horizontal bar thickness, edgecolor sets border stroke, and bottom stacks bars vertically.\nHence, Option C is correct.",
+      "detailed": "width sets vertical bar width, height sets horizontal bar thickness, edgecolor sets border stroke, and bottom stacks bars vertically.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock4-q37",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 42,
+    "chapter": "Data Structures: Stacks",
+    "topic": "Infix A * B + C Postfix",
+    "questionText": "What is the postfix representation of: A * B + C?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A B C * +",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A B C * +'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "A B * C +",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Infix A * B + C Postfix."
+      },
+      {
+        "id": "C",
+        "text": "+ * A B C",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '+ * A B C'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "A B C + *",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A B C + *'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "A * B evaluates first to AB*, which is then added to C, yielding AB*C+.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q42",
+    "conceptId": "cs.data_structures_stac",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A B * C +.",
+      "concept": "A * B evaluates first to AB*, which is then added to C, yielding AB*C+.\nHence, Option B is correct.",
+      "detailed": "A * B evaluates first to AB*, which is then added to C, yielding AB*C+.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock14-q12",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 43,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Explicit vs Implicit Join Syntax",
+    "questionText": "How does the implicit join SELECT * FROM A, B WHERE A.id = B.id compare to SELECT * FROM A JOIN B ON A.id = B.id?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Implicit join deletes all data in Table B",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Implicit join deletes all data in Table B'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Both produce identical result sets, but the explicit JOIN ON syntax is standard SQL-92 and separates join logic from row filtering",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Explicit vs Implicit Join Syntax."
+      },
+      {
+        "id": "C",
+        "text": "Explicit join can only join tables with 1 column",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Explicit join can only join tables with 1 column'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Implicit join is not supported in MySQL",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Implicit join is not supported in MySQL'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Implicit comma joins and explicit INNER JOIN ON produce identical execution plans; explicit JOIN ON is modern standard practice.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q43",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Both produce identical result sets, but the explicit JOIN ON syntax is standard SQL-92 and separates join logic from row filtering.",
+      "concept": "Implicit comma joins and explicit INNER JOIN ON produce identical execution plans; explicit JOIN ON is modern standard practice.\nHence, Option B is correct.",
+      "detailed": "Implicit comma joins and explicit INNER JOIN ON produce identical execution plans; explicit JOIN ON is modern standard practice.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock8-q19",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 44,
+    "chapter": "Search and Sorting Algorithms",
+    "topic": "Recursive Binary Search Base Case",
+    "questionText": "In a recursive binary search function def bsearch(L, low, high, key):, what base condition indicates failure (not found)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "if len(L) == 0: return -1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'if len(L) == 0: return -1'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "if low == high: return -1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'if low == high: return -1'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "if low > high: return -1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Recursive Binary Search Base Case."
+      },
+      {
+        "id": "D",
+        "text": "if key < 0: return -1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'if key < 0: return -1'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "When the search interval collapses such that low exceeds high, the search space is exhausted and the key is absent.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q44",
+    "conceptId": "cs.search_and_sorting_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is if low > high: return -1.",
+      "concept": "When the search interval collapses such that low exceeds high, the search space is exhausted and the key is absent.\nHence, Option C is correct.",
+      "detailed": "When the search interval collapses such that low exceeds high, the search space is exhausted and the key is absent.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock12-q13",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 45,
+    "chapter": "Python Programming and File Handling",
+    "topic": "read() vs readlines() Methods",
+    "questionText": "Given below are two statements:\nStatement I: The read() method without arguments reads the entire remaining content of a text file and returns it as a single string.\nStatement II: The readlines() method reads all lines from a text file and returns them as a list of strings, where each element ends with a newline character '\n'.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Evaluates dual statements on read() vs readlines() Methods correctly."
+      },
+      {
+        "id": "B",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Both Statement I and Statement II are incorrect'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is correct but Statement II is incorrect'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is incorrect but Statement II is correct'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Both Statement I and Statement II are correct. read() returns one complete string; readlines() returns a list of individual line strings.\nHence, Option A is correct.",
+    "questionType": "multi-statement",
+    "difficulty": 3,
+    "questionId": "COMPUTER_SCI-M07-Q45",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Both Statement I and Statement II are correct.",
+      "concept": "Both Statement I and Statement II are correct. read() returns one complete string; readlines() returns a list of individual line strings.\nHence, Option A is correct.",
+      "detailed": "Both Statement I and Statement II are correct. read() returns one complete string; readlines() returns a list of individual line strings.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock2-q3",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 46,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Pickling and Unpickling Definitions",
+    "questionText": "In Python file handling, what is the precise definition of 'Pickling' and 'Unpickling' using the built-in pickle module?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Pickling is compressing text files into ZIP archives; Unpickling is extracting files",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Pickling is compressing text files into ZIP archives; Unpickling is extracting files'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Pickling is the process of serializing a Python object hierarchy into a byte stream; Unpickling is the inverse process of deserializing bytes back into an object",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Pickling and Unpickling Definitions."
+      },
+      {
+        "id": "C",
+        "text": "Pickling is encrypting passwords; Unpickling is cracking passwords",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Pickling is encrypting passwords; Unpickling is cracking passwords'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Pickling is sorting a list of numbers; Unpickling is reversing a list",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Pickling is sorting a list of numbers; Unpickling is reversing a list'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Pickling (serialization) converts in-memory objects into a byte stream; unpickling (deserialization) reconstructs objects from byte streams.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "COMPUTER_SCI-M07-Q46",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Pickling is the process of serializing a Python object hierarchy into a byte stream; Unpickling is the inverse process of deserializing bytes back into an object.",
+      "concept": "Pickling (serialization) converts in-memory objects into a byte stream; unpickling (deserialization) reconstructs objects from byte streams.\nHence, Option B is correct.",
+      "detailed": "Pickling (serialization) converts in-memory objects into a byte stream; unpickling (deserialization) reconstructs objects from byte streams.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock1-q4",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 47,
+    "chapter": "Database Concepts and SQL",
+    "topic": "Handling NULL in Arithmetic via IFNULL()",
+    "questionText": "Read the following database payroll case study and answer the questions that follow:\n\nAn enterprise human resources department manages employee salaries and tenure in a MySQL database table EMP:\nEMP (EmpId INT PRIMARY KEY, EmpName VARCHAR(35), HireDate DATE, BasicSalary DECIMAL(10,2), Comm DECIMAL(8,2), DeptNo INT);\n\nTo prepare annual financial statements, the payroll manager executes several queries utilizing SQL scalar and date functions:\n1. Query 1 computes employee tenure in years: SELECT EmpName, YEAR(CURDATE()) - YEAR(HireDate) AS Tenure FROM EMP;\n2. Query 2 rounds annual bonuses to two decimal places: SELECT EmpName, ROUND(BasicSalary * 0.175, 2) AS Bonus FROM EMP;\n3. Query 3 extracts the month name of employment: SELECT EmpName, MONTHNAME(HireDate) FROM EMP;\n4. Query 4 handles null commissions using IFNULL: SELECT EmpName, BasicSalary + IFNULL(Comm, 0) AS GrossPay FROM EMP;\n\nQuestion: Why is IFNULL(Comm, 0) necessary when computing BasicSalary + Comm in MySQL?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Because MySQL throws a fatal error if NULL is added",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Because MySQL throws a fatal error if NULL is added'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Because IFNULL doubles the commission",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Because IFNULL doubles the commission'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Because Comm is stored as text",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Because Comm is stored as text'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Because adding NULL to any number in standard SQL yields NULL, erasing the salary if Comm is not recorded",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Handling NULL in Arithmetic via IFNULL()."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "In SQL arithmetic, any_number + NULL evaluates to NULL; IFNULL(Comm, 0) substitutes 0 for NULL to preserve the total.\nHence, Option D is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "COMPUTER_SCI-M07-Q47",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Because adding NULL to any number in standard SQL yields NULL, erasing the salary if Comm is not recorded.",
+      "concept": "In SQL arithmetic, any_number + NULL evaluates to NULL; IFNULL(Comm, 0) substitutes 0 for NULL to preserve the total.\nHence, Option D is correct.",
+      "detailed": "In SQL arithmetic, any_number + NULL evaluates to NULL; IFNULL(Comm, 0) substitutes 0 for NULL to preserve the total.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock9-q49",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 48,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Natural Join vs Equi-Join Column Duplication",
+    "questionText": "Given below are two statements:\nStatement I: An Equi-Join retains all columns from both tables in the output result-set, including duplicate join columns.\nStatement II: A Natural Join (NATURAL JOIN) automatically eliminates duplicate join columns, retaining only a single copy of the common attributes.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Evaluates dual statements on Natural Join vs Equi-Join Column Duplication correctly."
+      },
+      {
+        "id": "B",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Both Statement I and Statement II are incorrect'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is correct but Statement II is incorrect'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is incorrect but Statement II is correct'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Both Statement I and Statement II are correct. Equi-join keeps duplicate columns unless projected; Natural join joins on common column names and eliminates duplicate columns.\nHence, Option A is correct.",
+    "questionType": "multi-statement",
+    "difficulty": 3,
+    "questionId": "COMPUTER_SCI-M07-Q48",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Both Statement I and Statement II are correct.",
+      "concept": "Both Statement I and Statement II are correct. Equi-join keeps duplicate columns unless projected; Natural join joins on common column names and eliminates duplicate columns.\nHence, Option A is correct.",
+      "detailed": "Both Statement I and Statement II are correct. Equi-join keeps duplicate columns unless projected; Natural join joins on common column names and eliminates duplicate columns.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock2-q19",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 49,
+    "chapter": "Data Visualization using Pyplot",
+    "topic": "Execution Order of savefig and show",
+    "questionText": "Read the following data visualization case study and answer the questions that follow:\n\nPriya, a business intelligence analyst, is preparing an executive performance dashboard using matplotlib.pyplot. She has quarterly revenue and profit data for four quarters: ['Q1', 'Q2', 'Q3', 'Q4']. Revenue figures (in lakhs) are [45, 58, 62, 75], and profit figures are [12, 18, 22, 28]. To compare revenue and profit side-by-side without overlap, she constructs a grouped bar chart. She generates numerical positions using x = np.arange(len(quarters)), sets bar width w = 0.35, and plots revenue bars at x - w/2 and profit bars at x + w/2. She sets custom x-axis tick labels using plt.xticks(x, quarters), adds labels for both axes, attaches a descriptive title, activates the legend via plt.legend(), and exports the chart using plt.savefig('sales_dashboard.png').\n\nQuestion: Why did Priya call plt.savefig('sales_dashboard.png') before plt.show()?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Because savefig() only works after the program terminates",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Because savefig() only works after the program terminates'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Because Python deletes the image if show() is called first",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Because Python deletes the image if show() is called first'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Because savefig() opens a new window",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Because savefig() opens a new window'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Because plt.show() flushes the figure canvas, which could cause a subsequent savefig() to save a blank image",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Execution Order of savefig and show."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Calling plt.show() resets the current figure canvas in interactive backends; savefig() should precede show().\nHence, Option D is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "COMPUTER_SCI-M07-Q49",
+    "conceptId": "cs.data_visualization_u",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Because plt.show() flushes the figure canvas, which could cause a subsequent savefig() to save a blank image.",
+      "concept": "Calling plt.show() resets the current figure canvas in interactive backends; savefig() should precede show().\nHence, Option D is correct.",
+      "detailed": "Calling plt.show() resets the current figure canvas in interactive backends; savefig() should precede show().\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock5-q44",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  },
+  {
+    "questionNumber": 50,
+    "chapter": "Exception Handling and File Streams",
+    "topic": "ValueError Root Cause",
+    "questionText": "Read the following case study on exception handling and file robustness in Python and answer the questions that follow:\n\nAn enterprise billing engineer writes a robust data processing utility to import transaction files in Python. File operations can encounter runtime errors such as missing files, locked permissions, or corrupted data. The engineer structures the code using structured exception handling:\n\ndef process_billing(filename):\n    file = None\n    try:\n        file = open(filename, 'r')\n        data = file.readlines()\n        total = sum(float(line.strip()) for line in data)\n    except FileNotFoundError:\n        print('Error: The specified file does not exist on disk.')\n    except ValueError:\n        print('Error: Non-numeric data encountered in billing record.')\n    else:\n        print(f'Successfully processed billing total: {total}')\n    finally:\n        if file and not file.closed:\n            file.close()\n            print('Cleanup: File handle safely closed.')\n\nQuestion: What causes a ValueError in the expression float(line.strip())?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Attempting to convert a non-numeric string (e.g., 'Discount' or 'N/A') into a floating-point number",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on ValueError Root Cause."
+      },
+      {
+        "id": "B",
+        "text": "The file is too large",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'The file is too large'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "The number is equal to zero",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'The number is equal to zero'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "The string contains only digits",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'The string contains only digits'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "float() raises ValueError when passed a string that does not represent a valid numerical format.\nHence, Option A is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "COMPUTER_SCI-M07-Q50",
+    "conceptId": "cs.exception_handling_a",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Attempting to convert a non-numeric string (e.g., 'Discount' or 'N/A') into a floating-point number.",
+      "concept": "float() raises ValueError when passed a string that does not represent a valid numerical format.\nHence, Option A is correct.",
+      "detailed": "float() raises ValueError when passed a string that does not represent a valid numerical format.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock16-q50",
+    "testNumber": 7,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
+  }
+]

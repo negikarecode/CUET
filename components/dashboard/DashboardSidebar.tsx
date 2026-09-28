@@ -77,6 +77,7 @@ export default function DashboardSidebar() {
       icon: FileText,
       active: pathname.startsWith("/dashboard/pyqs"),
     },
+
     {
       id: "mocks",
       label: t("mocks", "Mock Tests"),

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ClipboardCheck, Lock, Sparkles, RotateCcw, Trophy } from "lucide-react";
+import { ArrowLeft, ArrowRight, ClipboardCheck, Lock, RotateCcw, Trophy } from "lucide-react";
 import { getSubjectMetadata } from "@/lib/config/subjectRegistry";
 import { getMockTestsForSubject, CUET_SUBJECTS, MockTestItem } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -41,7 +41,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
       : 45;
 
   const subtitle = isLive
-    ? `20 Full-Length NTA CBT Mock Papers • 50 Compulsory Questions • ${durationMinutes} Minutes each`
+    ? `${mockTests.length} Full-Length NTA CBT Mock Papers • 50 Compulsory Questions • ${durationMinutes} Minutes each`
     : "50 Compulsory Questions per Paper • Standard NTA CUET CBT Syllabus (Releasing Soon)";
 
   return (
@@ -67,7 +67,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
                   isLive ? "bg-[#D1FAE5] text-[#065F46]" : "bg-[#FEF3C7] text-black"
                 }`}
               >
-                {isLive ? "20 Mocks Live" : "In Preparation"}
+                {isLive ? `${mockTests.length} Mocks Live` : "In Preparation / Rebuilding"}
               </span>
             </div>
             <h1 className="text-2xl md:text-3xl font-black text-black flex items-center gap-2.5">
@@ -169,53 +169,24 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
             </div>
             <div className="space-y-1 max-w-md mx-auto">
               <h3 className="text-xl font-black text-black">
-                {title} Coming Soon
+                {title} In Preparation
               </h3>
               <p className="text-xs text-black/70 font-semibold leading-relaxed">
-                Full CBT mock papers for {subjectConfig?.name || subjectKey} (Code {code}) are currently being finalized according to the latest NTA 50 compulsory questions pattern and will be released shortly.
+                Full CBT mock papers for {subjectConfig?.name || subjectKey} (Code {code}) are currently being remade and recalibrated with official CUET NTA past year papers according to the latest 50 compulsory questions pattern and will be released shortly.
               </p>
             </div>
             <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
               <Link
-                href="/dashboard/mocks/physics"
+                href="/dashboard/mocks"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
               >
-                <Sparkles className="w-4 h-4" />
-                <span>Practice 20 Physics Mocks</span>
+                <span>Back to All Mock Papers</span>
               </Link>
               <Link
-                href="/dashboard/mocks/chemistry"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Practice 20 Chemistry Mocks</span>
-              </Link>
-              <Link
-                href="/dashboard/mocks/maths"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Practice 20 Maths Mocks</span>
-              </Link>
-              <Link
-                href="/dashboard/mocks/biology"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Practice 20 Biology Mocks</span>
-              </Link>
-              <Link
-                href="/dashboard/mocks/accountancy"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Practice 20 Accountancy Mocks</span>
-              </Link>
-              <Link
-                href="/dashboard/mocks"
+                href="/dashboard"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:bg-white transition-all"
               >
-                View All Mocks
+                <span>Go to Command Dashboard</span>
               </Link>
             </div>
           </div>
