@@ -287,7 +287,7 @@ export default function DashboardSidebar() {
       )}
 
       {/* 3. Desktop Left Sidebar Navbar (Persistent on left side) */}
-      <aside className="hidden md:flex flex-col w-64 lg:w-72 sticky top-0 h-screen overflow-y-auto shrink-0 z-40 bg-[#FAF7EE] border-r-2 border-black p-5 shadow-[4px_0px_0px_0px_#000]">
+      <aside className="hidden md:flex flex-col w-64 lg:w-72 h-full overflow-y-auto shrink-0 z-40 bg-[#FAF7EE] border-r-2 border-black p-5 shadow-[4px_0px_0px_0px_#000]">
         <SidebarContent />
       </aside>
     </>

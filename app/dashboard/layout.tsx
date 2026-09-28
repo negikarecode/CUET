@@ -29,16 +29,17 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7EE] flex flex-col md:flex-row w-full max-w-full overflow-x-hidden">
-      {/* Left Sidebar (sticky top-0 h-screen overflow-y-auto on desktop) */}
+    <div className="h-screen w-full max-w-full bg-[#FAF7EE] flex flex-col md:flex-row overflow-hidden">
+      {/* Left Sidebar (fixed height h-screen, persistent on desktop) */}
       <DashboardSidebar />
 
-      {/* Main Content Area (flex-1 overflow-y-auto min-h-screen) */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto min-h-screen w-full max-w-full">
-        {/* Top Horizontal Bar (sticky top-0 z-30 with right-aligned student utilities & no logo) */}
+      {/* Main Content Area (flex-1 column with sticky navbar and scrollable main content) */}
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden w-full max-w-full">
+        {/* Top Horizontal Bar */}
         <DashboardNavbar />
 
-        <main className="flex-1 min-w-0 w-full max-w-full">
+        {/* Scrollable Main Content Container */}
+        <main className="flex-1 min-w-0 overflow-y-auto w-full max-w-full">
           {children}
         </main>
       </div>
