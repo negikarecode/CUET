@@ -421,8 +421,8 @@ export default function DashboardClient({
       {/* 2.5 SUBJECT-WISE AI CALIBRATION MATRIX (150 Qs Goal Per Subject)   */}
       {/* =================================================================== */}
       <section className="bg-white rounded-xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] space-y-5 w-full max-w-full overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b-2 border-black">
-          <div className="space-y-1">
+        <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b-2 border-black">
+          <div className="flex-[1_1_320px] min-w-0 space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
               <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center shrink-0 shadow-[1px_1px_0px_0px_#000]">
                 <BrainCircuit className="w-4 h-4 text-[#10B981]" />
@@ -440,43 +440,43 @@ export default function DashboardClient({
           </div>
 
           {/* Filter Pills */}
-          <div className="flex items-center gap-1.5 self-start md:self-auto overflow-x-auto max-w-full pb-1 scrollbar-none">
+          <div className="flex items-center gap-2 shrink-0 overflow-x-auto max-w-full p-[0_6px_6px_0] scrollbar-none">
             <button
               type="button"
               onClick={() => setCalibrationCategoryFilter("all")}
-              className={`px-3 py-1.5 rounded-lg border-2 border-black text-xs font-black transition-all ${
+              className={`h-10 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black whitespace-nowrap inline-flex items-center gap-1.5 transition-all shrink-0 ${
                 calibrationCategoryFilter === "all"
-                  ? "bg-black text-white shadow-[2px_2px_0px_0px_#000]"
+                  ? "bg-black text-white shadow-[3px_3px_0px_0px_#000]"
                   : "bg-white text-black hover:bg-[#FAF7EE]"
               }`}
             >
-              All Selected ({candidateSubjectCalibrations.length})
+              All ({candidateSubjectCalibrations.length})
             </button>
             <button
               type="button"
               onClick={() => setCalibrationCategoryFilter("in_progress")}
-              className={`px-3 py-1.5 rounded-lg border-2 border-black text-xs font-black transition-all flex items-center gap-1.5 ${
+              className={`h-10 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black whitespace-nowrap inline-flex items-center gap-1.5 transition-all shrink-0 ${
                 calibrationCategoryFilter === "in_progress"
-                  ? "bg-[#FEF3C7] text-black shadow-[2px_2px_0px_0px_#000]"
+                  ? "bg-[#FEF3C7] text-black shadow-[3px_3px_0px_0px_#000]"
                   : "bg-white text-black hover:bg-[#FAF7EE]"
               }`}
             >
               <span>Calibrating</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-black text-white">
+              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-black text-white">
                 {candidateSubjectCalibrations.filter((s) => s.totalAttempted > 0 && !s.isUnlocked).length}
               </span>
             </button>
             <button
               type="button"
               onClick={() => setCalibrationCategoryFilter("unlocked")}
-              className={`px-3 py-1.5 rounded-lg border-2 border-black text-xs font-black transition-all flex items-center gap-1.5 ${
+              className={`h-10 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black whitespace-nowrap inline-flex items-center gap-1.5 transition-all shrink-0 ${
                 calibrationCategoryFilter === "unlocked"
-                  ? "bg-[#10B981] text-black shadow-[2px_2px_0px_0px_#000]"
+                  ? "bg-[#10B981] text-black shadow-[3px_3px_0px_0px_#000]"
                   : "bg-white text-black hover:bg-[#FAF7EE]"
               }`}
             >
               <span>Unlocked</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-black text-white">
+              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-black text-white">
                 {candidateSubjectCalibrations.filter((s) => s.isUnlocked).length}
               </span>
             </button>
