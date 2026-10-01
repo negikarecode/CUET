@@ -20,13 +20,13 @@
       },
       {
         "id": "B",
-        "text": "$(-2, 2)$",
+        "text": "$\\left[-\\frac{1}{3}, \\frac{1}{3}\\right]$",
         "isCorrect": false,
-        "studentSelectionTrap": "Open Bracket Slip",
-        "mistakeAnalysis": "Aspirants use open parentheses, forgetting that $4 - x^2 = 0$ is permitted under a non-denominator square root.",
+        "studentSelectionTrap": "Inverse Tangent Argument Confusion",
+        "mistakeAnalysis": "Aspirants mistakenly assume the domain of $\\tan^{-1}u$ is restricted to $[-1, 1]$.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Open Bracket Slip"
+          "description": "Inverse Tangent Argument Confusion"
         }
       },
       {
@@ -39,13 +39,13 @@
       },
       {
         "id": "D",
-        "text": "$\\left[-\\frac{1}{3}, \\frac{1}{3}\\right]$",
+        "text": "$(-2, 2)$",
         "isCorrect": false,
-        "studentSelectionTrap": "Inverse Tangent Argument Confusion",
-        "mistakeAnalysis": "Aspirants mistakenly assume the domain of $\\tan^{-1}u$ is restricted to $[-1, 1]$.",
+        "studentSelectionTrap": "Open Bracket Slip",
+        "mistakeAnalysis": "Aspirants use open parentheses, forgetting that $4 - x^2 = 0$ is permitted under a non-denominator square root.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Inverse Tangent Argument Confusion"
+          "description": "Open Bracket Slip"
         }
       }
     ],
@@ -90,17 +90,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{1}{1+t^{2}}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Parameter Expression Retention",
-        "mistakeAnalysis": "Aspirants introduce extraneous parameter expressions[cite: 4].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Parameter Expression Retention"
-        }
-      },
-      {
-        "id": "B",
         "text": "-1",
         "isCorrect": false,
         "studentSelectionTrap": "First Derivative Reported",
@@ -108,6 +97,17 @@
         "misconception": {
           "type": "calculation_error",
           "description": "First Derivative Reported"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$\\frac{1}{1+t^{2}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Parameter Expression Retention",
+        "mistakeAnalysis": "Aspirants introduce extraneous parameter expressions[cite: 4].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Parameter Expression Retention"
         }
       },
       {
@@ -171,11 +171,14 @@
     "options": [
       {
         "id": "A",
-        "text": "16",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correctly applied formula.",
-        "mistakeAnalysis": "Accurate step-by-step reasoning.",
-        "misconception": null
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Option C misconception trap.",
+        "mistakeAnalysis": "Student evaluated incorrectly for C.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Option C misconception trap."
+        }
       },
       {
         "id": "B",
@@ -190,17 +193,6 @@
       },
       {
         "id": "C",
-        "text": "4",
-        "isCorrect": false,
-        "studentSelectionTrap": "Option C misconception trap.",
-        "mistakeAnalysis": "Student evaluated incorrectly for C.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Option C misconception trap."
-        }
-      },
-      {
-        "id": "D",
         "text": "8",
         "isCorrect": false,
         "studentSelectionTrap": "Option D misconception trap.",
@@ -209,9 +201,17 @@
           "type": "conceptual_misunderstanding",
           "description": "Option D misconception trap."
         }
+      },
+      {
+        "id": "D",
+        "text": "16",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correctly applied formula.",
+        "mistakeAnalysis": "Accurate step-by-step reasoning.",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "For an $n \\times n$ square matrix $A$, the determinant of its adjoint is given by the property:\n$$|\\text{adj}(A)| = |A|^{n-1}$$\nHere order $n = 3$ and $|A| = 4$:\n$$|\\text{adj}(A)| = 4^{3-1} = 4^2 = 16$$",
     "questionId": "MATHS-M12-Q03",
     "conceptId": "MATH-determinants-properties-of-matrix-determinants-and-adjoints",
@@ -252,25 +252,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{1}{3}\\sin^{-1}(3x) + C$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Standard formula with substitution $u = 3x \\implies dx = \\frac{1}{3}du$: $\\frac{1}{3}\\sin^{-1}(3x) + C$.",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "$\\sin^{-1}(3x) + C$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Linear Divisor Omission",
-        "mistakeAnalysis": "Aspirants omit the divisor $1/3$ from the derivative of $3x$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Linear Divisor Omission"
-        }
-      },
-      {
-        "id": "C",
         "text": "$\\frac{1}{9}\\sin^{-1}(3x) + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Squared Coefficient Divisor Slip",
@@ -281,7 +262,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "$\\frac{1}{3}\\cos^{-1}(3x) + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Inverse Cosine Misattribution",
@@ -290,9 +271,28 @@
           "type": "sign_error",
           "description": "Inverse Cosine Misattribution"
         }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{3}\\sin^{-1}(3x) + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard formula with substitution $u = 3x \\implies dx = \\frac{1}{3}du$: $\\frac{1}{3}\\sin^{-1}(3x) + C$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$\\sin^{-1}(3x) + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Divisor Omission",
+        "mistakeAnalysis": "Aspirants omit the divisor $1/3$ from the derivative of $3x$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Linear Divisor Omission"
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "Write the radicand in the form $a^2 - u^2$:\n$\\sqrt{1 - 9x^2} = \\sqrt{1^2 - (3x)^2}$.\nSubstitute $u = 3x \\implies du = 3\\,dx \\implies dx = \\frac{1}{3}du$.\nThe integral becomes:\n$\\frac{1}{3} \\int \\frac{du}{\\sqrt{1^2 - u^2}} = \\frac{1}{3}\\sin^{-1}(u) + C = \\frac{1}{3}\\sin^{-1}(3x) + C$.",
     "questionId": "MATHS-M12-Q04",
     "conceptId": "MATH-integrals-integration-of-surd-denominators",
@@ -333,14 +333,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$x$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Dividing by $x^2$ gives $\\frac{dy}{dx} + \\frac{1}{x}y = \\frac{\\log x}{x^2}$. $\\text{IF} = e^{\\int \\frac{1}{x}dx} = e^{\\log x} = x$[cite: 4].",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "$e^{x}$",
         "isCorrect": false,
         "studentSelectionTrap": "Linear Function Exponential",
@@ -351,7 +343,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "$e^{x^{2}/2}$",
         "isCorrect": false,
         "studentSelectionTrap": "Integral Calculation Slip",
@@ -360,6 +352,14 @@
           "type": "calculation_error",
           "description": "Integral Calculation Slip"
         }
+      },
+      {
+        "id": "C",
+        "text": "$x$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Dividing by $x^2$ gives $\\frac{dy}{dx} + \\frac{1}{x}y = \\frac{\\log x}{x^2}$. $\\text{IF} = e^{\\int \\frac{1}{x}dx} = e^{\\log x} = x$[cite: 4].",
+        "misconception": null
       },
       {
         "id": "D",
@@ -373,7 +373,7 @@
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "Write the differential equation in standard linear form $\\frac{dy}{dx} + P(x)y = Q(x)$ by dividing throughout by $x^2$[cite: 4]:\n$\\frac{dy}{dx} + \\frac{xy}{x^2} = \\frac{\\log_e x}{x^2}$\n$\\frac{dy}{dx} + \\frac{1}{x}y = \\frac{\\log_e x}{x^2}$.\nHere $P(x) = \\frac{1}{x}$.\nThe integrating factor (IF) is:\n$\\text{IF} = e^{\\int P(x)dx} = e^{\\int \\frac{1}{x}dx} = e^{\\log_e x} = x$[cite: 4].",
     "questionId": "MATHS-M12-Q05",
     "conceptId": "MATH-differential-equations-integrating-factor-of-first-order-linear-equations",
@@ -414,17 +414,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Rs. 3,000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Students may mistakenly divide the simple interest (Rs. 36,000) by the number of years (3) instead of the total number of months.",
-        "mistakeAnalysis": "Dividing interest by years gives Rs. 12,000 per year, then adding principal/years leads to Rs. 3,000, which ignores the monthly distribution.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Students may mistakenly divide the simple interest (Rs. 36,000) by the number of years (3) instead of the total number of months."
-        }
-      },
-      {
-        "id": "B",
         "text": "Rs. 3,778",
         "isCorrect": true,
         "studentSelectionTrap": null,
@@ -432,7 +421,7 @@
         "misconception": null
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "Rs. 3,500",
         "isCorrect": false,
         "studentSelectionTrap": "Confusing the flat rate method with the reducing balance method and using the EMI formula for reducing balance.",
@@ -440,6 +429,17 @@
         "misconception": {
           "type": "formula_confusion",
           "description": "Confusing the flat rate method with the reducing balance method and using the EMI formula for reducing balance."
+        }
+      },
+      {
+        "id": "C",
+        "text": "Rs. 3,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Students may mistakenly divide the simple interest (Rs. 36,000) by the number of years (3) instead of the total number of months.",
+        "mistakeAnalysis": "Dividing interest by years gives Rs. 12,000 per year, then adding principal/years leads to Rs. 3,000, which ignores the monthly distribution.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Students may mistakenly divide the simple interest (Rs. 36,000) by the number of years (3) instead of the total number of months."
         }
       },
       {
@@ -454,7 +454,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "Step 1: Compute the total interest charged under the flat rate method.\\n\\\\[\\n\\text{Interest} = P \\times r \\times n = 1,00,000 \\times 0.12 \\times 3 = 36,000\\n\\\\]\\nStep 2: Find the total amount to be repaid (principal + interest).\\n\\\\[\\n\\text{Total Amount} = P + \\text{Interest} = 1,00,000 + 36,000 = 1,36,000\\n\\\\]\\nStep 3: Convert the loan tenure into months (since EMI is monthly).\\n\\\\[\\n\\text{Number of months} = 3 \\times 12 = 36\\n\\\\]\\nStep 4: EMI = Total Amount / Number of months.\\n\\\\[\\n\\text{EMI} = \\frac{1,36,000}{36} = 3,777.78\\text{ rupees}\\n\\\\]\\nStep 5: Round to the nearest rupee.\\n\\\\[\\n\\text{EMI} \\approx \\text{Rs. }3,778\\n\\\\]\\nThus, the correct EMI is Rs. 3,778.",
     "questionId": "MATHS-M12-Q06",
     "conceptId": "MATH-financial-mathematics-flat-rate-method-emi-calculation",
@@ -494,25 +494,17 @@
     "options": [
       {
         "id": "A",
-        "text": "$(1, 1, 1)$",
+        "text": "$\\left(\\frac{1}{\\sqrt{2}}, \\frac{1}{\\sqrt{2}}, \\frac{1}{\\sqrt{2}}\\right)$",
         "isCorrect": false,
-        "studentSelectionTrap": "Direction Ratios Confused with Direction Cosines",
-        "mistakeAnalysis": "Aspirants select direction ratios instead of normalized direction cosines[cite: 4].",
+        "studentSelectionTrap": "Two-Dimensional Normalization Error",
+        "mistakeAnalysis": "Aspirants divide by $\\sqrt{2}$ instead of $\\sqrt{3}$[cite: 4].",
         "misconception": {
-          "type": "direction_error",
-          "description": "Direction Ratios Confused with Direction Cosines"
+          "type": "unit_error",
+          "description": "Two-Dimensional Normalization Error"
         }
       },
       {
         "id": "B",
-        "text": "$\\left(\\pm\\frac{1}{\\sqrt{3}}, \\pm\\frac{1}{\\sqrt{3}}, \\pm\\frac{1}{\\sqrt{3}}\\right)$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $l^2 + m^2 + n^2 = 3l^2 = 1 \\implies l = \\pm 1/\\sqrt{3}$[cite: 4].",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$\\left(\\frac{1}{3}, \\frac{1}{3}, \\frac{1}{3}\\right)$",
         "isCorrect": false,
         "studentSelectionTrap": "Unsquared Sum Fallacy",
@@ -523,18 +515,26 @@
         }
       },
       {
-        "id": "D",
-        "text": "$\\left(\\frac{1}{\\sqrt{2}}, \\frac{1}{\\sqrt{2}}, \\frac{1}{\\sqrt{2}}\\right)$",
+        "id": "C",
+        "text": "$(1, 1, 1)$",
         "isCorrect": false,
-        "studentSelectionTrap": "Two-Dimensional Normalization Error",
-        "mistakeAnalysis": "Aspirants divide by $\\sqrt{2}$ instead of $\\sqrt{3}$[cite: 4].",
+        "studentSelectionTrap": "Direction Ratios Confused with Direction Cosines",
+        "mistakeAnalysis": "Aspirants select direction ratios instead of normalized direction cosines[cite: 4].",
         "misconception": {
-          "type": "unit_error",
-          "description": "Two-Dimensional Normalization Error"
+          "type": "direction_error",
+          "description": "Direction Ratios Confused with Direction Cosines"
         }
+      },
+      {
+        "id": "D",
+        "text": "$\\left(\\pm\\frac{1}{\\sqrt{3}}, \\pm\\frac{1}{\\sqrt{3}}, \\pm\\frac{1}{\\sqrt{3}}\\right)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $l^2 + m^2 + n^2 = 3l^2 = 1 \\implies l = \\pm 1/\\sqrt{3}$[cite: 4].",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "Let the direction angles of the line with the coordinate axes be $\\alpha, \\beta, \\gamma$[cite: 4].\nSince the line is equally inclined to the axes, $|\\cos\\alpha| = |\\cos\\beta| = |\\cos\\gamma| = |l|$[cite: 4].\nBy the direction cosines identity:\n$l^2 + m^2 + n^2 = 1$\n$l^2 + l^2 + l^2 = 1$\n$3l^2 = 1 \\implies l = \\pm \\frac{1}{\\sqrt{3}}$.\nTherefore, the direction cosines are $\\left(\\pm\\frac{1}{\\sqrt{3}}, \\pm\\frac{1}{\\sqrt{3}}, \\pm\\frac{1}{\\sqrt{3}}\\right)$[cite: 4].",
     "questionId": "MATHS-M12-Q07",
     "conceptId": "MATH-three-dimensional-geometry-direction-cosines-of-line-equally-inclined-to-axes",
@@ -575,13 +575,13 @@
     "options": [
       {
         "id": "A",
-        "text": "6",
+        "text": "0",
         "isCorrect": false,
-        "studentSelectionTrap": "Sign Neglect",
-        "mistakeAnalysis": "Aspirants ignore the negative sign on $-1$.",
+        "studentSelectionTrap": "Zero Element Heuristic",
+        "mistakeAnalysis": "Aspirants assume off-diagonal zeroes force determinant to 0.",
         "misconception": {
-          "type": "sign_error",
-          "description": "Sign Neglect"
+          "type": "conceptual_misunderstanding",
+          "description": "Zero Element Heuristic"
         }
       },
       {
@@ -605,13 +605,13 @@
       },
       {
         "id": "D",
-        "text": "0",
+        "text": "6",
         "isCorrect": false,
-        "studentSelectionTrap": "Zero Element Heuristic",
-        "mistakeAnalysis": "Aspirants assume off-diagonal zeroes force determinant to 0.",
+        "studentSelectionTrap": "Sign Neglect",
+        "mistakeAnalysis": "Aspirants ignore the negative sign on $-1$.",
         "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Zero Element Heuristic"
+          "type": "sign_error",
+          "description": "Sign Neglect"
         }
       }
     ],
@@ -675,17 +675,6 @@
       },
       {
         "id": "C",
-        "text": "2",
-        "isCorrect": false,
-        "studentSelectionTrap": "Denominator Drop Error",
-        "mistakeAnalysis": "Aspirants overlook the denominator factor 3.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Denominator Drop Error"
-        }
-      },
-      {
-        "id": "D",
         "text": "9",
         "isCorrect": false,
         "studentSelectionTrap": "Denominator Squaring Fallacy",
@@ -693,6 +682,17 @@
         "misconception": {
           "type": "logical_reasoning_error",
           "description": "Denominator Squaring Fallacy"
+        }
+      },
+      {
+        "id": "D",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Denominator Drop Error",
+        "mistakeAnalysis": "Aspirants overlook the denominator factor 3.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Denominator Drop Error"
         }
       }
     ],
@@ -737,17 +737,6 @@
     "options": [
       {
         "id": "A",
-        "text": "25",
-        "isCorrect": false,
-        "studentSelectionTrap": "Adjoint Alone Evaluated",
-        "mistakeAnalysis": "Aspirants evaluate only $|\\operatorname{adj} A| = |A|^{n-1} = 5^2 = 25$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Adjoint Alone Evaluated"
-        }
-      },
-      {
-        "id": "B",
         "text": "5",
         "isCorrect": false,
         "studentSelectionTrap": "Linear Identity Assumption",
@@ -755,6 +744,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Linear Identity Assumption"
+        }
+      },
+      {
+        "id": "B",
+        "text": "25",
+        "isCorrect": false,
+        "studentSelectionTrap": "Adjoint Alone Evaluated",
+        "mistakeAnalysis": "Aspirants evaluate only $|\\operatorname{adj} A| = |A|^{n-1} = 5^2 = 25$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Adjoint Alone Evaluated"
         }
       },
       {
@@ -818,14 +818,11 @@
     "options": [
       {
         "id": "A",
-        "text": "$|\\vec{a}|^2$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dot Product Formula Confusion",
-        "mistakeAnalysis": "Aspirants confuse the cross product with the scalar dot product $\\vec{a} \\cdot \\vec{a} = |\\vec{a}|^2$.",
-        "misconception": {
-          "type": "formula_confusion",
-          "description": "Dot Product Formula Confusion"
-        }
+        "text": "$\\vec{0}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\vec{a}\\times\\vec{a} = |\\vec{a}||\\vec{a}|\\sin(0)\\hat{n} = \\vec{0}$.",
+        "misconception": null
       },
       {
         "id": "B",
@@ -840,6 +837,17 @@
       },
       {
         "id": "C",
+        "text": "$|\\vec{a}|^2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dot Product Formula Confusion",
+        "mistakeAnalysis": "Aspirants confuse the cross product with the scalar dot product $\\vec{a} \\cdot \\vec{a} = |\\vec{a}|^2$.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "Dot Product Formula Confusion"
+        }
+      },
+      {
+        "id": "D",
         "text": "$1$",
         "isCorrect": false,
         "studentSelectionTrap": "Scalar Unit Confusion",
@@ -848,17 +856,9 @@
           "type": "unit_error",
           "description": "Scalar Unit Confusion"
         }
-      },
-      {
-        "id": "D",
-        "text": "$\\vec{0}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\vec{a}\\times\\vec{a} = |\\vec{a}||\\vec{a}|\\sin(0)\\hat{n} = \\vec{0}$.",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "A",
     "detailedSolution": "By definition of the vector cross product:\n$\\vec{a} \\times \\vec{b} = |\\vec{a}||\\vec{b}|\\sin\\theta \\,\\hat{n}$.\nWhen $\\vec{b} = \\vec{a}$, the angle between $\\vec{a}$ and itself is $\\theta = 0$:\n$\\sin(0) = 0 \\implies \\vec{a} \\times \\vec{a} = \\vec{0}$ (the zero vector).",
     "questionId": "MATHS-M12-Q11",
     "conceptId": "MATH-vector-algebra-self-cross-product",
@@ -899,14 +899,11 @@
     "options": [
       {
         "id": "A",
-        "text": "1",
-        "isCorrect": false,
-        "studentSelectionTrap": "Direction Cosine Square Sum Fallacy",
-        "mistakeAnalysis": "Aspirants confuse $\\sum \\cos 2\\alpha$ with $\\sum \\cos^2\\alpha = 1$[cite: 5].",
-        "misconception": {
-          "type": "direction_error",
-          "description": "Direction Cosine Square Sum Fallacy"
-        }
+        "text": "-1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\sum \\cos 2\\alpha = 2\\sum\\cos^2\\alpha - 3 = 2(1) - 3 = -1$[cite: 5].",
+        "misconception": null
       },
       {
         "id": "B",
@@ -921,14 +918,6 @@
       },
       {
         "id": "C",
-        "text": "-1",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\sum \\cos 2\\alpha = 2\\sum\\cos^2\\alpha - 3 = 2(1) - 3 = -1$[cite: 5].",
-        "misconception": null
-      },
-      {
-        "id": "D",
         "text": "$-\\frac{1}{2}$",
         "isCorrect": false,
         "studentSelectionTrap": "Sign and Half Error",
@@ -937,9 +926,20 @@
           "type": "sign_error",
           "description": "Sign and Half Error"
         }
+      },
+      {
+        "id": "D",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direction Cosine Square Sum Fallacy",
+        "mistakeAnalysis": "Aspirants confuse $\\sum \\cos 2\\alpha$ with $\\sum \\cos^2\\alpha = 1$[cite: 5].",
+        "misconception": {
+          "type": "direction_error",
+          "description": "Direction Cosine Square Sum Fallacy"
+        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "By the fundamental property of direction cosines of a line in 3D space:\n$\\cos^2\\alpha + \\cos^2\\beta + \\cos^2\\gamma = 1$.\nUsing the double-angle trigonometric identity $\\cos 2\\theta = 2\\cos^2\\theta - 1$:\n$\\cos 2\\alpha + \\cos 2\\beta + \\cos 2\\gamma = (2\\cos^2\\alpha - 1) + (2\\cos^2\\beta - 1) + (2\\cos^2\\gamma - 1)$\n$= 2(\\cos^2\\alpha + \\cos^2\\beta + \\cos^2\\gamma) - (1 + 1 + 1)$\n$= 2(1) - 3 = 2 - 3 = -1$[cite: 5].",
     "questionId": "MATHS-M12-Q12",
     "conceptId": "MATH-three-dimensional-geometry-double-angle-direction-cosine-identity",
@@ -980,17 +980,25 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\{5k - 2 : k \\in \\mathbb{Z}\\}$",
+        "text": "$\\{5k : k \\in \\mathbb{Z}\\}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Sign Convention Inversion",
-        "mistakeAnalysis": "Aspirants write $5k - 2$, which corresponds to the residue class $[3]$ modulo 5.",
+        "studentSelectionTrap": "Zero Equivalence Class Fallacy",
+        "mistakeAnalysis": "Aspirants report the equivalence class of $[0]$ instead of $[2]$.",
         "misconception": {
-          "type": "sign_error",
-          "description": "Sign Convention Inversion"
+          "type": "logical_reasoning_error",
+          "description": "Zero Equivalence Class Fallacy"
         }
       },
       {
         "id": "B",
+        "text": "$\\{5k + 2 : k \\in \\mathbb{Z}\\}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. By definition, $[2] = \\{x \\in \\mathbb{Z} : x \\equiv 2 \\pmod 5\\} = \\{5k + 2 : k \\in \\mathbb{Z}\\}$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$\\{2k + 5 : k \\in \\mathbb{Z}\\}$",
         "isCorrect": false,
         "studentSelectionTrap": "Modulus Multiplier Swapping",
@@ -1001,26 +1009,18 @@
         }
       },
       {
-        "id": "C",
-        "text": "$\\{5k + 2 : k \\in \\mathbb{Z}\\}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. By definition, $[2] = \\{x \\in \\mathbb{Z} : x \\equiv 2 \\pmod 5\\} = \\{5k + 2 : k \\in \\mathbb{Z}\\}$.",
-        "misconception": null
-      },
-      {
         "id": "D",
-        "text": "$\\{5k : k \\in \\mathbb{Z}\\}$",
+        "text": "$\\{5k - 2 : k \\in \\mathbb{Z}\\}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Zero Equivalence Class Fallacy",
-        "mistakeAnalysis": "Aspirants report the equivalence class of $[0]$ instead of $[2]$.",
+        "studentSelectionTrap": "Sign Convention Inversion",
+        "mistakeAnalysis": "Aspirants write $5k - 2$, which corresponds to the residue class $[3]$ modulo 5.",
         "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Zero Equivalence Class Fallacy"
+          "type": "sign_error",
+          "description": "Sign Convention Inversion"
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "By definition, the equivalence class $[a]$ with respect to an equivalence relation $R$ is:\n$[a] = \\{x \\in \\mathbb{Z} : (x, a) \\in R\\}$.\nHere, $(x, 2) \\in R \\iff 5 \\text{ divides } (x - 2)$.\nThus, $x - 2 = 5k$ for some $k \\in \\mathbb{Z}$, which gives:\n$x = 5k + 2$.\nTherefore, $[2] = \\{5k + 2 : k \\in \\mathbb{Z}\\} = \\{\\dots, -8, -3, 2, 7, 12, \\dots\\}$.",
     "questionId": "MATHS-M12-Q13",
     "conceptId": "MATH-relations-and-functions-equivalence-classes",
@@ -1061,6 +1061,17 @@
     "options": [
       {
         "id": "A",
+        "text": "$\\sec\\left(\\frac{y}{x}\\right) = Cx$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Trigonometric Identity Confusion",
+        "mistakeAnalysis": "Aspirants confuse $\\int \\tan v\\,dv$ and $\\int \\cot v\\,dv$, producing secant.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Trigonometric Identity Confusion"
+        }
+      },
+      {
+        "id": "B",
         "text": "$\\cos\\left(\\frac{y}{x}\\right) = Cx$",
         "isCorrect": false,
         "studentSelectionTrap": "Antiderivative Sign Slip",
@@ -1069,14 +1080,6 @@
           "type": "sign_error",
           "description": "Antiderivative Sign Slip"
         }
-      },
-      {
-        "id": "B",
-        "text": "$\\sin\\left(\\frac{y}{x}\\right) = Cx$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Putting $y = vx$ gives $v + x\\frac{dv}{dx} = v + \\tan v \\implies \\cot v\\,dv = \\frac{dx}{x} \\implies \\ln|\\sin v| = \\ln|x| + \\ln|C| \\implies \\sin(y/x) = Cx$.",
-        "misconception": null
       },
       {
         "id": "C",
@@ -1091,17 +1094,14 @@
       },
       {
         "id": "D",
-        "text": "$\\sec\\left(\\frac{y}{x}\\right) = Cx$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Trigonometric Identity Confusion",
-        "mistakeAnalysis": "Aspirants confuse $\\int \\tan v\\,dv$ and $\\int \\cot v\\,dv$, producing secant.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Trigonometric Identity Confusion"
-        }
+        "text": "$\\sin\\left(\\frac{y}{x}\\right) = Cx$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Putting $y = vx$ gives $v + x\\frac{dv}{dx} = v + \\tan v \\implies \\cot v\\,dv = \\frac{dx}{x} \\implies \\ln|\\sin v| = \\ln|x| + \\ln|C| \\implies \\sin(y/x) = Cx$.",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "Given: $\\frac{dy}{dx} = \\frac{y}{x} + \\tan\\left(\\frac{y}{x}\\right)$.\nThis is a homogeneous differential equation. Substitute $y = vx$, so $\\frac{dy}{dx} = v + x\\frac{dv}{dx}$.\nSubstituting:\n$v + x\\frac{dv}{dx} = v + \\tan v \\implies x\\frac{dv}{dx} = \\tan v$.\nSeparating variables:\n$\\frac{dv}{\\tan v} = \\frac{dx}{x} \\implies \\cot v\\,dv = \\frac{dx}{x}$.\nIntegrating both sides:\n$\\int \\cot v\\,dv = \\int \\frac{dx}{x} \\implies \\ln|\\sin v| = \\ln|x| + \\ln|C| = \\ln|Cx|$.\nTaking exponentials: $\\sin v = Cx \\implies \\sin\\left(\\frac{y}{x}\\right) = Cx$.",
     "questionId": "MATHS-M12-Q14",
     "conceptId": "MATH-differential-equations-homogeneous-differential-equations",
@@ -1142,6 +1142,14 @@
     "options": [
       {
         "id": "A",
+        "text": "$\\frac{\\sqrt{293}}{7}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\vec{a}_2 - \\vec{a}_1 = (2, 1, -1)$. $\\vec{b} \\times (\\vec{a}_2 - \\vec{a}_1) = (-9, 14, -4)$, magnitude $\\sqrt{293}$; $|\\vec{b}| = \\sqrt{4+9+36} = 7$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "$\\frac{\\sqrt{293}}{49}$",
         "isCorrect": false,
         "studentSelectionTrap": "Squared Denominator Slip",
@@ -1152,26 +1160,7 @@
         }
       },
       {
-        "id": "B",
-        "text": "$\\frac{\\sqrt{293}}{7}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\vec{a}_2 - \\vec{a}_1 = (2, 1, -1)$. $\\vec{b} \\times (\\vec{a}_2 - \\vec{a}_1) = (-9, 14, -4)$, magnitude $\\sqrt{293}$; $|\\vec{b}| = \\sqrt{4+9+36} = 7$.",
-        "misconception": null
-      },
-      {
         "id": "C",
-        "text": "$\\frac{\\sqrt{285}}{7}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Component Arithmetic Error",
-        "mistakeAnalysis": "Aspirants calculate $(-9)^2 + 14^2 + (-4)^2$ incorrectly.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Component Arithmetic Error"
-        }
-      },
-      {
-        "id": "D",
         "text": "$\\frac{1}{7}$",
         "isCorrect": false,
         "studentSelectionTrap": "Direction Normalization Fallacy",
@@ -1180,9 +1169,20 @@
           "type": "direction_error",
           "description": "Direction Normalization Fallacy"
         }
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{\\sqrt{285}}{7}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Component Arithmetic Error",
+        "mistakeAnalysis": "Aspirants calculate $(-9)^2 + 14^2 + (-4)^2$ incorrectly.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Component Arithmetic Error"
+        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "For parallel lines $\\vec{r} = \\vec{a}_1 + \\lambda\\vec{b}$ and $\\vec{r} = \\vec{a}_2 + \\mu\\vec{b}$, the shortest distance is:\n$d = \\frac{|\\vec{b} \\times (\\vec{a}_2 - \\vec{a}_1)|}{|\\vec{b}|}$.\nHere:\n$\\vec{a}_1 = \\hat{i} + 2\\hat{j} - 4\\hat{k}$, $\\vec{a}_2 = 3\\hat{i} + 3\\hat{j} - 5\\hat{k}$, and $\\vec{b} = 2\\hat{i} + 3\\hat{j} + 6\\hat{k}$.\nCompute $\\vec{a}_2 - \\vec{a}_1 = (3 - 1)\\hat{i} + (3 - 2)\\hat{j} + (-5 - (-4))\\hat{k} = 2\\hat{i} + \\hat{j} - \\hat{k}$.\nCompute cross product:\n$\\vec{b} \\times (\\vec{a}_2 - \\vec{a}_1) = \\begin{vmatrix} \\hat{i} & \\hat{j} & \\hat{k} \\\\ 2 & 3 & 6 \\\\ 2 & 1 & -1 \\end{vmatrix}$\n$= \\hat{i}(-3 - 6) - \\hat{j}(-2 - 12) + \\hat{k}(2 - 6) = -9\\hat{i} + 14\\hat{j} - 4\\hat{k}$.\nMagnitude: $|\\vec{b} \\times (\\vec{a}_2 - \\vec{a}_1)| = \\sqrt{(-9)^2 + 14^2 + (-4)^2} = \\sqrt{81 + 196 + 16} = \\sqrt{293}$.\n$|\\vec{b}| = \\sqrt{2^2 + 3^2 + 6^2} = \\sqrt{4 + 9 + 36} = \\sqrt{49} = 7$.\nTherefore:\n$d = \\frac{\\sqrt{293}}{7}$.",
     "questionId": "MATHS-M12-Q15",
     "conceptId": "MATH-three-dimensional-geometry-shortest-distance-between-parallel-lines",
@@ -1231,13 +1231,13 @@
       },
       {
         "id": "B",
-        "text": "(A) and (D) only",
+        "text": "(B) and (D) only",
         "isCorrect": false,
-        "studentSelectionTrap": "Degrees of Freedom Restriction Neglect",
-        "mistakeAnalysis": "Aspirants assume sample standard deviation has unconstrained $n$ degrees of freedom.",
+        "studentSelectionTrap": "Reversed Properties Fallacy",
+        "mistakeAnalysis": "Aspirants reverse the concepts completely.",
         "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Degrees of Freedom Restriction Neglect"
+          "type": "logical_reasoning_error",
+          "description": "Reversed Properties Fallacy"
         }
       },
       {
@@ -1253,13 +1253,13 @@
       },
       {
         "id": "D",
-        "text": "(B) and (D) only",
+        "text": "(A) and (D) only",
         "isCorrect": false,
-        "studentSelectionTrap": "Reversed Properties Fallacy",
-        "mistakeAnalysis": "Aspirants reverse the concepts completely.",
+        "studentSelectionTrap": "Degrees of Freedom Restriction Neglect",
+        "mistakeAnalysis": "Aspirants assume sample standard deviation has unconstrained $n$ degrees of freedom.",
         "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Reversed Properties Fallacy"
+          "type": "conceptual_misunderstanding",
+          "description": "Degrees of Freedom Restriction Neglect"
         }
       }
     ],
@@ -1304,28 +1304,6 @@
     "options": [
       {
         "id": "A",
-        "text": "(A), (B) and (C) only",
-        "isCorrect": false,
-        "studentSelectionTrap": "General Contingency Confusion",
-        "mistakeAnalysis": "Aspirants confuse sinking funds with general contingency reserves[cite: 4].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "General Contingency Confusion"
-        }
-      },
-      {
-        "id": "B",
-        "text": "(A), (B), (C) and (D)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Universal Acceptance Fallacy",
-        "mistakeAnalysis": "Aspirants accept statement (C) despite its contradiction of the fund's earmarked purpose[cite: 4].",
-        "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Universal Acceptance Fallacy"
-        }
-      },
-      {
-        "id": "C",
         "text": "(C) and (D) only",
         "isCorrect": false,
         "studentSelectionTrap": "Narrow Definition Bias",
@@ -1336,15 +1314,37 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "(A), (B) and (D) only",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Sinking funds are designated for specific future obligations or capital replacement, not arbitrary general purposes[cite: 4].",
         "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "(A), (B), (C) and (D)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Universal Acceptance Fallacy",
+        "mistakeAnalysis": "Aspirants accept statement (C) despite its contradiction of the fund's earmarked purpose[cite: 4].",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Universal Acceptance Fallacy"
+        }
+      },
+      {
+        "id": "D",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "General Contingency Confusion",
+        "mistakeAnalysis": "Aspirants confuse sinking funds with general contingency reserves[cite: 4].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "General Contingency Confusion"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "A **sinking fund** is an earmarked fund created by an entity for a specified future capital outlay or debt retirement[cite: 4]:\n- Statement (A) accurately states its use for funding future capital expenses (e.g., machinery replacement)[cite: 4].\n- Statement (B) correctly describes its use for repaying bonds or long-term debts[cite: 4].\n- Statement (D) accurately describes accumulation for a future financial obligation[cite: 4].\n- Statement (C) is false because a sinking fund cannot be used for arbitrary, non-designated purposes[cite: 4].\nTherefore, (A), (B) and (D) only are correct[cite: 4].",
     "questionId": "MATHS-M12-Q17",
     "conceptId": "MATH-financial-mathematics-sinking-fund-principles",
@@ -1384,17 +1384,6 @@
     "options": [
       {
         "id": "A",
-        "text": "0",
-        "isCorrect": false,
-        "studentSelectionTrap": "Constant Term Cancellation Fallacy",
-        "mistakeAnalysis": "Aspirants assume the entire integrand is odd, including the constant 1.",
-        "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Constant Term Cancellation Fallacy"
-        }
-      },
-      {
-        "id": "B",
         "text": "1",
         "isCorrect": false,
         "studentSelectionTrap": "Upper Bound Selection",
@@ -1405,15 +1394,18 @@
         }
       },
       {
-        "id": "C",
-        "text": "2",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $x^3, x\\cos x$, and $\\tan^5 x$ are all odd functions (integrating to 0 over $[-1, 1]$), leaving $\\int_{-1}^1 1\\,dx = [x]_{-1}^1 = 2$.",
-        "misconception": null
+        "id": "B",
+        "text": "0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Constant Term Cancellation Fallacy",
+        "mistakeAnalysis": "Aspirants assume the entire integrand is odd, including the constant 1.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Constant Term Cancellation Fallacy"
+        }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "4",
         "isCorrect": false,
         "studentSelectionTrap": "Doubling Error",
@@ -1422,9 +1414,17 @@
           "type": "conceptual_misunderstanding",
           "description": "Doubling Error"
         }
+      },
+      {
+        "id": "D",
+        "text": "2",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $x^3, x\\cos x$, and $\\tan^5 x$ are all odd functions (integrating to 0 over $[-1, 1]$), leaving $\\int_{-1}^1 1\\,dx = [x]_{-1}^1 = 2$.",
+        "misconception": null
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "Decompose the integral:\n$I = \\int_{-1}^1 x^3\\,dx + \\int_{-1}^1 x\\cos x\\,dx + \\int_{-1}^1 \\tan^5 x\\,dx + \\int_{-1}^1 1\\,dx$.\n1. $(-x)^3 = -x^3$ (odd) $\\implies \\int_{-1}^1 x^3\\,dx = 0$.\n2. $(-x)\\cos(-x) = -x\\cos x$ (odd) $\\implies \\int_{-1}^1 x\\cos x\\,dx = 0$.\n3. $\\tan^5(-x) = -\\tan^5 x$ (odd) $\\implies \\int_{-1}^1 \\tan^5 x\\,dx = 0$.\n4. $\\int_{-1}^1 1\\,dx = [x]_{-1}^1 = 1 - (-1) = 2$.\nTotal value $I = 0 + 0 + 0 + 2 = 2$.",
     "questionId": "MATHS-M12-Q18",
     "conceptId": "MATH-integrals-properties-of-odd-and-even-definite-integrals",
@@ -1465,25 +1465,6 @@
     "options": [
       {
         "id": "A",
-        "text": "2",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Variance $= npq = 16(1/2)(1/2) = 4$. Standard deviation $= \\sqrt{4} = 2$.",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "4",
-        "isCorrect": false,
-        "studentSelectionTrap": "Variance Reported as Standard Deviation",
-        "mistakeAnalysis": "Aspirants compute variance $\\sigma^2 = 4$ and forget to take the square root.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Variance Reported as Standard Deviation"
-        }
-      },
-      {
-        "id": "C",
         "text": "8",
         "isCorrect": false,
         "studentSelectionTrap": "Mean Reported",
@@ -1494,7 +1475,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "$\\sqrt{2}$",
         "isCorrect": false,
         "studentSelectionTrap": "Excess Square Root Slip",
@@ -1503,9 +1484,28 @@
           "type": "conceptual_misunderstanding",
           "description": "Excess Square Root Slip"
         }
+      },
+      {
+        "id": "C",
+        "text": "2",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Variance $= npq = 16(1/2)(1/2) = 4$. Standard deviation $= \\sqrt{4} = 2$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Variance Reported as Standard Deviation",
+        "mistakeAnalysis": "Aspirants compute variance $\\sigma^2 = 4$ and forget to take the square root.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Variance Reported as Standard Deviation"
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "The number of heads $X$ follows a Binomial distribution $B(n, p)$ with $n = 16$ and $p = 1/2$:\n$q = 1 - p = 1/2$.\nVariance: $\\sigma^2 = npq = 16 \\times \\frac{1}{2} \\times \\frac{1}{2} = 4$.\nStandard deviation: $\\sigma = \\sqrt{4} = 2$.",
     "questionId": "MATHS-M12-Q19",
     "conceptId": "MATH-probability-distributions-standard-deviation-of-binomial-distribution",
@@ -1546,25 +1546,17 @@
     "options": [
       {
         "id": "A",
-        "text": "An idempotent matrix",
+        "text": "An orthogonal matrix",
         "isCorrect": false,
-        "studentSelectionTrap": "Idempotent Matrix Confusion",
-        "mistakeAnalysis": "Aspirants confuse $A^2 = I$ with the idempotent condition $A^2 = A$.",
+        "studentSelectionTrap": "Orthogonal Condition Confusion",
+        "mistakeAnalysis": "Aspirants confuse $A^2 = I$ with $A A^T = I$.",
         "misconception": {
           "type": "boundary_condition_error",
-          "description": "Idempotent Matrix Confusion"
+          "description": "Orthogonal Condition Confusion"
         }
       },
       {
         "id": "B",
-        "text": "An involutory matrix",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. A matrix whose square equals the identity matrix ($A^2 = I$) is termed an involutory matrix.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "A nilpotent matrix",
         "isCorrect": false,
         "studentSelectionTrap": "Nilpotent Matrix Confusion",
@@ -1575,18 +1567,26 @@
         }
       },
       {
+        "id": "C",
+        "text": "An involutory matrix",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. A matrix whose square equals the identity matrix ($A^2 = I$) is termed an involutory matrix.",
+        "misconception": null
+      },
+      {
         "id": "D",
-        "text": "An orthogonal matrix",
+        "text": "An idempotent matrix",
         "isCorrect": false,
-        "studentSelectionTrap": "Orthogonal Condition Confusion",
-        "mistakeAnalysis": "Aspirants confuse $A^2 = I$ with $A A^T = I$.",
+        "studentSelectionTrap": "Idempotent Matrix Confusion",
+        "mistakeAnalysis": "Aspirants confuse $A^2 = I$ with the idempotent condition $A^2 = A$.",
         "misconception": {
           "type": "boundary_condition_error",
-          "description": "Orthogonal Condition Confusion"
+          "description": "Idempotent Matrix Confusion"
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "By algebraic definition:\n- A square matrix $A$ is **idempotent** if $A^2 = A$.\n- A square matrix $A$ is **involutory** if $A^2 = I$ (i.e., it is its own inverse: $A = A^{-1}$).\n- A square matrix $A$ is **nilpotent** if $A^k = O$ for some positive integer $k$.\nTherefore, $A^2 = I$ defines an **involutory matrix**.",
     "questionId": "MATHS-M12-Q20",
     "conceptId": "MATH-matrices-idempotent-matrix-properties",
@@ -1638,6 +1638,14 @@
       },
       {
         "id": "B",
+        "text": "11",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $2x + 3 = 7 \\implies x = 2$; $2(y - 3) + 2 = 14 \\implies 2y - 6 + 2 = 14 \\implies 2y = 18 \\implies y = 9$. $x + y = 2 + 9 = 11$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "7",
         "isCorrect": false,
         "studentSelectionTrap": "Linear Expansion Slip",
@@ -1648,7 +1656,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "13",
         "isCorrect": false,
         "studentSelectionTrap": "Scalar Factor Distribution Neglect",
@@ -1657,17 +1665,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Scalar Factor Distribution Neglect"
         }
-      },
-      {
-        "id": "D",
-        "text": "11",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $2x + 3 = 7 \\implies x = 2$; $2(y - 3) + 2 = 14 \\implies 2y - 6 + 2 = 14 \\implies 2y = 18 \\implies y = 9$. $x + y = 2 + 9 = 11$.",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "Distribute the scalar 2 and perform matrix addition:\n$\\begin{bmatrix}2x & 10 \\\\ 14 & 2y - 6\\end{bmatrix} + \\begin{bmatrix}3 & -4 \\\\ 1 & 2\\end{bmatrix} = \\begin{bmatrix}2x + 3 & 6 \\\\ 15 & 2y - 4\\end{bmatrix}$.\nEquating to $\\begin{bmatrix}7 & 6 \\\\ 15 & 14\\end{bmatrix}$:\n1. $2x + 3 = 7 \\implies 2x = 4 \\implies x = 2$.\n2. $2y - 4 = 14 \\implies 2y = 18 \\implies y = 9$.\nSum: $x + y = 2 + 9 = 11$.",
     "questionId": "MATHS-M12-Q21",
     "conceptId": "MATH-matrices-scalar-multiplication-and-matrix-equations",
@@ -1719,6 +1719,14 @@
       },
       {
         "id": "B",
+        "text": "$3xy-y^{3}=C$, where $C$ is an arbitrary constant.",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $d(xy) - y^2\\,dy = 0 \\implies xy - y^3/3 = C_1 \\implies 3xy - y^3 = C$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$3xy+y^{3}=C$, where $C$ is an arbitrary constant.",
         "isCorrect": false,
         "studentSelectionTrap": "Sign Slip in Rearrangement",
@@ -1727,14 +1735,6 @@
           "type": "sign_error",
           "description": "Sign Slip in Rearrangement"
         }
-      },
-      {
-        "id": "C",
-        "text": "$3xy-y^{3}=C$, where $C$ is an arbitrary constant.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $d(xy) - y^2\\,dy = 0 \\implies xy - y^3/3 = C_1 \\implies 3xy - y^3 = C$.",
-        "misconception": null
       },
       {
         "id": "D",
@@ -1748,7 +1748,7 @@
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "Given differential equation:\n$y\\,dx + (x - y^2)\\,dy = 0$\nRegrouping terms:\n$(y\\,dx + x\\,dy) - y^2\\,dy = 0$\nRecognizing the exact differential $d(xy) = y\\,dx + x\\,dy$:\n$d(xy) - y^2\\,dy = 0$\nIntegrating both sides:\n$\\int d(xy) - \\int y^2\\,dy = C_1$\n$xy - \\frac{y^3}{3} = C_1$\nMultiplying by 3 throughout:\n$3xy - y^3 = C$ (where $C = 3C_1$ is an arbitrary constant).",
     "questionId": "MATHS-M12-Q22",
     "conceptId": "MATH-differential-equations-exact-equations-and-integrating-factors",
@@ -1789,14 +1789,6 @@
     "options": [
       {
         "id": "A",
-        "text": "1",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Standard identity of direction cosines: $l^2 + m^2 + n^2 = \\cos^2\\alpha + \\cos^2\\beta + \\cos^2\\gamma = 1$.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "0",
         "isCorrect": false,
         "studentSelectionTrap": "Orthogonality Fallacy",
@@ -1804,6 +1796,17 @@
         "misconception": {
           "type": "logical_reasoning_error",
           "description": "Orthogonality Fallacy"
+        }
+      },
+      {
+        "id": "B",
+        "text": "3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dimensionality Heuristic",
+        "mistakeAnalysis": "Aspirants assume 3 dimensions sum to 3.",
+        "misconception": {
+          "type": "unit_error",
+          "description": "Dimensionality Heuristic"
         }
       },
       {
@@ -1819,17 +1822,14 @@
       },
       {
         "id": "D",
-        "text": "3",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dimensionality Heuristic",
-        "mistakeAnalysis": "Aspirants assume 3 dimensions sum to 3.",
-        "misconception": {
-          "type": "unit_error",
-          "description": "Dimensionality Heuristic"
-        }
+        "text": "1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard identity of direction cosines: $l^2 + m^2 + n^2 = \\cos^2\\alpha + \\cos^2\\beta + \\cos^2\\gamma = 1$.",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "Let the unit direction vector of the line be $\\hat{u} = l\\hat{i} + m\\hat{j} + n\\hat{k}$.\nSince $\\hat{u}$ is a unit vector, its magnitude is 1:\n$|\\hat{u}| = \\sqrt{l^2 + m^2 + n^2} = 1$.\nSquaring both sides:\n$l^2 + m^2 + n^2 = 1$.",
     "questionId": "MATHS-M12-Q23",
     "conceptId": "MATH-three-dimensional-geometry-sum-of-squares-of-direction-cosines",
@@ -1870,11 +1870,14 @@
     "options": [
       {
         "id": "A",
-        "text": "$k\\vec{a} + m\\vec{a}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Standard vector space distributive axiom of scalar addition over vector multiplication.",
-        "misconception": null
+        "text": "$\\vec{a}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Absorption Fallacy",
+        "mistakeAnalysis": "Aspirants assume scalars collapse to unity.",
+        "misconception": {
+          "type": "unit_error",
+          "description": "Absorption Fallacy"
+        }
       },
       {
         "id": "B",
@@ -1889,6 +1892,14 @@
       },
       {
         "id": "C",
+        "text": "$k\\vec{a} + m\\vec{a}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard vector space distributive axiom of scalar addition over vector multiplication.",
+        "misconception": null
+      },
+      {
+        "id": "D",
         "text": "$k\\vec{a} \\cdot m\\vec{a}$",
         "isCorrect": false,
         "studentSelectionTrap": "Dot Product Confusion",
@@ -1897,20 +1908,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Dot Product Confusion"
         }
-      },
-      {
-        "id": "D",
-        "text": "$\\vec{a}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Absorption Fallacy",
-        "mistakeAnalysis": "Aspirants assume scalars collapse to unity.",
-        "misconception": {
-          "type": "unit_error",
-          "description": "Absorption Fallacy"
-        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "By the distributive property of scalar addition over vector multiplication in vector space algebra:\n$(k + m)\\vec{a} = k\\vec{a} + m\\vec{a}$ for all scalars $k, m$ and vector $\\vec{a}$.",
     "questionId": "MATHS-M12-Q24",
     "conceptId": "MATH-vector-algebra-scalar-multiplication-distribution",
@@ -1962,14 +1962,6 @@
       },
       {
         "id": "B",
-        "text": "(A) - (IV), (B) - (I), (C) - (II), (D) - (III)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\det(A) = 14 \\implies 14^{24}$; $\\det(B) = 21 \\implies 21^{32}$; $\\det(C) = 32 \\implies 32^{-21}$; $\\det(D) = 32 \\implies 32^{21}$[cite: 5].",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "(A) - (IV), (B) - (II), (C) - (I), (D) - (III)",
         "isCorrect": false,
         "studentSelectionTrap": "Negative Exponent Misplacement",
@@ -1978,6 +1970,14 @@
           "type": "sign_error",
           "description": "Negative Exponent Misplacement"
         }
+      },
+      {
+        "id": "C",
+        "text": "(A) - (IV), (B) - (I), (C) - (II), (D) - (III)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\det(A) = 14 \\implies 14^{24}$; $\\det(B) = 21 \\implies 21^{32}$; $\\det(C) = 32 \\implies 32^{-21}$; $\\det(D) = 32 \\implies 32^{21}$[cite: 5].",
+        "misconception": null
       },
       {
         "id": "D",
@@ -1991,7 +1991,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "Using the multiplicative determinant power identity $\\det(M^k) = (\\det M)^k$:\n1. For Matrix $A$: $\\det = 3(4) - (-1)(2) = 12 + 2 = 14$. $\\det(A^{24}) = 14^{24} \\implies$ (A) matches (IV)[cite: 5].\n2. For Matrix $B$: $\\det = (-2)(-3) - 5(-3) = 6 + 15 = 21$. $\\det(B^{32}) = 21^{32} \\implies$ (B) matches (I)[cite: 5].\n3. For Matrix $C$: $\\det = (-12)(8) - 8(-16) = -96 + 128 = 32$. $\\det(C^{-21}) = 32^{-21} \\implies$ (C) matches (II)[cite: 5].\n4. For Matrix $D$: $\\det = 32$. $\\det(D^{21}) = 32^{21} \\implies$ (D) matches (III)[cite: 5].\nMatching: (A)-(IV), (B)-(I), (C)-(II), (D)-(III)[cite: 5].",
     "questionId": "MATHS-M12-Q25",
     "conceptId": "MATH-determinants-determinant-powers-of-2-times-2-matrices",
@@ -2032,6 +2032,25 @@
     "options": [
       {
         "id": "A",
+        "text": "$(4, -5, 7)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Second Component Formula Sign Slip",
+        "mistakeAnalysis": "Aspirants forget the negative cofactor sign in $-\\hat{j}(a_1 c_2 - a_2 c_1)$[cite: 2].",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "Second Component Formula Sign Slip"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$(4, 5, 7)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Cross product of $(2, -3, 1)$ and $(1, 2, -2)$ yields $(6-2)\\hat{i} - (-4-1)\\hat{j} + (4+3)\\hat{k} = (4, 5, 7)$[cite: 2].",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$(4, 5, -7)$",
         "isCorrect": false,
         "studentSelectionTrap": "Third Component Sign Error",
@@ -2042,7 +2061,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "D",
         "text": "$(-4, 5, 7)$",
         "isCorrect": false,
         "studentSelectionTrap": "First Component Sign Error",
@@ -2051,28 +2070,9 @@
           "type": "sign_error",
           "description": "First Component Sign Error"
         }
-      },
-      {
-        "id": "C",
-        "text": "$(4, 5, 7)$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Cross product of $(2, -3, 1)$ and $(1, 2, -2)$ yields $(6-2)\\hat{i} - (-4-1)\\hat{j} + (4+3)\\hat{k} = (4, 5, 7)$[cite: 2].",
-        "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "$(4, -5, 7)$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Second Component Formula Sign Slip",
-        "mistakeAnalysis": "Aspirants forget the negative cofactor sign in $-\\hat{j}(a_1 c_2 - a_2 c_1)$[cite: 2].",
-        "misconception": {
-          "type": "formula_confusion",
-          "description": "Second Component Formula Sign Slip"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "Let the direction vectors of the two given lines be $\\vec{b}_1 = 2\\hat{i} - 3\\hat{j} + 1\\hat{k}$ and $\\vec{b}_2 = 1\\hat{i} + 2\\hat{j} - 2\\hat{k}$[cite: 2].\nThe direction ratios of a line perpendicular to both are given by the components of their cross product $\\vec{b}_1 \\times \\vec{b}_2$:\n$\\vec{b}_1 \\times \\vec{b}_2 = \\begin{vmatrix} \\hat{i} & \\hat{j} & \\hat{k} \\\\ 2 & -3 & 1 \\\\ 1 & 2 & -2 \\end{vmatrix}$\n$= \\hat{i}[(-3)(-2) - (1)(2)] - \\hat{j}[(2)(-2) - (1)(1)] + \\hat{k}[(2)(2) - (-3)(1)]$\n$= \\hat{i}[6 - 2] - \\hat{j}[-4 - 1] + \\hat{k}[4 + 3]$\n$= 4\\hat{i} - (-5)\\hat{j} + 7\\hat{k} = 4\\hat{i} + 5\\hat{j} + 7\\hat{k}$.\nTherefore, the direction ratios are proportional to $(4, 5, 7)$[cite: 2].",
     "questionId": "MATHS-M12-Q26",
     "conceptId": "MATH-three-dimensional-geometry-direction-ratios-of-common-perpendicular-line",
@@ -2124,6 +2124,14 @@
       },
       {
         "id": "B",
+        "text": "$\\mathbb{R}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = -2 < 0$ constant for all $x \\in \\mathbb{R}$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$(-\\infty, 0)$ only",
         "isCorrect": false,
         "studentSelectionTrap": "Negative Domain Restriction",
@@ -2132,14 +2140,6 @@
           "type": "sign_error",
           "description": "Negative Domain Restriction"
         }
-      },
-      {
-        "id": "C",
-        "text": "$\\mathbb{R}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $f'(x) = -2 < 0$ constant for all $x \\in \\mathbb{R}$.",
-        "misconception": null
       },
       {
         "id": "D",
@@ -2153,7 +2153,7 @@
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "Differentiate $f(x) = 5 - 2x$ with respect to $x$:\n$f'(x) = -2$.\nSince $f'(x) = -2 < 0$ for every real number $x$, $f(x)$ is strictly decreasing on the entire real line $\\mathbb{R}$.",
     "questionId": "MATHS-M12-Q27",
     "conceptId": "MATH-application-of-derivatives-monotonicity-of-linear-functions",
@@ -2194,17 +2194,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$R$ is an equivalence relation",
-        "isCorrect": false,
-        "studentSelectionTrap": "Geometric Equivalence Fallacy",
-        "mistakeAnalysis": "Aspirants confuse perpendicularity with parallelism ($l_1 \\parallel l_2$), assuming it satisfies all equivalence criteria.",
-        "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Geometric Equivalence Fallacy"
-        }
-      },
-      {
-        "id": "B",
         "text": "$R$ is reflexive and symmetric but not transitive",
         "isCorrect": false,
         "studentSelectionTrap": "Self-Orthogonality Fallacy",
@@ -2215,7 +2204,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "$R$ is transitive but not symmetric",
         "isCorrect": false,
         "studentSelectionTrap": "Parallel Transitivity Confusion",
@@ -2223,6 +2212,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Parallel Transitivity Confusion"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$R$ is an equivalence relation",
+        "isCorrect": false,
+        "studentSelectionTrap": "Geometric Equivalence Fallacy",
+        "mistakeAnalysis": "Aspirants confuse perpendicularity with parallelism ($l_1 \\parallel l_2$), assuming it satisfies all equivalence criteria.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Geometric Equivalence Fallacy"
         }
       },
       {
@@ -2367,14 +2367,6 @@
       },
       {
         "id": "B",
-        "text": "$\\frac{-3\\hat{i} + 4\\hat{j} + 5\\hat{k}}{5\\sqrt{2}}$",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correctly applied formula.",
-        "mistakeAnalysis": "Accurate step-by-step reasoning.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$\\frac{-3\\hat{i} + 4\\hat{j} - 5\\hat{k}}{\\sqrt{50}}$",
         "isCorrect": false,
         "studentSelectionTrap": "Option C misconception trap.",
@@ -2383,6 +2375,14 @@
           "type": "conceptual_misunderstanding",
           "description": "Option C misconception trap."
         }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{-3\\hat{i} + 4\\hat{j} + 5\\hat{k}}{5\\sqrt{2}}$",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correctly applied formula.",
+        "mistakeAnalysis": "Accurate step-by-step reasoning.",
+        "misconception": null
       },
       {
         "id": "D",
@@ -2396,7 +2396,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "A vector perpendicular to both $\\vec{a}$ and $\\vec{b}$ is given by their cross product $\\vec{a} \\times \\vec{b}$:\n$$\\vec{a} \\times \\vec{b} = \\begin{vmatrix} \\hat{i} & \\hat{j} & \\hat{k} \\\\ 2 & -1 & 2 \\\\ 1 & 2 & -1 \\end{vmatrix} = \\hat{i}(1 - 4) - \\hat{j}(-2 - 2) + \\hat{k}(4 - (-1)) = -3\\hat{i} + 4\\hat{j} + 5\\hat{k}$$\nMagnitude:\n$$|\\vec{a} \\times \\vec{b}| = \\sqrt{(-3)^2 + 4^2 + 5^2} = \\sqrt{9 + 16 + 25} = \\sqrt{50} = 5\\sqrt{2}$$\nUnit vector:\n$$\\hat{n} = \\frac{-3\\hat{i} + 4\\hat{j} + 5\\hat{k}}{5\\sqrt{2}}$$",
     "questionId": "MATHS-M12-Q30",
     "conceptId": "MATH-vector-algebra-vectors-perpendicular-to-two-vectors-with-specified-magnitude",
@@ -2437,6 +2437,25 @@
     "options": [
       {
         "id": "A",
+        "text": "$\\begin{bmatrix}24 & 10 \\\\ 28 & 38\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Transposition Slip",
+        "mistakeAnalysis": "Aspirants forget to apply the negative sign when isolating $2C$ across the equality[cite: 2].",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Negative Transposition Slip"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$\\begin{bmatrix}-24 & -10 \\\\ -28 & -38\\end{bmatrix}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $C = -\\frac{1}{2}(3A + 5B) = -\\frac{1}{2}\\begin{bmatrix}48 & 20 \\\\ 56 & 76\\end{bmatrix} = \\begin{bmatrix}-24 & -10 \\\\ -28 & -38\\end{bmatrix}$[cite: 2].",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$\\begin{bmatrix}-48 & -20 \\\\ -56 & -76\\end{bmatrix}$",
         "isCorrect": false,
         "studentSelectionTrap": "Division by 2 Omission",
@@ -2447,7 +2466,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "D",
         "text": "$\\begin{bmatrix}-48 & 20 \\\\ 56 & -76\\end{bmatrix}$",
         "isCorrect": false,
         "studentSelectionTrap": "Partial Sign Inversion",
@@ -2456,28 +2475,9 @@
           "type": "sign_error",
           "description": "Partial Sign Inversion"
         }
-      },
-      {
-        "id": "C",
-        "text": "$\\begin{bmatrix}-24 & -10 \\\\ -28 & -38\\end{bmatrix}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $C = -\\frac{1}{2}(3A + 5B) = -\\frac{1}{2}\\begin{bmatrix}48 & 20 \\\\ 56 & 76\\end{bmatrix} = \\begin{bmatrix}-24 & -10 \\\\ -28 & -38\\end{bmatrix}$[cite: 2].",
-        "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "$\\begin{bmatrix}24 & 10 \\\\ 28 & 38\\end{bmatrix}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Negative Transposition Slip",
-        "mistakeAnalysis": "Aspirants forget to apply the negative sign when isolating $2C$ across the equality[cite: 2].",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Negative Transposition Slip"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "Given $3A + 5B + 2C = 0 \\implies 2C = -(3A + 5B)$[cite: 2].\nFirst, compute the scalar products $3A$ and $5B$:\n$3A = 3\\begin{bmatrix}1 & 5 \\\\ 7 & 12\\end{bmatrix} = \\begin{bmatrix}3 & 15 \\\\ 21 & 36\\end{bmatrix}$[cite: 2]\n$5B = 5\\begin{bmatrix}9 & 1 \\\\ 7 & 8\\end{bmatrix} = \\begin{bmatrix}45 & 5 \\\\ 35 & 40\\end{bmatrix}$[cite: 2]\nSumming both matrices:\n$3A + 5B = \\begin{bmatrix}3 + 45 & 15 + 5 \\\\ 21 + 35 & 36 + 40\\end{bmatrix} = \\begin{bmatrix}48 & 20 \\\\ 56 & 76\\end{bmatrix}$\nNow isolate matrix $C$:\n$C = -\\frac{1}{2}(3A + 5B) = -\\frac{1}{2}\\begin{bmatrix}48 & 20 \\\\ 56 & 76\\end{bmatrix} = \\begin{bmatrix}-24 & -10 \\\\ -28 & -38\\end{bmatrix}$[cite: 2].",
     "questionId": "MATHS-M12-Q31",
     "conceptId": "MATH-matrices-matrix-linear-combinations",
@@ -2518,14 +2518,6 @@
     "options": [
       {
         "id": "A",
-        "text": "20%",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correctly applied formula.",
-        "mistakeAnalysis": "Accurate step-by-step reasoning.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "22%",
         "isCorrect": false,
         "studentSelectionTrap": "Option B misconception trap.",
@@ -2534,6 +2526,14 @@
           "type": "conceptual_misunderstanding",
           "description": "Option B misconception trap."
         }
+      },
+      {
+        "id": "B",
+        "text": "20%",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correctly applied formula.",
+        "mistakeAnalysis": "Accurate step-by-step reasoning.",
+        "misconception": null
       },
       {
         "id": "C",
@@ -2558,7 +2558,7 @@
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "The formula for Compound Annual Growth Rate is:\n$$\\text{CAGR} = \\left(\\frac{V_{\\text{final}}}{V_{\\text{begin}}}\\right)^{1/n} - 1$$\nHere $V_{\\text{final}} = 14400$, $V_{\\text{begin}} = 10000$, and $n = 2$:\n$$\\text{CAGR} = \\left(\\frac{14400}{10000}\\right)^{1/2} - 1 = (1.44)^{0.5} - 1 = 1.20 - 1 = 0.20 = 20\\%$$",
     "questionId": "MATHS-M12-Q32",
     "conceptId": "MATH-financial-mathematics-compound-annual-growth-rate",
@@ -2599,17 +2599,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Rs. 40,000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Quarterly Scaling Omission",
-        "mistakeAnalysis": "Aspirants use an incorrect periodic interest rate[cite: 4].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Quarterly Scaling Omission"
-        }
-      },
-      {
-        "id": "B",
         "text": "Rs. 42,000",
         "isCorrect": false,
         "studentSelectionTrap": "Arbitrary Discount Guess",
@@ -2617,6 +2606,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Arbitrary Discount Guess"
+        }
+      },
+      {
+        "id": "B",
+        "text": "Rs. 40,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Quarterly Scaling Omission",
+        "mistakeAnalysis": "Aspirants use an incorrect periodic interest rate[cite: 4].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Quarterly Scaling Omission"
         }
       },
       {
@@ -2680,22 +2680,22 @@
     "options": [
       {
         "id": "A",
+        "text": "(A), (B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Feasible Region Exclusion",
+        "mistakeAnalysis": "Aspirants fail to recognize the feasible region as a fundamental LPP concept[cite: 2].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Feasible Region Exclusion"
+        }
+      },
+      {
+        "id": "B",
         "text": "(A), (C) and (D) only",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Constraints, Feasible region, and Objective function are core elements of LPP; Independent events belongs to Probability[cite: 2].",
         "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "(A) and (C) only",
-        "isCorrect": false,
-        "studentSelectionTrap": "Objective Function Omission",
-        "mistakeAnalysis": "Aspirants omit the objective function as a defining component of LPP[cite: 2].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Objective Function Omission"
-        }
       },
       {
         "id": "C",
@@ -2710,17 +2710,17 @@
       },
       {
         "id": "D",
-        "text": "(A), (B) and (D) only",
+        "text": "(A) and (C) only",
         "isCorrect": false,
-        "studentSelectionTrap": "Feasible Region Exclusion",
-        "mistakeAnalysis": "Aspirants fail to recognize the feasible region as a fundamental LPP concept[cite: 2].",
+        "studentSelectionTrap": "Objective Function Omission",
+        "mistakeAnalysis": "Aspirants omit the objective function as a defining component of LPP[cite: 2].",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Feasible Region Exclusion"
+          "description": "Objective Function Omission"
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "In linear programming:\n- **Constraints** are the linear inequalities or restrictions on the decision variables[cite: 2].\n- **Objective function** is the linear function $Z = ax + by$ that is to be maximized or minimized[cite: 2].\n- **Feasible region** is the common region determined by all the constraints including non-negative restrictions[cite: 2].\n- **Independent events** is a concept in Probability theory[cite: 2].\nThus, only (A), (C), and (D) are associated with LPP[cite: 2].",
     "questionId": "MATHS-M12-Q34",
     "conceptId": "MATH-linear-programming-terminology-of-linear-programming",
@@ -2761,17 +2761,6 @@
     "options": [
       {
         "id": "A",
-        "text": "4",
-        "isCorrect": false,
-        "studentSelectionTrap": "Argument Coefficient Direct Selection",
-        "mistakeAnalysis": "Aspirants equate $k$ to the multiplier 4.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Argument Coefficient Direct Selection"
-        }
-      },
-      {
-        "id": "B",
         "text": "16",
         "isCorrect": false,
         "studentSelectionTrap": "Half-Factor Omission",
@@ -2782,7 +2771,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "2",
         "isCorrect": false,
         "studentSelectionTrap": "Leading Coefficient Selection",
@@ -2793,15 +2782,26 @@
         }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "8",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. $\\lim_{x \\to 0} \\frac{1 - \\cos 4x}{x^2} = \\lim_{x \\to 0} \\frac{2\\sin^2(2x)}{x^2} = 2(2)^2 = 8$.",
         "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Argument Coefficient Direct Selection",
+        "mistakeAnalysis": "Aspirants equate $k$ to the multiplier 4.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Argument Coefficient Direct Selection"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "C",
     "detailedSolution": "For $f(x)$ to be continuous at $x = 0$, we must have $f(0) = \\lim_{x \\to 0} f(x)$.\nUsing the identity $1 - \\cos 4x = 2\\sin^2(2x)$:\n$\\lim_{x \\to 0} \\frac{1 - \\cos 4x}{x^2} = \\lim_{x \\to 0} \\frac{2\\sin^2(2x)}{x^2} = 2 \\lim_{x \\to 0} \\left( \\frac{\\sin 2x}{x} \\right)^2$\n$= 2 \\lim_{x \\to 0} \\left( 2 \\cdot \\frac{\\sin 2x}{2x} \\right)^2 = 2 \\times [2(1)]^2 = 2 \\times 4 = 8$.\nSince $f(0) = k$, we get $k = 8$.",
     "questionId": "MATHS-M12-Q35",
     "conceptId": "MATH-continuity-and-differentiability-trigonometric-limit-continuity-conditions",
@@ -2842,14 +2842,11 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{1}{3}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Option B misconception trap.",
-        "mistakeAnalysis": "Student evaluated incorrectly for B.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Option B misconception trap."
-        }
+        "text": "$\\frac{5}{9}$",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correctly applied formula.",
+        "mistakeAnalysis": "Accurate step-by-step reasoning.",
+        "misconception": null
       },
       {
         "id": "B",
@@ -2864,11 +2861,14 @@
       },
       {
         "id": "C",
-        "text": "$\\frac{5}{9}$",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correctly applied formula.",
-        "mistakeAnalysis": "Accurate step-by-step reasoning.",
-        "misconception": null
+        "text": "$\\frac{1}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Option B misconception trap.",
+        "mistakeAnalysis": "Student evaluated incorrectly for B.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Option B misconception trap."
+        }
       },
       {
         "id": "D",
@@ -2882,7 +2882,7 @@
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "Let $R_1$ be the event that the first ball is red, and $R_2$ be the event that the second ball is red.\n$P(R_1) = \\frac{6}{10} = \\frac{3}{5}$, $P(B_1) = \\frac{4}{10} = \\frac{2}{5}$.\n$P(R_2 | R_1) = \\frac{5}{9}$, $P(R_2 | B_1) = \\frac{6}{9}$.\nTotal probability of $R_2$:\n$$P(R_2) = P(R_1)P(R_2|R_1) + P(B_1)P(R_2|B_1) = \\frac{6}{10}\\cdot\\frac{5}{9} + \\frac{4}{10}\\cdot\\frac{6}{9} = \\frac{30 + 24}{90} = \\frac{54}{90} = \\frac{3}{5}$$\nBy Bayes theorem:\n$$P(R_1 | R_2) = \\frac{P(R_1 \\cap R_2)}{P(R_2)} = \\frac{\\frac{30}{90}}{\\frac{54}{90}} = \\frac{30}{54} = \\frac{5}{9}$$",
     "questionId": "MATHS-M12-Q36",
     "conceptId": "MATH-probability-conditional-probability",
@@ -3004,17 +3004,6 @@
     "options": [
       {
         "id": "A",
-        "text": "-2",
-        "isCorrect": false,
-        "studentSelectionTrap": "Sign Inversion Error",
-        "mistakeAnalysis": "Aspirants solve $-5\\lambda - 10 = 0$.",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Sign Inversion Error"
-        }
-      },
-      {
-        "id": "B",
         "text": "2",
         "isCorrect": true,
         "studentSelectionTrap": null,
@@ -3022,7 +3011,7 @@
         "misconception": null
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "5",
         "isCorrect": false,
         "studentSelectionTrap": "Coefficient Slip",
@@ -3030,6 +3019,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Coefficient Slip"
+        }
+      },
+      {
+        "id": "C",
+        "text": "-2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants solve $-5\\lambda - 10 = 0$.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion Error"
         }
       },
       {
@@ -3044,7 +3044,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "A homogeneous system has a non-trivial (non-zero) solution if and only if the determinant of its coefficient matrix vanishes:\n$\\begin{vmatrix} 2 & 3 & -1 \\\\ 1 & -1 & 2 \\\\ 3 & \\lambda & 1 \\end{vmatrix} = 0$\nExpand along Row 1:\n$2((-1)(1) - 2(\\lambda)) - 3((1)(1) - 2(3)) + (-1)((1)(\\lambda) - (-1)(3)) = 0$\n$2(-1 - 2\\lambda) - 3(1 - 6) - (\\lambda + 3) = 0$\n$-2 - 4\\lambda - 3(-5) - \\lambda - 3 = 0$\n$-5\\lambda - 5 + 15 = 0$\n$-5\\lambda + 10 = 0 \\implies 5\\lambda = 10 \\implies \\lambda = 2$.",
     "questionId": "MATHS-M12-Q38",
     "conceptId": "MATH-determinants-homogeneous-system-of-linear-equations",
@@ -3085,22 +3085,22 @@
     "options": [
       {
         "id": "A",
+        "text": "12",
+        "isCorrect": false,
+        "studentSelectionTrap": "Trace Factor Misapplication",
+        "mistakeAnalysis": "Aspirants multiply by the trace of matrix $A$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Trace Factor Misapplication"
+        }
+      },
+      {
+        "id": "B",
         "text": "9",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. $A \\operatorname{adj} A = |A| I_2 \\implies |A \\operatorname{adj} A| = ||A| I_2| = |A|^2 = 3^2 = 9$.",
         "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "3",
-        "isCorrect": false,
-        "studentSelectionTrap": "Determinant Order Power Neglect",
-        "mistakeAnalysis": "Aspirants assume $|A \\operatorname{adj} A| = |A| = 3$ without squaring for $n=2$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Determinant Order Power Neglect"
-        }
       },
       {
         "id": "C",
@@ -3115,17 +3115,17 @@
       },
       {
         "id": "D",
-        "text": "12",
+        "text": "3",
         "isCorrect": false,
-        "studentSelectionTrap": "Trace Factor Misapplication",
-        "mistakeAnalysis": "Aspirants multiply by the trace of matrix $A$.",
+        "studentSelectionTrap": "Determinant Order Power Neglect",
+        "mistakeAnalysis": "Aspirants assume $|A \\operatorname{adj} A| = |A| = 3$ without squaring for $n=2$.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Trace Factor Misapplication"
+          "description": "Determinant Order Power Neglect"
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "For any square matrix $A$ of order $n$, $A(\\operatorname{adj} A) = |A| I_n$.\nTaking determinants of both sides:\n$|A \\operatorname{adj} A| = ||A| I_n| = |A|^n |I_n| = |A|^n$.\nHere, the order is $n = 2$.\nFirst calculate $|A|$:\n$|A| = (1)(3) - (2)(0) = 3$.\nTherefore:\n$|A \\operatorname{adj} A| = |A|^2 = 3^2 = 9$.",
     "questionId": "MATHS-M12-Q39",
     "conceptId": "MATH-determinants-properties-of-matrix-adjoint-determinants",
@@ -3166,25 +3166,6 @@
     "options": [
       {
         "id": "A",
-        "text": "3",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Base relation requires diagonal elements plus $(a,b),(b,c),(a,c)$. Exactly 3 non-symmetric transitive extensions exist: $R_0$, $R_0 \\cup \\{(b,a)\\}$, and $R_0 \\cup \\{(c,b)\\}$[cite: 5].",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "1",
-        "isCorrect": false,
-        "studentSelectionTrap": "Minimal Relation Only",
-        "mistakeAnalysis": "Aspirants count only the minimal transitive closure without considering optional pairs[cite: 5].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Minimal Relation Only"
-        }
-      },
-      {
-        "id": "C",
         "text": "2",
         "isCorrect": false,
         "studentSelectionTrap": "Single Addition Omission",
@@ -3195,7 +3176,15 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
+        "text": "3",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Base relation requires diagonal elements plus $(a,b),(b,c),(a,c)$. Exactly 3 non-symmetric transitive extensions exist: $R_0$, $R_0 \\cup \\{(b,a)\\}$, and $R_0 \\cup \\{(c,b)\\}$[cite: 5].",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "4",
         "isCorrect": false,
         "studentSelectionTrap": "Symmetric Relation Inclusion",
@@ -3204,9 +3193,20 @@
           "type": "conceptual_misunderstanding",
           "description": "Symmetric Relation Inclusion"
         }
+      },
+      {
+        "id": "D",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Minimal Relation Only",
+        "mistakeAnalysis": "Aspirants count only the minimal transitive closure without considering optional pairs[cite: 5].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Minimal Relation Only"
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "For $R$ to be reflexive on $A = \\{a, b, c\\}$, it must contain $\\{(a, a), (b, b), (c, c)\\}$[cite: 5].\nIt must contain $(a, b)$ and $(b, c)$[cite: 5].\nBy transitivity, $(a, b) \\in R$ and $(b, c) \\in R \\implies (a, c) \\in R$.\nThus, the minimal relation is:\n$R_0 = \\{(a, a), (b, b), (c, c), (a, b), (b, c), (a, c)\\}$.\n$R_0$ is reflexive and transitive. It is NOT symmetric because $(a, b) \\in R_0$ but $(b, a) \\notin R_0$.\nThe remaining possible pairs from $A \\times A$ are $(b, a), (c, b), (c, a)$:\n1. If we add $(b, a)$: $R_1 = R_0 \\cup \\{(b, a)\\}$. Transitive check: $(b, a) \\in R_1, (a, c) \\in R_1 \\implies (b, c) \\in R_1$ (holds). Not symmetric because $(b, c) \\in R_1$ but $(c, b) \\notin R_1$.\n2. If we add $(c, b)$: $R_2 = R_0 \\cup \\{(c, b)\\}$. Transitive check holds. Not symmetric because $(a, b) \\in R_2$ but $(b, a) \\notin R_2$.\n3. If we add $(c, a)$: transitivity forces both $(b, a)$ and $(c, b)$ to be present, making the relation symmetric.\nTherefore, there are exactly 3 such relations ($R_0, R_1, R_2$)[cite: 5].",
     "questionId": "MATHS-M12-Q40",
     "conceptId": "MATH-relations-and-functions-counting-constrained-relations",
@@ -3266,17 +3266,6 @@
       },
       {
         "id": "C",
-        "text": "Rs. 37,500",
-        "isCorrect": false,
-        "studentSelectionTrap": "Direct Multiplication",
-        "mistakeAnalysis": "Aspirants multiply $750 \\times 50$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Direct Multiplication"
-        }
-      },
-      {
-        "id": "D",
         "text": "Rs. 7,500",
         "isCorrect": false,
         "studentSelectionTrap": "Decimal Shift Error",
@@ -3284,6 +3273,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Decimal Shift Error"
+        }
+      },
+      {
+        "id": "D",
+        "text": "Rs. 37,500",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Multiplication",
+        "mistakeAnalysis": "Aspirants multiply $750 \\times 50$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Direct Multiplication"
         }
       }
     ],
@@ -3328,6 +3328,17 @@
     "options": [
       {
         "id": "A",
+        "text": "$\\frac{1}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Sided Area Selection",
+        "mistakeAnalysis": "Aspirants calculate only the area on $[0, 1]$, omitting the lobe on $[-1, 0]$[cite: 5].",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Single Sided Area Selection"
+        }
+      },
+      {
+        "id": "B",
         "text": "2",
         "isCorrect": false,
         "studentSelectionTrap": "Antiderivative Divisor Omission",
@@ -3336,14 +3347,6 @@
           "type": "conceptual_misunderstanding",
           "description": "Antiderivative Divisor Omission"
         }
-      },
-      {
-        "id": "B",
-        "text": "1",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Area $= 2\\int_0^1 2x^3\\,dx = 4[x^4/4]_0^1 = 1\\text{ sq. unit}$[cite: 5].",
-        "misconception": null
       },
       {
         "id": "C",
@@ -3358,17 +3361,14 @@
       },
       {
         "id": "D",
-        "text": "$\\frac{1}{2}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Single Sided Area Selection",
-        "mistakeAnalysis": "Aspirants calculate only the area on $[0, 1]$, omitting the lobe on $[-1, 0]$[cite: 5].",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Single Sided Area Selection"
-        }
+        "text": "1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Area $= 2\\int_0^1 2x^3\\,dx = 4[x^4/4]_0^1 = 1\\text{ sq. unit}$[cite: 5].",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "The bounded geometric area is given by $\\int_{-1}^1 |2x^3|\\,dx$[cite: 5].\nSince $f(x) = |2x^3|$ is an even function:\n$\\text{Area} = 2 \\int_0^1 2x^3\\,dx = 4 \\int_0^1 x^3\\,dx = 4 \\left[ \\frac{x^4}{4} \\right]_0^1 = 4\\left(\\frac{1}{4}\\right) = 1\\text{ sq. unit}$[cite: 5].",
     "questionId": "MATHS-M12-Q42",
     "conceptId": "MATH-application-of-integrals-area-bounded-by-an-odd-cubic-function",
@@ -3409,6 +3409,14 @@
     "options": [
       {
         "id": "A",
+        "text": "1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = e^{-x} - xe^{-x} = e^{-x}(1 - x) = 0 \\implies x = 1$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "0",
         "isCorrect": false,
         "studentSelectionTrap": "Root Confused with Stationary Point",
@@ -3419,7 +3427,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "-1",
         "isCorrect": false,
         "studentSelectionTrap": "Sign Inversion Error",
@@ -3430,7 +3438,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "$e$",
         "isCorrect": false,
         "studentSelectionTrap": "Base Constant Guess",
@@ -3439,17 +3447,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Base Constant Guess"
         }
-      },
-      {
-        "id": "D",
-        "text": "1",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $f'(x) = e^{-x} - xe^{-x} = e^{-x}(1 - x) = 0 \\implies x = 1$.",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "A",
     "detailedSolution": "Differentiate $f(x) = x e^{-x}$ using the product rule:\n$f'(x) = \\frac{d}{dx}(x) \\cdot e^{-x} + x \\cdot \\frac{d}{dx}(e^{-x})$\n$= 1 \\cdot e^{-x} + x(-e^{-x}) = e^{-x}(1 - x)$.\nStationary points occur where $f'(x) = 0$:\n$e^{-x}(1 - x) = 0$.\nSince $e^{-x} > 0$ for all real $x$, we must have:\n$1 - x = 0 \\implies x = 1$.",
     "questionId": "MATHS-M12-Q43",
     "conceptId": "MATH-application-of-derivatives-stationary-point-of-linear-exponentials",
@@ -3490,17 +3490,25 @@
     "options": [
       {
         "id": "A",
-        "text": "$Y = T \\times S \\times C \\times I$",
+        "text": "$Y = T + S - C - I$",
         "isCorrect": false,
-        "studentSelectionTrap": "Multiplicative Model Selected",
-        "mistakeAnalysis": "Aspirants choose the formula for the multiplicative model.",
+        "studentSelectionTrap": "Alternating Sign Error",
+        "mistakeAnalysis": "Aspirants introduce negative signs into the component decomposition.",
         "misconception": {
-          "type": "formula_confusion",
-          "description": "Multiplicative Model Selected"
+          "type": "sign_error",
+          "description": "Alternating Sign Error"
         }
       },
       {
         "id": "B",
+        "text": "$Y = T + S + C + I$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Classical additive model sums Trend ($T$), Seasonal ($S$), Cyclical ($C$), and Irregular ($I$) components.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$Y = \\frac{T \\times S}{C \\times I}$",
         "isCorrect": false,
         "studentSelectionTrap": "Ratio Model Fallacy",
@@ -3511,26 +3519,18 @@
         }
       },
       {
-        "id": "C",
-        "text": "$Y = T + S + C + I$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Classical additive model sums Trend ($T$), Seasonal ($S$), Cyclical ($C$), and Irregular ($I$) components.",
-        "misconception": null
-      },
-      {
         "id": "D",
-        "text": "$Y = T + S - C - I$",
+        "text": "$Y = T \\times S \\times C \\times I$",
         "isCorrect": false,
-        "studentSelectionTrap": "Alternating Sign Error",
-        "mistakeAnalysis": "Aspirants introduce negative signs into the component decomposition.",
+        "studentSelectionTrap": "Multiplicative Model Selected",
+        "mistakeAnalysis": "Aspirants choose the formula for the multiplicative model.",
         "misconception": {
-          "type": "sign_error",
-          "description": "Alternating Sign Error"
+          "type": "formula_confusion",
+          "description": "Multiplicative Model Selected"
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "In time series analysis:\n- The **additive model** assumes that the original observation $Y$ is the sum of four components:\n  $Y = T + S + C + I$\n  where $T$ = Trend, $S$ = Seasonal, $C$ = Cyclical, and $I$ = Irregular fluctuations.\n- The **multiplicative model** assumes $Y = T \\times S \\times C \\times I$.",
     "questionId": "MATHS-M12-Q44",
     "conceptId": "MATH-time-series-analysis-additive-vs-multiplicative-models",
@@ -3571,17 +3571,25 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{1}{2}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Single Outcome Evaluation",
-        "mistakeAnalysis": "Aspirants evaluate only $P(X=1) = 3/8$ or confuse with fair coin probability $1/2$[cite: 2].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Single Outcome Evaluation"
-        }
+        "text": "$\\frac{3}{4}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P(0 < X < 3) = P(X=1) + P(X=2) = 3/8 + 3/8 = 6/8 = 3/4$[cite: 2].",
+        "misconception": null
       },
       {
         "id": "B",
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Certain Event Fallacy",
+        "mistakeAnalysis": "Aspirants assume heads must always appear strictly between 0 and 3 times[cite: 2].",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Certain Event Fallacy"
+        }
+      },
+      {
+        "id": "C",
         "text": "$\\frac{7}{8}$",
         "isCorrect": false,
         "studentSelectionTrap": "Weak Inequality Inclusion Trap",
@@ -3592,26 +3600,18 @@
         }
       },
       {
-        "id": "C",
-        "text": "$\\frac{3}{4}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $P(0 < X < 3) = P(X=1) + P(X=2) = 3/8 + 3/8 = 6/8 = 3/4$[cite: 2].",
-        "misconception": null
-      },
-      {
         "id": "D",
-        "text": "1",
+        "text": "$\\frac{1}{2}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Certain Event Fallacy",
-        "mistakeAnalysis": "Aspirants assume heads must always appear strictly between 0 and 3 times[cite: 2].",
+        "studentSelectionTrap": "Single Outcome Evaluation",
+        "mistakeAnalysis": "Aspirants evaluate only $P(X=1) = 3/8$ or confuse with fair coin probability $1/2$[cite: 2].",
         "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Certain Event Fallacy"
+          "type": "conceptual_misunderstanding",
+          "description": "Single Outcome Evaluation"
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "When three fair coins are tossed, the sample space size is $2^3 = 8$.\nThe random variable $X$ takes values $\\{0, 1, 2, 3\\}$.\nThe probability distribution is:\n- $P(X = 0) = \\binom{3}{0}(1/2)^3 = \\frac{1}{8}$\n- $P(X = 1) = \\binom{3}{1}(1/2)^3 = \\frac{3}{8}$\n- $P(X = 2) = \\binom{3}{2}(1/2)^3 = \\frac{3}{8}$\n- $P(X = 3) = \\binom{3}{3}(1/2)^3 = \\frac{1}{8}$\nThe condition $0 < X < 3$ includes only integer values $X = 1$ and $X = 2$[cite: 2]:\n$P(0 < X < 3) = P(X = 1) + P(X = 2) = \\frac{3}{8} + \\frac{3}{8} = \\frac{6}{8} = \\frac{3}{4}$[cite: 2].",
     "questionId": "MATHS-M12-Q45",
     "conceptId": "MATH-probability-binomial-probability-distribution",
@@ -3652,6 +3652,17 @@
     "options": [
       {
         "id": "A",
+        "text": "$\\frac{2}{\\sqrt{1-x^{2}}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Standard Inverse Sine Radical Slip",
+        "mistakeAnalysis": "Aspirants use the standard radical form of inverse sine without simplification.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Standard Inverse Sine Radical Slip"
+        }
+      },
+      {
+        "id": "B",
         "text": "$-\\frac{2}{1+x^{2}}$",
         "isCorrect": false,
         "studentSelectionTrap": "Arccosine Substitution Confusion",
@@ -3662,7 +3673,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "$\\frac{1}{1+x^{2}}$",
         "isCorrect": false,
         "studentSelectionTrap": "Coefficient 2 Omission",
@@ -3673,26 +3684,15 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "$\\frac{2}{1+x^{2}}$",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. For $-1 < x < 1$, $\\sin^{-1}\\left(\\frac{2x}{1+x^2}\\right) = 2\\tan^{-1}x$. Differentiating yields $\\frac{2}{1+x^2}$.",
         "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "$\\frac{2}{\\sqrt{1-x^{2}}}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Standard Inverse Sine Radical Slip",
-        "mistakeAnalysis": "Aspirants use the standard radical form of inverse sine without simplification.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Standard Inverse Sine Radical Slip"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "Substitute $x = \\tan\\theta \\implies \\theta = \\tan^{-1}x$.\nSince $-1 < x < 1$, we have $-\\frac{\\pi}{4} < \\theta < \\frac{\\pi}{4} \\implies -\\frac{\\pi}{2} < 2\\theta < \\frac{\\pi}{2}$.\nThe argument becomes:\n$\\frac{2x}{1 + x^2} = \\frac{2\\tan\\theta}{1 + \\tan^2\\theta} = \\sin 2\\theta$.\nSince $2\\theta \\in \\left(-\\frac{\\pi}{2}, \\frac{\\pi}{2}\\right)$, which is within the principal branch of $\\sin^{-1}$:\n$y = \\sin^{-1}(\\sin 2\\theta) = 2\\theta = 2\\tan^{-1}x$.\nDifferentiating with respect to $x$:\n$\\frac{dy}{dx} = \\frac{d}{dx}(2\\tan^{-1}x) = \\frac{2}{1 + x^2}$.",
     "questionId": "MATHS-M12-Q46",
     "conceptId": "MATH-continuity-and-differentiability-derivative-of-determinant-functions",
@@ -3741,13 +3741,13 @@
       },
       {
         "id": "B",
-        "text": "$\\frac{\\pi}{4}$",
+        "text": "$-\\frac{3\\pi}{4}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Neglect of Condition $xy > 1$",
-        "mistakeAnalysis": "Aspirants apply $\\tan^{-1}\\left(\\frac{2+3}{1-6}\\right) = \\tan^{-1}(-1) = -\\pi/4$ and take absolute value $\\pi/4$, ignoring the $+\\pi$ term required when $xy > 1$[cite: 2].",
+        "studentSelectionTrap": "Sign Inversion Fallacy",
+        "mistakeAnalysis": "Aspirants add $-\\pi$ instead of $+\\pi$[cite: 2].",
         "misconception": {
-          "type": "boundary_condition_error",
-          "description": "Neglect of Condition $xy > 1$"
+          "type": "sign_error",
+          "description": "Sign Inversion Fallacy"
         }
       },
       {
@@ -3763,13 +3763,13 @@
       },
       {
         "id": "D",
-        "text": "$-\\frac{3\\pi}{4}$",
+        "text": "$\\frac{\\pi}{4}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Sign Inversion Fallacy",
-        "mistakeAnalysis": "Aspirants add $-\\pi$ instead of $+\\pi$[cite: 2].",
+        "studentSelectionTrap": "Neglect of Condition $xy > 1$",
+        "mistakeAnalysis": "Aspirants apply $\\tan^{-1}\\left(\\frac{2+3}{1-6}\\right) = \\tan^{-1}(-1) = -\\pi/4$ and take absolute value $\\pi/4$, ignoring the $+\\pi$ term required when $xy > 1$[cite: 2].",
         "misconception": {
-          "type": "sign_error",
-          "description": "Sign Inversion Fallacy"
+          "type": "boundary_condition_error",
+          "description": "Neglect of Condition $xy > 1$"
         }
       }
     ],
@@ -3814,11 +3814,14 @@
     "options": [
       {
         "id": "A",
-        "text": "0.39",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $P(E\\cup F) = 0.25 + 0.50 - 0.14 = 0.61 \\implies P(E'\\cap F') = 1 - 0.61 = 0.39$[cite: 2].",
-        "misconception": null
+        "text": "0.61",
+        "isCorrect": false,
+        "studentSelectionTrap": "Union Probability Selection",
+        "mistakeAnalysis": "Aspirants calculate $P(E \\cup F) = 0.61$ and report it instead of its complement[cite: 2].",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Union Probability Selection"
+        }
       },
       {
         "id": "B",
@@ -3844,17 +3847,14 @@
       },
       {
         "id": "D",
-        "text": "0.61",
-        "isCorrect": false,
-        "studentSelectionTrap": "Union Probability Selection",
-        "mistakeAnalysis": "Aspirants calculate $P(E \\cup F) = 0.61$ and report it instead of its complement[cite: 2].",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Union Probability Selection"
-        }
+        "text": "0.39",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P(E\\cup F) = 0.25 + 0.50 - 0.14 = 0.61 \\implies P(E'\\cap F') = 1 - 0.61 = 0.39$[cite: 2].",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "Given:\n$P(E) = 0.25$, $P(F) = 0.50$, and $P(E \\cap F) = 0.14$[cite: 2].\nFirst calculate $P(E \\cup F)$:\n$P(E \\cup F) = P(E) + P(F) - P(E \\cap F) = 0.25 + 0.50 - 0.14 = 0.61$.\nBy De Morgan's law, the event 'neither $E$ nor $F$' is $(E \\cup F)'$:\n$P(\\text{neither } E \\text{ nor } F) = P(E' \\cap F') = 1 - P(E \\cup F) = 1 - 0.61 = 0.39$[cite: 2].",
     "questionId": "MATHS-M12-Q48",
     "conceptId": "MATH-probability-de-morgan-s-laws-and-union-probability",
@@ -3895,17 +3895,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$a = \\frac{2}{3},\\; b = -\\frac{3}{2}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Sign Inversion Error",
-        "mistakeAnalysis": "Aspirants invert the signs during equality comparison.",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Sign Inversion Error"
-        }
-      },
-      {
-        "id": "B",
         "text": "$a = -\\frac{2}{3},\\; b = \\frac{3}{2}$",
         "isCorrect": true,
         "studentSelectionTrap": null,
@@ -3913,7 +3902,7 @@
         "misconception": null
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "$a = -2,\\; b = 3$",
         "isCorrect": false,
         "studentSelectionTrap": "Coefficient Division Omission",
@@ -3921,6 +3910,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Coefficient Division Omission"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$a = \\frac{2}{3},\\; b = -\\frac{3}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants invert the signs during equality comparison.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion Error"
         }
       },
       {
@@ -3935,7 +3935,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "For a symmetric matrix, $A^T = A$, meaning $a_{ij} = a_{ji}$ for all $i, j$:\n1. $a_{12} = a_{21} \\implies 2b = 3 \\implies b = \\frac{3}{2}$.\n2. $a_{13} = a_{31} \\implies -2 = 3a \\implies a = -\\frac{2}{3}$.\n3. $a_{23} = a_{32} \\implies 3 = 3$ (consistent).\nHence, $a = -\\frac{2}{3}$ and $b = \\frac{3}{2}$.",
     "questionId": "MATHS-M12-Q49",
     "conceptId": "MATH-matrices-classification-of-square-matrices",
@@ -3976,14 +3976,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$2x\\\\sqrt{1+x^{6}}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct application of the Fundamental Theorem of Calculus together with the chain rule. No mistake.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "$\\\\sqrt{1+x^{6}}$",
         "isCorrect": false,
         "studentSelectionTrap": "Often forgets to multiply by the derivative of the upper limit \\(x^{2}\\) (i.e., the chain rule).",
@@ -3994,18 +3986,15 @@
         }
       },
       {
-        "id": "C",
-        "text": "$2x\\\\sqrt{1+x^{3}}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Mis‑substitutes \\(t^{3}\\) with \\((x^{2})^{3}=x^{6}\\) incorrectly, treating it as \\(x^{3}\\).",
-        "mistakeAnalysis": "The student evaluated the integrand at \\(t = x^{2}\\) but incorrectly simplified \\(1+(x^{2})^{3}\\) to \\(1+x^{3}\\) instead of \\(1+x^{6}\\).",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Mis‑substitutes \\(t^{3}\\) with \\((x^{2})^{3}=x^{6}\\) incorrectly, treating it as \\(x^{3}\\)."
-        }
+        "id": "B",
+        "text": "$2x\\\\sqrt{1+x^{6}}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct application of the Fundamental Theorem of Calculus together with the chain rule. No mistake.",
+        "misconception": null
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "$\\\\frac{1}{2x}\\\\sqrt{1+x^{6}}$",
         "isCorrect": false,
         "studentSelectionTrap": "Reverses the chain‑rule factor, dividing instead of multiplying by \\(2x\\).",
@@ -4014,9 +4003,20 @@
           "type": "conceptual_misunderstanding",
           "description": "Reverses the chain‑rule factor, dividing instead of multiplying by \\(2x\\)."
         }
+      },
+      {
+        "id": "D",
+        "text": "$2x\\\\sqrt{1+x^{3}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Mis‑substitutes \\(t^{3}\\) with \\((x^{2})^{3}=x^{6}\\) incorrectly, treating it as \\(x^{3}\\).",
+        "mistakeAnalysis": "The student evaluated the integrand at \\(t = x^{2}\\) but incorrectly simplified \\(1+(x^{2})^{3}\\) to \\(1+x^{3}\\) instead of \\(1+x^{6}\\).",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Mis‑substitutes \\(t^{3}\\) with \\((x^{2})^{3}=x^{6}\\) incorrectly, treating it as \\(x^{3}\\)."
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "Step 1: Identify the form of the expression. It is of the type \\(\\displaystyle \\frac{d}{dx}\\int_{a}^{g(x)} f(t)\\,dt\\).\n\nStep 2: Apply the Fundamental Theorem of Calculus together with the chain rule:\n\\[\\frac{d}{dx}\\int_{0}^{g(x)} f(t)\\,dt = f\\big(g(x)\\big)\\cdot g'(x).\\]\nHere, \\(g(x)=x^{2}\\) and \\(f(t)=\\sqrt{1+t^{3}}\\).\n\nStep 3: Compute \\(f\\big(g(x)\\big)\\):\n\\[f\\big(g(x)\\big)=\\sqrt{1+(x^{2})^{3}}=\\sqrt{1+x^{6}}.\\]\n\nStep 4: Compute \\(g'(x)\\):\n\\[g'(x)=\\frac{d}{dx}(x^{2})=2x.\\]\n\nStep 5: Multiply the two results:\n\\[\\frac{d}{dx}\\int_{0}^{x^{2}} \\sqrt{1+t^{3}}\\,dt = 2x\\,\\sqrt{1+x^{6}}.\\]\n\nHence the correct option is A.\n\nCommon pitfalls:\n- Forgetting the factor \\(g'(x)=2x\\) leads to option B.\n- Incorrect simplification of \\((x^{2})^{3}\\) as \\(x^{3}\\) gives option C.\n- Dividing by \\(2x\\) instead of multiplying yields option D.\n\nThe step‑by‑step reasoning above eliminates those errors and confirms the answer.",
     "questionId": "MATHS-M12-Q50",
     "conceptId": "MATH-integrals-derivative-integral-identity-matching",

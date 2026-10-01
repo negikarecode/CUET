@@ -20,14 +20,11 @@
       },
       {
         "id": "B",
-        "text": "$y - x = C$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Linear Antiderivative Error",
-        "mistakeAnalysis": "Aspirants drop the inverse tangent functions.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Linear Antiderivative Error"
-        }
+        "text": "$\\tan^{-1}y - \\tan^{-1}x = C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Separating gives $\\frac{dy}{1+y^2} = \\frac{dx}{1+x^2}$, which integrates directly to $\\tan^{-1}y = \\tan^{-1}x + C$.",
+        "misconception": null
       },
       {
         "id": "C",
@@ -42,14 +39,17 @@
       },
       {
         "id": "D",
-        "text": "$\\tan^{-1}y - \\tan^{-1}x = C$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Separating gives $\\frac{dy}{1+y^2} = \\frac{dx}{1+x^2}$, which integrates directly to $\\tan^{-1}y = \\tan^{-1}x + C$.",
-        "misconception": null
+        "text": "$y - x = C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Antiderivative Error",
+        "mistakeAnalysis": "Aspirants drop the inverse tangent functions.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Linear Antiderivative Error"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "Separating variables:\n$\\frac{dy}{1 + y^2} = \\frac{dx}{1 + x^2}$.\nIntegrating both sides:\n$\\int \\frac{dy}{1 + y^2} = \\int \\frac{dx}{1 + x^2}$\n$\\tan^{-1}y = \\tan^{-1}x + C \\implies \\tan^{-1}y - \\tan^{-1}x = C$.",
     "questionId": "MATHS-M17-Q01",
     "conceptId": "MATH-differential-equations-general-solution-of-separable-variable-equations",
@@ -90,10 +90,10 @@
     "options": [
       {
         "id": "A",
-        "text": "1",
+        "text": "3",
         "isCorrect": false,
         "studentSelectionTrap": "Trial Root Substitution Error",
-        "mistakeAnalysis": "Aspirants test $k = 1$: $1 - 6 + 4 = -1 \\ne 0$[cite: 3].",
+        "mistakeAnalysis": "Aspirants test $k = 3$: $27 - 18 + 4 = 13 \\ne 0$[cite: 3].",
         "misconception": {
           "type": "calculation_error",
           "description": "Trial Root Substitution Error"
@@ -109,10 +109,10 @@
       },
       {
         "id": "C",
-        "text": "3",
+        "text": "1",
         "isCorrect": false,
         "studentSelectionTrap": "Trial Root Substitution Error",
-        "mistakeAnalysis": "Aspirants test $k = 3$: $27 - 18 + 4 = 13 \\ne 0$[cite: 3].",
+        "mistakeAnalysis": "Aspirants test $k = 1$: $1 - 6 + 4 = -1 \\ne 0$[cite: 3].",
         "misconception": {
           "type": "calculation_error",
           "description": "Trial Root Substitution Error"
@@ -252,6 +252,17 @@
     "options": [
       {
         "id": "A",
+        "text": "$(5e)^{x}\\log(5e)+C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Derivative-Integral Confusion",
+        "mistakeAnalysis": "Aspirants multiply by $\\log(5e)$ (the derivative rule) instead of dividing.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Derivative-Integral Confusion"
+        }
+      },
+      {
+        "id": "B",
         "text": "$\\frac{(5e)^{x}}{\\log(5e)}+C$",
         "isCorrect": true,
         "studentSelectionTrap": null,
@@ -259,7 +270,7 @@
         "misconception": null
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "$\\frac{5^{x}}{\\log 5}e^{x}+C$",
         "isCorrect": false,
         "studentSelectionTrap": "Product Rule of Integration Fallacy",
@@ -270,7 +281,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "$5^{x}e^{x}+C$",
         "isCorrect": false,
         "studentSelectionTrap": "Logarithmic Denominator Omission",
@@ -279,20 +290,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Logarithmic Denominator Omission"
         }
-      },
-      {
-        "id": "D",
-        "text": "$(5e)^{x}\\log(5e)+C$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Derivative-Integral Confusion",
-        "mistakeAnalysis": "Aspirants multiply by $\\log(5e)$ (the derivative rule) instead of dividing.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Derivative-Integral Confusion"
-        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "Using the logarithmic identity $e^{x \\log 5} = e^{\\log(5^x)} = 5^x$:\nThe integrand simplifies to:\n$e^{(x \\log 5)} e^x = 5^x \\cdot e^x = (5e)^x$.\nUsing the standard integration formula $\\int a^x\\,dx = \\frac{a^x}{\\log_e a} + C$ (where $a = 5e$):\n$\\int (5e)^x\\,dx = \\frac{(5e)^x}{\\log(5e)} + C$.",
     "questionId": "MATHS-M17-Q04",
     "conceptId": "MATH-integrals-integration-of-exponential-functions",
@@ -333,28 +333,6 @@
     "options": [
       {
         "id": "A",
-        "text": "14.4 meters",
-        "isCorrect": false,
-        "studentSelectionTrap": "Decimal Shift Slip",
-        "mistakeAnalysis": "Aspirants misplace the decimal point by one order of magnitude[cite: 3].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Decimal Shift Slip"
-        }
-      },
-      {
-        "id": "B",
-        "text": "11.1 meters",
-        "isCorrect": false,
-        "studentSelectionTrap": "Decimal Shift Slip",
-        "mistakeAnalysis": "Aspirants divide by 90 instead of 9[cite: 3].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Decimal Shift Slip"
-        }
-      },
-      {
-        "id": "C",
         "text": "144.1 meters",
         "isCorrect": false,
         "studentSelectionTrap": "Time Difference Proportion Error",
@@ -365,15 +343,37 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
+        "text": "14.4 meters",
+        "isCorrect": false,
+        "studentSelectionTrap": "Decimal Shift Slip",
+        "mistakeAnalysis": "Aspirants misplace the decimal point by one order of magnitude[cite: 3].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Decimal Shift Slip"
+        }
+      },
+      {
+        "id": "C",
         "text": "111.1 meters",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. In 320 s (A's finishing time), B covers $\\frac{1000}{360} \\times 320 = \\frac{8000}{9} \\approx 888.89\\text{ m}$. Head start $= 1000 - 888.89 = 111.1\\text{ meters}$[cite: 3].",
         "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "11.1 meters",
+        "isCorrect": false,
+        "studentSelectionTrap": "Decimal Shift Slip",
+        "mistakeAnalysis": "Aspirants divide by 90 instead of 9[cite: 3].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Decimal Shift Slip"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "C",
     "detailedSolution": "Race distance $= 1\\text{ km} = 1000\\text{ meters}$[cite: 3].\nTime taken by A: $T_A = 5\\text{ min } 20\\text{ sec} = 5 \\times 60 + 20 = 320\\text{ seconds}$[cite: 3].\nTime taken by B: $T_B = 6\\text{ min} = 6 \\times 60 = 360\\text{ seconds}$[cite: 3].\nSpeed of B:\n$v_B = \\frac{1000\\text{ m}}{360\\text{ s}} = \\frac{25}{9}\\text{ m/s}$.\nIn the time A takes to complete the entire 1000 m (320 seconds), distance covered by B is:\n$d_B = v_B \\times T_A = \\frac{25}{9} \\times 320 = \\frac{8000}{9} \\approx 888.89\\text{ meters}$.\nFor both runners to reach the finish line simultaneously, A must give B a head start equal to the distance B lags behind:\n$\\text{Head start} = 1000 - 888.89 = 111.11 \\approx 111.1\\text{ meters}$[cite: 3].",
     "questionId": "MATHS-M17-Q05",
     "conceptId": "MATH-quantitative-aptitude-races-and-games-of-skill",
@@ -414,6 +414,17 @@
     "options": [
       {
         "id": "A",
+        "text": "Rs. 11,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Year Depreciation Subtraction",
+        "mistakeAnalysis": "Aspirants subtract only 2 years of depreciation or omit scrap value[cite: 3].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Single Year Depreciation Subtraction"
+        }
+      },
+      {
+        "id": "B",
         "text": "Rs. 2,000",
         "isCorrect": false,
         "studentSelectionTrap": "Annual Depreciation Selection",
@@ -422,14 +433,6 @@
           "type": "calculation_error",
           "description": "Annual Depreciation Selection"
         }
-      },
-      {
-        "id": "B",
-        "text": "Rs. 9,000",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Annual depreciation $= (15000 - 3000)/6 = 2000$. Book value $= 15000 - 3(2000) = \\text{Rs. } 9,000$[cite: 3].",
-        "misconception": null
       },
       {
         "id": "C",
@@ -444,17 +447,14 @@
       },
       {
         "id": "D",
-        "text": "Rs. 11,000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Single Year Depreciation Subtraction",
-        "mistakeAnalysis": "Aspirants subtract only 2 years of depreciation or omit scrap value[cite: 3].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Single Year Depreciation Subtraction"
-        }
+        "text": "Rs. 9,000",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Annual depreciation $= (15000 - 3000)/6 = 2000$. Book value $= 15000 - 3(2000) = \\text{Rs. } 9,000$[cite: 3].",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "Cost of printer ($C$) = Rs. 15,000[cite: 3]\nScrap value ($S$) = Rs. 3,000[cite: 3]\nUseful life ($n$) = 6 years[cite: 3]\nAnnual depreciation under straight-line method:\n$D = \\frac{C - S}{n} = \\frac{15,000 - 3,000}{6} = \\frac{12,000}{6} = \\text{Rs. } 2,000\\text{ per year}$.\nAccumulated depreciation after 3 years:\n$D_3 = 3 \\times 2,000 = \\text{Rs. } 6,000$.\nBook value at the end of 3 years:\n$BV_3 = C - D_3 = 15,000 - 6,000 = \\text{Rs. } 9,000$[cite: 3].",
     "questionId": "MATHS-M17-Q06",
     "conceptId": "MATH-financial-mathematics-book-value-under-straight-line-depreciation",
@@ -495,17 +495,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\left(\\sqrt{2},\\,\\frac{3}{\\sqrt{2}}\\right)$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Only the positive root is considered, ignoring the symmetric negative solution.",
-        "mistakeAnalysis": "The derivative equation yields $x^{2}=2$, which has both $x=\\sqrt{2}$ and $x=-\\sqrt{2}$. Selecting only the positive root misses the second valid point.",
-        "misconception": {
-          "type": "formula_confusion",
-          "description": "Only the positive root is considered, ignoring the symmetric negative solution."
-        }
-      },
-      {
-        "id": "B",
         "text": "Both $\\left(\\sqrt{2},\\,\\frac{3}{\\sqrt{2}}\\right)$ and $\\left(-\\sqrt{2},\\,-\\frac{3}{\\sqrt{2}}\\right)$",
         "isCorrect": true,
         "studentSelectionTrap": null,
@@ -513,7 +502,7 @@
         "misconception": null
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "$\\left(-\\sqrt{2},\\,-\\frac{3}{\\sqrt{2}}\\right)$",
         "isCorrect": false,
         "studentSelectionTrap": "Only the negative root is considered, ignoring the symmetric positive solution.",
@@ -524,7 +513,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "No such point exists on the curve.",
         "isCorrect": false,
         "studentSelectionTrap": "Assumes the derivative cannot equal $\\frac{1}{2}$ because of algebraic manipulation errors.",
@@ -533,10 +522,21 @@
           "type": "conceptual_misunderstanding",
           "description": "Assumes the derivative cannot equal $\\frac{1}{2}$ because of algebraic manipulation errors."
         }
+      },
+      {
+        "id": "D",
+        "text": "$\\left(\\sqrt{2},\\,\\frac{3}{\\sqrt{2}}\\right)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Only the positive root is considered, ignoring the symmetric negative solution.",
+        "mistakeAnalysis": "The derivative equation yields $x^{2}=2$, which has both $x=\\sqrt{2}$ and $x=-\\sqrt{2}$. Selecting only the positive root misses the second valid point.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "Only the positive root is considered, ignoring the symmetric negative solution."
+        }
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Step 1: Write the function and compute its derivative.\\n\\\\\nGiven $y = \\frac{x^{2}+1}{x}$. Using the quotient rule,\\n\\\\\n$y' = \\frac{(2x)(x) - (x^{2}+1)(1)}{x^{2}} = \\frac{2x^{2} - x^{2} - 1}{x^{2}} = \\frac{x^{2} - 1}{x^{2}} = 1 - \\frac{1}{x^{2}}$.\\n\\\\\nStep 2: Set the derivative equal to the required slope $\\frac{1}{2}$.\\n\\\\\n$1 - \\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nStep 3: Solve for $x$.\\n\\\\\n$-\\frac{1}{x^{2}} = \\frac{1}{2} - 1 = -\\frac{1}{2}$\\n\\\\\nMultiply by $-1$: $\\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nTake reciprocals: $x^{2} = 2$\\n\\\\\nHence $x = \\pm \\sqrt{2}$ (both values are admissible because $x \\neq 0$).\\n\\\\\nStep 4: Find the corresponding $y$-coordinates using the original curve.\\n\\\\\nFor $x = \\sqrt{2}$:\\n\\\\\n$y = \\frac{(\\sqrt{2})^{2}+1}{\\sqrt{2}} = \\frac{2+1}{\\sqrt{2}} = \\frac{3}{\\sqrt{2}}$.\\n\\\\\nFor $x = -\\sqrt{2}$:\\n\\\\\n$y = \\frac{(-\\sqrt{2})^{2}+1}{-\\sqrt{2}} = \\frac{2+1}{-\\sqrt{2}} = -\\frac{3}{\\sqrt{2}}$.\\n\\\\\nStep 5: State the points where the tangent slope is $\\frac{1}{2}$.\\n\\\\\nThe required points are $\\left(\\sqrt{2},\\,\\frac{3}{\\sqrt{2}}\\right)$ and $\\left(-\\sqrt{2},\\,-\\frac{3}{\\sqrt{2}}\\right)$.\\n\\\\\nThus, Option B, which lists both points, is the correct choice.",
+    "correctOption": "A",
+    "detailedSolution": "Step 1: Write the function and compute its derivative.\\n\\\\\nGiven $y = \\frac{x^{2}+1}{x}$. Using the quotient rule,\\n\\\\\n$y' = \\frac{(2x)(x) - (x^{2}+1)(1)}{x^{2}} = \\frac{2x^{2} - x^{2} - 1}{x^{2}} = \\frac{x^{2} - 1}{x^{2}} = 1 - \\frac{1}{x^{2}}$.\\n\\\\\nStep 2: Set the derivative equal to the required slope $\\frac{1}{2}$.\\n\\\\\n$1 - \\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nStep 3: Solve for $x$.\\n\\\\\n$-\\frac{1}{x^{2}} = \\frac{1}{2} - 1 = -\\frac{1}{2}$\\n\\\\\nMultiply by $-1$: $\\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nTake reciprocals: $x^{2} = 2$\\n\\\\\nHence $x = \\pm \\sqrt{2}$ (both values are admissible because $x \\neq 0$).\\n\\\\\nStep 4: Find the corresponding $y$-coordinates using the original curve.\\n\\\\\nFor $x = \\sqrt{2}$:\\n\\\\\n$y = \\frac{(\\sqrt{2})^{2}+1}{\\sqrt{2}} = \\frac{2+1}{\\sqrt{2}} = \\frac{3}{\\sqrt{2}}$.\\n\\\\\nFor $x = -\\sqrt{2}$:\\n\\\\\n$y = \\frac{(-\\sqrt{2})^{2}+1}{-\\sqrt{2}} = \\frac{2+1}{-\\sqrt{2}} = -\\frac{3}{\\sqrt{2}}$.\\n\\\\\nStep 5: State the points where the tangent slope is $\\frac{1}{2}$.\\n\\\\\nThe required points are $\\left(\\sqrt{2},\\,\\frac{3}{\\sqrt{2}}\\right)$ and $\\left(-\\sqrt{2},\\,-\\frac{3}{\\sqrt{2}}\\right)$.\\n\\\\\nThus, Option A, which lists both points, is the correct choice.",
     "questionId": "MATHS-M17-Q07",
     "conceptId": "MATH-application-of-derivatives-tangents-with-given-slope-to-a-rational-curve",
     "questionType": "conceptual",
@@ -544,8 +544,8 @@
     "estimatedTimeSeconds": 55,
     "solution": {
       "quick": "Correct answer is Both $\\left(\\sqrt{2},\\,\\frac{3}{\\sqrt{2}}\\right)$ and $\\left(-\\sqrt{2},\\,-\\frac{3}{\\sqrt{2}}\\right)$.",
-      "concept": "Step 1: Write the function and compute its derivative.\\n\\\\\nGiven $y = \\frac{x^{2}+1}{x}$. Using the quotient rule,\\n\\\\\n$y' = \\frac{(2x)(x) - (x^{2}+1)(1)}{x^{2}} = \\frac{2x^{2} - x^{2} - 1}{x^{2}} = \\frac{x^{2} - 1}{x^{2}} = 1 - \\frac{1}{x^{2}}$.\\n\\\\\nStep 2: Set the derivative equal to the required slope $\\frac{1}{2}$.\\n\\\\\n$1 - \\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nStep 3: Solve for $x$.\\n\\\\\n$-\\frac{1}{x^{2}} = \\frac{1}{2} - 1 = -\\frac{1}{2}$\\n\\\\\nMultiply by $-1$: $\\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nTake reciprocals: $x^{2} = 2$\\n\\\\\nHence $x = \\pm \\sqrt{2}$ (both values are admissible because $x \\neq 0$).\\n\\\\\nStep 4: Find the corresponding $y$-coordinates using the original curve.\\n\\\\\nFor $x = \\sqrt{2}$:\\n\\\\\n$y = \\frac{(\\sqrt{2})^{2}+1}{\\sqrt{2}} = \\frac{2+1}{\\sqrt{2}} = \\frac{3}{\\sqrt{2}}$.\\n\\\\\nFor $x = -\\sqrt{2}$:\\n\\\\\n$y = \\frac{(-\\sqrt{2})^{2}+1}{-\\sqrt{2}} = \\frac{2+1}{-\\sqrt{2}} = -\\frac{3}{\\sqrt{2}}$.\\n\\\\\nStep 5: State the points where the tangent slope is $\\frac{1}{2}$.\\n\\\\\nThe required points are $\\left(\\sqrt{2},\\,\\frac{3}{\\sqrt{2}}\\right)$ and $\\left(-\\sqrt{2},\\,-\\frac{3}{\\sqrt{2}}\\right)$.\\n\\\\\nOption B, which lists both points, is the correct choice.",
-      "detailed": "Step 1: Write the function and compute its derivative.\\n\\\\\nGiven $y = \\frac{x^{2}+1}{x}$. Using the quotient rule,\\n\\\\\n$y' = \\frac{(2x)(x) - (x^{2}+1)(1)}{x^{2}} = \\frac{2x^{2} - x^{2} - 1}{x^{2}} = \\frac{x^{2} - 1}{x^{2}} = 1 - \\frac{1}{x^{2}}$.\\n\\\\\nStep 2: Set the derivative equal to the required slope $\\frac{1}{2}$.\\n\\\\\n$1 - \\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nStep 3: Solve for $x$.\\n\\\\\n$-\\frac{1}{x^{2}} = \\frac{1}{2} - 1 = -\\frac{1}{2}$\\n\\\\\nMultiply by $-1$: $\\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nTake reciprocals: $x^{2} = 2$\\n\\\\\nHence $x = \\pm \\sqrt{2}$ (both values are admissible because $x \\neq 0$).\\n\\\\\nStep 4: Find the corresponding $y$-coordinates using the original curve.\\n\\\\\nFor $x = \\sqrt{2}$:\\n\\\\\n$y = \\frac{(\\sqrt{2})^{2}+1}{\\sqrt{2}} = \\frac{2+1}{\\sqrt{2}} = \\frac{3}{\\sqrt{2}}$.\\n\\\\\nFor $x = -\\sqrt{2}$:\\n\\\\\n$y = \\frac{(-\\sqrt{2})^{2}+1}{-\\sqrt{2}} = \\frac{2+1}{-\\sqrt{2}} = -\\frac{3}{\\sqrt{2}}$.\\n\\\\\nStep 5: State the points where the tangent slope is $\\frac{1}{2}$.\\n\\\\\nThe required points are $\\left(\\sqrt{2},\\,\\frac{3}{\\sqrt{2}}\\right)$ and $\\left(-\\sqrt{2},\\,-\\frac{3}{\\sqrt{2}}\\right)$.\\n\\\\\nThus, Option B, which lists both points, is the correct choice."
+      "concept": "Step 1: Write the function and compute its derivative.\\n\\\\\nGiven $y = \\frac{x^{2}+1}{x}$. Using the quotient rule,\\n\\\\\n$y' = \\frac{(2x)(x) - (x^{2}+1)(1)}{x^{2}} = \\frac{2x^{2} - x^{2} - 1}{x^{2}} = \\frac{x^{2} - 1}{x^{2}} = 1 - \\frac{1}{x^{2}}$.\\n\\\\\nStep 2: Set the derivative equal to the required slope $\\frac{1}{2}$.\\n\\\\\n$1 - \\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nStep 3: Solve for $x$.\\n\\\\\n$-\\frac{1}{x^{2}} = \\frac{1}{2} - 1 = -\\frac{1}{2}$\\n\\\\\nMultiply by $-1$: $\\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nTake reciprocals: $x^{2} = 2$\\n\\\\\nHence $x = \\pm \\sqrt{2}$ (both values are admissible because $x \\neq 0$).\\n\\\\\nStep 4: Find the corresponding $y$-coordinates using the original curve.\\n\\\\\nFor $x = \\sqrt{2}$:\\n\\\\\n$y = \\frac{(\\sqrt{2})^{2}+1}{\\sqrt{2}} = \\frac{2+1}{\\sqrt{2}} = \\frac{3}{\\sqrt{2}}$.\\n\\\\\nFor $x = -\\sqrt{2}$:\\n\\\\\n$y = \\frac{(-\\sqrt{2})^{2}+1}{-\\sqrt{2}} = \\frac{2+1}{-\\sqrt{2}} = -\\frac{3}{\\sqrt{2}}$.\\n\\\\\nStep 5: State the points where the tangent slope is $\\frac{1}{2}$.\\n\\\\\nThe required points are $\\left(\\sqrt{2},\\,\\frac{3}{\\sqrt{2}}\\right)$ and $\\left(-\\sqrt{2},\\,-\\frac{3}{\\sqrt{2}}\\right)$.\\n\\\\\nOption A, which lists both points, is the correct choice.",
+      "detailed": "Step 1: Write the function and compute its derivative.\\n\\\\\nGiven $y = \\frac{x^{2}+1}{x}$. Using the quotient rule,\\n\\\\\n$y' = \\frac{(2x)(x) - (x^{2}+1)(1)}{x^{2}} = \\frac{2x^{2} - x^{2} - 1}{x^{2}} = \\frac{x^{2} - 1}{x^{2}} = 1 - \\frac{1}{x^{2}}$.\\n\\\\\nStep 2: Set the derivative equal to the required slope $\\frac{1}{2}$.\\n\\\\\n$1 - \\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nStep 3: Solve for $x$.\\n\\\\\n$-\\frac{1}{x^{2}} = \\frac{1}{2} - 1 = -\\frac{1}{2}$\\n\\\\\nMultiply by $-1$: $\\frac{1}{x^{2}} = \\frac{1}{2}$\\n\\\\\nTake reciprocals: $x^{2} = 2$\\n\\\\\nHence $x = \\pm \\sqrt{2}$ (both values are admissible because $x \\neq 0$).\\n\\\\\nStep 4: Find the corresponding $y$-coordinates using the original curve.\\n\\\\\nFor $x = \\sqrt{2}$:\\n\\\\\n$y = \\frac{(\\sqrt{2})^{2}+1}{\\sqrt{2}} = \\frac{2+1}{\\sqrt{2}} = \\frac{3}{\\sqrt{2}}$.\\n\\\\\nFor $x = -\\sqrt{2}$:\\n\\\\\n$y = \\frac{(-\\sqrt{2})^{2}+1}{-\\sqrt{2}} = \\frac{2+1}{-\\sqrt{2}} = -\\frac{3}{\\sqrt{2}}$.\\n\\\\\nStep 5: State the points where the tangent slope is $\\frac{1}{2}$.\\n\\\\\nThe required points are $\\left(\\sqrt{2},\\,\\frac{3}{\\sqrt{2}}\\right)$ and $\\left(-\\sqrt{2},\\,-\\frac{3}{\\sqrt{2}}\\right)$.\\n\\\\\nThus, Option A, which lists both points, is the correct choice."
     },
     "keyConcept": "Application of Derivatives: Tangents with Given Slope to a Rational Curve",
     "formula": "$\\displaystyle y = \\frac{x^{2}+1}{x}$",
@@ -576,28 +576,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Greater than the nominal rate of interest",
-        "isCorrect": false,
-        "studentSelectionTrap": "Compounding Frequency Generalization",
-        "mistakeAnalysis": "Aspirants generalize the rule $r_{\\text{eff}} > r$ which only applies when compounding frequency $m > 1$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Compounding Frequency Generalization"
-        }
-      },
-      {
-        "id": "B",
-        "text": "Less than the nominal rate of interest",
-        "isCorrect": false,
-        "studentSelectionTrap": "Discounting Fallacy",
-        "mistakeAnalysis": "Aspirants assume effective rate is discounted below nominal rate.",
-        "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Discounting Fallacy"
-        }
-      },
-      {
-        "id": "C",
         "text": "Zero",
         "isCorrect": false,
         "studentSelectionTrap": "Trivial Value Assumption",
@@ -608,15 +586,37 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "Equal to the nominal rate of interest",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. When $m = 1$, $r_{\\text{eff}} = (1 + r/1)^1 - 1 = r$.",
         "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "Greater than the nominal rate of interest",
+        "isCorrect": false,
+        "studentSelectionTrap": "Compounding Frequency Generalization",
+        "mistakeAnalysis": "Aspirants generalize the rule $r_{\\text{eff}} > r$ which only applies when compounding frequency $m > 1$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Compounding Frequency Generalization"
+        }
+      },
+      {
+        "id": "D",
+        "text": "Less than the nominal rate of interest",
+        "isCorrect": false,
+        "studentSelectionTrap": "Discounting Fallacy",
+        "mistakeAnalysis": "Aspirants assume effective rate is discounted below nominal rate.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Discounting Fallacy"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "The effective annual interest rate formula for compounding frequency $m$ is:\n$r_{\\text{eff}} = \\left(1 + \\frac{r}{m}\\right)^m - 1$.\nFor annual compounding, $m = 1$:\n$r_{\\text{eff}} = \\left(1 + \\frac{r}{1}\\right)^1 - 1 = 1 + r - 1 = r$.\nThus, the effective rate is **equal to the nominal rate of interest**.",
     "questionId": "MATHS-M17-Q08",
     "conceptId": "MATH-financial-mathematics-effective-rate-with-annual-compounding",
@@ -657,6 +657,25 @@
     "options": [
       {
         "id": "A",
+        "text": "neither one-one nor onto",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f(2) = f(1/2) = 2/5$ (not one-one), and the range $[-1/2, 1/2] \\ne \\mathbb{R}$ (not onto).",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "both one-one and onto",
+        "isCorrect": false,
+        "studentSelectionTrap": "Bijection Heuristic",
+        "mistakeAnalysis": "Aspirants assume odd rational functions are bijective.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Bijection Heuristic"
+        }
+      },
+      {
+        "id": "C",
         "text": "one-one but not onto",
         "isCorrect": false,
         "studentSelectionTrap": "Derivative Positivity Slip",
@@ -667,7 +686,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "D",
         "text": "onto but not one-one",
         "isCorrect": false,
         "studentSelectionTrap": "Infinite Domain Codomain Fallacy",
@@ -676,28 +695,9 @@
           "type": "logical_reasoning_error",
           "description": "Infinite Domain Codomain Fallacy"
         }
-      },
-      {
-        "id": "C",
-        "text": "neither one-one nor onto",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $f(2) = f(1/2) = 2/5$ (not one-one), and the range $[-1/2, 1/2] \\ne \\mathbb{R}$ (not onto).",
-        "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "both one-one and onto",
-        "isCorrect": false,
-        "studentSelectionTrap": "Bijection Heuristic",
-        "mistakeAnalysis": "Aspirants assume odd rational functions are bijective.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Bijection Heuristic"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "1. Injectivity (one-one): Test $f(x_1) = f(x_2)$:\n$f(2) = \\frac{2}{2^2 + 1} = \\frac{2}{5}$.\n$f(1/2) = \\frac{1/2}{(1/2)^2 + 1} = \\frac{1/2}{5/4} = \\frac{2}{5}$.\nSince $f(2) = f(1/2)$ but $2 \\ne 1/2$, $f$ is not one-one.\n2. Surjectivity (onto): Let $y = \\frac{x}{x^2+1} \\implies yx^2 - x + y = 0$.\nFor $x$ to be real, the discriminant of this quadratic must be non-negative:\n$D = (-1)^2 - 4(y)(y) = 1 - 4y^2 \\ge 0 \\implies y^2 \\le \\frac{1}{4} \\implies -\\frac{1}{2} \\le y \\le \\frac{1}{2}$.\nThe range of $f$ is $\\left[-\\frac{1}{2}, \\frac{1}{2}\\right]$, which is a proper subset of codomain $\\mathbb{R}$. Thus, $f$ is not onto.\nTherefore, $f$ is neither one-one nor onto.",
     "questionId": "MATHS-M17-Q09",
     "conceptId": "MATH-relations-and-functions-injectivity-and-surjectivity-of-real-functions",
@@ -749,6 +749,14 @@
       },
       {
         "id": "B",
+        "text": "$x = 2$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = 6x - 12 = 0 \\implies x = 2$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$x = 4$",
         "isCorrect": false,
         "studentSelectionTrap": "Coefficient Multiplier Error",
@@ -759,7 +767,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "$x = 0$",
         "isCorrect": false,
         "studentSelectionTrap": "Origin Guess",
@@ -768,17 +776,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Origin Guess"
         }
-      },
-      {
-        "id": "D",
-        "text": "$x = 2$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $f'(x) = 6x - 12 = 0 \\implies x = 2$.",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "Differentiate $f(x) = 3x^2 - 12x + 5$:\n$f'(x) = 6x - 12$.\nSetting $f'(x) = 0$:\n$6x - 12 = 0 \\implies 6x = 12 \\implies x = 2$.",
     "questionId": "MATHS-M17-Q10",
     "conceptId": "MATH-application-of-derivatives-critical-points-of-polynomials",
@@ -830,17 +830,6 @@
       },
       {
         "id": "B",
-        "text": "$\\frac{1}{3\\sqrt{2}}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Line Magnitude Calculation Error",
-        "mistakeAnalysis": "Aspirants calculate line vector magnitude as $3\\sqrt{2}$ instead of $5\\sqrt{2}$.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Line Magnitude Calculation Error"
-        }
-      },
-      {
-        "id": "C",
         "text": "$\\frac{1}{2}$",
         "isCorrect": false,
         "studentSelectionTrap": "Arithmetic Slip",
@@ -848,6 +837,17 @@
         "misconception": {
           "type": "calculation_error",
           "description": "Arithmetic Slip"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{3\\sqrt{2}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Line Magnitude Calculation Error",
+        "mistakeAnalysis": "Aspirants calculate line vector magnitude as $3\\sqrt{2}$ instead of $5\\sqrt{2}$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Line Magnitude Calculation Error"
         }
       },
       {
@@ -900,6 +900,14 @@
     "options": [
       {
         "id": "A",
+        "text": "0.15",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. By De Morgan's Law, $A' \\cap B' = (A \\cup B)' \\implies P(A' \\cap B') = 1 - P(A \\cup B) = 1 - 0.85 = 0.15$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "0.85",
         "isCorrect": false,
         "studentSelectionTrap": "Identity Fallacy",
@@ -908,14 +916,6 @@
           "type": "logical_reasoning_error",
           "description": "Identity Fallacy"
         }
-      },
-      {
-        "id": "B",
-        "text": "0.15",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. By De Morgan's Law, $A' \\cap B' = (A \\cup B)' \\implies P(A' \\cap B') = 1 - P(A \\cup B) = 1 - 0.85 = 0.15$.",
-        "misconception": null
       },
       {
         "id": "C",
@@ -940,7 +940,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "Using De Morgan's law of set theory:\n$A' \\cap B' = (A \\cup B)'$.\nTaking probabilities:\n$P(A' \\cap B') = P((A \\cup B)') = 1 - P(A \\cup B)$.\nGiven $P(A \\cup B) = 0.85$:\n$P(A' \\cap B') = 1 - 0.85 = 0.15$.",
     "questionId": "MATHS-M17-Q12",
     "conceptId": "MATH-probability-complement-rule-for-unions",
@@ -992,14 +992,6 @@
       },
       {
         "id": "B",
-        "text": "0.5987",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct computation using the binomial formula for k = 0.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "0.598",
         "isCorrect": false,
         "studentSelectionTrap": "Subtracted the probability of a defective bulb from 1 only once.",
@@ -1008,6 +1000,14 @@
           "type": "conceptual_misunderstanding",
           "description": "Subtracted the probability of a defective bulb from 1 only once."
         }
+      },
+      {
+        "id": "C",
+        "text": "0.5987",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct computation using the binomial formula for k = 0.",
+        "misconception": null
       },
       {
         "id": "D",
@@ -1021,7 +1021,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "The number of trials is \\(n = 10\\) and the probability of selecting a non‑defective bulb in a single trial is \\(p' = 1 - 0.05 = 0.95\\).\\nFor a binomial distribution, the probability of obtaining exactly \\(k\\) successes is\\n\\\\[\\nP(X = k) = \\binom{n}{k} (p')^{k} (1-p')^{n-k}\\n\\\\]\\nHere we need the probability of zero defective bulbs, i.e., all 10 bulbs are non‑defective (k = 10 successes). Thus\\n\\\\[\\nP(X = 10) = \\binom{10}{10} (0.95)^{10} (0.05)^{0} = 1 \\times (0.95)^{10} \\times 1\\n\\\\]\\nCalculate \\((0.95)^{10}\\):\\n\\\\[\\n\\ln[(0.95)^{10}] = 10 \\ln 0.95 \\approx 10 (-0.051293) = -0.51293\\n\\\\]\\nHence\\n\\\\[\\n(0.95)^{10} = e^{-0.51293} \\approx 0.5987\\n\\\\]\\nTherefore, the required probability is approximately \\(0.5987\\).",
     "questionId": "MATHS-M17-Q13",
     "conceptId": "MATH-probability-distributions-binomial-probability-of-zero-defective-items",
@@ -1072,17 +1072,6 @@
       },
       {
         "id": "B",
-        "text": "$(0, 1)$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Negative Function Value Confusion",
-        "mistakeAnalysis": "Aspirants confuse positive values of $\\log x$ with the sign of the derivative.",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Negative Function Value Confusion"
-        }
-      },
-      {
-        "id": "C",
         "text": "$(1, e)$",
         "isCorrect": false,
         "studentSelectionTrap": "Sub-interval Truncation",
@@ -1093,15 +1082,26 @@
         }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "$(0, e)$",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. $f'(x) = \\frac{1 - \\log x}{x^2} > 0 \\iff \\log x < 1 \\iff 0 < x < e$.",
         "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$(0, 1)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Function Value Confusion",
+        "mistakeAnalysis": "Aspirants confuse positive values of $\\log x$ with the sign of the derivative.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Negative Function Value Confusion"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "C",
     "detailedSolution": "Domain of $f(x)$ is $(0, \\infty)$.\nDifferentiating with respect to $x$ using the quotient rule:\n$f'(x) = \\frac{x\\left(\\frac{1}{x}\\right) - \\log_e x(1)}{x^2} = \\frac{1 - \\log_e x}{x^2}$.\nFor $f(x)$ to be strictly increasing, $f'(x) > 0$:\nSince $x^2 > 0$ for all $x > 0$, we require:\n$1 - \\log_e x > 0 \\implies \\log_e x < 1 \\implies x < e$.\nCombining with the domain constraint $x > 0$:\n$x \\in (0, e)$.",
     "questionId": "MATHS-M17-Q14",
     "conceptId": "MATH-application-of-derivatives-interval-of-increase-for-frac-log-x-x",
@@ -1161,17 +1161,6 @@
       },
       {
         "id": "C",
-        "text": "(-2, 0)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Sign Inversion of Interval",
-        "mistakeAnalysis": "Aspirants solve $-x(x + 2) > 0$ due to a factoring sign slip[cite: 4].",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Sign Inversion of Interval"
-        }
-      },
-      {
-        "id": "D",
         "text": "$(2, \\infty)$",
         "isCorrect": false,
         "studentSelectionTrap": "Decreasing Interval Selected",
@@ -1179,6 +1168,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Decreasing Interval Selected"
+        }
+      },
+      {
+        "id": "D",
+        "text": "(-2, 0)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion of Interval",
+        "mistakeAnalysis": "Aspirants solve $-x(x + 2) > 0$ due to a factoring sign slip[cite: 4].",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion of Interval"
         }
       }
     ],
@@ -1223,6 +1223,17 @@
     "options": [
       {
         "id": "A",
+        "text": "2.0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Mode Selection",
+        "mistakeAnalysis": "Aspirants choose an arbitrary integer value.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Mode Selection"
+        }
+      },
+      {
+        "id": "B",
         "text": "1.5",
         "isCorrect": false,
         "studentSelectionTrap": "Domain Midpoint Guess",
@@ -1233,7 +1244,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "1.0",
         "isCorrect": false,
         "studentSelectionTrap": "Arithmetic Addition Slip",
@@ -1241,17 +1252,6 @@
         "misconception": {
           "type": "calculation_error",
           "description": "Arithmetic Addition Slip"
-        }
-      },
-      {
-        "id": "C",
-        "text": "2.0",
-        "isCorrect": false,
-        "studentSelectionTrap": "Mode Selection",
-        "mistakeAnalysis": "Aspirants choose an arbitrary integer value.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Mode Selection"
         }
       },
       {
@@ -1304,11 +1304,14 @@
     "options": [
       {
         "id": "A",
-        "text": "5",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Differentiating yields $dy/dx = m$. Substituting gives $y = x(y') + (y')^4$, which has order 1 and degree 4; sum = 5[cite: 2].",
-        "misconception": null
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Degree Alone Reported",
+        "mistakeAnalysis": "Aspirants report only the degree 4, forgetting to add the order 1[cite: 2].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Degree Alone Reported"
+        }
       },
       {
         "id": "B",
@@ -1323,17 +1326,6 @@
       },
       {
         "id": "C",
-        "text": "4",
-        "isCorrect": false,
-        "studentSelectionTrap": "Degree Alone Reported",
-        "mistakeAnalysis": "Aspirants report only the degree 4, forgetting to add the order 1[cite: 2].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Degree Alone Reported"
-        }
-      },
-      {
-        "id": "D",
         "text": "2",
         "isCorrect": false,
         "studentSelectionTrap": "Quadratic Fallacy",
@@ -1342,9 +1334,17 @@
           "type": "logical_reasoning_error",
           "description": "Quadratic Fallacy"
         }
+      },
+      {
+        "id": "D",
+        "text": "5",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Differentiating yields $dy/dx = m$. Substituting gives $y = x(y') + (y')^4$, which has order 1 and degree 4; sum = 5[cite: 2].",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "Given family of curves:\n$y = mx + m^4$  --- (1)[cite: 2]\nHere $m$ is the single arbitrary constant. Differentiating with respect to $x$[cite: 2]:\n$\\frac{dy}{dx} = m$  --- (2)\nSubstitute $m = \\frac{dy}{dx}$ into equation (1):\n$y = x\\left(\\frac{dy}{dx}\\right) + \\left(\\frac{dy}{dx}\\right)^4$.\n1. Highest order derivative is $\\frac{dy}{dx} \\implies \\text{Order} = 1$.\n2. The highest power of the highest derivative is $4 \\implies \\text{Degree} = 4$.\nSum of order and degree $= 1 + 4 = 5$[cite: 2].",
     "questionId": "MATHS-M17-Q17",
     "conceptId": "MATH-differential-equations-formation-of-differential-equations-and-order-degree",
@@ -1385,25 +1385,6 @@
     "options": [
       {
         "id": "A",
-        "text": "2",
-        "isCorrect": false,
-        "studentSelectionTrap": "Option B misconception trap.",
-        "mistakeAnalysis": "Student evaluated incorrectly for B.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Option B misconception trap."
-        }
-      },
-      {
-        "id": "B",
-        "text": "4",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correctly applied formula.",
-        "mistakeAnalysis": "Accurate step-by-step reasoning.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "-4",
         "isCorrect": false,
         "studentSelectionTrap": "Option C misconception trap.",
@@ -1414,7 +1395,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "6",
         "isCorrect": false,
         "studentSelectionTrap": "Option D misconception trap.",
@@ -1423,9 +1404,28 @@
           "type": "conceptual_misunderstanding",
           "description": "Option D misconception trap."
         }
+      },
+      {
+        "id": "C",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Option B misconception trap.",
+        "mistakeAnalysis": "Student evaluated incorrectly for B.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Option B misconception trap."
+        }
+      },
+      {
+        "id": "D",
+        "text": "4",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correctly applied formula.",
+        "mistakeAnalysis": "Accurate step-by-step reasoning.",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "A homogeneous system has non-trivial solutions if and only if the determinant of the coefficient matrix is zero:\n$$\\begin{vmatrix} 1 & 2 & 3 \\\\ 2 & k & 6 \\\\ 3 & 1 & 4 \\end{vmatrix} = 0$$\nExpanding along row 1:\n$$1(4k - 6) - 2(8 - 18) + 3(2 - 3k) = 0$$\n$$4k - 6 - 2(-10) + 6 - 9k = 0$$\n$$4k - 9k - 6 + 20 + 6 = 0$$\n$$-5k + 20 = 0 \\implies 5k = 20 \\implies k = 4$$",
     "questionId": "MATHS-M17-Q18",
     "conceptId": "MATH-determinants-homogeneous-system-non-trivial-solution",
@@ -1477,6 +1477,14 @@
       },
       {
         "id": "B",
+        "text": "$252\\text{ cm}^{2}\\text{/s}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $S = 6x^2 \\implies \\frac{dS}{dt} = 12x\\frac{dx}{dt} = 12(3)(7) = 252\\text{ cm}^2\\text{/s}$[cite: 3].",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$168\\text{ cm}^{2}\\text{/s}$",
         "isCorrect": false,
         "studentSelectionTrap": "Four Faces Area Formula",
@@ -1487,7 +1495,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "$84\\text{ cm}^{2}\\text{/s}$",
         "isCorrect": false,
         "studentSelectionTrap": "Edge Value Drop",
@@ -1496,17 +1504,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Edge Value Drop"
         }
-      },
-      {
-        "id": "D",
-        "text": "$252\\text{ cm}^{2}\\text{/s}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $S = 6x^2 \\implies \\frac{dS}{dt} = 12x\\frac{dx}{dt} = 12(3)(7) = 252\\text{ cm}^2\\text{/s}$[cite: 3].",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "Let the side length of the cube be $x$[cite: 3].\nTotal surface area of the cube is $S = 6x^2$.\nDifferentiating with respect to time $t$ using the chain rule:\n$\\frac{dS}{dt} = 12x \\frac{dx}{dt}$.\nGiven $\\frac{dx}{dt} = 7\\text{ cm/s}$ and $x = 3\\text{ cm}$[cite: 3]:\n$\\frac{dS}{dt} = 12(3)(7) = 36 \\times 7 = 252\\text{ cm}^2\\text{/s}$[cite: 3].",
     "questionId": "MATHS-M17-Q19",
     "conceptId": "MATH-application-of-derivatives-rate-of-change-of-surface-area-of-a-cube",
@@ -1555,13 +1555,13 @@
       },
       {
         "id": "B",
-        "text": "$\\frac{5}{2}$",
+        "text": "$\\frac{7}{2}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Partition Integration Error",
-        "mistakeAnalysis": "Calculates lower triangle area incorrectly.",
+        "studentSelectionTrap": "Integration Constant Slip",
+        "mistakeAnalysis": "Aspirants miscalculate the lower triangle area as $5/4$.",
         "misconception": {
           "type": "calculation_error",
-          "description": "Partition Integration Error"
+          "description": "Integration Constant Slip"
         }
       },
       {
@@ -1577,13 +1577,13 @@
       },
       {
         "id": "D",
-        "text": "$\\frac{7}{2}$",
+        "text": "$\\frac{5}{2}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Integration Constant Slip",
-        "mistakeAnalysis": "Aspirants miscalculate the lower triangle area as $5/4$.",
+        "studentSelectionTrap": "Partition Integration Error",
+        "mistakeAnalysis": "Calculates lower triangle area incorrectly.",
         "misconception": {
           "type": "calculation_error",
-          "description": "Integration Constant Slip"
+          "description": "Partition Integration Error"
         }
       }
     ],
@@ -1647,17 +1647,6 @@
       },
       {
         "id": "C",
-        "text": "11500",
-        "isCorrect": false,
-        "studentSelectionTrap": "Arithmetic Slip",
-        "mistakeAnalysis": "Aspirants evaluate cube differences of near-center values with calculation errors[cite: 4].",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Arithmetic Slip"
-        }
-      },
-      {
-        "id": "D",
         "text": "87750",
         "isCorrect": false,
         "studentSelectionTrap": "Extreme Boundary Evaluation",
@@ -1665,6 +1654,17 @@
         "misconception": {
           "type": "boundary_condition_error",
           "description": "Extreme Boundary Evaluation"
+        }
+      },
+      {
+        "id": "D",
+        "text": "11500",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants evaluate cube differences of near-center values with calculation errors[cite: 4].",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Arithmetic Slip"
         }
       }
     ],
@@ -1709,14 +1709,6 @@
     "options": [
       {
         "id": "A",
-        "text": "(\\(i\\)) Formulation of problem, (\\(ii\\)) Collection of data, (\\(iii\\)) Analysis of data, (\\(iv\\)) Interpretation of results, (\\(v\\)) Presentation of results",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "This option follows the standard sequence: define the problem, gather data, analyse, interpret, and finally present.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "(\\(i\\)) Collection of data, (\\(ii\\)) Formulation of problem, (\\(iii\\)) Analysis of data, (\\(iv\\)) Presentation of results, (\\(v\\)) Interpretation of results",
         "isCorrect": false,
         "studentSelectionTrap": "Swaps the first two stages, a common mistake when students think data collection precedes problem formulation.",
@@ -1727,18 +1719,7 @@
         }
       },
       {
-        "id": "C",
-        "text": "(\\(i\\)) Formulation of problem, (\\(ii\\)) Analysis of data, (\\(iii\\)) Collection of data, (\\(iv\\)) Interpretation of results, (\\(v\\)) Presentation of results",
-        "isCorrect": false,
-        "studentSelectionTrap": "Places analysis before data collection, which some students assume can be done hypothetically.",
-        "mistakeAnalysis": "Analysis cannot be performed without first collecting the data; the correct order places collection before analysis.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Places analysis before data collection, which some students assume can be done hypothetically."
-        }
-      },
-      {
-        "id": "D",
+        "id": "B",
         "text": "(\\(i\\)) Formulation of problem, (\\(ii\\)) Collection of data, (\\(iii\\)) Interpretation of results, (\\(iv\\)) Analysis of data, (\\(v\\)) Presentation of results",
         "isCorrect": false,
         "studentSelectionTrap": "Interchanges analysis and interpretation, a slip where students think interpretation can precede analysis.",
@@ -1747,9 +1728,28 @@
           "type": "conceptual_misunderstanding",
           "description": "Interchanges analysis and interpretation, a slip where students think interpretation can precede analysis."
         }
+      },
+      {
+        "id": "C",
+        "text": "(\\(i\\)) Formulation of problem, (\\(ii\\)) Collection of data, (\\(iii\\)) Analysis of data, (\\(iv\\)) Interpretation of results, (\\(v\\)) Presentation of results",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "This option follows the standard sequence: define the problem, gather data, analyse, interpret, and finally present.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "(\\(i\\)) Formulation of problem, (\\(ii\\)) Analysis of data, (\\(iii\\)) Collection of data, (\\(iv\\)) Interpretation of results, (\\(v\\)) Presentation of results",
+        "isCorrect": false,
+        "studentSelectionTrap": "Places analysis before data collection, which some students assume can be done hypothetically.",
+        "mistakeAnalysis": "Analysis cannot be performed without first collecting the data; the correct order places collection before analysis.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Places analysis before data collection, which some students assume can be done hypothetically."
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "The statistical investigation proceeds in a logical sequence:\n1. **Formulation of problem** – Identify what is to be studied and formulate hypotheses.\n2. **Collection of data** – Gather relevant data using appropriate sampling techniques.\n3. **Analysis of data** – Apply statistical methods (e.g., estimation, testing) to the collected data.\n4. **Interpretation of results** – Draw conclusions in the context of the original problem.\n5. **Presentation of results** – Communicate findings through reports, tables, or graphs.\nOption C lists these stages exactly in this order, making it the correct choice. The other options violate the logical flow by swapping stages, leading to conceptual errors as explained in their mistake analyses.",
     "questionId": "MATHS-M17-Q22",
     "conceptId": "MATH-inferential-statistics-stages-of-statistical-investigation",
@@ -1808,17 +1808,6 @@
       },
       {
         "id": "C",
-        "text": "$64\\hat{i} + 2\\hat{j} + 28\\hat{k}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "All Positive Signs Assumption",
-        "mistakeAnalysis": "Aspirants drop negative signs across all components[cite: 3].",
-        "misconception": {
-          "type": "sign_error",
-          "description": "All Positive Signs Assumption"
-        }
-      },
-      {
-        "id": "D",
         "text": "$32\\hat{i} - \\hat{j} - 14\\hat{k}$",
         "isCorrect": false,
         "studentSelectionTrap": "Scaling Factor $k$ Omission",
@@ -1826,6 +1815,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Scaling Factor $k$ Omission"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$64\\hat{i} + 2\\hat{j} + 28\\hat{k}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "All Positive Signs Assumption",
+        "mistakeAnalysis": "Aspirants drop negative signs across all components[cite: 3].",
+        "misconception": {
+          "type": "sign_error",
+          "description": "All Positive Signs Assumption"
         }
       }
     ],
@@ -1881,14 +1881,6 @@
       },
       {
         "id": "B",
-        "text": "$a_{ij} = 0$ for $i = j$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $a_{ij} = -a_{ji} \\implies a_{ii} = -a_{ii} \\implies 2a_{ii} = 0 \\implies a_{ii} = 0$ for all diagonal elements[cite: 3].",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$a_{ij} = 0$ for all $i, j$",
         "isCorrect": false,
         "studentSelectionTrap": "Zero Matrix Confusion",
@@ -1899,7 +1891,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "$a_{ij} \\ne 0$ for $i = j$",
         "isCorrect": false,
         "studentSelectionTrap": "Non-Zero Diagonal Fallacy",
@@ -1908,9 +1900,17 @@
           "type": "logical_reasoning_error",
           "description": "Non-Zero Diagonal Fallacy"
         }
+      },
+      {
+        "id": "D",
+        "text": "$a_{ij} = 0$ for $i = j$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $a_{ij} = -a_{ji} \\implies a_{ii} = -a_{ii} \\implies 2a_{ii} = 0 \\implies a_{ii} = 0$ for all diagonal elements[cite: 3].",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "By definition, a matrix $A = [a_{ij}]$ is skew-symmetric if $A^T = -A$, which implies[cite: 3]:\n$a_{ij} = -a_{ji}$ for all $i, j$.\nFor the principal diagonal elements, row index equals column index ($i = j$)[cite: 3]:\n$a_{ii} = -a_{ii}$\n$a_{ii} + a_{ii} = 0$\n$2a_{ii} = 0 \\implies a_{ii} = 0$ for all $i = j$[cite: 3].",
     "questionId": "MATHS-M17-Q24",
     "conceptId": "MATH-matrices-properties-of-skew-symmetric-matrices",
@@ -1951,6 +1951,25 @@
     "options": [
       {
         "id": "A",
+        "text": "$\\mathbb{R}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $f'(x) = 3(x^2 - 4x + 4) = 3(x - 2)^2 \\ge 0$ for all $x \\in \\mathbb{R}$, vanishing only at isolated point $x = 2$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "(-2, 2)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Chart Error",
+        "mistakeAnalysis": "Aspirants assume sign changes across roots of squared factors.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Chart Error"
+        }
+      },
+      {
+        "id": "C",
         "text": "$(2, \\infty)$ only",
         "isCorrect": false,
         "studentSelectionTrap": "Root Right-Side Truncation",
@@ -1961,15 +1980,7 @@
         }
       },
       {
-        "id": "B",
-        "text": "$\\mathbb{R}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $f'(x) = 3(x^2 - 4x + 4) = 3(x - 2)^2 \\ge 0$ for all $x \\in \\mathbb{R}$, vanishing only at isolated point $x = 2$.",
-        "misconception": null
-      },
-      {
-        "id": "C",
+        "id": "D",
         "text": "$(-\\infty, 2)$ only",
         "isCorrect": false,
         "studentSelectionTrap": "Root Left-Side Truncation",
@@ -1978,20 +1989,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Root Left-Side Truncation"
         }
-      },
-      {
-        "id": "D",
-        "text": "(-2, 2)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Sign Chart Error",
-        "mistakeAnalysis": "Aspirants assume sign changes across roots of squared factors.",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Sign Chart Error"
-        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "Notice that $f(x) = (x - 2)^3$.\nDifferentiating with respect to $x$:\n$f'(x) = 3(x - 2)^2$.\nFor all real numbers $x \\in \\mathbb{R}$, $(x - 2)^2 \\ge 0$, so $f'(x) \\ge 0$.\n$f'(x) = 0$ only at the single isolated point $x = 2$, and $f'(x) > 0$ for all $x \\ne 2$.\nTherefore, $f(x)$ is strictly increasing on $\\mathbb{R}$.",
     "questionId": "MATHS-M17-Q25",
     "conceptId": "MATH-application-of-derivatives-increasing-monotonicity-of-cubic-polynomials",
@@ -2043,14 +2043,6 @@
       },
       {
         "id": "B",
-        "text": "1",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $y' = x^x(1 + \\log x)$. At $x = 1$, $y' = 1^1(1 + \\log 1) = 1(1 + 0) = 1$.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$e$",
         "isCorrect": false,
         "studentSelectionTrap": "Natural Base Substitution",
@@ -2059,6 +2051,14 @@
           "type": "calculation_error",
           "description": "Natural Base Substitution"
         }
+      },
+      {
+        "id": "C",
+        "text": "1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $y' = x^x(1 + \\log x)$. At $x = 1$, $y' = 1^1(1 + \\log 1) = 1(1 + 0) = 1$.",
+        "misconception": null
       },
       {
         "id": "D",
@@ -2072,7 +2072,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "Given $y = x^x$.\nTaking natural logarithm on both sides:\n$\\log_e y = x \\log_e x$.\nDifferentiating both sides with respect to $x$:\n$\\frac{1}{y}\\frac{dy}{dx} = \\frac{d}{dx}(x)\\log_e x + x\\frac{d}{dx}(\\log_e x)$\n$\\frac{1}{y}\\frac{dy}{dx} = 1 \\cdot \\log_e x + x \\cdot \\frac{1}{x} = 1 + \\log_e x$.\nMultiply both sides by $y$:\n$\\frac{dy}{dx} = x^x (1 + \\log_e x)$.\nEvaluating at $x = 1$:\n$\\left.\\frac{dy}{dx}\\right|_{x=1} = 1^1 (1 + \\log_e 1) = 1(1 + 0) = 1$.",
     "questionId": "MATHS-M17-Q26",
     "conceptId": "MATH-continuity-and-differentiability-logarithmic-differentiation",
@@ -2113,13 +2113,13 @@
     "options": [
       {
         "id": "A",
-        "text": "(A) - (IV), (B) - (II), (C) - (III), (D) - (I)",
+        "text": "(A) - (III), (B) - (I), (C) - (IV), (D) - (II)",
         "isCorrect": false,
-        "studentSelectionTrap": "Point vs Value Confusion",
-        "mistakeAnalysis": "Aspirants confuse the location of the minimum with the minimum value[cite: 4].",
+        "studentSelectionTrap": "Cross Matching Inversion",
+        "mistakeAnalysis": "Aspirants invert the entire matching column[cite: 4].",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Point vs Value Confusion"
+          "description": "Cross Matching Inversion"
         }
       },
       {
@@ -2132,6 +2132,17 @@
       },
       {
         "id": "C",
+        "text": "(A) - (IV), (B) - (II), (C) - (III), (D) - (I)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Point vs Value Confusion",
+        "mistakeAnalysis": "Aspirants confuse the location of the minimum with the minimum value[cite: 4].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Point vs Value Confusion"
+        }
+      },
+      {
+        "id": "D",
         "text": "(A) - (I), (B) - (III), (C) - (II), (D) - (IV)",
         "isCorrect": false,
         "studentSelectionTrap": "Direct Value Permutation Error",
@@ -2139,17 +2150,6 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Direct Value Permutation Error"
-        }
-      },
-      {
-        "id": "D",
-        "text": "(A) - (III), (B) - (I), (C) - (IV), (D) - (II)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Cross Matching Inversion",
-        "mistakeAnalysis": "Aspirants invert the entire matching column[cite: 4].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Cross Matching Inversion"
         }
       }
     ],
@@ -2205,17 +2205,6 @@
       },
       {
         "id": "B",
-        "text": "$\\frac{1}{36}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Single Outcome Heuristic",
-        "mistakeAnalysis": "Aspirants count only $(4, 5)$ as the required pair[cite: 5].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Single Outcome Heuristic"
-        }
-      },
-      {
-        "id": "C",
         "text": "$\\frac{1}{54}$",
         "isCorrect": false,
         "studentSelectionTrap": "Sample Space 216 Misapplication",
@@ -2223,6 +2212,17 @@
         "misconception": {
           "type": "boundary_condition_error",
           "description": "Sample Space 216 Misapplication"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{36}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Outcome Heuristic",
+        "mistakeAnalysis": "Aspirants count only $(4, 5)$ as the required pair[cite: 5].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Single Outcome Heuristic"
         }
       },
       {
@@ -2275,25 +2275,17 @@
     "options": [
       {
         "id": "A",
-        "text": "An annuity with payments made only at the beginning of each year for a fixed term of 10 years",
+        "text": "A loan repayment schedule based strictly on the reducing balance method",
         "isCorrect": false,
-        "studentSelectionTrap": "Option B misconception trap.",
-        "mistakeAnalysis": "Student evaluated incorrectly for B.",
+        "studentSelectionTrap": "Option D misconception trap.",
+        "mistakeAnalysis": "Student evaluated incorrectly for D.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Option B misconception trap."
+          "description": "Option D misconception trap."
         }
       },
       {
         "id": "B",
-        "text": "An annuity where cash flows continue indefinitely with no fixed termination date",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correctly applied formula.",
-        "mistakeAnalysis": "Accurate step-by-step reasoning.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "A sinking fund established to pay off a single lump-sum debt after 5 years",
         "isCorrect": false,
         "studentSelectionTrap": "Option C misconception trap.",
@@ -2304,18 +2296,26 @@
         }
       },
       {
+        "id": "C",
+        "text": "An annuity where cash flows continue indefinitely with no fixed termination date",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correctly applied formula.",
+        "mistakeAnalysis": "Accurate step-by-step reasoning.",
+        "misconception": null
+      },
+      {
         "id": "D",
-        "text": "A loan repayment schedule based strictly on the reducing balance method",
+        "text": "An annuity with payments made only at the beginning of each year for a fixed term of 10 years",
         "isCorrect": false,
-        "studentSelectionTrap": "Option D misconception trap.",
-        "mistakeAnalysis": "Student evaluated incorrectly for D.",
+        "studentSelectionTrap": "Option B misconception trap.",
+        "mistakeAnalysis": "Student evaluated incorrectly for B.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Option D misconception trap."
+          "description": "Option B misconception trap."
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "A perpetuity is an infinite series of periodic cash flows of equal magnitude that continue forever without an end date. The present value of a standard perpetuity is given by $PV = \\frac{R}{i}$.",
     "questionId": "MATHS-M17-Q29",
     "conceptId": "MATH-financial-mathematics-financial-accounts-and-cash-flow-instruments",
@@ -2356,14 +2356,11 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\begin{bmatrix}5 & -2 \\\\ 4 & 3\\end{bmatrix}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Sign Neglect on Off-Diagonals",
-        "mistakeAnalysis": "Aspirants swap diagonal elements but forget to negate the off-diagonal elements.",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Sign Neglect on Off-Diagonals"
-        }
+        "text": "$\\begin{bmatrix}5 & 2 \\\\ -4 & 3\\end{bmatrix}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For a $2\\times 2$ matrix, swap diagonal elements and change signs of off-diagonal elements.",
+        "misconception": null
       },
       {
         "id": "B",
@@ -2378,6 +2375,17 @@
       },
       {
         "id": "C",
+        "text": "$\\begin{bmatrix}5 & -2 \\\\ 4 & 3\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Neglect on Off-Diagonals",
+        "mistakeAnalysis": "Aspirants swap diagonal elements but forget to negate the off-diagonal elements.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Neglect on Off-Diagonals"
+        }
+      },
+      {
+        "id": "D",
         "text": "$\\begin{bmatrix}3 & 4 \\\\ -2 & 5\\end{bmatrix}$",
         "isCorrect": false,
         "studentSelectionTrap": "Transpose Alone Selection",
@@ -2386,17 +2394,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Transpose Alone Selection"
         }
-      },
-      {
-        "id": "D",
-        "text": "$\\begin{bmatrix}5 & 2 \\\\ -4 & 3\\end{bmatrix}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. For a $2\\times 2$ matrix, swap diagonal elements and change signs of off-diagonal elements.",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "A",
     "detailedSolution": "For any $2 \\times 2$ matrix $M = \\begin{bmatrix}a & b \\\\ c & d\\end{bmatrix}$, the adjoint is given by:\n$\\operatorname{adj} M = \\begin{bmatrix}d & -b \\\\ -c & a\\end{bmatrix}$.\nHere $a = 3, b = -2, c = 4, d = 5$:\n$\\operatorname{adj} A = \\begin{bmatrix}5 & -(-2) \\\\ -(4) & 3\\end{bmatrix} = \\begin{bmatrix}5 & 2 \\\\ -4 & 3\\end{bmatrix}$.",
     "questionId": "MATHS-M17-Q30",
     "conceptId": "MATH-determinants-adjoint-of-2-times-2-matrix",
@@ -2518,6 +2518,14 @@
     "options": [
       {
         "id": "A",
+        "text": "4",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $(\\vec{x} - \\vec{a}) \\cdot (\\vec{x} + \\vec{a}) = |\\vec{x}|^2 - |\\vec{a}|^2 = 15$. Since $|\\vec{a}| = 1$, $|\\vec{x}|^2 = 16 \\implies |\\vec{x}| = 4$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "16",
         "isCorrect": false,
         "studentSelectionTrap": "Square Root Omission",
@@ -2525,17 +2533,6 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Square Root Omission"
-        }
-      },
-      {
-        "id": "B",
-        "text": "$\\sqrt{15}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Unit Vector Magnitude Neglect",
-        "mistakeAnalysis": "Aspirants neglect $|\\vec{a}|^2 = 1$, equating $|\\vec{x}|^2 = 15$.",
-        "misconception": {
-          "type": "unit_error",
-          "description": "Unit Vector Magnitude Neglect"
         }
       },
       {
@@ -2551,14 +2548,17 @@
       },
       {
         "id": "D",
-        "text": "4",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $(\\vec{x} - \\vec{a}) \\cdot (\\vec{x} + \\vec{a}) = |\\vec{x}|^2 - |\\vec{a}|^2 = 15$. Since $|\\vec{a}| = 1$, $|\\vec{x}|^2 = 16 \\implies |\\vec{x}| = 4$.",
-        "misconception": null
+        "text": "$\\sqrt{15}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Unit Vector Magnitude Neglect",
+        "mistakeAnalysis": "Aspirants neglect $|\\vec{a}|^2 = 1$, equating $|\\vec{x}|^2 = 15$.",
+        "misconception": {
+          "type": "unit_error",
+          "description": "Unit Vector Magnitude Neglect"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "A",
     "detailedSolution": "Expand the dot product using distributivity:\n$(\\vec{x} - \\vec{a}) \\cdot (\\vec{x} + \\vec{a}) = \\vec{x} \\cdot \\vec{x} + \\vec{x} \\cdot \\vec{a} - \\vec{a} \\cdot \\vec{x} - \\vec{a} \\cdot \\vec{a}$\n$= |\\vec{x}|^2 - |\\vec{a}|^2$.\nGiven that $\\vec{a}$ is a unit vector, $|\\vec{a}| = 1 \\implies |\\vec{a}|^2 = 1$:\n$|\\vec{x}|^2 - 1 = 15$\n$|\\vec{x}|^2 = 16$.\nSince magnitude is strictly non-negative:\n$|\\vec{x}| = 4$.",
     "questionId": "MATHS-M17-Q32",
     "conceptId": "MATH-vector-algebra-vector-magnitude-and-dot-product-properties",
@@ -2599,17 +2599,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$|y| = |c\\log_{e}(xy)|$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Argument Coupling Error",
-        "mistakeAnalysis": "Aspirants couple $x$ and $y$ inside the logarithm[cite: 3].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Argument Coupling Error"
-        }
-      },
-      {
-        "id": "B",
         "text": "$|x| = |cy|$",
         "isCorrect": false,
         "studentSelectionTrap": "Logarithm Dropped",
@@ -2618,6 +2607,14 @@
           "type": "conceptual_misunderstanding",
           "description": "Logarithm Dropped"
         }
+      },
+      {
+        "id": "B",
+        "text": "$|x| = |c\\log_{e}y|$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\frac{dx}{x} = \\frac{dy}{y\\log y} \\implies \\log|x| = \\log|\\log y| + \\log|c| \\implies |x| = |c\\log_e y|$[cite: 3].",
+        "misconception": null
       },
       {
         "id": "C",
@@ -2632,14 +2629,17 @@
       },
       {
         "id": "D",
-        "text": "$|x| = |c\\log_{e}y|$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\frac{dx}{x} = \\frac{dy}{y\\log y} \\implies \\log|x| = \\log|\\log y| + \\log|c| \\implies |x| = |c\\log_e y|$[cite: 3].",
-        "misconception": null
+        "text": "$|y| = |c\\log_{e}(xy)|$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Argument Coupling Error",
+        "mistakeAnalysis": "Aspirants couple $x$ and $y$ inside the logarithm[cite: 3].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Argument Coupling Error"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "Given $y\\log_e y\\,dx - x\\,dy = 0$[cite: 3].\nSeparate variables by dividing by $x y\\log_e y$:\n$\\frac{dx}{x} = \\frac{dy}{y\\log_e y}$.\nIntegrating both sides:\n$\\int \\frac{1}{x}\\,dx = \\int \\frac{1}{y\\log_e y}\\,dy$.\nFor the right-hand integral, substitute $u = \\log_e y \\implies du = \\frac{1}{y}\\,dy$:\n$\\int \\frac{du}{u} = \\log_e|u| = \\log_e|\\log_e y|$.\nThus:\n$\\log_e|x| = \\log_e|\\log_e y| + \\log_e|c|$\n$\\log_e|x| = \\log_e|c\\log_e y|$\n$|x| = |c\\log_e y|$[cite: 3].",
     "questionId": "MATHS-M17-Q33",
     "conceptId": "MATH-differential-equations-variable-separable-form-with-logarithmic-terms",
@@ -2680,14 +2680,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{a^{2}}{4}(\\pi - 2)$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $2\\int_{a/\\sqrt{2}}^a \\sqrt{a^2-x^2}dx = 2[\\frac{a^2\\pi}{4} - \\frac{a^2}{4} - \\frac{a^2\\pi}{8}] = \\frac{a^2}{4}(\\pi - 2)$.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "$\\frac{a^{2}}{2}(\\pi - 2)$",
         "isCorrect": false,
         "studentSelectionTrap": "Factor 2 Cancel Omission",
@@ -2698,18 +2690,15 @@
         }
       },
       {
-        "id": "C",
-        "text": "$\\frac{a^{2}}{4}(\\pi - 1)$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Triangular Area Subtraction Slip",
-        "mistakeAnalysis": "Aspirants evaluate triangular component as 1 instead of 2.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Triangular Area Subtraction Slip"
-        }
+        "id": "B",
+        "text": "$\\frac{a^{2}}{4}(\\pi - 2)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $2\\int_{a/\\sqrt{2}}^a \\sqrt{a^2-x^2}dx = 2[\\frac{a^2\\pi}{4} - \\frac{a^2}{4} - \\frac{a^2\\pi}{8}] = \\frac{a^2}{4}(\\pi - 2)$.",
+        "misconception": null
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "$\\frac{a^{2}}{2}\\pi$",
         "isCorrect": false,
         "studentSelectionTrap": "Semicircle Area Fallacy",
@@ -2718,9 +2707,20 @@
           "type": "logical_reasoning_error",
           "description": "Semicircle Area Fallacy"
         }
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{a^{2}}{4}(\\pi - 1)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Triangular Area Subtraction Slip",
+        "mistakeAnalysis": "Aspirants evaluate triangular component as 1 instead of 2.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Triangular Area Subtraction Slip"
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "The circle $x^2 + y^2 = a^2$ is cut off by the vertical line $x = \\frac{a}{\\sqrt{2}}$.\nThe smaller segment lies between $x = \\frac{a}{\\sqrt{2}}$ and $x = a$, symmetric about the $x$-axis:\n$\\text{Area} = 2 \\int_{a/\\sqrt{2}}^a \\sqrt{a^2 - x^2}\\,dx$\nUsing the standard integration formula $\\int \\sqrt{a^2 - x^2}dx = \\frac{x}{2}\\sqrt{a^2 - x^2} + \\frac{a^2}{2}\\sin^{-1}\\left(\\frac{x}{a}\\right)$:\n$= 2 \\left[ \\frac{x}{2}\\sqrt{a^2 - x^2} + \\frac{a^2}{2}\\sin^{-1}\\left(\\frac{x}{a}\\right) \\right]_{a/\\sqrt{2}}^a$\n$= 2 \\left[ \\left(0 + \\frac{a^2}{2}\\sin^{-1}(1)\\right) - \\left(\\frac{a}{2\\sqrt{2}}\\sqrt{a^2 - \\frac{a^2}{2}} + \\frac{a^2}{2}\\sin^{-1}\\left(\\frac{1}{\\sqrt{2}}\\right)\\right) \\right]$\n$= 2 \\left[ \\frac{a^2\\pi}{4} - \\left(\\frac{a}{2\\sqrt{2}} \\cdot \\frac{a}{\\sqrt{2}} + \\frac{a^2}{2} \\cdot \\frac{\\pi}{4}\\right) \\right]$\n$= 2 \\left[ \\frac{a^2\\pi}{4} - \\frac{a^2}{4} - \\frac{a^2\\pi}{8} \\right] = 2 \\left[ \\frac{a^2\\pi}{8} - \\frac{a^2}{4} \\right] = \\frac{a^2}{4}(\\pi - 2)\\text{ sq. units}$.",
     "questionId": "MATHS-M17-Q34",
     "conceptId": "MATH-application-of-integrals-area-enclosed-by-circle-and-line",
@@ -2761,14 +2761,11 @@
     "options": [
       {
         "id": "A",
-        "text": "$-\\frac{1}{2}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Limits Subtraction Sign Error",
-        "mistakeAnalysis": "Aspirants subtract limits in reverse order, obtaining a negative area.",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Limits Subtraction Sign Error"
-        }
+        "text": "$\\frac{1}{2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\left[-\\frac{1}{x}\\right]_1^2 = -\\frac{1}{2} - (-1) = 1 - \\frac{1}{2} = \\frac{1}{2}$.",
+        "misconception": null
       },
       {
         "id": "B",
@@ -2783,14 +2780,6 @@
       },
       {
         "id": "C",
-        "text": "$\\frac{1}{2}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\left[-\\frac{1}{x}\\right]_1^2 = -\\frac{1}{2} - (-1) = 1 - \\frac{1}{2} = \\frac{1}{2}$.",
-        "misconception": null
-      },
-      {
-        "id": "D",
         "text": "$\\log_e 2$",
         "isCorrect": false,
         "studentSelectionTrap": "Logarithmic Integration Fallacy",
@@ -2799,9 +2788,20 @@
           "type": "logical_reasoning_error",
           "description": "Logarithmic Integration Fallacy"
         }
+      },
+      {
+        "id": "D",
+        "text": "$-\\frac{1}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Limits Subtraction Sign Error",
+        "mistakeAnalysis": "Aspirants subtract limits in reverse order, obtaining a negative area.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Limits Subtraction Sign Error"
+        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "Using the power rule for $x^{-2}$:\n$\\int x^{-2}\\,dx = \\frac{x^{-2+1}}{-2+1} = \\frac{x^{-1}}{-1} = -\\frac{1}{x}$.\nEvaluating between limits 1 and 2:\n$\\int_1^2 \\frac{1}{x^2}\\,dx = \\left[ -\\frac{1}{x} \\right]_1^2 = \\left( -\\frac{1}{2} \\right) - \\left( -\\frac{1}{1} \\right) = -\\frac{1}{2} + 1 = \\frac{1}{2}$.",
     "questionId": "MATHS-M17-Q35",
     "conceptId": "MATH-integrals-standard-definite-integral-of-reciprocal-squares",
@@ -2842,25 +2842,17 @@
     "options": [
       {
         "id": "A",
-        "text": "120 hours",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Time without leak $= 24/5 = 4.8\\text{ hrs} = 4\\text{ hrs } 48\\text{ mins}$. With leak, time $= 5\\text{ hrs}$. Leak rate $= 5/24 - 1/5 = 1/120 \\implies 120\\text{ hours}$[cite: 4].",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "84 hours",
+        "text": "108 hours",
         "isCorrect": false,
-        "studentSelectionTrap": "Rate Arithmetic Slip",
-        "mistakeAnalysis": "Aspirants calculate using an incorrect LCM[cite: 4].",
+        "studentSelectionTrap": "Rounding Error",
+        "mistakeAnalysis": "Aspirants approximate the reciprocal fraction[cite: 4].",
         "misconception": {
-          "type": "calculation_error",
-          "description": "Rate Arithmetic Slip"
+          "type": "conceptual_misunderstanding",
+          "description": "Rounding Error"
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "72 hours",
         "isCorrect": false,
         "studentSelectionTrap": "Leak Time Underestimation",
@@ -2871,18 +2863,26 @@
         }
       },
       {
+        "id": "C",
+        "text": "120 hours",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Time without leak $= 24/5 = 4.8\\text{ hrs} = 4\\text{ hrs } 48\\text{ mins}$. With leak, time $= 5\\text{ hrs}$. Leak rate $= 5/24 - 1/5 = 1/120 \\implies 120\\text{ hours}$[cite: 4].",
+        "misconception": null
+      },
+      {
         "id": "D",
-        "text": "108 hours",
+        "text": "84 hours",
         "isCorrect": false,
-        "studentSelectionTrap": "Rounding Error",
-        "mistakeAnalysis": "Aspirants approximate the reciprocal fraction[cite: 4].",
+        "studentSelectionTrap": "Rate Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants calculate using an incorrect LCM[cite: 4].",
         "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Rounding Error"
+          "type": "calculation_error",
+          "description": "Rate Arithmetic Slip"
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "Filling rate of Pipe 1 = $\\frac{1}{8}$ cistern/hour[cite: 4].\nFilling rate of Pipe 2 = $\\frac{1}{12}$ cistern/hour[cite: 4].\nCombined filling rate without leak:\n$R_{\\text{fill}} = \\frac{1}{8} + \\frac{1}{12} = \\frac{3 + 2}{24} = \\frac{5}{24}\\text{ cistern/hour}$.\nTime taken to fill the cistern without leakage:\n$T = \\frac{24}{5}\\text{ hours} = 4.8\\text{ hours} = 4\\text{ hours } 48\\text{ minutes}$.\nDue to leakage, it takes 12 minutes more[cite: 4]:\n$T_{\\text{actual}} = 4\\text{ hours } 48\\text{ minutes} + 12\\text{ minutes} = 5\\text{ hours}$.\nNet rate with leakage:\n$R_{\\text{net}} = \\frac{1}{5}\\text{ cistern/hour}$.\nLet the emptying rate of the leak be $R_{\\text{leak}}$:\n$R_{\\text{fill}} - R_{\\text{leak}} = R_{\\text{net}}$\n$\\frac{5}{24} - R_{\\text{leak}} = \\frac{1}{5}$\n$R_{\\text{leak}} = \\frac{5}{24} - \\frac{1}{5} = \\frac{25 - 24}{120} = \\frac{1}{120}\\text{ cistern/hour}$.\nTime taken by the leakage to empty the full cistern:\n$T_{\\text{leak}} = \\frac{1}{1/120} = 120\\text{ hours}$[cite: 4].",
     "questionId": "MATHS-M17-Q36",
     "conceptId": "MATH-quantitative-aptitude-pipes-and-cisterns-with-leakage",
@@ -2945,14 +2945,6 @@
       },
       {
         "id": "C",
-        "text": "$8\\text{ km/hr}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Upstream speed $v_u = u - v = 10 - 2 = 8\\text{ km/hr}$.",
-        "misconception": null
-      },
-      {
-        "id": "D",
         "text": "$10\\text{ km/hr}$",
         "isCorrect": false,
         "studentSelectionTrap": "Current Speed Neglect",
@@ -2961,9 +2953,17 @@
           "type": "careless_arithmetic",
           "description": "Current Speed Neglect"
         }
+      },
+      {
+        "id": "D",
+        "text": "$8\\text{ km/hr}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Upstream speed $v_u = u - v = 10 - 2 = 8\\text{ km/hr}$.",
+        "misconception": null
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "Let speed of boat in still water be $u = 10\\text{ km/hr}$ and speed of stream be $v = 2\\text{ km/hr}$.\nUpstream motion opposes the current:\n$v_u = u - v = 10 - 2 = 8\\text{ km/hr}$.",
     "questionId": "MATHS-M17-Q37",
     "conceptId": "MATH-quantitative-aptitude-boats-and-streams-upstream-velocity",
@@ -3004,6 +3004,25 @@
     "options": [
       {
         "id": "A",
+        "text": "$(2, 2)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Adding equations gives $3x = 6 \\implies x = 2$, then $y = 4 - 2 = 2$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "$(0, 4)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "$y$-Intercept Selection",
+        "mistakeAnalysis": "Aspirants select an axis intercept.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "$y$-Intercept Selection"
+        }
+      },
+      {
+        "id": "C",
         "text": "$(3, 1)$",
         "isCorrect": false,
         "studentSelectionTrap": "Second Equation Check Neglect",
@@ -3014,7 +3033,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "D",
         "text": "$(1, 3)$",
         "isCorrect": false,
         "studentSelectionTrap": "Coordinate Swapping",
@@ -3023,28 +3042,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Coordinate Swapping"
         }
-      },
-      {
-        "id": "C",
-        "text": "$(2, 2)$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Adding equations gives $3x = 6 \\implies x = 2$, then $y = 4 - 2 = 2$.",
-        "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "$(0, 4)$",
-        "isCorrect": false,
-        "studentSelectionTrap": "$y$-Intercept Selection",
-        "mistakeAnalysis": "Aspirants select an axis intercept.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "$y$-Intercept Selection"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "Solve the system of linear equations:\n1. $x + y = 4$\n2. $2x - y = 2$\nAdding both equations eliminates $y$:\n$(x + 2x) + (y - y) = 4 + 2$\n$3x = 6 \\implies x = 2$.\nSubstitute $x = 2$ into the first equation:\n$2 + y = 4 \\implies y = 2$.\nThe intersection point is $(2, 2)$.",
     "questionId": "MATHS-M17-Q38",
     "conceptId": "MATH-linear-programming-feasible-region-boundary-intersections",
@@ -3085,25 +3085,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{81}{256}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Variance Square Root Confusion",
-        "mistakeAnalysis": "Aspirants select the raw squared variance term.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Variance Square Root Confusion"
-        }
-      },
-      {
-        "id": "B",
-        "text": "$\\frac{5}{32}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Solves to $\\mu = 3/4, \\sigma^2 = 9/16 \\implies p = 1/4, n = 3$. Then $P(X \\ge 2) = P(2) + P(3) = 9/64 + 1/64 = 10/64 = 5/32$.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$\\frac{9}{16}$",
         "isCorrect": false,
         "studentSelectionTrap": "Mean Value Selection",
@@ -3114,7 +3095,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "$\\frac{9}{256}$",
         "isCorrect": false,
         "studentSelectionTrap": "$P(X=2)$ Single Term Mistake",
@@ -3123,9 +3104,28 @@
           "type": "conceptual_misunderstanding",
           "description": "$P(X=2)$ Single Term Mistake"
         }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{81}{256}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Variance Square Root Confusion",
+        "mistakeAnalysis": "Aspirants select the raw squared variance term.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Variance Square Root Confusion"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{5}{32}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Solves to $\\mu = 3/4, \\sigma^2 = 9/16 \\implies p = 1/4, n = 3$. Then $P(X \\ge 2) = P(2) + P(3) = 9/64 + 1/64 = 10/64 = 5/32$.",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "Let mean be $\\mu$ and variance be $\\sigma^2$.\nGiven:\n$\\mu^2 + (\\sigma^2)^2 = \\frac{225}{256}$\n$\\mu^2 - (\\sigma^2)^2 = \\frac{63}{256}$\nAdding the two equations:\n$2\\mu^2 = \\frac{288}{256} = \\frac{9}{8} \\implies \\mu^2 = \\frac{9}{16} \\implies \\mu = \\frac{3}{4}$.\nSubtracting the two equations:\n$2(\\sigma^2)^2 = \\frac{162}{256} \\implies (\\sigma^2)^2 = \\frac{81}{256} \\implies \\sigma^2 = \\frac{9}{16}$.\nFor a binomial distribution: $\\mu = np$ and $\\sigma^2 = npq = np(1-p)$.\nDividing variance by mean: $1 - p = \\frac{\\sigma^2}{\\mu} = \\frac{9/16}{3/4} = \\frac{3}{4} \\implies p = 1 - \\frac{3}{4} = \\frac{1}{4}$.\nThen $q = \\frac{3}{4}$, and $n = \\frac{\\mu}{p} = \\frac{3/4}{1/4} = 3$.\nNow calculate $P(X \\ge 2) = P(X = 2) + P(X = 3)$:\n$P(X = 2) = \\binom{3}{2}\\left(\\frac{1}{4}\\right)^2\\left(\\frac{3}{4}\\right)^1 = 3 \\cdot \\frac{1}{16} \\cdot \\frac{3}{4} = \\frac{9}{64}$.\n$P(X = 3) = \\binom{3}{3}\\left(\\frac{1}{4}\\right)^3 = 1 \\cdot \\frac{1}{64} = \\frac{1}{64}$.\n$P(X \\ge 2) = \\frac{9}{64} + \\frac{1}{64} = \\frac{10}{64} = \\frac{5}{32}$.",
     "questionId": "MATHS-M17-Q39",
     "conceptId": "MATH-probability-distributions-binomial-distribution",
@@ -3166,25 +3166,6 @@
     "options": [
       {
         "id": "A",
-        "text": "4",
-        "isCorrect": false,
-        "studentSelectionTrap": "Sign Inversion Error",
-        "mistakeAnalysis": "Aspirants drop the negative sign from $4(-1)$.",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Sign Inversion Error"
-        }
-      },
-      {
-        "id": "B",
-        "text": "-4",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $2(3) + (-3)(2) + 4(-1) = 6 - 6 - 4 = -4$.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "0",
         "isCorrect": false,
         "studentSelectionTrap": "Orthogonality Assumption",
@@ -3195,7 +3176,18 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
+        "text": "4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Error",
+        "mistakeAnalysis": "Aspirants drop the negative sign from $4(-1)$.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion Error"
+        }
+      },
+      {
+        "id": "C",
         "text": "-8",
         "isCorrect": false,
         "studentSelectionTrap": "Arithmetic Slip",
@@ -3204,9 +3196,17 @@
           "type": "calculation_error",
           "description": "Arithmetic Slip"
         }
+      },
+      {
+        "id": "D",
+        "text": "-4",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $2(3) + (-3)(2) + 4(-1) = 6 - 6 - 4 = -4$.",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "By definition of the scalar dot product:\n$\\vec{a} \\cdot \\vec{b} = a_1 b_1 + a_2 b_2 + a_3 b_3$.\nSubstitute components:\n$\\vec{a} \\cdot \\vec{b} = (2)(3) + (-3)(2) + (4)(-1) = 6 - 6 - 4 = -4$.",
     "questionId": "MATHS-M17-Q40",
     "conceptId": "MATH-vector-algebra-vector-dot-product-evaluation",
@@ -3258,17 +3258,6 @@
       },
       {
         "id": "B",
-        "text": "$xy = C$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reciprocal Integration Error",
-        "mistakeAnalysis": "Aspirants integrate as if $y\\,dx + x\\,dy = 0$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Reciprocal Integration Error"
-        }
-      },
-      {
-        "id": "C",
         "text": "$y^2 = x^2 + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Quadratic Power Fallacy",
@@ -3276,6 +3265,17 @@
         "misconception": {
           "type": "formula_confusion",
           "description": "Quadratic Power Fallacy"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$xy = C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reciprocal Integration Error",
+        "mistakeAnalysis": "Aspirants integrate as if $y\\,dx + x\\,dy = 0$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Reciprocal Integration Error"
         }
       },
       {
@@ -3328,14 +3328,11 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{3}{2}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Signed Direct Integration Slip",
-        "mistakeAnalysis": "Aspirants integrate $x$ without modulus: $\\int_{-1}^2 x dx = [x^2/2]_{-1}^2 = (4 - 1)/2 = 3/2$.",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Signed Direct Integration Slip"
-        }
+        "text": "$\\frac{5}{2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\int_{-1}^0 (-x)dx + \\int_0^2 x dx = \\frac{1}{2} + 2 = \\frac{5}{2}$.",
+        "misconception": null
       },
       {
         "id": "B",
@@ -3361,14 +3358,17 @@
       },
       {
         "id": "D",
-        "text": "$\\frac{5}{2}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\int_{-1}^0 (-x)dx + \\int_0^2 x dx = \\frac{1}{2} + 2 = \\frac{5}{2}$.",
-        "misconception": null
+        "text": "$\\frac{3}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Signed Direct Integration Slip",
+        "mistakeAnalysis": "Aspirants integrate $x$ without modulus: $\\int_{-1}^2 x dx = [x^2/2]_{-1}^2 = (4 - 1)/2 = 3/2$.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Signed Direct Integration Slip"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "A",
     "detailedSolution": "Split the integral at the critical root $x = 0$:\n$\\int_{-1}^2 |x|\\,dx = \\int_{-1}^0 (-x)\\,dx + \\int_0^2 x\\,dx$.\n1. First part: $\\left[ -\\frac{x^2}{2} \\right]_{-1}^0 = 0 - \\left(-\\frac{(-1)^2}{2}\\right) = \\frac{1}{2}$.\n2. Second part: $\\left[ \\frac{x^2}{2} \\right]_0^2 = \\frac{2^2}{2} - 0 = \\frac{4}{2} = 2$.\nSumming the two integrals:\n$\\text{Total} = \\frac{1}{2} + 2 = \\frac{5}{2}$.",
     "questionId": "MATHS-M17-Q42",
     "conceptId": "MATH-integrals-definite-integral-of-linear-modulus-function",
@@ -3409,6 +3409,14 @@
     "options": [
       {
         "id": "A",
+        "text": "$(\\vec{a} \\cdot \\vec{c})\\vec{b} - (\\vec{a} \\cdot \\vec{b})\\vec{c}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard BAC-CAB vector triple product identity.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "$(\\vec{a} \\cdot \\vec{b})\\vec{c} - (\\vec{a} \\cdot \\vec{c})\\vec{b}$",
         "isCorrect": false,
         "studentSelectionTrap": "Vector Identity Sign Inversion",
@@ -3417,14 +3425,6 @@
           "type": "sign_error",
           "description": "Vector Identity Sign Inversion"
         }
-      },
-      {
-        "id": "B",
-        "text": "$(\\vec{a} \\cdot \\vec{c})\\vec{b} - (\\vec{a} \\cdot \\vec{b})\\vec{c}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Standard BAC-CAB vector triple product identity.",
-        "misconception": null
       },
       {
         "id": "C",
@@ -3449,7 +3449,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "By the standard vector triple product expansion identity (commonly referred to as the 'BAC-CAB' rule):\n$\\vec{a} \\times (\\vec{b} \\times \\vec{c}) = (\\vec{a} \\cdot \\vec{c})\\vec{b} - (\\vec{a} \\cdot \\vec{b})\\vec{c}$.",
     "questionId": "MATHS-M17-Q43",
     "conceptId": "MATH-vector-algebra-vector-triple-product-expansion",
@@ -3490,17 +3490,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$-1 \\le P(E) \\le 1$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Correlation Coefficient Range Confusion",
-        "mistakeAnalysis": "Aspirants confuse probability bounds with the Pearson correlation coefficient range $[-1, 1]$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Correlation Coefficient Range Confusion"
-        }
-      },
-      {
-        "id": "B",
         "text": "$0 < P(E) < 1$",
         "isCorrect": false,
         "studentSelectionTrap": "Strict Inequality Exclusion",
@@ -3509,6 +3498,14 @@
           "type": "conceptual_misunderstanding",
           "description": "Strict Inequality Exclusion"
         }
+      },
+      {
+        "id": "B",
+        "text": "$0 \\le P(E) \\le 1$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. By Kolmogorov's probability axioms, all probabilities are bounded between 0 and 1.",
+        "misconception": null
       },
       {
         "id": "C",
@@ -3523,14 +3520,17 @@
       },
       {
         "id": "D",
-        "text": "$0 \\le P(E) \\le 1$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. By Kolmogorov's probability axioms, all probabilities are bounded between 0 and 1.",
-        "misconception": null
+        "text": "$-1 \\le P(E) \\le 1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Correlation Coefficient Range Confusion",
+        "mistakeAnalysis": "Aspirants confuse probability bounds with the Pearson correlation coefficient range $[-1, 1]$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Correlation Coefficient Range Confusion"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "By Kolmogorov's foundational axioms of probability:\n1. For every event $E$, $P(E) \\ge 0$.\n2. For the entire sample space $S$, $P(S) = 1$.\n3. Since $E \\subseteq S$, $P(E) \\le P(S) = 1$.\nTherefore, $0 \\le P(E) \\le 1$.",
     "questionId": "MATHS-M17-Q44",
     "conceptId": "MATH-probability-probability-bounds",
@@ -3571,6 +3571,25 @@
     "options": [
       {
         "id": "A",
+        "text": "Rs. 16,380",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correctly applied formula.",
+        "mistakeAnalysis": "Accurate step-by-step reasoning.",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "Rs. 18,200",
+        "isCorrect": false,
+        "studentSelectionTrap": "Option D misconception trap.",
+        "mistakeAnalysis": "Student evaluated incorrectly for D.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Option D misconception trap."
+        }
+      },
+      {
+        "id": "C",
         "text": "Rs. 20,000",
         "isCorrect": false,
         "studentSelectionTrap": "Option B misconception trap.",
@@ -3581,15 +3600,7 @@
         }
       },
       {
-        "id": "B",
-        "text": "Rs. 16,380",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correctly applied formula.",
-        "mistakeAnalysis": "Accurate step-by-step reasoning.",
-        "misconception": null
-      },
-      {
-        "id": "C",
+        "id": "D",
         "text": "Rs. 14,500",
         "isCorrect": false,
         "studentSelectionTrap": "Option C misconception trap.",
@@ -3598,20 +3609,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Option C misconception trap."
         }
-      },
-      {
-        "id": "D",
-        "text": "Rs. 18,200",
-        "isCorrect": false,
-        "studentSelectionTrap": "Option D misconception trap.",
-        "mistakeAnalysis": "Student evaluated incorrectly for D.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Option D misconception trap."
-        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "The accumulated amount $A$ of an ordinary annuity sinking fund is:\n$$A = R \\left[\\frac{(1 + i)^n - 1}{i}\\right]$$\nSubstituting $A = 1,00,000$ and $s_{\\overline{5}|0.10} = 6.1051$:\n$$1,00,000 = R \\times 6.1051 \\implies R = \\frac{1,00,000}{6.1051} \\approx \\text{Rs. } 16,379.75 \\approx \\text{Rs. } 16,380$$",
     "questionId": "MATHS-M17-Q45",
     "conceptId": "MATH-financial-mathematics-sinking-fund-annual-deposit-calculation",
@@ -3652,25 +3652,6 @@
     "options": [
       {
         "id": "A",
-        "text": "30 l",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\left(1 - \\frac{10}{x}\\right)^2 = \\frac{4}{4+5} = \\frac{4}{9} \\implies 1 - \\frac{10}{x} = \\frac{2}{3} \\implies x = 30\\text{ liters}$[cite: 3].",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "20 l",
-        "isCorrect": false,
-        "studentSelectionTrap": "Initial Draw Doubling",
-        "mistakeAnalysis": "Aspirants double the drawn volume $10 \\times 2 = 20$[cite: 3].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Initial Draw Doubling"
-        }
-      },
-      {
-        "id": "C",
         "text": "40 l",
         "isCorrect": false,
         "studentSelectionTrap": "Ratio Term Addition Slip",
@@ -3681,7 +3662,15 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
+        "text": "30 l",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\left(1 - \\frac{10}{x}\\right)^2 = \\frac{4}{4+5} = \\frac{4}{9} \\implies 1 - \\frac{10}{x} = \\frac{2}{3} \\implies x = 30\\text{ liters}$[cite: 3].",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "60 l",
         "isCorrect": false,
         "studentSelectionTrap": "Ratio Inversion Error",
@@ -3690,9 +3679,20 @@
           "type": "conceptual_misunderstanding",
           "description": "Ratio Inversion Error"
         }
+      },
+      {
+        "id": "D",
+        "text": "20 l",
+        "isCorrect": false,
+        "studentSelectionTrap": "Initial Draw Doubling",
+        "mistakeAnalysis": "Aspirants double the drawn volume $10 \\times 2 = 20$[cite: 3].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Initial Draw Doubling"
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "Let the total capacity of the container be $x$ liters[cite: 3].\nVolume of milk drawn each time $y = 10\\text{ liters}$[cite: 3].\nNumber of repeated operations $n = 2$[cite: 3].\nThe amount of pure milk remaining after $n$ operations is:\n$\\text{Remaining Milk} = x\\left(1 - \\frac{y}{x}\\right)^n = x\\left(1 - \\frac{10}{x}\\right)^2$.\nTotal volume in the container remains constant at $x$.\nThe ratio of milk to water remaining is $4 : 5$, which means milk constitutes $\\frac{4}{4+5} = \\frac{4}{9}$ of the total volume[cite: 3]:\n$\\frac{\\text{Remaining Milk}}{\\text{Total Volume}} = \\left(1 - \\frac{10}{x}\\right)^2 = \\frac{4}{9}$.\nTaking square roots on both sides:\n$1 - \\frac{10}{x} = \\frac{2}{3}$\n$\\frac{10}{x} = 1 - \\frac{2}{3} = \\frac{1}{3}$\n$x = 10 \\times 3 = 30\\text{ liters}$[cite: 3].",
     "questionId": "MATHS-M17-Q46",
     "conceptId": "MATH-quantitative-aptitude-repeated-dilution-and-replacement-formula",
@@ -3733,28 +3733,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Rs. 10,000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Option B misconception trap.",
-        "mistakeAnalysis": "Student evaluated incorrectly for B.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Option B misconception trap."
-        }
-      },
-      {
-        "id": "B",
-        "text": "Rs. 11,500",
-        "isCorrect": false,
-        "studentSelectionTrap": "Option C misconception trap.",
-        "mistakeAnalysis": "Student evaluated incorrectly for C.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Option C misconception trap."
-        }
-      },
-      {
-        "id": "C",
         "text": "Rs. 12,000",
         "isCorrect": false,
         "studentSelectionTrap": "Option D misconception trap.",
@@ -3765,15 +3743,37 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "Rs. 11,000",
         "isCorrect": true,
         "studentSelectionTrap": "Correctly applied formula.",
         "mistakeAnalysis": "Accurate step-by-step reasoning.",
         "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "Rs. 11,500",
+        "isCorrect": false,
+        "studentSelectionTrap": "Option C misconception trap.",
+        "mistakeAnalysis": "Student evaluated incorrectly for C.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Option C misconception trap."
+        }
+      },
+      {
+        "id": "D",
+        "text": "Rs. 10,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Option B misconception trap.",
+        "mistakeAnalysis": "Student evaluated incorrectly for B.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Option B misconception trap."
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "Under the flat rate method:\nSimple Interest $I = \\frac{P \\times r \\times t}{100} = \\frac{120000 \\times 10 \\times 1}{100} = \\text{Rs. } 12,000$.\nTotal repayment amount = $P + I = 1,20,000 + 12,000 = \\text{Rs. } 1,32,000$.\nNumber of monthly installments $n = 12$.\n$$\\text{EMI} = \\frac{1,32,000}{12} = \\text{Rs. } 11,000$$",
     "questionId": "MATHS-M17-Q47",
     "conceptId": "MATH-financial-mathematics-equated-monthly-installments-emi-calculation",
@@ -3814,17 +3814,6 @@
     "options": [
       {
         "id": "A",
-        "text": "2",
-        "isCorrect": false,
-        "studentSelectionTrap": "Two-Year Moving Average Test",
-        "mistakeAnalysis": "Aspirants test $(10+20)/2 = 15 \\ne 30$[cite: 3].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Two-Year Moving Average Test"
-        }
-      },
-      {
-        "id": "B",
         "text": "3",
         "isCorrect": false,
         "studentSelectionTrap": "Three-Year Moving Average Test",
@@ -3832,6 +3821,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Three-Year Moving Average Test"
+        }
+      },
+      {
+        "id": "B",
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Two-Year Moving Average Test",
+        "mistakeAnalysis": "Aspirants test $(10+20)/2 = 15 \\ne 30$[cite: 3].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Two-Year Moving Average Test"
         }
       },
       {
@@ -3917,6 +3917,14 @@
       },
       {
         "id": "C",
+        "text": "-32",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|-2A| = (-2)^3 |A| = -8 \\times 4 = -32$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
         "text": "-16",
         "isCorrect": false,
         "studentSelectionTrap": "Linear Scalar Multiplication Slip",
@@ -3925,17 +3933,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Linear Scalar Multiplication Slip"
         }
-      },
-      {
-        "id": "D",
-        "text": "-32",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $|-2A| = (-2)^3 |A| = -8 \\times 4 = -32$.",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "C",
     "detailedSolution": "For an $n \\times n$ square matrix $A$ and scalar $k$, the determinant property states:\n$|kA| = k^n |A|$.\nHere $n = 3$, $k = -2$, and $|A| = 4$:\n$|-2A| = (-2)^3 |A| = -8 \\times 4 = -32$.",
     "questionId": "MATHS-M17-Q49",
     "conceptId": "MATH-determinants-determinant-of-scalar-multiples",

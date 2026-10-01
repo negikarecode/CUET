@@ -90,6 +90,14 @@
     "options": [
       {
         "id": "A",
+        "text": "$2$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Additional path difference is $\\Delta x = (\\mu - 1)t = (1.50 - 1)(2.0 \\times 10^{-6}\\text{ m}) = 1.0 \\times 10^{-6}\\text{ m} = 1000\\text{ nm}$. Number of fringes shifted is $n = \\frac{\\Delta x}{\\lambda} = \\frac{1000\\text{ nm}}{500\\text{ nm}} = 2$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "$4$",
         "isCorrect": false,
         "studentSelectionTrap": "Omitting $(\\mu - 1)$ Subtraction",
@@ -100,26 +108,7 @@
         }
       },
       {
-        "id": "B",
-        "text": "$1$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Single Wavelength Assumption",
-        "mistakeAnalysis": "Aspirants assume introducing a thin plate shifts the pattern by exactly one fringe.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Single Wavelength Assumption"
-        }
-      },
-      {
         "id": "C",
-        "text": "$2$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Additional path difference is $\\Delta x = (\\mu - 1)t = (1.50 - 1)(2.0 \\times 10^{-6}\\text{ m}) = 1.0 \\times 10^{-6}\\text{ m} = 1000\\text{ nm}$. Number of fringes shifted is $n = \\frac{\\Delta x}{\\lambda} = \\frac{1000\\text{ nm}}{500\\text{ nm}} = 2$.",
-        "misconception": null
-      },
-      {
-        "id": "D",
         "text": "$5$",
         "isCorrect": false,
         "studentSelectionTrap": "Direct Micron Ratio Trap",
@@ -128,9 +117,20 @@
           "type": "conceptual_misunderstanding",
           "description": "Direct Micron Ratio Trap"
         }
+      },
+      {
+        "id": "D",
+        "text": "$1$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Single Wavelength Assumption",
+        "mistakeAnalysis": "Aspirants assume introducing a thin plate shifts the pattern by exactly one fringe.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Single Wavelength Assumption"
+        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "1. When a transparent sheet of thickness $t$ and refractive index $\\mu$ is placed across one slit, it introduces an optical path difference:\n$$\\Delta x = (\\mu - 1)t$$\nGiven $t = 2.0\\,\\mu\\text{m} = 2.0 \\times 10^{-6}\\text{ m}$ and $\\mu = 1.50$:\n$$\\Delta x = (1.50 - 1) \\times (2.0 \\times 10^{-6}\\text{ m}) = 0.50 \\times 2.0 \\times 10^{-6}\\text{ m} = 1.0 \\times 10^{-6}\\text{ m} = 1000\\text{ nm}$$\n2. The number of fringes $n$ by which the pattern shifts across the screen is:\n$$n = \\frac{\\Delta x}{\\lambda}$$\nSubstitute $\\lambda = 500\\text{ nm}$:\n$$n = \\frac{1000\\text{ nm}}{500\\text{ nm}} = 2$$",
     "questionId": "PHYSICS-M12-Q02",
     "conceptId": "PHY-wave-optics-shift-of-interference-fringes-by-a-thin-dielectric-plate",
@@ -182,14 +182,11 @@
       },
       {
         "id": "B",
-        "text": "$v_0 = E_0 B_0$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Direct Multiplication Slip",
-        "mistakeAnalysis": "Aspirants multiply field magnitudes instead of dividing.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Direct Multiplication Slip"
-        }
+        "text": "$v_0 = \\frac{E_0}{B_0}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Magnetic force $\\vec{F}_B = -e(\\vec{v} \\times \\vec{B}) = -e(v_0\\hat{i} \\times B_0\\hat{j}) = -e v_0 B_0\\hat{k}$. Electric force is $\\vec{F}_E = -e\\vec{E} = -e E_0\\hat{k}$... wait: if $\\vec{F}_B$ and $\\vec{F}_E$ oppose, $\\vec{F}_{\\text{net}} = 0 \\implies v_0 = E_0/B_0$.",
+        "misconception": null
       },
       {
         "id": "C",
@@ -204,14 +201,17 @@
       },
       {
         "id": "D",
-        "text": "$v_0 = \\frac{E_0}{B_0}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Magnetic force $\\vec{F}_B = -e(\\vec{v} \\times \\vec{B}) = -e(v_0\\hat{i} \\times B_0\\hat{j}) = -e v_0 B_0\\hat{k}$. Electric force is $\\vec{F}_E = -e\\vec{E} = -e E_0\\hat{k}$... wait: if $\\vec{F}_B$ and $\\vec{F}_E$ oppose, $\\vec{F}_{\\text{net}} = 0 \\implies v_0 = E_0/B_0$.",
-        "misconception": null
+        "text": "$v_0 = E_0 B_0$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Multiplication Slip",
+        "mistakeAnalysis": "Aspirants multiply field magnitudes instead of dividing.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Direct Multiplication Slip"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "1. The total electromagnetic Lorentz force acting on the electron is:\n$$\\vec{F} = q(\\vec{E} + \\vec{v} \\times \\vec{B})$$\n2. For the particle to travel undeflected along a straight line, the net Lorentz force must be zero:\n$$\\vec{F} = 0 \\implies q\\vec{E} = -q(\\vec{v} \\times \\vec{B}) \\implies |q|E_0 = |q|v_0 B_0 \\sin(90^\\circ)$$\n$$E_0 = v_0 B_0 \\implies v_0 = \\frac{E_0}{B_0}$$\nThis is the velocity selector condition.",
     "questionId": "PHYSICS-M12-Q03",
     "conceptId": "PHY-moving-charges-and-magnetism-lorentz-force-on-a-charged-particle",
@@ -252,17 +252,25 @@
     "options": [
       {
         "id": "A",
-        "text": "(A) and (B) only",
-        "isCorrect": false,
-        "studentSelectionTrap": "Identifying True Statements",
-        "mistakeAnalysis": "Aspirants overlook the 'INCORRECT' constraint, selecting statements (A) and (B) which are true.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Identifying True Statements"
-        }
+        "text": "(D) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Statement (D) is incorrect because in water ($\\mu = 1.33$), wavelength compresses to $\\lambda' = \\lambda/\\mu$, causing the fringe width $\\beta' = \\frac{\\lambda' D}{d} = \\frac{\\beta}{\\mu}$ to decrease, not increase.",
+        "misconception": null
       },
       {
         "id": "B",
+        "text": "(B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Central Fringe Doubts",
+        "mistakeAnalysis": "Aspirants incorrectly doubt the brightness of the central fringe.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Central Fringe Doubts"
+        }
+      },
+      {
+        "id": "C",
         "text": "(C) only",
         "isCorrect": false,
         "studentSelectionTrap": "White Light Fringe Misconception",
@@ -273,26 +281,18 @@
         }
       },
       {
-        "id": "C",
-        "text": "(D) only",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Statement (D) is incorrect because in water ($\\mu = 1.33$), wavelength compresses to $\\lambda' = \\lambda/\\mu$, causing the fringe width $\\beta' = \\frac{\\lambda' D}{d} = \\frac{\\beta}{\\mu}$ to decrease, not increase.",
-        "misconception": null
-      },
-      {
         "id": "D",
-        "text": "(B) and (D) only",
+        "text": "(A) and (B) only",
         "isCorrect": false,
-        "studentSelectionTrap": "Central Fringe Doubts",
-        "mistakeAnalysis": "Aspirants incorrectly doubt the brightness of the central fringe.",
+        "studentSelectionTrap": "Identifying True Statements",
+        "mistakeAnalysis": "Aspirants overlook the 'INCORRECT' constraint, selecting statements (A) and (B) which are true.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Central Fringe Doubts"
+          "description": "Identifying True Statements"
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "1. In YDSE, $\\beta_{\\text{bright}} = \\beta_{\\text{dark}} = \\frac{\\lambda D}{d} \\implies$ Statement (A) is correct.\n2. At the central point on the screen, optical path difference is zero ($\\Delta x = 0$) for all wavelengths, producing constructive interference $\\implies$ Statement (B) is correct.\n3. With white light, all spectral colors produce constructive interference at $\\Delta x = 0$, superimposing to give a white central fringe, while higher fringes overlap into colors $\\implies$ Statement (C) is correct.\n4. In water, $\\lambda' = \\lambda / \\mu$. Since $\\mu_{\\text{water}} = 1.33 > 1$, fringe width becomes $\\beta' = \\beta / 1.33 < \\beta$ (it decreases) $\\implies$ Statement (D) is incorrect.",
     "questionId": "PHYSICS-M12-Q04",
     "conceptId": "PHY-wave-optics-interference-fringe-characteristics",
@@ -333,14 +333,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$60^\\circ$",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct NCERT physics principle applied.",
-        "mistakeAnalysis": "Accurate conceptual application.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "$30^\\circ$",
         "isCorrect": false,
         "studentSelectionTrap": "Option B distractor/common pitfall.",
@@ -351,18 +343,15 @@
         }
       },
       {
-        "id": "C",
-        "text": "$45^\\circ$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Option C distractor/common pitfall.",
-        "mistakeAnalysis": "Student evaluated incorrectly for C.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Option C distractor/common pitfall."
-        }
+        "id": "B",
+        "text": "$60^\\circ$",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct NCERT physics principle applied.",
+        "mistakeAnalysis": "Accurate conceptual application.",
+        "misconception": null
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "$90^\\circ$",
         "isCorrect": false,
         "studentSelectionTrap": "Option D distractor/common pitfall.",
@@ -371,9 +360,20 @@
           "type": "conceptual_misunderstanding",
           "description": "Option D distractor/common pitfall."
         }
+      },
+      {
+        "id": "D",
+        "text": "$45^\\circ$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Option C distractor/common pitfall.",
+        "mistakeAnalysis": "Student evaluated incorrectly for C.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Option C distractor/common pitfall."
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "Using the prism formula $n = \\frac{\\sin\\left(\\frac{A + \\delta_m}{2}\\right)}{\\sin(A/2)}$:\n$$\\sqrt{3} = \\frac{\\sin\\left(\\frac{60^\\circ + \\delta_m}{2}\\right)}{\\sin 30^\\circ} = \\frac{\\sin\\left(30^\\circ + \\frac{\\delta_m}{2}\\right)}{0.5}$$\n$$\\sin\\left(30^\\circ + \\frac{\\delta_m}{2}\\right) = \\frac{\\sqrt{3}}{2} \\implies 30^\\circ + \\frac{\\delta_m}{2} = 60^\\circ \\implies \\frac{\\delta_m}{2} = 30^\\circ \\implies \\delta_m = 60^\\circ$$",
     "questionId": "PHYSICS-M12-Q05",
     "conceptId": "PHY-ray-optics-and-optical-instruments-minimum-deviation-of-prism",
@@ -414,6 +414,17 @@
     "options": [
       {
         "id": "A",
+        "text": "$B = \\frac{\\mu_0 N I}{R^2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Option D distractor/common pitfall.",
+        "mistakeAnalysis": "Student evaluated incorrectly for D.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Option D distractor/common pitfall."
+        }
+      },
+      {
+        "id": "B",
         "text": "$B = \\frac{\\mu_0 N I}{4\\pi R}$",
         "isCorrect": false,
         "studentSelectionTrap": "Option B distractor/common pitfall.",
@@ -422,14 +433,6 @@
           "type": "conceptual_misunderstanding",
           "description": "Option B distractor/common pitfall."
         }
-      },
-      {
-        "id": "B",
-        "text": "$B = \\frac{\\mu_0 N I}{2R}$",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct NCERT physics principle applied.",
-        "mistakeAnalysis": "Accurate conceptual application.",
-        "misconception": null
       },
       {
         "id": "C",
@@ -444,17 +447,14 @@
       },
       {
         "id": "D",
-        "text": "$B = \\frac{\\mu_0 N I}{R^2}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Option D distractor/common pitfall.",
-        "mistakeAnalysis": "Student evaluated incorrectly for D.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Option D distractor/common pitfall."
-        }
+        "text": "$B = \\frac{\\mu_0 N I}{2R}$",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct NCERT physics principle applied.",
+        "mistakeAnalysis": "Accurate conceptual application.",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "By the Biot-Savart law, each element of the circular loop contributes to the magnetic field at the center. For $N$ turns, $B = \\frac{\\mu_0 N I}{2R}$.",
     "questionId": "PHYSICS-M12-Q06",
     "conceptId": "PHY-moving-charges-and-magnetism-magnetic-field-at-center-of-coil",
@@ -495,6 +495,17 @@
     "options": [
       {
         "id": "A",
+        "text": "$4.0 \\times 10^6\\text{ A m}^{-2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Radius Squaring Inversion",
+        "mistakeAnalysis": "Aspirants multiply by 4 due to an incorrect radius substitution.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Radius Squaring Inversion"
+        }
+      },
+      {
+        "id": "B",
         "text": "$2.5 \\times 10^5\\text{ A m}^{-2}$",
         "isCorrect": false,
         "studentSelectionTrap": "Using Diameter as Radius",
@@ -505,7 +516,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "$1.0 \\times 10^3\\text{ A m}^{-2}$",
         "isCorrect": false,
         "studentSelectionTrap": "Millimeter to Meter Area Conversion Error",
@@ -516,26 +527,15 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "$1.0 \\times 10^6\\text{ A m}^{-2}$",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Radius $r = 1.0\\text{ mm} = 1.0 \\times 10^{-3}\\text{ m}$. Area $A = \\pi r^2 = 3.14 \\times 10^{-6}\\text{ m}^2$. Current density $J = I / A = 3.14 / (3.14 \\times 10^{-6}) = 1.0 \\times 10^6\\text{ A m}^{-2}$.",
         "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "$4.0 \\times 10^6\\text{ A m}^{-2}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Radius Squaring Inversion",
-        "mistakeAnalysis": "Aspirants multiply by 4 due to an incorrect radius substitution.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Radius Squaring Inversion"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "1. Radius of the circular wire: $r = \\frac{D}{2} = \\frac{2.0\\text{ mm}}{2} = 1.0\\text{ mm} = 1.0 \\times 10^{-3}\\text{ m}$.\n2. Cross-sectional area:\n$$A = \\pi r^2 = 3.14 \\times (1.0 \\times 10^{-3}\\text{ m})^2 = 3.14 \\times 10^{-6}\\text{ m}^2$$\n3. Current density:\n$$J = \\frac{I}{A} = \\frac{3.14\\text{ A}}{3.14 \\times 10^{-6}\\text{ m}^2} = 1.0 \\times 10^6\\text{ A m}^{-2}$$",
     "questionId": "PHYSICS-M12-Q07",
     "conceptId": "PHY-current-electricity-current-density-and-drift-velocity",
@@ -576,6 +576,25 @@
     "options": [
       {
         "id": "A",
+        "text": "$\\Phi/4$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Option D distractor/common pitfall.",
+        "mistakeAnalysis": "Student evaluated incorrectly for D.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Option D distractor/common pitfall."
+        }
+      },
+      {
+        "id": "B",
+        "text": "$\\Phi$ (remains unchanged)",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct NCERT physics principle applied.",
+        "mistakeAnalysis": "Accurate conceptual application.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$2\\Phi$",
         "isCorrect": false,
         "studentSelectionTrap": "Option B distractor/common pitfall.",
@@ -586,7 +605,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "D",
         "text": "$4\\Phi$",
         "isCorrect": false,
         "studentSelectionTrap": "Option C distractor/common pitfall.",
@@ -595,28 +614,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Option C distractor/common pitfall."
         }
-      },
-      {
-        "id": "C",
-        "text": "$\\Phi$ (remains unchanged)",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct NCERT physics principle applied.",
-        "mistakeAnalysis": "Accurate conceptual application.",
-        "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "$\\Phi/4$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Option D distractor/common pitfall.",
-        "mistakeAnalysis": "Student evaluated incorrectly for D.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Option D distractor/common pitfall."
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "According to Gauss's Law, the total electric flux through any closed surface depends solely on the enclosed charge: $\\Phi = \\frac{q_{\\text{enc}}}{\\varepsilon_0}$. It is completely independent of the radius or shape of the surface.",
     "questionId": "PHYSICS-M12-Q08",
     "conceptId": "PHY-electric-charges-and-fields-gauss-s-law-and-scaling",
@@ -668,14 +668,6 @@
       },
       {
         "id": "B",
-        "text": "$4 : 1$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. In Bohr's model, $r_n \\propto n^2$. For $n = 2$ and $n = 1$, $\\frac{r_2}{r_1} = \\frac{2^2}{1^2} = \\frac{4}{1} = 4 : 1$.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$1 : 4$",
         "isCorrect": false,
         "studentSelectionTrap": "Inverted Orbit Ratio Trap",
@@ -684,6 +676,14 @@
           "type": "calculation_error",
           "description": "Inverted Orbit Ratio Trap"
         }
+      },
+      {
+        "id": "C",
+        "text": "$4 : 1$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. In Bohr's model, $r_n \\propto n^2$. For $n = 2$ and $n = 1$, $\\frac{r_2}{r_1} = \\frac{2^2}{1^2} = \\frac{4}{1} = 4 : 1$.",
+        "misconception": null
       },
       {
         "id": "D",
@@ -697,7 +697,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "According to Bohr's model of the hydrogen atom, the radius of the $n^{\\text{th}}$ stationary orbit is given by:\n$$r_n = \\frac{n^2 h^2 \\varepsilon_0}{\\pi m e^2} \\implies r_n \\propto n^2$$\nTaking the ratio for $n = 2$ and $n = 1$:\n$$\\frac{r_2}{r_1} = \\frac{2^2}{1^2} = \\frac{4}{1} = 4 : 1$$",
     "questionId": "PHYSICS-M12-Q09",
     "conceptId": "PHY-atoms-scaling-of-stationary-orbit-radii",
@@ -749,6 +749,14 @@
       },
       {
         "id": "B",
+        "text": "$24.0\\text{ MeV}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Initial $BE = 2 \\times (2 \\times 1.10) = 4.40\\text{ MeV}$. Final $BE = 4 \\times 7.10 = 28.40\\text{ MeV}$. Energy released $Q = 28.40 - 4.40 = 24.0\\text{ MeV}$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$26.2\\text{ MeV}$",
         "isCorrect": false,
         "studentSelectionTrap": "Single Deuteron Subtraction Error",
@@ -759,7 +767,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "$32.8\\text{ MeV}$",
         "isCorrect": false,
         "studentSelectionTrap": "Adding Binding Energies",
@@ -768,17 +776,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Adding Binding Energies"
         }
-      },
-      {
-        "id": "D",
-        "text": "$24.0\\text{ MeV}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Initial $BE = 2 \\times (2 \\times 1.10) = 4.40\\text{ MeV}$. Final $BE = 4 \\times 7.10 = 28.40\\text{ MeV}$. Energy released $Q = 28.40 - 4.40 = 24.0\\text{ MeV}$.",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "The nuclear fusion reaction is:\n$${}^{2}_{1}\\text{H} + {}^{2}_{1}\\text{H} \\longrightarrow {}^{4}_{2}\\text{He} + Q$$\n1. Total binding energy of initial reactants (two deuterons, each having $A = 2$ nucleons):\n$$BE_{\\text{initial}} = 2 \\times [2 \\times 1.10\\text{ MeV}] = 2 \\times 2.20\\text{ MeV} = 4.40\\text{ MeV}$$\n2. Total binding energy of product (${}^{4}_{2}\\text{He}$ with $A = 4$ nucleons):\n$$BE_{\\text{final}} = 4 \\times 7.10\\text{ MeV} = 28.40\\text{ MeV}$$\n3. Energy released ($Q$-value):\n$$Q = BE_{\\text{final}} - BE_{\\text{initial}} = 28.40\\text{ MeV} - 4.40\\text{ MeV} = 24.0\\text{ MeV}$$",
     "questionId": "PHYSICS-M12-Q10",
     "conceptId": "PHY-nuclei-binding-energy-released-in-nuclear-fusion",
@@ -819,13 +819,13 @@
     "options": [
       {
         "id": "A",
-        "text": "(A), (B) and (C) only",
+        "text": "(A), (B), (C) and (D)",
         "isCorrect": false,
-        "studentSelectionTrap": "Sensitivity Condition Neglect",
-        "mistakeAnalysis": "Aspirants fail to recognize the condition for maximum bridge sensitivity (equal orders of magnitude in all four arms).",
+        "studentSelectionTrap": "Battery Resistance Misconception",
+        "mistakeAnalysis": "Aspirants mistakenly believe source internal resistance alters the bridge ratio.",
         "misconception": {
-          "type": "boundary_condition_error",
-          "description": "Sensitivity Condition Neglect"
+          "type": "conceptual_misunderstanding",
+          "description": "Battery Resistance Misconception"
         }
       },
       {
@@ -841,25 +841,25 @@
       },
       {
         "id": "C",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sensitivity Condition Neglect",
+        "mistakeAnalysis": "Aspirants fail to recognize the condition for maximum bridge sensitivity (equal orders of magnitude in all four arms).",
+        "misconception": {
+          "type": "boundary_condition_error",
+          "description": "Sensitivity Condition Neglect"
+        }
+      },
+      {
+        "id": "D",
         "text": "(A), (C) and (D) only",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. The balancing condition $P/Q = R/S$ is derived from Kirchhoff's laws and is completely independent of source emf, source internal resistance, and galvanometer resistance, making (B) false.",
         "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "(A), (B), (C) and (D)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Battery Resistance Misconception",
-        "mistakeAnalysis": "Aspirants mistakenly believe source internal resistance alters the bridge ratio.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Battery Resistance Misconception"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "For a Wheatstone bridge, at balance, $V_B = V_D$, so $I_g = 0$. The balancing condition $\\frac{R_1}{R_2} = \\frac{R_3}{R_4}$ depends solely on the four arm resistors and is completely independent of the battery emf, its internal resistance, or galvanometer resistance. Sensitivity is maximized when all four arms have approximately equal resistance. Thus, (A), (C), and (D) are correct.",
     "questionId": "PHYSICS-M12-Q11",
     "conceptId": "PHY-current-electricity-wheatstone-bridge-principles-and-sensitivity",
@@ -900,25 +900,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$5 : 27$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Lyman longest ($2 \\to 1$): $\\frac{1}{\\lambda_L} = R(1 - 1/4) = \\frac{3R}{4} \\implies \\lambda_L = \\frac{4}{3R}$. Balmer longest ($3 \\to 2$): $\\frac{1}{\\lambda_B} = R(1/4 - 1/9) = \\frac{5R}{36} \\implies \\lambda_B = \\frac{36}{5R}$. $\\frac{\\lambda_L}{\\lambda_B} = \\frac{4/(3R)}{36/(5R)} = \\frac{4}{3} \\times \\frac{5}{36} = \\frac{5}{27}$.",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "$27 : 5$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Inverted Wavelength Ratio",
-        "mistakeAnalysis": "Aspirants compute $\\lambda_B / \\lambda_L$ instead of $\\lambda_L / \\lambda_B$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Inverted Wavelength Ratio"
-        }
-      },
-      {
-        "id": "C",
         "text": "$1 : 4$",
         "isCorrect": false,
         "studentSelectionTrap": "Series Limits Ratio Confusion",
@@ -929,7 +910,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "$5 : 36$",
         "isCorrect": false,
         "studentSelectionTrap": "Balmer Factor Omission",
@@ -938,9 +919,28 @@
           "type": "conceptual_misunderstanding",
           "description": "Balmer Factor Omission"
         }
+      },
+      {
+        "id": "C",
+        "text": "$27 : 5$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverted Wavelength Ratio",
+        "mistakeAnalysis": "Aspirants compute $\\lambda_B / \\lambda_L$ instead of $\\lambda_L / \\lambda_B$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Inverted Wavelength Ratio"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$5 : 27$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Lyman longest ($2 \\to 1$): $\\frac{1}{\\lambda_L} = R(1 - 1/4) = \\frac{3R}{4} \\implies \\lambda_L = \\frac{4}{3R}$. Balmer longest ($3 \\to 2$): $\\frac{1}{\\lambda_B} = R(1/4 - 1/9) = \\frac{5R}{36} \\implies \\lambda_B = \\frac{36}{5R}$. $\\frac{\\lambda_L}{\\lambda_B} = \\frac{4/(3R)}{36/(5R)} = \\frac{4}{3} \\times \\frac{5}{36} = \\frac{5}{27}$.",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "By the Rydberg formula for hydrogen: $\\frac{1}{\\lambda} = R \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)$.\n1. Longest wavelength in Lyman series (transition from $n_2 = 2$ to $n_1 = 1$):\n$$\\frac{1}{\\lambda_{L,\\max}} = R \\left(\\frac{1}{1^2} - \\frac{1}{2^2}\\right) = R \\left(1 - \\frac{1}{4}\\right) = \\frac{3R}{4} \\implies \\lambda_{L,\\max} = \\frac{4}{3R}$$\n2. Longest wavelength in Balmer series (transition from $n_2 = 3$ to $n_1 = 2$):\n$$\\frac{1}{\\lambda_{B,\\max}} = R \\left(\\frac{1}{2^2} - \\frac{1}{3^2}\\right) = R \\left(\\frac{1}{4} - \\frac{1}{9}\\right) = \\frac{5R}{36} \\implies \\lambda_{B,\\max} = \\frac{36}{5R}$$\n3. Taking their ratio:\n$$\\frac{\\lambda_{L,\\max}}{\\lambda_{B,\\max}} = \\frac{\\frac{4}{3R}}{\\frac{36}{5R}} = \\frac{4}{3} \\times \\frac{5}{36} = \\frac{1}{3} \\times \\frac{5}{9} = \\frac{5}{27}$$",
     "questionId": "PHYSICS-M12-Q12",
     "conceptId": "PHY-atoms-wavelength-ratio-of-longest-lines-in-lyman-and-balmer-series",
@@ -981,17 +981,25 @@
     "options": [
       {
         "id": "A",
-        "text": "Magnetic field strength ($B$) of the permanent magnets",
-        "isCorrect": false,
-        "studentSelectionTrap": "Sensitivity-Field Proportionality Inversion",
-        "mistakeAnalysis": "Aspirants assume decreasing magnetic field increases sensitivity, whereas $I_s \\propto B$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Sensitivity-Field Proportionality Inversion"
-        }
+        "text": "Restoring couple per unit twist ($k$) of the suspension wire",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Current sensitivity is $I_s = \\frac{\\theta}{I} = \\frac{N B A}{k}$. Decreasing the torsional restoring constant $k$ (e.g., using phosphor-bronze suspension) increases deflection $\\theta$ for a given current, maximizing sensitivity.",
+        "misconception": null
       },
       {
         "id": "B",
+        "text": "Total number of turns ($N$) in the coil",
+        "isCorrect": false,
+        "studentSelectionTrap": "Turns Proportionality Inversion",
+        "mistakeAnalysis": "Aspirants forget that $I_s \\propto N$; decreasing turns decreases sensitivity.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Turns Proportionality Inversion"
+        }
+      },
+      {
+        "id": "C",
         "text": "Effective area of the coil ($A$)",
         "isCorrect": false,
         "studentSelectionTrap": "Area Proportionality Inversion",
@@ -1002,26 +1010,18 @@
         }
       },
       {
-        "id": "C",
-        "text": "Restoring couple per unit twist ($k$) of the suspension wire",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Current sensitivity is $I_s = \\frac{\\theta}{I} = \\frac{N B A}{k}$. Decreasing the torsional restoring constant $k$ (e.g., using phosphor-bronze suspension) increases deflection $\\theta$ for a given current, maximizing sensitivity.",
-        "misconception": null
-      },
-      {
         "id": "D",
-        "text": "Total number of turns ($N$) in the coil",
+        "text": "Magnetic field strength ($B$) of the permanent magnets",
         "isCorrect": false,
-        "studentSelectionTrap": "Turns Proportionality Inversion",
-        "mistakeAnalysis": "Aspirants forget that $I_s \\propto N$; decreasing turns decreases sensitivity.",
+        "studentSelectionTrap": "Sensitivity-Field Proportionality Inversion",
+        "mistakeAnalysis": "Aspirants assume decreasing magnetic field increases sensitivity, whereas $I_s \\propto B$.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Turns Proportionality Inversion"
+          "description": "Sensitivity-Field Proportionality Inversion"
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "In a moving-coil galvanometer in a radial magnetic field, deflecting torque equals restoring torque at equilibrium:\n$$\\tau = N I A B = k \\theta$$\nDeflection per unit current defines the current sensitivity ($I_s$):\n$$I_s = \\frac{\\theta}{I} = \\frac{N B A}{k}$$\nTo increase $I_s$:\n- Increase the number of turns $N$\n- Increase the magnetic field $B$ (using strong pole shoes and soft iron core)\n- Increase the coil area $A$\n- **Decrease the restoring couple per unit twist $k$** (using a thin phosphor-bronze strip).\nThus, decreasing $k$ increases current sensitivity.",
     "questionId": "PHYSICS-M12-Q13",
     "conceptId": "PHY-moving-charges-and-magnetism-increasing-sensitivity-of-moving-coil-galvanometer",
@@ -1081,17 +1081,6 @@
       },
       {
         "id": "C",
-        "text": "(A)-(II), (B)-(IV), (C)-(III), (D)-(I)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Infrared and Microwave Swap",
-        "mistakeAnalysis": "Aspirants swap infrared and microwave wavelength ranges.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Infrared and Microwave Swap"
-        }
-      },
-      {
-        "id": "D",
         "text": "(A)-(I), (B)-(IV), (C)-(II), (D)-(III)",
         "isCorrect": false,
         "studentSelectionTrap": "Random Range Mapping",
@@ -1099,6 +1088,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Random Range Mapping"
+        }
+      },
+      {
+        "id": "D",
+        "text": "(A)-(II), (B)-(IV), (C)-(III), (D)-(I)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Infrared and Microwave Swap",
+        "mistakeAnalysis": "Aspirants swap infrared and microwave wavelength ranges.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Infrared and Microwave Swap"
         }
       }
     ],
@@ -1142,13 +1142,13 @@
     "options": [
       {
         "id": "A",
-        "text": "$2.05 \\times 10^{-7}\\text{ rad}$",
+        "text": "$5.00 \\times 10^{-7}\\text{ rad}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Omitting 1.22 Bessel Factor",
-        "mistakeAnalysis": "Aspirants use the rectangular slit criterion $\\lambda / D = 500 \\times 10^{-9} / 2.44 \\approx 2.05 \\times 10^{-7}\\text{ rad}$, omitting the $1.22$ circular aperture factor.",
+        "studentSelectionTrap": "Diameter Halving Error",
+        "mistakeAnalysis": "Aspirants use radius instead of diameter in the denominator.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Omitting 1.22 Bessel Factor"
+          "description": "Diameter Halving Error"
         }
       },
       {
@@ -1161,13 +1161,13 @@
       },
       {
         "id": "C",
-        "text": "$5.00 \\times 10^{-7}\\text{ rad}$",
+        "text": "$2.05 \\times 10^{-7}\\text{ rad}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Diameter Halving Error",
-        "mistakeAnalysis": "Aspirants use radius instead of diameter in the denominator.",
+        "studentSelectionTrap": "Omitting 1.22 Bessel Factor",
+        "mistakeAnalysis": "Aspirants use the rectangular slit criterion $\\lambda / D = 500 \\times 10^{-9} / 2.44 \\approx 2.05 \\times 10^{-7}\\text{ rad}$, omitting the $1.22$ circular aperture factor.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Diameter Halving Error"
+          "description": "Omitting 1.22 Bessel Factor"
         }
       },
       {
@@ -1231,13 +1231,13 @@
       },
       {
         "id": "B",
-        "text": "Increases by a factor of $6.0$",
+        "text": "Remains unchanged",
         "isCorrect": false,
-        "studentSelectionTrap": "Multiplying Factors Fallacy",
-        "mistakeAnalysis": "Aspirants multiply both factors ($3 \\times 2 = 6$), treating drift speed as directly proportional to length rather than inversely proportional.",
+        "studentSelectionTrap": "Thermal Speed Invariance Assumption",
+        "mistakeAnalysis": "Aspirants confuse field-induced drift velocity with temperature-dependent random thermal velocity.",
         "misconception": {
           "type": "careless_arithmetic",
-          "description": "Multiplying Factors Fallacy"
+          "description": "Thermal Speed Invariance Assumption"
         }
       },
       {
@@ -1253,13 +1253,13 @@
       },
       {
         "id": "D",
-        "text": "Remains unchanged",
+        "text": "Increases by a factor of $6.0$",
         "isCorrect": false,
-        "studentSelectionTrap": "Thermal Speed Invariance Assumption",
-        "mistakeAnalysis": "Aspirants confuse field-induced drift velocity with temperature-dependent random thermal velocity.",
+        "studentSelectionTrap": "Multiplying Factors Fallacy",
+        "mistakeAnalysis": "Aspirants multiply both factors ($3 \\times 2 = 6$), treating drift speed as directly proportional to length rather than inversely proportional.",
         "misconception": {
           "type": "careless_arithmetic",
-          "description": "Thermal Speed Invariance Assumption"
+          "description": "Multiplying Factors Fallacy"
         }
       }
     ],
@@ -1304,11 +1304,14 @@
     "options": [
       {
         "id": "A",
-        "text": "$10.0\\,\\Omega$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\frac{X}{15} = \\frac{l}{100 - l} = \\frac{40}{60} = \\frac{2}{3} \\implies X = 15 \\times \\frac{2}{3} = 10.0\\,\\Omega$.",
-        "misconception": null
+        "text": "$12.0\\,\\Omega$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip",
+        "mistakeAnalysis": "Aspirants evaluate $15 \\times (40/50)$ due to a misread total wire length.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Arithmetic Slip"
+        }
       },
       {
         "id": "B",
@@ -1334,17 +1337,14 @@
       },
       {
         "id": "D",
-        "text": "$12.0\\,\\Omega$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Arithmetic Slip",
-        "mistakeAnalysis": "Aspirants evaluate $15 \\times (40/50)$ due to a misread total wire length.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Arithmetic Slip"
-        }
+        "text": "$10.0\\,\\Omega$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\frac{X}{15} = \\frac{l}{100 - l} = \\frac{40}{60} = \\frac{2}{3} \\implies X = 15 \\times \\frac{2}{3} = 10.0\\,\\Omega$.",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "For a standard meter bridge of wire length $100.0\\text{ cm}$, the balancing condition is:\n$$\\frac{X}{R} = \\frac{l}{100.0 - l}$$\nGiven $R = 15.0\\,\\Omega$ and $l = 40.0\\text{ cm}$:\n$$100.0 - l = 100.0 - 40.0 = 60.0\\text{ cm}$$\n$$\\frac{X}{15.0\\,\\Omega} = \\frac{40.0}{60.0} = \\frac{2}{3}$$\n$$X = 15.0 \\times \\frac{2}{3} = 10.0\\,\\Omega$$",
     "questionId": "PHYSICS-M12-Q17",
     "conceptId": "PHY-current-electricity-meter-bridge-balancing-and-unknown-resistance",
@@ -1393,17 +1393,6 @@
       },
       {
         "id": "B",
-        "text": "$0.67 \\times 10^{-4}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Inverting Temperature Ratio",
-        "mistakeAnalysis": "Aspirants multiply by $T_2/T_1 = 100/300 = 1/3$, assuming susceptibility decreases when cooled.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Inverting Temperature Ratio"
-        }
-      },
-      {
-        "id": "C",
         "text": "$2.0 \\times 10^{-4}$",
         "isCorrect": false,
         "studentSelectionTrap": "Temperature Independence Fallacy (Diamagnetic Trap)",
@@ -1411,6 +1400,17 @@
         "misconception": {
           "type": "logical_reasoning_error",
           "description": "Temperature Independence Fallacy (Diamagnetic Trap)"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$0.67 \\times 10^{-4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverting Temperature Ratio",
+        "mistakeAnalysis": "Aspirants multiply by $T_2/T_1 = 100/300 = 1/3$, assuming susceptibility decreases when cooled.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Inverting Temperature Ratio"
         }
       },
       {
@@ -1466,17 +1466,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$2.0 \\times 10^5\\,\\Omega\\text{ m}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conductivity Instead of Resistivity",
-        "mistakeAnalysis": "Aspirants compute conductivity $\\sigma = J/E = 3.0 \\times 10^6 / 15.0 = 2.0 \\times 10^5\\,\\Omega^{-1}\\text{ m}^{-1}$ instead of resistivity.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Conductivity Instead of Resistivity"
-        }
-      },
-      {
-        "id": "B",
         "text": "$4.5 \\times 10^7\\,\\Omega\\text{ m}$",
         "isCorrect": false,
         "studentSelectionTrap": "Direct Multiplication Error",
@@ -1487,7 +1476,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "$5.0 \\times 10^{-6}\\,\\Omega\\text{ m}$",
         "isCorrect": true,
         "studentSelectionTrap": null,
@@ -1495,7 +1484,7 @@
         "misconception": null
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "$5.0 \\times 10^{-7}\\,\\Omega\\text{ m}$",
         "isCorrect": false,
         "studentSelectionTrap": "Power-of-Ten Decimal Slip",
@@ -1504,9 +1493,20 @@
           "type": "calculation_error",
           "description": "Power-of-Ten Decimal Slip"
         }
+      },
+      {
+        "id": "D",
+        "text": "$2.0 \\times 10^5\\,\\Omega\\text{ m}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conductivity Instead of Resistivity",
+        "mistakeAnalysis": "Aspirants compute conductivity $\\sigma = J/E = 3.0 \\times 10^6 / 15.0 = 2.0 \\times 10^5\\,\\Omega^{-1}\\text{ m}^{-1}$ instead of resistivity.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Conductivity Instead of Resistivity"
+        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "From Ohm's law in vector (microscopic) form:\n$$\\vec{J} = \\sigma \\vec{E} = \\frac{1}{\\rho} \\vec{E} \\implies \\vec{E} = \\rho \\vec{J}$$\nIn terms of magnitudes:\n$$\\rho = \\frac{E}{J}$$\nSubstitute $E = 15.0\\text{ V m}^{-1}$ and $J = 3.0 \\times 10^6\\text{ A m}^{-2}$:\n$$\\rho = \\frac{15.0\\text{ V m}^{-1}}{3.0 \\times 10^6\\text{ A m}^{-2}} = 5.0 \\times 10^{-6}\\,\\Omega\\text{ m}$$",
     "questionId": "PHYSICS-M12-Q19",
     "conceptId": "PHY-current-electricity-microscopic-ohm-s-law-and-electrical-resistivity",
@@ -1566,17 +1566,6 @@
       },
       {
         "id": "C",
-        "text": "$x = \\frac{R}{\\sqrt{2}}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Electric Ring Maxima Position Confusion",
-        "mistakeAnalysis": "Aspirants select the position where the electric field of a charged ring is maximum ($x = R/\\sqrt{2}$).",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Electric Ring Maxima Position Confusion"
-        }
-      },
-      {
-        "id": "D",
         "text": "$x = 2R$",
         "isCorrect": false,
         "studentSelectionTrap": "Direct Integer Guess",
@@ -1584,6 +1573,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Direct Integer Guess"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$x = \\frac{R}{\\sqrt{2}}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Electric Ring Maxima Position Confusion",
+        "mistakeAnalysis": "Aspirants select the position where the electric field of a charged ring is maximum ($x = R/\\sqrt{2}$).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Electric Ring Maxima Position Confusion"
         }
       }
     ],
@@ -1636,17 +1636,6 @@
       },
       {
         "id": "B",
-        "text": "(A), (B), (C) and (D)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Particle-Field Confusion",
-        "mistakeAnalysis": "Aspirants confuse photons with charged subatomic particles like electrons or protons.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Particle-Field Confusion"
-        }
-      },
-      {
-        "id": "C",
         "text": "(B) and (D) only",
         "isCorrect": false,
         "studentSelectionTrap": "Photon Conservation Fallacy",
@@ -1657,7 +1646,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "(B), (C) and (D) only",
         "isCorrect": false,
         "studentSelectionTrap": "Ignoring Conservation of Momentum",
@@ -1665,6 +1654,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Ignoring Conservation of Momentum"
+        }
+      },
+      {
+        "id": "D",
+        "text": "(A), (B), (C) and (D)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Particle-Field Confusion",
+        "mistakeAnalysis": "Aspirants confuse photons with charged subatomic particles like electrons or protons.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Particle-Field Confusion"
         }
       }
     ],
@@ -1709,25 +1709,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$4.0\\text{ cm}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Apparent Depth Conflation",
-        "mistakeAnalysis": "Aspirants calculate apparent depth $d' = t/\\mu = 6.0 / 1.5 = 4.0\\text{ cm}$ and report it instead of apparent shift $\\Delta y = t - d'$.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Apparent Depth Conflation"
-        }
-      },
-      {
-        "id": "B",
-        "text": "$2.0\\text{ cm}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Normal shift $\\Delta y = t\\left(1 - \\frac{1}{\\mu}\\right) = 6.0\\left(1 - \\frac{1}{1.5}\\right) = 6.0\\left(1 - \\frac{2}{3}\\right) = 6.0 \\times \\frac{1}{3} = 2.0\\text{ cm}$.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$3.0\\text{ cm}$",
         "isCorrect": false,
         "studentSelectionTrap": "Halving Approximation",
@@ -1738,7 +1719,18 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
+        "text": "$4.0\\text{ cm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Apparent Depth Conflation",
+        "mistakeAnalysis": "Aspirants calculate apparent depth $d' = t/\\mu = 6.0 / 1.5 = 4.0\\text{ cm}$ and report it instead of apparent shift $\\Delta y = t - d'$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Apparent Depth Conflation"
+        }
+      },
+      {
+        "id": "C",
         "text": "$1.0\\text{ cm}$",
         "isCorrect": false,
         "studentSelectionTrap": "Arithmetic Slip",
@@ -1747,9 +1739,17 @@
           "type": "calculation_error",
           "description": "Arithmetic Slip"
         }
+      },
+      {
+        "id": "D",
+        "text": "$2.0\\text{ cm}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Normal shift $\\Delta y = t\\left(1 - \\frac{1}{\\mu}\\right) = 6.0\\left(1 - \\frac{1}{1.5}\\right) = 6.0\\left(1 - \\frac{2}{3}\\right) = 6.0 \\times \\frac{1}{3} = 2.0\\text{ cm}$.",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "When an object situated beneath a dense medium of thickness $t$ and refractive index $\\mu$ is viewed normally from air:\n$$\\Delta y = t \\left( 1 - \\frac{1}{\\mu} \\right)$$\nSubstitute $t = 6.0\\text{ cm}$ and $\\mu = 1.50 = \\frac{3}{2}$:\n$$\\Delta y = 6.0 \\left( 1 - \\frac{2}{3} \\right) = 6.0 \\times \\frac{1}{3} = 2.0\\text{ cm}$$",
     "questionId": "PHYSICS-M12-Q22",
     "conceptId": "PHY-ray-optics-and-optical-instruments-normal-shift-by-a-glass-slab",
@@ -1790,6 +1790,17 @@
     "options": [
       {
         "id": "A",
+        "text": "Zero",
+        "isCorrect": false,
+        "studentSelectionTrap": "Symmetric Circulation Cancellation Fallacy",
+        "mistakeAnalysis": "Aspirants assume fields from opposite sides cancel, forgetting that current circulating in a closed loop produces fields in the same direction at the interior center.",
+        "misconception": {
+          "type": "direction_error",
+          "description": "Symmetric Circulation Cancellation Fallacy"
+        }
+      },
+      {
+        "id": "B",
         "text": "$\\frac{2\\sqrt{2}\\mu_0 I}{\\pi a}$",
         "isCorrect": false,
         "studentSelectionTrap": "Half-Side Distance Error",
@@ -1800,7 +1811,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "$\\frac{\\mu_0 I}{2\\pi a}$",
         "isCorrect": false,
         "studentSelectionTrap": "Single Side Field Slip",
@@ -1811,26 +1822,15 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "$\\frac{\\sqrt{2}\\mu_0 I}{\\pi a}$",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Distance from center to each side is $d = a$. For one side subtending angles $-45^\\circ$ to $+45^\\circ$, $B_1 = \\frac{\\mu_0 I}{4\\pi a}(\\sin 45^\\circ + \\sin 45^\\circ) = \\frac{\\mu_0 I}{4\\pi a}(\\sqrt{2})$. For all 4 sides adding constructively: $B_{\\text{total}} = 4 B_1 = \\frac{4\\sqrt{2}\\mu_0 I}{4\\pi a} = \\frac{\\sqrt{2}\\mu_0 I}{\\pi a}$.",
         "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "Zero",
-        "isCorrect": false,
-        "studentSelectionTrap": "Symmetric Circulation Cancellation Fallacy",
-        "mistakeAnalysis": "Aspirants assume fields from opposite sides cancel, forgetting that current circulating in a closed loop produces fields in the same direction at the interior center.",
-        "misconception": {
-          "type": "direction_error",
-          "description": "Symmetric Circulation Cancellation Fallacy"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "1. For a straight wire of finite length carrying current $I$, the magnetic field at perpendicular distance $d$ subtending angles $\\theta_1$ and $\\theta_2$ with the normal is:\n$$B_1 = \\frac{\\mu_0 I}{4\\pi d} (\\sin\\theta_1 + \\sin\\theta_2)$$\n2. The square has side length $2a$, so the perpendicular distance from the center to any of the 4 sides is $d = a$.\n3. Connecting the center to the two ends of one side forms an isosceles right triangle with $\\theta_1 = \\theta_2 = 45^\\circ$:\n$$B_1 = \\frac{\\mu_0 I}{4\\pi a} [\\sin(45^\\circ) + \\sin(45^\\circ)] = \\frac{\\mu_0 I}{4\\pi a} \\left( \\frac{1}{\\sqrt{2}} + \\frac{1}{\\sqrt{2}} \\right) = \\frac{\\mu_0 I}{4\\pi a} (\\sqrt{2})$$\n4. By the right-hand grip rule, all four sides produce magnetic fields pointing perpendicularly in the same direction at the center. The total field is:\n$$B_{\\text{total}} = 4 \\times B_1 = 4 \\times \\left( \\frac{\\sqrt{2}\\mu_0 I}{4\\pi a} \\right) = \\frac{\\sqrt{2}\\mu_0 I}{\\pi a}$$",
     "questionId": "PHYSICS-M12-Q23",
     "conceptId": "PHY-moving-charges-and-magnetism-magnetic-field-at-the-center-of-a-regular-polygon",
@@ -1871,25 +1871,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$0.60$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reactive Factor Confusion",
-        "mistakeAnalysis": "Aspirants evaluate $\\sin\\phi = X/Z = 30/50 = 0.60$ instead of power factor $\\cos\\phi = R/Z$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Reactive Factor Confusion"
-        }
-      },
-      {
-        "id": "B",
-        "text": "$0.80$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Net reactance $X = X_L - X_C = 100 - 70 = 30.0\\,\\Omega$. Impedance $Z = \\sqrt{R^2 + X^2} = \\sqrt{40^2 + 30^2} = 50.0\\,\\Omega$. Power factor $\\cos\\phi = R/Z = 40.0/50.0 = 0.80$.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$0.75$",
         "isCorrect": false,
         "studentSelectionTrap": "Tangent of Phase Angle Slip",
@@ -1900,7 +1881,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "$1.00$",
         "isCorrect": false,
         "studentSelectionTrap": "Resonance Assumption",
@@ -1909,9 +1890,28 @@
           "type": "unit_error",
           "description": "Resonance Assumption"
         }
+      },
+      {
+        "id": "C",
+        "text": "$0.80$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Net reactance $X = X_L - X_C = 100 - 70 = 30.0\\,\\Omega$. Impedance $Z = \\sqrt{R^2 + X^2} = \\sqrt{40^2 + 30^2} = 50.0\\,\\Omega$. Power factor $\\cos\\phi = R/Z = 40.0/50.0 = 0.80$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$0.60$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reactive Factor Confusion",
+        "mistakeAnalysis": "Aspirants evaluate $\\sin\\phi = X/Z = 30/50 = 0.60$ instead of power factor $\\cos\\phi = R/Z$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Reactive Factor Confusion"
+        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "1. Net reactance of the series LCR circuit:\n$$X = X_L - X_C = 100.0\\,\\Omega - 70.0\\,\\Omega = 30.0\\,\\Omega$$\n2. Circuit impedance $Z$:\n$$Z = \\sqrt{R^2 + X^2} = \\sqrt{(40.0\\,\\Omega)^2 + (30.0\\,\\Omega)^2} = \\sqrt{1600 + 900} = \\sqrt{2500} = 50.0\\,\\Omega$$\n3. The power factor is:\n$$\\cos\\phi = \\frac{R}{Z} = \\frac{40.0\\,\\Omega}{50.0\\,\\Omega} = 0.80$$\n(Since $X_L > X_C$, the circuit is inductive, and current lags voltage by $\\phi = \\cos^{-1}(0.80) \\approx 36.9^\\circ$).",
     "questionId": "PHYSICS-M12-Q24",
     "conceptId": "PHY-alternating-current-power-factor-and-phase-in-a-series-lcr-circuit",
@@ -1974,14 +1974,6 @@
       },
       {
         "id": "C",
-        "text": "$10.6\\text{ A}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $|\\mathcal{E}| = \\left|\\frac{d\\Phi}{dt}\\right| = 12t^2 + 4t - 3$. At $t = 2\\text{ s}$, $|\\mathcal{E}| = 12(4) + 4(2) - 3 = 48 + 8 - 3 = 53.0\\text{ V}$. Current $I = \\frac{|\\mathcal{E}|}{R} = \\frac{53.0\\text{ V}}{5.0\\,\\Omega} = 10.6\\text{ A}$.",
-        "misconception": null
-      },
-      {
-        "id": "D",
         "text": "$11.2\\text{ A}$",
         "isCorrect": false,
         "studentSelectionTrap": "Derivative Calculation Slip",
@@ -1990,9 +1982,17 @@
           "type": "calculation_error",
           "description": "Derivative Calculation Slip"
         }
+      },
+      {
+        "id": "D",
+        "text": "$10.6\\text{ A}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|\\mathcal{E}| = \\left|\\frac{d\\Phi}{dt}\\right| = 12t^2 + 4t - 3$. At $t = 2\\text{ s}$, $|\\mathcal{E}| = 12(4) + 4(2) - 3 = 48 + 8 - 3 = 53.0\\text{ V}$. Current $I = \\frac{|\\mathcal{E}|}{R} = \\frac{53.0\\text{ V}}{5.0\\,\\Omega} = 10.6\\text{ A}$.",
+        "misconception": null
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "1. By Faraday's law of induction, the induced emf is:\n$$|\\mathcal{E}| = \\left| \\frac{d\\Phi}{dt} \\right|$$\nDifferentiating $\\Phi(t) = 4t^3 + 2t^2 - 3t + 5$ with respect to time $t$:\n$$\\frac{d\\Phi}{dt} = 12t^2 + 4t - 3$$\n2. Evaluating at $t = 2.0\\text{ s}$:\n$$|\\mathcal{E}| = 12(2.0)^2 + 4(2.0) - 3 = 12(4) + 8 - 3 = 48 + 8 - 3 = 53.0\\text{ V}$$\n3. By Ohm's law, the induced current through resistance $R = 5.0\\,\\Omega$ is:\n$$I = \\frac{|\\mathcal{E}|}{R} = \\frac{53.0\\text{ V}}{5.0\\,\\Omega} = 10.6\\text{ A}$$",
     "questionId": "PHYSICS-M12-Q25",
     "conceptId": "PHY-electromagnetic-induction-induced-current-from-cubic-time-varying-magnetic-flux",
@@ -2033,17 +2033,25 @@
     "options": [
       {
         "id": "A",
-        "text": "$0.97\\text{ A}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reporting RMS Current Instead of Peak",
-        "mistakeAnalysis": "Aspirants calculate RMS current ($I_{\\text{rms}} = 0.968\\text{ A}$) and forget to multiply by $\\sqrt{2}$.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Reporting RMS Current Instead of Peak"
-        }
+        "text": "$1.37\\text{ A}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $X_C = \\frac{1}{2\\pi f C} = \\frac{1}{2(22/7)(50)(28 \\times 10^{-6})} = \\frac{1}{8800 \\times 10^{-6}} = \\frac{1250}{11}\\,\\Omega$. $I_{\\text{rms}} = \\frac{V_{\\text{rms}}}{X_C} = \\frac{110}{1250/11} = 0.968\\text{ A}$. Peak current $I_0 = I_{\\text{rms}} \\sqrt{2} = 0.968 \\times 1.414 \\approx 1.369\\text{ A} \\approx 1.37\\text{ A}$.",
+        "misconception": null
       },
       {
         "id": "B",
+        "text": "$1.94\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Doubling Current Factor",
+        "mistakeAnalysis": "Aspirants multiply by 2 instead of $\\sqrt{2}$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Doubling Current Factor"
+        }
+      },
+      {
+        "id": "C",
         "text": "$0.68\\text{ A}$",
         "isCorrect": false,
         "studentSelectionTrap": "Dividing by $\\sqrt{2}$ Instead of Multiplying",
@@ -2054,26 +2062,18 @@
         }
       },
       {
-        "id": "C",
-        "text": "$1.37\\text{ A}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $X_C = \\frac{1}{2\\pi f C} = \\frac{1}{2(22/7)(50)(28 \\times 10^{-6})} = \\frac{1}{8800 \\times 10^{-6}} = \\frac{1250}{11}\\,\\Omega$. $I_{\\text{rms}} = \\frac{V_{\\text{rms}}}{X_C} = \\frac{110}{1250/11} = 0.968\\text{ A}$. Peak current $I_0 = I_{\\text{rms}} \\sqrt{2} = 0.968 \\times 1.414 \\approx 1.369\\text{ A} \\approx 1.37\\text{ A}$.",
-        "misconception": null
-      },
-      {
         "id": "D",
-        "text": "$1.94\\text{ A}$",
+        "text": "$0.97\\text{ A}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Doubling Current Factor",
-        "mistakeAnalysis": "Aspirants multiply by 2 instead of $\\sqrt{2}$.",
+        "studentSelectionTrap": "Reporting RMS Current Instead of Peak",
+        "mistakeAnalysis": "Aspirants calculate RMS current ($I_{\\text{rms}} = 0.968\\text{ A}$) and forget to multiply by $\\sqrt{2}$.",
         "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Doubling Current Factor"
+          "type": "calculation_error",
+          "description": "Reporting RMS Current Instead of Peak"
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "1. Capacitive reactance of the circuit:\n$$X_C = \\frac{1}{\\omega C} = \\frac{1}{2\\pi f C}$$\nSubstitute $f = 50\\text{ Hz}$, $C = 28.0 \\times 10^{-6}\\text{ F}$, and $\\pi = \\frac{22}{7}$:\n$$X_C = \\frac{1}{2 \\times \\frac{22}{7} \\times 50 \\times (28.0 \\times 10^{-6})} = \\frac{1}{8800 \\times 10^{-6}} = \\frac{10^6}{8800} = \\frac{1250}{11}\\,\\Omega$$\n2. Root-mean-square current:\n$$I_{\\text{rms}} = \\frac{V_{\\text{rms}}}{X_C} = \\frac{110\\text{ V}}{\\frac{1250}{11}\\,\\Omega} = \\frac{110 \\times 11}{1250} = \\frac{1210}{1250} = 0.968\\text{ A}$$\n3. Peak instantaneous current amplitude:\n$$I_0 = I_{\\text{rms}} \\times \\sqrt{2} = 0.968\\text{ A} \\times 1.414 \\approx 1.369\\text{ A} \\approx 1.37\\text{ A}$$",
     "questionId": "PHYSICS-M12-Q26",
     "conceptId": "PHY-alternating-current-peak-current-in-a-purely-capacitive-ac-circuit",
@@ -2195,14 +2195,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$3 : 2$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\frac{\\mathcal{E}_1 + \\mathcal{E}_2}{\\mathcal{E}_1 - \\mathcal{E}_2} = \\frac{l_1}{l_2} = \\frac{350}{70} = 5$. By componendo and dividendo, $\\frac{\\mathcal{E}_1}{\\mathcal{E}_2} = \\frac{5 + 1}{5 - 1} = \\frac{6}{4} = \\frac{3}{2} = 3 : 2$.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "$5 : 1$",
         "isCorrect": false,
         "studentSelectionTrap": "Direct Length Ratio Fallacy",
@@ -2213,18 +2205,7 @@
         }
       },
       {
-        "id": "C",
-        "text": "$2 : 3$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Inverted Ratio Trap",
-        "mistakeAnalysis": "Aspirants calculate $\\mathcal{E}_2 / \\mathcal{E}_1$ instead of $\\mathcal{E}_1 / \\mathcal{E}_2$.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Inverted Ratio Trap"
-        }
-      },
-      {
-        "id": "D",
+        "id": "B",
         "text": "$4 : 3$",
         "isCorrect": false,
         "studentSelectionTrap": "Arithmetic Slip in Componendo-Dividendo",
@@ -2233,9 +2214,28 @@
           "type": "calculation_error",
           "description": "Arithmetic Slip in Componendo-Dividendo"
         }
+      },
+      {
+        "id": "C",
+        "text": "$3 : 2$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\frac{\\mathcal{E}_1 + \\mathcal{E}_2}{\\mathcal{E}_1 - \\mathcal{E}_2} = \\frac{l_1}{l_2} = \\frac{350}{70} = 5$. By componendo and dividendo, $\\frac{\\mathcal{E}_1}{\\mathcal{E}_2} = \\frac{5 + 1}{5 - 1} = \\frac{6}{4} = \\frac{3}{2} = 3 : 2$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$2 : 3$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverted Ratio Trap",
+        "mistakeAnalysis": "Aspirants calculate $\\mathcal{E}_2 / \\mathcal{E}_1$ instead of $\\mathcal{E}_1 / \\mathcal{E}_2$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Inverted Ratio Trap"
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "Let the potential gradient along the potentiometer wire be $k$.\n1. For the cells in series aiding configuration:\n$$\\mathcal{E}_1 + \\mathcal{E}_2 = k l_1 = 350.0 k$$\n2. For the cells in series opposing configuration:\n$$\\mathcal{E}_1 - \\mathcal{E}_2 = k l_2 = 70.0 k$$\n3. Dividing the two equations:\n$$\\frac{\\mathcal{E}_1 + \\mathcal{E}_2}{\\mathcal{E}_1 - \\mathcal{E}_2} = \\frac{l_1}{l_2} = \\frac{350.0}{70.0} = 5$$\n4. Applying componendo and dividendo:\n$$\\frac{(\\mathcal{E}_1 + \\mathcal{E}_2) + (\\mathcal{E}_1 - \\mathcal{E}_2)}{(\\mathcal{E}_1 + \\mathcal{E}_2) - (\\mathcal{E}_1 - \\mathcal{E}_2)} = \\frac{5 + 1}{5 - 1}$$\n$$\\frac{2\\mathcal{E}_1}{2\\mathcal{E}_2} = \\frac{6}{4} \\implies \\frac{\\mathcal{E}_1}{\\mathcal{E}_2} = \\frac{3}{2} = 3 : 2$$",
     "questionId": "PHYSICS-M12-Q28",
     "conceptId": "PHY-current-electricity-potentiometer-comparison-of-emfs-sum-and-difference-method",
@@ -2357,6 +2357,25 @@
     "options": [
       {
         "id": "A",
+        "text": "(B), (C), (D), (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Wavelength decreases in the order: Radio waves ($> 0.1\\text{ m}$) > Infrared ($1\\text{ mm} - 700\\text{ nm}$) > Visible light ($700\\text{ nm} - 400\\text{ nm}$) > X-rays ($1\\text{ nm} - 10^{-3}\\text{ nm}$).",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "(C), (B), (D), (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Infrared Ahead of Radio Waves",
+        "mistakeAnalysis": "Aspirants place infrared ahead of radio waves.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Infrared Ahead of Radio Waves"
+        }
+      },
+      {
+        "id": "C",
         "text": "(A), (D), (C), (B)",
         "isCorrect": false,
         "studentSelectionTrap": "Increasing Order Inversion",
@@ -2367,15 +2386,7 @@
         }
       },
       {
-        "id": "B",
-        "text": "(B), (C), (D), (A)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Wavelength decreases in the order: Radio waves ($> 0.1\\text{ m}$) > Infrared ($1\\text{ mm} - 700\\text{ nm}$) > Visible light ($700\\text{ nm} - 400\\text{ nm}$) > X-rays ($1\\text{ nm} - 10^{-3}\\text{ nm}$).",
-        "misconception": null
-      },
-      {
-        "id": "C",
+        "id": "D",
         "text": "(B), (D), (C), (A)",
         "isCorrect": false,
         "studentSelectionTrap": "Infrared and Visible Swap",
@@ -2384,20 +2395,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Infrared and Visible Swap"
         }
-      },
-      {
-        "id": "D",
-        "text": "(C), (B), (D), (A)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Infrared Ahead of Radio Waves",
-        "mistakeAnalysis": "Aspirants place infrared ahead of radio waves.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Infrared Ahead of Radio Waves"
-        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "From the classification of the electromagnetic spectrum in order of decreasing wavelength:\n1. Radio waves: $\\lambda > 0.1\\text{ m}$ (longest wavelength) $\\implies$ (B)\n2. Infrared radiation: $\\lambda \\sim 1\\text{ mm} - 700\\text{ nm}$ $\\implies$ (C)\n3. Visible light: $\\lambda \\sim 700\\text{ nm} - 400\\text{ nm}$ $\\implies$ (D)\n4. X-rays: $\\lambda \\sim 1\\text{ nm} - 10^{-3}\\text{ nm}$ (shortest wavelength among these) $\\implies$ (A)\nThus, the correct decreasing sequence is (B), (C), (D), (A).",
     "questionId": "PHYSICS-M12-Q30",
     "conceptId": "PHY-electromagnetic-waves-wavelength-ranges-across-the-em-spectrum",
@@ -2437,6 +2437,14 @@
     "options": [
       {
         "id": "A",
+        "text": "$n_1 = 3$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For coinciding bright fringes, $y = n_1 \\frac{\\lambda_1 D}{d} = n_2 \\frac{\\lambda_2 D}{d} \\implies n_1 \\lambda_1 = n_2 \\lambda_2 \\implies \\frac{n_1}{n_2} = \\frac{\\lambda_2}{\\lambda_1} = \\frac{450}{600} = \\frac{3}{4}$. Smallest non-zero integer solution is $n_1 = 3$ (coinciding with $n_2 = 4$).",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "$n_1 = 4$",
         "isCorrect": false,
         "studentSelectionTrap": "Wavelength Order Inversion",
@@ -2447,26 +2455,7 @@
         }
       },
       {
-        "id": "B",
-        "text": "$n_1 = 2$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Fraction Reduction Slip",
-        "mistakeAnalysis": "Aspirants approximate $450/600$ as $2/3$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Fraction Reduction Slip"
-        }
-      },
-      {
         "id": "C",
-        "text": "$n_1 = 3$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. For coinciding bright fringes, $y = n_1 \\frac{\\lambda_1 D}{d} = n_2 \\frac{\\lambda_2 D}{d} \\implies n_1 \\lambda_1 = n_2 \\lambda_2 \\implies \\frac{n_1}{n_2} = \\frac{\\lambda_2}{\\lambda_1} = \\frac{450}{600} = \\frac{3}{4}$. Smallest non-zero integer solution is $n_1 = 3$ (coinciding with $n_2 = 4$).",
-        "misconception": null
-      },
-      {
-        "id": "D",
         "text": "$n_1 = 6$",
         "isCorrect": false,
         "studentSelectionTrap": "Non-Minimal Multiplier Trap",
@@ -2475,9 +2464,20 @@
           "type": "boundary_condition_error",
           "description": "Non-Minimal Multiplier Trap"
         }
+      },
+      {
+        "id": "D",
+        "text": "$n_1 = 2$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Fraction Reduction Slip",
+        "mistakeAnalysis": "Aspirants approximate $450/600$ as $2/3$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Fraction Reduction Slip"
+        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "1. Position of the $n^{\\text{th}}$ bright fringe from the central maximum:\n$$y_n = n \\frac{\\lambda D}{d}$$\n2. At the position where the bright fringe of $\\lambda_1$ coincides with the bright fringe of $\\lambda_2$:\n$$y = n_1 \\frac{\\lambda_1 D}{d} = n_2 \\frac{\\lambda_2 D}{d}$$\n$$n_1 \\lambda_1 = n_2 \\lambda_2$$\n$$\\frac{n_1}{n_2} = \\frac{\\lambda_2}{\\lambda_1} = \\frac{450\\text{ nm}}{600\\text{ nm}} = \\frac{3}{4}$$\n3. Since $n_1$ and $n_2$ must be the smallest non-zero integers, the least order of $\\lambda_1$ that coincides with a bright fringe of $\\lambda_2$ is $n_1 = 3$ (which coincides with $n_2 = 4$ of $\\lambda_2$).",
     "questionId": "PHYSICS-M12-Q31",
     "conceptId": "PHY-wave-optics-coincidence-of-interference-maxima-for-two-wavelengths",
@@ -2529,6 +2529,17 @@
       },
       {
         "id": "B",
+        "text": "$500.0\\text{ nm}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arbitrary Guess",
+        "mistakeAnalysis": "Aspirants round to a common standard visible wavelength without calculating.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Arbitrary Guess"
+        }
+      },
+      {
+        "id": "C",
         "text": "$632.8\\text{ nm}$",
         "isCorrect": false,
         "studentSelectionTrap": "Wavelength Invariance Fallacy",
@@ -2539,26 +2550,15 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "$395.5\\text{ nm}$",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. $\\lambda' = \\frac{\\lambda_0}{\\mu} = \\frac{632.8\\text{ nm}}{1.60} = 395.5\\text{ nm}$.",
         "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "$500.0\\text{ nm}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Arbitrary Guess",
-        "mistakeAnalysis": "Aspirants round to a common standard visible wavelength without calculating.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Arbitrary Guess"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "When light passes from air into a material medium of refractive index $\\mu$:\n1. The frequency $\\nu$ remains strictly constant.\n2. The speed of propagation decreases from $c$ to $v = \\frac{c}{\\mu}$.\n3. Since $v = \\nu \\lambda'$, the new wavelength $\\lambda'$ is:\n$$\\lambda' = \\frac{v}{\\nu} = \\frac{c}{\\mu \\nu} = \\frac{\\lambda_0}{\\mu}$$\nSubstitute $\\lambda_0 = 632.8\\text{ nm}$ and $\\mu = 1.60$:\n$$\\lambda' = \\frac{632.8\\text{ nm}}{1.60} = 395.5\\text{ nm}$$",
     "questionId": "PHYSICS-M12-Q32",
     "conceptId": "PHY-wave-optics-wavelength-of-monochromatic-light-in-a-material-medium",
@@ -2599,22 +2599,22 @@
     "options": [
       {
         "id": "A",
-        "text": "$30^\\circ$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Equating Deviation to Refracting Angle Half",
-        "mistakeAnalysis": "Aspirants take $\\delta_m = A/2 = 30^\\circ$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Equating Deviation to Refracting Angle Half"
-        }
-      },
-      {
-        "id": "B",
         "text": "$60^\\circ$",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. $\\mu = \\frac{\\sin((A+\\delta_m)/2)}{\\sin(A/2)}$. For $A = 60^\\circ$, $\\sqrt{3} = \\frac{\\sin(30^\\circ + \\delta_m/2)}{0.5} \\implies \\sin(30^\\circ + \\delta_m/2) = \\frac{\\sqrt{3}}{2} \\implies 30^\\circ + \\delta_m/2 = 60^\\circ \\implies \\delta_m = 60^\\circ$.",
         "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "$90^\\circ$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Prism Angle Addition Error",
+        "mistakeAnalysis": "Aspirants solve $A + \\delta_m/2 = 90^\\circ$ incorrectly.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Prism Angle Addition Error"
+        }
       },
       {
         "id": "C",
@@ -2629,17 +2629,17 @@
       },
       {
         "id": "D",
-        "text": "$90^\\circ$",
+        "text": "$30^\\circ$",
         "isCorrect": false,
-        "studentSelectionTrap": "Prism Angle Addition Error",
-        "mistakeAnalysis": "Aspirants solve $A + \\delta_m/2 = 90^\\circ$ incorrectly.",
+        "studentSelectionTrap": "Equating Deviation to Refracting Angle Half",
+        "mistakeAnalysis": "Aspirants take $\\delta_m = A/2 = 30^\\circ$.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Prism Angle Addition Error"
+          "description": "Equating Deviation to Refracting Angle Half"
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "For an equilateral prism, prism angle $A = 60^\\circ$.\nUsing the prism formula:\n$$\\mu = \\frac{\\sin\\left(\\frac{A + \\delta_m}{2}\\right)}{\\sin\\left(\\frac{A}{2}\\right)}$$\nSubstitute $\\mu = \\sqrt{3}$ and $A = 60^\\circ$:\n$$\\sqrt{3} = \\frac{\\sin\\left(\\frac{60^\\circ + \\delta_m}{2}\\right)}{\\sin(30^\\circ)} = \\frac{\\sin\\left(\\frac{60^\\circ + \\delta_m}{2}\\right)}{0.5}$$\n$$\\sin\\left(\\frac{60^\\circ + \\delta_m}{2}\\right) = 0.5 \\times \\sqrt{3} = \\frac{\\sqrt{3}}{2}$$\n$$\\frac{60^\\circ + \\delta_m}{2} = 60^\\circ$$\n$$60^\\circ + \\delta_m = 120^\\circ \\implies \\delta_m = 60^\\circ$$",
     "questionId": "PHYSICS-M12-Q33",
     "conceptId": "PHY-ray-optics-and-optical-instruments-refraction-through-a-prism-at-minimum-deviation",
@@ -2680,6 +2680,14 @@
     "options": [
       {
         "id": "A",
+        "text": "$60.0\\text{ V m}^{-1}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $E_0 = c B_0 = (3.0 \\times 10^8\\text{ m s}^{-1})(2.0 \\times 10^{-7}\\text{ T}) = 60.0\\text{ V m}^{-1}$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "$6.67 \\times 10^{-16}\\text{ V m}^{-1}$",
         "isCorrect": false,
         "studentSelectionTrap": "Inverting Amplitude Ratio Formula",
@@ -2690,7 +2698,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "$6.0\\text{ V m}^{-1}$",
         "isCorrect": false,
         "studentSelectionTrap": "Power-of-Ten Decimal Slip",
@@ -2699,14 +2707,6 @@
           "type": "calculation_error",
           "description": "Power-of-Ten Decimal Slip"
         }
-      },
-      {
-        "id": "C",
-        "text": "$60.0\\text{ V m}^{-1}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $E_0 = c B_0 = (3.0 \\times 10^8\\text{ m s}^{-1})(2.0 \\times 10^{-7}\\text{ T}) = 60.0\\text{ V m}^{-1}$.",
-        "misconception": null
       },
       {
         "id": "D",
@@ -2720,7 +2720,7 @@
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "In a plane electromagnetic wave in free space, the ratio of peak electric field $E_0$ to peak magnetic field $B_0$ equals the speed of light $c$:\n$$\\frac{E_0}{B_0} = c \\implies E_0 = c B_0$$\nSubstitute $c = 3.0 \\times 10^8\\text{ m s}^{-1}$ and $B_0 = 2.0 \\times 10^{-7}\\text{ T}$:\n$$E_0 = (3.0 \\times 10^8\\text{ m s}^{-1}) \\times (2.0 \\times 10^{-7}\\text{ T}) = 60.0\\text{ V m}^{-1}$$",
     "questionId": "PHYSICS-M12-Q34",
     "conceptId": "PHY-electromagnetic-waves-electric-field-amplitude-calculation",
@@ -2761,13 +2761,13 @@
     "options": [
       {
         "id": "A",
-        "text": "$2.4 \\times 10^{-5}\\text{ N}$, attractive",
+        "text": "$4.8 \\times 10^{-5}\\text{ N}$, attractive",
         "isCorrect": false,
-        "studentSelectionTrap": "Current Interaction Sign Error",
-        "mistakeAnalysis": "Aspirants assume parallel wires always attract, forgetting that opposite (antiparallel) currents repel.",
+        "studentSelectionTrap": "Using $4\\pi$ in Denominator",
+        "mistakeAnalysis": "Aspirants use $4\\pi d$ instead of $2\\pi d$ in the denominator.",
         "misconception": {
-          "type": "sign_error",
-          "description": "Current Interaction Sign Error"
+          "type": "conceptual_misunderstanding",
+          "description": "Using $4\\pi$ in Denominator"
         }
       },
       {
@@ -2783,25 +2783,25 @@
       },
       {
         "id": "C",
-        "text": "$4.8 \\times 10^{-5}\\text{ N}$, attractive",
-        "isCorrect": false,
-        "studentSelectionTrap": "Using $4\\pi$ in Denominator",
-        "mistakeAnalysis": "Aspirants use $4\\pi d$ instead of $2\\pi d$ in the denominator.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Using $4\\pi$ in Denominator"
-        }
-      },
-      {
-        "id": "D",
         "text": "$2.4 \\times 10^{-5}\\text{ N}$, repulsive",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Force per unit length $f = \\frac{\\mu_0 I_A I_B}{2\\pi d} = \\frac{(2 \\times 10^{-7})(6.0)(4.0)}{0.05} = 9.6 \\times 10^{-5}\\text{ N/m}$. For $L = 0.25\\text{ m}$, $F = f L = 9.6 \\times 10^{-5} \\times 0.25 = 2.4 \\times 10^{-5}\\text{ N}$. Opposite currents repel.",
         "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$2.4 \\times 10^{-5}\\text{ N}$, attractive",
+        "isCorrect": false,
+        "studentSelectionTrap": "Current Interaction Sign Error",
+        "mistakeAnalysis": "Aspirants assume parallel wires always attract, forgetting that opposite (antiparallel) currents repel.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Current Interaction Sign Error"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "C",
     "detailedSolution": "1. The magnetic force per unit length between two parallel conductors is:\n$$f = \\frac{\\mu_0 I_A I_B}{2\\pi d} = \\left(\\frac{\\mu_0}{4\\pi}\\right) \\frac{2 I_A I_B}{d}$$\nSubstitute $\\frac{\\mu_0}{4\\pi} = 10^{-7}\\text{ T m A}^{-1}$, $I_A = 6.0\\text{ A}$, $I_B = 4.0\\text{ A}$, and $d = 5.0\\text{ cm} = 0.050\\text{ m}$:\n$$f = 10^{-7} \\times \\frac{2(6.0)(4.0)}{0.050} = 10^{-7} \\times \\frac{48.0}{0.050} = 10^{-7} \\times 960 = 9.6 \\times 10^{-5}\\text{ N m}^{-1}$$\n2. The total force on length $L = 25.0\\text{ cm} = 0.25\\text{ m}$ is:\n$$F = f \\times L = (9.6 \\times 10^{-5}\\text{ N m}^{-1}) \\times 0.25\\text{ m} = 2.4 \\times 10^{-5}\\text{ N}$$\n3. By the right-hand rule and Ampere's law, currents flowing in opposite directions repel each other.",
     "questionId": "PHYSICS-M12-Q35",
     "conceptId": "PHY-moving-charges-and-magnetism-magnetic-force-between-parallel-current-carrying-wires",
@@ -2842,13 +2842,13 @@
     "options": [
       {
         "id": "A",
-        "text": "Conservation of electric charge",
+        "text": "Conservation of linear momentum",
         "isCorrect": false,
-        "studentSelectionTrap": "Kirchhoff Junction Rule Confusion",
-        "mistakeAnalysis": "Aspirants confuse Lenz's law with Kirchhoff's junction rule (charge conservation).",
+        "studentSelectionTrap": "Newton's Third Law Analogy",
+        "mistakeAnalysis": "Aspirants assume opposing forces imply momentum conservation.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Kirchhoff Junction Rule Confusion"
+          "description": "Newton's Third Law Analogy"
         }
       },
       {
@@ -2861,13 +2861,13 @@
       },
       {
         "id": "C",
-        "text": "Conservation of linear momentum",
+        "text": "Conservation of electric charge",
         "isCorrect": false,
-        "studentSelectionTrap": "Newton's Third Law Analogy",
-        "mistakeAnalysis": "Aspirants assume opposing forces imply momentum conservation.",
+        "studentSelectionTrap": "Kirchhoff Junction Rule Confusion",
+        "mistakeAnalysis": "Aspirants confuse Lenz's law with Kirchhoff's junction rule (charge conservation).",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Newton's Third Law Analogy"
+          "description": "Kirchhoff Junction Rule Confusion"
         }
       },
       {
@@ -2941,17 +2941,6 @@
       },
       {
         "id": "C",
-        "text": "$3.0 \\times 10^6\\text{ m}^{-3}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Forgetting to Square Intrinsic Density",
-        "mistakeAnalysis": "Aspirants evaluate $n_i / n_h$ directly without squaring $n_i$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Forgetting to Square Intrinsic Density"
-        }
-      },
-      {
-        "id": "D",
         "text": "$1.5 \\times 10^{16}\\text{ m}^{-3}$",
         "isCorrect": false,
         "studentSelectionTrap": "Intrinsic Carrier Invariance Fallacy",
@@ -2959,6 +2948,17 @@
         "misconception": {
           "type": "logical_reasoning_error",
           "description": "Intrinsic Carrier Invariance Fallacy"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$3.0 \\times 10^6\\text{ m}^{-3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Forgetting to Square Intrinsic Density",
+        "mistakeAnalysis": "Aspirants evaluate $n_i / n_h$ directly without squaring $n_i$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Forgetting to Square Intrinsic Density"
         }
       }
     ],
@@ -3003,25 +3003,6 @@
     "options": [
       {
         "id": "A",
-        "text": "(A) and (B) only",
-        "isCorrect": false,
-        "studentSelectionTrap": "Cavity Potential Invariance Blindspot",
-        "mistakeAnalysis": "Aspirants omit statement (C), forgetting that $E = 0 \\implies V = \\text{constant}$ inside the entire cavity.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Cavity Potential Invariance Blindspot"
-        }
-      },
-      {
-        "id": "B",
-        "text": "(A), (B) and (C) only",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Statements (A), (B), and (C) define electrostatic shielding. Statement (D) is false because electrostatic shielding does not shield against static magnetic fields (magnetic shielding requires high-permeability ferromagnetic materials like mu-metal).",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "(A), (B), (C) and (D)",
         "isCorrect": false,
         "studentSelectionTrap": "Universal Field Shielding Myth",
@@ -3032,7 +3013,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "(B) and (D) only",
         "isCorrect": false,
         "studentSelectionTrap": "Cavity Shape Dependence Assumption",
@@ -3041,9 +3022,28 @@
           "type": "conceptual_misunderstanding",
           "description": "Cavity Shape Dependence Assumption"
         }
+      },
+      {
+        "id": "C",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Statements (A), (B), and (C) define electrostatic shielding. Statement (D) is false because electrostatic shielding does not shield against static magnetic fields (magnetic shielding requires high-permeability ferromagnetic materials like mu-metal).",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "(A) and (B) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cavity Potential Invariance Blindspot",
+        "mistakeAnalysis": "Aspirants omit statement (C), forgetting that $E = 0 \\implies V = \\text{constant}$ inside the entire cavity.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Cavity Potential Invariance Blindspot"
+        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "1. In an empty cavity within a conductor, any closed path has $\\oint \\vec{E} \\cdot d\\vec{l} = 0$, and Gauss's law shows $E = 0$ everywhere inside the cavity, irrespective of its shape or size $\\implies$ Statement (A) is correct.\n2. When an external electric field is applied, surface charges redistribute until the internal field produced exactly cancels the external field inside the metal and cavity (Electrostatic Shielding) $\\implies$ Statement (B) is correct.\n3. Since $\\vec{E} = -\\nabla V = 0$ inside the cavity, potential is constant throughout the cavity and matches the conductor's surface potential $\\implies$ Statement (C) is correct.\n4. Electrostatic shielding shields against electric fields only; static magnetic field lines penetrate non-magnetic conductors freely $\\implies$ Statement (D) is false.\nThus, (A), (B), and (C) only are correct.",
     "questionId": "PHYSICS-M12-Q38",
     "conceptId": "PHY-electrostatic-potential-and-capacitance-electrostatic-shielding-in-conductors-with-cavities",
@@ -3084,25 +3084,6 @@
     "options": [
       {
         "id": "A",
-        "text": "The positive z-axis ($\\vec{B} = B_0 \\sin(kx - \\omega t)\\hat{k}$)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. The wave vector is $\\hat{k} = +\\hat{i}$. The Poynting direction satisfies $\\vec{S} \\propto \\vec{E} \\times \\vec{B}$. Since $\\hat{j} \\times \\hat{k} = +\\hat{i}$, $\\vec{B}$ must oscillate along the positive z-axis.",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "The negative z-axis ($\\vec{B} = -B_0 \\sin(kx - \\omega t)\\hat{k}$)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Cross-Product Direction Reversal",
-        "mistakeAnalysis": "Aspirants evaluate $\\hat{k} \\times \\hat{j} = -\\hat{i}$, resulting in wave propagation along the negative x-axis.",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Cross-Product Direction Reversal"
-        }
-      },
-      {
-        "id": "C",
         "text": "The positive y-axis parallel to the electric field.",
         "isCorrect": false,
         "studentSelectionTrap": "Parallel Field Misconception",
@@ -3110,6 +3091,25 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Parallel Field Misconception"
+        }
+      },
+      {
+        "id": "B",
+        "text": "The positive z-axis ($\\vec{B} = B_0 \\sin(kx - \\omega t)\\hat{k}$)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The wave vector is $\\hat{k} = +\\hat{i}$. The Poynting direction satisfies $\\vec{S} \\propto \\vec{E} \\times \\vec{B}$. Since $\\hat{j} \\times \\hat{k} = +\\hat{i}$, $\\vec{B}$ must oscillate along the positive z-axis.",
+        "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "The negative z-axis ($\\vec{B} = -B_0 \\sin(kx - \\omega t)\\hat{k}$)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Cross-Product Direction Reversal",
+        "mistakeAnalysis": "Aspirants evaluate $\\hat{k} \\times \\hat{j} = -\\hat{i}$, resulting in wave propagation along the negative x-axis.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Cross-Product Direction Reversal"
         }
       },
       {
@@ -3124,7 +3124,7 @@
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "For a transverse electromagnetic wave propagating along unit vector $\\hat{n}$:\n$$\\hat{n} = \\frac{\\vec{E} \\times \\vec{B}}{|\\vec{E} \\times \\vec{B}|}$$\nGiven:\n- Direction of wave propagation: $\\hat{n} = +\\hat{i}$\n- Direction of electric field: $\\hat{u}_E = +\\hat{j}$\nTo satisfy $\\hat{u}_E \\times \\hat{u}_B = +\\hat{i}$:\n$$\\hat{j} \\times \\hat{u}_B = +\\hat{i}$$\nUsing standard vector cross-products of unit Cartesian vectors:\n$$\\hat{j} \\times \\hat{k} = +\\hat{i}$$\nThus, $\\hat{u}_B = +\\hat{k}$, meaning the magnetic field oscillates in phase along the positive z-axis.",
     "questionId": "PHYSICS-M12-Q39",
     "conceptId": "PHY-electromagnetic-waves-orthogonality-of-vectors-in-electromagnetic-waves",
@@ -3165,6 +3165,25 @@
     "options": [
       {
         "id": "A",
+        "text": "$1.2 \\times 10^{-3}\\text{ m}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Power-of-Ten Decimal Slip",
+        "mistakeAnalysis": "Aspirants make an error in exponent subtraction ($10^{-6} / 10^{-4} = 10^{-2}$ written as $10^{-3}$).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Power-of-Ten Decimal Slip"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$1.2 \\times 10^{-2}\\text{ m}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\beta_0 = \\frac{2\\lambda D}{a} = \\frac{2(600 \\times 10^{-9})(1.5)}{0.15 \\times 10^{-3}} = \\frac{1.8 \\times 10^{-6}}{1.5 \\times 10^{-4}} = 1.2 \\times 10^{-2}\\text{ m}$ ($12.0\\text{ mm}$).",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$6.0 \\times 10^{-3}\\text{ m}$",
         "isCorrect": false,
         "studentSelectionTrap": "Secondary Fringe Width Error",
@@ -3175,7 +3194,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "D",
         "text": "$2.4 \\times 10^{-2}\\text{ m}$",
         "isCorrect": false,
         "studentSelectionTrap": "Double Central Width Multiplier",
@@ -3184,28 +3203,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Double Central Width Multiplier"
         }
-      },
-      {
-        "id": "C",
-        "text": "$1.2 \\times 10^{-2}\\text{ m}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\beta_0 = \\frac{2\\lambda D}{a} = \\frac{2(600 \\times 10^{-9})(1.5)}{0.15 \\times 10^{-3}} = \\frac{1.8 \\times 10^{-6}}{1.5 \\times 10^{-4}} = 1.2 \\times 10^{-2}\\text{ m}$ ($12.0\\text{ mm}$).",
-        "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "$1.2 \\times 10^{-3}\\text{ m}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Power-of-Ten Decimal Slip",
-        "mistakeAnalysis": "Aspirants make an error in exponent subtraction ($10^{-6} / 10^{-4} = 10^{-2}$ written as $10^{-3}$).",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Power-of-Ten Decimal Slip"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "In Fraunhofer single-slit diffraction, the angular spread of the central maximum extends between the first minima on either side:\n$$\\theta_1 = \\pm \\frac{\\lambda}{a} \\implies 2\\theta = \\frac{2\\lambda}{a}$$\nThe linear width on a screen at distance $D$ is:\n$$\\beta_0 = (2\\theta) D = \\frac{2\\lambda D}{a}$$\nGiven:\n- $\\lambda = 600\\text{ nm} = 6.0 \\times 10^{-7}\\text{ m}$\n- $D = 1.5\\text{ m}$\n- $a = 0.15\\text{ mm} = 1.5 \\times 10^{-4}\\text{ m}$\n\n$$\\beta_0 = \\frac{2 \\times (6.0 \\times 10^{-7}\\text{ m}) \\times 1.5\\text{ m}}{1.5 \\times 10^{-4}\\text{ m}} = \\frac{1.80 \\times 10^{-6}}{1.5 \\times 10^{-4}} = 1.2 \\times 10^{-2}\\text{ m} = 12.0\\text{ mm}$$",
     "questionId": "PHYSICS-M12-Q40",
     "conceptId": "PHY-wave-optics-linear-width-of-central-diffraction-maximum",
@@ -3246,6 +3246,14 @@
     "options": [
       {
         "id": "A",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. High resistivity keeps dimensions compact, and near-zero $\\alpha$ guarantees resistance stays stable against Joule heating. Statement (D) is false as that describes semiconductors.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "(A) and (B) only",
         "isCorrect": false,
         "studentSelectionTrap": "Ignoring Mechanical Requirements",
@@ -3256,7 +3264,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "(B), (C) and (D) only",
         "isCorrect": false,
         "studentSelectionTrap": "Semiconductor Negative Coefficient Confusion",
@@ -3267,7 +3275,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "(A), (B), (C) and (D)",
         "isCorrect": false,
         "studentSelectionTrap": "Contradictory Pair Neglect",
@@ -3276,17 +3284,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Contradictory Pair Neglect"
         }
-      },
-      {
-        "id": "D",
-        "text": "(A), (B) and (C) only",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. High resistivity keeps dimensions compact, and near-zero $\\alpha$ guarantees resistance stays stable against Joule heating. Statement (D) is false as that describes semiconductors.",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "A",
     "detailedSolution": "Standard resistance materials (like Manganin, Constantan, and Eureka) are chosen because they possess high resistivity $\\rho$ and an extremely small temperature coefficient of resistance $\\alpha$, ensuring that thermal fluctuations do not distort calibration. They are also corrosion resistant and ductile. Thus, (A), (B), and (C) are correct.",
     "questionId": "PHYSICS-M12-Q41",
     "conceptId": "PHY-current-electricity-properties-of-standard-resistor-alloys",
@@ -3326,14 +3326,6 @@
     "options": [
       {
         "id": "A",
-        "text": "(i) Spherical wavefront; (ii) Plane wavefront",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. A local point source emits uniformly in 3D (spherical wavefronts). A distant star is at $r \\to \\infty$, so its wavefront curvature becomes negligible, arriving as a plane wavefront.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "(i) Plane wavefront; (ii) Spherical wavefront",
         "isCorrect": false,
         "studentSelectionTrap": "Inverted Distance Attribution",
@@ -3344,7 +3336,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "(i) Cylindrical wavefront; (ii) Plane wavefront",
         "isCorrect": false,
         "studentSelectionTrap": "Line Source Confusion",
@@ -3355,7 +3347,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "(i) Spherical wavefront; (ii) Spherical wavefront",
         "isCorrect": false,
         "studentSelectionTrap": "Ignoring Infinite Distance Planarity",
@@ -3364,9 +3356,17 @@
           "type": "conceptual_misunderstanding",
           "description": "Ignoring Infinite Distance Planarity"
         }
+      },
+      {
+        "id": "D",
+        "text": "(i) Spherical wavefront; (ii) Plane wavefront",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. A local point source emits uniformly in 3D (spherical wavefronts). A distant star is at $r \\to \\infty$, so its wavefront curvature becomes negligible, arriving as a plane wavefront.",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "1. For an isolated point source at a finite distance, wave disturbances propagate uniformly outwards in all three dimensions with equal phase speed. The locus of points with identical phase forms concentric expanding spheres (Spherical Wavefront).\n2. When light from a distant star travels across astronomical distances ($r \\to \\infty$), the radius of curvature of the spherical envelope becomes infinitely large. A small aperture on Earth intercepts an essentially flat surface, forming a Plane Wavefront.",
     "questionId": "PHYSICS-M12-Q42",
     "conceptId": "PHY-wave-optics-wavefront-geometries-for-various-sources",
@@ -3406,14 +3406,6 @@
     "options": [
       {
         "id": "A",
-        "text": "is independent of the mass number $A$ and is of the order of $10^{17}\\text{ kg m}^{-3}$.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Nuclear volume scales as $R^3 \\propto A$. Nuclear mass scales as $m A \\propto A$. Density $\\rho = \\frac{mA}{\\frac{4}{3}\\pi R_0^3 A} = \\frac{3m}{4\\pi R_0^3}$, which is a universal constant $\\approx 2.3 \\times 10^{17}\\text{ kg m}^{-3}$.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "increases linearly with the mass number $A$.",
         "isCorrect": false,
         "studentSelectionTrap": "Mass Proportionality Fallacy",
@@ -3424,18 +3416,15 @@
         }
       },
       {
-        "id": "C",
-        "text": "is inversely proportional to $A^{1/3}$.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Radius-Density Confusion",
-        "mistakeAnalysis": "Aspirants confuse density with the inverse of the radius.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Radius-Density Confusion"
-        }
+        "id": "B",
+        "text": "is independent of the mass number $A$ and is of the order of $10^{17}\\text{ kg m}^{-3}$.",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Nuclear volume scales as $R^3 \\propto A$. Nuclear mass scales as $m A \\propto A$. Density $\\rho = \\frac{mA}{\\frac{4}{3}\\pi R_0^3 A} = \\frac{3m}{4\\pi R_0^3}$, which is a universal constant $\\approx 2.3 \\times 10^{17}\\text{ kg m}^{-3}$.",
+        "misconception": null
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "is of the order of $10^3\\text{ kg m}^{-3}$, comparable to ordinary liquids.",
         "isCorrect": false,
         "studentSelectionTrap": "Bulk Density Confusion",
@@ -3444,9 +3433,20 @@
           "type": "conceptual_misunderstanding",
           "description": "Bulk Density Confusion"
         }
+      },
+      {
+        "id": "D",
+        "text": "is inversely proportional to $A^{1/3}$.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Radius-Density Confusion",
+        "mistakeAnalysis": "Aspirants confuse density with the inverse of the radius.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Radius-Density Confusion"
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "Let average nucleon mass be $m \\approx 1.66 \\times 10^{-27}\\text{ kg}$.\nMass of a nucleus of mass number $A$ is $M = m A$.\nNuclear volume is:\n$$V = \\frac{4}{3}\\pi R^3 = \\frac{4}{3}\\pi (R_0 A^{1/3})^3 = \\frac{4}{3}\\pi R_0^3 A$$\nNuclear density is:\n$$\\rho = \\frac{M}{V} = \\frac{m A}{\\frac{4}{3}\\pi R_0^3 A} = \\frac{3m}{4\\pi R_0^3}$$\nSince $A$ cancels out completely, nuclear density is constant across all nuclei:\n$$\\rho = \\frac{3(1.66 \\times 10^{-27})}{4\\pi (1.2 \\times 10^{-15})^3} \\approx 2.3 \\times 10^{17}\\text{ kg m}^{-3}$$",
     "questionId": "PHYSICS-M12-Q43",
     "conceptId": "PHY-nuclei-nuclear-size-and-nuclear-density",
@@ -3498,13 +3498,13 @@
       },
       {
         "id": "B",
-        "text": "$0.10\\,\\mu\\text{T}$",
+        "text": "$1.0\\text{ mT}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Power-of-Ten Decimal Slip",
-        "mistakeAnalysis": "Aspirants miscalculate $300 / (3 \\times 10^8)$ as $10^{-7}\\text{ T} = 0.10\\,\\mu\\text{T}$.",
+        "studentSelectionTrap": "Prefix Conversion Error",
+        "mistakeAnalysis": "Aspirants confuse microteslas ($10^{-6}\\text{ T}$) with milliteslas ($10^{-3}\\text{ T}$).",
         "misconception": {
-          "type": "calculation_error",
-          "description": "Power-of-Ten Decimal Slip"
+          "type": "unit_error",
+          "description": "Prefix Conversion Error"
         }
       },
       {
@@ -3517,13 +3517,13 @@
       },
       {
         "id": "D",
-        "text": "$1.0\\text{ mT}$",
+        "text": "$0.10\\,\\mu\\text{T}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Prefix Conversion Error",
-        "mistakeAnalysis": "Aspirants confuse microteslas ($10^{-6}\\text{ T}$) with milliteslas ($10^{-3}\\text{ T}$).",
+        "studentSelectionTrap": "Power-of-Ten Decimal Slip",
+        "mistakeAnalysis": "Aspirants miscalculate $300 / (3 \\times 10^8)$ as $10^{-7}\\text{ T} = 0.10\\,\\mu\\text{T}$.",
         "misconception": {
-          "type": "unit_error",
-          "description": "Prefix Conversion Error"
+          "type": "calculation_error",
+          "description": "Power-of-Ten Decimal Slip"
         }
       }
     ],
@@ -3568,11 +3568,14 @@
     "options": [
       {
         "id": "A",
-        "text": "(A), (C) and (D) only",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Statements (A), (C), and (D) are true. Statement (B) is false because electrons suffer frequent collisions with vibrating lattice ions, constantly randomizing their velocities between collision intervals.",
-        "misconception": null
+        "text": "(B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Thermal Averaging Neglect",
+        "mistakeAnalysis": "Aspirants omit statement (A), forgetting that random thermal velocities average to vector zero.",
+        "misconception": {
+          "type": "direction_error",
+          "description": "Thermal Averaging Neglect"
+        }
       },
       {
         "id": "B",
@@ -3598,17 +3601,14 @@
       },
       {
         "id": "D",
-        "text": "(B) and (D) only",
-        "isCorrect": false,
-        "studentSelectionTrap": "Thermal Averaging Neglect",
-        "mistakeAnalysis": "Aspirants omit statement (A), forgetting that random thermal velocities average to vector zero.",
-        "misconception": {
-          "type": "direction_error",
-          "description": "Thermal Averaging Neglect"
-        }
+        "text": "(A), (C) and (D) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Statements (A), (C), and (D) are true. Statement (B) is false because electrons suffer frequent collisions with vibrating lattice ions, constantly randomizing their velocities between collision intervals.",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "1. In random thermal motion, electrons move in all directions with equal probability. Thus, the average vector thermal velocity is $\\frac{1}{N}\\sum \\vec{u}_i = 0 \\implies$ (A) is correct.\n2. Conduction electrons repeatedly collide with heavy oscillating positive lattice ions (mean free path $\\sim 10^{-8}\\text{ m}$, relaxation time $\\tau \\sim 10^{-14}\\text{ s}$), constantly redirecting their motion rather than accelerating continuously in straight lines $\\implies$ (B) is incorrect.\n3. Because electrons carry negative charge ($q = -e$), the Lorentz force $\\vec{F} = -e\\vec{E}$ drives drift velocity $\\vec{v}_d = -\\frac{e\\vec{E}\\tau}{m}$ antiparallel to $\\vec{E} \\implies$ (C) is correct.\n4. Mobility is defined as drift speed per unit field: $\\mu = \\frac{v_d}{E} = \\frac{e\\tau}{m} \\implies$ (D) is correct.\nHence, statements (A), (C), and (D) only are correct.",
     "questionId": "PHYSICS-M12-Q45",
     "conceptId": "PHY-current-electricity-microscopic-free-electron-model-and-conduction-dynamics",
@@ -3649,14 +3649,11 @@
     "options": [
       {
         "id": "A",
-        "text": "$0^\\circ$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Undeflected Straight Path Error",
-        "mistakeAnalysis": "Aspirants assume $b = 0$ means the particle experiences no deviation, which corresponds to very large impact parameters ($b \\to \\infty$).",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Undeflected Straight Path Error"
-        }
+        "text": "$180^\\circ$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $b = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Z e^2 \\cot(\\theta/2)}{K}$. For $b = 0$, $\\cot(\\theta/2) = 0 \\implies \\theta/2 = 90^\\circ \\implies \\theta = 180^\\circ$. A head-on collision causes the particle to rebound backward.",
+        "misconception": null
       },
       {
         "id": "B",
@@ -3682,14 +3679,17 @@
       },
       {
         "id": "D",
-        "text": "$180^\\circ$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $b = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Z e^2 \\cot(\\theta/2)}{K}$. For $b = 0$, $\\cot(\\theta/2) = 0 \\implies \\theta/2 = 90^\\circ \\implies \\theta = 180^\\circ$. A head-on collision causes the particle to rebound backward.",
-        "misconception": null
+        "text": "$0^\\circ$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Undeflected Straight Path Error",
+        "mistakeAnalysis": "Aspirants assume $b = 0$ means the particle experiences no deviation, which corresponds to very large impact parameters ($b \\to \\infty$).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Undeflected Straight Path Error"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "A",
     "detailedSolution": "The relation between impact parameter $b$ and scattering angle $\\theta$ in Coulomb scattering is:\n$$b = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Z e^2 \\cot\\left(\\frac{\\theta}{2}\\right)}{K}$$\nWhen $b = 0$, the particle approaches head-on along the central axis directed straight toward the nucleus:\n$$0 = \\cot\\left(\\frac{\\theta}{2}\\right)$$\n$$\\frac{\\theta}{2} = 90^\\circ \\implies \\theta = 180^\\circ$$\nThe $\\alpha$-particle momentarily stops at its distance of closest approach and rebounds along its original path (scattered through $180^\\circ$).",
     "questionId": "PHYSICS-M12-Q46",
     "conceptId": "PHY-atoms-rutherford-scattering-and-impact-parameter",
@@ -3741,17 +3741,6 @@
       },
       {
         "id": "B",
-        "text": "$1.33\\,\\Omega$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Inverse Length Scaling Error",
-        "mistakeAnalysis": "Aspirants divide the original resistance by 3 ($R/3$).",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Inverse Length Scaling Error"
-        }
-      },
-      {
-        "id": "C",
         "text": "$36.0\\,\\Omega$",
         "isCorrect": true,
         "studentSelectionTrap": null,
@@ -3759,7 +3748,7 @@
         "misconception": null
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "$24.0\\,\\Omega$",
         "isCorrect": false,
         "studentSelectionTrap": "Arithmetic Slip",
@@ -3768,9 +3757,20 @@
           "type": "calculation_error",
           "description": "Arithmetic Slip"
         }
+      },
+      {
+        "id": "D",
+        "text": "$1.33\\,\\Omega$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverse Length Scaling Error",
+        "mistakeAnalysis": "Aspirants divide the original resistance by 3 ($R/3$).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Inverse Length Scaling Error"
+        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "Let initial length be $L_1$ and cross-sectional area be $A_1$. Initial resistance is $R_1 = \\rho \\frac{L_1}{A_1} = 4.0\\,\\Omega$.\nBecause volume $V = A L$ is conserved during stretching:\n$$V = A_1 L_1 = A_2 L_2$$\nGiven $L_2 = 3 L_1$:\n$$A_2 = A_1 \\left(\\frac{L_1}{L_2}\\right) = \\frac{A_1}{3}$$\nThe new resistance is:\n$$R_2 = \\rho \\frac{L_2}{A_2} = \\rho \\frac{3 L_1}{\\frac{A_1}{3}} = 9 \\left(\\rho \\frac{L_1}{A_1}\\right) = 9 R_1$$\nSubstitute $R_1 = 4.0\\,\\Omega$:\n$$R_2 = 9 \\times 4.0\\,\\Omega = 36.0\\,\\Omega$$",
     "questionId": "PHYSICS-M12-Q47",
     "conceptId": "PHY-current-electricity-stretching-of-wires-and-electrical-resistance",
@@ -3811,13 +3811,13 @@
     "options": [
       {
         "id": "A",
-        "text": "$8.0 \\times 10^{-6}\\text{ T}$, towards North",
+        "text": "$4.0 \\times 10^{-6}\\text{ T}$, towards South",
         "isCorrect": false,
-        "studentSelectionTrap": "Right-Hand Rule Reversal",
-        "mistakeAnalysis": "Aspirants reverse finger curling, predicting North instead of South below the wire.",
+        "studentSelectionTrap": "Using $4\\pi$ in Denominator",
+        "mistakeAnalysis": "Aspirants use $4\\pi d$ in Ampere's law, halving the field magnitude.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Right-Hand Rule Reversal"
+          "description": "Using $4\\pi$ in Denominator"
         }
       },
       {
@@ -3830,17 +3830,6 @@
       },
       {
         "id": "C",
-        "text": "$4.0 \\times 10^{-6}\\text{ T}$, towards South",
-        "isCorrect": false,
-        "studentSelectionTrap": "Using $4\\pi$ in Denominator",
-        "mistakeAnalysis": "Aspirants use $4\\pi d$ in Ampere's law, halving the field magnitude.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Using $4\\pi$ in Denominator"
-        }
-      },
-      {
-        "id": "D",
         "text": "$1.2 \\times 10^{-5}\\text{ T}$, towards East",
         "isCorrect": false,
         "studentSelectionTrap": "Field Along Wire Fallacy",
@@ -3848,6 +3837,17 @@
         "misconception": {
           "type": "direction_error",
           "description": "Field Along Wire Fallacy"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$8.0 \\times 10^{-6}\\text{ T}$, towards North",
+        "isCorrect": false,
+        "studentSelectionTrap": "Right-Hand Rule Reversal",
+        "mistakeAnalysis": "Aspirants reverse finger curling, predicting North instead of South below the wire.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Right-Hand Rule Reversal"
         }
       }
     ],
@@ -3892,25 +3892,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$12.0\\text{ A}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Short-Circuit Current Calculation",
-        "mistakeAnalysis": "Aspirants evaluate short-circuit current ($I_{\\text{sc}} = \\mathcal{E}/r = 36/3 = 12.0\\text{ A}$), forgetting that load resistance $R = r$ for maximum power.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Short-Circuit Current Calculation"
-        }
-      },
-      {
-        "id": "B",
-        "text": "$6.0\\text{ A}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Maximum power transfer occurs when $R = r = 3.0\\,\\Omega$. Current is $I = \\frac{\\mathcal{E}}{R + r} = \\frac{36.0}{3.0 + 3.0} = \\frac{36.0}{6.0} = 6.0\\text{ A}$.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$3.0\\text{ A}$",
         "isCorrect": false,
         "studentSelectionTrap": "Extra Halving Step",
@@ -3921,7 +3902,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "$108.0\\text{ A}$",
         "isCorrect": false,
         "studentSelectionTrap": "Maximum Power Value Substitution",
@@ -3930,9 +3911,28 @@
           "type": "calculation_error",
           "description": "Maximum Power Value Substitution"
         }
+      },
+      {
+        "id": "C",
+        "text": "$6.0\\text{ A}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Maximum power transfer occurs when $R = r = 3.0\\,\\Omega$. Current is $I = \\frac{\\mathcal{E}}{R + r} = \\frac{36.0}{3.0 + 3.0} = \\frac{36.0}{6.0} = 6.0\\text{ A}$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$12.0\\text{ A}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Short-Circuit Current Calculation",
+        "mistakeAnalysis": "Aspirants evaluate short-circuit current ($I_{\\text{sc}} = \\mathcal{E}/r = 36/3 = 12.0\\text{ A}$), forgetting that load resistance $R = r$ for maximum power.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Short-Circuit Current Calculation"
+        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "By the Maximum Power Transfer Theorem, the power delivered to the external load resistor $R$ is maximum when the load resistance equals the internal resistance of the source:\n$$R = r = 3.0\\,\\Omega$$\nAt this condition, the total circuit resistance is:\n$$R_{\\text{total}} = R + r = 3.0\\,\\Omega + 3.0\\,\\Omega = 6.0\\,\\Omega$$\nThe electric current drawn from the battery is:\n$$I = \\frac{\\mathcal{E}}{R_{\\text{total}}} = \\frac{36.0\\text{ V}}{6.0\\,\\Omega} = 6.0\\text{ A}$$",
     "questionId": "PHYSICS-M12-Q49",
     "conceptId": "PHY-current-electricity-maximum-power-transfer-theorem-and-circuit-current",
@@ -3973,17 +3973,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$24.7\\text{ mA}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Ignoring Barrier Potential Drop",
-        "mistakeAnalysis": "Aspirants treat the diode as ideal with zero barrier drop, calculating $I = 3.7 / 150 \\approx 24.7\\text{ mA}$.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Ignoring Barrier Potential Drop"
-        }
-      },
-      {
-        "id": "B",
         "text": "$4.67\\text{ mA}$",
         "isCorrect": false,
         "studentSelectionTrap": "Barrier Voltage Drop Misapplication",
@@ -3991,6 +3980,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Barrier Voltage Drop Misapplication"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$29.3\\text{ mA}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Adding Barrier Voltage",
+        "mistakeAnalysis": "Aspirants add the barrier potential ($3.7 + 0.7 = 4.4\\text{ V}$), calculating $4.4 / 150 \\approx 29.3\\text{ mA}$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Adding Barrier Voltage"
         }
       },
       {
@@ -4003,13 +4003,13 @@
       },
       {
         "id": "D",
-        "text": "$29.3\\text{ mA}$",
+        "text": "$24.7\\text{ mA}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Adding Barrier Voltage",
-        "mistakeAnalysis": "Aspirants add the barrier potential ($3.7 + 0.7 = 4.4\\text{ V}$), calculating $4.4 / 150 \\approx 29.3\\text{ mA}$.",
+        "studentSelectionTrap": "Ignoring Barrier Potential Drop",
+        "mistakeAnalysis": "Aspirants treat the diode as ideal with zero barrier drop, calculating $I = 3.7 / 150 \\approx 24.7\\text{ mA}$.",
         "misconception": {
           "type": "calculation_error",
-          "description": "Adding Barrier Voltage"
+          "description": "Ignoring Barrier Potential Drop"
         }
       }
     ],

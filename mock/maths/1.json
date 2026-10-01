@@ -90,14 +90,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\pm 6$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $2x^2 - 40 = 18 - (-14) = 32 \\implies 2x^2 = 72 \\implies x^2 = 36 \\implies x = \\pm 6$.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "6 only",
         "isCorrect": false,
         "studentSelectionTrap": "Negative Root Omission",
@@ -108,18 +100,7 @@
         }
       },
       {
-        "id": "C",
-        "text": "$\\pm 3$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Division by 2 Prematurely",
-        "mistakeAnalysis": "Aspirants divide by 4 or calculate $x^2 = 9$ due to arithmetic slips.",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Division by 2 Prematurely"
-        }
-      },
-      {
-        "id": "D",
+        "id": "B",
         "text": "$\\pm 2$",
         "isCorrect": false,
         "studentSelectionTrap": "Determinant Expansion Arithmetic Slip",
@@ -128,9 +109,28 @@
           "type": "calculation_error",
           "description": "Determinant Expansion Arithmetic Slip"
         }
+      },
+      {
+        "id": "C",
+        "text": "$\\pm 6$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $2x^2 - 40 = 18 - (-14) = 32 \\implies 2x^2 = 72 \\implies x^2 = 36 \\implies x = \\pm 6$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$\\pm 3$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by 2 Prematurely",
+        "mistakeAnalysis": "Aspirants divide by 4 or calculate $x^2 = 9$ due to arithmetic slips.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Division by 2 Prematurely"
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "Evaluate the LHS determinant:\n$\\text{LHS} = (2x)(x) - (5)(8) = 2x^2 - 40$.\nEvaluate the RHS determinant:\n$\\text{RHS} = (6)(3) - (-2)(7) = 18 - (-14) = 18 + 14 = 32$.\nEquating LHS and RHS:\n$2x^2 - 40 = 32$\n$2x^2 = 72$\n$x^2 = 36 \\implies x = \\pm 6$.",
     "questionId": "MATHS-M01-Q02",
     "conceptId": "MATH-determinants-determinant-equation-solving",
@@ -171,28 +171,14 @@
     "options": [
       {
         "id": "A",
-        "text": "(A), (B) and (C) only",
-        "isCorrect": false,
-        "studentSelectionTrap": "Diagonal Matrix Definition Misread",
-        "mistakeAnalysis": "Aspirants overlook the statement $i=j$ in (B) which contradicts the diagonal definition[cite: 2].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Diagonal Matrix Definition Misread"
-        }
+        "text": "(A), (C) and (D) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. (A) and (C) are standard definitions; (D) is a known property. (B) is false because off-diagonal entries require $i \\ne j = 0$[cite: 2].",
+        "misconception": null
       },
       {
         "id": "B",
-        "text": "(B), (C) and (D) only",
-        "isCorrect": false,
-        "studentSelectionTrap": "Symmetric Definition Rejection",
-        "mistakeAnalysis": "Aspirants accept the flawed diagonal statement and reject statement (A)[cite: 2].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Symmetric Definition Rejection"
-        }
-      },
-      {
-        "id": "C",
         "text": "(C) and (D) only",
         "isCorrect": false,
         "studentSelectionTrap": "Incomplete Verification",
@@ -203,15 +189,29 @@
         }
       },
       {
+        "id": "C",
+        "text": "(B), (C) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Symmetric Definition Rejection",
+        "mistakeAnalysis": "Aspirants accept the flawed diagonal statement and reject statement (A)[cite: 2].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Symmetric Definition Rejection"
+        }
+      },
+      {
         "id": "D",
-        "text": "(A), (C) and (D) only",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. (A) and (C) are standard definitions; (D) is a known property. (B) is false because off-diagonal entries require $i \\ne j = 0$[cite: 2].",
-        "misconception": null
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Diagonal Matrix Definition Misread",
+        "mistakeAnalysis": "Aspirants overlook the statement $i=j$ in (B) which contradicts the diagonal definition[cite: 2].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Diagonal Matrix Definition Misread"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "A",
     "detailedSolution": "1. Statement (A): A matrix is symmetric if and only if $A^T = A$, which translates to $a_{ij} = a_{ji}$ for all $i, j$. (True)[cite: 2]\n2. Statement (B): By NCERT definition, a square matrix is a diagonal matrix if all its **non-diagonal** entries are zero (i.e., $a_{ij} = 0$ when $i \\ne j$). The statement asserts $a_{ij} = 0$ when $i = j$, which is incorrect. (False)[cite: 2]\n3. Statement (C): A matrix is skew-symmetric if and only if $A^T = -A$, which requires $a_{ij} = -a_{ji}$ for all $i, j$. (True)[cite: 2]\n4. Statement (D): If $D_1 = \\operatorname{diag}(d_1, \\dots, d_n)$ and $D_2 = \\operatorname{diag}(k_1, \\dots, k_n)$, then $D_1 D_2 = \\operatorname{diag}(d_1 k_1, \\dots, d_n k_n) = D_2 D_1$. Multiplication of diagonal matrices of the same order is always commutative. (True)[cite: 2]\nThus, (A), (C) and (D) only are correct[cite: 2].",
     "questionId": "MATHS-M01-Q03",
     "conceptId": "MATH-matrices-definitions-and-commutativity-of-special-matrices",
@@ -260,13 +260,13 @@
       },
       {
         "id": "B",
-        "text": "$\\frac{\\operatorname{cosec}^2 x \\, e^{\\sqrt{\\cot x}}}{2\\sqrt{\\cot x}}$",
+        "text": "$-\\operatorname{cosec}^2 x \\, e^{\\sqrt{\\cot x}}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Cotangent Derivative Sign Error",
-        "mistakeAnalysis": "Aspirants differentiate $\\cot x$ as $+\\operatorname{cosec}^2 x$.",
+        "studentSelectionTrap": "Square Root Derivative Factor Omission",
+        "mistakeAnalysis": "Aspirants omit the denominator term $2\\sqrt{\\cot x}$.",
         "misconception": {
-          "type": "sign_error",
-          "description": "Cotangent Derivative Sign Error"
+          "type": "conceptual_misunderstanding",
+          "description": "Square Root Derivative Factor Omission"
         }
       },
       {
@@ -282,13 +282,13 @@
       },
       {
         "id": "D",
-        "text": "$-\\operatorname{cosec}^2 x \\, e^{\\sqrt{\\cot x}}$",
+        "text": "$\\frac{\\operatorname{cosec}^2 x \\, e^{\\sqrt{\\cot x}}}{2\\sqrt{\\cot x}}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Square Root Derivative Factor Omission",
-        "mistakeAnalysis": "Aspirants omit the denominator term $2\\sqrt{\\cot x}$.",
+        "studentSelectionTrap": "Cotangent Derivative Sign Error",
+        "mistakeAnalysis": "Aspirants differentiate $\\cot x$ as $+\\operatorname{cosec}^2 x$.",
         "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Square Root Derivative Factor Omission"
+          "type": "sign_error",
+          "description": "Cotangent Derivative Sign Error"
         }
       }
     ],
@@ -344,14 +344,6 @@
       },
       {
         "id": "B",
-        "text": "0",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. The matrix is skew-symmetric of odd order 3; the determinant of any odd-order skew-symmetric matrix is identically zero.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$a+b+c$",
         "isCorrect": false,
         "studentSelectionTrap": "Trace Value Guess",
@@ -360,6 +352,14 @@
           "type": "conceptual_misunderstanding",
           "description": "Trace Value Guess"
         }
+      },
+      {
+        "id": "C",
+        "text": "0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The matrix is skew-symmetric of odd order 3; the determinant of any odd-order skew-symmetric matrix is identically zero.",
+        "misconception": null
       },
       {
         "id": "D",
@@ -373,7 +373,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "Let $M = \\begin{bmatrix} 0 & a-b & a-c \\\\ b-a & 0 & b-c \\\\ c-a & c-b & 0 \\end{bmatrix}$.\nNotice that the diagonal entries are all 0, and:\n- $m_{21} = b - a = -(a - b) = -m_{12}$\n- $m_{31} = c - a = -(a - c) = -m_{13}$\n- $m_{32} = c - b = -(b - c) = -m_{23}$\nThus, $M^T = -M$, meaning $M$ is a skew-symmetric matrix of order $n = 3$.\nBy determinant properties: $|M| = |M^T| = |-M| = (-1)^3 |M| = -|M|$.\n$|M| = -|M| \\implies 2|M| = 0 \\implies |M| = 0$.",
     "questionId": "MATHS-M01-Q05",
     "conceptId": "MATH-determinants-properties-of-skew-symmetric-determinants-of-order-3",
@@ -414,17 +414,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$n \\times n$ and $m \\times m$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dimension Order Inversion",
-        "mistakeAnalysis": "Aspirants swap the row and column dimensions for pre- and post-multiplication.",
-        "misconception": {
-          "type": "unit_error",
-          "description": "Dimension Order Inversion"
-        }
-      },
-      {
-        "id": "B",
         "text": "$m \\times n$ and $n \\times m$",
         "isCorrect": false,
         "studentSelectionTrap": "Rectangular Identity Fallacy",
@@ -435,12 +424,23 @@
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "$m \\times m$ and $n \\times n$",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. $I_m A_{m\\times n} = A_{m\\times n}$ and $A_{m\\times n} I_n = A_{m\\times n}$.",
         "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "$n \\times n$ and $m \\times m$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dimension Order Inversion",
+        "mistakeAnalysis": "Aspirants swap the row and column dimensions for pre- and post-multiplication.",
+        "misconception": {
+          "type": "unit_error",
+          "description": "Dimension Order Inversion"
+        }
       },
       {
         "id": "D",
@@ -454,7 +454,7 @@
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "For matrix multiplication to be defined:\n1. In $IA = A$, $A$ has order $m \\times n$. For multiplication from the left, $I$ must have $m$ columns, and to result in an $m \\times n$ matrix, $I$ must have $m$ rows. Since an identity matrix is square, $I$ must be of order $m \\times m$ (denoted $I_m$).\n2. In $AI = A$, $A$ has order $m \\times n$. For multiplication from the right, $I$ must have $n$ rows. Because it is an identity matrix, it must be square of order $n \\times n$ (denoted $I_n$).\nTherefore, the orders are $m \\times m$ and $n \\times n$ respectively.",
     "questionId": "MATHS-M01-Q06",
     "conceptId": "MATH-matrices-identity-and-zero-matrix-multiplication",
@@ -506,17 +506,6 @@
       },
       {
         "id": "B",
-        "text": "5",
-        "isCorrect": false,
-        "studentSelectionTrap": "Numerator Multiplier Slip",
-        "mistakeAnalysis": "Aspirants report the constant term 5[cite: 3].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Numerator Multiplier Slip"
-        }
-      },
-      {
-        "id": "C",
         "text": "$\\frac{1}{5}$",
         "isCorrect": false,
         "studentSelectionTrap": "Reciprocal Error",
@@ -524,6 +513,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Reciprocal Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "5",
+        "isCorrect": false,
+        "studentSelectionTrap": "Numerator Multiplier Slip",
+        "mistakeAnalysis": "Aspirants report the constant term 5[cite: 3].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Numerator Multiplier Slip"
         }
       },
       {
@@ -576,28 +576,14 @@
     "options": [
       {
         "id": "A",
-        "text": "-5.79",
-        "isCorrect": false,
-        "studentSelectionTrap": "Division by $n$ Instead of $\\sqrt{n}$",
-        "mistakeAnalysis": "Aspirants divide sample standard deviation by 16 instead of 4.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Division by $n$ Instead of $\\sqrt{n}$"
-        }
+        "text": "-3.79",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $s^2 = 150/15 = 10 \\implies s = \\sqrt{10}$. $t = (53 - 56) / (\\sqrt{10}/\\sqrt{16}) = -3 / (3.162/4) = -12 / 3.162 \\approx -3.79$.",
+        "misconception": null
       },
       {
         "id": "B",
-        "text": "-4.79",
-        "isCorrect": false,
-        "studentSelectionTrap": "Sample Variance Divisor Slip",
-        "mistakeAnalysis": "Aspirants divide by $n=16$ instead of $n-1=15$ when computing $s^2$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Sample Variance Divisor Slip"
-        }
-      },
-      {
-        "id": "C",
         "text": "-2.79",
         "isCorrect": false,
         "studentSelectionTrap": "Standard Error Numerator Error",
@@ -608,15 +594,29 @@
         }
       },
       {
+        "id": "C",
+        "text": "-5.79",
+        "isCorrect": false,
+        "studentSelectionTrap": "Division by $n$ Instead of $\\sqrt{n}$",
+        "mistakeAnalysis": "Aspirants divide sample standard deviation by 16 instead of 4.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Division by $n$ Instead of $\\sqrt{n}$"
+        }
+      },
+      {
         "id": "D",
-        "text": "-3.79",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $s^2 = 150/15 = 10 \\implies s = \\sqrt{10}$. $t = (53 - 56) / (\\sqrt{10}/\\sqrt{16}) = -3 / (3.162/4) = -12 / 3.162 \\approx -3.79$.",
-        "misconception": null
+        "text": "-4.79",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sample Variance Divisor Slip",
+        "mistakeAnalysis": "Aspirants divide by $n=16$ instead of $n-1=15$ when computing $s^2$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Sample Variance Divisor Slip"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "A",
     "detailedSolution": "Given:\nSample size $n = 16$.\nSample mean $\\bar{x} = 53$.\nPopulation mean $\\mu = 56$.\nSum of squared deviations $\\sum (x_i - \\bar{x})^2 = 150$.\nUnbiased sample variance:\n$s^2 = \\frac{\\sum (x_i - \\bar{x})^2}{n - 1} = \\frac{150}{16 - 1} = \\frac{150}{15} = 10$.\nSample standard deviation $s = \\sqrt{10} \\approx 3.16228$.\nStandard Error of the mean ($SE$):\n$SE = \\frac{s}{\\sqrt{n}} = \\frac{\\sqrt{10}}{\\sqrt{16}} = \\frac{\\sqrt{10}}{4} \\approx 0.79057$.\nCalculating $t$-test statistic:\n$t = \\frac{\\bar{x} - \\mu}{SE} = \\frac{53 - 56}{0.79057} = \\frac{-3}{0.79057} \\approx -3.7947 \\approx -3.79$.",
     "questionId": "MATHS-M01-Q08",
     "conceptId": "MATH-inferential-statistics-student-s-t-test-for-single-mean",
@@ -657,13 +657,13 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{1}{3}(\\hat{i} - \\hat{j} - \\hat{k})$",
+        "text": "$3\\hat{i} - 3\\hat{j} - 3\\hat{k}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Square Root Omission in Denominator",
-        "mistakeAnalysis": "Aspirants normalize by 3 instead of $3\\sqrt{3}$.",
+        "studentSelectionTrap": "Unnormalized Vector Selection",
+        "mistakeAnalysis": "Aspirants select the raw cross product without normalizing to unit length.",
         "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Square Root Omission in Denominator"
+          "type": "unit_error",
+          "description": "Unnormalized Vector Selection"
         }
       },
       {
@@ -679,13 +679,13 @@
       },
       {
         "id": "C",
-        "text": "$3\\hat{i} - 3\\hat{j} - 3\\hat{k}$",
+        "text": "$\\frac{1}{3}(\\hat{i} - \\hat{j} - \\hat{k})$",
         "isCorrect": false,
-        "studentSelectionTrap": "Unnormalized Vector Selection",
-        "mistakeAnalysis": "Aspirants select the raw cross product without normalizing to unit length.",
+        "studentSelectionTrap": "Square Root Omission in Denominator",
+        "mistakeAnalysis": "Aspirants normalize by 3 instead of $3\\sqrt{3}$.",
         "misconception": {
-          "type": "unit_error",
-          "description": "Unnormalized Vector Selection"
+          "type": "conceptual_misunderstanding",
+          "description": "Square Root Omission in Denominator"
         }
       },
       {
@@ -757,17 +757,6 @@
       },
       {
         "id": "C",
-        "text": "2.3",
-        "isCorrect": false,
-        "studentSelectionTrap": "Arithmetic Slip in $E(X^2)$",
-        "mistakeAnalysis": "Aspirants calculate $E(X^2) = 6.3$ erroneously[cite: 4].",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Arithmetic Slip in $E(X^2)$"
-        }
-      },
-      {
-        "id": "D",
         "text": "1.2",
         "isCorrect": false,
         "studentSelectionTrap": "Mean Difference Error",
@@ -775,6 +764,17 @@
         "misconception": {
           "type": "calculation_error",
           "description": "Mean Difference Error"
+        }
+      },
+      {
+        "id": "D",
+        "text": "2.3",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Slip in $E(X^2)$",
+        "mistakeAnalysis": "Aspirants calculate $E(X^2) = 6.3$ erroneously[cite: 4].",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Arithmetic Slip in $E(X^2)$"
         }
       }
     ],
@@ -830,13 +830,13 @@
       },
       {
         "id": "B",
-        "text": "Is a bounded polygon",
+        "text": "Contains infinitely many extreme points",
         "isCorrect": false,
-        "studentSelectionTrap": "Non-negativity Bounding Fallacy",
-        "mistakeAnalysis": "Aspirants assume $x, y \\ge 0$ creates a bounded polygon.",
+        "studentSelectionTrap": "Unbounded Feasibility Confusion",
+        "mistakeAnalysis": "Aspirants confuse infeasibility with degenerate unboundedness.",
         "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Non-negativity Bounding Fallacy"
+          "type": "conceptual_misunderstanding",
+          "description": "Unbounded Feasibility Confusion"
         }
       },
       {
@@ -849,13 +849,13 @@
       },
       {
         "id": "D",
-        "text": "Contains infinitely many extreme points",
+        "text": "Is a bounded polygon",
         "isCorrect": false,
-        "studentSelectionTrap": "Unbounded Feasibility Confusion",
-        "mistakeAnalysis": "Aspirants confuse infeasibility with degenerate unboundedness.",
+        "studentSelectionTrap": "Non-negativity Bounding Fallacy",
+        "mistakeAnalysis": "Aspirants assume $x, y \\ge 0$ creates a bounded polygon.",
         "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Unbounded Feasibility Confusion"
+          "type": "logical_reasoning_error",
+          "description": "Non-negativity Bounding Fallacy"
         }
       }
     ],
@@ -980,25 +980,17 @@
     "options": [
       {
         "id": "A",
-        "text": "When the sample size increases, the mean of the sample of data becomes close to the mean of the overall population[cite: 4].",
+        "text": "A sample size of 30 or more is considered to be sufficient to hold the Central Limit Theorem[cite: 4].",
         "isCorrect": false,
-        "studentSelectionTrap": "True Statement Misidentification",
-        "mistakeAnalysis": "Aspirants classify the Law of Large Numbers property as an error[cite: 4].",
+        "studentSelectionTrap": "Valid Rule of Thumb Rejection",
+        "mistakeAnalysis": "Aspirants reject the standard $n \\ge 30$ heuristic[cite: 4].",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "True Statement Misidentification"
+          "description": "Valid Rule of Thumb Rejection"
         }
       },
       {
         "id": "B",
-        "text": "A sample size of less than 30 is considered to be sufficient to hold the Central Limit Theorem[cite: 4].",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. The established statistical rule of thumb requires $n \\ge 30$ for the sampling distribution of the mean to be approximately normal for non-normal populations[cite: 4].",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "When the sample size increases, the sampling distribution of the mean approaches a normal distribution, regardless of the shape of the parent population[cite: 4].",
         "isCorrect": false,
         "studentSelectionTrap": "Core Theorem Rejection",
@@ -1009,18 +1001,26 @@
         }
       },
       {
-        "id": "D",
-        "text": "A sample size of 30 or more is considered to be sufficient to hold the Central Limit Theorem[cite: 4].",
+        "id": "C",
+        "text": "When the sample size increases, the mean of the sample of data becomes close to the mean of the overall population[cite: 4].",
         "isCorrect": false,
-        "studentSelectionTrap": "Valid Rule of Thumb Rejection",
-        "mistakeAnalysis": "Aspirants reject the standard $n \\ge 30$ heuristic[cite: 4].",
+        "studentSelectionTrap": "True Statement Misidentification",
+        "mistakeAnalysis": "Aspirants classify the Law of Large Numbers property as an error[cite: 4].",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Valid Rule of Thumb Rejection"
+          "description": "True Statement Misidentification"
         }
+      },
+      {
+        "id": "D",
+        "text": "A sample size of less than 30 is considered to be sufficient to hold the Central Limit Theorem[cite: 4].",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The established statistical rule of thumb requires $n \\ge 30$ for the sampling distribution of the mean to be approximately normal for non-normal populations[cite: 4].",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "Under the Central Limit Theorem (CLT):\n- The sampling distribution of the sample mean $\\bar{x}$ approaches a normal distribution as sample size $n$ increases, regardless of whether the parent distribution is skewed, bimodal, or uniform[cite: 4].\n- Statistically, a sample size of $n \\ge 30$ is standardly considered large enough to ensure normality[cite: 4].\n- Samples of size less than 30 ($n < 30$) are small samples and are NOT generally sufficient unless the underlying population is already normally distributed[cite: 4].\nHence, statement 3 is NOT correct[cite: 4].",
     "questionId": "MATHS-M01-Q13",
     "conceptId": "MATH-inferential-statistics-central-limit-theorem-principles",
@@ -1060,22 +1060,22 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\begin{bmatrix}0 & 1 \\\\ 1 & 0\\end{bmatrix}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Odd Power Parity Confusion",
-        "mistakeAnalysis": "Aspirants treat 2026 as an odd exponent, concluding $A^{2026} = A$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Odd Power Parity Confusion"
-        }
-      },
-      {
-        "id": "B",
         "text": "$\\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. $A^2 = I$. For any even integer $2k$, $A^{2k} = (A^2)^k = I^k = I$.",
         "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "$\\begin{bmatrix}-1 & 0 \\\\ 0 & -1\\end{bmatrix}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Power Parity Error",
+        "mistakeAnalysis": "Aspirants introduce an alternating sign factor $(-1)^{2026/2}$.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Negative Power Parity Error"
+        }
       },
       {
         "id": "C",
@@ -1090,17 +1090,17 @@
       },
       {
         "id": "D",
-        "text": "$\\begin{bmatrix}-1 & 0 \\\\ 0 & -1\\end{bmatrix}$",
+        "text": "$\\begin{bmatrix}0 & 1 \\\\ 1 & 0\\end{bmatrix}$",
         "isCorrect": false,
-        "studentSelectionTrap": "Negative Power Parity Error",
-        "mistakeAnalysis": "Aspirants introduce an alternating sign factor $(-1)^{2026/2}$.",
+        "studentSelectionTrap": "Odd Power Parity Confusion",
+        "mistakeAnalysis": "Aspirants treat 2026 as an odd exponent, concluding $A^{2026} = A$.",
         "misconception": {
-          "type": "sign_error",
-          "description": "Negative Power Parity Error"
+          "type": "conceptual_misunderstanding",
+          "description": "Odd Power Parity Confusion"
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "Compute $A^2$:\n$A^2 = \\begin{bmatrix}0 & 1 \\\\ 1 & 0\\end{bmatrix} \\begin{bmatrix}0 & 1 \\\\ 1 & 0\\end{bmatrix} = \\begin{bmatrix}0(0) + 1(1) & 0(1) + 1(0) \\\\ 1(0) + 0(1) & 1(1) + 0(0)\\end{bmatrix} = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix} = I$.\nSince $A^2 = I$:\n$A^{2026} = (A^2)^{1013} = I^{1013} = I = \\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}$.",
     "questionId": "MATHS-M01-Q14",
     "conceptId": "MATH-matrices-matrix-multiplication-and-identity-powers",
@@ -1141,25 +1141,6 @@
     "options": [
       {
         "id": "A",
-        "text": "(B) and (C) only",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Standard form gives $P(x) = 2/x \\implies \\text{IF} = x^2$. Integrating by parts gives $y x^2 = \\frac{x^4}{16}(4\\log x - 1) + C \\implies y = \\frac{x^2}{16}(4\\log x - 1) + C x^{-2}$[cite: 2].",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "(A) and (C) only",
-        "isCorrect": false,
-        "studentSelectionTrap": "Integrating Factor Exponentiation Omission",
-        "mistakeAnalysis": "Aspirants compute $\\int (2/x)\\,dx = 2\\log x$ and mistake the integrating factor for $2x$[cite: 2].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Integrating Factor Exponentiation Omission"
-        }
-      },
-      {
-        "id": "C",
         "text": "(B) and (D) only",
         "isCorrect": false,
         "studentSelectionTrap": "Division by Integrating Factor Omission",
@@ -1170,7 +1151,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "(A) and (D) only",
         "isCorrect": false,
         "studentSelectionTrap": "Dual Component Miscalculation",
@@ -1179,9 +1160,28 @@
           "type": "calculation_error",
           "description": "Dual Component Miscalculation"
         }
+      },
+      {
+        "id": "C",
+        "text": "(B) and (C) only",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Standard form gives $P(x) = 2/x \\implies \\text{IF} = x^2$. Integrating by parts gives $y x^2 = \\frac{x^4}{16}(4\\log x - 1) + C \\implies y = \\frac{x^2}{16}(4\\log x - 1) + C x^{-2}$[cite: 2].",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "(A) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Integrating Factor Exponentiation Omission",
+        "mistakeAnalysis": "Aspirants compute $\\int (2/x)\\,dx = 2\\log x$ and mistake the integrating factor for $2x$[cite: 2].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Integrating Factor Exponentiation Omission"
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "Rewrite in standard linear form $\\frac{dy}{dx} + P(x)y = Q(x)$ by dividing by $x$[cite: 2]:\n$\\frac{dy}{dx} + \\frac{2}{x}y = x\\log_e x$.\nHere $P(x) = \\frac{2}{x}$ and $Q(x) = x\\log_e x$.\n1. Integrating factor (IF):\n   $\\text{IF} = e^{\\int \\frac{2}{x}\\,dx} = e^{2\\log_e x} = e^{\\log_e(x^2)} = x^2$. (Statement B is TRUE, A is FALSE)[cite: 2].\n2. General solution:\n   $y \\cdot (\\text{IF}) = \\int Q(x) \\cdot (\\text{IF})\\,dx + C$\n   $y \\cdot x^2 = \\int (x\\log_e x) \\cdot x^2\\,dx + C = \\int x^3 \\log_e x\\,dx + C$.\n   Integrate by parts with $u = \\log_e x$ and $dv = x^3\\,dx$:\n   $\\int x^3 \\log_e x\\,dx = (\\log_e x)\\left(\\frac{x^4}{4}\\right) - \\int \\frac{1}{x} \\left(\\frac{x^4}{4}\\right)\\,dx = \\frac{x^4}{4}\\log_e x - \\frac{x^4}{16} = \\frac{x^4}{16}(4\\log_e x - 1)$.\n   $y x^2 = \\frac{x^4}{16}(4\\log_e x - 1) + C$.\n   Divide through by $x^2$:\n   $y = \\frac{x^2}{16}(4\\log_e x - 1) + C x^{-2}$. (Statement C is TRUE, D is FALSE)[cite: 2].\nTherefore, (B) and (C) only are TRUE[cite: 2].",
     "questionId": "MATHS-M01-Q15",
     "conceptId": "MATH-differential-equations-first-order-linear-differential-equations-with-logarithmic-rhs",
@@ -1303,25 +1303,6 @@
     "options": [
       {
         "id": "A",
-        "text": "The open half-plane $ax + by < M$ has no point in common with the feasible region",
-        "isCorrect": false,
-        "studentSelectionTrap": "Inequality Reversal",
-        "mistakeAnalysis": "Aspirants confuse the condition for maximization with that for minimization.",
-        "misconception": {
-          "type": "boundary_condition_error",
-          "description": "Inequality Reversal"
-        }
-      },
-      {
-        "id": "B",
-        "text": "The open half-plane $ax + by > M$ has no point in common with the feasible region",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Fundamental NCERT theorem for maximization in unbounded regions.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "The feasible region is fully enclosed within the first quadrant",
         "isCorrect": false,
         "studentSelectionTrap": "Bounded Region Definition Trap",
@@ -1332,7 +1313,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "The objective function has identical values at all corner points",
         "isCorrect": false,
         "studentSelectionTrap": "Degenerate Multiple Solutions Fallacy",
@@ -1341,9 +1322,28 @@
           "type": "logical_reasoning_error",
           "description": "Degenerate Multiple Solutions Fallacy"
         }
+      },
+      {
+        "id": "C",
+        "text": "The open half-plane $ax + by > M$ has no point in common with the feasible region",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Fundamental NCERT theorem for maximization in unbounded regions.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "The open half-plane $ax + by < M$ has no point in common with the feasible region",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inequality Reversal",
+        "mistakeAnalysis": "Aspirants confuse the condition for maximization with that for minimization.",
+        "misconception": {
+          "type": "boundary_condition_error",
+          "description": "Inequality Reversal"
+        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "By the NCERT Fundamental Theorem for Linear Programming:\nWhen the feasible region is unbounded, $M$ is the maximum value of the objective function $Z = ax + by$ if and only if the open half-plane determined by the strict inequality $ax + by > M$ has no point in common with the feasible region. Otherwise, $Z$ has no maximum value.",
     "questionId": "MATHS-M01-Q17",
     "conceptId": "MATH-linear-programming-unbounded-feasible-region-optimality-condition",
@@ -1384,14 +1384,6 @@
     "options": [
       {
         "id": "A",
-        "text": "An equivalence relation",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. For all $x \\in \\mathbb{N}$, $x - x = 0 = 3(0)$ (reflexive); if $x - y = 3k$, then $y - x = 3(-k)$ (symmetric); if $x - y = 3k_1$ and $y - z = 3k_2$, then $x - z = 3(k_1 + k_2)$ (transitive).",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "Reflexive and symmetric but not transitive",
         "isCorrect": false,
         "studentSelectionTrap": "Summation Divisibility Doubt",
@@ -1402,7 +1394,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "Symmetric and transitive but not reflexive",
         "isCorrect": false,
         "studentSelectionTrap": "Zero Divisibility Misconception",
@@ -1411,6 +1403,14 @@
           "type": "conceptual_misunderstanding",
           "description": "Zero Divisibility Misconception"
         }
+      },
+      {
+        "id": "C",
+        "text": "An equivalence relation",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For all $x \\in \\mathbb{N}$, $x - x = 0 = 3(0)$ (reflexive); if $x - y = 3k$, then $y - x = 3(-k)$ (symmetric); if $x - y = 3k_1$ and $y - z = 3k_2$, then $x - z = 3(k_1 + k_2)$ (transitive).",
+        "misconception": null
       },
       {
         "id": "D",
@@ -1424,7 +1424,7 @@
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "1. Reflexivity: For any $x \\in \\mathbb{N}$, $x - x = 0$, which is divisible by 3. Thus, $(x, x) \\in R$.\n2. Symmetry: For any $x, y \\in \\mathbb{N}$, if $(x, y) \\in R$, then $x - y = 3k$ for some integer $k$. Then $y - x = -(x - y) = 3(-k)$. Since $-k$ is an integer, $y - x$ is divisible by 3, so $(y, x) \\in R$.\n3. Transitivity: If $(x, y) \\in R$ and $(y, z) \\in R$, then $x - y = 3k_1$ and $y - z = 3k_2$ for integers $k_1, k_2$. Adding both gives $x - z = 3(k_1 + k_2)$, which is divisible by 3. Thus, $(x, z) \\in R$.\nSince $R$ is reflexive, symmetric, and transitive, it is an equivalence relation.",
     "questionId": "MATHS-M01-Q18",
     "conceptId": "MATH-relations-and-functions-equivalence-relations-on-natural-numbers",
@@ -1473,17 +1473,6 @@
       },
       {
         "id": "B",
-        "text": "Rs. 24",
-        "isCorrect": false,
-        "studentSelectionTrap": "Ratio Inversion Slip",
-        "mistakeAnalysis": "Aspirants mix in the inverted ratio 3:2: $\\frac{20(3) + 30(2)}{5} = \\frac{120}{5} = 24$[cite: 2].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Ratio Inversion Slip"
-        }
-      },
-      {
-        "id": "C",
         "text": "Rs. 30",
         "isCorrect": false,
         "studentSelectionTrap": "Maximum Price Anchor",
@@ -1491,6 +1480,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Maximum Price Anchor"
+        }
+      },
+      {
+        "id": "C",
+        "text": "Rs. 24",
+        "isCorrect": false,
+        "studentSelectionTrap": "Ratio Inversion Slip",
+        "mistakeAnalysis": "Aspirants mix in the inverted ratio 3:2: $\\frac{20(3) + 30(2)}{5} = \\frac{120}{5} = 24$[cite: 2].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Ratio Inversion Slip"
         }
       },
       {
@@ -1557,25 +1557,6 @@
       },
       {
         "id": "B",
-        "text": "$x^{3}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Row operations reduce the matrix to upper triangular form with diagonal entries $x, x, x$, giving determinant $x^3$[cite: 3].",
-        "misconception": null
-      },
-      {
-        "id": "C",
-        "text": "$x$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Degree 1 Polynomial Fallacy",
-        "mistakeAnalysis": "Aspirants omit diagonal product powers[cite: 3].",
-        "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Degree 1 Polynomial Fallacy"
-        }
-      },
-      {
-        "id": "D",
         "text": "$x^{2}$",
         "isCorrect": false,
         "studentSelectionTrap": "Power Slip",
@@ -1584,9 +1565,28 @@
           "type": "conceptual_misunderstanding",
           "description": "Power Slip"
         }
+      },
+      {
+        "id": "C",
+        "text": "$x^{3}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Row operations reduce the matrix to upper triangular form with diagonal entries $x, x, x$, giving determinant $x^3$[cite: 3].",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$x$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Degree 1 Polynomial Fallacy",
+        "mistakeAnalysis": "Aspirants omit diagonal product powers[cite: 3].",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Degree 1 Polynomial Fallacy"
+        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "Let $\\Delta = \\begin{vmatrix}x & x+y & x+y+z \\\\ 2x & 3x+2y & 4x+3y+2z \\\\ 3x & 6x+3y & 10x+6y+3z\\end{vmatrix}$[cite: 3].\nApply row operations $R_2 \\to R_2 - 2R_1$ and $R_3 \\to R_3 - 3R_1$:\n$\\Delta = \\begin{vmatrix}x & x+y & x+y+z \\\\ 0 & x & 2x+z \\\\ 0 & 3x & 7x+3z\\end{vmatrix}$.\nNow apply $R_3 \\to R_3 - 3R_2$:\n$\\Delta = \\begin{vmatrix}x & x+y & x+y+z \\\\ 0 & x & 2x+z \\\\ 0 & 0 & (7x+3z) - 3(2x+z)\\end{vmatrix} = \\begin{vmatrix}x & x+y & x+y+z \\\\ 0 & x & 2x+z \\\\ 0 & 0 & x\\end{vmatrix}$.\nSince this is an upper triangular matrix, its determinant is the product of its main diagonal elements:\n$\\Delta = x \\cdot x \\cdot x = x^3$[cite: 3].",
     "questionId": "MATHS-M01-Q20",
     "conceptId": "MATH-determinants-evaluation-of-determinants-using-row-operations",
@@ -1627,11 +1627,14 @@
     "options": [
       {
         "id": "A",
-        "text": "$(5, \\infty)$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. First inequality gives $x > -5$; second gives $x > 5$. The intersection is $x > 5$ or $(5, \\infty)$.",
-        "misconception": null
+        "text": "$(-5, \\infty)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Weakest Inequality Selection",
+        "mistakeAnalysis": "Aspirants select the union instead of the intersection.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Weakest Inequality Selection"
+        }
       },
       {
         "id": "B",
@@ -1646,14 +1649,11 @@
       },
       {
         "id": "C",
-        "text": "$(-5, \\infty)$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Weakest Inequality Selection",
-        "mistakeAnalysis": "Aspirants select the union instead of the intersection.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Weakest Inequality Selection"
-        }
+        "text": "$(5, \\infty)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. First inequality gives $x > -5$; second gives $x > 5$. The intersection is $x > 5$ or $(5, \\infty)$.",
+        "misconception": null
       },
       {
         "id": "D",
@@ -1667,7 +1667,7 @@
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "1. Solve the first inequality:\n   $3x - 7 > 2x - 12$\n   $3x - 2x > -12 + 7 \\implies x > -5$.\n2. Solve the second inequality:\n   $6 - x > 11 - 2x$\n   $-x + 2x > 11 - 6 \\implies x > 5$.\nThe solution set is the intersection of both conditions:\n$x > -5$ and $x > 5 \\implies x > 5$.\nIn interval notation: $x \\in (5, \\infty)$.",
     "questionId": "MATHS-M01-Q21",
     "conceptId": "MATH-linear-inequalities-system-of-linear-inequalities-in-one-variable",
@@ -1707,25 +1707,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Skew-symmetric matrix",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $(A - A^T)^T = A^T - (A^T)^T = A^T - A = -(A - A^T)$.",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "Symmetric matrix",
-        "isCorrect": false,
-        "studentSelectionTrap": "Addition Confused with Subtraction",
-        "mistakeAnalysis": "Aspirants confuse $A - A^T$ with the symmetric sum $A + A^T$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Addition Confused with Subtraction"
-        }
-      },
-      {
-        "id": "C",
         "text": "Diagonal matrix",
         "isCorrect": false,
         "studentSelectionTrap": "Diagonal Assumption",
@@ -1736,7 +1717,15 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
+        "text": "Skew-symmetric matrix",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $(A - A^T)^T = A^T - (A^T)^T = A^T - A = -(A - A^T)$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "Identity matrix",
         "isCorrect": false,
         "studentSelectionTrap": "Identity Matrix Fallacy",
@@ -1745,9 +1734,20 @@
           "type": "logical_reasoning_error",
           "description": "Identity Matrix Fallacy"
         }
+      },
+      {
+        "id": "D",
+        "text": "Symmetric matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Addition Confused with Subtraction",
+        "mistakeAnalysis": "Aspirants confuse $A - A^T$ with the symmetric sum $A + A^T$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Addition Confused with Subtraction"
+        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "Let $Q = A - A^T$.\nTaking transpose on both sides:\n$Q^T = (A - A^T)^T = A^T - (A^T)^T$.\nSince $(A^T)^T = A$:\n$Q^T = A^T - A = -(A - A^T) = -Q$.\nBecause $Q^T = -Q$, the matrix $A - A^T$ is always skew-symmetric.",
     "questionId": "MATHS-M01-Q22",
     "conceptId": "MATH-matrices-symmetric-and-skew-symmetric-matrix-properties",
@@ -1799,17 +1799,6 @@
       },
       {
         "id": "B",
-        "text": "$12\\pi\\text{ cm}^{3}\\text{/s}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Exponent Slip",
-        "mistakeAnalysis": "Aspirants use $V = \\pi r^2$ or make calculation slips.",
-        "misconception": {
-          "type": "formula_confusion",
-          "description": "Formula Exponent Slip"
-        }
-      },
-      {
-        "id": "C",
         "text": "$36\\pi\\text{ cm}^{3}\\text{/s}$",
         "isCorrect": false,
         "studentSelectionTrap": "Radius Squaring Error",
@@ -1817,6 +1806,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Radius Squaring Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$12\\pi\\text{ cm}^{3}\\text{/s}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Exponent Slip",
+        "mistakeAnalysis": "Aspirants use $V = \\pi r^2$ or make calculation slips.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "Formula Exponent Slip"
         }
       },
       {
@@ -1869,14 +1869,11 @@
     "options": [
       {
         "id": "A",
-        "text": "1",
-        "isCorrect": false,
-        "studentSelectionTrap": "Quotient Modulo Confusion",
-        "mistakeAnalysis": "Aspirants evaluate $7 \\pmod 6 = 1$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Quotient Modulo Confusion"
-        }
+        "text": "5",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $47 = 6 \\times 7 + 5$, so remainder is 5.",
+        "misconception": null
       },
       {
         "id": "B",
@@ -1902,14 +1899,17 @@
       },
       {
         "id": "D",
-        "text": "5",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $47 = 6 \\times 7 + 5$, so remainder is 5.",
-        "misconception": null
+        "text": "1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Quotient Modulo Confusion",
+        "mistakeAnalysis": "Aspirants evaluate $7 \\pmod 6 = 1$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Quotient Modulo Confusion"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "A",
     "detailedSolution": "By Euclid's division algorithm:\n$47 = 6 \\times 7 + 5$, where $0 \\le 5 < 6$.\nTherefore:\n$47 \\equiv 5 \\pmod 6$.\nThe least non-negative remainder is 5.",
     "questionId": "MATHS-M01-Q24",
     "conceptId": "MATH-numbers-and-quantification-modular-arithmetic-division",
@@ -1958,17 +1958,6 @@
       },
       {
         "id": "B",
-        "text": "8.24%",
-        "isCorrect": false,
-        "studentSelectionTrap": "Quarterly Compounding Formula",
-        "mistakeAnalysis": "Aspirants use quarterly compounding $m = 4$ or make arithmetic mistakes.",
-        "misconception": {
-          "type": "formula_confusion",
-          "description": "Quarterly Compounding Formula"
-        }
-      },
-      {
-        "id": "C",
         "text": "8.33%",
         "isCorrect": false,
         "studentSelectionTrap": "Continuous Compounding Approximation",
@@ -1976,6 +1965,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Continuous Compounding Approximation"
+        }
+      },
+      {
+        "id": "C",
+        "text": "8.24%",
+        "isCorrect": false,
+        "studentSelectionTrap": "Quarterly Compounding Formula",
+        "mistakeAnalysis": "Aspirants use quarterly compounding $m = 4$ or make arithmetic mistakes.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "Quarterly Compounding Formula"
         }
       },
       {
@@ -2053,6 +2053,14 @@
       },
       {
         "id": "C",
+        "text": "$\\frac{1}{2}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\tan^{-1}x = \\frac{\\pi}{4} - \\tan^{-1}(1/3) \\implies x = \\tan(\\pi/4 - \\tan^{-1}(1/3)) = \\frac{1 - 1/3}{1 + 1/3} = \\frac{2/3}{4/3} = 1/2$.",
+        "misconception": null
+      },
+      {
+        "id": "D",
         "text": "1",
         "isCorrect": false,
         "studentSelectionTrap": "RHS Value Substitution",
@@ -2061,17 +2069,9 @@
           "type": "calculation_error",
           "description": "RHS Value Substitution"
         }
-      },
-      {
-        "id": "D",
-        "text": "$\\frac{1}{2}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\tan^{-1}x = \\frac{\\pi}{4} - \\tan^{-1}(1/3) \\implies x = \\tan(\\pi/4 - \\tan^{-1}(1/3)) = \\frac{1 - 1/3}{1 + 1/3} = \\frac{2/3}{4/3} = 1/2$.",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "C",
     "detailedSolution": "Isolate $\\tan^{-1}x$:\n$\\tan^{-1}x = \\frac{\\pi}{4} - \\tan^{-1}\\left(\\frac{1}{3}\\right)$.\nTaking tangent of both sides:\n$x = \\tan\\left(\\frac{\\pi}{4} - \\tan^{-1}\\left(\\frac{1}{3}\\right)\\right)$.\nUsing the subtraction formula $\\tan(A - B) = \\frac{\\tan A - \\tan B}{1 + \\tan A \\tan B}$ with $A = \\frac{\\pi}{4}$ and $B = \\tan^{-1}\\left(\\frac{1}{3}\\right)$:\n$x = \\frac{1 - \\frac{1}{3}}{1 + 1\\left(\\frac{1}{3}\\right)} = \\frac{\\frac{2}{3}}{\\frac{4}{3}} = \\frac{2}{4} = \\frac{1}{2}$.",
     "questionId": "MATHS-M01-Q26",
     "conceptId": "MATH-inverse-trigonometric-functions-algebraic-evaluation-of-inverse-tangents",
@@ -2112,17 +2112,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{1}{\\cos x + \\sin x} + C$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Antiderivative Sign Slip",
-        "mistakeAnalysis": "Aspirants integrate $t^{-2}$ as $+t^{-1}$ instead of $-t^{-1}$[cite: 4].",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Antiderivative Sign Slip"
-        }
-      },
-      {
-        "id": "B",
         "text": "$\\frac{1}{1 + \\sin 2x} + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Unsimplified Denominator Retention",
@@ -2133,7 +2122,26 @@
         }
       },
       {
+        "id": "B",
+        "text": "$\\frac{1}{\\cos x + \\sin x} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Antiderivative Sign Slip",
+        "mistakeAnalysis": "Aspirants integrate $t^{-2}$ as $+t^{-1}$ instead of $-t^{-1}$[cite: 4].",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Antiderivative Sign Slip"
+        }
+      },
+      {
         "id": "C",
+        "text": "$\\frac{-1}{\\cos x + \\sin x} + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $1 + \\sin 2x = (\\sin x + \\cos x)^2$. Substituting $t = \\sin x + \\cos x$ gives $\\int t^{-2}dt = -1/t + C = \\frac{-1}{\\cos x + \\sin x} + C$[cite: 4].",
+        "misconception": null
+      },
+      {
+        "id": "D",
         "text": "$\\frac{1}{1 - \\sin 2x} + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Denominator Identity Sign Error",
@@ -2142,17 +2150,9 @@
           "type": "sign_error",
           "description": "Denominator Identity Sign Error"
         }
-      },
-      {
-        "id": "D",
-        "text": "$\\frac{-1}{\\cos x + \\sin x} + C$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $1 + \\sin 2x = (\\sin x + \\cos x)^2$. Substituting $t = \\sin x + \\cos x$ gives $\\int t^{-2}dt = -1/t + C = \\frac{-1}{\\cos x + \\sin x} + C$[cite: 4].",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "C",
     "detailedSolution": "Express the denominator using trigonometric identities[cite: 4]:\n$1 + \\sin 2x = \\sin^2 x + \\cos^2 x + 2\\sin x\\cos x = (\\sin x + \\cos x)^2$.\nThe integral is:\n$\\int \\frac{\\cos x - \\sin x}{(\\sin x + \\cos x)^2}dx$.\nSubstitute $t = \\sin x + \\cos x$:\n$dt = (\\cos x - \\sin x)dx$.\nThe integral becomes:\n$\\int \\frac{dt}{t^2} = \\int t^{-2}dt = -\\frac{1}{t} + C = \\frac{-1}{\\sin x + \\cos x} + C$[cite: 4].",
     "questionId": "MATHS-M01-Q27",
     "conceptId": "MATH-integrals-trigonometric-substitution-in-fractions",
@@ -2212,17 +2212,6 @@
       },
       {
         "id": "C",
-        "text": "6",
-        "isCorrect": false,
-        "studentSelectionTrap": "Additive Transposition Slip",
-        "mistakeAnalysis": "Aspirants add absolute values $2 + 4 = 6$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Additive Transposition Slip"
-        }
-      },
-      {
-        "id": "D",
         "text": "0",
         "isCorrect": false,
         "studentSelectionTrap": "Trace Equality Confusion",
@@ -2230,6 +2219,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Trace Equality Confusion"
+        }
+      },
+      {
+        "id": "D",
+        "text": "6",
+        "isCorrect": false,
+        "studentSelectionTrap": "Additive Transposition Slip",
+        "mistakeAnalysis": "Aspirants add absolute values $2 + 4 = 6$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Additive Transposition Slip"
         }
       }
     ],
@@ -2282,13 +2282,13 @@
       },
       {
         "id": "B",
-        "text": "13.16%",
+        "text": "12.16%",
         "isCorrect": false,
-        "studentSelectionTrap": "Over-compounding Error",
-        "mistakeAnalysis": "Aspirants calculate $(1.06)^3$ instead of $(1.06)^2$[cite: 3].",
+        "studentSelectionTrap": "Arithmetic Squaring Slip",
+        "mistakeAnalysis": "Aspirants compute $6^2 = 16$ due to an arithmetic slip[cite: 3].",
         "misconception": {
           "type": "calculation_error",
-          "description": "Over-compounding Error"
+          "description": "Arithmetic Squaring Slip"
         }
       },
       {
@@ -2304,13 +2304,13 @@
       },
       {
         "id": "D",
-        "text": "12.16%",
+        "text": "13.16%",
         "isCorrect": false,
-        "studentSelectionTrap": "Arithmetic Squaring Slip",
-        "mistakeAnalysis": "Aspirants compute $6^2 = 16$ due to an arithmetic slip[cite: 3].",
+        "studentSelectionTrap": "Over-compounding Error",
+        "mistakeAnalysis": "Aspirants calculate $(1.06)^3$ instead of $(1.06)^2$[cite: 3].",
         "misconception": {
           "type": "calculation_error",
-          "description": "Arithmetic Squaring Slip"
+          "description": "Over-compounding Error"
         }
       }
     ],
@@ -2366,17 +2366,6 @@
       },
       {
         "id": "B",
-        "text": "Linear of order 1",
-        "isCorrect": false,
-        "studentSelectionTrap": "Linear Differential Equation Misclassification",
-        "mistakeAnalysis": "Aspirants confuse homogeneous with first-order linear.",
-        "misconception": {
-          "type": "formula_confusion",
-          "description": "Linear Differential Equation Misclassification"
-        }
-      },
-      {
-        "id": "C",
         "text": "Exact differential equation",
         "isCorrect": false,
         "studentSelectionTrap": "Exact Form Assumption",
@@ -2387,15 +2376,26 @@
         }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "Homogeneous of degree 0",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. $F(\\lambda x, \\lambda y) = \\frac{\\lambda^2(x^2+y^2)}{\\lambda^2(2xy)} = \\lambda^0 F(x, y)$.",
         "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "Linear of order 1",
+        "isCorrect": false,
+        "studentSelectionTrap": "Linear Differential Equation Misclassification",
+        "mistakeAnalysis": "Aspirants confuse homogeneous with first-order linear.",
+        "misconception": {
+          "type": "formula_confusion",
+          "description": "Linear Differential Equation Misclassification"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "C",
     "detailedSolution": "Let $F(x, y) = \\frac{x^2 + y^2}{2xy}$.\nTest homogeneity by replacing $x$ with $\\lambda x$ and $y$ with $\\lambda y$:\n$F(\\lambda x, \\lambda y) = \\frac{(\\lambda x)^2 + (\\lambda y)^2}{2(\\lambda x)(\\lambda y)} = \\frac{\\lambda^2 (x^2 + y^2)}{\\lambda^2 (2xy)} = \\lambda^0 \\left(\\frac{x^2 + y^2}{2xy}\\right) = \\lambda^0 F(x, y)$.\nBy definition, a function $F(x, y)$ is homogeneous of degree $n$ if $F(\\lambda x, \\lambda y) = \\lambda^n F(x, y)$.\nHere $n = 0$, so it is **homogeneous of degree 0**.",
     "questionId": "MATHS-M01-Q30",
     "conceptId": "MATH-differential-equations-homogeneous-first-order-equations",
@@ -2436,17 +2436,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{x^{2}}{2} + x + c$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Logarithmic Power Fallacy",
-        "mistakeAnalysis": "Aspirants integrate $x^{-2}$ as $x$ or $\\log x$[cite: 5].",
-        "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Logarithmic Power Fallacy"
-        }
-      },
-      {
-        "id": "B",
         "text": "$\\frac{x^{2}}{2} - \\frac{1}{x} + c$",
         "isCorrect": false,
         "studentSelectionTrap": "Negative Exponent Sign Slip",
@@ -2457,15 +2446,7 @@
         }
       },
       {
-        "id": "C",
-        "text": "$\\frac{x^{2}}{2} + \\frac{1}{x} + c$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\int (x - x^{-2})dx = x^2/2 - (-x^{-1}) + c = \\frac{x^2}{2} + \\frac{1}{x} + c$[cite: 5].",
-        "misconception": null
-      },
-      {
-        "id": "D",
+        "id": "B",
         "text": "$\\frac{x^{2}}{2} - x + c$",
         "isCorrect": false,
         "studentSelectionTrap": "Linear Antiderivative Error",
@@ -2474,9 +2455,28 @@
           "type": "conceptual_misunderstanding",
           "description": "Linear Antiderivative Error"
         }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{x^{2}}{2} + x + c$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Logarithmic Power Fallacy",
+        "mistakeAnalysis": "Aspirants integrate $x^{-2}$ as $x$ or $\\log x$[cite: 5].",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Logarithmic Power Fallacy"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{x^{2}}{2} + \\frac{1}{x} + c$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\int (x - x^{-2})dx = x^2/2 - (-x^{-1}) + c = \\frac{x^2}{2} + \\frac{1}{x} + c$[cite: 5].",
+        "misconception": null
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "Split the integrand into separate terms[cite: 5]:\n$\\frac{x^3 - 1}{x^2} = \\frac{x^3}{x^2} - \\frac{1}{x^2} = x - x^{-2}$.\nIntegrate term by term:\n$\\int (x - x^{-2})\\,dx = \\frac{x^2}{2} - \\left( \\frac{x^{-2+1}}{-2+1} \\right) + c$\n$= \\frac{x^2}{2} - \\left( \\frac{x^{-1}}{-1} \\right) + c$\n$= \\frac{x^2}{2} + \\frac{1}{x} + c$[cite: 5].",
     "questionId": "MATHS-M01-Q31",
     "conceptId": "MATH-integrals-indefinite-integration-of-simple-rational-functions",
@@ -2525,17 +2525,6 @@
       },
       {
         "id": "B",
-        "text": "Region A",
-        "isCorrect": false,
-        "studentSelectionTrap": "Left-Hand Side Region Misidentification",
-        "mistakeAnalysis": "Aspirants select Region A which violates the constraint $4x+y \\ge 80$[cite: 5].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Left-Hand Side Region Misidentification"
-        }
-      },
-      {
-        "id": "C",
         "text": "Region B",
         "isCorrect": false,
         "studentSelectionTrap": "Origin Region Fallacy",
@@ -2543,6 +2532,17 @@
         "misconception": {
           "type": "logical_reasoning_error",
           "description": "Origin Region Fallacy"
+        }
+      },
+      {
+        "id": "C",
+        "text": "Region A",
+        "isCorrect": false,
+        "studentSelectionTrap": "Left-Hand Side Region Misidentification",
+        "mistakeAnalysis": "Aspirants select Region A which violates the constraint $4x+y \\ge 80$[cite: 5].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Left-Hand Side Region Misidentification"
         }
       },
       {
@@ -2679,13 +2679,13 @@
     "options": [
       {
         "id": "A",
-        "text": "Rs. 30,000",
+        "text": "Rs. 50,000",
         "isCorrect": false,
-        "studentSelectionTrap": "Extra Year Added",
-        "mistakeAnalysis": "Aspirants count 6 installments: $6 \\times 5,000 = 30,000$.",
+        "studentSelectionTrap": "Ten-Year Doubling Error",
+        "mistakeAnalysis": "Aspirants multiply by 10.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Extra Year Added"
+          "description": "Ten-Year Doubling Error"
         }
       },
       {
@@ -2698,6 +2698,17 @@
       },
       {
         "id": "C",
+        "text": "Rs. 30,000",
+        "isCorrect": false,
+        "studentSelectionTrap": "Extra Year Added",
+        "mistakeAnalysis": "Aspirants count 6 installments: $6 \\times 5,000 = 30,000$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Extra Year Added"
+        }
+      },
+      {
+        "id": "D",
         "text": "Rs. 20,000",
         "isCorrect": false,
         "studentSelectionTrap": "One Year Omission",
@@ -2705,17 +2716,6 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "One Year Omission"
-        }
-      },
-      {
-        "id": "D",
-        "text": "Rs. 50,000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Ten-Year Doubling Error",
-        "mistakeAnalysis": "Aspirants multiply by 10.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Ten-Year Doubling Error"
         }
       }
     ],
@@ -2760,25 +2760,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{6}{65}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reciprocal Inversion",
-        "mistakeAnalysis": "Aspirants invert the sum to $6/65$[cite: 2].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Reciprocal Inversion"
-        }
-      },
-      {
-        "id": "B",
-        "text": "$\\frac{65}{6}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $|A|=0 \\implies 15-2a=0 \\implies a=15/2$; $|B|=0 \\implies 10-3b=0 \\implies b=10/3$. Sum $= 15/2 + 10/3 = 65/6$[cite: 2].",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$-\\frac{67}{6}$",
         "isCorrect": false,
         "studentSelectionTrap": "Sign and Arithmetic Slip",
@@ -2789,7 +2770,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "$\\frac{1}{66}$",
         "isCorrect": false,
         "studentSelectionTrap": "Denominator Miscalculation",
@@ -2798,9 +2779,28 @@
           "type": "calculation_error",
           "description": "Denominator Miscalculation"
         }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{6}{65}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reciprocal Inversion",
+        "mistakeAnalysis": "Aspirants invert the sum to $6/65$[cite: 2].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Reciprocal Inversion"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{65}{6}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $|A|=0 \\implies 15-2a=0 \\implies a=15/2$; $|B|=0 \\implies 10-3b=0 \\implies b=10/3$. Sum $= 15/2 + 10/3 = 65/6$[cite: 2].",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "A matrix is singular if and only if its determinant is zero[cite: 2]:\n1. For matrix $A$[cite: 2]:\n   $|A| = (3)(5) - (2a)(1) = 0 \\implies 15 - 2a = 0 \\implies a = \\frac{15}{2}$.\n2. For matrix $B$[cite: 2]:\n   $|B| = (2)(5) - (3)(b) = 0 \\implies 10 - 3b = 0 \\implies b = \\frac{10}{3}$.\nNow compute $a + b$[cite: 2]:\n$a + b = \\frac{15}{2} + \\frac{10}{3} = \\frac{45 + 20}{6} = \\frac{65}{6}$[cite: 2].",
     "questionId": "MATHS-M01-Q35",
     "conceptId": "MATH-determinants-singular-matrices-and-parameter-evaluation",
@@ -2852,17 +2852,6 @@
       },
       {
         "id": "B",
-        "text": "57.8",
-        "isCorrect": false,
-        "studentSelectionTrap": "Four-Year Extrapolation Slip",
-        "mistakeAnalysis": "Aspirants evaluate at $u = 4$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Four-Year Extrapolation Slip"
-        }
-      },
-      {
-        "id": "C",
         "text": "48.2",
         "isCorrect": false,
         "studentSelectionTrap": "One-Year Horizon Slip",
@@ -2870,6 +2859,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "One-Year Horizon Slip"
+        }
+      },
+      {
+        "id": "C",
+        "text": "57.8",
+        "isCorrect": false,
+        "studentSelectionTrap": "Four-Year Extrapolation Slip",
+        "mistakeAnalysis": "Aspirants evaluate at $u = 4$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Four-Year Extrapolation Slip"
         }
       },
       {
@@ -2922,25 +2922,17 @@
     "options": [
       {
         "id": "A",
-        "text": "If the feasible region $R$ of a Linear Programming Problem (LPP) is bounded, then the objective function has both a maximum and a minimum value in $R$[cite: 4].",
+        "text": "If two corner points of the feasible region are both optimal solutions of the same type, then any point on the line segment joining these two points is also an optimal solution of the same type[cite: 4].",
         "isCorrect": false,
-        "studentSelectionTrap": "True Statement Misidentification",
-        "mistakeAnalysis": "Aspirants mistake a true fundamental theorem for an incorrect statement[cite: 4].",
+        "studentSelectionTrap": "Coincident Solutions Theorem Rejection",
+        "mistakeAnalysis": "Aspirants reject the segment optimality theorem[cite: 4].",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "True Statement Misidentification"
+          "description": "Coincident Solutions Theorem Rejection"
         }
       },
       {
         "id": "B",
-        "text": "If the feasible region is unbounded, then a minimum value of the objective function always exists[cite: 4].",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. For unbounded feasible regions, a minimum or maximum value is not guaranteed to exist (it may fail the open half-plane optimality condition)[cite: 4].",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "An LPP can have no solution or more than one optimal solution[cite: 4].",
         "isCorrect": false,
         "studentSelectionTrap": "Multiple Solutions Ignorance",
@@ -2951,18 +2943,26 @@
         }
       },
       {
+        "id": "C",
+        "text": "If the feasible region is unbounded, then a minimum value of the objective function always exists[cite: 4].",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For unbounded feasible regions, a minimum or maximum value is not guaranteed to exist (it may fail the open half-plane optimality condition)[cite: 4].",
+        "misconception": null
+      },
+      {
         "id": "D",
-        "text": "If two corner points of the feasible region are both optimal solutions of the same type, then any point on the line segment joining these two points is also an optimal solution of the same type[cite: 4].",
+        "text": "If the feasible region $R$ of a Linear Programming Problem (LPP) is bounded, then the objective function has both a maximum and a minimum value in $R$[cite: 4].",
         "isCorrect": false,
-        "studentSelectionTrap": "Coincident Solutions Theorem Rejection",
-        "mistakeAnalysis": "Aspirants reject the segment optimality theorem[cite: 4].",
+        "studentSelectionTrap": "True Statement Misidentification",
+        "mistakeAnalysis": "Aspirants mistake a true fundamental theorem for an incorrect statement[cite: 4].",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "Coincident Solutions Theorem Rejection"
+          "description": "True Statement Misidentification"
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "By NCERT linear programming theory:\n- For a bounded feasible region, both a maximum and a minimum value always exist (Statement 1 is correct)[cite: 4].\n- An LPP may have no feasible solution (empty region), a unique solution, or infinitely many optimal solutions along a boundary segment (Statements 2 and 3 are correct)[cite: 4].\n- If the feasible region is **unbounded**, the objective function may or may not have an optimal value. A minimum exists only if the open half-plane $ax + by < m$ has no point in common with the feasible region. It does **not always exist**[cite: 4].\nHence, statement 4 is INCORRECT[cite: 4].",
     "questionId": "MATHS-M01-Q37",
     "conceptId": "MATH-linear-programming-theorems-of-linear-programming",
@@ -3002,11 +3002,14 @@
     "options": [
       {
         "id": "A",
-        "text": "The average of an even number of values falls between two time periods",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. An even period average (e.g. 4 years) falls at the midpoint between period 2 and 3, requiring a secondary 2-period moving average to align with an actual time period.",
-        "misconception": null
+        "text": "Odd period averages cannot be calculated",
+        "isCorrect": false,
+        "studentSelectionTrap": "Odd/Even Period Misconception",
+        "mistakeAnalysis": "Aspirants confuse odd and even moving average methods.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Odd/Even Period Misconception"
+        }
       },
       {
         "id": "B",
@@ -3021,6 +3024,14 @@
       },
       {
         "id": "C",
+        "text": "The average of an even number of values falls between two time periods",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. An even period average (e.g. 4 years) falls at the midpoint between period 2 and 3, requiring a secondary 2-period moving average to align with an actual time period.",
+        "misconception": null
+      },
+      {
+        "id": "D",
         "text": "The sum of residuals is non-zero",
         "isCorrect": false,
         "studentSelectionTrap": "Least Squares Confusion",
@@ -3029,20 +3040,9 @@
           "type": "formula_confusion",
           "description": "Least Squares Confusion"
         }
-      },
-      {
-        "id": "D",
-        "text": "Odd period averages cannot be calculated",
-        "isCorrect": false,
-        "studentSelectionTrap": "Odd/Even Period Misconception",
-        "mistakeAnalysis": "Aspirants confuse odd and even moving average methods.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Odd/Even Period Misconception"
-        }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "In time series moving average computation, when the period $m$ is even (e.g., $m = 4$), the average of $y_1, y_2, y_3, y_4$ corresponds to the midpoint between time periods 2 and 3 ($t = 2.5$). Because this does not align with any recorded chronological time point, a secondary 2-period moving average of these consecutive midpoints must be taken to **center** the values on actual integer time periods.",
     "questionId": "MATHS-M01-Q38",
     "conceptId": "MATH-time-series-analysis-four-year-centered-moving-average",
@@ -3083,11 +3083,14 @@
     "options": [
       {
         "id": "A",
-        "text": "1",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $y = -\\log(x+1) \\implies y' = -\\frac{1}{x+1} \\implies y'' = \\frac{1}{(x+1)^2} = (y')^2 \\implies k = 1$[cite: 3].",
-        "misconception": null
+        "text": "2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Exponent Factor Multiplier",
+        "mistakeAnalysis": "Aspirants multiply by the exponent 2[cite: 3].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Exponent Factor Multiplier"
+        }
       },
       {
         "id": "B",
@@ -3102,17 +3105,6 @@
       },
       {
         "id": "C",
-        "text": "2",
-        "isCorrect": false,
-        "studentSelectionTrap": "Exponent Factor Multiplier",
-        "mistakeAnalysis": "Aspirants multiply by the exponent 2[cite: 3].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Exponent Factor Multiplier"
-        }
-      },
-      {
-        "id": "D",
         "text": "3",
         "isCorrect": false,
         "studentSelectionTrap": "Higher Order Confusion",
@@ -3121,9 +3113,17 @@
           "type": "conceptual_misunderstanding",
           "description": "Higher Order Confusion"
         }
+      },
+      {
+        "id": "D",
+        "text": "1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $y = -\\log(x+1) \\implies y' = -\\frac{1}{x+1} \\implies y'' = \\frac{1}{(x+1)^2} = (y')^2 \\implies k = 1$[cite: 3].",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "Given $e^y(x + 1) = 1 \\implies e^y = \\frac{1}{x + 1}$[cite: 3].\nTaking natural logarithm:\n$y = -\\log_e(x + 1)$.\nDifferentiating with respect to $x$:\n$\\frac{dy}{dx} = -\\frac{1}{x + 1}$.\nDifferentiating again with respect to $x$:\n$\\frac{d^2y}{dx^2} = -\\left(-\\frac{1}{(x + 1)^2}\\right) = \\frac{1}{(x + 1)^2}$.\nNotice that:\n$\\left(\\frac{dy}{dx}\\right)^2 = \\left(-\\frac{1}{x + 1}\\right)^2 = \\frac{1}{(x + 1)^2}$.\nThus:\n$\\frac{d^2y}{dx^2} = 1 \\cdot \\left(\\frac{dy}{dx}\\right)^2$.\nComparing with $\\frac{d^2y}{dx^2} = k\\left(\\frac{dy}{dx}\\right)^2$ yields $k = 1$[cite: 3].",
     "questionId": "MATHS-M01-Q39",
     "conceptId": "MATH-continuity-and-differentiability-second-order-derivatives-and-proportionality-constant",
@@ -3164,14 +3164,6 @@
     "options": [
       {
         "id": "A",
-        "text": "4,143 tons",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $b = \\frac{\\sum x_i y_i}{\\sum x_i^2} = \\frac{116}{28} \\approx 4.142857\\text{ thousand tons} \\approx 4,143\\text{ tons}$[cite: 3].",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "86,860 tons",
         "isCorrect": false,
         "studentSelectionTrap": "Average Annual Production Reported",
@@ -3182,7 +3174,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "1,16,000 tons",
         "isCorrect": false,
         "studentSelectionTrap": "Product Sum Direct Selection",
@@ -3191,6 +3183,14 @@
           "type": "conceptual_misunderstanding",
           "description": "Product Sum Direct Selection"
         }
+      },
+      {
+        "id": "C",
+        "text": "4,143 tons",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $b = \\frac{\\sum x_i y_i}{\\sum x_i^2} = \\frac{116}{28} \\approx 4.142857\\text{ thousand tons} \\approx 4,143\\text{ tons}$[cite: 3].",
+        "misconception": null
       },
       {
         "id": "D",
@@ -3204,7 +3204,7 @@
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "C",
     "detailedSolution": "The linear trend line is $y = a + bx$[cite: 3].\nThe annual increase in production corresponds to the slope $b$:\n$b = \\frac{\\sum x_i y_i}{\\sum x_i^2}$\nSubstitute the given values[cite: 3]:\n$b = \\frac{116}{28} = \\frac{29}{7} \\approx 4.142857\\text{ thousand tons}$.\nConverting from thousand tons to tons:\n$\\text{Annual Increase} = 4.142857 \\times 1000 \\approx 4,143\\text{ tons}$[cite: 3].",
     "questionId": "MATHS-M01-Q40",
     "conceptId": "MATH-time-series-analysis-rate-of-trend-change-slope-parameter",
@@ -3245,22 +3245,22 @@
     "options": [
       {
         "id": "A",
-        "text": "$a = 9,\\; b = 3$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Variable Assignment Inversion",
-        "mistakeAnalysis": "Aspirants swap the values of $a$ and $b$[cite: 4].",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Variable Assignment Inversion"
-        }
-      },
-      {
-        "id": "B",
         "text": "$a = 3,\\; b = 9$",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. $Z(0, 20) = 20b = 180 \\implies b = 9$; $Z(15, 15) = 15a + 15(9) = 180 \\implies 15a = 45 \\implies a = 3$[cite: 4].",
         "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "$a = 4,\\; b = 8$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Arithmetic Guess",
+        "mistakeAnalysis": "Aspirants test $(15, 15)$ with $15(4) + 15(8) = 180$ but fail to satisfy $Z(0, 20) = 180$[cite: 4].",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Arithmetic Guess"
+        }
       },
       {
         "id": "C",
@@ -3275,17 +3275,17 @@
       },
       {
         "id": "D",
-        "text": "$a = 4,\\; b = 8$",
+        "text": "$a = 9,\\; b = 3$",
         "isCorrect": false,
-        "studentSelectionTrap": "Arithmetic Guess",
-        "mistakeAnalysis": "Aspirants test $(15, 15)$ with $15(4) + 15(8) = 180$ but fail to satisfy $Z(0, 20) = 180$[cite: 4].",
+        "studentSelectionTrap": "Variable Assignment Inversion",
+        "mistakeAnalysis": "Aspirants swap the values of $a$ and $b$[cite: 4].",
         "misconception": {
-          "type": "calculation_error",
-          "description": "Arithmetic Guess"
+          "type": "sign_error",
+          "description": "Variable Assignment Inversion"
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "Given $Z = ax + by$ has maximum value 180 at $(0, 20)$ and $(15, 15)$[cite: 4]:\n1. At $(0, 20)$[cite: 4]:\n   $a(0) + b(20) = 180 \\implies 20b = 180 \\implies b = 9$.\n2. At $(15, 15)$[cite: 4]:\n   $a(15) + b(15) = 180$\n   $15a + 15(9) = 180$\n   $15a + 135 = 180$\n   $15a = 45 \\implies a = 3$.\nTherefore, $a = 3$ and $b = 9$[cite: 4].",
     "questionId": "MATHS-M01-Q41",
     "conceptId": "MATH-linear-programming-coincident-multiple-optimal-solutions",
@@ -3326,17 +3326,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Singular matrix",
-        "isCorrect": false,
-        "studentSelectionTrap": "Zero Determinant Assumption",
-        "mistakeAnalysis": "Aspirants assume the commutator of symmetric matrices always has determinant zero[cite: 2].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Zero Determinant Assumption"
-        }
-      },
-      {
-        "id": "B",
         "text": "Zero matrix",
         "isCorrect": false,
         "studentSelectionTrap": "Commutativity Fallacy",
@@ -3345,6 +3334,14 @@
           "type": "logical_reasoning_error",
           "description": "Commutativity Fallacy"
         }
+      },
+      {
+        "id": "B",
+        "text": "Skew symmetric matrix",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $(AB - BA)^T = B^T A^T - A^T B^T = BA - AB = -(AB - BA)$[cite: 2].",
+        "misconception": null
       },
       {
         "id": "C",
@@ -3359,14 +3356,17 @@
       },
       {
         "id": "D",
-        "text": "Skew symmetric matrix",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $(AB - BA)^T = B^T A^T - A^T B^T = BA - AB = -(AB - BA)$[cite: 2].",
-        "misconception": null
+        "text": "Singular matrix",
+        "isCorrect": false,
+        "studentSelectionTrap": "Zero Determinant Assumption",
+        "mistakeAnalysis": "Aspirants assume the commutator of symmetric matrices always has determinant zero[cite: 2].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Zero Determinant Assumption"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "Given that $A$ and $B$ are symmetric matrices, $A^T = A$ and $B^T = B$.\nLet $C = AB - BA$.\nTaking the transpose of $C$:\n$C^T = (AB - BA)^T = (AB)^T - (BA)^T$.\nUsing the reversal law for transposes $(XY)^T = Y^T X^T$:\n$C^T = B^T A^T - A^T B^T$.\nSubstitute $A^T = A$ and $B^T = B$:\n$C^T = BA - AB = -(AB - BA) = -C$.\nSince $C^T = -C$, the matrix $AB - BA$ is skew-symmetric[cite: 2].",
     "questionId": "MATHS-M01-Q42",
     "conceptId": "MATH-matrices-properties-of-symmetric-and-skew-symmetric-matrices",
@@ -3407,6 +3407,14 @@
     "options": [
       {
         "id": "A",
+        "text": "$(0, 0), (5, 0), (0, 5)$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Axes intercepts are $(5, 0)$ and $(0, 5)$, together with the origin $(0, 0)$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "$(0, 0), (5, 5), (0, 5)$",
         "isCorrect": false,
         "studentSelectionTrap": "Infeasible Point Inclusion",
@@ -3417,26 +3425,7 @@
         }
       },
       {
-        "id": "B",
-        "text": "$(0, 0), (5, 0), (0, 5)$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Axes intercepts are $(5, 0)$ and $(0, 5)$, together with the origin $(0, 0)$.",
-        "misconception": null
-      },
-      {
         "id": "C",
-        "text": "$(5, 0), (0, 5)$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Origin Omission",
-        "mistakeAnalysis": "Aspirants omit the origin $(0, 0)$ as a corner point.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Origin Omission"
-        }
-      },
-      {
-        "id": "D",
         "text": "$(0, 0), (2.5, 2.5)$",
         "isCorrect": false,
         "studentSelectionTrap": "Midpoint Selection",
@@ -3445,9 +3434,20 @@
           "type": "boundary_condition_error",
           "description": "Midpoint Selection"
         }
+      },
+      {
+        "id": "D",
+        "text": "$(5, 0), (0, 5)$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Origin Omission",
+        "mistakeAnalysis": "Aspirants omit the origin $(0, 0)$ as a corner point.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Origin Omission"
+        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "The boundary lines of the region are:\n1. $x = 0$ ($y$-axis)\n2. $y = 0$ ($x$-axis)\n3. $x + y = 5$\nIntersection points:\n- $x = 0$ and $y = 0 \\implies (0, 0)$.\n- $y = 0$ and $x + y = 5 \\implies x = 5 \\implies (5, 0)$.\n- $x = 0$ and $x + y = 5 \\implies y = 5 \\implies (0, 5)$.\nHence, the vertices are $(0, 0), (5, 0), (0, 5)$.",
     "questionId": "MATHS-M01-Q43",
     "conceptId": "MATH-linear-programming-feasible-region-vertex-identification",
@@ -3496,17 +3496,6 @@
       },
       {
         "id": "B",
-        "text": "$\\frac{\\pi}{3}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Sine-Cosine Inversion",
-        "mistakeAnalysis": "Aspirants confuse $\\sin\\theta = 1/2$ with $\\pi/3$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Sine-Cosine Inversion"
-        }
-      },
-      {
-        "id": "C",
         "text": "$\\frac{\\pi}{4}$",
         "isCorrect": false,
         "studentSelectionTrap": "Square Root Ratio Confusion",
@@ -3514,6 +3503,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Square Root Ratio Confusion"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{\\pi}{3}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sine-Cosine Inversion",
+        "mistakeAnalysis": "Aspirants confuse $\\sin\\theta = 1/2$ with $\\pi/3$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Sine-Cosine Inversion"
         }
       },
       {
@@ -3569,17 +3569,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$3\\text{ cm/min}$ decreasing",
-        "isCorrect": false,
-        "studentSelectionTrap": "Width Rate Dominance",
-        "mistakeAnalysis": "Aspirants assume perimeter follows the width rate[cite: 2].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Width Rate Dominance"
-        }
-      },
-      {
-        "id": "B",
         "text": "$2\\text{ cm/min}$ increasing",
         "isCorrect": false,
         "studentSelectionTrap": "Sign Convention Error",
@@ -3590,15 +3579,18 @@
         }
       },
       {
-        "id": "C",
-        "text": "$2\\text{ cm/min}$ decreasing",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $P = 2(l + w) \\implies dP/dt = 2(-4 + 3) = -2\\text{ cm/min}$, which is decreasing[cite: 2].",
-        "misconception": null
+        "id": "B",
+        "text": "$3\\text{ cm/min}$ decreasing",
+        "isCorrect": false,
+        "studentSelectionTrap": "Width Rate Dominance",
+        "mistakeAnalysis": "Aspirants assume perimeter follows the width rate[cite: 2].",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Width Rate Dominance"
+        }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "$3\\text{ cm/min}$ increasing",
         "isCorrect": false,
         "studentSelectionTrap": "Difference of Magnitudes Slip",
@@ -3607,9 +3599,17 @@
           "type": "conceptual_misunderstanding",
           "description": "Difference of Magnitudes Slip"
         }
+      },
+      {
+        "id": "D",
+        "text": "$2\\text{ cm/min}$ decreasing",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $P = 2(l + w) \\implies dP/dt = 2(-4 + 3) = -2\\text{ cm/min}$, which is decreasing[cite: 2].",
+        "misconception": null
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "Let the length and width of the rectangle be $l$ and $w$ respectively.\nPerimeter $P = 2(l + w)$.\nDifferentiating with respect to time $t$:\n$\\frac{dP}{dt} = 2\\left( \\frac{dl}{dt} + \\frac{dw}{dt} \\right)$.\nGiven that length is decreasing: $\\frac{dl}{dt} = -4\\text{ cm/min}$[cite: 2].\nWidth is increasing: $\\frac{dw}{dt} = +3\\text{ cm/min}$[cite: 2].\n$\\frac{dP}{dt} = 2(-4 + 3) = 2(-1) = -2\\text{ cm/min}$.\nThe negative sign indicates that the perimeter is decreasing at the rate of $2\\text{ cm/minute}$[cite: 2].",
     "questionId": "MATHS-M01-Q45",
     "conceptId": "MATH-application-of-derivatives-rate-of-change-of-geometric-quantities",
@@ -3658,13 +3658,13 @@
       },
       {
         "id": "B",
-        "text": "(A) - (IV), (B) - (I), (C) - (II), (D) - (III)",
+        "text": "(A) - (III), (B) - (II), (C) - (IV), (D) - (I)",
         "isCorrect": false,
-        "studentSelectionTrap": "Arctangent Matching Error",
-        "mistakeAnalysis": "Aspirants match $\\int \\frac{dx}{x^2-16}$ with the arctangent formula[cite: 2].",
+        "studentSelectionTrap": "Radical Integral Inversion",
+        "mistakeAnalysis": "Aspirants match the radical integral with the arctangent formula[cite: 2].",
         "misconception": {
           "type": "formula_confusion",
-          "description": "Arctangent Matching Error"
+          "description": "Radical Integral Inversion"
         }
       },
       {
@@ -3680,13 +3680,13 @@
       },
       {
         "id": "D",
-        "text": "(A) - (III), (B) - (II), (C) - (IV), (D) - (I)",
+        "text": "(A) - (IV), (B) - (I), (C) - (II), (D) - (III)",
         "isCorrect": false,
-        "studentSelectionTrap": "Radical Integral Inversion",
-        "mistakeAnalysis": "Aspirants match the radical integral with the arctangent formula[cite: 2].",
+        "studentSelectionTrap": "Arctangent Matching Error",
+        "mistakeAnalysis": "Aspirants match $\\int \\frac{dx}{x^2-16}$ with the arctangent formula[cite: 2].",
         "misconception": {
           "type": "formula_confusion",
-          "description": "Radical Integral Inversion"
+          "description": "Arctangent Matching Error"
         }
       }
     ],
@@ -3731,6 +3731,17 @@
     "options": [
       {
         "id": "A",
+        "text": "$2\\sin x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Radical Factor Omission",
+        "mistakeAnalysis": "Aspirants write $\\sqrt{2}$ as 2 outside the integral.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Radical Factor Omission"
+        }
+      },
+      {
+        "id": "B",
         "text": "$-\\sqrt{2}\\sin x + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Cosine Integral Sign Slip",
@@ -3741,7 +3752,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "$\\sqrt{2}\\sin x + C$",
         "isCorrect": true,
         "studentSelectionTrap": null,
@@ -3749,7 +3760,7 @@
         "misconception": null
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "$\\sqrt{2}\\cos x + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Derivative-Integral Confusion",
@@ -3758,20 +3769,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Derivative-Integral Confusion"
         }
-      },
-      {
-        "id": "D",
-        "text": "$2\\sin x + C$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Radical Factor Omission",
-        "mistakeAnalysis": "Aspirants write $\\sqrt{2}$ as 2 outside the integral.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Radical Factor Omission"
-        }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "Using the identity $1 + \\cos 2x = 2\\cos^2 x$:\n$\\sqrt{1 + \\cos 2x} = \\sqrt{2\\cos^2 x} = \\sqrt{2}|\\cos x|$.\nFor $x \\in \\left[0, \\frac{\\pi}{2}\\right]$, $\\cos x \\ge 0$, so $|\\cos x| = \\cos x$.\n$\\int \\sqrt{1 + \\cos 2x}\\,dx = \\sqrt{2}\\int \\cos x\\,dx = \\sqrt{2}\\sin x + C$.",
     "questionId": "MATHS-M01-Q47",
     "conceptId": "MATH-integrals-trigonometric-half-angle-integration",
@@ -3831,17 +3831,6 @@
       },
       {
         "id": "C",
-        "text": "10",
-        "isCorrect": false,
-        "studentSelectionTrap": "Partial Evaluation",
-        "mistakeAnalysis": "Aspirants compute $5a = 10$ and omit $2b$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Partial Evaluation"
-        }
-      },
-      {
-        "id": "D",
         "text": "20",
         "isCorrect": false,
         "studentSelectionTrap": "Matrix Trace Guess",
@@ -3849,6 +3838,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Matrix Trace Guess"
+        }
+      },
+      {
+        "id": "D",
+        "text": "10",
+        "isCorrect": false,
+        "studentSelectionTrap": "Partial Evaluation",
+        "mistakeAnalysis": "Aspirants compute $5a = 10$ and omit $2b$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Partial Evaluation"
         }
       }
     ],
@@ -3893,13 +3893,13 @@
     "options": [
       {
         "id": "A",
-        "text": "$-3I$",
+        "text": "$O$",
         "isCorrect": false,
-        "studentSelectionTrap": "Sign Transposition Slip",
-        "mistakeAnalysis": "Aspirants fail to change the sign when moving $-3I$ to the right-hand side.",
+        "studentSelectionTrap": "Nilpotent Fallacy",
+        "mistakeAnalysis": "Aspirants assume quadratic matrix forms evaluate to the null matrix.",
         "misconception": {
-          "type": "sign_error",
-          "description": "Sign Transposition Slip"
+          "type": "logical_reasoning_error",
+          "description": "Nilpotent Fallacy"
         }
       },
       {
@@ -3915,25 +3915,25 @@
       },
       {
         "id": "C",
+        "text": "$-3I$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Transposition Slip",
+        "mistakeAnalysis": "Aspirants fail to change the sign when moving $-3I$ to the right-hand side.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Transposition Slip"
+        }
+      },
+      {
+        "id": "D",
         "text": "$3I$",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. $\\operatorname{tr}(A) = 2, |A| = 1 - 4 = -3$. Cayley-Hamilton gives $A^2 - 2A - 3I = O \\implies A^2 - 2A = 3I$.",
         "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "$O$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Nilpotent Fallacy",
-        "mistakeAnalysis": "Aspirants assume quadratic matrix forms evaluate to the null matrix.",
-        "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Nilpotent Fallacy"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "D",
     "detailedSolution": "Compute $A^2$:\n$A^2 = \\begin{bmatrix}1 & 2 \\\\ 2 & 1\\end{bmatrix}\\begin{bmatrix}1 & 2 \\\\ 2 & 1\\end{bmatrix} = \\begin{bmatrix}1(1)+2(2) & 1(2)+2(1) \\\\ 2(1)+1(2) & 2(2)+1(1)\\end{bmatrix} = \\begin{bmatrix}5 & 4 \\\\ 4 & 5\\end{bmatrix}$.\nCompute $2A$:\n$2A = \\begin{bmatrix}2 & 4 \\\\ 4 & 2\\end{bmatrix}$.\nSubtract $2A$ from $A^2$:\n$A^2 - 2A = \\begin{bmatrix}5 - 2 & 4 - 4 \\\\ 4 - 4 & 5 - 2\\end{bmatrix} = \\begin{bmatrix}3 & 0 \\\\ 0 & 3\\end{bmatrix} = 3\\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix} = 3I$.",
     "questionId": "MATHS-M01-Q49",
     "conceptId": "MATH-matrices-matrix-power-equations-and-characteristic-identities",
@@ -3974,6 +3974,25 @@
     "options": [
       {
         "id": "A",
+        "text": "$4I$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Trace Multiplication Error",
+        "mistakeAnalysis": "Aspirants multiply the identity by the trace value 4.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Trace Multiplication Error"
+        }
+      },
+      {
+        "id": "B",
+        "text": "$-I$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. By Cayley-Hamilton theorem, $\\lambda^2 - \\operatorname{tr}(A)\\lambda + |A| = 0 \\implies A^2 - 4A + I = O \\implies A^2 - 4A = -I$.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "$I$",
         "isCorrect": false,
         "studentSelectionTrap": "Sign Transposition Error",
@@ -3984,7 +4003,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "D",
         "text": "$O$",
         "isCorrect": false,
         "studentSelectionTrap": "Nilpotent Assumption",
@@ -3993,28 +4012,9 @@
           "type": "conceptual_misunderstanding",
           "description": "Nilpotent Assumption"
         }
-      },
-      {
-        "id": "C",
-        "text": "$-I$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. By Cayley-Hamilton theorem, $\\lambda^2 - \\operatorname{tr}(A)\\lambda + |A| = 0 \\implies A^2 - 4A + I = O \\implies A^2 - 4A = -I$.",
-        "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "$4I$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Trace Multiplication Error",
-        "mistakeAnalysis": "Aspirants multiply the identity by the trace value 4.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Trace Multiplication Error"
-        }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "Method 1: Direct multiplication:\n$A^2 = \\begin{bmatrix}2 & 3 \\\\ 1 & 2\\end{bmatrix}\\begin{bmatrix}2 & 3 \\\\ 1 & 2\\end{bmatrix} = \\begin{bmatrix}4+3 & 6+6 \\\\ 2+2 & 3+4\\end{bmatrix} = \\begin{bmatrix}7 & 12 \\\\ 4 & 7\\end{bmatrix}$.\n$4A = 4\\begin{bmatrix}2 & 3 \\\\ 1 & 2\\end{bmatrix} = \\begin{bmatrix}8 & 12 \\\\ 4 & 8\\end{bmatrix}$.\n$A^2 - 4A = \\begin{bmatrix}7 - 8 & 12 - 12 \\\\ 4 - 4 & 7 - 8\\end{bmatrix} = \\begin{bmatrix}-1 & 0 \\\\ 0 & -1\\end{bmatrix} = -I$.\n\nMethod 2: Characteristic Equation:\n$\\operatorname{tr}(A) = 2 + 2 = 4$; $|A| = (2)(2) - (3)(1) = 1$.\n$A^2 - \\operatorname{tr}(A)A + |A|I = O \\implies A^2 - 4A + I = O \\implies A^2 - 4A = -I$.",
     "questionId": "MATHS-M01-Q50",
     "conceptId": "MATH-matrices-characteristic-equation-and-matrix-polynomials",

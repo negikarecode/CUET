@@ -14,28 +14,28 @@
       },
       {
         "id": "B",
-        "text": "The CSV module has a bug on all computers",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'The CSV module has a bug on all computers'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "C",
         "text": "Windows cannot read comma characters",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'Windows cannot read comma characters'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "They omitted newline='' in open(), causing Python's text mode to double-translate '\n' into '\r\r\n'",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Accurately explains Empty Rows in Windows CSV Files."
+      },
+      {
+        "id": "D",
+        "text": "The CSV module has a bug on all computers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'The CSV module has a bug on all computers'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "On Windows, failing to specify newline='' causes standard library text mode and csv.writer both to append carriage returns, producing double spacing.\nHence, Option D is correct.",
+    "correctOption": "C",
+    "detailedSolution": "On Windows, failing to specify newline='' causes standard library text mode and csv.writer both to append carriage returns, producing double spacing.\nHence, Option C is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q01",
@@ -46,8 +46,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is They omitted newline='' in open(), causing Python's text mode to double-translate '\n' into '\r\r\n'.",
-      "concept": "On Windows, failing to specify newline='' causes standard library text mode and csv.writer both to append carriage returns, producing double spacing.\nHence, Option D is correct.",
-      "detailed": "On Windows, failing to specify newline='' causes standard library text mode and csv.writer both to append carriage returns, producing double spacing.\nHence, Option D is correct."
+      "concept": "On Windows, failing to specify newline='' causes standard library text mode and csv.writer both to append carriage returns, producing double spacing.\nHence, Option C is correct.",
+      "detailed": "On Windows, failing to specify newline='' causes standard library text mode and csv.writer both to append carriage returns, producing double spacing.\nHence, Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock15-q5",
@@ -65,35 +65,35 @@
     "options": [
       {
         "id": "A",
-        "text": "swap(L[j], L[j+1])",
+        "text": "L[j] = L[j+1]",
         "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'swap(L[j], L[j+1])'. Conflates core domain concepts or theories with adjacent terminology."
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'L[j] = L[j+1]'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "B",
-        "text": "L[j], L[j+1] = L[j+1], L[j]",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Adjacent Swap Code in Python."
-      },
-      {
-        "id": "C",
         "text": "L[j] == L[j+1]",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'L[j] == L[j+1]'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
+        "id": "C",
+        "text": "L[j], L[j+1] = L[j+1], L[j]",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Adjacent Swap Code in Python."
+      },
+      {
         "id": "D",
-        "text": "L[j] = L[j+1]",
+        "text": "swap(L[j], L[j+1])",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'L[j] = L[j+1]'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'swap(L[j], L[j+1])'. Conflates core domain concepts or theories with adjacent terminology."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Python supports simultaneous tuple assignment: L[j], L[j+1] = L[j+1], L[j].\nHence, Option B is correct.",
+    "correctOption": "C",
+    "detailedSolution": "Python supports simultaneous tuple assignment: L[j], L[j+1] = L[j+1], L[j].\nHence, Option C is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q02",
@@ -104,8 +104,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is L[j], L[j+1] = L[j+1], L[j].",
-      "concept": "Python supports simultaneous tuple assignment: L[j], L[j+1] = L[j+1], L[j].\nHence, Option B is correct.",
-      "detailed": "Python supports simultaneous tuple assignment: L[j], L[j+1] = L[j+1], L[j].\nHence, Option B is correct."
+      "concept": "Python supports simultaneous tuple assignment: L[j], L[j+1] = L[j+1], L[j].\nHence, Option C is correct.",
+      "detailed": "Python supports simultaneous tuple assignment: L[j], L[j+1] = L[j+1], L[j].\nHence, Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock13-q14",
@@ -123,17 +123,17 @@
     "options": [
       {
         "id": "A",
+        "text": "Because CSV modules only work with boolean values",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Because CSV modules only work with boolean values'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "B",
         "text": "Because Python does not support arithmetic on numbers",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Conflation Trap",
         "mistakeAnalysis": "Incorrect option 'Because Python does not support arithmetic on numbers'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
-        "text": "Because CSV files cannot store numbers greater than 100",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'Because CSV files cannot store numbers greater than 100'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
         "id": "C",
@@ -144,10 +144,10 @@
       },
       {
         "id": "D",
-        "text": "Because CSV modules only work with boolean values",
+        "text": "Because CSV files cannot store numbers greater than 100",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'Because CSV modules only work with boolean values'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Because CSV files cannot store numbers greater than 100'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
     "correctOption": "C",
@@ -181,10 +181,10 @@
     "options": [
       {
         "id": "A",
-        "text": "B, A, C, D",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'B, A, C, D'. Conflates core domain concepts or theories with adjacent terminology."
+        "text": "A, B, C, D",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly sequences Exception Handling Flow Sequence (with Else and Finally)."
       },
       {
         "id": "B",
@@ -202,14 +202,14 @@
       },
       {
         "id": "D",
-        "text": "A, B, C, D",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Correctly sequences Exception Handling Flow Sequence (with Else and Finally)."
+        "text": "B, A, C, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'B, A, C, D'. Conflates core domain concepts or theories with adjacent terminology."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Exception flow: try runs until error -> aborts try -> matching except executes -> else skipped -> finally executes unconditionally.\nHence, Option D is correct.",
+    "correctOption": "A",
+    "detailedSolution": "Exception flow: try runs until error -> aborts try -> matching except executes -> else skipped -> finally executes unconditionally.\nHence, Option A is correct.",
     "questionType": "chronological-sequence",
     "difficulty": 3,
     "questionId": "COMPUTER_SCI-M03-Q04",
@@ -220,8 +220,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is A, B, C, D.",
-      "concept": "Exception flow: try runs until error -> aborts try -> matching except executes -> else skipped -> finally executes unconditionally.\nHence, Option D is correct.",
-      "detailed": "Exception flow: try runs until error -> aborts try -> matching except executes -> else skipped -> finally executes unconditionally.\nHence, Option D is correct."
+      "concept": "Exception flow: try runs until error -> aborts try -> matching except executes -> else skipped -> finally executes unconditionally.\nHence, Option A is correct.",
+      "detailed": "Exception flow: try runs until error -> aborts try -> matching except executes -> else skipped -> finally executes unconditionally.\nHence, Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock5-q2",
@@ -239,10 +239,10 @@
     "options": [
       {
         "id": "A",
-        "text": "Statement I is correct but Statement II is incorrect",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Evaluates dual statements on Default and Positional Parameter Rules correctly."
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is incorrect but Statement II is correct'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "B",
@@ -253,21 +253,21 @@
       },
       {
         "id": "C",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Evaluates dual statements on Default and Positional Parameter Rules correctly."
+      },
+      {
+        "id": "D",
         "text": "Both Statement I and Statement II are incorrect",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'Both Statement I and Statement II are incorrect'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "D",
-        "text": "Statement I is incorrect but Statement II is correct",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'Statement I is incorrect but Statement II is correct'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Statement I is correct: non-default arguments cannot follow default arguments. Statement II is incorrect: positional arguments cannot follow keyword arguments in a function call.\nHence, Option A is correct.",
+    "correctOption": "C",
+    "detailedSolution": "Statement I is correct: non-default arguments cannot follow default arguments. Statement II is incorrect: positional arguments cannot follow keyword arguments in a function call.\nHence, Option C is correct.",
     "questionType": "multi-statement",
     "difficulty": 3,
     "questionId": "COMPUTER_SCI-M03-Q05",
@@ -278,8 +278,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is Statement I is correct but Statement II is incorrect.",
-      "concept": "Statement I is correct: non-default arguments cannot follow default arguments. Statement II is incorrect: positional arguments cannot follow keyword arguments in a function call.\nHence, Option A is correct.",
-      "detailed": "Statement I is correct: non-default arguments cannot follow default arguments. Statement II is incorrect: positional arguments cannot follow keyword arguments in a function call.\nHence, Option A is correct."
+      "concept": "Statement I is correct: non-default arguments cannot follow default arguments. Statement II is incorrect: positional arguments cannot follow keyword arguments in a function call.\nHence, Option C is correct.",
+      "detailed": "Statement I is correct: non-default arguments cannot follow default arguments. Statement II is incorrect: positional arguments cannot follow keyword arguments in a function call.\nHence, Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock2-q1",
@@ -297,10 +297,10 @@
     "options": [
       {
         "id": "A",
-        "text": "It deletes the comma from the text",
+        "text": "It raises a CSVFormatError",
         "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'It deletes the comma from the text'. Conflates core domain concepts or theories with adjacent terminology."
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It raises a CSVFormatError'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "B",
@@ -311,10 +311,10 @@
       },
       {
         "id": "C",
-        "text": "It raises a CSVFormatError",
+        "text": "It deletes the comma from the text",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'It raises a CSVFormatError'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It deletes the comma from the text'. Conflates core domain concepts or theories with adjacent terminology."
       },
       {
         "id": "D",
@@ -355,35 +355,35 @@
     "options": [
       {
         "id": "A",
-        "text": "It deletes all child records instantly",
+        "text": "It automatically sets all referencing foreign key values in the child table to NULL upon parent row deletion",
         "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'It deletes all child records instantly'. Conflates core domain concepts or theories with adjacent terminology."
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It shuts down the database'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "B",
-        "text": "It converts the parent record to text",
+        "text": "It automatically deletes all referencing foreign key rows in the child table upon parent row deletion",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'It converts the parent record to text'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
         "id": "C",
-        "text": "It prevents the parent record from being deleted as long as referencing records exist in the child table",
+        "text": "It prevents the parent row from being deleted as long as referencing rows exist in the child table",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Accurately explains ON DELETE RESTRICT Default."
       },
       {
         "id": "D",
-        "text": "It shuts down the database",
+        "text": "It automatically sets all referencing foreign key values in the child table to default values upon parent row deletion",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'It shuts down the database'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It deletes all child records instantly'. Conflates core domain concepts or theories with adjacent terminology."
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "RESTRICT rejects the deletion of a parent record if any child records currently reference that parent key.\nHence, Option C is correct.",
+    "detailedSolution": "ON DELETE RESTRICT (or NO ACTION) rejects the deletion of a parent record if any child records currently reference its primary key, maintaining referential integrity. Options A, B, and D describe SET NULL, CASCADE, and SET DEFAULT respectively.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q07",
@@ -395,7 +395,7 @@
     "solution": {
       "quick": "Correct answer is It prevents the parent record from being deleted as long as referencing records exist in the child table.",
       "concept": "RESTRICT rejects the deletion of a parent record if any child records currently reference that parent key.\nHence, Option C is correct.",
-      "detailed": "RESTRICT rejects the deletion of a parent record if any child records currently reference that parent key.\nHence, Option C is correct."
+      "detailed": "ON DELETE RESTRICT (or NO ACTION) rejects the deletion of a parent record if any child records currently reference its primary key, maintaining referential integrity. Options A, B, and D describe SET NULL, CASCADE, and SET DEFAULT respectively."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock9-q20",
@@ -420,28 +420,28 @@
       },
       {
         "id": "B",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A-IV, B-II, C-I, D-III'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "C",
         "text": "A-I, B-II, C-III, D-IV",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Matches conceptual categories for Series Creation Methods and Default Indices correctly."
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "A-I, B-III, C-IV, D-II",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'A-I, B-III, C-IV, D-II'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "D",
-        "text": "A-IV, B-II, C-I, D-III",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'A-IV, B-II, C-I, D-III'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Default list index is 0,1,2; explicit index assigns ['x','y','z']; dict keys become index; scalar replicates across index.\nHence, Option B is correct.",
+    "correctOption": "C",
+    "detailedSolution": "Default list index is 0,1,2; explicit index assigns ['x','y','z']; dict keys become index; scalar replicates across index.\nHence, Option C is correct.",
     "questionType": "match-the-following",
     "difficulty": 3,
     "questionId": "COMPUTER_SCI-M03-Q08",
@@ -452,8 +452,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is A-I, B-II, C-III, D-IV.",
-      "concept": "Default list index is 0,1,2; explicit index assigns ['x','y','z']; dict keys become index; scalar replicates across index.\nHence, Option B is correct.",
-      "detailed": "Default list index is 0,1,2; explicit index assigns ['x','y','z']; dict keys become index; scalar replicates across index.\nHence, Option B is correct."
+      "concept": "Default list index is 0,1,2; explicit index assigns ['x','y','z']; dict keys become index; scalar replicates across index.\nHence, Option C is correct.",
+      "detailed": "Default list index is 0,1,2; explicit index assigns ['x','y','z']; dict keys become index; scalar replicates across index.\nHence, Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock4-q26",
@@ -478,28 +478,28 @@
       },
       {
         "id": "B",
-        "text": "ALTER TABLE Student DROP PRIMARY KEY;",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Dropping Primary Key Constraint."
-      },
-      {
-        "id": "C",
         "text": "ALTER TABLE Student REMOVE PRIMARY KEY;",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'ALTER TABLE Student REMOVE PRIMARY KEY;'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "DROP PRIMARY KEY FROM Student;",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'DROP PRIMARY KEY FROM Student;'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "ALTER TABLE Student DROP PRIMARY KEY;",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Dropping Primary Key Constraint."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "In MySQL, ALTER TABLE table_name DROP PRIMARY KEY; removes the primary key constraint.\nHence, Option B is correct.",
+    "correctOption": "D",
+    "detailedSolution": "In MySQL, ALTER TABLE table_name DROP PRIMARY KEY; removes the primary key constraint.\nHence, Option D is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q09",
@@ -510,8 +510,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is ALTER TABLE Student DROP PRIMARY KEY;.",
-      "concept": "In MySQL, ALTER TABLE table_name DROP PRIMARY KEY; removes the primary key constraint.\nHence, Option B is correct.",
-      "detailed": "In MySQL, ALTER TABLE table_name DROP PRIMARY KEY; removes the primary key constraint.\nHence, Option B is correct."
+      "concept": "In MySQL, ALTER TABLE table_name DROP PRIMARY KEY; removes the primary key constraint.\nHence, Option D is correct.",
+      "detailed": "In MySQL, ALTER TABLE table_name DROP PRIMARY KEY; removes the primary key constraint.\nHence, Option D is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock14-q20",
@@ -530,34 +530,26 @@
       {
         "id": "A",
         "text": "A table storing numbers from 1 to 10",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'A table storing numbers from 1 to 10'. Conflates core domain concepts or theories with adjacent terminology."
+        "isCorrect": false
       },
       {
         "id": "B",
         "text": "A table storing student grades",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'A table storing student grades'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "An Employee table where ManagerId is a foreign key referencing EmpId within the same Employee table",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Self-Referencing Foreign Key Example."
+        "text": "A table storing book titles",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A table storing book titles",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'A table storing book titles'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "text": "An Employee table where ManagerId is a foreign key referencing EmpId within the same table",
+        "isCorrect": true
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Hierarchical self-references (e.g., an employee's manager being another employee in the same table) use self-referential foreign keys.\nHence, Option C is correct.",
+    "correctOption": "D",
+    "detailedSolution": "Hierarchical self-references (e.g., an employee's manager being another employee in the same table) use self-referential foreign keys.\nHence, Option D is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q10",
@@ -568,8 +560,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is An Employee table where ManagerId is a foreign key referencing EmpId within the same Employee table.",
-      "concept": "Hierarchical self-references (e.g., an employee's manager being another employee in the same table) use self-referential foreign keys.\nHence, Option C is correct.",
-      "detailed": "Hierarchical self-references (e.g., an employee's manager being another employee in the same table) use self-referential foreign keys.\nHence, Option C is correct."
+      "concept": "Hierarchical self-references (e.g., an employee's manager being another employee in the same table) use self-referential foreign keys.\nHence, Option D is correct.",
+      "detailed": "Hierarchical self-references (e.g., an employee's manager being another employee in the same table) use self-referential foreign keys.\nHence, Option D is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock19-q20",
@@ -587,35 +579,35 @@
     "options": [
       {
         "id": "A",
-        "text": "SMTP prints the email on paper while POP3 reads it out loud",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'SMTP prints the email on paper while POP3 reads it out loud'. Conflates core domain concepts or theories with adjacent terminology."
+        "text": "SMTP is a push protocol used to transmit mail from sender to servers; POP3/IMAP are pull protocols used by recipients to retrieve mail from the mailbox server",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains SMTP vs POP3 Roles."
       },
       {
         "id": "B",
-        "text": "SMTP is for mobile phones while POP3 is for laptops",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'SMTP is for mobile phones while POP3 is for laptops'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "C",
         "text": "They are identical protocols used on alternating days",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'They are identical protocols used on alternating days'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
+        "id": "C",
+        "text": "SMTP prints the email on paper while POP3 reads it out loud",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'SMTP prints the email on paper while POP3 reads it out loud'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
         "id": "D",
-        "text": "SMTP is a push protocol used to transmit mail from sender to servers; POP3/IMAP are pull protocols used by recipients to retrieve mail from the mailbox server",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains SMTP vs POP3 Roles."
+        "text": "SMTP is for mobile phones while POP3 is for laptops",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'SMTP is for mobile phones while POP3 is for laptops'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "SMTP sends/relays outgoing mail across servers; POP3 and IMAP retrieve stored incoming mail from the recipient's mailbox.\nHence, Option D is correct.",
+    "correctOption": "A",
+    "detailedSolution": "SMTP sends/relays outgoing mail across servers; POP3 and IMAP retrieve stored incoming mail from the recipient's mailbox.\nHence, Option A is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q11",
@@ -626,8 +618,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is SMTP is a push protocol used to transmit mail from sender to servers; POP3/IMAP are pull protocols used by recipients to retrieve mail from the mailbox server.",
-      "concept": "SMTP sends/relays outgoing mail across servers; POP3 and IMAP retrieve stored incoming mail from the recipient's mailbox.\nHence, Option D is correct.",
-      "detailed": "SMTP sends/relays outgoing mail across servers; POP3 and IMAP retrieve stored incoming mail from the recipient's mailbox.\nHence, Option D is correct."
+      "concept": "SMTP sends/relays outgoing mail across servers; POP3 and IMAP retrieve stored incoming mail from the recipient's mailbox.\nHence, Option A is correct.",
+      "detailed": "SMTP sends/relays outgoing mail across servers; POP3 and IMAP retrieve stored incoming mail from the recipient's mailbox.\nHence, Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock16-q10",
@@ -645,10 +637,10 @@
     "options": [
       {
         "id": "A",
-        "text": "WHERE SUM(FEES.FeeAmount) > 100000",
+        "text": "GROUP BY FeeAmount > 100000",
         "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'WHERE SUM(FEES.FeeAmount) > 100000'. Conflates core domain concepts or theories with adjacent terminology."
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'GROUP BY FeeAmount > 100000'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "B",
@@ -659,10 +651,10 @@
       },
       {
         "id": "C",
-        "text": "GROUP BY FeeAmount > 100000",
+        "text": "WHERE SUM(FEES.FeeAmount) > 100000",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'GROUP BY FeeAmount > 100000'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'WHERE SUM(FEES.FeeAmount) > 100000'. Conflates core domain concepts or theories with adjacent terminology."
       },
       {
         "id": "D",
@@ -717,17 +709,17 @@
       },
       {
         "id": "C",
-        "text": "Only the first row for Math and Science",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'Only the first row for Math and Science'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "D",
         "text": "An error because columns cannot be sliced by label",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'An error because columns cannot be sliced by label'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Only the first row for Math and Science",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Only the first row for Math and Science'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
     "correctOption": "B",
@@ -761,35 +753,27 @@
     "options": [
       {
         "id": "A",
-        "text": "Valid on any series; returns the first 10 items",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'Valid on any series; returns the first 10 items'. Conflates core domain concepts or theories with adjacent terminology."
+        "text": "Valid only when the Series has exactly one element; returns that value as a native Python scalar.",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "Valid only on a Series containing exactly one element; returns that element as a native Python scalar",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains s.item() Method Function."
+        "text": "Valid only when the Series is empty; returns an empty Python tuple containing no values.",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Valid only on empty series",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'Valid only on empty series'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+        "text": "Valid on any Series regardless of length; returns a new Series containing only the first item.",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Returns the index as a list",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'Returns the index as a list'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "text": "Valid only when the Series has multiple elements; coerces the entire Series into a single string.",
+        "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "s.item() extracts the single scalar value from a 1-element Series; calling it on multi-element Series raises ValueError.\nHence, Option B is correct.",
+    "correctOption": "A",
+    "detailedSolution": "The s.item() method is specifically designed to extract a single scalar value from a Pandas Series that contains exactly one element. If the Series contains zero or more than one element, calling item() raises a ValueError. Therefore, Option A correctly identifies both the validity condition (exactly one element) and the return type (native Python scalar). The other options incorrectly describe the method's behavior on empty Series, multi-element Series, or by forcing type conversion.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q14",
@@ -800,8 +784,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is Valid only on a Series containing exactly one element; returns that element as a native Python scalar.",
-      "concept": "s.item() extracts the single scalar value from a 1-element Series; calling it on multi-element Series raises ValueError.\nHence, Option B is correct.",
-      "detailed": "s.item() extracts the single scalar value from a 1-element Series; calling it on multi-element Series raises ValueError.\nHence, Option B is correct."
+      "concept": "s.item() extracts the single scalar value from a 1-element Series; calling it on multi-element Series raises ValueError.\nHence, Option A is correct.",
+      "detailed": "s.item() extracts the single scalar value from a 1-element Series; calling it on multi-element Series raises ValueError.\nHence, Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock7-q27",
@@ -819,35 +803,35 @@
     "options": [
       {
         "id": "A",
+        "text": "Probability density, such that the total area under the histogram integrates to 1.0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Density Normalization Parameter."
+      },
+      {
+        "id": "B",
         "text": "Raw frequency counts of consumers",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Conflation Trap",
         "mistakeAnalysis": "Incorrect option 'Raw frequency counts of consumers'. Conflates core domain concepts or theories with adjacent terminology."
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "Cumulative percentage from 0 to 100",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'Cumulative percentage from 0 to 100'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "Average consumer spending in rupees",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'Average consumer spending in rupees'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
-      },
-      {
-        "id": "D",
-        "text": "Probability density, such that the total area under the histogram integrates to 1.0",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Density Normalization Parameter."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "density=True normalizes bin counts so that the total area under the histogram equals 1, representing probability density.\nHence, Option D is correct.",
+    "correctOption": "A",
+    "detailedSolution": "density=True normalizes bin counts so that the total area under the histogram equals 1, representing probability density.\nHence, Option A is correct.",
     "questionType": "case-based",
     "difficulty": 4,
     "questionId": "COMPUTER_SCI-M03-Q15",
@@ -858,8 +842,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is Probability density, such that the total area under the histogram integrates to 1.0.",
-      "concept": "density=True normalizes bin counts so that the total area under the histogram equals 1, representing probability density.\nHence, Option D is correct.",
-      "detailed": "density=True normalizes bin counts so that the total area under the histogram equals 1, representing probability density.\nHence, Option D is correct."
+      "concept": "density=True normalizes bin counts so that the total area under the histogram equals 1, representing probability density.\nHence, Option A is correct.",
+      "detailed": "density=True normalizes bin counts so that the total area under the histogram equals 1, representing probability density.\nHence, Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock12-q44",
@@ -877,35 +861,35 @@
     "options": [
       {
         "id": "A",
-        "text": "ALTER TABLE Student MODIFY Name VARCHAR(50);",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Modifying Column Datatype."
-      },
-      {
-        "id": "B",
-        "text": "UPDATE Student CHANGE Name VARCHAR(50);",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'UPDATE Student CHANGE Name VARCHAR(50);'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "C",
         "text": "ALTER TABLE Student ADD Name VARCHAR(50);",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'ALTER TABLE Student ADD Name VARCHAR(50);'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "MODIFY TABLE Student Name VARCHAR(50);",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'MODIFY TABLE Student Name VARCHAR(50);'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "C",
+        "text": "ALTER TABLE Student MODIFY Name VARCHAR(50);",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Modifying Column Datatype."
+      },
+      {
+        "id": "D",
+        "text": "UPDATE Student CHANGE Name VARCHAR(50);",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'UPDATE Student CHANGE Name VARCHAR(50);'. Conflates core domain concepts or theories with adjacent terminology."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "ALTER TABLE table_name MODIFY column_name new_datatype; alters attribute metadata in MySQL.\nHence, Option A is correct.",
+    "correctOption": "C",
+    "detailedSolution": "ALTER TABLE table_name MODIFY column_name new_datatype; alters attribute metadata in MySQL.\nHence, Option C is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q16",
@@ -916,8 +900,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is ALTER TABLE Student MODIFY Name VARCHAR(50);.",
-      "concept": "ALTER TABLE table_name MODIFY column_name new_datatype; alters attribute metadata in MySQL.\nHence, Option A is correct.",
-      "detailed": "ALTER TABLE table_name MODIFY column_name new_datatype; alters attribute metadata in MySQL.\nHence, Option A is correct."
+      "concept": "ALTER TABLE table_name MODIFY column_name new_datatype; alters attribute metadata in MySQL.\nHence, Option C is correct.",
+      "detailed": "ALTER TABLE table_name MODIFY column_name new_datatype; alters attribute metadata in MySQL.\nHence, Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock18-q7",
@@ -935,35 +919,27 @@
     "options": [
       {
         "id": "A",
-        "text": "Cyber bullying occurs only in school laboratories",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'Cyber bullying occurs only in school laboratories'. Conflates core domain concepts or theories with adjacent terminology."
+        "text": "It is confined to physical school grounds and can only be witnessed by the immediate peer group involved.",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Cyber bullying can only happen to teachers",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'Cyber bullying can only happen to teachers'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+        "text": "It requires explicit permission from school administrators and cannot involve individuals outside the classroom.",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Cyber bullying is legally encouraged",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'Cyber bullying is legally encouraged'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "text": "It typically involves only a single victim and is effectively contained within controlled, monitored school networks.",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Cyber bullying can occur 24/7, reaches vast public audiences across digital networks, and can be conducted by anonymous perpetrators",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Cyber Bullying Psychological Impact."
+        "text": "It can occur 24/7, reaches vast public audiences across digital networks, and can be conducted by anonymous perpetrators.",
+        "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "The ubiquity, permanence of online records, public reach, and perceived anonymity magnify the distress of cyber bullying.\nHence, Option D is correct.",
+    "detailedSolution": "The ubiquity, permanence of online records, public reach, and perceived anonymity distinguish cyber bullying from traditional playground bullying. Therefore, the option highlighting continuous access, wide audience, and anonymity is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q17",
@@ -993,17 +969,17 @@
     "options": [
       {
         "id": "A",
-        "text": "Both Statement I and Statement II are incorrect",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'Both Statement I and Statement II are incorrect'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
         "text": "Both Statement I and Statement II are correct",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Evaluates dual statements on WHERE vs HAVING Clause Constraints correctly."
+      },
+      {
+        "id": "B",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is incorrect but Statement II is correct'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "C",
@@ -1014,14 +990,14 @@
       },
       {
         "id": "D",
-        "text": "Statement I is incorrect but Statement II is correct",
+        "text": "Both Statement I and Statement II are incorrect",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'Statement I is incorrect but Statement II is correct'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Both Statement I and Statement II are incorrect'. Conflates core domain concepts or theories with adjacent terminology."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Both Statement I and Statement II are correct. WHERE filters raw tuples before grouping; HAVING filters aggregated groups and supports aggregate conditions.\nHence, Option B is correct.",
+    "correctOption": "A",
+    "detailedSolution": "Both Statement I and Statement II are correct. WHERE filters raw tuples before grouping; HAVING filters aggregated groups and supports aggregate conditions.\nHence, Option A is correct.",
     "questionType": "multi-statement",
     "difficulty": 3,
     "questionId": "COMPUTER_SCI-M03-Q18",
@@ -1032,8 +1008,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is Both Statement I and Statement II are correct.",
-      "concept": "Both Statement I and Statement II are correct. WHERE filters raw tuples before grouping; HAVING filters aggregated groups and supports aggregate conditions.\nHence, Option B is correct.",
-      "detailed": "Both Statement I and Statement II are correct. WHERE filters raw tuples before grouping; HAVING filters aggregated groups and supports aggregate conditions.\nHence, Option B is correct."
+      "concept": "Both Statement I and Statement II are correct. WHERE filters raw tuples before grouping; HAVING filters aggregated groups and supports aggregate conditions.\nHence, Option A is correct.",
+      "detailed": "Both Statement I and Statement II are correct. WHERE filters raw tuples before grouping; HAVING filters aggregated groups and supports aggregate conditions.\nHence, Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock2-q8",
@@ -1058,17 +1034,17 @@
       },
       {
         "id": "B",
-        "text": "histtype='stepfilled'",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Step-filled Histogram Style."
-      },
-      {
-        "id": "C",
         "text": "step_fill=True",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'step_fill=True'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "histtype='stepfilled'",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Step-filled Histogram Style."
       },
       {
         "id": "D",
@@ -1078,8 +1054,8 @@
         "mistakeAnalysis": "Incorrect option 'polygon=True'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "histtype='stepfilled' renders a stepped baseline that is filled.\nHence, Option B is correct.",
+    "correctOption": "C",
+    "detailedSolution": "histtype='stepfilled' renders a stepped baseline that is filled.\nHence, Option C is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q19",
@@ -1090,8 +1066,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is histtype='stepfilled'.",
-      "concept": "histtype='stepfilled' renders a stepped baseline that is filled.\nHence, Option B is correct.",
-      "detailed": "histtype='stepfilled' renders a stepped baseline that is filled.\nHence, Option B is correct."
+      "concept": "histtype='stepfilled' renders a stepped baseline that is filled.\nHence, Option C is correct.",
+      "detailed": "histtype='stepfilled' renders a stepped baseline that is filled.\nHence, Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock13-q38",
@@ -1109,35 +1085,35 @@
     "options": [
       {
         "id": "A",
-        "text": "pd.Series([1, 4, 9])",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Using Lambda with apply()."
-      },
-      {
-        "id": "B",
-        "text": "pd.Series([2, 4, 6])",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'pd.Series([2, 4, 6])'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "C",
         "text": "pd.Series([1, 2, 3])",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'pd.Series([1, 2, 3])'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
-        "id": "D",
+        "id": "B",
+        "text": "pd.Series([1, 4, 9])",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Using Lambda with apply()."
+      },
+      {
+        "id": "C",
         "text": "Throws a SyntaxError",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'Throws a SyntaxError'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "pd.Series([2, 4, 6])",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'pd.Series([2, 4, 6])'. Conflates core domain concepts or theories with adjacent terminology."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "The lambda squares each element, producing [1, 4, 9].\nHence, Option A is correct.",
+    "correctOption": "B",
+    "detailedSolution": "The lambda squares each element, producing [1, 4, 9].\nHence, Option B is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q20",
@@ -1148,8 +1124,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is pd.Series([1, 4, 9]).",
-      "concept": "The lambda squares each element, producing [1, 4, 9].\nHence, Option A is correct.",
-      "detailed": "The lambda squares each element, producing [1, 4, 9].\nHence, Option A is correct."
+      "concept": "The lambda squares each element, producing [1, 4, 9].\nHence, Option B is correct.",
+      "detailed": "The lambda squares each element, producing [1, 4, 9].\nHence, Option B is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock13-q28",
@@ -1167,24 +1143,24 @@
     "options": [
       {
         "id": "A",
-        "text": "48 bits, represented as 6 groups of 2 hexadecimal digits separated by colons or hyphens",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on MAC Address Bit Length and Format."
-      },
-      {
-        "id": "B",
         "text": "32 bits, represented as 4 decimal octets",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Conflation Trap",
         "mistakeAnalysis": "Incorrect option '32 bits, represented as 4 decimal octets'. Conflates core domain concepts or theories with adjacent terminology."
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "128 bits, represented as 8 hexadecimal blocks",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option '128 bits, represented as 8 hexadecimal blocks'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "48 bits, represented as 6 groups of 2 hexadecimal digits separated by colons or hyphens",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on MAC Address Bit Length and Format."
       },
       {
         "id": "D",
@@ -1194,8 +1170,8 @@
         "mistakeAnalysis": "Incorrect option '64 bits in binary'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "A MAC address consists of 48 bits (6 bytes), displayed as 12 hexadecimal digits (e.g., AA:BB:CC:DD:EE:FF).\nHence, Option A is correct.",
+    "correctOption": "C",
+    "detailedSolution": "A MAC address consists of 48 bits (6 bytes), displayed as 12 hexadecimal digits (e.g., AA:BB:CC:DD:EE:FF).\nHence, Option C is correct.",
     "questionType": "case-based",
     "difficulty": 4,
     "questionId": "COMPUTER_SCI-M03-Q21",
@@ -1206,8 +1182,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is 48 bits, represented as 6 groups of 2 hexadecimal digits separated by colons or hyphens.",
-      "concept": "A MAC address consists of 48 bits (6 bytes), displayed as 12 hexadecimal digits (e.g., AA:BB:CC:DD:EE:FF).\nHence, Option A is correct.",
-      "detailed": "A MAC address consists of 48 bits (6 bytes), displayed as 12 hexadecimal digits (e.g., AA:BB:CC:DD:EE:FF).\nHence, Option A is correct."
+      "concept": "A MAC address consists of 48 bits (6 bytes), displayed as 12 hexadecimal digits (e.g., AA:BB:CC:DD:EE:FF).\nHence, Option C is correct.",
+      "detailed": "A MAC address consists of 48 bits (6 bytes), displayed as 12 hexadecimal digits (e.g., AA:BB:CC:DD:EE:FF).\nHence, Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock13-q42",
@@ -1225,35 +1201,35 @@
     "options": [
       {
         "id": "A",
-        "text": "pd.load_csv('filename.csv')",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'pd.load_csv('filename.csv')'. Conflates core domain concepts or theories with adjacent terminology."
+        "text": "pd.read_csv('filename.csv')",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains CSV to DataFrame Reader Function."
       },
       {
         "id": "B",
-        "text": "pd.open_csv('filename.csv')",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'pd.open_csv('filename.csv')'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "C",
         "text": "pd.csv_reader('filename.csv')",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'pd.csv_reader('filename.csv')'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
+        "id": "C",
+        "text": "pd.load_csv('filename.csv')",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'pd.load_csv('filename.csv')'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
         "id": "D",
-        "text": "pd.read_csv('filename.csv')",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains CSV to DataFrame Reader Function."
+        "text": "pd.open_csv('filename.csv')",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'pd.open_csv('filename.csv')'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "pd.read_csv() parses a CSV file stream into a fully indexed 2D DataFrame.\nHence, Option D is correct.",
+    "correctOption": "A",
+    "detailedSolution": "pd.read_csv() parses a CSV file stream into a fully indexed 2D DataFrame.\nHence, Option A is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q22",
@@ -1264,8 +1240,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is pd.read_csv('filename.csv').",
-      "concept": "pd.read_csv() parses a CSV file stream into a fully indexed 2D DataFrame.\nHence, Option D is correct.",
-      "detailed": "pd.read_csv() parses a CSV file stream into a fully indexed 2D DataFrame.\nHence, Option D is correct."
+      "concept": "pd.read_csv() parses a CSV file stream into a fully indexed 2D DataFrame.\nHence, Option A is correct.",
+      "detailed": "pd.read_csv() parses a CSV file stream into a fully indexed 2D DataFrame.\nHence, Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock18-q30",
@@ -1283,35 +1259,27 @@
     "options": [
       {
         "id": "A",
-        "text": "fetchone() returns an integer; fetchall() returns a string",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'fetchone() returns an integer; fetchall() returns a string'. Conflates core domain concepts or theories with adjacent terminology."
+        "text": "fetchone() returns an integer index; fetchall() returns a concatenated string of all results",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "fetchone() returns a list; fetchall() returns a single dictionary",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'fetchone() returns a list; fetchall() returns a single dictionary'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+        "text": "fetchone() returns a single tuple for the next row (or None); fetchall() returns a list of tuples for remaining rows",
+        "isCorrect": true
       },
       {
         "id": "C",
-        "text": "fetchone() returns a single tuple representing the next row (or None if no more rows); fetchall() returns a list of tuples representing all remaining rows",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains fetchone() vs fetchall() Return Types."
+        "text": "Both methods return identical Python dictionaries representing the entire result set as separate objects",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Both return identical strings",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'Both return identical strings'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "text": "fetchone() returns a list of all rows; fetchall() returns a single dictionary mapping column names to their values",
+        "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "fetchone() retrieves one row as a tuple (or None at end); fetchall() returns all remaining rows as a list of tuples (or empty list []).\nHence, Option C is correct.",
+    "correctOption": "B",
+    "detailedSolution": "fetchone() retrieves the next single row as a tuple (returning None if no rows remain); fetchall() returns all remaining rows as a list of tuples (returning an empty list if no rows remain). Therefore, the second option accurately describes the respective return types and values.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q23",
@@ -1322,8 +1290,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is fetchone() returns a single tuple representing the next row (or None if no more rows); fetchall() returns a list of tuples representing all remaining rows.",
-      "concept": "fetchone() retrieves one row as a tuple (or None at end); fetchall() returns all remaining rows as a list of tuples (or empty list []).\nHence, Option C is correct.",
-      "detailed": "fetchone() retrieves one row as a tuple (or None at end); fetchall() returns all remaining rows as a list of tuples (or empty list []).\nHence, Option C is correct."
+      "concept": "fetchone() retrieves one row as a tuple (or None at end); fetchall() returns all remaining rows as a list of tuples (or empty list []).\nHence, Option B is correct.",
+      "detailed": "fetchone() retrieves one row as a tuple (or None at end); fetchall() returns all remaining rows as a list of tuples (or empty list []).\nHence, Option B is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock1-q17",
@@ -1399,17 +1367,17 @@
     "options": [
       {
         "id": "A",
-        "text": "A Non-Linear Hierarchical Structure",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'A Non-Linear Hierarchical Structure'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
         "text": "A Relational Tabular Structure",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'A Relational Tabular Structure'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "A Non-Linear Hierarchical Structure",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A Non-Linear Hierarchical Structure'. Conflates core domain concepts or theories with adjacent terminology."
       },
       {
         "id": "C",
@@ -1457,35 +1425,35 @@
     "options": [
       {
         "id": "A",
-        "text": "A-II, B-I, C-III, D-IV",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'A-II, B-I, C-III, D-IV'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
-        "text": "A-I, B-III, C-IV, D-II",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'A-I, B-III, C-IV, D-II'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "C",
         "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'A-IV, B-II, C-I, D-III'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "A-I, B-II, C-III, D-IV",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Matches conceptual categories for Pickle Module Functions and Operations correctly."
+      },
+      {
+        "id": "C",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A-II, B-I, C-III, D-IV'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A-I, B-III, C-IV, D-II'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "dump writes to file; load reads from file; dumps serializes to bytes variable; loads deserializes from bytes variable.\nHence, Option D is correct.",
+    "correctOption": "B",
+    "detailedSolution": "dump writes to file; load reads from file; dumps serializes to bytes variable; loads deserializes from bytes variable.\nHence, Option B is correct.",
     "questionType": "match-the-following",
     "difficulty": 3,
     "questionId": "COMPUTER_SCI-M03-Q26",
@@ -1496,8 +1464,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is A-I, B-II, C-III, D-IV.",
-      "concept": "dump writes to file; load reads from file; dumps serializes to bytes variable; loads deserializes from bytes variable.\nHence, Option D is correct.",
-      "detailed": "dump writes to file; load reads from file; dumps serializes to bytes variable; loads deserializes from bytes variable.\nHence, Option D is correct."
+      "concept": "dump writes to file; load reads from file; dumps serializes to bytes variable; loads deserializes from bytes variable.\nHence, Option B is correct.",
+      "detailed": "dump writes to file; load reads from file; dumps serializes to bytes variable; loads deserializes from bytes variable.\nHence, Option B is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock4-q4",
@@ -1515,35 +1483,35 @@
     "options": [
       {
         "id": "A",
-        "text": "if line.has('[ERROR]'):",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'if line.has('[ERROR]'):'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
-        "text": "if line == '[ERROR]':",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'if line == '[ERROR]':'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "C",
         "text": "if '[ERROR]' in line.split():",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'if '[ERROR]' in line.split():'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "if '[ERROR]' in line:",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Line Filtering via Substring Check."
+      },
+      {
+        "id": "C",
+        "text": "if line.has('[ERROR]'):",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'if line.has('[ERROR]'):'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "if line == '[ERROR]':",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'if line == '[ERROR]':'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "The 'in' operator tests whether the substring '[ERROR]' is present within the string line.\nHence, Option D is correct.",
+    "correctOption": "B",
+    "detailedSolution": "The 'in' operator tests whether the substring '[ERROR]' is present within the string line.\nHence, Option B is correct.",
     "questionType": "case-based",
     "difficulty": 4,
     "questionId": "COMPUTER_SCI-M03-Q27",
@@ -1554,8 +1522,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is if '[ERROR]' in line:.",
-      "concept": "The 'in' operator tests whether the substring '[ERROR]' is present within the string line.\nHence, Option D is correct.",
-      "detailed": "The 'in' operator tests whether the substring '[ERROR]' is present within the string line.\nHence, Option D is correct."
+      "concept": "The 'in' operator tests whether the substring '[ERROR]' is present within the string line.\nHence, Option B is correct.",
+      "detailed": "The 'in' operator tests whether the substring '[ERROR]' is present within the string line.\nHence, Option B is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock9-q42",
@@ -1573,35 +1541,35 @@
     "options": [
       {
         "id": "A",
-        "text": "WEP (Wired Equivalent Privacy)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'WEP (Wired Equivalent Privacy)'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
         "text": "WPA3 (Wi-Fi Protected Access 3)",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Wi-Fi Security Standard."
       },
       {
-        "id": "C",
-        "text": "HTTP",
+        "id": "B",
+        "text": "WEP (Wired Equivalent Privacy)",
         "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'HTTP'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'WEP (Wired Equivalent Privacy)'. Conflates core domain concepts or theories with adjacent terminology."
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "FTP",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'FTP'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "HTTP",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'HTTP'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "WPA3 provides robust cryptographic protection and replaces older vulnerable standards like WEP and WPA.\nHence, Option B is correct.",
+    "correctOption": "A",
+    "detailedSolution": "WPA3 provides robust cryptographic protection and replaces older vulnerable standards like WEP and WPA.\nHence, Option A is correct.",
     "questionType": "case-based",
     "difficulty": 4,
     "questionId": "COMPUTER_SCI-M03-Q28",
@@ -1612,8 +1580,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is WPA3 (Wi-Fi Protected Access 3).",
-      "concept": "WPA3 provides robust cryptographic protection and replaces older vulnerable standards like WEP and WPA.\nHence, Option B is correct.",
-      "detailed": "WPA3 provides robust cryptographic protection and replaces older vulnerable standards like WEP and WPA.\nHence, Option B is correct."
+      "concept": "WPA3 provides robust cryptographic protection and replaces older vulnerable standards like WEP and WPA.\nHence, Option A is correct.",
+      "detailed": "WPA3 provides robust cryptographic protection and replaces older vulnerable standards like WEP and WPA.\nHence, Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock10-q50",
@@ -1631,10 +1599,10 @@
     "options": [
       {
         "id": "A",
-        "text": "Python's logical 'and' evaluates the truth value of the entire array at once, which is ambiguous for multiple booleans",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Python Logical 'and' Error."
+        "text": "Because 'and' is a reserved SQL keyword",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Because 'and' is a reserved SQL keyword'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "B",
@@ -1652,14 +1620,14 @@
       },
       {
         "id": "D",
-        "text": "Because 'and' is a reserved SQL keyword",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'Because 'and' is a reserved SQL keyword'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "text": "Python's logical 'and' evaluates the truth value of the entire array at once",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Python Logical 'and' Error."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Python's built-in boolean operators 'and'/'or' require a single scalar truth value; vectorized Pandas requires '&'/'|'.\nHence, Option A is correct.",
+    "correctOption": "D",
+    "detailedSolution": "Python's built-in boolean operators 'and'/'or' require a single scalar truth value; vectorized Pandas requires '&'/'|'.\nHence, Option D is correct.\n\nNote: This is because it is ambiguous for multiple booleans",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q29",
@@ -1670,8 +1638,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is Python's logical 'and' evaluates the truth value of the entire array at once, which is ambiguous for multiple booleans.",
-      "concept": "Python's built-in boolean operators 'and'/'or' require a single scalar truth value; vectorized Pandas requires '&'/'|'.\nHence, Option A is correct.",
-      "detailed": "Python's built-in boolean operators 'and'/'or' require a single scalar truth value; vectorized Pandas requires '&'/'|'.\nHence, Option A is correct."
+      "concept": "Python's built-in boolean operators 'and'/'or' require a single scalar truth value; vectorized Pandas requires '&'/'|'.\nHence, Option D is correct.",
+      "detailed": "Python's built-in boolean operators 'and'/'or' require a single scalar truth value; vectorized Pandas requires '&'/'|'.\nHence, Option D is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock9-q32",
@@ -1689,35 +1657,35 @@
     "options": [
       {
         "id": "A",
-        "text": "UNION, INTERSECT, and MINUS",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'UNION, INTERSECT, and MINUS'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
         "text": "PLUS, MINUS, and MULTIPLY",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'PLUS, MINUS, and MULTIPLY'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "Only comma ','",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'Only comma ',''. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "AND, OR, and NOT",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Accurately explains HAVING with Multiple Conditions."
+      },
+      {
+        "id": "D",
+        "text": "UNION, INTERSECT, and MINUS",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'UNION, INTERSECT, and MINUS'. Conflates core domain concepts or theories with adjacent terminology."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Conditions within a HAVING clause can be combined using standard boolean operators: HAVING COUNT(*) > 5 AND AVG(Salary) > 30000.\nHence, Option D is correct.",
+    "correctOption": "C",
+    "detailedSolution": "Conditions within a HAVING clause can be combined using standard boolean operators: HAVING COUNT(*) > 5 AND AVG(Salary) > 30000.\nHence, Option C is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q30",
@@ -1728,8 +1696,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is AND, OR, and NOT.",
-      "concept": "Conditions within a HAVING clause can be combined using standard boolean operators: HAVING COUNT(*) > 5 AND AVG(Salary) > 30000.\nHence, Option D is correct.",
-      "detailed": "Conditions within a HAVING clause can be combined using standard boolean operators: HAVING COUNT(*) > 5 AND AVG(Salary) > 30000.\nHence, Option D is correct."
+      "concept": "Conditions within a HAVING clause can be combined using standard boolean operators: HAVING COUNT(*) > 5 AND AVG(Salary) > 30000.\nHence, Option C is correct.",
+      "detailed": "Conditions within a HAVING clause can be combined using standard boolean operators: HAVING COUNT(*) > 5 AND AVG(Salary) > 30000.\nHence, Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock19-q8",
@@ -1761,17 +1729,17 @@
       },
       {
         "id": "C",
-        "text": "'rb' (read binary)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option ''rb' (read binary)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "D",
         "text": "'wb' (write binary)",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option ''wb' (write binary)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "'rb' (read binary)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option ''rb' (read binary)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
     "correctOption": "B",
@@ -1805,35 +1773,35 @@
     "options": [
       {
         "id": "A",
-        "text": "df.sort('Marks', reverse=True)",
+        "text": "df.sort_column('Marks', False)",
         "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'df.sort('Marks', reverse=True)'. Conflates core domain concepts or theories with adjacent terminology."
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'df.sort_column('Marks', False)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "B",
-        "text": "df.order_by('Marks', desc=True)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'df.order_by('Marks', desc=True)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "C",
         "text": "df.sort_values(by='Marks', ascending=False)",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Accurately explains Sorting DataFrame by Column Values."
       },
       {
-        "id": "D",
-        "text": "df.sort_column('Marks', False)",
+        "id": "C",
+        "text": "df.order_by('Marks', desc=True)",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'df.sort_column('Marks', False)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'df.order_by('Marks', desc=True)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "df.sort('Marks', reverse=True)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'df.sort('Marks', reverse=True)'. Conflates core domain concepts or theories with adjacent terminology."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "df.sort_values(by='Marks', ascending=False) sorts the table in descending order of column 'Marks'.\nHence, Option C is correct.",
+    "correctOption": "B",
+    "detailedSolution": "df.sort_values(by='Marks', ascending=False) sorts the table in descending order of column 'Marks'.\nHence, Option B is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q32",
@@ -1844,8 +1812,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is df.sort_values(by='Marks', ascending=False).",
-      "concept": "df.sort_values(by='Marks', ascending=False) sorts the table in descending order of column 'Marks'.\nHence, Option C is correct.",
-      "detailed": "df.sort_values(by='Marks', ascending=False) sorts the table in descending order of column 'Marks'.\nHence, Option C is correct."
+      "concept": "df.sort_values(by='Marks', ascending=False) sorts the table in descending order of column 'Marks'.\nHence, Option B is correct.",
+      "detailed": "df.sort_values(by='Marks', ascending=False) sorts the table in descending order of column 'Marks'.\nHence, Option B is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock18-q33",
@@ -1863,35 +1831,35 @@
     "options": [
       {
         "id": "A",
-        "text": "s[s > 50 and s < 90]",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 's[s > 50 and s < 90]'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
-        "text": "s[(s > 50) & (s < 90)] (using the bitwise & operator and parenthesized conditions)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Logical AND Filtering Syntax."
-      },
-      {
-        "id": "C",
         "text": "s[s > 50 && s < 90]",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 's[s > 50 && s < 90]'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "s[50 < s < 90]",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 's[50 < s < 90]'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "C",
+        "text": "s[(s > 50) &",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Logical AND Filtering Syntax."
+      },
+      {
+        "id": "D",
+        "text": "s[s > 50 and s < 90]",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 's[s > 50 and s < 90]'. Conflates core domain concepts or theories with adjacent terminology."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "In Pandas, element-wise boolean operations require bitwise operators (&, |, ~) with parentheses enclosing each condition.\nHence, Option B is correct.",
+    "correctOption": "C",
+    "detailedSolution": "In Pandas, element-wise boolean operations require bitwise operators (&, |, ~) with parentheses enclosing each condition.\nHence, Option C is correct.\n\nNote: s < 90)] (using the bitwise & operator and parenthesized conditions",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q33",
@@ -1902,8 +1870,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is s[(s > 50) & (s < 90)] (using the bitwise & operator and parenthesized conditions).",
-      "concept": "In Pandas, element-wise boolean operations require bitwise operators (&, |, ~) with parentheses enclosing each condition.\nHence, Option B is correct.",
-      "detailed": "In Pandas, element-wise boolean operations require bitwise operators (&, |, ~) with parentheses enclosing each condition.\nHence, Option B is correct."
+      "concept": "In Pandas, element-wise boolean operations require bitwise operators (&, |, ~) with parentheses enclosing each condition.\nHence, Option C is correct.",
+      "detailed": "In Pandas, element-wise boolean operations require bitwise operators (&, |, ~) with parentheses enclosing each condition.\nHence, Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock9-q28",
@@ -1921,35 +1889,35 @@
     "options": [
       {
         "id": "A",
-        "text": "UNIQUE",
+        "text": "NO_DUPLICATE",
         "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'UNIQUE'. Conflates core domain concepts or theories with adjacent terminology."
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'NO_DUPLICATE'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "B",
-        "text": "DISTINCT",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Eliminating Duplicate Output."
-      },
-      {
-        "id": "C",
         "text": "DIFFERENT",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'DIFFERENT'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
-        "id": "D",
-        "text": "NO_DUPLICATE",
+        "id": "C",
+        "text": "UNIQUE",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'NO_DUPLICATE'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'UNIQUE'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "DISTINCT",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Eliminating Duplicate Output."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "SELECT DISTINCT column FROM table removes duplicate tuples from the query output.\nHence, Option B is correct.",
+    "correctOption": "D",
+    "detailedSolution": "SELECT DISTINCT column FROM table removes duplicate tuples from the query output.\nHence, Option D is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q34",
@@ -1960,8 +1928,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is DISTINCT.",
-      "concept": "SELECT DISTINCT column FROM table removes duplicate tuples from the query output.\nHence, Option B is correct.",
-      "detailed": "SELECT DISTINCT column FROM table removes duplicate tuples from the query output.\nHence, Option B is correct."
+      "concept": "SELECT DISTINCT column FROM table removes duplicate tuples from the query output.\nHence, Option D is correct.",
+      "detailed": "SELECT DISTINCT column FROM table removes duplicate tuples from the query output.\nHence, Option D is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock8-q7",
@@ -1979,35 +1947,27 @@
     "options": [
       {
         "id": "A",
-        "text": "By maintaining an explicit queue or stack data structure in heap memory inside an iterative while loop",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Iterative Alternative using Queues/Stacks."
+        "text": "By deleting all files in the directory tree before performing the size calculation",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "By setting file sizes to negative",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'By setting file sizes to negative'. Conflates core domain concepts or theories with adjacent terminology."
+        "text": "By maintaining an explicit queue or stack data structure in heap memory inside an iterative loop",
+        "isCorrect": true
       },
       {
         "id": "C",
-        "text": "By using a lambda function",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'By using a lambda function'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+        "text": "By setting file sizes to negative values during the accumulation process",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "By deleting all files",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'By deleting all files'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "text": "By replacing the recursive call with a higher-order lambda function for folding operations",
+        "isCorrect": false
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "An iterative loop using an explicit stack or queue in heap memory can traverse trees of arbitrary depth without call stack limits.\nHence, Option A is correct.",
+    "correctOption": "B",
+    "detailedSolution": "An iterative loop using an explicit stack or queue stored in heap memory enables traversal of directory trees of arbitrary depth without relying on the call stack, thereby avoiding stack overflow altogether.",
     "questionType": "case-based",
     "difficulty": 4,
     "questionId": "COMPUTER_SCI-M03-Q35",
@@ -2018,8 +1978,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is By maintaining an explicit queue or stack data structure in heap memory inside an iterative while loop.",
-      "concept": "An iterative loop using an explicit stack or queue in heap memory can traverse trees of arbitrary depth without call stack limits.\nHence, Option A is correct.",
-      "detailed": "An iterative loop using an explicit stack or queue in heap memory can traverse trees of arbitrary depth without call stack limits.\nHence, Option A is correct."
+      "concept": "An iterative loop using an explicit stack or queue in heap memory can traverse trees of arbitrary depth without call stack limits.\nHence, Option B is correct.",
+      "detailed": "An iterative loop using an explicit stack or queue in heap memory can traverse trees of arbitrary depth without call stack limits.\nHence, Option B is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock18-q50",
@@ -2037,17 +1997,17 @@
     "options": [
       {
         "id": "A",
+        "text": "Isolation",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Isolation'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "B",
         "text": "Atomicity",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Conflation Trap",
         "mistakeAnalysis": "Incorrect option 'Atomicity'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
-        "text": "Consistency",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'Consistency'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
         "id": "C",
@@ -2058,10 +2018,10 @@
       },
       {
         "id": "D",
-        "text": "Isolation",
+        "text": "Consistency",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'Isolation'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Consistency'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
     "correctOption": "C",
@@ -2102,28 +2062,28 @@
       },
       {
         "id": "B",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Matches conceptual categories for Built-in Exceptions and Trigger Conditions correctly."
+      },
+      {
+        "id": "C",
         "text": "A-I, B-III, C-IV, D-II",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'A-I, B-III, C-IV, D-II'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'A-IV, B-II, C-I, D-III'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
-      },
-      {
-        "id": "D",
-        "text": "A-I, B-II, C-III, D-IV",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Matches conceptual categories for Built-in Exceptions and Trigger Conditions correctly."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "ZeroDivisionError is div by zero; IndexError is out of bounds; KeyError is missing dict key; ValueError is invalid value conversion.\nHence, Option D is correct.",
+    "correctOption": "B",
+    "detailedSolution": "ZeroDivisionError is div by zero; IndexError is out of bounds; KeyError is missing dict key; ValueError is invalid value conversion.\nHence, Option B is correct.",
     "questionType": "match-the-following",
     "difficulty": 3,
     "questionId": "COMPUTER_SCI-M03-Q37",
@@ -2134,8 +2094,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is A-I, B-II, C-III, D-IV.",
-      "concept": "ZeroDivisionError is div by zero; IndexError is out of bounds; KeyError is missing dict key; ValueError is invalid value conversion.\nHence, Option D is correct.",
-      "detailed": "ZeroDivisionError is div by zero; IndexError is out of bounds; KeyError is missing dict key; ValueError is invalid value conversion.\nHence, Option D is correct."
+      "concept": "ZeroDivisionError is div by zero; IndexError is out of bounds; KeyError is missing dict key; ValueError is invalid value conversion.\nHence, Option B is correct.",
+      "detailed": "ZeroDivisionError is div by zero; IndexError is out of bounds; KeyError is missing dict key; ValueError is invalid value conversion.\nHence, Option B is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock4-q2",
@@ -2153,35 +2113,35 @@
     "options": [
       {
         "id": "A",
-        "text": "B, A, C, D",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'B, A, C, D'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
-        "text": "A, C, B, D",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'A, C, B, D'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "C",
         "text": "A, B, C, D",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Correctly sequences Evaluating Postfix Expression Step-by-Step."
       },
       {
-        "id": "D",
+        "id": "B",
+        "text": "B, A, C, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'B, A, C, D'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
         "text": "D, B, C, A",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'D, B, C, A'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "A, C, B, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A, C, B, D'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Postfix evaluation: push 6,3,2 -> 3+2=5 -> push 5 -> 6*5=30 -> push 30 -> push 5 -> 30-5=25.\nHence, Option C is correct.",
+    "correctOption": "A",
+    "detailedSolution": "Postfix evaluation: push 6,3,2 -> 3+2=5 -> push 5 -> 6*5=30 -> push 30 -> push 5 -> 30-5=25.\nHence, Option A is correct.",
     "questionType": "chronological-sequence",
     "difficulty": 3,
     "questionId": "COMPUTER_SCI-M03-Q38",
@@ -2192,8 +2152,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is A, B, C, D.",
-      "concept": "Postfix evaluation: push 6,3,2 -> 3+2=5 -> push 5 -> 6*5=30 -> push 30 -> push 5 -> 30-5=25.\nHence, Option C is correct.",
-      "detailed": "Postfix evaluation: push 6,3,2 -> 3+2=5 -> push 5 -> 6*5=30 -> push 30 -> push 5 -> 30-5=25.\nHence, Option C is correct."
+      "concept": "Postfix evaluation: push 6,3,2 -> 3+2=5 -> push 5 -> 6*5=30 -> push 30 -> push 5 -> 30-5=25.\nHence, Option A is correct.",
+      "detailed": "Postfix evaluation: push 6,3,2 -> 3+2=5 -> push 5 -> 6*5=30 -> push 30 -> push 5 -> 30-5=25.\nHence, Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock5-q12",
@@ -2211,35 +2171,35 @@
     "options": [
       {
         "id": "A",
-        "text": "The total number of rows in the table",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'The total number of rows in the table'. Conflates core domain concepts or theories with adjacent terminology."
+        "text": "The count of unique, distinct non-null department IDs present in the table",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains COUNT(DISTINCT col) Functionality."
       },
       {
         "id": "B",
-        "text": "The maximum department number",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'The maximum department number'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "C",
         "text": "The average department number",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'The average department number'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
+        "id": "C",
+        "text": "The total number of rows in the table",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'The total number of rows in the table'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
         "id": "D",
-        "text": "The count of unique, distinct non-null department IDs present in the table",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains COUNT(DISTINCT col) Functionality."
+        "text": "The maximum department number",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'The maximum department number'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "COUNT(DISTINCT column) tallies only unique values, ignoring duplicate occurrences and NULLs.\nHence, Option D is correct.",
+    "correctOption": "A",
+    "detailedSolution": "COUNT(DISTINCT column) tallies only unique values, ignoring duplicate occurrences and NULLs.\nHence, Option A is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q39",
@@ -2250,8 +2210,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is The count of unique, distinct non-null department IDs present in the table.",
-      "concept": "COUNT(DISTINCT column) tallies only unique values, ignoring duplicate occurrences and NULLs.\nHence, Option D is correct.",
-      "detailed": "COUNT(DISTINCT column) tallies only unique values, ignoring duplicate occurrences and NULLs.\nHence, Option D is correct."
+      "concept": "COUNT(DISTINCT column) tallies only unique values, ignoring duplicate occurrences and NULLs.\nHence, Option A is correct.",
+      "detailed": "COUNT(DISTINCT column) tallies only unique values, ignoring duplicate occurrences and NULLs.\nHence, Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock12-q8",
@@ -2269,35 +2229,27 @@
     "options": [
       {
         "id": "A",
-        "text": "Malicious code inserted into software that lies dormant until triggered by a specific condition, date, or event (e.g., employee termination)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Logic Bomb Trigger Mechanism."
+        "text": "Malicious code designed to remain dormant until activated by a specific condition, date, or event",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "A bomb that physically explodes inside the CPU",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'A bomb that physically explodes inside the CPU'. Conflates core domain concepts or theories with adjacent terminology."
+        "text": "Unsolvable arithmetic operations embedded within the kernel to prevent processor execution",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A mathematical equation that cannot be solved",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'A mathematical equation that cannot be solved'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+        "text": "High-frequency acoustic waves generated by the display drivers to disrupt user cognition",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A sound effect played through speakers",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'A sound effect played through speakers'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "text": "Thermite charges integrated into the physical casing of the central processing unit",
+        "isCorrect": false
       }
     ],
     "correctOption": "A",
-    "detailedSolution": "A logic bomb executes its destructive payload only upon specific environmental triggers (e.g., Friday the 13th, specific database event).\nHence, Option A is correct.",
+    "detailedSolution": "A logic bomb is a type of malicious code that sits dormant in a system and activates its payload only when triggered by specific conditions, such as a date, time, or event (e.g., event-driven execution). Options B, C, and D are incorrect: B incorrectly refers to arithmetic loops; C incorrectly references audio output; and D incorrectly describes physical hardware destruction rather than logical corruption.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q40",
@@ -2327,24 +2279,24 @@
     "options": [
       {
         "id": "A",
+        "text": "To cancel out electromagnetic crosstalk and reduce external signal noise interference",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Twisting Mechanism in UTP."
+      },
+      {
+        "id": "B",
         "text": "To make the cable look thicker",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Conflation Trap",
         "mistakeAnalysis": "Incorrect option 'To make the cable look thicker'. Conflates core domain concepts or theories with adjacent terminology."
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "To increase the physical weight of the wire",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'To increase the physical weight of the wire'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "C",
-        "text": "To cancel out electromagnetic crosstalk and reduce external signal noise interference",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Twisting Mechanism in UTP."
       },
       {
         "id": "D",
@@ -2354,8 +2306,8 @@
         "mistakeAnalysis": "Incorrect option 'To trap heat inside'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Twisting wire pairs balances electromagnetic interference, canceling out crosstalk between adjacent pairs.\nHence, Option C is correct.",
+    "correctOption": "A",
+    "detailedSolution": "Twisting wire pairs balances electromagnetic interference, canceling out crosstalk between adjacent pairs.\nHence, Option A is correct.",
     "questionType": "case-based",
     "difficulty": 4,
     "questionId": "COMPUTER_SCI-M03-Q41",
@@ -2366,8 +2318,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is To cancel out electromagnetic crosstalk and reduce external signal noise interference.",
-      "concept": "Twisting wire pairs balances electromagnetic interference, canceling out crosstalk between adjacent pairs.\nHence, Option C is correct.",
-      "detailed": "Twisting wire pairs balances electromagnetic interference, canceling out crosstalk between adjacent pairs.\nHence, Option C is correct."
+      "concept": "Twisting wire pairs balances electromagnetic interference, canceling out crosstalk between adjacent pairs.\nHence, Option A is correct.",
+      "detailed": "Twisting wire pairs balances electromagnetic interference, canceling out crosstalk between adjacent pairs.\nHence, Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock17-q44",
@@ -2443,35 +2395,35 @@
     "options": [
       {
         "id": "A",
-        "text": "del df['Salary']",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Permanent Column Deletion via del."
+        "text": "delete df['Salary']",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'delete df['Salary']'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "B",
-        "text": "del df.loc['Salary']",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'del df.loc['Salary']'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "C",
         "text": "del(df.columns['Salary'])",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'del(df.columns['Salary'])'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
-        "id": "D",
-        "text": "delete df['Salary']",
+        "id": "C",
+        "text": "del df.loc['Salary']",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'delete df['Salary']'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'del df.loc['Salary']'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "del df['Salary']",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Permanent Column Deletion via del."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "del df['column_name'] is a built-in Python statement that mutates the DataFrame in place by removing the specified column.\nHence, Option A is correct.",
+    "correctOption": "D",
+    "detailedSolution": "del df['column_name'] is a built-in Python statement that mutates the DataFrame in place by removing the specified column.\nHence, Option D is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q43",
@@ -2482,8 +2434,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is del df['Salary'].",
-      "concept": "del df['column_name'] is a built-in Python statement that mutates the DataFrame in place by removing the specified column.\nHence, Option A is correct.",
-      "detailed": "del df['column_name'] is a built-in Python statement that mutates the DataFrame in place by removing the specified column.\nHence, Option A is correct."
+      "concept": "del df['column_name'] is a built-in Python statement that mutates the DataFrame in place by removing the specified column.\nHence, Option D is correct.",
+      "detailed": "del df['column_name'] is a built-in Python statement that mutates the DataFrame in place by removing the specified column.\nHence, Option D is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock6-q33",
@@ -2501,17 +2453,17 @@
     "options": [
       {
         "id": "A",
-        "text": "print(T[3])",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains IndexError Trigger Condition."
-      },
-      {
-        "id": "B",
         "text": "print(T[2])",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Conflation Trap",
         "mistakeAnalysis": "Incorrect option 'print(T[2])'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "print(T[3])",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains IndexError Trigger Condition."
       },
       {
         "id": "C",
@@ -2528,8 +2480,8 @@
         "mistakeAnalysis": "Incorrect option 'print(T[0])'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "T has valid indices 0, 1, 2 (or -3, -2, -1). Accessing index 3 is out of range, raising IndexError.\nHence, Option A is correct.",
+    "correctOption": "B",
+    "detailedSolution": "T has valid indices 0, 1, 2 (or -3, -2, -1). Accessing index 3 is out of range, raising IndexError.\nHence, Option B is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q44",
@@ -2540,8 +2492,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is print(T[3]).",
-      "concept": "T has valid indices 0, 1, 2 (or -3, -2, -1). Accessing index 3 is out of range, raising IndexError.\nHence, Option A is correct.",
-      "detailed": "T has valid indices 0, 1, 2 (or -3, -2, -1). Accessing index 3 is out of range, raising IndexError.\nHence, Option A is correct."
+      "concept": "T has valid indices 0, 1, 2 (or -3, -2, -1). Accessing index 3 is out of range, raising IndexError.\nHence, Option B is correct.",
+      "detailed": "T has valid indices 0, 1, 2 (or -3, -2, -1). Accessing index 3 is out of range, raising IndexError.\nHence, Option B is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock7-q2",
@@ -2559,10 +2511,10 @@
     "options": [
       {
         "id": "A",
-        "text": "orientation='horizontal'",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains Horizontal Histogram Orientation."
+        "text": "horizontal=True",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'horizontal=True'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "B",
@@ -2573,21 +2525,21 @@
       },
       {
         "id": "C",
+        "text": "orientation='horizontal'",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Horizontal Histogram Orientation."
+      },
+      {
+        "id": "D",
         "text": "axis='x'",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'axis='x''. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "D",
-        "text": "horizontal=True",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'horizontal=True'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "orientation='horizontal' generates horizontal histogram bins where frequencies lie on the X-axis.\nHence, Option A is correct.",
+    "correctOption": "C",
+    "detailedSolution": "orientation='horizontal' generates horizontal histogram bins where frequencies lie on the X-axis.\nHence, Option C is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q45",
@@ -2598,8 +2550,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is orientation='horizontal'.",
-      "concept": "orientation='horizontal' generates horizontal histogram bins where frequencies lie on the X-axis.\nHence, Option A is correct.",
-      "detailed": "orientation='horizontal' generates horizontal histogram bins where frequencies lie on the X-axis.\nHence, Option A is correct."
+      "concept": "orientation='horizontal' generates horizontal histogram bins where frequencies lie on the X-axis.\nHence, Option C is correct.",
+      "detailed": "orientation='horizontal' generates horizontal histogram bins where frequencies lie on the X-axis.\nHence, Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock19-q38",
@@ -2675,35 +2627,35 @@
     "options": [
       {
         "id": "A",
-        "text": "A Series of length 3 containing column sums",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'A Series of length 3 containing column sums'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
         "text": "A single scalar representing the grand total",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'A single scalar representing the grand total'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       },
       {
-        "id": "C",
-        "text": "A 4x3 DataFrame of normalized sums",
-        "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'A 4x3 DataFrame of normalized sums'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
-      },
-      {
-        "id": "D",
+        "id": "B",
         "text": "A Series of length 4 containing the horizontal sum of elements for each row",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Accurately explains Row-wise Sum Computation."
+      },
+      {
+        "id": "C",
+        "text": "A Series of length 3 containing column sums",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A Series of length 3 containing column sums'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "A 4x3 DataFrame of normalized sums",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A 4x3 DataFrame of normalized sums'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "axis=1 computes sums across columns for each row, returning a Series whose index matches df.index.\nHence, Option D is correct.",
+    "correctOption": "B",
+    "detailedSolution": "axis=1 computes sums across columns for each row, returning a Series whose index matches df.index.\nHence, Option B is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q47",
@@ -2714,8 +2666,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is A Series of length 4 containing the horizontal sum of elements for each row.",
-      "concept": "axis=1 computes sums across columns for each row, returning a Series whose index matches df.index.\nHence, Option D is correct.",
-      "detailed": "axis=1 computes sums across columns for each row, returning a Series whose index matches df.index.\nHence, Option D is correct."
+      "concept": "axis=1 computes sums across columns for each row, returning a Series whose index matches df.index.\nHence, Option B is correct.",
+      "detailed": "axis=1 computes sums across columns for each row, returning a Series whose index matches df.index.\nHence, Option B is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock14-q35",
@@ -2733,17 +2685,17 @@
     "options": [
       {
         "id": "A",
-        "text": "Active Digital Footprint",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Conflation Trap",
-        "mistakeAnalysis": "Incorrect option 'Active Digital Footprint'. Conflates core domain concepts or theories with adjacent terminology."
-      },
-      {
-        "id": "B",
         "text": "Voluntary Digital Footprint",
         "isCorrect": false,
         "studentSelectionTrap": "Factual Misattribution Trap",
         "mistakeAnalysis": "Incorrect option 'Voluntary Digital Footprint'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "Creative Digital Footprint",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Creative Digital Footprint'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
       },
       {
         "id": "C",
@@ -2754,10 +2706,10 @@
       },
       {
         "id": "D",
-        "text": "Creative Digital Footprint",
+        "text": "Active Digital Footprint",
         "isCorrect": false,
-        "studentSelectionTrap": "Overgeneralization Trap",
-        "mistakeAnalysis": "Incorrect option 'Creative Digital Footprint'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Active Digital Footprint'. Conflates core domain concepts or theories with adjacent terminology."
       }
     ],
     "correctOption": "C",
@@ -2805,21 +2757,21 @@
       },
       {
         "id": "C",
-        "text": "Returns True if the Series contains at least one NaN or missing value; otherwise False",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately explains s.hasnans Attribute Function."
-      },
-      {
-        "id": "D",
         "text": "Returns True if the series is empty",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'Returns True if the series is empty'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Returns True if the Series contains at least one NaN or missing value; otherwise False",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains s.hasnans Attribute Function."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "s.hasnans is an optimized boolean property that checks for the presence of any NaN values without computing full counts.\nHence, Option C is correct.",
+    "correctOption": "D",
+    "detailedSolution": "s.hasnans is an optimized boolean property that checks for the presence of any NaN values without computing full counts.\nHence, Option D is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M03-Q49",
@@ -2830,8 +2782,8 @@
     "validationFlags": [],
     "solution": {
       "quick": "Correct answer is Returns True if the Series contains at least one NaN or missing value; otherwise False.",
-      "concept": "s.hasnans is an optimized boolean property that checks for the presence of any NaN values without computing full counts.\nHence, Option C is correct.",
-      "detailed": "s.hasnans is an optimized boolean property that checks for the presence of any NaN values without computing full counts.\nHence, Option C is correct."
+      "concept": "s.hasnans is an optimized boolean property that checks for the presence of any NaN values without computing full counts.\nHence, Option D is correct.",
+      "detailed": "s.hasnans is an optimized boolean property that checks for the presence of any NaN values without computing full counts.\nHence, Option D is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock6-q27",
@@ -2863,17 +2815,17 @@
       },
       {
         "id": "C",
-        "text": "Random numbers",
-        "isCorrect": false,
-        "studentSelectionTrap": "Factual Misattribution Trap",
-        "mistakeAnalysis": "Incorrect option 'Random numbers'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
-      },
-      {
-        "id": "D",
         "text": "None",
         "isCorrect": false,
         "studentSelectionTrap": "Overgeneralization Trap",
         "mistakeAnalysis": "Incorrect option 'None'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Random numbers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Random numbers'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
       }
     ],
     "correctOption": "B",

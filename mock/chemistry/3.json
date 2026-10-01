@@ -8,7 +8,7 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\Lambda_m = \\frac{\\kappa}{M \\times 1000}\\text{ in S cm}^{-1}\\text{ mol}$",
+        "text": "$\\Lambda_m = \\frac{M \\times 1000}{\\kappa}\\text{ in S}^{-1}\\text{ cm}^2\\text{ mol}$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -27,7 +27,7 @@
       },
       {
         "id": "C",
-        "text": "$\\Lambda_m = \\kappa \\cdot M \\times 1000\\text{ in S cm}^2$",
+        "text": "$\\Lambda_m = \\frac{\\kappa}{M \\times 1000}\\text{ in S cm}^{-1}\\text{ mol}$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -38,7 +38,7 @@
       },
       {
         "id": "D",
-        "text": "$\\Lambda_m = \\frac{M \\times 1000}{\\kappa}\\text{ in S}^{-1}\\text{ cm}^2\\text{ mol}$",
+        "text": "$\\Lambda_m = \\kappa \\cdot M \\times 1000\\text{ in S cm}^2$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -101,17 +101,6 @@
       },
       {
         "id": "B",
-        "text": "N-Methylethanamine",
-        "isCorrect": false,
-        "studentSelectionTrap": "Secondary Amine Fallacy",
-        "mistakeAnalysis": "Hoffmann degradation exclusively yields primary amines, not secondary amines.",
-        "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Secondary Amine Fallacy"
-        }
-      },
-      {
-        "id": "C",
         "text": "Propanamine",
         "isCorrect": false,
         "studentSelectionTrap": "Carbon Chain Expansion Error",
@@ -119,6 +108,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Carbon Chain Expansion Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "N-Methylethanamine",
+        "isCorrect": false,
+        "studentSelectionTrap": "Secondary Amine Fallacy",
+        "mistakeAnalysis": "Hoffmann degradation exclusively yields primary amines, not secondary amines.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Secondary Amine Fallacy"
         }
       },
       {
@@ -169,25 +169,6 @@
     "options": [
       {
         "id": "A",
-        "text": "o-Nitrobenzaldehyde",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
-      },
-      {
-        "id": "B",
-        "text": "m-Nitrobenzaldehyde",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "p-Nitrobenzaldehyde",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -198,8 +179,27 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "2,4-Dinitrobenzaldehyde",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
+      },
+      {
+        "id": "C",
+        "text": "m-Nitrobenzaldehyde",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "o-Nitrobenzaldehyde",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -209,7 +209,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "The formyl group ($-CHO$) is strongly electron-withdrawing by both resonance ($-R$) and inductive ($-I$) effects. It withdraws $\\pi$-electron density from the ortho and para positions of the benzene ring to a much greater extent than from the meta position. Hence, $-CHO$ acts as a deactivating and meta-directing group during electrophilic aromatic substitution, yielding m-nitrobenzaldehyde.",
     "questionNumber": 3,
     "questionId": "CHEMISTRY-M03-Q03",
@@ -249,18 +249,15 @@
     "options": [
       {
         "id": "A",
-        "text": "An electron is ejected completely from the metal atom into the solvent",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
+        "text": "An electron is excited from a lower energy d-orbital ($t_{2g}$) to a higher energy vacant/partially filled d-orbital ($e_g$)",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
       },
       {
         "id": "B",
-        "text": "A ligand dissociates spontaneously from the coordination sphere",
+        "text": "A proton transfers from water to the metal nucleus",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -271,15 +268,18 @@
       },
       {
         "id": "C",
-        "text": "An electron is excited from a lower energy d-orbital ($t_{2g}$) to a higher energy vacant/partially filled d-orbital ($e_g$)",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
+        "text": "An electron is ejected completely from the metal atom into the solvent",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
       },
       {
         "id": "D",
-        "text": "A proton transfers from water to the metal nucleus",
+        "text": "A ligand dissociates spontaneously from the coordination sphere",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -289,7 +289,7 @@
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "When white light passes through a complex solution, the complex absorbs photons whose energy matches the crystal field splitting ($h\\nu = \\Delta_o$). This promotes an electron from the lower energy $t_{2g}$ set to the higher energy $e_g$ set (d-d transition). The transmitted light is complementary to the absorbed wavelength.",
     "questionNumber": 4,
     "questionId": "CHEMISTRY-M03-Q04",
@@ -331,11 +331,14 @@
     "options": [
       {
         "id": "A",
-        "text": "Acetone + Chloroform",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Chloroform ($CHCl_3$) forms a strong intermolecular hydrogen bond with the carbonyl oxygen of acetone, increasing A-B attraction.",
-        "misconception": null
+        "text": "$CS_2$ + Acetone",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dipolar Weakening Confusion",
+        "mistakeAnalysis": "$CS_2$ + Acetone exhibits positive deviation because dipolar interactions between acetone molecules are reduced.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Dipolar Weakening Confusion"
+        }
       },
       {
         "id": "B",
@@ -350,6 +353,14 @@
       },
       {
         "id": "C",
+        "text": "Acetone + Chloroform",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Chloroform ($CHCl_3$) forms a strong intermolecular hydrogen bond with the carbonyl oxygen of acetone, increasing A-B attraction.",
+        "misconception": null
+      },
+      {
+        "id": "D",
         "text": "Benzene + Toluene",
         "isCorrect": false,
         "studentSelectionTrap": "Ideal Solution Confusion",
@@ -358,21 +369,10 @@
           "type": "conceptual_misunderstanding",
           "description": "Ideal Solution Confusion"
         }
-      },
-      {
-        "id": "D",
-        "text": "$CS_2$ + Acetone",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dipolar Weakening Confusion",
-        "mistakeAnalysis": "$CS_2$ + Acetone exhibits positive deviation because dipolar interactions between acetone molecules are reduced.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Dipolar Weakening Confusion"
-        }
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "1. In a mixture of acetone and chloroform, chloroform provides an acidic proton due to three electronegative chlorine atoms, and acetone provides a carbonyl oxygen with lone pairs.\n2. Strong intermolecular hydrogen bonding forms between acetone and chloroform: $(CH_3)_2C=O \\cdots H-CCl_3$.\n3. These A-B interactions are stronger than A-A and B-B interactions, reducing escaping tendency and producing **negative deviation from Raoult's law**.\nHence Option A is correct.",
+    "correctOption": "C",
+    "detailedSolution": "1. In a mixture of acetone and chloroform, chloroform provides an acidic proton due to three electronegative chlorine atoms, and acetone provides a carbonyl oxygen with lone pairs.\n2. Strong intermolecular hydrogen bonding forms between acetone and chloroform: $(CH_3)_2C=O \\cdots H-CCl_3$.\n3. These A-B interactions are stronger than A-A and B-B interactions, reducing escaping tendency and producing **negative deviation from Raoult's law**.\nHence Option C is correct.",
     "questionId": "CHEMISTRY-M03-Q05",
     "conceptId": "CHEM-solutions-ideal-solutions-and-raoult-s-law-deviations-positive-and-negative",
     "questionType": "conceptual",
@@ -381,7 +381,7 @@
     "solution": {
       "quick": "Correct answer is Acetone + Chloroform.",
       "concept": "1. In a mixture of acetone and chloroform, chloroform provides an acidic proton due to three electronegative chlorine atoms, and acetone provides a carbonyl oxygen with lone pairs.",
-      "detailed": "1. In a mixture of acetone and chloroform, chloroform provides an acidic proton due to three electronegative chlorine atoms, and acetone provides a carbonyl oxygen with lone pairs.\n2. Strong intermolecular hydrogen bonding forms between acetone and chloroform: $(CH_3)_2C=O \\cdots H-CCl_3$.\n3. These A-B interactions are stronger than A-A and B-B interactions, reducing escaping tendency and producing **negative deviation from Raoult's law**.\nHence Option A is correct."
+      "detailed": "1. In a mixture of acetone and chloroform, chloroform provides an acidic proton due to three electronegative chlorine atoms, and acetone provides a carbonyl oxygen with lone pairs.\n2. Strong intermolecular hydrogen bonding forms between acetone and chloroform: $(CH_3)_2C=O \\cdots H-CCl_3$.\n3. These A-B interactions are stronger than A-A and B-B interactions, reducing escaping tendency and producing **negative deviation from Raoult's law**.\nHence Option C is correct."
     },
     "keyConcept": "Solutions: Ideal Solutions and Raoult's Law Deviations (Positive and Negative)",
     "formula": "$(CH_3)_2C=O \\cdots H-CCl_3$",
@@ -411,25 +411,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Polysaccharides",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
-      },
-      {
-        "id": "B",
-        "text": "Oligosaccharides",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "Monosaccharides",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -440,8 +421,27 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "Mucopolysaccharides",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
+      },
+      {
+        "id": "C",
+        "text": "Oligosaccharides",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "Polysaccharides",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -451,7 +451,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "C",
     "detailedSolution": "According to NCERT classification, carbohydrates that yield 2 to 10 monosaccharide units upon hydrolysis are termed oligosaccharides. Depending on whether they produce two, three, or four monosaccharide molecules, they are further designated as disaccharides, trisaccharides, or tetrasaccharides.",
     "questionNumber": 6,
     "questionId": "CHEMISTRY-M03-Q06",
@@ -503,14 +503,6 @@
       },
       {
         "id": "B",
-        "text": "Both 1-butene & 2-butene",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Combines the elimination products: 1-chlorobutane yields 1-butene exclusively, while 2-chlorobutane yields both 2-butene (major) and 1-butene (minor).",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "3-butene",
         "isCorrect": false,
         "studentSelectionTrap": "IUPAC Nomenclature Misunderstanding",
@@ -519,6 +511,14 @@
           "type": "conceptual_misunderstanding",
           "description": "IUPAC Nomenclature Misunderstanding"
         }
+      },
+      {
+        "id": "C",
+        "text": "Both 1-butene & 2-butene",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Combines the elimination products: 1-chlorobutane yields 1-butene exclusively, while 2-chlorobutane yields both 2-butene (major) and 1-butene (minor).",
+        "misconception": null
       },
       {
         "id": "D",
@@ -532,8 +532,8 @@
         }
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "1. Alcoholic $KOH$ acts as a strong base inducing $\\beta$-elimination (dehydrohalogenation, $E2$ mechanism):\n2. For 1-chlorobutane ($CH_3-CH_2-CH_2-CH_2Cl$):\n   - It has only one type of $\\beta$-hydrogen on $C-2$.\n   - Elimination yields exclusively **1-butene** ($CH_3-CH_2-CH=CH_2$).\n3. For 2-chlorobutane ($CH_3-CH_2-CH(Cl)-CH_3$):\n   - It has two distinct types of $\\beta$-hydrogens (at $C-1$ and $C-3$).\n   - By Saytzeff's rule, elimination of hydrogen from $C-3$ yields the more substituted alkene, **2-butene** ($CH_3-CH=CH-CH_3$, major), while elimination from $C-1$ yields **1-butene** (minor).\n4. Therefore, collectively, the reaction products formed from both substrates encompass **Both 1-butene & 2-butene**.\nHence Option B is correct.",
+    "correctOption": "C",
+    "detailedSolution": "1. Alcoholic $KOH$ acts as a strong base inducing $\\beta$-elimination (dehydrohalogenation, $E2$ mechanism):\n2. For 1-chlorobutane ($CH_3-CH_2-CH_2-CH_2Cl$):\n   - It has only one type of $\\beta$-hydrogen on $C-2$.\n   - Elimination yields exclusively **1-butene** ($CH_3-CH_2-CH=CH_2$).\n3. For 2-chlorobutane ($CH_3-CH_2-CH(Cl)-CH_3$):\n   - It has two distinct types of $\\beta$-hydrogens (at $C-1$ and $C-3$).\n   - By Saytzeff's rule, elimination of hydrogen from $C-3$ yields the more substituted alkene, **2-butene** ($CH_3-CH=CH-CH_3$, major), while elimination from $C-1$ yields **1-butene** (minor).\n4. Therefore, collectively, the reaction products formed from both substrates encompass **Both 1-butene & 2-butene**.\nHence Option C is correct.",
     "questionId": "CHEMISTRY-M03-Q07",
     "conceptId": "CHEM-haloalkanes-and-haloarenes-elimination-reactions-dehydrohalogenation",
     "questionType": "conceptual",
@@ -542,7 +542,7 @@
     "solution": {
       "quick": "Correct answer is Both 1-butene & 2-butene.",
       "concept": "1. Alcoholic $KOH$ acts as a strong base inducing $\\beta$-elimination (dehydrohalogenation, $E2$ mechanism):\n2.",
-      "detailed": "1. Alcoholic $KOH$ acts as a strong base inducing $\\beta$-elimination (dehydrohalogenation, $E2$ mechanism):\n2. For 1-chlorobutane ($CH_3-CH_2-CH_2-CH_2Cl$):\n   - It has only one type of $\\beta$-hydrogen on $C-2$.\n   - Elimination yields exclusively **1-butene** ($CH_3-CH_2-CH=CH_2$).\n3. For 2-chlorobutane ($CH_3-CH_2-CH(Cl)-CH_3$):\n   - It has two distinct types of $\\beta$-hydrogens (at $C-1$ and $C-3$).\n   - By Saytzeff's rule, elimination of hydrogen from $C-3$ yields the more substituted alkene, **2-butene** ($CH_3-CH=CH-CH_3$, major), while elimination from $C-1$ yields **1-butene** (minor).\n4. Therefore, collectively, the reaction products formed from both substrates encompass **Both 1-butene & 2-butene**.\nHence Option B is correct."
+      "detailed": "1. Alcoholic $KOH$ acts as a strong base inducing $\\beta$-elimination (dehydrohalogenation, $E2$ mechanism):\n2. For 1-chlorobutane ($CH_3-CH_2-CH_2-CH_2Cl$):\n   - It has only one type of $\\beta$-hydrogen on $C-2$.\n   - Elimination yields exclusively **1-butene** ($CH_3-CH_2-CH=CH_2$).\n3. For 2-chlorobutane ($CH_3-CH_2-CH(Cl)-CH_3$):\n   - It has two distinct types of $\\beta$-hydrogens (at $C-1$ and $C-3$).\n   - By Saytzeff's rule, elimination of hydrogen from $C-3$ yields the more substituted alkene, **2-butene** ($CH_3-CH=CH-CH_3$, major), while elimination from $C-1$ yields **1-butene** (minor).\n4. Therefore, collectively, the reaction products formed from both substrates encompass **Both 1-butene & 2-butene**.\nHence Option C is correct."
     },
     "keyConcept": "Haloalkanes and Haloarenes: Elimination Reactions (Dehydrohalogenation)",
     "formula": "$CH_3-CH_2-CH=CH_2$",
@@ -653,7 +653,15 @@
     "options": [
       {
         "id": "A",
-        "text": "The presence of an esterified carboxyl group at the terminal carbon of the sugar",
+        "text": "The presence of a free or hemiacetal carbonyl group (aldehyde or ketone) capable of opening into an active carbonyl form",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "The complete absence of asymmetric (chiral) carbon atoms in the molecule",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -661,14 +669,6 @@
           "type": "calculation_error",
           "description": "Incorrect concept application"
         }
-      },
-      {
-        "id": "B",
-        "text": "The presence of a free or hemiacetal carbonyl group (aldehyde or ketone) capable of opening into an active carbonyl form",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
       },
       {
         "id": "C",
@@ -683,7 +683,7 @@
       },
       {
         "id": "D",
-        "text": "The complete absence of asymmetric (chiral) carbon atoms in the molecule",
+        "text": "The presence of an esterified carboxyl group at the terminal carbon of the sugar",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -693,7 +693,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "Carbohydrates that reduce Fehling's solution and Tollens' reagent are termed reducing sugars. This reducing ability requires the presence of a free aldehyde or ketone group, or a cyclic hemiacetal/hemiketal that can readily open in aqueous alkaline solution to expose a free carbonyl group. When the anomeric carbon is tied up in a glycosidic acetal bond, the sugar is non-reducing.",
     "questionNumber": 9,
     "questionId": "CHEMISTRY-M03-Q09",
@@ -733,7 +733,7 @@
     "options": [
       {
         "id": "A",
-        "text": "$\\Delta_r S = -n F \\left(\\frac{\\partial E}{\\partial T}\\right)_P$",
+        "text": "$\\Delta_r S = n F T \\left(\\frac{\\partial E}{\\partial T}\\right)_P$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -755,7 +755,7 @@
       },
       {
         "id": "C",
-        "text": "$\\Delta_r S = n F T \\left(\\frac{\\partial E}{\\partial T}\\right)_P$",
+        "text": "$\\Delta_r S = -n F \\left(\\frac{\\partial E}{\\partial T}\\right)_P$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -815,6 +815,14 @@
     "options": [
       {
         "id": "A",
+        "text": "4-Nitrophenol",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The electron-withdrawing nitro group at the para position activates chlorine towards nucleophilic displacement by hydroxide at $443\\text{ K}$, yielding 4-nitrophenol.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "2-Hydroxy-4-nitrochlorobenzene",
         "isCorrect": false,
         "studentSelectionTrap": "Nuclear Hydrogen Substitution Trap",
@@ -822,17 +830,6 @@
         "misconception": {
           "type": "calculation_error",
           "description": "Nuclear Hydrogen Substitution Trap"
-        }
-      },
-      {
-        "id": "B",
-        "text": "2-Chlorophenol",
-        "isCorrect": false,
-        "studentSelectionTrap": "Nitro Displacement Misconception",
-        "mistakeAnalysis": "Aspirants assume the nitro group is displaced rather than the halide.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Nitro Displacement Misconception"
         }
       },
       {
@@ -848,15 +845,18 @@
       },
       {
         "id": "D",
-        "text": "4-Nitrophenol",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. The electron-withdrawing nitro group at the para position activates chlorine towards nucleophilic displacement by hydroxide at $443\\text{ K}$, yielding 4-nitrophenol.",
-        "misconception": null
+        "text": "2-Chlorophenol",
+        "isCorrect": false,
+        "studentSelectionTrap": "Nitro Displacement Misconception",
+        "mistakeAnalysis": "Aspirants assume the nitro group is displaced rather than the halide.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Nitro Displacement Misconception"
+        }
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "1. Aryl halides are normally unreactive towards nucleophilic substitution. However, the presence of strong electron-withdrawing groups (such as $-NO_2$) at ortho and para positions activates the ring towards addition-elimination ($S_NAr$).\n2. The negative charge in the Meisenheimer carbanion intermediate is strongly stabilized by resonance into the para-nitro group.\n3. When 1-chloro-4-nitrobenzene is heated with aqueous $NaOH$ at $443\\text{ K}$ followed by acidification, the chlorine atom is displaced by a hydroxyl group:\n   $$p\\text{-Cl-C}_6\\text{H}_4\\text{-NO}_2 \\xrightarrow{1.\\; NaOH, \\; 443\\text{ K} \\quad 2.\\; H^+} p\\text{-HO-C}_6\\text{H}_4\\text{-NO}_2 \\; (\\text{4-Nitrophenol})$$\nHence Option D is correct.",
+    "correctOption": "A",
+    "detailedSolution": "1. Aryl halides are normally unreactive towards nucleophilic substitution. However, the presence of strong electron-withdrawing groups (such as $-NO_2$) at ortho and para positions activates the ring towards addition-elimination ($S_NAr$).\n2. The negative charge in the Meisenheimer carbanion intermediate is strongly stabilized by resonance into the para-nitro group.\n3. When 1-chloro-4-nitrobenzene is heated with aqueous $NaOH$ at $443\\text{ K}$ followed by acidification, the chlorine atom is displaced by a hydroxyl group:\n   $$p\\text{-Cl-C}_6\\text{H}_4\\text{-NO}_2 \\xrightarrow{1.\\; NaOH, \\; 443\\text{ K} \\quad 2.\\; H^+} p\\text{-HO-C}_6\\text{H}_4\\text{-NO}_2 \\; (\\text{4-Nitrophenol})$$\nHence Option A is correct.",
     "questionId": "CHEMISTRY-M03-Q11",
     "conceptId": "CHEM-haloalkanes-and-haloarenes-nucleophilic-aromatic-substitution-s-nar",
     "questionType": "diagram-based",
@@ -865,7 +865,7 @@
     "solution": {
       "quick": "Correct answer is 4-Nitrophenol.",
       "concept": "1. Aryl halides are normally unreactive towards nucleophilic substitution.",
-      "detailed": "1. Aryl halides are normally unreactive towards nucleophilic substitution. However, the presence of strong electron-withdrawing groups (such as $-NO_2$) at ortho and para positions activates the ring towards addition-elimination ($S_NAr$).\n2. The negative charge in the Meisenheimer carbanion intermediate is strongly stabilized by resonance into the para-nitro group.\n3. When 1-chloro-4-nitrobenzene is heated with aqueous $NaOH$ at $443\\text{ K}$ followed by acidification, the chlorine atom is displaced by a hydroxyl group:\n   $$p\\text{-Cl-C}_6\\text{H}_4\\text{-NO}_2 \\xrightarrow{1.\\; NaOH, \\; 443\\text{ K} \\quad 2.\\; H^+} p\\text{-HO-C}_6\\text{H}_4\\text{-NO}_2 \\; (\\text{4-Nitrophenol})$$\nHence Option D is correct."
+      "detailed": "1. Aryl halides are normally unreactive towards nucleophilic substitution. However, the presence of strong electron-withdrawing groups (such as $-NO_2$) at ortho and para positions activates the ring towards addition-elimination ($S_NAr$).\n2. The negative charge in the Meisenheimer carbanion intermediate is strongly stabilized by resonance into the para-nitro group.\n3. When 1-chloro-4-nitrobenzene is heated with aqueous $NaOH$ at $443\\text{ K}$ followed by acidification, the chlorine atom is displaced by a hydroxyl group:\n   $$p\\text{-Cl-C}_6\\text{H}_4\\text{-NO}_2 \\xrightarrow{1.\\; NaOH, \\; 443\\text{ K} \\quad 2.\\; H^+} p\\text{-HO-C}_6\\text{H}_4\\text{-NO}_2 \\; (\\text{4-Nitrophenol})$$\nHence Option A is correct."
     },
     "keyConcept": "Haloalkanes and Haloarenes: Nucleophilic Aromatic Substitution ($S_NAr$)",
     "tags": [
@@ -975,17 +975,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$CHCl_3,\\; NaOH,\\; H^+$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reimer-Tiemann Reaction Confusion",
-        "mistakeAnalysis": "Aspirants confuse Kolbe's synthesis of salicylic acid with the Reimer-Tiemann reaction ($CHCl_3 + NaOH$), which introduces a formyl group to yield salicylaldehyde.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Reimer-Tiemann Reaction Confusion"
-        }
-      },
-      {
-        "id": "B",
         "text": "$NaOH,\\; CO_2,\\; H^+$",
         "isCorrect": true,
         "studentSelectionTrap": null,
@@ -993,7 +982,7 @@
         "misconception": null
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "$CO_2,\\; H^+,\\; CHCl_3$",
         "isCorrect": false,
         "studentSelectionTrap": "Reagent Scramble Error",
@@ -1001,6 +990,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Reagent Scramble Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "$CHCl_3,\\; NaOH,\\; H^+$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reimer-Tiemann Reaction Confusion",
+        "mistakeAnalysis": "Aspirants confuse Kolbe's synthesis of salicylic acid with the Reimer-Tiemann reaction ($CHCl_3 + NaOH$), which introduces a formyl group to yield salicylaldehyde.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Reimer-Tiemann Reaction Confusion"
         }
       },
       {
@@ -1015,8 +1015,8 @@
         }
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "1. The synthesis of salicylic acid from phenol is known as **Kolbe's reaction**.\n2. In Step 1, phenol is treated with sodium hydroxide ($NaOH$) to form sodium phenoxide ($C_6H_5O^-Na^+$). The phenoxide ion is substantially more nucleophilic and reactive towards electrophilic aromatic substitution than neutral phenol.\n3. In Step 2, sodium phenoxide is heated with carbon dioxide ($CO_2$, a weak electrophile) under pressure ($4-7\\text{ atm}$) at approximately $400\\text{ K}$ to form sodium salicylate.\n4. In Step 3, subsequent acidification ($H^+$) yields 2-hydroxybenzoic acid (salicylic acid):\n   $$C_6H_5OH \\xrightarrow{NaOH} C_6H_5ONa \\xrightarrow{1.\\; CO_2 \\quad 2.\\; H^+} o\\text{-HO-C}_6\\text{H}_4\\text{-COOH}$$\nHence Option B is correct.",
+    "correctOption": "A",
+    "detailedSolution": "1. The synthesis of salicylic acid from phenol is known as **Kolbe's reaction**.\n2. In Step 1, phenol is treated with sodium hydroxide ($NaOH$) to form sodium phenoxide ($C_6H_5O^-Na^+$). The phenoxide ion is substantially more nucleophilic and reactive towards electrophilic aromatic substitution than neutral phenol.\n3. In Step 2, sodium phenoxide is heated with carbon dioxide ($CO_2$, a weak electrophile) under pressure ($4-7\\text{ atm}$) at approximately $400\\text{ K}$ to form sodium salicylate.\n4. In Step 3, subsequent acidification ($H^+$) yields 2-hydroxybenzoic acid (salicylic acid):\n   $$C_6H_5OH \\xrightarrow{NaOH} C_6H_5ONa \\xrightarrow{1.\\; CO_2 \\quad 2.\\; H^+} o\\text{-HO-C}_6\\text{H}_4\\text{-COOH}$$\nHence Option A is correct.",
     "questionId": "CHEMISTRY-M03-Q13",
     "conceptId": "CHEM-alcohols-phenols-and-ethers-kolbe-s-reaction",
     "questionType": "diagram-based",
@@ -1025,7 +1025,7 @@
     "solution": {
       "quick": "Correct answer is $NaOH,\\; CO_2,\\; H^+$.",
       "concept": "1. The synthesis of salicylic acid from phenol is known as **Kolbe's reaction**.",
-      "detailed": "1. The synthesis of salicylic acid from phenol is known as **Kolbe's reaction**.\n2. In Step 1, phenol is treated with sodium hydroxide ($NaOH$) to form sodium phenoxide ($C_6H_5O^-Na^+$). The phenoxide ion is substantially more nucleophilic and reactive towards electrophilic aromatic substitution than neutral phenol.\n3. In Step 2, sodium phenoxide is heated with carbon dioxide ($CO_2$, a weak electrophile) under pressure ($4-7\\text{ atm}$) at approximately $400\\text{ K}$ to form sodium salicylate.\n4. In Step 3, subsequent acidification ($H^+$) yields 2-hydroxybenzoic acid (salicylic acid):\n   $$C_6H_5OH \\xrightarrow{NaOH} C_6H_5ONa \\xrightarrow{1.\\; CO_2 \\quad 2.\\; H^+} o\\text{-HO-C}_6\\text{H}_4\\text{-COOH}$$\nHence Option B is correct."
+      "detailed": "1. The synthesis of salicylic acid from phenol is known as **Kolbe's reaction**.\n2. In Step 1, phenol is treated with sodium hydroxide ($NaOH$) to form sodium phenoxide ($C_6H_5O^-Na^+$). The phenoxide ion is substantially more nucleophilic and reactive towards electrophilic aromatic substitution than neutral phenol.\n3. In Step 2, sodium phenoxide is heated with carbon dioxide ($CO_2$, a weak electrophile) under pressure ($4-7\\text{ atm}$) at approximately $400\\text{ K}$ to form sodium salicylate.\n4. In Step 3, subsequent acidification ($H^+$) yields 2-hydroxybenzoic acid (salicylic acid):\n   $$C_6H_5OH \\xrightarrow{NaOH} C_6H_5ONa \\xrightarrow{1.\\; CO_2 \\quad 2.\\; H^+} o\\text{-HO-C}_6\\text{H}_4\\text{-COOH}$$\nHence Option A is correct."
     },
     "keyConcept": "Alcohols, Phenols and Ethers: Kolbe's Reaction",
     "tags": [
@@ -1054,14 +1054,11 @@
     "options": [
       {
         "id": "A",
-        "text": "A nucleoside contains a phosphate group; a nucleotide lacks any phosphorus atoms",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
+        "text": "A nucleoside contains only a pentose sugar and a nitrogenous base; a nucleotide contains a sugar, a base, and a phosphate group esterified at the $5'$-OH",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
       },
       {
         "id": "B",
@@ -1076,15 +1073,18 @@
       },
       {
         "id": "C",
-        "text": "A nucleoside contains only a pentose sugar and a nitrogenous base; a nucleotide contains a sugar, a base, and a phosphate group esterified at the $5'$-OH",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
+        "text": "A nucleoside contains purines only; a nucleotide contains pyrimidines only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
       },
       {
         "id": "D",
-        "text": "A nucleoside contains purines only; a nucleotide contains pyrimidines only",
+        "text": "A nucleoside contains a phosphate group; a nucleotide lacks any phosphorus atoms",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -1094,7 +1094,7 @@
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "A",
     "detailedSolution": "A nucleoside is formed by the attachment of a nitrogenous base to the $1'$ position of a pentose sugar via an N-glycosidic linkage (Sugar + Base = Nucleoside). When the $5'$-hydroxyl group of the pentose sugar in a nucleoside is esterified with phosphoric acid, the resulting compound is a nucleotide (Sugar + Base + Phosphate = Nucleotide).",
     "questionNumber": 14,
     "questionId": "CHEMISTRY-M03-Q14",
@@ -1135,17 +1135,6 @@
     "options": [
       {
         "id": "A",
-        "text": "(A), (B) and (C) only",
-        "isCorrect": false,
-        "studentSelectionTrap": "Ambidentate vs Polydentate Confusion",
-        "mistakeAnalysis": "Aspirants confuse 'ambidentate' (unidentate ligand with two different donor atoms) with 'bidentate' (two simultaneous donor atoms).",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Ambidentate vs Polydentate Confusion"
-        }
-      },
-      {
-        "id": "B",
         "text": "(B), (C) and (D)",
         "isCorrect": false,
         "studentSelectionTrap": "Neutral Ligand Charge Oversight",
@@ -1156,12 +1145,23 @@
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "(A), (B) and (D) only",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Recognizes that ethylenediamine ($en$) is neutral, bidentate, and chelating, but not ambidentate (it coordinates only via nitrogen).",
         "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "(A), (B) and (C) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Ambidentate vs Polydentate Confusion",
+        "mistakeAnalysis": "Aspirants confuse 'ambidentate' (unidentate ligand with two different donor atoms) with 'bidentate' (two simultaneous donor atoms).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Ambidentate vs Polydentate Confusion"
+        }
       },
       {
         "id": "D",
@@ -1175,8 +1175,8 @@
         }
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "1. Ethane-1,2-diamine ($H_2N-CH_2-CH_2-NH_2$, abbreviated as $en$):\n   - Carries zero electrical charge $\\implies$ **Neutral ligand** ((A) is correct).\n   - Has two nitrogen atoms with lone pairs that bind simultaneously to the metal center $\\implies$ **Bidentate ligand** ((B) is correct).\n   - An ambidentate ligand is a unidentate ligand that can coordinate through two different atoms (e.g., $NO_2^-$, $SCN^-$). Ethane-1,2-diamine coordinates only via nitrogen atoms $\\implies$ **Not an ambidentate ligand** ((C) is incorrect).\n   - Forms a stable five-membered ring with the central metal ion $\\implies$ **Chelating ligand** ((D) is correct).\n2. Therefore, statements (A), (B), and (D) only are correct.\nHence Option C is correct.",
+    "correctOption": "B",
+    "detailedSolution": "1. Ethane-1,2-diamine ($H_2N-CH_2-CH_2-NH_2$, abbreviated as $en$):\n   - Carries zero electrical charge $\\implies$ **Neutral ligand** ((A) is correct).\n   - Has two nitrogen atoms with lone pairs that bind simultaneously to the metal center $\\implies$ **Bidentate ligand** ((B) is correct).\n   - An ambidentate ligand is a unidentate ligand that can coordinate through two different atoms (e.g., $NO_2^-$, $SCN^-$). Ethane-1,2-diamine coordinates only via nitrogen atoms $\\implies$ **Not an ambidentate ligand** ((C) is incorrect).\n   - Forms a stable five-membered ring with the central metal ion $\\implies$ **Chelating ligand** ((D) is correct).\n2. Therefore, statements (A), (B), and (D) only are correct.\nHence Option B is correct.",
     "questionId": "CHEMISTRY-M03-Q15",
     "conceptId": "CHEM-coordination-compounds-types-of-ligands",
     "questionType": "conceptual",
@@ -1185,7 +1185,7 @@
     "solution": {
       "quick": "Correct answer is (A), (B) and (D) only.",
       "concept": "1. Ethane-1,2-diamine ($H_2N-CH_2-CH_2-NH_2$, abbreviated as $en$):\n   - Carries zero electrical charge $\\implies$ **Neutral ligand** ((A) is correct).",
-      "detailed": "1. Ethane-1,2-diamine ($H_2N-CH_2-CH_2-NH_2$, abbreviated as $en$):\n   - Carries zero electrical charge $\\implies$ **Neutral ligand** ((A) is correct).\n   - Has two nitrogen atoms with lone pairs that bind simultaneously to the metal center $\\implies$ **Bidentate ligand** ((B) is correct).\n   - An ambidentate ligand is a unidentate ligand that can coordinate through two different atoms (e.g., $NO_2^-$, $SCN^-$). Ethane-1,2-diamine coordinates only via nitrogen atoms $\\implies$ **Not an ambidentate ligand** ((C) is incorrect).\n   - Forms a stable five-membered ring with the central metal ion $\\implies$ **Chelating ligand** ((D) is correct).\n2. Therefore, statements (A), (B), and (D) only are correct.\nHence Option C is correct."
+      "detailed": "1. Ethane-1,2-diamine ($H_2N-CH_2-CH_2-NH_2$, abbreviated as $en$):\n   - Carries zero electrical charge $\\implies$ **Neutral ligand** ((A) is correct).\n   - Has two nitrogen atoms with lone pairs that bind simultaneously to the metal center $\\implies$ **Bidentate ligand** ((B) is correct).\n   - An ambidentate ligand is a unidentate ligand that can coordinate through two different atoms (e.g., $NO_2^-$, $SCN^-$). Ethane-1,2-diamine coordinates only via nitrogen atoms $\\implies$ **Not an ambidentate ligand** ((C) is incorrect).\n   - Forms a stable five-membered ring with the central metal ion $\\implies$ **Chelating ligand** ((D) is correct).\n2. Therefore, statements (A), (B), and (D) only are correct.\nHence Option B is correct."
     },
     "keyConcept": "Coordination Compounds: Types of Ligands",
     "tags": [
@@ -1214,15 +1214,7 @@
     "options": [
       {
         "id": "A",
-        "text": "$HCHO > CH_3CHO > CH_3COCH_3 > (CH_3)_3CCOCH_3$",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "$(CH_3)_3CCOCH_3 > CH_3COCH_3 > CH_3CHO > HCHO$",
+        "text": "$HCHO > CH_3COCH_3 > CH_3CHO > (CH_3)_3CCOCH_3$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -1230,6 +1222,14 @@
           "type": "calculation_error",
           "description": "Incorrect concept application"
         }
+      },
+      {
+        "id": "B",
+        "text": "$HCHO > CH_3CHO > CH_3COCH_3 > (CH_3)_3CCOCH_3$",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
       },
       {
         "id": "C",
@@ -1244,7 +1244,7 @@
       },
       {
         "id": "D",
-        "text": "$HCHO > CH_3COCH_3 > CH_3CHO > (CH_3)_3CCOCH_3$",
+        "text": "$(CH_3)_3CCOCH_3 > CH_3COCH_3 > CH_3CHO > HCHO$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -1254,7 +1254,7 @@
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "Aldehydes are more reactive than ketones because: (1) Steric effect: Aldehydes have only one alkyl group (or none in $HCHO$), making the carbonyl carbon more accessible to nucleophiles. (2) Electronic effect: Alkyl groups are electron-donating (+I), which reduces the partial positive charge on the carbonyl carbon. Hence, formaldehyde is the most reactive, followed by acetaldehyde, acetone, and pinacolone.",
     "questionNumber": 16,
     "questionId": "CHEMISTRY-M03-Q16",
@@ -1305,6 +1305,14 @@
       },
       {
         "id": "B",
+        "text": "Reaction with hydrazine ($NH_2NH_2$) to form a hydrazone, followed by heating with $KOH$ in a high-boiling solvent like ethylene glycol",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "Treatment with sodium borohydride followed by concentrated sulfuric acid at $180^\\circ\\text{C}$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -1313,14 +1321,6 @@
           "type": "calculation_error",
           "description": "Incorrect concept application"
         }
-      },
-      {
-        "id": "C",
-        "text": "Reaction with hydrazine ($NH_2NH_2$) to form a hydrazone, followed by heating with $KOH$ in a high-boiling solvent like ethylene glycol",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
       },
       {
         "id": "D",
@@ -1334,7 +1334,7 @@
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "In the Wolff-Kishner reduction, aldehydes or ketones are heated with hydrazine ($NH_2NH_2$) to form a hydrazone intermediate. Subsequent heating with a strong base ($KOH$ or potassium tert-butoxide) in a high-boiling solvent such as ethylene glycol ($453-473\\text{ K}$) causes evolution of nitrogen gas ($N_2$) and yields the alkane.",
     "questionNumber": 17,
     "questionId": "CHEMISTRY-M03-Q17",
@@ -1375,17 +1375,6 @@
     "options": [
       {
         "id": "A",
-        "text": "(A)-(I), (B)-(II), (C)-(III), (D)-(IV)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Salicylate Product Inversion",
-        "mistakeAnalysis": "Aspirants swap the products of Kolbe's reaction (salicylic acid) and Reimer-Tiemann reaction (salicylaldehyde).",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Salicylate Product Inversion"
-        }
-      },
-      {
-        "id": "B",
         "text": "(A)-(I), (B)-(II), (C)-(IV), (D)-(III)",
         "isCorrect": false,
         "studentSelectionTrap": "Ether Synthesis Misplacement",
@@ -1393,6 +1382,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Ether Synthesis Misplacement"
+        }
+      },
+      {
+        "id": "B",
+        "text": "(A)-(I), (B)-(II), (C)-(III), (D)-(IV)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Salicylate Product Inversion",
+        "mistakeAnalysis": "Aspirants swap the products of Kolbe's reaction (salicylic acid) and Reimer-Tiemann reaction (salicylaldehyde).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Salicylate Product Inversion"
         }
       },
       {
@@ -1455,6 +1455,14 @@
     "options": [
       {
         "id": "A",
+        "text": "(A)-(III), (B)-(IV), (C)-(I), (D)-(II)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly pairs Gatterman-Koch to $CO, HCl, AlCl_3/CuCl$, Rosenmund to $H_2/Pd-BaSO_4$, Etard to $CrO_2Cl_2/CS_2$, and Friedel-Crafts to acyl chloride/anhydrous $AlCl_3$.",
+        "misconception": null
+      },
+      {
+        "id": "B",
         "text": "(A)-(I), (B)-(II), (C)-(III), (D)-(IV)",
         "isCorrect": false,
         "studentSelectionTrap": "Reversed Reagent Mapping",
@@ -1463,14 +1471,6 @@
           "type": "conceptual_misunderstanding",
           "description": "Reversed Reagent Mapping"
         }
-      },
-      {
-        "id": "B",
-        "text": "(A)-(III), (B)-(IV), (C)-(I), (D)-(II)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Correctly pairs Gatterman-Koch to $CO, HCl, AlCl_3/CuCl$, Rosenmund to $H_2/Pd-BaSO_4$, Etard to $CrO_2Cl_2/CS_2$, and Friedel-Crafts to acyl chloride/anhydrous $AlCl_3$.",
-        "misconception": null
       },
       {
         "id": "C",
@@ -1495,8 +1495,8 @@
         }
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "1. **Gatterman-Koch reaction**: Synthesis of benzaldehyde from benzene using **$CO, HCl, AlCl_3/CuCl$** $\\implies$ (A)-(III).\n2. **Rosenmund reduction**: Selective reduction of acyl chlorides to aldehydes using **$H_2/Pd-BaSO_4$** $\\implies$ (B)-(IV).\n3. **Etard reaction**: Oxidation of toluene to benzaldehyde using chromyl chloride, **$CrO_2Cl_2/CS_2$** $\\implies$ (C)-(I).\n4. **Friedel-Crafts acylation**: Acylation of aromatic rings using **Acyl chloride and anhyd. $AlCl_3$** $\\implies$ (D)-(II).\nMatching: (A)-(III), (B)-(IV), (C)-(I), (D)-(II).\nHence Option B is correct.",
+    "correctOption": "A",
+    "detailedSolution": "1. **Gatterman-Koch reaction**: Synthesis of benzaldehyde from benzene using **$CO, HCl, AlCl_3/CuCl$** $\\implies$ (A)-(III).\n2. **Rosenmund reduction**: Selective reduction of acyl chlorides to aldehydes using **$H_2/Pd-BaSO_4$** $\\implies$ (B)-(IV).\n3. **Etard reaction**: Oxidation of toluene to benzaldehyde using chromyl chloride, **$CrO_2Cl_2/CS_2$** $\\implies$ (C)-(I).\n4. **Friedel-Crafts acylation**: Acylation of aromatic rings using **Acyl chloride and anhyd. $AlCl_3$** $\\implies$ (D)-(II).\nMatching: (A)-(III), (B)-(IV), (C)-(I), (D)-(II).\nHence Option A is correct.",
     "questionId": "CHEMISTRY-M03-Q19",
     "conceptId": "CHEM-aldehydes-ketones-and-carboxylic-acids-reagents-for-named-synthesis-of-carbonyl-compounds",
     "questionType": "conceptual",
@@ -1505,7 +1505,7 @@
     "solution": {
       "quick": "Correct answer is (A)-(III), (B)-(IV), (C)-(I), (D)-(II).",
       "concept": "1. **Gatterman-Koch reaction**: Synthesis of benzaldehyde from benzene using **$CO, HCl, AlCl_3/CuCl$** $\\implies$ (A)-(III).",
-      "detailed": "1. **Gatterman-Koch reaction**: Synthesis of benzaldehyde from benzene using **$CO, HCl, AlCl_3/CuCl$** $\\implies$ (A)-(III).\n2. **Rosenmund reduction**: Selective reduction of acyl chlorides to aldehydes using **$H_2/Pd-BaSO_4$** $\\implies$ (B)-(IV).\n3. **Etard reaction**: Oxidation of toluene to benzaldehyde using chromyl chloride, **$CrO_2Cl_2/CS_2$** $\\implies$ (C)-(I).\n4. **Friedel-Crafts acylation**: Acylation of aromatic rings using **Acyl chloride and anhyd. $AlCl_3$** $\\implies$ (D)-(II).\nMatching: (A)-(III), (B)-(IV), (C)-(I), (D)-(II).\nHence Option B is correct."
+      "detailed": "1. **Gatterman-Koch reaction**: Synthesis of benzaldehyde from benzene using **$CO, HCl, AlCl_3/CuCl$** $\\implies$ (A)-(III).\n2. **Rosenmund reduction**: Selective reduction of acyl chlorides to aldehydes using **$H_2/Pd-BaSO_4$** $\\implies$ (B)-(IV).\n3. **Etard reaction**: Oxidation of toluene to benzaldehyde using chromyl chloride, **$CrO_2Cl_2/CS_2$** $\\implies$ (C)-(I).\n4. **Friedel-Crafts acylation**: Acylation of aromatic rings using **Acyl chloride and anhyd. $AlCl_3$** $\\implies$ (D)-(II).\nMatching: (A)-(III), (B)-(IV), (C)-(I), (D)-(II).\nHence Option A is correct."
     },
     "keyConcept": "Aldehydes, Ketones and Carboxylic Acids: Reagents for Named Synthesis of Carbonyl Compounds",
     "tags": [
@@ -1615,13 +1615,13 @@
     "options": [
       {
         "id": "A",
-        "text": "Because actinoids are radioactive elements",
+        "text": "Because actinoids form fewer coordination complexes",
         "isCorrect": false,
-        "studentSelectionTrap": "Radioactivity Association Fallacy",
-        "mistakeAnalysis": "Aspirants mistakenly attribute chemical oxidation valence behavior to nuclear radioactivity[cite: 2, 5].",
+        "studentSelectionTrap": "Complex Formation Reversal",
+        "mistakeAnalysis": "Actinoids actually form a wide variety of coordination complexes due to high charge density[cite: 2, 5].",
         "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Radioactivity Association Fallacy"
+          "type": "conceptual_misunderstanding",
+          "description": "Complex Formation Reversal"
         }
       },
       {
@@ -1634,6 +1634,17 @@
       },
       {
         "id": "C",
+        "text": "Because actinoids are radioactive elements",
+        "isCorrect": false,
+        "studentSelectionTrap": "Radioactivity Association Fallacy",
+        "mistakeAnalysis": "Aspirants mistakenly attribute chemical oxidation valence behavior to nuclear radioactivity[cite: 2, 5].",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Radioactivity Association Fallacy"
+        }
+      },
+      {
+        "id": "D",
         "text": "Due to stronger lanthanoid contraction effects",
         "isCorrect": false,
         "studentSelectionTrap": "Contraction Misattribution",
@@ -1641,17 +1652,6 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Contraction Misattribution"
-        }
-      },
-      {
-        "id": "D",
-        "text": "Because actinoids form fewer coordination complexes",
-        "isCorrect": false,
-        "studentSelectionTrap": "Complex Formation Reversal",
-        "mistakeAnalysis": "Actinoids actually form a wide variety of coordination complexes due to high charge density[cite: 2, 5].",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Complex Formation Reversal"
         }
       }
     ],
@@ -1702,17 +1702,6 @@
       },
       {
         "id": "B",
-        "text": "They are soft, malleable, and have melting points lower than the parent metals",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
-      },
-      {
-        "id": "C",
         "text": "They are electrical insulators and dissolve instantly in cold water",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -1723,8 +1712,19 @@
         }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "They are highly reactive reducing agents that decompose in air",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
+      },
+      {
+        "id": "D",
+        "text": "They are soft, malleable, and have melting points lower than the parent metals",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -1775,25 +1775,6 @@
     "options": [
       {
         "id": "A",
-        "text": "7.58",
-        "isCorrect": false,
-        "studentSelectionTrap": "Ratio Inversion Error",
-        "mistakeAnalysis": "Aspirants invert the fraction as $\\Lambda_m^0 / \\Lambda_m = 349.6 / 46.1 = 7.58$, forgetting that degree of dissociation must be less than 1.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Ratio Inversion Error"
-        }
-      },
-      {
-        "id": "B",
-        "text": "0.132",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. $\\alpha = \\frac{\\Lambda_m}{\\Lambda_m^0} = \\frac{46.1}{349.6} = 0.13187 \\approx 0.132$.",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "0.013",
         "isCorrect": false,
         "studentSelectionTrap": "Decimal Shift Error",
@@ -1804,7 +1785,18 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
+        "text": "7.58",
+        "isCorrect": false,
+        "studentSelectionTrap": "Ratio Inversion Error",
+        "mistakeAnalysis": "Aspirants invert the fraction as $\\Lambda_m^0 / \\Lambda_m = 349.6 / 46.1 = 7.58$, forgetting that degree of dissociation must be less than 1.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Ratio Inversion Error"
+        }
+      },
+      {
+        "id": "C",
         "text": "1.318",
         "isCorrect": false,
         "studentSelectionTrap": "Percentage-Fraction Conversion Error",
@@ -1813,10 +1805,18 @@
           "type": "unit_error",
           "description": "Percentage-Fraction Conversion Error"
         }
+      },
+      {
+        "id": "D",
+        "text": "0.132",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. $\\alpha = \\frac{\\Lambda_m}{\\Lambda_m^0} = \\frac{46.1}{349.6} = 0.13187 \\approx 0.132$.",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "1. The degree of dissociation ($\\alpha$) is given by the ratio of molar conductivity at concentration $c$ to the limiting molar conductivity at infinite dilution:\n   $$\\alpha = \\frac{\\Lambda_m}{\\Lambda_m^0}$|\n2. Substitute the given values:\n   $$\\alpha = \\frac{46.1\\text{ S cm}^2\\text{mol}^{-1}}{349.6\\text{ S cm}^2\\text{mol}^{-1}} = 0.13187 \\approx 0.132$$\nHence Option B is correct.",
+    "correctOption": "D",
+    "detailedSolution": "1. The degree of dissociation ($\\alpha$) is given by the ratio of molar conductivity at concentration $c$ to the limiting molar conductivity at infinite dilution:\n   $$\\alpha = \\frac{\\Lambda_m}{\\Lambda_m^0}$|\n2. Substitute the given values:\n   $$\\alpha = \\frac{46.1\\text{ S cm}^2\\text{mol}^{-1}}{349.6\\text{ S cm}^2\\text{mol}^{-1}} = 0.13187 \\approx 0.132$$\nHence Option D is correct.",
     "questionId": "CHEMISTRY-M03-Q23",
     "conceptId": "CHEM-electrochemistry-molar-conductivity-units-and-calculations",
     "questionType": "conceptual",
@@ -1825,7 +1825,7 @@
     "solution": {
       "quick": "Correct answer is 0.132.",
       "concept": "1. The degree of dissociation ($\\alpha$) is given by the ratio of molar conductivity at concentration $c$ to the limiting molar conductivity at infinite dilution:\n   $$\\alpha = \\frac{\\Lambda_m}{\\Lambda_m^0}$|\n2.",
-      "detailed": "1. The degree of dissociation ($\\alpha$) is given by the ratio of molar conductivity at concentration $c$ to the limiting molar conductivity at infinite dilution:\n   $$\\alpha = \\frac{\\Lambda_m}{\\Lambda_m^0}$|\n2. Substitute the given values:\n   $$\\alpha = \\frac{46.1\\text{ S cm}^2\\text{mol}^{-1}}{349.6\\text{ S cm}^2\\text{mol}^{-1}} = 0.13187 \\approx 0.132$$\nHence Option B is correct."
+      "detailed": "1. The degree of dissociation ($\\alpha$) is given by the ratio of molar conductivity at concentration $c$ to the limiting molar conductivity at infinite dilution:\n   $$\\alpha = \\frac{\\Lambda_m}{\\Lambda_m^0}$|\n2. Substitute the given values:\n   $$\\alpha = \\frac{46.1\\text{ S cm}^2\\text{mol}^{-1}}{349.6\\text{ S cm}^2\\text{mol}^{-1}} = 0.13187 \\approx 0.132$$\nHence Option D is correct."
     },
     "keyConcept": "Electrochemistry: Molar Conductivity Units and Calculations",
     "formula": "$\\alpha = \\frac{\\Lambda_m}{\\Lambda_m^0}$",
@@ -1875,17 +1875,6 @@
       },
       {
         "id": "C",
-        "text": "Decreases by 2.25 times.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Negative Order Confusion",
-        "mistakeAnalysis": "Aspirants square the factor correctly but assume an inhibitory effect.",
-        "misconception": {
-          "type": "sign_error",
-          "description": "Negative Order Confusion"
-        }
-      },
-      {
-        "id": "D",
         "text": "Increases by 2.5 times.",
         "isCorrect": false,
         "studentSelectionTrap": "Arithmetic Squaring Slip",
@@ -1893,6 +1882,17 @@
         "misconception": {
           "type": "calculation_error",
           "description": "Arithmetic Squaring Slip"
+        }
+      },
+      {
+        "id": "D",
+        "text": "Decreases by 2.25 times.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Negative Order Confusion",
+        "mistakeAnalysis": "Aspirants square the factor correctly but assume an inhibitory effect.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Negative Order Confusion"
         }
       }
     ],
@@ -1936,7 +1936,7 @@
     "options": [
       {
         "id": "A",
-        "text": "It doubles",
+        "text": "It decreases by half",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -1947,6 +1947,14 @@
       },
       {
         "id": "B",
+        "text": "It remains unchanged",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "It quadruples",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -1957,16 +1965,8 @@
         }
       },
       {
-        "id": "C",
-        "text": "It remains unchanged",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
-      },
-      {
         "id": "D",
-        "text": "It decreases by half",
+        "text": "It doubles",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -1976,7 +1976,7 @@
         }
       }
     ],
-    "correctOption": "C",
+    "correctOption": "B",
     "detailedSolution": "The rate constant $k$ is an intrinsic kinetic property that depends exclusively on temperature, the presence of a catalyst, and the chemical nature of the reactants. It is completely independent of reactant concentrations. (Note: It remains strictly unchanged because the rate constant depends only on temperature and catalyst)",
     "questionNumber": 25,
     "questionId": "CHEMISTRY-M03-Q25",
@@ -2016,25 +2016,6 @@
     "options": [
       {
         "id": "A",
-        "text": "$1.0$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
-      },
-      {
-        "id": "B",
-        "text": "$0.5$",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "$2.0$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -2045,7 +2026,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "$0.25$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -2054,9 +2035,28 @@
           "type": "calculation_error",
           "description": "Incorrect concept application"
         }
+      },
+      {
+        "id": "C",
+        "text": "$1.0$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
+      },
+      {
+        "id": "D",
+        "text": "$0.5$",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "Dimerization reaction: $2C_6H_5COOH \\rightleftharpoons (C_6H_5COOH)_2$. For complete association of pairs of molecules into single dimer units, 2 moles become 1 mole. Hence $i = 1/2 = 0.5$.",
     "questionNumber": 26,
     "questionId": "CHEMISTRY-M03-Q26",
@@ -2098,17 +2098,6 @@
     "options": [
       {
         "id": "A",
-        "text": "(A)-(I), (B)-(II), (C)-(III), (D)-(IV)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Phase Inversion Error",
-        "mistakeAnalysis": "Aspirants invert the physical phases of solute and solvent across amalgam and chloroform.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Phase Inversion Error"
-        }
-      },
-      {
-        "id": "B",
         "text": "(A)-(I), (B)-(III), (C)-(II), (D)-(IV)",
         "isCorrect": false,
         "studentSelectionTrap": "Mercury Liquid Heuristic",
@@ -2116,6 +2105,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Mercury Liquid Heuristic"
+        }
+      },
+      {
+        "id": "B",
+        "text": "(A)-(I), (B)-(II), (C)-(IV), (D)-(III)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Gas Phase Reversal",
+        "mistakeAnalysis": "Aspirants invert gas-liquid designations for chloroform in nitrogen.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Gas Phase Reversal"
         }
       },
       {
@@ -2128,13 +2128,13 @@
       },
       {
         "id": "D",
-        "text": "(A)-(I), (B)-(II), (C)-(IV), (D)-(III)",
+        "text": "(A)-(I), (B)-(II), (C)-(III), (D)-(IV)",
         "isCorrect": false,
-        "studentSelectionTrap": "Gas Phase Reversal",
-        "mistakeAnalysis": "Aspirants invert gas-liquid designations for chloroform in nitrogen.",
+        "studentSelectionTrap": "Phase Inversion Error",
+        "mistakeAnalysis": "Aspirants invert the physical phases of solute and solvent across amalgam and chloroform.",
         "misconception": {
-          "type": "sign_error",
-          "description": "Gas Phase Reversal"
+          "type": "conceptual_misunderstanding",
+          "description": "Phase Inversion Error"
         }
       }
     ],
@@ -2177,7 +2177,7 @@
     "options": [
       {
         "id": "A",
-        "text": "$10\\text{ s}$",
+        "text": "$1000\\text{ s}$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -2199,7 +2199,15 @@
       },
       {
         "id": "C",
-        "text": "$1000\\text{ s}$",
+        "text": "$100\\text{ s}$",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "$10\\text{ s}$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -2207,17 +2215,9 @@
           "type": "calculation_error",
           "description": "Incorrect concept application"
         }
-      },
-      {
-        "id": "D",
-        "text": "$100\\text{ s}$",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "C",
     "detailedSolution": "$t_{1/2} = \\frac{0.693}{k} = \\frac{0.693}{6.93 \\times 10^{-3}\\text{ s}^{-1}} = 100\\text{ s}$.",
     "questionNumber": 28,
     "questionId": "CHEMISTRY-M03-Q28",
@@ -2259,6 +2259,25 @@
     "options": [
       {
         "id": "A",
+        "text": "(A), (B) and (D) only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Stephen Reaction Misconception",
+        "mistakeAnalysis": "Aspirants confuse Stephen reduction of nitriles with ketone preparation methods.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Stephen Reaction Misconception"
+        }
+      },
+      {
+        "id": "B",
+        "text": "(A), (B), (C) and (D)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. All four named reactions are standard NCERT methods for synthesizing aldehydes.",
+        "misconception": null
+      },
+      {
+        "id": "C",
         "text": "(A), (B) and (C) only",
         "isCorrect": false,
         "studentSelectionTrap": "Rosenmund Exclusion Error",
@@ -2269,7 +2288,7 @@
         }
       },
       {
-        "id": "B",
+        "id": "D",
         "text": "(B), (C) and (D) only",
         "isCorrect": false,
         "studentSelectionTrap": "Gatterman-Koch Omission Trap",
@@ -2278,29 +2297,10 @@
           "type": "conceptual_misunderstanding",
           "description": "Gatterman-Koch Omission Trap"
         }
-      },
-      {
-        "id": "C",
-        "text": "(A), (B), (C) and (D)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. All four named reactions are standard NCERT methods for synthesizing aldehydes.",
-        "misconception": null
-      },
-      {
-        "id": "D",
-        "text": "(A), (B) and (D) only",
-        "isCorrect": false,
-        "studentSelectionTrap": "Stephen Reaction Misconception",
-        "mistakeAnalysis": "Aspirants confuse Stephen reduction of nitriles with ketone preparation methods.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Stephen Reaction Misconception"
-        }
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "1. Per NCERT Class 12 Aldehydes, Ketones and Carboxylic Acids:\n   - **(A) Gatterman-Koch reaction**: Benzene reacts with $CO + HCl$ in the presence of anhydrous $AlCl_3/CuCl$ to produce **benzaldehyde**.\n   - **(B) Etard reaction**: Chromyl chloride ($CrO_2Cl_2$) in $CS_2$ oxidizes toluene to a chromium complex that hydrolyzes to **benzaldehyde**.\n   - **(C) Stephen reaction**: Nitriles are reduced with $SnCl_2 + HCl$ to imines, which upon hydrolysis yield **aldehydes**.\n   - **(D) Rosenmund reaction**: Catalytic hydrogenation of acyl chlorides over $Pd-BaSO_4$ selectively yields **aldehydes**.\n2. All four reactions are specifically used to prepare aldehydes.\nHence Option C is correct.",
+    "correctOption": "B",
+    "detailedSolution": "1. Per NCERT Class 12 Aldehydes, Ketones and Carboxylic Acids:\n   - **(A) Gatterman-Koch reaction**: Benzene reacts with $CO + HCl$ in the presence of anhydrous $AlCl_3/CuCl$ to produce **benzaldehyde**.\n   - **(B) Etard reaction**: Chromyl chloride ($CrO_2Cl_2$) in $CS_2$ oxidizes toluene to a chromium complex that hydrolyzes to **benzaldehyde**.\n   - **(C) Stephen reaction**: Nitriles are reduced with $SnCl_2 + HCl$ to imines, which upon hydrolysis yield **aldehydes**.\n   - **(D) Rosenmund reaction**: Catalytic hydrogenation of acyl chlorides over $Pd-BaSO_4$ selectively yields **aldehydes**.\n2. All four reactions are specifically used to prepare aldehydes.\nHence Option B is correct.",
     "questionId": "CHEMISTRY-M03-Q29",
     "conceptId": "CHEM-aldehydes-ketones-and-carboxylic-acids-preparation-of-aldehydes",
     "questionType": "conceptual",
@@ -2309,7 +2309,7 @@
     "solution": {
       "quick": "Correct answer is (A), (B), (C) and (D).",
       "concept": "1. Per NCERT Class 12 Aldehydes, Ketones and Carboxylic Acids:\n   - **(A) Gatterman-Koch reaction**: Benzene reacts with $CO + HCl$ in the presence of anhydrous $AlCl_3/CuCl$ to produce **benzaldehyde**.",
-      "detailed": "1. Per NCERT Class 12 Aldehydes, Ketones and Carboxylic Acids:\n   - **(A) Gatterman-Koch reaction**: Benzene reacts with $CO + HCl$ in the presence of anhydrous $AlCl_3/CuCl$ to produce **benzaldehyde**.\n   - **(B) Etard reaction**: Chromyl chloride ($CrO_2Cl_2$) in $CS_2$ oxidizes toluene to a chromium complex that hydrolyzes to **benzaldehyde**.\n   - **(C) Stephen reaction**: Nitriles are reduced with $SnCl_2 + HCl$ to imines, which upon hydrolysis yield **aldehydes**.\n   - **(D) Rosenmund reaction**: Catalytic hydrogenation of acyl chlorides over $Pd-BaSO_4$ selectively yields **aldehydes**.\n2. All four reactions are specifically used to prepare aldehydes.\nHence Option C is correct."
+      "detailed": "1. Per NCERT Class 12 Aldehydes, Ketones and Carboxylic Acids:\n   - **(A) Gatterman-Koch reaction**: Benzene reacts with $CO + HCl$ in the presence of anhydrous $AlCl_3/CuCl$ to produce **benzaldehyde**.\n   - **(B) Etard reaction**: Chromyl chloride ($CrO_2Cl_2$) in $CS_2$ oxidizes toluene to a chromium complex that hydrolyzes to **benzaldehyde**.\n   - **(C) Stephen reaction**: Nitriles are reduced with $SnCl_2 + HCl$ to imines, which upon hydrolysis yield **aldehydes**.\n   - **(D) Rosenmund reaction**: Catalytic hydrogenation of acyl chlorides over $Pd-BaSO_4$ selectively yields **aldehydes**.\n2. All four reactions are specifically used to prepare aldehydes.\nHence Option B is correct."
     },
     "keyConcept": "Aldehydes, Ketones and Carboxylic Acids: Preparation of Aldehydes",
     "tags": [
@@ -2339,17 +2339,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Mn",
-        "isCorrect": false,
-        "studentSelectionTrap": "Half-Filled Configuration Trap",
-        "mistakeAnalysis": "Aspirants recall that manganese has an anomalously low enthalpy of atomization ($281\\text{ kJ mol}^{-1}$) among transition metals with unpaired electrons, forgetting that zinc is far lower.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Half-Filled Configuration Trap"
-        }
-      },
-      {
-        "id": "B",
         "text": "Cu",
         "isCorrect": false,
         "studentSelectionTrap": "Single s-Electron Assumption",
@@ -2357,6 +2346,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Single s-Electron Assumption"
+        }
+      },
+      {
+        "id": "B",
+        "text": "V",
+        "isCorrect": false,
+        "studentSelectionTrap": "High Bonding Strength Neglect",
+        "mistakeAnalysis": "Vanadium ($3d^3 4s^2$) has five bonding valence electrons and exhibits one of the highest atomization enthalpies ($515\\text{ kJ mol}^{-1}$).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "High Bonding Strength Neglect"
         }
       },
       {
@@ -2369,13 +2369,13 @@
       },
       {
         "id": "D",
-        "text": "V",
+        "text": "Mn",
         "isCorrect": false,
-        "studentSelectionTrap": "High Bonding Strength Neglect",
-        "mistakeAnalysis": "Vanadium ($3d^3 4s^2$) has five bonding valence electrons and exhibits one of the highest atomization enthalpies ($515\\text{ kJ mol}^{-1}$).",
+        "studentSelectionTrap": "Half-Filled Configuration Trap",
+        "mistakeAnalysis": "Aspirants recall that manganese has an anomalously low enthalpy of atomization ($281\\text{ kJ mol}^{-1}$) among transition metals with unpaired electrons, forgetting that zinc is far lower.",
         "misconception": {
           "type": "conceptual_misunderstanding",
-          "description": "High Bonding Strength Neglect"
+          "description": "Half-Filled Configuration Trap"
         }
       }
     ],
@@ -2418,28 +2418,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Orange $Cr_2O_7^{2-}$ changes to yellow $CrO_4^{2-}$ upon acidification, reducing Cr from $+6$ to $+3$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
-      },
-      {
-        "id": "B",
-        "text": "Acidification reduces chromate to chromium metal",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
-      },
-      {
-        "id": "C",
         "text": "Increasing pH stabilizes orange $Cr_2O_7^{2-}$ while decreasing pH produces yellow $CrO_4^{2-}$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -2450,15 +2428,37 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "Yellow $CrO_4^{2-}$ changes to orange $Cr_2O_7^{2-}$ upon adding acid ($pH < 7$), and the oxidation state of Cr is $+6$ in both species",
         "isCorrect": true,
         "studentSelectionTrap": "Correct concept and formula application",
         "mistakeAnalysis": "Follows standard NCERT derivation and principle",
         "misconception": null
+      },
+      {
+        "id": "C",
+        "text": "Orange $Cr_2O_7^{2-}$ changes to yellow $CrO_4^{2-}$ upon acidification, reducing Cr from $+6$ to $+3$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
+      },
+      {
+        "id": "D",
+        "text": "Acidification reduces chromate to chromium metal",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
       }
     ],
-    "correctOption": "D",
+    "correctOption": "B",
     "detailedSolution": "The equilibrium is: $2CrO_4^{2-} (\\text{yellow}) + 2H^+ \\rightleftharpoons Cr_2O_7^{2-} (\\text{orange}) + H_2O$. In acidic medium ($pH < 7$), $H^+$ shifts the equilibrium to form orange dichromate ($Cr_2O_7^{2-}$). In basic medium ($pH > 7$), $OH^-$ removes $H^+$ and forms yellow chromate ($CrO_4^{2-}$). In both ions, Chromium maintains the $+6$ oxidation state.",
     "questionNumber": 31,
     "questionId": "CHEMISTRY-M03-Q31",
@@ -2498,15 +2498,7 @@
     "options": [
       {
         "id": "A",
-        "text": "Methyl halide > Primary ($1^\\circ$) > Secondary ($2^\\circ$) > Tertiary ($3^\\circ$)",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "Tertiary ($3^\\circ$) > Secondary ($2^\\circ$) > Primary ($1^\\circ$) > Methyl halide",
+        "text": "Tertiary ($3^\\circ$) > Methyl halide > Primary ($1^\\circ$) > Secondary ($2^\\circ$)",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -2514,6 +2506,14 @@
           "type": "calculation_error",
           "description": "Incorrect concept application"
         }
+      },
+      {
+        "id": "B",
+        "text": "Methyl halide > Primary ($1^\\circ$) > Secondary ($2^\\circ$) > Tertiary ($3^\\circ$)",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
       },
       {
         "id": "C",
@@ -2528,7 +2528,7 @@
       },
       {
         "id": "D",
-        "text": "Tertiary ($3^\\circ$) > Methyl halide > Primary ($1^\\circ$) > Secondary ($2^\\circ$)",
+        "text": "Tertiary ($3^\\circ$) > Secondary ($2^\\circ$) > Primary ($1^\\circ$) > Methyl halide",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -2538,7 +2538,7 @@
         }
       }
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "detailedSolution": "In $S_N2$ substitution, the nucleophile must approach the backside of the carbon bearing the halogen. Increasing alkyl substitution at this carbon introduces steric hindrance that crowds the transition state and raises the activation energy. Thus, reactivity decreases in the order: $CH_3X > 1^\\circ > 2^\\circ > 3^\\circ$.",
     "questionNumber": 32,
     "questionId": "CHEMISTRY-M03-Q32",
@@ -2579,14 +2579,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Zr and Hf",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Zirconium ($160\\text{ pm}$) and Hafnium ($159\\text{ pm}$) belong to consecutive transition series and have virtually identical radii due to the lanthanoid contraction.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "Ti and Zr",
         "isCorrect": false,
         "studentSelectionTrap": "Group-14/15 Vertical Trend Confusion",
@@ -2597,18 +2589,7 @@
         }
       },
       {
-        "id": "C",
-        "text": "Sc and Y",
-        "isCorrect": false,
-        "studentSelectionTrap": "Group-3 Expansion Confusion",
-        "mistakeAnalysis": "Group 3 elements show a normal increase in atomic radius going down the group because lanthanoid filling begins only after Sc and Y.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Group-3 Expansion Confusion"
-        }
-      },
-      {
-        "id": "D",
+        "id": "B",
         "text": "La and Lu",
         "isCorrect": false,
         "studentSelectionTrap": "Series Extremes Misconception",
@@ -2617,10 +2598,29 @@
           "type": "conceptual_misunderstanding",
           "description": "Series Extremes Misconception"
         }
+      },
+      {
+        "id": "C",
+        "text": "Zr and Hf",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Zirconium ($160\\text{ pm}$) and Hafnium ($159\\text{ pm}$) belong to consecutive transition series and have virtually identical radii due to the lanthanoid contraction.",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "Sc and Y",
+        "isCorrect": false,
+        "studentSelectionTrap": "Group-3 Expansion Confusion",
+        "mistakeAnalysis": "Group 3 elements show a normal increase in atomic radius going down the group because lanthanoid filling begins only after Sc and Y.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Group-3 Expansion Confusion"
+        }
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "1. Due to the filling of $4f$ orbitals preceding the $5d$ transition series, the expected regular size increase from $4d$ to $5d$ transition elements is canceled out by the **lanthanoid contraction**.\n2. Consequently, elements of the second and third transition series in the same group (such as **Zirconium and Hafnium**) have nearly identical atomic and ionic radii ($Zr = 160\\text{ pm}$, $Hf = 159\\text{ pm}$).\nHence Option A is correct.",
+    "correctOption": "C",
+    "detailedSolution": "1. Due to the filling of $4f$ orbitals preceding the $5d$ transition series, the expected regular size increase from $4d$ to $5d$ transition elements is canceled out by the **lanthanoid contraction**.\n2. Consequently, elements of the second and third transition series in the same group (such as **Zirconium and Hafnium**) have nearly identical atomic and ionic radii ($Zr = 160\\text{ pm}$, $Hf = 159\\text{ pm}$).\nHence Option C is correct.",
     "questionId": "CHEMISTRY-M03-Q33",
     "conceptId": "CHEM-the-d-and-f-block-elements-lanthanoid-contraction-and-consequences",
     "questionType": "conceptual",
@@ -2629,7 +2629,7 @@
     "solution": {
       "quick": "Correct answer is Zr and Hf.",
       "concept": "1. Due to the filling of $4f$ orbitals preceding the $5d$ transition series, the expected regular size increase from $4d$ to $5d$ transition elements is canceled out by the **lanthanoid contraction**.",
-      "detailed": "1. Due to the filling of $4f$ orbitals preceding the $5d$ transition series, the expected regular size increase from $4d$ to $5d$ transition elements is canceled out by the **lanthanoid contraction**.\n2. Consequently, elements of the second and third transition series in the same group (such as **Zirconium and Hafnium**) have nearly identical atomic and ionic radii ($Zr = 160\\text{ pm}$, $Hf = 159\\text{ pm}$).\nHence Option A is correct."
+      "detailed": "1. Due to the filling of $4f$ orbitals preceding the $5d$ transition series, the expected regular size increase from $4d$ to $5d$ transition elements is canceled out by the **lanthanoid contraction**.\n2. Consequently, elements of the second and third transition series in the same group (such as **Zirconium and Hafnium**) have nearly identical atomic and ionic radii ($Zr = 160\\text{ pm}$, $Hf = 159\\text{ pm}$).\nHence Option C is correct."
     },
     "keyConcept": "The d- and f-Block Elements: Lanthanoid Contraction and Consequences",
     "formula": "$Zr = 160\\text{ pm}$",
@@ -2659,6 +2659,25 @@
     "options": [
       {
         "id": "A",
+        "text": "The strong electron-withdrawing inductive ($-I$) effect deactivates the ring by decreasing electron density, while the resonance ($+R$) effect delocalizes lone pairs specifically to the ortho and para positions",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
+      },
+      {
+        "id": "B",
+        "text": "Halogens act exclusively as Lewis acids that abstract electrophiles from the ortho and para positions",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
+      },
+      {
+        "id": "C",
         "text": "The inductive effect donates electrons, whereas the resonance effect withdraws electrons",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -2669,27 +2688,8 @@
         }
       },
       {
-        "id": "B",
-        "text": "The strong electron-withdrawing inductive ($-I$) effect deactivates the ring by decreasing electron density, while the resonance ($+R$) effect delocalizes lone pairs specifically to the ortho and para positions",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
-      },
-      {
-        "id": "C",
-        "text": "Halogens only deactivate the meta position, leaving ortho and para unaffected",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
-      },
-      {
         "id": "D",
-        "text": "Halogens act exclusively as Lewis acids that abstract electrophiles from the ortho and para positions",
+        "text": "Halogens only deactivate the meta position, leaving ortho and para unaffected",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -2699,7 +2699,7 @@
         }
       }
     ],
-    "correctOption": "B",
+    "correctOption": "A",
     "detailedSolution": "Halogens withdraw electrons through a strong inductive ($-I$) effect because of their high electronegativity, which decreases overall electron density on the benzene ring and makes electrophilic substitution slower than on benzene (deactivating). However, their resonance ($+R$) donation of lone pairs stabilizes the arenium ion intermediate selectively when electrophilic attack occurs at the ortho and para positions, making them ortho-para directing.",
     "questionNumber": 34,
     "questionId": "CHEMISTRY-M03-Q34",
@@ -2739,14 +2739,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Contact process for $H_2SO_4$ : $V_2O_5$; Haber process for $NH_3$ : Finely divided $Fe$",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "Ostwald process for $HNO_3$ : $Ni$; Hydrogenation of oils : $V_2O_5$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -2757,7 +2749,7 @@
         }
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "Wacker process : $Fe$; Haber process : $Pt/Rh$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -2768,7 +2760,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "C",
         "text": "Contact process : $TiCl_4$; Polymerization of ethene : Finely divided $Fe$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -2777,9 +2769,17 @@
           "type": "calculation_error",
           "description": "Incorrect concept application"
         }
+      },
+      {
+        "id": "D",
+        "text": "Contact process for $H_2SO_4$ : $V_2O_5$; Haber process for $NH_3$ : Finely divided $Fe$",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "In the Contact process, vanadium pentoxide ($V_2O_5$) catalyzes the oxidation of $SO_2$ to $SO_3$. In the Haber process, finely divided iron ($Fe$) with molybdenum promoter catalyzes the synthesis of ammonia ($N_2 + 3H_2 \\to 2NH_3$).",
     "questionNumber": 35,
     "questionId": "CHEMISTRY-M03-Q35",
@@ -2819,11 +2819,14 @@
     "options": [
       {
         "id": "A",
-        "text": "Strengthens the $M-C$ bond (higher bond order) and weakens the $C-O$ bond (longer bond length, lower stretching frequency $\\nu_{CO}$)",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
+        "text": "Lengthens the $M-C$ bond and increases the $C-O$ bond order",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
       },
       {
         "id": "B",
@@ -2838,18 +2841,15 @@
       },
       {
         "id": "C",
-        "text": "Strengthens both the $M-C$ bond and the $C-O$ bond",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
+        "text": "Strengthens the $M-C$ bond",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
       },
       {
         "id": "D",
-        "text": "Lengthens the $M-C$ bond and increases the $C-O$ bond order",
+        "text": "Strengthens both the $M-C$ bond and the $C-O$ bond",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -2859,8 +2859,8 @@
         }
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Back-donation transfers electron density from the metal into the antibonding $\\pi^*$ orbitals of $CO$. Populating an antibonding orbital reduces the $C-O$ bond order (weakening and lengthening the $C-O$ bond, lowering its stretching frequency $\\nu_{CO}$) while increasing the $M-C$ bond order (strengthening and shortening the $M-C$ bond).",
+    "correctOption": "C",
+    "detailedSolution": "Back-donation transfers electron density from the metal into the antibonding $\\pi^*$ orbitals of $CO$. Populating an antibonding orbital reduces the $C-O$ bond order (weakening and lengthening the $C-O$ bond, lowering its stretching frequency $\\nu_{CO}$) while increasing the $M-C$ bond order (strengthening and shortening the $M-C$ bond).\n\nNote: higher bond order) and weakens the $C-O$ bond (longer bond length, lower stretching frequency $\\nu_{CO}$",
     "questionNumber": 36,
     "questionId": "CHEMISTRY-M03-Q36",
     "conceptId": "CHEM-coordination-compounds-consequences-of-synergic-bonding-on-bond-strengths",
@@ -2900,13 +2900,13 @@
     "options": [
       {
         "id": "A",
-        "text": "(A)-(I), (B)-(II), (C)-(III), (D)-(IV)",
+        "text": "(A)-(III), (B)-(IV), (C)-(I), (D)-(II)",
         "isCorrect": false,
-        "studentSelectionTrap": "Sequential Order Slip",
-        "mistakeAnalysis": "Aspirants assign freons as paint removers and DDT as a refrigerant.",
+        "studentSelectionTrap": "Freons vs Carbon Tetrachloride Inversion",
+        "mistakeAnalysis": "Aspirants swap freons with carbon tetrachloride for fire extinguishing.",
         "misconception": {
-          "type": "sign_error",
-          "description": "Sequential Order Slip"
+          "type": "conceptual_misunderstanding",
+          "description": "Freons vs Carbon Tetrachloride Inversion"
         }
       },
       {
@@ -2922,26 +2922,26 @@
       },
       {
         "id": "C",
-        "text": "(A)-(III), (B)-(IV), (C)-(I), (D)-(II)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Freons vs Carbon Tetrachloride Inversion",
-        "mistakeAnalysis": "Aspirants swap freons with carbon tetrachloride for fire extinguishing.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Freons vs Carbon Tetrachloride Inversion"
-        }
-      },
-      {
-        "id": "D",
         "text": "(A)-(II), (B)-(IV), (C)-(I), (D)-(III)",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Accurately maps NCERT uses: Freons $\\rightarrow$ Refrigeration; DDT $\\rightarrow$ Insecticide; Dichloromethane $\\rightarrow$ Paint remover; Tetrachloromethane ($CCl_4$) $\\rightarrow$ Fire extinguisher (Pyrene).",
         "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "(A)-(I), (B)-(II), (C)-(III), (D)-(IV)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sequential Order Slip",
+        "mistakeAnalysis": "Aspirants assign freons as paint removers and DDT as a refrigerant.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sequential Order Slip"
+        }
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "1. Per NCERT Class 12 Haloalkanes and Haloarenes ('Polyhalogen Compounds'):\n   - **Freons ($CCl_2F_2$, Freon-12)**: Extremely stable, non-toxic, non-corrosive gas used widely as a coolant in **refrigeration** and air conditioning $\\implies$ (A)-(II).\n   - **DDT ($p,p'$-dichlorodiphenyltrichloroethane)**: First chlorinated organic **insecticide** used widely against malaria mosquitoes $\\implies$ (B)-(IV).\n   - **Dichloromethane ($CH_2Cl_2$, methylene chloride)**: Widely used volatile solvent as a **paint remover** and propellant in aerosols $\\implies$ (C)-(I).\n   - **Tetrachloromethane ($CCl_4$, carbon tetrachloride)**: Incombustible liquid historically sold under the trade name Pyrene as a **fire extinguisher** $\\implies$ (D)-(III).\n2. Matching: (A)-(II), (B)-(IV), (C)-(I), (D)-(III).\nHence Option D is correct.",
+    "correctOption": "C",
+    "detailedSolution": "1. Per NCERT Class 12 Haloalkanes and Haloarenes ('Polyhalogen Compounds'):\n   - **Freons ($CCl_2F_2$, Freon-12)**: Extremely stable, non-toxic, non-corrosive gas used widely as a coolant in **refrigeration** and air conditioning $\\implies$ (A)-(II).\n   - **DDT ($p,p'$-dichlorodiphenyltrichloroethane)**: First chlorinated organic **insecticide** used widely against malaria mosquitoes $\\implies$ (B)-(IV).\n   - **Dichloromethane ($CH_2Cl_2$, methylene chloride)**: Widely used volatile solvent as a **paint remover** and propellant in aerosols $\\implies$ (C)-(I).\n   - **Tetrachloromethane ($CCl_4$, carbon tetrachloride)**: Incombustible liquid historically sold under the trade name Pyrene as a **fire extinguisher** $\\implies$ (D)-(III).\n2. Matching: (A)-(II), (B)-(IV), (C)-(I), (D)-(III).\nHence Option C is correct.",
     "questionId": "CHEMISTRY-M03-Q37",
     "conceptId": "CHEM-haloalkanes-and-haloarenes-polyhalogen-compounds-and-commercial-uses",
     "questionType": "conceptual",
@@ -2950,7 +2950,7 @@
     "solution": {
       "quick": "Correct answer is (A)-(II), (B)-(IV), (C)-(I), (D)-(III).",
       "concept": "1. Per NCERT Class 12 Haloalkanes and Haloarenes ('Polyhalogen Compounds'):\n   - **Freons ($CCl_2F_2$, Freon-12)**: Extremely stable, non-toxic, non-corrosive gas used widely as a coolant in **refrigeration** and air conditioning $\\implies$ (A)-(II).",
-      "detailed": "1. Per NCERT Class 12 Haloalkanes and Haloarenes ('Polyhalogen Compounds'):\n   - **Freons ($CCl_2F_2$, Freon-12)**: Extremely stable, non-toxic, non-corrosive gas used widely as a coolant in **refrigeration** and air conditioning $\\implies$ (A)-(II).\n   - **DDT ($p,p'$-dichlorodiphenyltrichloroethane)**: First chlorinated organic **insecticide** used widely against malaria mosquitoes $\\implies$ (B)-(IV).\n   - **Dichloromethane ($CH_2Cl_2$, methylene chloride)**: Widely used volatile solvent as a **paint remover** and propellant in aerosols $\\implies$ (C)-(I).\n   - **Tetrachloromethane ($CCl_4$, carbon tetrachloride)**: Incombustible liquid historically sold under the trade name Pyrene as a **fire extinguisher** $\\implies$ (D)-(III).\n2. Matching: (A)-(II), (B)-(IV), (C)-(I), (D)-(III).\nHence Option D is correct."
+      "detailed": "1. Per NCERT Class 12 Haloalkanes and Haloarenes ('Polyhalogen Compounds'):\n   - **Freons ($CCl_2F_2$, Freon-12)**: Extremely stable, non-toxic, non-corrosive gas used widely as a coolant in **refrigeration** and air conditioning $\\implies$ (A)-(II).\n   - **DDT ($p,p'$-dichlorodiphenyltrichloroethane)**: First chlorinated organic **insecticide** used widely against malaria mosquitoes $\\implies$ (B)-(IV).\n   - **Dichloromethane ($CH_2Cl_2$, methylene chloride)**: Widely used volatile solvent as a **paint remover** and propellant in aerosols $\\implies$ (C)-(I).\n   - **Tetrachloromethane ($CCl_4$, carbon tetrachloride)**: Incombustible liquid historically sold under the trade name Pyrene as a **fire extinguisher** $\\implies$ (D)-(III).\n2. Matching: (A)-(II), (B)-(IV), (C)-(I), (D)-(III).\nHence Option C is correct."
     },
     "keyConcept": "Haloalkanes and Haloarenes: Polyhalogen Compounds and Commercial Uses",
     "tags": [
@@ -2979,7 +2979,7 @@
     "options": [
       {
         "id": "A",
-        "text": "Water flows out of the red blood cells, causing them to shrink and shrivel (plasmolysis)",
+        "text": "The red blood cells maintain exactly their original shape and size",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -3001,7 +3001,15 @@
       },
       {
         "id": "C",
-        "text": "The red blood cells maintain exactly their original shape and size",
+        "text": "Water molecules flow into the red blood cells via osmosis, causing them to swell and burst (hemolysis)",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
+      },
+      {
+        "id": "D",
+        "text": "Water flows out of the red blood cells, causing them to shrink and shrivel (plasmolysis)",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -3009,17 +3017,9 @@
           "type": "calculation_error",
           "description": "Incorrect concept application"
         }
-      },
-      {
-        "id": "D",
-        "text": "Water molecules flow into the red blood cells via osmosis, causing them to swell and burst (hemolysis)",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
       }
     ],
-    "correctOption": "D",
+    "correctOption": "C",
     "detailedSolution": "Blood plasma is isotonic with $0.9\\%$ (m/V) $NaCl$ solution. When placed in a hypotonic solution (lower osmotic pressure outside), water flows into the RBCs through their semipermeable membrane, causing them to swell and burst (hemolysis).",
     "questionNumber": 38,
     "questionId": "CHEMISTRY-M03-Q38",
@@ -3060,14 +3060,6 @@
     "options": [
       {
         "id": "A",
-        "text": "2.79 V",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Correctly evaluates $Q = \\frac{[Mg^{2+}]}{[Ag^+]^2} = \\frac{10^{-2}}{(10^{-3})^2} = 10^4$; then $E = 2.91 - \\frac{0.0591}{2}(4) = 2.91 - 0.1182 = 2.7918\\text{ V} \\approx 2.79\\text{ V}$.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "2.96 V",
         "isCorrect": false,
         "studentSelectionTrap": "Nernst Equation Sign Error",
@@ -3075,6 +3067,17 @@
         "misconception": {
           "type": "formula_confusion",
           "description": "Nernst Equation Sign Error"
+        }
+      },
+      {
+        "id": "B",
+        "text": "1.52 V",
+        "isCorrect": false,
+        "studentSelectionTrap": "Stoichiometric Square Neglect",
+        "mistakeAnalysis": "Aspirants forget to square $[Ag^+]$ in the denominator of the reaction quotient $Q$.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Stoichiometric Square Neglect"
         }
       },
       {
@@ -3090,18 +3093,15 @@
       },
       {
         "id": "D",
-        "text": "1.52 V",
-        "isCorrect": false,
-        "studentSelectionTrap": "Stoichiometric Square Neglect",
-        "mistakeAnalysis": "Aspirants forget to square $[Ag^+]$ in the denominator of the reaction quotient $Q$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Stoichiometric Square Neglect"
-        }
+        "text": "2.79 V",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly evaluates $Q = \\frac{[Mg^{2+}]}{[Ag^+]^2} = \\frac{10^{-2}}{(10^{-3})^2} = 10^4$; then $E = 2.91 - \\frac{0.0591}{2}(4) = 2.91 - 0.1182 = 2.7918\\text{ V} \\approx 2.79\\text{ V}$.",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "1. Identify the given parameters:\n   - Reaction: $Mg(s) + 2Ag^+(aq) \\rightarrow Mg^{2+}(aq) + 2Ag(s)$\n   - Number of electrons transferred: $n = 2$\n   - Standard cell potential: $E^\\circ_{\\text{cell}} = 2.91\\text{ V}$\n   - Concentrations: $[Mg^{2+}] = 0.01\\text{ M} = 10^{-2}\\text{ M}$, $[Ag^+] = 0.001\\text{ M} = 10^{-3}\\text{ M}$\n2. Write the reaction quotient expression ($Q$):\n   $$Q = \\frac{[Mg^{2+}]}{[Ag^+]^2} = \\frac{10^{-2}}{(10^{-3})^2} = \\frac{10^{-2}}{10^{-6}} = 10^4$$\n3. Apply the Nernst equation at $298\\text{ K}$:\n   $$E_{\\text{cell}} = E^\\circ_{\\text{cell}} - \\frac{0.0591}{n} \\log Q$$\n   $$E_{\\text{cell}} = 2.91 - \\frac{0.0591}{2} \\log(10^4)$$\n   $$E_{\\text{cell}} = 2.91 - \\frac{0.0591}{2} \\times 4 = 2.91 - (0.0591 \\times 2)$$\n   $$E_{\\text{cell}} = 2.91 - 0.1182 = 2.7918\\text{ V} \\approx 2.79\\text{ V}$$\nHence Option A is correct.",
+    "correctOption": "D",
+    "detailedSolution": "1. Identify the given parameters:\n   - Reaction: $Mg(s) + 2Ag^+(aq) \\rightarrow Mg^{2+}(aq) + 2Ag(s)$\n   - Number of electrons transferred: $n = 2$\n   - Standard cell potential: $E^\\circ_{\\text{cell}} = 2.91\\text{ V}$\n   - Concentrations: $[Mg^{2+}] = 0.01\\text{ M} = 10^{-2}\\text{ M}$, $[Ag^+] = 0.001\\text{ M} = 10^{-3}\\text{ M}$\n2. Write the reaction quotient expression ($Q$):\n   $$Q = \\frac{[Mg^{2+}]}{[Ag^+]^2} = \\frac{10^{-2}}{(10^{-3})^2} = \\frac{10^{-2}}{10^{-6}} = 10^4$$\n3. Apply the Nernst equation at $298\\text{ K}$:\n   $$E_{\\text{cell}} = E^\\circ_{\\text{cell}} - \\frac{0.0591}{n} \\log Q$$\n   $$E_{\\text{cell}} = 2.91 - \\frac{0.0591}{2} \\log(10^4)$$\n   $$E_{\\text{cell}} = 2.91 - \\frac{0.0591}{2} \\times 4 = 2.91 - (0.0591 \\times 2)$$\n   $$E_{\\text{cell}} = 2.91 - 0.1182 = 2.7918\\text{ V} \\approx 2.79\\text{ V}$$\nHence Option D is correct.",
     "questionId": "CHEMISTRY-M03-Q39",
     "conceptId": "CHEM-electrochemistry-nernst-equation-calculations",
     "questionType": "case-based",
@@ -3110,7 +3110,7 @@
     "solution": {
       "quick": "Correct answer is 2.79 V.",
       "concept": "1. Identify the given parameters:\n   - Reaction: $Mg(s) + 2Ag^+(aq) \\rightarrow Mg^{2+}(aq) + 2Ag(s)$\n   - Number of electrons transferred: $n = 2$\n   - Standard cell potential: $E^\\circ_{\\text{cell}} = 2.91\\text{ V}$\n   - Concentrations: $[Mg^{2+}] = 0.01\\text{ M} = 10^{-2}\\text{ M}$, $[Ag^+] = 0.001\\text{ M} = 10^{-3}\\text{ M}$\n2.",
-      "detailed": "1. Identify the given parameters:\n   - Reaction: $Mg(s) + 2Ag^+(aq) \\rightarrow Mg^{2+}(aq) + 2Ag(s)$\n   - Number of electrons transferred: $n = 2$\n   - Standard cell potential: $E^\\circ_{\\text{cell}} = 2.91\\text{ V}$\n   - Concentrations: $[Mg^{2+}] = 0.01\\text{ M} = 10^{-2}\\text{ M}$, $[Ag^+] = 0.001\\text{ M} = 10^{-3}\\text{ M}$\n2. Write the reaction quotient expression ($Q$):\n   $$Q = \\frac{[Mg^{2+}]}{[Ag^+]^2} = \\frac{10^{-2}}{(10^{-3})^2} = \\frac{10^{-2}}{10^{-6}} = 10^4$$\n3. Apply the Nernst equation at $298\\text{ K}$:\n   $$E_{\\text{cell}} = E^\\circ_{\\text{cell}} - \\frac{0.0591}{n} \\log Q$$\n   $$E_{\\text{cell}} = 2.91 - \\frac{0.0591}{2} \\log(10^4)$$\n   $$E_{\\text{cell}} = 2.91 - \\frac{0.0591}{2} \\times 4 = 2.91 - (0.0591 \\times 2)$$\n   $$E_{\\text{cell}} = 2.91 - 0.1182 = 2.7918\\text{ V} \\approx 2.79\\text{ V}$$\nHence Option A is correct."
+      "detailed": "1. Identify the given parameters:\n   - Reaction: $Mg(s) + 2Ag^+(aq) \\rightarrow Mg^{2+}(aq) + 2Ag(s)$\n   - Number of electrons transferred: $n = 2$\n   - Standard cell potential: $E^\\circ_{\\text{cell}} = 2.91\\text{ V}$\n   - Concentrations: $[Mg^{2+}] = 0.01\\text{ M} = 10^{-2}\\text{ M}$, $[Ag^+] = 0.001\\text{ M} = 10^{-3}\\text{ M}$\n2. Write the reaction quotient expression ($Q$):\n   $$Q = \\frac{[Mg^{2+}]}{[Ag^+]^2} = \\frac{10^{-2}}{(10^{-3})^2} = \\frac{10^{-2}}{10^{-6}} = 10^4$$\n3. Apply the Nernst equation at $298\\text{ K}$:\n   $$E_{\\text{cell}} = E^\\circ_{\\text{cell}} - \\frac{0.0591}{n} \\log Q$$\n   $$E_{\\text{cell}} = 2.91 - \\frac{0.0591}{2} \\log(10^4)$$\n   $$E_{\\text{cell}} = 2.91 - \\frac{0.0591}{2} \\times 4 = 2.91 - (0.0591 \\times 2)$$\n   $$E_{\\text{cell}} = 2.91 - 0.1182 = 2.7918\\text{ V} \\approx 2.79\\text{ V}$$\nHence Option D is correct."
     },
     "keyConcept": "Electrochemistry: Nernst Equation Calculations",
     "formula": "$E_{\\text{cell}}^\\circ = 2.91\\text{ V}$",
@@ -3149,17 +3149,6 @@
       },
       {
         "id": "B",
-        "text": "Nitrogenous base + Phosphate group only (without any pentose sugar).",
-        "isCorrect": false,
-        "studentSelectionTrap": "Sugar Omission Error",
-        "mistakeAnalysis": "A nucleotide must contain the central pentose sugar (ribose or deoxyribose).",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Sugar Omission Error"
-        }
-      },
-      {
-        "id": "C",
         "text": "Pentose sugar + Phosphoric acid only (without nitrogenous base).",
         "isCorrect": false,
         "studentSelectionTrap": "Base Omission Error",
@@ -3167,6 +3156,17 @@
         "misconception": {
           "type": "conceptual_misunderstanding",
           "description": "Base Omission Error"
+        }
+      },
+      {
+        "id": "C",
+        "text": "Nitrogenous base + Phosphate group only (without any pentose sugar).",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sugar Omission Error",
+        "mistakeAnalysis": "A nucleotide must contain the central pentose sugar (ribose or deoxyribose).",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Sugar Omission Error"
         }
       },
       {
@@ -3220,25 +3220,6 @@
     "options": [
       {
         "id": "A",
-        "text": "Nitrito ($NO_2^-$) coordinating via nitrogen ($-NO_2$) or oxygen ($-ONO$)",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
-      },
-      {
-        "id": "B",
-        "text": "Water ($H_2O$) coordinating via hydrogen or oxygen",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect concept application",
-        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
-        "misconception": {
-          "type": "calculation_error",
-          "description": "Incorrect concept application"
-        }
-      },
-      {
-        "id": "C",
         "text": "Ammonia ($NH_3$) coordinating via nitrogen or hydrogen",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -3249,7 +3230,7 @@
         }
       },
       {
-        "id": "D",
+        "id": "B",
         "text": "Carbonate ($CO_3^{2-}$) coordinating via carbon or oxygen",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -3258,9 +3239,28 @@
           "type": "calculation_error",
           "description": "Incorrect concept application"
         }
+      },
+      {
+        "id": "C",
+        "text": "Water ($H_2O$) coordinating via hydrogen or oxygen",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect concept application",
+        "mistakeAnalysis": "Student miscalculated or applied wrong principle",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Incorrect concept application"
+        }
+      },
+      {
+        "id": "D",
+        "text": "Nitrito ($NO_2^-$) coordinating via nitrogen ($-NO_2$) or oxygen ($-ONO$)",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
       }
     ],
-    "correctOption": "A",
+    "correctOption": "D",
     "detailedSolution": "An ambidentate ligand possesses two different donor atoms but can coordinate through only one of them at a time to a given metal ion. For example, $NO_2^-$ can coordinate via N (nitro, $-NO_2$) or via O (nitrito, $-ONO$). Similarly, thiocyanate ($SCN^-$) can bind via S (thiocyanato) or via N (isothiocyanato).",
     "questionNumber": 41,
     "questionId": "CHEMISTRY-M03-Q41",
@@ -3301,14 +3301,11 @@
     "options": [
       {
         "id": "A",
-        "text": "Aniline has too low a boiling point to withstand Friedel-Crafts reaction temperatures.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Physical Property Fallacy",
-        "mistakeAnalysis": "Aniline boils at 184 °C and is thermally stable at typical reaction temperatures.",
-        "misconception": {
-          "type": "logical_reasoning_error",
-          "description": "Physical Property Fallacy"
-        }
+        "text": "Aniline acts as a Lewis base and forms a coordinate complex with the anhydrous $AlCl_3$ Lewis acid catalyst, making the ring strongly deactivating.",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Lone pair on nitrogen binds to $AlCl_3$ to form $-N^+H_2-Al^-Cl_3$, turning an activating group into a strongly electron-withdrawing deactivating group.",
+        "misconception": null
       },
       {
         "id": "B",
@@ -3334,15 +3331,18 @@
       },
       {
         "id": "D",
-        "text": "Aniline acts as a Lewis base and forms a coordinate complex with the anhydrous $AlCl_3$ Lewis acid catalyst, making the ring strongly deactivating.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Lone pair on nitrogen binds to $AlCl_3$ to form $-N^+H_2-Al^-Cl_3$, turning an activating group into a strongly electron-withdrawing deactivating group.",
-        "misconception": null
+        "text": "Aniline has too low a boiling point to withstand Friedel-Crafts reaction temperatures.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Physical Property Fallacy",
+        "mistakeAnalysis": "Aniline boils at 184 °C and is thermally stable at typical reaction temperatures.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Physical Property Fallacy"
+        }
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "1. Aniline coordinates as a Lewis base to $AlCl_3$, developing a positive charge on nitrogen that strongly deactivates the aromatic ring toward electrophilic attack.\nHence Option D is correct.",
+    "correctOption": "A",
+    "detailedSolution": "1. Aniline coordinates as a Lewis base to $AlCl_3$, developing a positive charge on nitrogen that strongly deactivates the aromatic ring toward electrophilic attack.\nHence Option A is correct.",
     "questionId": "CHEMISTRY-M03-Q42",
     "conceptId": "CHEM-amines-friedel-crafts-reaction-failure-in-aniline-alcl3-complexation",
     "questionType": "conceptual",
@@ -3351,7 +3351,7 @@
     "solution": {
       "quick": "Correct answer is Aniline acts as a Lewis base and forms a coordinate complex with the anhydrous $AlCl_3$ Lewis acid catalyst, making the ring strongly deactivating..",
       "concept": "1. Aniline coordinates as a Lewis base to $AlCl_3$, developing a positive charge on nitrogen that strongly deactivates the aromatic ring toward electrophilic attack.",
-      "detailed": "1. Aniline coordinates as a Lewis base to $AlCl_3$, developing a positive charge on nitrogen that strongly deactivates the aromatic ring toward electrophilic attack.\nHence Option D is correct."
+      "detailed": "1. Aniline coordinates as a Lewis base to $AlCl_3$, developing a positive charge on nitrogen that strongly deactivates the aromatic ring toward electrophilic attack.\nHence Option A is correct."
     },
     "keyConcept": "Amines: Friedel-Crafts Reaction Failure in Aniline (AlCl3 Complexation)",
     "tags": [
@@ -3380,7 +3380,7 @@
     "options": [
       {
         "id": "A",
-        "text": "Forbidden d-d transitions between split d-orbitals",
+        "text": "Polarization of potassium cations ($K^+$)",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -3391,7 +3391,7 @@
       },
       {
         "id": "B",
-        "text": "Polarization of potassium cations ($K^+$)",
+        "text": "Forbidden d-d transitions between split d-orbitals",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -3461,28 +3461,14 @@
     "options": [
       {
         "id": "A",
-        "text": "Primary aliphatic amine",
-        "isCorrect": false,
-        "studentSelectionTrap": "Aliphatic Exclusivity Error",
-        "mistakeAnalysis": "Aspirants assume the test is limited strictly to aliphatic primary amines, forgetting that primary aromatic amines (like aniline) also give a positive test.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Aliphatic Exclusivity Error"
-        }
+        "text": "Primary aliphatic and aromatic amine",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Matches NCERT Class 12 Chapter 13: both aliphatic and aromatic primary amines produce foul-smelling isocyanides (carbylamines) when heated with chloroform and ethanolic $KOH$.",
+        "misconception": null
       },
       {
         "id": "B",
-        "text": "Secondary aliphatic amine",
-        "isCorrect": false,
-        "studentSelectionTrap": "Secondary Amine False Attribution",
-        "mistakeAnalysis": "Secondary amines do not have the required two protons on nitrogen and do not undergo the carbylamine reaction.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Secondary Amine False Attribution"
-        }
-      },
-      {
-        "id": "C",
         "text": "Secondary aromatic amine",
         "isCorrect": false,
         "studentSelectionTrap": "Aromatic Secondary Confusion",
@@ -3493,16 +3479,30 @@
         }
       },
       {
+        "id": "C",
+        "text": "Secondary aliphatic amine",
+        "isCorrect": false,
+        "studentSelectionTrap": "Secondary Amine False Attribution",
+        "mistakeAnalysis": "Secondary amines do not have the required two protons on nitrogen and do not undergo the carbylamine reaction.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Secondary Amine False Attribution"
+        }
+      },
+      {
         "id": "D",
-        "text": "Primary aliphatic and aromatic amine",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Matches NCERT Class 12 Chapter 13: both aliphatic and aromatic primary amines produce foul-smelling isocyanides (carbylamines) when heated with chloroform and ethanolic $KOH$.",
-        "misconception": null
+        "text": "Primary aliphatic amine",
+        "isCorrect": false,
+        "studentSelectionTrap": "Aliphatic Exclusivity Error",
+        "mistakeAnalysis": "Aspirants assume the test is limited strictly to aliphatic primary amines, forgetting that primary aromatic amines (like aniline) also give a positive test.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Aliphatic Exclusivity Error"
+        }
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "1. The carbylamine reaction (isocyanide test) involves heating a primary amine with chloroform ($CHCl_3$) and ethanolic potassium hydroxide ($KOH$):\n   $$R/Ar-NH_2 + CHCl_3 + 3KOH \\xrightarrow{\\Delta} R/Ar-NC + 3KCl + 3H_2O$$\n2. The resulting isocyanide (carbylamine) has an intensely foul, characteristic odor.\n3. This test is diagnostic for **both primary aliphatic and primary aromatic amines**.\n4. Secondary and tertiary amines do not show this reaction.\nHence Option D is correct.",
+    "correctOption": "A",
+    "detailedSolution": "1. The carbylamine reaction (isocyanide test) involves heating a primary amine with chloroform ($CHCl_3$) and ethanolic potassium hydroxide ($KOH$):\n   $$R/Ar-NH_2 + CHCl_3 + 3KOH \\xrightarrow{\\Delta} R/Ar-NC + 3KCl + 3H_2O$$\n2. The resulting isocyanide (carbylamine) has an intensely foul, characteristic odor.\n3. This test is diagnostic for **both primary aliphatic and primary aromatic amines**.\n4. Secondary and tertiary amines do not show this reaction.\nHence Option A is correct.",
     "questionId": "CHEMISTRY-M03-Q44",
     "conceptId": "CHEM-amines-carbylamine-reaction",
     "questionType": "case-based",
@@ -3511,7 +3511,7 @@
     "solution": {
       "quick": "Correct answer is Primary aliphatic and aromatic amine.",
       "concept": "1. The carbylamine reaction (isocyanide test) involves heating a primary amine with chloroform ($CHCl_3$) and ethanolic potassium hydroxide ($KOH$):\n   $$R/Ar-NH_2 + CHCl_3 + 3KOH \\xrightarrow{\\Delta} R/Ar-NC + 3KCl + 3H_2O$$\n2.",
-      "detailed": "1. The carbylamine reaction (isocyanide test) involves heating a primary amine with chloroform ($CHCl_3$) and ethanolic potassium hydroxide ($KOH$):\n   $$R/Ar-NH_2 + CHCl_3 + 3KOH \\xrightarrow{\\Delta} R/Ar-NC + 3KCl + 3H_2O$$\n2. The resulting isocyanide (carbylamine) has an intensely foul, characteristic odor.\n3. This test is diagnostic for **both primary aliphatic and primary aromatic amines**.\n4. Secondary and tertiary amines do not show this reaction.\nHence Option D is correct."
+      "detailed": "1. The carbylamine reaction (isocyanide test) involves heating a primary amine with chloroform ($CHCl_3$) and ethanolic potassium hydroxide ($KOH$):\n   $$R/Ar-NH_2 + CHCl_3 + 3KOH \\xrightarrow{\\Delta} R/Ar-NC + 3KCl + 3H_2O$$\n2. The resulting isocyanide (carbylamine) has an intensely foul, characteristic odor.\n3. This test is diagnostic for **both primary aliphatic and primary aromatic amines**.\n4. Secondary and tertiary amines do not show this reaction.\nHence Option A is correct."
     },
     "keyConcept": "Amines: Carbylamine Reaction",
     "tags": [
@@ -3541,14 +3541,6 @@
     "options": [
       {
         "id": "A",
-        "text": "It can be measured accurately at room temperature and utilizes molarity instead of molality.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Biomolecules are unstable at high temperatures (where boiling point elevation is measured), and osmotic pressure magnitudes are measurable even at very low concentrations.",
-        "misconception": null
-      },
-      {
-        "id": "B",
         "text": "It does not depend on the number of solute particles present in solution.",
         "isCorrect": false,
         "studentSelectionTrap": "Colligative Property Definition Neglect",
@@ -3557,6 +3549,14 @@
           "type": "conceptual_misunderstanding",
           "description": "Colligative Property Definition Neglect"
         }
+      },
+      {
+        "id": "B",
+        "text": "It can be measured accurately at room temperature and utilizes molarity instead of molality.",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Biomolecules are unstable at high temperatures (where boiling point elevation is measured), and osmotic pressure magnitudes are measurable even at very low concentrations.",
+        "misconception": null
       },
       {
         "id": "C",
@@ -3581,8 +3581,8 @@
         }
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "1. Biomolecules and macromolecular polymers are sensitive to heat and decompose at elevated temperatures required for boiling point elevation.\n2. Osmotic pressure measurement is carried out at room temperature (around 298 K).\n3. Even for extremely dilute solutions, the osmotic pressure magnitude is appreciable and measurable with high precision using molarity ($M$).\nHence Option A is correct.",
+    "correctOption": "B",
+    "detailedSolution": "1. Biomolecules and macromolecular polymers are sensitive to heat and decompose at elevated temperatures required for boiling point elevation.\n2. Osmotic pressure measurement is carried out at room temperature (around 298 K).\n3. Even for extremely dilute solutions, the osmotic pressure magnitude is appreciable and measurable with high precision using molarity ($M$).\nHence Option B is correct.",
     "questionId": "CHEMISTRY-M03-Q45",
     "conceptId": "CHEM-solutions-osmotic-pressure-and-molar-mass-determination",
     "questionType": "conceptual",
@@ -3591,7 +3591,7 @@
     "solution": {
       "quick": "Correct answer is It can be measured accurately at room temperature and utilizes molarity instead of molality..",
       "concept": "1. Biomolecules and macromolecular polymers are sensitive to heat and decompose at elevated temperatures required for boiling point elevation.",
-      "detailed": "1. Biomolecules and macromolecular polymers are sensitive to heat and decompose at elevated temperatures required for boiling point elevation.\n2. Osmotic pressure measurement is carried out at room temperature (around 298 K).\n3. Even for extremely dilute solutions, the osmotic pressure magnitude is appreciable and measurable with high precision using molarity ($M$).\nHence Option A is correct."
+      "detailed": "1. Biomolecules and macromolecular polymers are sensitive to heat and decompose at elevated temperatures required for boiling point elevation.\n2. Osmotic pressure measurement is carried out at room temperature (around 298 K).\n3. Even for extremely dilute solutions, the osmotic pressure magnitude is appreciable and measurable with high precision using molarity ($M$).\nHence Option B is correct."
     },
     "keyConcept": "Solutions: Osmotic Pressure and Molar Mass Determination",
     "tags": [
@@ -3701,14 +3701,11 @@
     "options": [
       {
         "id": "A",
-        "text": "2,5-Dimethylphenol",
-        "isCorrect": false,
-        "studentSelectionTrap": "Incorrect Numbering Direction",
-        "mistakeAnalysis": "Aspirants number around the ring in the direction that skips consecutive lowest locants, arriving at 2,5 instead of 2,6.",
-        "misconception": {
-          "type": "direction_error",
-          "description": "Incorrect Numbering Direction"
-        }
+        "text": "2,6-Dimethylphenol",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Carbon bearing the principal $-OH$ group is designated C1; numbering around the ring gives methyl substituents at the lowest equivalent locants 2 and 6.",
+        "misconception": null
       },
       {
         "id": "B",
@@ -3723,14 +3720,6 @@
       },
       {
         "id": "C",
-        "text": "2,6-Dimethylphenol",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Carbon bearing the principal $-OH$ group is designated C1; numbering around the ring gives methyl substituents at the lowest equivalent locants 2 and 6.",
-        "misconception": null
-      },
-      {
-        "id": "D",
         "text": "2,3-Dimethylphenol",
         "isCorrect": false,
         "studentSelectionTrap": "Adjacent Locant Assumption",
@@ -3739,10 +3728,21 @@
           "type": "calculation_error",
           "description": "Adjacent Locant Assumption"
         }
+      },
+      {
+        "id": "D",
+        "text": "2,5-Dimethylphenol",
+        "isCorrect": false,
+        "studentSelectionTrap": "Incorrect Numbering Direction",
+        "mistakeAnalysis": "Aspirants number around the ring in the direction that skips consecutive lowest locants, arriving at 2,5 instead of 2,6.",
+        "misconception": {
+          "type": "direction_error",
+          "description": "Incorrect Numbering Direction"
+        }
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "1. In substituted phenols, the carbon atom attached to the principal functional group ($-OH$) is assigned position C1.\n2. Numbering the ring to give the substituents the lowest possible set of locants gives:\n   - Position 1: $-OH$\n   - Position 2: $-CH_3$\n   - Position 6: $-CH_3$\n3. Combining locants and prefixes yields **2,6-dimethylphenol**.\nHence Option C is correct.",
+    "correctOption": "A",
+    "detailedSolution": "1. In substituted phenols, the carbon atom attached to the principal functional group ($-OH$) is assigned position C1.\n2. Numbering the ring to give the substituents the lowest possible set of locants gives:\n   - Position 1: $-OH$\n   - Position 2: $-CH_3$\n   - Position 6: $-CH_3$\n3. Combining locants and prefixes yields **2,6-dimethylphenol**.\nHence Option A is correct.",
     "questionId": "CHEMISTRY-M03-Q47",
     "conceptId": "CHEM-alcohols-phenols-and-ethers-iupac-nomenclature-of-phenols",
     "questionType": "diagram-based",
@@ -3751,7 +3751,7 @@
     "solution": {
       "quick": "Correct answer is 2,6-Dimethylphenol.",
       "concept": "1. In substituted phenols, the carbon atom attached to the principal functional group ($-OH$) is assigned position C1.",
-      "detailed": "1. In substituted phenols, the carbon atom attached to the principal functional group ($-OH$) is assigned position C1.\n2. Numbering the ring to give the substituents the lowest possible set of locants gives:\n   - Position 1: $-OH$\n   - Position 2: $-CH_3$\n   - Position 6: $-CH_3$\n3. Combining locants and prefixes yields **2,6-dimethylphenol**.\nHence Option C is correct."
+      "detailed": "1. In substituted phenols, the carbon atom attached to the principal functional group ($-OH$) is assigned position C1.\n2. Numbering the ring to give the substituents the lowest possible set of locants gives:\n   - Position 1: $-OH$\n   - Position 2: $-CH_3$\n   - Position 6: $-CH_3$\n3. Combining locants and prefixes yields **2,6-dimethylphenol**.\nHence Option A is correct."
     },
     "keyConcept": "Alcohols, Phenols and Ethers: IUPAC Nomenclature of Phenols",
     "tags": [
@@ -3780,7 +3780,7 @@
     "options": [
       {
         "id": "A",
-        "text": "Helium actively increases the metabolic rate of divers underwater",
+        "text": "Helium lowers blood pressure to prevent oxygen toxicity",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -3791,14 +3791,6 @@
       },
       {
         "id": "B",
-        "text": "Helium has very low solubility in blood even at high underwater pressures, preventing painful bends upon ascent",
-        "isCorrect": true,
-        "studentSelectionTrap": "Correct concept and formula application",
-        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
-        "misconception": null
-      },
-      {
-        "id": "C",
         "text": "Helium chemically reacts with nitrogen to form inert, non-toxic complexes in blood",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
@@ -3809,8 +3801,8 @@
         }
       },
       {
-        "id": "D",
-        "text": "Helium lowers blood pressure to prevent oxygen toxicity",
+        "id": "C",
+        "text": "Helium actively increases the metabolic rate of divers underwater",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -3818,9 +3810,17 @@
           "type": "calculation_error",
           "description": "Incorrect concept application"
         }
+      },
+      {
+        "id": "D",
+        "text": "Helium has very low solubility in blood even at high underwater pressures, preventing painful bends upon ascent",
+        "isCorrect": true,
+        "studentSelectionTrap": "Correct concept and formula application",
+        "mistakeAnalysis": "Follows standard NCERT derivation and principle",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
+    "correctOption": "D",
     "detailedSolution": "At high underwater pressures, atmospheric nitrogen dissolves extensively in the diver's blood. When the diver ascends, pressure decreases, causing dissolved nitrogen to release as bubbles in blood capillaries, causing painful and dangerous 'bends'. Diluting air with helium (which has extremely low solubility in blood) prevents this condition.",
     "questionNumber": 48,
     "questionId": "CHEMISTRY-M03-Q48",
@@ -3879,7 +3879,7 @@
       },
       {
         "id": "C",
-        "text": "$\\kappa = 8.0 \\times G$",
+        "text": "$\\kappa = G$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
@@ -3890,7 +3890,7 @@
       },
       {
         "id": "D",
-        "text": "$\\kappa = G$",
+        "text": "$\\kappa = 8.0 \\times G$",
         "isCorrect": false,
         "studentSelectionTrap": "Incorrect concept application",
         "mistakeAnalysis": "Student miscalculated or applied wrong principle",
