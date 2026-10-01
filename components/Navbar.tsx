@@ -310,12 +310,12 @@ export default function Navbar() {
                             <span>Aspirant Profile</span>
                           </Link>
                           <Link
-                            href="/dashboard"
+                            href="/dashboard/radar"
                             onClick={() => setProfileDropdownOpen(false)}
                             className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
                           >
-                            <Trophy className="w-4 h-4 text-[#F59E0B]" />
-                            <span>Trophy Cabinet & Radar</span>
+                            <Target className="w-4 h-4 text-[#FF5C5C]" />
+                            <span>Weakness Radar</span>
                           </Link>
                           <Link
                             href="/dashboard/pyqs"

@@ -408,10 +408,10 @@ export default function CBTResultView() {
             </div>
           </div>
           <Link
-            href="/dashboard"
+            href="/dashboard/radar"
             className="px-5 py-2.5 rounded-lg bg-black hover:bg-[#121212] text-white border-2 border-black font-black text-xs shrink-0 shadow-[2px_2px_0px_0px_#000] flex items-center gap-1.5"
           >
-            <span>View in Trophy Cabinet</span>
+            <span>View Weakness Radar</span>
           </Link>
         </div>
       )}

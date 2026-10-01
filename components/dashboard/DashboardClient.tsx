@@ -30,7 +30,6 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import TrophyCabinet from "@/components/dashboard/TrophyCabinet";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData } from "@/types";
@@ -397,27 +396,8 @@ export default function DashboardClient({
             />
           </div>
         </div>
-      ) : (
-        <div className="p-3.5 rounded-xl border-2 border-black bg-[#ECFDF5] shadow-[3px_3px_0px_0px_#000] flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1 rounded-md bg-[#10B981] border border-black text-white shadow-[1px_1px_0px_0px_#000]">
-              <CheckCircle2 className="w-4 h-4 text-black stroke-[2.5]" />
-            </div>
-            <div>
-              <p className="text-xs sm:text-sm font-black text-black">
-                AI Diagnostic Matrix &amp; Adaptive Drills Unlocked
-              </p>
-              <p className="text-[10px] text-black/70 font-semibold">
-                Sufficient calibration data ({totalAttempted} Qs evaluated). Active deep intelligence &amp; precision remediation.
-              </p>
-            </div>
-          </div>
-          <span className="px-2.5 py-1 rounded bg-[#10B981] text-black text-[10px] font-black uppercase border border-black shadow-[1px_1px_0px_0px_#000] shrink-0 flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-black fill-black" />
-            AI Mentor Active
-          </span>
-        </div>
-      )}
+      ) : null}
+
 
       {/* 2. MINIMAL 3-CARD VITAL METRICS ROW */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -703,9 +683,6 @@ export default function DashboardClient({
           </Link>
         </div>
       </div>
-
-      {/* 4. COMPACT TROPHY CABINET ACCORDION */}
-      <TrophyCabinet />
     </div>
   );
 }

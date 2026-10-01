@@ -19,7 +19,6 @@ import {
   Play,
   Layers,
   Trophy as TrophyIcon,
-  Lock,
   Crown,
   BellRing,
   LogOut,
@@ -27,12 +26,10 @@ import {
   Clock,
   ArrowRight,
   Shield,
-  HelpCircle,
 } from "lucide-react";
 import {
   ProfileInitialData,
   StudentProfileData,
-  ProfileTrophyItem,
   WeakMicroTopicItem,
 } from "@/types/profile";
 import { StreamOption } from "@/types/database";
@@ -53,7 +50,6 @@ import { createClient } from "@/lib/supabase/client";
 import { updateProfileGoalsAction } from "@/app/dashboard/profile/actions";
 import EditGoalsModal from "@/components/profile/EditGoalsModal";
 import SignOutModal from "@/components/profile/SignOutModal";
-import TrophyDetailModal from "@/components/profile/TrophyDetailModal";
 import UpgradeButton from "@/components/payments/UpgradeButton";
 
 interface ProfileClientProps {
@@ -75,12 +71,10 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
   const [profile, setProfile] = useState<StudentProfileData>(initialData.profile);
   const [diagnostic, setDiagnostic] = useState(initialData.diagnostic);
   const [weakTopics] = useState<WeakMicroTopicItem[]>(initialData.weakTopics);
-  const [trophies] = useState<ProfileTrophyItem[]>(initialData.trophies);
 
   // Modals state
   const [isEditGoalsOpen, setIsEditGoalsOpen] = useState(false);
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
-  const [selectedTrophy, setSelectedTrophy] = useState<ProfileTrophyItem | null>(null);
 
   // Status alerts & action loaders
   const [statusMessage, setStatusMessage] = useState<{
@@ -387,8 +381,6 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
     });
   };
 
-  // Unlocked trophies count
-  const unlockedCount = trophies.filter((t) => t.isUnlocked).length;
 
   // Student Initials
   const initials =
@@ -1005,119 +997,6 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       </div>
 
       {/* ──────────────────────────────────────────────────────────── */}
-      {/* CARD 3: GAMIFICATION & TROPHY SHELF */}
-      {/* ──────────────────────────────────────────────────────────── */}
-      <section className="bg-white rounded-xl border-2 border-black shadow-[5px_5px_0px_0px_#000] p-6 sm:p-8 space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b-2 border-black/10">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-[#FEF3C7] border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
-              <TrophyIcon className="w-6 h-6 text-[#D97706]" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl font-black text-black tracking-tight">
-                  Gamification Trophy Shelf
-                </h2>
-                <span className="bg-[#FEF3C7] text-black text-[11px] font-black px-2.5 py-0.5 rounded-full border border-black font-mono shadow-[1px_1px_0px_0px_#000]">
-                  {unlockedCount} / {trophies.length} Badges Earned
-                </span>
-              </div>
-              <p className="text-xs text-black/60 font-semibold mt-0.5">
-                Authentic NTA CBT mastery milestones awarding XP and redeemable Campus Coins.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Trophy Grid */}
-        {trophies.length === 0 ? (
-          <div className="p-8 text-center bg-[#FAF7EE] rounded-xl border-2 border-dashed border-black space-y-2">
-            <TrophyIcon className="w-8 h-8 text-black/40 mx-auto" />
-            <h4 className="text-sm font-black text-black">No Badges Unlocked Yet</h4>
-            <p className="text-xs text-black/60 max-w-sm mx-auto">
-              Complete your first NTA domain mock test to unlock &quot;NCERT Sharpshooter&quot; or start a 7-day streak to claim &quot;Consistency King&quot;!
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {trophies.map((trophy) => {
-              const isUnlocked = trophy.isUnlocked;
-
-              return (
-                <button
-                  key={trophy.id}
-                  type="button"
-                  onClick={() => setSelectedTrophy(trophy)}
-                  className={`group relative p-4 rounded-xl border-2 border-black text-left transition-all flex flex-col justify-between focus:outline-none cursor-pointer ${
-                    isUnlocked
-                      ? "bg-white hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] shadow-[3px_3px_0px_0px_#000]"
-                      : "bg-[#FAF7EE] opacity-75 hover:opacity-100 shadow-[2px_2px_0px_0px_#000]"
-                  }`}
-                >
-                  <div>
-                    {/* Icon & Unlocked Status Badge */}
-                    <div className="flex items-center justify-between mb-3">
-                      <div
-                        className={`w-11 h-11 rounded-lg border-2 border-black flex items-center justify-center transition-transform group-hover:scale-105 shadow-[2px_2px_0px_0px_#000] ${
-                          isUnlocked ? "bg-[#FEF3C7] text-black" : "bg-black/10 text-black/40"
-                        }`}
-                      >
-                        {trophy.icon === "Flame" ? (
-                          <Flame className="w-5 h-5 text-[#D97706] fill-[#F59E0B]" />
-                        ) : trophy.icon === "Zap" ? (
-                          <Zap className="w-5 h-5 text-[#4F46E5] fill-[#4F46E5]" />
-                        ) : trophy.icon === "Sparkles" ? (
-                          <Sparkles className="w-5 h-5 text-[#D97706]" />
-                        ) : (
-                          <Target className="w-5 h-5 text-black" />
-                        )}
-                      </div>
-
-                      {isUnlocked ? (
-                        <span className="flex items-center gap-1 text-[10px] font-black text-black bg-[#D1FAE5] border border-black px-2 py-0.5 rounded-full shadow-[1px_1px_0px_0px_#000]">
-                          <CheckCircle2 className="w-3 h-3 text-[#10B981] stroke-[2.5]" />
-                          Unlocked
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1 text-[10px] font-black text-black/60 bg-white border border-black px-2 py-0.5 rounded-full shadow-[1px_1px_0px_0px_#000]">
-                          <Lock className="w-3 h-3 text-black/40" />
-                          Locked
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Title & Description */}
-                    <h3 className="font-black text-sm tracking-tight text-black">
-                      {trophy.title}
-                    </h3>
-                    <p className="mt-1 text-xs text-black/70 font-medium line-clamp-2 leading-relaxed">
-                      {trophy.description}
-                    </p>
-                  </div>
-
-                  {/* Bottom: Rewards or Progress */}
-                  <div className="mt-4 pt-3 border-t-2 border-black/10">
-                    {isUnlocked ? (
-                      <div className="flex items-center justify-between text-[11px] font-black">
-                        <span className="text-black font-mono">+{trophy.xpReward} XP</span>
-                        <span className="text-[#D97706] font-mono">+{trophy.coinReward} Coins</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-between text-[10px] font-black text-black/50">
-                        <span className="line-clamp-1">{trophy.criteria}</span>
-                        <HelpCircle className="w-3 h-3 shrink-0 ml-1" />
-                      </div>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
-      </section>
-
-      {/* ──────────────────────────────────────────────────────────── */}
       {/* PHASE 3: DEDICATED SIGN OUT FOOTER SECTION */}
       {/* ──────────────────────────────────────────────────────────── */}
       <section className="bg-white rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_#000] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -1161,11 +1040,6 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         isOpen={isSignOutModalOpen}
         onClose={() => setIsSignOutModalOpen(false)}
         onConfirm={handleSignOut}
-      />
-
-      <TrophyDetailModal
-        trophy={selectedTrophy}
-        onClose={() => setSelectedTrophy(null)}
       />
     </div>
   );

@@ -168,10 +168,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/dashboard"
+                  href="/dashboard/radar"
                   className="hover:text-black hover:underline decoration-[#FF5C5C] decoration-2 underline-offset-2"
                 >
-                  Academic Trophy Cabinet
+                  Subject Weakness Radar
                 </Link>
               </li>
               <li>
