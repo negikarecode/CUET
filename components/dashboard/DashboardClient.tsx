@@ -458,13 +458,27 @@ export default function DashboardClient({
                   </h3>
                   <p className="text-xs sm:text-sm font-bold text-black/80 font-mono mt-0.5">
                     {prioritizedCandidate.accuracyPercentage}% Accuracy · {prioritizedCandidate.attemptsCount} Attempts
-                    {prioritizedCandidate.avgTimeSeconds ? ` · ~${prioritizedCandidate.avgTimeSeconds}s / Q` : ""}
+                    {prioritizedCandidate.avgTimeSeconds ? ` · Avg response time: ${prioritizedCandidate.avgTimeSeconds}s / Q` : ""}
                   </p>
+                </div>
+
+                {/* Primary Diagnosis & Contributing Factor */}
+                <div className="flex items-center gap-2 flex-wrap text-xs">
+                  <div className="px-2 py-0.5 rounded bg-[#FEF2F2] border border-black font-black text-black text-[11px] flex items-center gap-1 shadow-[1px_1px_0px_0px_#000]">
+                    <span className="text-[9px] text-[#DC2626] uppercase">PRIMARY:</span>
+                    <span>{prioritizedCandidate.fullDiagnosis?.primaryDiagnosis || (prioritizedCandidate.accuracyPercentage < 50 ? "Conceptual Gap" : "Precision Slip")}</span>
+                  </div>
+                  {prioritizedCandidate.fullDiagnosis?.contributingFactor && (
+                    <div className="px-2 py-0.5 rounded bg-[#FAF7EE] border border-black font-bold text-black/80 text-[11px] flex items-center gap-1 shadow-[1px_1px_0px_0px_#000]">
+                      <span className="text-[9px] text-black/60 uppercase">CONTRIBUTING:</span>
+                      <span>{prioritizedCandidate.fullDiagnosis.contributingFactor}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-3 rounded-xl bg-[#FAF7EE] border-2 border-black text-xs space-y-0.5">
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#DC2626] block">
-                    Why it is being prioritized:
+                    Evidence Behind Priority:
                   </span>
                   <p className="text-black/90 font-bold leading-relaxed">
                     {isLimited

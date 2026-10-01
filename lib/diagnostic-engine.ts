@@ -484,48 +484,48 @@ export function calculateSpeedVsAccuracyState(
   avgTimeSeconds: number,
   targetTimeSeconds: number
 ): {
-  state: "Concept/Knowledge Gap" | "Pacing/Fluency Deficit" | "Validated Core Strength" | "Major Systemic Weakness" | "Impulsive Rushing / Careless";
+  state: "Concept/Knowledge Gap" | "Pacing/Fluency Deficit" | "Validated Core Strength" | "Major Systemic Weakness" | "Rapid Response Pattern";
   explanation: string;
 } {
   const isHighAccuracy = accuracyPercentage >= 75;
   const isLowAccuracy = accuracyPercentage < 60;
   const isExcessiveTime = avgTimeSeconds > targetTimeSeconds + 15;
-  const isUnusuallyFast = avgTimeSeconds < Math.max(20, Math.round(targetTimeSeconds * 0.45));
+  const isUnusuallyFast = avgTimeSeconds < Math.max(10, Math.round(targetTimeSeconds * 0.35));
 
   if (isLowAccuracy && !isExcessiveTime && !isUnusuallyFast) {
     return {
       state: "Concept/Knowledge Gap",
-      explanation: "Low accuracy with standard solving time points to a conceptual understanding or recall gap rather than a clock issue.",
+      explanation: "Lower accuracy with standard response time indicates conceptual gap or recall uncertainty rather than clock pressure.",
     };
   }
   if (isHighAccuracy && isExcessiveTime) {
     return {
       state: "Pacing/Fluency Deficit",
-      explanation: "High accuracy accompanied by excessive time usage indicates strong conceptual grasp but suboptimal fluency or calculation speed.",
+      explanation: "High accuracy accompanied by high response time indicates sound grasp but slow execution pace.",
     };
   }
   if (isHighAccuracy && !isExcessiveTime) {
     return {
       state: "Validated Core Strength",
-      explanation: "High accuracy paired with optimal pace confirms exam-ready mastery.",
+      explanation: "High accuracy paired with expected response time confirms consistent performance.",
     };
   }
   if (isLowAccuracy && isExcessiveTime) {
     return {
       state: "Major Systemic Weakness",
-      explanation: "Both low accuracy and excessive time usage signal a critical double-barrier: conceptual struggle combined with calculation drain.",
+      explanation: "Both lower accuracy and extended response time indicate compounding conceptual difficulty and calculation clock drain.",
     };
   }
   if (isLowAccuracy && isUnusuallyFast) {
     return {
-      state: "Impulsive Rushing / Careless",
-      explanation: "Low accuracy paired with unusually fast response times indicates guessing, impulsive reading, or falling for distractor traps.",
+      state: "Rapid Response Pattern",
+      explanation: "Very fast responses detected alongside incorrect answers. Telemetry indicates rapid answer selection, though intent cannot be determined.",
     };
   }
 
   return {
     state: "Concept/Knowledge Gap",
-    explanation: "Performance requires targeted practice to establish baseline accuracy.",
+    explanation: "Performance requires targeted practice to establish baseline calibration.",
   };
 }
 
@@ -736,20 +736,38 @@ export function generateFullTopicDiagnosis(
   const errorTaxonomy = classifyErrorTaxonomy(attemptsCount, incorrectCount, avgTimeSeconds, targetTimeSeconds, accuracyPercentage, questionsData);
   const masteryModel = calculateMultiDimensionalMastery(attemptsCount, correctCount, accuracyPercentage, avgTimeSeconds, targetTimeSeconds);
 
-  // Derive primary failure pattern & evidence
-  let primaryFailurePattern: string = speedVsAcc.state;
-  let secondaryFailurePattern: string | undefined = undefined;
+  // Two-tier taxonomy hierarchy: PRIMARY DIAGNOSIS and CONTRIBUTING FACTOR
+  let primaryDiagnosis = "Conceptual Gap";
+  let contributingFactor = "Foundational NCERT Theory";
 
-  if (errorTaxonomy.calculationCount > 0 && errorTaxonomy.calculationCount >= errorTaxonomy.conceptualGapCount) {
-    primaryFailurePattern = "Calculation & Clock Drain";
-    secondaryFailurePattern = "Numerical execution error";
+  if (attemptsCount < 5) {
+    primaryDiagnosis = "Limited Data Telemetry";
+    contributingFactor = "Sample Size Insufficient (<5 Attempts)";
+  } else if (errorTaxonomy.calculationCount > 0 && errorTaxonomy.calculationCount >= errorTaxonomy.conceptualGapCount) {
+    primaryDiagnosis = "Calculation Error";
+    contributingFactor = "Calculation Fluency & Clock Drain";
   } else if (errorTaxonomy.distractorTrapCount > 0 || errorTaxonomy.questionInterpretationCount > 0) {
-    primaryFailurePattern = "Distractor Trap Susceptibility";
-    secondaryFailurePattern = "Impulsive keyword misreading";
+    primaryDiagnosis = "Distractor Trap Susceptibility";
+    contributingFactor = "Question Interpretation & Qualifying Terms";
   } else if (errorTaxonomy.applicationGapCount > 0) {
-    primaryFailurePattern = "Conceptual Application Gap";
-    secondaryFailurePattern = "Scenario transfer difficulty";
+    primaryDiagnosis = "Concept Application Gap";
+    contributingFactor = "Multi-Variable Scenario Transfer";
+  } else if (speedVsAcc.state === "Rapid Response Pattern" || (avgTimeSeconds < 15 && accuracyPercentage < 60)) {
+    primaryDiagnosis = "Rapid Response Pacing";
+    contributingFactor = "High-Speed Answer Selection";
+  } else if (accuracyPercentage < 50) {
+    primaryDiagnosis = "Conceptual Gap";
+    contributingFactor = "Foundational Knowledge Retrieval";
+  } else if (accuracyPercentage >= 75 && incorrectCount > 0) {
+    primaryDiagnosis = "Precision Slip / Careless Error";
+    contributingFactor = "Isolated Exam Condition Variation";
+  } else {
+    primaryDiagnosis = "Emerging Concept Inconsistency";
+    contributingFactor = "Practice Calibration";
   }
+
+  let primaryFailurePattern: string = primaryDiagnosis;
+  let secondaryFailurePattern: string | undefined = contributingFactor;
 
   const topicKey = (chapter || microTopic || "").toLowerCase();
   let specificWeakness = "";
@@ -758,31 +776,38 @@ export function generateFullTopicDiagnosis(
   if (attemptsCount < 5) {
     const needed = Math.max(1, 5 - attemptsCount);
     specificWeakness = `Limited Data: Only ${attemptsCount} attempt${attemptsCount === 1 ? "" : "s"} recorded. Minimum 5 attempts needed to diagnose a genuine weakness pattern.`;
-    interpretation = `There is insufficient test telemetry to confirm a chronic weakness in ${chapter || microTopic}. Solve ${needed} more question${needed === 1 ? "" : "s"} across mocks or diagnostic drills to establish baseline calibration.`;
+    interpretation = `What the data suggests: The available telemetry identifies ${attemptsCount} question attempt${attemptsCount === 1 ? "" : "s"}, but cannot determine the exact underlying cause yet. Solve ${needed} more question${needed === 1 ? "" : "s"} to establish baseline calibration.`;
   } else {
-    // Evidence-based diagnosis strictly reflecting error telemetry
-    if (errorTaxonomy.calculationCount > 0 && errorTaxonomy.calculationCount >= errorTaxonomy.conceptualGapCount) {
+    // Evidence-based diagnosis strictly reflecting error telemetry without psychological speculation
+    if (primaryDiagnosis === "Calculation Error") {
       specificWeakness = `Execution & Numerical Clock Drain: Multi-step arithmetic and formula execution consume ${avgTimeSeconds}s/Q (Target: ≤${targetTimeSeconds}s) with ${errorTaxonomy.calculationCount} sign/calculation error(s).`;
-      interpretation = `Your conceptual familiarity is present, but multi-step arithmetic creates clock drain and execution slips under timed exam conditions.`;
-    } else if (errorTaxonomy.distractorTrapCount > 0 || errorTaxonomy.questionInterpretationCount > 0) {
+      interpretation = `What the data suggests: Your telemetry records extended response latency alongside arithmetic and formula execution errors. This pattern indicates clock drain during numerical working rather than unfamiliarity with concepts.`;
+    } else if (primaryDiagnosis === "Distractor Trap Susceptibility") {
       specificWeakness = `Distractor Trap Susceptibility: Selected ${errorTaxonomy.distractorTrapCount} tempting distractor choice(s) and missed ${errorTaxonomy.questionInterpretationCount} keyword qualifier(s) ('NOT' / 'EXCEPT').`;
-      interpretation = `You understand basic definitions, but impulsive reading under clock pressure leads to falling for examiner trap choices.`;
-    } else if (errorTaxonomy.applicationGapCount > 0) {
-      specificWeakness = `Concept Application Gap: Difficulty transferring foundational NCERT principles into multi-variable CUET application scenarios.`;
-      interpretation = `You recognize standard textbook definitions, but struggle when questions combine multiple concepts or present real-world application stems.`;
+      interpretation = `What the data suggests: Your incorrect responses frequently involve tempting distractor options and missed qualifying terms such as 'NOT' and 'EXCEPT'. This pattern is consistent with question-interpretation and distractor-trap susceptibility.`;
+    } else if (primaryDiagnosis === "Concept Application Gap") {
+      specificWeakness = `Concept Application Gap: Difficulty transferring foundational principles into multi-variable CUET application scenarios.`;
+      interpretation = `What the data suggests: Correct responses occur on direct definition stems, but errors cluster on multi-step or application-oriented questions requiring multi-variable synthesis.`;
+    } else if (primaryDiagnosis === "Rapid Response Pacing") {
+      specificWeakness = `Rapid Response Pattern: Unusually fast response times recorded (~${avgTimeSeconds}s/Q) alongside ${incorrectCount} incorrect selections.`;
+      interpretation = `What the data suggests: Very fast responses detected. This may indicate rapid guessing or quick answer selection, but the current telemetry cannot determine intent.`;
     } else if (accuracyPercentage < 50) {
-      specificWeakness = `Foundational Conceptual Gap: Core definitions and key relationships in ${chapter || microTopic} require direct NCERT review.`;
-      interpretation = `Performance indicates uncertainty in basic principles. Re-studying core NCERT summary points is recommended before taking further timed tests.`;
+      specificWeakness = `Foundational Conceptual Gap: Core definitions and relationships in ${chapter || microTopic} require direct NCERT review.`;
+      interpretation = `What the data suggests: Accuracy across fundamental domain questions is below 50%. Performance indicates uncertainty in primary NCERT definitions and core principles.`;
     } else {
       specificWeakness = `Inconsistent Execution: Periodic lapses under exam conditions (${incorrectCount} incorrect out of ${attemptsCount} attempts).`;
-      interpretation = `Your grasp of ${chapter || microTopic} is developing. A focused 5-question targeted drill will solidify consistency and pace.`;
+      interpretation = `What the data suggests: Foundational grasp is established with ${accuracyPercentage}% accuracy, but performance exhibits occasional lapses under timed mock conditions.`;
     }
   }
 
   const evidenceList: string[] = [
     `${incorrectCount}/${attemptsCount} questions incorrect (${accuracyPercentage}% accuracy)`,
-    `Average time spent: ${avgTimeSeconds}s per question (Target: ≤${targetTimeSeconds}s)`,
+    `Avg response time: ${avgTimeSeconds}s per question (Target: ≤${targetTimeSeconds}s)`,
   ];
+
+  if (avgTimeSeconds < 10 && attemptsCount > 0) {
+    evidenceList.push(`Unusually fast response times detected (~${avgTimeSeconds}s/Q). This may indicate rapid answer selection, but telemetry cannot determine intent.`);
+  }
 
   if (attemptsCount < 5) {
     evidenceList.push(`Sample size: ${attemptsCount} attempt${attemptsCount === 1 ? "" : "s"} (Insufficient evidence threshold: <5 attempts)`);
@@ -910,12 +935,36 @@ export function generateFullTopicDiagnosis(
     diagnosticConfidence: threshold.confidence,
     confidenceRationale: threshold.rationale,
     evidenceThresholdLabel: threshold.label,
+    primaryDiagnosis,
+    contributingFactor,
     primaryFailurePattern,
     secondaryFailurePattern,
     specificWeakness,
     evidenceList,
     interpretation,
     errorTaxonomy,
+    recordedMistakes: questionsData
+      ? questionsData
+          .filter((q) => q.isCorrect === false)
+          .map((q, idx) => ({
+            questionId: q.questionId || `q_${idx + 1}`,
+            prompt: q.prompt || "Question stem from CBT attempt",
+            userAnswer: q.selectedOption || "None",
+            correctAnswer: q.correctOption || "Correct Answer",
+            errorCategory:
+              (q.timeSpentSeconds || 0) < 20
+                ? "Guessing / Rapid Selection"
+                : (q.prompt?.toLowerCase().includes("not") || q.prompt?.toLowerCase().includes("except"))
+                ? "Question Interpretation Error"
+                : (q.timeSpentSeconds || 0) > targetTimeSeconds + 15
+                ? "Calculation / Clock Drain"
+                : "Distractor Trap",
+            explanation: q.explanation || "Official NCERT explanation and derivation.",
+            timeSpentSeconds: q.timeSpentSeconds || 0,
+            chapter,
+            microTopic,
+          }))
+      : undefined,
     weakSubtopics,
     masteryModel,
     remediationPlan,

@@ -358,13 +358,15 @@ export interface FullTopicDiagnosis {
     accuracyPercentage: number;
     avgTimeSeconds: number;
     targetTimeSeconds: number;
-    speedVsAccuracyState: "Concept/Knowledge Gap" | "Pacing/Fluency Deficit" | "Validated Core Strength" | "Major Systemic Weakness" | "Impulsive Rushing / Careless";
+    speedVsAccuracyState: "Concept/Knowledge Gap" | "Pacing/Fluency Deficit" | "Validated Core Strength" | "Major Systemic Weakness" | "Rapid Response Pattern";
   };
   diagnosticConfidence: "HIGH" | "MEDIUM" | "LOW" | "INSUFFICIENT_EVIDENCE";
   confidenceRationale: string;
   evidenceThresholdLabel: "Insufficient evidence" | "Early signal" | "Emerging weakness" | "Established weakness";
   primaryFailurePattern: string;
   secondaryFailurePattern?: string;
+  primaryDiagnosis: string;
+  contributingFactor?: string;
   specificWeakness: string;
   evidenceList: string[];
   interpretation: string;
@@ -376,6 +378,7 @@ export interface FullTopicDiagnosis {
   commonTrap: string;
   problemClassification?: "KNOWLEDGE_PROBLEM" | "PERFORMANCE_PROBLEM";
   recommendedPracticeType: "5-Question Concept Repair" | "10-Question Application Drill" | "15-Question Mixed Remediation" | "10-Question Timed Drill" | "Calculation Drill" | "Misconception Repair Drill";
+  recordedMistakes?: TopicMistakeRecord[];
   retestCriteria: {
     targetAccuracy: number;
     targetPacingSeconds: number;
