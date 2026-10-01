@@ -828,9 +828,24 @@ export default function WeaknessRadarClient({
                     <span className="text-[10px] text-black/60 block uppercase">Avg Time</span>
                     <span className="text-base font-black">{selectedModalDiagnosis.observedPerformance.avgTimeSeconds}s</span>
                   </div>
-                  <div className="p-2 bg-white rounded border border-black">
+                  <div className="p-2 bg-white rounded border border-black flex flex-col justify-between items-center overflow-hidden">
                     <span className="text-[10px] text-black/60 block uppercase">Confidence</span>
-                    <span className="text-base font-black">{selectedModalDiagnosis.diagnosticConfidence}</span>
+                    <span
+                      className={`inline-block px-1.5 py-0.5 mt-0.5 rounded text-[11px] sm:text-xs font-black uppercase tracking-tight text-center max-w-full truncate ${
+                        selectedModalDiagnosis.diagnosticConfidence === "HIGH"
+                          ? "bg-[#DCFCE7] text-[#16A34A] border border-[#16A34A]/40"
+                          : selectedModalDiagnosis.diagnosticConfidence === "MEDIUM"
+                          ? "bg-[#FEF3C7] text-[#B45309] border border-[#B45309]/40"
+                          : selectedModalDiagnosis.diagnosticConfidence === "LOW"
+                          ? "bg-[#F3F4F6] text-black/70 border border-black/20"
+                          : "bg-[#FEF2F2] text-[#DC2626] border border-[#DC2626]/40"
+                      }`}
+                      title={selectedModalDiagnosis.diagnosticConfidence.replace(/_/g, " ")}
+                    >
+                      {selectedModalDiagnosis.diagnosticConfidence === "INSUFFICIENT_EVIDENCE"
+                        ? "Limited Data"
+                        : selectedModalDiagnosis.diagnosticConfidence}
+                    </span>
                   </div>
                 </div>
                 <p className="text-[11px] font-semibold text-black/80">{selectedModalDiagnosis.confidenceRationale}</p>
