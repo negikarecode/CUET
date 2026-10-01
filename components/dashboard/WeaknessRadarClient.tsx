@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -786,168 +787,171 @@ export default function WeaknessRadarClient({
       </div>
 
       {/* 6. FULL TOPIC DIAGNOSIS MODAL (SECTION 20) */}
-      {selectedModalDiagnosis && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl border-4 border-black max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-6 shadow-[8px_8px_0px_0px_#000]">
-            {/* Modal Header */}
-            <div className="flex items-start justify-between border-b-2 border-black pb-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-xl font-black text-black tracking-tight">{selectedModalDiagnosis.chapter}</h2>
-                  <span className="px-2 py-0.5 rounded bg-black text-white text-[10px] font-black uppercase">
-                    {selectedModalDiagnosis.subject}
-                  </span>
-                </div>
-                <p className="text-xs text-black/70 font-mono font-bold">{selectedModalDiagnosis.ncertReference}</p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setSelectedModalDiagnosis(null)}
-                className="p-1.5 rounded-lg border-2 border-black bg-[#FAF7EE] hover:bg-[#FF5C5C] hover:text-white text-black transition-colors"
-              >
-                <X className="w-5 h-5 stroke-[2.5]" />
-              </button>
-            </div>
-
-            {/* Modal Content Sections */}
-            <div className="space-y-6 text-xs">
-              {/* 1. TOPIC OVERVIEW */}
-              <div className="p-4 rounded-xl border-2 border-black bg-[#FAF7EE] space-y-3">
-                <h3 className="font-black text-black uppercase text-xs tracking-wider">TOPIC OVERVIEW</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-center">
-                  <div className="p-2 bg-white rounded border border-black">
-                    <span className="text-[10px] text-black/60 block uppercase">Accuracy</span>
-                    <span className="text-base font-black">{selectedModalDiagnosis.observedPerformance.accuracyPercentage}%</span>
-                  </div>
-                  <div className="p-2 bg-white rounded border border-black">
-                    <span className="text-[10px] text-black/60 block uppercase">Attempts</span>
-                    <span className="text-base font-black">{selectedModalDiagnosis.observedPerformance.attemptsCount}</span>
-                  </div>
-                  <div className="p-2 bg-white rounded border border-black">
-                    <span className="text-[10px] text-black/60 block uppercase">Avg Time</span>
-                    <span className="text-base font-black">{selectedModalDiagnosis.observedPerformance.avgTimeSeconds}s</span>
-                  </div>
-                  <div className="p-2 bg-white rounded border border-black flex flex-col justify-between items-center overflow-hidden">
-                    <span className="text-[10px] text-black/60 block uppercase">Confidence</span>
-                    <span
-                      className={`inline-block px-1.5 py-0.5 mt-0.5 rounded text-[11px] sm:text-xs font-black uppercase tracking-tight text-center max-w-full truncate ${
-                        selectedModalDiagnosis.diagnosticConfidence === "HIGH"
-                          ? "bg-[#DCFCE7] text-[#16A34A] border border-[#16A34A]/40"
-                          : selectedModalDiagnosis.diagnosticConfidence === "MEDIUM"
-                          ? "bg-[#FEF3C7] text-[#B45309] border border-[#B45309]/40"
-                          : selectedModalDiagnosis.diagnosticConfidence === "LOW"
-                          ? "bg-[#F3F4F6] text-black/70 border border-black/20"
-                          : "bg-[#FEF2F2] text-[#DC2626] border border-[#DC2626]/40"
-                      }`}
-                      title={selectedModalDiagnosis.diagnosticConfidence.replace(/_/g, " ")}
-                    >
-                      {selectedModalDiagnosis.diagnosticConfidence === "INSUFFICIENT_EVIDENCE"
-                        ? "Limited Data"
-                        : selectedModalDiagnosis.diagnosticConfidence}
+      {selectedModalDiagnosis &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+            <div className="bg-white rounded-2xl border-4 border-black max-w-3xl w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-6 shadow-[8px_8px_0px_0px_#000] my-auto">
+              {/* Modal Header */}
+              <div className="flex items-start justify-between border-b-2 border-black pb-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h2 className="text-xl font-black text-black tracking-tight">{selectedModalDiagnosis.chapter}</h2>
+                    <span className="px-2 py-0.5 rounded bg-black text-white text-[10px] font-black uppercase">
+                      {selectedModalDiagnosis.subject}
                     </span>
                   </div>
-                </div>
-                <p className="text-[11px] font-semibold text-black/80">{selectedModalDiagnosis.confidenceRationale}</p>
-              </div>
-
-              {/* 2. WHAT EXACTLY IS GOING WRONG? */}
-              <div className="space-y-2">
-                <h3 className="font-black text-black uppercase text-xs tracking-wider">WHAT EXACTLY IS GOING WRONG?</h3>
-                <p className="font-bold text-black/90">{selectedModalDiagnosis.specificWeakness}</p>
-                <div className="p-3 rounded-lg border border-black bg-white space-y-1">
-                  <span className="font-bold text-black text-[11px] block">Observed Evidence Signals:</span>
-                  <ul className="list-disc pl-4 space-y-0.5 text-black/80 font-semibold">
-                    {selectedModalDiagnosis.evidenceList.map((ev, i) => (
-                      <li key={i}>{ev}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              {/* 3. ROOT CAUSE EXPLANATION */}
-              <div className="space-y-2">
-                <h3 className="font-black text-black uppercase text-xs tracking-wider">WHY THIS IS HAPPENING</h3>
-                <p className="font-medium text-black/90 leading-relaxed">{selectedModalDiagnosis.interpretation}</p>
-              </div>
-
-              {/* 4. WHAT TO STUDY & HOW TO STUDY */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="p-3.5 rounded-lg border-2 border-black bg-[#F0FDF4] space-y-2">
-                  <h4 className="font-black text-black uppercase text-[11px]">WHAT TO STUDY</h4>
-                  <ul className="list-disc pl-4 space-y-1 font-semibold text-black/80">
-                    {selectedModalDiagnosis.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => (
-                      <li key={i}>{t}</li>
-                    ))}
-                  </ul>
+                  <p className="text-xs text-black/70 font-mono font-bold">{selectedModalDiagnosis.ncertReference}</p>
                 </div>
 
-                <div className="p-3.5 rounded-lg border-2 border-black bg-[#EFF6FF] space-y-2">
-                  <h4 className="font-black text-black uppercase text-[11px]">HOW TO STUDY (DECISION TREE)</h4>
-                  <ol className="list-decimal pl-4 space-y-1 font-semibold text-black/80">
-                    {selectedModalDiagnosis.remediationPlan.step2DecisionFramework.checklist.map((c, i) => (
-                      <li key={i}>{c}</li>
-                    ))}
-                  </ol>
-                </div>
-              </div>
-
-              {/* 5. SHORTCUTS & COMMON TRAPS */}
-              {selectedModalDiagnosis.examTactic && (
-                <div className="p-4 rounded-xl border-2 border-black bg-[#FFFBEB] space-y-2">
-                  <h3 className="font-black text-black uppercase text-xs tracking-wider">SHORTCUTS & EXAM TACTICS</h3>
-                  <p className="font-bold text-black">QUICK METHOD: {selectedModalDiagnosis.examTactic.quickMethod}</p>
-                  <p className="font-semibold text-black/80">FULL METHOD: {selectedModalDiagnosis.examTactic.fullMethod}</p>
-                  <p className="font-bold text-[#DC2626]">CAUTION: {selectedModalDiagnosis.examTactic.caution}</p>
-                </div>
-              )}
-
-              {/* 6. WHAT TO PRACTICE */}
-              <div className="p-4 rounded-xl border-2 border-black bg-white space-y-3">
-                <h3 className="font-black text-black uppercase text-xs tracking-wider">STRUCTURED PRACTICE PLAN</h3>
-                <div className="space-y-2">
-                  {selectedModalDiagnosis.remediationPlan.step3Practice.phases.map((ph) => (
-                    <div key={ph.phase} className="p-3 rounded-lg border border-black bg-[#FAF7EE] flex items-center justify-between gap-3">
-                      <div>
-                        <span className="font-black text-black block">{ph.title} ({ph.questionCount} Qs)</span>
-                        <span className="text-[11px] font-semibold text-black/70">{ph.description}</span>
-                      </div>
-                      <span className="px-2 py-1 bg-black text-white rounded font-mono font-black text-[10px] shrink-0">
-                        Target ≥{ph.targetAccuracyPercentage}%
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Modal Action CTA */}
-              <div className="pt-2 flex items-center justify-end gap-3 border-t-2 border-black">
                 <button
                   type="button"
                   onClick={() => setSelectedModalDiagnosis(null)}
-                  className="px-4 py-2 rounded-lg bg-[#FAF7EE] hover:bg-white text-black font-black text-xs border-2 border-black transition-all"
+                  className="p-1.5 rounded-lg border-2 border-black bg-[#FAF7EE] hover:bg-[#FF5C5C] hover:text-white text-black transition-colors"
                 >
-                  Close Diagnosis
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const topic = selectedModalDiagnosis.chapter;
-                    const subject = selectedModalDiagnosis.subject;
-                    const practiceType = selectedModalDiagnosis.recommendedPracticeType;
-                    setSelectedModalDiagnosis(null);
-                    handleLaunchTargetedPractice(topic, subject, practiceType);
-                  }}
-                  className="px-5 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center gap-1.5"
-                >
-                  <Play className="w-3.5 h-3.5 fill-white" />
-                  <span>Start Targeted Practice</span>
+                  <X className="w-5 h-5 stroke-[2.5]" />
                 </button>
               </div>
+
+              {/* Modal Content Sections */}
+              <div className="space-y-6 text-xs">
+                {/* 1. TOPIC OVERVIEW */}
+                <div className="p-4 rounded-xl border-2 border-black bg-[#FAF7EE] space-y-3">
+                  <h3 className="font-black text-black uppercase text-xs tracking-wider">TOPIC OVERVIEW</h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-center">
+                    <div className="p-2 bg-white rounded border border-black">
+                      <span className="text-[10px] text-black/60 block uppercase">Accuracy</span>
+                      <span className="text-base font-black">{selectedModalDiagnosis.observedPerformance.accuracyPercentage}%</span>
+                    </div>
+                    <div className="p-2 bg-white rounded border border-black">
+                      <span className="text-[10px] text-black/60 block uppercase">Attempts</span>
+                      <span className="text-base font-black">{selectedModalDiagnosis.observedPerformance.attemptsCount}</span>
+                    </div>
+                    <div className="p-2 bg-white rounded border border-black">
+                      <span className="text-[10px] text-black/60 block uppercase">Avg Time</span>
+                      <span className="text-base font-black">{selectedModalDiagnosis.observedPerformance.avgTimeSeconds}s</span>
+                    </div>
+                    <div className="p-2 bg-white rounded border border-black flex flex-col justify-between items-center overflow-hidden">
+                      <span className="text-[10px] text-black/60 block uppercase">Confidence</span>
+                      <span
+                        className={`inline-block px-1.5 py-0.5 mt-0.5 rounded text-[11px] sm:text-xs font-black uppercase tracking-tight text-center max-w-full truncate ${
+                          selectedModalDiagnosis.diagnosticConfidence === "HIGH"
+                            ? "bg-[#DCFCE7] text-[#16A34A] border border-[#16A34A]/40"
+                            : selectedModalDiagnosis.diagnosticConfidence === "MEDIUM"
+                            ? "bg-[#FEF3C7] text-[#B45309] border border-[#B45309]/40"
+                            : selectedModalDiagnosis.diagnosticConfidence === "LOW"
+                            ? "bg-[#F3F4F6] text-black/70 border border-black/20"
+                            : "bg-[#FEF2F2] text-[#DC2626] border border-[#DC2626]/40"
+                        }`}
+                        title={selectedModalDiagnosis.diagnosticConfidence.replace(/_/g, " ")}
+                      >
+                        {selectedModalDiagnosis.diagnosticConfidence === "INSUFFICIENT_EVIDENCE"
+                          ? "Limited Data"
+                          : selectedModalDiagnosis.diagnosticConfidence}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-[11px] font-semibold text-black/80">{selectedModalDiagnosis.confidenceRationale}</p>
+                </div>
+
+                {/* 2. WHAT EXACTLY IS GOING WRONG? */}
+                <div className="space-y-2">
+                  <h3 className="font-black text-black uppercase text-xs tracking-wider">WHAT EXACTLY IS GOING WRONG?</h3>
+                  <p className="font-bold text-black/90">{selectedModalDiagnosis.specificWeakness}</p>
+                  <div className="p-3 rounded-lg border border-black bg-white space-y-1">
+                    <span className="font-bold text-black text-[11px] block">Observed Evidence Signals:</span>
+                    <ul className="list-disc pl-4 space-y-0.5 text-black/80 font-semibold">
+                      {selectedModalDiagnosis.evidenceList.map((ev, i) => (
+                        <li key={i}>{ev}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* 3. ROOT CAUSE EXPLANATION */}
+                <div className="space-y-2">
+                  <h3 className="font-black text-black uppercase text-xs tracking-wider">WHY THIS IS HAPPENING</h3>
+                  <p className="font-medium text-black/90 leading-relaxed">{selectedModalDiagnosis.interpretation}</p>
+                </div>
+
+                {/* 4. WHAT TO STUDY & HOW TO STUDY */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="p-3.5 rounded-lg border-2 border-black bg-[#F0FDF4] space-y-2">
+                    <h4 className="font-black text-black uppercase text-[11px]">WHAT TO STUDY</h4>
+                    <ul className="list-disc pl-4 space-y-1 font-semibold text-black/80">
+                      {selectedModalDiagnosis.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => (
+                        <li key={i}>{t}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="p-3.5 rounded-lg border-2 border-black bg-[#EFF6FF] space-y-2">
+                    <h4 className="font-black text-black uppercase text-[11px]">HOW TO STUDY (DECISION TREE)</h4>
+                    <ol className="list-decimal pl-4 space-y-1 font-semibold text-black/80">
+                      {selectedModalDiagnosis.remediationPlan.step2DecisionFramework.checklist.map((c, i) => (
+                        <li key={i}>{c}</li>
+                      ))}
+                    </ol>
+                  </div>
+                </div>
+
+                {/* 5. SHORTCUTS & COMMON TRAPS */}
+                {selectedModalDiagnosis.examTactic && (
+                  <div className="p-4 rounded-xl border-2 border-black bg-[#FFFBEB] space-y-2">
+                    <h3 className="font-black text-black uppercase text-xs tracking-wider">SHORTCUTS & EXAM TACTICS</h3>
+                    <p className="font-bold text-black">QUICK METHOD: {selectedModalDiagnosis.examTactic.quickMethod}</p>
+                    <p className="font-semibold text-black/80">FULL METHOD: {selectedModalDiagnosis.examTactic.fullMethod}</p>
+                    <p className="font-bold text-[#DC2626]">CAUTION: {selectedModalDiagnosis.examTactic.caution}</p>
+                  </div>
+                )}
+
+                {/* 6. WHAT TO PRACTICE */}
+                <div className="p-4 rounded-xl border-2 border-black bg-white space-y-3">
+                  <h3 className="font-black text-black uppercase text-xs tracking-wider">STRUCTURED PRACTICE PLAN</h3>
+                  <div className="space-y-2">
+                    {selectedModalDiagnosis.remediationPlan.step3Practice.phases.map((ph) => (
+                      <div key={ph.phase} className="p-3 rounded-lg border border-black bg-[#FAF7EE] flex items-center justify-between gap-3">
+                        <div>
+                          <span className="font-black text-black block">{ph.title} ({ph.questionCount} Qs)</span>
+                          <span className="text-[11px] font-semibold text-black/70">{ph.description}</span>
+                        </div>
+                        <span className="px-2 py-1 bg-black text-white rounded font-mono font-black text-[10px] shrink-0">
+                          Target ≥{ph.targetAccuracyPercentage}%
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Modal Action CTA */}
+                <div className="pt-2 flex items-center justify-end gap-3 border-t-2 border-black">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedModalDiagnosis(null)}
+                    className="px-4 py-2 rounded-lg bg-[#FAF7EE] hover:bg-white text-black font-black text-xs border-2 border-black transition-all"
+                  >
+                    Close Diagnosis
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const topic = selectedModalDiagnosis.chapter;
+                      const subject = selectedModalDiagnosis.subject;
+                      const practiceType = selectedModalDiagnosis.recommendedPracticeType;
+                      setSelectedModalDiagnosis(null);
+                      handleLaunchTargetedPractice(topic, subject, practiceType);
+                    }}
+                    className="px-5 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center gap-1.5"
+                  >
+                    <Play className="w-3.5 h-3.5 fill-white" />
+                    <span>Start Targeted Practice</span>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }
