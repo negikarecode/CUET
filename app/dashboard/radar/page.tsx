@@ -171,7 +171,7 @@ export default async function WeaknessRadarPage() {
         });
         serverData.subjectCalibration = subMap;
 
-        // Group by micro_topic & chapter
+        // Group by chapter (consistent with analytics.ts source-of-truth)
         const topicMap = new Map<
           string,
           {
@@ -184,16 +184,22 @@ export default async function WeaknessRadarPage() {
             incorrectCount: number;
             timeSinksCount: number;
             totalTimeSpent: number;
+            recordedMistakes: import("@/types").TopicMistakeRecord[];
+            questionsData: any[];
           }
         >();
 
         attemptedRows.forEach((ua: any) => {
           const q = ua.questions;
           const subject = q?.subject || "Physics";
-          const chapter = q?.chapter || "Domain Knowledge Calibration";
-          const microTopic = q?.micro_topic || "Key Concept";
+          let rawChapter = (q?.chapter || "Domain Knowledge Calibration").trim();
+          if (rawChapter === "Current Electricity & Semiconductor Electronics") {
+            rawChapter = "Current Electricity";
+          }
+          const chapter = rawChapter || "General Domain";
+          const microTopic = (q?.micro_topic || chapter).trim();
           const ncertRef = q?.ncert_reference || `NCERT Class 12 (${chapter})`;
-          const key = `${subject.toLowerCase()}:::${chapter.toLowerCase()}:::${microTopic.toLowerCase()}`;
+          const key = `${subject.toLowerCase()}:::${chapter.toLowerCase()}`;
 
           let item = topicMap.get(key);
           if (!item) {
@@ -207,15 +213,29 @@ export default async function WeaknessRadarPage() {
               incorrectCount: 0,
               timeSinksCount: 0,
               totalTimeSpent: 0,
+              recordedMistakes: [],
+              questionsData: [],
             };
             topicMap.set(key, item);
           }
 
           item.attemptsCount += 1;
-          if (ua.is_correct === true) {
+          const isCorrect = ua.is_correct === true || ua.is_correct === "true" || ua.is_correct === 1;
+          if (isCorrect) {
             item.correctCount += 1;
-          } else if (ua.is_correct === false) {
+          } else {
             item.incorrectCount += 1;
+            item.recordedMistakes.push({
+              questionId: q?.id || ua.question_id || `err_${Date.now()}`,
+              prompt: q?.question_text || `Question from ${chapter}`,
+              userAnswer: ua.selected_option || "None",
+              correctAnswer: q?.correct_option || "A",
+              errorCategory: "Conceptual Gap",
+              explanation: q?.explanation || `Review ${chapter} principles in NCERT.`,
+              timeSpentSeconds: ua.time_spent_seconds || 0,
+              chapter,
+              microTopic,
+            });
           }
 
           const timeSpent = ua.time_spent_seconds || 0;
@@ -223,12 +243,31 @@ export default async function WeaknessRadarPage() {
           if (ua.is_time_sink || timeSpent > 72) {
             item.timeSinksCount += 1;
           }
+
+          item.questionsData.push({
+            id: q?.id || ua.question_id,
+            subject,
+            chapter,
+            microTopic,
+            isCorrect,
+            selectedOption: ua.selected_option,
+            correctOption: q?.correct_option,
+            timeSpentSeconds: timeSpent,
+            isTimeSink: ua.is_time_sink || timeSpent > 72,
+          });
         });
 
         const computedTopics = Array.from(topicMap.values()).map((item) => {
           const acc = Math.round((item.correctCount / item.attemptsCount) * 100);
+          // Strictly gate status: <5 attempts is Limited Data (polish), NEVER critical weakness
           const status: "critical" | "polish" | "mastered" =
-            acc < 50 ? "critical" : acc < 80 ? "polish" : "mastered";
+            item.attemptsCount < 5
+              ? "polish"
+              : acc < 50
+              ? "critical"
+              : acc < 80
+              ? "polish"
+              : "mastered";
           const avgTime = Math.round(item.totalTimeSpent / item.attemptsCount);
           const fullDiagnosis = generateFullTopicDiagnosis(
             item.subject,
@@ -237,7 +276,8 @@ export default async function WeaknessRadarPage() {
             item.attemptsCount,
             item.correctCount,
             item.incorrectCount,
-            avgTime
+            avgTime,
+            item.questionsData
           );
 
           return {
@@ -253,6 +293,10 @@ export default async function WeaknessRadarPage() {
             timeSinksCount: item.timeSinksCount,
             status,
             fullDiagnosis,
+            remediationStage: fullDiagnosis.remediationStage,
+            isRecovered: fullDiagnosis.isRecovered,
+            recoveryEvidence: fullDiagnosis.recoveryEvidence,
+            recordedMistakes: item.recordedMistakes.slice(0, 5),
           };
         });
 

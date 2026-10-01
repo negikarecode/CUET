@@ -238,6 +238,14 @@ export type WeaknessSeverityTier =
   | "minor"
   | "potential";
 
+export type RemediationStage =
+  | "DETECTED"
+  | "DIAGNOSED"
+  | "LEARNING"
+  | "PRACTICING"
+  | "VALIDATING"
+  | "RECOVERED";
+
 export type StrengthMasteryTier =
   | "core"
   | "emerging"
@@ -366,12 +374,31 @@ export interface FullTopicDiagnosis {
   remediationPlan: RemediationPlan;
   examTactic?: ExamTactic;
   commonTrap: string;
+  problemClassification?: "KNOWLEDGE_PROBLEM" | "PERFORMANCE_PROBLEM";
   recommendedPracticeType: "5-Question Concept Repair" | "10-Question Application Drill" | "15-Question Mixed Remediation" | "10-Question Timed Drill" | "Calculation Drill" | "Misconception Repair Drill";
   retestCriteria: {
     targetAccuracy: number;
     targetPacingSeconds: number;
     minimumNewAttemptsRequired: number;
   };
+  remediationStage?: RemediationStage;
+  isRecovered?: boolean;
+  recoveryEvidence?: {
+    beforeAccuracy: number;
+    afterAccuracy: number;
+    beforeAvgTime: number;
+    afterAvgTime: number;
+    beforeConceptErrors: number;
+    afterConceptErrors: number;
+    recoveredAt?: string;
+    explanation: string;
+  };
+  progressHistory?: Array<{
+    date: string;
+    accuracy: number;
+    avgTimeSeconds: number;
+    attemptedCount: number;
+  }>;
   progressTracking?: {
     beforeAccuracy: number;
     beforeAvgTime: number;
@@ -380,6 +407,18 @@ export interface FullTopicDiagnosis {
     hasRetested: boolean;
     verdict?: string;
   };
+}
+
+export interface TopicMistakeRecord {
+  questionId: string;
+  prompt: string;
+  userAnswer: string;
+  correctAnswer: string;
+  errorCategory: string;
+  explanation: string;
+  timeSpentSeconds: number;
+  chapter: string;
+  microTopic?: string;
 }
 
 export interface TopicMastery {
@@ -394,6 +433,18 @@ export interface TopicMastery {
   timeSinksCount: number;
   avgTimeSeconds: number;
   status: "critical" | "polish" | "mastered";
+  remediationStage?: RemediationStage;
+  isRecovered?: boolean;
+  recoveryEvidence?: {
+    beforeAccuracy: number;
+    afterAccuracy: number;
+    beforeAvgTime: number;
+    afterAvgTime: number;
+    beforeConceptErrors: number;
+    afterConceptErrors: number;
+    recoveredAt?: string;
+    explanation: string;
+  };
   masteryScore?: number;
   diagnosisLabel?: string;
   diagnosticInsight?: string;
@@ -409,6 +460,8 @@ export interface TopicMastery {
   scoreImpactPotentialMarks?: number;
   // Comprehensive Diagnostic Engine Fields
   fullDiagnosis?: FullTopicDiagnosis;
+  // Recorded representative mistakes from real attempts
+  recordedMistakes?: TopicMistakeRecord[];
 }
 
 export interface TimeSinkAlertData {

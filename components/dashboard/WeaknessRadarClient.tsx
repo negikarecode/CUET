@@ -290,6 +290,25 @@ export default function WeaknessRadarClient({
       : subjectCalibrationMap[selectedRadarSubject]?.accuracyPercentage ?? summaryReport.overallAccuracy;
   summaryReport.overallAccuracy = displayAccuracy;
 
+  // Compute deterministic "Next Best Action" topic
+  // Prioritizes established/emerging weaknesses with lowest accuracy and high error impact
+  const prioritizedCandidate = [...weaknessRadar]
+    .filter((t) => !t.isRecovered)
+    .sort((a, b) => {
+      // Prioritize topics with enough data first (>=5 attempts)
+      const aHasData = (a.attemptsCount || 0) >= 5 ? 1 : 0;
+      const bHasData = (b.attemptsCount || 0) >= 5 ? 1 : 0;
+      if (aHasData !== bHasData) return bHasData - aHasData;
+      // Then lowest accuracy
+      if (a.accuracyPercentage !== b.accuracyPercentage) {
+        return a.accuracyPercentage - b.accuracyPercentage;
+      }
+      // Then highest error count
+      return (b.incorrectCount || 0) - (a.incorrectCount || 0);
+    })[0] || weaknessRadar[0];
+
+  const nextActionDiagnosis = prioritizedCandidate ? getOrGenerateDiagnosis(prioritizedCandidate) : null;
+
   // Launch targeted practice drill
   const handleLaunchTargetedPractice = async (topic: string, subject: string, practiceType?: string) => {
     setActiveRepairTopic(topic);
@@ -317,7 +336,7 @@ export default function WeaknessRadarClient({
           subject: quizData.subject,
           code: quizData.code,
           totalQuestions: quizData.totalQuestions || 5,
-          durationMinutes: quizData.durationMinutes || 8,
+          durationMinutes: quizData.durationMinutes || 6,
         },
         quizData.questions
       );
@@ -344,7 +363,7 @@ export default function WeaknessRadarClient({
               <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
             </Link>
             <h1 className="text-xl sm:text-2xl font-black text-black tracking-tight flex items-center gap-2">
-              <span>Diagnostic & Remediation Engine</span>
+              <span>Diagnostic &amp; Remediation Engine</span>
               <span className="px-2 py-0.5 rounded bg-[#FEF3C7] border border-black text-[10px] font-black uppercase">
                 Weakness Radar
               </span>
@@ -366,7 +385,91 @@ export default function WeaknessRadarClient({
         </div>
       </div>
 
-      {/* 2. REAL DIAGNOSTIC SUMMARY DASHBOARD REPORT (SECTIONS 18 & 25) */}
+      {/* 2. PROMINENT "YOUR NEXT BEST ACTION" HERO CARD */}
+      {prioritizedCandidate && nextActionDiagnosis && (
+        <div className="bg-white rounded-2xl border-3 border-black p-5 sm:p-6 shadow-[6px_6px_0px_0px_#000] relative overflow-hidden">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div className="space-y-2.5 max-w-2xl">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-1 rounded bg-black text-white text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-[1px_1px_0px_0px_#000]">
+                  <Zap className="w-3 h-3 text-[#F59E0B] fill-[#F59E0B]" />
+                  <span>YOUR NEXT BEST ACTION</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-[#FAF7EE] text-black border border-black text-[10px] font-bold uppercase">
+                  {prioritizedCandidate.subject}
+                </span>
+                <span
+                  className={`px-2 py-0.5 rounded border border-black text-[10px] font-black uppercase ${
+                    nextActionDiagnosis.diagnosticConfidence === "HIGH"
+                      ? "bg-[#DCFCE7] text-[#16A34A]"
+                      : nextActionDiagnosis.diagnosticConfidence === "MEDIUM"
+                      ? "bg-[#FEF3C7] text-[#B45309]"
+                      : nextActionDiagnosis.diagnosticConfidence === "LOW"
+                      ? "bg-[#F3F4F6] text-black/70"
+                      : "bg-[#F3F4F6] text-black/60"
+                  }`}
+                >
+                  {nextActionDiagnosis.evidenceThresholdLabel}
+                </span>
+              </div>
+
+              <div>
+                <h2 className="text-xl sm:text-2xl font-black text-black tracking-tight">
+                  {prioritizedCandidate.chapter}
+                </h2>
+                <p className="text-xs sm:text-sm font-bold text-black/80 font-mono mt-0.5">
+                  {prioritizedCandidate.accuracyPercentage}% Accuracy · {prioritizedCandidate.attemptsCount} Attempts
+                  {prioritizedCandidate.avgTimeSeconds ? ` · ~${prioritizedCandidate.avgTimeSeconds}s / Q` : ""}
+                </p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#FAF7EE] border-2 border-black text-xs space-y-1">
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#DC2626] block">
+                  Root Cause / Priority Justification:
+                </span>
+                <p className="text-black/90 font-bold leading-relaxed">
+                  {nextActionDiagnosis.diagnosticConfidence === "INSUFFICIENT_EVIDENCE"
+                    ? `Limited Data: Only ${prioritizedCandidate.attemptsCount} question attempts recorded. Solve 5 adaptive questions to build reliable diagnostic telemetry.`
+                    : `${nextActionDiagnosis.specificWeakness}. Prioritized due to high question frequency and mark-leakage risk in upcoming full mocks.`}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end justify-center gap-3 shrink-0">
+              <button
+                type="button"
+                disabled={activeRepairTopic === (prioritizedCandidate.troubleTopics?.[0] || prioritizedCandidate.chapter)}
+                onClick={() =>
+                  handleLaunchTargetedPractice(
+                    prioritizedCandidate.troubleTopics?.[0] || prioritizedCandidate.chapter,
+                    prioritizedCandidate.subject,
+                    nextActionDiagnosis.recommendedPracticeType
+                  )
+                }
+                className="px-6 py-3.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs sm:text-sm border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                <Play className="w-4 h-4 fill-white shrink-0" />
+                <span>
+                  {activeRepairTopic === (prioritizedCandidate.troubleTopics?.[0] || prioritizedCandidate.chapter)
+                    ? "Building Drill..."
+                    : "START 6-MIN REPAIR"}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedModalDiagnosis(nextActionDiagnosis)}
+                className="px-4 py-2 rounded-xl bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>View Full Diagnosis</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. REAL DIAGNOSTIC SUMMARY DASHBOARD REPORT (SECTIONS 18 & 25) */}
       <div className="bg-white rounded-xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] space-y-4">
         <div className="flex items-center justify-between border-b-2 border-black/10 pb-3">
           <div className="flex items-center gap-2">
@@ -525,7 +628,7 @@ export default function WeaknessRadarClient({
                 {/* Topic Card Header */}
                 <div className="p-4 sm:p-5 border-b-2 border-black space-y-3">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <div className="space-y-1">
+                    <div className="space-y-1.5">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-black text-black text-base sm:text-lg tracking-tight">
                           {diag.chapter}
@@ -533,19 +636,30 @@ export default function WeaknessRadarClient({
                         <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-black/5 text-black/70 border border-black/10">
                           {diag.subject}
                         </span>
+
+                        {/* Confidence Badge */}
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-black uppercase border border-black ${
-                            diag.observedPerformance.accuracyPercentage < 35
-                              ? "bg-[#FEF2F2] text-[#DC2626]"
-                              : diag.observedPerformance.accuracyPercentage < 60
+                            diag.diagnosticConfidence === "HIGH"
+                              ? "bg-[#DCFCE7] text-[#16A34A]"
+                              : diag.diagnosticConfidence === "MEDIUM"
                               ? "bg-[#FEF3C7] text-[#B45309]"
-                              : "bg-[#DBEAFE] text-[#1D4ED8]"
+                              : diag.diagnosticConfidence === "LOW"
+                              ? "bg-[#F3F4F6] text-black/70"
+                              : "bg-[#F3F4F6] text-black/60"
                           }`}
                         >
                           {diag.evidenceThresholdLabel} ({diag.observedPerformance.accuracyPercentage}%)
                         </span>
+
+                        {/* Pipeline Stage Badge */}
+                        <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-[#1E293B] text-white border border-black">
+                          {diag.remediationStage || topicItem.remediationStage || "DETECTED"}
+                        </span>
+
+                        {/* Problem Type: Knowledge vs Performance */}
                         <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-[#FAF7EE] text-black border border-black">
-                          {diag.observedPerformance.speedVsAccuracyState}
+                          {diag.problemClassification === "PERFORMANCE_PROBLEM" ? "⚡ Performance Issue" : "🧠 Knowledge Gap"}
                         </span>
                       </div>
 
@@ -578,7 +692,7 @@ export default function WeaknessRadarClient({
                         className="px-3.5 py-1.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
                       >
                         <Play className="w-3 h-3 fill-white" />
-                        <span>{isRepairing ? "Building Drill..." : "Start Targeted Practice"}</span>
+                        <span>{isRepairing ? "Building Drill..." : diag.observedPerformance.attemptsCount < 5 ? "Practice 5 Questions" : "Start Repair Plan"}</span>
                       </button>
 
                       <button
@@ -604,11 +718,24 @@ export default function WeaknessRadarClient({
                 {/* Collapsible / Expandable Details */}
                 {isExpanded && (
                   <div className="p-5 bg-white space-y-5">
+                    {/* SECTION: EVIDENCE BEHIND THIS DIAGNOSIS */}
+                    <div className="p-4 rounded-xl border-2 border-black bg-[#F8FAFC] space-y-2">
+                      <span className="text-[11px] font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB]" />
+                        <span>WHY WE THINK THIS (EVIDENCE BEHIND THIS DIAGNOSIS)</span>
+                      </span>
+                      <ul className="list-disc pl-5 space-y-1 text-xs text-black/80 font-bold">
+                        {diag.evidenceList.map((ev, i) => (
+                          <li key={i}>{ev}</li>
+                        ))}
+                      </ul>
+                    </div>
+
                     {/* SECTION: WHY YOU'RE LOSING MARKS (SECTION 7) */}
                     <div className="space-y-2">
                       <h3 className="text-xs font-black text-black uppercase tracking-wider flex items-center gap-1.5">
                         <AlertTriangle className="w-3.5 h-3.5 text-[#DC2626]" />
-                        <span>WHY YOU&apos;RE LOSING MARKS</span>
+                        <span>WHY YOU&apos;RE LOSING MARKS (ERROR TAXONOMY)</span>
                       </h3>
 
                       {diag.errorTaxonomy.percentages ? (
@@ -655,6 +782,31 @@ export default function WeaknessRadarClient({
                         </div>
                       )}
                     </div>
+
+                    {/* SECTION: YOUR MISTAKES (REPRESENTATIVE ATTEMPT LOGS) */}
+                    {topicItem.recordedMistakes && topicItem.recordedMistakes.length > 0 && (
+                      <div className="space-y-2">
+                        <h3 className="text-xs font-black text-black uppercase tracking-wider flex items-center gap-1.5">
+                          <AlertTriangle className="w-3.5 h-3.5 text-[#DC2626]" />
+                          <span>YOUR MISTAKES ({topicItem.recordedMistakes.length} RECORDED)</span>
+                        </h3>
+                        <div className="space-y-2">
+                          {topicItem.recordedMistakes.slice(0, 3).map((m, idx) => (
+                            <div key={idx} className="p-3 rounded-lg border border-black bg-white space-y-1 text-xs">
+                              <p className="font-bold text-black">{m.prompt}</p>
+                              <div className="flex items-center gap-3 text-[11px] font-mono">
+                                <span className="text-[#DC2626] font-bold">Your Ans: {m.userAnswer}</span>
+                                <span className="text-[#16A34A] font-bold">Correct Ans: {m.correctAnswer}</span>
+                                <span className="px-1.5 py-0.2 rounded bg-black/5 text-black font-sans font-bold text-[10px]">
+                                  {m.errorCategory}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-black/70 font-semibold">{m.explanation}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {/* SECTION: EXACT SUBTOPICS (SECTION 8) */}
                     <div className="space-y-2">
@@ -854,74 +1006,157 @@ export default function WeaknessRadarClient({
                   <p className="text-[11px] font-semibold text-black/80">{selectedModalDiagnosis.confidenceRationale}</p>
                 </div>
 
-                {/* 2. WHAT EXACTLY IS GOING WRONG? */}
-                <div className="space-y-2">
-                  <h3 className="font-black text-black uppercase text-xs tracking-wider">WHAT EXACTLY IS GOING WRONG?</h3>
-                  <p className="font-bold text-black/90">{selectedModalDiagnosis.specificWeakness}</p>
-                  <div className="p-3 rounded-lg border border-black bg-white space-y-1">
-                    <span className="font-bold text-black text-[11px] block">Observed Evidence Signals:</span>
-                    <ul className="list-disc pl-4 space-y-0.5 text-black/80 font-semibold">
-                      {selectedModalDiagnosis.evidenceList.map((ev, i) => (
-                        <li key={i}>{ev}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+                {/* CONDITIONAL CONTENT: LIMITED DATA (<5 attempts) VS ESTABLISHED DIAGNOSIS */}
+                {selectedModalDiagnosis.observedPerformance.attemptsCount < 5 ? (
+                  <div className="p-6 rounded-xl border-2 border-black bg-[#FAF7EE] text-center space-y-4">
+                    <div className="w-12 h-12 rounded-full bg-[#FEF3C7] border-2 border-black flex items-center justify-center mx-auto text-[#B45309] shadow-[2px_2px_0px_0px_#000]">
+                      <AlertTriangle className="w-6 h-6 stroke-[2.5]" />
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="text-base font-black text-black">LIMITED DATA TELEMETRY</h4>
+                      <p className="text-xs text-black/70 font-semibold max-w-md mx-auto">
+                        Not enough evidence to diagnose a weakness yet. You have only solved{" "}
+                        <span className="font-black text-black">{selectedModalDiagnosis.observedPerformance.attemptsCount}</span> question
+                        {selectedModalDiagnosis.observedPerformance.attemptsCount === 1 ? "" : "s"} in this topic (need at least 5 to detect patterns).
+                      </p>
+                    </div>
 
-                {/* 3. ROOT CAUSE EXPLANATION */}
-                <div className="space-y-2">
-                  <h3 className="font-black text-black uppercase text-xs tracking-wider">WHY THIS IS HAPPENING</h3>
-                  <p className="font-medium text-black/90 leading-relaxed">{selectedModalDiagnosis.interpretation}</p>
-                </div>
-
-                {/* 4. WHAT TO STUDY & HOW TO STUDY */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="p-3.5 rounded-lg border-2 border-black bg-[#F0FDF4] space-y-2">
-                    <h4 className="font-black text-black uppercase text-[11px]">WHAT TO STUDY</h4>
-                    <ul className="list-disc pl-4 space-y-1 font-semibold text-black/80">
-                      {selectedModalDiagnosis.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => (
-                        <li key={i}>{t}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="p-3.5 rounded-lg border-2 border-black bg-[#EFF6FF] space-y-2">
-                    <h4 className="font-black text-black uppercase text-[11px]">HOW TO STUDY (DECISION TREE)</h4>
-                    <ol className="list-decimal pl-4 space-y-1 font-semibold text-black/80">
-                      {selectedModalDiagnosis.remediationPlan.step2DecisionFramework.checklist.map((c, i) => (
-                        <li key={i}>{c}</li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
-
-                {/* 5. SHORTCUTS & COMMON TRAPS */}
-                {selectedModalDiagnosis.examTactic && (
-                  <div className="p-4 rounded-xl border-2 border-black bg-[#FFFBEB] space-y-2">
-                    <h3 className="font-black text-black uppercase text-xs tracking-wider">SHORTCUTS & EXAM TACTICS</h3>
-                    <p className="font-bold text-black">QUICK METHOD: {selectedModalDiagnosis.examTactic.quickMethod}</p>
-                    <p className="font-semibold text-black/80">FULL METHOD: {selectedModalDiagnosis.examTactic.fullMethod}</p>
-                    <p className="font-bold text-[#DC2626]">CAUTION: {selectedModalDiagnosis.examTactic.caution}</p>
-                  </div>
-                )}
-
-                {/* 6. WHAT TO PRACTICE */}
-                <div className="p-4 rounded-xl border-2 border-black bg-white space-y-3">
-                  <h3 className="font-black text-black uppercase text-xs tracking-wider">STRUCTURED PRACTICE PLAN</h3>
-                  <div className="space-y-2">
-                    {selectedModalDiagnosis.remediationPlan.step3Practice.phases.map((ph) => (
-                      <div key={ph.phase} className="p-3 rounded-lg border border-black bg-[#FAF7EE] flex items-center justify-between gap-3">
-                        <div>
-                          <span className="font-black text-black block">{ph.title} ({ph.questionCount} Qs)</span>
-                          <span className="text-[11px] font-semibold text-black/70">{ph.description}</span>
-                        </div>
-                        <span className="px-2 py-1 bg-black text-white rounded font-mono font-black text-[10px] shrink-0">
-                          Target ≥{ph.targetAccuracyPercentage}%
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-lg mx-auto font-mono text-center pt-2">
+                      <div className="p-2.5 bg-white rounded-lg border border-black">
+                        <span className="text-[10px] text-black/60 uppercase block">Accuracy</span>
+                        <span className="text-sm font-black">{selectedModalDiagnosis.observedPerformance.accuracyPercentage}%</span>
+                      </div>
+                      <div className="p-2.5 bg-white rounded-lg border border-black">
+                        <span className="text-[10px] text-black/60 uppercase block">Attempts</span>
+                        <span className="text-sm font-black">{selectedModalDiagnosis.observedPerformance.attemptsCount}</span>
+                      </div>
+                      <div className="p-2.5 bg-white rounded-lg border border-black">
+                        <span className="text-[10px] text-black/60 uppercase block">Avg Time</span>
+                        <span className="text-sm font-black">{selectedModalDiagnosis.observedPerformance.avgTimeSeconds}s</span>
+                      </div>
+                      <div className="p-2.5 bg-white rounded-lg border border-black">
+                        <span className="text-[10px] text-black/60 uppercase block">Needed Qs</span>
+                        <span className="text-sm font-black text-[#2563EB]">
+                          +{Math.max(1, 5 - selectedModalDiagnosis.observedPerformance.attemptsCount)} more
                         </span>
                       </div>
-                    ))}
+                    </div>
+
+                    <div className="pt-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const topic = selectedModalDiagnosis.chapter;
+                          const subject = selectedModalDiagnosis.subject;
+                          setSelectedModalDiagnosis(null);
+                          handleLaunchTargetedPractice(topic, subject);
+                        }}
+                        className="px-6 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] inline-flex items-center gap-2"
+                      >
+                        <Play className="w-3.5 h-3.5 fill-white" />
+                        <span>Practice 5 Questions</span>
+                      </button>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <>
+                    {/* 2. DIAGNOSIS & EVIDENCE SUPPORTING IT */}
+                    <div className="space-y-3">
+                      <h3 className="font-black text-black uppercase text-xs tracking-wider flex items-center gap-1.5">
+                        <ShieldAlert className="w-4 h-4 text-[#DC2626]" />
+                        <span>DIAGNOSIS &amp; EVIDENCE</span>
+                      </h3>
+                      <div className="p-3.5 rounded-xl border-2 border-black bg-white space-y-2">
+                        <div className="flex items-center justify-between gap-2 flex-wrap">
+                          <span className="font-black text-sm text-black">
+                            Primary Issue: {selectedModalDiagnosis.specificWeakness}
+                          </span>
+                          <span className="px-2 py-0.5 rounded bg-black text-white text-[10px] font-black uppercase">
+                            {selectedModalDiagnosis.problemClassification === "PERFORMANCE_PROBLEM" ? "Performance Issue" : "Knowledge Gap"}
+                          </span>
+                        </div>
+                        <div className="p-3 rounded-lg bg-[#F8FAFC] border border-black/20 space-y-1">
+                          <span className="font-bold text-black text-[11px] block text-[#2563EB]">WHY WE THINK THIS (RECORDED TELEMETRY):</span>
+                          <ul className="list-disc pl-4 space-y-0.5 text-black/80 font-semibold">
+                            {selectedModalDiagnosis.evidenceList.map((ev, i) => (
+                              <li key={i}>{ev}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 3. WHAT EXACTLY IS GOING WRONG? */}
+                    <div className="space-y-2">
+                      <h3 className="font-black text-black uppercase text-xs tracking-wider">WHAT EXACTLY IS GOING WRONG?</h3>
+                      <p className="font-bold text-black/90 text-xs leading-relaxed bg-[#FAF7EE] p-3 rounded-xl border border-black">
+                        {selectedModalDiagnosis.specificWeakness}. Based on observed responses, errors cluster around {selectedModalDiagnosis.weakSubtopics?.[0]?.name || selectedModalDiagnosis.chapter}.
+                      </p>
+                    </div>
+
+                    {/* 4. WHY THIS IS HAPPENING */}
+                    <div className="space-y-2">
+                      <h3 className="font-black text-black uppercase text-xs tracking-wider">WHY THIS IS HAPPENING</h3>
+                      <p className="font-medium text-black/90 leading-relaxed bg-white p-3 rounded-xl border border-black">
+                        {selectedModalDiagnosis.interpretation}
+                      </p>
+                    </div>
+
+                    {/* 5. WHAT TO STUDY & HOW TO STUDY */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="p-3.5 rounded-lg border-2 border-black bg-[#F0FDF4] space-y-2">
+                        <h4 className="font-black text-black uppercase text-[11px]">WHAT TO STUDY</h4>
+                        <ul className="list-disc pl-4 space-y-1 font-semibold text-black/80">
+                          {selectedModalDiagnosis.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => (
+                            <li key={i}>{t}</li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="p-3.5 rounded-lg border-2 border-black bg-[#EFF6FF] space-y-2">
+                        <h4 className="font-black text-black uppercase text-[11px]">HOW TO STUDY (DECISION TREE)</h4>
+                        <ol className="list-decimal pl-4 space-y-1 font-semibold text-black/80">
+                          {selectedModalDiagnosis.remediationPlan.step2DecisionFramework.checklist.map((c, i) => (
+                            <li key={i}>{c}</li>
+                          ))}
+                        </ol>
+                      </div>
+                    </div>
+
+                    {/* 6. EXAM TACTICS & TRAPS */}
+                    {selectedModalDiagnosis.examTactic && (
+                      <div className="p-4 rounded-xl border-2 border-black bg-[#FFFBEB] space-y-2">
+                        <h3 className="font-black text-black uppercase text-xs tracking-wider">EXAM TACTICS &amp; COMMON TRAPS</h3>
+                        <p className="font-bold text-black">QUICK METHOD: {selectedModalDiagnosis.examTactic.quickMethod}</p>
+                        <p className="font-semibold text-black/80">FULL METHOD: {selectedModalDiagnosis.examTactic.fullMethod}</p>
+                        <p className="font-bold text-[#DC2626]">CAUTION: {selectedModalDiagnosis.examTactic.caution}</p>
+                        {selectedModalDiagnosis.commonTrap && (
+                          <p className="text-[11px] text-black/80 font-medium pt-1 border-t border-black/10">
+                            <strong>Common Trap:</strong> {selectedModalDiagnosis.commonTrap}
+                          </p>
+                        )}
+                      </div>
+                    )}
+
+                    {/* 7. REPAIR PLAN */}
+                    <div className="p-4 rounded-xl border-2 border-black bg-white space-y-3">
+                      <h3 className="font-black text-black uppercase text-xs tracking-wider">REPAIR PLAN</h3>
+                      <div className="space-y-2">
+                        {selectedModalDiagnosis.remediationPlan.step3Practice.phases.map((ph) => (
+                          <div key={ph.phase} className="p-3 rounded-lg border border-black bg-[#FAF7EE] flex items-center justify-between gap-3">
+                            <div>
+                              <span className="font-black text-black block">{ph.title} ({ph.questionCount} Qs)</span>
+                              <span className="text-[11px] font-semibold text-black/70">{ph.description}</span>
+                            </div>
+                            <span className="px-2 py-1 bg-black text-white rounded font-mono font-black text-[10px] shrink-0">
+                              Target ≥{ph.targetAccuracyPercentage}%
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 {/* Modal Action CTA */}
                 <div className="pt-2 flex items-center justify-end gap-3 border-t-2 border-black">
@@ -944,7 +1179,11 @@ export default function WeaknessRadarClient({
                     className="px-5 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center gap-1.5"
                   >
                     <Play className="w-3.5 h-3.5 fill-white" />
-                    <span>Start Targeted Practice</span>
+                    <span>
+                      {selectedModalDiagnosis.observedPerformance.attemptsCount < 5
+                        ? "Practice 5 Questions"
+                        : "START REPAIR PLAN"}
+                    </span>
                   </button>
                 </div>
               </div>

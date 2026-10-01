@@ -398,6 +398,104 @@ export default function DashboardClient({
         </div>
       ) : null}
 
+      {/* PROMINENT "YOUR NEXT BEST ACTION" HERO CARD */}
+      {(() => {
+        const candidateWeaknesses =
+          isClient && clientAnalytics && clientAnalytics.weaknessRadar.length > 0
+            ? clientAnalytics.weaknessRadar
+            : initialData.weaknessRadar || [];
+
+        const prioritizedCandidate = [...candidateWeaknesses]
+          .filter((t) => !t.isRecovered)
+          .sort((a, b) => {
+            const aHasData = (a.attemptsCount || 0) >= 5 ? 1 : 0;
+            const bHasData = (b.attemptsCount || 0) >= 5 ? 1 : 0;
+            if (aHasData !== bHasData) return bHasData - aHasData;
+            if (a.accuracyPercentage !== b.accuracyPercentage) {
+              return a.accuracyPercentage - b.accuracyPercentage;
+            }
+            return (b.incorrectCount || 0) - (a.incorrectCount || 0);
+          })[0] || candidateWeaknesses[0];
+
+        if (!prioritizedCandidate) return null;
+
+        const isLimited = (prioritizedCandidate.attemptsCount || 0) < 5;
+
+        return (
+          <div className="bg-white rounded-2xl border-3 border-black p-5 sm:p-6 shadow-[5px_5px_0px_0px_#000] relative overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="space-y-2 max-w-2xl">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2.5 py-0.5 rounded bg-black text-white text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-[1px_1px_0px_0px_#000]">
+                    <Zap className="w-3 h-3 text-[#F59E0B] fill-[#F59E0B]" />
+                    <span>YOUR NEXT BEST ACTION</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-[#FAF7EE] text-black border border-black text-[10px] font-bold uppercase">
+                    {prioritizedCandidate.subject}
+                  </span>
+                  <span
+                    className={`px-2 py-0.5 rounded border border-black text-[10px] font-black uppercase ${
+                      isLimited
+                        ? "bg-[#F3F4F6] text-black/70"
+                        : prioritizedCandidate.accuracyPercentage < 50
+                        ? "bg-[#FEF2F2] text-[#DC2626]"
+                        : "bg-[#FEF3C7] text-[#B45309]"
+                    }`}
+                  >
+                    {isLimited
+                      ? "LIMITED DATA"
+                      : prioritizedCandidate.attemptsCount >= 20
+                      ? "ESTABLISHED WEAKNESS"
+                      : prioritizedCandidate.attemptsCount >= 10
+                      ? "EMERGING PATTERN"
+                      : "EARLY SIGNAL"}
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="text-xl sm:text-2xl font-black text-black tracking-tight">
+                    {prioritizedCandidate.chapter}
+                  </h3>
+                  <p className="text-xs sm:text-sm font-bold text-black/80 font-mono mt-0.5">
+                    {prioritizedCandidate.accuracyPercentage}% Accuracy · {prioritizedCandidate.attemptsCount} Attempts
+                    {prioritizedCandidate.avgTimeSeconds ? ` · ~${prioritizedCandidate.avgTimeSeconds}s / Q` : ""}
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-xl bg-[#FAF7EE] border-2 border-black text-xs space-y-0.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#DC2626] block">
+                    Why it is being prioritized:
+                  </span>
+                  <p className="text-black/90 font-bold leading-relaxed">
+                    {isLimited
+                      ? `Insufficient data (${prioritizedCandidate.attemptsCount}/5 attempts). Practice 5 questions to calibrate baseline and detect genuine misconceptions.`
+                      : `Significant mark-leakage risk observed. Repairing ${prioritizedCandidate.chapter} will yield the highest immediate point gain on your next full mock.`}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row md:flex-col items-stretch md:items-end justify-center gap-2.5 shrink-0">
+                <Link
+                  href={`/dashboard/radar?subject=${normalizeSubject(prioritizedCandidate.subject).key}`}
+                  className="px-6 py-3.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs sm:text-sm border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2"
+                >
+                  <Play className="w-4 h-4 fill-white shrink-0" />
+                  <span>START 6-MIN REPAIR</span>
+                </Link>
+
+                <Link
+                  href="/dashboard/radar"
+                  className="px-4 py-2 rounded-xl bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-1.5"
+                >
+                  <span>Open Weakness Radar</span>
+                  <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
 
       {/* 2. MINIMAL 3-CARD VITAL METRICS ROW */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

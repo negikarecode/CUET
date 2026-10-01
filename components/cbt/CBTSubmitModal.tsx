@@ -66,10 +66,14 @@ export default function CBTSubmitModal() {
                 id="submit-modal-title"
                 className="text-lg font-black tracking-tight text-black"
               >
-                {t("confirmSubmission", "Confirm Test Paper Submission")}
+                {counts.total <= 15
+                  ? "Confirm Remediation Drill Submission"
+                  : t("confirmSubmission", "Confirm Test Paper Submission")}
               </h3>
               <p className="text-xs text-black/70 font-semibold mt-0.5">
-                {t("examSummary", "NTA CUET Examination Summary")} ({counts.total} {t("compulsoryBadge", "Compulsory Questions")})
+                {counts.total <= 15
+                  ? `AI Adaptive Drill Summary (${counts.total} Questions)`
+                  : `${t("examSummary", "NTA CUET Examination Summary")} (${counts.total} ${t("compulsoryBadge", "Compulsory Questions")})`}
               </p>
             </div>
           </div>
@@ -185,7 +189,11 @@ export default function CBTSubmitModal() {
               </>
             ) : (
               <>
-                <span>{t("submitExamNow", "Submit Exam Now")}</span>
+                <span>
+                  {counts.total <= 15
+                    ? "Submit Drill Now"
+                    : t("submitExamNow", "Submit Exam Now")}
+                </span>
                 <ArrowRight className="w-4 h-4 stroke-[2.5]" />
               </>
             )}

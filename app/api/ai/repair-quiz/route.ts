@@ -23,7 +23,7 @@ export interface RepairQuizResponse {
   subject: string;
   code: string;
   totalQuestions: 5;
-  durationMinutes: 8;
+  durationMinutes: 6;
   targetTopics: string[];
   questions: Question[];
 }
@@ -193,16 +193,49 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // 3. Structure questions into progressive sequence:
+    // Q1-Q2: Core Foundation / Concept Reinforcement
+    // Q3: Concept Application
+    // Q4: CUET-Level Distractor Trap
+    // Q5: Timed Exam Validation
+    const structuredDrillQuestions = selectedQuestions.slice(0, 5).map((q, idx) => {
+      let stageTag = "Foundation & Core Concept";
+      let targetDifficulty: "easy" | "medium" | "hard" = "easy";
+      if (idx === 0) {
+        stageTag = "Stage 1: Core Concept Definition & Formula Check";
+        targetDifficulty = "easy";
+      } else if (idx === 1) {
+        stageTag = "Stage 2: Conceptual Direct Recall & NCERT Fact";
+        targetDifficulty = "easy";
+      } else if (idx === 2) {
+        stageTag = "Stage 3: Concept Application & Multi-Step Logic";
+        targetDifficulty = "medium";
+      } else if (idx === 3) {
+        stageTag = "Stage 4: CUET-Level Application & Distractor Trap Variant";
+        targetDifficulty = "hard";
+      } else {
+        stageTag = "Stage 5: Speed Validation Drill (Target: ≤60s)";
+        targetDifficulty = "medium";
+      }
+
+      return {
+        ...q,
+        questionNumber: idx + 1,
+        difficulty: targetDifficulty,
+        aiDiagnosisNotes: `${stageTag}: Addressing detected pattern in ${primaryTopics.join(", ")}.`,
+      };
+    });
+
     const testId = `repair_quiz_${(subject || "physics").toLowerCase().replace(/[^a-z0-9]/g, "_")}_${Date.now()}`;
     const responsePayload: RepairQuizResponse = {
       testId,
-      title: `5-Question AI Repair Quiz: ${primaryTopics.join(", ")}`,
+      title: `Adaptive Repair Drill • ${primaryTopics.join(", ")}`,
       subject: subject || "Targeted Concept Remediation",
       code: "AI-REPAIR-05",
       totalQuestions: 5,
-      durationMinutes: 8,
+      durationMinutes: 6,
       targetTopics: primaryTopics,
-      questions: selectedQuestions.slice(0, 5),
+      questions: structuredDrillQuestions,
     };
 
     // 4. Save to in-memory quiz cache

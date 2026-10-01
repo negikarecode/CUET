@@ -197,11 +197,21 @@ export default function CBTPlayer() {
                     {testMeta?.title ?? examConfig.name}
                   </h1>
                   <span className="hidden md:inline rounded-full bg-[#FEF3C7] text-black border border-black px-2 py-0.5 text-[10px] font-black uppercase shadow-[1px_1px_0px_0px_#000]">
-                    {t("compulsoryBadge", `${examConfig.totalQuestions} Compulsory Qs`)}
+                    {questions.length <= 15 || testMeta?.title?.toLowerCase().includes("repair")
+                      ? `Adaptive Repair Drill • ${questions.length} Questions`
+                      : t("compulsoryBadge", `${examConfig.totalQuestions} Compulsory Qs`)}
                   </span>
                 </div>
                 <p className="text-[10px] sm:text-[11px] text-black/70 font-semibold truncate hidden sm:block">
-                  {t("subjectLabel", "Subject:")} <span className="font-black text-black">{testMeta?.subject}</span> ({testMeta?.code}) • {t("markingInfo", `Marking: +${examConfig.correctMarks} / ${examConfig.incorrectMarks} / 0`)}
+                  {questions.length <= 15 || testMeta?.title?.toLowerCase().includes("repair") ? (
+                    <>
+                      {t("subjectLabel", "Subject:")} <span className="font-black text-black">{testMeta?.subject}</span> • Target: <span className="font-black text-[#15803D]">80%+ Mastery</span> • ~{Math.ceil(remainingSeconds / 60)} mins
+                    </>
+                  ) : (
+                    <>
+                      {t("subjectLabel", "Subject:")} <span className="font-black text-black">{testMeta?.subject}</span> ({testMeta?.code}) • {t("markingInfo", `Marking: +${examConfig.correctMarks} / ${examConfig.incorrectMarks} / 0`)}
+                    </>
+                  )}
                 </p>
               </div>
             </div>
@@ -250,7 +260,11 @@ export default function CBTPlayer() {
                 className="px-2.5 sm:px-5 py-1.5 sm:py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs sm:text-sm tracking-wide shadow-[2px_2px_0px_0px_#000] sm:shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1 sm:gap-1.5 shrink-0"
               >
                 <Send className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
-                <span className="hidden sm:inline">{t("submitTest", "Submit Test")}</span>
+                <span className="hidden sm:inline">
+                  {questions.length <= 15 || testMeta?.title?.toLowerCase().includes("repair")
+                    ? "Submit Drill"
+                    : t("submitTest", "Submit Test")}
+                </span>
                 <span className="sm:hidden">{t("submit", "Submit")}</span>
               </button>
             </div>

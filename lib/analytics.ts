@@ -333,6 +333,8 @@ export function computeAnalyticsFromAttempts(
     totalTimeSpent: number;
     troubleSubtopicsMap: Map<string, number>;
     masteredSubtopicsMap: Map<string, number>;
+    questionsData: import("@/types").RecordedQuestionAttempt[];
+    mistakesList: import("@/types").TopicMistakeRecord[];
   }
 
   const chapterMap = new Map<string, ChapterDiagnosticBucket>();
@@ -414,6 +416,8 @@ export function computeAnalyticsFromAttempts(
           totalTimeSpent: 0,
           troubleSubtopicsMap: new Map(),
           masteredSubtopicsMap: new Map(),
+          questionsData: [] as import("@/types").RecordedQuestionAttempt[],
+          mistakesList: [] as import("@/types").TopicMistakeRecord[],
         };
         chapterMap.set(key, bucket);
       }
@@ -421,6 +425,7 @@ export function computeAnalyticsFromAttempts(
       bucket.attemptsCount += 1;
       const timeSpent = q.timeSpentSeconds || 0;
       bucket.totalTimeSpent += timeSpent;
+      bucket.questionsData.push(q);
 
       if (timeSpent > 72 || q.isTimeSink) {
         bucket.timeSinksCount += 1;
@@ -445,6 +450,26 @@ export function computeAnalyticsFromAttempts(
         if (timeSpent > 75) {
           bucket.slowErrorsCount += 1;
         }
+
+        // Determine specific error category from telemetry
+        let errCat = "Conceptual Gap";
+        if (timeSpent < 20) errCat = "Guessing / Uncertainty";
+        else if (timeSpent < 35 && (q.prompt?.toLowerCase().includes("not") || q.prompt?.toLowerCase().includes("except"))) errCat = "Question Interpretation";
+        else if (timeSpent > 85) errCat = "Calculation & Clock Drain";
+        else if (q.questionType?.toLowerCase().includes("application")) errCat = "Concept Application Gap";
+        else if (timeSpent < 30) errCat = "Distractor Trap";
+
+        bucket.mistakesList.push({
+          questionId: q.questionId || q.conceptId || `q_${bucket.mistakesList.length + 1}`,
+          prompt: q.prompt || "Question stem from CBT attempt",
+          userAnswer: q.selectedOption || "None",
+          correctAnswer: q.correctOption || "Correct Answer",
+          errorCategory: errCat,
+          explanation: q.explanation || "Official NCERT explanation and derivation.",
+          timeSpentSeconds: timeSpent,
+          chapter: bucket.chapter,
+          microTopic,
+        });
       }
     });
 
@@ -615,7 +640,15 @@ export function computeAnalyticsFromAttempts(
     const troubleListStr = troubleTopics.slice(0, 2).join(", ");
     const strongListStr = strongTopics.slice(0, 2).join(", ");
 
-    if (confidenceLevel !== "emerging" && (accuracy < 50 || masteryScore < 45)) {
+    // Strictly respect evidence thresholds:
+    // <5 attempts: LIMITED DATA - Not enough evidence to diagnose a weakness yet
+    if (attempts < 5) {
+      const needed = Math.max(1, 5 - attempts);
+      status = "polish";
+      diagnosisLabel = "Limited Data (Need " + needed + " More Qs)";
+      diagnosticInsight = `Only ${attempts} question attempt${attempts === 1 ? "" : "s"} recorded (${accuracy}% accuracy). Need ${needed} more attempt${needed === 1 ? "" : "s"} (minimum 5 total) before diagnosing a genuine weakness pattern.`;
+      remedialPrescription = `Practice 5 questions in ${bucket.chapter} to calibrate baseline accuracy without guessing.`;
+    } else if (accuracy < 50 || masteryScore < 45) {
       status = "critical";
       diagnosisLabel = "Critical Conceptual Gap";
       diagnosticInsight = `${bucket.incorrectCount} mistakes out of ${attempts} questions tested (${accuracy}% accuracy). Repeated breakdowns identified in: ${troubleListStr || "core chapter concepts"}.`;
@@ -625,31 +658,21 @@ export function computeAnalyticsFromAttempts(
       diagnosisLabel = "Calculation & Clock Drain";
       diagnosticInsight = `Average solving pace of ${avgTime}s/Q is severely drag-heavy (${bucket.timeSinksCount} questions exceeded 72s limit). Calculations are eating valuable CBT exam time.`;
       remedialPrescription = `Practice shortcut formula substitutions and dimensional elimination for ${bucket.chapter} to bring pace under 60s.`;
-    } else if (bucket.fastErrorsCount >= 2 || (attempts >= 2 && accuracy < 50 && avgTime < 38)) {
+    } else if (bucket.fastErrorsCount >= 2 || (accuracy < 50 && avgTime < 38)) {
       status = "critical";
       diagnosisLabel = "Impulsive Trap Exposure";
       diagnosticInsight = `Rapid solving pace (${avgTime}s avg) with ${bucket.incorrectCount} errors. You are falling for NTA negative marking (-1) trap choices in: ${troubleListStr || "formula questions"}.`;
       remedialPrescription = `Slow down. Underline 'INCORRECT' / 'NOT TRUE' qualifying keywords in question stems before selecting answers.`;
-    } else if (attempts === 1 && accuracy === 0) {
-      status = "critical";
-      diagnosisLabel = "Early Weakness Signal";
-      diagnosticInsight = `Initial question on ${troubleListStr || bucket.chapter} missed (${avgTime}s spent). Further practice required to diagnose if this is a chronic gap or one-off slip.`;
-      remedialPrescription = `Attempt a 5-question targeted drill on ${bucket.chapter} to calibrate true retention.`;
-    } else if (accuracy >= 80 && bucket.incorrectCount === 1 && attempts >= 4) {
+    } else if (accuracy >= 80 && bucket.incorrectCount === 1) {
       status = "polish";
       diagnosisLabel = "Careless / Precision Slip";
       diagnosticInsight = `High accuracy (${accuracy}% across ${attempts} questions). The single error was a careless calculation/reading slip, not a conceptual deficit.`;
       remedialPrescription = `Maintain habit of double-checking final arithmetic before locking option. Knowledge retention is solid.`;
-    } else if (masteryScore >= 75 && accuracy >= 75 && attempts >= 2) {
+    } else if (masteryScore >= 75 && accuracy >= 75) {
       status = "mastered";
       diagnosisLabel = "Core Pillar Strength";
       diagnosticInsight = `Exceptional precision (${accuracy}% accuracy across ${attempts} questions) with optimal solving rhythm (${avgTime}s avg). Solid mastery of: ${strongListStr || bucket.chapter}.`;
       remedialPrescription = `Exam-ready stronghold. Maintain sharpness with a quick 5-minute revision drill once a week.`;
-    } else if (attempts === 1 && accuracy === 100) {
-      status = "polish";
-      diagnosisLabel = "Emerging Strength Signal";
-      diagnosticInsight = `First question on ${strongListStr || bucket.chapter} solved correctly in ${avgTime}s. Good initial grasp, but requires more mock questions to establish permanent mastery.`;
-      remedialPrescription = `Solve 3-4 more questions on ${bucket.chapter} across upcoming mocks to confirm resilience against complex variants.`;
     } else {
       status = "polish";
       diagnosisLabel = "Needs Polish & Consistency";
@@ -664,8 +687,26 @@ export function computeAnalyticsFromAttempts(
       attempts,
       bucket.correctCount,
       bucket.incorrectCount,
-      avgTime
+      avgTime,
+      bucket.questionsData
     );
+
+    // Determine Remediation Stage
+    let remediationStage: import("@/types").RemediationStage = "DETECTED";
+    let isRecovered = false;
+    if (accuracy >= 80 && attempts >= 10 && avgTime <= 75) {
+      remediationStage = "RECOVERED";
+      isRecovered = true;
+    } else if (attempts >= 5 && accuracy < 60) {
+      remediationStage = "DIAGNOSED";
+    } else if (attempts >= 5 && accuracy < 75) {
+      remediationStage = "PRACTICING";
+    } else if (attempts < 5) {
+      remediationStage = "DETECTED";
+    }
+
+    fullDiagnosis.remediationStage = remediationStage;
+    fullDiagnosis.isRecovered = isRecovered;
 
     allTopics.push({
       subject: bucket.subject,
@@ -679,6 +720,8 @@ export function computeAnalyticsFromAttempts(
       timeSinksCount: bucket.timeSinksCount,
       avgTimeSeconds: avgTime,
       status,
+      remediationStage,
+      isRecovered,
       masteryScore,
       diagnosisLabel,
       diagnosticInsight,
@@ -692,6 +735,7 @@ export function computeAnalyticsFromAttempts(
       primaryErrorType,
       scoreImpactPotentialMarks,
       fullDiagnosis,
+      recordedMistakes: bucket.mistakesList,
     });
   });
 

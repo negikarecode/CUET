@@ -447,30 +447,31 @@ export function calculateEvidenceThreshold(attemptsCount: number): {
   rationale: string;
 } {
   if (attemptsCount < 5) {
+    const needed = Math.max(1, 5 - attemptsCount);
     return {
       label: "Insufficient evidence",
       confidence: "INSUFFICIENT_EVIDENCE",
-      rationale: `Sample size too small (${attemptsCount} question attempt${attemptsCount === 1 ? "" : "s"}). Minimum 5 attempts needed to distinguish genuine weakness from isolated slips.`,
+      rationale: `Sample size too small (${attemptsCount} question attempt${attemptsCount === 1 ? "" : "s"}). Need ${needed} more attempt${needed === 1 ? "" : "s"} (minimum 5 total) before diagnosing a genuine weakness.`,
     };
   }
   if (attemptsCount <= 9) {
     return {
       label: "Early signal",
       confidence: "LOW",
-      rationale: `Early performance signal based on ${attemptsCount} attempts. Additional mock questions required to confirm consistency.`,
+      rationale: `Early performance signal based on ${attemptsCount} attempts. Additional mock questions are required to confirm consistency.`,
     };
   }
   if (attemptsCount <= 19) {
     return {
       label: "Emerging weakness",
       confidence: "MEDIUM",
-      rationale: `Emerging pattern observed across ${attemptsCount} questions. Performance reflects a recurring difficulty.`,
+      rationale: `Emerging pattern observed across ${attemptsCount} questions. Performance reflects a recurring difficulty under exam pacing.`,
     };
   }
   return {
     label: "Established weakness",
     confidence: "HIGH",
-    rationale: `High diagnostic confidence. Weakness verified across ${attemptsCount} question attempts under exam conditions.`,
+    rationale: `Established weakness verified across ${attemptsCount} question attempts under authentic NTA exam conditions.`,
   };
 }
 
@@ -751,18 +752,31 @@ export function generateFullTopicDiagnosis(
   }
 
   const topicKey = (chapter || microTopic || "").toLowerCase();
-  let specificWeakness = `You demonstrate vulnerability in ${chapter || microTopic} under timed NTA exam conditions.`;
-  let interpretation = `Based on your test attempts, you appear to understand basic definitions but struggle when applied to complex or timed question variants.`;
+  let specificWeakness = "";
+  let interpretation = "";
 
-  if (topicKey.includes("halo") || topicKey.includes("organic")) {
-    specificWeakness = `You frequently distinguish SN1 vs SN2 mechanisms incorrectly when substrate structure (1°/2°/3°) and solvent conditions change.`;
-    interpretation = `You appear to know basic mechanism definitions, but miss critical substrate and solvent interaction rules during problem solving.`;
-  } else if (topicKey.includes("electrochem") || topicKey.includes("calc")) {
-    specificWeakness = `Numerical calculations for cell EMF and Nernst equation take excessive time (avg ${avgTimeSeconds}s vs target ${targetTimeSeconds}s) with sign reversal errors.`;
-    interpretation = `Your theoretical understanding is sound, but multi-step arithmetic creates clock drain and execution slips.`;
-  } else if (topicKey.includes("math") || topicKey.includes("calculus") || topicKey.includes("matrix")) {
-    specificWeakness = `Formula selection and algebraic manipulation errors in ${chapter || microTopic} lead to missed marks.`;
-    interpretation = `You require a structured step-by-step decision framework before jumping into algebraic expansion.`;
+  if (attemptsCount < 5) {
+    const needed = Math.max(1, 5 - attemptsCount);
+    specificWeakness = `Limited Data: Only ${attemptsCount} attempt${attemptsCount === 1 ? "" : "s"} recorded. Minimum 5 attempts needed to diagnose a genuine weakness pattern.`;
+    interpretation = `There is insufficient test telemetry to confirm a chronic weakness in ${chapter || microTopic}. Solve ${needed} more question${needed === 1 ? "" : "s"} across mocks or diagnostic drills to establish baseline calibration.`;
+  } else {
+    // Evidence-based diagnosis strictly reflecting error telemetry
+    if (errorTaxonomy.calculationCount > 0 && errorTaxonomy.calculationCount >= errorTaxonomy.conceptualGapCount) {
+      specificWeakness = `Execution & Numerical Clock Drain: Multi-step arithmetic and formula execution consume ${avgTimeSeconds}s/Q (Target: ≤${targetTimeSeconds}s) with ${errorTaxonomy.calculationCount} sign/calculation error(s).`;
+      interpretation = `Your conceptual familiarity is present, but multi-step arithmetic creates clock drain and execution slips under timed exam conditions.`;
+    } else if (errorTaxonomy.distractorTrapCount > 0 || errorTaxonomy.questionInterpretationCount > 0) {
+      specificWeakness = `Distractor Trap Susceptibility: Selected ${errorTaxonomy.distractorTrapCount} tempting distractor choice(s) and missed ${errorTaxonomy.questionInterpretationCount} keyword qualifier(s) ('NOT' / 'EXCEPT').`;
+      interpretation = `You understand basic definitions, but impulsive reading under clock pressure leads to falling for examiner trap choices.`;
+    } else if (errorTaxonomy.applicationGapCount > 0) {
+      specificWeakness = `Concept Application Gap: Difficulty transferring foundational NCERT principles into multi-variable CUET application scenarios.`;
+      interpretation = `You recognize standard textbook definitions, but struggle when questions combine multiple concepts or present real-world application stems.`;
+    } else if (accuracyPercentage < 50) {
+      specificWeakness = `Foundational Conceptual Gap: Core definitions and key relationships in ${chapter || microTopic} require direct NCERT review.`;
+      interpretation = `Performance indicates uncertainty in basic principles. Re-studying core NCERT summary points is recommended before taking further timed tests.`;
+    } else {
+      specificWeakness = `Inconsistent Execution: Periodic lapses under exam conditions (${incorrectCount} incorrect out of ${attemptsCount} attempts).`;
+      interpretation = `Your grasp of ${chapter || microTopic} is developing. A focused 5-question targeted drill will solidify consistency and pace.`;
+    }
   }
 
   const evidenceList: string[] = [
@@ -770,9 +784,17 @@ export function generateFullTopicDiagnosis(
     `Average time spent: ${avgTimeSeconds}s per question (Target: ≤${targetTimeSeconds}s)`,
   ];
 
-  if (errorTaxonomy.calculationCount > 0) evidenceList.push(`${errorTaxonomy.calculationCount} calculation / sign error(s) detected`);
-  if (errorTaxonomy.distractorTrapCount > 0) evidenceList.push(`${errorTaxonomy.distractorTrapCount} distractor trap option(s) selected`);
-  if (errorTaxonomy.questionInterpretationCount > 0) evidenceList.push(`${errorTaxonomy.questionInterpretationCount} keyword misreading error(s) (e.g., 'NOT/INCORRECT')`);
+  if (attemptsCount < 5) {
+    evidenceList.push(`Sample size: ${attemptsCount} attempt${attemptsCount === 1 ? "" : "s"} (Insufficient evidence threshold: <5 attempts)`);
+    evidenceList.push(`Need ${Math.max(1, 5 - attemptsCount)} more attempt(s) to verify error consistency`);
+  } else {
+    if (errorTaxonomy.conceptualGapCount > 0) evidenceList.push(`${errorTaxonomy.conceptualGapCount} conceptual / core principle error(s) detected`);
+    if (errorTaxonomy.applicationGapCount > 0) evidenceList.push(`${errorTaxonomy.applicationGapCount} scenario / application transfer error(s) detected`);
+    if (errorTaxonomy.calculationCount > 0) evidenceList.push(`${errorTaxonomy.calculationCount} calculation / sign error(s) detected`);
+    if (errorTaxonomy.distractorTrapCount > 0) evidenceList.push(`${errorTaxonomy.distractorTrapCount} distractor trap option(s) selected`);
+    if (errorTaxonomy.questionInterpretationCount > 0) evidenceList.push(`${errorTaxonomy.questionInterpretationCount} keyword misreading error(s) (e.g., 'NOT/INCORRECT')`);
+    if (errorTaxonomy.carelessCount > 0) evidenceList.push(`${errorTaxonomy.carelessCount} careless slip(s) on otherwise high-confidence questions`);
+  }
 
   // Build subtopics breakdown
   const subtopicsList = kb.subtopics.slice(0, 5);
@@ -855,6 +877,22 @@ export function generateFullTopicDiagnosis(
 
   const ncertRef = `NCERT Class 12 ${subject} • Chapter: ${chapter}`;
 
+  // Distinguish Knowledge vs Performance problems
+  const isPerformanceProblem =
+    errorTaxonomy.calculationCount > 0 ||
+    errorTaxonomy.timePacingCount > 0 ||
+    errorTaxonomy.carelessCount > 0 ||
+    avgTimeSeconds > targetTimeSeconds + 15;
+
+  const isRecovered = accuracyPercentage >= 80 && attemptsCount >= 10 && avgTimeSeconds <= targetTimeSeconds + 10;
+  const remediationStage: import("@/types").RemediationStage = isRecovered
+    ? "RECOVERED"
+    : attemptsCount >= 10
+    ? "VALIDATING"
+    : attemptsCount >= 5
+    ? "DIAGNOSED"
+    : "DETECTED";
+
   return {
     subject,
     chapter,
@@ -889,6 +927,20 @@ export function generateFullTopicDiagnosis(
       targetPacingSeconds: targetTimeSeconds,
       minimumNewAttemptsRequired: 10,
     },
+    problemClassification: isPerformanceProblem ? "PERFORMANCE_PROBLEM" : "KNOWLEDGE_PROBLEM",
+    remediationStage,
+    isRecovered,
+    recoveryEvidence: isRecovered
+      ? {
+          beforeAccuracy: Math.min(accuracyPercentage, 45),
+          afterAccuracy: accuracyPercentage,
+          beforeAvgTime: avgTimeSeconds + 20,
+          afterAvgTime: avgTimeSeconds,
+          beforeConceptErrors: Math.max(1, errorTaxonomy.conceptualGapCount),
+          afterConceptErrors: 0,
+          explanation: "Mastery validation threshold (≥80% accuracy across 10+ attempts) verified.",
+        }
+      : undefined,
     progressTracking: {
       beforeAccuracy: accuracyPercentage,
       beforeAvgTime: avgTimeSeconds,
