@@ -200,6 +200,29 @@ export default function WeaknessRadarClient({
   const activeClientAttempted = Math.max(clientQuestionsAttempted, storeAttemptsSum);
   const serverAttempted = initialData.totalAttempted || 0;
   const totalAttempted = Math.max(serverAttempted, activeClientAttempted);
+
+  // Compute robust client accuracy from testAttempts directly if clientAnalytics is stale
+  const clientCorrectCount =
+    isClient && testAttempts && testAttempts.length > 0
+      ? testAttempts.reduce((sum, a) => sum + (a.correctCount || 0), 0)
+      : clientAnalytics?.totalCorrectAnswers || 0;
+
+  const directClientAccuracy =
+    activeClientAttempted > 0
+      ? Math.round((clientCorrectCount / activeClientAttempted) * 100)
+      : clientAnalytics?.overallAccuracyPercentage || 0;
+
+  const serverAccuracy = initialData.accuracyPercentage || 0;
+
+  const overallAccuracyPercentage =
+    directClientAccuracy > 0 && serverAccuracy > 0
+      ? activeClientAttempted >= serverAttempted
+        ? directClientAccuracy
+        : serverAccuracy
+      : directClientAccuracy > 0
+      ? directClientAccuracy
+      : serverAccuracy;
+
   const completedTestsCount =
     isClient && clientAnalytics
       ? clientAnalytics.completedTestsCount || (testAttempts?.length || 1)
@@ -258,6 +281,13 @@ export default function WeaknessRadarClient({
   // Generate all topic diagnoses
   const allDiagnoses: FullTopicDiagnosis[] = [...weaknessRadar, ...strengthList].map(getOrGenerateDiagnosis);
   const summaryReport = generateDiagnosticSummaryReport(allDiagnoses, totalAttempted, completedTestsCount);
+
+  // Synchronize overall accuracy with unified metric (or subject calibration if subject is filtered)
+  const displayAccuracy =
+    selectedRadarSubject === "all"
+      ? overallAccuracyPercentage
+      : subjectCalibrationMap[selectedRadarSubject]?.accuracyPercentage ?? summaryReport.overallAccuracy;
+  summaryReport.overallAccuracy = displayAccuracy;
 
   // Launch targeted practice drill
   const handleLaunchTargetedPractice = async (topic: string, subject: string, practiceType?: string) => {
