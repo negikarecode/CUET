@@ -376,7 +376,7 @@ export interface FullTopicDiagnosis {
   remediationPlan: RemediationPlan;
   examTactic?: ExamTactic;
   commonTrap: string;
-  problemClassification?: "KNOWLEDGE_PROBLEM" | "PERFORMANCE_PROBLEM";
+  problemClassification?: "KNOWLEDGE_PROBLEM" | "PERFORMANCE_PROBLEM" | "QUESTION_INTERPRETATION" | "LIMITED_DATA";
   recommendedPracticeType: "5-Question Concept Repair" | "10-Question Application Drill" | "15-Question Mixed Remediation" | "10-Question Timed Drill" | "Calculation Drill" | "Misconception Repair Drill";
   recordedMistakes?: TopicMistakeRecord[];
   retestCriteria: {

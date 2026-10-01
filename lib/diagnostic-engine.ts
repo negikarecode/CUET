@@ -65,23 +65,57 @@ const SUBJECT_KNOWLEDGE_MAP: Record<string, SubjectKnowledgeConfig> = {
       "solutions": "Confusing molality (moles solute/kg solvent) with molarity (moles solute/L solution) in temperature-dependence questions.",
     },
     decisionFrameworks: {
+      "electrochemistry": [
+        "1. Identify oxidation/reduction half-cells",
+        "2. Determine anode/cathode",
+        "3. Establish electrode-potential convention (Standard Reduction Potentials)",
+        "4. Calculate E°cell = E°cathode - E°anode",
+        "5. Check sign and spontaneity (E°cell > 0, ΔG° < 0)",
+        "6. Apply Nernst equation when concentrations or pressures deviate from standard conditions",
+      ],
+      "haloalkanes": [
+        "1. Identify substrate degree (1°, 2°, or 3°)",
+        "2. Identify nucleophile/base strength and charge",
+        "3. Check solvent (polar protic vs polar aprotic)",
+        "4. Evaluate SN1 vs SN2 conditions (carbocation stability vs backside displacement)",
+        "5. Consider steric effects and temperature (substitution vs elimination)",
+        "6. Check NOT/EXCEPT qualifiers before finalizing answer",
+      ],
+      "coordination": [
+        "1. Determine central metal oxidation state and d-electron count",
+        "2. Identify ligand field strength from Spectrochemical Series",
+        "3. Evaluate crystal field splitting (Δo vs pairing energy P)",
+        "4. Determine spin state (high spin vs low spin)",
+        "5. Calculate magnetic moment μ = √(n(n+2)) BM",
+        "6. Verify IUPAC naming and isomerism rules",
+      ],
+      "solutions": [
+        "1. Distinguish solute and solvent; verify concentration units (M vs m)",
+        "2. Identify colligative property formula (ΔTb, ΔTf, Π, or Raoult's law)",
+        "3. Determine van 't Hoff factor (i) based on dissociation/association",
+        "4. Calculate target colligative value incorporating i factor",
+        "5. Check for non-ideal deviations (positive vs negative Raoult deviation)",
+      ],
       "organic": [
-        "What is the substrate degree (1°, 2°, or 3°)?",
-        "Is the reagent a strong nucleophile or strong base?",
-        "Is the solvent polar protic (water/alcohol) or polar aprotic (DMSO/acetone)?",
-        "Is heat applied (favoring elimination over substitution)?",
-        "Is steric hindrance present on the substrate or nucleophile?",
+        "1. Identify functional group and reacting centers",
+        "2. Determine electrophile and nucleophile / base",
+        "3. Check solvent polarity and temperature",
+        "4. Evaluate stereochemistry and regioselectivity (Markovnikov vs Saytzeff)",
+        "5. Check question stem for 'NOT' or 'EXCEPT' qualifiers",
       ],
       "physical": [
-        "Identify given quantities and required units (convert to SI).",
-        "Select exact formula (e.g. Nernst, Rate Law, Arrhenius).",
-        "Check stoichiometric coefficients before plugging in values.",
-        "Perform order-of-magnitude estimation before exact arithmetic.",
+        "1. Identify given variables and convert to standard SI units",
+        "2. Select governing formula and verify stoichiometric ratios",
+        "3. Check for equilibrium or standard state conditions",
+        "4. Calculate intermediate numerical values with sign precision",
+        "5. Verify units and order of magnitude of final answer",
       ],
     },
     reviewTopics: {
-      "haloalkanes": ["SN1 Mechanism", "SN2 Mechanism", "Substrate Effects", "Solvent Effects", "Leaving Group Ability"],
-      "electrochemistry": ["Nernst Equation", "Kohlrausch Law", "Standard Electrode Potentials", "Faraday's Laws of Electrolysis"],
+      "haloalkanes": ["SN1 Mechanism", "SN2 Mechanism", "Substrate Effects", "Solvent Effects", "Leaving Group Ability", "Elimination Reactions (E1/E2)"],
+      "electrochemistry": ["Nernst Equation", "Kohlrausch Law", "Standard Electrode Potentials", "Faraday's Laws of Electrolysis", "Electrochemical Cell Conventions"],
+      "coordination": ["Spectrochemical Series", "CFT Splitting", "Isomerism in Coordination Compounds", "IUPAC Nomenclature"],
+      "solutions": ["Colligative Properties", "Van 't Hoff Factor", "Raoult's Law Deviations", "Henry's Law"],
     },
   },
   physics: {
@@ -116,11 +150,27 @@ const SUBJECT_KNOWLEDGE_MAP: Record<string, SubjectKnowledgeConfig> = {
       "optics": "Incorrect sign convention for focal lengths: convex lenses/mirrors have positive f; concave have negative f.",
     },
     decisionFrameworks: {
+      "current electricity": [
+        "1. Identify circuit elements (batteries, resistors, capacitors, galvanometers)",
+        "2. Check for Wheatstone bridge symmetry or balanced potentials",
+        "3. Apply Kirchhoff's Current Law (KCL) or Voltage Law (KVL) with sign convention",
+        "4. Account for cell internal resistance (r) and terminal voltage V = E ± Ir",
+        "5. Verify meter bridge / potentiometer balance length condition",
+        "6. Check power and thermal dissipation formulas (P = I²R vs P = V²/R)",
+      ],
+      "electrostatics": [
+        "1. Identify charge distribution (point charges vs continuous/spherical conductors)",
+        "2. Choose coordinate origin and vector sign convention for electric fields",
+        "3. Apply Gauss's Law or superposition principle according to symmetry",
+        "4. Treat potential (V) as scalar and field (E) as vector with directional components",
+        "5. Determine capacitance formula with dielectric insertion (C = κ·ε0·A/d)",
+        "6. Calculate stored energy U = 1/2 C V² or energy density u = 1/2 ε0 E²",
+      ],
       "physics_numerical": [
-        "Draw diagram and define coordinate origin/sign convention.",
-        "List known values with SI units.",
-        "Identify governing physical law (Energy conservation, Momentum, Gauss, Ampere).",
-        "Check dimensions of symbolic answer before numeric calculation.",
+        "1. Draw diagram and define coordinate origin/sign convention",
+        "2. List known values with SI units",
+        "3. Identify governing physical law (Energy conservation, Momentum, Gauss, Ampere)",
+        "4. Check dimensions of symbolic answer before numeric calculation",
       ],
     },
     reviewTopics: {
@@ -160,11 +210,25 @@ const SUBJECT_KNOWLEDGE_MAP: Record<string, SubjectKnowledgeConfig> = {
       "3d geometry": "Using direction ratios (a,b,c) instead of normalized direction cosines (l,m,n) when computing projection distances.",
     },
     decisionFrameworks: {
+      "calculus": [
+        "1. Check function domain, continuity, and differentiability at boundary points",
+        "2. Identify standard form or derivative chain rule structure",
+        "3. Evaluate limits and indeterminate forms using L'Hôpital's Rule or expansion",
+        "4. Check symmetry properties f(-x) for definite integrals over [-a, a]",
+        "5. Remember integration constant (+ C) for indefinite integrals",
+      ],
+      "matrices": [
+        "1. Identify matrix dimensions (m x n) and check multiplication conformability",
+        "2. Check determinant properties: |AB| = |A||B|, |k·A| = k^n |A|",
+        "3. Apply adjoint theorems: A · adj(A) = |A| · I, |adj(A)| = |A|^(n-1)",
+        "4. Test system consistency: rank(A) vs rank([A|B]) for unique/infinite/no solutions",
+        "5. Remember matrix multiplication is non-commutative in general (AB ≠ BA)",
+      ],
       "math_problem": [
-        "What is the domain / range constraint of the function?",
-        "Can substitution or elimination reduce algebraic steps?",
-        "Are options distinct numeric values (suitable for back-substitution)?",
-        "Check boundary points for extrema / limits.",
+        "1. What is the domain / range constraint of the function?",
+        "2. Can substitution or elimination reduce algebraic steps?",
+        "3. Are options distinct numeric values (suitable for back-substitution)?",
+        "4. Check boundary points for extrema / limits.",
       ],
     },
     reviewTopics: {
@@ -770,43 +834,72 @@ export function generateFullTopicDiagnosis(
   let secondaryFailurePattern: string | undefined = contributingFactor;
 
   const topicKey = (chapter || microTopic || "").toLowerCase();
+
+  // Helper to fuzzy match topic in kb dictionaries (e.g. "electrochemistry", "haloalkanes", etc.)
+  function findBestConfigKey<T>(dict: Record<string, T>, topicText: string): T | undefined {
+    if (!dict) return undefined;
+    const cleanTopic = topicText.toLowerCase();
+    // Direct match
+    if (dict[cleanTopic]) return dict[cleanTopic];
+    // Keyword match
+    for (const [key, value] of Object.entries(dict)) {
+      const cleanKey = key.toLowerCase();
+      if (cleanTopic.includes(cleanKey) || cleanKey.includes(cleanTopic)) {
+        return value;
+      }
+      // Specific domain keywords
+      if (cleanTopic.includes("electrochem") && cleanKey.includes("electrochem")) return value;
+      if ((cleanTopic.includes("haloalkan") || cleanTopic.includes("haloaren")) && cleanKey.includes("haloalkan")) return value;
+      if (cleanTopic.includes("coordinat") && cleanKey.includes("coordinat")) return value;
+      if (cleanTopic.includes("solut") && cleanKey.includes("solut")) return value;
+      if ((cleanTopic.includes("current") || cleanTopic.includes("circuit")) && cleanKey.includes("current")) return value;
+      if ((cleanTopic.includes("electrostat") || cleanTopic.includes("charge") || cleanTopic.includes("capacit")) && cleanKey.includes("electrostat")) return value;
+      if ((cleanTopic.includes("calculus") || cleanTopic.includes("integr") || cleanTopic.includes("deriv")) && cleanKey.includes("calculus")) return value;
+      if ((cleanTopic.includes("matrix") || cleanTopic.includes("determinant")) && cleanKey.includes("matrix")) return value;
+      if (cleanTopic.includes("genetics") && cleanKey.includes("genetics")) return value;
+      if (cleanTopic.includes("partnership") && cleanKey.includes("partnership")) return value;
+      if ((cleanTopic.includes("macro") || cleanTopic.includes("national income")) && cleanKey.includes("macro")) return value;
+    }
+    return undefined;
+  }
+
   let specificWeakness = "";
   let interpretation = "";
 
   if (attemptsCount < 5) {
     const needed = Math.max(1, 5 - attemptsCount);
-    specificWeakness = `Limited Data: Only ${attemptsCount} attempt${attemptsCount === 1 ? "" : "s"} recorded. Minimum 5 attempts needed to diagnose a genuine weakness pattern.`;
-    interpretation = `What the data suggests: The available telemetry identifies ${attemptsCount} question attempt${attemptsCount === 1 ? "" : "s"}, but cannot determine the exact underlying cause yet. Solve ${needed} more question${needed === 1 ? "" : "s"} to establish baseline calibration.`;
+    specificWeakness = `Limited Data: ${attemptsCount} attempt${attemptsCount === 1 ? "" : "s"} recorded. Minimum 5 attempts needed to diagnose a genuine weakness pattern.`;
+    interpretation = `What the data suggests: The available telemetry records ${attemptsCount} question attempt${attemptsCount === 1 ? "" : "s"} (${incorrectCount} incorrect). Telemetry cannot determine the underlying cause yet. Solve ${needed} more question${needed === 1 ? "" : "s"} to establish baseline calibration.`;
   } else {
     // Evidence-based diagnosis strictly reflecting error telemetry without psychological speculation
     if (primaryDiagnosis === "Calculation Error") {
-      specificWeakness = `Execution & Numerical Clock Drain: Multi-step arithmetic and formula execution consume ${avgTimeSeconds}s/Q (Target: ≤${targetTimeSeconds}s) with ${errorTaxonomy.calculationCount} sign/calculation error(s).`;
-      interpretation = `What the data suggests: Your telemetry records extended response latency alongside arithmetic and formula execution errors. This pattern indicates clock drain during numerical working rather than unfamiliarity with concepts.`;
+      specificWeakness = `Calculation & Formula Precision: ${incorrectCount} of ${attemptsCount} questions were incorrect, with ${errorTaxonomy.calculationCount} error(s) involving arithmetic or formula execution. Avg Response: ${avgTimeSeconds}s.`;
+      interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect. Telemetry records ${errorTaxonomy.calculationCount} incorrect response(s) involving numerical calculation or formula execution. Avg Response is ${avgTimeSeconds}s per question (target: ≤${targetTimeSeconds}s). This pattern is consistent with calculation and execution errors.`;
     } else if (primaryDiagnosis === "Distractor Trap Susceptibility") {
-      specificWeakness = `Distractor Trap Susceptibility: Selected ${errorTaxonomy.distractorTrapCount} tempting distractor choice(s) and missed ${errorTaxonomy.questionInterpretationCount} keyword qualifier(s) ('NOT' / 'EXCEPT').`;
-      interpretation = `What the data suggests: Your incorrect responses frequently involve tempting distractor options and missed qualifying terms such as 'NOT' and 'EXCEPT'. This pattern is consistent with question-interpretation and distractor-trap susceptibility.`;
+      specificWeakness = `Distractor Selection & Question Interpretation: ${incorrectCount} of ${attemptsCount} questions were incorrect (${errorTaxonomy.distractorTrapCount} tempting distractor selection(s), ${errorTaxonomy.questionInterpretationCount} keyword qualifier miss(es) like NOT/EXCEPT).`;
+      interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect. ${errorTaxonomy.distractorTrapCount} incorrect responses involved tempting distractors and ${errorTaxonomy.questionInterpretationCount} involved missed qualifying words such as NOT or EXCEPT. This pattern is consistent with question-interpretation and distractor-selection errors.`;
     } else if (primaryDiagnosis === "Concept Application Gap") {
-      specificWeakness = `Concept Application Gap: Difficulty transferring foundational principles into multi-variable CUET application scenarios.`;
-      interpretation = `What the data suggests: Correct responses occur on direct definition stems, but errors cluster on multi-step or application-oriented questions requiring multi-variable synthesis.`;
+      specificWeakness = `Concept Application & Multi-Step Scenarios: ${incorrectCount} of ${attemptsCount} questions were incorrect, clustering on multi-variable application problems.`;
+      interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect. Responses demonstrate familiarity on direct single-step stems, but incorrect answers cluster on multi-step or application scenarios requiring multi-variable synthesis.`;
     } else if (primaryDiagnosis === "Rapid Response Pacing") {
-      specificWeakness = `Rapid Response Pattern: Unusually fast response times recorded (~${avgTimeSeconds}s/Q) alongside ${incorrectCount} incorrect selections.`;
-      interpretation = `What the data suggests: Very fast responses detected. This may indicate rapid guessing or quick answer selection, but the current telemetry cannot determine intent.`;
+      specificWeakness = `Rapid Response Timing: Fast responses recorded (~${avgTimeSeconds}s/Q, target: ${targetTimeSeconds}s) alongside ${incorrectCount} incorrect selections out of ${attemptsCount} attempts.`;
+      interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect with an average response time of ~${avgTimeSeconds}s per question. Very fast responses detected. Telemetry cannot determine whether this reflects rapid guessing or instant selection.`;
     } else if (accuracyPercentage < 50) {
-      specificWeakness = `Foundational Conceptual Gap: Core definitions and relationships in ${chapter || microTopic} require direct NCERT review.`;
-      interpretation = `What the data suggests: Accuracy across fundamental domain questions is below 50%. Performance indicates uncertainty in primary NCERT definitions and core principles.`;
+      specificWeakness = `Foundational Knowledge Retrieval: ${incorrectCount} of ${attemptsCount} questions were incorrect (${accuracyPercentage}% accuracy). Core definitions in ${chapter || microTopic} require direct NCERT review.`;
+      interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect (${accuracyPercentage}% accuracy). Telemetry records multiple errors across core definitions and standard relationships in ${chapter || microTopic}. This pattern indicates foundational knowledge gaps requiring direct NCERT textbook review.`;
     } else {
-      specificWeakness = `Inconsistent Execution: Periodic lapses under exam conditions (${incorrectCount} incorrect out of ${attemptsCount} attempts).`;
-      interpretation = `What the data suggests: Foundational grasp is established with ${accuracyPercentage}% accuracy, but performance exhibits occasional lapses under timed mock conditions.`;
+      specificWeakness = `Intermittent Response Variability: ${incorrectCount} incorrect responses recorded out of ${attemptsCount} attempts (${accuracyPercentage}% accuracy).`;
+      interpretation = `What the data suggests: Foundational grasp is supported with ${accuracyPercentage}% accuracy across ${attemptsCount} questions, but ${incorrectCount} isolated errors were recorded under timed test conditions. If an isolated cause cannot be determined from telemetry, continued practice will confirm whether a systemic pattern exists.`;
     }
   }
 
   const evidenceList: string[] = [
     `${incorrectCount}/${attemptsCount} questions incorrect (${accuracyPercentage}% accuracy)`,
-    `Avg response time: ${avgTimeSeconds}s per question (Target: ≤${targetTimeSeconds}s)`,
+    `Avg Response: ${avgTimeSeconds}s per question (Target: ≤${targetTimeSeconds}s)`,
   ];
 
   if (avgTimeSeconds < 10 && attemptsCount > 0) {
-    evidenceList.push(`Unusually fast response times detected (~${avgTimeSeconds}s/Q). This may indicate rapid answer selection, but telemetry cannot determine intent.`);
+    evidenceList.push(`Very fast responses detected (~${avgTimeSeconds}s/Q). Telemetry cannot determine whether this reflects rapid guessing or instant selection.`);
   }
 
   if (attemptsCount < 5) {
@@ -837,12 +930,17 @@ export function generateFullTopicDiagnosis(
   });
 
   // Remediation Plan
-  const revTopics = kb.reviewTopics[topicKey] || [chapter, microTopic, "Core NCERT Principles"];
-  const frameworkChecklist = kb.decisionFrameworks[topicKey] || [
-    "Identify exact given variables & SI units.",
-    "Verify whether question stem contains 'NOT' or 'EXCEPT'.",
-    "Select primary formula before attempting calculation.",
-    "Double check signs and units in final step.",
+  const topicSearch = `${chapter} ${microTopic}`.trim();
+  const revTopics = findBestConfigKey(kb.reviewTopics, topicSearch) || kb.reviewTopics[topicKey] || [
+    chapter,
+    microTopic,
+    "Core NCERT Principles",
+  ];
+  const frameworkChecklist = findBestConfigKey(kb.decisionFrameworks, topicSearch) || kb.decisionFrameworks[topicKey] || [
+    "1. Identify given parameters and convert to standard units",
+    "2. Check question stem for qualifying keywords ('NOT' or 'EXCEPT')",
+    "3. Select governing NCERT formula or mechanism",
+    "4. Eliminate distractor options before confirming answer",
   ];
 
   // Dynamic practice recommendation based on error taxonomy
@@ -896,18 +994,45 @@ export function generateFullTopicDiagnosis(
     },
   };
 
-  // Exam Tactic & Trap
-  const examTactic = kb.tactics[topicKey] || Object.values(kb.tactics)[0];
-  const commonTrap = kb.commonTraps[topicKey] || `Falling for tempting distractor choices in ${chapter || microTopic} by skipping qualifying keywords.`;
+  // Exam Tactic & Trap matched specifically to topic
+  const examTactic =
+    findBestConfigKey(kb.tactics, topicSearch) ||
+    kb.tactics[topicKey] ||
+    Object.values(kb.tactics)[0];
+  const commonTrap =
+    findBestConfigKey(kb.commonTraps, topicSearch) ||
+    kb.commonTraps[topicKey] ||
+    `Falling for tempting distractor choices in ${chapter || microTopic} by skipping qualifying keywords.`;
 
   const ncertRef = `NCERT Class 12 ${subject} • Chapter: ${chapter}`;
 
-  // Distinguish Knowledge vs Performance problems
-  const isPerformanceProblem =
+  // Rigorous problemClassification alignment:
+  // Never display Knowledge Gap if telemetry indicates distractor traps or calculation issues
+  let problemClassification: FullTopicDiagnosis["problemClassification"] = "KNOWLEDGE_PROBLEM";
+  if (attemptsCount < 5) {
+    problemClassification = "LIMITED_DATA";
+  } else if (
+    primaryDiagnosis === "Distractor Trap Susceptibility" ||
+    primaryDiagnosis === "Question Interpretation Error" ||
+    errorTaxonomy.distractorTrapCount > 0 ||
+    errorTaxonomy.questionInterpretationCount > 0
+  ) {
+    problemClassification = "QUESTION_INTERPRETATION";
+  } else if (
+    primaryDiagnosis === "Calculation Error" ||
+    primaryDiagnosis === "Rapid Response Pacing" ||
+    primaryDiagnosis === "Precision Slip / Careless Error" ||
     errorTaxonomy.calculationCount > 0 ||
     errorTaxonomy.timePacingCount > 0 ||
     errorTaxonomy.carelessCount > 0 ||
-    avgTimeSeconds > targetTimeSeconds + 15;
+    avgTimeSeconds > targetTimeSeconds + 15
+  ) {
+    problemClassification = "PERFORMANCE_PROBLEM";
+  } else if (errorTaxonomy.conceptualGapCount > 0 || accuracyPercentage < 50) {
+    problemClassification = "KNOWLEDGE_PROBLEM";
+  } else {
+    problemClassification = "QUESTION_INTERPRETATION";
+  }
 
   const isRecovered = accuracyPercentage >= 80 && attemptsCount >= 10 && avgTimeSeconds <= targetTimeSeconds + 10;
   const remediationStage: import("@/types").RemediationStage = isRecovered
@@ -976,7 +1101,7 @@ export function generateFullTopicDiagnosis(
       targetPacingSeconds: targetTimeSeconds,
       minimumNewAttemptsRequired: 10,
     },
-    problemClassification: isPerformanceProblem ? "PERFORMANCE_PROBLEM" : "KNOWLEDGE_PROBLEM",
+    problemClassification,
     remediationStage,
     isRecovered,
     recoveryEvidence: isRecovered

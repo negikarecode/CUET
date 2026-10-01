@@ -458,7 +458,7 @@ export default function DashboardClient({
                   </h3>
                   <p className="text-xs sm:text-sm font-bold text-black/80 font-mono mt-0.5">
                     {prioritizedCandidate.accuracyPercentage}% Accuracy · {prioritizedCandidate.attemptsCount} Attempts
-                    {prioritizedCandidate.avgTimeSeconds ? ` · Avg response time: ${prioritizedCandidate.avgTimeSeconds}s / Q` : ""}
+                    {prioritizedCandidate.avgTimeSeconds ? ` · Avg Response: ${prioritizedCandidate.avgTimeSeconds}s` : ""}
                   </p>
                 </div>
 
