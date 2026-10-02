@@ -14,24 +14,42 @@ export function buildDeterministicPostMockAIInsight(
   const { overall, difficultyBreakdown, chapterBreakdown, allQuestions, subject } = report;
 
   // 1. Difficulty Observation
-  let diffInsight = "";
+  // Always summarize all present difficulty tiers deterministically before interpreting
   const easy = difficultyBreakdown.find((d) => d.difficulty === "easy");
   const med = difficultyBreakdown.find((d) => d.difficulty === "medium");
   const hard = difficultyBreakdown.find((d) => d.difficulty === "hard");
 
-  if (easy && hard && easy.attempted > 0 && hard.attempted > 0) {
-    if (easy.accuracy >= 75 && hard.accuracy <= 50) {
-      diffInsight = `In this mock, your accuracy dropped from ${easy.accuracy}% on Easy questions to ${hard.accuracy}% on Hard questions. You navigated foundational questions smoothly but encountered resistance on deeper analytical items.`;
-    } else if (Math.abs(easy.accuracy - hard.accuracy) <= 15) {
-      diffInsight = `In this mock, your accuracy remained steady across difficulty tiers (${easy.accuracy}% on Easy vs ${hard.accuracy}% on Hard).`;
-    } else {
-      diffInsight = `In this mock, you achieved ${easy.accuracy}% on Easy questions, ${med ? `${med.accuracy}% on Medium, ` : ""}and ${hard.accuracy}% on Hard questions.`;
-    }
-  } else if (easy && easy.attempted > 0) {
-    diffInsight = `In this mock, you achieved ${easy.accuracy}% accuracy across ${easy.attempted} Easy questions attempted.`;
-  } else {
-    diffInsight = `Performance across difficulty tiers in this mock showed an overall accuracy of ${overall.accuracyPercentage}%.`;
+  const tierSummaries: string[] = [];
+  if (easy && easy.totalQuestions > 0) {
+    tierSummaries.push(`Easy: ${easy.correct}/${easy.attempted} = ${easy.accuracy}%`);
   }
+  if (med && med.totalQuestions > 0) {
+    tierSummaries.push(`Medium: ${med.correct}/${med.attempted} = ${med.accuracy}%`);
+  }
+  if (hard && hard.totalQuestions > 0) {
+    tierSummaries.push(`Hard: ${hard.correct}/${hard.attempted} = ${hard.accuracy}%`);
+  }
+
+  let diffInterpretation = "";
+  if (easy && hard && easy.attempted >= 3 && hard.attempted >= 3) {
+    if (easy.accuracy >= hard.accuracy + 20) {
+      diffInterpretation = ` Accuracy declined notably from Easy to Hard questions in this paper.`;
+    } else if (hard.accuracy >= easy.accuracy + 10) {
+      diffInterpretation = ` Accuracy on Hard questions matched or exceeded Easy questions, showing the paper did not follow a typical difficulty drop.`;
+    } else {
+      diffInterpretation = ` Performance remained steady across difficulty tiers in this mock.`;
+    }
+  } else if (easy && med && easy.attempted >= 3 && med.attempted >= 3) {
+    if (med.accuracy >= easy.accuracy) {
+      diffInterpretation = ` Accuracy was slightly higher on Medium questions than Easy questions in this mock.`;
+    } else {
+      diffInterpretation = ` Accuracy was higher on Easy questions than Medium questions in this mock.`;
+    }
+  }
+
+  const diffInsight = tierSummaries.length > 0
+    ? `${tierSummaries.join(" | ")}.${diffInterpretation}`
+    : `Performance across difficulty tiers in this mock showed an overall accuracy of ${overall.accuracyPercentage}%.`;
 
   // 2. Chapter Insights
   const chapterInsights = chapterBreakdown.slice(0, 3).map((ch) => {
@@ -50,7 +68,7 @@ export function buildDeterministicPostMockAIInsight(
     return {
       chapter: ch.chapter,
       insight: insightText,
-      evidenceQuestionIds: incorrectQIds.length > 0 ? incorrectQIds.slice(0, 5) : chapterQuestions.slice(0, 3).map((q) => q.questionId),
+      evidenceQuestionIds: incorrectQIds.length > 0 ? incorrectQIds : chapterQuestions.map((q) => q.questionId),
     };
   });
 
@@ -63,7 +81,7 @@ export function buildDeterministicPostMockAIInsight(
     notablePatterns.push({
       title: "Time-Sink Questions (>72s)",
       description: `${overall.timeSinkCount} question${overall.timeSinkCount === 1 ? "" : "s"} required more than 72 seconds in this mock, which impacted overall pacing.`,
-      evidenceQuestionIds: timeSinkQIds.slice(0, 4),
+      evidenceQuestionIds: timeSinkQIds,
     });
   }
 
@@ -73,7 +91,7 @@ export function buildDeterministicPostMockAIInsight(
     notablePatterns.push({
       title: "Strategic Skipping",
       description: `You chose not to answer ${overall.skippedCount} questions, preserving ${overall.skippedCount} marks from negative penalty.`,
-      evidenceQuestionIds: skippedQIds.slice(0, 4),
+      evidenceQuestionIds: skippedQIds,
     });
   }
 
@@ -84,10 +102,14 @@ export function buildDeterministicPostMockAIInsight(
       .filter((q) => q.chapter === mostPenalizedChapter.chapter && q.isAttempted && q.isCorrect === false)
       .map((q) => q.questionId);
 
+    const pctOfAllMistakes = overall.incorrectCount > 0
+      ? Math.round((mostPenalizedChapter.incorrect / overall.incorrectCount) * 100)
+      : 0;
+
     notablePatterns.push({
       title: "Penalty Concentration",
-      description: `In this paper, ${mostPenalizedChapter.incorrect} incorrect answers originated from "${mostPenalizedChapter.chapter}".`,
-      evidenceQuestionIds: chapIncorrectIds.slice(0, 4),
+      description: `${mostPenalizedChapter.chapter} accounted for ${mostPenalizedChapter.incorrect} of your ${overall.incorrectCount} incorrect answers (${pctOfAllMistakes}% of all mistakes). You answered ${mostPenalizedChapter.correct} of ${mostPenalizedChapter.attempted} ${mostPenalizedChapter.chapter} questions correctly (${mostPenalizedChapter.accuracy}%).`,
+      evidenceQuestionIds: chapIncorrectIds,
     });
   }
 
@@ -179,14 +201,17 @@ export async function generatePostMockAIInsight(
 Your task is to provide an observational interpretation of ONE single completed mock attempt.
 CRITICAL RULES:
 1. Ground every statement STRICTLY in the provided verified telemetry. Do NOT invent numbers or statistics.
-2. Use NEUTRAL, OBSERVATIONAL language describing THIS single mock only.
-   - GOOD: "In this mock, your accuracy dropped from 82% on Easy to 48% on Hard questions."
-   - GOOD: "Most of your incorrect answers in this paper came from Electrochemistry."
+2. In difficultyInsight: ALWAYS summarize all present difficulty tiers first (e.g. Easy: X/Y = Z%, Medium: X/Y = Z%, Hard: A/B = C%), then offer neutral interpretation only if data supports it. Never assume harder = worse without data.
+3. In notablePatterns: If noting penalty concentration in a chapter, include: incorrect count, total incorrect count, percentage of all mistakes, chapter correct count, chapter attempted count, and chapter accuracy percentage.
+4. Any evidenceQuestionIds provided MUST strictly be taken from the provided question IDs. The count stated in any claim MUST EXACTLY match the number of IDs in evidenceQuestionIds.
+5. Use NEUTRAL, OBSERVATIONAL language describing THIS single mock only.
+   - GOOD: "In this mock, your accuracy was 22% on Easy and 33% on Medium."
+   - GOOD: "Matrices accounted for 6 of your 38 incorrect answers (16% of all mistakes)."
    - FORBIDDEN: "You have poor understanding", "You are careless", "This is your permanent weakness".
-3. Return VALID JSON matching this exact structure:
+6. Return VALID JSON matching this exact structure:
 {
   "summary": "1-2 sentences summarizing what happened in this mock",
-  "difficultyInsight": "1-2 sentences on how difficulty affected performance in this mock",
+  "difficultyInsight": "Deterministic summary of present tiers followed by neutral observation",
   "chapterInsights": [
     {
       "chapter": "chapter name",
@@ -197,7 +222,7 @@ CRITICAL RULES:
   "notablePatterns": [
     {
       "title": "pattern title",
-      "description": "pattern observation",
+      "description": "pattern observation with verified numbers",
       "evidenceQuestionIds": ["q_id"]
     }
   ],
@@ -234,6 +259,8 @@ CRITICAL RULES:
       typeof parsed.difficultyInsight === "string" &&
       Array.isArray(parsed.chapterInsights)
     ) {
+      const validQIds = new Set(report.allQuestions.map((q) => q.questionId));
+
       return {
         status: "available",
         summary: parsed.summary,
@@ -241,13 +268,13 @@ CRITICAL RULES:
         chapterInsights: parsed.chapterInsights.map((ci: any) => ({
           chapter: String(ci.chapter || "Core Chapter"),
           insight: String(ci.insight || ""),
-          evidenceQuestionIds: Array.isArray(ci.evidenceQuestionIds) ? ci.evidenceQuestionIds : [],
+          evidenceQuestionIds: (Array.isArray(ci.evidenceQuestionIds) ? ci.evidenceQuestionIds : []).filter((id: any) => validQIds.has(String(id))),
         })),
         notablePatterns: Array.isArray(parsed.notablePatterns)
           ? parsed.notablePatterns.map((np: any) => ({
               title: String(np.title || "Pattern"),
               description: String(np.description || ""),
-              evidenceQuestionIds: Array.isArray(np.evidenceQuestionIds) ? np.evidenceQuestionIds : [],
+              evidenceQuestionIds: (Array.isArray(np.evidenceQuestionIds) ? np.evidenceQuestionIds : []).filter((id: any) => validQIds.has(String(id))),
             }))
           : [],
         recommendedNextSteps: Array.isArray(parsed.recommendedNextSteps)

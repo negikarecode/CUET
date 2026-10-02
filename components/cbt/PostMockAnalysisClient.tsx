@@ -50,6 +50,9 @@ export default function PostMockAnalysisClient({
   const [filterResult, setFilterResult] = useState<"all" | "correct" | "incorrect" | "skipped">(
     "all"
   );
+  // Specific question ID filter (e.g. from clicking "Inspect evidence" on AI pattern or chapter)
+  const [filterQuestionIds, setFilterQuestionIds] = useState<string[] | null>(null);
+  const [activeEvidenceLabel, setActiveEvidenceLabel] = useState<string | null>(null);
 
   // AI Interpretation State
   const [aiInsight, setAiInsight] = useState<AIPostMockInsight | null>(null);
@@ -101,10 +104,22 @@ export default function PostMockAnalysisClient({
     chapter?: string;
     difficulty?: NormalizedDifficulty | "all";
     result?: "all" | "correct" | "incorrect" | "skipped";
+    questionIds?: string[];
+    evidenceLabel?: string;
   }) => {
-    if (options.chapter !== undefined) setFilterChapter(options.chapter);
-    if (options.difficulty !== undefined) setFilterDifficulty(options.difficulty);
-    if (options.result !== undefined) setFilterResult(options.result);
+    if (options.questionIds) {
+      setFilterQuestionIds(options.questionIds);
+      setActiveEvidenceLabel(options.evidenceLabel || `${options.questionIds.length} Question Evidence`);
+      setFilterChapter("all");
+      setFilterDifficulty("all");
+      setFilterResult("all");
+    } else {
+      setFilterQuestionIds(null);
+      setActiveEvidenceLabel(null);
+      if (options.chapter !== undefined) setFilterChapter(options.chapter);
+      if (options.difficulty !== undefined) setFilterDifficulty(options.difficulty);
+      if (options.result !== undefined) setFilterResult(options.result);
+    }
 
     setTimeout(() => {
       questionReviewRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -114,6 +129,9 @@ export default function PostMockAnalysisClient({
   // Filtered Questions for Click-Through Question Review
   const filteredQuestions = useMemo(() => {
     return allQuestions.filter((q) => {
+      if (filterQuestionIds !== null) {
+        return filterQuestionIds.includes(q.questionId);
+      }
       if (filterDifficulty !== "all" && q.difficulty !== filterDifficulty) return false;
       if (filterChapter !== "all" && q.chapter !== filterChapter) return false;
       if (filterResult === "correct" && q.isCorrect !== true) return false;
@@ -121,7 +139,7 @@ export default function PostMockAnalysisClient({
       if (filterResult === "skipped" && !q.isSkipped) return false;
       return true;
     });
-  }, [allQuestions, filterDifficulty, filterChapter, filterResult]);
+  }, [allQuestions, filterQuestionIds, filterDifficulty, filterChapter, filterResult]);
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
@@ -310,7 +328,7 @@ export default function PostMockAnalysisClient({
               <span>Chapter-wise Performance</span>
             </h2>
             <p className="text-xs text-black/65 font-semibold mt-0.5">
-              Ranked by question count and sample weight to reflect meaningful paper distribution.
+              Sorted by number of questions in this mock.
             </p>
           </div>
           <span className="text-[11px] font-bold text-black/60 font-mono">
@@ -350,8 +368,8 @@ export default function PostMockAnalysisClient({
                   </td>
                   <td className="py-3 px-3 text-center font-mono">{row.totalQuestions}</td>
                   <td className="py-3 px-3 text-center font-mono">{row.attempted}</td>
-                  <td className="py-3 px-3 text-center font-mono text-[#059669]">+{row.correct}</td>
-                  <td className="py-3 px-3 text-center font-mono text-[#DC2626]">-{row.incorrect}</td>
+                  <td className="py-3 px-3 text-center font-mono text-[#059669]">{row.correct}</td>
+                  <td className="py-3 px-3 text-center font-mono text-[#DC2626]">{row.incorrect}</td>
                   <td className="py-3 px-3 text-center">
                     <span
                       className={`inline-block px-2 py-0.5 rounded font-mono font-black text-xs border border-black ${
@@ -426,14 +444,14 @@ export default function PostMockAnalysisClient({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
               {(["easy", "medium", "hard"] as NormalizedDifficulty[]).map((diff) => {
                 const cell = currentChapterMatrixRow[diff];
-                const hasData = cell && cell.totalQuestions > 0;
+                const hasQuestions = cell && cell.totalQuestions > 0;
                 const isAttempted = cell && cell.attempted > 0;
 
                 return (
                   <div
                     key={diff}
                     className={`p-4 rounded-xl border-2 border-black flex flex-col justify-between ${
-                      hasData ? "bg-[#FAF7EE]/60" : "bg-slate-50 opacity-70"
+                      hasQuestions ? "bg-[#FAF7EE]/60" : "bg-slate-50 opacity-70"
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -447,27 +465,33 @@ export default function PostMockAnalysisClient({
 
                     <div className="mt-3">
                       <p className="text-xl font-black text-black font-mono">
-                        {hasData ? (
-                          <>
-                            {cell.correct}{" "}
-                            <span className="text-xs font-semibold text-black/50">
-                              / {cell.attempted} attempted
+                        {hasQuestions ? (
+                          isAttempted ? (
+                            <>
+                              {cell.correct}{" "}
+                              <span className="text-xs font-semibold text-black/50">
+                                / {cell.attempted} attempted
+                              </span>
+                            </>
+                          ) : (
+                            <span className="text-sm font-semibold text-black/60">
+                              0 attempted
                             </span>
-                          </>
+                          )
                         ) : (
                           <span className="text-sm font-semibold text-black/40">
-                            No {diff} questions in paper
+                            No {diff} questions in this mock
                           </span>
                         )}
                       </p>
-                      {hasData && (
+                      {hasQuestions && (
                         <p className="text-[11px] font-semibold text-black/60 mt-1">
                           {cell.totalQuestions} total questions ({cell.skipped} skipped)
                         </p>
                       )}
                     </div>
 
-                    {hasData && (
+                    {hasQuestions && (
                       <button
                         type="button"
                         onClick={() =>
@@ -608,9 +632,8 @@ export default function PostMockAnalysisClient({
                         type="button"
                         onClick={() =>
                           handleInspectSlice({
-                            difficulty: "all",
-                            chapter: "all",
-                            result: "all",
+                            questionIds: pat.evidenceQuestionIds,
+                            evidenceLabel: `AI Pattern: ${pat.title}`,
                           })
                         }
                         className="mt-2 text-[10px] font-black text-[#FF5C5C] hover:underline cursor-pointer"
@@ -670,22 +693,49 @@ export default function PostMockAnalysisClient({
             </span>
           </div>
 
+          {/* Active Evidence Inspection Banner */}
+          {filterQuestionIds !== null && (
+            <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#FEF3C7] border-2 border-black text-xs font-bold text-black">
+              <span>
+                Filtered by: <span className="font-black text-black">{activeEvidenceLabel || "Evidence Slice"}</span> ({filteredQuestions.length} Questions)
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setFilterQuestionIds(null);
+                  setActiveEvidenceLabel(null);
+                }}
+                className="px-2.5 py-1 rounded bg-black text-white text-[11px] font-black hover:bg-neutral-800 cursor-pointer"
+              >
+                Clear Evidence Filter
+              </button>
+            </div>
+          )}
+
           {/* Filter Pills */}
           <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-black/10">
             {/* Result Filter */}
             <span className="text-[11px] font-black text-black mr-1">Result:</span>
             <button
               type="button"
-              onClick={() => setFilterResult("all")}
+              onClick={() => {
+                setFilterQuestionIds(null);
+                setActiveEvidenceLabel(null);
+                setFilterResult("all");
+              }}
               className={`px-2.5 py-1 rounded-lg text-xs font-black border border-black cursor-pointer transition-all ${
-                filterResult === "all" ? "bg-black text-white" : "bg-white text-black hover:bg-[#FEF3C7]"
+                filterResult === "all" && filterQuestionIds === null ? "bg-black text-white" : "bg-white text-black hover:bg-[#FEF3C7]"
               }`}
             >
               All
             </button>
             <button
               type="button"
-              onClick={() => setFilterResult("correct")}
+              onClick={() => {
+                setFilterQuestionIds(null);
+                setActiveEvidenceLabel(null);
+                setFilterResult("correct");
+              }}
               className={`px-2.5 py-1 rounded-lg text-xs font-black border border-black cursor-pointer transition-all ${
                 filterResult === "correct" ? "bg-[#10B981] text-black" : "bg-white text-black hover:bg-[#D1FAE5]"
               }`}
@@ -694,7 +744,11 @@ export default function PostMockAnalysisClient({
             </button>
             <button
               type="button"
-              onClick={() => setFilterResult("incorrect")}
+              onClick={() => {
+                setFilterQuestionIds(null);
+                setActiveEvidenceLabel(null);
+                setFilterResult("incorrect");
+              }}
               className={`px-2.5 py-1 rounded-lg text-xs font-black border border-black cursor-pointer transition-all ${
                 filterResult === "incorrect" ? "bg-[#FF5C5C] text-white" : "bg-white text-black hover:bg-[#FEE2E2]"
               }`}
@@ -703,7 +757,11 @@ export default function PostMockAnalysisClient({
             </button>
             <button
               type="button"
-              onClick={() => setFilterResult("skipped")}
+              onClick={() => {
+                setFilterQuestionIds(null);
+                setActiveEvidenceLabel(null);
+                setFilterResult("skipped");
+              }}
               className={`px-2.5 py-1 rounded-lg text-xs font-black border border-black cursor-pointer transition-all ${
                 filterResult === "skipped" ? "bg-black text-white" : "bg-white text-black hover:bg-slate-100"
               }`}
@@ -722,9 +780,13 @@ export default function PostMockAnalysisClient({
                   <button
                     key={diff}
                     type="button"
-                    onClick={() => setFilterDifficulty(diff)}
+                    onClick={() => {
+                      setFilterQuestionIds(null);
+                      setActiveEvidenceLabel(null);
+                      setFilterDifficulty(diff);
+                    }}
                     className={`px-2.5 py-1 rounded-lg text-xs font-black border border-black uppercase cursor-pointer transition-all ${
-                      filterDifficulty === diff
+                      filterDifficulty === diff && filterQuestionIds === null
                         ? "bg-black text-white"
                         : "bg-white text-black hover:bg-[#FEF3C7]"
                     }`}
@@ -738,10 +800,15 @@ export default function PostMockAnalysisClient({
             {/* Chapter Filter */}
             <span className="text-[11px] font-black text-black ml-3 mr-1">Chapter:</span>
             <select
-              value={filterChapter}
-              onChange={(e) => setFilterChapter(e.target.value)}
+              value={filterQuestionIds !== null ? "custom" : filterChapter}
+              onChange={(e) => {
+                setFilterQuestionIds(null);
+                setActiveEvidenceLabel(null);
+                setFilterChapter(e.target.value);
+              }}
               className="px-2 py-1 rounded-lg border border-black bg-white text-xs font-bold text-black focus:outline-none cursor-pointer"
             >
+              {filterQuestionIds !== null && <option value="custom">Evidence Selection</option>}
               <option value="all">All Chapters</option>
               {chapterBreakdown.map((c) => (
                 <option key={c.chapter} value={c.chapter}>
