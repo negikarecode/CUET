@@ -60,6 +60,7 @@ import { CycleHistorySelector } from "@/components/dashboard/CycleHistorySelecto
 import { SubjectRadarAISection } from "@/components/dashboard/SubjectRadarAISection";
 import { DiagnosticCycle } from "@/types/cycle";
 import { SubjectRadarAIAnalysis, SubjectRadarAIPayload } from "@/types/subject-ai";
+import { buildDeterministicSubjectRadarAI } from "@/lib/subject-ai-engine";
 
 const SUBJECT_ICON_MAP: Record<string, React.ElementType> = {
   Calculator,
@@ -187,6 +188,10 @@ export default function WeaknessRadarClient({
   const [selectedCycleForReport, setSelectedCycleForReport] = useState<DiagnosticCycle | null>(null);
   const [aiAnalysis, setAiAnalysis] = useState<SubjectRadarAIAnalysis | null>(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
+
+  // In-flight request controller and fingerprint cache to avoid duplicate/stuck fetches
+  const abortControllerRef = React.useRef<AbortController | null>(null);
+  const lastFingerprintRef = React.useRef<string>("");
 
   const toggleChapterExpand = (key: string) => {
     setExpandedChapterKey((prev) => (prev === key ? null : key));
@@ -347,7 +352,7 @@ export default function WeaknessRadarClient({
   const nextActionDiagnosis = prioritizedCandidate ? getOrGenerateDiagnosis(prioritizedCandidate) : null;
 
   // Evidence-Based AI Analysis for current subject
-  const fetchSubjectAIAnalysis = React.useCallback(async () => {
+  const fetchSubjectAIAnalysis = React.useCallback(async (forceRefresh = false) => {
     const activeSubjectName =
       selectedRadarSubject === "all"
         ? candidateSubjects[0] || "Physics"
@@ -450,23 +455,67 @@ export default function WeaknessRadarClient({
       },
     };
 
+    // Calculate a stable deterministic fingerprint to prevent duplicate in-flight requests
+    const currentFingerprint = `${selectedRadarSubject}:${subAttempted}:${subAccuracy}:${currentCycleNumber}:${currentCycleQuestionCount}:${weaknessRadar.length}`;
+    if (!forceRefresh && lastFingerprintRef.current === currentFingerprint && aiAnalysis !== null) {
+      return;
+    }
+    lastFingerprintRef.current = currentFingerprint;
+
+    // Immediately resolve deterministic calibration if attempts < 5
+    if (subAttempted < 5) {
+      const immediateAnalysis = buildDeterministicSubjectRadarAI(payload);
+      setAiAnalysis(immediateAnalysis);
+      setIsAiLoading(false);
+      return;
+    }
+
+    // Abort previous in-flight request to avoid race condition overwrite
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setIsAiLoading(true);
+
     try {
       const res = await fetch("/api/ai/subject-radar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
+
       if (res.ok) {
         const data = await res.json();
         if (data.analysis) {
           setAiAnalysis(data.analysis);
+        } else {
+          // If response lacked analysis object, fall back to deterministic baseline
+          const fallback = buildDeterministicSubjectRadarAI(payload);
+          fallback.status = "fallback";
+          setAiAnalysis(fallback);
         }
+      } else {
+        // Non-200 response -> robust deterministic fallback with status fallback
+        const fallback = buildDeterministicSubjectRadarAI(payload);
+        fallback.status = "fallback";
+        setAiAnalysis(fallback);
       }
-    } catch (err) {
-      console.warn("Failed to fetch subject AI analysis:", err);
+    } catch (err: any) {
+      if (err?.name === "AbortError") {
+        // Request was intentionally aborted for newer subject filter
+        return;
+      }
+      console.warn("Failed to fetch subject AI analysis; using verified deterministic fallback:", err);
+      const fallback = buildDeterministicSubjectRadarAI(payload);
+      fallback.status = "fallback";
+      setAiAnalysis(fallback);
     } finally {
-      setIsAiLoading(false);
+      if (abortControllerRef.current === controller) {
+        setIsAiLoading(false);
+      }
     }
   }, [
     selectedRadarSubject,
@@ -479,14 +528,20 @@ export default function WeaknessRadarClient({
     currentCycleNumber,
     currentCycleQuestionCount,
     diagnosticCycles,
+    aiAnalysis,
   ]);
 
-  // Fetch subject AI analysis whenever active subject or cycle changes
+  // Fetch subject AI analysis whenever active subject, cycle, or attempt count changes
   useEffect(() => {
     if (isClient) {
-      fetchSubjectAIAnalysis();
+      fetchSubjectAIAnalysis(false);
     }
-  }, [isClient, selectedRadarSubject, currentCycleNumber, fetchSubjectAIAnalysis]);
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, [isClient, selectedRadarSubject, currentCycleNumber, currentCycleQuestionCount, testAttempts?.length]);
 
   // Launch targeted practice drill
   const handleLaunchTargetedPractice = async (topic: string, subject: string, practiceType?: string) => {
@@ -812,7 +867,7 @@ export default function WeaknessRadarClient({
         }
         analysis={aiAnalysis}
         isLoading={isAiLoading}
-        onRefresh={fetchSubjectAIAnalysis}
+        onRefresh={() => fetchSubjectAIAnalysis(true)}
         onLaunchRepairDrill={(topic, practiceType) => {
           const sub =
             selectedRadarSubject === "all"

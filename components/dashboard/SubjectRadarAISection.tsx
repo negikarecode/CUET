@@ -33,7 +33,7 @@ export function SubjectRadarAISection({
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-2xl border-3 border-black p-6 shadow-[5px_5px_0px_0px_#000] space-y-4">
+      <div className="bg-white rounded-2xl border-3 border-black p-5 sm:p-6 shadow-[5px_5px_0px_0px_#000] space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center animate-spin">
@@ -49,8 +49,9 @@ export function SubjectRadarAISection({
             </div>
           </div>
         </div>
-        <div className="h-24 bg-[#FAF7EE] rounded-xl border-2 border-black/10 animate-pulse flex items-center justify-center">
-          <span className="text-xs font-mono font-bold text-black/40">Evaluating response patterns...</span>
+        <div className="p-4 bg-[#FAF7EE] rounded-xl border-2 border-black/20 flex flex-col items-center justify-center text-center space-y-1.5 animate-pulse">
+          <span className="text-xs font-mono font-black text-black/80">Analyzing verified question telemetry...</span>
+          <span className="text-[11px] font-semibold text-black/50">Cross-referencing error taxonomy, speed pacing, and difficulty progression</span>
         </div>
       </div>
     );
@@ -68,7 +69,7 @@ export function SubjectRadarAISection({
           </div>
           <button
             onClick={onRefresh}
-            className="px-3 py-1 rounded-lg bg-[#FAF7EE] hover:bg-black hover:text-white border-2 border-black text-xs font-black transition-all flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-lg bg-[#FAF7EE] hover:bg-black hover:text-white border-2 border-black text-xs font-black transition-all flex items-center gap-1.5 shadow-[2px_2px_0px_0px_#000]"
           >
             <RotateCcw className="w-3 h-3" />
             <span>Generate Analysis</span>
@@ -82,9 +83,26 @@ export function SubjectRadarAISection({
   }
 
   const isInsufficient = analysis.status === "insufficient_data";
+  const isFallback = analysis.status === "fallback";
 
   return (
     <div className="bg-white rounded-2xl border-3 border-black p-5 sm:p-6 shadow-[6px_6px_0px_0px_#000] space-y-5">
+      {/* Fallback Notice Banner if AI interpretation service is unavailable */}
+      {isFallback && (
+        <div className="p-2.5 px-3 rounded-xl bg-[#FEF3C7] border-2 border-black text-[11px] font-bold text-black flex items-center justify-between gap-2 shadow-[2px_2px_0px_0px_#000]">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-[#B45309] shrink-0" />
+            <span>AI interpretation temporarily unavailable — displaying verified telemetry analysis from deterministic engine.</span>
+          </div>
+          <button
+            onClick={onRefresh}
+            className="px-2 py-0.5 rounded bg-white hover:bg-black hover:text-white border border-black font-black text-[10px] uppercase transition-all shrink-0"
+          >
+            Retry AI
+          </button>
+        </div>
+      )}
+
       {/* 1. Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black/10 pb-4">
         <div className="space-y-1">
