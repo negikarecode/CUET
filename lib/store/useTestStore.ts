@@ -414,6 +414,7 @@ export const useTestStore = create<TestStoreState>()(
                         isCorrect,
                         timeSpentSeconds: st?.timeSpentSeconds || 0,
                         isTimeSink: (st?.timeSpentSeconds || 0) > 72,
+                        difficulty: q.difficulty,
                         ncertReference: q.pyqSource || `NCERT Class 12 (${q.chapter || "Core"})`,
                         explanation: q.explanation || "",
                       };

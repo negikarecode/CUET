@@ -123,6 +123,44 @@ export function setCachedSubjectRadarAI(
 }
 
 /**
+ * Post-Mock AI Analysis cache
+ * Key: `${userId}:${attemptId}:${fingerprint}`
+ */
+const postMockAIMemoryCache = new Map<
+  string,
+  {
+    data: any;
+    cachedAt: number;
+  }
+>();
+
+export function getCachedPostMockAI(
+  userId: string,
+  attemptId: string,
+  fingerprint: string
+): any | null {
+  const cacheKey = `${userId}:${attemptId}:${fingerprint}`;
+  const hit = postMockAIMemoryCache.get(cacheKey);
+  if (hit && Date.now() - hit.cachedAt < CACHE_TTL_MS) {
+    return hit.data;
+  }
+  return null;
+}
+
+export function setCachedPostMockAI(
+  userId: string,
+  attemptId: string,
+  fingerprint: string,
+  data: any
+): void {
+  const cacheKey = `${userId}:${attemptId}:${fingerprint}`;
+  postMockAIMemoryCache.set(cacheKey, {
+    data,
+    cachedAt: Date.now(),
+  });
+}
+
+/**
  * Invalidate all in-memory caches belonging to a user on logout or account switch
  */
 export function clearUserAICache(userId: string): void {
@@ -136,6 +174,11 @@ export function clearUserAICache(userId: string): void {
   for (const key of subjectRadarMemoryCache.keys()) {
     if (key.startsWith(prefix)) {
       subjectRadarMemoryCache.delete(key);
+    }
+  }
+  for (const key of postMockAIMemoryCache.keys()) {
+    if (key.startsWith(prefix)) {
+      postMockAIMemoryCache.delete(key);
     }
   }
 }

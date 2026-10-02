@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import {
   Award,
@@ -20,6 +20,8 @@ import { getTestAttemptStats } from "@/lib/analytics";
 import { Trophy, RecordedTestAttempt } from "@/types";
 import MathRenderer from "./MathRenderer";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
+import PostMockAnalysisClient from "./PostMockAnalysisClient";
+import { buildPostMockDeterministicReport } from "@/lib/post-mock-engine";
 
 export default function CBTResultView() {
   const { t, translateStem } = useTranslation();
@@ -35,12 +37,14 @@ export default function CBTResultView() {
   const addCoins = useTestStore((state) => state.addCoins);
   const recordTestAttempt = useTestStore((state) => state.recordTestAttempt);
 
+  const [viewMode, setViewMode] = useState<"analysis" | "scorecard">("analysis");
   const [activeFilter, setActiveFilter] = useState<
     "all" | "correct" | "incorrect" | "timesinks" | "unattempted"
   >("all");
   const [earnedXP, setEarnedXP] = useState(0);
   const [unlockedTrophies, setUnlockedTrophies] = useState<Trophy[]>([]);
   const hasProcessedRef = useRef(false);
+  const currentAttemptRecordRef = useRef<RecordedTestAttempt | null>(null);
 
   // Derive all-time personal best stats for this specific test
   const currentTestId = testMeta?.id ?? "cbt_exam";
@@ -89,6 +93,7 @@ export default function CBTResultView() {
         isCorrect,
         timeSpentSeconds: timeSpent,
         isTimeSink: timeSpent > 72,
+        difficulty: String(q.difficulty),
         ncertReference: q.pyqSource || `NCERT Class 12 (${q.chapter || q.topic})`,
         explanation: q.explanation,
       };
@@ -119,6 +124,8 @@ export default function CBTResultView() {
       submittedAt: new Date().toISOString(),
       questions: questionAttempts,
     };
+
+    currentAttemptRecordRef.current = attemptRecord;
 
     // Save locally into user store
     recordTestAttempt(attemptRecord);
@@ -174,6 +181,69 @@ export default function CBTResultView() {
     testAttempts,
   ]);
 
+  // Compile deterministic Post-Mock Analysis report from this attempt (Hooks must run unconditionally)
+  const deterministicReport = useMemo(() => {
+    if (!submittedScore) return null;
+    if (currentAttemptRecordRef.current) {
+      return buildPostMockDeterministicReport(currentAttemptRecordRef.current, questions);
+    }
+
+    const currentTId = testMeta?.id ?? "cbt_exam";
+    const existingAttempt = (testAttempts || []).find((a) => a.testId === currentTId);
+    if (existingAttempt) {
+      return buildPostMockDeterministicReport(existingAttempt, questions);
+    }
+
+    // Synthesize from active store state if first run before effect
+    const syntheticAttempt: RecordedTestAttempt = {
+      id: `attempt_${currentTId}_${Date.now()}`,
+      userId: user.id || "guest",
+      testId: testMeta?.id ?? "cbt_exam",
+      testTitle: testMeta?.title ?? "CUET Domain Examination Paper",
+      subject: testMeta?.subject ?? "Physics",
+      totalQuestions: questions.length,
+      attemptedCount: submittedScore.attemptedCount,
+      unattemptedCount: submittedScore.unattemptedCount,
+      correctCount: submittedScore.correctCount,
+      incorrectCount: submittedScore.incorrectCount,
+      totalMarks: submittedScore.totalMarks,
+      maxMarks: submittedScore.maxMarks,
+      accuracyPercentage: submittedScore.accuracyPercentage,
+      timeTakenSeconds: submittedScore.timeTakenSeconds,
+      timeSinkCount: submittedScore.timeSinkCount,
+      submittedAt: new Date().toISOString(),
+      questions: questions.map((q) => {
+        const ans = answers[q.id];
+        const selectedOption = ans?.selectedOption ?? null;
+        const isCorrect =
+          selectedOption !== null && selectedOption !== undefined
+            ? selectedOption === q.correctOptionId
+            : null;
+        const timeSpent = ans?.timeSpentSeconds ?? 0;
+        return {
+          questionId: q.id,
+          conceptId: q.conceptId,
+          questionNumber: q.questionNumber,
+          subject: testMeta?.subject ?? "Physics",
+          chapter: q.chapter || q.topic || "Domain Core",
+          microTopic: q.topic,
+          prompt: q.prompt,
+          options: q.options,
+          questionType: q.questionType,
+          selectedOption,
+          correctOption: q.correctOptionId,
+          isCorrect,
+          timeSpentSeconds: timeSpent,
+          isTimeSink: timeSpent > 72,
+          difficulty: String(q.difficulty),
+          ncertReference: q.pyqSource || `NCERT Class 12 (${q.chapter || q.topic})`,
+          explanation: q.explanation,
+        };
+      }),
+    };
+    return buildPostMockDeterministicReport(syntheticAttempt, questions);
+  }, [questions, answers, submittedScore, testMeta, user.id, testAttempts]);
+
   if (!submittedScore || (questions.length > 0 && !questions[0]?.correctOptionId)) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
@@ -222,8 +292,50 @@ export default function CBTResultView() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 animate-in fade-in duration-300">
-      {/* Header Banner */}
-      <div className="bg-[#FAF7EE] rounded-xl text-black p-6 sm:p-8 border-2 border-black shadow-[6px_6px_0px_0px_#000]">
+      {/* Top View Mode Switcher */}
+      <div className="flex items-center justify-between gap-4 border-b-2 border-black pb-3">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setViewMode("analysis")}
+            className={`px-4 py-2 rounded-xl text-xs font-black border-2 border-black transition-all cursor-pointer ${
+              viewMode === "analysis"
+                ? "bg-[#FF5C5C] text-white shadow-[3px_3px_0px_0px_#000]"
+                : "bg-white text-black hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000]"
+            }`}
+          >
+            Post-Mock Deep Analysis
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode("scorecard")}
+            className={`px-4 py-2 rounded-xl text-xs font-black border-2 border-black transition-all cursor-pointer ${
+              viewMode === "scorecard"
+                ? "bg-[#FF5C5C] text-white shadow-[3px_3px_0px_0px_#000]"
+                : "bg-white text-black hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000]"
+            }`}
+          >
+            Official Scorecard
+          </button>
+        </div>
+
+        <Link
+          href="/dashboard/mocks"
+          className="text-xs font-black text-black hover:underline decoration-2"
+        >
+          ← Mocks History
+        </Link>
+      </div>
+
+      {viewMode === "analysis" && deterministicReport ? (
+        <PostMockAnalysisClient
+          report={deterministicReport}
+          onRetake={resetSession}
+        />
+      ) : (
+        <>
+          {/* Header Banner */}
+          <div className="bg-[#FAF7EE] rounded-xl text-black p-6 sm:p-8 border-2 border-black shadow-[6px_6px_0px_0px_#000]">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FEF3C7] text-black text-xs font-black uppercase tracking-wider mb-3 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
@@ -719,6 +831,8 @@ export default function CBTResultView() {
           </div>
         </div>
       </div>
+        </>
+      )}
 
     </div>
   );

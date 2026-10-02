@@ -616,10 +616,16 @@ export default function MocksPage() {
                           <span>{t("reattemptTest", "Re-attempt")}</span>
                         </Link>
                         <Link
-                          href={`/test/${test.id}`}
-                          className="px-3 py-2.5 rounded-xl border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all"
+                          href={`/dashboard/mocks/analysis/${best?.id || test.id}`}
+                          className="px-3 py-2.5 rounded-xl border-2 border-black bg-[#FAF7EE] hover:bg-[#FEF3C7] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all"
                         >
-                          {t("scorecardTitle", "Result")}
+                          Analysis
+                        </Link>
+                        <Link
+                          href={`/test/${test.id}`}
+                          className="px-2.5 py-2.5 rounded-xl border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all"
+                        >
+                          Scorecard
                         </Link>
                       </div>
                     ) : (

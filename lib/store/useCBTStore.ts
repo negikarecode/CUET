@@ -835,6 +835,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           isCorrect,
           timeSpentSeconds: timeSpent,
           isTimeSink: timeSpent > 72,
+          difficulty: String(q.difficulty),
           ncertReference: q.pyqSource || `NCERT Class 12 (${q.chapter || q.topic})`,
           explanation: q.explanation,
         };
