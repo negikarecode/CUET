@@ -110,20 +110,39 @@ export function buildDeterministicSubjectRadarAI(
     (q) =>
       q.isCorrect === false &&
       (q.errorCategory?.toLowerCase().includes("calculation") ||
-        q.timeSpentSeconds > 75)
+        q.errorCategory?.toLowerCase().includes("sign") ||
+        q.errorCategory?.toLowerCase().includes("formula"))
   );
 
   if (calculationErrors.length >= 2) {
     const qIds = calculationErrors.map((q) => q.questionId).slice(0, 4);
     keyPatterns.push({
       title: "Calculation Setup & Sign Execution",
-      description: `Detected ${calculationErrors.length} calculation or extended-duration slips. The underlying formula is generally targeted correctly, but multi-step numerical execution causes mark loss.`,
+      description: `Detected ${calculationErrors.length} calculation or sign execution slips. The underlying formula is generally targeted correctly, but multi-step numerical execution causes mark loss.`,
       evidenceQuestionIds: qIds,
       confidence: calculationErrors.length >= 3 ? "high" : "medium",
       classification: "PERFORMANCE_PROBLEM",
     });
     performancePatterns.push(
       `Execution drag on multi-step numericals (${calculationErrors.length} instances). Intermediate sign and unit tracking required.`
+    );
+  }
+
+  // Correct but slow observation (Pacing observation, NOT an accuracy weakness)
+  const slowCorrectQuestions = questions.filter(
+    (q) => q.isCorrect === true && q.timeSpentSeconds > 80
+  );
+  if (slowCorrectQuestions.length >= 2) {
+    performancePatterns.push(
+      `Pacing observation: ${slowCorrectQuestions.length} questions were answered correctly but required >80s. Concepts are solid, but retrieval speed can be improved with timed drills.`
+    );
+  }
+
+  // Rapid responses observation (Purely observational, no psychological guessing)
+  const rapidResponses = questions.filter((q) => q.timeSpentSeconds < 15);
+  if (rapidResponses.length >= 3) {
+    performancePatterns.push(
+      `Telemetry observation: ${rapidResponses.length} questions answered in under 15s. Telemetry records rapid selection; verify pacing allows deliberate stem reading.`
     );
   }
 
@@ -328,11 +347,15 @@ STRICT RULES:
    - KNOWLEDGE PROBLEM: concept misunderstanding, missing definition, formula confusion.
    - PERFORMANCE PROBLEM: calculation errors, sign errors, slow execution, careless slip.
    - QUESTION INTERPRETATION: negative qualifiers (NOT, EXCEPT, INCORRECT), distractor attraction.
-4. Detect CROSS-CHAPTER patterns: Does the same underlying flaw (e.g. calculation setup or qualifier miss) occur across multiple chapters?
+4. Detect CROSS-CHAPTER patterns: Does the same underlying flaw (e.g. calculation setup or qualifier miss) occur across multiple chapters? NEVER invent cross-chapter patterns simply because two chapters have low accuracy. Only group if the underlying error mechanism is identical.
 5. Reference actual question IDs in evidenceQuestionIds array whenever discussing a pattern.
 6. Adhere strictly to the student's deterministic confidence tier: "${payload.deterministicStats.evidenceThresholdLabel}".
    If tier is "Early signal" or "Emerging weakness", use observational phrasing ("Early signal indicates...", "Observed in 2 attempts..."). Never declare absolute certainty.
-7. Return strictly valid JSON matching the exact schema requested with NO markdown backticks or commentary outside JSON.`;
+7. PACING & PSYCHOLOGICAL CLAIMS: NEVER claim the student "guessed", "panicked", or was "careless".
+   Use purely observational telemetry language (e.g. "Rapid response telemetry (<15s) observed on...", "Extended duration (>75s) observed on correct solutions indicates slow retrieval rather than conceptual weakness").
+   Do NOT classify correct-but-slow questions as accuracy weaknesses; surface them strictly as pacing observations.
+8. DIFFICULTY PARADOX: Inspect the actual evidence across easy vs medium vs hard. If easy accuracy is low and hard accuracy is high, interpret that directly (e.g. foundational slip vs complex competence) rather than defaulting to "hard questions are weak".
+9. Return strictly valid JSON matching the exact schema requested with NO markdown backticks or commentary outside JSON.`;
 
     const userPrompt = JSON.stringify({
       subject: payload.subject,
