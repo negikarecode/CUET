@@ -190,7 +190,8 @@ export default function DashboardClient({
 
   const isServerUser = initialData.user && initialData.user.id !== "guest";
 
-  // Robust attempted count: Never drop questions solved on client or server
+  // Authoritative completed attempt counting:
+  // If client has test attempts, compute questions attempted strictly from test attempts
   const clientQuestionsAttempted =
     isClient && clientAnalytics ? (clientAnalytics.totalQuestionsAttempted || 0) : 0;
   const storeAttemptsSum =
@@ -200,7 +201,13 @@ export default function DashboardClient({
   const activeClientAttempted = Math.max(clientQuestionsAttempted, storeAttemptsSum);
 
   const serverAttempted = initialData?.kpi?.totalAttempted || 0;
-  const totalAttempted = Math.max(serverAttempted, activeClientAttempted);
+  // If active client attempts exist and match/exceed server, client store is latest
+  const totalAttempted =
+    activeClientAttempted > 0 && serverAttempted > 0
+      ? activeClientAttempted >= serverAttempted
+        ? activeClientAttempted
+        : serverAttempted
+      : Math.max(serverAttempted, activeClientAttempted);
 
   // Compute robust client accuracy from testAttempts directly if clientAnalytics is stale
   const clientCorrectCount =

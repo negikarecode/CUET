@@ -202,6 +202,13 @@ export async function POST(req: NextRequest) {
           });
 
         if (attemptsToInsert.length > 0) {
+          // Idempotent write: Remove any prior attempt records for this user & test before inserting
+          await supabaseAdmin
+            .from("user_attempts")
+            .delete()
+            .eq("user_id", targetUserId)
+            .eq("test_id", testUuid);
+
           const { error: insertErr } = await supabaseAdmin
             .from("user_attempts")
             .insert(attemptsToInsert);

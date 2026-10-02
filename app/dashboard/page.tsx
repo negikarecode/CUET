@@ -120,9 +120,16 @@ export default async function DashboardPage() {
         .eq("user_id", authUser.id);
 
       if (userAttempts && userAttempts.length > 0) {
-        const attemptedRows = userAttempts.filter(
-          (ua) => ua.selected_option !== null && ua.selected_option !== undefined
-        );
+        // Filter answered questions and deduplicate by (test_id, question_id) to prevent duplicate counting
+        const seenKeys = new Set<string>();
+        const attemptedRows = userAttempts.filter((ua) => {
+          if (ua.selected_option === null || ua.selected_option === undefined) return false;
+          const key = `${ua.test_id || "default"}_${ua.question_id || ua.id}`;
+          if (seenKeys.has(key)) return false;
+          seenKeys.add(key);
+          return true;
+        });
+
         const totalAttempted = attemptedRows.length;
         const correctCount = attemptedRows.filter((ua: any) => {
           if (ua.is_correct === true || ua.is_correct === "true" || ua.is_correct === 1) return true;

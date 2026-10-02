@@ -81,14 +81,12 @@ export default function CBTResultView() {
       };
     });
 
+    // Test attempt recording and database sync are already performed upon submission in submitTest().
+    // We only retrieve/construct attempt record for local post-mock report viewing.
     const currentTId = testMeta?.id ?? "cbt_exam";
-    const existingAttempt = (testAttempts || []).find(
-      (a) => a.testId === currentTId && Math.abs(Date.now() - new Date(a.submittedAt).getTime()) < 300000
-    );
-    const attemptId = existingAttempt ? existingAttempt.id : `attempt_${currentTId}_${Date.now()}`;
-
-    const attemptRecord: RecordedTestAttempt = {
-      id: attemptId,
+    const existingAttempt = (testAttempts || []).find((a) => a.testId === currentTId);
+    const attemptRecord: RecordedTestAttempt = existingAttempt || {
+      id: `attempt_${currentTId}_${Date.now()}`,
       userId: user.id || "guest",
       testId: testMeta?.id ?? "cbt_exam",
       testTitle: testMeta?.title ?? "CUET Domain Examination Paper",
@@ -109,17 +107,17 @@ export default function CBTResultView() {
 
     currentAttemptRecordRef.current = attemptRecord;
 
-    // Save locally into user store
-    recordTestAttempt(attemptRecord);
-
-    // Save asynchronously to Supabase database via API
-    fetch("/api/test/record-attempt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(attemptRecord),
-    }).catch((err) => {
-      console.warn("Background attempt database sync notice:", err);
-    });
+    // If for any reason attempt was not recorded in testAttempts, record once safely
+    if (!existingAttempt) {
+      recordTestAttempt(attemptRecord);
+      fetch("/api/test/record-attempt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(attemptRecord),
+      }).catch((err) => {
+        console.warn("Background attempt database sync notice:", err);
+      });
+    }
 
     const xp = calculateXP(
       submittedScore.correctCount,
