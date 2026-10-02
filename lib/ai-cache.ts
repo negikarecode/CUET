@@ -122,3 +122,21 @@ export function setCachedSubjectRadarAI(
   });
 }
 
+/**
+ * Invalidate all in-memory caches belonging to a user on logout or account switch
+ */
+export function clearUserAICache(userId: string): void {
+  if (!userId) return;
+  const prefix = `${userId}:`;
+  for (const key of memoryResponseCache.keys()) {
+    if (key.startsWith(prefix)) {
+      memoryResponseCache.delete(key);
+    }
+  }
+  for (const key of subjectRadarMemoryCache.keys()) {
+    if (key.startsWith(prefix)) {
+      subjectRadarMemoryCache.delete(key);
+    }
+  }
+}
+

@@ -20,6 +20,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
+import { useTestStore } from "@/lib/store/useTestStore";
 import { DiagnosticResponseData } from "@/app/api/ai/diagnose/route";
 import { RepairQuizResponse } from "@/app/api/ai/repair-quiz/route";
 import UpgradeButton from "@/components/payments/UpgradeButton";
@@ -36,6 +37,7 @@ export default function DiagnosticReportModal({
   onClose,
   testId,
 }: DiagnosticReportModalProps) {
+  const user = useTestStore((state) => state.user);
   const questions = useCBTStore((state) => state.questions);
   const answers = useCBTStore((state) => state.answers);
   const initTest = useCBTStore((state) => state.initTest);
@@ -70,6 +72,7 @@ export default function DiagnosticReportModal({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         testId,
+        userId: user?.id,
         attempts: attemptsPayload,
       }),
     })
@@ -103,7 +106,7 @@ export default function DiagnosticReportModal({
     return () => {
       isMounted = false;
     };
-  }, [isOpen, testId, questions, answers]);
+  }, [isOpen, testId, questions, answers, user?.id]);
 
   if (!isOpen) return null;
 
@@ -115,7 +118,7 @@ export default function DiagnosticReportModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: "user_cuet_aspirant_01",
+          userId: user?.id,
           weakMicroTopics: [topic],
           subject: data?.primary_weak_topics[0] ?? "Remedial Concept Polish",
         }),

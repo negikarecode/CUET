@@ -144,34 +144,79 @@ export const useTestStore = create<TestStoreState>()(
         if (typeof document !== "undefined") {
           document.cookie = "cuet_auth=1; path=/; max-age=2592000; SameSite=Lax";
         }
+        const targetId = profile.id || `user_${Date.now()}`;
         const stream = (profile.preferredStream || "science") as StreamType;
-        set((state) => {
-          const isDifferentUser = state.user?.id !== profile.id;
-          return {
-            user: {
-              ...DEFAULT_USER,
-              ...profile,
-              id: profile.id || `user_${Date.now()}`,
-              name: profile.name || "Aspirant",
-              email: profile.email || `${(profile.name || "aspirant").toLowerCase().replace(/\s+/g, "")}@example.com`,
-              age: profile.age || "17",
-              targetCollege: profile.targetCollege || "SRCC / St. Stephen's (Delhi University)",
-              targetUniversity: profile.targetUniversity || "Delhi University",
-              targetCourse: profile.targetCourse || "B.Com (Hons)",
-              preferredStream: stream,
-              selectedSubjects: profile.selectedSubjects || [],
-              dailyStreak: profile.dailyStreak ?? 1,
-              xpPoints: profile.xpPoints ?? 150,
-              campusCoins: profile.campusCoins ?? 50,
-              isLoggedIn: true,
-              lastActiveDate: new Date().toISOString(),
-            },
-            selectedStream: stream,
-            testAttempts: isDifferentUser ? [] : state.testAttempts,
-            analytics: isDifferentUser ? DEFAULT_ANALYTICS : state.analytics,
-            isSessionActive: false,
-            recordedAnswers: {},
-          };
+
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("cuet_active_uid", targetId);
+          // Check if this user already has persisted user-scoped data
+          const existingDataStr = window.localStorage.getItem(`cuet_ai_prep_session_storage:${targetId}`);
+          if (existingDataStr) {
+            try {
+              const parsed = JSON.parse(existingDataStr);
+              if (parsed?.state?.user && parsed.state.user.id === targetId) {
+                // Restore target user's existing isolated data merged with latest profile
+                const savedAttempts = parsed.state.testAttempts || [];
+                const savedCycles = parsed.state.diagnosticCycles || [];
+                const savedAnalytics = parsed.state.analytics || computeAnalyticsFromAttempts(savedAttempts);
+
+                set({
+                  user: {
+                    ...parsed.state.user,
+                    ...profile,
+                    id: targetId,
+                    isLoggedIn: true,
+                    lastActiveDate: new Date().toISOString(),
+                  },
+                  selectedStream: parsed.state.selectedStream || stream,
+                  testAttempts: savedAttempts,
+                  analytics: savedAnalytics,
+                  currentCycleNumber: parsed.state.currentCycleNumber || 1,
+                  currentCycleQuestionCount: parsed.state.currentCycleQuestionCount || 0,
+                  diagnosticCycles: savedCycles,
+                  activeCompletionNotification: parsed.state.activeCompletionNotification || null,
+                  isSessionActive: false,
+                  recordedAnswers: {},
+                });
+                return;
+              }
+            } catch {
+              // Parse error, proceed to fresh initialization
+            }
+          }
+        }
+
+        // Fresh initialization for new or unpersisted user - ZERO inherited metrics
+        set({
+          user: {
+            ...DEFAULT_USER,
+            ...profile,
+            id: targetId,
+            name: profile.name || "Aspirant",
+            email: profile.email || `${(profile.name || "aspirant").toLowerCase().replace(/\s+/g, "")}@example.com`,
+            age: profile.age || "17",
+            targetCollege: profile.targetCollege || "SRCC / St. Stephen's (Delhi University)",
+            targetUniversity: profile.targetUniversity || "Delhi University",
+            targetCourse: profile.targetCourse || "B.Com (Hons)",
+            preferredStream: stream,
+            selectedSubjects: profile.selectedSubjects || [],
+            dailyStreak: profile.dailyStreak ?? 1,
+            xpPoints: profile.xpPoints ?? 0,
+            campusCoins: profile.campusCoins ?? 0,
+            accuracyPercentage: profile.accuracyPercentage ?? 0,
+            completedTestsCount: profile.completedTestsCount ?? 0,
+            isLoggedIn: true,
+            lastActiveDate: new Date().toISOString(),
+          },
+          selectedStream: stream,
+          testAttempts: [],
+          analytics: DEFAULT_ANALYTICS,
+          currentCycleNumber: 1,
+          currentCycleQuestionCount: 0,
+          diagnosticCycles: [],
+          activeCompletionNotification: null,
+          isSessionActive: false,
+          recordedAnswers: {},
         });
       },
 
@@ -179,10 +224,17 @@ export const useTestStore = create<TestStoreState>()(
         if (typeof document !== "undefined") {
           document.cookie = "cuet_auth=; path=/; max-age=0; SameSite=Lax";
         }
+        if (typeof window !== "undefined") {
+          window.localStorage.removeItem("cuet_active_uid");
+        }
         set({
           user: DEFAULT_USER,
           testAttempts: [],
           analytics: DEFAULT_ANALYTICS,
+          currentCycleNumber: 1,
+          currentCycleQuestionCount: 0,
+          diagnosticCycles: [],
+          activeCompletionNotification: null,
           isSessionActive: false,
           activeSubject: null,
           recordedAnswers: {},
@@ -271,17 +323,26 @@ export const useTestStore = create<TestStoreState>()(
         if (typeof window === "undefined") return;
         try {
           const currentAttempts = [...(get().testAttempts || [])];
+          const activeUid = get().user?.id || (typeof window !== "undefined" ? window.localStorage.getItem("cuet_active_uid") : null);
+          if (!activeUid || activeUid === "guest") return;
+
           const recovered: RecordedTestAttempt[] = [];
           let hasChanges = false;
 
           for (let i = 0; i < window.localStorage.length; i++) {
             const key = window.localStorage.key(i);
-            if (key && (key.startsWith("cuet_cbt_session_") || key === "cuet_cbt_active_session")) {
+            if (
+              key &&
+              (key.startsWith(`cuet_cbt_session_${activeUid}_`) ||
+                key === `cuet_cbt_active_session_${activeUid}`)
+            ) {
               const raw = window.localStorage.getItem(key);
               if (!raw) continue;
               try {
                 const session = JSON.parse(raw);
                 if (session && session.isSubmitted && session.testId) {
+                  // Verify session user ownership strictly
+                  if (session.userId && session.userId !== activeUid) continue;
                   // Reconstruct actual correct count from questionStates & questions to heal any 0-correct states
                   let derivedCorrect = 0;
                   let derivedAttempted = 0;
@@ -517,13 +578,63 @@ export const useTestStore = create<TestStoreState>()(
     {
       name: "cuet_ai_prep_session_storage",
       storage: createJSONStorage(() => {
-        if (typeof window !== "undefined") {
-          return window.localStorage;
+        if (typeof window === "undefined") {
+          return {
+            getItem: () => null,
+            setItem: () => {},
+            removeItem: () => {},
+          };
         }
         return {
-          getItem: () => null,
-          setItem: () => {},
-          removeItem: () => {},
+          getItem: (_name: string) => {
+            // Priority 1: Check active user pointer
+            const activeUid = window.localStorage.getItem("cuet_active_uid");
+            if (activeUid) {
+              const userScoped = window.localStorage.getItem(`cuet_ai_prep_session_storage:${activeUid}`);
+              if (userScoped) return userScoped;
+            }
+            // Fallback for guest
+            const guestScoped = window.localStorage.getItem("cuet_ai_prep_session_storage:guest");
+            if (guestScoped) return guestScoped;
+
+            // Safe migration: ONLY if legacy data explicitly has an id that matches activeUid
+            const legacy = window.localStorage.getItem("cuet_ai_prep_session_storage");
+            if (legacy) {
+              try {
+                const parsed = JSON.parse(legacy);
+                const legacyUserId = parsed?.state?.user?.id;
+                // If legacy owner matches current activeUid, migrate it safely
+                if (legacyUserId && activeUid && legacyUserId === activeUid) {
+                  window.localStorage.setItem(`cuet_ai_prep_session_storage:${activeUid}`, legacy);
+                  window.localStorage.removeItem("cuet_ai_prep_session_storage");
+                  return legacy;
+                }
+              } catch {
+                // Ignore parse errors
+              }
+            }
+            return null;
+          },
+          setItem: (_name: string, value: string) => {
+            try {
+              const parsed = JSON.parse(value);
+              const userId = parsed?.state?.user?.id;
+              if (userId && userId !== "guest") {
+                window.localStorage.setItem("cuet_active_uid", userId);
+                window.localStorage.setItem(`cuet_ai_prep_session_storage:${userId}`, value);
+              } else {
+                window.localStorage.removeItem("cuet_active_uid");
+                window.localStorage.setItem("cuet_ai_prep_session_storage:guest", value);
+              }
+            } catch {
+              window.localStorage.removeItem("cuet_active_uid");
+              window.localStorage.setItem(`cuet_ai_prep_session_storage:guest`, value);
+            }
+          },
+          removeItem: (_name: string) => {
+            const activeUid = window.localStorage.getItem("cuet_active_uid") || "guest";
+            window.localStorage.removeItem(`cuet_ai_prep_session_storage:${activeUid}`);
+          },
         };
       }),
       partialize: (state) => ({

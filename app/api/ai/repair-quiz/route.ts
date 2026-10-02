@@ -38,7 +38,8 @@ const QUIZ_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as RepairQuizRequestBody;
-    const { userId = "user_cuet_aspirant_01", weakMicroTopics, subject } = body;
+    const { userId: bodyUserId, weakMicroTopics, subject } = body;
+    const userId = bodyUserId || `anon_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
     if (!Array.isArray(weakMicroTopics) || weakMicroTopics.length === 0) {
       return NextResponse.json(

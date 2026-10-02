@@ -221,7 +221,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Determine User Identity & Premium Tier
-    let userId = payloadUserId || "user_cuet_aspirant_01";
+    let userId = payloadUserId || `anon_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     let isPaidUser = false;
 
     try {
@@ -229,7 +229,7 @@ export async function POST(req: NextRequest) {
       const {
         data: { user: authUser },
       } = await supabase.auth.getUser();
-      if (authUser) {
+      if (authUser?.id) {
         userId = authUser.id;
       }
       const { data: profile } = await supabase

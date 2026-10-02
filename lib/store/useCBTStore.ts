@@ -93,11 +93,18 @@ export function deriveQuestionStatus(
   return "not_answered";
 }
 
+function getActiveUserId(): string {
+  if (typeof window === "undefined") return "guest";
+  return window.localStorage.getItem("cuet_active_uid") || useTestStore.getState().user?.id || "guest";
+}
+
 function getStorageKey(testId: string): string {
-  return `cuet_cbt_session_${testId}`;
+  const uid = getActiveUserId();
+  return `cuet_cbt_session_${uid}_${testId}`;
 }
 
 interface StoredSession {
+  userId?: string;
   testId: string;
   testMeta: FullTestMeta | null;
   currentQuestionIndex: number;
@@ -116,7 +123,13 @@ function loadSessionFromStorage(testId: string): StoredSession | null {
     const raw =
       window.sessionStorage.getItem(key) || window.localStorage.getItem(key);
     if (!raw) return null;
-    return JSON.parse(raw) as StoredSession;
+    const session = JSON.parse(raw) as StoredSession;
+    const currentUid = getActiveUserId();
+    // Validate session user isolation
+    if (session.userId && currentUid !== "guest" && session.userId !== currentUid) {
+      return null;
+    }
+    return session;
   } catch {
     return null;
   }
@@ -125,10 +138,12 @@ function loadSessionFromStorage(testId: string): StoredSession | null {
 function pruneOldStorageSessions(): void {
   if (typeof window === "undefined") return;
   try {
+    const uid = getActiveUserId();
+    const prefix = `cuet_cbt_session_${uid}_`;
     const keysToRemove: string[] = [];
     for (let i = 0; i < window.localStorage.length; i++) {
       const k = window.localStorage.key(i);
-      if (k && k.startsWith("cuet_cbt_session_")) {
+      if (k && k.startsWith(prefix)) {
         keysToRemove.push(k);
       }
     }
@@ -142,7 +157,9 @@ function pruneOldStorageSessions(): void {
 function saveSessionToStorage(state: CBTStoreState): void {
   if (typeof window === "undefined" || !state.testId) return;
   try {
+    const currentUid = getActiveUserId();
     const data: StoredSession = {
+      userId: currentUid,
       testId: state.testId,
       testMeta: state.testMeta,
       currentQuestionIndex: state.currentQuestionIndex,
@@ -177,9 +194,10 @@ export function clearSessionFromStorage(testId: string): void {
   if (typeof window === "undefined" || !testId) return;
   try {
     const key = getStorageKey(testId);
+    const uid = getActiveUserId();
     window.sessionStorage.removeItem(key);
     window.localStorage.removeItem(key);
-    window.localStorage.removeItem("cuet_cbt_active_session");
+    window.localStorage.removeItem(`cuet_cbt_active_session_${uid}`);
   } catch {}
 }
 
