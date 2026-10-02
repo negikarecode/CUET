@@ -21,6 +21,17 @@ export interface NormalizedMockQuestionTelemetry {
   difficulty: NormalizedDifficulty;
   rawDifficulty?: string | number;
   explanation?: string;
+  solution?: {
+    quick?: string;
+    concept?: string;
+    detailed?: string;
+  };
+  formula?: string;
+  keyConcept?: string;
+  misconception?: {
+    type?: string;
+    description?: string;
+  } | null;
   ncertReference?: string;
 }
 

@@ -76,23 +76,6 @@ export default function MockAnalysisPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <Link
-          href="/dashboard/mocks"
-          className="inline-flex items-center gap-1.5 text-xs font-black text-black/60 hover:text-black transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Mock Papers
-        </Link>
-
-        <Link
-          href={`/test/${matchingAttempt.testId}`}
-          className="text-xs font-black text-black hover:underline"
-        >
-          View In-Exam Scorecard →
-        </Link>
-      </div>
-
       <PostMockAnalysisClient
         report={report}
         onRetake={() => {

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Award,
   BarChart3,
@@ -13,12 +14,17 @@ import {
   RotateCcw,
   Sparkles,
   Target,
+  Trophy as TrophyIcon,
+  Zap,
 } from "lucide-react";
 import {
   PostMockDeterministicReport,
   AIPostMockInsight,
   NormalizedDifficulty,
 } from "@/types/postMockAnalysis";
+import { Trophy } from "@/types";
+import { useTestStore } from "@/lib/store/useTestStore";
+import { getTestAttemptStats } from "@/lib/analytics";
 import MathRenderer from "@/components/cbt/MathRenderer";
 
 interface PostMockAnalysisClientProps {
@@ -26,6 +32,13 @@ interface PostMockAnalysisClientProps {
   onRetake?: () => void;
   initialSelectedChapter?: string;
   initialSelectedDifficulty?: NormalizedDifficulty;
+  earnedXP?: number;
+  unlockedTrophies?: Trophy[];
+  attemptsCount?: number;
+  bestMarks?: number;
+  bestAccuracy?: number;
+  isNewPersonalBest?: boolean;
+  scoreImprovement?: number;
 }
 
 export default function PostMockAnalysisClient({
@@ -33,9 +46,64 @@ export default function PostMockAnalysisClient({
   onRetake,
   initialSelectedChapter,
   initialSelectedDifficulty,
+  earnedXP: propEarnedXP,
+  unlockedTrophies: propUnlockedTrophies,
+  attemptsCount: propAttemptsCount,
+  bestMarks: propBestMarks,
+  bestAccuracy: propBestAccuracy,
+  isNewPersonalBest: propIsNewPersonalBest,
+  scoreImprovement: propScoreImprovement,
 }: PostMockAnalysisClientProps) {
+  const router = useRouter();
+  const testAttempts = useTestStore((state) => state.testAttempts);
   const { overall, difficultyBreakdown, chapterBreakdown, chapterDifficultyMatrix, allQuestions } =
     report;
+
+  // Derive all-time personal best stats if not explicitly passed as props
+  const computedStats = useMemo(() => {
+    if (propAttemptsCount !== undefined) {
+      return {
+        attemptsCount: propAttemptsCount,
+        bestMarks: propBestMarks ?? overall.totalMarks,
+        bestAccuracy: propBestAccuracy ?? overall.accuracyPercentage,
+        isNewPersonalBest: propIsNewPersonalBest ?? true,
+        scoreImprovement: propScoreImprovement ?? 0,
+      };
+    }
+    const stats = getTestAttemptStats(testAttempts, report.testId);
+    const count = Math.max(1, stats.attemptsCount);
+    const bestAtt = stats.bestAttempt;
+    const currentMarks = overall.totalMarks;
+    const currentAcc = overall.accuracyPercentage;
+    const bMarks = bestAtt ? Math.max(bestAtt.totalMarks, currentMarks) : currentMarks;
+    const bAcc =
+      bestAtt && bestAtt.totalMarks > currentMarks ? bestAtt.accuracyPercentage : currentAcc;
+    const isNewPB = !bestAtt || currentMarks >= bestAtt.totalMarks;
+    const improvement = bestAtt && currentMarks > bestAtt.totalMarks ? currentMarks - bestAtt.totalMarks : 0;
+    return {
+      attemptsCount: count,
+      bestMarks: bMarks,
+      bestAccuracy: bAcc,
+      isNewPersonalBest: isNewPB,
+      scoreImprovement: improvement,
+    };
+  }, [
+    propAttemptsCount,
+    propBestMarks,
+    propBestAccuracy,
+    propIsNewPersonalBest,
+    propScoreImprovement,
+    testAttempts,
+    report.testId,
+    overall.totalMarks,
+    overall.accuracyPercentage,
+  ]);
+
+  const attemptsCount = computedStats.attemptsCount;
+  const bestMarks = computedStats.bestMarks;
+  const bestAccuracy = computedStats.bestAccuracy;
+  const isNewPersonalBest = computedStats.isNewPersonalBest;
+  const scoreImprovement = computedStats.scoreImprovement;
 
   // Selected Chapter for deeper Chapter × Difficulty breakdown
   const [selectedChapter, setSelectedChapter] = useState<string>(
@@ -141,15 +209,64 @@ export default function PostMockAnalysisClient({
     });
   }, [allQuestions, filterQuestionIds, filterDifficulty, filterChapter, filterResult]);
 
+  const minutesTaken = Math.floor(overall.totalTimeSeconds / 60);
+  const secondsTaken = overall.totalTimeSeconds % 60;
+  const timeTakenFormatted = `${minutesTaken}m ${secondsTaken.toString().padStart(2, "0")}s`;
+
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
-      {/* 1. MOCK COMPLETED: Overall Performance (Deterministic numbers) */}
+      {/* Top Simple Navigation Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black pb-4">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/dashboard/mocks"
+            className="text-xs font-black text-black hover:underline decoration-2 flex items-center gap-1.5"
+          >
+            <span>←</span>
+            <span>Mocks History</span>
+          </Link>
+          <span className="text-black/30 font-bold">|</span>
+          <span className="text-xs font-black uppercase tracking-wider bg-black text-white px-2.5 py-0.5 rounded font-mono">
+            POST-MOCK RESULTS
+          </span>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {onRetake ? (
+            <button
+              type="button"
+              onClick={onRetake}
+              className="px-4 py-2 rounded-xl bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
+            >
+              <RotateCcw className="w-4 h-4 stroke-[2.5]" />
+              <span>Retake Mock</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => router.push(`/test/${report.testId}?reattempt=true`)}
+              className="px-4 py-2 rounded-xl bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
+            >
+              <RotateCcw className="w-4 h-4 stroke-[2.5]" />
+              <span>Retake Mock</span>
+            </button>
+          )}
+          <Link
+            href="/dashboard/mocks"
+            className="px-4 py-2 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          >
+            Back to Mocks
+          </Link>
+        </div>
+      </div>
+
+      {/* SECTION 1 — OFFICIAL SCORECARD */}
       <div className="bg-[#FAF7EE] rounded-2xl border-2 border-black p-6 sm:p-8 shadow-[6px_6px_0px_0px_#000]">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FEF3C7] text-black text-xs font-black uppercase tracking-wider mb-2 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
               <Award className="w-3.5 h-3.5 text-[#F59E0B]" />
-              Official Post-Mock Analysis · Single Attempt Evaluation
+              Official NTA CUET CBT Scorecard
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-black tracking-tight">
               {report.testTitle}
@@ -162,74 +279,157 @@ export default function PostMockAnalysisClient({
                 year: "numeric",
               })}
             </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            {onRetake && (
-              <button
-                type="button"
-                onClick={onRetake}
-                className="px-4 py-2.5 rounded-xl bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
-              >
-                <RotateCcw className="w-4 h-4 stroke-[2.5]" />
-                <span>Re-attempt Mock</span>
-              </button>
-            )}
-            <Link
-              href="/dashboard/mocks"
-              className="px-4 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5"
-            >
-              <span>Back to Mocks</span>
-            </Link>
+            <p className="text-xs text-black/60 font-semibold mt-0.5">
+              Scoring Rule: +5 Correct | -1 Incorrect | 0 Unattempted
+            </p>
           </div>
         </div>
 
-        {/* Primary Metric Highlights */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3.5 mt-6 pt-6 border-t-2 border-black/10">
+        {/* Primary Deterministic Scorecard Metrics */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 mt-6 pt-6 border-t-2 border-black/10">
+          {/* Score */}
           <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-            <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Score</span>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Score</span>
+              {propEarnedXP && propEarnedXP > 0 ? (
+                <span className="text-[9px] font-black font-mono bg-[#FEF3C7] text-black px-1 py-0.2 rounded border border-black">
+                  +{propEarnedXP} XP
+                </span>
+              ) : null}
+            </div>
             <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-black">
               {overall.totalMarks}{" "}
               <span className="text-xs font-bold text-black/50">/ {overall.maxMarks}</span>
             </p>
+            <p className="text-[10px] text-black font-bold mt-1">
+              {overall.totalMarks >= 225
+                ? "Top 99th %tile"
+                : overall.totalMarks >= 175
+                ? "DU North Campus"
+                : "Remediation"}
+            </p>
           </div>
 
+          {/* Accuracy */}
           <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
             <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Accuracy</span>
             <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-black">
               {overall.accuracyPercentage}%
             </p>
+            <p className="text-[10px] text-black/70 font-semibold mt-1">
+              {overall.correctCount} of {overall.attemptedCount} attempted
+            </p>
           </div>
 
+          {/* Correct */}
           <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
             <span className="text-[10px] font-black uppercase text-[#059669] tracking-wider">Correct</span>
             <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-[#059669]">
               {overall.correctCount}
             </p>
+            <p className="text-[10px] text-[#059669] font-black mt-1">
+              +{overall.correctCount * 5} marks
+            </p>
           </div>
 
+          {/* Incorrect */}
           <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
             <span className="text-[10px] font-black uppercase text-[#DC2626] tracking-wider">Incorrect</span>
             <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-[#DC2626]">
               {overall.incorrectCount}
             </p>
+            <p className="text-[10px] text-[#DC2626] font-black mt-1">
+              -{overall.incorrectCount} penalty
+            </p>
           </div>
 
+          {/* Unattempted / Skipped */}
           <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-            <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Skipped</span>
+            <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Unattempted</span>
             <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-black/70">
               {overall.skippedCount}
             </p>
+            <p className="text-[10px] text-black/60 font-black mt-1">
+              0 penalty
+            </p>
           </div>
 
+          {/* Time Elapsed & Time Sinks */}
           <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-            <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Avg Pace</span>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Time Elapsed</span>
+              {overall.timeSinkCount > 0 && (
+                <span className="text-[9px] font-black font-mono bg-[#FEE2E2] text-[#DC2626] px-1 py-0.2 rounded border border-black">
+                  {overall.timeSinkCount} Sinks
+                </span>
+              )}
+            </div>
             <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-black">
-              {overall.avgTimePerQuestionSeconds}s{" "}
-              <span className="text-xs font-semibold text-black/50">/ Q</span>
+              {timeTakenFormatted}
+            </p>
+            <p className="text-[10px] text-black/70 font-semibold mt-1">
+              Allocated: 60m ({overall.avgTimePerQuestionSeconds}s/Q)
             </p>
           </div>
         </div>
+      </div>
+
+      {/* SECTION 2 — BEST RESULT / ATTEMPT HISTORY */}
+      <div className="p-5 sm:p-6 rounded-2xl bg-white border-2 border-black shadow-[5px_5px_0px_0px_#000] flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-xl bg-[#FEF3C7] border-2 border-black flex items-center justify-center shrink-0 shadow-[3px_3px_0px_0px_#000]">
+            <TrophyIcon className="w-6 h-6 text-[#D97706]" />
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] font-black uppercase bg-black text-white px-2.5 py-0.5 rounded font-mono">
+                Paper Benchmark
+              </span>
+              {attemptsCount <= 1 ? (
+                <span className="text-[10px] font-black uppercase bg-[#FEF3C7] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                  Initial Baseline Recorded
+                </span>
+              ) : isNewPersonalBest ? (
+                <span className="text-[10px] font-black uppercase bg-[#D1FAE5] text-[#065F46] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                  New Personal Best!
+                </span>
+              ) : (
+                <span className="text-[10px] font-black uppercase bg-[#FAF7EE] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                  Personal Best Tracker
+                </span>
+              )}
+              <span className="text-[10px] font-black uppercase bg-[#FAF7EE] text-black/80 border border-black px-2 py-0.5 rounded">
+                {attemptsCount} {attemptsCount === 1 ? "Attempt" : "Attempts"} Total
+              </span>
+            </div>
+
+            <h2 className="text-lg sm:text-xl font-black text-black tracking-tight flex items-center gap-2 pt-0.5">
+              <span>Best Result: {bestMarks} / {overall.maxMarks} Marks</span>
+              <span className="text-sm font-bold text-black/60 font-mono">({bestAccuracy}% Accuracy)</span>
+            </h2>
+
+            <p className="text-xs text-black/75 font-semibold leading-relaxed">
+              {attemptsCount <= 1
+                ? "This is your first completed attempt on this paper. Use the option to re-attempt anytime and strive for 225+ North Campus score!"
+                : isNewPersonalBest && scoreImprovement > 0
+                ? `Incredible progress! You outperformed your previous high by +${scoreImprovement} marks on this test.`
+                : isNewPersonalBest
+                ? "You matched your all-time high score on this test."
+                : `Your personal best on this paper is ${bestMarks} marks (${bestAccuracy}% accuracy). You scored ${overall.totalMarks} marks in this run.`}
+            </p>
+          </div>
+        </div>
+
+        {/* Trophies celebration if unlocked */}
+        {propUnlockedTrophies && propUnlockedTrophies.length > 0 && (
+          <div className="p-3 rounded-xl bg-[#FEF3C7] border-2 border-black flex items-center gap-3 shrink-0 shadow-[2px_2px_0px_0px_#000]">
+            <Award className="w-5 h-5 text-[#F59E0B]" />
+            <div className="text-xs font-bold text-black">
+              <span className="font-black">Unlocked: </span>
+              {propUnlockedTrophies.map((t) => t.title).join(", ")}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 2. DIFFICULTY ANALYSIS */}
@@ -927,17 +1127,75 @@ export default function PostMockAnalysisClient({
                     })}
                   </div>
 
-                  {/* Explanation & NCERT Reference */}
-                  {q.explanation && (
-                    <div className="p-3 rounded-lg bg-[#FAF7EE] border border-black/30 text-xs text-black space-y-1">
-                      <span className="text-[10px] font-black uppercase text-black/60 block">
-                        Verified Solution &amp; NCERT Rationale:
-                      </span>
-                      <MathRenderer text={q.explanation} className="text-black/85 leading-relaxed font-medium" />
-                      {q.ncertReference && (
-                        <span className="text-[10px] font-bold text-black/60 block pt-1">
-                          Source: {q.ncertReference}
-                        </span>
+                  {/* Explanation, 3-Level Breakdown & AI Diagnosis with MathRenderer */}
+                  {(q.explanation || q.solution?.quick || q.solution?.concept || q.formula || q.keyConcept || q.misconception) && (
+                    <div className="p-4 rounded-xl bg-[#FAF7EE] border-2 border-black text-xs space-y-3 shadow-[2px_2px_0px_0px_#000]">
+                      {q.explanation && (
+                        <div className="text-black/85 leading-relaxed font-medium">
+                          <strong className="text-black font-black uppercase text-[10px] tracking-wider block mb-1">
+                            Verified Solution &amp; NCERT Rationale:
+                          </strong>
+                          <MathRenderer text={q.explanation} className="text-black/85 leading-relaxed" />
+                          {q.ncertReference && (
+                            <span className="text-[10px] font-bold text-black/60 block pt-1.5">
+                              Source: {q.ncertReference}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* 3-Level Solution Cards: Quick Takeaway & Core Concept */}
+                      {q.solution && (q.solution.quick || q.solution.concept) && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-black/10">
+                          {q.solution.quick && (
+                            <div className="p-2.5 rounded-lg bg-white border border-black/30">
+                              <span className="text-[10px] font-black uppercase text-[#2563EB] block mb-0.5">
+                                30-Sec Takeaway
+                              </span>
+                              <MathRenderer
+                                text={q.solution.quick}
+                                className="text-black/90 font-semibold text-[11px] leading-relaxed"
+                              />
+                            </div>
+                          )}
+                          {q.solution.concept && (
+                            <div className="p-2.5 rounded-lg bg-white border border-black/30">
+                              <span className="text-[10px] font-black uppercase text-[#059669] block mb-0.5">
+                                Core NCERT Concept
+                              </span>
+                              <MathRenderer
+                                text={q.solution.concept}
+                                className="text-black/90 font-semibold text-[11px] leading-relaxed"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Formula / Key Concept Highlight */}
+                      {(q.formula || q.keyConcept) && (
+                        <div className="p-2.5 rounded-lg bg-[#FFFBEB] border border-[#F59E0B] text-black">
+                          <span className="text-[10px] font-black uppercase text-[#B45309] block mb-0.5">
+                            Formula / Principle
+                          </span>
+                          <MathRenderer
+                            text={q.formula || q.keyConcept || ""}
+                            className="font-bold text-[11px] leading-relaxed text-black"
+                          />
+                        </div>
+                      )}
+
+                      {/* Common Misconception Alert */}
+                      {q.misconception && (
+                        <div className="p-2.5 rounded-lg bg-[#FEF2F2] border border-[#EF4444] text-black">
+                          <span className="text-[10px] font-black uppercase text-[#DC2626] block mb-0.5">
+                            Common Trap / Misconception
+                          </span>
+                          <MathRenderer
+                            text={q.misconception.description || ""}
+                            className="font-semibold text-[11px] leading-relaxed text-black/90"
+                          />
+                        </div>
                       )}
                     </div>
                   )}
@@ -945,6 +1203,70 @@ export default function PostMockAnalysisClient({
               );
             })
           )}
+        </div>
+      </div>
+
+      {/* SECTION 8 — FINAL ACTIONS BAR */}
+      <div className="p-6 bg-[#FAF7EE] rounded-2xl border-2 border-black shadow-[5px_5px_0px_0px_#000] flex flex-col md:flex-row items-center justify-between gap-5">
+        <div className="space-y-1 text-center md:text-left">
+          <h4 className="text-base font-black text-black flex items-center justify-center md:justify-start gap-2">
+            <span>Next Steps for CUET Domain Mastery</span>
+            <span className="text-xs font-bold text-black/60 font-mono">
+              (Personal Best: {bestMarks} / {overall.maxMarks})
+            </span>
+          </h4>
+          <p className="text-xs text-black/70 font-semibold max-w-xl">
+            Focus on eliminating recurring error patterns before the real CUET exam. Review your incorrect questions or trigger targeted chapter repair drills.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-3 w-full md:w-auto">
+          {overall.incorrectCount > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                handleInspectSlice({ result: "incorrect" });
+              }}
+              className="px-4 py-2.5 rounded-xl bg-white hover:bg-neutral-100 text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+            >
+              Review {overall.incorrectCount} Incorrect Questions
+            </button>
+          )}
+
+          <Link
+            href="/dashboard/radar"
+            className="px-4 py-2.5 rounded-xl bg-[#FEF3C7] hover:bg-[#FDE68A] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5"
+          >
+            <Zap className="w-3.5 h-3.5 text-[#D97706]" />
+            <span>Targeted Weakness Practice</span>
+          </Link>
+
+          {onRetake ? (
+            <button
+              type="button"
+              onClick={onRetake}
+              className="px-4 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Retake Mock</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => router.push(`/test/${report.testId}?reattempt=true`)}
+              className="px-4 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Retake Mock</span>
+            </button>
+          )}
+
+          <Link
+            href="/dashboard/mocks"
+            className="px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-800 text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          >
+            Back to Mocks
+          </Link>
         </div>
       </div>
     </div>
