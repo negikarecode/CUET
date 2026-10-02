@@ -195,6 +195,8 @@ export interface RecordedQuestionAttempt {
   isTimeSink: boolean;
   ncertReference?: string;
   explanation?: string;
+  difficulty?: "easy" | "medium" | "hard" | string;
+  errorCategory?: string;
 }
 
 export interface RecordedTestAttempt {
@@ -534,5 +536,9 @@ export interface SubjectCalibrationData {
   unlockProgress: number;
   mockUrl: string;
 }
+
+export * from "./cycle";
+export * from "./subject-ai";
+
 
 

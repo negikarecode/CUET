@@ -6,8 +6,11 @@ import type {
   UserAnswer,
   RecordedTestAttempt,
   UserAnalyticsSummary,
+  DiagnosticCycle,
+  CycleCompletionNotification,
 } from "@/types";
 import { computeAnalyticsFromAttempts, buildDefaultSubjectCalibration } from "@/lib/analytics";
+import { processQuestionsIntoCycles } from "@/lib/cycle-engine";
 
 interface TestStoreState {
   // Gamification & User Auth state
@@ -24,6 +27,12 @@ interface TestStoreState {
   // Attempt History & Analytics
   testAttempts: RecordedTestAttempt[];
   analytics: UserAnalyticsSummary;
+  // Diagnostic Cycle System (150-question window tracking)
+  currentCycleNumber: number;
+  currentCycleQuestionCount: number;
+  diagnosticCycles: DiagnosticCycle[];
+  activeCompletionNotification: CycleCompletionNotification | null;
+  dismissCycleCompletionNotification: () => void;
   recordTestAttempt: (attempt: RecordedTestAttempt) => void;
   recoverUnrecordedCBTSessions: () => void;
   getAnalytics: () => UserAnalyticsSummary;
@@ -184,7 +193,17 @@ export const useTestStore = create<TestStoreState>()(
       testAttempts: [],
       analytics: DEFAULT_ANALYTICS,
 
-      recordTestAttempt: (attempt: RecordedTestAttempt) => {
+      // Diagnostic Cycle System (150-question window tracking)
+      currentCycleNumber: 1,
+      currentCycleQuestionCount: 0,
+      diagnosticCycles: [],
+      activeCompletionNotification: null,
+
+      dismissCycleCompletionNotification: () => {
+        set({ activeCompletionNotification: null });
+      },
+
+      recordTestAttempt: async (attempt: RecordedTestAttempt) => {
         const currentAttempts = get().testAttempts || [];
         // Replace if existing attempt with identical ID or same testId, otherwise prepend
         const existingIdx = currentAttempts.findIndex(
@@ -200,9 +219,46 @@ export const useTestStore = create<TestStoreState>()(
 
         const analytics = computeAnalyticsFromAttempts(updatedAttempts);
 
+        // Collect all individual question attempts across all recorded tests (ordered chronologically)
+        // Reverse updatedAttempts so earliest attempts come first for proper cycle slicing
+        const chronologicalAttempts = [...updatedAttempts].reverse();
+        const allQuestions = chronologicalAttempts.flatMap((t) => t.questions || []);
+
+        // Process questions into 150-question diagnostic cycles idempotently
+        const existingCycles = get().diagnosticCycles || [];
+        const {
+          cycles,
+          currentCycleNumber,
+          currentCycleQuestionCount,
+          justCompletedCycle,
+        } = await processQuestionsIntoCycles(existingCycles, allQuestions);
+
+        let completionNotification: CycleCompletionNotification | null = null;
+        if (justCompletedCycle) {
+          completionNotification = {
+            cycleNumber: justCompletedCycle.cycleNumber,
+            totalAnalyzed: justCompletedCycle.totalQuestionsAttempted,
+            isBaseline: justCompletedCycle.cycleNumber === 1,
+            completedAt: justCompletedCycle.completedAt || new Date().toISOString(),
+            comparisonSummary: justCompletedCycle.comparison
+              ? {
+                  improvedCount: justCompletedCycle.comparison.improved.length,
+                  recurringCount: justCompletedCycle.comparison.recurringWeak.length,
+                  resolvedCount: justCompletedCycle.comparison.resolved.length,
+                  newMistakesCount: justCompletedCycle.comparison.newMistakes.length,
+                  declinedCount: justCompletedCycle.comparison.declined.length,
+                }
+              : undefined,
+          };
+        }
+
         set((state) => ({
           testAttempts: updatedAttempts,
           analytics,
+          diagnosticCycles: cycles,
+          currentCycleNumber,
+          currentCycleQuestionCount,
+          activeCompletionNotification: completionNotification || state.activeCompletionNotification,
           user: {
             ...state.user,
             accuracyPercentage: analytics.overallAccuracyPercentage,
@@ -332,15 +388,26 @@ export const useTestStore = create<TestStoreState>()(
           if (hasChanges || recovered.length > 0) {
             const allAttempts = [...recovered, ...currentAttempts];
             const analytics = computeAnalyticsFromAttempts(allAttempts);
-            set((state) => ({
-              testAttempts: allAttempts,
-              analytics,
-              user: {
-                ...state.user,
-                accuracyPercentage: analytics.overallAccuracyPercentage,
-                completedTestsCount: analytics.completedTestsCount,
-              },
-            }));
+            const chronologicalAttempts = [...allAttempts].reverse();
+            const allQuestions = chronologicalAttempts.flatMap((t) => t.questions || []);
+            const existingCycles = get().diagnosticCycles || [];
+
+            processQuestionsIntoCycles(existingCycles, allQuestions).then(
+              ({ cycles, currentCycleNumber, currentCycleQuestionCount }) => {
+                set((state) => ({
+                  testAttempts: allAttempts,
+                  analytics,
+                  diagnosticCycles: cycles,
+                  currentCycleNumber,
+                  currentCycleQuestionCount,
+                  user: {
+                    ...state.user,
+                    accuracyPercentage: analytics.overallAccuracyPercentage,
+                    completedTestsCount: analytics.completedTestsCount,
+                  },
+                }));
+              }
+            );
           }
         } catch (err) {
           console.warn("Session recovery notice:", err);
@@ -355,6 +422,10 @@ export const useTestStore = create<TestStoreState>()(
         set((state) => ({
           testAttempts: [],
           analytics: DEFAULT_ANALYTICS,
+          currentCycleNumber: 1,
+          currentCycleQuestionCount: 0,
+          diagnosticCycles: [],
+          activeCompletionNotification: null,
           user: {
             ...state.user,
             accuracyPercentage: 0,
@@ -460,6 +531,10 @@ export const useTestStore = create<TestStoreState>()(
         selectedStream: state.selectedStream,
         testAttempts: state.testAttempts,
         analytics: state.analytics,
+        currentCycleNumber: state.currentCycleNumber,
+        currentCycleQuestionCount: state.currentCycleQuestionCount,
+        diagnosticCycles: state.diagnosticCycles,
+        activeCompletionNotification: state.activeCompletionNotification,
       }),
     }
   )

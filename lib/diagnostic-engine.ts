@@ -66,56 +66,89 @@ const SUBJECT_KNOWLEDGE_MAP: Record<string, SubjectKnowledgeConfig> = {
     },
     decisionFrameworks: {
       "electrochemistry": [
-        "1. Identify oxidation/reduction half-cells",
-        "2. Determine anode/cathode",
-        "3. Establish electrode-potential convention (Standard Reduction Potentials)",
-        "4. Calculate E°cell = E°cathode - E°anode",
-        "5. Check sign and spontaneity (E°cell > 0, ΔG° < 0)",
-        "6. Apply Nernst equation when concentrations or pressures deviate from standard conditions",
+        "Identify oxidation/reduction half-cells",
+        "Determine anode/cathode",
+        "Establish electrode-potential convention (Standard Reduction Potentials)",
+        "Calculate E°cell = E°cathode - E°anode",
+        "Check sign and spontaneity (E°cell > 0, ΔG° < 0)",
+        "Apply Nernst equation when concentrations or pressures deviate from standard conditions",
       ],
       "haloalkanes": [
-        "1. Identify substrate degree (1°, 2°, or 3°)",
-        "2. Identify nucleophile/base strength and charge",
-        "3. Check solvent (polar protic vs polar aprotic)",
-        "4. Evaluate SN1 vs SN2 conditions (carbocation stability vs backside displacement)",
-        "5. Consider steric effects and temperature (substitution vs elimination)",
-        "6. Check NOT/EXCEPT qualifiers before finalizing answer",
+        "Identify substrate degree (1°, 2°, or 3°)",
+        "Identify nucleophile/base strength and charge",
+        "Check solvent (polar protic vs polar aprotic)",
+        "Evaluate SN1 vs SN2 conditions (carbocation stability vs backside displacement)",
+        "Consider steric effects and temperature (substitution vs elimination)",
+        "Check NOT/EXCEPT qualifiers before finalizing answer",
       ],
       "coordination": [
-        "1. Determine central metal oxidation state and d-electron count",
-        "2. Identify ligand field strength from Spectrochemical Series",
-        "3. Evaluate crystal field splitting (Δo vs pairing energy P)",
-        "4. Determine spin state (high spin vs low spin)",
-        "5. Calculate magnetic moment μ = √(n(n+2)) BM",
-        "6. Verify IUPAC naming and isomerism rules",
+        "Determine central metal oxidation state and d-electron count",
+        "Identify ligand field strength from Spectrochemical Series",
+        "Evaluate crystal field splitting (Δo vs pairing energy P)",
+        "Determine spin state (high spin vs low spin)",
+        "Calculate magnetic moment μ = √(n(n+2)) BM",
+        "Verify IUPAC naming and isomerism rules",
       ],
       "solutions": [
-        "1. Distinguish solute and solvent; verify concentration units (M vs m)",
-        "2. Identify colligative property formula (ΔTb, ΔTf, Π, or Raoult's law)",
-        "3. Determine van 't Hoff factor (i) based on dissociation/association",
-        "4. Calculate target colligative value incorporating i factor",
-        "5. Check for non-ideal deviations (positive vs negative Raoult deviation)",
+        "Distinguish solute and solvent; verify concentration units (M vs m)",
+        "Identify colligative property formula (ΔTb, ΔTf, Π, or Raoult's law)",
+        "Determine van 't Hoff factor (i) based on dissociation/association",
+        "Calculate target colligative value incorporating i factor",
+        "Check for non-ideal deviations (positive vs negative Raoult deviation)",
       ],
       "organic": [
-        "1. Identify functional group and reacting centers",
-        "2. Determine electrophile and nucleophile / base",
-        "3. Check solvent polarity and temperature",
-        "4. Evaluate stereochemistry and regioselectivity (Markovnikov vs Saytzeff)",
-        "5. Check question stem for 'NOT' or 'EXCEPT' qualifiers",
+        "Identify functional group and reacting centers",
+        "Determine electrophile and nucleophile / base",
+        "Check solvent polarity and temperature",
+        "Evaluate stereochemistry and regioselectivity (Markovnikov vs Saytzeff)",
+        "Check question stem for 'NOT' or 'EXCEPT' qualifiers",
       ],
       "physical": [
-        "1. Identify given variables and convert to standard SI units",
-        "2. Select governing formula and verify stoichiometric ratios",
-        "3. Check for equilibrium or standard state conditions",
-        "4. Calculate intermediate numerical values with sign precision",
-        "5. Verify units and order of magnitude of final answer",
+        "Identify given variables and convert to standard SI units",
+        "Select governing formula and verify stoichiometric ratios",
+        "Check for equilibrium or standard state conditions",
+        "Calculate intermediate numerical values with sign precision",
+        "Verify units and order of magnitude of final answer",
       ],
     },
     reviewTopics: {
-      "haloalkanes": ["SN1 Mechanism", "SN2 Mechanism", "Substrate Effects", "Solvent Effects", "Leaving Group Ability", "Elimination Reactions (E1/E2)"],
-      "electrochemistry": ["Nernst Equation", "Kohlrausch Law", "Standard Electrode Potentials", "Faraday's Laws of Electrolysis", "Electrochemical Cell Conventions"],
-      "coordination": ["Spectrochemical Series", "CFT Splitting", "Isomerism in Coordination Compounds", "IUPAC Nomenclature"],
-      "solutions": ["Colligative Properties", "Van 't Hoff Factor", "Raoult's Law Deviations", "Henry's Law"],
+      "haloalkanes": [
+        "FOCUS FIRST:",
+        "SN1 vs SN2 conditions",
+        "Substrate degree (1°, 2°, 3°)",
+        "Nucleophile strength",
+        "Solvent effects (polar protic vs aprotic)",
+        "THEN SECONDARY:",
+        "Leaving group ability",
+        "Elimination reactions (E1/E2)",
+      ],
+      "electrochemistry": [
+        "FOCUS FIRST:",
+        "Nernst equation & concentration ratios",
+        "Standard electrode potential conventions (E°cell = E°cathode - E°anode)",
+        "Half-cell redox reactions & electron balance",
+        "THEN SECONDARY:",
+        "Kohlrausch's Law of independent migration",
+        "Faraday's laws of electrolysis",
+      ],
+      "coordination": [
+        "FOCUS FIRST:",
+        "Spectrochemical Series & ligand field splitting (Δo vs P)",
+        "Oxidation states & d-electron configuration",
+        "Magnetic moment calculation μ = √(n(n+2)) BM",
+        "THEN SECONDARY:",
+        "Geometrical and optical isomerism",
+        "IUPAC nomenclature rules",
+      ],
+      "solutions": [
+        "FOCUS FIRST:",
+        "Van 't Hoff factor (i) dissociation/association",
+        "Colligative property formulas (ΔTb, ΔTf, osmotic pressure Π)",
+        "Raoult's Law deviations (positive vs negative)",
+        "THEN SECONDARY:",
+        "Henry's Law gas solubility",
+        "Molarity vs molality temperature independence",
+      ],
     },
   },
   physics: {
@@ -151,31 +184,47 @@ const SUBJECT_KNOWLEDGE_MAP: Record<string, SubjectKnowledgeConfig> = {
     },
     decisionFrameworks: {
       "current electricity": [
-        "1. Identify circuit elements (batteries, resistors, capacitors, galvanometers)",
-        "2. Check for Wheatstone bridge symmetry or balanced potentials",
-        "3. Apply Kirchhoff's Current Law (KCL) or Voltage Law (KVL) with sign convention",
-        "4. Account for cell internal resistance (r) and terminal voltage V = E ± Ir",
-        "5. Verify meter bridge / potentiometer balance length condition",
-        "6. Check power and thermal dissipation formulas (P = I²R vs P = V²/R)",
+        "Identify circuit elements (batteries, resistors, capacitors, galvanometers)",
+        "Check for Wheatstone bridge symmetry or balanced potentials",
+        "Apply Kirchhoff's Current Law (KCL) or Voltage Law (KVL) with sign convention",
+        "Account for cell internal resistance (r) and terminal voltage V = E ± Ir",
+        "Verify meter bridge / potentiometer balance length condition",
+        "Check power and thermal dissipation formulas (P = I²R vs P = V²/R)",
       ],
       "electrostatics": [
-        "1. Identify charge distribution (point charges vs continuous/spherical conductors)",
-        "2. Choose coordinate origin and vector sign convention for electric fields",
-        "3. Apply Gauss's Law or superposition principle according to symmetry",
-        "4. Treat potential (V) as scalar and field (E) as vector with directional components",
-        "5. Determine capacitance formula with dielectric insertion (C = κ·ε0·A/d)",
-        "6. Calculate stored energy U = 1/2 C V² or energy density u = 1/2 ε0 E²",
+        "Identify charge distribution (point charges vs continuous/spherical conductors)",
+        "Choose coordinate origin and vector sign convention for electric fields",
+        "Apply Gauss's Law or superposition principle according to symmetry",
+        "Treat potential (V) as scalar and field (E) as vector with directional components",
+        "Determine capacitance formula with dielectric insertion (C = κ·ε0·A/d)",
+        "Calculate stored energy U = 1/2 C V² or energy density u = 1/2 ε0 E²",
       ],
       "physics_numerical": [
-        "1. Draw diagram and define coordinate origin/sign convention",
-        "2. List known values with SI units",
-        "3. Identify governing physical law (Energy conservation, Momentum, Gauss, Ampere)",
-        "4. Check dimensions of symbolic answer before numeric calculation",
+        "Draw diagram and define coordinate origin/sign convention",
+        "List known values with SI units",
+        "Identify governing physical law (Energy conservation, Momentum, Gauss, Ampere)",
+        "Check dimensions of symbolic answer before numeric calculation",
       ],
     },
     reviewTopics: {
-      "current electricity": ["Kirchhoff's Laws", "Potentiometer Principles", "Drift Velocity & Ohm's Law", "Combination of Cells"],
-      "electrostatics": ["Gauss's Law", "Electric Dipole", "Capacitor Energy & Dielectrics", "Potential Due to Point Charges"],
+      "current electricity": [
+        "FOCUS FIRST:",
+        "Kirchhoff's Voltage and Current Laws (KVL/KCL)",
+        "Terminal potential difference vs EMF (V = E ± Ir)",
+        "Wheatstone bridge balance conditions",
+        "THEN SECONDARY:",
+        "Drift velocity and microscopic Ohm's Law",
+        "Potentiometer and meter bridge sensitivity",
+      ],
+      "electrostatics": [
+        "FOCUS FIRST:",
+        "Electric field (vector) vs electric potential (scalar) sign rules",
+        "Gauss's Law applications for spherical and planar conductors",
+        "Capacitor energy and dielectric constant insertion effects",
+        "THEN SECONDARY:",
+        "Electric dipole torque and potential energy in uniform fields",
+        "Equipotential surface properties",
+      ],
     },
   },
   mathematics: {
@@ -211,29 +260,45 @@ const SUBJECT_KNOWLEDGE_MAP: Record<string, SubjectKnowledgeConfig> = {
     },
     decisionFrameworks: {
       "calculus": [
-        "1. Check function domain, continuity, and differentiability at boundary points",
-        "2. Identify standard form or derivative chain rule structure",
-        "3. Evaluate limits and indeterminate forms using L'Hôpital's Rule or expansion",
-        "4. Check symmetry properties f(-x) for definite integrals over [-a, a]",
-        "5. Remember integration constant (+ C) for indefinite integrals",
+        "Check function domain, continuity, and differentiability at boundary points",
+        "Identify standard form or derivative chain rule structure",
+        "Evaluate limits and indeterminate forms using L'Hôpital's Rule or expansion",
+        "Check symmetry properties f(-x) for definite integrals over [-a, a]",
+        "Remember integration constant (+ C) for indefinite integrals",
       ],
       "matrices": [
-        "1. Identify matrix dimensions (m x n) and check multiplication conformability",
-        "2. Check determinant properties: |AB| = |A||B|, |k·A| = k^n |A|",
-        "3. Apply adjoint theorems: A · adj(A) = |A| · I, |adj(A)| = |A|^(n-1)",
-        "4. Test system consistency: rank(A) vs rank([A|B]) for unique/infinite/no solutions",
-        "5. Remember matrix multiplication is non-commutative in general (AB ≠ BA)",
+        "Identify matrix dimensions (m x n) and check multiplication conformability",
+        "Check determinant properties: |AB| = |A||B|, |k·A| = k^n |A|",
+        "Apply adjoint theorems: A · adj(A) = |A| · I, |adj(A)| = |A|^(n-1)",
+        "Test system consistency: rank(A) vs rank([A|B]) for unique/infinite/no solutions",
+        "Remember matrix multiplication is non-commutative in general (AB ≠ BA)",
       ],
       "math_problem": [
-        "1. What is the domain / range constraint of the function?",
-        "2. Can substitution or elimination reduce algebraic steps?",
-        "3. Are options distinct numeric values (suitable for back-substitution)?",
-        "4. Check boundary points for extrema / limits.",
+        "What is the domain / range constraint of the function?",
+        "Can substitution or elimination reduce algebraic steps?",
+        "Are options distinct numeric values (suitable for back-substitution)?",
+        "Check boundary points for extrema / limits.",
       ],
     },
     reviewTopics: {
-      "calculus": ["Definite Integral Properties", "Chain Rule Derivatives", "Maxima & Minima Conditions", "Differential Equations"],
-      "matrices": ["Determinant Properties", "Adjoint & Inverse Theorems", "System of Linear Equations Consistency"],
+      "calculus": [
+        "FOCUS FIRST:",
+        "Definite integral symmetry properties ∫[-a to a] f(x) dx",
+        "L'Hôpital's Rule & indeterminate forms (0/0, ∞/∞)",
+        "Chain rule and implicit differentiation",
+        "THEN SECONDARY:",
+        "Integration by parts and partial fractions",
+        "Area under curves & bounding conditions",
+      ],
+      "matrices": [
+        "FOCUS FIRST:",
+        "Adjoint & determinant formulas: |adj(A)| = |A|^(n-1), |k A| = k^n |A|",
+        "Matrix multiplication non-commutativity & order rules",
+        "System of linear equations consistency (rank/determinant)",
+        "THEN SECONDARY:",
+        "Elementary row transformations for inverse",
+        "Symmetric and skew-symmetric matrix decomposition",
+      ],
     },
   },
   biology: {
@@ -809,10 +874,10 @@ export function generateFullTopicDiagnosis(
     contributingFactor = "Sample Size Insufficient (<5 Attempts)";
   } else if (errorTaxonomy.calculationCount > 0 && errorTaxonomy.calculationCount >= errorTaxonomy.conceptualGapCount) {
     primaryDiagnosis = "Calculation Error";
-    contributingFactor = "Calculation Fluency & Clock Drain";
+    contributingFactor = "Calculation Fluency & Execution Pace";
   } else if (errorTaxonomy.distractorTrapCount > 0 || errorTaxonomy.questionInterpretationCount > 0) {
-    primaryDiagnosis = "Distractor Trap Susceptibility";
-    contributingFactor = "Question Interpretation & Qualifying Terms";
+    primaryDiagnosis = "Distractor Selection";
+    contributingFactor = "Qualifier-word misses";
   } else if (errorTaxonomy.applicationGapCount > 0) {
     primaryDiagnosis = "Concept Application Gap";
     contributingFactor = "Multi-Variable Scenario Transfer";
@@ -875,9 +940,9 @@ export function generateFullTopicDiagnosis(
     if (primaryDiagnosis === "Calculation Error") {
       specificWeakness = `Calculation & Formula Precision: ${incorrectCount} of ${attemptsCount} questions were incorrect, with ${errorTaxonomy.calculationCount} error(s) involving arithmetic or formula execution. Avg Response: ${avgTimeSeconds}s.`;
       interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect. Telemetry records ${errorTaxonomy.calculationCount} incorrect response(s) involving numerical calculation or formula execution. Avg Response is ${avgTimeSeconds}s per question (target: ≤${targetTimeSeconds}s). This pattern is consistent with calculation and execution errors.`;
-    } else if (primaryDiagnosis === "Distractor Trap Susceptibility") {
-      specificWeakness = `Distractor Selection & Question Interpretation: ${incorrectCount} of ${attemptsCount} questions were incorrect (${errorTaxonomy.distractorTrapCount} tempting distractor selection(s), ${errorTaxonomy.questionInterpretationCount} keyword qualifier miss(es) like NOT/EXCEPT).`;
-      interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect. ${errorTaxonomy.distractorTrapCount} incorrect responses involved tempting distractors and ${errorTaxonomy.questionInterpretationCount} involved missed qualifying words such as NOT or EXCEPT. This pattern is consistent with question-interpretation and distractor-selection errors.`;
+    } else if (primaryDiagnosis === "Distractor Selection" || primaryDiagnosis === "Distractor Trap Susceptibility") {
+      specificWeakness = `Distractor Selection & Question Interpretation: ${incorrectCount} of ${attemptsCount} questions were incorrect (${errorTaxonomy.distractorTrapCount} distractor selection(s), ${errorTaxonomy.questionInterpretationCount} qualifier-word miss(es) like NOT/EXCEPT).`;
+      interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect. Telemetry records ${errorTaxonomy.distractorTrapCount} distractor selection(s) and ${errorTaxonomy.questionInterpretationCount} missed qualifying words such as NOT or EXCEPT. This pattern is consistent with question interpretation and distractor selection.`;
     } else if (primaryDiagnosis === "Concept Application Gap") {
       specificWeakness = `Concept Application & Multi-Step Scenarios: ${incorrectCount} of ${attemptsCount} questions were incorrect, clustering on multi-variable application problems.`;
       interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect. Responses demonstrate familiarity on direct single-step stems, but incorrect answers cluster on multi-step or application scenarios requiring multi-variable synthesis.`;
@@ -931,17 +996,21 @@ export function generateFullTopicDiagnosis(
 
   // Remediation Plan
   const topicSearch = `${chapter} ${microTopic}`.trim();
-  const revTopics = findBestConfigKey(kb.reviewTopics, topicSearch) || kb.reviewTopics[topicKey] || [
-    chapter,
-    microTopic,
-    "Core NCERT Principles",
+  const rawRevTopics = findBestConfigKey(kb.reviewTopics, topicSearch) || kb.reviewTopics[topicKey];
+  const revTopics = rawRevTopics || [
+    "FOCUS FIRST:",
+    `Core definitions & boundary rules in ${microTopic || chapter}`,
+    "NCERT key terminology & qualifying terms",
+    "THEN SECONDARY:",
+    `Application examples in ${chapter}`,
+    "NCERT exercise summary questions",
   ];
-  const frameworkChecklist = findBestConfigKey(kb.decisionFrameworks, topicSearch) || kb.decisionFrameworks[topicKey] || [
-    "1. Identify given parameters and convert to standard units",
-    "2. Check question stem for qualifying keywords ('NOT' or 'EXCEPT')",
-    "3. Select governing NCERT formula or mechanism",
-    "4. Eliminate distractor options before confirming answer",
-  ];
+  const frameworkChecklist = (findBestConfigKey(kb.decisionFrameworks, topicSearch) || kb.decisionFrameworks[topicKey] || [
+    "Identify given parameters and convert to standard units",
+    "Check question stem for qualifying keywords ('NOT' or 'EXCEPT')",
+    "Select governing NCERT formula or mechanism",
+    "Eliminate distractor options before confirming answer",
+  ]).map((s) => s.replace(/^\d+[\.\)]\s*/, "").replace(/^Step\s*\d+:\s*/i, ""));
 
   // Dynamic practice recommendation based on error taxonomy
   let practiceType: FullTopicDiagnosis["recommendedPracticeType"] = "10-Question Application Drill";
@@ -1012,6 +1081,7 @@ export function generateFullTopicDiagnosis(
   if (attemptsCount < 5) {
     problemClassification = "LIMITED_DATA";
   } else if (
+    primaryDiagnosis === "Distractor Selection" ||
     primaryDiagnosis === "Distractor Trap Susceptibility" ||
     primaryDiagnosis === "Question Interpretation Error" ||
     errorTaxonomy.distractorTrapCount > 0 ||
@@ -1145,6 +1215,7 @@ export interface RealWeaknessReportSummary {
     reason: string;
   } | null;
   biggestAvoidableMistake: string;
+  pacingLabel?: string;
   pacingIssue: string;
   priorityAction: string;
   top5Weaknesses: Array<{
@@ -1202,7 +1273,8 @@ export function generateDiagnosticSummaryReport(
   }));
 
   let biggestAvoidableMistake = "Impulsive keyword misreading on timed questions.";
-  let pacingIssue = "No critical pacing issues detected.";
+  let pacingLabel = "RESPONSE PATTERN";
+  let pacingIssue = "Standard response pace maintained across attempted questions.";
   let priorityAction = "Complete baseline diagnostic mock to establish topic calibration.";
 
   if (biggestWeak) {
@@ -1211,9 +1283,19 @@ export function generateDiagnosticSummaryReport(
   }
 
   const slowTopics = diagnoses.filter((d) => d.observedPerformance.avgTimeSeconds > d.observedPerformance.targetTimeSeconds + 15);
+  const fastTopics = diagnoses.filter((d) => d.observedPerformance.avgTimeSeconds < 10 && d.observedPerformance.attemptsCount > 0);
+
   if (slowTopics.length > 0 && slowTopics[0]) {
     const slowItem = slowTopics[0];
+    pacingLabel = "PACING ALERT";
     pacingIssue = `Numerical calculations in ${slowItem.chapter} exceed target pace (${slowItem.observedPerformance.avgTimeSeconds}s vs ${slowItem.observedPerformance.targetTimeSeconds}s).`;
+  } else if (fastTopics.length > 0 && fastTopics[0]) {
+    const fastItem = fastTopics[0];
+    pacingLabel = "RESPONSE PATTERN";
+    pacingIssue = `Very fast responses detected (~${fastItem.observedPerformance.avgTimeSeconds}s/Q). Telemetry cannot determine whether this reflects rapid guessing or instant selection.`;
+  } else {
+    pacingLabel = "RESPONSE PATTERN";
+    pacingIssue = "Standard response pace maintained across attempted questions.";
   }
 
   return {
@@ -1238,6 +1320,7 @@ export function generateDiagnosticSummaryReport(
         }
       : null,
     biggestAvoidableMistake,
+    pacingLabel,
     pacingIssue,
     priorityAction,
     top5Weaknesses,

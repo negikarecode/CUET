@@ -114,6 +114,8 @@ export default function DashboardClient({
   const storeUser = useTestStore((state) => state.user);
   const clientAnalytics = useTestStore((state) => state.analytics);
   const testAttempts = useTestStore((state) => state.testAttempts);
+  const currentCycleNumber = useTestStore((state) => state.currentCycleNumber || 1);
+  const currentCycleQuestionCount = useTestStore((state) => state.currentCycleQuestionCount || 0);
 
   const subjectScrollRef = React.useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -365,7 +367,7 @@ export default function DashboardClient({
         </Link>
       </div>
 
-      {/* Dynamic Cold-Start Qualification Progress Meter */}
+      {/* Dynamic Cold-Start Qualification Progress Meter & Active Cycle Window */}
       {!isAiMentorUnlocked ? (
         <div className="p-4 rounded-xl border-2 border-black bg-[#FFFBEB] shadow-[3px_3px_0px_0px_#000] space-y-2">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -375,7 +377,9 @@ export default function DashboardClient({
               </div>
               <div>
                 <p className="text-xs sm:text-sm font-black text-black flex items-center gap-2">
-                  <span>Unlocking AI Mentor: {totalAttempted}/150 questions attempted</span>
+                  <span>
+                    Cycle {currentCycleNumber}: {currentCycleQuestionCount || totalAttempted}/150 questions attempted
+                  </span>
                   <span className="px-2 py-0.2 rounded bg-amber-200 border border-black text-[9px] font-black uppercase">
                     Calibration Gate
                   </span>
@@ -396,7 +400,31 @@ export default function DashboardClient({
             />
           </div>
         </div>
-      ) : null}
+      ) : (
+        /* Active Cycle Indicator when calibrated */
+        <div className="p-3.5 rounded-xl border-2 border-black bg-[#FAF7EE] shadow-[3px_3px_0px_0px_#000] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse ml-1" />
+            <div>
+              <p className="text-xs font-black text-black flex items-center gap-2">
+                <span>ACTIVE DIAGNOSTIC CYCLE {currentCycleNumber}</span>
+                <span className="px-2 py-0.5 rounded bg-black text-white text-[9px] font-black uppercase font-mono">
+                  {currentCycleQuestionCount} / 150 QUESTIONS
+                </span>
+              </p>
+              <p className="text-[11px] text-black/70 font-medium">
+                {150 - currentCycleQuestionCount} more questions until Cycle {currentCycleNumber} completes and comparison analysis runs.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/dashboard/radar"
+            className="px-3 py-1.5 rounded-lg bg-white hover:bg-black hover:text-white border-2 border-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all text-center self-start sm:self-auto shrink-0"
+          >
+            View Weakness Radar &rarr;
+          </Link>
+        </div>
+      )}
 
       {/* PROMINENT "YOUR NEXT BEST ACTION" HERO CARD */}
       {(() => {
@@ -465,12 +493,12 @@ export default function DashboardClient({
                 {/* Primary Diagnosis & Contributing Factor */}
                 <div className="flex items-center gap-2 flex-wrap text-xs">
                   <div className="px-2 py-0.5 rounded bg-[#FEF2F2] border border-black font-black text-black text-[11px] flex items-center gap-1 shadow-[1px_1px_0px_0px_#000]">
-                    <span className="text-[9px] text-[#DC2626] uppercase">PRIMARY:</span>
+                    <span className="text-[9px] text-[#DC2626] uppercase">PRIMARY PATTERN:</span>
                     <span>{prioritizedCandidate.fullDiagnosis?.primaryDiagnosis || (prioritizedCandidate.accuracyPercentage < 50 ? "Conceptual Gap" : "Precision Slip")}</span>
                   </div>
                   {prioritizedCandidate.fullDiagnosis?.contributingFactor && (
                     <div className="px-2 py-0.5 rounded bg-[#FAF7EE] border border-black font-bold text-black/80 text-[11px] flex items-center gap-1 shadow-[1px_1px_0px_0px_#000]">
-                      <span className="text-[9px] text-black/60 uppercase">CONTRIBUTING:</span>
+                      <span className="text-[9px] text-black/60 uppercase">CONTRIBUTING PATTERN:</span>
                       <span>{prioritizedCandidate.fullDiagnosis.contributingFactor}</span>
                     </div>
                   )}
@@ -483,7 +511,7 @@ export default function DashboardClient({
                   <p className="text-black/90 font-bold leading-relaxed">
                     {isLimited
                       ? `Insufficient data (${prioritizedCandidate.attemptsCount}/5 attempts). Practice 5 questions to calibrate baseline and detect genuine misconceptions.`
-                      : `Significant mark-leakage risk observed. Repairing ${prioritizedCandidate.chapter} will yield the highest immediate point gain on your next full mock.`}
+                      : `Prioritized because this topic currently has ${prioritizedCandidate.accuracyPercentage}% accuracy across ${prioritizedCandidate.attemptsCount} attempts.`}
                   </p>
                 </div>
               </div>

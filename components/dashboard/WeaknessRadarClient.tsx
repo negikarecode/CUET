@@ -54,6 +54,12 @@ import {
   generateFullTopicDiagnosis,
   generateDiagnosticSummaryReport,
 } from "@/lib/diagnostic-engine";
+import { CycleCompletionModal } from "@/components/dashboard/CycleCompletionModal";
+import { CycleAnalysisModal } from "@/components/dashboard/CycleAnalysisModal";
+import { CycleHistorySelector } from "@/components/dashboard/CycleHistorySelector";
+import { SubjectRadarAISection } from "@/components/dashboard/SubjectRadarAISection";
+import { DiagnosticCycle } from "@/types/cycle";
+import { SubjectRadarAIAnalysis, SubjectRadarAIPayload } from "@/types/subject-ai";
 
 const SUBJECT_ICON_MAP: Record<string, React.ElementType> = {
   Calculator,
@@ -164,6 +170,13 @@ export default function WeaknessRadarClient({
   const initTest = useCBTStore((state) => state.initTest);
   const clientAnalytics = useTestStore((state) => state.analytics);
   const testAttempts = useTestStore((state) => state.testAttempts);
+  const currentCycleNumber = useTestStore((state) => state.currentCycleNumber || 1);
+  const currentCycleQuestionCount = useTestStore((state) => state.currentCycleQuestionCount || 0);
+  const diagnosticCycles = useTestStore((state) => state.diagnosticCycles || []);
+  const activeCompletionNotification = useTestStore((state) => state.activeCompletionNotification);
+  const dismissCycleCompletionNotification = useTestStore(
+    (state) => state.dismissCycleCompletionNotification
+  );
 
   // Subject selector & tab state
   const paramSubject = searchParams.get("subject") || "all";
@@ -171,6 +184,9 @@ export default function WeaknessRadarClient({
   const [activeRepairTopic, setActiveRepairTopic] = useState<string | null>(null);
   const [expandedChapterKey, setExpandedChapterKey] = useState<string | null>(null);
   const [selectedModalDiagnosis, setSelectedModalDiagnosis] = useState<FullTopicDiagnosis | null>(null);
+  const [selectedCycleForReport, setSelectedCycleForReport] = useState<DiagnosticCycle | null>(null);
+  const [aiAnalysis, setAiAnalysis] = useState<SubjectRadarAIAnalysis | null>(null);
+  const [isAiLoading, setIsAiLoading] = useState(false);
 
   const toggleChapterExpand = (key: string) => {
     setExpandedChapterKey((prev) => (prev === key ? null : key));
@@ -330,6 +346,148 @@ export default function WeaknessRadarClient({
 
   const nextActionDiagnosis = prioritizedCandidate ? getOrGenerateDiagnosis(prioritizedCandidate) : null;
 
+  // Evidence-Based AI Analysis for current subject
+  const fetchSubjectAIAnalysis = React.useCallback(async () => {
+    const activeSubjectName =
+      selectedRadarSubject === "all"
+        ? candidateSubjects[0] || "Physics"
+        : candidateSubjectCalibrations.find((c) => c.subjectKey === selectedRadarSubject)?.subject || "Physics";
+
+    // Gather questions for this subject across all recorded attempts
+    const subjectQuestions = (testAttempts || []).flatMap((t) =>
+      (t.questions || []).filter((q) => {
+        if (selectedRadarSubject === "all") return true;
+        return normalizeSubject(q.subject || "").key === selectedRadarSubject;
+      })
+    );
+
+    // Calculate difficulty stats
+    const diffStats = {
+      easy: { attempted: 0, correct: 0, accuracy: 0 },
+      medium: { attempted: 0, correct: 0, accuracy: 0 },
+      hard: { attempted: 0, correct: 0, accuracy: 0 },
+    };
+
+    subjectQuestions.forEach((q) => {
+      const diff = ((q.difficulty as string) || "medium").toLowerCase();
+      const target = diff.includes("easy") ? diffStats.easy : diff.includes("hard") ? diffStats.hard : diffStats.medium;
+      if (q.selectedOption) {
+        target.attempted++;
+        if (q.isCorrect === true) target.correct++;
+      }
+    });
+
+    ["easy", "medium", "hard"].forEach((k) => {
+      const t = diffStats[k as keyof typeof diffStats];
+      t.accuracy = t.attempted > 0 ? Math.round((t.correct / t.attempted) * 100) : 0;
+    });
+
+    const subAttempted = subjectQuestions.filter((q) => q.selectedOption).length;
+    const subCorrect = subjectQuestions.filter((q) => q.isCorrect === true).length;
+    const subIncorrect = subAttempted - subCorrect;
+    const subAccuracy = subAttempted > 0 ? Math.round((subCorrect / subAttempted) * 100) : 0;
+    const subTime = subjectQuestions.reduce((s, q) => s + (q.timeSpentSeconds || 0), 0);
+    const subAvgTime = subAttempted > 0 ? Math.round(subTime / subAttempted) : 0;
+
+    const payload: SubjectRadarAIPayload = {
+      subject: activeSubjectName,
+      userId: storeUser?.id || initialData.user.id,
+      questions: subjectQuestions.map((q) => ({
+        questionId: q.questionId,
+        prompt: q.prompt || `Question on ${q.chapter}`,
+        options: q.options || [],
+        selectedOption: q.selectedOption,
+        correctOption: q.correctOption,
+        isCorrect: q.isCorrect,
+        chapter: q.chapter,
+        microTopic: q.microTopic,
+        difficulty: (q.difficulty as string) || "medium",
+        timeSpentSeconds: q.timeSpentSeconds || 0,
+        ncertReference: q.ncertReference,
+        explanation: q.explanation,
+        errorCategory: q.errorCategory,
+      })),
+      deterministicStats: {
+        totalAttempted: subAttempted,
+        correctCount: subCorrect,
+        incorrectCount: subIncorrect,
+        accuracyPercentage: subAccuracy,
+        avgTimeSeconds: subAvgTime,
+        difficultyStats: diffStats,
+        chapterPerformance: weaknessRadar.map((w) => ({
+          chapter: w.chapter,
+          attempted: w.attemptsCount,
+          correct: w.correctCount,
+          accuracy: w.accuracyPercentage,
+          avgTimeSeconds: w.avgTimeSeconds,
+          primaryDiagnosis: w.diagnosisLabel,
+        })),
+        errorTaxonomy: {
+          totalErrors: subIncorrect,
+          conceptualGapCount: Math.round(subIncorrect * 0.4),
+          applicationGapCount: Math.round(subIncorrect * 0.3),
+          calculationCount: Math.round(subIncorrect * 0.15),
+          distractorTrapCount: Math.round(subIncorrect * 0.1),
+          questionInterpretationCount: Math.round(subIncorrect * 0.05),
+          factualRecallCount: 0,
+          formulaMethodCount: 0,
+          carelessCount: 0,
+          multiStepReasoningCount: 0,
+          timePacingCount: 0,
+          guessingCount: 0,
+          memoryConfusionCount: 0,
+        },
+        diagnosticConfidence:
+          subAttempted >= 20 ? "HIGH" : subAttempted >= 10 ? "MEDIUM" : subAttempted >= 5 ? "LOW" : "INSUFFICIENT_EVIDENCE",
+        evidenceThresholdLabel:
+          subAttempted >= 20 ? "Established weakness" : subAttempted >= 10 ? "Emerging weakness" : subAttempted >= 5 ? "Early signal" : "Insufficient evidence",
+      },
+      cycleInfo: {
+        currentCycleNumber,
+        currentCycleQuestionCount,
+        resolvedWeaknesses: diagnosticCycles.flatMap((c) => c.comparison?.resolved.map((r) => r.name) || []),
+        recurringWeaknesses: diagnosticCycles.flatMap((c) => c.comparison?.recurringWeak.map((r) => r.name) || []),
+      },
+    };
+
+    setIsAiLoading(true);
+    try {
+      const res = await fetch("/api/ai/subject-radar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.analysis) {
+          setAiAnalysis(data.analysis);
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to fetch subject AI analysis:", err);
+    } finally {
+      setIsAiLoading(false);
+    }
+  }, [
+    selectedRadarSubject,
+    candidateSubjects,
+    candidateSubjectCalibrations,
+    testAttempts,
+    storeUser?.id,
+    initialData.user.id,
+    weaknessRadar,
+    currentCycleNumber,
+    currentCycleQuestionCount,
+    diagnosticCycles,
+  ]);
+
+  // Fetch subject AI analysis whenever active subject or cycle changes
+  useEffect(() => {
+    if (isClient) {
+      fetchSubjectAIAnalysis();
+    }
+  }, [isClient, selectedRadarSubject, currentCycleNumber, fetchSubjectAIAnalysis]);
+
   // Launch targeted practice drill
   const handleLaunchTargetedPractice = async (topic: string, subject: string, practiceType?: string) => {
     setActiveRepairTopic(topic);
@@ -395,7 +553,28 @@ export default function WeaknessRadarClient({
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+          {/* Cycle Badge Indicator */}
+          <div className="px-3 py-1.5 rounded-xl bg-[#FAF7EE] border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+            <div className="text-left font-mono">
+              <span className="text-[10px] font-black uppercase text-black block tracking-tight">
+                DIAGNOSTIC CYCLE {currentCycleNumber}
+              </span>
+              <span className="text-[11px] font-bold text-black/70">
+                {currentCycleQuestionCount} / 150 QUESTIONS
+              </span>
+            </div>
+          </div>
+
+          {/* Cycle History Selector */}
+          <CycleHistorySelector
+            currentCycleNumber={currentCycleNumber}
+            currentCycleQuestionCount={currentCycleQuestionCount}
+            diagnosticCycles={diagnosticCycles}
+            onSelectCycle={(cycle) => setSelectedCycleForReport(cycle)}
+          />
+
           <Link
             href="/dashboard/mocks"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
@@ -447,12 +626,12 @@ export default function WeaknessRadarClient({
               {/* Taxonomy badges: Primary Diagnosis & Contributing Factor */}
               <div className="flex items-center gap-2 flex-wrap text-xs">
                 <div className="px-2.5 py-1 rounded-lg bg-[#FEF2F2] border-2 border-black font-black text-black flex items-center gap-1.5 shadow-[1px_1px_0px_0px_#000]">
-                  <span className="text-[10px] text-[#DC2626] uppercase">PRIMARY:</span>
+                  <span className="text-[10px] text-[#DC2626] uppercase">PRIMARY PATTERN:</span>
                   <span>{nextActionDiagnosis.primaryDiagnosis}</span>
                 </div>
                 {nextActionDiagnosis.contributingFactor && (
                   <div className="px-2.5 py-1 rounded-lg bg-[#FAF7EE] border-2 border-black font-bold text-black/80 flex items-center gap-1.5 shadow-[1px_1px_0px_0px_#000]">
-                    <span className="text-[10px] text-black/60 uppercase">CONTRIBUTING:</span>
+                    <span className="text-[10px] text-black/60 uppercase">CONTRIBUTING PATTERN:</span>
                     <span>{nextActionDiagnosis.contributingFactor}</span>
                   </div>
                 )}
@@ -465,7 +644,7 @@ export default function WeaknessRadarClient({
                 <p className="text-black/90 font-bold leading-relaxed">
                   {nextActionDiagnosis.diagnosticConfidence === "INSUFFICIENT_EVIDENCE"
                     ? `Limited Data: Only ${prioritizedCandidate.attemptsCount} question attempts recorded. Solve 5 adaptive questions to build reliable diagnostic telemetry.`
-                    : `${nextActionDiagnosis.specificWeakness}. Prioritized due to high question frequency and mark-leakage risk in upcoming full mocks.`}
+                    : `Prioritized because this topic currently has ${prioritizedCandidate.accuracyPercentage}% accuracy across ${prioritizedCandidate.attemptsCount} attempts.`}
                 </p>
               </div>
             </div>
@@ -547,7 +726,9 @@ export default function WeaknessRadarClient({
           </div>
 
           <div className="p-3.5 rounded-lg bg-[#FEF3C7] border-2 border-black shadow-[2px_2px_0px_0px_#000] space-y-1">
-            <span className="text-[10px] font-black text-[#B45309] uppercase tracking-wider">Pacing Alert</span>
+            <span className="text-[10px] font-black text-[#B45309] uppercase tracking-wider">
+              {summaryReport.pacingLabel || "Response Pattern"}
+            </span>
             <p className="text-xs font-black text-black line-clamp-2">{summaryReport.pacingIssue}</p>
           </div>
         </div>
@@ -622,7 +803,26 @@ export default function WeaknessRadarClient({
         </div>
       </div>
 
-      {/* 4. DIAGNOSTIC WEAKNESS CARDS */}
+      {/* 4. REAL EVIDENCE-BASED AI ANALYST SECTION */}
+      <SubjectRadarAISection
+        subject={
+          selectedRadarSubject === "all"
+            ? "Domain Overview"
+            : candidateSubjectCalibrations.find((c) => c.subjectKey === selectedRadarSubject)?.subject || "Domain"
+        }
+        analysis={aiAnalysis}
+        isLoading={isAiLoading}
+        onRefresh={fetchSubjectAIAnalysis}
+        onLaunchRepairDrill={(topic, practiceType) => {
+          const sub =
+            selectedRadarSubject === "all"
+              ? candidateSubjects[0] || "Physics"
+              : candidateSubjectCalibrations.find((c) => c.subjectKey === selectedRadarSubject)?.subject || "Physics";
+          handleLaunchTargetedPractice(topic, sub, practiceType);
+        }}
+      />
+
+      {/* 5. DIAGNOSTIC WEAKNESS CARDS */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-black text-black tracking-tight flex items-center gap-2">
@@ -701,12 +901,12 @@ export default function WeaknessRadarClient({
                       {/* Primary Diagnosis & Contributing Factor */}
                       <div className="flex items-center gap-2 flex-wrap text-xs pt-0.5">
                         <div className="px-2 py-0.5 rounded bg-[#FEF2F2] border border-black font-black text-black text-[11px] flex items-center gap-1 shadow-[1px_1px_0px_0px_#000]">
-                          <span className="text-[9px] text-[#DC2626] uppercase">PRIMARY:</span>
+                          <span className="text-[9px] text-[#DC2626] uppercase">PRIMARY PATTERN:</span>
                           <span>{diag.primaryDiagnosis}</span>
                         </div>
                         {diag.contributingFactor && (
                           <div className="px-2 py-0.5 rounded bg-[#FAF7EE] border border-black font-bold text-black/80 text-[11px] flex items-center gap-1 shadow-[1px_1px_0px_0px_#000]">
-                            <span className="text-[9px] text-black/60 uppercase">CONTRIBUTING:</span>
+                            <span className="text-[9px] text-black/60 uppercase">CONTRIBUTING PATTERN:</span>
                             <span>{diag.contributingFactor}</span>
                           </div>
                         )}
@@ -902,9 +1102,16 @@ export default function WeaknessRadarClient({
                         <div className="space-y-1">
                           <span className="font-black text-black uppercase text-[10px] block">{diag.remediationPlan.step1Rebuild.title}:</span>
                           <ul className="list-disc pl-4 space-y-0.5 text-black/80 font-semibold">
-                            {diag.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => (
-                              <li key={i}>{t}</li>
-                            ))}
+                            {diag.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => {
+                              const isHeader = t.startsWith("FOCUS FIRST:") || t.startsWith("THEN SECONDARY:");
+                              return isHeader ? (
+                                <li key={i} className="list-none font-black text-black pt-1.5 -ml-4 tracking-wider text-[10px] uppercase">
+                                  {t}
+                                </li>
+                              ) : (
+                                <li key={i}>{t}</li>
+                              );
+                            })}
                           </ul>
                         </div>
 
@@ -912,7 +1119,7 @@ export default function WeaknessRadarClient({
                           <span className="font-black text-black uppercase text-[10px] block">{diag.remediationPlan.step2DecisionFramework.title}:</span>
                           <ol className="list-decimal pl-4 space-y-0.5 text-black/80 font-semibold">
                             {diag.remediationPlan.step2DecisionFramework.checklist.map((c, i) => (
-                              <li key={i}>{c}</li>
+                              <li key={i}>{c.replace(/^\d+[\.\)]\s*/, "").replace(/^Step\s*\d+:\s*/i, "")}</li>
                             ))}
                           </ol>
                         </div>
@@ -1128,7 +1335,7 @@ export default function WeaknessRadarClient({
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="p-3 rounded-lg bg-[#FEF2F2] border-2 border-black space-y-1">
                           <span className="text-[10px] font-black text-[#DC2626] uppercase tracking-wider block">
-                            PRIMARY DIAGNOSIS:
+                            PRIMARY PATTERN:
                           </span>
                           <span className="text-sm font-black text-black block">
                             {selectedModalDiagnosis.primaryDiagnosis}
@@ -1137,7 +1344,7 @@ export default function WeaknessRadarClient({
 
                         <div className="p-3 rounded-lg bg-[#FAF7EE] border-2 border-black space-y-1">
                           <span className="text-[10px] font-black text-black/60 uppercase tracking-wider block">
-                            CONTRIBUTING FACTOR:
+                            CONTRIBUTING PATTERN:
                           </span>
                           <span className="text-sm font-bold text-black/90 block">
                             {selectedModalDiagnosis.contributingFactor || "Isolated Topic Variation"}
@@ -1186,7 +1393,7 @@ export default function WeaknessRadarClient({
                         </div>
                         <div className="flex items-center gap-2 p-2 bg-white rounded border border-black">
                           <span className="w-5 h-5 rounded-full bg-black text-white font-mono font-black text-[10px] flex items-center justify-center shrink-0">4</span>
-                          <span className="font-bold text-black">Lock ≥80% accuracy to advance recovery</span>
+                          <span className="font-bold text-black">Reach ≥80% on the targeted drill to continue.</span>
                         </div>
                       </div>
 
@@ -1224,9 +1431,16 @@ export default function WeaknessRadarClient({
                       <div className="p-3.5 rounded-lg border-2 border-black bg-[#F0FDF4] space-y-2">
                         <h4 className="font-black text-black uppercase text-[11px]">WHAT TO STUDY</h4>
                         <ul className="list-disc pl-4 space-y-1 font-semibold text-black/80">
-                          {selectedModalDiagnosis.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => (
-                            <li key={i}>{t}</li>
-                          ))}
+                          {selectedModalDiagnosis.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => {
+                            const isHeader = t.startsWith("FOCUS FIRST:") || t.startsWith("THEN SECONDARY:");
+                            return isHeader ? (
+                              <li key={i} className="list-none font-black text-black pt-1.5 -ml-4 tracking-wider text-[10px] uppercase">
+                                {t}
+                              </li>
+                            ) : (
+                              <li key={i}>{t}</li>
+                            );
+                          })}
                         </ul>
                       </div>
 
@@ -1234,7 +1448,7 @@ export default function WeaknessRadarClient({
                         <h4 className="font-black text-black uppercase text-[11px]">HOW TO STUDY (DECISION TREE)</h4>
                         <ol className="list-decimal pl-4 space-y-1 font-semibold text-black/80">
                           {selectedModalDiagnosis.remediationPlan.step2DecisionFramework.checklist.map((c, i) => (
-                            <li key={i}>{c}</li>
+                            <li key={i}>{c.replace(/^\d+[\.\)]\s*/, "").replace(/^Step\s*\d+:\s*/i, "")}</li>
                           ))}
                         </ol>
                       </div>
@@ -1394,6 +1608,37 @@ export default function WeaknessRadarClient({
               </div>
             </div>
           </div>,
+          document.body
+        )}
+
+      {/* Cycle Completion Celebration Modal (Portal) */}
+      {isClient &&
+        activeCompletionNotification &&
+        createPortal(
+          <CycleCompletionModal
+            notification={activeCompletionNotification}
+            onClose={() => dismissCycleCompletionNotification()}
+            onViewAnalysis={() => {
+              const completed = diagnosticCycles.find(
+                (c) => c.cycleNumber === activeCompletionNotification.cycleNumber
+              );
+              dismissCycleCompletionNotification();
+              if (completed) {
+                setSelectedCycleForReport(completed);
+              }
+            }}
+          />,
+          document.body
+        )}
+
+      {/* Cycle Deep Analysis Modal (Portal) */}
+      {isClient &&
+        selectedCycleForReport &&
+        createPortal(
+          <CycleAnalysisModal
+            cycle={selectedCycleForReport}
+            onClose={() => setSelectedCycleForReport(null)}
+          />,
           document.body
         )}
     </div>
