@@ -37,6 +37,7 @@ import {
   Activity,
   Check,
   ShieldAlert,
+  Lock,
 } from "lucide-react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -188,6 +189,8 @@ export default function WeaknessRadarClient({
   const [selectedCycleForReport, setSelectedCycleForReport] = useState<DiagnosticCycle | null>(null);
   const [aiAnalysis, setAiAnalysis] = useState<SubjectRadarAIAnalysis | null>(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [aiAnalysisStatus, setAiAnalysisStatus] = useState<"idle" | "running" | "complete" | "error">("idle");
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
 
   // In-flight request controller and fingerprint cache to avoid duplicate/stuck fetches
   const abortControllerRef = React.useRef<AbortController | null>(null);
@@ -478,6 +481,8 @@ export default function WeaknessRadarClient({
     abortControllerRef.current = controller;
 
     setIsAiLoading(true);
+    setAiAnalysisStatus("running");
+    setAnalysisError(null);
 
     try {
       const res = await fetch("/api/ai/subject-radar", {
@@ -491,27 +496,22 @@ export default function WeaknessRadarClient({
         const data = await res.json();
         if (data.analysis) {
           setAiAnalysis(data.analysis);
+          setAiAnalysisStatus("complete");
         } else {
-          // If response lacked analysis object, fall back to deterministic baseline
-          const fallback = buildDeterministicSubjectRadarAI(payload);
-          fallback.status = "fallback";
-          setAiAnalysis(fallback);
+          setAiAnalysisStatus("error");
+          setAnalysisError("AI interpretation could not be generated right now.");
         }
       } else {
-        // Non-200 response -> robust deterministic fallback with status fallback
-        const fallback = buildDeterministicSubjectRadarAI(payload);
-        fallback.status = "fallback";
-        setAiAnalysis(fallback);
+        setAiAnalysisStatus("error");
+        setAnalysisError("AI interpretation could not be generated right now.");
       }
     } catch (err: any) {
       if (err?.name === "AbortError") {
-        // Request was intentionally aborted for newer subject filter
         return;
       }
-      console.warn("Failed to fetch subject AI analysis; using verified deterministic fallback:", err);
-      const fallback = buildDeterministicSubjectRadarAI(payload);
-      fallback.status = "fallback";
-      setAiAnalysis(fallback);
+      console.warn("Failed to fetch subject AI analysis:", err);
+      setAiAnalysisStatus("error");
+      setAnalysisError("AI interpretation could not be generated right now.");
     } finally {
       if (abortControllerRef.current === controller) {
         setIsAiLoading(false);
@@ -531,17 +531,14 @@ export default function WeaknessRadarClient({
     aiAnalysis,
   ]);
 
-  // Fetch subject AI analysis whenever active subject, cycle, or attempt count changes
+  // Abort in-flight requests on unmount
   useEffect(() => {
-    if (isClient) {
-      fetchSubjectAIAnalysis(false);
-    }
     return () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
     };
-  }, [isClient, selectedRadarSubject, currentCycleNumber, currentCycleQuestionCount, testAttempts?.length]);
+  }, []);
 
   // Launch targeted practice drill
   const handleLaunchTargetedPractice = async (topic: string, subject: string, practiceType?: string) => {
@@ -639,6 +636,37 @@ export default function WeaknessRadarClient({
           </Link>
         </div>
       </div>
+
+      {/* CALIBRATION NOTIFICATION BANNER (UNDER 150 QUESTIONS) */}
+      {(currentCycleQuestionCount < 150 && totalAttempted < 150) && (
+        <div className="bg-[#FFFBEB] rounded-xl border-2 border-black p-4 sm:p-5 shadow-[4px_4px_0px_0px_#000] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-lg bg-black text-white shrink-0 mt-0.5">
+              <Lock className="w-5 h-5 text-[#F59E0B]" />
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="font-black text-black text-sm uppercase tracking-tight">
+                  Diagnostic Calibration in Progress
+                </span>
+                <span className="px-2 py-0.5 rounded bg-black text-white text-[10px] font-mono font-bold">
+                  {Math.max(currentCycleQuestionCount, totalAttempted)} / 150 Qs
+                </span>
+              </div>
+              <p className="text-xs text-black/80 font-medium">
+                The Weakness Radar requires a minimum 150-question window to eliminate sample noise and provide statistically verified diagnosis. Early signals are displayed below as preliminary data.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/dashboard/mocks"
+            className="shrink-0 px-4 py-2 rounded-lg bg-black text-white hover:bg-black/90 text-xs font-black border border-black shadow-[2px_2px_0px_0px_#000] transition-all flex items-center gap-1.5"
+          >
+            <Play className="w-3.5 h-3.5 fill-white" />
+            <span>Complete Calibration Mocks</span>
+          </Link>
+        </div>
+      )}
 
       {/* 2. PROMINENT "YOUR NEXT BEST ACTION" HERO CARD */}
       {prioritizedCandidate && nextActionDiagnosis && (
@@ -867,6 +895,19 @@ export default function WeaknessRadarClient({
         }
         analysis={aiAnalysis}
         isLoading={isAiLoading}
+        status={aiAnalysisStatus}
+        errorMessage={analysisError}
+        isUnlocked={
+          (selectedRadarSubject === "all"
+            ? currentCycleQuestionCount >= 150 || totalAttempted >= 150
+            : (candidateSubjectCalibrations.find((c) => c.subjectKey === selectedRadarSubject)?.totalAttempted || 0) >= 150)
+        }
+        currentQuestionsCount={
+          selectedRadarSubject === "all"
+            ? (currentCycleQuestionCount || totalAttempted)
+            : (candidateSubjectCalibrations.find((c) => c.subjectKey === selectedRadarSubject)?.totalAttempted || 0)
+        }
+        requiredQuestionsCount={150}
         onRefresh={() => fetchSubjectAIAnalysis(true)}
         onLaunchRepairDrill={(topic, practiceType) => {
           const sub =

@@ -18,6 +18,11 @@ interface SubjectRadarAISectionProps {
   subject: string;
   analysis: SubjectRadarAIAnalysis | null;
   isLoading: boolean;
+  status?: "idle" | "running" | "complete" | "error";
+  errorMessage?: string | null;
+  isUnlocked?: boolean;
+  currentQuestionsCount?: number;
+  requiredQuestionsCount?: number;
   onRefresh: () => void;
   onLaunchRepairDrill: (topic: string, practiceType?: string) => void;
 }
@@ -26,10 +31,58 @@ export function SubjectRadarAISection({
   subject,
   analysis,
   isLoading,
+  status = "idle",
+  errorMessage,
+  isUnlocked = true,
+  currentQuestionsCount = 0,
+  requiredQuestionsCount = 150,
   onRefresh,
   onLaunchRepairDrill,
 }: SubjectRadarAISectionProps) {
   const [activeTab, setActiveTab] = useState<"insights" | "cross_chapter" | "difficulty" | "profile">("insights");
+
+  // Calibration locked state (under 150 questions)
+  if (!isUnlocked) {
+    const progressPct = Math.min(100, Math.round((currentQuestionsCount / requiredQuestionsCount) * 100));
+    return (
+      <div className="bg-white rounded-2xl border-3 border-black p-5 sm:p-6 shadow-[5px_5px_0px_0px_#000] space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center">
+              <Brain className="w-4 h-4 text-[#8B5CF6]" />
+            </div>
+            <div>
+              <h3 className="text-sm font-black text-black uppercase tracking-tight flex items-center gap-2">
+                <span>AI Evidence Analyst</span>
+                <span className="px-2 py-0.5 rounded bg-[#FEF3C7] text-[#B45309] border border-black text-[10px] font-black uppercase">
+                  Calibration Required
+                </span>
+              </h3>
+              <p className="text-xs text-black/60 font-semibold">
+                Requires minimum {requiredQuestionsCount} qualifying questions in {subject} to calibrate patterns.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-[#FAF7EE] rounded-xl border-2 border-black space-y-3">
+          <div className="flex items-center justify-between text-xs font-mono font-black">
+            <span>Cycle Calibration Progress</span>
+            <span>{currentQuestionsCount} / {requiredQuestionsCount} Questions ({progressPct}%)</span>
+          </div>
+          <div className="w-full h-3 rounded-full bg-black/10 border border-black overflow-hidden">
+            <div
+              className="h-full bg-[#10B981] transition-all duration-300"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+          <p className="text-[11px] font-semibold text-black/70">
+            AI telemetry analysis activates once you complete 150 questions to ensure statistically verified diagnostic recommendations without false positives.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -53,6 +106,31 @@ export function SubjectRadarAISection({
           <span className="text-xs font-mono font-black text-black/80">Analyzing verified question telemetry...</span>
           <span className="text-[11px] font-semibold text-black/50">Cross-referencing error taxonomy, speed pacing, and difficulty progression</span>
         </div>
+      </div>
+    );
+  }
+
+  if (status === "error" && !analysis) {
+    return (
+      <div className="bg-white rounded-2xl border-3 border-black p-6 shadow-[5px_5px_0px_0px_#000] space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Brain className="w-5 h-5 text-[#DC2626]" />
+            <h3 className="text-sm font-black text-black uppercase tracking-tight">
+              AI Evidence Analyst
+            </h3>
+          </div>
+          <button
+            onClick={onRefresh}
+            className="px-3 py-1.5 rounded-lg bg-[#FAF7EE] hover:bg-black hover:text-white border-2 border-black text-xs font-black transition-all flex items-center gap-1.5 shadow-[2px_2px_0px_0px_#000]"
+          >
+            <RotateCcw className="w-3 h-3" />
+            <span>Retry Analysis</span>
+          </button>
+        </div>
+        <p className="text-xs text-[#DC2626] font-bold">
+          {errorMessage || "AI interpretation could not be generated right now."}
+        </p>
       </div>
     );
   }

@@ -310,8 +310,14 @@ export default async function WeaknessRadarPage() {
           .filter((t) => t.status === "mastered" || t.accuracyPercentage >= 75)
           .sort((a, b) => b.accuracyPercentage - a.accuracyPercentage);
 
-        serverData.weaknessRadar = weaknesses;
-        serverData.strengthList = strengths;
+        // Strictly gate diagnostic weakness conclusions behind the 150-question window
+        if (totalAttempted >= 150) {
+          serverData.weaknessRadar = weaknesses;
+          serverData.strengthList = strengths;
+        } else {
+          serverData.weaknessRadar = [];
+          serverData.strengthList = [];
+        }
 
         // Pacing / time sink alerts
         serverData.timeSinkAlerts = Array.from(topicMap.values())

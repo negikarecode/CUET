@@ -30,10 +30,26 @@ export async function POST(req: NextRequest) {
 
     const userId = body.userId || user?.id || "guest";
 
-    // Build unique cache fingerprint from question count + accuracy + cycle number
+    // Strictly enforce minimum 150 qualifying questions for diagnostic cycle analysis
+    const totalAttempted = deterministicStats.totalAttempted || 0;
+    const cycleQuestionCount = cycleInfo?.currentCycleQuestionCount ?? totalAttempted;
+    const isCompletedCycle = cycleQuestionCount >= 150 || totalAttempted >= 150;
+
+    if (!isCompletedCycle) {
+      return NextResponse.json(
+        {
+          error: "Calibration Incomplete: Minimum 150 qualifying questions required for Subject Weakness Radar analysis.",
+          currentCycleQuestionCount: cycleQuestionCount,
+          required: 150,
+        },
+        { status: 400 }
+      );
+    }
+
+    // Build unique cache fingerprint strictly scoped to user + cycleNumber + exact question telemetry
     const fingerprint = `${deterministicStats.totalAttempted}_${deterministicStats.accuracyPercentage}_${
       cycleInfo?.currentCycleNumber || 1
-    }_${cycleInfo?.currentCycleQuestionCount || 0}`;
+    }_${cycleQuestionCount}`;
 
     // 1. Check cache first to avoid redundant LLM calls on page refresh
     const cached = getCachedSubjectRadarAI(userId, subject, fingerprint);
