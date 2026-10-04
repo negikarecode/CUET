@@ -61,7 +61,6 @@ import { CycleHistorySelector } from "@/components/dashboard/CycleHistorySelecto
 import { SubjectRadarAISection } from "@/components/dashboard/SubjectRadarAISection";
 import { DiagnosticCycle } from "@/types/cycle";
 import { SubjectRadarAIAnalysis, SubjectRadarAIPayload } from "@/types/subject-ai";
-import { buildDeterministicSubjectRadarAI } from "@/lib/subject-ai-engine";
 
 const SUBJECT_ICON_MAP: Record<string, React.ElementType> = {
   Calculator,
@@ -191,6 +190,7 @@ export default function WeaknessRadarClient({
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [aiAnalysisStatus, setAiAnalysisStatus] = useState<"idle" | "running" | "complete" | "error">("idle");
   const [analysisError, setAnalysisError] = useState<string | null>(null);
+  const [analysisTriggered, setAnalysisTriggered] = useState(false);
 
   // In-flight request controller and fingerprint cache to avoid duplicate/stuck fetches
   const abortControllerRef = React.useRef<AbortController | null>(null);
@@ -324,6 +324,12 @@ export default function WeaknessRadarClient({
       ? rawStrengthList
       : rawStrengthList.filter((t) => normalizeSubject(t.subject).key === selectedRadarSubject);
 
+  // Calibration gating condition:
+  // Active cycle has completed when currentCycleQuestionCount >= 150 OR overall totalAttempted >= 150
+  // If user has prior completed cycles, those completed cycles are unlocked in history
+  const isCurrentCycleComplete = currentCycleQuestionCount >= 150 || (totalAttempted >= 150 && diagnosticCycles.length === 0);
+  const isCalibrationLocked = !isCurrentCycleComplete;
+
   // Generate all topic diagnoses
   const allDiagnoses: FullTopicDiagnosis[] = [...weaknessRadar, ...strengthList].map(getOrGenerateDiagnosis);
   const summaryReport = generateDiagnosticSummaryReport(allDiagnoses, totalAttempted, completedTestsCount);
@@ -354,8 +360,14 @@ export default function WeaknessRadarClient({
 
   const nextActionDiagnosis = prioritizedCandidate ? getOrGenerateDiagnosis(prioritizedCandidate) : null;
 
-  // Evidence-Based AI Analysis for current subject
+  // Evidence-Based AI Analysis for current completed cycle
   const fetchSubjectAIAnalysis = React.useCallback(async (forceRefresh = false) => {
+    // Strictly prevent running before 150 questions
+    if (!isCurrentCycleComplete) {
+      console.warn("Blocked AI analysis trigger: Current cycle is still in calibration window (<150 Qs).");
+      return;
+    }
+
     const activeSubjectName =
       selectedRadarSubject === "all"
         ? candidateSubjects[0] || "Physics"
@@ -452,26 +464,20 @@ export default function WeaknessRadarClient({
       },
       cycleInfo: {
         currentCycleNumber,
-        currentCycleQuestionCount,
+        currentCycleQuestionCount: 150,
         resolvedWeaknesses: diagnosticCycles.flatMap((c) => c.comparison?.resolved.map((r) => r.name) || []),
         recurringWeaknesses: diagnosticCycles.flatMap((c) => c.comparison?.recurringWeak.map((r) => r.name) || []),
       },
     };
 
     // Calculate a stable deterministic fingerprint to prevent duplicate in-flight requests
-    const currentFingerprint = `${selectedRadarSubject}:${subAttempted}:${subAccuracy}:${currentCycleNumber}:${currentCycleQuestionCount}:${weaknessRadar.length}`;
+    const currentFingerprint = `${selectedRadarSubject}:${subAttempted}:${subAccuracy}:${currentCycleNumber}:150:${weaknessRadar.length}`;
     if (!forceRefresh && lastFingerprintRef.current === currentFingerprint && aiAnalysis !== null) {
+      setAiAnalysisStatus("complete");
+      setAnalysisTriggered(true);
       return;
     }
     lastFingerprintRef.current = currentFingerprint;
-
-    // Immediately resolve deterministic calibration if attempts < 5
-    if (subAttempted < 5) {
-      const immediateAnalysis = buildDeterministicSubjectRadarAI(payload);
-      setAiAnalysis(immediateAnalysis);
-      setIsAiLoading(false);
-      return;
-    }
 
     // Abort previous in-flight request to avoid race condition overwrite
     if (abortControllerRef.current) {
@@ -482,6 +488,7 @@ export default function WeaknessRadarClient({
 
     setIsAiLoading(true);
     setAiAnalysisStatus("running");
+    setAnalysisTriggered(true);
     setAnalysisError(null);
 
     try {
@@ -518,6 +525,7 @@ export default function WeaknessRadarClient({
       }
     }
   }, [
+    isCurrentCycleComplete,
     selectedRadarSubject,
     candidateSubjects,
     candidateSubjectCalibrations,
@@ -526,7 +534,6 @@ export default function WeaknessRadarClient({
     initialData.user.id,
     weaknessRadar,
     currentCycleNumber,
-    currentCycleQuestionCount,
     diagnosticCycles,
     aiAnalysis,
   ]);
@@ -579,6 +586,12 @@ export default function WeaknessRadarClient({
       setActiveRepairTopic(null);
     }
   };
+
+  const calibrationProgressPct = Math.min(
+    100,
+    Math.round(((currentCycleQuestionCount || totalAttempted) / 150) * 100)
+  );
+  const remainingQuestions = Math.max(0, 150 - (currentCycleQuestionCount || totalAttempted));
 
   return (
     <div className="space-y-6">
@@ -637,37 +650,243 @@ export default function WeaknessRadarClient({
         </div>
       </div>
 
-      {/* CALIBRATION NOTIFICATION BANNER (UNDER 150 QUESTIONS) */}
-      {(currentCycleQuestionCount < 150 && totalAttempted < 150) && (
-        <div className="bg-[#FFFBEB] rounded-xl border-2 border-black p-4 sm:p-5 shadow-[4px_4px_0px_0px_#000] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-black text-white shrink-0 mt-0.5">
-              <Lock className="w-5 h-5 text-[#F59E0B]" />
-            </div>
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="font-black text-black text-sm uppercase tracking-tight">
-                  Diagnostic Calibration in Progress
-                </span>
-                <span className="px-2 py-0.5 rounded bg-black text-white text-[10px] font-mono font-bold">
-                  {Math.max(currentCycleQuestionCount, totalAttempted)} / 150 Qs
-                </span>
+
+      {/* ============================================================== */}
+      {/* 2. CALIBRATION GATED EXPERIENCE                                */}
+      {/* ============================================================== */}
+
+      {/* CASE A: UNDER 150 QUESTIONS -> CALIBRATION LOCKED STATE */}
+      {isCalibrationLocked ? (
+        <div className="space-y-6">
+          {/* Diagnostic Cycle Progress Card */}
+          <div className="bg-white rounded-2xl border-3 border-black p-6 sm:p-8 shadow-[6px_6px_0px_0px_#000] text-center space-y-5">
+            <div className="space-y-2">
+              <span className="px-3 py-1 rounded-full bg-black text-white text-[11px] font-black uppercase tracking-wider font-mono inline-block">
+                DIAGNOSTIC CYCLE {currentCycleNumber}
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-black tracking-tight font-mono">
+                {currentCycleQuestionCount} / 150 QUESTIONS
+              </h2>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#FEF3C7] border-2 border-black text-[#B45309] font-black text-xs uppercase tracking-wider">
+                <span className="w-2 h-2 rounded-full bg-[#B45309] animate-pulse" />
+                <span>CALIBRATION IN PROGRESS</span>
               </div>
-              <p className="text-xs text-black/80 font-medium">
-                The Weakness Radar requires a minimum 150-question window to eliminate sample noise and provide statistically verified diagnosis. Early signals are displayed below as preliminary data.
+            </div>
+
+            <p className="text-xs sm:text-sm text-black/80 font-medium max-w-lg mx-auto leading-relaxed">
+              We need enough question-level evidence to reliably identify recurring strengths, weaknesses, and cross-chapter patterns.
+            </p>
+
+            {/* Calibration Progress Bar */}
+            <div className="max-w-md mx-auto space-y-2">
+              <div className="w-full h-4 rounded-full bg-black/10 border-2 border-black overflow-hidden p-0.5">
+                <div
+                  className="h-full bg-black rounded-full transition-all duration-500"
+                  style={{ width: `${Math.max(4, calibrationProgressPct)}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-xs font-mono font-bold text-black/70 px-1">
+                <span>{calibrationProgressPct}% Calibrated</span>
+                <span>{remainingQuestions} questions remaining</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Locked Radar Card */}
+          <div className="bg-[#FAF7EE] rounded-2xl border-3 border-black p-6 sm:p-8 shadow-[6px_6px_0px_0px_#000] space-y-6">
+            <div className="flex items-center gap-3 border-b-2 border-black/10 pb-4">
+              <div className="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shrink-0 shadow-[2px_2px_0px_0px_#000]">
+                <Lock className="w-5 h-5 text-[#F59E0B]" />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-black tracking-tight flex items-center gap-2">
+                  <span>SUBJECT WEAKNESS RADAR LOCKED</span>
+                </h3>
+                <p className="text-xs text-black/70 font-semibold">
+                  Complete the 150-question diagnostic window to unlock:
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl">
+              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0 stroke-[2.5]" />
+                <span className="text-xs font-black text-black">Evidence-based subject analysis</span>
+              </div>
+              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0 stroke-[2.5]" />
+                <span className="text-xs font-black text-black">Cross-chapter pattern detection</span>
+              </div>
+              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0 stroke-[2.5]" />
+                <span className="text-xs font-black text-black">Difficulty analysis</span>
+              </div>
+              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0 stroke-[2.5]" />
+                <span className="text-xs font-black text-black">Personalized learning profile</span>
+              </div>
+              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0 stroke-[2.5]" />
+                <span className="text-xs font-black text-black">Targeted repair recommendations</span>
+              </div>
+              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0 stroke-[2.5]" />
+                <span className="text-xs font-black text-black">AI diagnostic analysis</span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+              <Link
+                href="/dashboard/mocks"
+                className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-black hover:bg-black/90 text-white font-black text-xs sm:text-sm border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
+              >
+                <Play className="w-4 h-4 fill-white" />
+                <span>CONTINUE PRACTICING</span>
+              </Link>
+
+              {diagnosticCycles.length > 0 && diagnosticCycles[diagnosticCycles.length - 1] && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedCycleForReport(diagnosticCycles[diagnosticCycles.length - 1] || null)}
+                  className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white hover:bg-[#FAF7EE] text-black font-black text-xs sm:text-sm border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
+                >
+                  <Award className="w-4 h-4 text-[#F59E0B]" />
+                  <span>VIEW CYCLE {diagnosticCycles[diagnosticCycles.length - 1]?.cycleNumber} ANALYSIS</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : !analysisTriggered && aiAnalysisStatus !== "running" && aiAnalysisStatus !== "complete" ? (
+        /* CASE B: 150/150 REACHED, BUT ANALYSIS NOT TRIGGERED YET */
+        <div className="bg-white rounded-2xl border-3 border-black p-6 sm:p-8 shadow-[6px_6px_0px_0px_#000] text-center space-y-6">
+          <div className="space-y-2">
+            <span className="px-3 py-1 rounded-full bg-[#10B981] text-white text-[11px] font-black uppercase tracking-wider font-mono inline-block shadow-[1px_1px_0px_0px_#000]">
+              🎯 DIAGNOSTIC CYCLE {currentCycleNumber} COMPLETE
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-black tracking-tight font-mono">
+              150 / 150 QUESTIONS
+            </h2>
+            <p className="text-base font-black text-black">
+              Your baseline evidence is now ready.
+            </p>
+          </div>
+
+          <p className="text-xs sm:text-sm text-black/80 font-medium max-w-xl mx-auto leading-relaxed">
+            You&apos;ve completed enough qualifying questions for the system to analyze your performance across subjects, chapters, difficulty levels, error patterns, and response behavior.
+          </p>
+
+          <div className="pt-2 flex justify-center">
+            <button
+              type="button"
+              onClick={() => fetchSubjectAIAnalysis(false)}
+              className="px-8 py-4 rounded-xl bg-[#10B981] hover:bg-[#059669] text-white font-black text-sm sm:text-base border-3 border-black shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center gap-2.5 cursor-pointer"
+            >
+              <Sparkles className="w-5 h-5 fill-white" />
+              <span>RUN AI ANALYSIS</span>
+            </button>
+          </div>
+        </div>
+      ) : aiAnalysisStatus === "running" ? (
+        /* CASE C: ANALYSIS IS CURRENTLY RUNNING (SECTION 6 SPEC) */
+        <div className="bg-white rounded-2xl border-3 border-black p-6 sm:p-8 shadow-[6px_6px_0px_0px_#000] space-y-6">
+          <div className="flex items-center gap-3 border-b-2 border-black pb-4">
+            <div className="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center animate-spin">
+              <Brain className="w-5 h-5 text-[#8B5CF6]" />
+            </div>
+            <div>
+              <h2 className="text-lg sm:text-xl font-black text-black tracking-tight uppercase">
+                AI SUBJECT ANALYSIS
+              </h2>
+              <p className="text-xs text-black/70 font-semibold">
+                Analyzing your 150-question diagnostic cycle...
               </p>
             </div>
           </div>
-          <Link
-            href="/dashboard/mocks"
-            className="shrink-0 px-4 py-2 rounded-lg bg-black text-white hover:bg-black/90 text-xs font-black border border-black shadow-[2px_2px_0px_0px_#000] transition-all flex items-center gap-1.5"
-          >
-            <Play className="w-3.5 h-3.5 fill-white" />
-            <span>Complete Calibration Mocks</span>
-          </Link>
-        </div>
-      )}
 
+          <div className="p-5 rounded-xl bg-[#FAF7EE] border-2 border-black space-y-3 font-mono text-xs">
+            <div className="flex items-center gap-2.5 text-[#16A34A] font-bold">
+              <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
+              <span>Question telemetry verified</span>
+            </div>
+            <div className="flex items-center gap-2.5 text-[#16A34A] font-bold">
+              <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
+              <span>Chapter performance calculated</span>
+            </div>
+            <div className="flex items-center gap-2.5 text-[#16A34A] font-bold">
+              <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
+              <span>Difficulty patterns calculated</span>
+            </div>
+            <div className="flex items-center gap-2.5 text-black font-bold animate-pulse">
+              <span className="w-4 h-4 rounded-full border-2 border-black border-t-transparent animate-spin inline-block" />
+              <span>Identifying recurring error patterns</span>
+            </div>
+            <div className="flex items-center gap-2.5 text-black/60 font-bold">
+              <span className="w-4 h-4 rounded-full border border-black/40 inline-block" />
+              <span>Building subject learning profile</span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between pt-2">
+            <span className="text-xs font-bold text-black/60 italic">Please wait...</span>
+            <button
+              disabled
+              className="px-6 py-3 rounded-xl bg-gray-200 text-black/50 font-black text-xs border-2 border-black cursor-not-allowed flex items-center gap-2"
+            >
+              <span className="w-3.5 h-3.5 rounded-full border-2 border-black border-t-transparent animate-spin" />
+              <span>ANALYZING YOUR 150 QUESTIONS...</span>
+            </button>
+          </div>
+        </div>
+      ) : aiAnalysisStatus === "error" && !aiAnalysis ? (
+        /* CASE D: ANALYSIS FAILURE STATE (SECTION 13 SPEC) */
+        <div className="bg-white rounded-2xl border-3 border-black p-6 sm:p-8 shadow-[6px_6px_0px_0px_#000] space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#FEF2F2] border-2 border-black flex items-center justify-center text-[#DC2626]">
+              <AlertTriangle className="w-5 h-5 stroke-[2.5]" />
+            </div>
+            <div>
+              <h2 className="text-lg font-black text-[#DC2626] tracking-tight uppercase">
+                AI ANALYSIS UNAVAILABLE
+              </h2>
+              <p className="text-xs text-black/70 font-semibold">
+                Your 150-question diagnostic data has been successfully recorded, but AI interpretation could not be generated right now.
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-2 flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => fetchSubjectAIAnalysis(true)}
+              className="px-6 py-3 rounded-xl bg-black hover:bg-black/90 text-white font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-[#F59E0B]" />
+              <span>TRY AGAIN</span>
+            </button>
+          </div>
+        </div>
+      ) : (
+        /* CASE E: 150/150 UNLOCKED & ANALYSIS COMPLETE -> FULL RADAR EXPERIENCE */
+        <div className="space-y-6">
+          {/* Analysis Complete Badge / View Mode Banner */}
+          <div className="p-3.5 rounded-xl bg-[#DCFCE7] border-2 border-black flex items-center justify-between gap-3 shadow-[2px_2px_0px_0px_#000]">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#16A34A] stroke-[2.5]" />
+              <span className="text-xs font-black text-black">
+                ✓ 150-QUESTION DIAGNOSTIC ANALYSIS COMPLETE
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => fetchSubjectAIAnalysis(true)}
+              disabled={isAiLoading}
+              className="px-3 py-1 rounded-lg bg-white hover:bg-black hover:text-white text-black font-black text-[11px] border border-black transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <Sparkles className="w-3 h-3 text-[#F59E0B]" />
+              <span>{isAiLoading ? "Refreshing..." : "Re-run Analysis"}</span>
+            </button>
+          </div>
       {/* 2. PROMINENT "YOUR NEXT BEST ACTION" HERO CARD */}
       {prioritizedCandidate && nextActionDiagnosis && (
         <div className="bg-white rounded-2xl border-3 border-black p-5 sm:p-6 shadow-[6px_6px_0px_0px_#000] relative overflow-hidden">
@@ -1289,7 +1508,8 @@ export default function WeaknessRadarClient({
           </div>
         )}
       </div>
-
+        </div>
+      )}
       {/* 6. FULL TOPIC DIAGNOSIS MODAL (SECTION 20) */}
       {selectedModalDiagnosis &&
         typeof document !== "undefined" &&

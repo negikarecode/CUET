@@ -65,14 +65,14 @@ function runTests() {
   );
 
   const mathKey = normalizeSubject("Mathematics").key;
-  const mathCal1 = analytics1.subjectCalibration[mathKey];
+  const mathCal1 = analytics1.subjectCalibration?.[mathKey];
   console.assert(
-    mathCal1.totalAttempted === 50,
-    `Expected 50 attempts for Mathematics, got ${mathCal1.totalAttempted}`
+    mathCal1?.totalAttempted === 50,
+    `Expected 50 attempts for Mathematics, got ${mathCal1?.totalAttempted}`
   );
   console.assert(
-    mathCal1.attemptsToUnlock === 100,
-    `Expected 100 left to unlock for Mathematics, got ${mathCal1.attemptsToUnlock}`
+    mathCal1?.attemptsToUnlock === 100,
+    `Expected 100 left to unlock for Mathematics, got ${mathCal1?.attemptsToUnlock}`
   );
 
   console.log("Test 1 Passed: 1 single 50-Q mock produces exactly 50 total questions and 50/150 subject calibration.");
@@ -113,14 +113,14 @@ function runTests() {
     `Expected 2 completed tests, got ${analytics2.completedTestsCount}`
   );
 
-  const mathCal2 = analytics2.subjectCalibration[mathKey];
+  const mathCal2 = analytics2.subjectCalibration?.[mathKey];
   console.assert(
-    mathCal2.totalAttempted === 100,
-    `Expected 100 attempts for Mathematics across 2 mocks, got ${mathCal2.totalAttempted}`
+    mathCal2?.totalAttempted === 100,
+    `Expected 100 attempts for Mathematics across 2 mocks, got ${mathCal2?.totalAttempted}`
   );
   console.assert(
-    mathCal2.attemptsToUnlock === 50,
-    `Expected 50 left to unlock for Mathematics across 2 mocks, got ${mathCal2.attemptsToUnlock}`
+    mathCal2?.attemptsToUnlock === 50,
+    `Expected 50 left to unlock for Mathematics across 2 mocks, got ${mathCal2?.attemptsToUnlock}`
   );
 
   console.log("Test 3 Passed: 2 distinct 50-Q mocks produce exactly 100 total questions and 100/150 subject calibration.");
