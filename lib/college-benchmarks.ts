@@ -135,12 +135,29 @@ export function calculateCollegeReadiness(
 ): CollegeBenchmarkResult {
   const { campus, cutoff, targetScore } = getCollegeCutoffInfo(collegeName);
 
+  // If user has 0 attempts, prediction is uncalibrated baseline
+  if (totalAttempts === 0) {
+    return {
+      collegeName: collegeName || "Target College",
+      universityName: universityName || "Target University",
+      campus,
+      historicalCutoffPercentile: cutoff,
+      targetScoreFormatted: targetScore,
+      predictedPercentile: 0,
+      deltaPercentile: -cutoff,
+      status: "calibrating",
+      statusLabel: "Uncalibrated Baseline",
+      statusBadgeClass: "bg-slate-100 text-slate-800 border-slate-200",
+      recommendation: `Attempt at least 150 questions across Domain mocks to calibrate accurate percentile prediction against ${collegeName || "your target college"}.`,
+    };
+  }
+
   // If user has fewer than 15 attempts, calibration is preliminary
   if (totalAttempts < 15) {
-    const predicted = Math.max(50, Math.min(88, Math.round((accuracyPercentage || 65) * 0.9 * 10) / 10));
+    const predicted = Math.round(accuracyPercentage * 0.9 * 10) / 10;
     return {
-      collegeName: collegeName || "Delhi University — SRCC",
-      universityName: universityName || "Delhi University",
+      collegeName: collegeName || "Target College",
+      universityName: universityName || "Target University",
       campus,
       historicalCutoffPercentile: cutoff,
       targetScoreFormatted: targetScore,
@@ -148,8 +165,8 @@ export function calculateCollegeReadiness(
       deltaPercentile: Math.round((predicted - cutoff) * 10) / 10,
       status: "calibrating",
       statusLabel: "Calibration Underway",
-      statusBadgeClass: "bg-blue-100 text-blue-900 border-blue-400",
-      recommendation: `Attempt at least 150 questions across Domain mocks to calibrate accurate percentile prediction against ${collegeName}.`,
+      statusBadgeClass: "bg-blue-50 text-blue-800 border-blue-200",
+      recommendation: `Attempt at least 150 questions across Domain mocks to calibrate accurate percentile prediction against ${collegeName || "your target college"}.`,
     };
   }
 
@@ -158,7 +175,7 @@ export function calculateCollegeReadiness(
   const accuracyBase = accuracyPercentage * 0.95;
   const volumeBonus = Math.min(5.0, Math.log10(totalAttempts + 1) * 2.2);
   const rawPredicted = accuracyBase + volumeBonus;
-  const predictedPercentile = Math.min(99.9, Math.max(50.0, Math.round(rawPredicted * 10) / 10));
+  const predictedPercentile = Math.min(99.9, Math.max(0, Math.round(rawPredicted * 10) / 10));
   const delta = Math.round((predictedPercentile - cutoff) * 10) / 10;
 
   if (delta >= 0) {
@@ -172,7 +189,7 @@ export function calculateCollegeReadiness(
       deltaPercentile: delta,
       status: "surpassed",
       statusLabel: `Cutoff Surpassed (+${delta}%)`,
-      statusBadgeClass: "bg-[#D1FAE5] text-black border-black",
+      statusBadgeClass: "bg-emerald-50 text-emerald-800 border-emerald-200",
       recommendation: `High probability admission! Maintain pacing consistency and avoid negative marking traps.`,
     };
   }
@@ -188,7 +205,7 @@ export function calculateCollegeReadiness(
       deltaPercentile: delta,
       status: "striking_distance",
       statusLabel: `Within Striking Distance (${delta}%)`,
-      statusBadgeClass: "bg-[#FEF3C7] text-black border-black",
+      statusBadgeClass: "bg-amber-50 text-amber-800 border-amber-200",
       recommendation: `Targetable within ~2 weeks of targeted micro-topic fix drills. Bridge the remaining ${Math.abs(delta)}% gap.`,
     };
   }
@@ -203,7 +220,7 @@ export function calculateCollegeReadiness(
     deltaPercentile: delta,
     status: "needs_remediation",
     statusLabel: `Gap to Bridge (${delta}%)`,
-    statusBadgeClass: "bg-[#FEE2E2] text-[#991B1B] border-[#DC2626]",
+    statusBadgeClass: "bg-rose-50 text-rose-800 border-rose-200",
     recommendation: `Priority focus needed on your top 3 persistent red-zone topics to raise domain accuracy toward ${cutoff}%.`,
   };
 }

@@ -9,7 +9,11 @@ interface ScheduleMockTestProps {
 
 export const ScheduleMockTest: React.FC<ScheduleMockTestProps> = ({ onTestScheduled }) => {
   const [testType, setTestType] = useState('Full Mock Test');
-  const [testDate, setTestDate] = useState('2025-05-28');
+  const [testDate, setTestDate] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().slice(0, 10);
+  });
   const [testTime, setTestTime] = useState('10:00 AM');
   const [duration, setDuration] = useState('3 hours (200 Questions)');
   const [isScheduled, setIsScheduled] = useState(false);
@@ -26,13 +30,21 @@ export const ScheduleMockTest: React.FC<ScheduleMockTestProps> = ({ onTestSchedu
 
     const newTest: UpcomingTest = {
       id: `test-${Date.now()}`,
-      title: `CUET ${testType} - Custom`,
+      title: `CUET ${testType}`,
       subtitle: `Mock Session • ${duration}`,
-      dateTime: `${formattedDate || 'May 28, 2025'} - ${testTime}`,
+      dateTime: `${formattedDate} - ${testTime}`,
       status: 'Ready',
-      questions: duration.includes('200') ? 200 : duration.includes('100') ? 100 : 50,
+      questions: duration.includes('200') ? 200 : duration.includes('120') ? 120 : duration.includes('100') ? 100 : 50,
       durationHours: duration.includes('3') ? 3 : duration.includes('2') ? 2 : 1,
     };
+
+    try {
+      const existingStr = typeof window !== 'undefined' ? localStorage.getItem('cuet_scheduled_mocks') : null;
+      const existing = existingStr ? JSON.parse(existingStr) : [];
+      localStorage.setItem('cuet_scheduled_mocks', JSON.stringify([newTest, ...existing]));
+    } catch {
+      // storage quota or SSR fallback
+    }
 
     onTestScheduled?.(newTest);
 

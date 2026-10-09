@@ -318,6 +318,17 @@ export default function DashboardClient({
     };
   });
 
+  // Candidate Weaknesses & Strengths derived from live client analytics or server initialData
+  const candidateWeaknesses =
+    isClient && clientAnalytics && clientAnalytics.weaknessRadar && clientAnalytics.weaknessRadar.length > 0
+      ? clientAnalytics.weaknessRadar
+      : initialData.weaknessRadar || [];
+
+  const candidateStrengths =
+    isClient && clientAnalytics && clientAnalytics.strengthList && clientAnalytics.strengthList.length > 0
+      ? clientAnalytics.strengthList
+      : (initialData as any)?.strengthList || [];
+
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* 1. Welcome & Motivation Banner */}
@@ -326,7 +337,7 @@ export default function DashboardClient({
           userName={fullName}
           targetStream={targetStream}
           targetCollege={targetCollege}
-          streak={isClient && storeUser?.dailyStreak ? storeUser.dailyStreak : (initialData?.user?.currentStreak || 1)}
+          streak={isClient && storeUser?.dailyStreak ? storeUser.dailyStreak : (initialData?.user?.currentStreak || 0)}
         />
       </section>
 
@@ -334,8 +345,8 @@ export default function DashboardClient({
       <section aria-label="Top Metrics">
         <TopMetricsRow
           totalAttempted={totalAttempted}
-          averageScore={accuracyPercentage > 0 ? Math.round(accuracyPercentage * 20) : 1550}
-          percentile={accuracyPercentage > 0 ? Math.min(99.9, Math.max(50, accuracyPercentage * 1.15)) : 88.5}
+          averageScore={accuracyPercentage > 0 ? Math.round(accuracyPercentage * 20) : 0}
+          percentile={accuracyPercentage > 0 ? Math.min(99.9, Math.max(50, accuracyPercentage * 1.15)) : 0}
         />
       </section>
 
@@ -345,17 +356,23 @@ export default function DashboardClient({
           <ScoreImprovementTrend />
         </div>
         <div className="lg:col-span-4">
-          <SubjectWisePerformance />
+          <SubjectWisePerformance calibrations={candidateSubjectCalibrations} />
         </div>
       </section>
 
       {/* 4. Detailed Analytics & AI Diagnostic Suggestions (2 Columns: 8 cols / 4 cols) */}
       <section aria-label="Detailed Analytics" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         <div className="lg:col-span-8">
-          <DetailedPerformanceAnalysis />
+          <DetailedPerformanceAnalysis 
+            calibrations={candidateSubjectCalibrations} 
+            weaknesses={candidateWeaknesses} 
+          />
         </div>
         <div className="lg:col-span-4">
-          <StrengthsWeaknesses />
+          <StrengthsWeaknesses 
+            weaknesses={candidateWeaknesses} 
+            strengths={candidateStrengths} 
+          />
         </div>
       </section>
 

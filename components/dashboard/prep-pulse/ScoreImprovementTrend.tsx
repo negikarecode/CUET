@@ -1,4 +1,5 @@
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useMemo } from 'react';
+import Link from 'next/link';
 import { 
   ResponsiveContainer, 
   AreaChart, 
@@ -18,11 +19,11 @@ import {
   Calendar, 
   CheckCircle2, 
   Flame,
-  Award
+  Award,
+  Play
 } from 'lucide-react';
-import { 
-  SMOOTH_CHART_12_MONTHS
-} from '@/lib/data/dashboardMockData';
+import { useTestStore } from '@/lib/store/useTestStore';
+import { useIsClient } from '@/lib/hooks/useIsClient';
 import { GlowCard } from './GlowCard';
 
 interface SubjectConfig {
@@ -141,15 +142,18 @@ export const ScoreImprovementTrend: React.FC = () => {
   const verticalPinGradId = `verticalPinGrad_${chartUniqueId}`;
   const badgeShadowId = `badgeShadow_${chartUniqueId}`;
 
+  const isClient = useIsClient();
+  const testAttempts = useTestStore((state) => state.testAttempts);
+
   // Time filter state
   const [selectedRange, setSelectedRange] = useState<'12M' | '6M' | '30D'>('12M');
   
-  // View mode: 'overall' (matches reference image) or 'breakdown' (subject lines)
+  // View mode: 'overall' or 'breakdown'
   const [viewMode, setViewMode] = useState<'overall' | 'breakdown'>('overall');
 
-  // Active highlighted point: default to index 4 ("May", value 250) matching reference image
-  const [pinnedIndex, setPinnedIndex] = useState<number>(4);
-  const [activeIndex, setActiveIndex] = useState<number>(4);
+  // Active highlighted point
+  const [pinnedIndex, setPinnedIndex] = useState<number>(0);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
 
   // Subject toggles for breakdown mode
   const [activeSubjects, setActiveSubjects] = useState<Record<string, boolean>>({
@@ -167,18 +171,83 @@ export const ScoreImprovementTrend: React.FC = () => {
     });
   };
 
-  // Filter 12-month data based on range
-  const chartData = React.useMemo(() => {
-    if (selectedRange === '6M') {
-      return SMOOTH_CHART_12_MONTHS.slice(0, 6);
-    }
-    if (selectedRange === '30D') {
-      return SMOOTH_CHART_12_MONTHS.slice(2, 6);
-    }
-    return SMOOTH_CHART_12_MONTHS;
-  }, [selectedRange]);
+  const rawAttempts = useMemo(() => {
+    if (!isClient || !testAttempts || testAttempts.length === 0) return [];
+    return [...testAttempts].sort((a, b) => {
+      const ta = new Date(a.submittedAt || 0).getTime();
+      const tb = new Date(b.submittedAt || 0).getTime();
+      return ta - tb;
+    });
+  }, [isClient, testAttempts]);
 
-  const currentFocusedPoint = chartData[activeIndex] || chartData[4] || chartData[0];
+  // Transform genuine test attempts into timeline data points
+  const chartData = useMemo(() => {
+    if (rawAttempts.length === 0) return [];
+    const points = rawAttempts.map((att, idx) => {
+      const d = new Date(att.submittedAt || Date.now());
+      const monthShort = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      const score = Math.round(att.totalMarks ?? 0);
+      const acc = Math.round(att.accuracyPercentage ?? 0);
+      const percentile = Math.min(99.9, Math.max(50, Math.round((acc || 60) * 1.15 * 10) / 10));
+      const subName = att.subject || "Domain";
+
+      return {
+        id: att.id || `att-${idx}`,
+        month: `Mock ${idx + 1}`,
+        monthShort,
+        score,
+        percentile,
+        subject: subName,
+        Physics: subName.toLowerCase().includes("phys") ? score : undefined,
+        Chemistry: subName.toLowerCase().includes("chem") ? score : undefined,
+        Maths: subName.toLowerCase().includes("math") ? score : undefined,
+        English: subName.toLowerCase().includes("eng") ? score : undefined,
+      };
+    });
+
+    if (selectedRange === '6M') return points.slice(-6);
+    if (selectedRange === '30D') return points.slice(-3);
+    return points;
+  }, [rawAttempts, selectedRange]);
+
+  const displayChartData = useMemo(() => {
+    if (chartData.length === 1) {
+      const single = chartData[0]!;
+      return [
+        { ...single, month: "Baseline Start", monthShort: "Baseline" },
+        { ...single, month: single.month, monthShort: single.monthShort },
+      ];
+    }
+    return chartData;
+  }, [chartData]);
+
+  const growthStats = useMemo(() => {
+    if (rawAttempts.length >= 2) {
+      const first = rawAttempts[0]!.totalMarks || 0;
+      const latest = rawAttempts[rawAttempts.length - 1]!.totalMarks || 0;
+      const diff = latest - first;
+      const pct = Math.round((diff / Math.max(1, Math.abs(first))) * 100);
+      return {
+        label: `${pct >= 0 ? "+" : ""}${pct}% Growth`,
+        isPositive: pct >= 0,
+        hasHistory: true,
+      };
+    }
+    if (rawAttempts.length === 1) {
+      return {
+        label: "Baseline Recorded",
+        isPositive: true,
+        hasHistory: true,
+      };
+    }
+    return {
+      label: "Calibration Gate",
+      isPositive: false,
+      hasHistory: false,
+    };
+  }, [rawAttempts]);
+
+  const currentFocusedPoint = displayChartData[activeIndex] || displayChartData[displayChartData.length - 1] || null;
 
   // Tooltip for Subject Breakdown mode
   const BreakdownTooltip = ({ active, payload, label }: any) => {
@@ -228,12 +297,18 @@ export const ScoreImprovementTrend: React.FC = () => {
             <h2 className="text-lg font-bold text-slate-900 tracking-tight">
               Score Improvement Trend
             </h2>
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100/60 action-glow">
-              <TrendingUp className="w-3 h-3 stroke-[2.5]" /> +19.4% Growth
+            <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full border action-glow ${
+              growthStats.hasHistory
+                ? growthStats.isPositive
+                  ? "text-emerald-600 bg-emerald-50 border-emerald-100/60"
+                  : "text-amber-600 bg-amber-50 border-amber-100/60"
+                : "text-amber-800 bg-amber-50 border-amber-200/60"
+            }`}>
+              <TrendingUp className="w-3 h-3 stroke-[2.5]" /> {growthStats.label}
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Standardized mock test progression across the annual preparation cycle
+            Standardized mock test progression across your active preparation cycle
           </p>
         </div>
 
@@ -272,9 +347,9 @@ export const ScoreImprovementTrend: React.FC = () => {
               onChange={(e) => setSelectedRange(e.target.value as any)}
               className="appearance-none bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 text-xs font-semibold text-slate-700 pl-3 pr-8 py-1.5 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-500/20 action-glow"
             >
-              <option value="12M">Full Year (12M)</option>
-              <option value="6M">Last 6 Months</option>
-              <option value="30D">Last 30 Days</option>
+              <option value="12M">Full Cycle (12M)</option>
+              <option value="6M">Last 6 Mocks</option>
+              <option value="30D">Last 3 Mocks</option>
             </select>
             <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
@@ -287,15 +362,15 @@ export const ScoreImprovementTrend: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-1.5 text-slate-600">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              <span>Active Focus: <strong className="text-slate-900 font-bold">{currentFocusedPoint?.month}</strong></span>
+              <span>Active Focus: <strong className="text-slate-900 font-bold">{currentFocusedPoint?.month || "Calibration"}</strong></span>
             </div>
             <div className="flex items-center gap-1.5 text-slate-600">
               <Flame className="w-3.5 h-3.5 text-orange-500" />
-              <span>Score Benchmark: <strong className="text-slate-900 font-bold">{currentFocusedPoint?.score} pts</strong></span>
+              <span>Score Benchmark: <strong className="text-slate-900 font-bold">{currentFocusedPoint ? `${currentFocusedPoint.score} pts` : "--"}</strong></span>
             </div>
             <div className="hidden md:flex items-center gap-1.5 text-emerald-600 font-medium">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>Percentile: {currentFocusedPoint?.percentile || 88.5}th %ile</span>
+              <span>Percentile: {currentFocusedPoint ? `${currentFocusedPoint.percentile}th %ile` : "Uncalibrated"}</span>
             </div>
           </div>
         ) : (
@@ -344,191 +419,216 @@ export const ScoreImprovementTrend: React.FC = () => {
           aria-hidden="true" 
         />
 
-        <ResponsiveContainer width="100%" height="100%">
-          {viewMode === 'overall' ? (
-            /* EXACT SMOOTH SPLINE AREA CHART FROM REFERENCE IMAGE */
-            <AreaChart
-              data={chartData}
-              margin={{ top: 48, right: 16, left: 6, bottom: 20 }}
-              onMouseMove={(e) => {
-                if (e && typeof e.activeTooltipIndex === 'number') {
-                  setActiveIndex(e.activeTooltipIndex);
-                }
-              }}
-              onMouseLeave={() => {
-                setActiveIndex(pinnedIndex);
-              }}
-              onClick={(e) => {
-                if (e && typeof e.activeTooltipIndex === 'number') {
-                  setPinnedIndex(e.activeTooltipIndex);
-                  setActiveIndex(e.activeTooltipIndex);
-                }
-              }}
-            >
-              <defs>
-                {/* 1. Multi-stop Gradient Stroke: Amber -> Coral -> Crimson */}
-                <linearGradient id={strokeGradId} x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#FFA03A" />
-                  <stop offset="25%" stopColor="#FF7A45" />
-                  <stop offset="48%" stopColor="#FF5E62" />
-                  <stop offset="72%" stopColor="#FF3E75" />
-                  <stop offset="100%" stopColor="#FF2665" />
-                </linearGradient>
+        {rawAttempts.length === 0 ? (
+          <div className="h-full w-full flex flex-col items-center justify-center p-6 text-center space-y-3 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-600 shadow-2xs">
+              <TrendingUp className="w-6 h-6 stroke-[2]" />
+            </div>
+            <div className="space-y-1 max-w-sm">
+              <h3 className="text-sm font-bold text-slate-900">
+                No Mock Exam History Yet
+              </h3>
+              <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                Complete your first full-length CBT mock test to start plotting your authentic chronological score improvement curve and subject trajectories.
+              </p>
+            </div>
+            <div className="pt-1">
+              <Link
+                href="/dashboard/mocks"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-all shadow-xs"
+              >
+                <Play className="w-3.5 h-3.5 fill-white" />
+                <span>Start First Mock Test</span>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            {viewMode === 'overall' ? (
+              /* EXACT SMOOTH SPLINE AREA CHART FROM REFERENCE IMAGE */
+              <AreaChart
+                data={displayChartData}
+                margin={{ top: 48, right: 16, left: 6, bottom: 20 }}
+                onMouseMove={(e) => {
+                  if (e && typeof e.activeTooltipIndex === 'number') {
+                    setActiveIndex(e.activeTooltipIndex);
+                  }
+                }}
+                onMouseLeave={() => {
+                  setActiveIndex(pinnedIndex);
+                }}
+                onClick={(e) => {
+                  if (e && typeof e.activeTooltipIndex === 'number') {
+                    setPinnedIndex(e.activeTooltipIndex);
+                    setActiveIndex(e.activeTooltipIndex);
+                  }
+                }}
+              >
+                <defs>
+                  {/* 1. Multi-stop Gradient Stroke: Amber -> Coral -> Crimson */}
+                  <linearGradient id={strokeGradId} x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#FFA03A" />
+                    <stop offset="25%" stopColor="#FF7A45" />
+                    <stop offset="48%" stopColor="#FF5E62" />
+                    <stop offset="72%" stopColor="#FF3E75" />
+                    <stop offset="100%" stopColor="#FF2665" />
+                  </linearGradient>
 
-                {/* 2. Subtle Warm Area Fill Gradient: Soft peach fading to transparent */}
-                <linearGradient id={areaGradId} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#FF5E62" stopOpacity={0.20} />
-                  <stop offset="40%" stopColor="#FFA03A" stopOpacity={0.08} />
-                  <stop offset="90%" stopColor="#FFA03A" stopOpacity={0.01} />
-                  <stop offset="100%" stopColor="#FFA03A" stopOpacity={0.0} />
-                </linearGradient>
+                  {/* 2. Subtle Warm Area Fill Gradient: Soft peach fading to transparent */}
+                  <linearGradient id={areaGradId} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#FF5E62" stopOpacity={0.20} />
+                    <stop offset="40%" stopColor="#FFA03A" stopOpacity={0.08} />
+                    <stop offset="90%" stopColor="#FFA03A" stopOpacity={0.01} />
+                    <stop offset="100%" stopColor="#FFA03A" stopOpacity={0.0} />
+                  </linearGradient>
 
-                {/* 3. Vertical Guide Drop Line Gradient: Coral to Warm Peach */}
-                <linearGradient id={verticalPinGradId} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#FF5E62" stopOpacity={0.9} />
-                  <stop offset="60%" stopColor="#FFA03A" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#FFA03A" stopOpacity={0.08} />
-                </linearGradient>
+                  {/* 3. Vertical Guide Drop Line Gradient: Coral to Warm Peach */}
+                  <linearGradient id={verticalPinGradId} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#FF5E62" stopOpacity={0.9} />
+                    <stop offset="60%" stopColor="#FFA03A" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#FFA03A" stopOpacity={0.08} />
+                  </linearGradient>
 
-                {/* 4. Soft Floating Box Shadow for Tooltip Badge */}
-                <filter id={badgeShadowId} x="-25%" y="-25%" width="150%" height="160%">
-                  <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#0F172A" floodOpacity="0.09" />
-                  <feDropShadow dx="0" dy="1" stdDeviation="2" floodColor="#0F172A" floodOpacity="0.04" />
-                </filter>
-              </defs>
+                  {/* 4. Soft Floating Box Shadow for Tooltip Badge */}
+                  <filter id={badgeShadowId} x="-25%" y="-25%" width="150%" height="160%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#0F172A" floodOpacity="0.09" />
+                    <feDropShadow dx="0" dy="1" stdDeviation="2" floodColor="#0F172A" floodOpacity="0.04" />
+                  </filter>
+                </defs>
 
-              {/* Warm Dashed Horizontal Gridlines matching reference screenshot */}
-              <CartesianGrid 
-                strokeDasharray="4 4" 
-                stroke="#FCE6D5" 
-                vertical={false} 
-              />
+                {/* Warm Dashed Horizontal Gridlines matching reference screenshot */}
+                <CartesianGrid 
+                  strokeDasharray="4 4" 
+                  stroke="#FCE6D5" 
+                  vertical={false} 
+                />
 
-              {/* Clean Minimalist X-Axis with 12 Months */}
-              <XAxis 
-                dataKey="monthShort" 
-                tickLine={false} 
-                axisLine={false}
-                tick={{ fill: '#94A3B8', fontSize: 12, fontWeight: 500 }}
-                dy={10}
-              />
+                {/* Clean Minimalist X-Axis with chronological labels */}
+                <XAxis 
+                  dataKey="monthShort" 
+                  tickLine={false} 
+                  axisLine={false}
+                  tick={{ fill: '#94A3B8', fontSize: 12, fontWeight: 500 }}
+                  dy={10}
+                />
 
-              {/* Y-Axis: Hidden tick values for edge-to-edge clean aesthetic matching reference image */}
-              <YAxis 
-                domain={[90, 310]}
-                ticks={[100, 150, 200, 250, 300]}
-                tickLine={false}
-                axisLine={false}
-                tick={false}
-                width={0}
-              />
+                {/* Y-Axis: Hidden tick values for edge-to-edge clean aesthetic */}
+                <YAxis 
+                  domain={['auto', 'auto']}
+                  tickLine={false}
+                  axisLine={false}
+                  tick={false}
+                  width={0}
+                />
 
-              {/* Ultra-Smooth Spline Curve with Dynamic Active Pin Dot */}
-              <Area
-                type="monotone"
-                dataKey="score"
-                stroke={`url(#${strokeGradId})`}
-                strokeWidth={3}
-                fill={`url(#${areaGradId})`}
-                strokeLinecap="round"
-                animationDuration={900}
-                dot={
-                  <CustomActivePin 
-                    activeIndex={activeIndex}
-                    gradientId={verticalPinGradId}
-                    shadowId={badgeShadowId}
+                {/* Ultra-Smooth Spline Curve with Dynamic Active Pin Dot */}
+                <Area
+                  type="monotone"
+                  dataKey="score"
+                  stroke={`url(#${strokeGradId})`}
+                  strokeWidth={3}
+                  fill={`url(#${areaGradId})`}
+                  strokeLinecap="round"
+                  animationDuration={900}
+                  dot={
+                    <CustomActivePin 
+                      activeIndex={activeIndex}
+                      gradientId={verticalPinGradId}
+                      shadowId={badgeShadowId}
+                    />
+                  }
+                />
+              </AreaChart>
+            ) : (
+              /* SUBJECT BREAKDOWN MULTI-LINE SPLINE VIEW */
+              <LineChart
+                data={displayChartData}
+                margin={{ top: 20, right: 16, left: -20, bottom: 10 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
+                <XAxis 
+                  dataKey="monthShort" 
+                  tickLine={false} 
+                  axisLine={{ stroke: '#F1F5F9' }}
+                  tick={{ fill: '#64748B', fontSize: 12, fontWeight: 500 }}
+                  dy={8}
+                />
+                <YAxis 
+                  domain={['auto', 'auto']}
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fill: '#94A3B8', fontSize: 11 }}
+                  dx={-5}
+                />
+                <Tooltip content={<BreakdownTooltip />} />
+
+                {activeSubjects.Physics && (
+                  <Line
+                    type="monotone"
+                    dataKey="Physics"
+                    stroke="#3B82F6"
+                    strokeWidth={3}
+                    dot={{ r: 3.5, stroke: '#3B82F6', strokeWidth: 2, fill: '#FFFFFF' }}
+                    activeDot={{ r: 6, stroke: '#3B82F6', strokeWidth: 3, fill: '#FFFFFF' }}
+                    animationDuration={1000}
                   />
-                }
-              />
-            </AreaChart>
-          ) : (
-            /* SUBJECT BREAKDOWN MULTI-LINE SPLINE VIEW */
-            <LineChart
-              data={chartData}
-              margin={{ top: 20, right: 16, left: -20, bottom: 10 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
-              <XAxis 
-                dataKey="monthShort" 
-                tickLine={false} 
-                axisLine={{ stroke: '#F1F5F9' }}
-                tick={{ fill: '#64748B', fontSize: 12, fontWeight: 500 }}
-                dy={8}
-              />
-              <YAxis 
-                domain={[800, 2000]}
-                ticks={[800, 1200, 1600, 2000]}
-                tickLine={false}
-                axisLine={false}
-                tick={{ fill: '#94A3B8', fontSize: 11 }}
-                dx={-5}
-              />
-              <Tooltip content={<BreakdownTooltip />} />
+                )}
 
-              {activeSubjects.Physics && (
-                <Line
-                  type="monotone"
-                  dataKey="Physics"
-                  stroke="#3B82F6"
-                  strokeWidth={3}
-                  dot={{ r: 3.5, stroke: '#3B82F6', strokeWidth: 2, fill: '#FFFFFF' }}
-                  activeDot={{ r: 6, stroke: '#3B82F6', strokeWidth: 3, fill: '#FFFFFF' }}
-                  animationDuration={1000}
-                />
-              )}
+                {activeSubjects.Chemistry && (
+                  <Line
+                    type="monotone"
+                    dataKey="Chemistry"
+                    stroke="#F97316"
+                    strokeWidth={3}
+                    dot={{ r: 3.5, stroke: '#F97316', strokeWidth: 2, fill: '#FFFFFF' }}
+                    activeDot={{ r: 6, stroke: '#F97316', strokeWidth: 3, fill: '#FFFFFF' }}
+                    animationDuration={1000}
+                  />
+                )}
 
-              {activeSubjects.Chemistry && (
-                <Line
-                  type="monotone"
-                  dataKey="Chemistry"
-                  stroke="#F97316"
-                  strokeWidth={3}
-                  dot={{ r: 3.5, stroke: '#F97316', strokeWidth: 2, fill: '#FFFFFF' }}
-                  activeDot={{ r: 6, stroke: '#F97316', strokeWidth: 3, fill: '#FFFFFF' }}
-                  animationDuration={1000}
-                />
-              )}
+                {activeSubjects.Maths && (
+                  <Line
+                    type="monotone"
+                    dataKey="Maths"
+                    stroke="#10B981"
+                    strokeWidth={3}
+                    dot={{ r: 3.5, stroke: '#10B981', strokeWidth: 2, fill: '#FFFFFF' }}
+                    activeDot={{ r: 6, stroke: '#10B981', strokeWidth: 3, fill: '#FFFFFF' }}
+                    animationDuration={1000}
+                  />
+                )}
 
-              {activeSubjects.Maths && (
-                <Line
-                  type="monotone"
-                  dataKey="Maths"
-                  stroke="#10B981"
-                  strokeWidth={3}
-                  dot={{ r: 3.5, stroke: '#10B981', strokeWidth: 2, fill: '#FFFFFF' }}
-                  activeDot={{ r: 6, stroke: '#10B981', strokeWidth: 3, fill: '#FFFFFF' }}
-                  animationDuration={1000}
-                />
-              )}
-
-              {activeSubjects.English && (
-                <Line
-                  type="monotone"
-                  dataKey="English"
-                  stroke="#8B5CF6"
-                  strokeWidth={3}
-                  dot={{ r: 3.5, stroke: '#8B5CF6', strokeWidth: 2, fill: '#FFFFFF' }}
-                  activeDot={{ r: 6, stroke: '#8B5CF6', strokeWidth: 3, fill: '#FFFFFF' }}
-                  animationDuration={1000}
-                />
-              )}
-            </LineChart>
-          )}
-        </ResponsiveContainer>
+                {activeSubjects.English && (
+                  <Line
+                    type="monotone"
+                    dataKey="English"
+                    stroke="#8B5CF6"
+                    strokeWidth={3}
+                    dot={{ r: 3.5, stroke: '#8B5CF6', strokeWidth: 2, fill: '#FFFFFF' }}
+                    activeDot={{ r: 6, stroke: '#8B5CF6', strokeWidth: 3, fill: '#FFFFFF' }}
+                    animationDuration={1000}
+                  />
+                )}
+              </LineChart>
+            )}
+          </ResponsiveContainer>
+        )}
       </div>
 
       {/* Footer Note & Legend */}
       <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400">
         <span className="flex items-center gap-1.5">
           <Award className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-          Interactive smooth spline chart matching reference design. Hover over any month or click to lock pin.
+          {rawAttempts.length > 0
+            ? "Interactive score curve from verified CBT mocks. Hover over any attempt to inspect details."
+            : "Progression curve requires completed CBT mock tests."}
         </span>
         <div className="flex items-center gap-3 self-end sm:self-auto font-mono text-[11px]">
           <span className="px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 action-glow">
-            May Peak: 250 pts
+            {rawAttempts.length > 0 ? `Latest: ${rawAttempts[rawAttempts.length - 1]?.totalMarks ?? 0} pts` : "0 Mocks"}
           </span>
           <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-semibold action-glow">
-            Predicted: 275+ (Dec)
+            {rawAttempts.length > 0 ? `${rawAttempts.length} Completed` : "Target: 200+ pts"}
           </span>
         </div>
       </div>

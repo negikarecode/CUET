@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Flame, ChevronLeft, ChevronRight, Activity } from 'lucide-react';
+import { useTestStore } from '@/lib/store/useTestStore';
 import { GlowCard } from './GlowCard';
 
 interface DayPracticeData {
@@ -7,83 +8,72 @@ interface DayPracticeData {
   dayOfWeek: number;  // 0 = Sun, 1 = Mon, ..., 6 = Sat
   monthIndex: number; // 0, 1, 2 for the 3 months
   monthName: string;
-  count: number;      // 0 to 12
+  count: number;      // Actual attempt count
   subjectTag?: string;
 }
 
 export const DailyPracticeCalendar: React.FC = () => {
-  // Current 3-month window offset: 0 = Mar-May 2025, -1 = Dec-Feb, +1 = Jun-Aug
+  // Current 3-month window offset: 0 = current 3-month quarter, -1 = previous, +1 = next
   const [windowOffset, setWindowOffset] = useState<number>(0);
   const [hoveredDay, setHoveredDay] = useState<DayPracticeData | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
 
-  // Month configurations for 3-month windows
+  const testAttempts = useTestStore((s) => s.testAttempts);
+  const activeStreak = useTestStore((s) => s.user.dailyStreak) || 0;
+
+  // Map real attempts by YYYY-MM-DD
+  const attemptsByDate = useMemo(() => {
+    const map: Record<string, { count: number; subjects: Set<string> }> = {};
+    testAttempts.forEach((att) => {
+      if (!att.submittedAt) return;
+      const dateKey = att.submittedAt.slice(0, 10);
+      if (!map[dateKey]) {
+        map[dateKey] = { count: 0, subjects: new Set() };
+      }
+      map[dateKey].count += 1;
+      if (att.subject) map[dateKey].subjects.add(att.subject);
+    });
+    return map;
+  }, [testAttempts]);
+
+  // Month configurations dynamically computed from current date
   const windowMonths = useMemo(() => {
-    if (windowOffset === 0) {
-      return [
-        { name: 'Mar', year: 2025, days: 31, startDay: 6 }, // March 1, 2025 is Saturday
-        { name: 'Apr', year: 2025, days: 30, startDay: 2 }, // April 1, 2025 is Tuesday
-        { name: 'May', year: 2025, days: 31, startDay: 4 }, // May 1, 2025 is Thursday
-      ];
-    } else if (windowOffset === -1) {
-      return [
-        { name: 'Dec', year: 2024, days: 31, startDay: 0 },
-        { name: 'Jan', year: 2025, days: 31, startDay: 3 },
-        { name: 'Feb', year: 2025, days: 28, startDay: 6 },
-      ];
-    } else {
-      return [
-        { name: 'Jun', year: 2025, days: 30, startDay: 0 },
-        { name: 'Jul', year: 2025, days: 31, startDay: 2 },
-        { name: 'Aug', year: 2025, days: 31, startDay: 5 },
-      ];
-    }
+    const now = new Date();
+    const currentMonthIdx = now.getMonth();
+    const currentYear = now.getFullYear();
+    const shift = windowOffset * 3;
+
+    return [-2, -1, 0].map((rel, idx) => {
+      const d = new Date(currentYear, currentMonthIdx + rel + shift, 1);
+      const month = d.getMonth();
+      const year = d.getFullYear();
+      const days = new Date(year, month + 1, 0).getDate();
+      const startDay = d.getDay();
+      const name = d.toLocaleDateString('en-US', { month: 'short' });
+      return { name, year, days, startDay, monthNumber: month + 1, windowIndex: idx };
+    });
   }, [windowOffset]);
 
-  const { weeksGrid, totalSubmissions, activeStreak } = useMemo(() => {
+  const { weeksGrid, totalSubmissions } = useMemo(() => {
     const allDays: DayPracticeData[] = [];
-    let dayCounter = 0;
 
-    windowMonths.forEach((m, mIdx) => {
+    windowMonths.forEach((m) => {
       for (let d = 1; d <= m.days; d++) {
-        const monthNum = m.name === 'Dec' ? 12 : m.name === 'Jan' ? 1 : m.name === 'Feb' ? 2 : m.name === 'Mar' ? 3 : m.name === 'Apr' ? 4 : m.name === 'May' ? 5 : m.name === 'Jun' ? 6 : m.name === 'Jul' ? 7 : 8;
-        const dateStr = `${m.year}-${String(monthNum).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        
-        let count = 0;
-        let subjectTag = 'Physics Practice';
-        const seed = (d * 17 + mIdx * 31 + dayCounter) % 100;
-
-        if (windowOffset === 0) {
-          if (mIdx === 2) {
-            if (d >= 15 && d <= 27) {
-              count = (d % 4) + 5;
-            } else if (seed > 25) {
-              count = (seed % 7) + 2;
-            }
-          } else if (mIdx === 1) {
-            if (seed > 35) count = (seed % 6) + 1;
-          } else {
-            if (seed > 50) count = (seed % 5) + 1;
-          }
-        } else {
-          if (seed > 40) count = (seed % 6) + 1;
-        }
-
-        if (count > 0) {
-          const subjects = ['Physics (Mechanics)', 'Chemistry (Organic)', 'Maths (Calculus)', 'English Comprehension', 'Full Mock Drill'];
-          subjectTag = subjects[(d + mIdx) % subjects.length] ?? 'Physics Practice';
-        }
+        const dateStr = `${m.year}-${String(m.monthNumber).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const match = attemptsByDate[dateStr];
+        const count = match ? match.count : 0;
+        const subjectTag = match && match.subjects.size > 0 
+          ? Array.from(match.subjects).join(', ') 
+          : undefined;
 
         allDays.push({
           date: dateStr,
           dayOfWeek: (d + m.startDay - 1) % 7,
-          monthIndex: mIdx,
+          monthIndex: m.windowIndex,
           monthName: m.name,
           count,
-          subjectTag: count > 0 ? subjectTag : undefined,
+          subjectTag,
         });
-
-        dayCounter++;
       }
     });
 
@@ -112,31 +102,19 @@ export const DailyPracticeCalendar: React.FC = () => {
       weeks.push(currentWeek);
     }
 
-    const labels: { name: string; weekCol: number }[] = [];
-    let currentM = -1;
-    weeks.forEach((w, colIdx) => {
-      const firstValid = w.find(d => d !== null);
-      if (firstValid && firstValid.monthIndex !== currentM) {
-        currentM = firstValid.monthIndex;
-        labels.push({ name: firstValid.monthName, weekCol: colIdx });
-      }
-    });
-
     const total = allDays.reduce((acc, d) => acc + d.count, 0);
 
     return {
       weeksGrid: weeks,
       totalSubmissions: total,
-      activeStreak: 12,
-      monthLabels: labels,
     };
-  }, [windowMonths, windowOffset]);
+  }, [windowMonths, attemptsByDate]);
 
   const getCellColor = (count: number) => {
     if (count === 0) return 'bg-slate-100 hover:bg-slate-200 border border-slate-200/50';
-    if (count <= 2) return 'bg-[#86efac] hover:bg-[#4ade80] border border-[#4ade80]/40';
-    if (count <= 5) return 'bg-[#34d399] hover:bg-[#10b981] border border-[#10b981]/40';
-    if (count <= 8) return 'bg-[#10b981] hover:bg-[#059669] border border-[#059669]/50 shadow-2xs';
+    if (count <= 1) return 'bg-[#86efac] hover:bg-[#4ade80] border border-[#4ade80]/40';
+    if (count <= 3) return 'bg-[#34d399] hover:bg-[#10b981] border border-[#10b981]/40';
+    if (count <= 5) return 'bg-[#10b981] hover:bg-[#059669] border border-[#059669]/50 shadow-2xs';
     return 'bg-[#047857] hover:bg-[#065f46] border border-[#065f46] shadow-2xs';
   };
 
@@ -168,19 +146,19 @@ export const DailyPracticeCalendar: React.FC = () => {
         {/* Month Window Switcher */}
         <div className="flex items-center gap-1 bg-slate-50 border border-slate-200/80 rounded-lg p-1 self-start sm:self-auto shrink-0">
           <button
-            onClick={() => setWindowOffset(prev => Math.max(prev - 1, -1))}
-            disabled={windowOffset <= -1}
+            onClick={() => setWindowOffset(prev => Math.max(prev - 1, -2))}
+            disabled={windowOffset <= -2}
             aria-label="Previous 3 months"
             className="p-1 text-slate-500 hover:text-slate-800 disabled:opacity-30 rounded hover:bg-white transition-colors"
           >
             <ChevronLeft className="w-3.5 h-3.5" />
           </button>
           <span className="text-xs font-bold text-slate-700 px-2 font-mono">
-            {windowMonths[0]?.name} – {windowMonths[2]?.name} 2025
+            {windowMonths[0]?.name} {windowMonths[0]?.year} – {windowMonths[2]?.name} {windowMonths[2]?.year}
           </span>
           <button
-            onClick={() => setWindowOffset(prev => Math.min(prev + 1, 1))}
-            disabled={windowOffset >= 1}
+            onClick={() => setWindowOffset(prev => Math.min(prev + 1, 0))}
+            disabled={windowOffset >= 0}
             aria-label="Next 3 months"
             className="p-1 text-slate-500 hover:text-slate-800 disabled:opacity-30 rounded hover:bg-white transition-colors"
           >
@@ -195,8 +173,8 @@ export const DailyPracticeCalendar: React.FC = () => {
         <div className="flex text-xs font-semibold text-slate-400 mb-2 pl-6">
           <div className="flex justify-between w-full max-w-[460px] pr-2 font-mono">
             {windowMonths.map((m) => (
-              <span key={m.name} className="tracking-wide">
-                {m.name} 2025
+              <span key={`${m.name}-${m.year}`} className="tracking-wide">
+                {m.name} {m.year}
               </span>
             ))}
           </div>
@@ -291,3 +269,5 @@ export const DailyPracticeCalendar: React.FC = () => {
     </GlowCard>
   );
 };
+
+export default DailyPracticeCalendar;

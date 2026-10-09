@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { BANNER_INFO } from '@/lib/data/dashboardMockData';
 import { Quote, Sparkles, Target, Flame } from 'lucide-react';
 
 interface WelcomeBannerProps {
@@ -13,7 +12,7 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
   userName,
   targetStream = "Science",
   targetCollege,
-  streak = 12,
+  streak = 0,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -28,8 +27,10 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
     });
   };
 
-  const displayName = userName || "Sarah";
-  const greeting = userName ? `Good Morning, ${displayName}! 👋` : BANNER_INFO.greeting;
+  const displayName = userName && userName.trim() ? userName : "CUET Aspirant";
+  const hour = new Date().getHours();
+  const timeOfDay = hour < 12 ? "Good Morning" : hour < 17 ? "Good Afternoon" : "Good Evening";
+  const greeting = `${timeOfDay}, ${displayName}! 👋`;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
@@ -52,7 +53,7 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
         </h1>
 
         <p className="mt-2 text-sm sm:text-base text-slate-500 max-w-2xl leading-relaxed">
-          {BANNER_INFO.subtitle}
+          Stay consistent. Systematic NTA-pattern mock tests and targeted mistake diagnostics bring you closer to {targetCollege ? targetCollege : "your dream university"}.
         </p>
       </div>
 
@@ -101,14 +102,14 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
           {/* Quote text: “Discipline today creates options tomorrow.” */}
           <div className="relative z-20 my-3">
             <p className="text-base sm:text-lg font-semibold tracking-tight text-white leading-snug drop-shadow-sm italic">
-              {BANNER_INFO.quote}
+              &ldquo;Discipline today creates options tomorrow.&rdquo;
             </p>
           </div>
 
           {/* Bottom attribution/meta */}
           <div className="relative z-20 flex items-center justify-between text-xs text-slate-300">
             <span className="font-medium text-slate-300">Focus on the process</span>
-            <span className="text-[11px] text-slate-400 font-mono">#CUET2025</span>
+            <span className="text-[11px] text-slate-400 font-mono">#CUET2026</span>
           </div>
 
         </div>

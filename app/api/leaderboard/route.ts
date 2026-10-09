@@ -151,7 +151,7 @@ export async function GET(_req: NextRequest) {
 
       const accuracy = agg.totalAttempted > 0
         ? Math.round((agg.totalCorrect / agg.totalAttempted) * 100)
-        : (p.xp > 0 ? 85 : 0);
+        : 0;
 
       return {
         userId: p.id,

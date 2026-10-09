@@ -171,14 +171,19 @@ export default async function ProfilePage() {
               const q = wa.questions;
               if (q && q.micro_topic && !seen.has(q.micro_topic)) {
                 seen.add(q.micro_topic);
+                const topicWrongs = wrongAttempts.filter((x: any) => x.questions?.micro_topic === q.micro_topic);
+                const totalTime = topicWrongs.reduce((sum: number, x: any) => sum + (x.time_spent_seconds || 0), 0);
+                const avgTime = topicWrongs.length > 0 ? Math.round(totalTime / topicWrongs.length) : (wa.time_spent_seconds || 0);
+                const timeSinks = topicWrongs.filter((x: any) => x.is_time_sink).length;
+
                 weakTopics.push({
                   microTopic: q.micro_topic,
                   chapter: q.chapter || "Domain Chapter",
                   subject: q.subject || "Domain",
-                  accuracyPercentage: 40,
-                  fatalTimeSinks: wa.is_time_sink ? 1 : 0,
-                  totalAttempts: 3,
-                  avgTimeSeconds: wa.time_spent_seconds || 85,
+                  accuracyPercentage: 0,
+                  fatalTimeSinks: timeSinks,
+                  totalAttempts: topicWrongs.length,
+                  avgTimeSeconds: avgTime,
                 });
               }
             });
