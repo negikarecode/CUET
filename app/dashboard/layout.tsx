@@ -29,7 +29,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="h-screen w-full max-w-full bg-[#FAF7EE] flex flex-col md:flex-row overflow-hidden">
+    <div className="h-screen w-full max-w-full bg-[#F8FAFC] flex flex-col md:flex-row overflow-hidden">
       {/* Left Sidebar (fixed height h-screen, persistent on desktop) */}
       <DashboardSidebar />
 

@@ -12,6 +12,7 @@ import {
   LogOut,
   Trophy,
   User,
+  Search,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -54,7 +55,30 @@ export default function DashboardNavbar() {
   };
 
   return (
-    <header className="hidden md:flex sticky top-0 z-30 w-full border-b-2 border-black bg-[#FAF7EE] px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 shadow-[0_2px_0px_0px_#000] items-center justify-end gap-3 transition-all select-none">
+    <header className="hidden md:flex sticky top-0 z-30 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-3 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] items-center justify-between gap-4 transition-all select-none">
+      {/* Left: Quick Search Bar */}
+      <div className="flex items-center gap-4 flex-1 max-w-md">
+        <div className="relative w-full">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <Search className="h-4 w-4" />
+          </div>
+          <input
+            type="text"
+            readOnly
+            onClick={() => {
+              window.location.href = "/dashboard/mocks";
+            }}
+            placeholder="Search mock tests, topics, or subjects... (Click to browse)"
+            className="w-full pl-10 pr-12 py-2 bg-slate-50 hover:bg-slate-100/70 focus:bg-white text-xs text-slate-800 placeholder-slate-400 rounded-xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer"
+          />
+          <div className="hidden lg:flex absolute inset-y-0 right-0 pr-3 items-center pointer-events-none">
+            <kbd className="text-[10px] uppercase font-semibold text-slate-400 bg-white border border-slate-200 px-1.5 py-0.5 rounded shadow-2xs">
+              ⌘K
+            </kbd>
+          </div>
+        </div>
+      </div>
+
       {/* Right-Aligned Student Utilities */}
       <div className="flex items-center gap-3 shrink-0">
         {/* 1. Language Selector Dropdown */}
@@ -62,30 +86,30 @@ export default function DashboardNavbar() {
 
         {/* 2. Daily Streak Indicator */}
         <div
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FEF3C7] hover:bg-[#FDE68A] border-2 border-black rounded-full text-black text-xs font-black transition-all shadow-[2px_2px_0px_0px_#000] cursor-pointer group hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000]"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100/80 border border-amber-200/60 rounded-full text-amber-800 text-xs font-semibold transition-all shadow-2xs cursor-pointer group"
           title={`${streak} Day Study Streak! Solve at least 1 mock daily to preserve streak.`}
         >
           <span className="relative flex items-center justify-center">
-            <Flame className="w-4 h-4 text-[#D97706] fill-[#F59E0B] group-hover:scale-110 transition-transform" />
+            <Flame className="w-4 h-4 text-amber-500 fill-amber-500 group-hover:scale-110 transition-transform" />
           </span>
-          <span className="tracking-tight text-black font-black text-[13px]">
+          <span className="tracking-tight font-bold text-xs">
             {streak}
           </span>
-          <span className="text-black text-[11px] font-bold hidden lg:inline">
+          <span className="text-amber-700/80 text-[11px] font-medium hidden lg:inline">
             {t("days", "Days")} {t("streak", "Streak")}
           </span>
         </div>
 
         {/* 3. XP Points Counter */}
         <div
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#EEF2FF] hover:bg-[#E0E7FF] border-2 border-black rounded-full text-black text-xs font-black transition-all shadow-[2px_2px_0px_0px_#000] cursor-pointer group hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000]"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100/80 border border-blue-200/60 rounded-full text-blue-800 text-xs font-semibold transition-all shadow-2xs cursor-pointer group"
           title={`${xp} Total Experience Points earned across mock tests and mistake diagnoses.`}
         >
-          <Zap className="w-3.5 h-3.5 text-[#4F46E5] fill-[#4F46E5] group-hover:scale-110 transition-transform" />
-          <span className="text-black font-black tracking-tight text-[13px]">
+          <Zap className="w-3.5 h-3.5 text-blue-600 fill-blue-600 group-hover:scale-110 transition-transform" />
+          <span className="font-bold tracking-tight text-xs">
             {xp.toLocaleString()}
           </span>
-          <span className="text-black text-[11px] font-bold hidden lg:inline">
+          <span className="text-blue-700/80 text-[11px] font-medium hidden lg:inline">
             XP
           </span>
         </div>
@@ -94,8 +118,8 @@ export default function DashboardNavbar() {
         <UpgradeButton
           planId="ai_practice_pass_499"
           variant="amber"
-          className="py-1.5 px-3.5 text-[11px] rounded-lg font-black border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
-          buttonText="Upgrade to Pro"
+          className="py-1.5 px-3.5 text-xs rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm hover:shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all cursor-pointer"
+          buttonText="Upgrade Pass"
         />
 
         {/* 5. Profile Avatar Dropdown */}
@@ -103,18 +127,18 @@ export default function DashboardNavbar() {
           <button
             type="button"
             onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-            className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full border-2 border-black bg-white hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+            className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full border border-slate-200 bg-white hover:bg-slate-50 shadow-2xs transition-all cursor-pointer"
             aria-label="User Profile menu"
             aria-expanded={profileDropdownOpen}
           >
-            <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center font-black text-xs">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-slate-900 to-slate-700 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
               {userInitials}
             </div>
-            <span className="text-xs font-black text-black hidden lg:inline max-w-[120px] truncate">
+            <span className="text-xs font-semibold text-slate-800 hidden lg:inline max-w-[120px] truncate">
               {userName}
             </span>
             <ChevronDown
-              className={`w-3.5 h-3.5 text-black transition-transform duration-200 ${
+              className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
                 profileDropdownOpen ? "rotate-180" : ""
               }`}
             />
@@ -122,66 +146,66 @@ export default function DashboardNavbar() {
 
           {profileDropdownOpen && (
             <div
-              className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-[5px_5px_0px_0px_#000] border-2 border-black py-2 text-xs z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+              className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 text-xs z-50 animate-in fade-in slide-in-from-top-2 duration-150"
               onMouseLeave={() => setProfileDropdownOpen(false)}
             >
-              <div className="px-4 py-3 border-b-2 border-black bg-[#FAF7EE]">
-                <p className="font-black text-black text-sm truncate">
+              <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/50 rounded-t-2xl">
+                <p className="font-bold text-slate-900 text-sm truncate">
                   {userName}
                 </p>
-                <p className="text-black/60 text-xs font-medium truncate">
+                <p className="text-slate-500 text-xs truncate">
                   {user.email || "aspirant@cuet-prep.in"}
                 </p>
                 <div className="mt-2 flex items-center gap-2 text-[11px]">
-                  <span className="inline-flex items-center gap-1 font-bold text-black bg-[#FEF3C7] px-2 py-0.5 rounded-full border border-black shadow-[1px_1px_0px_0px_#000]">
-                    <Award className="w-3 h-3 text-[#D97706]" />
+                  <span className="inline-flex items-center gap-1 font-semibold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200/60 shadow-2xs">
+                    <Award className="w-3 h-3 text-amber-600" />
                     Target: {user.targetCollege || "Delhi University"}
                   </span>
                 </div>
               </div>
 
-              <div className="py-1 font-bold">
+              <div className="py-1 font-medium">
                 <Link
                   href="/dashboard/profile"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
+                  className="flex items-center gap-2.5 px-4 py-2.5 text-slate-700 hover:bg-slate-50 transition-colors"
                 >
-                  <User className="w-4 h-4 text-black" />
+                  <User className="w-4 h-4 text-slate-400" />
                   <span>Aspirant Profile</span>
                 </Link>
                 <Link
                   href="/dashboard"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
+                  className="flex items-center gap-2.5 px-4 py-2.5 text-slate-700 hover:bg-slate-50 transition-colors"
                 >
-                  <Trophy className="w-4 h-4 text-[#F59E0B]" />
+                  <Trophy className="w-4 h-4 text-amber-500" />
                   <span>Command Hub & Radar</span>
                 </Link>
                 <Link
                   href="/dashboard/pyqs"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
+                  className="flex items-center gap-2.5 px-4 py-2.5 text-slate-700 hover:bg-slate-50 transition-colors"
                 >
-                  <FileText className="w-4 h-4 text-black/60" />
+                  <FileText className="w-4 h-4 text-slate-400" />
                   <span>Solve PYQs</span>
                 </Link>
                 <Link
                   href="/dashboard/mocks"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
+                  className="flex items-center gap-2.5 px-4 py-2.5 text-slate-700 hover:bg-slate-50 transition-colors"
                 >
-                  <BookOpen className="w-4 h-4 text-black/60" />
+                  <BookOpen className="w-4 h-4 text-slate-400" />
                   <span>Mock Tests</span>
                 </Link>
               </div>
 
-              <div className="border-t-2 border-black pt-1">
+              <div className="border-t border-slate-100 pt-1">
                 <button
                   type="button"
                   onClick={handleSignOut}
-                  className="w-full flex items-center gap-2.5 px-4 py-2 text-[#EF4444] text-left hover:bg-[#FEE2E2] font-black cursor-pointer"
+                  className="w-full flex items-center gap-2.5 px-4 py-2.5 text-rose-600 text-left hover:bg-rose-50 font-semibold cursor-pointer transition-colors"
                 >
-                  <LogOut className="w-4 h-4 text-[#EF4444]" />
+                  <LogOut className="w-4 h-4 text-rose-500" />
                   <span>{t("signOut", "Sign Out")}</span>
                 </button>
               </div>

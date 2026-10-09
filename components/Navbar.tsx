@@ -99,34 +99,34 @@ export default function Navbar() {
     window.location.href = "/";
   };
 
-  if (pathname.startsWith("/test/") || pathname.startsWith("/dashboard")) return null;
+  if (pathname === "/" || pathname.startsWith("/test/") || pathname.startsWith("/dashboard")) return null;
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-[#FAF7EE] transition-all">
+      <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-xs transition-all">
         {/* Main Navbar */}
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5">
-          <div className="flex items-center justify-between min-h-[52px] sm:min-h-[64px] relative">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3">
+          <div className="flex items-center justify-between min-h-[52px] sm:min-h-[58px] relative">
             {/* Left: Brand Logo & Dashboard Nav Items */}
             <div className="flex items-center gap-2 sm:gap-4 lg:gap-6 min-w-0">
               <Link
                 href="/"
-                className="flex items-center gap-2 sm:gap-3 group focus:outline-none rounded-lg py-1 px-1"
+                className="flex items-center gap-2 sm:gap-3 group focus:outline-none rounded-xl py-1 px-1"
               >
-                <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#FF5C5C] text-black border-2 border-black shadow-[2px_2px_0px_0px_#000] group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 group-hover:shadow-[3px_3px_0px_0px_#000] transition-all shrink-0">
-                  <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[2.5]" />
-                  <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#F59E0B] absolute -top-1.5 -right-1.5 fill-[#F59E0B]" />
+                <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xs group-hover:scale-105 transition-all shrink-0">
+                  <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[2]" />
+                  <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-300 absolute -top-1 -right-1 fill-amber-300" />
                 </div>
                 <div className="flex flex-col justify-center min-w-0">
                   <div className="flex items-center gap-1 sm:gap-1.5 leading-none">
-                    <span className="text-lg sm:text-2xl font-black tracking-tight text-black font-sans leading-tight whitespace-nowrap">
-                      CUET <span className="text-[#FF5C5C]">AI-Prep</span>
+                    <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 font-sans leading-tight whitespace-nowrap">
+                      CUET <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">AI-Prep</span>
                     </span>
-                    <span className="rounded-full bg-[#FEF3C7] border-2 border-black px-1.5 py-0.2 text-[9px] sm:text-[10px] font-black text-black uppercase tracking-wide shadow-[1px_1px_0px_0px_#000]">
+                    <span className="rounded-full bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-indigo-600 uppercase tracking-wide">
                       UG
                     </span>
                   </div>
-                  <span className="text-[10px] font-black tracking-wider text-black/60 uppercase mt-0.5 hidden sm:block">
+                  <span className="text-[10px] font-medium tracking-wider text-slate-400 uppercase mt-0.5 hidden sm:block">
                     {t("appTagline", "NTA CBT Diagnostic Engine")}
                   </span>
                 </div>
@@ -135,41 +135,41 @@ export default function Navbar() {
               {/* Dashboard Left-Aligned Navigation */}
               {isDashboard && (
                 <>
-                  <div className="hidden lg:block h-6 w-px bg-black/20" />
-                  <nav className="hidden lg:flex items-center space-x-1.5">
+                  <div className="hidden lg:block h-5 w-px bg-slate-200" />
+                  <nav className="hidden lg:flex items-center space-x-1">
                     <Link
                       href="/dashboard"
-                      className="px-3 py-1.5 text-xs font-black text-black bg-[#FEF3C7] rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center gap-1.5"
+                      className="px-3 py-1.5 text-xs font-semibold text-indigo-600 bg-indigo-50/80 rounded-xl border border-indigo-100 flex items-center gap-1.5 shadow-xs"
                     >
-                      <Trophy className="w-3.5 h-3.5 text-[#D97706]" />
+                      <Trophy className="w-3.5 h-3.5 text-amber-500" />
                       <span>{t("commandHub", "Command Hub")}</span>
                     </Link>
                     <Link
                       href="/dashboard/pyqs"
-                      className="px-3 py-1.5 text-xs font-bold text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all flex items-center gap-1.5"
+                      className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all flex items-center gap-1.5"
                     >
-                      <FileText className="w-3.5 h-3.5 text-black/70" />
+                      <FileText className="w-3.5 h-3.5 text-slate-400" />
                       <span>{t("domainTests", "PYQs")}</span>
                     </Link>
                     <Link
                       href="/dashboard/mocks"
-                      className="px-3 py-1.5 text-xs font-bold text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all flex items-center gap-1.5"
+                      className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all flex items-center gap-1.5"
                     >
-                      <BookOpen className="w-3.5 h-3.5 text-black/70" />
+                      <BookOpen className="w-3.5 h-3.5 text-slate-400" />
                       <span>{t("mocks", "Mock Tests")}</span>
                     </Link>
                     <Link
                       href="/dashboard/radar"
-                      className="px-3 py-1.5 text-xs font-bold text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all flex items-center gap-1.5"
+                      className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all flex items-center gap-1.5"
                     >
-                      <Target className="w-3.5 h-3.5 text-[#FF5C5C]" />
+                      <Target className="w-3.5 h-3.5 text-rose-500" />
                       <span>{t("radar", "Weakness Radar")}</span>
                     </Link>
                     <Link
                       href="/dashboard#leaderboard"
-                      className="px-3 py-1.5 text-xs font-bold text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all flex items-center gap-1.5"
+                      className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all flex items-center gap-1.5"
                     >
-                      <Award className="w-3.5 h-3.5 text-[#4F46E5]" />
+                      <Award className="w-3.5 h-3.5 text-indigo-500" />
                       <span>{t("leaderboard", "Leaderboard")}</span>
                     </Link>
                   </nav>
@@ -187,17 +187,17 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("login")}
-                    className="px-3.5 py-2 text-xs font-black text-black hover:bg-black/5 rounded-lg border-2 border-transparent hover:border-black transition-all cursor-pointer"
+                    className="px-3.5 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all cursor-pointer"
                   >
                     {t("logIn", "Log In")}
                   </button>
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("signup")}
-                    className="px-4 py-2 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] active:bg-[#E03E3E] text-white font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5 cursor-pointer"
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
                   >
                     <span>{t("joinNow", "Join Now")}</span>
-                    <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <ArrowRight className="w-3.5 h-3.5 stroke-[2]" />
                   </button>
                 </div>
               ) : (
@@ -207,30 +207,30 @@ export default function Navbar() {
                     <>
                       {/* Daily Streak Counter with Flame Icon */}
                       <div
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FEF3C7] hover:bg-[#FDE68A] border-2 border-black rounded-full text-black text-xs font-black transition-all shadow-[2px_2px_0px_0px_#000] cursor-pointer group hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000]"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100/70 border border-amber-200/80 rounded-full text-slate-800 text-xs font-semibold transition-all shadow-xs cursor-pointer group"
                         title={`${streak} Day Study Streak! Solve at least 1 mock daily to preserve streak.`}
                       >
                         <span className="relative flex items-center justify-center">
-                          <Flame className="w-4 h-4 text-[#D97706] fill-[#F59E0B] group-hover:scale-110 transition-transform" />
+                          <Flame className="w-4 h-4 text-amber-500 fill-amber-500 group-hover:scale-110 transition-transform" />
                         </span>
-                        <span className="tracking-tight text-black font-black text-[13px]">
+                        <span className="tracking-tight text-slate-900 font-bold text-xs">
                           {streak}
                         </span>
-                        <span className="text-black text-[11px] font-bold hidden md:inline">
+                        <span className="text-slate-500 text-[11px] font-medium hidden md:inline">
                           {t("days", "Days")} {t("streak", "Streak")}
                         </span>
                       </div>
 
                       {/* User XP Points Badge */}
                       <div
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#EEF2FF] hover:bg-[#E0E7FF] border-2 border-black rounded-full text-black text-xs font-black transition-all shadow-[2px_2px_0px_0px_#000] cursor-pointer group hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000]"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100/70 border border-indigo-200/80 rounded-full text-slate-800 text-xs font-semibold transition-all shadow-xs cursor-pointer group"
                         title={`${xp} Total Experience Points earned across mock tests and mistake diagnoses.`}
                       >
-                        <Zap className="w-3.5 h-3.5 text-[#4F46E5] fill-[#4F46E5] group-hover:scale-110 transition-transform" />
-                        <span className="text-black font-black tracking-tight text-[13px]">
+                        <Zap className="w-3.5 h-3.5 text-indigo-600 fill-indigo-600 group-hover:scale-110 transition-transform" />
+                        <span className="text-slate-900 font-bold tracking-tight text-xs">
                           {xp.toLocaleString()}
                         </span>
-                        <span className="text-black text-[11px] font-bold hidden md:inline">
+                        <span className="text-slate-500 text-[11px] font-medium hidden md:inline">
                           XP
                         </span>
                       </div>
@@ -239,7 +239,7 @@ export default function Navbar() {
                       <UpgradeButton
                         planId="ai_practice_pass_499"
                         variant="amber"
-                        className="py-1.5 px-3.5 text-[11px] rounded-lg hidden sm:flex font-black border-2 border-black shadow-[2px_2px_0px_0px_#000]"
+                        className="py-1.5 px-3.5 text-xs rounded-xl hidden sm:flex font-semibold shadow-xs"
                         buttonText={t("upgrade", "Upgrade")}
                       />
                     </>
@@ -250,29 +250,29 @@ export default function Navbar() {
                     {isHomepage ? (
                       <Link
                         href="/dashboard"
-                        className="px-4 py-2 rounded-lg bg-[#FEF3C7] hover:bg-[#FDE68A] text-black font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1.5"
+                        className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5"
                         aria-label="Go to dashboard"
                       >
-                        <LayoutDashboard className="w-3.5 h-3.5 stroke-[2.5]" />
+                        <LayoutDashboard className="w-3.5 h-3.5 stroke-[2]" />
                         <span>{t("dashboard", "Dashboard")}</span>
-                        <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                        <ArrowRight className="w-3.5 h-3.5 stroke-[2]" />
                       </Link>
                     ) : (
                       <button
                         type="button"
                         onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                        className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full border-2 border-black bg-white hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
+                        className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full border border-slate-200/80 bg-white hover:bg-slate-50 shadow-xs active:scale-[0.98] transition-all"
                         aria-label="User Profile menu"
                         aria-expanded={profileDropdownOpen}
                       >
-                        <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center font-black text-xs">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
                           {userInitials}
                         </div>
-                        <span className="text-xs font-black text-black hidden lg:inline max-w-[110px] truncate">
+                        <span className="text-xs font-semibold text-slate-800 hidden lg:inline max-w-[110px] truncate">
                           {userName}
                         </span>
                         <ChevronDown
-                          className={`w-3.5 h-3.5 text-black transition-transform duration-200 ${
+                          className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 ${
                             profileDropdownOpen ? "rotate-180" : ""
                           }`}
                         />
@@ -282,66 +282,66 @@ export default function Navbar() {
                     {/* Profile Dropdown Menu */}
                     {!isHomepage && profileDropdownOpen && (
                       <div
-                        className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-[5px_5px_0px_0px_#000] border-2 border-black py-2 text-xs z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                        className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200/80 py-2 text-xs z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                         onMouseLeave={() => setProfileDropdownOpen(false)}
                       >
-                        <div className="px-4 py-3 border-b-2 border-black bg-[#FAF7EE]">
-                          <p className="font-black text-black text-sm truncate">
+                        <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/60">
+                          <p className="font-bold text-slate-900 text-sm truncate">
                             {userName}
                           </p>
-                          <p className="text-black/60 text-xs font-medium truncate">
+                          <p className="text-slate-500 text-xs font-medium truncate">
                             {user.email || "aspirant@cuet-prep.in"}
                           </p>
                           <div className="mt-2 flex items-center gap-2 text-[11px]">
-                            <span className="inline-flex items-center gap-1 font-bold text-black bg-[#FEF3C7] px-2 py-0.5 rounded-full border border-black shadow-[1px_1px_0px_0px_#000]">
-                              <Award className="w-3 h-3 text-[#D97706]" />
+                            <span className="inline-flex items-center gap-1 font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/60">
+                              <Award className="w-3 h-3 text-amber-600" />
                               Target: {user.targetCollege || "Top Central University"}
                             </span>
                           </div>
                         </div>
 
-                        <div className="py-1 font-bold">
+                        <div className="py-1 font-medium">
                           <Link
                             href="/dashboard/profile"
                             onClick={() => setProfileDropdownOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
+                            className="flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 transition-colors"
                           >
-                            <User className="w-4 h-4 text-black" />
+                            <User className="w-4 h-4 text-slate-500" />
                             <span>Aspirant Profile</span>
                           </Link>
                           <Link
                             href="/dashboard/radar"
                             onClick={() => setProfileDropdownOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
+                            className="flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 transition-colors"
                           >
-                            <Target className="w-4 h-4 text-[#FF5C5C]" />
+                            <Target className="w-4 h-4 text-rose-500" />
                             <span>Weakness Radar</span>
                           </Link>
                           <Link
                             href="/dashboard/pyqs"
                             onClick={() => setProfileDropdownOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
+                            className="flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 transition-colors"
                           >
-                            <FileText className="w-4 h-4 text-black/60" />
+                            <FileText className="w-4 h-4 text-slate-400" />
                             <span>Solve PYQs</span>
                           </Link>
                           <Link
                             href="/dashboard/mocks"
                             onClick={() => setProfileDropdownOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-2 text-black hover:bg-[#FEF3C7]/50"
+                            className="flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 transition-colors"
                           >
-                            <BookOpen className="w-4 h-4 text-black/60" />
+                            <BookOpen className="w-4 h-4 text-slate-400" />
                             <span>Mock Tests</span>
                           </Link>
                         </div>
 
-                        <div className="border-t-2 border-black pt-1">
+                        <div className="border-t border-slate-100 pt-1">
                           <button
                             type="button"
                             onClick={handleSignOut}
-                            className="w-full flex items-center gap-2.5 px-4 py-2 text-[#EF4444] text-left hover:bg-[#FEE2E2] font-black cursor-pointer"
+                            className="w-full flex items-center gap-2.5 px-4 py-2 text-rose-600 text-left hover:bg-rose-50 font-semibold cursor-pointer transition-colors"
                           >
-                            <LogOut className="w-4 h-4 text-[#EF4444]" />
+                            <LogOut className="w-4 h-4 text-rose-600" />
                             <span>Sign Out</span>
                           </button>
                         </div>
@@ -353,7 +353,7 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Menu Button & Language Switcher */}
-            <div className="flex items-center gap-1 sm:hidden shrink-0">
+            <div className="flex items-center gap-1.5 sm:hidden shrink-0">
               <LanguageSelector variant="navbar" />
 
               {!isLoggedIn ? (
@@ -361,21 +361,21 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("login")}
-                    className="px-2.5 py-1.5 rounded-lg bg-white text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none shrink-0"
+                    className="px-2.5 py-1.5 rounded-xl bg-white text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs active:scale-95 shrink-0"
                   >
                     {t("logIn", "Log In")}
                   </button>
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("signup")}
-                    className="px-2.5 py-1.5 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none shrink-0"
+                    className="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-xs shadow-xs active:scale-95 shrink-0"
                   >
                     {t("joinNow", "Join Now")}
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-1 px-2 py-1 bg-[#FEF3C7] border-2 border-black rounded-full text-black text-xs font-black shadow-[1px_1px_0px_0px_#000] shrink-0">
-                  <Flame className="w-3.5 h-3.5 fill-[#F59E0B] text-[#D97706]" />
+                <div className="flex items-center gap-1 px-2.5 py-1 bg-amber-50 border border-amber-200/80 rounded-full text-slate-800 text-xs font-semibold shadow-xs shrink-0">
+                  <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                   <span>{streak}</span>
                 </div>
               )}
@@ -384,7 +384,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="p-1.5 rounded-lg border-2 border-black bg-white text-black hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] focus:outline-none"
+                  className="p-1.5 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 shadow-xs focus:outline-none"
                   aria-label="Toggle navigation menu"
                 >
                   {mobileMenuOpen ? (
@@ -400,44 +400,44 @@ export default function Navbar() {
 
         {/* Mobile Menu Dropdown (Only when NOT on Homepage) */}
         {!isHomepage && mobileMenuOpen && (
-          <div className="sm:hidden border-t-2 border-black bg-[#FAF7EE] px-4 pt-3 pb-6 space-y-4 shadow-[4px_4px_0px_0px_#000]">
+          <div className="sm:hidden border-t border-slate-200/80 bg-white px-4 pt-3 pb-6 space-y-4 shadow-lg animate-in fade-in duration-150">
             {isLoggedIn ? (
-              <div className="flex items-center justify-between pb-3 border-b-2 border-black">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-black text-white flex items-center justify-center font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
                     {userInitials}
                   </div>
                   <div>
-                    <p className="font-black text-black text-sm">{userName}</p>
-                    <p className="text-black/60 text-xs font-bold">
+                    <p className="font-bold text-slate-900 text-sm">{userName}</p>
+                    <p className="text-slate-500 text-xs font-medium">
                       {user.targetCollege || "CUET UG Aspirant"}
                     </p>
                   </div>
                 </div>
                 {!isHomepage && (
-                  <div className="flex items-center gap-1 px-2.5 py-1 bg-[#EEF2FF] border-2 border-black rounded-full text-black text-xs font-black shadow-[1px_1px_0px_0px_#000]">
-                    <Zap className="w-3.5 h-3.5 text-[#4F46E5] fill-[#4F46E5]" />
+                  <div className="flex items-center gap-1 px-2.5 py-1 bg-indigo-50 border border-indigo-200/80 rounded-full text-slate-800 text-xs font-semibold shadow-xs">
+                    <Zap className="w-3.5 h-3.5 text-indigo-600 fill-indigo-600" />
                     <span>{xp} XP</span>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="p-3 rounded-xl bg-white border-2 border-black space-y-2">
-                <p className="font-black text-black text-xs">
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5">
+                <p className="font-semibold text-slate-900 text-xs">
                   Prepare for CUET 2025/2026 Format
                 </p>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("signup")}
-                    className="flex-1 py-2 rounded-lg bg-[#FF5C5C] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] text-center"
+                    className="flex-1 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-xs shadow-xs text-center"
                   >
                     {t("joinNow", "Join Now")}
                   </button>
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("login")}
-                    className="flex-1 py-2 rounded-lg bg-white text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] text-center"
+                    className="flex-1 py-2 rounded-xl bg-white text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs text-center"
                   >
                     {t("logIn", "Log In")}
                   </button>
@@ -445,41 +445,41 @@ export default function Navbar() {
               </div>
             )}
 
-            <div className="space-y-1 font-bold text-black">
+            <div className="space-y-1 font-medium text-slate-700">
               {isDashboard ? (
                 <>
                   <Link
                     href="/dashboard"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-lg text-xs font-black bg-[#FEF3C7] border-2 border-black"
+                    className="block px-3 py-2 rounded-xl text-xs font-semibold bg-indigo-50 text-indigo-600 border border-indigo-100"
                   >
                     {t("commandHub", "Command Hub")}
                   </Link>
                   <Link
                     href="/dashboard/pyqs"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-lg text-xs font-bold border-2 border-transparent hover:border-black hover:bg-white"
+                    className="block px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-50 transition-colors"
                   >
                     {t("domainTests", "PYQs")}
                   </Link>
                   <Link
                     href="/dashboard/mocks"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-lg text-xs font-bold border-2 border-transparent hover:border-black hover:bg-white"
+                    className="block px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-50 transition-colors"
                   >
                     {t("mocks", "Mock Tests")}
                   </Link>
                   <Link
                     href="/dashboard/radar"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-lg text-xs font-bold border-2 border-transparent hover:border-black hover:bg-white"
+                    className="block px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-50 transition-colors"
                   >
                     {t("radar", "Weakness Radar")}
                   </Link>
                   <Link
                     href="/dashboard#leaderboard"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-lg text-xs font-bold border-2 border-transparent hover:border-black hover:bg-white"
+                    className="block px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-50 transition-colors"
                   >
                     {t("leaderboard", "Leaderboard")}
                   </Link>
@@ -488,7 +488,7 @@ export default function Navbar() {
                 <Link
                   href="/dashboard"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 rounded-lg text-sm border-2 border-transparent hover:border-black hover:bg-white"
+                  className="block px-3 py-2 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors"
                 >
                   {t("commandHub", "My Dashboard")}
                 </Link>
@@ -496,18 +496,18 @@ export default function Navbar() {
             </div>
 
             {/* Language Selector in Mobile Menu */}
-            <div className="pt-2 border-t-2 border-black">
+            <div className="pt-2 border-t border-slate-100">
               <LanguageSelector variant="mobile" />
             </div>
 
             {isLoggedIn && (
-              <div className="pt-2 border-t-2 border-black">
+              <div className="pt-2 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={handleSignOut}
-                  className="w-full py-2 px-3 rounded-lg bg-[#FEE2E2] text-[#DC2626] font-black text-xs border-2 border-black text-left flex items-center gap-2"
+                  className="w-full py-2 px-3 rounded-xl bg-rose-50 text-rose-600 font-semibold text-xs border border-rose-200/60 text-left flex items-center gap-2 transition-colors"
                 >
-                  <LogOut className="w-4 h-4 text-[#DC2626]" />
+                  <LogOut className="w-4 h-4 text-rose-600" />
                   <span>{t("signOut", "Sign Out")}</span>
                 </button>
               </div>

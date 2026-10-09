@@ -32,36 +32,36 @@ export default function SignOutModal({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-150"
     >
-      <div className="w-full max-w-md bg-white rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_#000] p-6 text-center animate-in zoom-in-95 duration-150 relative">
+      <div className="w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-xl p-6 sm:p-7 text-center animate-in zoom-in-95 duration-150 relative">
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-lg border border-black bg-white hover:bg-[#FAF7EE] text-black"
+          className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all cursor-pointer"
           aria-label="Close"
         >
           <X className="w-4 h-4" />
         </button>
 
-        <div className="w-14 h-14 rounded-xl bg-[#FEE2E2] text-[#DC2626] border-2 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-center mx-auto mb-4">
-          <AlertTriangle className="w-7 h-7 stroke-[2.5]" />
+        <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center mx-auto mb-4">
+          <AlertTriangle className="w-7 h-7 stroke-[2.2]" />
         </div>
 
-        <h3 className="text-xl font-black text-black tracking-tight">
+        <h3 className="text-xl font-bold text-slate-900 tracking-tight">
           Are you sure you want to sign out?
         </h3>
 
-        <p className="mt-2 text-xs text-black/70 font-semibold leading-relaxed max-w-sm mx-auto">
+        <p className="mt-2 text-xs text-slate-500 font-medium leading-relaxed max-w-sm mx-auto">
           Your CBT mock test sessions, daily practice streaks, and AI calibration metrics are safely stored in your account. You will need to log back in to resume practice.
         </p>
 
-        <div className="mt-6 pt-4 border-t-2 border-black/10 flex items-center justify-center gap-3">
+        <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-center gap-3">
           <button
             type="button"
             disabled={loading}
             onClick={onClose}
-            className="flex-1 py-2.5 rounded-lg bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all disabled:opacity-50"
+            className="flex-1 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-slate-200 transition-all disabled:opacity-50 cursor-pointer"
           >
             Cancel
           </button>
@@ -69,7 +69,7 @@ export default function SignOutModal({
             type="button"
             disabled={loading}
             onClick={handleSignOut}
-            className="flex-1 py-2.5 rounded-lg bg-[#DC2626] hover:bg-[#B91C1C] text-white font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
               <>
@@ -78,7 +78,7 @@ export default function SignOutModal({
               </>
             ) : (
               <>
-                <LogOut className="w-4 h-4 stroke-[2.5]" />
+                <LogOut className="w-4 h-4 stroke-[2.2]" />
                 <span>Yes, Sign Out</span>
               </>
             )}

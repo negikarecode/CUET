@@ -37,24 +37,24 @@ export default function BottomNav() {
     <>
       <nav
         aria-label="Mobile Navigation Bar"
-        className="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t-2 border-black shadow-[0_-4px_0px_0px_#000] px-2 py-1.5 transition-all"
+        className="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-md border-t border-slate-200/80 shadow-[0_-2px_12px_rgba(0,0,0,0.04)] px-3 py-1.5 transition-all"
       >
         <div className="grid grid-cols-5 items-center justify-around text-center">
           {/* 1. Home */}
           <Link
             href="/"
-            className={`flex flex-col items-center justify-center py-1 rounded-lg transition-all ${
+            className={`flex flex-col items-center justify-center py-1 rounded-xl transition-all ${
               isHome
-                ? "text-black font-black"
-                : "text-black/60 hover:text-black font-bold"
+                ? "text-indigo-600 font-semibold"
+                : "text-slate-500 hover:text-slate-800 font-medium"
             }`}
           >
             <div
-              className={`p-1 rounded-md transition-all ${
-                isHome ? "bg-[#FEF3C7] border border-black shadow-[1px_1px_0px_0px_#000]" : ""
+              className={`p-1.5 rounded-xl transition-all ${
+                isHome ? "bg-indigo-50 text-indigo-600 shadow-xs" : "hover:bg-slate-100/70"
               }`}
             >
-              <Home className="w-4 h-4 stroke-[2.5]" />
+              <Home className="w-4 h-4 stroke-[2]" />
             </div>
             <span className="text-[10px] mt-0.5 tracking-tight">{t("home", "Home")}</span>
           </Link>
@@ -62,10 +62,10 @@ export default function BottomNav() {
           {/* 2. Mock Tests */}
           <Link
             href="/#stream-matrix"
-            className="flex flex-col items-center justify-center py-1 text-black/60 hover:text-black font-bold transition-all"
+            className="flex flex-col items-center justify-center py-1 text-slate-500 hover:text-slate-800 font-medium transition-all"
           >
-            <div className="p-1 rounded-md hover:bg-[#FAF7EE]">
-              <BookOpen className="w-4 h-4 stroke-[2.5]" />
+            <div className="p-1.5 rounded-xl hover:bg-slate-100/70 transition-colors">
+              <BookOpen className="w-4 h-4 stroke-[2]" />
             </div>
             <span className="text-[10px] mt-0.5 tracking-tight">{t("mocks", "Mocks")}</span>
           </Link>
@@ -73,10 +73,10 @@ export default function BottomNav() {
           {/* 3. Diagnostic Demo */}
           <Link
             href="/#live-demo"
-            className="flex flex-col items-center justify-center py-1 text-black/60 hover:text-black font-bold transition-all"
+            className="flex flex-col items-center justify-center py-1 text-slate-500 hover:text-slate-800 font-medium transition-all"
           >
-            <div className="p-1 rounded-md hover:bg-[#FAF7EE]">
-              <Target className="w-4 h-4 stroke-[2.5] text-[#FF5C5C]" />
+            <div className="p-1.5 rounded-xl hover:bg-slate-100/70 transition-colors">
+              <Target className="w-4 h-4 stroke-[2] text-rose-500" />
             </div>
             <span className="text-[10px] mt-0.5 tracking-tight">{t("dailyDrill", "Demo")}</span>
           </Link>
@@ -84,10 +84,10 @@ export default function BottomNav() {
           {/* 4. Pricing / Ranker Pass */}
           <Link
             href="/#pricing"
-            className="flex flex-col items-center justify-center py-1 text-black/60 hover:text-black font-bold transition-all"
+            className="flex flex-col items-center justify-center py-1 text-slate-500 hover:text-slate-800 font-medium transition-all"
           >
-            <div className="p-1 rounded-md hover:bg-[#FAF7EE]">
-              <Zap className="w-4 h-4 stroke-[2.5] text-[#D97706]" />
+            <div className="p-1.5 rounded-xl hover:bg-slate-100/70 transition-colors">
+              <Zap className="w-4 h-4 stroke-[2] text-amber-500" />
             </div>
             <span className="text-[10px] mt-0.5 tracking-tight">{t("upgrade", "Pricing")}</span>
           </Link>
@@ -96,20 +96,20 @@ export default function BottomNav() {
           {isLoggedIn ? (
             <Link
               href="/dashboard"
-              className={`flex flex-col items-center justify-center py-1 rounded-lg transition-all ${
+              className={`flex flex-col items-center justify-center py-1 rounded-xl transition-all ${
                 isDashboard
-                  ? "text-black font-black"
-                  : "text-black/60 hover:text-black font-bold"
+                  ? "text-emerald-600 font-semibold"
+                  : "text-slate-500 hover:text-slate-800 font-medium"
               }`}
             >
               <div
-                className={`p-1 rounded-md transition-all ${
+                className={`p-1.5 rounded-xl transition-all ${
                   isDashboard
-                    ? "bg-[#D1FAE5] border border-black shadow-[1px_1px_0px_0px_#000]"
-                    : "hover:bg-[#FAF7EE]"
+                    ? "bg-emerald-50 text-emerald-600 shadow-xs"
+                    : "hover:bg-slate-100/70"
                 }`}
               >
-                <Trophy className="w-4 h-4 stroke-[2.5] text-[#059669]" />
+                <Trophy className="w-4 h-4 stroke-[2] text-emerald-600" />
               </div>
               <span className="text-[10px] mt-0.5 tracking-tight">{t("commandHub", "Hub")}</span>
             </Link>
@@ -117,12 +117,12 @@ export default function BottomNav() {
             <button
               type="button"
               onClick={() => setAuthModalOpen(true)}
-              className="flex flex-col items-center justify-center py-1 text-black font-black transition-all cursor-pointer"
+              className="flex flex-col items-center justify-center py-1 text-indigo-600 font-semibold transition-all cursor-pointer"
             >
-              <div className="p-1 rounded-md bg-[#FF5C5C] text-white border border-black shadow-[1px_1px_0px_0px_#000]">
-                <UserPlus className="w-4 h-4 stroke-[2.5]" />
+              <div className="p-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs">
+                <UserPlus className="w-4 h-4 stroke-[2]" />
               </div>
-              <span className="text-[10px] mt-0.5 tracking-tight text-[#DC2626]">
+              <span className="text-[10px] mt-0.5 tracking-tight text-indigo-600">
                 {t("join", "Join")}
               </span>
             </button>

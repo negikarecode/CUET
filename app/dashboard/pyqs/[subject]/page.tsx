@@ -45,47 +45,47 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
     : "50 Compulsory Questions per Paper • Official NTA CUET CBT Past Year Papers";
 
   return (
-    <div className="min-h-screen bg-[#FAF7EE] p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-6 lg:p-8">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Navigation & Header */}
         <div className="space-y-3">
           <Link
             href="/dashboard/pyqs"
-            className="inline-flex items-center gap-1.5 text-xs font-black text-black/70 hover:text-black"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to All PYQ Papers
           </Link>
 
-          <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000] space-y-2">
+          <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[11px] font-black uppercase bg-[#FEF3C7] px-2 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
+              <span className="text-[11px] font-semibold bg-amber-50 text-amber-800 px-3 py-0.5 rounded-full border border-amber-200/60">
                 Code: {code}
               </span>
               <span
-                className={`text-[10px] font-black uppercase border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000] ${
-                  isLive && pyqTests.length > 0 ? "bg-[#D1FAE5] text-[#065F46]" : "bg-[#FEF3C7] text-black"
+                className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full ${
+                  isLive && pyqTests.length > 0 ? "bg-emerald-50 text-emerald-700 border border-emerald-200/60" : "bg-amber-50 text-amber-800 border border-amber-200/60"
                 }`}
               >
                 {isLive && pyqTests.length > 0 ? `${pyqTests.length} Official Papers Live` : "In Preparation / Rebuilding"}
               </span>
-              <span className="text-[10px] font-black uppercase border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000] bg-[#FAF7EE] text-black">
+              <span className="text-[10px] font-semibold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full border border-slate-200">
                 50 Compulsory Qs • {durationMinutes} Mins
               </span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black text-black flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-lg bg-[#FF5C5C] text-white border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center justify-center shrink-0">
-                <FileText className="w-4.5 h-4.5" />
+            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/20 flex items-center justify-center shrink-0">
+                <FileText className="w-5 h-5 stroke-[2.2]" />
               </div>
               {title}
             </h1>
-            <p className="text-sm text-black/70 font-semibold">{subtitle}</p>
+            <p className="text-sm text-slate-500 font-medium">{subtitle}</p>
           </div>
         </div>
 
         {/* PYQ Tests Grid */}
         {isLive && pyqTests.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           {pyqTests.map((test) => {
             const stats = isClient
               ? getTestAttemptStats(testAttempts, test.id)
@@ -96,41 +96,41 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
             return (
               <div
                 key={test.id}
-                className="bg-white rounded-xl border-2 border-black p-5 shadow-[3px_3px_0px_0px_#000] hover:shadow-[5px_5px_0px_0px_#000] transition-all hover:-translate-y-1 hover:-translate-x-1 flex flex-col justify-between"
+                className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-black uppercase bg-[#FEF3C7] px-2 py-0.5 rounded border border-black">
+                    <span className="text-[11px] font-bold uppercase text-slate-400 tracking-wider">
                       {subjectName} • Code {code}
                     </span>
-                    <span className="text-[10px] font-black uppercase bg-[#D1FAE5] text-[#065F46] px-2 py-0.5 rounded border border-black">
+                    <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
                       {test.year} CBT
                     </span>
                   </div>
 
                   <div>
-                    <h2 className="text-lg font-black text-black leading-snug">{test.label}</h2>
-                    <p className="text-xs text-black/70 font-bold mt-1">{test.yearLabel}</p>
+                    <h2 className="text-lg font-bold text-slate-900 leading-snug">{test.label}</h2>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">{test.yearLabel}</p>
                   </div>
 
                   {/* Best Score Badge if attempted */}
                   {hasAttempted && best && (
-                    <div className="p-2 rounded-lg bg-[#FEF3C7] border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center justify-between gap-2">
+                    <div className="px-3.5 py-2 rounded-2xl bg-amber-50/70 border border-amber-200/60 flex items-center justify-between gap-2 text-xs font-semibold text-amber-900">
                       <div className="flex items-center gap-1.5">
-                        <Trophy className="w-3.5 h-3.5 text-[#D97706] shrink-0" />
-                        <span className="text-[11px] font-black text-black">
+                        <Trophy className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                        <span>
                           Best: {best.totalMarks} / {best.maxMarks}
                         </span>
                       </div>
-                      <span className="text-[10px] font-black text-black/70 font-mono">
+                      <span className="text-amber-700/80 text-[11px] font-mono">
                         {best.accuracyPercentage}% Acc • {stats.attemptsCount} {stats.attemptsCount === 1 ? "attempt" : "attempts"}
                       </span>
                     </div>
                   )}
 
-                  <div className="flex items-center gap-2 text-xs font-bold text-black/60">
+                  <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
                     <span className="flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#059669]" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                       {test.questions} Compulsory Qs
                     </span>
                     <span>•</span>
@@ -140,11 +140,11 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
                     </span>
                   </div>
 
-                  <div className="flex flex-wrap gap-1 pt-1">
+                  <div className="flex flex-wrap gap-1.5 pt-1">
                     {test.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[10px] font-bold bg-[#FAF7EE] text-black/80 px-1.5 py-0.5 rounded border border-black/30"
+                        className="text-[10px] font-medium bg-slate-50 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200/60"
                       >
                         {tag}
                       </span>
@@ -152,19 +152,19 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
                   </div>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-black/10">
+                <div className="pt-3 border-t border-slate-100">
                   {hasAttempted ? (
                     <div className="flex items-center gap-2">
                       <Link
                         href={`/test/${test.id}?reattempt=true`}
-                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] transition-all"
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-2xs hover:shadow-sm transition-all"
                       >
-                        <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+                        <RotateCcw className="w-3.5 h-3.5 stroke-[2.2]" />
                         <span>Re-attempt</span>
                       </Link>
                       <Link
                         href={`/test/${test.id}`}
-                        className="px-3 py-2.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all"
+                        className="px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all"
                       >
                         Result
                       </Link>
@@ -172,10 +172,10 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
                   ) : (
                     <Link
                       href={`/test/${test.id}`}
-                      className="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
+                      className="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all"
                     >
                       <span>Start This Official Paper</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-4 h-4" />
                     </Link>
                   )}
                 </div>
@@ -184,28 +184,28 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
           })}
         </div>
         ) : (
-          <div className="bg-white rounded-xl border-2 border-black p-8 shadow-[4px_4px_0px_0px_#000] text-center space-y-4">
-            <div className="w-12 h-12 rounded-full bg-[#FEF3C7] border-2 border-black flex items-center justify-center mx-auto shadow-[2px_2px_0px_0px_#000]">
-              <RotateCcw className="w-6 h-6 text-black stroke-[2.5]" />
+          <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm text-center space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/60 flex items-center justify-center mx-auto text-amber-600">
+              <RotateCcw className="w-6 h-6 stroke-[2]" />
             </div>
-            <div className="space-y-1 max-w-md mx-auto">
-              <h3 className="text-xl font-black text-black">
+            <div className="space-y-1.5 max-w-md mx-auto">
+              <h3 className="text-xl font-bold text-slate-900">
                 {title} In Preparation
               </h3>
-              <p className="text-xs text-black/70 font-semibold leading-relaxed">
+              <p className="text-xs text-slate-500 leading-relaxed font-medium">
                 Official NTA past year papers for {subjectName} (Code {code}) are currently being remade and digitized from verified answer keys and shifts. They will be published shortly.
               </p>
             </div>
             <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/dashboard/pyqs"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm transition-all"
               >
                 <span>Back to All PYQ Papers</span>
               </Link>
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:bg-white transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 hover:bg-slate-100 transition-all"
               >
                 <span>Go to Command Dashboard</span>
               </Link>

@@ -160,21 +160,21 @@ export default function DiagnosticReportModal({
   const getErrorBadgeStyle = (errorType?: string) => {
     switch (errorType) {
       case "Calculation Error":
-        return "bg-[#FEF3C7] text-[#92400E] border-[#F59E0B]";
+        return "bg-amber-50 text-amber-800 border-amber-200";
       case "Misreading Error":
-        return "bg-[#F3E8FF] text-[#6B21A8] border-[#A855F7]";
+        return "bg-purple-50 text-purple-800 border-purple-200";
       case "Careless Error":
-        return "bg-[#E0F2FE] text-[#0369A1] border-[#38BDF8]";
+        return "bg-sky-50 text-sky-800 border-sky-200";
       case "Concept Confusion":
       case "Option Confusion":
-        return "bg-[#FFEDD5] text-[#C2410C] border-[#FB923C]";
+        return "bg-orange-50 text-orange-800 border-orange-200";
       case "Application Error":
-        return "bg-[#EEF2FF] text-[#3730A3] border-[#6366F1]";
+        return "bg-indigo-50 text-indigo-800 border-indigo-200";
       case "Time Pressure Error":
-        return "bg-[#FFE4E6] text-[#9F1239] border-[#FB7185]";
+        return "bg-pink-50 text-pink-800 border-pink-200";
       case "Conceptual Gap":
       default:
-        return "bg-[#FEE2E2] text-[#991B1B] border-[#EF4444]";
+        return "bg-rose-50 text-rose-800 border-rose-200";
     }
   };
 
@@ -182,40 +182,40 @@ export default function DiagnosticReportModal({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-200"
     >
-      <div className="w-full max-w-4xl bg-white rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_#000] overflow-hidden my-8 flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-4xl bg-white rounded-3xl border border-slate-200/80 shadow-2xl overflow-hidden my-8 flex flex-col max-h-[90vh]">
         {/* Modal Header */}
-        <div className="bg-[#FAF7EE] text-black p-6 border-b-2 border-black flex items-center justify-between shrink-0">
+        <div className="bg-slate-50/80 text-slate-900 p-6 border-b border-slate-200/80 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-[#FEF3C7] border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center justify-center text-black">
-              <Sparkles className="w-5 h-5 text-[#F59E0B] fill-[#F59E0B]" />
+            <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-xs">
+              <Sparkles className="w-5 h-5 text-amber-600 fill-amber-500" />
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-lg font-black tracking-tight text-black">
+                <h3 className="text-lg font-bold tracking-tight text-slate-900">
                   CUET AI Performance Intelligence Engine
                 </h3>
-                <span className="bg-[#D1FAE5] text-black text-[10px] font-black px-2.5 py-0.5 rounded-full border border-black uppercase shadow-[1px_1px_0px_0px_#000]">
+                <span className="bg-emerald-50 text-emerald-700 text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-emerald-200 uppercase shadow-xs">
                   Master Engine
                 </span>
                 {readiness && (
                   <span
-                    className={`text-[10px] font-black px-2.5 py-0.5 rounded-full border border-black uppercase shadow-[1px_1px_0px_0px_#000] ${
+                    className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border uppercase shadow-xs ${
                       readiness.level === "Very Strong"
-                        ? "bg-[#A7F3D0] text-black"
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                         : readiness.level === "Strong"
-                        ? "bg-[#BAE6FD] text-black"
+                        ? "bg-blue-50 text-blue-700 border-blue-200"
                         : readiness.level === "Moderate"
-                        ? "bg-[#FEF08A] text-black"
-                        : "bg-[#FECDD3] text-black"
+                        ? "bg-amber-50 text-amber-700 border-amber-200"
+                        : "bg-rose-50 text-rose-700 border-rose-200"
                     }`}
                   >
                     Readiness: {readiness.level}
                   </span>
                 )}
               </div>
-              <p className="text-xs text-black/70 font-semibold mt-0.5">
+              <p className="text-xs text-slate-500 font-medium mt-0.5">
                 Multi-dimensional post-mortem analyzing cognitive error types, NCERT anchors, and net mark recovery.
               </p>
             </div>
@@ -224,23 +224,23 @@ export default function DiagnosticReportModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black shadow-[2px_2px_0px_0px_#000] transition-all"
+            className="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 shadow-xs transition-all"
             aria-label="Close dialog"
           >
-            <X className="w-5 h-5 stroke-[2.5]" />
+            <X className="w-4 h-4 stroke-[2]" />
           </button>
         </div>
 
         {/* Navigation Tabs */}
         {data && !loading && (
-          <div className="bg-white border-b-2 border-black px-6 pt-3 flex items-center gap-2 overflow-x-auto shrink-0">
+          <div className="bg-white border-b border-slate-200 px-6 pt-2 flex items-center gap-2 overflow-x-auto shrink-0">
             <button
               type="button"
               onClick={() => setActiveTab("decrypter")}
-              className={`px-4 py-2 text-xs font-black rounded-t-lg border-2 border-b-0 border-black transition-all flex items-center gap-1.5 ${
+              className={`px-4 py-2.5 text-xs font-semibold rounded-t-xl transition-all flex items-center gap-1.5 border-b-2 ${
                 activeTab === "decrypter"
-                  ? "bg-[#FAF7EE] text-black translate-y-[2px]"
-                  : "bg-neutral-100 text-black/60 hover:text-black"
+                  ? "bg-blue-50/60 text-blue-700 border-blue-600"
+                  : "border-transparent text-slate-600 hover:text-slate-900"
               }`}
             >
               <BookOpen className="w-3.5 h-3.5" />
@@ -249,10 +249,10 @@ export default function DiagnosticReportModal({
             <button
               type="button"
               onClick={() => setActiveTab("breakdown")}
-              className={`px-4 py-2 text-xs font-black rounded-t-lg border-2 border-b-0 border-black transition-all flex items-center gap-1.5 ${
+              className={`px-4 py-2.5 text-xs font-semibold rounded-t-xl transition-all flex items-center gap-1.5 border-b-2 ${
                 activeTab === "breakdown"
-                  ? "bg-[#FAF7EE] text-black translate-y-[2px]"
-                  : "bg-neutral-100 text-black/60 hover:text-black"
+                  ? "bg-blue-50/60 text-blue-700 border-blue-600"
+                  : "border-transparent text-slate-600 hover:text-slate-900"
               }`}
             >
               <BarChart3 className="w-3.5 h-3.5" />
@@ -261,10 +261,10 @@ export default function DiagnosticReportModal({
             <button
               type="button"
               onClick={() => setActiveTab("report")}
-              className={`px-4 py-2 text-xs font-black rounded-t-lg border-2 border-b-0 border-black transition-all flex items-center gap-1.5 ${
+              className={`px-4 py-2.5 text-xs font-semibold rounded-t-xl transition-all flex items-center gap-1.5 border-b-2 ${
                 activeTab === "report"
-                  ? "bg-[#FAF7EE] text-black translate-y-[2px]"
-                  : "bg-neutral-100 text-black/60 hover:text-black"
+                  ? "bg-blue-50/60 text-blue-700 border-blue-600"
+                  : "border-transparent text-slate-600 hover:text-slate-900"
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -274,16 +274,16 @@ export default function DiagnosticReportModal({
         )}
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1 bg-[#FAF7EE]/40">
+        <div className="p-6 overflow-y-auto space-y-6 flex-1 bg-slate-50/60">
           {/* Loading State */}
           {loading && (
             <div className="py-16 flex flex-col items-center justify-center gap-4 text-center">
-              <div className="w-10 h-10 border-4 border-black border-t-[#FF5C5C] rounded-full animate-spin" />
+              <div className="w-10 h-10 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
               <div>
-                <p className="text-sm font-black text-black">
+                <p className="text-sm font-bold text-slate-900">
                   Executing CUET AI Performance Intelligence scan...
                 </p>
-                <p className="text-xs text-black/70 font-semibold mt-1">
+                <p className="text-xs text-slate-500 font-medium mt-1">
                   Classifying errors (A–L), cross-referencing NCERT chapters, and formulating 7-point recovery strategy.
                 </p>
               </div>
@@ -293,15 +293,15 @@ export default function DiagnosticReportModal({
           {/* Error State or Rate Limit State */}
           {error && !loading && (
             isRateLimited ? (
-              <div className="p-6 rounded-xl bg-[#FEF3C7] border-2 border-black text-center space-y-4 shadow-[4px_4px_0px_0px_#000] animate-in zoom-in-95 duration-200">
-                <div className="w-14 h-14 rounded-lg bg-white border-2 border-black text-black flex items-center justify-center mx-auto shadow-[2px_2px_0px_0px_#000]">
-                  <Zap className="w-7 h-7 fill-[#F59E0B] text-[#D97706]" />
+              <div className="p-6 rounded-2xl bg-amber-50/80 border border-amber-200 text-center space-y-4 shadow-xs animate-in zoom-in-95 duration-200">
+                <div className="w-14 h-14 rounded-2xl bg-white border border-amber-200 text-amber-600 flex items-center justify-center mx-auto shadow-xs">
+                  <Zap className="w-7 h-7 fill-amber-500 text-amber-600" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-black text-black tracking-tight">
+                  <h4 className="text-lg font-bold text-slate-900 tracking-tight">
                     Daily AI Analysis Limit Reached
                   </h4>
-                  <p className="text-xs text-black/80 font-medium mt-1 max-w-md mx-auto leading-relaxed">
+                  <p className="text-xs text-slate-600 font-medium mt-1 max-w-md mx-auto leading-relaxed">
                     Free tier candidates are allocated 3 AI diagnostic scans per day. Upgrade to the <strong>Ranker Pass</strong> to unlock 25 runs/day, instant NCERT decrypters, and adaptive repair drills.
                   </p>
                 </div>
@@ -314,13 +314,13 @@ export default function DiagnosticReportModal({
                 </div>
               </div>
             ) : (
-              <div className="p-6 rounded-xl bg-[#FEE2E2] border-2 border-black text-center space-y-3 shadow-[4px_4px_0px_0px_#000]">
-                <AlertTriangle className="w-8 h-8 text-[#DC2626] mx-auto stroke-[2.5]" />
-                <p className="text-sm font-black text-black">{error}</p>
+              <div className="p-6 rounded-2xl bg-rose-50/80 border border-rose-200 text-center space-y-3 shadow-xs">
+                <AlertTriangle className="w-8 h-8 text-rose-600 mx-auto stroke-[2]" />
+                <p className="text-sm font-bold text-slate-900">{error}</p>
                 <button
                   type="button"
                   onClick={() => window.location.reload()}
-                  className="px-4 py-2 bg-white rounded-lg border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_0px_#000] hover:bg-[#FAF7EE]"
+                  className="px-4 py-2 bg-white rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 shadow-xs hover:bg-slate-50"
                 >
                   Retry Diagnosis
                 </button>
@@ -332,33 +332,33 @@ export default function DiagnosticReportModal({
           {data && !loading && (
             <>
               {/* Executive Summary Card (always visible above tabs) */}
-              <div className="p-5 rounded-xl bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000]">
+              <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2 text-black font-black text-sm">
-                    <Brain className="w-4 h-4 text-black" />
+                  <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
+                    <Brain className="w-4 h-4 text-blue-600" />
                     <span>Executive Intelligence Summary</span>
                   </div>
                   {readiness && (
-                    <span className="text-[11px] font-mono font-bold text-black/70">
+                    <span className="text-[11px] font-mono font-medium text-slate-500">
                       Confidence: {readiness.confidence}
                     </span>
                   )}
                 </div>
-                <p className="text-xs sm:text-sm text-black/80 font-medium leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
                   {data.overall_summary}
                 </p>
 
                 {/* Primary Weak Topics Badges */}
-                <div className="mt-4 pt-3 border-t-2 border-black/10 flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-black text-black">
+                <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-semibold text-slate-800">
                     High-Priority Weakness Targets:
                   </span>
                   {data.primary_weak_topics.map((topic, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FEF3C7] border-2 border-black text-black font-mono text-xs font-black shadow-[1px_1px_0px_0px_#000]"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 font-mono text-xs font-semibold shadow-xs"
                     >
-                      <Target className="w-3 h-3 text-[#DC2626]" />
+                      <Target className="w-3 h-3 text-rose-600" />
                       {topic}
                     </span>
                   ))}
@@ -371,8 +371,8 @@ export default function DiagnosticReportModal({
                   {/* Pacing Bottlenecks & Alerts */}
                   {data.time_sink_alerts.length > 0 && (
                     <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-black">
-                        <Hourglass className="w-4 h-4 text-[#F59E0B] stroke-[2.5]" />
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800">
+                        <Hourglass className="w-4 h-4 text-amber-500 stroke-[2]" />
                         <span>Pacing Bottlenecks Detected ({data.time_sink_alerts.length})</span>
                       </div>
 
@@ -380,14 +380,14 @@ export default function DiagnosticReportModal({
                         {data.time_sink_alerts.map((alert, idx) => (
                           <div
                             key={idx}
-                            className="p-3.5 rounded-lg border-2 border-black bg-[#FEF3C7] text-xs flex items-start gap-2.5 shadow-[2px_2px_0px_0px_#000]"
+                            className="p-3.5 rounded-xl border border-amber-200 bg-amber-50/70 text-xs flex items-start gap-2.5 shadow-xs"
                           >
-                            <AlertTriangle className="w-4 h-4 text-[#D97706] shrink-0 mt-0.5 stroke-[2.5]" />
+                            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5 stroke-[2]" />
                             <div>
-                              <span className="font-black text-black">
+                              <span className="font-bold text-slate-900">
                                 Pacing Alert (Q{alert.question_number}):
                               </span>
-                              <p className="text-black/80 mt-0.5 leading-relaxed font-semibold">
+                              <p className="text-slate-700 mt-0.5 leading-relaxed font-medium">
                                 {alert.message}
                               </p>
                             </div>
@@ -400,11 +400,11 @@ export default function DiagnosticReportModal({
                   {/* AI Mistake Decrypter Cards */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-black">
-                        <BookOpen className="w-4 h-4 text-black" />
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800">
+                        <BookOpen className="w-4 h-4 text-blue-600" />
                         <span>NCERT Concept Decrypter ({data.mistake_analyses.length} Errors Analyzed)</span>
                       </div>
-                      <span className="text-[11px] text-black/60 font-bold">
+                      <span className="text-[11px] text-slate-500 font-medium">
                         12-Factor Error Classification
                       </span>
                     </div>
@@ -413,21 +413,21 @@ export default function DiagnosticReportModal({
                       {data.mistake_analyses.map((item, idx) => (
                         <div
                           key={idx}
-                          className="p-5 rounded-xl bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] space-y-3"
+                          className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3"
                         >
-                          <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-black/10 pb-2.5">
+                          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
                             <div className="flex items-center gap-2">
-                              <span className="w-6 h-6 rounded-md bg-[#FF5C5C] text-white font-black text-xs flex items-center justify-center font-mono border border-black shadow-[1px_1px_0px_0px_#000]">
+                              <span className="w-6 h-6 rounded-lg bg-rose-50 text-rose-700 font-bold text-xs flex items-center justify-center font-mono border border-rose-200 shadow-xs">
                                 #{idx + 1}
                               </span>
-                              <div className="text-xs font-black text-black">
+                              <div className="text-xs font-bold text-slate-900">
                                 <MathRenderer text={item.micro_topic} inline />
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
                               {item.error_classification && (
                                 <span
-                                  className={`text-[10px] font-black px-2.5 py-0.5 rounded border-2 shadow-[1px_1px_0px_0px_#000] ${getErrorBadgeStyle(
+                                  className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border shadow-xs ${getErrorBadgeStyle(
                                     item.error_classification
                                   )}`}
                                 >
@@ -435,7 +435,7 @@ export default function DiagnosticReportModal({
                                 </span>
                               )}
                               {item.confidence && (
-                                <span className="text-[10px] font-bold text-black/70 bg-neutral-100 px-2 py-0.5 rounded border border-black">
+                                <span className="text-[10px] font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
                                   {item.confidence} Confidence
                                 </span>
                               )}
@@ -443,23 +443,23 @@ export default function DiagnosticReportModal({
                           </div>
 
                           {/* Distractor Trap Callout */}
-                          <div className="p-3 rounded-lg bg-[#FEE2E2] border-2 border-black text-xs">
-                            <span className="font-black text-black flex items-center gap-1.5 mb-1">
-                              <Zap className="w-3.5 h-3.5 text-[#DC2626] stroke-[2.5]" />
+                          <div className="p-3.5 rounded-xl bg-rose-50/70 border border-rose-200/80 text-xs">
+                            <span className="font-bold text-rose-900 flex items-center gap-1.5 mb-1">
+                              <Zap className="w-3.5 h-3.5 text-rose-600 stroke-[2]" />
                               Why You Picked the Trap Option:
                             </span>
-                            <div className="text-black/80 font-medium leading-relaxed">
+                            <div className="text-slate-700 font-normal leading-relaxed">
                               <MathRenderer text={item.distractor_trap} />
                             </div>
                           </div>
 
-                          {/* Exact NCERT Rules in 2 bullet points */}
-                          <div className="p-3 rounded-lg bg-[#FAF7EE] border-2 border-black text-xs space-y-1.5">
-                            <span className="font-black text-black flex items-center gap-1.5">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] stroke-[3]" />
+                          {/* Exact NCERT Rules in bullet points */}
+                          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs space-y-1.5">
+                            <span className="font-bold text-slate-900 flex items-center gap-1.5">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" />
                               Exact NCERT Concept Rule:
                             </span>
-                            <ul className="list-disc list-inside text-black/80 font-medium space-y-1 pl-1">
+                            <ul className="list-disc list-inside text-slate-700 font-medium space-y-1 pl-1">
                               {item.ncert_rule.map((rule, rIdx) => (
                                 <li key={rIdx} className="leading-relaxed">
                                   <MathRenderer text={rule} inline />
@@ -477,86 +477,86 @@ export default function DiagnosticReportModal({
               {/* TAB 2: Loss Breakdown & Next Actions */}
               {activeTab === "breakdown" && (
                 <div className="space-y-6">
-                  {/* "Why Am I Losing Marks?" Section 26 */}
+                  {/* "Why Am I Losing Marks?" Section */}
                   {whyLosingMarks.length > 0 && (
-                    <div className="p-5 rounded-xl bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] space-y-4">
-                      <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-black">
-                        <ShieldAlert className="w-4 h-4 text-[#DC2626]" />
+                    <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800">
+                        <ShieldAlert className="w-4 h-4 text-rose-600" />
                         <span>Why Am I Losing Marks? (Cognitive Breakdown)</span>
                       </div>
-                      <p className="text-xs text-black/70 font-semibold">
+                      <p className="text-xs text-slate-500 font-medium">
                         Your lost marks are classified across cognitive error patterns rather than generic lack of effort:
                       </p>
 
                       <div className="space-y-3">
                         {whyLosingMarks.map((cause, idx) => (
-                          <div key={idx} className="space-y-1">
-                            <div className="flex items-center justify-between text-xs font-black text-black">
+                          <div key={idx} className="space-y-1.5">
+                            <div className="flex items-center justify-between text-xs font-bold text-slate-800">
                               <span>{cause.cause}</span>
-                              <span className="font-mono">{cause.percentage}%</span>
+                              <span className="font-mono text-rose-600">{cause.percentage}%</span>
                             </div>
-                            <div className="w-full h-3 bg-neutral-100 rounded-full border-2 border-black overflow-hidden shadow-[1px_1px_0px_0px_#000]">
+                            <div className="w-full h-2.5 bg-slate-100 rounded-full border border-slate-200/60 overflow-hidden shadow-xs">
                               <div
-                                className="h-full bg-[#FF5C5C]"
+                                className="h-full bg-gradient-to-r from-rose-500 to-amber-500 rounded-full transition-all"
                                 style={{ width: `${Math.max(5, cause.percentage)}%` }}
                               />
                             </div>
-                            <p className="text-[11px] text-black/70 font-medium">{cause.evidence}</p>
+                            <p className="text-[11px] text-slate-500 font-medium">{cause.evidence}</p>
                           </div>
                         ))}
                       </div>
                     </div>
                   )}
 
-                  {/* 7-Point Next Actions Plan (Section 28) */}
+                  {/* 7-Point Next Actions Plan */}
                   {nextActions && (
-                    <div className="p-5 rounded-xl bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] space-y-4">
-                      <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-black">
-                        <Compass className="w-4 h-4 text-[#0369A1]" />
+                    <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800">
+                        <Compass className="w-4 h-4 text-blue-600" />
                         <span>What Should I Do Next? (7-Point Action Plan)</span>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                        <div className="p-3 bg-[#FAF7EE] rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-                          <span className="font-black text-black">1. Biggest Strength</span>
-                          <p className="text-black/80 font-semibold mt-1">{nextActions.biggest_strength}</p>
+                        <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 shadow-xs">
+                          <span className="font-bold text-slate-900">1. Biggest Strength</span>
+                          <p className="text-slate-600 font-medium mt-1">{nextActions.biggest_strength}</p>
                         </div>
-                        <div className="p-3 bg-[#FEE2E2] rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-                          <span className="font-black text-black">2. Biggest Weakness</span>
-                          <p className="text-black/80 font-semibold mt-1">{nextActions.biggest_weakness}</p>
+                        <div className="p-3.5 bg-rose-50/60 rounded-xl border border-rose-200 shadow-xs">
+                          <span className="font-bold text-rose-900">2. Biggest Weakness</span>
+                          <p className="text-slate-700 font-medium mt-1">{nextActions.biggest_weakness}</p>
                         </div>
-                        <div className="p-3 bg-[#FEF3C7] rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-                          <span className="font-black text-black">3. Recurring Trap</span>
-                          <p className="text-black/80 font-semibold mt-1">{nextActions.biggest_recurring_mistake}</p>
+                        <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200 shadow-xs">
+                          <span className="font-bold text-amber-900">3. Recurring Trap</span>
+                          <p className="text-slate-700 font-medium mt-1">{nextActions.biggest_recurring_mistake}</p>
                         </div>
-                        <div className="p-3 bg-[#EEF2FF] rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-                          <span className="font-black text-black">4. Highest-Impact Focus</span>
-                          <p className="text-black/80 font-semibold mt-1">{nextActions.highest_impact_topic}</p>
+                        <div className="p-3.5 bg-blue-50/60 rounded-xl border border-blue-200 shadow-xs">
+                          <span className="font-bold text-blue-900">4. Highest-Impact Focus</span>
+                          <p className="text-slate-700 font-medium mt-1">{nextActions.highest_impact_topic}</p>
                         </div>
                       </div>
 
-                      <div className="p-3 bg-white rounded-lg border-2 border-black text-xs space-y-2 shadow-[2px_2px_0px_0px_#000]">
-                        <span className="font-black text-black">5. Recommended NCERT Revision:</span>
-                        <ul className="list-disc list-inside space-y-1 text-black/80 font-semibold pl-1">
+                      <div className="p-3.5 bg-white rounded-xl border border-slate-200/80 text-xs space-y-2 shadow-xs">
+                        <span className="font-bold text-slate-900">5. Recommended NCERT Revision:</span>
+                        <ul className="list-disc list-inside space-y-1 text-slate-600 font-medium pl-1">
                           {nextActions.recommended_revision.map((rev, rIdx) => (
                             <li key={rIdx}>{rev}</li>
                           ))}
                         </ul>
                       </div>
 
-                      <div className="p-3 bg-white rounded-lg border-2 border-black text-xs space-y-2 shadow-[2px_2px_0px_0px_#000]">
-                        <span className="font-black text-black">6. Recommended Practice:</span>
-                        <ul className="list-disc list-inside space-y-1 text-black/80 font-semibold pl-1">
+                      <div className="p-3.5 bg-white rounded-xl border border-slate-200/80 text-xs space-y-2 shadow-xs">
+                        <span className="font-bold text-slate-900">6. Recommended Practice:</span>
+                        <ul className="list-disc list-inside space-y-1 text-slate-600 font-medium pl-1">
                           {nextActions.recommended_practice.map((prac, pIdx) => (
                             <li key={pIdx}>{prac}</li>
                           ))}
                         </ul>
                       </div>
 
-                      <div className="p-3 bg-[#D1FAE5] rounded-lg border-2 border-black text-xs flex items-center justify-between shadow-[2px_2px_0px_0px_#000]">
+                      <div className="p-3.5 bg-emerald-50/70 rounded-xl border border-emerald-200 text-xs flex items-center justify-between shadow-xs">
                         <div>
-                          <span className="font-black text-black">7. Recommended Next Test:</span>
-                          <p className="text-black/80 font-bold mt-0.5">{nextActions.recommended_next_test}</p>
+                          <span className="font-bold text-emerald-900">7. Recommended Next Test:</span>
+                          <p className="text-emerald-700 font-medium mt-0.5">{nextActions.recommended_next_test}</p>
                         </div>
                       </div>
                     </div>
@@ -564,29 +564,29 @@ export default function DiagnosticReportModal({
 
                   {/* Micro-Topic Accuracy Table */}
                   {Object.keys(data.analytics.microTopicAccuracy).length > 0 && (
-                    <div className="p-4 rounded-xl bg-white border-2 border-black shadow-[3px_3px_0px_0px_#000]">
-                      <div className="flex items-center gap-2 mb-3 text-xs font-black text-black uppercase tracking-wider">
-                        <Layers className="w-4 h-4 text-black" />
+                    <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
+                      <div className="flex items-center gap-2 mb-3 text-xs font-bold text-slate-800 uppercase tracking-wider">
+                        <Layers className="w-4 h-4 text-blue-600" />
                         <span>Micro-Topic Accuracy Breakdown</span>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 text-xs">
                         {Object.entries(data.analytics.microTopicAccuracy).map(
                           ([topic, stat], tIdx) => (
                             <div
                               key={tIdx}
-                              className="p-2.5 bg-[#FAF7EE] rounded-lg border-2 border-black flex items-center justify-between shadow-[2px_2px_0px_0px_#000]"
+                              className="p-3 bg-slate-50/80 rounded-xl border border-slate-200/80 flex items-center justify-between shadow-xs"
                             >
-                              <span className="text-black font-bold truncate max-w-[170px]" title={topic}>
+                              <span className="text-slate-800 font-medium truncate max-w-[170px]" title={topic}>
                                 {topic}
                               </span>
                               <span
-                                className={`font-mono font-black text-xs px-2 py-0.5 rounded border border-black ${
+                                className={`font-mono font-semibold text-xs px-2.5 py-0.5 rounded-full border ${
                                   stat.percentage >= 75
-                                    ? "bg-[#D1FAE5] text-black"
+                                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                                     : stat.percentage >= 50
-                                    ? "bg-[#FEF3C7] text-black"
-                                    : "bg-[#FEE2E2] text-black"
+                                    ? "bg-amber-50 text-amber-700 border-amber-200"
+                                    : "bg-rose-50 text-rose-700 border-rose-200"
                                 }`}
                               >
                                 {stat.percentage}% ({stat.correct}/{stat.total})
@@ -600,26 +600,26 @@ export default function DiagnosticReportModal({
                 </div>
               )}
 
-              {/* TAB 3: Full Natural-Language Student Report (Section 33) */}
+              {/* TAB 3: Full Natural-Language Student Report */}
               {activeTab === "report" && (
-                <div className="p-6 rounded-xl bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] space-y-4">
-                  <div className="flex items-center justify-between border-b-2 border-black/10 pb-3">
-                    <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-black">
-                      <FileText className="w-4 h-4 text-black" />
-                      <span>Section 33 Natural-Language Student Report</span>
+                <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800">
+                      <FileText className="w-4 h-4 text-blue-600" />
+                      <span>Executive Natural-Language Student Report</span>
                     </div>
-                    <span className="text-[11px] font-mono font-black bg-[#FAF7EE] px-2.5 py-0.5 rounded border border-black">
+                    <span className="text-[11px] font-mono font-semibold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full border border-slate-200">
                       CUET-UG Intelligence
                     </span>
                   </div>
 
-                  <div className="prose prose-sm max-w-none text-black/90 font-medium space-y-4 leading-relaxed">
+                  <div className="prose prose-sm max-w-none text-slate-700 font-normal space-y-4 leading-relaxed">
                     {data.natural_language_report ? (
                       <div className="whitespace-pre-line text-xs sm:text-sm">
                         {data.natural_language_report}
                       </div>
                     ) : (
-                      <p className="text-xs text-black/70">
+                      <p className="text-xs text-slate-500">
                         Natural language report generation in progress. Check back shortly.
                       </p>
                     )}
@@ -631,8 +631,8 @@ export default function DiagnosticReportModal({
         </div>
 
         {/* Modal Footer: Prominent AI Repair Quiz Launcher */}
-        <div className="p-6 bg-[#FAF7EE] border-t-2 border-black flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
-          <div className="text-xs text-black/70 font-semibold">
+        <div className="p-5 sm:p-6 bg-slate-50/80 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
+          <div className="text-xs text-slate-500 font-medium">
             Remedial Drills focus on unattempted/failed questions only.
           </div>
 
@@ -640,17 +640,17 @@ export default function DiagnosticReportModal({
             <button
               type="button"
               onClick={onClose}
-              className="w-full sm:w-auto px-5 py-3 rounded-lg border-2 border-black bg-white text-black font-black text-xs hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] transition-all"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold text-xs hover:bg-slate-50 shadow-xs transition-all"
             >
               Back to Scorecard
             </button>
 
-            {/* Prominent Action Button: Generate 5-Question AI Repair Quiz */}
+            {/* Action Button: Generate 5-Question AI Repair Quiz */}
             <button
               type="button"
               disabled={loading || launchingQuiz}
               onClick={() => handleLaunchRepairQuiz(primaryWeakTopic)}
-              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs flex items-center justify-center gap-2 border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none disabled:opacity-50 transition-all group"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-xs hover:shadow transition-all disabled:opacity-50 group"
             >
               {launchingQuiz ? (
                 <>
@@ -661,7 +661,7 @@ export default function DiagnosticReportModal({
                 <>
                   <RotateCcw className="w-4 h-4 text-white group-hover:rotate-45 transition-transform" />
                   <span>Generate 5-Question AI Repair Quiz for {primaryWeakTopic.slice(0, 24)}</span>
-                  <ArrowRight className="w-4 h-4 stroke-[2.5] group-hover:translate-x-0.5 transition-transform" />
+                  <ArrowRight className="w-4 h-4 stroke-[2] group-hover:translate-x-0.5 transition-transform" />
                 </>
               )}
             </button>

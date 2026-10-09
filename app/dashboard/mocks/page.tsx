@@ -412,18 +412,18 @@ export default function MocksPage() {
   }, [selectedStream]);
 
   return (
-    <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-8">
+    <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-6 sm:space-y-8">
       {/* Page Header */}
       <div className="space-y-2">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#FF5C5C] text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_0px_#000] shrink-0">
-            <ClipboardCheck className="w-5 h-5 stroke-[2.5]" />
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm shadow-blue-500/20 shrink-0">
+            <ClipboardCheck className="w-5 h-5 stroke-[2.2]" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-black tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
               Full-Length Mock Tests
             </h1>
-            <p className="text-xs sm:text-sm text-black/60 font-semibold mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
               390 full-length CBT papers across 20 domain subjects · Real-time timer · Official NTA pattern (+5 / -1)
             </p>
           </div>
@@ -431,38 +431,38 @@ export default function MocksPage() {
       </div>
 
       {/* Stream & Subject Dropdown Controls */}
-      <div className="bg-white rounded-2xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000]">
+      <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Select Stream */}
           <div className="space-y-1.5">
-            <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
+            <label className="text-xs font-bold uppercase text-slate-400 tracking-wider block">
               Filter by Stream:
             </label>
             <div className="relative">
               <select
                 value={selectedStream}
                 onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
-                className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
+                className="w-full bg-slate-50 hover:bg-slate-100/70 text-slate-800 font-semibold text-sm px-4 py-3 rounded-2xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-10 transition-all"
               >
                 <option value="all">All Domain Streams (20 Subjects)</option>
                 <option value="science">Science Stream (7 Subjects)</option>
                 <option value="commerce">Commerce Stream (4 Subjects)</option>
                 <option value="humanities">Humanities & Arts (10 Subjects)</option>
               </select>
-              <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
           </div>
 
           {/* Select Subject */}
           <div className="space-y-1.5">
-            <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
+            <label className="text-xs font-bold uppercase text-slate-400 tracking-wider block">
               Filter by Subject:
             </label>
             <div className="relative">
               <select
                 value={selectedTab}
                 onChange={(e) => handleSelectSubject(e.target.value as SubjectKey)}
-                className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
+                className="w-full bg-slate-50 hover:bg-slate-100/70 text-slate-800 font-semibold text-sm px-4 py-3 rounded-2xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-10 transition-all"
               >
                 <option value="all">
                   {selectedStream === "all"
@@ -501,7 +501,7 @@ export default function MocksPage() {
                   ))
                 )}
               </select>
-              <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
           </div>
         </div>
@@ -509,16 +509,16 @@ export default function MocksPage() {
 
       {/* Active Subject Banner */}
       {activeSubjectInfo && (
-        <div className="bg-white rounded-2xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-start gap-4">
-            <div className="w-11 h-11 rounded-xl bg-[#EEF2FF] border-2 border-black flex items-center justify-center shrink-0 shadow-[2px_2px_0px_0px_#000] text-[#4F46E5]">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200/60 flex items-center justify-center shrink-0 text-blue-600">
               <activeSubjectInfo.icon className="w-6 h-6" />
             </div>
             <div className="space-y-1">
-              <h2 className="text-xl sm:text-2xl font-black text-black tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 {activeSubjectInfo.name}
               </h2>
-              <p className="text-xs sm:text-sm font-semibold text-black/60">
+              <p className="text-xs sm:text-sm font-medium text-slate-500">
                 {activeSubjectInfo.mockCount} full-length CBT mocks · {activeSubjectInfo.totalQuestions.toLocaleString()} questions · Code {activeSubjectInfo.code}
               </p>
             </div>
@@ -526,7 +526,7 @@ export default function MocksPage() {
 
           <Link
             href={`/dashboard/mocks/${activeSubjectInfo.key}`}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] bg-[#FF5C5C] text-white hover:bg-[#FF4545] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#000] transition-all shrink-0 self-start md:self-auto"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-sm hover:shadow-md transition-all shrink-0 self-start md:self-auto"
           >
             <span>Open Full Subject Suite</span>
             <ArrowRight className="w-4 h-4" />
@@ -536,11 +536,11 @@ export default function MocksPage() {
 
       {/* Active Stream Banner */}
       {!activeSubjectInfo && activeStreamInfo && (
-        <div className="bg-white rounded-2xl border-2 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_#000] space-y-1">
-          <h2 className="text-xl sm:text-2xl font-black text-black tracking-tight">
+        <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm space-y-1">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
             {activeStreamInfo.name}
           </h2>
-          <p className="text-xs sm:text-sm font-semibold text-black/60">
+          <p className="text-xs sm:text-sm font-medium text-slate-500">
             {displayedTests.length} full-length CBT mocks available across {activeStreamInfo.name.toLowerCase()}
           </p>
         </div>
@@ -549,13 +549,13 @@ export default function MocksPage() {
       {/* Mock Test Cards Grid */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg sm:text-xl font-black text-black tracking-tight">
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
             {selectedTab === "all"
               ? selectedStream === "all"
                 ? "Available Mock Papers"
                 : `${STREAM_CONFIGS[selectedStream].name} Papers`
               : `${activeSubjectInfo?.name} CBT Papers`}
-            <span className="text-xs font-semibold text-black/50 ml-2">
+            <span className="text-xs font-medium text-slate-400 ml-2">
               ({displayedTests.length} papers)
             </span>
           </h3>
@@ -573,57 +573,57 @@ export default function MocksPage() {
               return (
                 <div
                   key={test.id}
-                  className="bg-white rounded-2xl border-2 border-black p-5 sm:p-6 shadow-[3px_3px_0px_0px_#000] hover:shadow-[5px_5px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all flex flex-col justify-between space-y-4 min-w-0"
+                  className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4 min-w-0"
                 >
                   <div className="space-y-3">
                     <div>
-                      <p className="text-[11px] font-bold text-black/50 uppercase tracking-wider">
+                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                         {test.subjectName} · Code {test.code}
                       </p>
-                      <h4 className="text-lg font-black text-black leading-snug mt-0.5">
+                      <h4 className="text-lg font-bold text-slate-900 leading-snug mt-0.5">
                         {test.label}
                       </h4>
-                      <p className="text-xs font-medium text-black/60 mt-0.5">
+                      <p className="text-xs font-medium text-slate-500 mt-0.5">
                         {test.mockLabel} · Full Syllabus CBT
                       </p>
                     </div>
 
                     {hasAttempted && best && (
-                      <div className="px-3 py-2 rounded-xl bg-[#FEF3C7] border border-black/20 flex items-center justify-between gap-2 text-xs font-bold text-black">
+                      <div className="px-3.5 py-2 rounded-2xl bg-amber-50/70 border border-amber-200/60 flex items-center justify-between gap-2 text-xs font-semibold text-amber-900">
                         <div className="flex items-center gap-1.5">
-                          <Trophy className="w-3.5 h-3.5 text-[#D97706] shrink-0" />
+                          <Trophy className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                           <span>Best: {best.totalMarks} / {best.maxMarks}</span>
                         </div>
-                        <span className="text-black/60 text-[11px] font-mono">
+                        <span className="text-amber-700/80 text-[11px] font-mono">
                           {best.accuracyPercentage}% Acc ({stats.attemptsCount} {stats.attemptsCount === 1 ? "attempt" : "attempts"})
                         </span>
                       </div>
                     )}
 
-                    <p className="text-xs font-semibold text-black/60">
+                    <p className="text-xs font-medium text-slate-500">
                       50 Questions · {test.duration}
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-black/10">
+                  <div className="pt-3 border-t border-slate-100">
                     {hasAttempted ? (
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/test/${test.id}?reattempt=true`}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] transition-all"
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-2xs hover:shadow-sm transition-all"
                         >
-                          <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+                          <RotateCcw className="w-3.5 h-3.5 stroke-[2.2]" />
                           <span>{t("reattemptTest", "Re-attempt")}</span>
                         </Link>
                         <Link
                           href={`/dashboard/mocks/analysis/${best?.id || test.id}`}
-                          className="px-3 py-2.5 rounded-xl border-2 border-black bg-[#FAF7EE] hover:bg-[#FEF3C7] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all"
+                          className="px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-all"
                         >
                           Analysis
                         </Link>
                         <Link
                           href={`/test/${test.id}`}
-                          className="px-2.5 py-2.5 rounded-xl border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all"
+                          className="px-2.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all"
                         >
                           Scorecard
                         </Link>
@@ -631,7 +631,7 @@ export default function MocksPage() {
                     ) : (
                       <Link
                         href={`/test/${test.id}`}
-                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all"
+                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all"
                       >
                         <span>{t("startTest", "Start Test")}</span>
                         <ArrowRight className="w-4 h-4" />
@@ -643,22 +643,22 @@ export default function MocksPage() {
             })}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border-2 border-black p-8 md:p-12 shadow-[4px_4px_0px_0px_#000] text-center space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-[#FEF3C7] border-2 border-black flex items-center justify-center mx-auto shadow-[3px_3px_0px_0px_#000]">
-              <RotateCcw className="w-7 h-7 text-black stroke-[2.5]" />
+          <div className="bg-white rounded-3xl border border-slate-100 p-8 md:p-12 shadow-sm text-center space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200/60 flex items-center justify-center mx-auto text-amber-600">
+              <RotateCcw className="w-6 h-6 stroke-[2]" />
             </div>
             <div className="space-y-2 max-w-lg mx-auto">
-              <h3 className="text-2xl font-black text-black">
+              <h3 className="text-xl font-bold text-slate-900">
                 {activeSubjectInfo ? `${activeSubjectInfo.name} Mocks Being Prepared` : "Mock Papers Under Preparation"}
               </h3>
-              <p className="text-sm text-black/70 font-semibold leading-relaxed">
+              <p className="text-sm text-slate-500 leading-relaxed font-medium">
                 Full CBT mock papers for this subject are being calibrated according to the latest NTA CUET UG CBT pattern and will be published shortly.
               </p>
             </div>
             <div className="pt-2">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm transition-all"
               >
                 <span>Back to Command Dashboard</span>
               </Link>

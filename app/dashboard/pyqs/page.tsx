@@ -441,72 +441,72 @@ export default function PYQsPage() {
   }, [selectedStream]);
 
   if (!isClient) {
-    return <div className="min-h-screen bg-[#FAF7EE]" />;
+    return <div className="min-h-screen bg-[#F8FAFC]" />;
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7EE] p-4 md:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto mb-10 space-y-8">
+    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto mb-10 space-y-6 sm:space-y-8">
         {/* Header Section */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-black uppercase bg-[#FEF3C7] text-black px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
+            <span className="text-[11px] font-semibold bg-amber-50 text-amber-800 px-3 py-1 rounded-full border border-amber-200/60">
               In Preparation / Rebuilding
             </span>
-            <span className="text-[11px] font-black uppercase bg-[#FEE2E2] text-[#DC2626] px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
+            <span className="text-[11px] font-semibold bg-rose-50 text-rose-700 px-3 py-1 rounded-full border border-rose-200/60">
               0 Papers Live
             </span>
-            <span className="text-[11px] font-black uppercase bg-white text-black px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
+            <span className="text-[11px] font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full border border-slate-200">
               5,000 Questions
             </span>
-            <span className="text-[11px] font-black uppercase bg-[#E0F2FE] text-[#0369A1] px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
+            <span className="text-[11px] font-semibold bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-200/60">
               Official NTA Pattern (+5 / -1)
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-black flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-[#FF5C5C] text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-              <FileText className="w-5 h-5" />
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm shadow-blue-500/20 shrink-0">
+              <FileText className="w-5 h-5 stroke-[2.2]" />
             </div>
             Previous Year Questions (PYQs)
           </h1>
-          <p className="text-black/60 font-bold text-base md:text-lg">
+          <p className="text-slate-500 font-medium text-sm md:text-base max-w-3xl">
             Practice authentic official NTA CUET UG CBT examination papers (2024, 2023, 2022) with verified solutions, continuous timer & AI diagnostics.
           </p>
         </div>
 
         {/* Stream & Subject Dropdown Controls */}
-        <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000]">
+        <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Stream Dropdown Select */}
             <div className="space-y-1.5">
-              <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
+              <label className="text-xs font-bold uppercase text-slate-400 tracking-wider block">
                 Select Stream:
               </label>
               <div className="relative">
                 <select
                   value={selectedStream}
                   onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
-                  className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
+                  className="w-full bg-slate-50 hover:bg-slate-100/70 text-slate-800 font-semibold text-sm px-4 py-3 rounded-2xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-10 transition-all"
                 >
                   <option value="all">All Streams (Under Rebuild)</option>
                   <option value="science">Science Stream (7 Subjects • In Preparation)</option>
                   <option value="commerce">Commerce Stream (4 Subjects • In Preparation)</option>
                   <option value="humanities">Humanities & Arts (10 Subjects • In Preparation)</option>
                 </select>
-                <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
             </div>
 
             {/* Subject Dropdown Select */}
             <div className="space-y-1.5">
-              <label className="text-xs font-black uppercase text-black/70 tracking-wider block">
+              <label className="text-xs font-bold uppercase text-slate-400 tracking-wider block">
                 Select Subject:
               </label>
               <div className="relative">
                 <select
                   value={selectedTab}
                   onChange={(e) => handleSelectSubject(e.target.value as SubjectKey)}
-                  className="w-full bg-[#FAF7EE] hover:bg-white text-black font-black text-sm px-4 py-3 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] focus:outline-none cursor-pointer appearance-none pr-10"
+                  className="w-full bg-slate-50 hover:bg-slate-100/70 text-slate-800 font-semibold text-sm px-4 py-3 rounded-2xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-10 transition-all"
                 >
                   <option value="all">
                     {selectedStream === "all"
@@ -545,7 +545,7 @@ export default function PYQsPage() {
                     ))
                   )}
                 </select>
-                <ChevronDown className="w-4 h-4 text-black/60 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
             </div>
           </div>
@@ -553,28 +553,28 @@ export default function PYQsPage() {
 
         {/* Active Domain Heading Banner */}
         {activeSubjectInfo && (
-          <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000] space-y-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm space-y-4 animate-in fade-in duration-200">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-start gap-3.5">
-                <div className="w-11 h-11 rounded-lg bg-[#E0F2FE] border-2 border-black flex items-center justify-center shrink-0 shadow-[2px_2px_0px_0px_#000]">
-                  <activeSubjectInfo.icon className="w-6 h-6 text-[#0369A1]" />
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200/60 flex items-center justify-center shrink-0 text-blue-600">
+                  <activeSubjectInfo.icon className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="text-xl md:text-2xl font-black text-black">
+                    <h2 className="text-xl md:text-2xl font-bold text-slate-900">
                       {activeSubjectInfo.name} Official CUET PYQ Papers
                     </h2>
-                    <span className="text-xs font-black uppercase bg-[#D1FAE5] text-[#065F46] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                    <span className="text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
                       {activeSubjectInfo.isLive ? `${activeSubjectInfo.paperCount} Papers Live` : "In Preparation / Rebuilding"}
                     </span>
-                    <span className="text-xs font-black uppercase bg-[#FEF3C7] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                    <span className="text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200/60 px-2.5 py-0.5 rounded-full">
                       Code: {activeSubjectInfo.code}
                     </span>
-                    <span className="text-xs font-black uppercase bg-[#FAF7EE] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                    <span className="text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-0.5 rounded-full">
                       {activeSubjectInfo.durationMinutes} Minutes
                     </span>
                   </div>
-                  <p className="text-sm font-semibold text-black/70">
+                  <p className="text-sm font-medium text-slate-500">
                     {activeSubjectInfo.subtitle}
                   </p>
                 </div>
@@ -583,7 +583,7 @@ export default function PYQsPage() {
               <div className="flex items-center gap-2 shrink-0">
                 <Link
                   href={`/dashboard/pyqs/${activeSubjectInfo.key}`}
-                  className="px-4 py-2 rounded-lg font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all bg-[#FF5C5C] text-white hover:bg-[#FF4545] flex items-center gap-1.5"
+                  className="px-5 py-2.5 rounded-xl font-semibold text-xs bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-sm hover:shadow-md transition-all flex items-center gap-1.5"
                 >
                   <span>Open Full Subject Suite</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -595,16 +595,16 @@ export default function PYQsPage() {
 
         {/* Stream Heading Banner */}
         {!activeSubjectInfo && activeStreamInfo && (
-          <div className="bg-white rounded-xl border-2 border-black p-5 md:p-6 shadow-[4px_4px_0px_0px_#000] space-y-2 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm space-y-2 animate-in fade-in duration-200">
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-xl md:text-2xl font-black text-black">
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900">
                 {activeStreamInfo.name} Official CUET PYQs
               </h2>
-              <span className="text-xs font-black uppercase bg-[#D1FAE5] text-[#065F46] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+              <span className="text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
                 {activeStreamInfo.badge}
               </span>
             </div>
-            <p className="text-sm font-semibold text-black/70">
+            <p className="text-sm font-medium text-slate-500">
               Showing all {displayedTests.length} official papers across {activeStreamInfo.name}.
             </p>
           </div>
@@ -613,22 +613,22 @@ export default function PYQsPage() {
         {/* Papers Grid */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-black text-black flex items-center gap-2">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
               <span>
                 {selectedTab === "all"
                   ? selectedStream === "all"
                     ? "Official CUET NTA CBT Examination Papers"
                     : `${STREAM_CONFIGS[selectedStream].name} Official Papers`
-                  : `${activeSubjectInfo?.name} Official Papers (${displayedTests.length} Papers)`}
+                  : `${activeSubjectInfo?.name} Official Papers`}
               </span>
-              <span className="text-xs bg-black text-white px-2 py-0.5 rounded-full font-bold">
-                {displayedTests.length}
+              <span className="text-xs font-semibold text-slate-400 ml-1">
+                ({displayedTests.length} papers)
               </span>
             </h3>
           </div>
 
           {displayedTests.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
             {displayedTests.map((test) => {
               const stats = isClient
                 ? getTestAttemptStats(testAttempts, test.id)
@@ -639,44 +639,44 @@ export default function PYQsPage() {
               return (
                 <div
                   key={test.id}
-                  className="bg-white rounded-xl border-2 border-black p-5 shadow-[3px_3px_0px_0px_#000] hover:shadow-[5px_5px_0px_0px_#000] transition-all hover:-translate-y-1 hover:-translate-x-1 flex flex-col justify-between"
+                  className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4 min-w-0"
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-black uppercase bg-[#FEF3C7] px-2 py-0.5 rounded border border-black">
+                      <span className="text-[11px] font-bold uppercase text-slate-400 tracking-wider">
                         {test.subjectName} • Code {test.code}
                       </span>
-                      <span className="text-[10px] font-black uppercase bg-[#D1FAE5] text-[#065F46] px-2 py-0.5 rounded border border-black">
+                      <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
                         {test.year} Official
                       </span>
                     </div>
 
                     <div>
-                      <h4 className="text-lg font-black text-black leading-snug">
+                      <h4 className="text-lg font-bold text-slate-900 leading-snug">
                         {test.label}
                       </h4>
-                      <p className="text-xs text-black/70 font-bold mt-1">
+                      <p className="text-xs text-slate-500 font-medium mt-0.5">
                         {test.yearLabel}
                       </p>
                     </div>
 
                     {/* Best Score Badge if attempted */}
                     {hasAttempted && best && (
-                      <div className="p-2 rounded-lg bg-[#FEF3C7] border-2 border-black shadow-[2px_2px_0px_0px_#000] flex items-center justify-between gap-2">
+                      <div className="px-3.5 py-2 rounded-2xl bg-amber-50/70 border border-amber-200/60 flex items-center justify-between gap-2 text-xs font-semibold text-amber-900">
                         <div className="flex items-center gap-1.5">
-                          <Trophy className="w-3.5 h-3.5 text-[#D97706] shrink-0" />
-                          <span className="text-[11px] font-black text-black">
+                          <Trophy className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                          <span>
                             Best: {best.totalMarks} / {best.maxMarks}
                           </span>
                         </div>
-                        <span className="text-[10px] font-black text-black/70 font-mono">
+                        <span className="text-amber-700/80 text-[11px] font-mono">
                           {best.accuracyPercentage}% Acc • {stats.attemptsCount}{" "}
                           {stats.attemptsCount === 1 ? "attempt" : "attempts"}
                         </span>
                       </div>
                     )}
 
-                    <div className="flex items-center gap-2 text-xs font-bold text-black/60">
+                    <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
                       <span className="flex items-center gap-1">
                         <FileCheck2 className="w-3.5 h-3.5" />
                         {test.questions} Compulsory Qs
@@ -688,11 +688,11 @@ export default function PYQsPage() {
                       </span>
                     </div>
 
-                    <div className="flex flex-wrap gap-1 pt-1">
+                    <div className="flex flex-wrap gap-1.5 pt-1">
                       {test.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="text-[10px] font-bold bg-[#FAF7EE] text-black/80 px-1.5 py-0.5 rounded border border-black/30"
+                          className="text-[10px] font-medium bg-slate-50 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200/60"
                         >
                           {tag}
                         </span>
@@ -700,19 +700,19 @@ export default function PYQsPage() {
                     </div>
                   </div>
 
-                  <div className="pt-4 mt-4 border-t border-black/10">
+                  <div className="pt-3 border-t border-slate-100">
                     {hasAttempted ? (
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/test/${test.id}?reattempt=true`}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] transition-all"
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-2xs hover:shadow-sm transition-all"
                         >
-                          <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+                          <RotateCcw className="w-3.5 h-3.5 stroke-[2.2]" />
                           <span>{t("reattemptTest", "Re-attempt")}</span>
                         </Link>
                         <Link
                           href={`/test/${test.id}`}
-                          className="px-3 py-2.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] transition-all"
+                          className="px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all"
                         >
                           {t("scorecardTitle", "Result")}
                         </Link>
@@ -720,7 +720,7 @@ export default function PYQsPage() {
                     ) : (
                       <Link
                         href={`/test/${test.id}`}
-                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#000] transition-all"
+                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all"
                       >
                         <span>Start Official Paper</span>
                         <ArrowRight className="w-4 h-4" />
@@ -732,25 +732,25 @@ export default function PYQsPage() {
             })}
           </div>
         ) : (
-          <div className="bg-white rounded-xl border-2 border-black p-8 md:p-12 shadow-[4px_4px_0px_0px_#000] text-center space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-[#FEF3C7] border-2 border-black flex items-center justify-center mx-auto shadow-[3px_3px_0px_0px_#000]">
-              <RotateCcw className="w-7 h-7 text-black stroke-[2.5]" />
+          <div className="bg-white rounded-3xl border border-slate-100 p-8 md:p-12 shadow-sm text-center space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200/60 flex items-center justify-center mx-auto text-amber-600">
+              <RotateCcw className="w-6 h-6 stroke-[2]" />
             </div>
             <div className="space-y-2 max-w-lg mx-auto">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEF3C7] border border-black text-[11px] font-black uppercase tracking-wider">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/60 text-[11px] font-semibold text-amber-800">
                 <span>Under Active Reconstruction</span>
               </div>
-              <h3 className="text-2xl font-black text-black">
+              <h3 className="text-xl font-bold text-slate-900">
                 {activeSubjectInfo ? `${activeSubjectInfo.name} Official PYQs Being Remade` : "Official PYQ Papers Under Reconstruction"}
               </h3>
-              <p className="text-sm text-black/70 font-semibold leading-relaxed">
+              <p className="text-sm text-slate-500 leading-relaxed font-medium">
                 Authentic NTA CUET past year shift papers (2022–2025) are currently being digitized, NCERT-verified, and recalibrated into the modern 50-compulsory-questions CBT simulator. Updated papers will be released shortly.
               </p>
             </div>
             <div className="pt-2">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm transition-all"
               >
                 <span>Back to Command Dashboard</span>
               </Link>

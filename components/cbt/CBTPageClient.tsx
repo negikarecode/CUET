@@ -63,10 +63,10 @@ export default function CBTPageClient({
 
   if (!isInitialized || currentTestId !== testId || (isReattempt && isSubmitted)) {
     return (
-      <div className="min-h-screen bg-[#FAF7EE] flex items-center justify-center p-4">
-        <div className="flex flex-col items-center gap-3 text-black/70">
-          <div className="w-9 h-9 border-4 border-[#FF5C5C] border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs font-black uppercase tracking-wider">
+      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
+        <div className="flex flex-col items-center gap-3 text-slate-600">
+          <div className="w-9 h-9 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
             {isReattempt
               ? "Preparing Fresh Re-attempt Environment..."
               : "Initializing NTA CBT Secure Examination Engine..."}

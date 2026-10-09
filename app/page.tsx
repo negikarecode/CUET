@@ -1,308 +1,706 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
-  Zap,
-  FileCheck2,
-  Brain,
-  CheckCircle2,
-  RotateCcw,
-  Flame,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import {
   ArrowRight,
+  BookOpen,
+  ChevronDown,
+  Clock3,
+  FileText,
+  GraduationCap,
+  Lightbulb,
+  MonitorCheck,
+  Trophy,
+  X,
   LayoutDashboard,
 } from "lucide-react";
-import LiveDiagnosticDemo from "@/components/LiveDiagnosticDemo";
-import StatsSection from "@/components/StatsSection";
-import StreamSelector from "@/components/StreamSelector";
-import PricingSection from "@/components/payments/PricingSection";
-import OnboardingModal from "@/components/auth/OnboardingModal";
+import { ScrollSplitCard, PricingCardItem } from "@/components/ui/scroll-split-card";
+import { StickyScrollCards, StickyScrollCardItem } from "@/components/ui/sticky-scroll-cards";
+import { KineticTextReveal } from "@/components/ui/kinetic-text-reveal";
+import { AnnotatedText } from "@/components/ui/annotated-text";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@/components/animate-ui/primitives/headless/disclosure";
+import {
+  Particles,
+  ParticlesEffect,
+} from "@/components/animate-ui/primitives/effects/particles";
+import { ShimmeringText } from "@/components/animate-ui/primitives/texts/shimmering";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
-import { useTranslation } from "@/lib/i18n/LanguageContext";
 
-export default function HomePage() {
-  const { t } = useTranslation();
-  const isClient = useIsClient();
-  const user = useTestStore((state) => state.user);
-  const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name && user?.id !== "guest");
-  const [authModalOpen, setAuthModalOpen] = useState(false);
+const faqs: [string, string][] = [
+  [
+    "Are these mock tests based on the latest NTA CUET 2026 syllabus?",
+    "Yes. Every test strictly follows the latest NTA notification and rationalized Class 12 NCERT curriculum with 50 compulsory questions.",
+  ],
+  [
+    "Can I practice tests on mobile devices?",
+    "Absolutely. Practice drills, CBT simulators, and performance analytics work seamlessly across smartphones, tablets, and desktops.",
+  ],
+  [
+    "How does the negative marking calculation work?",
+    "You earn +5 marks for every correct answer, receive a -1 penalty for incorrect responses, and 0 for unattempted questions, matching NTA rules.",
+  ],
+  [
+    "Is the free plan really free to use?",
+    "Yes. You can start immediately with diagnostic tests, chapter practice questions, and AI performance insights with zero credit card required.",
+  ],
+];
 
-  const scrollToDemo = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    const elem = document.getElementById("live-demo");
-    if (elem) {
-      elem.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  };
+const colleges: StickyScrollCardItem[] = [
+  {
+    title: "Miranda College",
+    src: "/assets/images/download (9).jpg",
+  },
+  {
+    title: "Hindu College",
+    src: "/assets/images/Hindu College, University of Delhi.jpg",
+  },
+  {
+    title: "St. Stephen's College",
+    src: "/assets/images/St Stephen’s College, University Of Delhi.jpg",
+  },
+  {
+    title: "Dare to Dream Big",
+    src: "/assets/images/download (10).jpg",
+  },
+  {
+    title: "SRCC",
+    src: "/assets/images/@Shri Ram College of commerce (1).jpg",
+  },
+  {
+    title: "Find your place at Delhi University",
+    src: "/assets/images/Delhi University vibezzz.jpg",
+  },
+];
+
+const pricingCards: PricingCardItem[] = [
+  {
+    title: "Free",
+    description: "Build your preparation rhythm with daily practice and essential CUET resources.",
+    price: "₹0",
+    features: [
+      "Daily practice questions",
+      "Essential CUET resources",
+      "Diagnostic mock tests",
+      "NCERT concept explanations",
+    ],
+    cta: "Start for free",
+    tier: "free",
+    bgColor: "#f4f1e7",
+    textColor: "#172033",
+  },
+  {
+    title: "Gold Pass",
+    description: "Get the focused practice, All-India percentiles, and AI insights you need to secure North Campus.",
+    price: "₹699",
+    originalPrice: "₹999",
+    badge: "Most popular",
+    features: [
+      "Everything in Free",
+      "Full-length NTA CBT mock tests",
+      "100% Shift-wise PYQs (2022-2025)",
+      "Granular AI Trap & Mistake Diagnosis",
+      "Weekly All-India Percentile Leaderboard",
+    ],
+    cta: "Choose Gold",
+    tier: "gold",
+    bgColor: "#20232b",
+    textColor: "#ffffff",
+  },
+];
+
+function Icon({
+  icon: IconComponent,
+  size = 18,
+  className = "",
+}: {
+  icon: React.ElementType;
+  size?: number;
+  className?: string;
+}) {
+  return <IconComponent size={size} strokeWidth={2} aria-hidden="true" className={className} />;
+}
+
+function ParticleButton({
+  children,
+  className,
+  onClick,
+  ...props
+}: {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  [key: string]: any;
+}) {
+  const [key, setKey] = useState(0);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FAF7EE]">
-      {/* =================================================================== */}
-      {/* SECTION 1: ABOVE-THE-FOLD HERO (Side-by-Side: Reality Check & Demo) */}
-      {/* =================================================================== */}
-      <section className="relative overflow-hidden pt-8 sm:pt-12 pb-12 sm:pb-16 bg-[#FAF7EE]">
-        {/* Subtle grid background pattern */}
-        <div className="absolute inset-0 academic-grid-pattern opacity-40 pointer-events-none" />
+    <Particles key={key} className="particle-button-wrapper">
+      <button
+        {...props}
+        className={className}
+        onClick={(event) => {
+          setKey((value) => value + 1);
+          onClick?.(event);
+        }}
+      >
+        {children}
+      </button>
+      <ParticlesEffect className="particle-effect" />
+    </Particles>
+  );
+}
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            {/* Left Column: Value Prop & CTAs */}
-            <div className="lg:col-span-6 xl:col-span-6 space-y-6 text-left">
-              {/* Mobile-Only Dashboard Button at Start of Landing Page */}
-              <div className="block sm:hidden">
-                <Link
-                  href="/dashboard"
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-[#FEF3C7] active:bg-[#FDE68A] text-black font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center justify-between transition-all"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded bg-black text-white flex items-center justify-center shrink-0">
-                      <LayoutDashboard className="w-3.5 h-3.5 stroke-[2.5]" />
-                    </div>
-                    <span className="uppercase tracking-wider font-black text-[11px]">
-                      {isLoggedIn ? "Open Student Dashboard" : "Go to Dashboard"}
-                    </span>
-                  </div>
-                  <span className="flex items-center gap-1 font-black text-[11px] bg-[#FF5C5C] text-white px-2.5 py-1 rounded-md border border-black shadow-[1px_1px_0px_0px_#000]">
-                    Dashboard <ArrowRight className="w-3 h-3 stroke-[2.5]" />
-                  </span>
-                </Link>
-              </div>
+function ParticleLink({
+  children,
+  className,
+  href,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  href: string;
+}) {
+  const [key, setKey] = useState(0);
 
-              {/* Eyebrow Tag */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FEF3C7] border-2 border-black text-black text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_#000]">
-                <span className="w-2 h-2 rounded-full bg-[#FF5C5C] border border-black animate-pulse" />
-                <span>{t("patternBadge", "[NEW 2026 NTA PATTERN: 50/50 COMPULSORY]")}</span>
-              </div>
+  return (
+    <Particles key={key} className="particle-button-wrapper">
+      <Link
+        href={href}
+        className={className}
+        onClick={() => setKey((value) => value + 1)}
+      >
+        {children}
+      </Link>
+      <ParticlesEffect className="particle-effect" />
+    </Particles>
+  );
+}
 
-              {/* Headline - Main Attention Grabber */}
-              <h1 className="text-3xl sm:text-5xl lg:text-[3.25rem] xl:text-[3.75rem] font-black text-black tracking-tight leading-[1.1] sm:leading-[1.06] break-words">
-                {t("titlePart1", "Stop losing")}{" "}
-                <span className="inline-block bg-[#FEE2E2] text-[#DC2626] px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_#000] sm:shadow-[4px_4px_0px_0px_#000] -rotate-1 align-middle my-1">
-                  {t("marksCallout", "-6 marks")}
-                </span>{" "}
-                {t("titlePart2", "to trick options.")}
-                <span className="block mt-2 sm:mt-3 text-xl sm:text-3xl lg:text-[2.5rem] xl:text-[2.85rem] text-black font-black leading-tight">
-                  {t("titlePart3", "Master CUET's")}{" "}
-                  <span className="underline decoration-[#FF5C5C] decoration-[4px] sm:decoration-[6px] underline-offset-[5px] sm:underline-offset-[6px]">
-                    {t("titleHighlight", "zero-buffer format.")}
-                  </span>
-                </span>
-              </h1>
+function Navigation({
+  onAuth,
+  isLoggedIn,
+}: {
+  onAuth: (mode: "login" | "signup") => void;
+  isLoggedIn: boolean;
+}) {
+  return (
+    <header className="hero-content-layer site-header">
+      <div className="nav-shell">
+        <Link href="/" className="footer-brand" aria-label="CUET AI-Prep Home">
+          <span className="footer-brand-mark bg-blue-600 text-white font-extrabold shadow-sm">C</span>
+          <strong className="text-slate-900 text-lg font-extrabold tracking-tight">
+            CUET<span className="text-blue-600">Prep</span>
+          </strong>
+        </Link>
 
-              {/* Sub-headline (1 sentence) */}
-              <p className="text-sm sm:text-lg text-black/80 leading-relaxed font-semibold">
-                {t("heroSubtitle", "All 50 questions are mandatory. You have 72 seconds per question. CUET AI-Prep pinpoints the trap option you fell for before exam day does.")}
-              </p>
+        <nav className="desktop-nav" aria-label="Main navigation">
+          <ParticleLink href="#features" className="nav-link">
+            Mock Tests
+          </ParticleLink>
+          <ParticleLink href="#faq" className="nav-link">
+            F&amp;Q
+          </ParticleLink>
+          <ParticleLink href="#pricing" className="nav-link">
+            Pricing
+          </ParticleLink>
+          <ParticleLink href="/dashboard" className="nav-link">
+            Dashboard
+          </ParticleLink>
+        </nav>
 
-              {/* Primary & Secondary CTAs */}
-              <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                {isLoggedIn && (
-                  <Link
-                    href="/dashboard"
-                    className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-lg bg-[#FEF3C7] hover:bg-[#FDE68A] active:bg-[#FCD34D] text-black font-black text-xs sm:text-sm tracking-wide border-2 border-black shadow-[3px_3px_0px_0px_#000] sm:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
-                  >
-                    <LayoutDashboard className="w-4 h-4 stroke-[2.5]" />
-                    <span>Go to Dashboard</span>
-                    <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-                  </Link>
-                )}
-
-                {/* Primary CTA */}
-                <a
-                  href="#live-demo"
-                  onClick={scrollToDemo}
-                  className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] active:bg-[#E03E3E] text-white font-black text-xs sm:text-sm tracking-wide border-2 border-black shadow-[3px_3px_0px_0px_#000] sm:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <Zap className="w-4 h-4 fill-white" />
-                  <span>{t("ctaPrimary", "Try 1 Diagnostic Question Free")}</span>
-                </a>
-
-                {/* Secondary CTA */}
-                <Link
-                  href="#stream-matrix"
-                  className="px-5 sm:px-6 py-3 sm:py-3.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs sm:text-sm tracking-wide shadow-[3px_3px_0px_0px_#000] sm:shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2"
-                >
-                  <span>{t("ctaSecondary", "View Stream Tests")}</span>
-                </Link>
-              </div>
-
-              {/* Trust Highlights */}
-              <div className="pt-4 border-t-2 border-black/10 grid grid-cols-2 gap-2 sm:gap-3 text-xs text-black font-bold">
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded bg-[#D1FAE5] border border-black flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-black stroke-[3]" />
-                  </div>
-                  <span>{t("badgePYQ", "100% Shift-Wise PYQs")}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded bg-[#FEF3C7] border border-black flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-black stroke-[3]" />
-                  </div>
-                  <span>{t("badgeTrap", "Instant Trap Breakdown")}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded bg-[#EEF2FF] border border-black flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-black stroke-[3]" />
-                  </div>
-                  <span>{t("badgeMarking", "Exact +5 / -1 Marking")}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded bg-[#FAF7EE] border border-black flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-black stroke-[3]" />
-                  </div>
-                  <span>{t("badgeFree", "No Login Required to Try")}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Live Diagnostic Demo */}
-            <div className="lg:col-span-6 xl:col-span-6 w-full">
-              <LiveDiagnosticDemo />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =================================================================== */}
-      {/* SECTION 3: THE REALITY CHECK BAR (3 Neo-Brutalist Stat Chips)       */}
-      {/* =================================================================== */}
-      <StatsSection />
-
-      {/* =================================================================== */}
-      {/* SECTION 4: THE 3-STEP FEATURE GRID (Minimal Cards)                  */}
-      {/* =================================================================== */}
-      <section id="features" className="py-16 bg-white border-b-2 border-black text-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-black uppercase tracking-wider text-black bg-[#FEF3C7] px-3.5 py-1 rounded-full border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-              Built For Zero Internal Choice
-            </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-black tracking-tight text-black">
-              Engineered To Break Through Score Plateaus
-            </h2>
-            <p className="mt-2 text-sm text-black/70 font-semibold">
-              No generic question banks. Three targeted tools designed specifically for the 50-compulsory NTA format.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1: Real NTA CBT Engine */}
-            <div className="rounded-xl bg-[#FAF7EE] border-2 border-black p-6 shadow-[5px_5px_0px_0px_#000] flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-lg bg-[#EEF2FF] text-black border-2 border-black flex items-center justify-center mb-5 shadow-[2px_2px_0px_0px_#000]">
-                  <FileCheck2 className="w-6 h-6 stroke-[2.5]" />
-                </div>
-                <h3 className="text-xl font-black text-black">
-                  Real NTA CBT Engine
-                </h3>
-                <p className="mt-2 text-xs sm:text-sm text-black/80 font-medium leading-relaxed">
-                  Cloned down to the exact countdown timer, palette colors, and question layout. Practice under genuine test center sensory conditions so nothing surprises you on exam day.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t-2 border-black/10 text-xs font-black text-black flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#10B981] stroke-[2.5]" />
-                <span>Exact 1-50 Question Matrix</span>
-              </div>
-            </div>
-
-            {/* Card 2: Trap-Distractor Post-Mortem */}
-            <div className="rounded-xl bg-[#FEF3C7] border-2 border-black p-6 shadow-[5px_5px_0px_0px_#000] flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-lg bg-white text-black border-2 border-black flex items-center justify-center mb-5 shadow-[2px_2px_0px_0px_#000]">
-                  <Brain className="w-6 h-6 text-[#DC2626] stroke-[2.5]" />
-                </div>
-                <h3 className="text-xl font-black text-black">
-                  Trap-Distractor Post-Mortem
-                </h3>
-                <p className="mt-2 text-xs sm:text-sm text-black/80 font-medium leading-relaxed">
-                  Traditional keys say <em>&quot;Option A is correct.&quot;</em> Our AI explains <strong>why</strong> you fell for Option C, what intermediate step you missed, and what NCERT concept you skipped.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t-2 border-black/10 text-xs font-black text-black flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#10B981] stroke-[2.5]" />
-                <span>NCERT Page-Level Rule Citations</span>
-              </div>
-            </div>
-
-            {/* Card 3: Streak & Weakness Drills */}
-            <div className="rounded-xl bg-[#FAF7EE] border-2 border-black p-6 shadow-[5px_5px_0px_0px_#000] flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-lg bg-[#D1FAE5] text-black border-2 border-black flex items-center justify-center mb-5 shadow-[2px_2px_0px_0px_#000]">
-                  <RotateCcw className="w-6 h-6 text-[#059669] stroke-[2.5]" />
-                </div>
-                <h3 className="text-xl font-black text-black">
-                  Streak & Weakness Drills
-                </h3>
-                <p className="mt-2 text-xs sm:text-sm text-black/80 font-medium leading-relaxed">
-                  Bite-sized 5-question targeted drills generated solely from your flagged mistakes. Fix your recurring slips in 5 minutes a day and build unstoppable habit streaks.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t-2 border-black/10 text-xs font-black text-black flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#10B981] stroke-[2.5]" />
-                <span>Adaptive 5-Min Repair Sprints</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stream Selector Matrix (Science, Commerce, Humanities) */}
-      <StreamSelector />
-
-      {/* =================================================================== */}
-      {/* SECTION 5: TRANSPARENT, ZERO-FRICTION PRICING                       */}
-      {/* =================================================================== */}
-      <PricingSection />
-
-      {/* =================================================================== */}
-      {/* SECTION 6: THE "NORTH CAMPUS DREAM" FOOTER CTA                      */}
-      {/* =================================================================== */}
-      <section className="py-20 bg-[#FEF3C7] text-black text-center border-t-2 border-black">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border-2 border-black text-black text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_#000]">
-            <Flame className="w-4 h-4 fill-[#F59E0B] text-[#D97706]" />
-            <span>Target: 960+ / 1,000 (99.5+ Percentile) North Campus Cutoff</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-black leading-tight">
-            Don&apos;t gamble your dream university on guesswork.
-          </h2>
-
-          <p className="text-black/80 font-semibold text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            50 mandatory questions means zero margin for avoidable errors. Practice under real shift pressure, eliminate trap habits, and claim your North Campus seat.
-          </p>
-
-          <div className="pt-3 flex justify-center">
-            {isLoggedIn ? (
-              <Link
-                href="/dashboard"
-                className="px-8 py-4 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] active:bg-[#E03E3E] text-white font-black text-sm sm:text-base tracking-wide border-2 border-black shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center gap-2.5 transition-all"
+        <div className="nav-actions">
+          {isLoggedIn ? (
+            <Link
+              href="/dashboard"
+              className="btn-join flex items-center gap-1.5"
+            >
+              <LayoutDashboard size={15} />
+              <span>Go to Dashboard</span>
+            </Link>
+          ) : (
+            <>
+              <ParticleButton
+                className="btn-login"
+                onClick={() => onAuth("login")}
               >
-                <span>Go to Aspirant Command Hub →</span>
-              </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setAuthModalOpen(true)}
-                className="px-8 py-4 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] active:bg-[#E03E3E] text-white font-black text-sm sm:text-base tracking-wide border-2 border-black shadow-[4px_4px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none flex items-center gap-2.5 transition-all cursor-pointer"
+                Login
+              </ParticleButton>
+              <ParticleButton
+                className="btn-join"
+                onClick={() => onAuth("signup")}
               >
-                <Zap className="w-5 h-5 fill-white" />
-                <span>Join Now — Claim Your Dream Seat</span>
-                <ArrowRight className="w-5 h-5 stroke-[2.5]" />
-              </button>
-            )}
-          </div>
+                Join now <Icon icon={ArrowRight} size={15} />
+              </ParticleButton>
+            </>
+          )}
         </div>
-      </section>
+      </div>
+    </header>
+  );
+}
 
-      {/* Onboarding / Real Supabase Auth Modal */}
-      <OnboardingModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        initialMode="signup"
-      />
+function Feature({
+  icon,
+  text,
+}: {
+  icon: React.ElementType;
+  text: React.ReactNode;
+}) {
+  return (
+    <div className="feature-badge-item">
+      <div className="feature-icon-box">
+        <Icon icon={icon} size={19} />
+      </div>
+      <strong className="text-slate-800 text-sm font-semibold">{text}</strong>
     </div>
   );
 }
 
+function Hero({
+  onAuth,
+  isLoggedIn,
+}: {
+  onAuth: (mode: "login" | "signup") => void;
+  isLoggedIn: boolean;
+}) {
+  const router = useRouter();
+
+  return (
+    <section className="hero-wrapper">
+      <div className="hero-bg-container" aria-hidden="true" />
+      <div className="hero-gradient-mask" aria-hidden="true" />
+      <Navigation onAuth={onAuth} isLoggedIn={isLoggedIn} />
+      
+      <main className="hero-content-layer hero-main">
+        <div className="hero-copy">
+          <div className="hero-badge">
+            <Icon icon={Trophy} size={16} /> India&apos;s Most Trusted CUET Practice Platform
+          </div>
+          <h1>
+            Your all-in-one
+            <br />
+            launchpad to
+            <br />
+            <span className="hero-shimmer">
+              <ShimmeringText
+                text="India's top universities."
+                color="var(--primary-blue)"
+                shimmeringColor="#7dd3fc"
+                duration={2.2}
+              />
+            </span>
+          </h1>
+          <p>
+            Authentic NTA CBT simulator, shift-wise PYQs, instant AI mistake diagnosis, and everything you need to ace your CUET 2026 preparation.
+          </p>
+          <div className="hero-actions">
+            <button
+              className="btn-hero-cta"
+              onClick={() => {
+                if (isLoggedIn) {
+                  router.push("/dashboard");
+                } else {
+                  onAuth("signup");
+                }
+              }}
+            >
+              {isLoggedIn ? "Open Student Dashboard" : "Start practicing free"}{" "}
+              <Icon icon={ArrowRight} size={19} className="cta-arrow" />
+            </button>
+            <div className="trust-copy">
+              Trusted by <strong>2L+</strong>
+              <small>CUET aspirants</small>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <div className="hero-content-layer hero-features">
+        <Feature
+          icon={FileText}
+          text={
+            <>
+              Full-length
+              <br />
+              Mock Tests
+            </>
+          }
+        />
+        <Feature
+          icon={BookOpen}
+          text={
+            <>
+              Chapter-wise
+              <br />
+              Practice
+            </>
+          }
+        />
+        <Feature
+          icon={Trophy}
+          text={
+            <>
+              Detailed
+              <br />
+              Performance Insights
+            </>
+          }
+        />
+        <Feature
+          icon={GraduationCap}
+          text={
+            <>
+              Expert-curated
+              <br />
+              Study Resources
+            </>
+          }
+        />
+      </div>
+    </section>
+  );
+}
+
+function ContentSections() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "start center"],
+  });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    mass: 0.25,
+  });
+  const contentOpacity = useTransform(smoothProgress, [0, 0.8], [0, 1]);
+  const contentY = useTransform(smoothProgress, [0, 1], [36, 0]);
+
+  const cards = [
+    {
+      title: "Practice in the Exact Exam Environment",
+      description:
+        "Our mock tests replicate the real NTA interface: the identical countdown timer, palette colors, and question layout. When exam day arrives, nothing feels unfamiliar.",
+      takeaway: "All 50 Questions, Exact Format",
+      icon: MonitorCheck,
+      tone: "blue",
+    },
+    {
+      title: (
+        <>
+          Find Out <em>Why</em> You are Getting Questions Wrong
+        </>
+      ),
+      description:
+        'Most answer keys just say "Option A is correct." Ours explains why you fell for Option C, what step you skipped, and which NCERT concept to revisit.',
+      takeaway: "NCERT Concept-Level Explanations",
+      icon: Lightbulb,
+      tone: "green",
+    },
+    {
+      title: "Fix Weak Spots in 5 Minutes a Day",
+      description:
+        "Short five-question drills built entirely from your past mistakes, not generic questions. Catch the same conceptual errors before they cost you negative marks.",
+      takeaway: "Personalized Daily Practice Sprints",
+      icon: Clock3,
+      tone: "orange",
+    },
+  ];
+
+  return (
+    <section ref={sectionRef} id="features" className="content-section feature-section">
+      <motion.div
+        style={{
+          opacity: shouldReduceMotion ? 1 : contentOpacity,
+          y: shouldReduceMotion ? 0 : contentY,
+        }}
+      >
+        <div className="section-heading">
+          <span className="eyebrow">Everything You Need To Ace CUET</span>
+          <h2>
+            <KineticTextReveal
+              text="Engineered for 100 Percentilers"
+              splitBy="characters"
+              stagger={0.06}
+              distance={16}
+              staggerFrom="center"
+              inView
+            />
+          </h2>
+          <p>Designed to maximize speed, accuracy and domain mastery.</p>
+        </div>
+
+        <div className="cards-grid feature-cards">
+          {cards.map(({ title, description, takeaway, icon, tone }) => (
+            <article className={`glass-card feature-promise-card ${tone}`} key={takeaway}>
+              <div className="feature-promise-icon">
+                <Icon icon={icon} size={28} />
+              </div>
+              <div className="feature-promise-copy">
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </div>
+              <span className="feature-promise-takeaway">{takeaway}</span>
+            </article>
+          ))}
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+function AdmissionSection() {
+  return (
+    <section className="content-section admission-section">
+      <div>
+        <div className="section-heading admission-heading">
+          <h2 className="admission-title">
+            <span className="title-row">
+              <span className="title-word">Turning</span>
+              <AnnotatedText
+                className="title-word annotated-word"
+                variant="highlight"
+                delay={0.08}
+              >
+                Ambition
+              </AnnotatedText>
+              <span className="title-word">into</span>
+            </span>
+            <span className="title-row title-row-bottom">
+              <AnnotatedText
+                className="title-word annotated-word"
+                variant="highlight"
+                delay={0.16}
+              >
+                Admission
+              </AnnotatedText>
+            </span>
+          </h2>
+        </div>
+        <StickyScrollCards hint="Explore university campuses" cards={colleges} />
+      </div>
+    </section>
+  );
+}
+
+function PricingSplit({ onAuth }: { onAuth: (mode: "login" | "signup") => void }) {
+  return (
+    <section id="pricing" className="pricing-section">
+      <ScrollSplitCard
+        imageSrc="/assets/images/PRICING_SECTION_BACKGROUND.png"
+        cards={pricingCards}
+        onSelect={() => onAuth("signup")}
+      />
+    </section>
+  );
+}
+
+function FAQ() {
+  const [open, setOpen] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "start center"],
+  });
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [28, 0]);
+
+  return (
+    <section ref={sectionRef} id="faq" className="content-section light-section faq-section">
+      <motion.div
+        style={{
+          opacity: shouldReduceMotion ? 1 : contentOpacity,
+          y: shouldReduceMotion ? 0 : contentY,
+        }}
+      >
+        <div className="section-heading">
+          <h2>Frequently Asked Questions</h2>
+        </div>
+        <div className="faq-list">
+          {faqs.map(([question, answer], index) => (
+            <Disclosure
+              as="div"
+              className="faq-item"
+              key={question}
+              open={open === index}
+              onOpenChange={(isOpen) => setOpen(isOpen ? index : null)}
+            >
+              <DisclosureButton>
+                <span>{question}</span>
+                <Icon icon={ChevronDown} size={19} />
+              </DisclosureButton>
+              <DisclosurePanel>
+                <p>{answer}</p>
+              </DisclosurePanel>
+            </Disclosure>
+          ))}
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+function AuthModal({
+  mode,
+  onClose,
+}: {
+  mode: "login" | "signup";
+  onClose: () => void;
+}) {
+  const router = useRouter();
+  const [signup, setSignup] = useState(mode === "signup");
+
+  const handleRedirect = (target: string) => {
+    onClose();
+    router.push(target);
+  };
+
+  return (
+    <div className="modal-overlay" role="dialog" aria-modal="true">
+      <div className="auth-modal shadow-2xl border border-slate-100">
+        <button
+          className="modal-close p-1 hover:text-slate-900 transition-colors"
+          onClick={onClose}
+          aria-label="Close"
+        >
+          <Icon icon={X} size={20} />
+        </button>
+        <div className="modal-tabs">
+          <button
+            type="button"
+            className={!signup ? "active text-blue-600 font-bold" : "text-slate-400 font-semibold"}
+            onClick={() => setSignup(false)}
+          >
+            Login
+          </button>
+          <button
+            type="button"
+            className={signup ? "active text-blue-600 font-bold" : "text-slate-400 font-semibold"}
+            onClick={() => setSignup(true)}
+          >
+            Create Account
+          </button>
+        </div>
+        <h2 className="text-xl font-bold text-slate-900">
+          {signup ? "Create your Free Account" : "Welcome back to CUETPrep"}
+        </h2>
+        <p className="text-xs text-slate-500 mt-1 mb-5">
+          {signup
+            ? "Start with full-length mocks, PYQs and personalized diagnostics."
+            : "Enter your credentials to continue your practice session."}
+        </p>
+
+        <div className="space-y-3">
+          <button
+            onClick={() => handleRedirect(signup ? "/signup" : "/login")}
+            className="btn-hero-cta w-full justify-center text-sm py-3"
+          >
+            {signup ? "Continue to Sign Up" : "Continue to Log In"}{" "}
+            <Icon icon={ArrowRight} size={16} />
+          </button>
+
+          <div className="text-center text-xs text-slate-400 pt-2">
+            Instant access to NTA CBT Simulators
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LandingFooter({ onAuth }: { onAuth: (mode: "login" | "signup") => void }) {
+  return (
+    <footer className="site-footer">
+      <div className="footer-art" aria-hidden="true" />
+      <div className="footer-main">
+        <div className="footer-brand-column">
+          <Link className="footer-brand" href="#top" aria-label="CUETPrep home">
+            <span className="footer-brand-mark bg-blue-600 text-white font-extrabold shadow-sm">C</span>
+            <strong className="text-slate-900 text-xl font-bold">
+              CUET<span className="text-blue-600">Prep</span>
+            </strong>
+          </Link>
+          <p>
+            Know exactly where you stand. Practice smarter, build confidence, and get ready for your dream Delhi University college.
+          </p>
+          <div className="footer-socials" aria-label="Social media">
+            <a href="https://twitter.com" aria-label="CUETPrep on Twitter">
+              <span aria-hidden="true">X</span>
+            </a>
+            <a href="https://linkedin.com" aria-label="CUETPrep on LinkedIn">
+              <span aria-hidden="true">in</span>
+            </a>
+          </div>
+          <p className="footer-status">
+            <span /> All systems operational
+          </p>
+        </div>
+        <div className="footer-link-column">
+          <h2>Prepare</h2>
+          <Link href="#features">How it works</Link>
+          <Link href="#pricing">Plans &amp; pricing</Link>
+          <Link href="#faq">FAQs</Link>
+          <Link href="/dashboard/mocks">Mock tests</Link>
+        </div>
+        <div className="footer-link-column">
+          <h2>Explore</h2>
+          <Link href="/dashboard/pyqs">Previous Year Papers</Link>
+          <Link href="/dashboard/radar">Weakness Radar</Link>
+          <Link href="/dashboard/leaderboard">Rankings &amp; Percentiles</Link>
+          <Link href="/dashboard">Aspirant Command Hub</Link>
+        </div>
+        <div className="footer-link-column">
+          <h2>Support</h2>
+          <Link href="#faq">Help center</Link>
+          <a href="mailto:support@cuetprep.com">Contact us</a>
+          <Link href="#faq">Privacy policy</Link>
+          <Link href="#faq">Terms of service</Link>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <span>© 2026 CUETPrep. All rights reserved.</span>
+        <div>
+          <button onClick={() => onAuth("login")}>Log in</button>
+          <button className="footer-trial-link" onClick={() => onAuth("signup")}>
+            Start free trial <Icon icon={ArrowRight} size={15} />
+          </button>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default function HomePage() {
+  const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null);
+  const isClient = useIsClient();
+  const user = useTestStore((state) => state.user);
+  const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name && user?.id !== "guest");
+
+  return (
+    <>
+      <Hero onAuth={setAuthMode} isLoggedIn={isLoggedIn} />
+      <PricingSplit onAuth={setAuthMode} />
+      <ContentSections />
+      <AdmissionSection />
+      <FAQ />
+      <LandingFooter onAuth={setAuthMode} />
+      {authMode && (
+        <AuthModal mode={authMode} onClose={() => setAuthMode(null)} />
+      )}
+    </>
+  );
+}

@@ -198,11 +198,11 @@ export default function UpgradeButton({
 
   const variantStyles = {
     amber:
-      "bg-[#F59E0B] text-black font-black border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none",
+      "bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl shadow-xs hover:shadow active:scale-[0.98]",
     primary:
-      "bg-[#FF5C5C] text-white font-black border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none",
+      "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-xs hover:shadow active:scale-[0.98]",
     outline:
-      "bg-white text-black font-black border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:bg-[#FAF7EE] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none",
+      "bg-white hover:bg-slate-50 text-slate-700 font-semibold border border-slate-200 rounded-xl shadow-xs active:scale-[0.98]",
   };
 
   return (
@@ -211,7 +211,7 @@ export default function UpgradeButton({
         type="button"
         disabled={loading}
         onClick={handleCheckout}
-        className={`px-5 py-3 rounded-lg flex items-center justify-center gap-2 text-xs transition-all disabled:opacity-50 ${variantStyles[variant]} ${className}`}
+        className={`px-5 py-3 rounded-xl flex items-center justify-center gap-2 text-xs transition-all disabled:opacity-50 ${variantStyles[variant]} ${className}`}
       >
         {loading ? (
           <>
@@ -232,34 +232,34 @@ export default function UpgradeButton({
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-200"
         >
-          <div className="w-full max-w-md bg-white rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_#000] p-6 sm:p-8 text-center animate-in zoom-in-95 duration-200">
-            <div className="w-16 h-16 rounded-xl bg-[#10B981] text-black border-2 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 stroke-[2.5]" />
+          <div className="w-full max-w-md bg-white rounded-3xl border border-slate-200/80 shadow-2xl p-6 sm:p-8 text-center animate-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center mx-auto mb-4 shadow-xs">
+              <CheckCircle2 className="w-8 h-8 stroke-[2]" />
             </div>
 
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] text-black text-[11px] font-black border-2 border-black uppercase font-mono shadow-[1px_1px_0px_0px_#000]">
-              <ShieldCheck className="w-3.5 h-3.5 text-black" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200/60 uppercase shadow-xs">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
               Payment Confirmed
             </span>
 
-            <h3 className="text-2xl font-black text-black tracking-tight mt-3">
+            <h3 className="text-2xl font-bold text-slate-900 tracking-tight mt-3">
               Welcome to the AI Practice Pass!
             </h3>
 
-            <p className="text-xs text-black/70 mt-2 leading-relaxed font-semibold">
+            <p className="text-xs text-slate-500 mt-2 leading-relaxed font-normal">
               Your 1-year unlimited access to official NTA CBT mock simulators, instant NCERT mistake decrypter, and personalized repair quizzes is now active.
             </p>
 
             {/* Bonus Coins Callout */}
-            <div className="mt-5 p-4 rounded-xl bg-[#FEF3C7] border-2 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-center gap-3">
-              <Coins className="w-6 h-6 text-black shrink-0" />
+            <div className="mt-5 p-4 rounded-2xl bg-amber-50/70 border border-amber-200/60 flex items-center justify-center gap-3">
+              <Coins className="w-6 h-6 text-amber-600 shrink-0" />
               <div className="text-left">
-                <p className="text-xs font-black text-black">
+                <p className="text-xs font-semibold text-slate-900">
                   +500 Campus Coins Credited!
                 </p>
-                <p className="text-[10px] text-black/70 font-bold">
+                <p className="text-[10px] text-slate-500 font-normal">
                   Use them to unlock domain mock shifts and diagnostic reports.
                 </p>
               </div>
@@ -273,7 +273,7 @@ export default function UpgradeButton({
                   router.push("/dashboard");
                   router.refresh();
                 }}
-                className="w-full py-3 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white border-2 border-black font-black text-xs transition-all shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs transition-all shadow-xs hover:shadow active:scale-[0.98]"
               >
                 Go to Aspirant Dashboard
               </button>

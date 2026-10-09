@@ -624,10 +624,19 @@ export async function processQuestionsIntoCycles(
   currentCycleQuestionCount: number;
   justCompletedCycle: DiagnosticCycle | null;
 }> {
-  // Only qualifying answered attempts count
-  const qualifying = allAttempts.filter(
-    (q) => q.selectedOption !== null && q.selectedOption !== undefined
-  );
+  // Only unique qualifying answered attempts count towards diagnostic cycles
+  const seenCanonicalKeys = new Set<string>();
+  const qualifying: RecordedQuestionAttempt[] = [];
+
+  for (const q of allAttempts) {
+    if (q.selectedOption === null || q.selectedOption === undefined) continue;
+    const testKey = ((q as any).testId || (q as any).mockId || (q as any).sessionId || "mock").trim();
+    const qKey = (q.questionId || (q.questionNumber !== undefined ? `q_${q.questionNumber}` : "q")).trim();
+    const canonicalKey = `${testKey}:::${qKey}`;
+    if (seenCanonicalKeys.has(canonicalKey)) continue;
+    seenCanonicalKeys.add(canonicalKey);
+    qualifying.push(q);
+  }
 
   const totalQuestions = qualifying.length;
   const completedCycleCount = Math.floor(totalQuestions / CYCLE_WINDOW_SIZE);

@@ -202,22 +202,22 @@ export default function LiveDiagnosticDemo() {
   return (
     <div
       id="live-demo"
-      className="w-full max-w-4xl mx-auto rounded-2xl bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] sm:shadow-[8px_8px_0px_0px_#000] overflow-hidden text-left"
+      className="w-full max-w-4xl mx-auto rounded-3xl bg-white border border-slate-200/80 shadow-xs sm:shadow-md overflow-hidden text-left"
     >
       {/* Top Header Bar */}
-      <div className="bg-[#FAF7EE] p-3.5 sm:p-5 border-b-2 border-black flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-slate-50/70 p-3.5 sm:p-5 border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#FF5C5C] border border-black animate-pulse" />
-          <span className="text-xs font-black uppercase tracking-wider text-black font-mono">
+          <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-800">
             {t("liveDemoTitle", "Live Diagnostic Demo")}
           </span>
-          <span className="hidden sm:inline-block text-[10px] bg-black text-white font-bold px-2 py-0.5 rounded font-mono">
+          <span className="hidden sm:inline-block text-[10px] bg-slate-900 text-white font-medium px-2.5 py-0.5 rounded-full">
             {t("clickAnyOption", "Click Any Option Below")}
           </span>
         </div>
 
         {/* Stream Switcher Tabs: 3-column equal grid on phones, flex on larger screens */}
-        <div className="grid grid-cols-3 sm:flex items-center gap-1 sm:gap-1.5 p-1 bg-white border-2 border-black rounded-lg w-full sm:w-auto">
+        <div className="grid grid-cols-3 sm:flex items-center gap-1 sm:gap-1.5 p-1 bg-white border border-slate-200/80 rounded-xl w-full sm:w-auto shadow-xs">
           {DEMO_QUESTIONS.map((q) => {
             const isActive = q.streamId === selectedStream;
             const fullLabel =
@@ -238,10 +238,10 @@ export default function LiveDiagnosticDemo() {
                 key={q.streamId}
                 type="button"
                 onClick={() => handleSelectStream(q.streamId)}
-                className={`px-2 sm:px-3 py-1 text-xs font-black rounded transition-all text-center truncate ${
+                className={`px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-center truncate ${
                   isActive
-                    ? "bg-[#FF5C5C] text-white shadow-[1px_1px_0px_0px_#000]"
-                    : "text-black hover:bg-[#FAF7EE]"
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                 }`}
               >
                 <span className="hidden sm:inline">{fullLabel}</span>
@@ -256,17 +256,17 @@ export default function LiveDiagnosticDemo() {
       <div className="p-4 sm:p-7 space-y-4 sm:space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded bg-[#FEF3C7] border border-black font-black font-mono" translate="no">
+            <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-200/60 font-semibold text-indigo-700" translate="no">
               Q1 of 50
             </span>
-            <span className="font-bold text-black/70">{activeQuestion.chapter}</span>
+            <span className="font-medium text-slate-500">{activeQuestion.chapter}</span>
           </div>
-          <span className="font-mono font-black text-black bg-[#FAF7EE] px-2 py-0.5 rounded border border-black">
+          <span className="font-mono text-xs font-semibold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200/60">
             {t("markingInfo", "+5 / -1 Marking")}
           </span>
         </div>
 
-        <div className="text-base sm:text-lg font-black text-black leading-snug">
+        <div className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
           <LatexRenderer content={translateStem(activeQuestion.prompt)} />
         </div>
 
@@ -279,21 +279,21 @@ export default function LiveDiagnosticDemo() {
                 key={option.id}
                 type="button"
                 onClick={() => setSelectedOptionId(option.id)}
-                className={`w-full text-left p-3.5 sm:p-4 rounded-xl border-2 border-black font-bold text-xs sm:text-sm flex items-start gap-3 transition-all ${
+                className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border font-medium text-xs sm:text-sm flex items-start gap-3 transition-all ${
                   isSelected
                     ? option.isCorrect
-                      ? "bg-[#D1FAE5] shadow-[3px_3px_0px_0px_#000] -translate-y-0.5"
-                      : "bg-[#FEE2E2] shadow-[3px_3px_0px_0px_#000] -translate-y-0.5"
-                    : "bg-white hover:bg-[#FAF7EE] shadow-[2px_2px_0px_0px_#000] hover:-translate-y-0.5"
+                      ? "bg-emerald-50/80 border-emerald-300 text-slate-900 shadow-xs"
+                      : "bg-rose-50/80 border-rose-300 text-slate-900 shadow-xs"
+                    : "bg-white hover:bg-slate-50/80 border-slate-200/80 text-slate-800 shadow-xs"
                 }`}
               >
                 <span
-                  className={`w-6 h-6 rounded-md border-2 border-black flex items-center justify-center font-mono font-black text-xs shrink-0 ${
+                  className={`w-6 h-6 rounded-lg flex items-center justify-center font-mono font-bold text-xs shrink-0 ${
                     isSelected
                       ? option.isCorrect
-                        ? "bg-[#10B981] text-white"
-                        : "bg-[#FF5C5C] text-white"
-                      : "bg-[#FAF7EE] text-black"
+                        ? "bg-emerald-600 text-white"
+                        : "bg-rose-600 text-white"
+                      : "bg-slate-100 text-slate-600"
                   }`}
                   translate="no"
                 >
@@ -301,16 +301,16 @@ export default function LiveDiagnosticDemo() {
                 </span>
 
                 <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div className="text-black flex-1">
+                  <div className="text-slate-800 flex-1 font-medium">
                     <LatexRenderer content={translateStem(option.text)} inline />
                   </div>
                   {option.slipPercentage && !option.isCorrect && (
-                    <span className="text-[10px] font-mono font-black text-[#DC2626] bg-white px-2 py-0.5 rounded border border-black shrink-0 self-start sm:self-auto shadow-[1px_1px_0px_0px_#000]">
+                    <span className="text-[10px] font-mono font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200/80 shrink-0 self-start sm:self-auto shadow-xs">
                       {option.slipPercentage}% {t("pickThis", "pick this")}
                     </span>
                   )}
                   {option.isCorrect && (
-                    <span className="text-[10px] font-mono font-black text-[#059669] bg-white px-2 py-0.5 rounded border border-black shrink-0 self-start sm:self-auto shadow-[1px_1px_0px_0px_#000]">
+                    <span className="text-[10px] font-mono font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/80 shrink-0 self-start sm:self-auto shadow-xs">
                       {t("officialKey", "Official NTA Key")}
                     </span>
                   )}
@@ -323,51 +323,51 @@ export default function LiveDiagnosticDemo() {
         {/* Real-Time AI Distractor Breakdown Drawer */}
         {activeBreakdown && (
           <div
-            className={`mt-6 p-5 sm:p-6 rounded-xl border-2 border-black animate-in fade-in zoom-in-95 duration-200 ${
+            className={`mt-6 p-5 sm:p-6 rounded-2xl border animate-in fade-in zoom-in-95 duration-200 shadow-xs ${
               activeBreakdown.isCorrect
-                ? "bg-[#D1FAE5] shadow-[4px_4px_0px_0px_#000]"
-                : "bg-[#FEF3C7] shadow-[4px_4px_0px_0px_#000]"
+                ? "bg-emerald-50/60 border-emerald-200/80"
+                : "bg-amber-50/60 border-amber-200/80"
             }`}
           >
-            <div className="flex items-start justify-between gap-3 pb-3 border-b-2 border-black">
-              <div className="flex items-center gap-2">
+            <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-200/60">
+              <div className="flex items-center gap-2.5">
                 {activeBreakdown.isCorrect ? (
-                  <CheckCircle2 className="w-5 h-5 text-[#059669] stroke-[2.5]" />
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 stroke-[2]" />
                 ) : (
-                  <Brain className="w-5 h-5 text-[#DC2626] stroke-[2.5]" />
+                  <Brain className="w-5 h-5 text-rose-600 stroke-[2]" />
                 )}
                 <div>
-                  <h4 className="text-sm font-black text-black">
+                  <h4 className="text-sm font-bold text-slate-900">
                     {activeBreakdown.isCorrect
                       ? t("correct", "AI Diagnosis: Correct Conceptual Execution (+5 Marks)")
                       : `${t("trapOptionAnalysisText", "NTA Trap Breakdown")}: Option ${activeBreakdown.id} (-1 Mark)`}
                   </h4>
                   {activeBreakdown.trapType && (
-                    <p className="text-[11px] font-bold text-[#DC2626]">
+                    <p className="text-[11px] font-semibold text-rose-600">
                       {t("radar", "Trap Category")}: {activeBreakdown.trapType}
                     </p>
                   )}
                 </div>
               </div>
 
-              <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-white border border-black text-black shrink-0 shadow-[1px_1px_0px_0px_#000]">
+              <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700 shrink-0 shadow-xs">
                 {t("ncertVerified", "NCERT Verified")}
               </span>
             </div>
 
-            <div className="text-xs sm:text-sm text-black/90 font-medium leading-relaxed mt-3">
+            <div className="text-xs sm:text-sm text-slate-700 font-normal leading-relaxed mt-3">
               <LatexRenderer content={activeBreakdown.explanation} />
             </div>
 
-            <div className="mt-4 pt-3 border-t-2 border-black/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-black/70">
-              <span className="font-bold flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5 text-black" />
-                <span>{t("ncertCitationText", "NCERT Reference")}: <strong>{activeBreakdown.ncertReference}</strong></span>
+            <div className="mt-4 pt-3 border-t border-slate-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-slate-500">
+              <span className="font-medium flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-slate-400" />
+                <span>{t("ncertCitationText", "NCERT Reference")}: <strong className="text-slate-700 font-semibold">{activeBreakdown.ncertReference}</strong></span>
               </span>
 
               <Link
                 href="/dashboard/mocks"
-                className="inline-flex items-center gap-1.5 font-black text-black hover:underline"
+                className="inline-flex items-center gap-1.5 font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
               >
                 <span>{t("practiceMore", "Practice 49 More Questions Like This")}</span>
                 <ArrowRight className="w-3.5 h-3.5" />

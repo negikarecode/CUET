@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-slate-200;
+  }
+  body {
+    @apply bg-[#F8FAFC] text-slate-800 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom subtle transitions & effects */
+.transition-smooth {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Interactive Action Hover Lighting (matching reference image) */
+.action-glow {
+  transition: all 0.2s ease-in-out;
+}
+.action-glow:hover {
+  background-color: #E0F2FE !important;
+  color: #0284C7 !important;
+  box-shadow: 0 0 8px -2px rgba(56, 189, 248, 0.2) !important;
+  outline: 1px solid rgba(125, 211, 252, 0.3) !important;
+  outline-offset: 1px;
+}
+
+/* Custom scrollbar for clean aesthetics */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

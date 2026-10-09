@@ -107,16 +107,9 @@ export default function CBTResultView() {
 
     currentAttemptRecordRef.current = attemptRecord;
 
-    // If for any reason attempt was not recorded in testAttempts, record once safely
-    if (!existingAttempt) {
+    // Safety fallback: only if the store completely missed it, record locally once without background duplicate POST
+    if (!existingAttempt && !testAttempts.some((a) => a.testId === currentTId)) {
       recordTestAttempt(attemptRecord);
-      fetch("/api/test/record-attempt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(attemptRecord),
-      }).catch((err) => {
-        console.warn("Background attempt database sync notice:", err);
-      });
     }
 
     const xp = calculateXP(
@@ -227,31 +220,29 @@ export default function CBTResultView() {
   if (!submittedScore || (questions.length > 0 && !questions[0]?.correctOptionId)) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-12 h-12 rounded-xl bg-[#FAF7EE] border-2 border-black flex items-center justify-center mb-4 shadow-[3px_3px_0px_0px_#000]">
-          <Loader2 className="w-6 h-6 animate-spin text-black stroke-[2.5]" />
+        <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center mb-4 shadow-xs">
+          <Loader2 className="w-6 h-6 animate-spin stroke-[2.5]" />
         </div>
-        <h3 className="text-base font-black text-black">
+        <h3 className="text-base font-bold text-slate-900 tracking-tight">
           Compiling Official CBT Scorecard...
         </h3>
-        <p className="text-xs text-black/60 font-semibold mt-1">
+        <p className="text-xs text-slate-500 font-medium mt-1">
           Validating answer keys and generating NCERT performance diagnostics.
         </p>
       </div>
     );
   }
 
-
-
   if (!deterministicReport) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-12 h-12 rounded-xl bg-[#FAF7EE] border-2 border-black flex items-center justify-center mb-4 shadow-[3px_3px_0px_0px_#000]">
-          <Loader2 className="w-6 h-6 animate-spin text-black stroke-[2.5]" />
+        <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center mb-4 shadow-xs">
+          <Loader2 className="w-6 h-6 animate-spin stroke-[2.5]" />
         </div>
-        <h3 className="text-base font-black text-black">
+        <h3 className="text-base font-bold text-slate-900 tracking-tight">
           Generating Unified Post-Mock Analysis...
         </h3>
-        <p className="text-xs text-black/60 font-semibold mt-1">
+        <p className="text-xs text-slate-500 font-medium mt-1">
           Compiling official scorecard, chapter analytics, and grounded diagnostic verification.
         </p>
       </div>

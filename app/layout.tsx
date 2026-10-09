@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FF5C5C",
+  themeColor: "#4F46E5",
   width: "device-width",
   initialScale: 1,
 };
@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full scroll-smooth overflow-x-hidden">
-      <body className="flex min-h-full flex-col bg-[#FAF7EE] font-sans text-black antialiased selection:bg-[#FECDD3] selection:text-black overflow-x-hidden w-full max-w-full">
+      <body className="flex min-h-full flex-col bg-white font-sans text-slate-900 antialiased selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden w-full max-w-full">
         <LanguageProvider>
           <GoogleTranslateSync />
           <Navbar />

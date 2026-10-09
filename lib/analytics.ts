@@ -234,6 +234,24 @@ export function stringToUuid(str: string): string {
 }
 
 /**
+ * Generates a stable canonical attempt ID for question telemetry deduplication:
+ * Format: userId:::testId:::questionId
+ * An invariant is that the exact same question in the exact same completed mock test
+ * always resolves to the identical canonical attempt key.
+ */
+export function getCanonicalAttemptId(
+  userId?: string,
+  testId?: string,
+  questionId?: string,
+  questionNumber?: number
+): string {
+  const u = (userId || "user").trim();
+  const t = (testId || "test").trim();
+  const q = (questionId || (questionNumber !== undefined ? `q_${questionNumber}` : "q")).trim();
+  return `${u}:::${t}:::${q}`;
+}
+
+/**
  * Aggregates all recorded test attempts into actionable insights:
  * - Questions solved & Diagnostic accuracy
  * - Weakness radar (critical & polish topics)
@@ -269,50 +287,69 @@ export function computeAnalyticsFromAttempts(
     };
   }
 
-  let totalQuestionsAttempted = 0;
-  let totalCorrectAnswers = 0;
-  let totalIncorrectAnswers = 0;
+  // 1. Deduplicate test attempts by testId (or id if testId not present) so re-renders or multiple submissions cannot duplicate attempts
+  const deduplicatedAttemptsMap = new Map<string, RecordedTestAttempt>();
+  for (const a of attempts) {
+    const key = (a.testId ? a.testId.trim() : (a.id || "").trim());
+    if (!key) continue;
+    // Prefer attempt with questions data or highest answered count
+    const existing = deduplicatedAttemptsMap.get(key);
+    if (!existing) {
+      deduplicatedAttemptsMap.set(key, a);
+    } else {
+      const existingQCount = existing.questions?.filter((q) => q.selectedOption !== null && q.selectedOption !== undefined).length || 0;
+      const newQCount = a.questions?.filter((q) => q.selectedOption !== null && q.selectedOption !== undefined).length || 0;
+      if (newQCount >= existingQCount) {
+        deduplicatedAttemptsMap.set(key, a);
+      }
+    }
+  }
+
+  const cleanAttempts = Array.from(deduplicatedAttemptsMap.values());
+  const completedTestsCount = cleanAttempts.length;
+
+  // 2. Canonical question-level deduplication:
+  // Key: testId:::questionId (or testId:::questionNumber)
+  const canonicalQuestionsMap = new Map<string, { q: import("@/types").RecordedQuestionAttempt; attempt: RecordedTestAttempt }>();
   let totalTimeSpentSeconds = 0;
 
-  attempts.forEach((a) => {
-    let aAttempted = a.attemptedCount ?? 0;
-    let aCorrect = a.correctCount ?? 0;
+  cleanAttempts.forEach((attempt) => {
+    totalTimeSpentSeconds += attempt.timeTakenSeconds ?? 0;
+    const testKey = (attempt.testId || attempt.id || "test").trim();
 
-    // Self-healing: if correctCount was saved as 0 but accuracyPercentage > 0
-    if (aCorrect === 0 && (a.accuracyPercentage || 0) > 0 && aAttempted > 0) {
-      aCorrect = Math.round(((a.accuracyPercentage || 0) * aAttempted) / 100);
-    }
+    (attempt.questions || []).forEach((q, idx) => {
+      // Only count questions that the user actually answered
+      if (q.selectedOption === null || q.selectedOption === undefined) return;
 
-    // Self-healing: if individual question attempts exist, check matching answers
-    if (Array.isArray(a.questions) && a.questions.length > 0) {
-      let qAttempted = 0;
-      let qCorrect = 0;
-      a.questions.forEach((q) => {
-        if (q.selectedOption !== null && q.selectedOption !== undefined) {
-          qAttempted += 1;
-          const trueOption =
-            q.correctOption ||
-            (q as any).correctOptionId ||
-            q.options?.find((o: any) => o.isCorrect === true)?.id;
-          if (
-            q.isCorrect === true ||
-            (trueOption && q.selectedOption === trueOption)
-          ) {
-            qCorrect += 1;
-            q.isCorrect = true;
-            if (trueOption) q.correctOption = trueOption;
-          }
-        }
-      });
-      if (qCorrect > aCorrect) aCorrect = qCorrect;
-      if (qAttempted > aAttempted) aAttempted = qAttempted;
-    }
+      const qIdentifier = (q.questionId || (q.questionNumber ? `q_${q.questionNumber}` : `q_${idx + 1}`)).trim();
+      const canonicalKey = `${testKey}:::${qIdentifier}`;
 
-    totalQuestionsAttempted += aAttempted;
-    totalCorrectAnswers += aCorrect;
-    totalIncorrectAnswers += Math.max(0, aAttempted - aCorrect);
-    totalTimeSpentSeconds += a.timeTakenSeconds ?? 0;
+      // Check correctness self-healing
+      const trueOption =
+        q.correctOption ||
+        (q as any).correctOptionId ||
+        q.options?.find((o: any) => o.isCorrect === true)?.id;
+      const isCorrect = Boolean(
+        q.isCorrect === true ||
+        (trueOption && q.selectedOption === trueOption)
+      );
+
+      const verifiedQ = {
+        ...q,
+        isCorrect,
+        correctOption: trueOption || q.correctOption,
+      };
+
+      if (!canonicalQuestionsMap.has(canonicalKey)) {
+        canonicalQuestionsMap.set(canonicalKey, { q: verifiedQ, attempt });
+      }
+    });
   });
+
+  const canonicalEntries = Array.from(canonicalQuestionsMap.values());
+  const totalQuestionsAttempted = canonicalEntries.length;
+  const totalCorrectAnswers = canonicalEntries.filter(({ q }) => q.isCorrect === true).length;
+  const totalIncorrectAnswers = Math.max(0, totalQuestionsAttempted - totalCorrectAnswers);
 
   const overallAccuracyPercentage =
     totalQuestionsAttempted > 0
@@ -348,47 +385,41 @@ export function computeAnalyticsFromAttempts(
   });
   const testIdsBySubject = new Map<string, Set<string>>();
 
-  attempts.forEach((attempt) => {
-    let hasAttemptQuestions = false;
+  // Populate subject calibration & chapters strictly from canonical question entries
+  canonicalEntries.forEach(({ q, attempt }) => {
+    // Subject Calibration tally
+    const qSubRaw = q.subject || attempt.subject || "Physics";
+    const subInfo = normalizeSubject(qSubRaw);
+    let subCal = subjectMap.get(subInfo.key);
+    if (!subCal) {
+      subCal = {
+        subject: subInfo.name,
+        subjectKey: subInfo.key,
+        icon: subInfo.icon,
+        category: subInfo.category,
+        totalAttempted: 0,
+        totalCorrect: 0,
+        totalIncorrect: 0,
+        accuracyPercentage: 0,
+        testsCount: 0,
+        isUnlocked: false,
+        attemptsToUnlock: 150,
+        unlockProgress: 0,
+        mockUrl: subInfo.mockUrl,
+      };
+      subjectMap.set(subInfo.key, subCal);
+    }
+    subCal.totalAttempted += 1;
+    if (q.isCorrect === true) {
+      subCal.totalCorrect += 1;
+    } else {
+      subCal.totalIncorrect += 1;
+    }
 
-    (attempt.questions || []).forEach((q) => {
-      // Only count questions that the user actually attempted (selectedOption is not null)
-      if (q.selectedOption === null || q.selectedOption === undefined) return;
-      hasAttemptQuestions = true;
-
-      // Subject Calibration tally
-      const qSubRaw = q.subject || attempt.subject || "Physics";
-      const subInfo = normalizeSubject(qSubRaw);
-      let subCal = subjectMap.get(subInfo.key);
-      if (!subCal) {
-        subCal = {
-          subject: subInfo.name,
-          subjectKey: subInfo.key,
-          icon: subInfo.icon,
-          category: subInfo.category,
-          totalAttempted: 0,
-          totalCorrect: 0,
-          totalIncorrect: 0,
-          accuracyPercentage: 0,
-          testsCount: 0,
-          isUnlocked: false,
-          attemptsToUnlock: 150,
-          unlockProgress: 0,
-          mockUrl: subInfo.mockUrl,
-        };
-        subjectMap.set(subInfo.key, subCal);
-      }
-      subCal.totalAttempted += 1;
-      if (q.isCorrect === true) {
-        subCal.totalCorrect += 1;
-      } else if (q.isCorrect === false) {
-        subCal.totalIncorrect += 1;
-      }
-
-      if (!testIdsBySubject.has(subInfo.key)) {
-        testIdsBySubject.set(subInfo.key, new Set());
-      }
-      testIdsBySubject.get(subInfo.key)!.add(attempt.testId || attempt.id);
+    if (!testIdsBySubject.has(subInfo.key)) {
+      testIdsBySubject.set(subInfo.key, new Set());
+    }
+    testIdsBySubject.get(subInfo.key)!.add(attempt.testId || attempt.id);
 
       const subject = q.subject || attempt.subject || "Physics";
       let rawChapter = (q.chapter || "Domain Core").trim();
@@ -471,39 +502,6 @@ export function computeAnalyticsFromAttempts(
           microTopic,
         });
       }
-    });
-
-    // Fallback if attempt recorded without detailed questions array
-    if (!hasAttemptQuestions && (attempt.attemptedCount || 0) > 0) {
-      const subInfo = normalizeSubject(attempt.subject || "Physics");
-      let subCal = subjectMap.get(subInfo.key);
-      if (!subCal) {
-        subCal = {
-          subject: subInfo.name,
-          subjectKey: subInfo.key,
-          icon: subInfo.icon,
-          category: subInfo.category,
-          totalAttempted: 0,
-          totalCorrect: 0,
-          totalIncorrect: 0,
-          accuracyPercentage: 0,
-          testsCount: 0,
-          isUnlocked: false,
-          attemptsToUnlock: 150,
-          unlockProgress: 0,
-          mockUrl: subInfo.mockUrl,
-        };
-        subjectMap.set(subInfo.key, subCal);
-      }
-      subCal.totalAttempted += attempt.attemptedCount;
-      subCal.totalCorrect += attempt.correctCount || 0;
-      subCal.totalIncorrect += attempt.incorrectCount || 0;
-
-      if (!testIdsBySubject.has(subInfo.key)) {
-        testIdsBySubject.set(subInfo.key, new Set());
-      }
-      testIdsBySubject.get(subInfo.key)!.add(attempt.testId || attempt.id);
-    }
   });
 
   // Finalize subject-wise calibration calculations
@@ -956,7 +954,7 @@ export function computeAnalyticsFromAttempts(
     totalIncorrectAnswers,
     totalTimeSpentSeconds,
     overallAccuracyPercentage,
-    completedTestsCount: attempts.length,
+    completedTestsCount,
     weaknessRadar,
     strengthList,
     allTopics,

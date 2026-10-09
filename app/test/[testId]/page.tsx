@@ -30,32 +30,32 @@ export default function TestPage({ params, searchParams }: PageProps) {
   if (questions.length === 0) {
     const isMock = params.testId.toLowerCase().includes("mock");
     return (
-      <div className="min-h-screen bg-[#FAF7EE] flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-xl border-2 border-black p-8 shadow-[4px_4px_0px_0px_#000] text-center space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#FEF3C7] border-2 border-black flex items-center justify-center mx-auto shadow-[3px_3px_0px_0px_#000]">
-            <RotateCcw className="w-7 h-7 text-black stroke-[2.5]" />
+      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-3xl border border-slate-100 p-8 shadow-sm text-center space-y-5">
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center mx-auto text-amber-600 shadow-xs">
+            <RotateCcw className="w-7 h-7 stroke-[2.5]" />
           </div>
           <div className="space-y-2">
-            <span className="text-[11px] font-black uppercase bg-[#FEF3C7] px-2.5 py-1 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
+            <span className="text-[11px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 px-3 py-1 rounded-full border border-amber-200/60 inline-block">
               Test In Preparation
             </span>
-            <h2 className="text-xl font-black text-black">
+            <h2 className="text-xl font-bold text-slate-900 tracking-tight">
               {testMeta?.title || "Exam Paper Under Reconstruction"}
             </h2>
-            <p className="text-xs text-black/70 font-semibold leading-relaxed">
+            <p className="text-xs text-slate-500 font-medium leading-relaxed">
               This paper is currently being remade and recalibrated with official CUET NTA past year papers according to the latest 50 compulsory questions pattern.
             </p>
           </div>
-          <div className="pt-2 flex flex-col gap-2">
+          <div className="pt-2 flex flex-col gap-2.5">
             <Link
               href={isMock ? "/dashboard/mocks" : "/dashboard/pyqs"}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] transition-all"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all"
             >
               <span>{isMock ? "Back to All Mocks" : "Back to All PYQ Papers"}</span>
             </Link>
             <Link
               href="/dashboard"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:bg-white transition-all"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-50 text-slate-700 hover:bg-slate-100 font-semibold text-xs border border-slate-200 transition-all"
             >
               <span>Go to Command Dashboard</span>
             </Link>

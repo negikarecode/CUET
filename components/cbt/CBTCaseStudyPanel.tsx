@@ -66,31 +66,31 @@ export default function CBTCaseStudyPanel({
 
   if (!parsed.hasPassage) {
     return (
-      <div className="text-base sm:text-lg font-bold text-black leading-relaxed font-sans whitespace-pre-line">
+      <div className="text-base sm:text-lg font-medium text-slate-900 leading-relaxed font-sans whitespace-pre-line">
         <MathRenderer text={prompt} />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Case Study / Reading Passage Container */}
-      <div className="border-2 border-black rounded-xl bg-[#FFFDF8] shadow-[3px_3px_0px_0px_#000] overflow-hidden">
+      <div className="border border-slate-200/80 rounded-2xl bg-slate-50/50 shadow-xs overflow-hidden">
         {/* Header Bar with Toggle */}
         <div
           onClick={() => setIsMobileExpanded((prev) => !prev)}
-          className="bg-[#FFE5B4] px-4 py-3 border-b-2 border-black flex items-center justify-between cursor-pointer select-none"
+          className="bg-amber-50/80 px-4 py-3.5 border-b border-amber-100 flex items-center justify-between cursor-pointer select-none"
         >
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-black stroke-[2.5]" />
-            <span className="text-xs sm:text-sm font-black text-black uppercase tracking-wide">
+          <div className="flex items-center gap-2.5">
+            <BookOpen className="w-4 h-4 text-amber-700 stroke-[2.5]" />
+            <span className="text-xs sm:text-sm font-bold text-amber-900 uppercase tracking-wide">
               {parsed.passageTitle || "Case Study / Comprehension Passage"}
             </span>
           </div>
 
           <button
             type="button"
-            className="flex items-center gap-1 text-xs font-black text-black bg-white px-2 py-1 rounded border border-black shadow-[1px_1px_0px_0px_#000]"
+            className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-xs cursor-pointer"
           >
             <span>{isMobileExpanded ? "Collapse" : "Expand"}</span>
             {isMobileExpanded ? (
@@ -103,18 +103,18 @@ export default function CBTCaseStudyPanel({
 
         {/* Passage Content Body */}
         {isMobileExpanded && (
-          <div className="p-4 sm:p-6 max-h-[300px] sm:max-h-[360px] overflow-y-auto text-sm sm:text-base leading-relaxed text-slate-800 font-serif border-t border-black/10 bg-white/60">
+          <div className="p-5 sm:p-6 max-h-[300px] sm:max-h-[360px] overflow-y-auto text-sm sm:text-base leading-relaxed text-slate-700 font-sans border-t border-slate-100 bg-white/80">
             <MathRenderer text={parsed.passageText} />
           </div>
         )}
       </div>
 
       {/* Specific Question Stem for Current Question */}
-      <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-white shadow-[2px_2px_0px_0px_#000]">
-        <div className="inline-block px-2 py-0.5 mb-2 rounded bg-black text-white text-[10px] font-black tracking-wider uppercase">
+      <div className="p-5 sm:p-6 rounded-2xl border border-slate-200/80 bg-white shadow-xs space-y-2">
+        <div className="inline-block px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 text-[10px] font-bold tracking-wider uppercase">
           Question {questionNumber} Target
         </div>
-        <div className="text-base sm:text-lg font-bold text-black leading-relaxed font-sans whitespace-pre-line">
+        <div className="text-base sm:text-lg font-medium text-slate-900 leading-relaxed font-sans whitespace-pre-line">
           <MathRenderer text={parsed.questionStem} />
         </div>
       </div>

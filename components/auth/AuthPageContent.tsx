@@ -308,48 +308,48 @@ export default function AuthPageContent({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7EE] flex flex-col justify-center py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
-      {/* Background Grid Pattern */}
-      <div className="absolute inset-0 academic-grid-pattern opacity-30 pointer-events-none" />
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-center py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
+      {/* Background Subtle Gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))] pointer-events-none" />
 
       <div className="relative max-w-xl w-full mx-auto space-y-6">
         {/* Navigation & Header */}
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-black text-black bg-white hover:bg-[#FAF7EE] px-3 py-1.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-white hover:bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 shadow-2xs transition-all"
           >
-            <ArrowLeft className="w-3.5 h-3.5 stroke-[2.5]" />
+            <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Home</span>
           </Link>
 
-          <div className="flex items-center gap-1 text-[11px] font-black text-black/70 bg-[#FEF3C7] px-2.5 py-1 rounded-full border border-black shadow-[1px_1px_0px_0px_#000]">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/60 shadow-2xs">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
             <span>NTA CBT Verification</span>
           </div>
         </div>
 
         {/* Main Card */}
-        <div className="bg-white rounded-2xl border-2 border-black shadow-[6px_6px_0px_0px_#000] overflow-hidden">
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-xl overflow-hidden">
           {/* Top Banner */}
-          <div className="bg-[#FAF7EE] p-5 sm:p-6 border-b-2 border-black flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="relative w-11 h-11 rounded-xl bg-[#FF5C5C] text-white border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000] shrink-0">
-                <GraduationCap className="w-6 h-6 stroke-[2.5]" />
-                <Sparkles className="w-3 h-3 text-[#F59E0B] absolute -top-1 -right-1 fill-[#F59E0B]" />
+          <div className="bg-slate-50/60 p-6 border-b border-slate-100 flex items-center justify-between">
+            <div className="flex items-center gap-3.5">
+              <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm shadow-blue-500/20 shrink-0">
+                <GraduationCap className="w-6 h-6 stroke-[2.2]" />
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 absolute -top-1 -right-1 fill-amber-300" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-base sm:text-lg font-black text-black tracking-tight">
+                  <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                     {mode === "signup" ? "Join CUET AI-Prep" : "Candidate Sign In"}
                   </h1>
                   {mode === "signup" && (
-                    <span className="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-[#FEF3C7] border border-black text-black">
+                    <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200/60 text-blue-700">
                       Step {step} of 2
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-black/60 font-semibold mt-0.5">
+                <p className="text-xs text-slate-500 font-medium mt-0.5">
                   Sign in or create your profile to access your Student Dashboard
                 </p>
               </div>
@@ -357,7 +357,7 @@ export default function AuthPageContent({
           </div>
 
           {/* Mode Switcher Tabs */}
-          <div className="grid grid-cols-2 border-b-2 border-black bg-[#FAF7EE] text-xs font-black">
+          <div className="grid grid-cols-2 border-b border-slate-100 bg-slate-50/30 text-xs font-semibold">
             <button
               type="button"
               onClick={() => {
@@ -365,10 +365,10 @@ export default function AuthPageContent({
                 setErrorMessage(null);
                 setInfoMessage(null);
               }}
-              className={`py-3 text-center border-r-2 border-black transition-all cursor-pointer ${
+              className={`py-3.5 text-center transition-all cursor-pointer ${
                 mode === "signup"
-                  ? "bg-white text-black font-black underline decoration-[#FF5C5C] decoration-2 underline-offset-4"
-                  : "text-black/60 hover:bg-white/50"
+                  ? "bg-white text-blue-600 font-bold border-b-2 border-blue-600 shadow-2xs"
+                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
               }`}
             >
               Join Now (New Candidate)
@@ -380,10 +380,10 @@ export default function AuthPageContent({
                 setErrorMessage(null);
                 setInfoMessage(null);
               }}
-              className={`py-3 text-center transition-all cursor-pointer ${
+              className={`py-3.5 text-center transition-all cursor-pointer ${
                 mode === "login"
-                  ? "bg-white text-black font-black underline decoration-[#FF5C5C] decoration-2 underline-offset-4"
-                  : "text-black/60 hover:bg-white/50"
+                  ? "bg-white text-blue-600 font-bold border-b-2 border-blue-600 shadow-2xs"
+                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
               }`}
             >
               Sign In (Existing Candidate)
@@ -392,28 +392,28 @@ export default function AuthPageContent({
 
           {/* Error / Alert Banner */}
           {errorMessage && (
-            <div className="mx-6 mt-5 p-3.5 rounded-xl bg-[#FEE2E2] border-2 border-black text-[#DC2626] text-xs font-bold flex items-start gap-2.5 shadow-[2px_2px_0px_0px_#000]">
-              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 stroke-[2.5]" />
+            <div className="mx-6 mt-5 p-3.5 rounded-2xl bg-rose-50 border border-rose-200/60 text-rose-700 text-xs font-medium flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <p className="flex-1">{errorMessage}</p>
             </div>
           )}
 
           {infoMessage && (
-            <div className="mx-6 mt-5 p-3.5 rounded-xl bg-[#D1FAE5] border-2 border-black text-[#059669] text-xs font-bold flex items-start gap-2.5 shadow-[2px_2px_0px_0px_#000]">
-              <Check className="w-4 h-4 shrink-0 mt-0.5 stroke-[2.5]" />
+            <div className="mx-6 mt-5 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200/60 text-emerald-800 text-xs font-medium flex items-start gap-2.5">
+              <Check className="w-4 h-4 shrink-0 mt-0.5" />
               <p className="flex-1">{infoMessage}</p>
             </div>
           )}
 
           {/* Card Body */}
-          <div className="p-6 sm:p-8 space-y-6 text-black">
+          <div className="p-6 sm:p-8 space-y-6 text-slate-800">
             {mode === "login" ? (
               /* ======================================================= */
               /* LOGIN FORM                                              */
               /* ======================================================= */
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                     <Mail className="w-3.5 h-3.5" />
                     <span>Registered Email Address</span>
                   </label>
@@ -423,12 +423,12 @@ export default function AuthPageContent({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="aspirant@example.com"
-                    className="w-full px-3.5 py-2.5 rounded-lg border-2 border-black font-bold text-sm bg-[#FAF7EE] focus:bg-white focus:outline-none shadow-[2px_2px_0px_0px_#000]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/70 font-medium text-sm bg-slate-50 hover:bg-slate-100/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                     <Lock className="w-3.5 h-3.5" />
                     <span>Password</span>
                   </label>
@@ -439,18 +439,18 @@ export default function AuthPageContent({
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Enter your password"
-                      className="w-full pl-3.5 pr-11 py-2.5 rounded-lg border-2 border-black font-bold text-sm bg-[#FAF7EE] focus:bg-white focus:outline-none shadow-[2px_2px_0px_0px_#000]"
+                      className="w-full pl-3.5 pr-11 py-2.5 rounded-xl border border-slate-200/70 font-medium text-sm bg-slate-50 hover:bg-slate-100/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-2.5 p-1 rounded hover:bg-black/10 text-black/70 hover:text-black transition-all cursor-pointer"
+                      className="absolute right-2.5 p-1 rounded-lg text-slate-400 hover:text-slate-600 transition-all cursor-pointer"
                       aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? (
-                        <EyeOff className="w-4 h-4 stroke-[2.5]" />
+                        <EyeOff className="w-4 h-4" />
                       ) : (
-                        <Eye className="w-4 h-4 stroke-[2.5]" />
+                        <Eye className="w-4 h-4" />
                       )}
                     </button>
                   </div>
@@ -470,7 +470,7 @@ export default function AuthPageContent({
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full py-3.5 px-4 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs sm:text-sm border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     {isLoading ? (
                       <>
@@ -480,7 +480,7 @@ export default function AuthPageContent({
                     ) : (
                       <>
                         <span>Sign In & Open Dashboard</span>
-                        <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                        <ArrowRight className="w-4 h-4 stroke-[2.2]" />
                       </>
                     )}
                   </button>
@@ -495,7 +495,7 @@ export default function AuthPageContent({
                   /* STEP 1: Basic Identity & Credentials */
                   <div className="space-y-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                         <User className="w-3.5 h-3.5" />
                         <span>Full Legal Name</span>
                       </label>
@@ -505,12 +505,12 @@ export default function AuthPageContent({
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="e.g. Aarav Sharma"
-                        className="w-full px-3.5 py-2.5 rounded-lg border-2 border-black font-bold text-sm bg-[#FAF7EE] focus:bg-white focus:outline-none shadow-[2px_2px_0px_0px_#000]"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/70 font-medium text-sm bg-slate-50 hover:bg-slate-100/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                         <Mail className="w-3.5 h-3.5" />
                         <span>Email Address</span>
                       </label>
@@ -520,12 +520,12 @@ export default function AuthPageContent({
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="aspirant@example.com"
-                        className="w-full px-3.5 py-2.5 rounded-lg border-2 border-black font-bold text-sm bg-[#FAF7EE] focus:bg-white focus:outline-none shadow-[2px_2px_0px_0px_#000]"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/70 font-medium text-sm bg-slate-50 hover:bg-slate-100/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                         <Lock className="w-3.5 h-3.5" />
                         <span>Password (min. 6 characters)</span>
                       </label>
@@ -537,18 +537,18 @@ export default function AuthPageContent({
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="Create a secure password"
-                          className="w-full pl-3.5 pr-11 py-2.5 rounded-lg border-2 border-black font-bold text-sm bg-[#FAF7EE] focus:bg-white focus:outline-none shadow-[2px_2px_0px_0px_#000]"
+                          className="w-full pl-3.5 pr-11 py-2.5 rounded-xl border border-slate-200/70 font-medium text-sm bg-slate-50 hover:bg-slate-100/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-2.5 p-1 rounded hover:bg-black/10 text-black/70 hover:text-black transition-all cursor-pointer"
+                          className="absolute right-2.5 p-1 rounded-lg text-slate-400 hover:text-slate-600 transition-all cursor-pointer"
                           aria-label={showPassword ? "Hide password" : "Show password"}
                         >
                           {showPassword ? (
-                            <EyeOff className="w-4 h-4 stroke-[2.5]" />
+                            <EyeOff className="w-4 h-4" />
                           ) : (
-                            <Eye className="w-4 h-4 stroke-[2.5]" />
+                            <Eye className="w-4 h-4" />
                           )}
                         </button>
                       </div>
@@ -573,10 +573,10 @@ export default function AuthPageContent({
                           setErrorMessage(null);
                           setStep(2);
                         }}
-                        className="w-full py-3.5 px-4 rounded-xl bg-[#10B981] hover:bg-[#059669] text-black font-black text-xs sm:text-sm border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
+                        className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
                       >
                         <span>Continue to Stream & Target Selection</span>
-                        <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                        <ArrowRight className="w-4 h-4 stroke-[2.2]" />
                       </button>
                     </div>
                   </div>
@@ -585,7 +585,7 @@ export default function AuthPageContent({
                   <div className="space-y-4">
                     {/* Stream Selection */}
                     <div className="space-y-1.5">
-                      <label className="text-xs font-black uppercase tracking-wider text-black">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
                         Choose Your Academic Stream
                       </label>
                       <div className="grid grid-cols-3 gap-2">
@@ -594,10 +594,10 @@ export default function AuthPageContent({
                             key={s}
                             type="button"
                             onClick={() => handleStreamChange(s)}
-                            className={`py-2 px-1 text-center rounded-lg border-2 border-black text-xs font-black capitalize transition-all cursor-pointer ${
+                            className={`py-2.5 px-1 text-center rounded-xl text-xs font-semibold capitalize transition-all cursor-pointer border ${
                               stream === s
-                                ? "bg-[#FEF3C7] text-black shadow-[2px_2px_0px_0px_#000] -translate-x-0.5 -translate-y-0.5"
-                                : "bg-white text-black/70 hover:bg-[#FAF7EE]"
+                                ? "bg-blue-50 text-blue-700 border-blue-300 font-bold shadow-2xs"
+                                : "bg-slate-50 text-slate-600 border-slate-200/70 hover:bg-slate-100"
                             }`}
                           >
                             {s}
@@ -629,13 +629,13 @@ export default function AuthPageContent({
                     />
 
                     {/* Auto-Assigned Stream Domain Subjects */}
-                    <div className="p-3.5 bg-[#FAF7EE] border-2 border-black rounded-xl space-y-2">
+                    <div className="p-4 bg-slate-50 border border-slate-200/70 rounded-2xl space-y-2">
                       <div className="flex items-center justify-between">
-                        <label className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
-                          <Sparkles className="w-3.5 h-3.5 text-[#FF5C5C]" />
+                        <label className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
                           <span>Stream Domain Subjects (Auto-Calibrated)</span>
                         </label>
-                        <span className="text-[10px] font-black bg-white px-2 py-0.5 rounded border border-black text-black/70">
+                        <span className="text-[10px] font-semibold bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-500">
                           {selectedSubjects.length} Domains
                         </span>
                       </div>
@@ -643,13 +643,13 @@ export default function AuthPageContent({
                         {selectedSubjects.map((subj) => (
                           <span
                             key={subj}
-                            className="px-2.5 py-1 text-xs font-black bg-white text-black border-2 border-black rounded-lg shadow-[1px_1px_0px_0px_#000]"
+                            className="px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-200 rounded-lg shadow-2xs"
                           >
                             {subj}
                           </span>
                         ))}
                       </div>
-                      <p className="text-[11px] font-bold text-black/60">
+                      <p className="text-[11px] font-medium text-slate-500">
                         Diagnostic radars and mock tests are automatically calibrated for your {stream} stream.
                       </p>
                     </div>
@@ -662,14 +662,14 @@ export default function AuthPageContent({
                           setStep(1);
                           setErrorMessage(null);
                         }}
-                        className="py-3 px-4 rounded-xl border-2 border-black bg-white hover:bg-[#FAF7EE] text-black font-black text-xs shadow-[2px_2px_0px_0px_#000] cursor-pointer"
+                        className="py-3 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs shadow-2xs cursor-pointer transition-all"
                       >
                         Back
                       </button>
                       <button
                         type="submit"
                         disabled={isLoading}
-                        className="flex-1 py-3 px-4 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs sm:text-sm border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                        className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                       >
                         {isLoading ? (
                           <>
@@ -679,7 +679,7 @@ export default function AuthPageContent({
                         ) : (
                           <>
                             <span>Complete & Launch Dashboard</span>
-                            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                            <ArrowRight className="w-4 h-4 stroke-[2.2]" />
                           </>
                         )}
                       </button>
@@ -692,7 +692,7 @@ export default function AuthPageContent({
         </div>
 
         {/* Footer Note */}
-        <p className="text-center text-xs text-black/60 font-semibold">
+        <p className="text-center text-xs text-slate-400 font-medium">
           CUET AI-Prep &bull; Built strictly for NTA CBT Candidates &bull; No spam guaranteed
         </p>
       </div>

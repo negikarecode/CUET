@@ -171,11 +171,17 @@ export async function POST(req: NextRequest) {
           await supabaseAdmin.from("questions").upsert(questionsToUpsert, { onConflict: "id" });
         }
 
-        // 3. Prepare and insert user_attempts for all attempted questions
-        const attemptsToInsert = attempt.questions
+        // 3. Prepare and insert user_attempts for all attempted questions (deduplicated by question UUID)
+        const seenQuestionUuids = new Set<string>();
+        const attemptsToInsert: any[] = [];
+
+        attempt.questions
           .filter((q) => q.selectedOption !== null && q.selectedOption !== undefined)
-          .map((q, idx) => {
+          .forEach((q, idx) => {
             const qUuid = stringToUuid(q.questionId || `${attempt.testId}_q_${idx + 1}`);
+            if (seenQuestionUuids.has(qUuid)) return;
+            seenQuestionUuids.add(qUuid);
+
             const expectedOption =
               authMap.get(q.questionId) ||
               authMap.get(String(q.questionNumber)) ||
@@ -191,14 +197,14 @@ export async function POST(req: NextRequest) {
             const validOption =
               rawOpt && ["A", "B", "C", "D"].includes(rawOpt) ? rawOpt : null;
 
-            return {
+            attemptsToInsert.push({
               user_id: targetUserId,
               test_id: testUuid,
               question_id: qUuid,
               selected_option: validOption,
               is_correct: isCorrect,
               time_spent_seconds: Math.max(0, q.timeSpentSeconds || 0),
-            };
+            });
           });
 
         if (attemptsToInsert.length > 0) {
@@ -217,12 +223,18 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // 4. Update profile XP and practice streak if profile exists
+        // 4. Update profile XP, practice streak, and canonical total_questions_attempted
         const { data: profile } = await supabaseAdmin
           .from("profiles")
           .select("xp, current_streak, last_practice_date")
           .eq("id", targetUserId)
           .maybeSingle();
+
+        // Calculate authoritative unique attempted count from database
+        const { count: canonicalDbAttemptCount } = await supabaseAdmin
+          .from("user_attempts")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", targetUserId);
 
         if (profile) {
           const earnedXP = (attempt.correctCount || 0) * 10;
@@ -239,6 +251,7 @@ export async function POST(req: NextRequest) {
               xp: (profile.xp || 0) + earnedXP,
               current_streak: updatedStreak,
               last_practice_date: todayStr,
+              total_questions_attempted: canonicalDbAttemptCount ?? attemptsToInsert.length,
             })
             .eq("id", targetUserId);
         }

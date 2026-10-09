@@ -216,17 +216,17 @@ export default function PostMockAnalysisClient({
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* Top Simple Navigation Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/mocks"
-            className="text-xs font-black text-black hover:underline decoration-2 flex items-center gap-1.5"
+            className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-colors"
           >
             <span>←</span>
             <span>Mocks History</span>
           </Link>
-          <span className="text-black/30 font-bold">|</span>
-          <span className="text-xs font-black uppercase tracking-wider bg-black text-white px-2.5 py-0.5 rounded font-mono">
+          <span className="text-slate-300">|</span>
+          <span className="text-xs font-semibold uppercase tracking-wider bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full border border-slate-200 font-mono">
             POST-MOCK RESULTS
           </span>
         </div>
@@ -236,24 +236,24 @@ export default function PostMockAnalysisClient({
             <button
               type="button"
               onClick={onRetake}
-              className="px-4 py-2 rounded-xl bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center gap-2 cursor-pointer"
             >
-              <RotateCcw className="w-4 h-4 stroke-[2.5]" />
+              <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
               <span>Retake Mock</span>
             </button>
           ) : (
             <button
               type="button"
               onClick={() => router.push(`/test/${report.testId}?reattempt=true`)}
-              className="px-4 py-2 rounded-xl bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center gap-2 cursor-pointer"
             >
-              <RotateCcw className="w-4 h-4 stroke-[2.5]" />
+              <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
               <span>Retake Mock</span>
             </button>
           )}
           <Link
             href="/dashboard/mocks"
-            className="px-4 py-2 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all"
           >
             Back to Mocks
           </Link>
@@ -261,47 +261,47 @@ export default function PostMockAnalysisClient({
       </div>
 
       {/* SECTION 1 — OFFICIAL SCORECARD */}
-      <div className="bg-[#FAF7EE] rounded-2xl border-2 border-black p-6 sm:p-8 shadow-[6px_6px_0px_0px_#000]">
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FEF3C7] text-black text-xs font-black uppercase tracking-wider mb-2 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-              <Award className="w-3.5 h-3.5 text-[#F59E0B]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold uppercase tracking-wider mb-2 border border-blue-200/80 shadow-xs">
+              <Award className="w-3.5 h-3.5 text-blue-600" />
               Official NTA CUET CBT Scorecard
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-black tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               {report.testTitle}
             </h1>
-            <p className="text-xs sm:text-sm text-black/70 font-semibold mt-1">
-              Subject: <span className="font-bold text-black">{report.subject}</span> · Completed on{" "}
+            <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
+              Subject: <span className="font-semibold text-slate-700">{report.subject}</span> · Completed on{" "}
               {new Date(report.submittedAt).toLocaleDateString("en-IN", {
                 day: "numeric",
                 month: "short",
                 year: "numeric",
               })}
             </p>
-            <p className="text-xs text-black/60 font-semibold mt-0.5">
+            <p className="text-xs text-slate-400 font-medium mt-0.5">
               Scoring Rule: +5 Correct | -1 Incorrect | 0 Unattempted
             </p>
           </div>
         </div>
 
         {/* Primary Deterministic Scorecard Metrics */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 mt-6 pt-6 border-t-2 border-black/10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 mt-6 pt-6 border-t border-slate-100">
           {/* Score */}
-          <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Score</span>
+              <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Score</span>
               {propEarnedXP && propEarnedXP > 0 ? (
-                <span className="text-[9px] font-black font-mono bg-[#FEF3C7] text-black px-1 py-0.2 rounded border border-black">
+                <span className="text-[9px] font-semibold font-mono bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded-full border border-amber-200">
                   +{propEarnedXP} XP
                 </span>
               ) : null}
             </div>
-            <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-black">
+            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
               {overall.totalMarks}{" "}
-              <span className="text-xs font-bold text-black/50">/ {overall.maxMarks}</span>
+              <span className="text-xs font-medium text-slate-400">/ {overall.maxMarks}</span>
             </p>
-            <p className="text-[10px] text-black font-bold mt-1">
+            <p className="text-[10px] text-blue-600 font-semibold mt-1">
               {overall.totalMarks >= 225
                 ? "Top 99th %tile"
                 : overall.totalMarks >= 175
@@ -311,63 +311,63 @@ export default function PostMockAnalysisClient({
           </div>
 
           {/* Accuracy */}
-          <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-            <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Accuracy</span>
-            <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-black">
+          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+            <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Accuracy</span>
+            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
               {overall.accuracyPercentage}%
             </p>
-            <p className="text-[10px] text-black/70 font-semibold mt-1">
+            <p className="text-[10px] text-slate-500 font-medium mt-1">
               {overall.correctCount} of {overall.attemptedCount} attempted
             </p>
           </div>
 
           {/* Correct */}
-          <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-            <span className="text-[10px] font-black uppercase text-[#059669] tracking-wider">Correct</span>
-            <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-[#059669]">
+          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+            <span className="text-[10px] font-semibold uppercase text-emerald-600 tracking-wider">Correct</span>
+            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-emerald-600">
               {overall.correctCount}
             </p>
-            <p className="text-[10px] text-[#059669] font-black mt-1">
+            <p className="text-[10px] text-emerald-600 font-semibold mt-1">
               +{overall.correctCount * 5} marks
             </p>
           </div>
 
           {/* Incorrect */}
-          <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-            <span className="text-[10px] font-black uppercase text-[#DC2626] tracking-wider">Incorrect</span>
-            <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-[#DC2626]">
+          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+            <span className="text-[10px] font-semibold uppercase text-rose-600 tracking-wider">Incorrect</span>
+            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-rose-600">
               {overall.incorrectCount}
             </p>
-            <p className="text-[10px] text-[#DC2626] font-black mt-1">
+            <p className="text-[10px] text-rose-600 font-semibold mt-1">
               -{overall.incorrectCount} penalty
             </p>
           </div>
 
           {/* Unattempted / Skipped */}
-          <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-            <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Unattempted</span>
-            <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-black/70">
+          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+            <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Unattempted</span>
+            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-600">
               {overall.skippedCount}
             </p>
-            <p className="text-[10px] text-black/60 font-black mt-1">
+            <p className="text-[10px] text-slate-400 font-medium mt-1">
               0 penalty
             </p>
           </div>
 
           {/* Time Elapsed & Time Sinks */}
-          <div className="bg-white rounded-xl p-3.5 border-2 border-black shadow-[2px_2px_0px_0px_#000]">
+          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase text-black/60 tracking-wider">Time Elapsed</span>
+              <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Time Elapsed</span>
               {overall.timeSinkCount > 0 && (
-                <span className="text-[9px] font-black font-mono bg-[#FEE2E2] text-[#DC2626] px-1 py-0.2 rounded border border-black">
+                <span className="text-[9px] font-semibold font-mono bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded-full border border-rose-200">
                   {overall.timeSinkCount} Sinks
                 </span>
               )}
             </div>
-            <p className="text-2xl sm:text-3xl font-black font-mono mt-0.5 text-black">
+            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
               {timeTakenFormatted}
             </p>
-            <p className="text-[10px] text-black/70 font-semibold mt-1">
+            <p className="text-[10px] text-slate-500 font-medium mt-1">
               Allocated: 60m ({overall.avgTimePerQuestionSeconds}s/Q)
             </p>
           </div>
@@ -375,40 +375,40 @@ export default function PostMockAnalysisClient({
       </div>
 
       {/* SECTION 2 — BEST RESULT / ATTEMPT HISTORY */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-white border-2 border-black shadow-[5px_5px_0px_0px_#000] flex flex-col md:flex-row md:items-center justify-between gap-5">
+      <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-[#FEF3C7] border-2 border-black flex items-center justify-center shrink-0 shadow-[3px_3px_0px_0px_#000]">
-            <TrophyIcon className="w-6 h-6 text-[#D97706]" />
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0 shadow-xs">
+            <TrophyIcon className="w-6 h-6 text-amber-600" />
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] font-black uppercase bg-black text-white px-2.5 py-0.5 rounded font-mono">
+              <span className="text-[10px] font-semibold uppercase bg-slate-900 text-white px-2.5 py-0.5 rounded-full font-mono">
                 Paper Benchmark
               </span>
               {attemptsCount <= 1 ? (
-                <span className="text-[10px] font-black uppercase bg-[#FEF3C7] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                <span className="text-[10px] font-semibold uppercase bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-0.5 rounded-full shadow-xs">
                   Initial Baseline Recorded
                 </span>
               ) : isNewPersonalBest ? (
-                <span className="text-[10px] font-black uppercase bg-[#D1FAE5] text-[#065F46] border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                <span className="text-[10px] font-semibold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full shadow-xs">
                   New Personal Best!
                 </span>
               ) : (
-                <span className="text-[10px] font-black uppercase bg-[#FAF7EE] text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#000]">
+                <span className="text-[10px] font-semibold uppercase bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-0.5 rounded-full shadow-xs">
                   Personal Best Tracker
                 </span>
               )}
-              <span className="text-[10px] font-black uppercase bg-[#FAF7EE] text-black/80 border border-black px-2 py-0.5 rounded">
+              <span className="text-[10px] font-medium uppercase bg-slate-50 text-slate-600 border border-slate-200 px-2.5 py-0.5 rounded-full">
                 {attemptsCount} {attemptsCount === 1 ? "Attempt" : "Attempts"} Total
               </span>
             </div>
 
-            <h2 className="text-lg sm:text-xl font-black text-black tracking-tight flex items-center gap-2 pt-0.5">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2 pt-0.5">
               <span>Best Result: {bestMarks} / {overall.maxMarks} Marks</span>
-              <span className="text-sm font-bold text-black/60 font-mono">({bestAccuracy}% Accuracy)</span>
+              <span className="text-sm font-medium text-slate-500 font-mono">({bestAccuracy}% Accuracy)</span>
             </h2>
 
-            <p className="text-xs text-black/75 font-semibold leading-relaxed">
+            <p className="text-xs text-slate-600 font-normal leading-relaxed">
               {attemptsCount <= 1
                 ? "This is your first completed attempt on this paper. Use the option to re-attempt anytime and strive for 225+ North Campus score!"
                 : isNewPersonalBest && scoreImprovement > 0
@@ -422,10 +422,10 @@ export default function PostMockAnalysisClient({
 
         {/* Trophies celebration if unlocked */}
         {propUnlockedTrophies && propUnlockedTrophies.length > 0 && (
-          <div className="p-3 rounded-xl bg-[#FEF3C7] border-2 border-black flex items-center gap-3 shrink-0 shadow-[2px_2px_0px_0px_#000]">
-            <Award className="w-5 h-5 text-[#F59E0B]" />
-            <div className="text-xs font-bold text-black">
-              <span className="font-black">Unlocked: </span>
+          <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-center gap-3 shrink-0 shadow-xs">
+            <Award className="w-5 h-5 text-amber-600" />
+            <div className="text-xs font-semibold text-amber-900">
+              <span className="font-bold">Unlocked: </span>
               {propUnlockedTrophies.map((t) => t.title).join(", ")}
             </div>
           </div>
@@ -433,18 +433,18 @@ export default function PostMockAnalysisClient({
       </div>
 
       {/* 2. DIFFICULTY ANALYSIS */}
-      <div className="bg-white rounded-2xl border-2 border-black p-6 sm:p-7 shadow-[5px_5px_0px_0px_#000] space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-black/10 pb-4">
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-7 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-lg font-black text-black tracking-tight flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-[#FF5C5C]" />
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-blue-600" />
               <span>Difficulty Breakdown</span>
             </h2>
-            <p className="text-xs text-black/65 font-semibold mt-0.5">
+            <p className="text-xs text-slate-500 font-normal mt-0.5">
               Accuracy and penalty distribution partitioned across difficulty tiers present in this mock.
             </p>
           </div>
-          <span className="text-[11px] font-bold text-black/60 font-mono">
+          <span className="text-[11px] font-medium text-slate-500 font-mono">
             Click any tier to filter questions below
           </span>
         </div>
@@ -453,12 +453,12 @@ export default function PostMockAnalysisClient({
           {difficultyBreakdown.map((item) => {
             const badgeBg =
               item.difficulty === "easy"
-                ? "bg-[#D1FAE5] text-[#065F46]"
+                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                 : item.difficulty === "medium"
-                ? "bg-[#FEF3C7] text-[#92400E]"
+                ? "bg-amber-50 text-amber-700 border-amber-200"
                 : item.difficulty === "hard"
-                ? "bg-[#FEE2E2] text-[#991B1B]"
-                : "bg-slate-100 text-slate-700";
+                ? "bg-rose-50 text-rose-700 border-rose-200"
+                : "bg-slate-100 text-slate-700 border-slate-200";
 
             return (
               <button
@@ -471,47 +471,47 @@ export default function PostMockAnalysisClient({
                     result: "all",
                   })
                 }
-                className="text-left p-4 rounded-xl border-2 border-black bg-[#FAF7EE]/50 hover:bg-[#FAF7EE] shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer group"
+                className="text-left p-5 rounded-2xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 shadow-xs hover:border-slate-300 transition-all cursor-pointer group"
               >
                 <div className="flex items-center justify-between mb-2">
                   <span
-                    className={`text-[10px] font-black uppercase px-2.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000] ${badgeBg}`}
+                    className={`text-[10px] font-semibold uppercase px-2.5 py-0.5 rounded-full border shadow-xs ${badgeBg}`}
                   >
                     {item.label}
                   </span>
-                  <span className="text-xs font-mono font-black text-black">
+                  <span className="text-xs font-mono font-semibold text-slate-800">
                     {item.attempted > 0 ? `${item.accuracy}% Accuracy` : "Unattempted"}
                   </span>
                 </div>
 
                 <div className="flex items-baseline justify-between mt-3">
-                  <span className="text-2xl font-black text-black font-mono">
+                  <span className="text-2xl font-bold text-slate-900 font-mono">
                     {item.correct}{" "}
-                    <span className="text-sm font-semibold text-black/50">/ {item.attempted}</span>
+                    <span className="text-sm font-medium text-slate-400">/ {item.attempted}</span>
                   </span>
-                  <span className="text-xs font-bold text-black/60">
+                  <span className="text-xs font-medium text-slate-500">
                     {item.totalQuestions} Questions
                   </span>
                 </div>
 
                 {/* Progress bar */}
-                <div className="w-full h-2 rounded-full bg-black/10 mt-3 overflow-hidden border border-black">
+                <div className="w-full h-2 rounded-full bg-slate-200 mt-3 overflow-hidden">
                   <div
                     className={`h-full transition-all ${
                       item.accuracy >= 75
-                        ? "bg-[#10B981]"
+                        ? "bg-emerald-500"
                         : item.accuracy >= 50
-                        ? "bg-[#F59E0B]"
-                        : "bg-[#FF5C5C]"
+                        ? "bg-amber-500"
+                        : "bg-rose-500"
                     }`}
                     style={{ width: `${item.accuracy}%` }}
                   />
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] font-bold text-black/70 mt-2.5 pt-2 border-t border-black/10">
-                  <span className="text-[#059669]">+{item.correct} correct</span>
-                  <span className="text-[#DC2626]">-{item.incorrect} wrong</span>
-                  <span className="text-black/50">{item.skipped} skipped</span>
+                <div className="flex items-center justify-between text-[11px] font-medium text-slate-600 mt-3 pt-2.5 border-t border-slate-200/60">
+                  <span className="text-emerald-600">+{item.correct} correct</span>
+                  <span className="text-rose-600">-{item.incorrect} wrong</span>
+                  <span className="text-slate-400">{item.skipped} skipped</span>
                 </div>
               </button>
             );
@@ -520,18 +520,18 @@ export default function PostMockAnalysisClient({
       </div>
 
       {/* 3. CHAPTER-WISE ANALYSIS */}
-      <div className="bg-white rounded-2xl border-2 border-black p-6 sm:p-7 shadow-[5px_5px_0px_0px_#000] space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-black/10 pb-4">
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-7 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-lg font-black text-black tracking-tight flex items-center gap-2">
-              <Layers className="w-5 h-5 text-[#FF5C5C]" />
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              <Layers className="w-5 h-5 text-blue-600" />
               <span>Chapter-wise Performance</span>
             </h2>
-            <p className="text-xs text-black/65 font-semibold mt-0.5">
+            <p className="text-xs text-slate-500 font-normal mt-0.5">
               Sorted by number of questions in this mock.
             </p>
           </div>
-          <span className="text-[11px] font-bold text-black/60 font-mono">
+          <span className="text-[11px] font-medium text-slate-500 font-mono">
             {chapterBreakdown.length} Chapters Tested
           </span>
         </div>
@@ -539,45 +539,45 @@ export default function PostMockAnalysisClient({
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b-2 border-black text-[11px] font-black uppercase text-black/70 bg-[#FAF7EE]">
+              <tr className="border-b border-slate-200 text-[11px] font-semibold uppercase text-slate-500 bg-slate-50/70">
                 <th className="py-2.5 px-3">Chapter</th>
                 <th className="py-2.5 px-3 text-center">Questions</th>
                 <th className="py-2.5 px-3 text-center">Attempted</th>
-                <th className="py-2.5 px-3 text-center text-[#059669]">Correct</th>
-                <th className="py-2.5 px-3 text-center text-[#DC2626]">Incorrect</th>
+                <th className="py-2.5 px-3 text-center text-emerald-600">Correct</th>
+                <th className="py-2.5 px-3 text-center text-rose-600">Incorrect</th>
                 <th className="py-2.5 px-3 text-center">Accuracy</th>
                 <th className="py-2.5 px-3 text-right">Inspect</th>
               </tr>
             </thead>
-            <tbody className="divide-y border-b-2 border-black text-xs font-bold text-black">
+            <tbody className="divide-y border-b border-slate-200 text-xs font-medium text-slate-800">
               {chapterBreakdown.map((row) => (
                 <tr
                   key={row.chapter}
-                  className={`hover:bg-[#FEF3C7]/40 transition-colors ${
-                    selectedChapter === row.chapter ? "bg-[#FEF3C7]/60" : ""
+                  className={`hover:bg-slate-50/80 transition-colors ${
+                    selectedChapter === row.chapter ? "bg-blue-50/50" : ""
                   }`}
                 >
                   <td className="py-3 px-3">
                     <button
                       type="button"
                       onClick={() => setSelectedChapter(row.chapter)}
-                      className="font-black text-left hover:underline decoration-2 text-black cursor-pointer"
+                      className="font-semibold text-left hover:text-blue-600 text-slate-900 cursor-pointer"
                     >
                       {row.chapter}
                     </button>
                   </td>
                   <td className="py-3 px-3 text-center font-mono">{row.totalQuestions}</td>
                   <td className="py-3 px-3 text-center font-mono">{row.attempted}</td>
-                  <td className="py-3 px-3 text-center font-mono text-[#059669]">{row.correct}</td>
-                  <td className="py-3 px-3 text-center font-mono text-[#DC2626]">{row.incorrect}</td>
+                  <td className="py-3 px-3 text-center font-mono text-emerald-600 font-semibold">{row.correct}</td>
+                  <td className="py-3 px-3 text-center font-mono text-rose-600 font-semibold">{row.incorrect}</td>
                   <td className="py-3 px-3 text-center">
                     <span
-                      className={`inline-block px-2 py-0.5 rounded font-mono font-black text-xs border border-black ${
+                      className={`inline-block px-2.5 py-0.5 rounded-full font-mono font-semibold text-xs border ${
                         row.accuracy >= 75
-                          ? "bg-[#D1FAE5] text-[#065F46]"
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                           : row.accuracy >= 50
-                          ? "bg-[#FEF3C7] text-[#92400E]"
-                          : "bg-[#FEE2E2] text-[#991B1B]"
+                          ? "bg-amber-50 text-amber-700 border-amber-200"
+                          : "bg-rose-50 text-rose-700 border-rose-200"
                       }`}
                     >
                       {row.accuracy}%
@@ -593,7 +593,7 @@ export default function PostMockAnalysisClient({
                           result: "all",
                         })
                       }
-                      className="px-2.5 py-1 rounded bg-white hover:bg-black hover:text-white border border-black text-[11px] font-black transition-all shadow-[1px_1px_0px_0px_#000] cursor-pointer"
+                      className="px-3 py-1 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-semibold transition-all shadow-xs cursor-pointer"
                     >
                       View Qs
                     </button>
@@ -606,25 +606,25 @@ export default function PostMockAnalysisClient({
       </div>
 
       {/* 4. CHAPTER × DIFFICULTY: Deep Concept vs Application Analysis */}
-      <div className="bg-white rounded-2xl border-2 border-black p-6 sm:p-7 shadow-[5px_5px_0px_0px_#000] space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black/10 pb-4">
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-7 shadow-xs space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-lg font-black text-black tracking-tight flex items-center gap-2">
-              <Target className="w-5 h-5 text-[#FF5C5C]" />
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              <Target className="w-5 h-5 text-blue-600" />
               <span>Chapter × Difficulty Analysis</span>
             </h2>
-            <p className="text-xs text-black/65 font-semibold mt-0.5">
+            <p className="text-xs text-slate-500 font-normal mt-0.5">
               Inspect how depth of question difficulty affects performance in a specific chapter.
             </p>
           </div>
 
           {/* Chapter Selector Dropdown */}
           <div className="flex items-center gap-2">
-            <span className="text-xs font-black text-black">Select Chapter:</span>
+            <span className="text-xs font-semibold text-slate-700">Select Chapter:</span>
             <select
               value={selectedChapter}
               onChange={(e) => setSelectedChapter(e.target.value)}
-              className="px-3 py-1.5 rounded-lg border-2 border-black bg-[#FAF7EE] text-xs font-black text-black focus:outline-none shadow-[2px_2px_0px_0px_#000] cursor-pointer"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none shadow-xs cursor-pointer"
             >
               {chapterBreakdown.map((c) => (
                 <option key={c.chapter} value={c.chapter}>
@@ -638,7 +638,7 @@ export default function PostMockAnalysisClient({
         {/* Selected Chapter Breakdown Cards */}
         {currentChapterMatrixRow ? (
           <div>
-            <h3 className="text-sm font-black text-black mb-3">
+            <h3 className="text-sm font-bold text-slate-900 mb-3">
               Performance Tiers for &ldquo;{selectedChapter}&rdquo;:
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
@@ -650,42 +650,42 @@ export default function PostMockAnalysisClient({
                 return (
                   <div
                     key={diff}
-                    className={`p-4 rounded-xl border-2 border-black flex flex-col justify-between ${
-                      hasQuestions ? "bg-[#FAF7EE]/60" : "bg-slate-50 opacity-70"
+                    className={`p-5 rounded-2xl border flex flex-col justify-between shadow-xs ${
+                      hasQuestions ? "bg-slate-50/70 border-slate-200/80" : "bg-slate-50/40 border-slate-200/40 opacity-70"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-black uppercase text-black tracking-wider">
+                      <span className="text-xs font-bold uppercase text-slate-700 tracking-wider">
                         {diff}
                       </span>
-                      <span className="font-mono font-black text-xs text-black">
+                      <span className="font-mono font-bold text-xs text-slate-900">
                         {isAttempted && cell.accuracy !== null ? `${cell.accuracy}%` : "—"}
                       </span>
                     </div>
 
                     <div className="mt-3">
-                      <p className="text-xl font-black text-black font-mono">
+                      <p className="text-xl font-bold text-slate-900 font-mono">
                         {hasQuestions ? (
                           isAttempted ? (
                             <>
                               {cell.correct}{" "}
-                              <span className="text-xs font-semibold text-black/50">
+                              <span className="text-xs font-medium text-slate-400">
                                 / {cell.attempted} attempted
                               </span>
                             </>
                           ) : (
-                            <span className="text-sm font-semibold text-black/60">
+                            <span className="text-sm font-medium text-slate-500">
                               0 attempted
                             </span>
                           )
                         ) : (
-                          <span className="text-sm font-semibold text-black/40">
+                          <span className="text-sm font-normal text-slate-400">
                             No {diff} questions in this mock
                           </span>
                         )}
                       </p>
                       {hasQuestions && (
-                        <p className="text-[11px] font-semibold text-black/60 mt-1">
+                        <p className="text-[11px] font-medium text-slate-500 mt-1">
                           {cell.totalQuestions} total questions ({cell.skipped} skipped)
                         </p>
                       )}
@@ -701,7 +701,7 @@ export default function PostMockAnalysisClient({
                             result: "all",
                           })
                         }
-                        className="mt-3 w-full py-1.5 rounded-lg border-2 border-black bg-white hover:bg-black hover:text-white font-black text-[11px] transition-all shadow-[2px_2px_0px_0px_#000] cursor-pointer"
+                        className="mt-4 w-full py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-[11px] transition-all shadow-xs cursor-pointer"
                       >
                         Inspect {diff.toUpperCase()} Questions
                       </button>
@@ -714,47 +714,47 @@ export default function PostMockAnalysisClient({
         ) : null}
 
         {/* Compact Full-Paper Matrix */}
-        <div className="pt-4 border-t-2 border-black/10">
-          <h3 className="text-xs font-black uppercase text-black/70 tracking-wider mb-2">
+        <div className="pt-4 border-t border-slate-100">
+          <h3 className="text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">
             Full Chapter × Difficulty Matrix
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-center border-collapse text-xs">
               <thead>
-                <tr className="border-b-2 border-black bg-[#FAF7EE] text-[11px] font-black uppercase">
+                <tr className="border-b border-slate-200 bg-slate-50/70 text-[11px] font-semibold uppercase text-slate-500">
                   <th className="py-2 px-3 text-left">Chapter</th>
                   <th className="py-2 px-3">Easy</th>
                   <th className="py-2 px-3">Medium</th>
                   <th className="py-2 px-3">Hard</th>
                 </tr>
               </thead>
-              <tbody className="divide-y border-b-2 border-black font-mono font-bold">
+              <tbody className="divide-y border-b border-slate-200 font-mono font-medium">
                 {chapterBreakdown.map((ch) => {
                   const row = chapterDifficultyMatrix[ch.chapter];
                   return (
-                    <tr key={ch.chapter} className="hover:bg-[#FAF7EE]/50">
-                      <td className="py-2 px-3 text-left font-sans font-black text-black">
+                    <tr key={ch.chapter} className="hover:bg-slate-50/80">
+                      <td className="py-2 px-3 text-left font-sans font-semibold text-slate-900">
                         {ch.chapter}
                       </td>
                       <td className="py-2 px-3">
                         {row?.easy?.accuracy !== null ? (
-                          <span className="font-black text-[#059669]">{row?.easy?.accuracy}%</span>
+                          <span className="font-semibold text-emerald-600">{row?.easy?.accuracy}%</span>
                         ) : (
-                          <span className="text-black/30">—</span>
+                          <span className="text-slate-300">—</span>
                         )}
                       </td>
                       <td className="py-2 px-3">
                         {row?.medium?.accuracy !== null ? (
-                          <span className="font-black text-[#D97706]">{row?.medium?.accuracy}%</span>
+                          <span className="font-semibold text-amber-600">{row?.medium?.accuracy}%</span>
                         ) : (
-                          <span className="text-black/30">—</span>
+                          <span className="text-slate-300">—</span>
                         )}
                       </td>
                       <td className="py-2 px-3">
                         {row?.hard?.accuracy !== null ? (
-                          <span className="font-black text-[#DC2626]">{row?.hard?.accuracy}%</span>
+                          <span className="font-semibold text-rose-600">{row?.hard?.accuracy}%</span>
                         ) : (
-                          <span className="text-black/30">—</span>
+                          <span className="text-slate-300">—</span>
                         )}
                       </td>
                     </tr>
@@ -767,50 +767,50 @@ export default function PostMockAnalysisClient({
       </div>
 
       {/* 5. AI POST-MOCK INSIGHT: Grounded Observational Interpretation */}
-      <div className="bg-[#FAF7EE] rounded-2xl border-2 border-black p-6 sm:p-7 shadow-[5px_5px_0px_0px_#000] space-y-4">
-        <div className="flex items-center justify-between border-b-2 border-black/10 pb-3">
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-7 shadow-xs space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#FF5C5C] text-white border-2 border-black flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
-              <Brain className="w-4 h-4 stroke-[2.5]" />
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-xs">
+              <Brain className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
-              <h2 className="text-base font-black text-black tracking-tight">
+              <h2 className="text-base font-bold text-slate-900 tracking-tight">
                 AI Post-Mock Insights &amp; Observations
               </h2>
-              <p className="text-[11px] text-black/70 font-semibold">
+              <p className="text-[11px] text-slate-500 font-normal">
                 What this single mock reveals about difficulty response and mistake distribution.
               </p>
             </div>
           </div>
-          <span className="text-[10px] font-black uppercase bg-[#FEF3C7] text-black px-2 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
+          <span className="text-[10px] font-semibold uppercase bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200/80 shadow-xs">
             Observational Engine
           </span>
         </div>
 
         {aiLoading ? (
           <div className="py-8 flex flex-col items-center justify-center gap-2 text-center">
-            <Loader2 className="w-6 h-6 animate-spin text-[#FF5C5C]" />
-            <p className="text-xs font-bold text-black/70">
+            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+            <p className="text-xs font-semibold text-slate-500">
               Generating grounded AI observations from your verified telemetry...
             </p>
           </div>
         ) : aiInsight ? (
-          <div className="space-y-4 text-xs font-semibold leading-relaxed text-black">
+          <div className="space-y-4 text-xs font-normal leading-relaxed text-slate-700">
             {/* Summary */}
-            <div className="p-4 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-              <span className="text-[10px] font-black uppercase text-black/50 block mb-1">
+            <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 shadow-xs">
+              <span className="text-[10px] font-semibold uppercase text-slate-400 block mb-1">
                 Mock Summary
               </span>
-              <p className="text-sm font-bold text-black">{aiInsight.summary}</p>
+              <p className="text-sm font-semibold text-slate-900">{aiInsight.summary}</p>
             </div>
 
             {/* Difficulty Insight */}
             {aiInsight.difficultyInsight && (
-              <div className="p-4 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-                <span className="text-[10px] font-black uppercase text-black/50 block mb-1">
+              <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 shadow-xs">
+                <span className="text-[10px] font-semibold uppercase text-slate-400 block mb-1">
                   Difficulty Transition
                 </span>
-                <p className="text-xs font-bold text-black">{aiInsight.difficultyInsight}</p>
+                <p className="text-xs font-medium text-slate-800">{aiInsight.difficultyInsight}</p>
               </div>
             )}
 
@@ -820,13 +820,13 @@ export default function PostMockAnalysisClient({
                 {aiInsight.notablePatterns.map((pat, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_0px_#000]"
+                    className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs"
                   >
-                    <h4 className="text-xs font-black text-black flex items-center gap-1.5 mb-1">
-                      <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
+                    <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                       <span>{pat.title}</span>
                     </h4>
-                    <p className="text-[11px] text-black/75">{pat.description}</p>
+                    <p className="text-[11px] text-slate-600">{pat.description}</p>
                     {pat.evidenceQuestionIds && pat.evidenceQuestionIds.length > 0 && (
                       <button
                         type="button"
@@ -836,7 +836,7 @@ export default function PostMockAnalysisClient({
                             evidenceLabel: `AI Pattern: ${pat.title}`,
                           })
                         }
-                        className="mt-2 text-[10px] font-black text-[#FF5C5C] hover:underline cursor-pointer"
+                        className="mt-2 text-[10px] font-semibold text-blue-600 hover:underline cursor-pointer"
                       >
                         Inspect evidence ({pat.evidenceQuestionIds.length} Qs)
                       </button>
@@ -848,11 +848,11 @@ export default function PostMockAnalysisClient({
 
             {/* Recommended Next Steps */}
             {aiInsight.recommendedNextSteps && aiInsight.recommendedNextSteps.length > 0 && (
-              <div className="p-4 rounded-xl bg-[#FEF3C7] border-2 border-black shadow-[2px_2px_0px_0px_#000]">
-                <span className="text-[10px] font-black uppercase text-black block mb-2 tracking-wider">
+              <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 shadow-xs">
+                <span className="text-[10px] font-bold uppercase text-amber-900 block mb-2 tracking-wider">
                   Recommended Immediate Next Steps:
                 </span>
-                <ul className="space-y-1.5 list-disc list-inside text-xs font-bold text-black">
+                <ul className="space-y-1.5 list-disc list-inside text-xs font-semibold text-amber-800">
                   {aiInsight.recommendedNextSteps.map((step, idx) => (
                     <li key={idx}>{step}</li>
                   ))}
@@ -861,8 +861,8 @@ export default function PostMockAnalysisClient({
             )}
           </div>
         ) : (
-          <div className="p-4 rounded-xl bg-white border border-black/20 text-center">
-            <p className="text-xs font-bold text-black/60">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+            <p className="text-xs font-medium text-slate-500">
               {aiError
                 ? "AI insight is temporarily unavailable. All deterministic performance and question data above are fully verified."
                 : "AI insight unavailable for this mock. Deterministic analysis above is fully verified."}
@@ -874,30 +874,30 @@ export default function PostMockAnalysisClient({
       {/* 6. CLICK-THROUGH QUESTION REVIEW */}
       <div
         ref={questionReviewRef}
-        className="bg-white rounded-2xl border-2 border-black shadow-[5px_5px_0px_0px_#000] overflow-hidden"
+        className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden"
       >
         {/* Review Filter Bar */}
-        <div className="p-6 border-b-2 border-black bg-[#FAF7EE] flex flex-col gap-4">
+        <div className="p-6 border-b border-slate-100 bg-slate-50/70 flex flex-col gap-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-black text-black tracking-tight flex items-center gap-2">
-                <Filter className="w-5 h-5 text-[#FF5C5C]" />
+              <h2 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                <Filter className="w-5 h-5 text-blue-600" />
                 <span>Question Evidence &amp; Verification</span>
               </h2>
-              <p className="text-xs text-black/70 font-semibold mt-0.5">
+              <p className="text-xs text-slate-500 font-normal mt-0.5">
                 Every metric above is backed by the questions below. Filter by chapter, difficulty, or result.
               </p>
             </div>
-            <span className="text-xs font-mono font-black text-black bg-white border border-black px-2.5 py-1 rounded shadow-[1px_1px_0px_0px_#000]">
+            <span className="text-xs font-mono font-semibold text-blue-700 bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-xl shadow-xs">
               Showing {filteredQuestions.length} of {allQuestions.length} Qs
             </span>
           </div>
 
           {/* Active Evidence Inspection Banner */}
           {filterQuestionIds !== null && (
-            <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#FEF3C7] border-2 border-black text-xs font-bold text-black">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-50 border border-amber-200 text-xs font-medium text-amber-900">
               <span>
-                Filtered by: <span className="font-black text-black">{activeEvidenceLabel || "Evidence Slice"}</span> ({filteredQuestions.length} Questions)
+                Filtered by: <span className="font-bold text-amber-950">{activeEvidenceLabel || "Evidence Slice"}</span> ({filteredQuestions.length} Questions)
               </span>
               <button
                 type="button"
@@ -905,7 +905,7 @@ export default function PostMockAnalysisClient({
                   setFilterQuestionIds(null);
                   setActiveEvidenceLabel(null);
                 }}
-                className="px-2.5 py-1 rounded bg-black text-white text-[11px] font-black hover:bg-neutral-800 cursor-pointer"
+                className="px-3 py-1 rounded-xl bg-slate-900 text-white text-[11px] font-semibold hover:bg-slate-800 cursor-pointer shadow-xs"
               >
                 Clear Evidence Filter
               </button>
@@ -913,9 +913,9 @@ export default function PostMockAnalysisClient({
           )}
 
           {/* Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-black/10">
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/60">
             {/* Result Filter */}
-            <span className="text-[11px] font-black text-black mr-1">Result:</span>
+            <span className="text-[11px] font-semibold text-slate-600 mr-1">Result:</span>
             <button
               type="button"
               onClick={() => {
@@ -923,8 +923,10 @@ export default function PostMockAnalysisClient({
                 setActiveEvidenceLabel(null);
                 setFilterResult("all");
               }}
-              className={`px-2.5 py-1 rounded-lg text-xs font-black border border-black cursor-pointer transition-all ${
-                filterResult === "all" && filterQuestionIds === null ? "bg-black text-white" : "bg-white text-black hover:bg-[#FEF3C7]"
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border cursor-pointer transition-all shadow-xs ${
+                filterResult === "all" && filterQuestionIds === null
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200"
               }`}
             >
               All
@@ -936,8 +938,10 @@ export default function PostMockAnalysisClient({
                 setActiveEvidenceLabel(null);
                 setFilterResult("correct");
               }}
-              className={`px-2.5 py-1 rounded-lg text-xs font-black border border-black cursor-pointer transition-all ${
-                filterResult === "correct" ? "bg-[#10B981] text-black" : "bg-white text-black hover:bg-[#D1FAE5]"
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border cursor-pointer transition-all shadow-xs ${
+                filterResult === "correct"
+                  ? "bg-emerald-600 text-white border-emerald-600"
+                  : "bg-white text-slate-700 hover:bg-emerald-50 border-slate-200"
               }`}
             >
               Correct ({overall.correctCount})
@@ -949,8 +953,10 @@ export default function PostMockAnalysisClient({
                 setActiveEvidenceLabel(null);
                 setFilterResult("incorrect");
               }}
-              className={`px-2.5 py-1 rounded-lg text-xs font-black border border-black cursor-pointer transition-all ${
-                filterResult === "incorrect" ? "bg-[#FF5C5C] text-white" : "bg-white text-black hover:bg-[#FEE2E2]"
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border cursor-pointer transition-all shadow-xs ${
+                filterResult === "incorrect"
+                  ? "bg-rose-600 text-white border-rose-600"
+                  : "bg-white text-slate-700 hover:bg-rose-50 border-slate-200"
               }`}
             >
               Incorrect ({overall.incorrectCount})
@@ -962,15 +968,17 @@ export default function PostMockAnalysisClient({
                 setActiveEvidenceLabel(null);
                 setFilterResult("skipped");
               }}
-              className={`px-2.5 py-1 rounded-lg text-xs font-black border border-black cursor-pointer transition-all ${
-                filterResult === "skipped" ? "bg-black text-white" : "bg-white text-black hover:bg-slate-100"
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border cursor-pointer transition-all shadow-xs ${
+                filterResult === "skipped"
+                  ? "bg-slate-800 text-white border-slate-800"
+                  : "bg-white text-slate-700 hover:bg-slate-100 border-slate-200"
               }`}
             >
               Skipped ({overall.skippedCount})
             </button>
 
             {/* Difficulty Filter */}
-            <span className="text-[11px] font-black text-black ml-3 mr-1">Difficulty:</span>
+            <span className="text-[11px] font-semibold text-slate-600 ml-3 mr-1">Difficulty:</span>
             {(["all", "easy", "medium", "hard", "unknown"] as Array<NormalizedDifficulty | "all">).map(
               (diff) => {
                 if (diff !== "all" && !difficultyBreakdown.some((d) => d.difficulty === diff)) {
@@ -985,10 +993,10 @@ export default function PostMockAnalysisClient({
                       setActiveEvidenceLabel(null);
                       setFilterDifficulty(diff);
                     }}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-black border border-black uppercase cursor-pointer transition-all ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold border uppercase cursor-pointer transition-all shadow-xs ${
                       filterDifficulty === diff && filterQuestionIds === null
-                        ? "bg-black text-white"
-                        : "bg-white text-black hover:bg-[#FEF3C7]"
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200"
                     }`}
                   >
                     {diff}
@@ -998,7 +1006,7 @@ export default function PostMockAnalysisClient({
             )}
 
             {/* Chapter Filter */}
-            <span className="text-[11px] font-black text-black ml-3 mr-1">Chapter:</span>
+            <span className="text-[11px] font-semibold text-slate-600 ml-3 mr-1">Chapter:</span>
             <select
               value={filterQuestionIds !== null ? "custom" : filterChapter}
               onChange={(e) => {
@@ -1006,7 +1014,7 @@ export default function PostMockAnalysisClient({
                 setActiveEvidenceLabel(null);
                 setFilterChapter(e.target.value);
               }}
-              className="px-2 py-1 rounded-lg border border-black bg-white text-xs font-bold text-black focus:outline-none cursor-pointer"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none shadow-xs cursor-pointer"
             >
               {filterQuestionIds !== null && <option value="custom">Evidence Selection</option>}
               <option value="all">All Chapters</option>
@@ -1020,10 +1028,10 @@ export default function PostMockAnalysisClient({
         </div>
 
         {/* Question Cards List */}
-        <div className="divide-y-2 divide-black/10 p-6 space-y-6">
+        <div className="divide-y divide-slate-100 p-6 space-y-6">
           {filteredQuestions.length === 0 ? (
-            <div className="text-center py-12 bg-[#FAF7EE]/50 rounded-xl border-2 border-dashed border-black/20">
-              <p className="text-sm font-black text-black">No questions match the current filter selection.</p>
+            <div className="text-center py-12 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+              <p className="text-sm font-semibold text-slate-700">No questions match the current filter selection.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -1031,7 +1039,7 @@ export default function PostMockAnalysisClient({
                   setFilterChapter("all");
                   setFilterResult("all");
                 }}
-                className="mt-3 px-4 py-1.5 rounded-lg bg-black text-white font-black text-xs cursor-pointer"
+                className="mt-3 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold text-xs cursor-pointer shadow-xs"
               >
                 Reset Filters
               </button>
@@ -1046,13 +1054,13 @@ export default function PostMockAnalysisClient({
                   {/* Status Bar */}
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono font-black text-sm text-black bg-[#FEF3C7] border border-black px-2.5 py-1 rounded shadow-[1px_1px_0px_0px_#000]">
+                      <span className="font-mono font-semibold text-sm text-blue-700 bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-xl shadow-xs">
                         Q{q.questionNumber}
                       </span>
-                      <span className="text-xs font-bold text-black bg-[#FAF7EE] border border-black px-2 py-0.5 rounded">
+                      <span className="text-xs font-medium text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">
                         {q.chapter}
                       </span>
-                      <span className="text-[10px] font-black uppercase bg-white border border-black px-2 py-0.5 rounded">
+                      <span className="text-[10px] font-semibold uppercase bg-slate-50 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-full">
                         {q.difficulty}
                       </span>
                     </div>
@@ -1060,25 +1068,27 @@ export default function PostMockAnalysisClient({
                     <div className="flex items-center gap-3 text-xs">
                       {/* Time Spent */}
                       <span
-                        className={`inline-flex items-center gap-1 font-mono font-black px-2 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000] ${
-                          q.isTimeSink ? "bg-[#FEE2E2] text-black" : "bg-white text-black"
+                        className={`inline-flex items-center gap-1 font-mono font-medium px-2.5 py-0.5 rounded-full border shadow-xs ${
+                          q.isTimeSink
+                            ? "bg-rose-50 text-rose-700 border-rose-200"
+                            : "bg-slate-50 text-slate-600 border-slate-200"
                         }`}
                       >
-                        <Hourglass className="w-3 h-3 stroke-[2.5]" />
+                        <Hourglass className="w-3 h-3 stroke-[2]" />
                         {q.timeSpentSeconds}s {q.isTimeSink && "(Time Sink >72s)"}
                       </span>
 
                       {/* Score Result */}
                       {isCorrect ? (
-                        <span className="bg-[#D1FAE5] text-black font-black px-2.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
+                        <span className="bg-emerald-50 text-emerald-700 font-semibold px-2.5 py-0.5 rounded-full border border-emerald-200 shadow-xs">
                           +5 Marks (Correct)
                         </span>
                       ) : isIncorrect ? (
-                        <span className="bg-[#FEE2E2] text-black font-black px-2.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
+                        <span className="bg-rose-50 text-rose-700 font-semibold px-2.5 py-0.5 rounded-full border border-rose-200 shadow-xs">
                           -1 Mark (Penalty)
                         </span>
                       ) : (
-                        <span className="bg-white text-black font-black px-2.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_0px_#000]">
+                        <span className="bg-slate-50 text-slate-600 font-semibold px-2.5 py-0.5 rounded-full border border-slate-200 shadow-xs">
                           0 Marks (Skipped)
                         </span>
                       )}
@@ -1086,7 +1096,7 @@ export default function PostMockAnalysisClient({
                   </div>
 
                   {/* Prompt */}
-                  <div className="font-bold text-sm text-black mb-3">
+                  <div className="font-semibold text-sm text-slate-900 mb-3">
                     <MathRenderer text={q.prompt} />
                   </div>
 
@@ -1096,29 +1106,29 @@ export default function PostMockAnalysisClient({
                       const isCandidatePick = q.selectedOption === opt.id;
                       const isTrueCorrect = q.correctOption === opt.id;
 
-                      let optClasses = "border border-black/30 bg-white text-black";
+                      let optClasses = "border border-slate-200/80 bg-white text-slate-800";
                       if (isTrueCorrect) {
-                        optClasses = "border-2 border-black bg-[#D1FAE5] text-black font-bold";
+                        optClasses = "border-2 border-emerald-500 bg-emerald-50/70 text-slate-900 font-medium";
                       } else if (isCandidatePick && !isTrueCorrect) {
-                        optClasses = "border-2 border-black bg-[#FEE2E2] text-black font-bold";
+                        optClasses = "border-2 border-rose-500 bg-rose-50/70 text-slate-900 font-medium";
                       }
 
                       return (
                         <div
                           key={opt.id}
-                          className={`p-2.5 rounded-lg flex items-start gap-2 text-xs ${optClasses}`}
+                          className={`p-3 rounded-xl flex items-start gap-2 text-xs shadow-xs transition-all ${optClasses}`}
                         >
-                          <span className="font-mono font-black shrink-0">({opt.id})</span>
+                          <span className="font-mono font-bold shrink-0 text-slate-600">({opt.id})</span>
                           <div className="flex-1">
                             <MathRenderer text={opt.text} />
                           </div>
                           {isTrueCorrect && (
-                            <span className="text-[10px] font-black uppercase text-[#065F46] shrink-0">
+                            <span className="text-[10px] font-bold uppercase text-emerald-700 shrink-0">
                               Correct Key
                             </span>
                           )}
                           {isCandidatePick && !isTrueCorrect && (
-                            <span className="text-[10px] font-black uppercase text-[#991B1B] shrink-0">
+                            <span className="text-[10px] font-bold uppercase text-rose-700 shrink-0">
                               Your Pick
                             </span>
                           )}
@@ -1129,15 +1139,15 @@ export default function PostMockAnalysisClient({
 
                   {/* Explanation, 3-Level Breakdown & AI Diagnosis with MathRenderer */}
                   {(q.explanation || q.solution?.quick || q.solution?.concept || q.formula || q.keyConcept || q.misconception) && (
-                    <div className="p-4 rounded-xl bg-[#FAF7EE] border-2 border-black text-xs space-y-3 shadow-[2px_2px_0px_0px_#000]">
+                    <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 text-xs space-y-3 shadow-xs">
                       {q.explanation && (
-                        <div className="text-black/85 leading-relaxed font-medium">
-                          <strong className="text-black font-black uppercase text-[10px] tracking-wider block mb-1">
+                        <div className="text-slate-700 leading-relaxed font-normal">
+                          <strong className="text-slate-900 font-bold uppercase text-[10px] tracking-wider block mb-1">
                             Verified Solution &amp; NCERT Rationale:
                           </strong>
-                          <MathRenderer text={q.explanation} className="text-black/85 leading-relaxed" />
+                          <MathRenderer text={q.explanation} className="text-slate-700 leading-relaxed" />
                           {q.ncertReference && (
-                            <span className="text-[10px] font-bold text-black/60 block pt-1.5">
+                            <span className="text-[10px] font-medium text-slate-500 block pt-1.5">
                               Source: {q.ncertReference}
                             </span>
                           )}
@@ -1146,26 +1156,26 @@ export default function PostMockAnalysisClient({
 
                       {/* 3-Level Solution Cards: Quick Takeaway & Core Concept */}
                       {q.solution && (q.solution.quick || q.solution.concept) && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-black/10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-slate-200/60">
                           {q.solution.quick && (
-                            <div className="p-2.5 rounded-lg bg-white border border-black/30">
-                              <span className="text-[10px] font-black uppercase text-[#2563EB] block mb-0.5">
+                            <div className="p-3 rounded-xl bg-white border border-slate-200/80 shadow-xs">
+                              <span className="text-[10px] font-bold uppercase text-blue-600 block mb-0.5">
                                 30-Sec Takeaway
                               </span>
                               <MathRenderer
                                 text={q.solution.quick}
-                                className="text-black/90 font-semibold text-[11px] leading-relaxed"
+                                className="text-slate-800 font-medium text-[11px] leading-relaxed"
                               />
                             </div>
                           )}
                           {q.solution.concept && (
-                            <div className="p-2.5 rounded-lg bg-white border border-black/30">
-                              <span className="text-[10px] font-black uppercase text-[#059669] block mb-0.5">
+                            <div className="p-3 rounded-xl bg-white border border-slate-200/80 shadow-xs">
+                              <span className="text-[10px] font-bold uppercase text-emerald-600 block mb-0.5">
                                 Core NCERT Concept
                               </span>
                               <MathRenderer
                                 text={q.solution.concept}
-                                className="text-black/90 font-semibold text-[11px] leading-relaxed"
+                                className="text-slate-800 font-medium text-[11px] leading-relaxed"
                               />
                             </div>
                           )}
@@ -1174,26 +1184,26 @@ export default function PostMockAnalysisClient({
 
                       {/* Formula / Key Concept Highlight */}
                       {(q.formula || q.keyConcept) && (
-                        <div className="p-2.5 rounded-lg bg-[#FFFBEB] border border-[#F59E0B] text-black">
-                          <span className="text-[10px] font-black uppercase text-[#B45309] block mb-0.5">
+                        <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200 text-slate-900 shadow-xs">
+                          <span className="text-[10px] font-bold uppercase text-amber-900 block mb-0.5">
                             Formula / Principle
                           </span>
                           <MathRenderer
                             text={q.formula || q.keyConcept || ""}
-                            className="font-bold text-[11px] leading-relaxed text-black"
+                            className="font-medium text-[11px] leading-relaxed text-amber-950"
                           />
                         </div>
                       )}
 
                       {/* Common Misconception Alert */}
                       {q.misconception && (
-                        <div className="p-2.5 rounded-lg bg-[#FEF2F2] border border-[#EF4444] text-black">
-                          <span className="text-[10px] font-black uppercase text-[#DC2626] block mb-0.5">
+                        <div className="p-3 rounded-xl bg-rose-50/80 border border-rose-200 text-slate-900 shadow-xs">
+                          <span className="text-[10px] font-bold uppercase text-rose-800 block mb-0.5">
                             Common Trap / Misconception
                           </span>
                           <MathRenderer
                             text={q.misconception.description || ""}
-                            className="font-semibold text-[11px] leading-relaxed text-black/90"
+                            className="font-medium text-[11px] leading-relaxed text-rose-950"
                           />
                         </div>
                       )}
@@ -1207,15 +1217,15 @@ export default function PostMockAnalysisClient({
       </div>
 
       {/* SECTION 8 — FINAL ACTIONS BAR */}
-      <div className="p-6 bg-[#FAF7EE] rounded-2xl border-2 border-black shadow-[5px_5px_0px_0px_#000] flex flex-col md:flex-row items-center justify-between gap-5">
+      <div className="p-6 bg-slate-50/80 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row items-center justify-between gap-5">
         <div className="space-y-1 text-center md:text-left">
-          <h4 className="text-base font-black text-black flex items-center justify-center md:justify-start gap-2">
+          <h4 className="text-base font-bold text-slate-900 flex items-center justify-center md:justify-start gap-2">
             <span>Next Steps for CUET Domain Mastery</span>
-            <span className="text-xs font-bold text-black/60 font-mono">
+            <span className="text-xs font-medium text-slate-500 font-mono">
               (Personal Best: {bestMarks} / {overall.maxMarks})
             </span>
           </h4>
-          <p className="text-xs text-black/70 font-semibold max-w-xl">
+          <p className="text-xs text-slate-500 font-normal max-w-xl">
             Focus on eliminating recurring error patterns before the real CUET exam. Review your incorrect questions or trigger targeted chapter repair drills.
           </p>
         </div>
@@ -1227,7 +1237,7 @@ export default function PostMockAnalysisClient({
               onClick={() => {
                 handleInspectSlice({ result: "incorrect" });
               }}
-              className="px-4 py-2.5 rounded-xl bg-white hover:bg-neutral-100 text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all cursor-pointer"
             >
               Review {overall.incorrectCount} Incorrect Questions
             </button>
@@ -1235,9 +1245,9 @@ export default function PostMockAnalysisClient({
 
           <Link
             href="/dashboard/radar"
-            className="px-4 py-2.5 rounded-xl bg-[#FEF3C7] hover:bg-[#FDE68A] text-black font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5"
+            className="px-4 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100/80 text-amber-900 font-semibold text-xs border border-amber-200 shadow-xs transition-all flex items-center gap-1.5"
           >
-            <Zap className="w-3.5 h-3.5 text-[#D97706]" />
+            <Zap className="w-3.5 h-3.5 text-amber-600" />
             <span>Targeted Weakness Practice</span>
           </Link>
 
@@ -1245,25 +1255,25 @@ export default function PostMockAnalysisClient({
             <button
               type="button"
               onClick={onRetake}
-              className="px-4 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
             >
-              <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+              <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
               <span>Retake Mock</span>
             </button>
           ) : (
             <button
               type="button"
               onClick={() => router.push(`/test/${report.testId}?reattempt=true`)}
-              className="px-4 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
             >
-              <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+              <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
               <span>Retake Mock</span>
             </button>
           )}
 
           <Link
             href="/dashboard/mocks"
-            className="px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-800 text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
+            className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all"
           >
             Back to Mocks
           </Link>

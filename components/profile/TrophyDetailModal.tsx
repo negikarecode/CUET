@@ -41,13 +41,13 @@ export default function TrophyDetailModal({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-150"
     >
-      <div className="w-full max-w-md bg-white rounded-xl border-2 border-black shadow-[8px_8px_0px_0px_#000] p-6 text-center animate-in zoom-in-95 duration-150 relative">
+      <div className="w-full max-w-md bg-white rounded-3xl border border-slate-100 shadow-xl p-6 sm:p-7 text-center animate-in zoom-in-95 duration-150 relative">
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 rounded-lg border-2 border-black bg-white hover:bg-[#FAF7EE] text-black shadow-[2px_2px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
+          className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
@@ -55,46 +55,46 @@ export default function TrophyDetailModal({
         {/* Trophy Icon */}
         <div className="relative mx-auto mb-4 w-20 h-20">
           <div
-            className={`w-20 h-20 rounded-xl border-2 border-black flex items-center justify-center shadow-[3px_3px_0px_0px_#000] ${
+            className={`w-20 h-20 rounded-2xl border flex items-center justify-center shadow-xs ${
               trophy.isUnlocked
-                ? "bg-[#FEF3C7] text-black"
-                : "bg-black/10 text-black/40"
+                ? "bg-amber-50 border-amber-200/80 text-amber-600"
+                : "bg-slate-100 border-slate-200 text-slate-400"
             }`}
           >
             <IconComp className="w-10 h-10" />
           </div>
           {trophy.isUnlocked ? (
-            <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#10B981] border border-black text-white flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
+            <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-white text-white flex items-center justify-center shadow-xs">
               <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
             </span>
           ) : (
-            <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white border border-black text-black/60 flex items-center justify-center shadow-[1px_1px_0px_0px_#000]">
+            <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-slate-200 border-2 border-white text-slate-600 flex items-center justify-center shadow-xs">
               <Lock className="w-3.5 h-3.5" />
             </span>
           )}
         </div>
 
-        <h3 className="text-xl font-black text-black tracking-tight">
+        <h3 className="text-xl font-bold text-slate-900 tracking-tight">
           {trophy.title}
         </h3>
 
-        <p className="mt-2 text-xs text-black/70 font-semibold leading-relaxed max-w-xs mx-auto">
+        <p className="mt-2 text-xs text-slate-500 font-medium leading-relaxed max-w-xs mx-auto">
           {trophy.description}
         </p>
 
         {/* Criteria Box */}
-        <div className="mt-5 p-3.5 rounded-lg bg-[#FAF7EE] border-2 border-black text-left text-xs space-y-2 shadow-[2px_2px_0px_0px_#000]">
-          <div className="flex items-center gap-2 text-black font-black">
-            <Target className="w-4 h-4 text-black" />
+        <div className="mt-5 p-4 rounded-2xl bg-slate-50 border border-slate-100 text-left text-xs space-y-2">
+          <div className="flex items-center gap-2 text-slate-700 font-bold">
+            <Target className="w-4 h-4 text-blue-600" />
             <span>Unlock Criteria:</span>
           </div>
-          <p className="text-black/80 font-medium pl-6 text-xs">
+          <p className="text-slate-600 font-medium pl-6 text-xs">
             {trophy.criteria}
           </p>
 
           {trophy.isUnlocked && trophy.unlockedAt ? (
-            <div className="pt-2 border-t-2 border-black/10 flex items-center gap-2 text-black text-[11px] font-bold">
-              <Calendar className="w-3.5 h-3.5 text-[#10B981] stroke-[2.5]" />
+            <div className="pt-2.5 border-t border-slate-200/60 flex items-center gap-2 text-slate-700 text-[11px] font-semibold">
+              <Calendar className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" />
               <span>
                 Unlocked on:{" "}
                 {new Date(trophy.unlockedAt).toLocaleDateString("en-IN", {
@@ -105,14 +105,14 @@ export default function TrophyDetailModal({
               </span>
             </div>
           ) : (
-            <div className="pt-2 border-t-2 border-black/10">
-              <div className="flex justify-between text-[11px] font-black text-black mb-1">
+            <div className="pt-2.5 border-t border-slate-200/60">
+              <div className="flex justify-between text-[11px] font-bold text-slate-600 mb-1.5">
                 <span>Progress to Unlock</span>
                 <span>{trophy.progressPercentage}%</span>
               </div>
-              <div className="w-full h-2.5 bg-white border border-black rounded-full overflow-hidden shadow-[1px_1px_0px_0px_#000]">
+              <div className="w-full h-2.5 bg-slate-200/70 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#F59E0B] rounded-full transition-all"
+                  className="h-full bg-gradient-to-r from-blue-500 to-amber-500 rounded-full transition-all"
                   style={{ width: `${trophy.progressPercentage}%` }}
                 />
               </div>
@@ -121,23 +121,23 @@ export default function TrophyDetailModal({
         </div>
 
         {/* Rewards Badge */}
-        <div className="mt-5 flex items-center justify-center gap-4 text-xs font-black">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#EEF2FF] border-2 border-black text-black shadow-[2px_2px_0px_0px_#000]">
-            <Zap className="w-4 h-4 text-[#4F46E5] fill-[#4F46E5]" />
+        <div className="mt-5 flex items-center justify-center gap-3 text-xs font-bold">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-700">
+            <Zap className="w-4 h-4 text-indigo-600 fill-indigo-600" />
             <span>+{trophy.xpReward} XP</span>
           </div>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FEF3C7] border-2 border-black text-black shadow-[2px_2px_0px_0px_#000]">
-            <Coins className="w-4 h-4 text-[#D97706]" />
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-100 text-amber-700">
+            <Coins className="w-4 h-4 text-amber-600" />
             <span>+{trophy.coinReward} Coins</span>
           </div>
         </div>
 
         {/* Close Button */}
-        <div className="mt-6 pt-4 border-t-2 border-black/10">
+        <div className="mt-6 pt-4 border-t border-slate-100">
           <button
             type="button"
             onClick={onClose}
-            className="w-full py-2.5 rounded-lg bg-black hover:bg-[#121212] text-white font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
+            className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-xs hover:shadow transition-all cursor-pointer"
           >
             Dismiss
           </button>

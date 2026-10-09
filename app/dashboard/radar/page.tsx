@@ -114,9 +114,16 @@ export default async function WeaknessRadarPage() {
         .eq("user_id", authUser.id);
 
       if (userAttempts && userAttempts.length > 0) {
-        const attemptedRows = userAttempts.filter(
-          (ua) => ua.selected_option !== null && ua.selected_option !== undefined
-        );
+        // Enforce canonical deduplication by (test_id, question_id): 1 real question attempt = 1 attempt everywhere
+        const seenCanonicalKeys = new Set<string>();
+        const attemptedRows = userAttempts.filter((ua) => {
+          if (ua.selected_option === null || ua.selected_option === undefined) return false;
+          const canonicalKey = `${ua.test_id || "default"}:::${ua.question_id || ua.id}`;
+          if (seenCanonicalKeys.has(canonicalKey)) return false;
+          seenCanonicalKeys.add(canonicalKey);
+          return true;
+        });
+
         const totalAttempted = attemptedRows.length;
         const correctCount = attemptedRows.filter((ua: any) => {
           if (ua.is_correct === true || ua.is_correct === "true" || ua.is_correct === 1) return true;
@@ -355,13 +362,13 @@ export default async function WeaknessRadarPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7EE] pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+    <div className="min-h-screen bg-[#F8FAFC] pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         <Suspense
           fallback={
             <div className="py-20 flex flex-col items-center justify-center space-y-3">
-              <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
-              <p className="text-xs font-black text-black">Loading Subject Weakness Radar...</p>
+              <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+              <p className="text-xs font-semibold text-slate-500">Loading Subject Weakness Radar...</p>
             </div>
           }
         >

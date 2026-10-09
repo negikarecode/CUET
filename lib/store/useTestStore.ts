@@ -256,11 +256,15 @@ export const useTestStore = create<TestStoreState>()(
       },
 
       recordTestAttempt: async (attempt: RecordedTestAttempt) => {
+        const testKey = (attempt.testId || attempt.id || "").trim();
+        if (!testKey) return;
+
         const currentAttempts = get().testAttempts || [];
-        // Replace if existing attempt with identical ID or same testId, otherwise prepend
+        // Strictly deduplicate by testId: replace existing, otherwise prepend
         const existingIdx = currentAttempts.findIndex(
-          (a) => a.id === attempt.id || (a.testId && a.testId === attempt.testId)
+          (a) => (a.testId && a.testId.trim() === testKey) || a.id === attempt.id
         );
+
         let updatedAttempts: RecordedTestAttempt[];
         if (existingIdx >= 0) {
           updatedAttempts = [...currentAttempts];
@@ -269,10 +273,21 @@ export const useTestStore = create<TestStoreState>()(
           updatedAttempts = [attempt, ...currentAttempts];
         }
 
+        // Canonical analytics computation (guarantees 1 question = 1 attempt)
         const analytics = computeAnalyticsFromAttempts(updatedAttempts);
 
+        // Synchronously update testAttempts and analytics IMMEDIATELY so any concurrent read sees the recorded attempt
+        set((state) => ({
+          testAttempts: updatedAttempts,
+          analytics,
+          user: {
+            ...state.user,
+            accuracyPercentage: analytics.overallAccuracyPercentage,
+            completedTestsCount: analytics.completedTestsCount,
+          },
+        }));
+
         // Collect all individual question attempts across all recorded tests (ordered chronologically)
-        // Reverse updatedAttempts so earliest attempts come first for proper cycle slicing
         const chronologicalAttempts = [...updatedAttempts].reverse();
         const allQuestions = chronologicalAttempts.flatMap((t) => t.questions || []);
 
@@ -305,17 +320,10 @@ export const useTestStore = create<TestStoreState>()(
         }
 
         set((state) => ({
-          testAttempts: updatedAttempts,
-          analytics,
           diagnosticCycles: cycles,
           currentCycleNumber,
           currentCycleQuestionCount,
           activeCompletionNotification: completionNotification || state.activeCompletionNotification,
-          user: {
-            ...state.user,
-            accuracyPercentage: analytics.overallAccuracyPercentage,
-            completedTestsCount: analytics.completedTestsCount,
-          },
         }));
       },
 
@@ -325,6 +333,12 @@ export const useTestStore = create<TestStoreState>()(
           const currentAttempts = [...(get().testAttempts || [])];
           const activeUid = get().user?.id || (typeof window !== "undefined" ? window.localStorage.getItem("cuet_active_uid") : null);
           if (!activeUid || activeUid === "guest") return;
+
+          // Track already registered testIds to prevent any duplication
+          const seenTestIds = new Set<string>();
+          currentAttempts.forEach((a) => {
+            if (a.testId) seenTestIds.add(a.testId.trim());
+          });
 
           const recovered: RecordedTestAttempt[] = [];
           let hasChanges = false;
@@ -341,8 +355,10 @@ export const useTestStore = create<TestStoreState>()(
               try {
                 const session = JSON.parse(raw);
                 if (session && session.isSubmitted && session.testId) {
+                  const sTestId = String(session.testId).trim();
                   // Verify session user ownership strictly
                   if (session.userId && session.userId !== activeUid) continue;
+
                   // Reconstruct actual correct count from questionStates & questions to heal any 0-correct states
                   let derivedCorrect = 0;
                   let derivedAttempted = 0;
@@ -369,7 +385,7 @@ export const useTestStore = create<TestStoreState>()(
                   const finalAccuracy =
                     finalAttempted > 0 ? Math.round((finalCorrect / finalAttempted) * 100) : 0;
 
-                  const existingIdx = currentAttempts.findIndex((a) => a.testId === session.testId);
+                  const existingIdx = currentAttempts.findIndex((a) => a.testId === sTestId);
 
                   if (existingIdx >= 0 && currentAttempts[existingIdx]) {
                     const existing = currentAttempts[existingIdx]!;
@@ -386,7 +402,8 @@ export const useTestStore = create<TestStoreState>()(
                       };
                       hasChanges = true;
                     }
-                  } else if (finalAttempted > 0 || session.isSubmitted) {
+                  } else if (!seenTestIds.has(sTestId) && (finalAttempted > 0 || session.isSubmitted)) {
+                    seenTestIds.add(sTestId);
                     const testMeta = session.testMeta;
                     const questionAttempts = questionsList.map((q: any, idx: number) => {
                       const st = qStates[q.id];
@@ -421,9 +438,9 @@ export const useTestStore = create<TestStoreState>()(
                     });
 
                     const attempt: RecordedTestAttempt = {
-                      id: `recovered_${session.testId}`,
+                      id: `recovered_${sTestId}`,
                       userId: get().user?.id || "guest",
-                      testId: session.testId,
+                      testId: sTestId,
                       testTitle: testMeta?.title || "CUET Domain Examination Paper",
                       subject: testMeta?.subject || "Physics",
                       totalQuestions: questionsList.length || 50,
@@ -448,25 +465,36 @@ export const useTestStore = create<TestStoreState>()(
           }
 
           if (hasChanges || recovered.length > 0) {
-            const allAttempts = [...recovered, ...currentAttempts];
+            // Deduplicate all attempts strictly by testId
+            const dedupMap = new Map<string, RecordedTestAttempt>();
+            [...currentAttempts, ...recovered].forEach((att) => {
+              const k = (att.testId || att.id).trim();
+              if (!dedupMap.has(k)) {
+                dedupMap.set(k, att);
+              }
+            });
+            const allAttempts = Array.from(dedupMap.values());
             const analytics = computeAnalyticsFromAttempts(allAttempts);
             const chronologicalAttempts = [...allAttempts].reverse();
             const allQuestions = chronologicalAttempts.flatMap((t) => t.questions || []);
             const existingCycles = get().diagnosticCycles || [];
 
+            set((state) => ({
+              testAttempts: allAttempts,
+              analytics,
+              user: {
+                ...state.user,
+                accuracyPercentage: analytics.overallAccuracyPercentage,
+                completedTestsCount: analytics.completedTestsCount,
+              },
+            }));
+
             processQuestionsIntoCycles(existingCycles, allQuestions).then(
               ({ cycles, currentCycleNumber, currentCycleQuestionCount }) => {
-                set((state) => ({
-                  testAttempts: allAttempts,
-                  analytics,
+                set(() => ({
                   diagnosticCycles: cycles,
                   currentCycleNumber,
                   currentCycleQuestionCount,
-                  user: {
-                    ...state.user,
-                    accuracyPercentage: analytics.overallAccuracyPercentage,
-                    completedTestsCount: analytics.completedTestsCount,
-                  },
                 }));
               }
             );

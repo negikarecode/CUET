@@ -37,7 +37,7 @@ export default function MockAnalysisPage() {
   if (!isClient) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-12 flex justify-center">
-        <div className="w-8 h-8 border-4 border-[#FF5C5C] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -47,24 +47,24 @@ export default function MockAnalysisPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6">
         <Link
           href="/dashboard/mocks"
-          className="inline-flex items-center gap-1.5 text-xs font-black text-black/60 hover:text-black transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Mock History
         </Link>
 
-        <div className="bg-white rounded-2xl border-2 border-black p-8 shadow-[6px_6px_0px_0px_#000] text-center space-y-4">
-          <div className="w-12 h-12 rounded-xl bg-[#FEF3C7] border-2 border-black flex items-center justify-center mx-auto shadow-[2px_2px_0px_0px_#000]">
-            <AlertTriangle className="w-6 h-6 text-[#D97706]" />
+        <div className="bg-white rounded-3xl border border-slate-200/80 p-8 shadow-xs text-center space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto shadow-xs">
+            <AlertTriangle className="w-6 h-6 text-amber-600" />
           </div>
-          <h2 className="text-xl font-black text-black">Mock Attempt Not Found</h2>
-          <p className="text-xs text-black/70 font-semibold max-w-md mx-auto">
+          <h2 className="text-xl font-bold text-slate-900">Mock Attempt Not Found</h2>
+          <p className="text-xs text-slate-500 font-medium max-w-md mx-auto">
             We couldn&apos;t find saved question telemetry for this mock attempt in your authenticated account.
           </p>
           <div className="pt-2">
             <Link
               href="/dashboard/mocks"
-              className="px-5 py-2.5 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] inline-flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs inline-flex items-center gap-2 transition-all"
             >
               <span>View All Mocks</span>
             </Link>

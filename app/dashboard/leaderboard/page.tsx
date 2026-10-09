@@ -9,17 +9,17 @@ export const metadata: Metadata = {
 
 export default function LeaderboardPage() {
   return (
-    <div className="min-h-screen bg-[#FAF7EE] pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+    <div className="min-h-screen bg-[#F8FAFC] pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-6">
         {/* Page Title & Context Banner */}
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FEF3C7] border-2 border-black rounded-full text-black text-xs font-black shadow-[2px_2px_0px_0px_#000]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-200/60 rounded-full text-amber-800 text-xs font-semibold">
             <span>🏆 National Trophy Standings</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-black tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             All-India CUET Trophy Leaderboard
           </h1>
-          <p className="text-xs sm:text-sm text-black/70 font-medium max-w-2xl">
+          <p className="text-xs sm:text-sm text-slate-500 font-medium max-w-2xl">
             Live rankings based on locked mock exam trophies (+5 per correct, -1 per negative). Track overall rankings or toggle subject-wise domain leaderboards.
           </p>
         </div>

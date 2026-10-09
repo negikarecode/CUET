@@ -54,17 +54,17 @@ export default function CBTDiagramViewer({ question }: CBTDiagramViewerProps) {
           {/* Circuit Loop */}
           <rect x="50" y="30" width="300" height="100" fill="none" stroke="currentColor" strokeWidth="2.5" rx="4" />
           {/* DC Battery Symbol at bottom */}
-          <rect x="180" y="125" width="40" height="10" fill="#FAF7EE" />
+          <rect x="180" y="125" width="40" height="10" fill="#FFFFFF" />
           <line x1="190" y1="115" x2="190" y2="145" stroke="currentColor" strokeWidth="3.5" />
           <line x1="205" y1="122" x2="205" y2="138" stroke="currentColor" strokeWidth="2" />
           <text x="185" y="156" fontSize="10" fontWeight="bold">+</text>
           <text x="210" y="156" fontSize="10" fontWeight="bold">-</text>
           {/* Resistor Zig-Zag at Top */}
-          <rect x="160" y="25" width="80" height="10" fill="#FAF7EE" />
+          <rect x="160" y="25" width="80" height="10" fill="#FFFFFF" />
           <polyline points="160,30 170,20 180,40 190,20 200,40 210,20 220,40 230,20 240,30" fill="none" stroke="currentColor" strokeWidth="2.5" />
           <text x="200" y="18" fontSize="11" fontWeight="bold" textAnchor="middle">Resistor R</text>
           {/* Ammeter Node */}
-          <rect x="335" y="65" width="30" height="30" fill="#FAF7EE" />
+          <rect x="335" y="65" width="30" height="30" fill="#FFFFFF" />
           <circle cx="350" cy="80" r="14" fill="#FEF3C7" stroke="currentColor" strokeWidth="2" />
           <text x="350" y="84" fontSize="12" fontWeight="black" textAnchor="middle">A</text>
         </svg>
@@ -125,17 +125,17 @@ export default function CBTDiagramViewer({ question }: CBTDiagramViewerProps) {
   };
 
   return (
-    <div className="my-5 p-4 rounded-xl border-2 border-black bg-[#F8FAFC] shadow-[2px_2px_0px_0px_#000]">
+    <div className="my-5 p-4 sm:p-5 rounded-2xl border border-slate-200/80 bg-slate-50 shadow-xs">
       <div className="flex items-center gap-2 mb-3">
-        <ImageIcon className="w-4 h-4 text-black stroke-[2.5]" />
-        <span className="text-xs font-black uppercase tracking-wider text-black">
+        <ImageIcon className="w-4 h-4 text-slate-700 stroke-[2.5]" />
+        <span className="text-xs font-bold uppercase tracking-wider text-slate-900">
           FIGURE / DIAGRAM REFERENCE
         </span>
       </div>
 
-      <div className="bg-white p-3 rounded-lg border border-black/20 flex flex-col items-center justify-center">
+      <div className="bg-white p-4 rounded-xl border border-slate-200/60 flex flex-col items-center justify-center shadow-2xs">
         {renderSvgSchematic()}
-        <p className="mt-2 text-xs font-semibold text-slate-700 italic text-center max-w-[420px]">
+        <p className="mt-2 text-xs font-medium text-slate-600 italic text-center max-w-[420px]">
           {desc}
         </p>
       </div>

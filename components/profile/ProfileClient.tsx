@@ -167,9 +167,9 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
   // Format stream badge color
   const streamBadgeColors: Record<StreamOption, { bg: string; text: string; border: string }> = {
-    Science: { bg: "bg-[#EEF2FF]", text: "text-[#4338CA]", border: "border-[#6366F1]" },
-    Commerce: { bg: "bg-[#FEF3C7]", text: "text-[#92400E]", border: "border-[#F59E0B]" },
-    Humanities: { bg: "bg-[#F3E8FF]", text: "text-[#6B21A8]", border: "border-[#A855F7]" },
+    Science: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200/60" },
+    Commerce: { bg: "bg-amber-50", text: "text-amber-800", border: "border-amber-200/60" },
+    Humanities: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200/60" },
   };
   const activeStreamBadge = streamBadgeColors[profile.targetStream] || streamBadgeColors.Science;
 
@@ -398,15 +398,15 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-[#FEF3C7] border border-black text-[11px] font-black uppercase font-mono shadow-[1px_1px_0px_0px_#000]">
+            <span className="px-3 py-0.5 rounded-full bg-blue-50 border border-blue-200/60 text-blue-700 text-[11px] font-bold uppercase tracking-wider font-mono">
               Official Student Record
             </span>
-            <span className="text-xs text-black/50 font-bold">•</span>
-            <span className="text-xs text-black/60 font-mono font-bold">
+            <span className="text-xs text-slate-300 font-bold">•</span>
+            <span className="text-xs text-slate-500 font-mono font-semibold">
               ID: {profile.id.slice(0, 8)}...
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-black tracking-tight mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
             Academic Identity & Readiness
           </h1>
         </div>
@@ -415,9 +415,9 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         <button
           type="button"
           onClick={() => setIsEditGoalsOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#FAF7EE] text-black font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200/80 shadow-xs hover:shadow transition-all cursor-pointer self-start sm:self-auto"
         >
-          <Edit3 className="w-4 h-4 text-black" />
+          <Edit3 className="w-4 h-4 text-slate-500" />
           <span>Edit Academic Goals</span>
         </button>
       </div>
@@ -425,28 +425,28 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       {/* Global Status Message Toast */}
       {statusMessage && (
         <div
-          className={`p-3.5 rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_#000] text-xs font-black flex items-center justify-between gap-2 animate-in fade-in duration-150 ${
+          className={`p-4 rounded-2xl border text-xs font-semibold flex items-center justify-between gap-3 animate-in fade-in duration-150 ${
             statusMessage.type === "success"
-              ? "bg-[#D1FAE5] text-black"
+              ? "bg-emerald-50 border-emerald-200/80 text-emerald-800"
               : statusMessage.type === "error"
-              ? "bg-[#FEE2E2] text-[#991B1B]"
-              : "bg-[#FEF3C7] text-black"
+              ? "bg-rose-50 border-rose-200/80 text-rose-800"
+              : "bg-blue-50 border-blue-200/80 text-blue-800"
           }`}
         >
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             {statusMessage.type === "success" ? (
-              <CheckCircle2 className="w-4 h-4 text-[#10B981] stroke-[2.5]" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
             ) : statusMessage.type === "error" ? (
-              <AlertTriangle className="w-4 h-4 text-[#DC2626]" />
+              <AlertTriangle className="w-4 h-4 text-rose-600" />
             ) : (
-              <RefreshCw className="w-4 h-4 text-[#D97706] animate-spin" />
+              <RefreshCw className="w-4 h-4 text-blue-600 animate-spin" />
             )}
             <span>{statusMessage.text}</span>
           </div>
           <button
             type="button"
             onClick={() => setStatusMessage(null)}
-            className="text-black/60 hover:text-black font-bold p-1"
+            className="text-slate-400 hover:text-slate-700 font-bold p-1"
           >
             ✕
           </button>
@@ -456,16 +456,16 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       {/* ──────────────────────────────────────────────────────────── */}
       {/* CARD 1: HERO & ACADEMIC IDENTITY CARD */}
       {/* ──────────────────────────────────────────────────────────── */}
-      <section className="bg-white rounded-xl border-2 border-black shadow-[5px_5px_0px_0px_#000] p-6 sm:p-8 space-y-6">
+      <section className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all p-6 sm:p-8 space-y-6">
         {/* Top: Avatar, Name, Email, Stream Badge */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pb-6 border-b-2 border-black/10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pb-6 border-b border-slate-100">
           <div className="flex items-center gap-4">
             {/* Student Avatar */}
             <div className="relative">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-black text-white flex items-center justify-center font-black text-xl sm:text-2xl border-2 border-black shadow-[3px_3px_0px_0px_#FF5C5C] shrink-0">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xl sm:text-2xl shadow-sm shrink-0">
                 {initials}
               </div>
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#10B981] border-2 border-black flex items-center justify-center text-white shadow-[1px_1px_0px_0px_#000]">
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-white shadow-xs">
                 <Shield className="w-3.5 h-3.5 stroke-[2.5]" />
               </div>
             </div>
@@ -473,38 +473,40 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             {/* Name, Email, Stream */}
             <div className="space-y-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-xl sm:text-2xl font-black text-black tracking-tight truncate">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight truncate">
                   {profile.fullName || "CUET Aspirant"}
                 </h2>
                 {/* Stream Badge */}
                 <span
-                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border-2 text-[11px] font-black uppercase font-mono shadow-[1px_1px_0px_0px_#000] ${activeStreamBadge.bg} ${activeStreamBadge.text} ${activeStreamBadge.border}`}
+                  className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider font-mono ${activeStreamBadge.bg} ${activeStreamBadge.text} ${activeStreamBadge.border}`}
                 >
                   <GraduationCap className="w-3.5 h-3.5" />
                   {profile.targetStream}
                 </span>
               </div>
-              <p className="text-xs text-black/60 font-semibold truncate">
+              <p className="text-xs text-slate-500 font-medium truncate">
                 {profile.email || "aspirant@cuet-prep.in"}
               </p>
             </div>
           </div>
 
           {/* Quick Target College Pill with Edit Button */}
-          <div className="flex items-center gap-2 bg-[#FAF7EE] border-2 border-black p-2.5 rounded-xl shadow-[2px_2px_0px_0px_#000] self-start sm:self-auto">
-            <Building2 className="w-5 h-5 text-[#FF5C5C] shrink-0" />
-            <div className="text-left pr-2">
-              <p className="text-[10px] uppercase font-black text-black/50">
+          <div className="flex items-center gap-3 bg-slate-50 border border-slate-200/70 p-3 rounded-2xl self-start sm:self-auto">
+            <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0">
+              <Building2 className="w-4 h-4" />
+            </div>
+            <div className="text-left pr-1">
+              <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
                 Target College Goal
               </p>
-              <p className="text-xs font-black text-black truncate max-w-[220px]">
+              <p className="text-xs font-bold text-slate-800 truncate max-w-[200px]">
                 {profile.targetUniversity} — {profile.targetCollege}
               </p>
             </div>
             <button
               type="button"
               onClick={() => setIsEditGoalsOpen(true)}
-              className="p-1.5 rounded-lg border border-black bg-white hover:bg-[#FEF3C7] text-black shadow-[1px_1px_0px_0px_#000] transition-all"
+              className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 transition-all cursor-pointer"
               title="Change target college"
             >
               <Edit3 className="w-3.5 h-3.5" />
@@ -519,16 +521,16 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               ? profile.selectedSubjects
               : getSubjectsForStream(profile.targetStream);
           return (
-            <div className="p-4 bg-[#FAF7EE] rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_#000] space-y-2">
+            <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/60 space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
-                  <Layers className="w-3.5 h-3.5 text-[#FF5C5C]" />
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-blue-600" />
                   <span>Stream Domain Subjects ({profile.targetStream || "Science"} Stream • {displaySubjects.length} Domains)</span>
                 </span>
                 <button
                   type="button"
                   onClick={() => setIsEditGoalsOpen(true)}
-                  className="text-xs font-black text-black hover:text-[#FF5C5C] flex items-center gap-1 cursor-pointer transition-colors"
+                  className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer transition-colors"
                 >
                   <Edit3 className="w-3 h-3" />
                   <span>Change Stream</span>
@@ -538,7 +540,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                 {displaySubjects.map((subj) => (
                   <span
                     key={subj}
-                    className="px-3 py-1 rounded-lg bg-white border-2 border-black text-xs font-black text-black shadow-[2px_2px_0px_0px_#000]"
+                    className="px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-semibold text-slate-700 shadow-xs"
                   >
                     {subj}
                   </span>
@@ -551,61 +553,61 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         {/* Quick Stats Pills: XP, Active Streak Flame, Campus Coins */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {/* XP Pill */}
-          <div className="p-4 rounded-xl bg-[#EEF2FF] border-2 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-white border-2 border-black flex items-center justify-center text-[#4F46E5] shadow-[1px_1px_0px_0px_#000]">
-                <Zap className="w-5 h-5 fill-[#4F46E5]" />
+              <div className="w-10 h-10 rounded-xl bg-white border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-xs">
+                <Zap className="w-5 h-5 fill-indigo-500 text-indigo-500" />
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase text-black/60">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-900/60">
                   Total Experience
                 </p>
-                <p className="text-lg font-black text-black font-mono leading-none mt-0.5">
+                <p className="text-lg font-extrabold text-slate-900 font-mono leading-none mt-0.5">
                   {profile.xp.toLocaleString()} XP
                 </p>
               </div>
             </div>
-            <span className="text-[10px] font-black px-2 py-0.5 bg-white rounded-md border border-black">
+            <span className="text-[10px] font-bold px-2.5 py-1 bg-white text-indigo-700 rounded-full border border-indigo-100 shadow-xs">
               {profile.xp >= 1500 ? "Level 3" : profile.xp >= 500 ? "Level 2" : "Level 1"}
             </span>
           </div>
 
           {/* Streak Flame Pill */}
-          <div className="p-4 rounded-xl bg-[#FEF3C7] border-2 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-white border-2 border-black flex items-center justify-center text-[#D97706] shadow-[1px_1px_0px_0px_#000]">
-                <Flame className="w-5 h-5 fill-[#F59E0B]" />
+              <div className="w-10 h-10 rounded-xl bg-white border border-amber-100 flex items-center justify-center text-amber-600 shadow-xs">
+                <Flame className="w-5 h-5 fill-amber-500 text-amber-500" />
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase text-black/60">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-amber-900/60">
                   Practice Streak
                 </p>
-                <p className="text-lg font-black text-black font-mono leading-none mt-0.5">
+                <p className="text-lg font-extrabold text-slate-900 font-mono leading-none mt-0.5">
                   {profile.currentStreak} Day{profile.currentStreak === 1 ? "" : "s"}
                 </p>
               </div>
             </div>
-            <span className="text-[10px] font-black px-2 py-0.5 bg-white rounded-md border border-black text-[#D97706]">
+            <span className="text-[10px] font-bold px-2.5 py-1 bg-white text-amber-700 rounded-full border border-amber-100 shadow-xs">
               {profile.currentStreak >= 7 ? "7d King 🔥" : "Active"}
             </span>
           </div>
 
           {/* Campus Coins Pill */}
-          <div className="p-4 rounded-xl bg-[#D1FAE5] border-2 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-white border-2 border-black flex items-center justify-center text-[#059669] shadow-[1px_1px_0px_0px_#000]">
-                <Coins className="w-5 h-5 text-[#059669]" />
+              <div className="w-10 h-10 rounded-xl bg-white border border-emerald-100 flex items-center justify-center text-emerald-600 shadow-xs">
+                <Coins className="w-5 h-5 text-emerald-600" />
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase text-black/60">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-900/60">
                   Campus Coins
                 </p>
-                <p className="text-lg font-black text-black font-mono leading-none mt-0.5">
+                <p className="text-lg font-extrabold text-slate-900 font-mono leading-none mt-0.5">
                   {profile.campusCoins} Coins
                 </p>
               </div>
             </div>
-            <span className="text-[10px] font-black px-2 py-0.5 bg-white rounded-md border border-black text-[#047857]">
+            <span className="text-[10px] font-bold px-2.5 py-1 bg-white text-emerald-700 rounded-full border border-emerald-100 shadow-xs">
               Redeemable
             </span>
           </div>
@@ -619,19 +621,19 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         {/* ──────────────────────────────────────────────────────────── */}
         {/* CARD 2: AI DIAGNOSTIC & EXAM READINESS CARD */}
         {/* ──────────────────────────────────────────────────────────── */}
-        <section className="bg-white rounded-xl border-2 border-black shadow-[5px_5px_0px_0px_#000] p-6 sm:p-7 space-y-6 flex flex-col justify-between">
+        <section className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all p-6 sm:p-7 space-y-6 flex flex-col justify-between">
           <div className="space-y-5">
             {/* Header with AI Mentor Status */}
-            <div className="flex items-center justify-between gap-3 pb-3 border-b-2 border-black/10">
+            <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-lg bg-[#FAF7EE] border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_0px_#000]">
-                  <Brain className="w-5 h-5 text-[#FF5C5C]" />
+                <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                  <Brain className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-black text-black tracking-tight">
-                    AI Diagnostic & Exam Readiness
+                  <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+                    AI Diagnostic & Readiness
                   </h2>
-                  <p className="text-xs text-black/60 font-semibold">
+                  <p className="text-xs text-slate-500 font-medium">
                     150-question calibration & historical cutoff benchmarks
                   </p>
                 </div>
@@ -639,75 +641,75 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
               {/* Active Pulse Badge or Calibration Badge */}
               {effectiveDiagnostic.isAiMentorUnlocked ? (
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D1FAE5] border-2 border-black text-[11px] font-black text-black font-mono shadow-[1px_1px_0px_0px_#000]">
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-700">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                   </span>
                   <span>AI Mentor Active</span>
                 </div>
               ) : (
-                <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FEF3C7] border-2 border-black text-[10px] font-black text-black font-mono shadow-[1px_1px_0px_0px_#000]">
-                  <Clock className="w-3 h-3 text-[#D97706]" />
+                <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-xs font-semibold text-amber-700">
+                  <Clock className="w-3.5 h-3.5 text-amber-600" />
                   <span>Calibrating</span>
                 </div>
               )}
             </div>
 
             {/* 1. AI Calibration Progress Meter */}
-            <div className="p-4 rounded-xl bg-[#FAF7EE] border-2 border-black shadow-[3px_3px_0px_0px_#000] space-y-3">
-              <div className="flex items-center justify-between text-xs font-black">
-                <span className="text-black flex items-center gap-1.5">
-                  <Target className="w-3.5 h-3.5 text-[#FF5C5C]" />
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-slate-700 flex items-center gap-1.5">
+                  <Target className="w-3.5 h-3.5 text-blue-600" />
                   <span>AI Calibration Progress</span>
                 </span>
-                <span className="font-mono text-black">
+                <span className="font-mono text-slate-800">
                   {effectiveDiagnostic.totalAttempts} / 150 Qs ({effectiveDiagnostic.calibrationProgress}%)
                 </span>
               </div>
 
               {/* Linear Progress Bar */}
-              <div className="w-full h-3.5 bg-white rounded-full border-2 border-black overflow-hidden shadow-[1px_1px_0px_0px_#000]">
+              <div className="w-full h-3 bg-slate-200/70 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#10B981] transition-all duration-500 rounded-full"
+                  className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-500 rounded-full"
                   style={{ width: `${effectiveDiagnostic.calibrationProgress}%` }}
                 />
               </div>
 
-              <div className="flex items-center justify-between text-[11px] font-bold text-black/70">
+              <div className="flex items-center justify-between text-[11px] font-medium text-slate-500">
                 {effectiveDiagnostic.isAiMentorUnlocked ? (
-                  <span className="text-[#059669] font-black flex items-center gap-1">
+                  <span className="text-emerald-700 font-semibold flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
-                    Baseline complete. Sub-second trap remediation active.
+                    Baseline complete. Trap remediation active.
                   </span>
                 ) : (
                   <span>
-                    {Math.max(0, 150 - effectiveDiagnostic.totalAttempts)} more questions to establish full NTA timing accuracy.
+                    {Math.max(0, 150 - effectiveDiagnostic.totalAttempts)} more questions to establish NTA timing accuracy.
                   </span>
                 )}
-                <span className="font-mono font-black text-black">
+                <span className="font-mono font-bold text-slate-700">
                   Acc: {effectiveDiagnostic.accuracyPercentage}%
                 </span>
               </div>
             </div>
 
             {/* 2. Target College Readiness Index */}
-            <div className="p-4 rounded-xl bg-white border-2 border-black shadow-[3px_3px_0px_0px_#000] space-y-3">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/70 shadow-xs space-y-3">
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <Building2 className="w-3.5 h-3.5 text-[#4F46E5]" />
-                    <span className="text-xs font-black uppercase text-black">
-                      Target College Readiness Index
+                    <Building2 className="w-3.5 h-3.5 text-indigo-600" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                      Target College Readiness
                     </span>
                   </div>
-                  <p className="text-xs font-bold text-black/80 mt-0.5">
+                  <p className="text-xs font-bold text-slate-800 mt-0.5">
                     {collegeBenchmark.collegeName} ({collegeBenchmark.campus})
                   </p>
                 </div>
 
                 <span
-                  className={`px-2 py-0.5 rounded-full border text-[10px] font-black uppercase font-mono shadow-[1px_1px_0px_0px_#000] ${collegeBenchmark.statusBadgeClass}`}
+                  className={`px-2.5 py-0.5 rounded-full border text-[10px] font-bold uppercase tracking-wider font-mono ${collegeBenchmark.statusBadgeClass}`}
                 >
                   {collegeBenchmark.statusLabel}
                 </span>
@@ -715,33 +717,33 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
               {/* Comparison Visual Meter */}
               <div className="space-y-1.5 pt-1">
-                <div className="flex justify-between text-[11px] font-black text-black font-mono">
+                <div className="flex justify-between text-[11px] font-bold text-slate-700 font-mono">
                   <span>Predicted: {collegeBenchmark.predictedPercentile}%tile</span>
                   <span>Cutoff: {collegeBenchmark.historicalCutoffPercentile}%tile ({collegeBenchmark.targetScoreFormatted})</span>
                 </div>
 
-                <div className="relative w-full h-4 bg-[#FAF7EE] rounded-full border-2 border-black overflow-hidden shadow-[1px_1px_0px_0px_#000]">
+                <div className="relative w-full h-3.5 bg-slate-100 rounded-full overflow-hidden">
                   {/* Predicted Bar */}
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${
                       collegeBenchmark.status === "surpassed"
-                        ? "bg-[#10B981]"
+                        ? "bg-emerald-500"
                         : collegeBenchmark.status === "striking_distance"
-                        ? "bg-[#F59E0B]"
-                        : "bg-[#FF5C5C]"
+                        ? "bg-amber-500"
+                        : "bg-blue-600"
                     }`}
                     style={{ width: `${Math.min(100, collegeBenchmark.predictedPercentile)}%` }}
                   />
                   {/* Cutoff Target Marker Line */}
                   <div
-                    className="absolute top-0 bottom-0 w-1 bg-black z-10"
+                    className="absolute top-0 bottom-0 w-1 bg-slate-900 z-10"
                     style={{ left: `${Math.min(99, collegeBenchmark.historicalCutoffPercentile)}%` }}
                     title={`Target Cutoff: ${collegeBenchmark.historicalCutoffPercentile}%`}
                   />
                 </div>
               </div>
 
-              <p className="text-[11px] text-black/70 font-semibold leading-relaxed">
+              <p className="text-[11px] text-slate-600 font-medium leading-relaxed">
                 {collegeBenchmark.recommendation}
               </p>
             </div>
@@ -749,17 +751,17 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             {/* 3. Persistent Red Zones */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
-                  <AlertTriangle className="w-3.5 h-3.5 text-[#DC2626]" />
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+                  <AlertTriangle className="w-3.5 h-3.5 text-rose-500" />
                   <span>Persistent Red Zones (Top 3 Weak Spots)</span>
                 </span>
-                <span className="text-[10px] text-black/60 font-mono font-bold">
+                <span className="text-[10px] text-slate-400 font-mono font-semibold">
                   Pacing Sinks
                 </span>
               </div>
 
               {weakTopics.length === 0 ? (
-                <div className="p-3.5 rounded-xl bg-[#FAF7EE] border-2 border-dashed border-black text-center text-xs font-bold text-black/60">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-dashed border-slate-200 text-center text-xs font-medium text-slate-500">
                   No chronic weak spots detected yet. Start solving mocks to populate your topic radar!
                 </div>
               ) : (
@@ -767,28 +769,28 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                   {weakTopics.map((topic, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-lg bg-[#FAF7EE] border-2 border-black flex items-center justify-between gap-3 shadow-[2px_2px_0px_0px_#000]"
+                      className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between gap-3 hover:bg-slate-100/60 transition-colors"
                     >
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5">
-                          <span className="w-4 h-4 rounded-full bg-black text-white text-[10px] font-black flex items-center justify-center shrink-0">
+                          <span className="w-4 h-4 rounded-full bg-slate-800 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
                             {idx + 1}
                           </span>
-                          <span className="text-xs font-black text-black truncate">
+                          <span className="text-xs font-bold text-slate-800 truncate">
                             {topic.microTopic}
                           </span>
                         </div>
-                        <p className="text-[10px] text-black/60 font-bold truncate pl-5">
+                        <p className="text-[10px] text-slate-500 font-medium truncate pl-5">
                           {topic.subject} • {topic.chapter}
                         </p>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[10px] font-black text-[#DC2626] font-mono bg-[#FEE2E2] px-2 py-0.5 rounded border border-black">
+                        <span className="text-[10px] font-bold text-rose-700 font-mono bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200/70">
                           {topic.accuracyPercentage}% Acc
                         </span>
                         {topic.fatalTimeSinks > 0 && (
-                          <span className="text-[10px] font-black text-black/70 font-mono bg-white px-1.5 py-0.5 rounded border border-black/40">
+                          <span className="text-[10px] font-bold text-slate-600 font-mono bg-white px-1.5 py-0.5 rounded-md border border-slate-200">
                             {topic.fatalTimeSinks} Sinks
                           </span>
                         )}
@@ -801,12 +803,12 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
 
           {/* Direct "Launch 15-Q Fix Drill" CTA Button */}
-          <div className="pt-4 border-t-2 border-black/10">
+          <div className="pt-4 border-t border-slate-100">
             <button
               type="button"
               disabled={isLaunchingDrill}
               onClick={handleLaunchFixDrill}
-              className="w-full py-3 px-4 rounded-xl bg-[#FF5C5C] hover:bg-[#FF4545] text-white font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {isLaunchingDrill ? (
                 <>
@@ -827,19 +829,19 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         {/* ──────────────────────────────────────────────────────────── */}
         {/* CARD 4: SUBSCRIPTION, SETTINGS & STUDY ALERTS */}
         {/* ──────────────────────────────────────────────────────────── */}
-        <section className="bg-white rounded-xl border-2 border-black shadow-[5px_5px_0px_0px_#000] p-6 sm:p-7 space-y-6 flex flex-col justify-between">
+        <section className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all p-6 sm:p-7 space-y-6 flex flex-col justify-between">
           <div className="space-y-5">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b-2 border-black/10">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-lg bg-[#FEF3C7] border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_0px_#000]">
-                  <Crown className="w-5 h-5 text-[#D97706]" />
+                <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+                  <Crown className="w-5 h-5 text-amber-600" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-black text-black tracking-tight">
+                  <h2 className="text-lg font-bold text-slate-900 tracking-tight">
                     Subscription & Study Alerts
                   </h2>
-                  <p className="text-xs text-black/60 font-semibold">
+                  <p className="text-xs text-slate-500 font-medium">
                     Pass validity, push reminders & exam preferences
                   </p>
                 </div>
@@ -848,19 +850,21 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
             {/* Subscription Status Card */}
             <div
-              className={`p-5 rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_#000] space-y-3.5 ${
-                profile.isPremium ? "bg-[#EEF2FF]" : "bg-[#FAF7EE]"
+              className={`p-5 rounded-2xl border space-y-3.5 ${
+                profile.isPremium
+                  ? "bg-indigo-50/50 border-indigo-100"
+                  : "bg-slate-50 border-slate-200/70"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-wider text-black/60 font-mono">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
                   Current Membership
                 </span>
                 <span
-                  className={`px-2.5 py-0.5 rounded-full border-2 text-[11px] font-black font-mono shadow-[1px_1px_0px_0px_#000] ${
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold font-mono border ${
                     profile.isPremium
-                      ? "bg-[#D1FAE5] text-black border-black"
-                      : "bg-white text-black/70 border-black"
+                      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                      : "bg-white text-slate-600 border-slate-200"
                   }`}
                 >
                   {profile.isPremium ? "Active AI Pass" : "Free Aspirant Tier"}
@@ -868,72 +872,72 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               </div>
 
               <div>
-                <h3 className="text-base sm:text-lg font-black text-black tracking-tight">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                   {profile.isPremium
                     ? "CUET AI Practice Pass (Valid until July 31)"
                     : "Free Tier (1 Domain Mock / Day)"}
                 </h3>
-                <p className="text-xs text-black/70 font-semibold mt-1 leading-relaxed">
+                <p className="text-xs text-slate-600 font-medium mt-1 leading-relaxed">
                   {profile.isPremium
                     ? "Unlimited NTA CBT full mock simulations, instant NCERT mistake decrypter, and personalized Sunday ritual reports are fully unlocked."
                     : "Upgrade to unlock unlimited 50-Q NTA simulations, zero-token AI repair quizzes, and target college cutoff projections."}
                 </p>
               </div>
 
-              {/* If Free: High-contrast "Upgrade to AI Pass (₹399)" CTA triggering Razorpay modal */}
+              {/* If Free: Modern Upgrade CTA */}
               {!profile.isPremium && (
                 <div className="pt-2">
                   <UpgradeButton
                     planId="ai_pass_399"
                     variant="primary"
                     buttonText="Upgrade to AI Pass (₹399)"
-                    className="w-full py-3 rounded-xl font-black text-xs shadow-[3px_3px_0px_0px_#000]"
+                    className="w-full py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs hover:shadow-md"
                   />
                 </div>
               )}
             </div>
 
             {/* Study Alerts & Web Push Preference */}
-            <div className="p-4 rounded-xl bg-white border-2 border-black shadow-[3px_3px_0px_0px_#000] space-y-4">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/70 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#FEF3C7] border border-black flex items-center justify-center">
-                    <BellRing className="w-4 h-4 text-[#D97706]" />
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+                    <BellRing className="w-4 h-4 text-amber-600" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-black text-black">
+                    <h4 className="text-xs font-bold text-slate-900">
                       Daily Revision Push Alerts
                     </h4>
-                    <p className="text-[10px] text-black/60 font-semibold">
+                    <p className="text-[10px] text-slate-500 font-medium">
                       Automated 8:00 PM practice streak ping
                     </p>
                   </div>
                 </div>
 
-                {/* Toggle Switch */}
+                {/* Modern Toggle Switch */}
                 <button
                   type="button"
                   onClick={handleTogglePush}
-                  className={`w-12 h-6 rounded-full border-2 border-black p-0.5 transition-colors shadow-[1px_1px_0px_0px_#000] ${
-                    pushEnabled ? "bg-[#10B981]" : "bg-black/20"
+                  className={`w-11 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${
+                    pushEnabled ? "bg-blue-600" : "bg-slate-200"
                   }`}
                   aria-label="Toggle push notifications"
                 >
                   <div
-                    className={`w-4 h-4 rounded-full bg-white border border-black transition-transform ${
-                      pushEnabled ? "translate-x-6" : "translate-x-0"
+                    className={`w-5 h-5 rounded-full bg-white shadow-xs transition-transform ${
+                      pushEnabled ? "translate-x-5" : "translate-x-0"
                     }`}
                   />
                 </button>
               </div>
 
               {pushNotice && (
-                <div className="p-2.5 rounded-lg bg-[#FAF7EE] border border-black text-[11px] font-bold text-black flex items-center justify-between">
+                <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-200/60 text-[11px] font-medium text-blue-800 flex items-center justify-between">
                   <span>{pushNotice}</span>
                   <button
                     type="button"
                     onClick={() => setPushNotice(null)}
-                    className="text-black/50 hover:text-black ml-2"
+                    className="text-blue-500 hover:text-blue-800 ml-2 font-bold"
                   >
                     ✕
                   </button>
@@ -941,8 +945,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               )}
 
               {/* Test Notification Trigger Button */}
-              <div className="flex items-center justify-between pt-2 border-t border-black/10 text-xs">
-                <span className="text-[11px] text-black/60 font-bold">
+              <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+                <span className="text-[11px] text-slate-500 font-medium">
                   Status:{" "}
                   {pushEnabled
                     ? "Enabled (Browser VAPID)"
@@ -954,7 +958,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                   <button
                     type="button"
                     onClick={handleTestNotification}
-                    className="text-[11px] font-black text-black hover:underline cursor-pointer flex items-center gap-1"
+                    className="text-[11px] font-semibold text-blue-600 hover:text-blue-700 cursor-pointer flex items-center gap-1"
                   >
                     <span>Send Test Ping</span>
                     <ArrowRight className="w-3 h-3" />
@@ -964,30 +968,30 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             </div>
 
             {/* Quick System Links */}
-            <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+            <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
               <Link
                 href="/dashboard/mocks"
-                className="p-2.5 rounded-lg bg-[#FAF7EE] border border-black hover:bg-white text-black flex items-center justify-between"
+                className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 hover:bg-white hover:shadow-xs text-slate-700 flex items-center justify-between transition-all"
               >
                 <span>Mock Tests</span>
-                <Play className="w-3 h-3 text-black/50" />
+                <Play className="w-3.5 h-3.5 text-slate-400" />
               </Link>
               <Link
                 href="/dashboard/leaderboard"
-                className="p-2.5 rounded-lg bg-[#FAF7EE] border border-black hover:bg-white text-black flex items-center justify-between"
+                className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 hover:bg-white hover:shadow-xs text-slate-700 flex items-center justify-between transition-all"
               >
                 <span>DU Leaderboard</span>
-                <TrophyIcon className="w-3 h-3 text-black/50" />
+                <TrophyIcon className="w-3.5 h-3.5 text-slate-400" />
               </Link>
             </div>
           </div>
 
           {/* Account Security Quick Sign Out */}
-          <div className="pt-3 border-t-2 border-black/10">
+          <div className="pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsSignOutModalOpen(true)}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-white hover:bg-[#FEE2E2] text-black hover:text-[#DC2626] font-black text-xs border-2 border-black shadow-[2px_2px_0px_0px_#000] hover:shadow-[3px_3px_0px_0px_#DC2626] transition-all cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-semibold text-xs border border-slate-200/60 hover:border-rose-200 transition-all cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
               <span>Sign Out from Device</span>
@@ -999,15 +1003,15 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       {/* ──────────────────────────────────────────────────────────── */}
       {/* PHASE 3: DEDICATED SIGN OUT FOOTER SECTION */}
       {/* ──────────────────────────────────────────────────────────── */}
-      <section className="bg-white rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_#000] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <section className="bg-white rounded-3xl border border-slate-100 shadow-sm p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#FAF7EE] border-2 border-black flex items-center justify-center text-black/70">
+          <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
             <User className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-sm font-black text-black">Account Session Management</h4>
-            <p className="text-xs text-black/60 font-semibold">
-              Signed in as <span className="font-mono text-black">{profile.email}</span>
+            <h4 className="text-sm font-bold text-slate-900">Account Session Management</h4>
+            <p className="text-xs text-slate-500 font-medium">
+              Signed in as <span className="font-mono text-slate-700 font-semibold">{profile.email}</span>
             </p>
           </div>
         </div>
@@ -1015,7 +1019,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         <button
           type="button"
           onClick={() => setIsSignOutModalOpen(true)}
-          className="px-5 py-2.5 rounded-xl bg-white hover:bg-[#FEE2E2] text-black hover:text-[#DC2626] font-black text-xs border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:shadow-[4px_4px_0px_0px_#DC2626] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer self-start sm:self-auto"
+          className="px-5 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold text-xs border border-rose-200 transition-all flex items-center justify-center gap-2 cursor-pointer self-start sm:self-auto"
         >
           <LogOut className="w-4 h-4" />
           <span>Sign Out</span>
