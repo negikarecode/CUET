@@ -20,7 +20,6 @@ import {
   Lightbulb,
   MonitorCheck,
   Trophy,
-  X,
   LayoutDashboard,
 } from "lucide-react";
 import { ScrollSplitCard, PricingCardItem } from "@/components/ui/scroll-split-card";
@@ -39,6 +38,7 @@ import {
 import { ShimmeringText } from "@/components/animate-ui/primitives/texts/shimmering";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import OnboardingModal from "@/components/auth/OnboardingModal";
 
 const faqs: [string, string][] = [
   [
@@ -134,35 +134,7 @@ function Icon({
   return <IconComponent size={size} strokeWidth={2} aria-hidden="true" className={className} />;
 }
 
-function ParticleButton({
-  children,
-  className,
-  onClick,
-  ...props
-}: {
-  children: React.ReactNode;
-  className?: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  [key: string]: any;
-}) {
-  const [key, setKey] = useState(0);
 
-  return (
-    <Particles key={key} className="particle-button-wrapper">
-      <button
-        {...props}
-        className={className}
-        onClick={(event) => {
-          setKey((value) => value + 1);
-          onClick?.(event);
-        }}
-      >
-        {children}
-      </button>
-      <ParticlesEffect className="particle-effect" />
-    </Particles>
-  );
-}
 
 function ParticleLink({
   children,
@@ -232,18 +204,20 @@ function Navigation({
             </Link>
           ) : (
             <>
-              <ParticleButton
-                className="btn-login"
+              <button
+                type="button"
+                className="btn-login cursor-pointer"
                 onClick={() => onAuth("login")}
               >
                 Login
-              </ParticleButton>
-              <ParticleButton
-                className="btn-join"
+              </button>
+              <button
+                type="button"
+                className="btn-join cursor-pointer"
                 onClick={() => onAuth("signup")}
               >
                 Join now <Icon icon={ArrowRight} size={15} />
-              </ParticleButton>
+              </button>
             </>
           )}
         </div>
@@ -554,74 +528,6 @@ function FAQ() {
   );
 }
 
-function AuthModal({
-  mode,
-  onClose,
-}: {
-  mode: "login" | "signup";
-  onClose: () => void;
-}) {
-  const router = useRouter();
-  const [signup, setSignup] = useState(mode === "signup");
-
-  const handleRedirect = (target: string) => {
-    onClose();
-    router.push(target);
-  };
-
-  return (
-    <div className="modal-overlay" role="dialog" aria-modal="true">
-      <div className="auth-modal shadow-2xl border border-slate-100">
-        <button
-          className="modal-close p-1 hover:text-slate-900 transition-colors"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          <Icon icon={X} size={20} />
-        </button>
-        <div className="modal-tabs">
-          <button
-            type="button"
-            className={!signup ? "active text-blue-600 font-bold" : "text-slate-400 font-semibold"}
-            onClick={() => setSignup(false)}
-          >
-            Login
-          </button>
-          <button
-            type="button"
-            className={signup ? "active text-blue-600 font-bold" : "text-slate-400 font-semibold"}
-            onClick={() => setSignup(true)}
-          >
-            Create Account
-          </button>
-        </div>
-        <h2 className="text-xl font-bold text-slate-900">
-          {signup ? "Create your Free Account" : "Welcome back to CUETPrep"}
-        </h2>
-        <p className="text-xs text-slate-500 mt-1 mb-5">
-          {signup
-            ? "Start with full-length mocks, PYQs and personalized diagnostics."
-            : "Enter your credentials to continue your practice session."}
-        </p>
-
-        <div className="space-y-3">
-          <button
-            onClick={() => handleRedirect(signup ? "/signup" : "/login")}
-            className="btn-hero-cta w-full justify-center text-sm py-3"
-          >
-            {signup ? "Continue to Sign Up" : "Continue to Log In"}{" "}
-            <Icon icon={ArrowRight} size={16} />
-          </button>
-
-          <div className="text-center text-xs text-slate-400 pt-2">
-            Instant access to NTA CBT Simulators
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function LandingFooter({ onAuth }: { onAuth: (mode: "login" | "signup") => void }) {
   return (
     <footer className="site-footer">
@@ -674,8 +580,8 @@ function LandingFooter({ onAuth }: { onAuth: (mode: "login" | "signup") => void 
       <div className="footer-bottom">
         <span>© 2026 CUETPrep. All rights reserved.</span>
         <div>
-          <button onClick={() => onAuth("login")}>Log in</button>
-          <button className="footer-trial-link" onClick={() => onAuth("signup")}>
+          <button type="button" className="cursor-pointer" onClick={() => onAuth("login")}>Log in</button>
+          <button type="button" className="footer-trial-link cursor-pointer" onClick={() => onAuth("signup")}>
             Start free trial <Icon icon={ArrowRight} size={15} />
           </button>
         </div>
@@ -698,9 +604,13 @@ export default function HomePage() {
       <AdmissionSection />
       <FAQ />
       <LandingFooter onAuth={setAuthMode} />
-      {authMode && (
-        <AuthModal mode={authMode} onClose={() => setAuthMode(null)} />
-      )}
+      
+      {/* Authentic Supabase Auth & Multi-Step Onboarding Modal */}
+      <OnboardingModal
+        isOpen={Boolean(authMode)}
+        onClose={() => setAuthMode(null)}
+        initialMode={authMode || "signup"}
+      />
     </>
   );
 }
