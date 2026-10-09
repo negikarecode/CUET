@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Quote, Sparkles, Target, Flame } from 'lucide-react';
+import { Sparkles, Target, Flame } from 'lucide-react';
 
 interface WelcomeBannerProps {
   userName?: string;
@@ -31,6 +31,18 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
   const hour = new Date().getHours();
   const timeOfDay = hour < 12 ? "Good Morning" : hour < 17 ? "Good Afternoon" : "Good Evening";
   const greeting = `${timeOfDay}, ${displayName}! 👋`;
+
+  const getCollegeImage = (college?: string) => {
+    if (!college) return '/assets/images/delhi-university.jpg';
+    const c = college.toLowerCase();
+    if (c.includes('srcc') || c.includes('shri ram') || c.includes('commerce')) return '/assets/images/srcc.jpg';
+    if (c.includes('hindu')) return '/assets/images/hindu-college.jpg';
+    if (c.includes('stephen')) return '/assets/images/st-stephens.jpg';
+    if (c.includes('miranda')) return '/assets/images/miranda-house.jpg';
+    return '/assets/images/delhi-university.jpg';
+  };
+
+  const collegeImageUrl = getCollegeImage(targetCollege);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
@@ -64,22 +76,22 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className={`relative overflow-hidden rounded-2xl sm:rounded-3xl p-6 sm:p-7 text-white transition-all duration-300 group min-h-[140px] flex flex-col justify-between border ${
+          className={`relative overflow-hidden rounded-2xl sm:rounded-3xl p-6 sm:p-7 text-white transition-all duration-300 group min-h-[160px] flex flex-col justify-between border ${
             isHovered 
               ? 'border-sky-300 shadow-[0_16px_40px_-10px_rgba(56,189,248,0.35),0_0_25px_rgba(56,189,248,0.2)]' 
               : 'border-slate-800 shadow-md'
           }`}
         >
-          {/* Scenic Mountain Background Image */}
+          {/* Authentic University Campus Background Image */}
           <div 
             className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
             style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80')`,
+              backgroundImage: `url('${collegeImageUrl}')`,
             }}
           />
 
           {/* Gradients */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/75 to-indigo-950/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/80 to-indigo-950/85" />
           
           {/* Dynamic Cursor Spotlight Lighting Overlay */}
           <div 
@@ -96,7 +108,9 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
               <Sparkles className="w-3 h-3 text-amber-300" />
               Daily Inspiration
             </span>
-            <Quote className="w-5 h-5 text-white/40" />
+            <span className="text-[11px] font-semibold text-white/90 bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10">
+              {targetCollege || "Delhi University"}
+            </span>
           </div>
 
           {/* Quote text: “Discipline today creates options tomorrow.” */}
@@ -108,7 +122,10 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
 
           {/* Bottom attribution/meta */}
           <div className="relative z-20 flex items-center justify-between text-xs text-slate-300">
-            <span className="font-medium text-slate-300">Focus on the process</span>
+            <span className="font-medium text-slate-300 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Focus on the process
+            </span>
             <span className="text-[11px] text-slate-400 font-mono">#CUET2026</span>
           </div>
 

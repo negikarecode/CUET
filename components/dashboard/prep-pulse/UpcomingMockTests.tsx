@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   ArrowUpRight, 
   MoreVertical, 
@@ -17,7 +18,8 @@ interface UpcomingMockTestsProps {
   onStartTest?: (test: UpcomingTest) => void;
 }
 
-export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onStartTest: _onStartTest }) => {
+export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onStartTest }) => {
+  const router = useRouter();
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [activeModalTest, setActiveModalTest] = useState<UpcomingTest | null>(null);
 
@@ -75,7 +77,7 @@ export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onS
         </div>
 
         <button 
-          onClick={() => setActiveModalTest(tests[0] ?? null)}
+          onClick={() => router.push('/dashboard/mocks')}
           className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg text-blue-600 hover:text-blue-700 action-glow group"
         >
           <span>View All</span>
@@ -202,7 +204,7 @@ export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onS
               <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 space-y-2 text-xs text-slate-700">
                 <div className="flex justify-between">
                   <span className="text-slate-500">Pattern:</span>
-                  <span className="font-bold text-slate-800">CUET UG 2025 Standard</span>
+                  <span className="font-bold text-slate-800">CUET UG 2026 Standard</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Questions:</span>
@@ -233,8 +235,13 @@ export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onS
               </button>
               <button
                 onClick={() => {
-                  alert(`Starting ${activeModalTest.title} in exam mode! Good luck, Sarah!`);
+                  const testToStart = activeModalTest;
                   setActiveModalTest(null);
+                  if (onStartTest && testToStart) {
+                    onStartTest(testToStart);
+                  } else {
+                    router.push('/dashboard/mocks');
+                  }
                 }}
                 className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-colors shadow-sm shadow-blue-500/20 action-glow"
               >

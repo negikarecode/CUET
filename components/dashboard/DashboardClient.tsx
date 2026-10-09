@@ -41,6 +41,8 @@ import { DetailedPerformanceAnalysis } from "@/components/dashboard/prep-pulse/D
 import { StrengthsWeaknesses } from "@/components/dashboard/prep-pulse/StrengthsWeaknesses";
 import { ScheduleMockTest } from "@/components/dashboard/prep-pulse/ScheduleMockTest";
 import { DailyPracticeCalendar } from "@/components/dashboard/prep-pulse/DailyPracticeCalendar";
+import { DreamCollegeCard } from "@/components/dashboard/prep-pulse/DreamCollegeCard";
+import { RecentEvaluationsTable } from "@/components/dashboard/prep-pulse/RecentEvaluationsTable";
 
 const SUBJECT_ICON_MAP: Record<string, React.ElementType> = {
   Calculator,
@@ -341,39 +343,50 @@ export default function DashboardClient({
         />
       </section>
 
-      {/* 2. Top Metrics Row */}
+      {/* 2. Top Metrics Row (4 Cards alternating blue and charcoal matching Dashboard Overview.png) */}
       <section aria-label="Top Metrics">
         <TopMetricsRow
           totalAttempted={totalAttempted}
           averageScore={accuracyPercentage > 0 ? Math.round(accuracyPercentage * 20) : 0}
           percentile={accuracyPercentage > 0 ? Math.min(99.9, Math.max(50, accuracyPercentage * 1.15)) : 0}
+          dailyStreak={isClient && storeUser?.dailyStreak ? storeUser.dailyStreak : (initialData?.user?.currentStreak || 0)}
         />
       </section>
 
-      {/* 3. Main Performance Charts (2 Columns: ~65% / 35%) */}
-      <section aria-label="Performance Charts" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      {/* 3. Main Performance Spline Chart & Dream College Benchmark (2 Columns: 8 cols / 4 cols) */}
+      <section aria-label="Performance Charts and College Benchmark" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         <div className="lg:col-span-8">
           <ScoreImprovementTrend />
         </div>
         <div className="lg:col-span-4">
-          <SubjectWisePerformance calibrations={candidateSubjectCalibrations} />
+          <DreamCollegeCard
+            targetCollege={targetCollege}
+            targetUniversity={initialData.user.targetUniversity}
+            accuracyPercentage={accuracyPercentage}
+            totalAttempts={totalAttempted}
+          />
         </div>
       </section>
 
-      {/* 4. Detailed Analytics & AI Diagnostic Suggestions (2 Columns: 8 cols / 4 cols) */}
+      {/* 4. Subject Comparative Analytics & Breakdown (2 Columns: 7 cols / 5 cols) */}
       <section aria-label="Detailed Analytics" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-7">
           <DetailedPerformanceAnalysis 
             calibrations={candidateSubjectCalibrations} 
             weaknesses={candidateWeaknesses} 
           />
         </div>
-        <div className="lg:col-span-4">
-          <StrengthsWeaknesses 
-            weaknesses={candidateWeaknesses} 
-            strengths={candidateStrengths} 
-          />
+        <div className="lg:col-span-5">
+          <SubjectWisePerformance calibrations={candidateSubjectCalibrations} />
         </div>
+      </section>
+
+      {/* 5. Diagnostic Strengths & Weaknesses Remediation */}
+      <section aria-label="Strengths and Weaknesses">
+        <StrengthsWeaknesses 
+          weaknesses={candidateWeaknesses} 
+          strengths={candidateStrengths} 
+        />
       </section>
 
       {/* 5. Dynamic Cold-Start Qualification Progress Meter & Active Cycle Window */}
@@ -706,7 +719,12 @@ export default function DashboardClient({
         </div>
       </section>
 
-      {/* 8. Bottom Row: Schedule Mock Test (50%) & Daily Practice Heatmap (50%) */}
+      {/* 8. Recent Test Sessions & AI Evaluations Table (matching Projects table from Dashboard Overview.png) */}
+      <section aria-label="Recent Test Sessions and Evaluations">
+        <RecentEvaluationsTable />
+      </section>
+
+      {/* 9. Bottom Row: Schedule Mock Test (50%) & Daily Practice Heatmap (50%) */}
       <section aria-label="Schedule Test and Activity Heatmap" className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
         <div>
           <ScheduleMockTest />

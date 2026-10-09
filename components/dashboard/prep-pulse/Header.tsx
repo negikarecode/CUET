@@ -10,7 +10,7 @@ import {
   Sparkles,
   X
 } from 'lucide-react';
-import { USER_PROFILE } from '@/lib/data/dashboardMockData';
+import { useTestStore } from '@/lib/store/useTestStore';
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -18,6 +18,11 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTest }) => {
+  const storeUser = useTestStore((s) => s.user);
+  const userName = storeUser?.name?.trim() ? storeUser.name : "CUET Aspirant";
+  const roleSubtitle = storeUser?.targetCollege ? `Targeting ${storeUser.targetCollege}` : "Aspirant, CUET UG 2026";
+  const avatarUrl = "/assets/images/avatar1.png";
+
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -198,8 +203,8 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
             >
               <div className="relative">
                 <img
-                  src={USER_PROFILE.avatarUrl}
-                  alt={USER_PROFILE.name}
+                  src={avatarUrl}
+                  alt={userName}
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-blue-500/20"
                 />
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></span>
@@ -207,10 +212,10 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
               
               <div className="text-left hidden md:block">
                 <div className="text-sm font-bold text-slate-900 leading-tight">
-                  {USER_PROFILE.name}
+                  {userName}
                 </div>
                 <div className="text-xs text-slate-500 font-medium">
-                  {USER_PROFILE.roleSubtitle}
+                  {roleSubtitle}
                 </div>
               </div>
 
@@ -222,8 +227,8 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
               <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
                 <div className="px-3 py-2.5 border-b border-slate-100">
                   <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Signed in as</p>
-                  <p className="text-sm font-bold text-slate-900 truncate mt-0.5">{USER_PROFILE.name}</p>
-                  <p className="text-xs text-slate-500">{USER_PROFILE.roleSubtitle}</p>
+                  <p className="text-sm font-bold text-slate-900 truncate mt-0.5">{userName}</p>
+                  <p className="text-xs text-slate-500">{roleSubtitle}</p>
                 </div>
 
                 <div className="py-1">

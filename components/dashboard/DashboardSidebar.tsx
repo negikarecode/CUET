@@ -41,15 +41,6 @@ export default function DashboardSidebar() {
   const targetCollege = isClient && isLoggedIn && user.targetCollege ? user.targetCollege : "Delhi University";
   const userStream = isClient && isLoggedIn && user.preferredStream ? user.preferredStream : "Science";
 
-  const userInitials =
-    userName
-      .split(" ")
-      .filter(Boolean)
-      .map((n) => n[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase() || "CU";
-
   const handleSignOut = async () => {
     try {
       const supabase = createClient();
@@ -143,8 +134,13 @@ export default function DashboardSidebar() {
           className="block p-3.5 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200/70 transition-all space-y-3 group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-900 to-slate-700 text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-              {userInitials}
+            <div className="relative shrink-0">
+              <img
+                src="/assets/images/avatar1.png"
+                alt={userName}
+                className="w-10 h-10 rounded-xl object-cover ring-2 ring-blue-500/20 group-hover:scale-105 transition-transform"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
             </div>
             <div className="flex flex-col min-w-0 flex-1">
               <span className="font-bold text-slate-900 text-sm truncate leading-tight group-hover:text-blue-600 transition-colors">

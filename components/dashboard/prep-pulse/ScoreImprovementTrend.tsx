@@ -257,7 +257,7 @@ export const ScoreImprovementTrend: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-3.5 min-w-[210px] z-50 animate-in fade-in zoom-in-95 duration-100">
           <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
             <span className="text-xs font-bold text-slate-800">
-              {pointData?.month || label} 2025
+              {pointData?.month || label}
             </span>
             <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
               Overall: {pointData?.score} pts

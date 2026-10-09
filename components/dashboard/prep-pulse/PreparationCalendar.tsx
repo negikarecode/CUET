@@ -20,7 +20,7 @@ export const PreparationCalendar: React.FC = () => {
               Preparation Calendar
             </h2>
             <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md action-glow cursor-default">
-              May – Jun 2025
+              CUET UG 2026
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -57,10 +57,10 @@ export const PreparationCalendar: React.FC = () => {
           </div>
 
           <button 
-            onClick={() => alert('Opening Full Monthly Preparation Schedule')}
+            onClick={() => setActiveTab(activeTab === 'schedule' ? 'activity' : 'schedule')}
             className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg text-blue-600 hover:text-blue-700 action-glow group"
           >
-            <span>Full View</span>
+            <span>{activeTab === 'schedule' ? 'Heatmap' : 'Roadmap'}</span>
             <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </button>
         </div>
