@@ -31,6 +31,21 @@ export default function CBTPlayer() {
   const [mobilePaletteOpen, setMobilePaletteOpen] = useState(false);
   const examConfig = getActiveExamConfig();
 
+  // Lock body scroll and listen for Escape key when mobile palette is open
+  useEffect(() => {
+    if (!mobilePaletteOpen) return;
+
+    document.body.style.overflow = "hidden";
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobilePaletteOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobilePaletteOpen]);
+
   // Store state and actions
   const testMeta = useCBTStore((state) => state.testMeta);
   const questions = useCBTStore((state) => state.questions);
@@ -365,7 +380,7 @@ export default function CBTPlayer() {
                   type="button"
                   onClick={clearResponse}
                   disabled={selectedOption === null}
-                  className="px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all"
+                  className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all touch-manipulation cursor-pointer flex items-center justify-center"
                 >
                   <span className="hidden sm:inline">{t("clearResponse", "Clear Response")}</span>
                   <span className="sm:hidden">{t("clear", "Clear")}</span>
@@ -374,7 +389,7 @@ export default function CBTPlayer() {
                 <button
                   type="button"
                   onClick={markForReviewAndNext}
-                  className={`px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border transition-all flex items-center gap-1.5 shadow-xs ${
+                  className={`min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border transition-all flex items-center justify-center gap-1.5 shadow-xs touch-manipulation cursor-pointer ${
                     currentAnswer?.isMarkedForReview
                       ? "bg-amber-100 border-amber-300 text-amber-900"
                       : "bg-amber-50 border-amber-200 text-amber-800 hover:bg-amber-100/80"
@@ -392,7 +407,7 @@ export default function CBTPlayer() {
                   type="button"
                   onClick={goToPrevious}
                   disabled={currentQuestionIndex === 0}
-                  className="px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all flex items-center gap-1"
+                  className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all flex items-center justify-center gap-1 touch-manipulation cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4 stroke-[2]" />
                   <span className="hidden sm:inline">{t("previous", "Previous")}</span>
@@ -402,7 +417,7 @@ export default function CBTPlayer() {
                   type="button"
                   onClick={goToNext}
                   disabled={currentQuestionIndex >= questions.length - 1}
-                  className="px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all flex items-center gap-1"
+                  className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all flex items-center justify-center gap-1 touch-manipulation cursor-pointer"
                 >
                   <span className="hidden sm:inline">{t("next", "Next")}</span>
                   <ChevronRight className="w-4 h-4 stroke-[2]" />
@@ -411,7 +426,7 @@ export default function CBTPlayer() {
                 <button
                   type="button"
                   onClick={saveAndNext}
-                  className="px-4 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs tracking-wide shadow-xs hover:shadow transition-all flex items-center gap-1.5"
+                  className="min-h-[44px] px-4 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs tracking-wide shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer"
                 >
                   <span>{t("saveAndNext", "Save & Next")}</span>
                   <ChevronRight className="w-4 h-4 stroke-[2]" />
@@ -438,7 +453,12 @@ export default function CBTPlayer() {
         {/* MOBILE QUESTION PALETTE DRAWER / BOTTOM SHEET */}
         {/* =================================================================== */}
         {mobilePaletteOpen && (
-          <div className="lg:hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-end justify-center">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Question Palette Drawer"
+            className="lg:hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-end justify-center"
+          >
             <div className="w-full max-h-[85vh] bg-white rounded-t-3xl border-t border-slate-200 p-5 overflow-y-auto shadow-xl animate-in slide-in-from-bottom duration-200">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
                 <h3 className="text-sm font-bold text-slate-900">
@@ -447,7 +467,8 @@ export default function CBTPlayer() {
                 <button
                   type="button"
                   onClick={() => setMobilePaletteOpen(false)}
-                  className="p-1.5 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 shadow-xs"
+                  className="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 shadow-xs touch-manipulation cursor-pointer"
+                  aria-label="Close question palette"
                 >
                   <X className="w-5 h-5 stroke-[2]" />
                 </button>
@@ -587,7 +608,7 @@ function PaletteCard({
               key={q.id}
               type="button"
               onClick={() => onSelectQuestion(idx)}
-              className={`relative h-9 rounded-xl text-xs font-mono font-semibold transition-all flex items-center justify-center cursor-pointer ${colorClasses} ${
+              className={`relative h-10 min-h-[40px] rounded-xl text-xs font-mono font-semibold transition-all flex items-center justify-center cursor-pointer touch-manipulation ${colorClasses} ${
                 isCurrent
                   ? "ring-2 ring-blue-600 ring-offset-2 scale-105 z-10 shadow-sm"
                   : ""

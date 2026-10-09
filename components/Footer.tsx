@@ -22,7 +22,7 @@ export default function Footer() {
     }
   };
 
-  if (pathname === "/" || pathname.startsWith("/test/") || pathname.startsWith("/dashboard")) {
+  if (!pathname || pathname === "/" || pathname.startsWith("/test/") || pathname === "/dashboard" || pathname.startsWith("/dashboard/")) {
     return null;
   }
 

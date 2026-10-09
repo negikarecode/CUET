@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import AppShell from "@/components/layout/AppShell";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import GoogleTranslateSync from "@/components/i18n/GoogleTranslateSync";
 import "./globals.css";
@@ -39,9 +38,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col bg-white font-sans text-slate-900 antialiased selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden w-full max-w-full">
         <LanguageProvider>
           <GoogleTranslateSync />
-          <Navbar />
-          <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>
-          <Footer />
+          <AppShell>{children}</AppShell>
         </LanguageProvider>
       </body>
     </html>

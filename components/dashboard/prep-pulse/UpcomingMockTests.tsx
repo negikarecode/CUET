@@ -64,7 +64,7 @@ export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onS
   };
 
   return (
-    <GlowCard className="p-6 h-full">
+    <GlowCard className="p-4 sm:p-6 h-full">
       {/* Header Row */}
       <div className="flex items-center justify-between pb-4 border-b border-slate-100/80">
         <div>

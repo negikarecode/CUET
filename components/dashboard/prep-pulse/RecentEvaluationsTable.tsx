@@ -107,7 +107,7 @@ export const RecentEvaluationsTable: React.FC = () => {
   const displayRows = hasRealAttempts ? realRows : defaultRecommendedRows;
 
   return (
-    <GlowCard className="p-6">
+    <GlowCard className="p-4 sm:p-6">
       {/* Table Header matching Dashboard Overview.png */}
       <div className="flex items-center justify-between pb-4 border-b border-slate-100">
         <div>
@@ -138,9 +138,9 @@ export const RecentEvaluationsTable: React.FC = () => {
         </div>
       </div>
 
-      {/* Responsive Table */}
-      <div className="overflow-x-auto pt-2">
-        <table className="w-full text-left border-collapse">
+      {/* Responsive Table with horizontal scrollguard */}
+      <div className="overflow-x-auto pt-2 -mx-1 sm:mx-0">
+        <table className="w-full min-w-[640px] text-left border-collapse">
           <thead>
             <tr className="border-b border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-400">
               <th className="py-3 px-2">Evaluator &amp; Test Session</th>

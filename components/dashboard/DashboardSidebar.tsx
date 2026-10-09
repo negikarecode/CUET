@@ -34,6 +34,21 @@ export default function DashboardSidebar() {
 
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
+  // Lock body scroll and listen for Escape key when mobile drawer is open
+  React.useEffect(() => {
+    if (!mobileDrawerOpen) return;
+
+    document.body.style.overflow = "hidden";
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileDrawerOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileDrawerOpen]);
+
   const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name && user?.id !== "guest");
   const streak = isClient && isLoggedIn ? user.dailyStreak : 1;
   const xp = isClient && isLoggedIn ? user.xpPoints : 0;
@@ -250,8 +265,9 @@ export default function DashboardSidebar() {
           <button
             type="button"
             onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
-            className="p-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 shrink-0"
+            className="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 shrink-0 touch-manipulation cursor-pointer"
             aria-label="Toggle Dashboard Menu"
+            aria-expanded={mobileDrawerOpen}
           >
             {mobileDrawerOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
@@ -260,13 +276,19 @@ export default function DashboardSidebar() {
 
       {/* 2. Mobile Drawer Overlay */}
       {mobileDrawerOpen && (
-        <div className="md:hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Dashboard Navigation Menu"
+          className="md:hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex"
+        >
           <div className="w-72 max-w-[85vw] h-full bg-white border-r border-slate-200/80 p-5 flex flex-col shadow-2xl animate-in slide-in-from-left duration-200">
             <div className="flex justify-end pb-3">
               <button
                 type="button"
                 onClick={() => setMobileDrawerOpen(false)}
-                className="p-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                className="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 touch-manipulation cursor-pointer"
+                aria-label="Close navigation menu"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -282,8 +304,8 @@ export default function DashboardSidebar() {
         </div>
       )}
 
-      {/* 3. Desktop Left Sidebar Navbar (Persistent on left side) */}
-      <aside className="hidden md:flex flex-col w-64 lg:w-72 h-full overflow-y-auto shrink-0 z-40 bg-white border-r border-slate-200/80 p-5 shadow-xs">
+      {/* 3. Desktop Left Sidebar Navbar (Persistent & sticky, seamless single-scroll surface) */}
+      <aside className="hidden md:flex flex-col w-64 lg:w-72 md:sticky md:top-0 md:h-screen md:overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden shrink-0 z-40 bg-white border-r border-slate-200/80 p-5 shadow-xs">
         <SidebarContent />
       </aside>
     </>

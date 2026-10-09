@@ -49,18 +49,18 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
       
       {/* Left Column: Greeting and Context */}
       <div className="lg:col-span-7 flex flex-col justify-center py-2">
-        <div className="flex flex-wrap items-center gap-2.5 mb-2.5">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-200/60 shadow-2xs action-glow cursor-default">
-            <Target className="w-3.5 h-3.5 text-blue-600" />
-            CUET 2026 • {targetStream}{targetCollege ? ` • Targeting ${targetCollege}` : ''}
+        <div className="flex flex-wrap items-center gap-2 mb-2.5">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-200/60 shadow-2xs action-glow cursor-default max-w-full">
+            <Target className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+            <span className="truncate">CUET 2026 • {targetStream}{targetCollege ? ` • Targeting ${targetCollege}` : ''}</span>
           </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full border border-amber-200/60 shadow-2xs action-glow cursor-default">
-            <Flame className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
-            {streak}-Day Practice Streak
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full border border-amber-200/60 shadow-2xs action-glow cursor-default shrink-0">
+            <Flame className="w-3.5 h-3.5 text-amber-600 fill-amber-500 shrink-0" />
+            <span>{streak}-Day Practice Streak</span>
           </span>
         </div>
 
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        <h1 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
           {greeting}
         </h1>
 
