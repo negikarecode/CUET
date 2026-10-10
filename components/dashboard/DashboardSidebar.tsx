@@ -304,8 +304,8 @@ export default function DashboardSidebar() {
         </div>
       )}
 
-      {/* 3. Desktop Left Sidebar Navbar (Persistent & sticky, seamless single-scroll surface) */}
-      <aside className="hidden md:flex flex-col w-64 lg:w-72 md:sticky md:top-0 md:h-screen md:overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden shrink-0 z-40 bg-white border-r border-slate-200/80 p-5 shadow-xs">
+      {/* 3. Desktop Left Sidebar Navbar (Fixed permanently on left, stays fixed while scrolling) */}
+      <aside className="hidden md:flex flex-col w-64 lg:w-72 fixed inset-y-0 left-0 h-screen overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden shrink-0 z-40 bg-white border-r border-slate-200/80 p-5 shadow-xs">
         <SidebarContent />
       </aside>
     </>

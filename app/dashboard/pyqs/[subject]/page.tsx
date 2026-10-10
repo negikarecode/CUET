@@ -45,9 +45,8 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
     : "50 Compulsory Questions per Paper • Official NTA CUET CBT Past Year Papers";
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-6 lg:p-8">
-      <div className="max-w-5xl mx-auto space-y-6">
-        {/* Navigation & Header */}
+    <div className="w-full max-w-5xl mx-auto p-4 md:p-6 lg:p-8 space-y-6">
+      {/* Navigation & Header */}
         <div className="space-y-3">
           <Link
             href="/dashboard/pyqs"
@@ -213,6 +212,5 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
           </div>
         )}
       </div>
-    </div>
-  );
-}
+    );
+  }

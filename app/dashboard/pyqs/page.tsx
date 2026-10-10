@@ -445,9 +445,8 @@ export default function PYQsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto mb-10 space-y-6 sm:space-y-8">
-        {/* Header Section */}
+    <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-6 sm:space-y-8">
+      {/* Header Section */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[11px] font-semibold bg-amber-50 text-amber-800 px-3 py-1 rounded-full border border-amber-200/60">
@@ -757,7 +756,6 @@ export default function PYQsPage() {
             </div>
           </div>
         )}
-        </div>
       </div>
     </div>
   );

@@ -29,17 +29,17 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full bg-[#F8FAFC] flex flex-col md:flex-row">
-      {/* Left Sidebar (persistent on desktop, sticky) */}
+    <div className="min-h-screen w-full max-w-full bg-[#F8FAFC]">
+      {/* Left Sidebar (fixed on desktop, stays fixed while scrolling) */}
       <DashboardSidebar />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 w-full max-w-full">
+      {/* Main Content Area (offset by fixed sidebar width on desktop) */}
+      <div className="md:pl-64 lg:pl-72 flex flex-col min-w-0 w-full max-w-full">
         {/* Top Horizontal Bar (sticky on desktop) */}
         <DashboardNavbar />
 
-        {/* Main Content Container (natural document flow, single scroll surface, safe mobile bottom clearance) */}
-        <main className="flex-1 min-w-0 w-full max-w-full pb-24 md:pb-12">
+        {/* Main Content Container (no extra padding in end) */}
+        <main className="flex-1 min-w-0 w-full max-w-full pb-16 md:pb-0">
           {children}
         </main>
       </div>
