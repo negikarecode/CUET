@@ -9,21 +9,11 @@ export const DailyPracticeCalendar: React.FC = () => {
   const testAttempts = useTestStore((s) => s.testAttempts);
 
   const attempts = useMemo(() => {
-    if (testAttempts && testAttempts.length > 0) {
-      return testAttempts;
-    }
-    return [
-      {
-        submittedAt: '2026-10-06T14:30:00.000Z',
-        subject: 'Environmental Studies',
-        attemptedCount: 50,
-        score: 10,
-      },
-    ];
+    return testAttempts || [];
   }, [testAttempts]);
 
   const heatmapData = useMemo(() => {
-    return generate90DayHeatmap(new Date('2026-10-10'), attempts);
+    return generate90DayHeatmap(new Date(), attempts);
   }, [attempts]);
 
   const getCellColor = (count: number, isInRange: boolean) => {

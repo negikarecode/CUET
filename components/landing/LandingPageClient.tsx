@@ -511,6 +511,14 @@ function Hero({
               <Icon icon={ArrowRight} size={19} />
             </button>
 
+            <Link
+              href="/dashboard/pyqs"
+              className="px-5 py-3 rounded-full font-bold text-sm bg-white/95 hover:bg-white text-slate-800 hover:text-blue-600 border border-slate-200/90 shadow-sm hover:shadow transition-all flex items-center gap-2"
+            >
+              <FileText className="w-4 h-4 text-blue-600" />
+              <span>Solve 411+ Official PYQs</span>
+            </Link>
+
             <div className="flex items-center gap-3">
               <img
                 src="/assets/images/avatar_stack.png"
@@ -527,14 +535,14 @@ function Hero({
       </main>
 
       <div className="hero-content-layer hero-features">
-        <Feature
-          icon={FileText}
-          text={
-            <>
-              Full-length<br />Mock Tests
-            </>
-          }
-        />
+        <Link href="/dashboard/pyqs" className="feature-badge-item hover:border-blue-300 transition-colors group">
+          <div className="feature-icon-box bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+            <Icon icon={FileText} size={19} />
+          </div>
+          <strong className="text-slate-800 font-bold text-xs sm:text-sm leading-snug">
+            411 Official<br />PYQ Shift Papers
+          </strong>
+        </Link>
         <Feature
           icon={BookOpen}
           text={

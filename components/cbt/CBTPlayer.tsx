@@ -10,6 +10,7 @@ import {
   Grid,
   X,
   ArrowLeft,
+  CheckCircle2,
 } from "lucide-react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -167,6 +168,7 @@ export default function CBTPlayer() {
     );
   }
 
+  const isLastQuestion = currentQuestionIndex >= questions.length - 1;
   const currentQ = questions[currentQuestionIndex];
   if (!currentQ) {
     return (
@@ -413,23 +415,47 @@ export default function CBTPlayer() {
                   <span className="hidden sm:inline">{t("previous", "Previous")}</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={goToNext}
-                  disabled={currentQuestionIndex >= questions.length - 1}
-                  className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all flex items-center justify-center gap-1 touch-manipulation cursor-pointer"
-                >
-                  <span className="hidden sm:inline">{t("next", "Next")}</span>
-                  <ChevronRight className="w-4 h-4 stroke-[2]" />
-                </button>
+                {isLastQuestion ? (
+                  <button
+                    type="button"
+                    onClick={openSubmitModal}
+                    className="min-h-[44px] px-4 sm:px-5 py-2 text-xs font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer"
+                  >
+                    <CheckCircle2 className="w-4 h-4 stroke-[2]" />
+                    <span className="hidden sm:inline">{t("submitExam", "Submit Exam")}</span>
+                    <span className="sm:hidden">{t("submit", "Submit")}</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={goToNext}
+                    className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all flex items-center justify-center gap-1 touch-manipulation cursor-pointer"
+                  >
+                    <span className="hidden sm:inline">{t("next", "Next")}</span>
+                    <ChevronRight className="w-4 h-4 stroke-[2]" />
+                  </button>
+                )}
 
                 <button
                   type="button"
-                  onClick={saveAndNext}
-                  className="min-h-[44px] px-4 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs tracking-wide shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer"
+                  onClick={() => {
+                    saveAndNext();
+                    if (isLastQuestion) {
+                      openSubmitModal();
+                    }
+                  }}
+                  className={`min-h-[44px] px-4 sm:px-5 py-2 rounded-xl font-semibold text-xs tracking-wide shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer ${
+                    isLastQuestion
+                      ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
+                      : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
+                  }`}
                 >
-                  <span>{t("saveAndNext", "Save & Next")}</span>
-                  <ChevronRight className="w-4 h-4 stroke-[2]" />
+                  <span>{isLastQuestion ? t("saveAndSubmit", "Save & Submit") : t("saveAndNext", "Save & Next")}</span>
+                  {isLastQuestion ? (
+                    <CheckCircle2 className="w-4 h-4 stroke-[2]" />
+                  ) : (
+                    <ChevronRight className="w-4 h-4 stroke-[2]" />
+                  )}
                 </button>
               </div>
             </div>

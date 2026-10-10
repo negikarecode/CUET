@@ -9,7 +9,7 @@ interface WelcomeBannerProps {
 export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
   userName,
 }) => {
-  const displayName = userName && userName.trim() ? userName : 'Aryan';
+  const displayName = userName && userName.trim() ? userName : 'Aspirant';
   const hour = new Date().getHours();
   const timeOfDay = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 

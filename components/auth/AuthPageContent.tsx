@@ -171,8 +171,7 @@ export default function AuthPageContent({
           campusCoins: userCoins,
         });
 
-        router.push(redirectUrl);
-        router.refresh();
+        window.location.href = redirectUrl;
       }
     } catch (err: any) {
       setErrorMessage(err?.message || "Authentication error. Please try again.");
@@ -292,13 +291,12 @@ export default function AuthPageContent({
           targetCourse: finalCourse,
           preferredStream: stream,
           selectedSubjects,
-          dailyStreak: 1,
-          xpPoints: 100,
-          campusCoins: 25,
+          dailyStreak: 0,
+          xpPoints: 0,
+          campusCoins: 0,
         });
 
-        router.push(redirectUrl);
-        router.refresh();
+        window.location.href = redirectUrl;
       }
     } catch (err: any) {
       setErrorMessage(err?.message || "Sign up failed. Please try again.");

@@ -32,17 +32,7 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
 
   const rawAttempts = useMemo(() => {
     if (!isClient || !testAttempts || testAttempts.length === 0) {
-      return [
-        {
-          id: 'mock-1',
-          submittedAt: '2026-10-06T14:30:00.000Z',
-          subject: 'Environmental Studies',
-          totalMarks: 10,
-          accuracyPercentage: 20,
-          attemptedCount: 50,
-          correctCount: 10,
-        },
-      ];
+      return [];
     }
     return [...testAttempts].sort((a, b) => {
       const ta = new Date(a.submittedAt || 0).getTime();
@@ -136,13 +126,22 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
               Score trend chart showing historical test attempts with a target score line at {targetScore}.
             </div>
 
-            {attemptsCount < 2 ? (
+            {attemptsCount === 0 ? (
               <div className="py-12 text-center space-y-2">
                 <p className="text-[14px] font-medium text-[var(--text)]">
-                  Baseline recorded: {rawAttempts[0]?.totalMarks ?? 10} / {MARKING_SCHEME.MAX_SCORE_PER_SUBJECT}
+                  No mock tests attempted yet
                 </p>
                 <p className="text-[14px] text-[var(--text-secondary)] max-w-sm mx-auto">
-                  Complete at least two mock tests to view your performance trend line over time.
+                  Complete your first diagnostic test to establish your baseline score and start tracking your performance trend.
+                </p>
+              </div>
+            ) : attemptsCount === 1 ? (
+              <div className="py-12 text-center space-y-2">
+                <p className="text-[14px] font-medium text-[var(--text)]">
+                  Baseline recorded: {rawAttempts[0]?.totalMarks ?? 0} / {MARKING_SCHEME.MAX_SCORE_PER_SUBJECT}
+                </p>
+                <p className="text-[14px] text-[var(--text-secondary)] max-w-sm mx-auto">
+                  Complete at least one more mock test to view your performance trend line over time.
                 </p>
               </div>
             ) : (

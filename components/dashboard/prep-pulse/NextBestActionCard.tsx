@@ -24,24 +24,40 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
   const isCalibrated = attempts >= CALIBRATION_THRESHOLDS.SUBJECT_CALIBRATION_QUESTIONS;
   const unlockProgress = Math.min(100, Math.round((attempts / CALIBRATION_THRESHOLDS.SUBJECT_CALIBRATION_QUESTIONS) * 100));
 
-  // Default fallback if no weakness recorded yet
-  const topic: TopicMastery = (prioritizedTopic || {
-    subject: 'Physics',
-    chapter: 'Electrostatics & Coulomb Law',
-    microTopic: 'Electric Field Lines',
-    accuracyPercentage: 0,
-    attemptsCount: 6,
-    correctCount: 0,
-    incorrectCount: 6,
-    avgTimeSeconds: 2,
-    status: 'critical',
-    isRecovered: false,
-    fullDiagnosis: {
-      primaryDiagnosis: 'Rapid Response Pacing',
-      contributingFactor: 'High-Speed Answer Selection',
-      specificWeakness: 'Rushing through questions without reviewing options',
-    },
-  }) as TopicMastery;
+  // If no attempts or weakness recorded yet, show onboarding diagnostic card
+  if (!prioritizedTopic || totalAttempted === 0) {
+    return (
+      <div className="app-card flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="space-y-2 max-w-2xl">
+          <div className="flex items-center gap-2">
+            <span className="text-[12px] font-medium text-[var(--text-secondary)]">
+              Recommended next step
+            </span>
+            <span className="text-[12px] text-[var(--text-muted)]">•</span>
+            <span className="text-[12px] text-[var(--text-secondary)]">
+              Diagnostic Mock
+            </span>
+          </div>
+          <h2 className="text-[20px] font-semibold text-[var(--text)] leading-[1.25]">
+            Complete your first diagnostic test
+          </h2>
+          <p className="text-[14px] text-[var(--text-secondary)] leading-[1.5]">
+            Take an official 50-question mock or PYQ shift paper to calibrate your score, detect question traps, and unlock AI weakness diagnosis.
+          </p>
+        </div>
+        <div className="flex items-center gap-3 shrink-0">
+          <Link
+            href="/dashboard/mocks"
+            className="inline-flex items-center justify-center px-4 py-2.5 rounded-[8px] text-[14px] font-medium text-white bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-colors cursor-pointer"
+          >
+            Start diagnostic test
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const topic: TopicMastery = prioritizedTopic;
 
   const confidence = getTopicConfidence(topic.attemptsCount || 0);
   const plainDiagnosis = formatPlainLanguageDiagnosis({

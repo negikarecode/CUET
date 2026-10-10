@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData } from "@/types";
@@ -25,7 +24,7 @@ export interface DashboardInitialData {
     targetUniversity: string;
     targetCollege: string;
     targetCourse: string;
-    selectedSubjects?: string[];
+    selectedSubjects: string[];
     xp: number;
     campusCoins: number;
     currentStreak: number;
@@ -57,7 +56,6 @@ export default function DashboardClient({
 }: {
   initialData: DashboardInitialData;
 }) {
-  const router = useRouter();
   const isClient = useIsClient();
   const storeUser = useTestStore((state) => state.user);
   const clientAnalytics = useTestStore((state) => state.analytics);
@@ -79,23 +77,15 @@ export default function DashboardClient({
     }
   }, []);
 
-  // Client-side authentication guard: redirect to /signup if unauthenticated
+  // Allow guest visitors to explore dashboard, mocks, and PYQs seamlessly without blocking
   useEffect(() => {
-    if (isClient) {
-      const isAuth = Boolean(
-        (storeUser?.isLoggedIn && storeUser?.name && storeUser?.id !== "guest") ||
-        (initialData?.user && initialData.user.id !== "guest")
-      );
-      if (!isAuth) {
-        router.replace("/signup?redirect=/dashboard");
-      }
-    }
-  }, [isClient, storeUser, initialData, router]);
+    // Guest mode active for practice
+  }, []);
 
   const isServerUser = initialData?.user && initialData.user.id !== "guest";
 
   // ---------------------------------------------------------------------------
-  // SINGLE SOURCE OF TRUTH FOR ALL NUMBERS
+  // SINGLE SOURCE OF TRUTH FOR ALL NUMBERS (No fake defaults)
   // ---------------------------------------------------------------------------
   const storeAttemptsSum =
     isClient && testAttempts && testAttempts.length > 0
@@ -103,43 +93,45 @@ export default function DashboardClient({
       : 0;
 
   const clientQuestionsAttempted =
-    isClient && clientAnalytics ? (clientAnalytics.totalQuestionsAttempted || 0) : 0;
+    isClient && clientAnalytics ? (clientAnalytics.totalQuestionsAttempted ?? 0) : 0;
 
-  const serverAttempted = initialData?.kpi?.totalAttempted || 50;
+  const serverAttempted = initialData?.kpi?.totalAttempted ?? 0;
 
   // Single source for total attempted
-  const totalAttempted = Math.max(serverAttempted, storeAttemptsSum, clientQuestionsAttempted);
+  const totalAttempted = isClient && testAttempts && testAttempts.length > 0
+    ? storeAttemptsSum
+    : (isServerUser ? serverAttempted : clientQuestionsAttempted);
 
-  // Single source for correct and incorrect answers
+  // Single source for correct answers
   const correctCount =
     isClient && testAttempts && testAttempts.length > 0
       ? testAttempts.reduce((sum, a) => sum + (a.correctCount || 0), 0)
-      : clientAnalytics?.totalCorrectAnswers || 10;
+      : (clientAnalytics?.totalCorrectAnswers ?? 0);
 
-  // Single source for accuracy: strictly correct / attempted (10/50 = 20%)
+  // Single source for accuracy: strictly correct / attempted
   const accuracyPercentage =
     totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0;
 
   // Single source for score: CUET marking scheme (+5 correct, -1 incorrect)
-  const currentScore = calculateCUETScore(correctCount, totalAttempted).score;
+  const currentScore = totalAttempted > 0 ? calculateCUETScore(correctCount, totalAttempted).score : 0;
 
   // User profile identifiers
   const fullName = isServerUser
     ? initialData.user.fullName
     : isClient && storeUser.name
     ? storeUser.name
-    : initialData.user.fullName || "Aryan Negi";
+    : initialData?.user?.fullName || "Aspirant";
 
   const targetStream = isServerUser
     ? initialData.user.targetStream
     : isClient && storeUser.preferredStream
     ? storeUser.preferredStream
-    : initialData.user.targetStream || "Science";
+    : initialData?.user?.targetStream || "Science";
 
   const streak =
-    isClient && storeUser?.dailyStreak
+    isClient && storeUser?.dailyStreak !== undefined
       ? storeUser.dailyStreak
-      : initialData?.user?.currentStreak || 1;
+      : initialData?.user?.currentStreak ?? 0;
 
   // Active Subject Calibration Map
   const subjectCalibrationMap = useMemo(() => {
@@ -230,10 +222,12 @@ export default function DashboardClient({
       })[0] || candidateWeaknesses[0];
   }, [candidateWeaknesses]);
 
-  // Check if pacing guidance is relevant
+  // Check if pacing guidance is relevant (only if attempts exist)
   const hasPacingIssue = Boolean(
-    candidateWeaknesses.some((w) => w.fullDiagnosis?.primaryDiagnosis === "Rapid Response Pacing") ||
-    (testAttempts && testAttempts.some((a) => a.isLowEffort))
+    totalAttempted > 0 && (
+      candidateWeaknesses.some((w) => w.fullDiagnosis?.primaryDiagnosis === "Rapid Response Pacing") ||
+      (testAttempts && testAttempts.some((a) => a.isLowEffort))
+    )
   );
 
   return (

@@ -12,12 +12,12 @@ interface TopMetricsRowProps {
 }
 
 export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
-  score = 10,
+  score = 0,
   maxScore = MARKING_SCHEME.MAX_SCORE_PER_SUBJECT,
-  accuracyPercentage = 20,
-  correctCount = 10,
-  totalAttempted = 50,
-  dailyStreak = 1,
+  accuracyPercentage = 0,
+  correctCount = 0,
+  totalAttempted = 0,
+  dailyStreak = 0,
 }) => {
   const hasAttempts = totalAttempted > 0;
 

@@ -24,7 +24,7 @@ export default function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
 
   const isDashboardRoute = Boolean(
-    pathname && (pathname === "/dashboard" || pathname.startsWith("/dashboard/"))
+    pathname && (pathname === "/dashboard" || pathname.startsWith("/dashboard/") || pathname.startsWith("/dashboard?"))
   );
 
   const isCbtTestRoute = Boolean(
@@ -32,6 +32,10 @@ export default function AppShell({ children }: AppShellProps) {
   );
 
   const isLandingRoute = pathname === "/";
+
+  const isAuthRoute = Boolean(
+    pathname && (pathname.startsWith("/signup") || pathname.startsWith("/login"))
+  );
 
   // If on CBT simulator, full screen with no navbars or bottom navs
   if (isCbtTestRoute) {
@@ -43,14 +47,14 @@ export default function AppShell({ children }: AppShellProps) {
     return <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>;
   }
 
-  // If on authenticated dashboard, no duplicate upper navbar or footer, but mount mobile BottomNav
+  // Auth routes (signup / login): focused card layout without global marketing navbar or footer
+  if (isAuthRoute) {
+    return <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>;
+  }
+
+  // Authenticated dashboard routes: managed entirely by DashboardLayout (DashboardSidebar + DashboardNavbar)
   if (isDashboardRoute) {
-    return (
-      <>
-        {children}
-        <BottomNav />
-      </>
-    );
+    return <>{children}</>;
   }
 
   // Other public marketing & utility routes

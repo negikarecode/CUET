@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import {
   X,
   GraduationCap,
@@ -34,7 +33,6 @@ export default function OnboardingModal({
   onClose,
   initialMode = "signup",
 }: OnboardingModalProps) {
-  const router = useRouter();
   const loginUser = useTestStore((state) => state.loginUser);
 
   const [mode, setMode] = useState<"signup" | "login">(initialMode);
@@ -168,8 +166,7 @@ export default function OnboardingModal({
         });
 
         onClose();
-        router.push("/dashboard");
-        router.refresh();
+        window.location.href = "/dashboard";
       }
     } catch (err: any) {
       setErrorMessage(err?.message || "Authentication error. Please try again.");
@@ -292,14 +289,13 @@ export default function OnboardingModal({
           targetCourse: finalCourse,
           preferredStream: stream,
           selectedSubjects,
-          dailyStreak: 1,
-          xpPoints: 50,
-          campusCoins: 25,
+          dailyStreak: 0,
+          xpPoints: 0,
+          campusCoins: 0,
         });
 
         onClose();
-        router.push("/dashboard");
-        router.refresh();
+        window.location.href = "/dashboard";
       }
     } catch (err: any) {
       setErrorMessage(err?.message || "Sign up failed. Please try again.");

@@ -15,7 +15,6 @@ import {
   BookOpen,
   FileText,
   LogOut,
-  Trophy,
   ArrowRight,
   Target,
   LayoutDashboard,
@@ -99,7 +98,14 @@ export default function Navbar() {
     window.location.href = "/";
   };
 
-  if (!pathname || pathname === "/" || pathname.startsWith("/test/") || pathname === "/dashboard" || pathname.startsWith("/dashboard/")) {
+  if (
+    !pathname ||
+    pathname === "/" ||
+    pathname.startsWith("/test/") ||
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/signup") ||
+    pathname.startsWith("/login")
+  ) {
     return null;
   }
 
@@ -109,7 +115,7 @@ export default function Navbar() {
         {/* Main Navbar */}
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3">
           <div className="flex items-center justify-between min-h-[52px] sm:min-h-[58px] relative">
-            {/* Left: Brand Logo & Dashboard Nav Items */}
+            {/* Left: Brand Logo */}
             <div className="flex items-center gap-2 sm:gap-4 lg:gap-6 min-w-0">
               <Link
                 href="/"
@@ -133,50 +139,6 @@ export default function Navbar() {
                   </span>
                 </div>
               </Link>
-
-              {/* Dashboard Left-Aligned Navigation */}
-              {isDashboard && (
-                <>
-                  <div className="hidden lg:block h-5 w-px bg-slate-200" />
-                  <nav className="hidden lg:flex items-center space-x-1">
-                    <Link
-                      href="/dashboard"
-                      className="px-3 py-1.5 text-xs font-semibold text-indigo-600 bg-indigo-50/80 rounded-xl border border-indigo-100 flex items-center gap-1.5 shadow-xs"
-                    >
-                      <Trophy className="w-3.5 h-3.5 text-amber-500" />
-                      <span>{t("commandHub", "Command Hub")}</span>
-                    </Link>
-                    <Link
-                      href="/dashboard/pyqs"
-                      className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all flex items-center gap-1.5"
-                    >
-                      <FileText className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{t("domainTests", "PYQs")}</span>
-                    </Link>
-                    <Link
-                      href="/dashboard/mocks"
-                      className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all flex items-center gap-1.5"
-                    >
-                      <BookOpen className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{t("mocks", "Mock Tests")}</span>
-                    </Link>
-                    <Link
-                      href="/dashboard/radar"
-                      className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all flex items-center gap-1.5"
-                    >
-                      <Target className="w-3.5 h-3.5 text-rose-500" />
-                      <span>{t("radar", "Weakness Radar")}</span>
-                    </Link>
-                    <Link
-                      href="/dashboard#leaderboard"
-                      className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all flex items-center gap-1.5"
-                    >
-                      <Award className="w-3.5 h-3.5 text-indigo-500" />
-                      <span>{t("leaderboard", "Leaderboard")}</span>
-                    </Link>
-                  </nav>
-                </>
-              )}
             </div>
 
             {/* Right Action Items: Logged Out vs Logged In */}

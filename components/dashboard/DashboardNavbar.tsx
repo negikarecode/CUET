@@ -25,10 +25,9 @@ export default function DashboardNavbar() {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name && user?.id !== "guest");
-  const streak = isClient && isLoggedIn ? user.dailyStreak : 1;
-  const userName = isClient && isLoggedIn && user.name ? user.name : "Aryan Negi";
-  const userEmail = isClient && isLoggedIn && user.email ? user.email : "student@cuetprep.in";
+  const streak = isClient && user?.dailyStreak !== undefined ? user.dailyStreak : 0;
+  const userName = isClient && user?.name ? user.name : "Aspirant";
+  const userEmail = isClient && user?.email ? user.email : "";
 
   // Close dropdown on click outside
   useEffect(() => {

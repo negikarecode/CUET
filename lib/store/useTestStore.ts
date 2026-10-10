@@ -201,7 +201,7 @@ export const useTestStore = create<TestStoreState>()(
             targetCourse: profile.targetCourse || "B.Com (Hons)",
             preferredStream: stream,
             selectedSubjects: profile.selectedSubjects || [],
-            dailyStreak: profile.dailyStreak ?? 1,
+            dailyStreak: profile.dailyStreak ?? 0,
             xpPoints: profile.xpPoints ?? 0,
             campusCoins: profile.campusCoins ?? 0,
             accuracyPercentage: profile.accuracyPercentage ?? 0,
