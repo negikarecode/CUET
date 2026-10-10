@@ -72,6 +72,8 @@ export const SUBJECT_MOCK_DEFINITIONS: SubjectMockDefinition[] = [
   { id: "fine_arts", folder: "fine_arts", code: "311", name: "Fine Arts / Visual Arts", durationMinutes: 45, aliases: ["fine-arts", "fine_arts", "visual-arts", "visual_arts", "finearts", "fa"] },
   { id: "agriculture", folder: "agriculture", code: "302", name: "Agriculture", durationMinutes: 45, aliases: ["agriculture", "agr"] },
   { id: "anthropology", folder: "anthropology", code: "303", name: "Anthropology", durationMinutes: 45, aliases: ["anthropology", "ant"] },
+  { id: "english", folder: "english", code: "101", name: "English", durationMinutes: 45, aliases: ["english", "eng"] },
+  { id: "general-test", folder: "general-test", code: "501", name: "General Aptitude Test", durationMinutes: 60, aliases: ["general-test", "general_test", "general_aptitude_test", "general-aptitude-test", "gat", "general"] },
 ];
 
 // In-memory cache for parsed JSON datasets to ensure zero file-I/O overhead on repeat visits
@@ -88,6 +90,33 @@ export function loadRawMockData(folder: string, mockNumber: number): RawQuestion
   const basePath = path.join(process.cwd(), "mock", folder, `${mockNumber}.json`);
   if (!fs.existsSync(basePath)) {
     console.warn(`[MockLoader] Mock file not found at ${basePath}. Returning empty bank pending rebuild.`);
+    return [];
+  }
+
+  const content = fs.readFileSync(basePath, "utf-8");
+  const parsed = JSON.parse(content) as RawQuestion[];
+  mockRawDataCache.set(cacheKey, parsed);
+  return parsed;
+}
+
+/**
+ * Loads raw PYQ question data from pyq/<subjectFolder>/<paperNumber>.json
+ */
+export function loadRawPYQData(folder: string, paperNumber: number): RawQuestion[] {
+  const cacheKey = `pyq_${folder}_${paperNumber}`;
+  const cached = mockRawDataCache.get(cacheKey);
+  if (cached) return cached;
+
+  const basePath = path.join(process.cwd(), "pyq", folder, `${paperNumber}.json`);
+  if (!fs.existsSync(basePath)) {
+    const fallbackPath = path.join(process.cwd(), "mock", folder, `${paperNumber}.json`);
+    if (fs.existsSync(fallbackPath)) {
+      const content = fs.readFileSync(fallbackPath, "utf-8");
+      const parsed = JSON.parse(content) as RawQuestion[];
+      mockRawDataCache.set(cacheKey, parsed);
+      return parsed;
+    }
+    console.warn(`[PYQLoader] Paper not found at ${basePath}. Returning empty bank.`);
     return [];
   }
 
@@ -265,7 +294,10 @@ export function getQuestionsForTest(testId: string): {
     notesPrefix = `CUET UG 2026 NTA Practice (${subjectDef.name} Mock ${validMockNumber})`;
   }
 
-  const rawQuestions = loadRawMockData(subjectDef.folder, validMockNumber);
+  const isPYQ = lowerId.includes("pyq");
+  const rawQuestions = isPYQ
+    ? loadRawPYQData(subjectDef.folder, validMockNumber)
+    : loadRawMockData(subjectDef.folder, validMockNumber);
 
   const questions = mapQuestionsFromDataset(
     testId,

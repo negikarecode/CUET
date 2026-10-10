@@ -62,9 +62,11 @@ type SubjectKey =
   | "environmental-studies"
   | "fine-arts"
   | "agriculture"
-  | "anthropology";
+  | "anthropology"
+  | "english"
+  | "general-test";
 
-type StreamKey = "all" | "science" | "commerce" | "humanities";
+type StreamKey = "all" | "science" | "commerce" | "humanities" | "common";
 
 interface SubjectMeta {
   key: SubjectKey;
@@ -93,7 +95,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "science",
     name: "Science Stream",
     shortName: "Science",
-    badge: "7 Domains • In Preparation",
+    badge: "7 Domains • 35 Official Papers Live",
     accentBg: "#E0F2FE",
     accentText: "#0369A1",
     subjects: [
@@ -110,7 +112,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "commerce",
     name: "Commerce Stream",
     shortName: "Commerce",
-    badge: "4 Domains • In Preparation",
+    badge: "4 Domains • 20 Official Papers Live",
     accentBg: "#FEF3C7",
     accentText: "#D97706",
     subjects: [
@@ -124,7 +126,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "humanities",
     name: "Humanities & Arts",
     shortName: "Humanities",
-    badge: "10 Domains • In Preparation",
+    badge: "10 Domains • 50 Official Papers Live",
     accentBg: "#FCE7F3",
     accentText: "#BE185D",
     subjects: [
@@ -140,6 +142,18 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
       "anthropology",
     ],
   },
+  common: {
+    key: "common",
+    name: "Common & Languages",
+    shortName: "General/Lang",
+    badge: "2 Subjects • 10 Official Papers Live",
+    accentBg: "#F0FDF4",
+    accentText: "#15803D",
+    subjects: [
+      "english",
+      "general-test",
+    ],
+  },
 };
 
 const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
@@ -147,9 +161,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "physics",
     name: "Physics",
     code: "312",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 60,
     subtitle:
       "Official NTA CUET CBT papers (2024 Shifts 1 & 2, 2023 Shifts 1 & 2, 2022) with complete step-by-step NCERT solutions.",
@@ -159,9 +173,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "chemistry",
     name: "Chemistry",
     code: "306",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 60,
     subtitle:
       "Official NTA CUET CBT papers covering Physical, Organic, and Inorganic Chemistry with reaction mechanisms and pacing benchmarks.",
@@ -171,9 +185,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "mathematics",
     name: "Mathematics",
     code: "319",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 60,
     subtitle:
       "Official NTA CUET CBT papers covering Calculus, Algebra, Probability, and Vectors with full analytical derivations.",
@@ -183,9 +197,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "biology",
     name: "Biology",
     code: "304",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Genetics, Reproduction, Biotechnology, and Ecology with line-by-line NCERT references.",
@@ -195,9 +209,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "accountancy",
     name: "Accountancy",
     code: "301",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 60,
     subtitle:
       "Official NTA CUET CBT papers covering Partnership, Company Accounts, Cash Flow Statements, and Financial Analysis.",
@@ -207,9 +221,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "business-studies",
     name: "Business Studies",
     code: "305",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Principles of Management, Financial Markets, Marketing, and Consumer Protection.",
@@ -219,9 +233,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "economics",
     name: "Economics",
     code: "309",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 60,
     subtitle:
       "Official NTA CUET CBT papers covering Introductory Macroeconomics and Indian Economic Development.",
@@ -231,9 +245,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "history",
     name: "History",
     code: "314",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Themes in Indian History Parts I, II, and III with source-based and chronology questions.",
@@ -243,9 +257,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "political-science",
     name: "Political Science",
     code: "323",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Contemporary World Politics and Politics in India Since Independence.",
@@ -255,9 +269,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "geography",
     name: "Geography",
     code: "313",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Fundamentals of Human Geography and India: People and Economy.",
@@ -267,9 +281,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "psychology",
     name: "Psychology",
     code: "324",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Psychological Disorders, Personality, Social Influence, and Therapeutic Approaches.",
@@ -279,9 +293,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "sociology",
     name: "Sociology",
     code: "325",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Indian Society, Social Institutions, and Social Change and Development.",
@@ -291,9 +305,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "physical-education",
     name: "Physical Education",
     code: "321",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Management of Sports Events, Children & Women in Sports, Yoga, and Biomechanics.",
@@ -303,9 +317,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "computer-science",
     name: "Computer Science / IP",
     code: "308",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 60,
     subtitle:
       "Official NTA CUET CBT papers covering Computational Thinking, Python Programming, SQL Databases, and Computer Networks.",
@@ -315,9 +329,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "home-science",
     name: "Home Science",
     code: "315",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Clinical Nutrition, Human Development, Fabric and Apparel, and Resource Management.",
@@ -327,9 +341,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "mass-media",
     name: "Mass Media & Communication",
     code: "318",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Communication Theories, Journalism, Cinema, Radio & Television, and New Media.",
@@ -339,9 +353,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "environmental-studies",
     name: "Environmental Studies",
     code: "307",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Human & Environment, Ecosystem Dynamics, Pollution, and Sustainable Development.",
@@ -351,9 +365,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "fine-arts",
     name: "Fine Arts / Visual Arts",
     code: "311",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Rajasthani, Pahari, Mughal & Deccan Miniatures, Bengal School, and Modern Indian Art.",
@@ -363,9 +377,9 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "agriculture",
     name: "Agriculture",
     code: "302",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Agrometeorology, Genetics, Livestock Production, Crop Production, and Horticulture.",
@@ -375,13 +389,37 @@ const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     key: "anthropology",
     name: "Anthropology",
     code: "303",
-    isLive: false,
-    paperCount: 0,
-    totalQuestions: 0,
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
     durationMinutes: 45,
     subtitle:
       "Official NTA CUET CBT papers covering Physical Anthropology, Prehistoric Archaeology, Socio-Cultural Anthropology, and Tribal Studies.",
     icon: Footprints,
+  },
+  english: {
+    key: "english",
+    name: "English Language",
+    code: "101",
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
+    durationMinutes: 45,
+    subtitle:
+      "Official NTA CUET CBT papers covering Reading Comprehension, Vocabulary, Synonyms & Antonyms, and Verbal Ability with complete solutions.",
+    icon: FileText,
+  },
+  "general-test": {
+    key: "general-test",
+    name: "General Aptitude Test",
+    code: "501",
+    isLive: true,
+    paperCount: 5,
+    totalQuestions: 250,
+    durationMinutes: 60,
+    subtitle:
+      "Official NTA CUET CBT papers covering General Knowledge, Current Affairs, Mental Ability, and Quantitative Aptitude with full step-by-step explanations.",
+    icon: Trophy,
   },
 };
 
@@ -449,16 +487,16 @@ export default function PYQsPage() {
       {/* Header Section */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-semibold bg-amber-50 text-amber-800 px-3 py-1 rounded-full border border-amber-200/60">
-              In Preparation / Rebuilding
-            </span>
-            <span className="text-[11px] font-semibold bg-rose-50 text-rose-700 px-3 py-1 rounded-full border border-rose-200/60">
-              0 Papers Live
-            </span>
-            <span className="text-[11px] font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full border border-slate-200">
-              5,000 Questions
+            <span className="text-[11px] font-semibold bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full border border-emerald-200/60">
+              110 Official Papers Live
             </span>
             <span className="text-[11px] font-semibold bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-200/60">
+              All 22 Subjects Live
+            </span>
+            <span className="text-[11px] font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full border border-slate-200">
+              5,500 Questions
+            </span>
+            <span className="text-[11px] font-semibold bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full border border-indigo-200/60">
               Official NTA Pattern (+5 / -1)
             </span>
           </div>
@@ -487,10 +525,11 @@ export default function PYQsPage() {
                   onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
                   className="w-full bg-slate-50 hover:bg-slate-100/70 text-slate-800 font-semibold text-sm px-4 py-3 rounded-2xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-10 transition-all"
                 >
-                  <option value="all">All Streams (Under Rebuild)</option>
-                  <option value="science">Science Stream (7 Subjects • In Preparation)</option>
-                  <option value="commerce">Commerce Stream (4 Subjects • In Preparation)</option>
-                  <option value="humanities">Humanities & Arts (10 Subjects • In Preparation)</option>
+                  <option value="all">All Streams (22 Subjects • 110 Papers Live)</option>
+                  <option value="science">Science Stream (7 Subjects • 35 Papers Live)</option>
+                  <option value="commerce">Commerce Stream (4 Subjects • 20 Papers Live)</option>
+                  <option value="humanities">Humanities & Arts (10 Subjects • 50 Papers Live)</option>
+                  <option value="common">Common & Languages (2 Subjects • 10 Papers Live)</option>
                 </select>
                 <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
@@ -509,7 +548,7 @@ export default function PYQsPage() {
                 >
                   <option value="all">
                     {selectedStream === "all"
-                      ? "All 20 Domain Subjects"
+                      ? "All 22 Subjects (110 Papers Live)"
                       : `All Subjects in ${STREAM_CONFIGS[selectedStream].name} (${STREAM_CONFIGS[selectedStream].subjects.length} Subjects)`}
                   </option>
                   {selectedStream === "all" ? (
@@ -517,21 +556,28 @@ export default function PYQsPage() {
                       <optgroup label="Science Stream">
                         {STREAM_CONFIGS.science.subjects.map((k) => (
                           <option key={`sci-${k}`} value={k}>
-                            {PYQ_SUBJECT_CONFIGS[k].name} (Code {PYQ_SUBJECT_CONFIGS[k].code} • In Preparation)
+                            {PYQ_SUBJECT_CONFIGS[k].name} (Code {PYQ_SUBJECT_CONFIGS[k].code} • 5 Papers Live)
                           </option>
                         ))}
                       </optgroup>
                       <optgroup label="Commerce Stream">
                         {STREAM_CONFIGS.commerce.subjects.map((k) => (
                           <option key={`com-${k}`} value={k}>
-                            {PYQ_SUBJECT_CONFIGS[k].name} (Code {PYQ_SUBJECT_CONFIGS[k].code} • In Preparation)
+                            {PYQ_SUBJECT_CONFIGS[k].name} (Code {PYQ_SUBJECT_CONFIGS[k].code} • 5 Papers Live)
                           </option>
                         ))}
                       </optgroup>
                       <optgroup label="Humanities & Arts Stream">
                         {STREAM_CONFIGS.humanities.subjects.map((k) => (
                           <option key={`hum-${k}`} value={k}>
-                            {PYQ_SUBJECT_CONFIGS[k].name} (Code {PYQ_SUBJECT_CONFIGS[k].code} • In Preparation)
+                            {PYQ_SUBJECT_CONFIGS[k].name} (Code {PYQ_SUBJECT_CONFIGS[k].code} • 5 Papers Live)
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Common & Languages">
+                        {STREAM_CONFIGS.common.subjects.map((k) => (
+                          <option key={`comn-${k}`} value={k}>
+                            {PYQ_SUBJECT_CONFIGS[k].name} (Code {PYQ_SUBJECT_CONFIGS[k].code} • 5 Papers Live)
                           </option>
                         ))}
                       </optgroup>
@@ -539,7 +585,7 @@ export default function PYQsPage() {
                   ) : (
                     availableSubjectsForDropdown.map((sub) => (
                       <option key={sub.key} value={sub.key}>
-                        {sub.name} (Code {sub.code} • In Preparation)
+                        {sub.name} (Code {sub.code} • 5 Papers Live)
                       </option>
                     ))
                   )}

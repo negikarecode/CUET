@@ -1,0 +1,3148 @@
+[
+  {
+    "questionNumber": 1,
+    "chapter": "Database Concepts and SQL",
+    "topic": "Nested Aggregate Functions in SQL",
+    "questionText": "Why is SELECT MAX(AVG(Salary)) FROM Emp GROUP BY DeptId; invalid in standard SQL?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Because AVG is only for school grades",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Because AVG is only for school grades'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "Because MAX cannot be used with numbers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Because MAX cannot be used with numbers'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "C",
+        "text": "SQL does not permit nesting of aggregate functions directly; a subquery or derived table must be used instead",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Nested Aggregate Functions in SQL."
+      },
+      {
+        "id": "D",
+        "text": "Because Salary is a currency data type",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Because Salary is a currency data type'. Conflates core domain concepts or theories with adjacent terminology."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Standard SQL prohibits nesting aggregate functions like MAX(AVG(...)); inner aggregation must be computed via a subquery.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q01",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is SQL does not permit nesting of aggregate functions directly; a subquery or derived table must be used instead.",
+      "concept": "Standard SQL prohibits nesting aggregate functions like MAX(AVG(...)); inner aggregation must be computed via a subquery.\nHence, Option C is correct.",
+      "detailed": "Standard SQL prohibits nesting aggregate functions like MAX(AVG(...)); inner aggregation must be computed via a subquery.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock11-q8",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "chapter": "Data Visualization using Pyplot",
+    "topic": "Bar Chart vs Histogram Difference",
+    "questionText": "What is the conceptual difference between a bar chart and a histogram?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Bar charts display qualitative categories with gaps between bars, whereas histograms display quantitative frequency distributions using contiguous bars.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Bar charts require the x-axis to be a continuous numeric scale, while histograms mandate a categorical discrete axis for classification.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Bar charts are exclusively used for temporal data sequences, whereas histograms are reserved for spatial geographic data mapping.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Bar charts use proportional bar lengths to represent values, while histograms use bar heights to represent non-linear mathematical trends.",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Option A is correct because it accurately describes the fundamental structural and data-type differences: bar charts use separated bars to show distinct categories (qualitative or discrete data), while histograms use adjacent bars to show the distribution of continuous numerical data across intervals. Option B incorrectly swaps the axis requirements. Option C incorrectly restricts the use cases to specific data types like time or space. Option D incorrectly describes the visualization mechanics (bar length vs height for non-linear trends).",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q02",
+    "conceptId": "cs.data_visualization_u",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Bar charts represent discrete categorical data with separated bars; histograms represent continuous numerical distributions partitioned into intervals.",
+      "concept": "Bar charts visualize discrete categories; histograms visualize the continuous distribution of numerical variables.\nHence, Option D is correct.",
+      "detailed": "Bar charts visualize discrete categories; histograms visualize the continuous distribution of numerical variables.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock11-q38",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Adding New Row using loc",
+    "questionText": "How can a new row with index label 'R5' be appended to DataFrame df with values [10, 20, 30]?",
+    "options": [
+      {
+        "id": "A",
+        "text": "df.loc['R5'] = [10, 20, 30]",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Adding New Row using loc."
+      },
+      {
+        "id": "B",
+        "text": "df['R5'] = [10, 20, 30]",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'df['R5'] = [10, 20, 30]'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "df.append_row('R5', [10, 20, 30])",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'df.append_row('R5', [10, 20, 30])'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "df.add_row('R5', [10, 20, 30])",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'df.add_row('R5', [10, 20, 30])'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Assigning a sequence or dict to a new row label via df.loc['new_label'] appends or updates that row in place.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q03",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is df.loc['R5'] = [10, 20, 30].",
+      "concept": "Assigning a sequence or dict to a new row label via df.loc['new_label'] appends or updates that row in place.\nHence, Option A is correct.",
+      "detailed": "Assigning a sequence or dict to a new row label via df.loc['new_label'] appends or updates that row in place.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock8-q33",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "DataFrame True Column Count",
+    "questionText": "How can you programmatically get the total number of columns in DataFrame df?",
+    "options": [
+      {
+        "id": "A",
+        "text": "df.count_cols()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'df.count_cols()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "len(df)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'len(df)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "df.size // 2",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'df.size // 2'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "len(df.columns) or df.shape[1]",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains DataFrame True Column Count."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "The number of columns is given by df.shape[1] or the length of the column index len(df.columns).\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q04",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is len(df.columns) or df.shape[1].",
+      "concept": "The number of columns is given by df.shape[1] or the length of the column index len(df.columns).\nHence, Option D is correct.",
+      "detailed": "The number of columns is given by df.shape[1] or the length of the column index len(df.columns).\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock20-q31",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "Creation from 2D NumPy Array",
+    "questionText": "When creating df = pd.DataFrame(np.zeros((3, 4))), what are the shape and default column labels?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Shape: (4, 3); Column labels: 1, 2, 3, 4",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Shape: (4, 3); Column labels: 1, 2, 3, 4'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "Shape: 12; Column labels: 'a', 'b', 'c', 'd'",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Shape: 12; Column labels: 'a', 'b', 'c', 'd''. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Shape: (3, 4); Column labels: 'col1', 'col2', 'col3', 'col4'",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Shape: (3, 4); Column labels: 'col1', 'col2', 'col3', 'col4''. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Shape: (3, 4); Column labels: 0, 1, 2, 3",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Creation from 2D NumPy Array."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "A 3x4 array creates 3 rows and 4 columns, defaulting to integer labels 0, 1, 2, 3 for columns and 0, 1, 2 for rows.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q05",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Shape: (3, 4); Column labels: 0, 1, 2, 3.",
+      "concept": "A 3x4 array creates 3 rows and 4 columns, defaulting to integer labels 0, 1, 2, 3 for columns and 0, 1, 2 for rows.\nHence, Option D is correct.",
+      "detailed": "A 3x4 array creates 3 rows and 4 columns, defaulting to integer labels 0, 1, 2, 3 for columns and 0, 1, 2 for rows.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock12-q30",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "chapter": "Computer Networks",
+    "topic": "Star vs Bus Network Topology Resilience",
+    "questionText": "Why is the 'Star Topology' far more resilient to individual cable failures than the 'Bus Topology'?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A cable break in a star topology only isolates the connected node, whereas a break in the bus backbone disrupts the entire network segment.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "A cable break in a star topology is automatically bypassed by the central hub, whereas a break in a bus topology requires manual rerouting of all traffic.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "A cable break in a star topology only reduces overall transmission speed, whereas a break in a bus topology causes continuous data packet collisions.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "A cable break in a star topology is prevented by redundant backup lines, whereas a bus topology lacks any physical shielding against cable damage.",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "In a star topology, each device is connected to a central hub or switch via an individual cable; therefore, a cable failure only isolates that specific device. In contrast, a bus topology relies on a single central backbone cable terminated at both ends. A break in this backbone disrupts the electrical termination, causing signal reflection and collapsing the entire network segment.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q06",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is In Star topology, a broken cable disconnects only that single workstation, whereas in Bus topology, a severed backbone cable collapses the entire network.",
+      "concept": "Star topology connects every node independently to a central switch/hub; failure of one cable isolates only that single node.\nHence, Option D is correct.",
+      "detailed": "Star topology connects every node independently to a central switch/hub; failure of one cable isolates only that single node.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock1-q10",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Fileless Malware Concept",
+    "questionText": "What is 'Fileless Malware' in modern cybersecurity?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Malicious logic that executes entirely within RAM using native OS scripts, avoiding disk writes",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Software exploits that reside exclusively in non-volatile storage for long-term persistence on the host",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Cryptographic procedures that erase all executable payloads directly from the device's hard drive",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Network intrusion tools that rely solely on external remote servers to perform data exfiltration tasks",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Fileless malware is technically defined by its execution within volatile memory (RAM) utilizing living-off-the-land binaries or native scripts (like PowerShell), thereby avoiding the creation of persistent executable files on the disk. This behavior allows it to bypass traditional disk-based signature detection. Therefore, the correct description is the one emphasizing execution within RAM without writing to disk.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q07",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Malicious code that operates purely within volatile RAM memory and legitimate OS tools (like PowerShell) without writing executable files to disk.",
+      "concept": "Fileless malware evades disk-based signature scanners by executing scripts in memory through living-off-the-land system utilities.\nHence, Option B is correct.",
+      "detailed": "Fileless malware evades disk-based signature scanners by executing scripts in memory through living-off-the-land system utilities.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock19-q22",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "chapter": "Computer Networks",
+    "topic": "Modem Function (Modulation / Demodulation)",
+    "questionText": "What does the term 'Modem' stand for, and what is its primary electronic function?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Mode-Demonstrator: displays internet speed",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Mode-Demonstrator: displays internet speed'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "Modulator-Demodulator",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Modem Function (Modulation / Demodulation)."
+      },
+      {
+        "id": "C",
+        "text": "Module-Demagnifier: shrinks computer chips",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Module-Demagnifier: shrinks computer chips'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Modern-Demarcation: secures computer cables",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Modern-Demarcation: secures computer cables'. Conflates core domain concepts or theories with adjacent terminology."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Modem modulates digital data into analog audio frequencies for copper telecommunication media and demodulates incoming analog signals back to digital.\nHence, Option B is correct.\n\nNote: converts digital signals from a computer into analog signals for telephone lines, and vice versa",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q08",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Modulator-Demodulator: converts digital signals from a computer into analog signals for telephone lines, and vice versa.",
+      "concept": "Modem modulates digital data into analog audio frequencies for copper telecommunication media and demodulates incoming analog signals back to digital.\nHence, Option B is correct.",
+      "detailed": "Modem modulates digital data into analog audio frequencies for copper telecommunication media and demodulates incoming analog signals back to digital.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock8-q9",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "count() vs len() Distinction",
+    "questionText": "How does df['Age'].count() differ fundamentally from len(df['Age'])?",
+    "options": [
+      {
+        "id": "A",
+        "text": "They are exact duplicates with identical behavior",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'They are exact duplicates with identical behavior'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "B",
+        "text": "df['Age'].count() counts only non-null values, whereas len(df['Age']) counts all rows including NaNs",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains count() vs len() Distinction."
+      },
+      {
+        "id": "C",
+        "text": "len() counts only positive numbers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'len() counts only positive numbers'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "df['Age'].count() counts unique values only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'df['Age'].count() counts unique values only'. Conflates core domain concepts or theories with adjacent terminology."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "count() tallies non-null observations; len() returns the total length of the index axis.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q09",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is df['Age'].count() counts only non-null values, whereas len(df['Age']) counts all rows including NaNs.",
+      "concept": "count() tallies non-null observations; len() returns the total length of the index axis.\nHence, Option B is correct.",
+      "detailed": "count() tallies non-null observations; len() returns the total length of the index axis.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock8-q35",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "chapter": "Algorithmic Efficiency and Search",
+    "topic": "Best-case Time Complexity Comparison",
+    "questionText": "Read the following algorithmic search case study and answer the questions that follow:\n\nAn administrative software engineer is optimizing citizen identification lookups across a database of 1,000,000 enrolled citizens. Each record has a unique 12-digit CitizenID. The engineer tests two search algorithms:\n1. Linear Search: Examines records sequentially from index 0 to n-1 until a match is found or end of array is reached. If the ID is located at the end or absent, it requires 1,000,000 comparisons (O(n) worst-case time complexity).\n2. Binary Search: Operates on an array that is strictly sorted by CitizenID. It compares the target ID with the middle element. If target is smaller, it searches the left half; if larger, it searches the right half. With each comparison, the search space is cut in half, locating any citizen in at most 20 comparisons (O(log2 n) worst case).\n\nQuestion: What is the best-case time complexity for both Linear Search and Binary Search when the target is at the first inspected position?",
+    "options": [
+      {
+        "id": "A",
+        "text": "O(1) constant time",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Best-case Time Complexity Comparison."
+      },
+      {
+        "id": "B",
+        "text": "O(log n)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'O(log n)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "O(n)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'O(n)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "O(n^2)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'O(n^2)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "If the target item is at index 0 (Linear Search) or at the initial midpoint (Binary Search), both locate it in O(1) time.\nHence, Option A is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "CUET-UG-CS-2024-S2-Q10",
+    "conceptId": "cs.algorithmic_efficien",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is O(1) constant time.",
+      "concept": "If the target item is at index 0 (Linear Search) or at the initial midpoint (Binary Search), both locate it in O(1) time.\nHence, Option A is correct.",
+      "detailed": "If the target item is at index 0 (Linear Search) or at the initial midpoint (Binary Search), both locate it in O(1) time.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock15-q49",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "chapter": "Societal Impacts, Cyber Ethics and Data Protection",
+    "topic": "Hazardous E-waste Substances",
+    "questionText": "Read the following case study on e-waste and green computing and answer the questions that follow:\n\nGreenTech Municipal Corporation conducted an environmental audit across city schools and corporate tech parks. The audit revealed that over 15 tonnes of obsolete personal computers, CRT monitors, lithium batteries, and circuit boards were being discarded directly into unlined municipal landfills or sold to informal scrapyards. Informal scrap workers extracted copper and gold by burning printed circuit boards in open fires and soaking components in acid baths, releasing toxic fumes into dense neighborhoods. The municipal committee instituted the E-Waste (Management) Rules, mandating Extended Producer Responsibility (EPR) on electronics manufacturers and establishing authorized e-waste collection centers with certified, eco-friendly dismantling and recycling protocols.\n\nQuestion: Which hazardous heavy metal, commonly found in cathode ray tube (CRT) monitor glass and solder, causes neurological damage?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Silicon (Si)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Silicon (Si)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "Lead (Pb)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Hazardous E-waste Substances."
+      },
+      {
+        "id": "C",
+        "text": "Carbon (C)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Carbon (C)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Gold (Au)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Gold (Au)'. Conflates core domain concepts or theories with adjacent terminology."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Lead in CRT funnel glass and older solder alloys is a potent neurotoxin that bioaccumulates in human tissues.\nHence, Option B is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "CUET-UG-CS-2024-S2-Q11",
+    "conceptId": "cs.societal_impacts_cyb",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Lead (Pb).",
+      "concept": "Lead in CRT funnel glass and older solder alloys is a potent neurotoxin that bioaccumulates in human tissues.\nHence, Option B is correct.",
+      "detailed": "Lead in CRT funnel glass and older solder alloys is a potent neurotoxin that bioaccumulates in human tissues.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock7-q48",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "chapter": "Search and Sorting Algorithms",
+    "topic": "Comparison Count on Uniform Duplicate Array",
+    "questionText": "How many comparisons does Insertion Sort perform on an array of identical elements [5, 5, 5, 5, 5]?",
+    "options": [
+      {
+        "id": "A",
+        "text": "10 comparisons",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '10 comparisons'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "0 comparisons",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '0 comparisons'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "C",
+        "text": "25 comparisons",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '25 comparisons'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "4 comparisons",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Comparison Count on Uniform Duplicate Array."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Because L[j] > key is immediately False when comparing equal values, the inner loop terminates after 1 check per pass (4 total).\nHence, Option D is correct.\n\nNote: 1 comparison per pass, since 5 > 5 is False",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q12",
+    "conceptId": "cs.search_and_sorting_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is 4 comparisons (1 comparison per pass, since 5 > 5 is False).",
+      "concept": "Because L[j] > key is immediately False when comparing equal values, the inner loop terminates after 1 check per pass (4 total).\nHence, Option D is correct.",
+      "detailed": "Because L[j] > key is immediately False when comparing equal values, the inner loop terminates after 1 check per pass (4 total).\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock20-q15",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "chapter": "Computer Networks",
+    "topic": "Bandwidth Definition in Networking",
+    "questionText": "What is 'Bandwidth' in computer communications?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The physical width of the copper cable in millimeters",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'The physical width of the copper cable in millimeters'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "The distance between the router and server",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'The distance between the router and server'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "C",
+        "text": "The maximum data transfer capacity of a transmission channel, measured in Hertz",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Bandwidth Definition in Networking."
+      },
+      {
+        "id": "D",
+        "text": "The weight of the network switch in kilograms",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'The weight of the network switch in kilograms'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Bandwidth denotes the frequency range or maximum bit-carrying capacity of a communication link over a given unit of time.\nHence, Option C is correct.\n\nNote: analog) or bits per second (digital, bps",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q13",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is The maximum data transfer capacity of a transmission channel, measured in Hertz (analog) or bits per second (digital, bps).",
+      "concept": "Bandwidth denotes the frequency range or maximum bit-carrying capacity of a communication link over a given unit of time.\nHence, Option C is correct.",
+      "detailed": "Bandwidth denotes the frequency range or maximum bit-carrying capacity of a communication link over a given unit of time.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock19-q9",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Inplace Renaming Mechanics",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): df.rename(columns={'old_name': 'new_name'}, inplace=True) modifies the column header in the existing DataFrame without reassignment.\nReason (R): The parameter inplace=True instructs Pandas methods to mutate the underlying object directly rather than returning a modified copy.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '(A) is true but (R) is false'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Both (A) and (R) are true but (R) is not the correct explanation of (A)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '(A) is false but (R) is true'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Analyzes causal relationship regarding Inplace Renaming Mechanics correctly."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Both (A) and (R) are true, and (R) correctly explains (A). inplace=True modifies the caller object in place.\nHence, Option D is correct.",
+    "questionType": "assertion-reasoning",
+    "difficulty": 3,
+    "questionId": "CUET-UG-CS-2024-S2-Q14",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Both (A) and (R) are true and (R) is the correct explanation of (A).",
+      "concept": "Both (A) and (R) are true, and (R) correctly explains (A). inplace=True modifies the caller object in place.\nHence, Option D is correct.",
+      "detailed": "Both (A) and (R) are true, and (R) correctly explains (A). inplace=True modifies the caller object in place.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock3-q33",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "chapter": "Data Visualization using Pyplot",
+    "topic": "Line Plot Styling Parameters",
+    "questionText": "Match the styling parameter in List I with its rendering effect in List II:\n\nList I:\n(A) linestyle=':'\n(B) linestyle='--'\n(C) marker='^'\n(D) linewidth=3\n\nList II:\n(I) Renders a dotted line style\n(II) Renders a dashed line style\n(III) Renders triangle-up markers at data points\n(IV) Sets the thickness of the line to 3 points\n\nChoose the correct answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A-IV, B-II, C-I, D-III'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "B",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Matches conceptual categories for Line Plot Styling Parameters correctly."
+      },
+      {
+        "id": "C",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A-I, B-III, C-IV, D-II'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A-II, B-I, C-III, D-IV'. Conflates core domain concepts or theories with adjacent terminology."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "':' is dotted, '--' is dashed, '^' is triangle-up marker, and linewidth sets line thickness in points.\nHence, Option B is correct.",
+    "questionType": "match-the-following",
+    "difficulty": 3,
+    "questionId": "CUET-UG-CS-2024-S2-Q15",
+    "conceptId": "cs.data_visualization_u",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A-I, B-II, C-III, D-IV.",
+      "concept": "':' is dotted, '--' is dashed, '^' is triangle-up marker, and linewidth sets line thickness in points.\nHence, Option B is correct.",
+      "detailed": "':' is dotted, '--' is dashed, '^' is triangle-up marker, and linewidth sets line thickness in points.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock4-q36",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "chapter": "File Handling in Python",
+    "topic": "Updating Records in Binary Files",
+    "questionText": "Read the following case study on binary file handling in Python and answer the questions that follow:\n\nAniket is tasked with creating a customer banking module in Python that writes and reads customer account records using binary files. Each record is represented as a dictionary: {'AccNo': 101, 'Name': 'Kavita', 'Balance': 45000.0}. Because dictionaries cannot be written directly to plain text files without converting to strings, Aniket imports the pickle module. To add records to 'bank.dat', he opens the file in 'ab' (append binary) mode and uses pickle.dump(record, file). To search for an account, he opens 'bank.dat' in 'rb' (read binary) mode and loads records sequentially inside a while True loop using pickle.load(file). He catches the EOFError exception to cleanly detect when the end of the binary file has been reached.\n\nQuestion: When updating an existing record in place within a binary file, which method changes the file pointer position?",
+    "options": [
+      {
+        "id": "A",
+        "text": "file.jump()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'file.jump()'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "B",
+        "text": "file.move()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'file.move()'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "file.tell()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'file.tell()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "file.seek(offset, from_what)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Updating Records in Binary Files."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "seek() repositions the file read/write pointer to a specified byte offset.\nHence, Option D is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "CUET-UG-CS-2024-S2-Q16",
+    "conceptId": "cs.file_handling_in_pyt",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is file.seek(offset, from_what).",
+      "concept": "seek() repositions the file read/write pointer to a specified byte offset.\nHence, Option D is correct.",
+      "detailed": "seek() repositions the file read/write pointer to a specified byte offset.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock4-q45",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "chapter": "File Handling in Python",
+    "topic": "writerow vs writerows Distinction",
+    "questionText": "Read the following case study on CSV inventory management in Python and answer the questions that follow:\n\nRajesh operates a warehouse distribution center and manages inventory items using Python's csv module. He creates a script 'inventory_manager.py' to record incoming inventory shipments into 'warehouse.csv'.\n\nTo record data, he opens the file using with open('warehouse.csv', 'w', newline='') as f: and instantiates a writer object using writer = csv.writer(f, delimiter=','). He writes the column headers using writer.writerow(['ItemId', 'ItemName', 'Quantity', 'UnitPrice']). To insert multiple inventory shipment rows at once from a nested list of records, he uses writer.writerows(shipment_data).\nLater, to search for low-stock items, he reads the file using csv.reader, checks if int(row[2]) < 20, and prints alerts for restock.\n\nQuestion: What is the difference between writer.writerow() and writer.writerows() in Python's csv module?",
+    "options": [
+      {
+        "id": "A",
+        "text": "writerow() accepts a single 1D sequence to write one line, while writerows() accepts a 2D iterable to write multiple lines in a single call",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "writerow() is used exclusively for writing header rows, while writerows() is restricted to running total calculations on existing data",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "writerow() handles string data types only, whereas writerows() uniquely processes integer-based inventory quantities for the file",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "writerow() overwrites the entire CSV file with a new record, while writerows() appends data to the end of the current file",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Correct answer is the first option. In Python's csv module, writerow() is designed to write a single row provided as a 1D sequence (like a list or tuple). In contrast, writerows() is designed to write multiple rows at once and expects an iterable of sequences (a 2D structure, like a list of lists). The other options are incorrect: writerow() is not limited to headers, both methods handle mixed data types as strings, and writerow() does not inherently overwrite the entire file (depending on file mode, it writes the row to the current file position).",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "CUET-UG-CS-2024-S2-Q17",
+    "conceptId": "cs.file_handling_in_pyt",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is writerow() writes a single row from a 1D sequence, whereas writerows() writes multiple rows from a 2D iterable of sequences.",
+      "concept": "writerow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence, Option A is correct.",
+      "detailed": "writerow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock12-q46",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "chapter": "Computer Networks",
+    "topic": "Server Placement Decision",
+    "questionText": "Read the following comprehensive campus networking project case study and answer the questions that follow:\n\nGreenwood International School is constructing a state-of-the-art campus network across three buildings:\n- Academic Wing (120 computers, distance to Admin: 90 m, distance to Sports Complex: 140 m)\n- Administrative Wing (40 computers, distance to Sports Complex: 110 m)\n- Sports Complex (15 computers)\n\nThe IT advisory committee lays down implementation guidelines:\n1. Server Location: The main Server Room will be established in the Academic Wing due to its highest computer concentration (80-20 rule).\n2. Inter-Building Backbone: Optical fiber cable connects the Academic Wing to the Administrative Wing and Sports Complex, providing high speed and immunity to lightning/EMI.\n3. Local Cabling: Inside each wing, workstations connect to central switches in a Star Topology using Category 6 UTP cables.\n4. Security: The entire campus network connects to the ISP router through a Hardware Gateway Firewall providing NAT, content filtering, and blocking unauthorized inbound traffic.\n5. Wireless: Classrooms are equipped with Wi-Fi 6 Access Points broadcasting an encrypted SSID for faculty laptops.\n\nQuestion: Why is the Academic Wing selected as the optimal location for the campus server room?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It accommodates the largest workstation count, reducing cross-building packet relay overhead",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "It possesses the shortest total linear cable run distance to the remaining two structures",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "It offers the most extensive contiguous physical floor space suitable for server installation",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "It provides the strongest inherent electromagnetic shielding against adjacent high-voltage lines",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Placing the central server in the wing with the highest computer density (Academic Wing, 120 PCs) optimizes local bandwidth usage and reduces inter-building switch traversal latency for the majority of traffic. The other options misattribute factors (like cable length, floor space, or shielding) which are secondary to the primary logic of data volume concentration in this scenario.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "CUET-UG-CS-2024-S2-Q18",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is It houses the maximum number of workstations (120 computers), minimizing cross-campus network traffic.",
+      "concept": "Placing the central server in the wing with the highest computer density optimizes bandwidth and reduces inter-building latency.\nHence, Option A is correct.",
+      "detailed": "Placing the central server in the wing with the highest computer density optimizes bandwidth and reduces inter-building latency.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock20-q41",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Updating Records in Binary File",
+    "questionText": "How is an existing record updated in a binary file using pickle?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Read all records into memory, modify the target record, and rewrite the entire file in binary mode",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Seek the specific byte offset of the record and overwrite only those bytes in place",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Invoke the pickle module's dedicated update method to handle the modification automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Append the new record to the end of the file and mark the old record as deleted in metadata",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Option A is correct because pickle-pickled objects often have variable lengths depending on their content; therefore, you cannot simply overwrite bytes in place without shifting the rest of the file. The standard approach is to read all objects, update the desired one in memory, and then write all objects back to a binary file (typically by creating a new file or truncating the existing one). Option B is incorrect because object sizes vary, making in-place overwriting problematic. Option C is incorrect because the pickle module does not have an 'update' method for modifying existing records within a file. Option D describes a log-structured approach not specific to standard pickle file updates.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q19",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Read all records into a list in memory, modify the target record in the list, and write all records back to the file opened in 'wb' mode.",
+      "concept": "Because serialized binary records vary in byte lengths, updating standardly involves reading records, updating in memory, and re-dumping.\nHence, Option A is correct.",
+      "detailed": "Because serialized binary records vary in byte lengths, updating standardly involves reading records, updating in memory, and re-dumping.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock8-q4",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "s.ndim and s.size Attributes",
+    "questionText": "Given below are two statements:\nStatement I: The s.ndim attribute of any Pandas Series always evaluates to 1 because a Series is inherently a one-dimensional data structure.\nStatement II: The s.size attribute returns the total count of elements present in the Series, including missing (NaN) values.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Evaluates dual statements on s.ndim and s.size Attributes correctly."
+      },
+      {
+        "id": "B",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is correct but Statement II is incorrect'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Both Statement I and Statement II are incorrect'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is incorrect but Statement II is correct'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Both Statement I and Statement II are correct. Series dimensionality is always 1; s.size counts all elements including NaNs.\nHence, Option A is correct.",
+    "questionType": "multi-statement",
+    "difficulty": 3,
+    "questionId": "CUET-UG-CS-2024-S2-Q20",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Both Statement I and Statement II are correct.",
+      "concept": "Both Statement I and Statement II are correct. Series dimensionality is always 1; s.size counts all elements including NaNs.\nHence, Option A is correct.",
+      "detailed": "Both Statement I and Statement II are correct. Series dimensionality is always 1; s.size counts all elements including NaNs.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock2-q27",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "chapter": "Database Concepts and SQL",
+    "topic": "TRUNCATE vs DELETE Performance",
+    "questionText": "Why is TRUNCATE TABLE significantly faster than DELETE FROM for clearing massive tables?",
+    "options": [
+      {
+        "id": "A",
+        "text": "TRUNCATE converts numbers into strings",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'TRUNCATE converts numbers into strings'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "TRUNCATE deallocates data pages directly without logging individual row deletions, bypassing rollback logging",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains TRUNCATE vs DELETE Performance."
+      },
+      {
+        "id": "C",
+        "text": "TRUNCATE deletes the database server hardware",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'TRUNCATE deletes the database server hardware'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "TRUNCATE only deletes the first 10 rows",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'TRUNCATE only deletes the first 10 rows'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "TRUNCATE is a DDL operation that resets high-water marks and deallocates storage pages without generating per-row undo logs.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q21",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is TRUNCATE deallocates data pages directly without logging individual row deletions, bypassing rollback logging.",
+      "concept": "TRUNCATE is a DDL operation that resets high-water marks and deallocates storage pages without generating per-row undo logs.\nHence, Option B is correct.",
+      "detailed": "TRUNCATE is a DDL operation that resets high-water marks and deallocates storage pages without generating per-row undo logs.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock15-q7",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Python-SQL Connectivity Entities and Roles",
+    "questionText": "Match the database interface entity in List I with its operational function in List II:\n\nList I:\n(A) mysql.connector.connect()\n(B) connection.cursor()\n(C) connection.close()\n(D) cursor.close()\n\nList II:\n(I) Establishes an authenticated communication session with the MySQL database server\n(II) Instantiates a cursor object used to execute SQL statements and fetch results\n(III) Terminates the network socket session and releases database server connections\n(IV) Closes the query execution context and frees server-side memory buffers\n\nChoose the correct answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A-I, B-III, C-IV, D-II'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Matches conceptual categories for Python-SQL Connectivity Entities and Roles correctly."
+      },
+      {
+        "id": "C",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A-IV, B-II, C-I, D-III'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A-II, B-I, C-III, D-IV'. Conflates core domain concepts or theories with adjacent terminology."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "connect opens session; cursor creates query interface; connection.close shuts session; cursor.close frees cursor buffers.\nHence, Option B is correct.",
+    "questionType": "match-the-following",
+    "difficulty": 3,
+    "questionId": "CUET-UG-CS-2024-S2-Q22",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A-I, B-II, C-III, D-IV.",
+      "concept": "connect opens session; cursor creates query interface; connection.close shuts session; cursor.close frees cursor buffers.\nHence, Option B is correct.",
+      "detailed": "connect opens session; cursor creates query interface; connection.close shuts session; cursor.close frees cursor buffers.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock4-q16",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "chapter": "Societal Impacts, Cyber Ethics and Data Protection",
+    "topic": "Copyright Infringement",
+    "questionText": "What constitutes Copyright Infringement in software and digital content?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Writing original code that performs a common mathematical operation",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Writing original code that performs a common mathematical operation'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "Purchasing a legitimate single-user license",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Purchasing a legitimate single-user license'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Reading public documentation",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Reading public documentation'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "Unauthorized copying, modification, distribution, or commercial piracy of protected creative works without the copyright owner's consent",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Copyright Infringement."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Copyright infringement violates the exclusive statutory rights granted to the creator of an intellectual property.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q23",
+    "conceptId": "cs.societal_impacts_cyb",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Unauthorized copying, modification, distribution, or commercial piracy of protected creative works without the copyright owner's consent.",
+      "concept": "Copyright infringement violates the exclusive statutory rights granted to the creator of an intellectual property.\nHence, Option D is correct.",
+      "detailed": "Copyright infringement violates the exclusive statutory rights granted to the creator of an intellectual property.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock15-q40",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "chapter": "Computer Networks",
+    "topic": "Firewall Functional Role",
+    "questionText": "Read the following enterprise network architecture case study and answer the questions that follow:\n\nNational Trust Bank is upgrading its network architecture connecting its Regional Headquarters with five local branches. The network design specifications are established as follows:\n1. Headquarters houses the core transactional database cluster, protected behind a stateful Packet Filtering Firewall and Intrusion Detection System (IDS).\n2. Inside each local branch, all teller workstations are wired to a high-speed Central Switch configured in a Star Topology.\n3. The connection between Headquarters and Branch 1 (distance 35 km) utilizes a dedicated High-Speed Leased Line over Optical Fiber.\n4. Wireless connectivity within the customer lounge is segregated on a guest VLAN protected with WPA3 Wi-Fi encryption.\n5. Inter-branch communication over public telecommunication networks is encrypted inside a Virtual Private Network (VPN) tunnel.\n\nQuestion: What is the primary operational role of the Packet Filtering Firewall installed at the Bank Headquarters?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Reimaging hard drives of compromised host devices to remove persistent malware infections",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Inspecting incoming and outgoing network packets and blocking unauthorized traffic based on security rules",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "Negotiating higher throughput bandwidth allocations with the upstream telecommunications service provider",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Converting alternating current electricity into direct current to supply power to the network infrastructure",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "A stateful packet filtering firewall monitors and filters network traffic based on configured security policies, port settings, and packet headers to prevent unauthorized access. It does not perform hardware maintenance (like formatting drives), manage ISP bandwidth negotiations, or convert electrical power forms.\nHence, Option B is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "CUET-UG-CS-2024-S2-Q24",
+    "conceptId": "cs.computer_networks",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Inspecting incoming and outgoing network packets and blocking unauthorized traffic based on predefined security rules.",
+      "concept": "A firewall monitors and filters network traffic based on configured security policies and packet headers.\nHence, Option B is correct.",
+      "detailed": "A firewall monitors and filters network traffic based on configured security policies and packet headers.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock10-q46",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "chapter": "Python Programming and File Handling",
+    "topic": "CSV Format and Delimiter Concept",
+    "questionText": "What is a 'Comma-Separated Values' (CSV) file, and what character separates tabular fields by default?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A plain text file where tabular data is represented with each line being a record, and fields separated by a comma (',') delimiter",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains CSV Format and Delimiter Concept."
+      },
+      {
+        "id": "B",
+        "text": "A compressed binary format that can only be read with machine learning algorithms",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A compressed binary format that can only be read with machine learning algorithms'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "An encrypted password archive storing hashes",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'An encrypted password archive storing hashes'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "An image format storing pixels separated by semicolons",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'An image format storing pixels separated by semicolons'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "CSV is a tabular text format where rows represent records and columns are delimited by commas (or other specified delimiter characters).\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q25",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A plain text file where tabular data is represented with each line being a record, and fields separated by a comma (',') delimiter.",
+      "concept": "CSV is a tabular text format where rows represent records and columns are delimited by commas (or other specified delimiter characters).\nHence, Option A is correct.",
+      "detailed": "CSV is a tabular text format where rows represent records and columns are delimited by commas (or other specified delimiter characters).\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock1-q5",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "chapter": "Database Concepts and SQL",
+    "topic": "Aggregate Count Function",
+    "questionText": "Read the following database case study on joins and group aggregations and answer the questions that follow:\n\nA grand resort hotel manages guest reservations using two relational tables in MySQL:\n1. Table ROOMS (RoomNo INT PRIMARY KEY, RoomType VARCHAR(20), PricePerNight DECIMAL(8,2), Floor INT);\n2. Table BOOKINGS (BookingId INT PRIMARY KEY, RoomNo INT, GuestName VARCHAR(40), CheckIn DATE, CheckOut DATE, FOREIGN KEY (RoomNo) REFERENCES ROOMS(RoomNo));\n\nThe resort manager requests a report showing the RoomType, total number of bookings per RoomType, and average revenue generated. The report must only include RoomTypes that have received at least 5 bookings, arranged in descending order of total bookings. The senior database developer constructs an SQL query utilizing an inner equi-join, GROUP BY ROOMS.RoomType, HAVING COUNT(BOOKINGS.BookingId) >= 5, and ORDER BY COUNT(BOOKINGS.BookingId) DESC.\n\nQuestion: Which SQL expression counts the total number of bookings per room type?",
+    "options": [
+      {
+        "id": "A",
+        "text": "AVG(B.RoomNo)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'AVG(B.RoomNo)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "SUM(B.BookingId)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'SUM(B.BookingId)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "COUNT(B.BookingId) (or COUNT(*))",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Aggregate Count Function."
+      },
+      {
+        "id": "D",
+        "text": "MAX(B.GuestName)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'MAX(B.GuestName)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "COUNT(BookingId) tallies the number of booking records associated with each grouped room type.\nHence, Option C is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "CUET-UG-CS-2024-S2-Q26",
+    "conceptId": "cs.database_concepts_an",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is COUNT(B.BookingId) (or COUNT(*)).",
+      "concept": "COUNT(BookingId) tallies the number of booking records associated with each grouped room type.\nHence, Option C is correct.",
+      "detailed": "COUNT(BookingId) tallies the number of booking records associated with each grouped room type.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock15-q42",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Relational Algebra Join Symbol",
+    "questionText": "What mathematical symbol represents the Natural Join operation in relational algebra notation?",
+    "options": [
+      {
+        "id": "A",
+        "text": "The sigma sign (σ)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'The sigma sign (σ)'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "The bowtie symbol (⨝)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Relational Algebra Join Symbol."
+      },
+      {
+        "id": "C",
+        "text": "The multiplication sign (×)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'The multiplication sign (×)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "The pi sign (π)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'The pi sign (π)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "In relational algebra, the bowtie symbol (⨝) denotes the Natural Join operation between two relations.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q27",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is The bowtie symbol (⨝).",
+      "concept": "In relational algebra, the bowtie symbol (⨝) denotes the Natural Join operation between two relations.\nHence, Option B is correct.",
+      "detailed": "In relational algebra, the bowtie symbol (⨝) denotes the Natural Join operation between two relations.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock18-q19",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Resetting Cursor Result Pointer",
+    "questionText": "Can an unbuffered cursor seek backward to re-read rows that were already fetched?",
+    "options": [
+      {
+        "id": "A",
+        "text": "No, cursors are forward-only streams; re-reading requires re-executing the query or buffering records",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Yes, by invoking a dedicated backward navigation method on the cursor object instance",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Yes, by resetting the internal state pointer to the beginning of the result set buffer",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Yes, by processing the remaining data stream into a temporary file for random access",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Standard database cursors operate as forward-only streams and do not support backward seeking natively. To re-read rows, the developer must either re-execute the query or have explicitly buffered the records in memory (e.g., in a list). Options B, C, and D describe non-existent or incorrect mechanisms for standard cursor behavior.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q28",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is No, standard result cursors are forward-only streams; re-reading requires re-executing the query or buffering records in memory.",
+      "concept": "Standard database socket cursors are forward-only; to revisit records, developers store them in Python lists or re-query.\nHence, Option A is correct.",
+      "detailed": "Standard database socket cursors are forward-only; to revisit records, developers store them in Python lists or re-query.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock20-q17",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "chapter": "Data Handling using Pandas - II",
+    "topic": "Targeted Column Imputation",
+    "questionText": "Read the following case study on survey data cleaning using Pandas and answer the questions that follow:\n\nAn educational research group conducts an online learning survey across 500 high school students. The survey responses are imported into a DataFrame survey_df containing columns: ['StudentID', 'StudyHours', 'DeviceType', 'InternetSpeed', 'ExamScore'].\n\nThe lead analyst identifies several data quality issues:\n1. Incomplete records: Some students abandoned the survey halfway, leaving multiple columns null.\n2. Duplicate submissions: Some students accidentally clicked 'Submit' twice, generating identical duplicate rows.\n3. Missing numerical values: ExamScore has 15 missing values (NaN).\n\nThe analyst executes a structured data cleaning pipeline:\n- Drops duplicate rows: survey_df.drop_duplicates(inplace=True)\n- Drops rows that have fewer than 3 valid non-null answers: survey_df.dropna(thresh=3, inplace=True)\n- Imputes missing ExamScore with the mean exam score: survey_df['ExamScore'].fillna(survey_df['ExamScore'].mean(), inplace=True)\n- Resets the index: survey_df.reset_index(drop=True, inplace=True)\n\nQuestion: How does survey_df['ExamScore'].fillna(survey_df['ExamScore'].mean(), inplace=True) affect other columns with missing values?",
+    "options": [
+      {
+        "id": "A",
+        "text": "It replaces missing values across the entire DataFrame with the ExamScore mean",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'It replaces missing values across the entire DataFrame with the ExamScore mean'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "It converts other columns to float",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'It converts other columns to float'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "It deletes all other columns",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'It deletes all other columns'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "It leaves all other columns completely untouched, imputing mean values only into 'ExamScore'",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Targeted Column Imputation."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Applying fillna directly to a specific Series (survey_df['ExamScore']) restricts imputation exclusively to that column.\nHence, Option D is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "CUET-UG-CS-2024-S2-Q29",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is It leaves all other columns completely untouched, imputing mean values only into 'ExamScore'.",
+      "concept": "Applying fillna directly to a specific Series (survey_df['ExamScore']) restricts imputation exclusively to that column.\nHence, Option D is correct.",
+      "detailed": "Applying fillna directly to a specific Series (survey_df['ExamScore']) restricts imputation exclusively to that column.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock10-q43",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Sorting DataFrame by Row Index",
+    "questionText": "How do you sort DataFrame df by its row index labels in ascending order?",
+    "options": [
+      {
+        "id": "A",
+        "text": "df.sort_index(ascending=True)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Sorting DataFrame by Row Index."
+      },
+      {
+        "id": "B",
+        "text": "df.arrange_index()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'df.arrange_index()'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "C",
+        "text": "df.sort_rows()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'df.sort_rows()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "df.order_index()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'df.order_index()'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "df.sort_index() sorts the DataFrame along the index axis.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q30",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is df.sort_index(ascending=True).",
+      "concept": "df.sort_index() sorts the DataFrame along the index axis.\nHence, Option A is correct.",
+      "detailed": "df.sort_index() sorts the DataFrame along the index axis.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock19-q33",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Global Keyword Modification",
+    "questionText": "What Python keyword must be declared inside a function before reassigning a variable that was defined at the module level?",
+    "options": [
+      {
+        "id": "A",
+        "text": "nonlocal",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'nonlocal'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "extern",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'extern'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "public",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'public'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "global",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Global Keyword Modification."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "The global statement declares that a particular variable refers to the module-level global namespace, allowing reassignment.\nHence, Option D is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q31",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is global.",
+      "concept": "The global statement declares that a particular variable refers to the module-level global namespace, allowing reassignment.\nHence, Option D is correct.",
+      "detailed": "The global statement declares that a particular variable refers to the module-level global namespace, allowing reassignment.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock6-q1",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "chapter": "Python Recursion and Algorithmic Tracing",
+    "topic": "Memoization in Recursive Functions",
+    "questionText": "What is 'Memoization' when applied to recursive algorithms like Fibonacci?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Executing subsequent recursive calls using jump pointers to bypass intermediate stack frames and reduce overhead",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Allocating static memory blocks for all parameter values before the first recursive call is initiated",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Transforming the recursive structure into an iterative loop that updates state variables within a fixed range",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Caching the results of function calls in a lookup table to avoid redundant recalculation of identical subproblems",
+        "isCorrect": true
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Memoization is a technique that stores the results of expensive function calls and returns the cached result when the same inputs occur again. This converts the exponential time complexity of naive recursive Fibonacci (O(2^n)) into linear time (O(n)) by avoiding redundant calculations of identical subproblems, matching the description in the correct option.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q32",
+    "conceptId": "cs.python_recursion_and",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Caching the results of expensive function calls in a lookup table (dictionary/array) to avoid redundant recalculation of identical subproblems.",
+      "concept": "Memoization stores computed subproblem solutions, converting exponential O(2^n) Fibonacci calls into linear O(n) time.\nHence, Option D is correct.",
+      "detailed": "Memoization stores computed subproblem solutions, converting exponential O(2^n) Fibonacci calls into linear O(n) time.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock20-q21",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "Iterating Directly Over Cursor",
+    "questionText": "Can a Python programmer iterate directly over a cursor object using: for row in cur:?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Yes, the cursor object is an iterable that yields rows one-by-one using internal fetchone() streaming",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Iterating Directly Over Cursor."
+      },
+      {
+        "id": "B",
+        "text": "Only if the database contains fewer than 10 rows",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Only if the database contains fewer than 10 rows'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Only in text files",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Only in text files'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "No, direct iteration raises a TypeError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'No, direct iteration raises a TypeError'. Conflates core domain concepts or theories with adjacent terminology."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Cursor objects implement the Python iterator protocol, enabling clean line-by-line streaming via 'for row in cur:'.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q33",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Yes, the cursor object is an iterable that yields rows one-by-one using internal fetchone() streaming.",
+      "concept": "Cursor objects implement the Python iterator protocol, enabling clean line-by-line streaming via 'for row in cur:'.\nHence, Option A is correct.",
+      "detailed": "Cursor objects implement the Python iterator protocol, enabling clean line-by-line streaming via 'for row in cur:'.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock7-q17",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Copyleft vs Permissive Open Source Licenses",
+    "questionText": "Given below are two statements:\nStatement I: The GNU General Public License (GPL) is a 'Copyleft' license: any derivative work created from GPL code must also be licensed under the GPL.\nStatement II: The MIT and Apache licenses are 'Permissive' licenses: they allow developers to incorporate code into proprietary closed-source commercial software.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Evaluates dual statements on Copyleft vs Permissive Open Source Licenses correctly."
+      },
+      {
+        "id": "B",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is correct but Statement II is incorrect'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Both Statement I and Statement II are incorrect'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Statement I is incorrect but Statement II is correct'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Both Statement I and Statement II are correct. GPL mandates reciprocity (copyleft); MIT/Apache allow closed-source commercial re-licensing.\nHence, Option A is correct.",
+    "questionType": "multi-statement",
+    "difficulty": 3,
+    "questionId": "CUET-UG-CS-2024-S2-Q34",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Both Statement I and Statement II are correct.",
+      "concept": "Both Statement I and Statement II are correct. GPL mandates reciprocity (copyleft); MIT/Apache allow closed-source commercial re-licensing.\nHence, Option A is correct.",
+      "detailed": "Both Statement I and Statement II are correct. GPL mandates reciprocity (copyleft); MIT/Apache allow closed-source commercial re-licensing.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock2-q25",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "chapter": "Search and Sorting Algorithms",
+    "topic": "Number of Comparisons for [10, 20, 30, 40]",
+    "questionText": "How many comparisons does Insertion Sort perform on the already sorted list [10, 20, 30, 40]?",
+    "options": [
+      {
+        "id": "A",
+        "text": "12 comparisons",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option '12 comparisons'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "3 comparisons",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Number of Comparisons for [10, 20, 30, 40]."
+      },
+      {
+        "id": "C",
+        "text": "6 comparisons",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '6 comparisons'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "0 comparisons",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '0 comparisons'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "For n=4 sorted items, passes i=1, 2, 3 each execute exactly one comparison (L[j] > key is false) and terminate.\nHence, Option B is correct.\n\nNote: exactly 1 comparison per pass for 3 passes",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q35",
+    "conceptId": "cs.search_and_sorting_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is 3 comparisons (exactly 1 comparison per pass for 3 passes).",
+      "concept": "For n=4 sorted items, passes i=1, 2, 3 each execute exactly one comparison (L[j] > key is false) and terminate.\nHence, Option B is correct.",
+      "detailed": "For n=4 sorted items, passes i=1, 2, 3 each execute exactly one comparison (L[j] > key is false) and terminate.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock12-q15",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "chapter": "Database Management and Python-SQL Connectivity",
+    "topic": "SQL Injection Attack Mechanism",
+    "questionText": "What is an 'SQL Injection' attack?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Injecting malicious SQL snippets into input fields to manipulate database queries and bypass application controls",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Flooding a web server with a high volume of repetitive HTTP requests to exhaust its available system resources",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Deploying Trojan horse software through email attachments to establish persistent unauthorized remote access",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Scanning local network subnets for open ports and vulnerable services to identify potential entry points for exploitation",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "SQL injection is a code injection technique that exploits a security vulnerability occurring when user-supplied input is directly concatenated into a SQL query without proper sanitization or parameterization. This allows an attacker to execute malicious database commands, such as bypassing authentication or extracting sensitive data. Option A correctly describes this mechanism. Option B describes a Denial of Service (DoS) attack. Option C describes social engineering/malware delivery. Option D describes network reconnaissance/scanning.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q36",
+    "conceptId": "cs.database_management_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A cyber attack where an adversary injects malicious SQL fragments into input fields to manipulate database queries and gain unauthorized data access.",
+      "concept": "SQL injection exploits unsanitized input concatenated into query strings, allowing attackers to bypass authentication or extract sensitive data.\nHence, Option B is correct.",
+      "detailed": "SQL injection exploits unsanitized input concatenated into query strings, allowing attackers to bypass authentication or extract sensitive data.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock6-q18",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "chapter": "Python Recursion and Algorithmic Tracing",
+    "topic": "Missing Base Case Error",
+    "questionText": "Read the following case study on recursion in Python and answer the questions that follow:\n\nDeepak is implementing algorithmic simulations for mathematical models in Python. He develops a recursive function to compute the power of a number: def power(x, n):\n    if n == 0:\n        return 1\n    else:\n        return x * power(x, n - 1)\n\nWhen computing power(2, 3), Python allocates an activation record (stack frame) on the system call stack for each call: power(2, 3) calls power(2, 2), which calls power(2, 1), which calls power(2, 0). Upon reaching n == 0, the base case executes without making another recursive call, returning 1. The call stack then unwinds in Last-In-First-Out (LIFO) order: power(2, 1) computes 2 * 1 = 2; power(2, 2) computes 2 * 2 = 4; and power(2, 3) computes 2 * 4 = 8, returning the final result to the caller.\n\nQuestion: What runtime exception is thrown if Deepak accidentally removes the base case from his recursive function?",
+    "options": [
+      {
+        "id": "A",
+        "text": "SyntaxError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'SyntaxError'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "B",
+        "text": "RecursionError: maximum recursion depth exceeded",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately analyzes case evidence on Missing Base Case Error."
+      },
+      {
+        "id": "C",
+        "text": "ZeroDivisionError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'ZeroDivisionError'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "TypeError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'TypeError'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Unbounded recursion continues pushing frames until Python hits its recursion limit, raising RecursionError.\nHence, Option B is correct.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "CUET-UG-CS-2024-S2-Q37",
+    "conceptId": "cs.python_recursion_and",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is RecursionError: maximum recursion depth exceeded.",
+      "concept": "Unbounded recursion continues pushing frames until Python hits its recursion limit, raising RecursionError.\nHence, Option B is correct.",
+      "detailed": "Unbounded recursion continues pushing frames until Python hits its recursion limit, raising RecursionError.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock7-q44",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
+    "topic": "Partial Missing Row Evaluation",
+    "questionText": "If a row has values [10, np.nan, 30, np.nan], does df.dropna(how='any') drop this row?",
+    "options": [
+      {
+        "id": "A",
+        "text": "No, because how='any' requires all values to be NaN",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'No, because how='any' requires all values to be NaN'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "Only if axis=1 is specified",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Only if axis=1 is specified'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "C",
+        "text": "Yes, because at least one cell contains NaN",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Partial Missing Row Evaluation."
+      },
+      {
+        "id": "D",
+        "text": "No, because more than half the values are valid",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'No, because more than half the values are valid'. Conflates core domain concepts or theories with adjacent terminology."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "how='any' drops the entry if any null value is encountered.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q38",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Yes, because at least one cell contains NaN.",
+      "concept": "how='any' drops the entry if any null value is encountered.\nHence, Option C is correct.",
+      "detailed": "how='any' drops the entry if any null value is encountered.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock18-q34",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "chapter": "Python Programming and File Handling",
+    "topic": "File Object Line Iteration",
+    "questionText": "What is the most memory-efficient way to read a 10-Gigabyte text file line-by-line in Python without crashing RAM?",
+    "options": [
+      {
+        "id": "A",
+        "text": "list(file_object)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'list(file_object)'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "B",
+        "text": "file_object.read().split('\n')",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'file_object.read().split('\n')'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "for line in file_object:",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains File Object Line Iteration."
+      },
+      {
+        "id": "D",
+        "text": "file_object.readlines()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'file_object.readlines()'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Iterating directly over the file object uses buffered lazy evaluation, streaming one line at a time without loading the file into RAM.\nHence, Option C is correct.\n\nNote: iterating directly over the file object generator",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q39",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is for line in file_object: (iterating directly over the file object generator).",
+      "concept": "Iterating directly over the file object uses buffered lazy evaluation, streaming one line at a time without loading the file into RAM.\nHence, Option C is correct.",
+      "detailed": "Iterating directly over the file object uses buffered lazy evaluation, streaming one line at a time without loading the file into RAM.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock7-q3",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "chapter": "Data Handling and Visualization",
+    "topic": "Numeric-only Mean Imputation",
+    "questionText": "Read the following case study on an end-to-end data pipeline in Pandas and Pyplot and answer the questions that follow:\n\nA retail business analyst builds an automated reporting pipeline in Python to analyze monthly store revenue from 'sales_data.csv'.\nThe script executes the following stages:\n1. Ingestion: df = pd.read_csv('sales_data.csv') loads 12 monthly records into a DataFrame with columns ['Month', 'Sales', 'Expenses'].\n2. Data Cleaning: Incomplete records with NaN values are filled using df.fillna(df.mean(numeric_only=True), inplace=True).\n3. Derived Metrics: A new column 'Profit' is calculated: df['Profit'] = df['Sales'] - df['Expenses'].\n4. Statistical Aggregation: Total annual revenue is computed via total_sales = df['Sales'].sum(), and the best performing month is identified using best_month = df.loc[df['Profit'].idxmax(), 'Month'].\n5. Visualization: A line plot compares monthly Sales and Expenses over time with grid lines and custom styling: plt.plot(df['Month'], df['Sales'], label='Sales', color='blue', marker='o')\nplt.plot(df['Month'], df['Expenses'], label='Expenses', color='red', linestyle='--')\nplt.legend(); plt.savefig('annual_report.png'); plt.show()\n\nQuestion: Why did the analyst specify numeric_only=True in df.mean(numeric_only=True)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "To permanently drop the 'Month' column from the DataFrame object",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "To ensure the mean is calculated only for numerical types, excluding string columns like 'Month'",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "To convert all string values in the DataFrame into numerical codes before execution",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "To round the resulting mean values to two decimal places for better display",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "In the context of the data cleaning stage, the DataFrame contains both string data ('Month') and numeric data ('Sales', 'Expenses'). The parameter numeric_only=True in pd.DataFrame.mean() ensures that the aggregation function skips non-numeric columns. Without this parameter, attempting to calculate the mean of a column containing strings would raise a TypeError (or in older versions, return NaN for those columns, but it's an invalid operation to average strings). Therefore, this flag is necessary to compute valid means only for 'Sales' and 'Expenses' to use for imputation.",
+    "questionType": "case-based",
+    "difficulty": 4,
+    "questionId": "CUET-UG-CS-2024-S2-Q40",
+    "conceptId": "cs.data_handling_and_vi",
+    "difficultyLevel": 4,
+    "estimatedTimeSeconds": 80,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is To compute mean values only for numeric columns ('Sales', 'Expenses') while ignoring non-numeric string columns like 'Month'.",
+      "concept": "numeric_only=True instructs mean() to operate exclusively on numeric data types, avoiding TypeErrors on string columns.\nHence, Option D is correct.",
+      "detailed": "numeric_only=True instructs mean() to operate exclusively on numeric data types, avoiding TypeErrors on string columns.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock20-q46",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "chapter": "Data Structures: Stacks",
+    "topic": "Expression Notations and Formats",
+    "questionText": "Match the mathematical expression format in List I with its symbolic syntax in List II for adding A and B:\n\nList I:\n(A) Infix Notation\n(B) Postfix Notation (Reverse Polish)\n(C) Prefix Notation (Polish)\n(D) Evaluation Data Structure\n\nList II:\n(I) A + B (operator placed between operands)\n(II) A B + (operator placed after operands)\n(III) + A B (operator placed before operands)\n(IV) LIFO Stack\n\nChoose the correct answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'A-IV, B-II, C-I, D-III'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "B",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A-I, B-III, C-IV, D-II'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'A-II, B-I, C-III, D-IV'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Matches conceptual categories for Expression Notations and Formats correctly."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Infix places operator between; Postfix places operator after; Prefix places operator before; Stack evaluates postfix/prefix.\nHence, Option D is correct.",
+    "questionType": "match-the-following",
+    "difficulty": 3,
+    "questionId": "CUET-UG-CS-2024-S2-Q41",
+    "conceptId": "cs.data_structures_stac",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is D-I, B-II, C-III, D-IV.",
+      "concept": "Infix places operator between; Postfix places operator after; Prefix places operator before; Stack evaluates postfix/prefix.\nHence, Option D is correct.",
+      "detailed": "Infix places operator between; Postfix places operator after; Prefix places operator before; Stack evaluates postfix/prefix.\nHence, Option D is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock4-q12",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Text File Word Counting Technique",
+    "questionText": "Given content = file.read(), which expression calculates the total number of words separated by whitespace?",
+    "options": [
+      {
+        "id": "A",
+        "text": "len(content.split())",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Text File Word Counting Technique."
+      },
+      {
+        "id": "B",
+        "text": "len(content)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'len(content)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "len(content.splitlines())",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'len(content.splitlines())'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "content.count(' ')",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'content.count(' ')'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "content.split() splits the string on any whitespace into a list of distinct words; len() counts total words.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q42",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is len(content.split()).",
+      "concept": "content.split() splits the string on any whitespace into a list of distinct words; len() counts total words.\nHence, Option A is correct.",
+      "detailed": "content.split() splits the string on any whitespace into a list of distinct words; len() counts total words.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock15-q3",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "chapter": "Cyber Security, Cyber Crime and IT Law",
+    "topic": "Fair Use Doctrine in Copyright",
+    "questionText": "What is the 'Fair Use' (or Fair Dealing) doctrine in copyright law?",
+    "options": [
+      {
+        "id": "A",
+        "text": "A judicial test allowing limited use of copyrighted works for purposes such as criticism, commentary, news reporting, and education without authorization.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "A statutory license requiring fixed-rate payments to copyright holders for any and all duplication of digital media files in commercial or private contexts.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "A procedural defense that allows defendants to claim immunity if they unknowingly replicated more than fifty percent of a protected creative work.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "An international treaty provision eliminating copyright protection for non-fiction factual publications published after the year of creation.",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Fair Use (or Fair Dealing) is a legal doctrine that provides an exception to copyright infringement, allowing limited use of copyrighted material for purposes such as criticism, comment, news reporting, teaching, scholarship, or research. \n\nOption A is correct because it accurately describes this doctrine as a judicial test/exception permitting limited use for specific purposes (criticism, commentary, news, education) without needing explicit permission.\n\nOption B is incorrect because Fair Use is not a statutory license requiring fixed payments for any duplication; it is a flexible, case-by-case defense based on a multi-factor test, and commercial use requires compensation or specific licensing not covered by this general exception.\n\nOption C is incorrect because 'unknowingly replicating more than fifty percent' does not automatically grant immunity; the amount used is just one factor in the Fair Use analysis, and quantity alone does not determine the outcome.\n\nOption D is incorrect because Fair Use applies generally to copyrighted works and does not specifically eliminate copyright protection for non-fiction publications post-creation, which is part of the standard duration of copyright protection.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q43",
+    "conceptId": "cs.cyber_security_cyber",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A legal exception that permits limited, non-commercial reproduction of copyrighted material for education, research, commentary, and criticism without permission.",
+      "concept": "Fair use permits reproduction of copyrighted extracts for scholarly review, teaching, commentary, and news reporting without infringement.\nHence, Option A is correct.",
+      "detailed": "Fair use permits reproduction of copyrighted extracts for scholarly review, teaching, commentary, and news reporting without infringement.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock7-q24",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "chapter": "Python Programming and File Handling",
+    "topic": "File Object closed Attribute",
+    "questionText": "What boolean attribute of a file object indicates whether the file has been closed?",
+    "options": [
+      {
+        "id": "A",
+        "text": "file.is_closed()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'file.is_closed()'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "file.close_state",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'file.close_state'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "C",
+        "text": "file.closed",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains File Object closed Attribute."
+      },
+      {
+        "id": "D",
+        "text": "file.status",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'file.status'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "The file.closed attribute evaluates to True if the file stream is closed, and False if it remains open.\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q44",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is file.closed.",
+      "concept": "The file.closed attribute evaluates to True if the file stream is closed, and False if it remains open.\nHence, Option C is correct.",
+      "detailed": "The file.closed attribute evaluates to True if the file stream is closed, and False if it remains open.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock17-q3",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "chapter": "Data Visualization using Pyplot",
+    "topic": "Line Plot Styling Arguments",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Invoking plt.plot(x, y, color='red', linestyle='--', marker='o') renders a red dashed line with circular marker points.\nReason (R): Pyplot provides explicit keyword arguments including color, linestyle, and marker to customize visual rendering of line graphs.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option '(A) is true but (R) is false'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Both (A) and (R) are true but (R) is not the correct explanation of (A)'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Analyzes causal relationship regarding Line Plot Styling Arguments correctly."
+      },
+      {
+        "id": "D",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option '(A) is false but (R) is true'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Both (A) and (R) are true, and (R) correctly explains (A). Keyword arguments color, linestyle, and marker customize line aesthetics.\nHence, Option C is correct.",
+    "questionType": "assertion-reasoning",
+    "difficulty": 3,
+    "questionId": "CUET-UG-CS-2024-S2-Q45",
+    "conceptId": "cs.data_visualization_u",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Both (A) and (R) are true and (R) is the correct explanation of (A).",
+      "concept": "Both (A) and (R) are true, and (R) correctly explains (A). Keyword arguments color, linestyle, and marker customize line aesthetics.\nHence, Option C is correct.",
+      "detailed": "Both (A) and (R) are true, and (R) correctly explains (A). Keyword arguments color, linestyle, and marker customize line aesthetics.\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock3-q36",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "Setting Values via Slicing",
+    "questionText": "What is the effect of executing s.iloc[1:3] = 0 on a Pandas Series?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Elements at index positions 1 and 2 are updated to 0 in place",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Setting Values via Slicing."
+      },
+      {
+        "id": "B",
+        "text": "Only element 3 is set to 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Only element 3 is set to 0'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "C",
+        "text": "The entire series is deleted",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'The entire series is deleted'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "D",
+        "text": "Raises a ReadOnlyError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Raises a ReadOnlyError'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Positional slicing with assignment updates the selected slice range in place.\nHence, Option A is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q46",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is Elements at index positions 1 and 2 are updated to 0 in place.",
+      "concept": "Positional slicing with assignment updates the selected slice range in place.\nHence, Option A is correct.",
+      "detailed": "Positional slicing with assignment updates the selected slice range in place.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock11-q29",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "chapter": "Python Programming and File Handling",
+    "topic": "Counting Records in CSV File",
+    "questionText": "How can the total number of data records (excluding header) in a CSV file be counted using csv.reader?",
+    "options": [
+      {
+        "id": "A",
+        "text": "reader = csv.reader(f); next(reader); count = sum(1 for _ in reader)",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "reader = csv.reader(f); count = sum(1 for _ in list(reader))",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "reader = csv.reader(f); count = len(f.readlines()) - 1",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "reader = csv.reader(f); count = reader.__len__() - 1",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Option A is correct because it uses csv.reader, advances past the header row with next(reader), and efficiently counts each subsequent data row with sum(1 for _ in reader) in a streaming fashion. Option B incorrectly counts all rows including the header. Option C uses f.readlines() which ignores the csv.reader context and would include the header in its count (though it subtracts 1, f is a file object and readlines consumes the file, which may interfere with the reader). Option D is incorrect because csv.reader objects do not have a __len__ method, making this approach invalid. The question tests knowledge of proper CSV file handling and record counting with csv.reader.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q47",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is reader = csv.reader(f); next(reader); count = sum(1 for row in reader).",
+      "concept": "Consuming the header with next(reader) and summing 1 for each remaining yielded row counts data records efficiently.\nHence, Option A is correct.",
+      "detailed": "Consuming the header with next(reader) and summing 1 for each remaining yielded row counts data records efficiently.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock16-q5",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "chapter": "Python Programming and File Handling",
+    "topic": "pickle.dumps vs pickle.dump",
+    "questionText": "What is the key return value difference between pickle.dumps() and pickle.dump()?",
+    "options": [
+      {
+        "id": "A",
+        "text": "pickle.dumps() writes to a database, while dump writes to a file",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'pickle.dumps() writes to a database, while dump writes to a file'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "B",
+        "text": "pickle.dumps() returns a bytes object in memory, while pickle.dump() writes bytes to an open file stream and returns None",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains pickle.dumps vs pickle.dump."
+      },
+      {
+        "id": "C",
+        "text": "There is zero difference between them",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'There is zero difference between them'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "D",
+        "text": "pickle.dumps() returns an integer",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'pickle.dumps() returns an integer'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "The 's' in dumps stands for 'string' (bytes); dumps() outputs in-memory bytes, whereas dump() targets an external file stream.\nHence, Option B is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q48",
+    "conceptId": "cs.python_programming_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is pickle.dumps() returns a bytes object in memory, while pickle.dump() writes bytes to an open file stream and returns None.",
+      "concept": "The 's' in dumps stands for 'string' (bytes); dumps() outputs in-memory bytes, whereas dump() targets an external file stream.\nHence, Option B is correct.",
+      "detailed": "The 's' in dumps stands for 'string' (bytes); dumps() outputs in-memory bytes, whereas dump() targets an external file stream.\nHence, Option B is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock12-q4",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "chapter": "Search and Sorting Algorithms",
+    "topic": "Starting Index of Outer Loop",
+    "questionText": "In Python Insertion Sort, why does the outer loop start at index 1 (for i in range(1, len(L))) rather than index 0?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Because Python lists cannot hold numbers at index 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'Because Python lists cannot hold numbers at index 0'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      },
+      {
+        "id": "B",
+        "text": "Index 0 cannot be accessed in Python",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'Index 0 cannot be accessed in Python'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "A single element at index 0 is inherently sorted by definition, so the first unsorted element to insert is at index 1",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately explains Starting Index of Outer Loop."
+      },
+      {
+        "id": "D",
+        "text": "Index 0 is reserved for hardware memory addresses",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'Index 0 is reserved for hardware memory addresses'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "An array of length 1 is trivially sorted; the algorithm begins by inserting the element at index 1 into the sub-list L[0].\nHence, Option C is correct.",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "questionId": "CUET-UG-CS-2024-S2-Q49",
+    "conceptId": "cs.search_and_sorting_a",
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 50,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A single element at index 0 is inherently sorted by definition, so the first unsorted element to insert is at index 1.",
+      "concept": "An array of length 1 is trivially sorted; the algorithm begins by inserting the element at index 1 into the sub-list L[0].\nHence, Option C is correct.",
+      "detailed": "An array of length 1 is trivially sorted; the algorithm begins by inserting the element at index 1 into the sub-list L[0].\nHence, Option C is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock6-q15",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
+    "topic": "Vectorized Data Transformation Sequence",
+    "questionText": "Arrange the sequential execution steps for scaling and filtering a Series of examination scores:\n(A) Initialize Series: 'scores = pd.Series([45, 60, 80, 35], index=['A', 'B', 'C', 'D'])'\n(B) Apply vectorized scalar scaling: 'curved_scores = scores + 5'\n(C) Generate boolean mask: 'passing_mask = curved_scores >= 50'\n(D) Filter passing scores using mask: 'passed = curved_scores[passing_mask]'\n\nChoose the correct chronological/logical sequence from the options given below:",
+    "options": [
+      {
+        "id": "A",
+        "text": "A, B, C, D",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly sequences Vectorized Data Transformation Sequence."
+      },
+      {
+        "id": "B",
+        "text": "B, A, C, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Conflation Trap",
+        "mistakeAnalysis": "Incorrect option 'B, A, C, D'. Conflates core domain concepts or theories with adjacent terminology."
+      },
+      {
+        "id": "C",
+        "text": "A, C, B, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Factual Misattribution Trap",
+        "mistakeAnalysis": "Incorrect option 'A, C, B, D'. Attributes historical facts, dates, authors, or mechanisms to an incorrect entity."
+      },
+      {
+        "id": "D",
+        "text": "D, B, C, A",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overgeneralization Trap",
+        "mistakeAnalysis": "Incorrect option 'D, B, C, A'. Adopts an over-generalized or inaccurate interpretation contradictory to syllabus facts."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Vectorized pipeline: instantiate -> broadcast scalar addition -> construct boolean mask -> apply mask to filter.\nHence, Option A is correct.",
+    "questionType": "chronological-sequence",
+    "difficulty": 3,
+    "questionId": "CUET-UG-CS-2024-S2-Q50",
+    "conceptId": "cs.data_handling_using_",
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 65,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "solution": {
+      "quick": "Correct answer is A, B, C, D.",
+      "concept": "Vectorized pipeline: instantiate -> broadcast scalar addition -> construct boolean mask -> apply mask to filter.\nHence, Option A is correct.",
+      "detailed": "Vectorized pipeline: instantiate -> broadcast scalar addition -> construct boolean mask -> apply mask to filter.\nHence, Option A is correct."
+    },
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "cs-mock5-q28",
+    "testNumber": 2,
+    "subjectFolder": "computer_science",
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated",
+    "pyqSource": "CUET UG 2024 (Shift 2 Official CBT Paper)",
+    "tags": [
+      "CUET UG 2024",
+      "Shift 2",
+      "Computer Science / IP",
+      "Official CBT Paper"
+    ]
+  }
+]
