@@ -27,7 +27,7 @@ export interface WhyWrongResponse {
 }
 
 // In-memory flagged explanations store for admin review
-export const flaggedExplanationsStore: Array<{
+const flaggedExplanationsStore: Array<{
   questionId: string;
   selectedOption: string;
   reason: string;

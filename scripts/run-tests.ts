@@ -613,6 +613,7 @@ What is the immediate impact on commercial banks when RBI increases the repo rat
     "/dashboard/mocks",
     "/dashboard/pyqs",
     "/dashboard/leaderboard",
+    "/dashboard/standing",
     "/dashboard/mocks/physics",
   ];
 

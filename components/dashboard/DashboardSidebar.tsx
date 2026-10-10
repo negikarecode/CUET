@@ -16,6 +16,7 @@ import {
   FileText,
   ClipboardCheck,
   User,
+  Compass,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -88,6 +89,13 @@ export default function DashboardSidebar() {
       href: "/dashboard/mocks",
       icon: ClipboardCheck,
       active: pathname.startsWith("/dashboard/mocks"),
+    },
+    {
+      id: "standing",
+      label: "Where Do I Stand",
+      href: "/dashboard/standing",
+      icon: Compass,
+      active: pathname.startsWith("/dashboard/standing"),
     },
     {
       id: "radar",
