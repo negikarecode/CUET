@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   Compass,
   ClipboardCheck,
@@ -42,8 +43,29 @@ export default function StandingViewClient() {
   const [targetCollege, setTargetCollegeLocal] = useState<string>("Shri Ram College of Commerce");
   const [trendCollege, setTrendCollege] = useState<string>("Shri Ram College of Commerce");
 
-  // Sync target college from user profile if available
+  const searchParams = useSearchParams();
+
+  // Sync target college & course from search params or user profile
   useEffect(() => {
+    const collegeParam = searchParams.get("college");
+    const courseParam = searchParams.get("course");
+
+    if (courseParam && CANONICAL_COURSES_MAP[courseParam]) {
+      setSelectedCourseId(courseParam);
+    }
+
+    if (collegeParam) {
+      const matched = NORMALIZED_CUTOFFS.find((r) =>
+        r.college.toLowerCase().includes(collegeParam.toLowerCase()) ||
+        collegeParam.toLowerCase().includes(r.college.toLowerCase())
+      );
+      if (matched) {
+        setTargetCollegeLocal(matched.college);
+        setTrendCollege(matched.college);
+        return;
+      }
+    }
+
     if (user?.targetCollege) {
       // Find closest matching college in cutoff data
       const matched = NORMALIZED_CUTOFFS.find((r) =>
@@ -55,7 +77,7 @@ export default function StandingViewClient() {
         setTrendCollege(matched.college);
       }
     }
-  }, [user?.targetCollege]);
+  }, [searchParams, user?.targetCollege]);
 
   // Compute standings for selected course
   const standingsResult = useMemo(() => {

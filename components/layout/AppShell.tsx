@@ -31,9 +31,16 @@ export default function AppShell({ children }: AppShellProps) {
     pathname && pathname.startsWith("/test/")
   );
 
+  const isLandingRoute = pathname === "/";
+
   // If on CBT simulator, full screen with no navbars or bottom navs
   if (isCbtTestRoute) {
     return <>{children}</>;
+  }
+
+  // Landing page route: clean viewport without dashboard bottom tab bar or legacy navs
+  if (isLandingRoute) {
+    return <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>;
   }
 
   // If on authenticated dashboard, no duplicate upper navbar or footer, but mount mobile BottomNav
@@ -46,7 +53,7 @@ export default function AppShell({ children }: AppShellProps) {
     );
   }
 
-  // Public marketing & utility routes
+  // Other public marketing & utility routes
   return (
     <>
       <Navbar />

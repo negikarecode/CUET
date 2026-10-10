@@ -28,8 +28,8 @@ export default function BottomNav() {
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
-  // CBT simulator screen is strict full-screen exam mode - hide bottom nav completely
-  if (pathname.startsWith("/test/")) {
+  // CBT simulator screen is strict full-screen exam mode; landing page uses pure desktop/mobile header
+  if (pathname === "/" || pathname.startsWith("/test/")) {
     return null;
   }
 
