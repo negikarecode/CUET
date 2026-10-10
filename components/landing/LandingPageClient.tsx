@@ -296,6 +296,9 @@ function Navigation({
         </Link>
 
         <nav className="desktop-nav" aria-label="Main navigation">
+          <ParticleLink href="/dashboard/pyqs" className="nav-link font-semibold text-blue-600 hover:text-blue-700">
+            Past Papers (PYQs)
+          </ParticleLink>
           <ParticleLink href="#features" className="nav-link">
             Mock Tests
           </ParticleLink>
@@ -354,6 +357,14 @@ function Navigation({
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden mt-4 p-4 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-xl flex flex-col gap-3">
+          <Link
+            href="/dashboard/pyqs"
+            className="py-2.5 px-3 text-sm font-bold text-blue-600 bg-blue-50/80 rounded-xl hover:bg-blue-100/80 flex items-center justify-between"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <span>Previous Year Papers</span>
+            <span className="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-bold">411 Papers</span>
+          </Link>
           <Link
             href="#features"
             className="py-2 px-3 text-sm font-semibold text-slate-800 hover:text-blue-600"

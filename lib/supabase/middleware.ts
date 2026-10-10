@@ -54,6 +54,11 @@ export async function updateSession(request: NextRequest) {
   }
 
   const pathname = request.nextUrl.pathname;
+  const isPracticeRoute =
+    pathname.startsWith("/dashboard/pyqs") ||
+    pathname.startsWith("/dashboard/mocks") ||
+    pathname.startsWith("/dashboard/standing") ||
+    pathname.startsWith("/test");
   const isDashboardRoute =
     pathname === "/dashboard" || pathname.startsWith("/dashboard/");
   const isAuthRoute = pathname === "/signup" || pathname === "/login";
@@ -61,8 +66,18 @@ export async function updateSession(request: NextRequest) {
   const cuetAuthCookie = request.cookies.get("cuet_auth")?.value === "1";
   const isAuthenticated = Boolean(authUser || cuetAuthCookie);
 
-  // 1. Unauthenticated users cannot enter dashboard routes -> redirect to /signup
-  if (isDashboardRoute && !isAuthenticated) {
+  // If visiting a practice route or dashboard as a visitor, allow seamless guest access
+  if (isPracticeRoute && !isAuthenticated) {
+    supabaseResponse.cookies.set("cuet_auth", "1", {
+      path: "/",
+      maxAge: 2592000,
+      sameSite: "lax",
+    });
+    return supabaseResponse;
+  }
+
+  // 1. Unauthenticated users cannot enter protected dashboard core routes -> redirect to /signup
+  if (isDashboardRoute && !isAuthenticated && !isPracticeRoute) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/signup";
     redirectUrl.search = "";

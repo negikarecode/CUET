@@ -40,6 +40,7 @@ export interface RawQuestion {
   keyConcept?: string;
   tags?: string[];
   qualityScore?: number;
+  pyqSource?: string;
 }
 
 export interface SubjectMockDefinition {
@@ -248,39 +249,20 @@ export function getQuestionsForTest(testId: string): {
   let sourceLabel = "";
   let notesPrefix = "";
 
-  if (lowerId.includes("pyq")) {
-    let year = "2024";
-    let shift = "Shift 1";
+  const isPYQ = lowerId.includes("pyq");
 
-    if (lowerId.includes("2024-s2") || lowerId.includes("2024_s2") || lowerId.endsWith("-2")) {
-      validMockNumber = 2;
-      year = "2024";
-      shift = "Shift 2";
-    } else if (lowerId.includes("2023-s1") || lowerId.includes("2023_s1") || lowerId.endsWith("-3")) {
-      validMockNumber = 3;
-      year = "2023";
-      shift = "Shift 1";
-    } else if (lowerId.includes("2023-s2") || lowerId.includes("2023_s2") || lowerId.endsWith("-4")) {
-      validMockNumber = 4;
-      year = "2023";
-      shift = "Shift 2";
-    } else if (lowerId.includes("2022") || lowerId.endsWith("-5")) {
-      validMockNumber = 5;
-      year = "2022";
-      shift = "Official CBT";
-    } else {
-      validMockNumber = 1;
-      year = "2024";
-      shift = "Shift 1";
-    }
+  if (isPYQ) {
+    const pyqMatch = lowerId.match(/pyq[^\d]*(\d+)/) || lowerId.match(/-(\d+)$/) || lowerId.match(/(\d+)$/);
+    validMockNumber = pyqMatch && pyqMatch[1] ? parseInt(pyqMatch[1], 10) : 1;
+    if (validMockNumber < 1) validMockNumber = 1;
 
-    title = shift === "Official CBT"
-      ? `CUET UG ${year} ${subjectDef.name} (Official CBT Paper)`
-      : `CUET UG ${year} ${subjectDef.name} (${shift} Official CBT)`;
-    sourceLabel = shift === "Official CBT"
-      ? `CUET UG ${year} Official NTA CBT Paper`
-      : `CUET UG ${year} (${shift} Official NTA CBT Paper)`;
-    notesPrefix = `CUET UG ${year} Official Paper (${subjectDef.name})`;
+    const rawQuestions = loadRawPYQData(subjectDef.folder, validMockNumber);
+    const firstQ = rawQuestions[0];
+    const pyqSource = firstQ?.pyqSource || `CUET UG Official CBT Paper ${validMockNumber}`;
+
+    title = `CUET UG ${subjectDef.name} Official Past Paper ${validMockNumber}`;
+    sourceLabel = pyqSource;
+    notesPrefix = `CUET UG Official Paper (${subjectDef.name} Shift ${validMockNumber})`;
   } else {
     const match = lowerId.match(/(\d+)/);
     const rawMockNumber = match && match[1] ? parseInt(match[1], 10) : 1;
@@ -294,7 +276,6 @@ export function getQuestionsForTest(testId: string): {
     notesPrefix = `CUET UG 2026 NTA Practice (${subjectDef.name} Mock ${validMockNumber})`;
   }
 
-  const isPYQ = lowerId.includes("pyq");
   const rawQuestions = isPYQ
     ? loadRawPYQData(subjectDef.folder, validMockNumber)
     : loadRawMockData(subjectDef.folder, validMockNumber);

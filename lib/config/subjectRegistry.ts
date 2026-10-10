@@ -488,22 +488,124 @@ export const SUPPORTED_SUBJECTS_REGISTRY: Record<string, SubjectMetadata> = {
     contentStatus: "approved",
     disclaimer: "CUET UG 2026-pattern practice for Domain Code 303. Not endorsed by NTA.",
   },
+  english: {
+    id: "english",
+    name: "English",
+    officialCode: "101",
+    syllabusVersion: "CUET UG 2026 (Language Section 1A Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["reading-comprehension", "vocabulary", "synonyms-antonyms", "grammar", "verbal-ability"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 6,
+      numericalTargetPercentage: 0,
+      caseBasedTargetPercentage: 40,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-28",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Section 1A Code 101. Not endorsed by NTA.",
+  },
+  "general-test": {
+    id: "general-test",
+    name: "General Aptitude Test",
+    officialCode: "501",
+    syllabusVersion: "CUET UG 2026 (Section III General Test Aligned)",
+    supportedStatus: "active",
+    mockCount: 20,
+    questionCount: 1000,
+    questionTypes: ["general-knowledge", "current-affairs", "general-mental-ability", "numerical-ability", "logical-reasoning"],
+    blueprint: {
+      totalQuestions: 50,
+      distinctChaptersMinimum: 6,
+      numericalTargetPercentage: 35,
+      caseBasedTargetPercentage: 15,
+    },
+    languageAvailability: {
+      questionBank: ["en"],
+      uiShell: ["en", "hi"],
+    },
+    lastContentAudit: "2026-09-28",
+    contentStatus: "approved",
+    disclaimer: "CUET UG 2026-pattern practice for Section III Code 501. Not endorsed by NTA.",
+  },
 };
 
 export const SUPPORTED_SUBJECT_KEYS = Object.keys(SUPPORTED_SUBJECTS_REGISTRY);
 
 export function getSubjectMetadata(subjectKey: string): SubjectMetadata | undefined {
-  const normalized = subjectKey.toLowerCase().trim().replace(/[-_]/g, "");
-  if (normalized === "accountancy" || normalized === "accounts" || normalized === "accs") return SUPPORTED_SUBJECTS_REGISTRY["accs"];
-  if (normalized === "polscience" || normalized === "politicalscience" || normalized === "pol") return SUPPORTED_SUBJECTS_REGISTRY["pol science"];
-  if (normalized === "sociology" || normalized === "soc") return SUPPORTED_SUBJECTS_REGISTRY["sociology"];
-  if (normalized === "physicaleducation" || normalized === "ped" || normalized === "physical") return SUPPORTED_SUBJECTS_REGISTRY["physical_education"];
-  if (normalized === "computerscience" || normalized === "cs" || normalized === "csip" || normalized === "informaticspractices") return SUPPORTED_SUBJECTS_REGISTRY["computer_science"];
-  if (normalized === "homescience" || normalized === "hsc") return SUPPORTED_SUBJECTS_REGISTRY["home_science"];
-  if (normalized === "massmedia" || normalized === "masscommunication" || normalized === "mmc") return SUPPORTED_SUBJECTS_REGISTRY["mass_media"];
-  if (normalized === "environmentalstudies" || normalized === "environmentalscience" || normalized === "evs") return SUPPORTED_SUBJECTS_REGISTRY["environmental_studies"];
-  if (normalized === "finearts" || normalized === "visualarts" || normalized === "fa") return SUPPORTED_SUBJECTS_REGISTRY["fine_arts"];
-  if (normalized === "agriculture" || normalized === "agr") return SUPPORTED_SUBJECTS_REGISTRY["agriculture"];
-  if (normalized === "anthropology" || normalized === "ant") return SUPPORTED_SUBJECTS_REGISTRY["anthropology"];
-  return SUPPORTED_SUBJECTS_REGISTRY[subjectKey.toLowerCase().trim()];
+  if (!subjectKey) return undefined;
+  const normalized = subjectKey.toLowerCase().trim().replace(/[-_ ]/g, "");
+
+  if (normalized === "accountancy" || normalized === "accounts" || normalized === "accs" || normalized === "acc") {
+    return SUPPORTED_SUBJECTS_REGISTRY["accs"];
+  }
+  if (normalized === "mathematics" || normalized === "maths" || normalized === "math" || normalized === "mathematicssci" || normalized === "mathematicscom") {
+    return SUPPORTED_SUBJECTS_REGISTRY["maths"];
+  }
+  if (normalized === "biology" || normalized === "bio") {
+    return SUPPORTED_SUBJECTS_REGISTRY["bio"];
+  }
+  if (normalized === "economics" || normalized === "eco") {
+    return SUPPORTED_SUBJECTS_REGISTRY["eco"];
+  }
+  if (normalized === "businessstudies" || normalized === "bst" || normalized === "business") {
+    return SUPPORTED_SUBJECTS_REGISTRY["bst"];
+  }
+  if (normalized === "geography" || normalized === "geo") {
+    return SUPPORTED_SUBJECTS_REGISTRY["geo"];
+  }
+  if (normalized === "polscience" || normalized === "politicalscience" || normalized === "pol") {
+    return SUPPORTED_SUBJECTS_REGISTRY["pol science"];
+  }
+  if (normalized === "history" || normalized === "hist") {
+    return SUPPORTED_SUBJECTS_REGISTRY["history"];
+  }
+  if (normalized === "sociology" || normalized === "soc") {
+    return SUPPORTED_SUBJECTS_REGISTRY["sociology"];
+  }
+  if (normalized === "psychology" || normalized === "psy" || normalized === "psych") {
+    return SUPPORTED_SUBJECTS_REGISTRY["psychology"];
+  }
+  if (normalized === "physicaleducation" || normalized === "ped" || normalized === "physical") {
+    return SUPPORTED_SUBJECTS_REGISTRY["physical_education"];
+  }
+  if (normalized === "computerscience" || normalized === "cs" || normalized === "csip" || normalized === "informaticspractices") {
+    return SUPPORTED_SUBJECTS_REGISTRY["computer_science"];
+  }
+  if (normalized === "homescience" || normalized === "hsc") {
+    return SUPPORTED_SUBJECTS_REGISTRY["home_science"];
+  }
+  if (normalized === "massmedia" || normalized === "masscommunication" || normalized === "mmc") {
+    return SUPPORTED_SUBJECTS_REGISTRY["mass_media"];
+  }
+  if (normalized === "environmentalstudies" || normalized === "environmentalscience" || normalized === "evs") {
+    return SUPPORTED_SUBJECTS_REGISTRY["environmental_studies"];
+  }
+  if (normalized === "finearts" || normalized === "visualarts" || normalized === "fa") {
+    return SUPPORTED_SUBJECTS_REGISTRY["fine_arts"];
+  }
+  if (normalized === "agriculture" || normalized === "agr") {
+    return SUPPORTED_SUBJECTS_REGISTRY["agriculture"];
+  }
+  if (normalized === "anthropology" || normalized === "ant") {
+    return SUPPORTED_SUBJECTS_REGISTRY["anthropology"];
+  }
+  if (normalized === "english" || normalized === "eng") {
+    return SUPPORTED_SUBJECTS_REGISTRY["english"];
+  }
+  if (normalized === "generaltest" || normalized === "generalaptitudetest" || normalized === "gat" || normalized === "general") {
+    return SUPPORTED_SUBJECTS_REGISTRY["general-test"];
+  }
+
+  const direct = SUPPORTED_SUBJECTS_REGISTRY[subjectKey.toLowerCase().trim()];
+  if (direct) return direct;
+
+  return undefined;
 }
+

@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import DashboardClient, { DashboardInitialData } from "@/components/dashboard/DashboardClient";
 import { buildDefaultSubjectCalibration, normalizeSubject } from "@/lib/analytics";
@@ -16,8 +14,6 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const cookieStore = cookies();
-  const cuetAuth = cookieStore.get("cuet_auth")?.value === "1";
 
   // 1. Clean real initial state (no fake mock attempts)
   let serverData: DashboardInitialData = {
@@ -63,9 +59,7 @@ export default async function DashboardPage() {
       data: { user: authUser },
     } = await supabase.auth.getUser();
 
-    if (!authUser && !cuetAuth) {
-      redirect("/signup");
-    }
+    // If guest user without auth, proceed with default clean aspirant state
 
     if (authUser) {
       const { data: profile } = await supabase

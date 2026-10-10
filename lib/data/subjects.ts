@@ -1,4 +1,5 @@
 import { SubjectConfig } from "@/types";
+import pyqManifest from "@/pyq/pyq_manifest.json";
 
 // Mapping of subject IDs to their primary PYQ test IDs
 export const SUBJECT_TO_PYQ: Record<string, string> = {
@@ -337,33 +338,46 @@ export interface PYQTestItem {
   tags: string[];
 }
 
+export function loadPYQFromManifest(subjectSlug: string): PYQTestItem[] {
+  const normKey = subjectSlug.toLowerCase().replace(/[-_ ]/g, "");
+  let folder = subjectSlug;
+  if (normKey === "physics" || normKey === "phys") folder = "physics";
+  else if (normKey === "chemistry" || normKey === "chem") folder = "chemistry";
+  else if (normKey === "mathematics" || normKey === "maths" || normKey === "math" || normKey === "mathematicssci" || normKey === "mathematicscom") folder = "maths";
+  else if (normKey === "biology" || normKey === "bio") folder = "bio";
+  else if (normKey === "accountancy" || normKey === "accounts" || normKey === "accs" || normKey === "acc") folder = "accountancy";
+  else if (normKey === "businessstudies" || normKey === "business" || normKey === "bst") folder = "bst";
+  else if (normKey === "economics" || normKey === "eco") folder = "eco";
+  else if (normKey === "history" || normKey === "hist") folder = "history";
+  else if (normKey === "politicalscience" || normKey === "polscience" || normKey === "pol") folder = "pol science";
+  else if (normKey === "geography" || normKey === "geo") folder = "geo";
+  else if (normKey === "psychology" || normKey === "psy" || normKey === "psych") folder = "psychology";
+  else if (normKey === "sociology" || normKey === "soc") folder = "sociology";
+  else if (normKey === "physicaleducation" || normKey === "ped" || normKey === "physical") folder = "physical_education";
+  else if (normKey === "computerscience" || normKey === "cs" || normKey === "csip" || normKey === "informatics") folder = "computer_science";
+  else if (normKey === "homescience" || normKey === "hsc") folder = "home_science";
+  else if (normKey === "massmedia" || normKey === "mmc" || normKey === "masscomm") folder = "mass_media";
+  else if (normKey === "environmentalstudies" || normKey === "evs" || normKey === "environmental") folder = "environmental_studies";
+  else if (normKey === "finearts" || normKey === "fa" || normKey === "visualarts") folder = "fine_arts";
+  else if (normKey === "agriculture" || normKey === "agr") folder = "agriculture";
+  else if (normKey === "anthropology" || normKey === "ant") folder = "anthropology";
+  else if (normKey === "english" || normKey === "eng") folder = "english";
+  else if (normKey === "generaltest" || normKey === "gat" || normKey === "general" || normKey === "generalaptitudetest") folder = "general-test";
+
+  const manifestSub = (pyqManifest.subjects as Record<string, { papers: PYQTestItem[] }>)[folder];
+  if (manifestSub && manifestSub.papers && manifestSub.papers.length > 0) {
+    return manifestSub.papers;
+  }
+  return [];
+}
+
 export function createPYQTestList(
   subjectSlug: string,
-  subjectName: string,
-  code: string,
-  durationMinutes: number = 60
+  _subjectName?: string,
+  _code?: string,
+  _durationMinutes: number = 60
 ): PYQTestItem[] {
-  const configs = [
-    { num: 1, year: "2024", shift: "Shift 1", label: `CUET UG 2024 Shift 1 Official CBT Paper` },
-    { num: 2, year: "2024", shift: "Shift 2", label: `CUET UG 2024 Shift 2 Official CBT Paper` },
-    { num: 3, year: "2023", shift: "Shift 1", label: `CUET UG 2023 Shift 1 Official CBT Paper` },
-    { num: 4, year: "2023", shift: "Shift 2", label: `CUET UG 2023 Shift 2 Official CBT Paper` },
-    { num: 5, year: "2022", shift: "Official CBT", label: `CUET UG 2022 Official CBT Paper` },
-  ];
-
-  return configs.map((c) => ({
-    id: `${subjectSlug}-pyq-${c.num}`,
-    subjectSlug,
-    subjectName,
-    code,
-    year: c.year,
-    shift: c.shift,
-    label: c.label,
-    yearLabel: `CUET UG ${c.year}`,
-    duration: `${durationMinutes} mins`,
-    questions: 50,
-    tags: [`CUET ${c.year}`, c.shift, "100% Real Questions", "Detailed NCERT Solutions"],
-  }));
+  return loadPYQFromManifest(subjectSlug);
 }
 
 export const PHYSICS_PYQ_TESTS = createPYQTestList("physics", "Physics", "312", 60);
@@ -451,7 +465,9 @@ const PYQ_SUBJECT_TEST_MAP: Record<string, PYQTestItem[]> = {
 export function getPYQTestsForSubject(subjectKey: string): PYQTestItem[] {
   if (!subjectKey) return [];
   const cleanKey = subjectKey.toLowerCase().replace(/[-_\s]/g, "");
-  return PYQ_SUBJECT_TEST_MAP[cleanKey] || [];
+  const direct = PYQ_SUBJECT_TEST_MAP[cleanKey];
+  if (direct && direct.length > 0) return direct;
+  return loadPYQFromManifest(subjectKey);
 }
 
 export function getAllPYQTests(): PYQTestItem[] {
