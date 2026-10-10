@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import {
   RecordedTestAttempt,
   TopicMastery,
@@ -7,6 +6,7 @@ import {
   SubjectCalibrationData,
 } from "@/types";
 import { generateFullTopicDiagnosis } from "@/lib/diagnostic-engine";
+import { getTopicDiagnosticState, CALIBRATION_THRESHOLDS } from "@/lib/config/dashboardConfig";
 
 export interface CanonicalSubjectInfo {
   key: string;
@@ -53,6 +53,15 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
       icon: "Dna",
       category: "Science",
       mockUrl: "/dashboard/mocks/bio",
+    };
+  }
+  if (clean.includes("environment") || clean.includes("evs")) {
+    return {
+      key: "environmental-studies",
+      name: "Environmental Studies",
+      icon: "Globe",
+      category: "Science",
+      mockUrl: "/dashboard/mocks/environmental_studies",
     };
   }
   if (clean.includes("account") || clean === "accs" || clean === "accounts") {
@@ -222,14 +231,27 @@ export function stringToUuid(str: string): string {
   if (uuidRegex.test(str)) {
     return str;
   }
-  const hash = crypto.createHash("md5").update(str).digest("hex");
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  const p1 = (h1 >>> 0).toString(16).padStart(8, "0");
+  const p2 = (h2 >>> 0).toString(16).padStart(8, "0");
+  const p3 = ((h1 ^ h2) >>> 0).toString(16).padStart(8, "0");
+  const p4 = ((h1 + h2) >>> 0).toString(16).padStart(8, "0");
+  const hex = (p1 + p2 + p3 + p4).padEnd(32, "0");
+
   return [
-    hash.substring(0, 8),
-    hash.substring(8, 12),
-    "4" + hash.substring(13, 16),
-    ((parseInt(hash.substring(16, 18), 16) & 0x3f) | 0x80).toString(16) +
-      hash.substring(18, 20),
-    hash.substring(20, 32),
+    hex.substring(0, 8),
+    hex.substring(8, 12),
+    "4" + hex.substring(13, 16),
+    ((parseInt(hex.substring(16, 18), 16) & 0x3f) | 0x80).toString(16) +
+      hex.substring(18, 20),
+    hex.substring(20, 32),
   ].join("-");
 }
 
@@ -493,6 +515,7 @@ export function computeAnalyticsFromAttempts(
         bucket.mistakesList.push({
           questionId: q.questionId || q.conceptId || `q_${bucket.mistakesList.length + 1}`,
           prompt: q.prompt || "Question stem from CBT attempt",
+          options: q.options || [],
           userAnswer: q.selectedOption || "None",
           correctAnswer: q.correctOption || "Correct Answer",
           errorCategory: errCat,
@@ -500,6 +523,8 @@ export function computeAnalyticsFromAttempts(
           timeSpentSeconds: timeSpent,
           chapter: bucket.chapter,
           microTopic,
+          reviewed_by_human: (q as any).reviewed_by_human ?? false,
+          source: (q as any).source,
         });
       }
   });
@@ -534,16 +559,6 @@ export function computeAnalyticsFromAttempts(
     const strongTopics = Array.from(bucket.masteredSubtopicsMap.entries())
       .sort((a, b) => b[1] - a[1])
       .map(([name]) => name);
-
-    // Confidence level based on sample size
-    let confidenceLevel: "high" | "medium" | "emerging";
-    if (attempts >= 4) {
-      confidenceLevel = "high";
-    } else if (attempts >= 2) {
-      confidenceLevel = "medium";
-    } else {
-      confidenceLevel = "emerging";
-    }
 
     // Mastery Score (0 - 100) combining accuracy, pace, and error severity
     let masteryScore = (bucket.correctCount / attempts) * 70;
@@ -629,53 +644,48 @@ export function computeAnalyticsFromAttempts(
       weaknessTier = "potential";
     }
 
-    // Categorization logic: True Weakness vs Polish vs True Strength
-    let status: "critical" | "polish" | "mastered";
-    let diagnosisLabel: string;
-    let diagnosticInsight: string;
-    let remedialPrescription: string;
+    // Remediation stage & recovery status
+    let remediationStage: import("@/types").RemediationStage = "DETECTED";
+    let isRecovered = false;
+    if (accuracy >= CALIBRATION_THRESHOLDS.RECOVERY_MIN_ACCURACY && attempts >= CALIBRATION_THRESHOLDS.RECOVERY_MIN_ATTEMPTS && avgTime <= CALIBRATION_THRESHOLDS.RECOVERY_MAX_AVG_TIME) {
+      remediationStage = "RECOVERED";
+      isRecovered = true;
+    } else if (attempts >= 5 && accuracy < 60) {
+      remediationStage = "DIAGNOSED";
+    } else if (attempts >= 5 && accuracy < 75) {
+      remediationStage = "PRACTICING";
+    } else if (attempts < 5) {
+      remediationStage = "DETECTED";
+    }
 
-    const troubleListStr = troubleTopics.slice(0, 2).join(", ");
-    const strongListStr = strongTopics.slice(0, 2).join(", ");
+    // Canonical Topic Diagnostic State from dashboardConfig
+    const topicState = getTopicDiagnosticState({
+      attemptsCount: attempts,
+      accuracyPercentage: accuracy,
+      avgTimeSeconds: avgTime,
+      isRecovered,
+      inRemediation: remediationStage === "PRACTICING" || remediationStage === "DIAGNOSED",
+    });
 
-    // Strictly respect evidence thresholds:
-    // <5 attempts: LIMITED DATA - Not enough evidence to diagnose a weakness yet
-    if (attempts < 5) {
-      const needed = Math.max(1, 5 - attempts);
-      status = "polish";
-      diagnosisLabel = "Limited Data (Need " + needed + " More Qs)";
-      diagnosticInsight = `Only ${attempts} question attempt${attempts === 1 ? "" : "s"} recorded (${accuracy}% accuracy). Need ${needed} more attempt${needed === 1 ? "" : "s"} (minimum 5 total) before diagnosing a genuine weakness pattern.`;
-      remedialPrescription = `Practice 5 questions in ${bucket.chapter} to calibrate baseline accuracy without guessing.`;
-    } else if (accuracy < 50 || masteryScore < 45) {
-      status = "critical";
-      diagnosisLabel = "Critical Conceptual Gap";
-      diagnosticInsight = `${bucket.incorrectCount} mistakes out of ${attempts} questions tested (${accuracy}% accuracy). Repeated breakdowns identified in: ${troubleListStr || "core chapter concepts"}.`;
-      remedialPrescription = `Re-read NCERT Class 12 (${bucket.chapter}). Revisit basic definitions and resolve NCERT in-text examples before taking another mock.`;
-    } else if (bucket.timeSinksCount >= 2 || (bucket.slowErrorsCount >= 1 && avgTime > 75)) {
-      status = "critical";
-      diagnosisLabel = "Calculation & Clock Drain";
-      diagnosticInsight = `Average solving pace of ${avgTime}s/Q is severely drag-heavy (${bucket.timeSinksCount} questions exceeded 72s limit). Calculations are eating valuable CBT exam time.`;
-      remedialPrescription = `Practice shortcut formula substitutions and dimensional elimination for ${bucket.chapter} to bring pace under 60s.`;
-    } else if (bucket.fastErrorsCount >= 2 || (accuracy < 50 && avgTime < 38)) {
-      status = "critical";
-      diagnosisLabel = "Impulsive Trap Exposure";
-      diagnosticInsight = `Rapid solving pace (${avgTime}s avg) with ${bucket.incorrectCount} errors. You are falling for NTA negative marking (-1) trap choices in: ${troubleListStr || "formula questions"}.`;
-      remedialPrescription = `Slow down. Underline 'INCORRECT' / 'NOT TRUE' qualifying keywords in question stems before selecting answers.`;
-    } else if (accuracy >= 80 && bucket.incorrectCount === 1) {
-      status = "polish";
-      diagnosisLabel = "Careless / Precision Slip";
-      diagnosticInsight = `High accuracy (${accuracy}% across ${attempts} questions). The single error was a careless calculation/reading slip, not a conceptual deficit.`;
-      remedialPrescription = `Maintain habit of double-checking final arithmetic before locking option. Knowledge retention is solid.`;
-    } else if (masteryScore >= 75 && accuracy >= 75) {
-      status = "mastered";
-      diagnosisLabel = "Core Pillar Strength";
-      diagnosticInsight = `Exceptional precision (${accuracy}% accuracy across ${attempts} questions) with optimal solving rhythm (${avgTime}s avg). Solid mastery of: ${strongListStr || bucket.chapter}.`;
-      remedialPrescription = `Exam-ready stronghold. Maintain sharpness with a quick 5-minute revision drill once a week.`;
-    } else {
-      status = "polish";
-      diagnosisLabel = "Needs Polish & Consistency";
-      diagnosticInsight = `Moderate performance (${accuracy}% accuracy, ${bucket.correctCount}/${attempts} correct). Concept is recognized, but slips occurred in: ${troubleListStr || "secondary concepts"}.`;
-      remedialPrescription = `Review formulas for ${troubleListStr || bucket.chapter}. Target 80%+ accuracy threshold to turn this into a core strength.`;
+    const status: "critical" | "polish" | "mastered" =
+      topicState.state === "established_weakness"
+        ? "critical"
+        : topicState.isStrength
+        ? "mastered"
+        : "polish";
+
+    const diagnosisLabel = topicState.badgeLabel;
+    const diagnosticInsight = topicState.explanation;
+
+    let remedialPrescription = `Practice 5 questions in ${bucket.chapter} to calibrate baseline accuracy.`;
+    if (topicState.state === "established_weakness") {
+      remedialPrescription = `Re-read NCERT Class 12 (${bucket.chapter}). Revisit basic definitions and resolve NCERT in-text examples before next mock.`;
+    } else if (topicState.state === "emerging_weakness") {
+      remedialPrescription = `Attempt a 5-question targeted repair drill in ${bucket.chapter} to stabilize accuracy above 75%.`;
+    } else if (topicState.state === "early_signal") {
+      remedialPrescription = `Early signal. Complete 5-10 more practice questions under exam pacing to confirm topic consistency.`;
+    } else if (topicState.isStrength || isRecovered) {
+      remedialPrescription = `Stronghold. Maintain sharpness with a quick 5-minute revision drill once a week.`;
     }
 
     const fullDiagnosis = generateFullTopicDiagnosis(
@@ -688,20 +698,6 @@ export function computeAnalyticsFromAttempts(
       avgTime,
       bucket.questionsData
     );
-
-    // Determine Remediation Stage
-    let remediationStage: import("@/types").RemediationStage = "DETECTED";
-    let isRecovered = false;
-    if (accuracy >= 80 && attempts >= 10 && avgTime <= 75) {
-      remediationStage = "RECOVERED";
-      isRecovered = true;
-    } else if (attempts >= 5 && accuracy < 60) {
-      remediationStage = "DIAGNOSED";
-    } else if (attempts >= 5 && accuracy < 75) {
-      remediationStage = "PRACTICING";
-    } else if (attempts < 5) {
-      remediationStage = "DETECTED";
-    }
 
     fullDiagnosis.remediationStage = remediationStage;
     fullDiagnosis.isRecovered = isRecovered;
@@ -718,13 +714,14 @@ export function computeAnalyticsFromAttempts(
       timeSinksCount: bucket.timeSinksCount,
       avgTimeSeconds: avgTime,
       status,
+      diagnosticState: topicState.state,
       remediationStage,
       isRecovered,
       masteryScore,
       diagnosisLabel,
       diagnosticInsight,
       remedialPrescription,
-      confidenceLevel,
+      confidenceLevel: topicState.confidenceLevel === "high" ? "high" : topicState.confidenceLevel === "medium" ? "medium" : "emerging",
       troubleTopics,
       strongTopics,
       priorityScore,

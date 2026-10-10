@@ -4,36 +4,41 @@ import { MoreHorizontal, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
 import { GlowCard } from './GlowCard';
 import { useTestStore } from '@/lib/store/useTestStore';
 import { RecordedTestAttempt } from '@/types';
+import Avatar from '@/components/ui/Avatar';
+import { getEvaluatorForSubject, formatDateIndian, MARKING_SCHEME } from '@/lib/config/dashboardConfig';
 
-const EVALUATOR_AVATARS = [
-  '/assets/images/avatar1.png',
-  '/assets/images/avatar2.png',
-  '/assets/images/avatar3.png',
-  '/assets/images/avatar4.png',
-];
-
-const EVALUATOR_NAMES = [
-  'Dr. A. Verma (Physics Lead)',
-  'Prof. R. Sen (Chemistry Specialist)',
-  'Dr. P. Iyer (Maths Evaluator)',
-  'K. Joshi (English Faculty)',
-];
+interface EvaluationTableRow {
+  id: string;
+  title: string;
+  subject: string;
+  date: string;
+  scoreFormatted: string;
+  accuracyFormatted: string;
+  status: string;
+  statusColor: string;
+  evaluator: string;
+  avatar: string;
+  href: string;
+  isLowEffort?: boolean;
+  sessionConfidence?: "Low" | "Medium" | "High";
+}
 
 export const RecentEvaluationsTable: React.FC = () => {
   const testAttempts = useTestStore((s) => s.testAttempts) || [];
 
   // Default baseline diagnostic tests if user has 0 attempts
-  const defaultRecommendedRows = [
+  const defaultRecommendedRows: EvaluationTableRow[] = [
     {
       id: 'mock-rec-1',
       title: 'Physics Domain Diagnostic Mock (Mechanics & Waves)',
       subject: 'Physics',
       date: 'Recommended Baseline',
-      score: '50 Questions • 60 Mins',
+      scoreFormatted: '50 Qs • 60 Mins',
+      accuracyFormatted: 'Calibration Gate',
       status: 'Ready to Start',
       statusColor: 'bg-emerald-50 text-emerald-700 border-emerald-200/60',
       evaluator: 'Dr. A. Verma (Physics Lead)',
-      avatar: EVALUATOR_AVATARS[0],
+      avatar: '/assets/images/avatar1.png',
       href: '/test/physics-mock-1',
     },
     {
@@ -41,11 +46,12 @@ export const RecentEvaluationsTable: React.FC = () => {
       title: 'Chemistry Organic & Physical CBT Diagnostic',
       subject: 'Chemistry',
       date: 'Recommended Baseline',
-      score: '50 Questions • 60 Mins',
+      scoreFormatted: '50 Qs • 60 Mins',
+      accuracyFormatted: 'Calibration Gate',
       status: 'Ready to Start',
       statusColor: 'bg-blue-50 text-blue-700 border-blue-200/60',
       evaluator: 'Prof. R. Sen (Chemistry Specialist)',
-      avatar: EVALUATOR_AVATARS[1],
+      avatar: '/assets/images/avatar2.png',
       href: '/test/chemistry-mock-1',
     },
     {
@@ -53,11 +59,12 @@ export const RecentEvaluationsTable: React.FC = () => {
       title: 'Mathematics Sectional: Calculus & Matrices',
       subject: 'Mathematics',
       date: 'Recommended Baseline',
-      score: '50 Questions • 60 Mins',
-      status: 'Calibration Gate',
+      scoreFormatted: '50 Qs • 60 Mins',
+      accuracyFormatted: 'Calibration Gate',
+      status: 'Ready to Start',
       statusColor: 'bg-amber-50 text-amber-800 border-amber-200/60',
       evaluator: 'Dr. P. Iyer (Maths Evaluator)',
-      avatar: EVALUATOR_AVATARS[2],
+      avatar: '/assets/images/avatar3.png',
       href: '/test/maths-mock-1',
     },
     {
@@ -65,32 +72,32 @@ export const RecentEvaluationsTable: React.FC = () => {
       title: 'English Reading Comprehension & Verbal Ability',
       subject: 'English',
       date: 'Recommended Baseline',
-      score: '50 Questions • 45 Mins',
+      scoreFormatted: '50 Qs • 45 Mins',
+      accuracyFormatted: 'Calibration Gate',
       status: 'Ready to Start',
       statusColor: 'bg-purple-50 text-purple-700 border-purple-200/60',
       evaluator: 'K. Joshi (English Faculty)',
-      avatar: EVALUATOR_AVATARS[3],
+      avatar: '/assets/images/avatar4.png',
       href: '/test/english-mock-1',
     },
   ];
 
   const hasRealAttempts = testAttempts.length > 0;
 
-  // Format real attempts
+  // Format real attempts with strict domain-accurate evaluators and clear labelling
   const realRows = testAttempts.slice(0, 5).map((att: RecordedTestAttempt, idx: number) => {
-    const d = att.submittedAt ? new Date(att.submittedAt) : new Date();
-    const formattedDate = d.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
+    const evaluatorInfo = getEvaluatorForSubject(att.subject);
+    const evaluatorTitle = `${evaluatorInfo.name} (${evaluatorInfo.role})`;
+    const formattedDate = formatDateIndian(att.submittedAt || new Date());
+    const maxMarks = att.maxMarks || MARKING_SCHEME.MAX_MARKS_PER_SUBJECT;
 
     return {
       id: att.id || `attempt-${idx}`,
-      title: att.testTitle || `${att.subject} CBT Mock Test`,
+      title: att.testTitle || `${att.subject || 'Domain'} CBT Mock Test`,
       subject: att.subject || 'Domain',
       date: formattedDate,
-      score: `${att.totalMarks} / ${att.maxMarks || 200} pts (${att.accuracyPercentage}%)`,
+      scoreFormatted: `${att.totalMarks} / ${maxMarks} pts`,
+      accuracyFormatted: `${att.accuracyPercentage}% Accuracy`,
       status: att.accuracyPercentage >= 70 ? 'Complete' : att.accuracyPercentage >= 50 ? 'Calibrated' : 'Needs Review',
       statusColor:
         att.accuracyPercentage >= 70
@@ -98,8 +105,10 @@ export const RecentEvaluationsTable: React.FC = () => {
           : att.accuracyPercentage >= 50
           ? 'bg-blue-50 text-blue-700 border-blue-200/60'
           : 'bg-amber-50 text-amber-800 border-amber-200/60',
-      evaluator: EVALUATOR_NAMES[idx % EVALUATOR_NAMES.length],
-      avatar: EVALUATOR_AVATARS[idx % EVALUATOR_AVATARS.length],
+      evaluator: evaluatorTitle,
+      avatar: `/assets/images/avatar${(idx % 4) + 1}.png`,
+      isLowEffort: att.isLowEffort,
+      sessionConfidence: att.sessionConfidence || (att.isLowEffort ? "Low" : "High"),
       href: `/dashboard/mocks/analysis/${att.id}`,
     };
   });
@@ -108,16 +117,16 @@ export const RecentEvaluationsTable: React.FC = () => {
 
   return (
     <GlowCard className="p-4 sm:p-6">
-      {/* Table Header matching Dashboard Overview.png */}
+      {/* Table Header */}
       <div className="flex items-center justify-between pb-4 border-b border-slate-100">
         <div>
           <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
             Recent Test Sessions &amp; Diagnostic Evaluations
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             {hasRealAttempts
-              ? 'Verified NTA-pattern mock attempts with AI mistake pattern diagnosis'
-              : 'Standardized NTA diagnostic tests with automated peer & mentor verification'}
+              ? 'Practice sessions under timed conditions with AI mistake pattern diagnosis'
+              : 'Timed domain practice tests with automated pattern diagnosis'}
           </p>
         </div>
 
@@ -159,16 +168,16 @@ export const RecentEvaluationsTable: React.FC = () => {
                 {/* Evaluator + Title */}
                 <td className="py-3.5 px-2">
                   <div className="flex items-center gap-3">
-                    <img
+                    <Avatar
                       src={row.avatar}
-                      alt={row.evaluator}
-                      className="w-8 h-8 rounded-full object-cover ring-2 ring-slate-100 shrink-0"
+                      name={row.evaluator}
+                      size="sm"
                     />
                     <div className="min-w-0">
                       <p className="font-bold text-slate-800 group-hover:text-blue-600 transition-colors truncate">
                         {row.title}
                       </p>
-                      <p className="text-[11px] text-slate-400 truncate">
+                      <p className="text-[11px] text-slate-500 font-medium truncate">
                         {row.evaluator}
                       </p>
                     </div>
@@ -180,31 +189,64 @@ export const RecentEvaluationsTable: React.FC = () => {
                   {row.date}
                 </td>
 
-                {/* Score */}
-                <td className="py-3.5 px-2 font-mono font-semibold text-slate-700 whitespace-nowrap">
-                  {row.score}
+                {/* Score & Accuracy clearly labelled */}
+                <td className="py-3.5 px-2 whitespace-nowrap">
+                  <div className="flex flex-col">
+                    <span className="font-mono font-bold text-slate-800 text-xs">
+                      {row.scoreFormatted}
+                    </span>
+                    <span className="text-[11px] font-semibold text-slate-500">
+                      {row.accuracyFormatted}
+                    </span>
+                  </div>
                 </td>
 
-                {/* Status Badge */}
+                {/* Status & Confidence Badge */}
                 <td className="py-3.5 px-2 whitespace-nowrap">
-                  <span
-                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${row.statusColor}`}
-                  >
-                    {row.status === 'Complete' && <CheckCircle2 className="w-3 h-3 stroke-[2.5]" />}
-                    {row.status === 'Ready to Start' && <Clock className="w-3 h-3" />}
-                    {row.status}
-                  </span>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${row.statusColor}`}
+                    >
+                      {row.status === 'Complete' && <CheckCircle2 className="w-3 h-3 stroke-[2.5]" />}
+                      {row.status === 'Ready to Start' && <Clock className="w-3 h-3" />}
+                      {row.status}
+                    </span>
+                    {row.sessionConfidence && (
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
+                          row.sessionConfidence === 'High'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+                            : row.sessionConfidence === 'Medium'
+                            ? 'bg-blue-50 text-blue-700 border-blue-200/60'
+                            : 'bg-amber-50 text-amber-800 border-amber-200/60'
+                        }`}
+                        title={row.isLowEffort ? "Low-effort session, results not reliable" : `${row.sessionConfidence} confidence evaluation`}
+                      >
+                        {row.isLowEffort ? '⚠️ Low Effort' : `Confidence: ${row.sessionConfidence}`}
+                      </span>
+                    )}
+                  </div>
                 </td>
 
                 {/* Action CTA */}
                 <td className="py-3.5 px-2 text-right whitespace-nowrap">
-                  <Link
-                    href={row.href}
-                    className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 transition-colors"
-                  >
-                    <span>{hasRealAttempts ? 'Audit' : 'Start'}</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </Link>
+                  <div className="flex items-center justify-end gap-2">
+                    {row.isLowEffort && (
+                      <Link
+                        href={`/dashboard/mocks`}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition-colors"
+                      >
+                        Retake Paced
+                      </Link>
+                    )}
+                    <Link
+                      href={row.href}
+                      className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 transition-colors"
+                    >
+                      <span>{hasRealAttempts ? 'Audit' : 'Start'}</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
                 </td>
               </tr>
             ))}

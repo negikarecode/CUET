@@ -473,6 +473,34 @@ export function compareDiagnosticCycles(
 }
 
 /**
+ * Post-generation consistency check:
+ * Rejects LLM text that claims strength when strengths = 0 or accuracy is below threshold.
+ */
+export function validateCycleNarrativeConsistency(params: {
+  narrative: string;
+  accuracyPercentage: number;
+  strengthsCount: number;
+}): { isValid: boolean; reason?: string } {
+  const { narrative, accuracyPercentage, strengthsCount } = params;
+  const lower = narrative.toLowerCase();
+  const claimsStrength =
+    lower.includes("strong performance") ||
+    lower.includes("foundational theory grasp") ||
+    lower.includes("solid mastery") ||
+    lower.includes("excellent grasp") ||
+    lower.includes("command over core") ||
+    lower.includes("dominant strength");
+
+  if ((strengthsCount === 0 || accuracyPercentage < 50) && claimsStrength) {
+    return {
+      isValid: false,
+      reason: `Narrative claims strong grasp/performance, but student has ${accuracyPercentage}% accuracy and 0 calibrated strengths.`,
+    };
+  }
+  return { isValid: true };
+}
+
+/**
  * Generate AI interpretation for a completed cycle.
  * Uses Groq/Gemini if configured, with a 100% deterministic fallback so data is never lost.
  */
@@ -514,6 +542,20 @@ export async function generateCycleAIInterpretation(
       : null,
   };
 
+  // Build honest deterministic narrative baseline
+  let narrative = "";
+  if (isFirstCycle) {
+    if (currentCycle.strengths.length > 0 && currentCycle.accuracyPercentage >= 60) {
+      narrative = `Cycle 1 establishes your initial diagnostic baseline with ${currentCycle.accuracyPercentage}% accuracy across 150 questions. Strong performance observed in ${currentCycle.strengths[0]?.chapter}, with remediation required in ${currentCycle.diagnosedWeaknesses[0]?.chapter || "foundational areas"}.`;
+    } else {
+      narrative = `Cycle 1 establishes your initial diagnostic baseline with ${currentCycle.accuracyPercentage}% accuracy across 150 questions. No topics reached the strength threshold yet. Foundational rebuild is required across tested areas before attempting timed drills.`;
+    }
+  } else {
+    const change = currentCycle.comparison?.overallAccuracyChange || 0;
+    const changeStr = change >= 0 ? `+${change}%` : `${change}%`;
+    narrative = `Cycle ${currentCycle.cycleNumber} concluded with ${currentCycle.accuracyPercentage}% accuracy (${changeStr} vs Cycle ${currentCycle.cycleNumber - 1}). Telemetry highlights ${currentCycle.comparison?.whatImproved.length || 0} improving area(s) and ${currentCycle.comparison?.whatRemainedWeak.length || 0} recurring weakness pattern(s).`;
+  }
+
   const groqApiKey = process.env.GROQ_API_KEY;
 
   if (groqApiKey && !groqApiKey.includes("placeholder")) {
@@ -530,7 +572,12 @@ Provide an observational, evidence-based interpretation conforming STRICTLY to t
   "crossTopicPatterns": ["pattern 1", "pattern 2"],
   "behavioralShift": "1 sentence on response time or distractor selection pattern",
   "personalizedRoadmap": ["Actionable step 1", "Actionable step 2", "Actionable step 3"]
-}`;
+}
+
+CRITICAL RULES:
+- Ground all statements strictly in the facts provided above.
+- Do NOT praise or claim 'strong performance' or 'solid foundational grasp' unless strengthsCount > 0 and overallAccuracy >= 60%.
+- If overallAccuracy is below 50% or strengthsCount is 0, explicitly state that foundational remediation is required across all tested areas.`;
 
       const res = await groq.chat.completions.create({
         model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
@@ -543,12 +590,36 @@ Provide an observational, evidence-based interpretation conforming STRICTLY to t
       const raw = res.choices[0]?.message?.content?.trim();
       if (raw) {
         const parsed = JSON.parse(raw);
+        let validNarrative = parsed.overallNarrative || narrative;
+
+        // Run post-generation consistency check
+        const consistencyCheck = validateCycleNarrativeConsistency({
+          narrative: validNarrative,
+          accuracyPercentage: currentCycle.accuracyPercentage,
+          strengthsCount: currentCycle.strengths.length,
+        });
+
+        if (!consistencyCheck.isValid) {
+          console.warn("LLM Narrative rejected by consistency gate:", consistencyCheck.reason);
+          validNarrative = narrative; // Substitute honest deterministic narrative
+        }
+
+        let crossPatterns: string[] = Array.isArray(parsed.crossTopicPatterns) ? parsed.crossTopicPatterns : [];
+        if (currentCycle.accuracyPercentage < 50) {
+          crossPatterns = crossPatterns.filter(
+            (p) => !p.toLowerCase().includes("foundational theory grasp") && !p.toLowerCase().includes("strong performance")
+          );
+          if (crossPatterns.length === 0) {
+            crossPatterns.push("General conceptual gaps identified across core tested chapters.");
+          }
+        }
+
         return {
           status: "completed",
           generatedAt: new Date().toISOString(),
-          overallNarrative: parsed.overallNarrative || "Telemetry analysis completed.",
+          overallNarrative: validNarrative,
           recurringMisconceptions: Array.isArray(parsed.recurringMisconceptions) ? parsed.recurringMisconceptions : [],
-          crossTopicPatterns: Array.isArray(parsed.crossTopicPatterns) ? parsed.crossTopicPatterns : [],
+          crossTopicPatterns: crossPatterns,
           behavioralShift: parsed.behavioralShift,
           personalizedRoadmap: Array.isArray(parsed.personalizedRoadmap) ? parsed.personalizedRoadmap : [],
         };
@@ -556,16 +627,6 @@ Provide an observational, evidence-based interpretation conforming STRICTLY to t
     } catch (err) {
       console.warn("Groq Cycle AI Interpretation notice:", err);
     }
-  }
-
-  // Robust deterministic fallback based strictly on actual telemetry
-  let narrative = "";
-  if (isFirstCycle) {
-    narrative = `Cycle 1 establishes your initial diagnostic baseline with ${currentCycle.accuracyPercentage}% accuracy across 150 questions. Strong performance observed in ${currentCycle.strengths[0]?.chapter || "core concepts"}, with remediation required in ${currentCycle.diagnosedWeaknesses[0]?.chapter || "foundational areas"}.`;
-  } else {
-    const change = currentCycle.comparison?.overallAccuracyChange || 0;
-    const changeStr = change >= 0 ? `+${change}%` : `${change}%`;
-    narrative = `Cycle ${currentCycle.cycleNumber} concluded with ${currentCycle.accuracyPercentage}% accuracy (${changeStr} vs Cycle ${currentCycle.cycleNumber - 1}). Telemetry highlights ${currentCycle.comparison?.whatImproved.length || 0} improving area(s) and ${currentCycle.comparison?.whatRemainedWeak.length || 0} recurring weakness pattern(s).`;
   }
 
   const recurringMisconceptions: string[] = [];
@@ -587,7 +648,11 @@ Provide an observational, evidence-based interpretation conforming STRICTLY to t
     );
   }
   if (crossTopicPatterns.length === 0) {
-    crossTopicPatterns.push("Isolated errors with consistent foundational theory grasp.");
+    if (currentCycle.accuracyPercentage >= 70) {
+      crossTopicPatterns.push("Isolated errors with consistent foundational theory grasp.");
+    } else {
+      crossTopicPatterns.push("General conceptual gaps identified across core tested chapters.");
+    }
   }
 
   const roadmap: string[] = [];
@@ -596,7 +661,7 @@ Provide an observational, evidence-based interpretation conforming STRICTLY to t
   });
   if (roadmap.length === 0) {
     roadmap.push(`Complete targeted practice drill on ${currentCycle.diagnosedWeaknesses[0]?.chapter || "weak areas"}.`);
-    roadmap.push("Review NCERT key definitions and sign conventions.");
+    roadmap.push("Review NCERT key definitions and standard distinctions.");
     roadmap.push("Proceed to next full CBT domain mock.");
   }
 
@@ -630,6 +695,8 @@ export async function processQuestionsIntoCycles(
 
   for (const q of allAttempts) {
     if (q.selectedOption === null || q.selectedOption === undefined) continue;
+    // Skip questions answered in low-effort sessions (Validity Gate)
+    if ((q as any).isLowEffort === true) continue;
     const testKey = ((q as any).testId || (q as any).mockId || (q as any).sessionId || "mock").trim();
     const qKey = (q.questionId || (q.questionNumber !== undefined ? `q_${q.questionNumber}` : "q")).trim();
     const canonicalKey = `${testKey}:::${qKey}`;

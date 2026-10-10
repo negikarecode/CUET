@@ -6,6 +6,11 @@ export interface CollegeBenchmarkResult {
   campus: string;
   historicalCutoffPercentile: number;
   targetScoreFormatted: string;
+  targetScoreNumber: number;
+  currentScore: number;
+  pointsGap: number;
+  gapLabel: string;
+  gapExplanation: string;
   predictedPercentile: number;
   deltaPercentile: number;
   status: "surpassed" | "striking_distance" | "needs_remediation" | "calibrating";
@@ -14,32 +19,32 @@ export interface CollegeBenchmarkResult {
   recommendation: string;
 }
 
-// Canonical cutoffs for prominent colleges
-const CUTOFF_LOOKUP: Record<string, { cutoff: number; targetScore: string }> = {
+// Canonical cutoffs for prominent colleges on real CUET per-subject 250-mark scale
+const CUTOFF_LOOKUP: Record<string, { cutoff: number; targetScoreNumber: number; targetScore: string }> = {
   // North Campus Flagships
-  srcc: { cutoff: 99.4, targetScore: "788 / 800" },
-  "st-stephens": { cutoff: 99.3, targetScore: "786 / 800" },
-  hindu: { cutoff: 99.2, targetScore: "784 / 800" },
-  lsr: { cutoff: 99.1, targetScore: "782 / 800" },
-  miranda: { cutoff: 98.9, targetScore: "778 / 800" },
-  hansraj: { cutoff: 98.7, targetScore: "775 / 800" },
-  kmc: { cutoff: 98.0, targetScore: "768 / 800" },
-  ramjas: { cutoff: 97.6, targetScore: "762 / 800" },
-  "sgtb-khalsa": { cutoff: 96.8, targetScore: "752 / 800" },
-  "ip-college": { cutoff: 96.5, targetScore: "748 / 800" },
-  "daulat-ram": { cutoff: 96.2, targetScore: "745 / 800" },
+  srcc: { cutoff: 99.4, targetScoreNumber: 242, targetScore: "242 / 250 pts" },
+  "st-stephens": { cutoff: 99.3, targetScoreNumber: 240, targetScore: "240 / 250 pts" },
+  hindu: { cutoff: 99.2, targetScoreNumber: 238, targetScore: "238 / 250 pts" },
+  lsr: { cutoff: 99.1, targetScoreNumber: 236, targetScore: "236 / 250 pts" },
+  miranda: { cutoff: 98.9, targetScoreNumber: 234, targetScore: "234 / 250 pts" },
+  hansraj: { cutoff: 98.7, targetScoreNumber: 232, targetScore: "232 / 250 pts" },
+  kmc: { cutoff: 98.0, targetScoreNumber: 228, targetScore: "228 / 250 pts" },
+  ramjas: { cutoff: 97.6, targetScoreNumber: 225, targetScore: "225 / 250 pts" },
+  "sgtb-khalsa": { cutoff: 96.8, targetScoreNumber: 220, targetScore: "220 / 250 pts" },
+  "ip-college": { cutoff: 96.5, targetScoreNumber: 218, targetScore: "218 / 250 pts" },
+  "daulat-ram": { cutoff: 96.2, targetScoreNumber: 215, targetScore: "215 / 250 pts" },
 
   // South Campus Flagships
-  venky: { cutoff: 97.4, targetScore: "760 / 800" },
-  gargi: { cutoff: 95.8, targetScore: "742 / 800" },
-  arsd: { cutoff: 95.2, targetScore: "736 / 800" },
-  maitreyi: { cutoff: 94.6, targetScore: "730 / 800" },
-  dcac: { cutoff: 95.4, targetScore: "738 / 800" },
-  sbsc: { cutoff: 96.0, targetScore: "744 / 800" },
-  sggscc: { cutoff: 96.4, targetScore: "748 / 800" },
-  "dyal-singh": { cutoff: 94.0, targetScore: "725 / 800" },
-  kamala_nehru: { cutoff: 94.8, targetScore: "732 / 800" },
-  "motilal-nehru": { cutoff: 93.2, targetScore: "715 / 800" },
+  venky: { cutoff: 97.4, targetScoreNumber: 222, targetScore: "222 / 250 pts" },
+  gargi: { cutoff: 95.8, targetScoreNumber: 212, targetScore: "212 / 250 pts" },
+  arsd: { cutoff: 95.2, targetScoreNumber: 210, targetScore: "210 / 250 pts" },
+  maitreyi: { cutoff: 94.6, targetScoreNumber: 206, targetScore: "206 / 250 pts" },
+  dcac: { cutoff: 95.4, targetScoreNumber: 210, targetScore: "210 / 250 pts" },
+  sbsc: { cutoff: 96.0, targetScoreNumber: 214, targetScore: "214 / 250 pts" },
+  sggscc: { cutoff: 96.4, targetScoreNumber: 216, targetScore: "216 / 250 pts" },
+  "dyal-singh": { cutoff: 94.0, targetScoreNumber: 204, targetScore: "204 / 250 pts" },
+  kamala_nehru: { cutoff: 94.8, targetScoreNumber: 208, targetScore: "208 / 250 pts" },
+  "motilal-nehru": { cutoff: 93.2, targetScoreNumber: 200, targetScore: "200 / 250 pts" },
 };
 
 /**
@@ -49,6 +54,7 @@ export function getCollegeCutoffInfo(collegeName: string): {
   campus: string;
   cutoff: number;
   targetScore: string;
+  targetScoreNumber: number;
 } {
   const clean = (collegeName || "").toLowerCase().trim();
 
@@ -71,36 +77,37 @@ export function getCollegeCutoffInfo(collegeName: string): {
       campus: matched.campus,
       cutoff: data.cutoff,
       targetScore: data.targetScore,
+      targetScoreNumber: data.targetScoreNumber,
     };
   }
 
-  // Check direct key matches or campus heuristics
+  // Check direct key matches or campus heuristics (CUET 250-point single-subject scale)
   if (clean.includes("srcc") || clean.includes("shri ram college")) {
-    return { campus: "North Campus", cutoff: 99.4, targetScore: "788 / 800" };
+    return { campus: "North Campus", cutoff: 99.4, targetScore: "242 / 250 pts", targetScoreNumber: 242 };
   }
   if (clean.includes("stephen")) {
-    return { campus: "North Campus", cutoff: 99.3, targetScore: "786 / 800" };
+    return { campus: "North Campus", cutoff: 99.3, targetScore: "240 / 250 pts", targetScoreNumber: 240 };
   }
   if (clean.includes("hindu")) {
-    return { campus: "North Campus", cutoff: 99.2, targetScore: "784 / 800" };
+    return { campus: "North Campus", cutoff: 99.2, targetScore: "238 / 250 pts", targetScoreNumber: 238 };
   }
   if (clean.includes("lsr") || clean.includes("lady shri ram")) {
-    return { campus: "South Campus", cutoff: 99.1, targetScore: "782 / 800" };
+    return { campus: "South Campus", cutoff: 99.1, targetScore: "236 / 250 pts", targetScoreNumber: 236 };
   }
   if (clean.includes("miranda")) {
-    return { campus: "North Campus", cutoff: 98.9, targetScore: "778 / 800" };
+    return { campus: "North Campus", cutoff: 98.9, targetScore: "234 / 250 pts", targetScoreNumber: 234 };
   }
   if (clean.includes("hansraj") || clean.includes("hans raj")) {
-    return { campus: "North Campus", cutoff: 98.7, targetScore: "775 / 800" };
+    return { campus: "North Campus", cutoff: 98.7, targetScore: "232 / 250 pts", targetScoreNumber: 232 };
   }
   if (clean.includes("venky") || clean.includes("venkateswara")) {
-    return { campus: "South Campus", cutoff: 97.4, targetScore: "760 / 800" };
+    return { campus: "South Campus", cutoff: 97.4, targetScore: "222 / 250 pts", targetScoreNumber: 222 };
   }
   if (clean.includes("north campus")) {
-    return { campus: "North Campus", cutoff: 97.5, targetScore: "760 / 800" };
+    return { campus: "North Campus", cutoff: 97.5, targetScore: "225 / 250 pts", targetScoreNumber: 225 };
   }
   if (clean.includes("south campus")) {
-    return { campus: "South Campus", cutoff: 95.0, targetScore: "735 / 800" };
+    return { campus: "South Campus", cutoff: 95.0, targetScore: "210 / 250 pts", targetScoreNumber: 210 };
   }
   if (matched) {
     const campusBase =
@@ -109,10 +116,12 @@ export function getCollegeCutoffInfo(collegeName: string): {
         : matched.campus === "South Campus"
         ? 94.5
         : 92.0;
+    const scoreNum = Math.round(campusBase * 2.4);
     return {
       campus: matched.campus,
       cutoff: campusBase,
-      targetScore: `${Math.round(campusBase * 7.8)} / 800`,
+      targetScore: `${scoreNum} / 250 pts`,
+      targetScoreNumber: scoreNum,
     };
   }
 
@@ -120,7 +129,8 @@ export function getCollegeCutoffInfo(collegeName: string): {
   return {
     campus: "Central University",
     cutoff: 93.0,
-    targetScore: "720 / 800",
+    targetScore: "200 / 250 pts",
+    targetScoreNumber: 200,
   };
 }
 
@@ -131,9 +141,13 @@ export function calculateCollegeReadiness(
   collegeName: string,
   universityName: string = "Delhi University",
   accuracyPercentage: number = 0,
-  totalAttempts: number = 0
+  totalAttempts: number = 0,
+  currentScore: number = 0
 ): CollegeBenchmarkResult {
-  const { campus, cutoff, targetScore } = getCollegeCutoffInfo(collegeName);
+  const { campus, cutoff, targetScore, targetScoreNumber } = getCollegeCutoffInfo(collegeName);
+  const pointsGap = Math.max(0, targetScoreNumber - currentScore);
+  const gapLabel = pointsGap > 0 ? `Need +${pointsGap} pts to reach target` : "Target score reached";
+  const gapExplanation = `Calculated on the CUET marking scheme (+5 correct, -1 incorrect, max 250 pts). Target is ${targetScore} (${cutoff}%ile historical cutoff for ${collegeName}). Current score is ${currentScore} / 250 pts.`;
 
   // If user has 0 attempts, prediction is uncalibrated baseline
   if (totalAttempts === 0) {
@@ -143,6 +157,11 @@ export function calculateCollegeReadiness(
       campus,
       historicalCutoffPercentile: cutoff,
       targetScoreFormatted: targetScore,
+      targetScoreNumber,
+      currentScore,
+      pointsGap,
+      gapLabel,
+      gapExplanation,
       predictedPercentile: 0,
       deltaPercentile: -cutoff,
       status: "calibrating",
@@ -161,6 +180,11 @@ export function calculateCollegeReadiness(
       campus,
       historicalCutoffPercentile: cutoff,
       targetScoreFormatted: targetScore,
+      targetScoreNumber,
+      currentScore,
+      pointsGap,
+      gapLabel,
+      gapExplanation,
       predictedPercentile: predicted,
       deltaPercentile: Math.round((predicted - cutoff) * 10) / 10,
       status: "calibrating",
@@ -185,6 +209,11 @@ export function calculateCollegeReadiness(
       campus,
       historicalCutoffPercentile: cutoff,
       targetScoreFormatted: targetScore,
+      targetScoreNumber,
+      currentScore,
+      pointsGap,
+      gapLabel,
+      gapExplanation,
       predictedPercentile,
       deltaPercentile: delta,
       status: "surpassed",
@@ -201,12 +230,17 @@ export function calculateCollegeReadiness(
       campus,
       historicalCutoffPercentile: cutoff,
       targetScoreFormatted: targetScore,
+      targetScoreNumber,
+      currentScore,
+      pointsGap,
+      gapLabel,
+      gapExplanation,
       predictedPercentile,
       deltaPercentile: delta,
       status: "striking_distance",
-      statusLabel: `Within Striking Distance (${delta}%)`,
+      statusLabel: `Within Striking Distance (${gapLabel})`,
       statusBadgeClass: "bg-amber-50 text-amber-800 border-amber-200",
-      recommendation: `Targetable within ~2 weeks of targeted micro-topic fix drills. Bridge the remaining ${Math.abs(delta)}% gap.`,
+      recommendation: `Targetable within ~2 weeks of targeted micro-topic fix drills. Bridge the remaining ${pointsGap} pts gap.`,
     };
   }
 
@@ -216,11 +250,16 @@ export function calculateCollegeReadiness(
     campus,
     historicalCutoffPercentile: cutoff,
     targetScoreFormatted: targetScore,
+    targetScoreNumber,
+    currentScore,
+    pointsGap,
+    gapLabel,
+    gapExplanation,
     predictedPercentile,
     deltaPercentile: delta,
     status: "needs_remediation",
-    statusLabel: `Gap to Bridge (${delta}%)`,
+    statusLabel: gapLabel,
     statusBadgeClass: "bg-rose-50 text-rose-800 border-rose-200",
-    recommendation: `Priority focus needed on your top 3 persistent red-zone topics to raise domain accuracy toward ${cutoff}%.`,
+    recommendation: `Priority focus needed on your top 3 persistent red-zone topics to raise domain score toward ${targetScore}.`,
   };
 }

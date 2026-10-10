@@ -219,7 +219,7 @@ export default function Navbar() {
                           {streak}
                         </span>
                         <span className="text-slate-500 text-[11px] font-medium hidden md:inline">
-                          {t("days", "Days")} {t("streak", "Streak")}
+                          {streak === 1 ? "day streak" : "days streak"}
                         </span>
                       </div>
 

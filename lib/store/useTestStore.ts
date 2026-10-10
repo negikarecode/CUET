@@ -11,6 +11,7 @@ import type {
 } from "@/types";
 import { computeAnalyticsFromAttempts, buildDefaultSubjectCalibration } from "@/lib/analytics";
 import { processQuestionsIntoCycles } from "@/lib/cycle-engine";
+import { evaluateSessionValidity } from "@/lib/session-validity";
 
 interface TestStoreState {
   // Gamification & User Auth state
@@ -259,6 +260,19 @@ export const useTestStore = create<TestStoreState>()(
         const testKey = (attempt.testId || attempt.id || "").trim();
         if (!testKey) return;
 
+        // Evaluate session validity gate
+        const validity = evaluateSessionValidity(attempt.questions || []);
+        const enrichedAttempt: RecordedTestAttempt = {
+          ...attempt,
+          isLowEffort: validity.isLowEffort,
+          sessionConfidence: validity.confidence,
+          sessionMessage: validity.message,
+          questions: (attempt.questions || []).map((q) => ({
+            ...q,
+            isLowEffort: validity.isLowEffort,
+          })),
+        };
+
         const currentAttempts = get().testAttempts || [];
         // Strictly deduplicate by testId: replace existing, otherwise prepend
         const existingIdx = currentAttempts.findIndex(
@@ -268,13 +282,16 @@ export const useTestStore = create<TestStoreState>()(
         let updatedAttempts: RecordedTestAttempt[];
         if (existingIdx >= 0) {
           updatedAttempts = [...currentAttempts];
-          updatedAttempts[existingIdx] = attempt;
+          updatedAttempts[existingIdx] = enrichedAttempt;
         } else {
-          updatedAttempts = [attempt, ...currentAttempts];
+          updatedAttempts = [enrichedAttempt, ...currentAttempts];
         }
 
         // Canonical analytics computation (guarantees 1 question = 1 attempt)
         const analytics = computeAnalyticsFromAttempts(updatedAttempts);
+
+        // Calculate XP delta: low effort gets 5 XP, normal gets full 50 XP
+        const xpAward = validity.isLowEffort ? 5 : 50;
 
         // Synchronously update testAttempts and analytics IMMEDIATELY so any concurrent read sees the recorded attempt
         set((state) => ({
@@ -284,6 +301,7 @@ export const useTestStore = create<TestStoreState>()(
             ...state.user,
             accuracyPercentage: analytics.overallAccuracyPercentage,
             completedTestsCount: analytics.completedTestsCount,
+            xpPoints: (state.user.xpPoints || 0) + xpAward,
           },
         }));
 

@@ -134,6 +134,7 @@ export interface UserStats {
   email: string;
   age?: string | number;
   dailyStreak: number;
+  currentStreak?: number;
   lastActiveDate: string;
   xpPoints: number;
   campusCoins: number;
@@ -197,6 +198,9 @@ export interface RecordedQuestionAttempt {
   explanation?: string;
   difficulty?: "easy" | "medium" | "hard" | string;
   errorCategory?: string;
+  source?: string;
+  reviewed_by_human?: boolean;
+  isLowEffort?: boolean;
 }
 
 export interface RecordedTestAttempt {
@@ -216,6 +220,12 @@ export interface RecordedTestAttempt {
   timeTakenSeconds: number;
   timeSinkCount: number;
   submittedAt: string;
+  date?: string;
+  timestamp?: string;
+  score?: number;
+  isLowEffort?: boolean;
+  sessionConfidence?: "Low" | "Medium" | "High";
+  sessionMessage?: string;
   questions: RecordedQuestionAttempt[];
 }
 
@@ -417,6 +427,7 @@ export interface FullTopicDiagnosis {
 export interface TopicMistakeRecord {
   questionId: string;
   prompt: string;
+  options?: QuestionOption[];
   userAnswer: string;
   correctAnswer: string;
   errorCategory: string;
@@ -424,6 +435,8 @@ export interface TopicMistakeRecord {
   timeSpentSeconds: number;
   chapter: string;
   microTopic?: string;
+  reviewed_by_human?: boolean;
+  source?: string;
 }
 
 export interface TopicMastery {
@@ -438,6 +451,7 @@ export interface TopicMastery {
   timeSinksCount: number;
   avgTimeSeconds: number;
   status: "critical" | "polish" | "mastered";
+  diagnosticState?: string;
   remediationStage?: RemediationStage;
   isRecovered?: boolean;
   recoveryEvidence?: {

@@ -161,6 +161,42 @@ export function setCachedPostMockAI(
 }
 
 /**
+ * Cache for "Why did I get this wrong?" explanations
+ * Key: `${questionId}_${selectedOption}`
+ */
+const whyWrongExplanationCache = new Map<
+  string,
+  {
+    data: any;
+    cachedAt: number;
+  }
+>();
+
+export function getCachedWhyWrongExplanation(
+  questionId: string,
+  selectedOption: string
+): any | null {
+  const key = `${questionId}_${selectedOption}`.trim();
+  const hit = whyWrongExplanationCache.get(key);
+  if (hit && Date.now() - hit.cachedAt < CACHE_TTL_MS) {
+    return hit.data;
+  }
+  return null;
+}
+
+export function setCachedWhyWrongExplanation(
+  questionId: string,
+  selectedOption: string,
+  data: any
+): void {
+  const key = `${questionId}_${selectedOption}`.trim();
+  whyWrongExplanationCache.set(key, {
+    data,
+    cachedAt: Date.now(),
+  });
+}
+
+/**
  * Invalidate all in-memory caches belonging to a user on logout or account switch
  */
 export function clearUserAICache(userId: string): void {

@@ -8,6 +8,7 @@ import {
   RecordedQuestionAttempt,
   PracticePhase,
 } from "@/types";
+import { getSubjectMetadata } from "@/lib/config/dashboardConfig";
 
 // ============================================================================
 // 1. SUBJECT-SPECIFIC KNOWLEDGE BASE, EXAM TACTICS & TRAPS
@@ -600,7 +601,7 @@ export function calculateEvidenceThreshold(attemptsCount: number): {
   return {
     label: "Established weakness",
     confidence: "HIGH",
-    rationale: `Established weakness verified across ${attemptsCount} question attempts under authentic NTA exam conditions.`,
+    rationale: `Established weakness verified across ${attemptsCount} question attempts under timed practice conditions.`,
   };
 }
 
@@ -996,21 +997,40 @@ export function generateFullTopicDiagnosis(
 
   // Remediation Plan
   const topicSearch = `${chapter} ${microTopic}`.trim();
+  const subjectMeta = getSubjectMetadata(subject);
   const rawRevTopics = findBestConfigKey(kb.reviewTopics, topicSearch) || kb.reviewTopics[topicKey];
   const revTopics = rawRevTopics || [
     "FOCUS FIRST:",
-    `Core definitions & boundary rules in ${microTopic || chapter}`,
-    "NCERT key terminology & qualifying terms",
+    `Core concepts & distinctions in ${microTopic || chapter}`,
+    `${subjectMeta.ncertTextbookContext} definitions`,
     "THEN SECONDARY:",
-    `Application examples in ${chapter}`,
-    "NCERT exercise summary questions",
+    `Key application drills in ${chapter}`,
+    "Summary questions & recall verification",
   ];
-  const frameworkChecklist = (findBestConfigKey(kb.decisionFrameworks, topicSearch) || kb.decisionFrameworks[topicKey] || [
-    "Identify given parameters and convert to standard units",
-    "Check question stem for qualifying keywords ('NOT' or 'EXCEPT')",
-    "Select governing NCERT formula or mechanism",
-    "Eliminate distractor options before confirming answer",
-  ]).map((s) => s.replace(/^\d+[\.\)]\s*/, "").replace(/^Step\s*\d+:\s*/i, ""));
+
+  const defaultFramework =
+    subjectMeta.subjectType === "conceptual"
+      ? [
+          `Read the NCERT section for ${microTopic || chapter}`,
+          "Make a 5-line summary of core definitions and classifications",
+          "Check question stem for qualifying keywords ('NOT' or 'EXCEPT')",
+          "Test active recall before selecting an option",
+        ]
+      : subjectMeta.subjectType === "language"
+      ? [
+          "Read prompt for author tone, thesis, and context clues",
+          "Identify qualifier keywords ('NOT', 'EXCEPT', 'RARELY')",
+          "Eliminate extreme distractor options and near-synonym traps",
+          "Confirm grammatical agreement before selecting option",
+        ]
+      : [
+          "Identify given parameters and convert to standard SI units",
+          "Write out intermediate calculation steps and sign conventions",
+          "Select governing NCERT formula or mechanism",
+          "Eliminate distractor options before confirming answer",
+        ];
+
+  const frameworkChecklist = (findBestConfigKey(kb.decisionFrameworks, topicSearch) || kb.decisionFrameworks[topicKey] || defaultFramework).map((s) => s.replace(/^\d+[\.\)]\s*/, "").replace(/^Step\s*\d+:\s*/i, ""));
 
   // Dynamic practice recommendation based on error taxonomy
   let practiceType: FullTopicDiagnosis["recommendedPracticeType"] = "10-Question Application Drill";
@@ -1144,6 +1164,7 @@ export function generateFullTopicDiagnosis(
           .map((q, idx) => ({
             questionId: q.questionId || `q_${idx + 1}`,
             prompt: q.prompt || "Question stem from CBT attempt",
+            options: q.options || [],
             userAnswer: q.selectedOption || "None",
             correctAnswer: q.correctOption || "Correct Answer",
             errorCategory:
@@ -1158,6 +1179,8 @@ export function generateFullTopicDiagnosis(
             timeSpentSeconds: q.timeSpentSeconds || 0,
             chapter,
             microTopic,
+            reviewed_by_human: (q as any).reviewed_by_human ?? false,
+            source: (q as any).source,
           }))
       : undefined,
     weakSubtopics,

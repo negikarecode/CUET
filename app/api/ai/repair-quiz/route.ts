@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { Question } from "@/types";
-import {
-  checkRateLimit,
-  incrementUsage,
-  getRateLimitHeaders,
-} from "@/lib/rate-limiter";
 import { getQuestionsForTest } from "@/lib/data/mock50Questions";
+import { checkAndRecordRateLimit } from "@/lib/config/dashboardConfig";
+import { tokenLogger } from "@/lib/ai/token-logger";
  
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -15,6 +12,7 @@ interface RepairQuizRequestBody {
   userId: string;
   weakMicroTopics: string[];
   subject?: string;
+  practiceType?: string;
 }
 
 export interface RepairQuizResponse {
@@ -36,6 +34,7 @@ const memoryQuizCache = new Map<
 const QUIZ_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 export async function POST(req: NextRequest) {
+  const startTime = Date.now();
   try {
     const body = (await req.json()) as RepairQuizRequestBody;
     const { userId: bodyUserId, weakMicroTopics, subject } = body;
@@ -54,36 +53,29 @@ export async function POST(req: NextRequest) {
     // 1. Check Response Cache FIRST
     const cachedQuiz = memoryQuizCache.get(cacheKey);
     if (cachedQuiz && Date.now() - cachedQuiz.cachedAt < QUIZ_CACHE_TTL_MS) {
+      tokenLogger.logUsage({
+        userId,
+        feature: "repair_quiz",
+        model: "cache",
+        promptTokens: 0,
+        completionTokens: 0,
+        latencyMs: Date.now() - startTime,
+        cached: true,
+      });
       return NextResponse.json(cachedQuiz.data, {
         headers: { "X-Cache": "HIT" },
       });
     }
 
-    // 2. Check Daily Rate Limit
-    let isPaidUser = false;
-    try {
-      const supabase = createClient();
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("is_premium")
-        .eq("id", userId)
-        .single();
-      if (profile?.is_premium) isPaidUser = true;
-    } catch {
-      // fallback
-    }
-
-    const rateLimit = await checkRateLimit(userId, isPaidUser);
+    // 2. Check Daily Rate Limit (abuse protection only, no paywall)
+    const rateLimit = checkAndRecordRateLimit(userId, "repair_drills");
     if (!rateLimit.allowed) {
       return NextResponse.json(
         {
-          error: "Daily AI analysis limit reached. Upgrade to unlock more.",
-          limit: rateLimit.limit,
+          error: rateLimit.message || "Daily practice drill limit reached for today. Resets tomorrow.",
           remaining: 0,
-          resetAt: rateLimit.resetAt,
-          upgradeUrl: "/#pricing",
         },
-        { status: 429, headers: getRateLimitHeaders(rateLimit) }
+        { status: 429 }
       );
     }
 
@@ -245,18 +237,19 @@ export async function POST(req: NextRequest) {
       cachedAt: Date.now(),
     });
 
-    // 5. Increment usage count
-    await incrementUsage(userId);
+    tokenLogger.logUsage({
+      userId,
+      feature: "repair_quiz",
+      model: "curated_bank",
+      promptTokens: 0,
+      completionTokens: 0,
+      latencyMs: Date.now() - startTime,
+      cached: false,
+    });
 
     return NextResponse.json(responsePayload, {
       headers: {
         "X-Cache": "MISS",
-        ...getRateLimitHeaders({
-          allowed: true,
-          limit: rateLimit.limit,
-          remaining: Math.max(0, rateLimit.remaining - 1),
-          resetAt: rateLimit.resetAt,
-        }),
       },
     });
   } catch (error) {

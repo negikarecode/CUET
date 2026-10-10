@@ -63,6 +63,16 @@ import { CycleHistorySelector } from "@/components/dashboard/CycleHistorySelecto
 import { SubjectRadarAISection } from "@/components/dashboard/SubjectRadarAISection";
 import { DiagnosticCycle } from "@/types/cycle";
 import { SubjectRadarAIAnalysis, SubjectRadarAIPayload } from "@/types/subject-ai";
+import { getSubjectMetadata, getTopicDiagnosticState } from "@/lib/config/dashboardConfig";
+import { deriveTopicRepairPlan, recordRepairEvent, TopicRepairState } from "@/lib/repair-plan";
+import { enrollMissedQuestion, getSpacedRepetitionSummary } from "@/lib/spaced-repetition";
+import { generateWeeklyReportData } from "@/lib/weekly-report-engine";
+import { WhyWrongExplanationModal } from "@/components/dashboard/WhyWrongExplanationModal";
+import { DoubtSolverDrawer } from "@/components/dashboard/DoubtSolverDrawer";
+import { WeeklyReportModal } from "@/components/dashboard/WeeklyReportModal";
+import { DailyStudyPlanCard } from "@/components/dashboard/DailyStudyPlanCard";
+import { RetentionLeaderboardCard } from "@/components/dashboard/RetentionLeaderboardCard";
+import { HelpCircle, ShieldCheck } from "lucide-react";
 
 const SUBJECT_ICON_MAP: Record<string, React.ElementType> = {
   Calculator,
@@ -161,6 +171,123 @@ function renderProblemClassificationBadge(classification?: FullTopicDiagnosis["p
   }
 }
 
+function RenderMistakeItem({
+  mistake,
+  idx,
+  onWhyWrong,
+}: {
+  mistake: any;
+  idx: number;
+  onWhyWrong: (m: any) => void;
+}) {
+  return (
+    <div className="p-3.5 rounded-2xl border border-slate-200/80 bg-slate-50 space-y-2 text-xs">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-rose-600 text-[11px]">❌ Question #{idx + 1}</span>
+          {mistake.timeSpentSeconds !== undefined && mistake.timeSpentSeconds > 0 && (
+            <span className="px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-mono text-[10px] font-medium">
+              ~{mistake.timeSpentSeconds}s answered
+            </span>
+          )}
+        </div>
+
+        {/* Content verification flag (Phase 1 Item 15) */}
+        <span
+          className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 ${
+            mistake.reviewed_by_human
+              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+              : "bg-purple-50 text-purple-700 border border-purple-200"
+          }`}
+        >
+          {mistake.reviewed_by_human ? (
+            <>
+              <ShieldCheck className="w-3 h-3 text-emerald-600" />
+              <span>Explanation Reviewed</span>
+            </>
+          ) : (
+            <>
+              <Sparkles className="w-3 h-3 text-purple-600" />
+              <span>AI-generated</span>
+            </>
+          )}
+        </span>
+      </div>
+
+      <p className="font-semibold text-slate-900 leading-snug">{mistake.prompt}</p>
+
+      {/* Answer options breakdown (Phase 1 Item 13) */}
+      {mistake.options && mistake.options.length > 0 && (
+        <div className="space-y-1.5 pt-0.5">
+          {mistake.options.map((opt: any) => {
+            const isUser = opt.id === mistake.userAnswer;
+            const isCorr = opt.id === mistake.correctAnswer;
+            return (
+              <div
+                key={opt.id}
+                className={`p-2 rounded-xl border flex items-start gap-2 text-xs transition-all ${
+                  isUser
+                    ? "bg-rose-50/80 border-rose-300 text-rose-950 font-medium"
+                    : isCorr
+                    ? "bg-emerald-50/80 border-emerald-300 text-emerald-950 font-medium"
+                    : "bg-white border-slate-200 text-slate-700"
+                }`}
+              >
+                <span
+                  className={`w-5 h-5 rounded-md font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5 ${
+                    isUser
+                      ? "bg-rose-600 text-white"
+                      : isCorr
+                      ? "bg-emerald-600 text-white"
+                      : "bg-slate-100 text-slate-600"
+                  }`}
+                >
+                  {opt.id}
+                </span>
+                <span className="flex-1 text-xs leading-normal">{opt.text}</span>
+                {isUser && (
+                  <span className="text-[10px] uppercase font-bold text-rose-700 shrink-0 font-mono px-1.5 py-0.5 rounded bg-rose-100">
+                    Your Choice ✗
+                  </span>
+                )}
+                {isCorr && (
+                  <span className="text-[10px] uppercase font-bold text-emerald-700 shrink-0 font-mono px-1.5 py-0.5 rounded bg-emerald-100">
+                    Correct ✓
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Explanation text */}
+      <p className="text-[11px] text-slate-600 font-medium pt-1 border-t border-slate-200/60 leading-relaxed">
+        {mistake.explanation}
+      </p>
+
+      {/* Citation if source exists */}
+      {mistake.source && (
+        <p className="text-[10px] text-slate-400 font-mono">
+          Verified source: {mistake.source}
+        </p>
+      )}
+
+      {/* Why did I get this wrong button (Phase 2 Item 1) */}
+      <div className="pt-1 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => onWhyWrong(mistake)}
+          className="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
+        >
+          <HelpCircle className="w-3.5 h-3.5 text-purple-600" />
+          <span>Why did I get this wrong?</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function WeaknessRadarClient({
   initialData,
 }: {
@@ -173,7 +300,6 @@ export default function WeaknessRadarClient({
   const initTest = useCBTStore((state) => state.initTest);
   const clientAnalytics = useTestStore((state) => state.analytics);
   const testAttempts = useTestStore((state) => state.testAttempts);
-  const currentCycleNumber = useTestStore((state) => state.currentCycleNumber || 1);
   const currentCycleQuestionCount = useTestStore((state) => state.currentCycleQuestionCount || 0);
   const diagnosticCycles = useTestStore((state) => state.diagnosticCycles || []);
   const activeCompletionNotification = useTestStore((state) => state.activeCompletionNotification);
@@ -193,6 +319,12 @@ export default function WeaknessRadarClient({
   const [aiAnalysisStatus, setAiAnalysisStatus] = useState<"idle" | "running" | "complete" | "error">("idle");
   const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [analysisTriggered, setAnalysisTriggered] = useState(false);
+
+  // Phase 2 feature state
+  const [selectedMistakeForExplanation, setSelectedMistakeForExplanation] = useState<any | null>(null);
+  const [isDoubtDrawerOpen, setIsDoubtDrawerOpen] = useState(false);
+  const [isWeeklyReportOpen, setIsWeeklyReportOpen] = useState(false);
+  const [topicRepairState, setTopicRepairState] = useState<TopicRepairState | null>(null);
 
   // In-flight request controller and fingerprint cache to avoid duplicate/stuck fetches
   const abortControllerRef = React.useRef<AbortController | null>(null);
@@ -305,26 +437,76 @@ export default function WeaknessRadarClient({
       ? clientAnalytics.subjectCalibration
       : initialData.subjectCalibration || {};
 
-  const candidateSubjectCalibrations: SubjectCalibrationData[] = candidateSubjects.map((subName) => {
-    const info = normalizeSubject(subName);
-    const existing = subjectCalibrationMap[info.key];
-    if (existing) return existing;
-    return {
-      subject: info.name,
-      subjectKey: info.key,
-      icon: info.icon,
-      category: info.category,
-      totalAttempted: 0,
-      totalCorrect: 0,
-      totalIncorrect: 0,
-      accuracyPercentage: 0,
-      testsCount: 0,
-      isUnlocked: false,
-      attemptsToUnlock: 150,
-      unlockProgress: 0,
-      mockUrl: info.mockUrl,
-    };
-  });
+  // Build full subjects list derived from actual test attempts + initial data + stream candidates
+  const allSubjectsList = React.useMemo(() => {
+    const keysSeen = new Set<string>();
+    const list: string[] = [];
+
+    cleanTestAttempts.forEach((t) => {
+      (t.questions || []).forEach((q) => {
+        if (q.subject || t.subject) {
+          const norm = normalizeSubject(q.subject || t.subject || "");
+          if (!keysSeen.has(norm.key)) {
+            keysSeen.add(norm.key);
+            list.push(norm.name);
+          }
+        }
+      });
+    });
+
+    [...(initialData.weaknessRadar || []), ...(initialData.strengthList || [])].forEach((t) => {
+      if (t.subject) {
+        const norm = normalizeSubject(t.subject);
+        if (!keysSeen.has(norm.key)) {
+          keysSeen.add(norm.key);
+          list.push(norm.name);
+        }
+      }
+    });
+
+    candidateSubjects.forEach((subName) => {
+      const norm = normalizeSubject(subName);
+      if (!keysSeen.has(norm.key)) {
+        keysSeen.add(norm.key);
+        list.push(norm.name);
+      }
+    });
+
+    return list;
+  }, [cleanTestAttempts, initialData, candidateSubjects]);
+
+  const candidateSubjectCalibrations: SubjectCalibrationData[] = React.useMemo(() => {
+    return allSubjectsList.map((subName) => {
+      const info = normalizeSubject(subName);
+      const existing = subjectCalibrationMap[info.key];
+      if (existing && existing.totalAttempted > 0) return existing;
+
+      // Extract telemetry from clean test attempts for this subject
+      const subAttempts = cleanTestAttempts.flatMap((t) =>
+        (t.questions || []).filter((q) => normalizeSubject(q.subject || t.subject || "").key === info.key)
+      );
+      const subTotal = subAttempts.filter((q) => q.selectedOption !== null && q.selectedOption !== undefined).length;
+      const subCorrect = subAttempts.filter((q) => q.isCorrect === true).length;
+      const subIncorrect = subTotal - subCorrect;
+      const subAccuracy = subTotal > 0 ? Math.round((subCorrect / subTotal) * 100) : 0;
+
+      return {
+        subject: info.name,
+        subjectKey: info.key,
+        icon: info.icon,
+        category: info.category,
+        totalAttempted: subTotal,
+        totalCorrect: subCorrect,
+        totalIncorrect: subIncorrect,
+        accuracyPercentage: subAccuracy,
+        testsCount: subTotal > 0 ? Math.max(1, Math.ceil(subTotal / 50)) : 0,
+        isUnlocked: subTotal >= 150,
+        attemptsToUnlock: Math.max(0, 150 - subTotal),
+        unlockProgress: Math.min(100, Math.round((subTotal / 150) * 100)),
+        mockUrl: info.mockUrl,
+      };
+    });
+  }, [allSubjectsList, subjectCalibrationMap, cleanTestAttempts]);
 
   const rawWeaknessRadar =
     isClient && clientAnalytics && clientAnalytics.weaknessRadar.length > 0
@@ -348,16 +530,65 @@ export default function WeaknessRadarClient({
       ? rawStrengthList
       : rawStrengthList.filter((t) => normalizeSubject(t.subject).key === selectedRadarSubject);
 
-  // Calibration gating condition:
-  // Active cycle has completed when currentCycleQuestionCount >= 150 OR overall totalAttempted >= 150
-  // If user has prior completed cycles, those completed cycles are unlocked in history
+  // Exact cycle calculation: 150 qualifying questions per cycle
+  // Fixes Cycle 2: 150/150 bug
+  const completedCycleCount = diagnosticCycles.filter((c) => c.status === "completed").length;
+  const currentCycleNumber = completedCycleCount + 1;
   const effectiveCycleQuestionCount =
-    currentCycleQuestionCount > 0
-      ? currentCycleQuestionCount
-      : (totalAttempted % 150 || (totalAttempted >= 150 ? 150 : totalAttempted));
+    completedCycleCount > 0
+      ? (totalAttempted % 150)
+      : Math.min(150, totalAttempted);
 
-  const isCurrentCycleComplete = effectiveCycleQuestionCount >= 150 || (totalAttempted >= 150 && diagnosticCycles.length === 0);
-  const isCalibrationLocked = !isCurrentCycleComplete;
+  const isCurrentCycleComplete = totalAttempted >= 150 && completedCycleCount >= 1;
+  const isCalibrationLocked = totalAttempted < 150;
+
+  // Session-level pacing pattern alert (Phase 1 Item 11)
+  const sessionPacingAlert = React.useMemo(() => {
+    if (!weaknessRadar || weaknessRadar.length === 0) return null;
+    const fastTopics = weaknessRadar.filter(
+      (t) => (t.avgTimeSeconds || 0) > 0 && (t.avgTimeSeconds || 0) < 15
+    );
+    const ratio = fastTopics.length / weaknessRadar.length;
+    if (ratio >= 0.5) {
+      const avgSec = Math.round(
+        fastTopics.reduce((s, t) => s + (t.avgTimeSeconds || 0), 0) / fastTopics.length
+      );
+      return {
+        avgSec,
+        title: "Session Pacing Observation",
+        message: `You answered in about ${avgSec}s per question across most weak topics. Slow down and read every option carefully before selecting.`,
+      };
+    }
+    return null;
+  }, [weaknessRadar]);
+
+  // Synchronize missed questions with spaced repetition
+  useEffect(() => {
+    if (isClient && cleanTestAttempts.length > 0) {
+      const uId = storeUser?.id || initialData.user.id;
+      cleanTestAttempts.forEach((t) => {
+        if (t.isLowEffort) return; // Skip low effort
+        (t.questions || []).forEach((q) => {
+          if (q.selectedOption !== null && q.selectedOption !== undefined && q.isCorrect === false) {
+            enrollMissedQuestion(uId, {
+              questionId: q.questionId || `q_${q.questionNumber}`,
+              subject: q.subject || t.subject || "Domain",
+              chapter: q.chapter || "Core Concepts",
+              microTopic: q.microTopic,
+              prompt: q.prompt || "Practice question",
+              options: q.options,
+              correctOption: q.correctOption || "A",
+              userSelectedOption: q.selectedOption,
+              explanation: q.explanation || "",
+              source: q.source,
+              reviewed_by_human: q.reviewed_by_human,
+              isLowEffort: q.isLowEffort || t.isLowEffort,
+            });
+          }
+        });
+      });
+    }
+  }, [isClient, cleanTestAttempts, storeUser, initialData]);
 
   // Generate all topic diagnoses
   const allDiagnoses: FullTopicDiagnosis[] = [...weaknessRadar, ...strengthList].map(getOrGenerateDiagnosis);
@@ -371,27 +602,38 @@ export default function WeaknessRadarClient({
   summaryReport.overallAccuracy = displayAccuracy;
 
   // Compute deterministic "Next Best Action" topic
-  // Prioritizes established/emerging weaknesses with lowest accuracy and high error impact
   const prioritizedCandidate = [...weaknessRadar]
     .filter((t) => !t.isRecovered)
     .sort((a, b) => {
-      // Prioritize topics with enough data first (>=5 attempts)
       const aHasData = (a.attemptsCount || 0) >= 5 ? 1 : 0;
       const bHasData = (b.attemptsCount || 0) >= 5 ? 1 : 0;
       if (aHasData !== bHasData) return bHasData - aHasData;
-      // Then lowest accuracy
       if (a.accuracyPercentage !== b.accuracyPercentage) {
         return a.accuracyPercentage - b.accuracyPercentage;
       }
-      // Then highest error count
       return (b.incorrectCount || 0) - (a.incorrectCount || 0);
     })[0] || weaknessRadar[0];
 
   const nextActionDiagnosis = prioritizedCandidate ? getOrGenerateDiagnosis(prioritizedCandidate) : null;
 
+  // Dynamically derive attempted subjects for accurate overview
+  const attemptedSubjectNames = React.useMemo(() => {
+    const map = new Map<string, number>();
+    cleanTestAttempts.forEach((t) => {
+      (t.questions || []).forEach((q) => {
+        if (q.subject || t.subject) {
+          const norm = normalizeSubject(q.subject || t.subject || "");
+          map.set(norm.name, (map.get(norm.name) || 0) + 1);
+        }
+      });
+    });
+    return Array.from(map.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([name]) => name);
+  }, [cleanTestAttempts]);
+
   // Evidence-Based AI Analysis for current completed cycle
   const fetchSubjectAIAnalysis = React.useCallback(async (forceRefresh = false) => {
-    // Strictly prevent running before 150 questions
     if (!isCurrentCycleComplete) {
       console.warn("Blocked AI analysis trigger: Current cycle is still in calibration window (<150 Qs).");
       return;
@@ -399,8 +641,8 @@ export default function WeaknessRadarClient({
 
     const activeSubjectName =
       selectedRadarSubject === "all"
-        ? candidateSubjects[0] || "Physics"
-        : candidateSubjectCalibrations.find((c) => c.subjectKey === selectedRadarSubject)?.subject || "Physics";
+        ? attemptedSubjectNames[0] || allSubjectsList[0] || "Domain Overview"
+        : candidateSubjectCalibrations.find((c) => c.subjectKey === selectedRadarSubject)?.subject || "Domain";
 
     // Gather questions for this subject across all recorded attempts
     const subjectQuestions = (testAttempts || []).flatMap((t) =>
@@ -616,6 +858,25 @@ export default function WeaknessRadarClient({
     }
   };
 
+  // Wire event-driven repair plan for selected modal topic
+  useEffect(() => {
+    if (selectedModalDiagnosis) {
+      const uId = storeUser?.id || initialData.user.id;
+      const plan = deriveTopicRepairPlan(
+        uId,
+        selectedModalDiagnosis.chapter,
+        cleanTestAttempts
+      );
+      setTopicRepairState(plan);
+    }
+  }, [selectedModalDiagnosis, storeUser, initialData, cleanTestAttempts]);
+
+  const handleMarkConceptReviewed = (topic: string) => {
+    const uId = storeUser?.id || initialData.user.id;
+    const updated = recordRepairEvent(uId, topic, "concept_reviewed");
+    setTopicRepairState(updated);
+  };
+
   const calibrationProgressPct = Math.min(
     100,
     Math.round((effectiveCycleQuestionCount / 150) * 100)
@@ -648,6 +909,26 @@ export default function WeaknessRadarClient({
         </div>
 
         <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+          {/* Doubt Solver Drawer CTA */}
+          <button
+            type="button"
+            onClick={() => setIsDoubtDrawerOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 font-semibold text-xs shadow-xs transition-all cursor-pointer"
+          >
+            <Brain className="w-4 h-4 text-purple-600" />
+            <span>Ask Doubt Solver</span>
+          </button>
+
+          {/* Weekly Report CTA */}
+          <button
+            type="button"
+            onClick={() => setIsWeeklyReportOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold text-xs shadow-xs transition-all cursor-pointer"
+          >
+            <Activity className="w-4 h-4 text-blue-600" />
+            <span>Weekly Report</span>
+          </button>
+
           {/* Cycle Badge Indicator */}
           <div className="px-3.5 py-2 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center gap-2.5 shadow-xs">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -678,6 +959,26 @@ export default function WeaknessRadarClient({
           </Link>
         </div>
       </div>
+
+      {/* Session Pacing Behavior Alert (Phase 1 Item 11 & 12) */}
+      {sessionPacingAlert && (
+        <div className="p-4 rounded-2xl bg-amber-50/90 border border-amber-200 text-xs flex items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
+            <div>
+              <span className="font-bold text-amber-900 uppercase tracking-wider text-[11px] block">
+                {sessionPacingAlert.title}
+              </span>
+              <p className="text-amber-800 font-medium">
+                {sessionPacingAlert.message}
+              </p>
+            </div>
+          </div>
+          <span className="text-[10px] font-mono font-semibold px-2.5 py-1 rounded-full bg-amber-200/70 text-amber-900 shrink-0">
+            Avg {sessionPacingAlert.avgSec}s / question
+          </span>
+        </div>
+      )}
 
       {/* ============================================================== */}
       {/* 2. CALIBRATION GATED EXPERIENCE                                */}
@@ -784,6 +1085,26 @@ export default function WeaknessRadarClient({
               )}
             </div>
           </div>
+
+          {/* Daily Study Plan to achieve calibration */}
+          <DailyStudyPlanCard
+            topWeakTopics={weaknessRadar.map((w) => ({
+              chapter: w.chapter,
+              subject: w.subject,
+              accuracy: w.accuracyPercentage,
+            }))}
+            spacedDueCount={getSpacedRepetitionSummary(storeUser?.id || initialData.user.id).dueTodayCount}
+            calibrationProgressPct={calibrationProgressPct}
+            onLaunchDrill={(topic, subject) => handleLaunchTargetedPractice(topic, subject)}
+          />
+
+          {/* Retention & Daily Target Habit Tracker */}
+          <RetentionLeaderboardCard
+            currentStreak={storeUser?.currentStreak || initialData.user.currentStreak || 1}
+            todayQuestionsAttempted={cleanTestAttempts.length > 0 ? (cleanTestAttempts[0]?.questions?.length || 50) : 0}
+            dailyGoalQuestions={25}
+            userRankData={[]}
+          />
         </div>
       ) : !analysisTriggered && aiAnalysisStatus !== "running" && aiAnalysisStatus !== "complete" ? (
         /* CASE B: 150/150 REACHED, BUT ANALYSIS NOT TRIGGERED YET */
@@ -1035,19 +1356,41 @@ export default function WeaknessRadarClient({
             <p className="text-[11px] text-slate-500 font-medium">{totalAttempted} Total Attempts</p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-1">
-            <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Strongest Domain</span>
-            <p className="text-sm font-bold text-slate-900 truncate">
+          <div
+            className={`p-4 rounded-2xl space-y-1 ${
+              summaryReport.strongestArea
+                ? "bg-emerald-50/60 border border-emerald-100"
+                : "bg-slate-50 border border-slate-200/70"
+            }`}
+          >
+            <span
+              className={`text-[10px] font-bold uppercase tracking-wider ${
+                summaryReport.strongestArea ? "text-emerald-700" : "text-slate-500"
+              }`}
+            >
+              Strongest Domain
+            </span>
+            <p
+              className="text-sm font-bold text-slate-900 break-words line-clamp-2"
+              title={summaryReport.strongestArea ? summaryReport.strongestArea.topic : "Pending Calibration"}
+            >
               {summaryReport.strongestArea ? summaryReport.strongestArea.topic : "Pending Calibration"}
             </p>
-            <p className="text-[11px] text-emerald-800/80 font-medium">
-              {summaryReport.strongestArea ? `${summaryReport.strongestArea.accuracy}% accuracy` : "Requires more attempts"}
+            <p
+              className={`text-[11px] font-medium ${
+                summaryReport.strongestArea ? "text-emerald-800/80" : "text-slate-500"
+              }`}
+            >
+              {summaryReport.strongestArea ? `${summaryReport.strongestArea.accuracy}% accuracy` : "Requires ≥5 attempts in topic"}
             </p>
           </div>
 
           <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 space-y-1">
             <span className="text-[10px] font-bold text-rose-700 uppercase tracking-wider">Primary Weakness</span>
-            <p className="text-sm font-bold text-slate-900 truncate">
+            <p
+              className="text-sm font-bold text-slate-900 break-words line-clamp-2"
+              title={summaryReport.biggestWeakness ? summaryReport.biggestWeakness.topic : "None Detected"}
+            >
               {summaryReport.biggestWeakness ? summaryReport.biggestWeakness.topic : "None Detected"}
             </p>
             <p className="text-[11px] text-rose-800/80 font-medium">
@@ -1215,18 +1558,26 @@ export default function WeaknessRadarClient({
                           {diag.subject}
                         </span>
 
-                        {/* Confidence Badge */}
-                        <span
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                            diag.diagnosticConfidence === "HIGH"
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                              : diag.diagnosticConfidence === "MEDIUM"
+                        {/* Canonical Diagnostic State Badge (Phase 1 Item 6) */}
+                        {(() => {
+                          const topicState = getTopicDiagnosticState(topicItem);
+                          const badgeColorClass =
+                            topicState.color === "red"
+                              ? "bg-rose-50 text-rose-700 border-rose-200"
+                              : topicState.color === "amber"
                               ? "bg-amber-50 text-amber-700 border-amber-200"
-                              : "bg-slate-100 text-slate-700 border-slate-200"
-                          }`}
-                        >
-                          {diag.evidenceThresholdLabel} ({diag.observedPerformance.accuracyPercentage}%)
-                        </span>
+                              : topicState.color === "green"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              : "bg-slate-100 text-slate-700 border-slate-200";
+
+                          return (
+                            <span
+                              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${badgeColorClass}`}
+                            >
+                              {topicState.badgeLabel} ({diag.observedPerformance.accuracyPercentage}%)
+                            </span>
+                          );
+                        })()}
 
                         {/* Pipeline Stage Badge */}
                         <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-700 border border-slate-200">
@@ -1254,7 +1605,7 @@ export default function WeaknessRadarClient({
                       </div>
 
                       <p className="text-xs text-slate-500 font-medium">
-                        Evidence: {diag.observedPerformance.attemptsCount} attempted · {diag.observedPerformance.incorrectCount} incorrect · Avg Response: {diag.observedPerformance.avgTimeSeconds}s (Target ≤{diag.observedPerformance.targetTimeSeconds}s)
+                        Evidence: {diag.observedPerformance.attemptsCount} attempted · {diag.observedPerformance.incorrectCount} incorrect · Avg Response: {diag.observedPerformance.avgTimeSeconds}s ({getSubjectMetadata(diag.subject).expectedPaceText})
                       </p>
                     </div>
 
@@ -1382,17 +1733,26 @@ export default function WeaknessRadarClient({
                         </h3>
                         <div className="space-y-2">
                           {topicItem.recordedMistakes.slice(0, 3).map((m, idx) => (
-                            <div key={idx} className="p-3.5 rounded-xl border border-slate-200/80 bg-slate-50 space-y-1.5 text-xs">
-                              <p className="font-semibold text-slate-900">{m.prompt}</p>
-                              <div className="flex items-center gap-3 text-[11px] font-mono">
-                                <span className="text-rose-600 font-semibold">Your Ans: {m.userAnswer}</span>
-                                <span className="text-emerald-600 font-semibold">Correct Ans: {m.correctAnswer}</span>
-                                <span className="px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-700 font-sans font-medium text-[10px]">
-                                  {m.errorCategory}
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-slate-500 font-medium">{m.explanation}</p>
-                            </div>
+                            <RenderMistakeItem
+                              key={idx}
+                              mistake={m}
+                              idx={idx}
+                              onWhyWrong={(item) =>
+                                setSelectedMistakeForExplanation({
+                                  questionId: item.questionId || `q_${idx + 1}`,
+                                  prompt: item.prompt,
+                                  options: item.options || [],
+                                  selectedOption: item.userAnswer,
+                                  correctOption: item.correctAnswer,
+                                  subject: diag.subject,
+                                  chapter: diag.chapter,
+                                  explanation: item.explanation,
+                                  source: item.source,
+                                  reviewed_by_human: item.reviewed_by_human,
+                                  timeSpentSeconds: item.timeSpentSeconds,
+                                })
+                              }
+                            />
                           ))}
                         </div>
                       </div>
@@ -1830,25 +2190,26 @@ export default function WeaknessRadarClient({
                       {selectedModalDiagnosis.recordedMistakes && selectedModalDiagnosis.recordedMistakes.length > 0 ? (
                         <div className="space-y-2.5">
                           {selectedModalDiagnosis.recordedMistakes.slice(0, 4).map((m, idx) => (
-                            <div key={idx} className="p-3.5 rounded-xl border border-slate-200/80 bg-slate-50 space-y-1.5 text-xs">
-                              <div className="flex items-center justify-between">
-                                <span className="font-bold text-rose-600 text-[11px]">❌ Question #{idx + 1}</span>
-                                <span className="px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-mono text-[10px] font-medium">
-                                  {m.timeSpentSeconds ? `~${m.timeSpentSeconds}s` : "Timed"}
-                                </span>
-                              </div>
-                              <p className="font-semibold text-slate-900 leading-snug">{m.prompt}</p>
-                              <div className="flex items-center gap-3 text-[11px] font-mono pt-0.5">
-                                <span className="text-rose-600 font-semibold">Selected: {m.userAnswer}</span>
-                                <span className="text-emerald-600 font-semibold">Correct: {m.correctAnswer}</span>
-                                <span className="px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-700 font-sans font-medium text-[10px]">
-                                  Error: {m.errorCategory}
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-slate-500 font-medium border-t border-slate-200/60 pt-1">
-                                {m.explanation}
-                              </p>
-                            </div>
+                            <RenderMistakeItem
+                              key={idx}
+                              mistake={m}
+                              idx={idx}
+                              onWhyWrong={(item) =>
+                                setSelectedMistakeForExplanation({
+                                  questionId: item.questionId || `q_${idx + 1}`,
+                                  prompt: item.prompt,
+                                  options: item.options || [],
+                                  selectedOption: item.userAnswer,
+                                  correctOption: item.correctAnswer,
+                                  subject: selectedModalDiagnosis.subject,
+                                  chapter: selectedModalDiagnosis.chapter,
+                                  explanation: item.explanation,
+                                  source: item.source,
+                                  reviewed_by_human: item.reviewed_by_human,
+                                  timeSpentSeconds: item.timeSpentSeconds,
+                                })
+                              }
+                            />
                           ))}
                         </div>
                       ) : (
@@ -1858,53 +2219,142 @@ export default function WeaknessRadarClient({
                       )}
                     </div>
 
-                    {/* 9. REPAIR PLAN PROGRESSION (4 PHASES) */}
+                    {/* 9. REPAIR PLAN PROGRESSION (EVENT-DRIVEN: PHASE 1 ITEM 8) */}
                     <div className="p-5 rounded-2xl border border-slate-200/60 bg-white space-y-3.5 shadow-xs">
                       <div className="flex items-center justify-between flex-wrap gap-2">
                         <h3 className="font-bold text-slate-900 uppercase text-xs tracking-wider flex items-center gap-1.5">
                           <Target className="w-4 h-4 text-blue-600" />
-                          <span>REPAIR PLAN PROGRESSION</span>
+                          <span>EVENT-DRIVEN REPAIR PLAN</span>
                         </h3>
                         <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold uppercase">
-                          Stage: {selectedModalDiagnosis.remediationStage || "DETECTED"}
+                          Stage: {topicRepairState?.currentStage || "NOT_STARTED"}
                         </span>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
                         {/* Phase 1 */}
-                        <div className="p-3 rounded-xl border border-slate-200/60 bg-slate-50 space-y-1">
+                        <div
+                          className={`p-3 rounded-xl border space-y-1 ${
+                            topicRepairState?.step1.status === "completed"
+                              ? "border-emerald-200 bg-emerald-50/60"
+                              : "border-slate-200/60 bg-slate-50"
+                          }`}
+                        >
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold text-slate-700">① CONCEPT REPAIR</span>
-                            <span className="text-xs font-bold text-emerald-600">✓</span>
+                            <span className="text-[10px] font-bold text-slate-700">① CONCEPT REVIEW</span>
+                            <span
+                              className={`text-xs font-bold font-mono ${
+                                topicRepairState?.step1.status === "completed"
+                                  ? "text-emerald-600"
+                                  : "text-slate-400"
+                              }`}
+                            >
+                              {topicRepairState?.step1.status === "completed" ? "✓" : "○"}
+                            </span>
                           </div>
-                          <p className="text-[10px] text-slate-500 font-medium leading-tight">NCERT core formulas &amp; definitions reviewed.</p>
+                          <p className="text-[10px] text-slate-500 font-medium leading-tight">
+                            NCERT core definitions &amp; distinctions reviewed.
+                          </p>
+                          {topicRepairState?.step1.status !== "completed" && (
+                            <button
+                              type="button"
+                              onClick={() => handleMarkConceptReviewed(selectedModalDiagnosis.chapter)}
+                              className="mt-1 px-2 py-0.5 rounded bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-semibold transition-all cursor-pointer"
+                            >
+                              Mark Reviewed
+                            </button>
+                          )}
                         </div>
 
                         {/* Phase 2 */}
-                        <div className="p-3 rounded-xl border border-amber-200/60 bg-amber-50/50 space-y-1">
+                        <div
+                          className={`p-3 rounded-xl border space-y-1 ${
+                            topicRepairState?.step2.status === "completed"
+                              ? "border-emerald-200 bg-emerald-50/60"
+                              : topicRepairState?.step2.status === "active"
+                              ? "border-amber-200/80 bg-amber-50/60"
+                              : "border-slate-200/60 bg-slate-50 opacity-60"
+                          }`}
+                        >
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold text-amber-900">② GUIDED DRILL</span>
-                            <span className="text-xs font-bold text-amber-700">→ Active</span>
+                            <span className="text-[10px] font-bold text-slate-700">② GUIDED DRILL</span>
+                            <span
+                              className={`text-xs font-bold font-mono ${
+                                topicRepairState?.step2.status === "completed"
+                                  ? "text-emerald-600"
+                                  : topicRepairState?.step2.status === "active"
+                                  ? "text-amber-700"
+                                  : "text-slate-400"
+                              }`}
+                            >
+                              {topicRepairState?.step2.status === "completed"
+                                ? "✓"
+                                : topicRepairState?.step2.status === "active"
+                                ? "→ Active"
+                                : "○"}
+                            </span>
                           </div>
-                          <p className="text-[10px] text-amber-800/80 font-medium leading-tight">5 targeted adaptive questions on weak patterns.</p>
+                          <p className="text-[10px] text-slate-500 font-medium leading-tight">
+                            5 targeted adaptive questions on weak patterns.
+                          </p>
                         </div>
 
                         {/* Phase 3 */}
-                        <div className="p-3 rounded-xl border border-slate-200/60 bg-white space-y-1">
+                        <div
+                          className={`p-3 rounded-xl border space-y-1 ${
+                            topicRepairState?.step3.status === "completed"
+                              ? "border-emerald-200 bg-emerald-50/60"
+                              : topicRepairState?.step3.status === "active"
+                              ? "border-amber-200/80 bg-amber-50/60"
+                              : "border-slate-200/60 bg-slate-50 opacity-60"
+                          }`}
+                        >
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-medium text-slate-400">③ TIMED RETEST</span>
-                            <span className="text-xs font-medium text-slate-400">○</span>
+                            <span className="text-[10px] font-bold text-slate-700">③ TIMED RETEST</span>
+                            <span
+                              className={`text-xs font-bold font-mono ${
+                                topicRepairState?.step3.status === "completed"
+                                  ? "text-emerald-600"
+                                  : topicRepairState?.step3.status === "active"
+                                  ? "text-amber-700"
+                                  : "text-slate-400"
+                              }`}
+                            >
+                              {topicRepairState?.step3.status === "completed"
+                                ? "✓"
+                                : topicRepairState?.step3.status === "active"
+                                ? "→ Active"
+                                : "○"}
+                            </span>
                           </div>
-                          <p className="text-[10px] text-slate-400 font-medium leading-tight">10 Qs at ≤{selectedModalDiagnosis.observedPerformance.targetTimeSeconds}s/Q pacing.</p>
+                          <p className="text-[10px] text-slate-500 font-medium leading-tight">
+                            10 Qs at expected pace.
+                          </p>
                         </div>
 
                         {/* Phase 4 */}
-                        <div className="p-3 rounded-xl border border-slate-200/60 bg-white space-y-1">
+                        <div
+                          className={`p-3 rounded-xl border space-y-1 ${
+                            topicRepairState?.step4.status === "completed"
+                              ? "border-emerald-200 bg-emerald-50/60"
+                              : "border-slate-200/60 bg-slate-50 opacity-60"
+                          }`}
+                        >
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-medium text-slate-400">④ RECOVERY CHECK</span>
-                            <span className="text-xs font-medium text-slate-400">○</span>
+                            <span className="text-[10px] font-bold text-slate-700">④ RECOVERY CHECK</span>
+                            <span
+                              className={`text-xs font-bold font-mono ${
+                                topicRepairState?.step4.status === "completed"
+                                  ? "text-emerald-600"
+                                  : "text-slate-400"
+                              }`}
+                            >
+                              {topicRepairState?.step4.status === "completed" ? "✓" : "○"}
+                            </span>
                           </div>
-                          <p className="text-[10px] text-slate-400 font-medium leading-tight">Verified only when ≥80% accuracy over 10+ attempts.</p>
+                          <p className="text-[10px] text-slate-500 font-medium leading-tight">
+                            Verified only when ≥80% accuracy over 10+ attempts.
+                          </p>
                         </div>
                       </div>
 
@@ -1912,7 +2362,7 @@ export default function WeaknessRadarClient({
                       <div className="p-3 rounded-xl border border-slate-200/60 bg-slate-50 text-[11px] font-semibold text-slate-700 flex items-center justify-between gap-2">
                         <span>Recovery Status:</span>
                         <span className="font-mono text-slate-900">
-                          {selectedModalDiagnosis.isRecovered
+                          {topicRepairState?.isRecovered
                             ? "✅ RECOVERED (≥80% accuracy across 10+ attempts verified)"
                             : "Validation incomplete — more evidence required"}
                         </span>
@@ -1982,6 +2432,65 @@ export default function WeaknessRadarClient({
           <CycleAnalysisModal
             cycle={selectedCycleForReport}
             onClose={() => setSelectedCycleForReport(null)}
+          />,
+          document.body
+        )}
+
+      {/* Why Did I Get This Wrong Deep Explanation Modal (Portal) */}
+      {isClient &&
+        selectedMistakeForExplanation &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <WhyWrongExplanationModal
+            question={selectedMistakeForExplanation}
+            onClose={() => setSelectedMistakeForExplanation(null)}
+          />,
+          document.body
+        )}
+
+      {/* Grounded Doubt Solver Drawer (Portal) */}
+      {isClient &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <DoubtSolverDrawer
+            isOpen={isDoubtDrawerOpen}
+            onClose={() => setIsDoubtDrawerOpen(false)}
+            studentContext={{
+              subject:
+                selectedRadarSubject === "all"
+                  ? attemptedSubjectNames[0] || "Domain Overview"
+                  : candidateSubjectCalibrations.find((c) => c.subjectKey === selectedRadarSubject)?.subject || "Domain",
+              weakTopics: weaknessRadar.map((w) => w.chapter),
+              strongTopics: strengthList.map((s) => s.chapter),
+              recentMistakes: cleanTestAttempts.flatMap((t) =>
+                (t.questions || [])
+                  .filter((q) => q.isCorrect === false)
+                  .map((q) => ({
+                    prompt: q.prompt,
+                    userAnswer: q.selectedOption,
+                    correctAnswer: q.correctOption,
+                    chapter: q.chapter,
+                  }))
+              ),
+            }}
+          />,
+          document.body
+        )}
+
+      {/* Weekly Performance Report Modal (Portal) */}
+      {isClient &&
+        isWeeklyReportOpen &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <WeeklyReportModal
+            report={generateWeeklyReportData({
+              studentName: storeUser?.name || initialData.user.fullName || "Student",
+              streakDays: storeUser?.currentStreak || initialData.user.currentStreak || 1,
+              testAttempts: cleanTestAttempts,
+              weaknessRadar,
+              strengthList,
+            })}
+            onClose={() => setIsWeeklyReportOpen(false)}
           />,
           document.body
         )}

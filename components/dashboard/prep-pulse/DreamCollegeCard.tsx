@@ -9,6 +9,7 @@ interface DreamCollegeCardProps {
   targetUniversity?: string;
   accuracyPercentage?: number;
   totalAttempts?: number;
+  currentScore?: number;
 }
 
 export const DreamCollegeCard: React.FC<DreamCollegeCardProps> = ({
@@ -16,12 +17,14 @@ export const DreamCollegeCard: React.FC<DreamCollegeCardProps> = ({
   targetUniversity = 'Delhi University',
   accuracyPercentage = 0,
   totalAttempts = 0,
+  currentScore = 0,
 }) => {
   const readiness = calculateCollegeReadiness(
     targetCollege,
     targetUniversity,
     accuracyPercentage,
-    totalAttempts
+    totalAttempts,
+    currentScore
   );
 
   const getCollegeImage = (college: string) => {
@@ -59,7 +62,10 @@ export const DreamCollegeCard: React.FC<DreamCollegeCardProps> = ({
             <GraduationCap className="w-3.5 h-3.5 text-sky-400" />
             Dream College Target
           </span>
-          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border backdrop-blur-md ${readiness.statusBadgeClass}`}>
+          <span
+            title={readiness.gapExplanation}
+            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border backdrop-blur-md cursor-help ${readiness.statusBadgeClass}`}
+          >
             <Sparkles className="w-3 h-3" />
             {readiness.statusLabel}
           </span>
@@ -106,9 +112,16 @@ export const DreamCollegeCard: React.FC<DreamCollegeCardProps> = ({
           </div>
         </div>
 
-        {/* Recommendation Note */}
-        <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600 leading-relaxed">
-          <p className="font-medium text-[11px] text-slate-700">
+        {/* Gap & Recommendation Note with Tooltip */}
+        <div
+          title={readiness.gapExplanation}
+          className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600 leading-relaxed space-y-1 cursor-help"
+        >
+          <div className="flex items-center justify-between text-[11px] font-semibold">
+            <span className="text-slate-700">Target Gap:</span>
+            <span className="font-mono text-rose-600 font-bold">{readiness.gapLabel}</span>
+          </div>
+          <p className="font-medium text-[11px] text-slate-600">
             {readiness.recommendation}
           </p>
         </div>

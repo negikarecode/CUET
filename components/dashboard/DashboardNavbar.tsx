@@ -20,6 +20,7 @@ import { createClient } from "@/lib/supabase/client";
 import UpgradeButton from "@/components/payments/UpgradeButton";
 import LanguageSelector from "@/components/i18n/LanguageSelector";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
+import Avatar from "@/components/ui/Avatar";
 
 export default function DashboardNavbar() {
   const { t } = useTranslation();
@@ -88,7 +89,7 @@ export default function DashboardNavbar() {
             {streak}
           </span>
           <span className="text-amber-700/80 text-[11px] font-medium hidden lg:inline">
-            {t("days", "Days")} {t("streak", "Streak")}
+            {streak === 1 ? "day streak" : "days streak"}
           </span>
         </div>
 
@@ -123,14 +124,12 @@ export default function DashboardNavbar() {
             aria-label="User Profile menu"
             aria-expanded={profileDropdownOpen}
           >
-            <div className="relative w-7 h-7 shrink-0">
-              <img
-                src="/assets/images/avatar1.png"
-                alt={userName}
-                className="w-7 h-7 rounded-full object-cover ring-1 ring-blue-500/20"
-              />
-              <span className="absolute bottom-0 right-0 w-2 h-2 bg-emerald-500 border border-white rounded-full"></span>
-            </div>
+            <Avatar
+              src="/assets/images/avatar1.png"
+              name={userName}
+              size="xs"
+              showStatusDot
+            />
             <span className="text-xs font-semibold text-slate-800 hidden lg:inline max-w-[120px] truncate">
               {userName}
             </span>
@@ -147,10 +146,10 @@ export default function DashboardNavbar() {
               onMouseLeave={() => setProfileDropdownOpen(false)}
             >
               <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/50 rounded-t-2xl flex items-center gap-3">
-                <img
+                <Avatar
                   src="/assets/images/avatar1.png"
-                  alt={userName}
-                  className="w-10 h-10 rounded-full object-cover ring-2 ring-blue-500/20 shrink-0"
+                  name={userName}
+                  size="md"
                 />
                 <div className="min-w-0 flex-1">
                   <p className="font-bold text-slate-900 text-sm truncate">
