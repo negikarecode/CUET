@@ -413,8 +413,8 @@ async function runStandingTests() {
   assert(srccStats !== null, "Multi-Year: SRCC B.Com (Hons.) record found in dataset");
   if (srccStats) {
     assert(
-      srccStats.years.length === 2,
-      `Multi-Year: Covers 2 years (Found: ${srccStats.years.join(", ")})`
+      srccStats.years.length >= 2,
+      `Multi-Year: Covers multiple historical years (Found: ${srccStats.years.join(", ")})`
     );
     assert(
       srccStats.expectedRange.highPct > srccStats.expectedRange.lowPct,
@@ -424,6 +424,16 @@ async function runStandingTests() {
       srccStats.cutoffScale === 1000,
       `Cutoff Scale: 1000 marks scale for B.Com Hons (Found: ${srccStats.cutoffScale})`
     );
+
+    // Multi-University verification across newly added institutions
+    const bhuStats = computeMultiYearCutoff("Faculty of Main Campus (FMC), BHU", "bcom_hons", "UR");
+    assert(bhuStats !== null, "Multi-University: BHU B.Com (Hons.) found in dataset");
+
+    const auStats = computeMultiYearCutoff("University of Allahabad (Main Campus)", "bcom_prog", "UR");
+    assert(auStats !== null, "Multi-University: Allahabad University B.Com found in dataset");
+
+    const jnuStats = computeMultiYearCutoff("School of Language, Literature and Culture Studies (SLL&CS), JNU", "ba_hons_french", "UR");
+    assert(jnuStats !== null, "Multi-University: JNU B.A. (Hons.) French found in dataset");
   }
 
   // Filter by single year (2026) to test single-year widening rule

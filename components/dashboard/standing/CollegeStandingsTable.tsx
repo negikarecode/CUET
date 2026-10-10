@@ -44,14 +44,23 @@ export default function CollegeStandingsTable({
 }: CollegeStandingsTableProps) {
   const [bandFilter, setBandFilter] = useState<string>("all");
   const [searchFilter, setSearchFilter] = useState("");
+  const [selectedUniversity, setSelectedUniversity] = useState<string>("all");
 
   const categories: CategoryCode[] = ["UR", "OBC", "SC", "ST", "EWS", "PwBD"];
+
+  const universities = useMemo(() => {
+    return Array.from(new Set(standings.map((s) => s.universityName))).sort();
+  }, [standings]);
 
   const filteredStandings = useMemo(() => {
     return standings.filter((item) => {
       const matchesSearch =
         !searchFilter ||
-        item.collegeName.toLowerCase().includes(searchFilter.toLowerCase().trim());
+        item.collegeName.toLowerCase().includes(searchFilter.toLowerCase().trim()) ||
+        item.universityName.toLowerCase().includes(searchFilter.toLowerCase().trim());
+
+      const matchesUniversity =
+        selectedUniversity === "all" || item.universityName === selectedUniversity;
 
       let matchesBand = true;
       if (bandFilter === "likely") {
@@ -62,9 +71,9 @@ export default function CollegeStandingsTable({
         matchesBand = item.band === "Reach" || item.band === "Far";
       }
 
-      return matchesSearch && matchesBand;
+      return matchesSearch && matchesUniversity && matchesBand;
     });
-  }, [standings, searchFilter, bandFilter]);
+  }, [standings, searchFilter, selectedUniversity, bandFilter]);
 
   // Data for trend chart of the selected college
   const selectedStandingItem =
@@ -106,24 +115,24 @@ export default function CollegeStandingsTable({
           ))}
         </div>
 
-        {/* Year Selector & Band Tabs */}
+        {/* Year Selector, University Dropdown & Search */}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center bg-slate-100 p-0.5 rounded-xl text-xs font-semibold">
             <button
               type="button"
               onClick={() => onSelectYear("all")}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
+              className={`px-2 py-1 rounded-lg transition-all ${
                 selectedYear === "all"
                   ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-500 hover:text-slate-900"
               }`}
             >
-              Multi-Year
+              All Years
             </button>
             <button
               type="button"
               onClick={() => onSelectYear(2026)}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
+              className={`px-2 py-1 rounded-lg transition-all ${
                 selectedYear === 2026
                   ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-500 hover:text-slate-900"
@@ -134,7 +143,7 @@ export default function CollegeStandingsTable({
             <button
               type="button"
               onClick={() => onSelectYear(2025)}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
+              className={`px-2 py-1 rounded-lg transition-all ${
                 selectedYear === 2025
                   ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-500 hover:text-slate-900"
@@ -142,16 +151,55 @@ export default function CollegeStandingsTable({
             >
               2025
             </button>
+            <button
+              type="button"
+              onClick={() => onSelectYear(2024)}
+              className={`px-2 py-1 rounded-lg transition-all ${
+                selectedYear === 2024
+                  ? "bg-white text-slate-900 shadow-2xs font-bold"
+                  : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              2024
+            </button>
+            <button
+              type="button"
+              onClick={() => onSelectYear(2023)}
+              className={`px-2 py-1 rounded-lg transition-all ${
+                selectedYear === 2023
+                  ? "bg-white text-slate-900 shadow-2xs font-bold"
+                  : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              2023
+            </button>
           </div>
 
+          {/* University Filter Dropdown */}
+          {universities.length > 1 && (
+            <select
+              value={selectedUniversity}
+              onChange={(e) => setSelectedUniversity(e.target.value)}
+              className="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-800 bg-white font-medium focus:outline-hidden focus:border-blue-500 max-w-[180px] truncate"
+              title="Filter by University"
+            >
+              <option value="all">All Universities ({universities.length})</option>
+              {universities.map((u) => (
+                <option key={u} value={u}>
+                  {u}
+                </option>
+              ))}
+            </select>
+          )}
+
           {/* Search Box */}
-          <div className="relative flex-1 sm:w-48">
+          <div className="relative flex-1 sm:w-44">
             <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchFilter}
               onChange={(e) => setSearchFilter(e.target.value)}
-              placeholder="Search colleges..."
+              placeholder="Search colleges / unis..."
               className="w-full pl-8 pr-2.5 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:border-blue-500"
             />
           </div>
@@ -314,10 +362,15 @@ export default function CollegeStandingsTable({
                       }`}
                     >
                       <td className="py-3 px-4 font-bold text-slate-900">
-                        <div className="flex items-center gap-2">
-                          <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span className="truncate max-w-[220px]">
-                            {item.collegeName}
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex items-center gap-2">
+                            <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                            <span className="truncate max-w-[240px]">
+                              {item.collegeName}
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-medium text-slate-500 pl-5 truncate max-w-[240px]">
+                            {item.universityName}
                           </span>
                         </div>
                       </td>
@@ -393,9 +446,14 @@ export default function CollegeStandingsTable({
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="text-xs font-bold text-slate-900 leading-snug">
-                      {item.collegeName}
-                    </span>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold text-slate-900 leading-snug">
+                        {item.collegeName}
+                      </span>
+                      <span className="text-[10px] font-medium text-slate-500">
+                        {item.universityName}
+                      </span>
+                    </div>
                     <span
                       className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold border shrink-0 ${item.bandInfo.badgeClass}`}
                     >

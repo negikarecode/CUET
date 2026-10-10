@@ -716,6 +716,7 @@ export function computeCollegeStandings(params: {
     category = STANDING_CONFIG.DEFAULT_CATEGORY,
     userAttempts,
     filterYear,
+    filterUniversity,
     filterBand,
   } = params;
 
@@ -736,6 +737,16 @@ export function computeCollegeStandings(params: {
   for (const college of offeringColleges) {
     const multiYear = computeMultiYearCutoff(college, courseId, category, filterYear);
     if (!multiYear) continue;
+
+    // Resolve University
+    const matchedRecord = NORMALIZED_CUTOFFS.find(
+      (r) => r.college.toLowerCase().trim() === college.toLowerCase().trim() && r.canonical_course_id === courseId
+    );
+    const resolvedUniversity = matchedRecord?.university || "University of Delhi";
+
+    if (filterUniversity && filterUniversity !== "all" && resolvedUniversity !== filterUniversity) {
+      continue;
+    }
 
     const band = resolution.hasNoData
       ? "Far"
@@ -769,7 +780,7 @@ export function computeCollegeStandings(params: {
 
     standings.push({
       collegeName: college,
-      universityName: "University of Delhi",
+      universityName: resolvedUniversity,
       courseName: resolution.course.name,
       category,
       band,

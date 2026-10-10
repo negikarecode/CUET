@@ -242,7 +242,7 @@ export default function StandingViewClient() {
         </div>
         <ul className="space-y-1.5 list-disc list-inside text-[11px] leading-relaxed text-slate-600">
           <li>
-            <strong>Data Source:</strong> Benchmarks are derived from official University of Delhi 2025 and 2026 final seat allocation lists across 69 colleges and 264 programs.
+            <strong>Data Source:</strong> Benchmarks are derived from official institutional archives across participating CUET universities (University of Delhi, Banaras Hindu University, Jawaharlal Nehru University, University of Allahabad, Jamia Millia Islamia, Dr. B.R. Ambedkar University Delhi, BBAU, GGSIPU, and Central Universities) covering 2023 to 2026 seat allocations across 96+ colleges and 48 degree programs.
           </li>
           <li>
             <strong>Score Scale:</strong> Standard CUET 2026 scoring applies (+5 correct, -1 incorrect, max 250 points per test paper). Cutoff values reflect total normalized marks across required subject combinations (750 marks for 3-subject science courses, 1000 marks for 4-subject arts/commerce courses).

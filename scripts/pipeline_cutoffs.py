@@ -163,6 +163,18 @@ CANONICAL_SUBJECTS = {
         "code": "303",
         "type": "domain"
     },
+    "legal_studies": {
+        "id": "legal_studies",
+        "name": "Legal Studies",
+        "code": "317",
+        "type": "domain"
+    },
+    "teaching_aptitude": {
+        "id": "teaching_aptitude",
+        "name": "Teaching Aptitude",
+        "code": "327",
+        "type": "domain"
+    },
     "general_test": {
         "id": "general_test",
         "name": "General Aptitude Test",
@@ -175,7 +187,7 @@ ALL_DOMAINS = [
     "physics", "chemistry", "maths", "bio", "accs", "eco", "bst", "history",
     "pol science", "geo", "psychology", "sociology", "computer_science",
     "physical_education", "home_science", "mass_media", "environmental_studies",
-    "fine_arts", "agriculture", "anthropology"
+    "fine_arts", "agriculture", "anthropology", "legal_studies", "teaching_aptitude"
 ]
 ALL_LANGUAGES = ["english", "hindi", "sanskrit"]
 
@@ -775,6 +787,317 @@ CANONICAL_COURSES = {
                 ]
             }
         ]
+    },
+    "ba_arts_bhu": {
+        "id": "ba_arts_bhu",
+        "name": "B.A. (Hons.) Arts",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "Language + General Test",
+                "rules": [
+                    {"type": "one_of", "subjects": ALL_LANGUAGES, "count": 1, "label": "Language"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "ba_socsci_bhu": {
+        "id": "ba_socsci_bhu",
+        "name": "B.A. (Hons.) Social Sciences",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "Language + General Test",
+                "rules": [
+                    {"type": "one_of", "subjects": ALL_LANGUAGES, "count": 1, "label": "Language"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "bsc_agri": {
+        "id": "bsc_agri",
+        "name": "B.Sc. (Hons.) Agriculture",
+        "stream": "science",
+        "degreeType": "Honours",
+        "cutoffScale": 750,
+        "subjectCount": 3,
+        "combinations": [
+            {
+                "id": "comb_pcb_pca",
+                "label": "Physics + Chemistry + Biology/Agriculture/Maths",
+                "rules": [
+                    {"type": "required", "subjects": ["physics"], "count": 1, "label": "Physics"},
+                    {"type": "required", "subjects": ["chemistry"], "count": 1, "label": "Chemistry"},
+                    {"type": "one_of", "subjects": ["bio", "agriculture", "maths"], "count": 1, "label": "Biology / Agriculture / Maths"}
+                ]
+            }
+        ]
+    },
+    "ba_llb_hons": {
+        "id": "ba_llb_hons",
+        "name": "B.A. LL.B. (Hons.)",
+        "stream": "humanities",
+        "degreeType": "Professional",
+        "cutoffScale": 750,
+        "subjectCount": 3,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "Language + Legal Studies + General Test",
+                "rules": [
+                    {"type": "one_of", "subjects": ALL_LANGUAGES, "count": 1, "label": "Language"},
+                    {"type": "required", "subjects": ["legal_studies"], "count": 1, "label": "Legal Studies"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "bba_prog": {
+        "id": "bba_prog",
+        "name": "B.B.A.",
+        "stream": "commerce",
+        "degreeType": "Professional",
+        "cutoffScale": 750,
+        "subjectCount": 3,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "Language + General Test + Domain",
+                "rules": [
+                    {"type": "one_of", "subjects": ALL_LANGUAGES, "count": 1, "label": "Language"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"},
+                    {"type": "best_of", "subjects": ["bst", "maths", "accs", "eco"], "count": 1, "label": "Commerce Domain"}
+                ]
+            }
+        ]
+    },
+    "bca_prog": {
+        "id": "bca_prog",
+        "name": "B.C.A.",
+        "stream": "science",
+        "degreeType": "Professional",
+        "cutoffScale": 750,
+        "subjectCount": 3,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "Language + Maths/CS + General Test",
+                "rules": [
+                    {"type": "one_of", "subjects": ALL_LANGUAGES, "count": 1, "label": "Language"},
+                    {"type": "one_of", "subjects": ["maths", "computer_science"], "count": 1, "label": "Mathematics or CS"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "bsc_biotech": {
+        "id": "bsc_biotech",
+        "name": "B.Sc. (Hons.) Biotechnology",
+        "stream": "science",
+        "degreeType": "Honours",
+        "cutoffScale": 750,
+        "subjectCount": 3,
+        "combinations": [
+            {
+                "id": "comb_pcb",
+                "label": "Physics + Chemistry + Biology",
+                "rules": [
+                    {"type": "required", "subjects": ["physics"], "count": 1, "label": "Physics"},
+                    {"type": "required", "subjects": ["chemistry"], "count": 1, "label": "Chemistry"},
+                    {"type": "required", "subjects": ["bio"], "count": 1, "label": "Biology"}
+                ]
+            }
+        ]
+    },
+    "ba_hons_french": {
+        "id": "ba_hons_french",
+        "name": "B.A. (Hons.) French",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "English + General Test",
+                "rules": [
+                    {"type": "required", "subjects": ["english"], "count": 1, "label": "English"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "ba_hons_german": {
+        "id": "ba_hons_german",
+        "name": "B.A. (Hons.) German",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "English + General Test",
+                "rules": [
+                    {"type": "required", "subjects": ["english"], "count": 1, "label": "English"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "ba_hons_spanish": {
+        "id": "ba_hons_spanish",
+        "name": "B.A. (Hons.) Spanish",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "English + General Test",
+                "rules": [
+                    {"type": "required", "subjects": ["english"], "count": 1, "label": "English"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "ba_hons_japanese": {
+        "id": "ba_hons_japanese",
+        "name": "B.A. (Hons.) Japanese",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "English + General Test",
+                "rules": [
+                    {"type": "required", "subjects": ["english"], "count": 1, "label": "English"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "ba_hons_korean": {
+        "id": "ba_hons_korean",
+        "name": "B.A. (Hons.) Korean",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "English + General Test",
+                "rules": [
+                    {"type": "required", "subjects": ["english"], "count": 1, "label": "English"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "ba_hons_chinese": {
+        "id": "ba_hons_chinese",
+        "name": "B.A. (Hons.) Chinese",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "English + General Test",
+                "rules": [
+                    {"type": "required", "subjects": ["english"], "count": 1, "label": "English"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "ba_hons_russian": {
+        "id": "ba_hons_russian",
+        "name": "B.A. (Hons.) Russian",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "English + General Test",
+                "rules": [
+                    {"type": "required", "subjects": ["english"], "count": 1, "label": "English"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "ba_hons_arabic": {
+        "id": "ba_hons_arabic",
+        "name": "B.A. (Hons.) Arabic",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "English + General Test",
+                "rules": [
+                    {"type": "required", "subjects": ["english"], "count": 1, "label": "English"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "ba_hons_persian": {
+        "id": "ba_hons_persian",
+        "name": "B.A. (Hons.) Persian",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "English + General Test",
+                "rules": [
+                    {"type": "required", "subjects": ["english"], "count": 1, "label": "English"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
+    },
+    "ba_hons_pashto": {
+        "id": "ba_hons_pashto",
+        "name": "B.A. (Hons.) Pashto",
+        "stream": "humanities",
+        "degreeType": "Honours",
+        "cutoffScale": 500,
+        "subjectCount": 2,
+        "combinations": [
+            {
+                "id": "comb_1",
+                "label": "English + General Test",
+                "rules": [
+                    {"type": "required", "subjects": ["english"], "count": 1, "label": "English"},
+                    {"type": "required", "subjects": ["general_test"], "count": 1, "label": "General Test"}
+                ]
+            }
+        ]
     }
 }
 
@@ -909,6 +1232,40 @@ def match_program(raw_name: str, overrides: dict):
             ratio = max(ratio, 0.96)
         elif cid == "beled" and "b.el.ed" in cleaned.lower():
             ratio = max(ratio, 0.96)
+        elif cid == "ba_llb_hons" and ("ll.b" in cleaned.lower() or "llb" in cleaned.lower()):
+            ratio = max(ratio, 0.96)
+        elif cid == "bba_prog" and ("bba" in cleaned.lower() or "b.b.a" in cleaned.lower()) and "fia" not in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "bca_prog" and ("bca" in cleaned.lower() or "b.c.a" in cleaned.lower()):
+            ratio = max(ratio, 0.96)
+        elif cid == "bsc_agri" and "agriculture" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "bsc_biotech" and ("biotechnology" in cleaned.lower() or "biotech" in cleaned.lower()):
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_arts_bhu" and "arts" in cleaned.lower() and "fine" not in cleaned.lower() and "visual" not in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_socsci_bhu" and "social science" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_hons_french" and "french" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_hons_german" and "german" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_hons_spanish" and "spanish" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_hons_japanese" and "japanese" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_hons_korean" and "korean" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_hons_chinese" and "chinese" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_hons_russian" and "russian" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_hons_arabic" and "arabic" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_hons_persian" and "persian" in cleaned.lower():
+            ratio = max(ratio, 0.96)
+        elif cid == "ba_hons_pashto" and "pashto" in cleaned.lower():
+            ratio = max(ratio, 0.96)
 
         candidates.append({"id": cid, "score": round(ratio, 4), "name": cdef["name"]})
 
@@ -953,13 +1310,40 @@ def run_pipeline():
             status, matched_cid, score, cands = match_program(prog_raw, overrides)
             cdef = CANONICAL_COURSES.get(matched_cid) if matched_cid else None
 
-            # Plausible cutoff scale
-            cutoff_max = cdef["cutoffScale"] if cdef else 1000
+            # University Name
+            univ_raw = str(row.get("University Name", row.get("University", "University of Delhi"))).strip()
+            if not univ_raw or univ_raw == "nan":
+                univ_raw = "University of Delhi"
+
+            # Check Year
+            row_year = row.get("Year")
+            if pd.notna(row_year) and str(row_year).strip() != "" and str(row_year).strip() != "nan":
+                try:
+                    record_year = int(float(row_year))
+                except ValueError:
+                    record_year = year
+            else:
+                record_year = year
+
+            # Check Round
+            row_round = str(row.get("Round", "Final")).strip()
+            if not row_round or row_round == "nan":
+                row_round = "Final"
+
+            # Check Max Scale
+            row_max = row.get("Max Scale", row.get("cutoff_max"))
+            if pd.notna(row_max) and str(row_max).strip() != "" and str(row_max).strip() != "nan":
+                try:
+                    cutoff_max = float(row_max)
+                except ValueError:
+                    cutoff_max = cdef["cutoffScale"] if cdef else 1000
+            else:
+                cutoff_max = cdef["cutoffScale"] if cdef else 1000
 
             categories = ["UR", "OBC", "SC", "ST", "EWS", "PwBD"]
             for cat in categories:
                 val = row.get(cat)
-                if pd.notna(val) and val != "" and val is not None:
+                if pd.notna(val) and val != "" and val is not None and str(val).strip() != "":
                     try:
                         val_float = float(val)
                     except ValueError:
@@ -974,7 +1358,7 @@ def run_pipeline():
                         continue
 
                     # Validate range
-                    if val_float < 0 or val_float > cutoff_max + 10:
+                    if val_float < 0 or val_float > cutoff_max + 15:
                         quality_issues.append({
                             "type": "out_of_range",
                             "file": fname,
@@ -986,16 +1370,16 @@ def run_pipeline():
                         })
 
                     normalized_records.append({
-                        "university": "University of Delhi",
+                        "university": univ_raw,
                         "college": college_clean,
                         "raw_college": college_raw,
                         "course": prog_raw,
                         "canonical_course_id": matched_cid,
                         "canonical_course_name": cdef["name"] if cdef else None,
                         "stream": cdef["stream"] if cdef else "general",
-                        "year": year,
+                        "year": record_year,
                         "category": cat,
-                        "round": "Final",
+                        "round": row_round,
                         "cutoff_value": round(val_float, 4),
                         "cutoff_max": cutoff_max,
                         "source_file": fname
