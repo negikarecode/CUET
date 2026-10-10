@@ -1,25 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6..96,500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import '../styles/tokens.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --canvas: #f8fafc;
-  --surface: #ffffff;
-  --primary-navy: #0d162a;
-  --primary-blue: #0066ff;
-  --accent-orange: #ff5e1e;
-  --accent-orange-hover: #f04e0e;
-  --pill-blue-bg: #e8f3fe;
-  --pill-blue-border: #cfe4fd;
-  --pill-blue-text: #0284c7;
-  --text-muted: #475569;
-  --border-slate: #e2e8f0;
-}
 
 /* Universal anti-horizontal overflow guardrail */
 html {
@@ -36,9 +20,10 @@ body {
   max-width: 100vw;
   width: 100%;
   position: relative;
-  color: #0f172a;
-  background-color: #ffffff;
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background-color: var(--bg);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -48,6 +33,11 @@ body {
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 img,
@@ -68,30 +58,32 @@ canvas {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--border-strong);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--text-muted);
 }
 
 /* Selection */
 ::selection {
-  background: rgba(0, 102, 255, 0.16);
-  color: var(--primary-navy);
+  background: var(--accent-subtle);
+  color: var(--accent);
 }
 
-/* Action glow utility for interactive elements */
-.action-glow {
-  transition: all 0.2s ease-in-out;
+/* Clean Professional Card */
+.app-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  box-shadow: none;
 }
-.action-glow:hover {
-  background-color: #e0f2fe !important;
-  color: #0284c7 !important;
-  box-shadow: 0 0 8px -2px rgba(56, 189, 248, 0.25) !important;
-  outline: 1px solid rgba(125, 211, 252, 0.35) !important;
-  outline-offset: 1px;
+@media (max-width: 640px) {
+  .app-card {
+    padding: 16px;
+  }
 }
 
 /* ==========================================================================

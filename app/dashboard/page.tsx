@@ -8,9 +8,9 @@ import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
 import { StreamType } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Aspirant Command Hub | CUET AI-Prep",
+  title: "Dashboard | CUET AI-Prep",
   description:
-    "Real-time CUET UG preparation command center with AI diagnostic insights, chapter mastery radar, time-sink alerts, daily practice streaks, and trophies.",
+    "Real-time CUET UG preparation dashboard with performance analytics, diagnostic reports, and college cutoffs.",
 };
 
 export const dynamic = "force-dynamic";

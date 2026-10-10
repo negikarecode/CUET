@@ -10,14 +10,11 @@ import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { calculateCUETScore, MARKING_SCHEME } from "@/lib/config/dashboardConfig";
 
 import { WelcomeBanner } from "@/components/dashboard/prep-pulse/WelcomeBanner";
-import { OnboardingChecklist } from "@/components/dashboard/prep-pulse/OnboardingChecklist";
 import { NextBestActionCard } from "@/components/dashboard/prep-pulse/NextBestActionCard";
 import { TopMetricsRow } from "@/components/dashboard/prep-pulse/TopMetricsRow";
 import { CombinedPerformanceCard } from "@/components/dashboard/prep-pulse/CombinedPerformanceCard";
-import { DreamCollegeCard } from "@/components/dashboard/prep-pulse/DreamCollegeCard";
 import { StrengthsWeaknesses } from "@/components/dashboard/prep-pulse/StrengthsWeaknesses";
 import { RecentEvaluationsTable } from "@/components/dashboard/prep-pulse/RecentEvaluationsTable";
-import { ScheduleMockTest } from "@/components/dashboard/prep-pulse/ScheduleMockTest";
 import { DailyPracticeCalendar } from "@/components/dashboard/prep-pulse/DailyPracticeCalendar";
 
 export interface DashboardInitialData {
@@ -133,14 +130,6 @@ export default function DashboardClient({
     ? storeUser.name
     : initialData.user.fullName || "Aryan Negi";
 
-  const targetCollege = isServerUser
-    ? initialData.user.targetCollege
-    : isClient && storeUser.targetCollege
-    ? storeUser.targetCollege
-    : initialData.user.targetCollege || "Hindu College";
-
-  const targetUniversity = initialData?.user?.targetUniversity || "Delhi University";
-
   const targetStream = isServerUser
     ? initialData.user.targetStream
     : isClient && storeUser.preferredStream
@@ -151,11 +140,6 @@ export default function DashboardClient({
     isClient && storeUser?.dailyStreak
       ? storeUser.dailyStreak
       : initialData?.user?.currentStreak || 1;
-
-  const xp =
-    isClient && storeUser?.xpPoints
-      ? storeUser.xpPoints
-      : initialData?.user?.xp || 0;
 
   // Active Subject Calibration Map
   const subjectCalibrationMap = useMemo(() => {
@@ -246,31 +230,30 @@ export default function DashboardClient({
       })[0] || candidateWeaknesses[0];
   }, [candidateWeaknesses]);
 
-  return (
-    <div className="space-y-6 sm:space-y-8 pb-10">
-      {/* 1. Slim Top Bar is rendered by DashboardLayout (Search, Language, Upgrade, Profile) */}
+  // Check if pacing guidance is relevant
+  const hasPacingIssue = Boolean(
+    candidateWeaknesses.some((w) => w.fullDiagnosis?.primaryDiagnosis === "Rapid Response Pacing") ||
+    (testAttempts && testAttempts.some((a) => a.isLowEffort))
+  );
 
-      {/* 2. One Row: Greeting + Exam Countdown + Streak + XP */}
-      <section aria-label="Greeting and Countdown">
+  return (
+    <div className="space-y-6">
+      {/* 1. Greeting line plus one-line summary */}
+      <section aria-label="Greeting">
         <WelcomeBanner
           userName={fullName}
-          streak={streak}
-          xp={xp}
         />
       </section>
 
-      {/* Onboarding Checklist for low-attempt users */}
-      {totalAttempted < 150 && (
-        <section aria-label="Onboarding Checklist">
-          <OnboardingChecklist
-            totalAttempted={totalAttempted}
-            attemptsCount={testAttempts?.length || 1}
-          />
-        </section>
+      {/* Single pacing guidance banner if relevant */}
+      {hasPacingIssue && (
+        <div className="p-3 bg-[var(--warning-subtle)] text-[var(--warning)] border border-[var(--warning)]/20 rounded-[8px] text-[14px] leading-[1.5]">
+          Pacing note: Rapid answering under 10 seconds per question leads to avoidable errors. Take time to read each question completely.
+        </div>
       )}
 
-      {/* 3. Next Best Action card moved to top + Prominent Calibration Progress Bar */}
-      <section aria-label="Next Best Action and Calibration Gate">
+      {/* 2. Next action card: topic, one-sentence reason, one primary button ("Practice this topic") */}
+      <section aria-label="Next action">
         <NextBestActionCard
           prioritizedTopic={prioritizedTopic}
           totalAttempted={totalAttempted}
@@ -279,8 +262,8 @@ export default function DashboardClient({
         />
       </section>
 
-      {/* 4. Four Stat Cards: Score, Accuracy, Questions attempted, Study streak */}
-      <section aria-label="Key Performance Indicators">
+      {/* 3. Four stat cards (Latest score, Accuracy, Questions attempted, Streak) */}
+      <section aria-label="Overview statistics">
         <TopMetricsRow
           score={currentScore}
           maxScore={MARKING_SCHEME.MAX_SCORE_PER_SUBJECT}
@@ -291,47 +274,31 @@ export default function DashboardClient({
         />
       </section>
 
-      {/* 5. Combined "Performance" Card + Single Target Dream College Card */}
-      <section aria-label="Performance Intelligence and Target College" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        <div className="lg:col-span-8">
-          <CombinedPerformanceCard
-            calibrations={candidateSubjectCalibrations}
-            weaknesses={candidateWeaknesses}
-            targetScore={238}
-          />
-        </div>
-        <div className="lg:col-span-4">
-          <DreamCollegeCard
-            targetCollege={targetCollege}
-            targetUniversity={targetUniversity}
-            accuracyPercentage={accuracyPercentage}
-            totalAttempts={totalAttempted}
-            currentScore={currentScore}
-          />
-        </div>
+      {/* 4. Performance (trend and by-subject tabs in one card) */}
+      <section aria-label="Performance">
+        <CombinedPerformanceCard
+          calibrations={candidateSubjectCalibrations}
+          weaknesses={candidateWeaknesses}
+          targetScore={238}
+        />
       </section>
 
-      {/* 6. Diagnostic Strengths & Priority Weaknesses with per-row "Practice this" button */}
-      <section aria-label="Strengths and Weaknesses">
+      {/* 5. Topics to fix (top 3, each with a secondary "Practice" button and a "View all" link) */}
+      <section aria-label="Topics to fix">
         <StrengthsWeaknesses
           weaknesses={candidateWeaknesses}
           strengths={candidateStrengths}
         />
       </section>
 
-      {/* 7. Recent Sessions Table (matched evaluator, unambiguous dates, clear score and accuracy) */}
-      <section aria-label="Recent Test Sessions">
+      {/* 6. Recent sessions */}
+      <section aria-label="Recent sessions">
         <RecentEvaluationsTable />
       </section>
 
-      {/* 8. Schedule Mock Form (50%) + Activity Heatmap (50%) Side by Side */}
-      <section aria-label="Schedule Test and Activity Heatmap" className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-        <div>
-          <ScheduleMockTest />
-        </div>
-        <div>
-          <DailyPracticeCalendar />
-        </div>
+      {/* 7. Activity heatmap */}
+      <section aria-label="Activity heatmap">
+        <DailyPracticeCalendar />
       </section>
     </div>
   );

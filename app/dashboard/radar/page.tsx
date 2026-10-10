@@ -12,9 +12,9 @@ import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
 import { StreamType } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Subject Weakness Radar & AI Diagnostic | CUET AI-Prep",
+  title: "Weakness report | CUET AI-Prep",
   description:
-    "AI diagnostic matrix and weak topic radar for CUET UG aspirants. Pinpoint distractor traps, clock-drain calculations, and NCERT-backed micro-topic weaknesses.",
+    "Diagnostic report analyzing topic-level accuracy, recurring mistakes, and targeted practice.",
 };
 
 export const dynamic = "force-dynamic";

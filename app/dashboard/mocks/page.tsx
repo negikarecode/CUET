@@ -7,7 +7,6 @@ import {
   MockTestItem,
 } from "@/lib/data/subjects";
 import {
-  ClipboardCheck,
   ArrowRight,
   ChevronDown,
   Atom,
@@ -37,6 +36,7 @@ import { useTestStore } from "@/lib/store/useTestStore";
 import { getTestAttemptStats } from "@/lib/analytics";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
+import { ScheduleMockTest } from "@/components/dashboard/prep-pulse/ScheduleMockTest";
 
 type SubjectKey =
   | "all"
@@ -412,22 +412,20 @@ export default function MocksPage() {
   }, [selectedStream]);
 
   return (
-    <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-6 sm:space-y-8">
+    <div className="w-full min-w-0 max-w-[1120px] mx-auto space-y-6">
       {/* Page Header */}
-      <div className="space-y-2">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm shadow-blue-500/20 shrink-0">
-            <ClipboardCheck className="w-5 h-5 stroke-[2.2]" />
-          </div>
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Full-Length Mock Tests
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
-              390 full-length CBT papers across 20 domain subjects · Real-time timer · Official NTA pattern (+5 / -1)
-            </p>
-          </div>
-        </div>
+      <div className="space-y-1">
+        <h1 className="text-[28px] font-semibold text-[var(--text)] leading-[1.25]">
+          Mock tests
+        </h1>
+        <p className="text-[14px] text-[var(--text-secondary)] leading-[1.5]">
+          Full-length practice tests across domain subjects with standard CUET scoring (+5 / -1).
+        </p>
+      </div>
+
+      {/* Schedule Mock Section */}
+      <div className="mb-6">
+        <ScheduleMockTest />
       </div>
 
       {/* Stream & Subject Dropdown Controls */}

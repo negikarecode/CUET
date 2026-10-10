@@ -198,11 +198,11 @@ export default function UpgradeButton({
 
   const variantStyles = {
     amber:
-      "bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl shadow-xs hover:shadow active:scale-[0.98]",
+      "bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-[8px] transition-colors",
     primary:
-      "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-xs hover:shadow active:scale-[0.98]",
+      "bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white font-medium rounded-[8px] transition-colors",
     outline:
-      "bg-white hover:bg-slate-50 text-slate-700 font-semibold border border-slate-200 rounded-xl shadow-xs active:scale-[0.98]",
+      "bg-white hover:bg-slate-50 text-[var(--text)] font-medium border border-[var(--border-strong)] rounded-[8px] transition-colors",
   };
 
   return (

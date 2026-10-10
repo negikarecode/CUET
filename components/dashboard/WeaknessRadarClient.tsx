@@ -27,16 +27,11 @@ import {
   Laptop,
   Medal,
   GraduationCap,
-  ChevronDown,
-  ChevronUp,
   AlertTriangle,
   X,
   FileText,
-  Lightbulb,
-  Layers,
   Activity,
   Check,
-  ShieldAlert,
   Lock,
 } from "lucide-react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
@@ -63,7 +58,6 @@ import { CycleHistorySelector } from "@/components/dashboard/CycleHistorySelecto
 import { SubjectRadarAISection } from "@/components/dashboard/SubjectRadarAISection";
 import { DiagnosticCycle } from "@/types/cycle";
 import { SubjectRadarAIAnalysis, SubjectRadarAIPayload } from "@/types/subject-ai";
-import { getSubjectMetadata, getTopicDiagnosticState } from "@/lib/config/dashboardConfig";
 import { deriveTopicRepairPlan, recordRepairEvent, TopicRepairState } from "@/lib/repair-plan";
 import { enrollMissedQuestion, getSpacedRepetitionSummary } from "@/lib/spaced-repetition";
 import { generateWeeklyReportData } from "@/lib/weekly-report-engine";
@@ -311,7 +305,6 @@ export default function WeaknessRadarClient({
   const paramSubject = searchParams.get("subject") || "all";
   const [selectedRadarSubject, setSelectedRadarSubject] = useState<string>(paramSubject);
   const [activeRepairTopic, setActiveRepairTopic] = useState<string | null>(null);
-  const [expandedChapterKey, setExpandedChapterKey] = useState<string | null>(null);
   const [selectedModalDiagnosis, setSelectedModalDiagnosis] = useState<FullTopicDiagnosis | null>(null);
   const [selectedCycleForReport, setSelectedCycleForReport] = useState<DiagnosticCycle | null>(null);
   const [aiAnalysis, setAiAnalysis] = useState<SubjectRadarAIAnalysis | null>(null);
@@ -329,10 +322,6 @@ export default function WeaknessRadarClient({
   // In-flight request controller and fingerprint cache to avoid duplicate/stuck fetches
   const abortControllerRef = React.useRef<AbortController | null>(null);
   const lastFingerprintRef = React.useRef<string>("");
-
-  const toggleChapterExpand = (key: string) => {
-    setExpandedChapterKey((prev) => (prev === key ? null : key));
-  };
 
   useEffect(() => {
     if (paramSubject) {
@@ -891,20 +880,17 @@ export default function WeaknessRadarClient({
           <div className="flex items-center gap-3">
             <Link
               href="/dashboard"
-              className="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all shadow-xs"
+              className="p-2 rounded-[8px] border border-[var(--border)] bg-white hover:bg-slate-50 text-[var(--text-secondary)] transition-colors"
               title="Return to Dashboard"
             >
-              <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
+              <ArrowLeft className="w-4 h-4" strokeWidth={1.75} />
             </Link>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-              <span>Diagnostic &amp; Remediation Engine</span>
-              <span className="px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold">
-                Weakness Radar
-              </span>
+            <h1 className="text-[28px] font-semibold text-[var(--text)] leading-[1.25]">
+              Weakness report
             </h1>
           </div>
-          <p className="text-xs text-slate-500 font-medium pl-10">
-            Root-cause analysis, error taxonomy, exam tactics, and adaptive remediation plans for your CUET domain subjects.
+          <p className="text-[14px] text-[var(--text-secondary)] pl-11">
+            Topic-level accuracy, error patterns, and targeted practice.
           </p>
         </div>
 
@@ -913,10 +899,20 @@ export default function WeaknessRadarClient({
           <button
             type="button"
             onClick={() => setIsDoubtDrawerOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 font-semibold text-xs shadow-xs transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 h-10 px-3 rounded-[8px] bg-white hover:bg-slate-50 text-[var(--text)] border border-[var(--border-strong)] text-[14px] font-medium transition-colors cursor-pointer"
           >
-            <Brain className="w-4 h-4 text-purple-600" />
-            <span>Ask Doubt Solver</span>
+            <Brain className="w-4 h-4 text-[var(--text-muted)]" strokeWidth={1.75} />
+            <span>Ask doubt solver</span>
+          </button>
+
+          {/* Weekly Report CTA */}
+          <button
+            type="button"
+            onClick={() => setIsWeeklyReportOpen(true)}
+            className="inline-flex items-center gap-1.5 h-10 px-3 rounded-[8px] bg-white hover:bg-slate-50 text-[var(--text)] border border-[var(--border-strong)] text-[14px] font-medium transition-colors cursor-pointer"
+          >
+            <Activity className="w-4 h-4 text-[var(--text-muted)]" strokeWidth={1.75} />
+            <span>Weekly report</span>
           </button>
 
           {/* Weekly Report CTA */}
@@ -1335,83 +1331,38 @@ export default function WeaknessRadarClient({
       {/* 3. REAL DIAGNOSTIC SUMMARY DASHBOARD REPORT (SECTIONS 18 & 25) */}
       <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-7 shadow-sm space-y-5">
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center">
-              <Activity className="w-4 h-4" />
-            </div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
-              YOUR CURRENT DIAGNOSTIC SUMMARY
+          <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+            <h2 className="text-[20px] font-semibold text-[var(--text)] leading-[1.25]">
+              Diagnostic summary
             </h2>
-          </div>
-          <span className="text-[11px] font-semibold text-slate-500 font-mono">
-            {totalAttempted} Questions Analyzed Across {completedTestsCount} Mock{completedTestsCount === 1 ? "" : "s"}
-          </span>
-        </div>
-
-        {/* 4 Metric Summary Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-1">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Overall Accuracy</span>
-            <p className="text-2xl font-bold text-slate-900 font-mono">{summaryReport.overallAccuracy}%</p>
-            <p className="text-[11px] text-slate-500 font-medium">{totalAttempted} Total Attempts</p>
-          </div>
-
-          <div
-            className={`p-4 rounded-2xl space-y-1 ${
-              summaryReport.strongestArea
-                ? "bg-emerald-50/60 border border-emerald-100"
-                : "bg-slate-50 border border-slate-200/70"
-            }`}
-          >
-            <span
-              className={`text-[10px] font-bold uppercase tracking-wider ${
-                summaryReport.strongestArea ? "text-emerald-700" : "text-slate-500"
-              }`}
-            >
-              Strongest Domain
+            <span className="text-[14px] text-[var(--text-muted)] tabular-nums">
+              {totalAttempted} questions analyzed
             </span>
-            <p
-              className="text-sm font-bold text-slate-900 break-words line-clamp-2"
-              title={summaryReport.strongestArea ? summaryReport.strongestArea.topic : "Pending Calibration"}
-            >
-              {summaryReport.strongestArea ? summaryReport.strongestArea.topic : "Pending Calibration"}
-            </p>
-            <p
-              className={`text-[11px] font-medium ${
-                summaryReport.strongestArea ? "text-emerald-800/80" : "text-slate-500"
-              }`}
-            >
-              {summaryReport.strongestArea ? `${summaryReport.strongestArea.accuracy}% accuracy` : "Requires ≥5 attempts in topic"}
-            </p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 space-y-1">
-            <span className="text-[10px] font-bold text-rose-700 uppercase tracking-wider">Primary Weakness</span>
-            <p
-              className="text-sm font-bold text-slate-900 break-words line-clamp-2"
-              title={summaryReport.biggestWeakness ? summaryReport.biggestWeakness.topic : "None Detected"}
-            >
-              {summaryReport.biggestWeakness ? summaryReport.biggestWeakness.topic : "None Detected"}
-            </p>
-            <p className="text-[11px] text-rose-800/80 font-medium">
-              {summaryReport.biggestWeakness ? `${summaryReport.biggestWeakness.accuracy}% accuracy` : "Maintain practice pace"}
-            </p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-100 space-y-1">
-            <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wider">
-              {summaryReport.pacingLabel || "Response Pattern"}
-            </span>
-            <p className="text-xs font-bold text-slate-900 line-clamp-2">{summaryReport.pacingIssue}</p>
           </div>
         </div>
 
-        {/* Priority Action Highlight */}
-        <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200/70 text-xs flex items-start gap-3">
-          <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-          <div className="space-y-0.5">
-            <span className="font-bold text-amber-900 uppercase tracking-wider text-[11px]">Priority Action Before Next Mock:</span>
-            <p className="text-slate-700 font-medium">{summaryReport.priorityAction}</p>
+        {/* Summary Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="app-card space-y-1">
+            <span className="text-[14px] font-medium text-[var(--text-secondary)]">Accuracy</span>
+            <p className="text-[28px] font-semibold text-[var(--text)] tabular-nums">{summaryReport.overallAccuracy}%</p>
+            <p className="text-[12px] text-[var(--text-muted)]">Across all practice questions</p>
+          </div>
+
+          <div className="app-card space-y-1">
+            <span className="text-[14px] font-medium text-[var(--text-secondary)]">Questions analyzed</span>
+            <p className="text-[28px] font-semibold text-[var(--text)] tabular-nums">{totalAttempted}</p>
+            <p className="text-[12px] text-[var(--text-muted)]">Valid test attempts</p>
+          </div>
+
+          <div className="app-card space-y-1">
+            <span className="text-[14px] font-medium text-[var(--text-secondary)]">Main issue</span>
+            <p className="text-[16px] font-semibold text-[var(--text)] truncate mt-1">
+              {summaryReport.biggestWeakness?.topic || "None detected"}
+            </p>
+            <p className="text-[12px] text-[var(--text-muted)]">
+              {summaryReport.biggestWeakness ? `${summaryReport.biggestWeakness.accuracy}% accuracy` : "No critical weaknesses"}
+            </p>
           </div>
         </div>
       </div>
@@ -1508,351 +1459,195 @@ export default function WeaknessRadarClient({
         }}
       />
 
-      {/* 5. DIAGNOSTIC WEAKNESS CARDS */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <span>Diagnosed Weak Areas</span>
-            <span className="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-semibold font-mono">
-              {weaknessRadar.length} Topic{weaknessRadar.length === 1 ? "" : "s"}
-            </span>
-          </h2>
+      {/* 5. Topics Table */}
+      <div className="app-card space-y-4">
+        <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+          <div>
+            <h2 className="text-[20px] font-semibold text-[var(--text)] leading-[1.25]">
+              Topics to fix
+            </h2>
+            <p className="text-[14px] text-[var(--text-secondary)] mt-0.5">
+              Review topic accuracy, error patterns, and practice weak concepts.
+            </p>
+          </div>
+          <span className="text-[14px] text-[var(--text-muted)] tabular-nums">
+            {weaknessRadar.length} {weaknessRadar.length === 1 ? "topic" : "topics"}
+          </span>
         </div>
 
         {weaknessRadar.length === 0 ? (
-          <div className="p-8 rounded-3xl border border-slate-100 bg-white shadow-sm text-center space-y-3">
-            <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto stroke-[2.5]" />
-            <div className="space-y-1">
-              <p className="text-base font-bold text-slate-900">No Critical Weaknesses Detected</p>
-              <p className="text-xs text-slate-500 font-medium max-w-md mx-auto">
-                Your performance across tested questions is solid. Continue solving full CBT mocks to unlock deeper micro-topic analysis as sample size grows.
-              </p>
-            </div>
+          <div className="py-12 text-center space-y-3">
+            <p className="text-[14px] text-[var(--text-secondary)]">
+              No weak topics detected. Take more mock tests to calibrate your diagnosis.
+            </p>
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center justify-center h-10 px-4 rounded-[8px] bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-[14px] font-medium transition-colors"
             >
-              <span>Attempt Full Practice Mock</span>
+              Take a mock test
             </Link>
           </div>
         ) : (
-          weaknessRadar.map((topicItem) => {
-            const diag = getOrGenerateDiagnosis(topicItem);
-            const isExpanded = expandedChapterKey === topicItem.chapter;
-            const isRepairing = activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter);
+          <div className="overflow-x-auto">
+            {/* Desktop Table */}
+            <table className="hidden sm:table w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-[var(--border)] text-[12px] font-medium text-[var(--text-muted)]">
+                  <th className="py-3 pr-4 font-medium">Topic</th>
+                  <th className="py-3 px-4 font-medium">Subject</th>
+                  <th className="py-3 px-4 font-medium text-right">Accuracy</th>
+                  <th className="py-3 px-4 font-medium text-right">Questions</th>
+                  <th className="py-3 px-4 font-medium">Status</th>
+                  <th className="py-3 pl-4 font-medium text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {weaknessRadar.map((topicItem) => {
+                  const diag = getOrGenerateDiagnosis(topicItem);
+                  const isRepairing = activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter);
+                  const accuracy = diag.observedPerformance.accuracyPercentage;
+                  const attempts = diag.observedPerformance.attemptsCount;
+                  const isLowConf = attempts < 10;
 
-            return (
-              <div
-                key={topicItem.chapter}
-                className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden transition-all hover:shadow-md"
-              >
-                {/* Topic Card Header */}
-                <div className="p-5 sm:p-6 border-b border-slate-100 space-y-3.5">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <div className="space-y-1.5">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-slate-900 text-base sm:text-lg tracking-tight">
+                  return (
+                    <tr
+                      key={topicItem.chapter}
+                      className="h-12 border-b border-[var(--border)] text-[14px] hover:bg-slate-50/50 transition-colors"
+                    >
+                      <td className="py-3 pr-4 font-medium text-[var(--text)]">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedModalDiagnosis(diag)}
+                          className="hover:text-[var(--accent)] text-left hover:underline cursor-pointer"
+                        >
                           {diag.chapter}
-                        </span>
-                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700">
-                          {diag.subject}
-                        </span>
-
-                        {/* Canonical Diagnostic State Badge (Phase 1 Item 6) */}
-                        {(() => {
-                          const topicState = getTopicDiagnosticState(topicItem);
-                          const badgeColorClass =
-                            topicState.color === "red"
-                              ? "bg-rose-50 text-rose-700 border-rose-200"
-                              : topicState.color === "amber"
-                              ? "bg-amber-50 text-amber-700 border-amber-200"
-                              : topicState.color === "green"
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                              : "bg-slate-100 text-slate-700 border-slate-200";
-
-                          return (
-                            <span
-                              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${badgeColorClass}`}
-                            >
-                              {topicState.badgeLabel} ({diag.observedPerformance.accuracyPercentage}%)
-                            </span>
-                          );
-                        })()}
-
-                        {/* Pipeline Stage Badge */}
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-700 border border-slate-200">
-                          {diag.remediationStage || topicItem.remediationStage || "DETECTED"}
-                        </span>
-
-                        {/* Problem Type: Classification Badge */}
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-50 text-slate-700 border border-slate-200/80">
-                          {renderProblemClassificationBadge(diag.problemClassification)}
-                        </span>
-                      </div>
-
-                      {/* Primary Diagnosis & Contributing Factor */}
-                      <div className="flex items-center gap-2 flex-wrap text-xs pt-0.5">
-                        <div className="px-2.5 py-1 rounded-xl bg-rose-50 border border-rose-100 font-bold text-slate-800 text-[11px] flex items-center gap-1.5">
-                          <span className="text-[10px] text-rose-600 uppercase tracking-wider">PRIMARY PATTERN:</span>
-                          <span>{diag.primaryDiagnosis}</span>
-                        </div>
-                        {diag.contributingFactor && (
-                          <div className="px-2.5 py-1 rounded-xl bg-slate-50 border border-slate-200/60 font-medium text-slate-700 text-[11px] flex items-center gap-1.5">
-                            <span className="text-[10px] text-slate-500 uppercase tracking-wider">CONTRIBUTING PATTERN:</span>
-                            <span>{diag.contributingFactor}</span>
-                          </div>
+                        </button>
+                      </td>
+                      <td className="py-3 px-4 text-[var(--text-secondary)]">
+                        {diag.subject}
+                      </td>
+                      <td className="py-3 px-4 text-right tabular-nums text-[var(--text)] font-medium">
+                        {accuracy}%
+                      </td>
+                      <td className="py-3 px-4 text-right tabular-nums text-[var(--text-secondary)]">
+                        {attempts}
+                      </td>
+                      <td className="py-3 px-4">
+                        {accuracy < 50 ? (
+                          <span className="text-[12px] font-medium text-[var(--danger)] bg-[var(--danger-subtle)] px-2 py-0.5 rounded-[8px]">
+                            Needs work
+                          </span>
+                        ) : isLowConf ? (
+                          <span className="text-[12px] font-medium text-[var(--warning)] bg-[var(--warning-subtle)] px-2 py-0.5 rounded-[8px]">
+                            Low confidence
+                          </span>
+                        ) : (
+                          <span className="text-[12px] font-medium text-[var(--success)] bg-[var(--success-subtle)] px-2 py-0.5 rounded-[8px]">
+                            Recovered
+                          </span>
                         )}
+                      </td>
+                      <td className="py-3 pl-4 text-right whitespace-nowrap space-x-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedModalDiagnosis(diag)}
+                          className="text-[14px] font-medium text-[var(--text-secondary)] hover:text-[var(--text)] hover:underline cursor-pointer"
+                        >
+                          Details
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isRepairing}
+                          onClick={() =>
+                            handleLaunchTargetedPractice(
+                              topicItem.troubleTopics?.[0] || topicItem.chapter,
+                              topicItem.subject,
+                              diag.recommendedPracticeType
+                            )
+                          }
+                          className="inline-flex items-center justify-center h-8 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white hover:bg-slate-50 text-[12px] font-medium text-[var(--text)] transition-colors cursor-pointer disabled:opacity-50"
+                        >
+                          {isRepairing ? "Building..." : "Practice"}
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            {/* Mobile Collapsed Cards (<640px) */}
+            <div className="sm:hidden space-y-3">
+              {weaknessRadar.map((topicItem) => {
+                const diag = getOrGenerateDiagnosis(topicItem);
+                const isRepairing = activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter);
+                const accuracy = diag.observedPerformance.accuracyPercentage;
+                const attempts = diag.observedPerformance.attemptsCount;
+                const isLowConf = attempts < 10;
+
+                return (
+                  <div
+                    key={`mob-${topicItem.chapter}`}
+                    className="p-3 rounded-[8px] border border-[var(--border)] space-y-2"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h3
+                          onClick={() => setSelectedModalDiagnosis(diag)}
+                          className="text-[14px] font-semibold text-[var(--text)] cursor-pointer hover:underline"
+                        >
+                          {diag.chapter}
+                        </h3>
+                        <p className="text-[12px] text-[var(--text-muted)]">
+                          {diag.subject} • {attempts} questions
+                        </p>
                       </div>
-
-                      <p className="text-xs text-slate-500 font-medium">
-                        Evidence: {diag.observedPerformance.attemptsCount} attempted · {diag.observedPerformance.incorrectCount} incorrect · Avg Response: {diag.observedPerformance.avgTimeSeconds}s ({getSubjectMetadata(diag.subject).expectedPaceText})
-                      </p>
-                    </div>
-
-                    {/* CTAs */}
-                    <div className="flex items-center gap-2 shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedModalDiagnosis(diag)}
-                        className="px-3.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs hover:shadow transition-all cursor-pointer flex items-center gap-1.5"
-                      >
-                        <FileText className="w-3.5 h-3.5" />
-                        <span>View Full Diagnosis</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        disabled={isRepairing}
-                        onClick={() =>
-                          handleLaunchTargetedPractice(
-                            topicItem.troubleTopics?.[0] || topicItem.chapter,
-                            topicItem.subject,
-                            diag.recommendedPracticeType
-                          )
-                        }
-                        className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
-                      >
-                        <Play className="w-3 h-3 fill-white" />
-                        <span>{isRepairing ? "Building Drill..." : diag.observedPerformance.attemptsCount < 5 ? "Practice 5 Questions" : "Start Repair Plan"}</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => toggleChapterExpand(topicItem.chapter)}
-                        className="p-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer"
-                        aria-label={isExpanded ? "Collapse card" : "Expand card"}
-                      >
-                        {isExpanded ? <ChevronUp className="w-4 h-4 stroke-[2.5]" /> : <ChevronDown className="w-4 h-4 stroke-[2.5]" />}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Primary Issue Summary */}
-                  <div className="p-3.5 rounded-2xl bg-rose-50/60 border border-rose-100 text-xs space-y-1">
-                    <span className="font-bold text-rose-600 uppercase tracking-wider text-[10px] block">
-                      PRIMARY DIAGNOSED ISSUE:
-                    </span>
-                    <p className="text-slate-700 font-medium">{diag.specificWeakness}</p>
-                  </div>
-                </div>
-
-                {/* Collapsible / Expandable Details */}
-                {isExpanded && (
-                  <div className="p-5 sm:p-6 bg-white space-y-5">
-                    {/* SECTION: EVIDENCE BEHIND THIS DIAGNOSIS */}
-                    <div className="p-4.5 rounded-2xl border border-slate-200/60 bg-slate-50 space-y-2">
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
-                        <span>WHY WE THINK THIS (EVIDENCE BEHIND THIS DIAGNOSIS)</span>
-                      </span>
-                      <ul className="list-disc pl-5 space-y-1 text-xs text-slate-600 font-medium">
-                        {diag.evidenceList.map((ev, i) => (
-                          <li key={i}>{ev}</li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* SECTION: WHY YOU'RE LOSING MARKS (SECTION 7) */}
-                    <div className="space-y-2.5">
-                      <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                        <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
-                        <span>WHY YOU&apos;RE LOSING MARKS (ERROR TAXONOMY)</span>
-                      </h3>
-
-                      {diag.errorTaxonomy.percentages ? (
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                          {Object.entries(diag.errorTaxonomy.percentages)
-                            .filter(([_, pct]) => pct > 0)
-                            .map(([cat, pct]) => (
-                              <div key={cat} className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 text-center space-y-0.5">
-                                <span className="text-[10px] font-medium text-slate-500 block truncate">{cat}</span>
-                                <span className="text-base font-bold text-slate-900 font-mono">{pct}%</span>
-                              </div>
-                            ))}
-                        </div>
+                      {accuracy < 50 ? (
+                        <span className="text-[12px] font-medium text-[var(--danger)] bg-[var(--danger-subtle)] px-2 py-0.5 rounded-[8px]">
+                          Needs work
+                        </span>
+                      ) : isLowConf ? (
+                        <span className="text-[12px] font-medium text-[var(--warning)] bg-[var(--warning-subtle)] px-2 py-0.5 rounded-[8px]">
+                          Low confidence
+                        </span>
                       ) : (
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60 text-xs space-y-1.5">
-                          <span className="font-semibold text-slate-700 block">Error Distribution (Counts from {diag.errorTaxonomy.totalErrors} total errors):</span>
-                          <div className="flex flex-wrap gap-2 pt-1">
-                            {diag.errorTaxonomy.conceptualGapCount > 0 && (
-                              <span className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700">
-                                Conceptual: {diag.errorTaxonomy.conceptualGapCount} error{diag.errorTaxonomy.conceptualGapCount > 1 ? "s" : ""}
-                              </span>
-                            )}
-                            {diag.errorTaxonomy.applicationGapCount > 0 && (
-                              <span className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700">
-                                Application: {diag.errorTaxonomy.applicationGapCount} error{diag.errorTaxonomy.applicationGapCount > 1 ? "s" : ""}
-                              </span>
-                            )}
-                            {diag.errorTaxonomy.calculationCount > 0 && (
-                              <span className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700">
-                                Calculation: {diag.errorTaxonomy.calculationCount} error{diag.errorTaxonomy.calculationCount > 1 ? "s" : ""}
-                              </span>
-                            )}
-                            {diag.errorTaxonomy.distractorTrapCount > 0 && (
-                              <span className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700">
-                                Distractor Trap: {diag.errorTaxonomy.distractorTrapCount} error{diag.errorTaxonomy.distractorTrapCount > 1 ? "s" : ""}
-                              </span>
-                            )}
-                            {diag.errorTaxonomy.questionInterpretationCount > 0 && (
-                              <span className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700">
-                                Interpretation: {diag.errorTaxonomy.questionInterpretationCount} error{diag.errorTaxonomy.questionInterpretationCount > 1 ? "s" : ""}
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                        <span className="text-[12px] font-medium text-[var(--success)] bg-[var(--success-subtle)] px-2 py-0.5 rounded-[8px]">
+                          Recovered
+                        </span>
                       )}
                     </div>
 
-                    {/* SECTION: YOUR MISTAKES (REPRESENTATIVE ATTEMPT LOGS) */}
-                    {topicItem.recordedMistakes && topicItem.recordedMistakes.length > 0 && (
-                      <div className="space-y-2.5">
-                        <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                          <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
-                          <span>YOUR MISTAKES ({topicItem.recordedMistakes.length} RECORDED)</span>
-                        </h3>
-                        <div className="space-y-2">
-                          {topicItem.recordedMistakes.slice(0, 3).map((m, idx) => (
-                            <RenderMistakeItem
-                              key={idx}
-                              mistake={m}
-                              idx={idx}
-                              onWhyWrong={(item) =>
-                                setSelectedMistakeForExplanation({
-                                  questionId: item.questionId || `q_${idx + 1}`,
-                                  prompt: item.prompt,
-                                  options: item.options || [],
-                                  selectedOption: item.userAnswer,
-                                  correctOption: item.correctAnswer,
-                                  subject: diag.subject,
-                                  chapter: diag.chapter,
-                                  explanation: item.explanation,
-                                  source: item.source,
-                                  reviewed_by_human: item.reviewed_by_human,
-                                  timeSpentSeconds: item.timeSpentSeconds,
-                                })
-                              }
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* SECTION: EXACT SUBTOPICS (SECTION 8) */}
-                    <div className="space-y-2.5">
-                      <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                        <Layers className="w-3.5 h-3.5 text-blue-600" />
-                        <span>WEAK SUBTOPICS BREAKDOWN</span>
-                      </h3>
-
-                      <div className="space-y-2">
-                        {diag.weakSubtopics.map((sub, idx) => (
-                          <div key={idx} className="p-3 rounded-xl border border-slate-200/60 bg-slate-50 flex items-center justify-between text-xs gap-3">
-                            <div className="min-w-0 flex-1">
-                              <span className="font-semibold text-slate-900 block truncate">{sub.name}</span>
-                              <span className="text-[11px] text-slate-500 font-medium">{sub.errorPattern}</span>
-                            </div>
-
-                            <div className="flex items-center gap-2.5 shrink-0 font-mono">
-                              <span
-                                className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                                  sub.status === "Critical"
-                                    ? "bg-rose-50 text-rose-700 border border-rose-200"
-                                    : sub.status === "Moderate"
-                                    ? "bg-amber-50 text-amber-700 border border-amber-200"
-                                    : "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                }`}
-                              >
-                                {sub.status}
-                              </span>
-                              <span className="font-bold text-slate-900 text-xs">{sub.accuracyPercentage}%</span>
-                            </div>
-                          </div>
-                        ))}
+                    <div className="flex items-center justify-between pt-2 border-t border-[var(--border)] text-[14px]">
+                      <span className="tabular-nums text-[var(--text-secondary)]">Accuracy: {accuracy}%</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedModalDiagnosis(diag)}
+                          className="text-[12px] text-[var(--text-secondary)] hover:underline"
+                        >
+                          Details
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isRepairing}
+                          onClick={() =>
+                            handleLaunchTargetedPractice(
+                              topicItem.troubleTopics?.[0] || topicItem.chapter,
+                              topicItem.subject,
+                              diag.recommendedPracticeType
+                            )
+                          }
+                          className="h-8 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white text-[12px] font-medium text-[var(--text)]"
+                        >
+                          {isRepairing ? "..." : "Practice"}
+                        </button>
                       </div>
                     </div>
-
-                    {/* SECTION: HOW TO FIX THIS (SECTION 9) */}
-                    <div className="p-5 rounded-2xl border border-slate-200/60 bg-slate-50 space-y-3">
-                      <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                        <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
-                        <span>HOW TO FIX THIS</span>
-                      </h3>
-
-                      <div className="space-y-2.5 text-xs">
-                        <div className="space-y-1">
-                          <span className="font-bold text-slate-900 uppercase text-[10px] block">{diag.remediationPlan.step1Rebuild.title}:</span>
-                          <ul className="list-disc pl-4 space-y-0.5 text-slate-600 font-medium">
-                            {diag.remediationPlan.step1Rebuild.topicsToReview.map((t, i) => {
-                              const isHeader = t.startsWith("FOCUS FIRST:") || t.startsWith("THEN SECONDARY:");
-                              return isHeader ? (
-                                <li key={i} className="list-none font-bold text-slate-900 pt-1.5 -ml-4 tracking-wider text-[10px] uppercase">
-                                  {t}
-                                </li>
-                              ) : (
-                                <li key={i}>{t}</li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-
-                        <div className="space-y-1">
-                          <span className="font-bold text-slate-900 uppercase text-[10px] block">{diag.remediationPlan.step2DecisionFramework.title}:</span>
-                          <ol className="list-decimal pl-4 space-y-0.5 text-slate-600 font-medium">
-                            {diag.remediationPlan.step2DecisionFramework.checklist.map((c, i) => (
-                              <li key={i}>{c.replace(/^\d+[\.\)]\s*/, "").replace(/^Step\s*\d+:\s*/i, "")}</li>
-                            ))}
-                          </ol>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* EXAM TACTIC & TRAP (SECTIONS 10 & 11) */}
-                    {diag.examTactic && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs">
-                        <div className="p-4 rounded-2xl border border-blue-100 bg-blue-50/60 space-y-1.5">
-                          <span className="font-bold text-blue-700 uppercase text-[10px] block flex items-center gap-1.5">
-                            <Zap className="w-3.5 h-3.5 fill-blue-700" />
-                            EXAM TACTIC / SHORTCUT
-                          </span>
-                          <p className="font-semibold text-slate-900">QUICK METHOD: {diag.examTactic.quickMethod}</p>
-                          <p className="text-[11px] text-rose-600 font-medium">CAUTION: {diag.examTactic.caution}</p>
-                        </div>
-
-                        <div className="p-4 rounded-2xl border border-rose-100 bg-rose-50/60 space-y-1.5">
-                          <span className="font-bold text-rose-700 uppercase text-[10px] block flex items-center gap-1.5">
-                            <AlertTriangle className="w-3.5 h-3.5 fill-rose-700" />
-                            COMMON EXAM TRAP
-                          </span>
-                          <p className="font-medium text-slate-700 leading-relaxed">{diag.commonTrap}</p>
-                        </div>
-                      </div>
-                    )}
                   </div>
-                )}
-              </div>
-            );
-          })
+                );
+              })}
+            </div>
+          </div>
         )}
       </div>
 
