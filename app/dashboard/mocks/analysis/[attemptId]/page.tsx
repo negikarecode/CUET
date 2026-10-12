@@ -19,6 +19,12 @@ export default function MockAnalysisPage() {
 
   const attemptId = String(params?.attemptId || "");
 
+  React.useEffect(() => {
+    if (attemptId.toLowerCase().includes("pyq")) {
+      router.replace(`/dashboard/pyqs/analysis/${attemptId}`);
+    }
+  }, [attemptId, router]);
+
   // Find attempt matching either attempt.id or attempt.testId
   const matchingAttempt = useMemo(() => {
     if (!testAttempts || testAttempts.length === 0) return null;

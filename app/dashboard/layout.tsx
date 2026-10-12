@@ -7,7 +7,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Allow candidates and visitors to explore all 411 PYQs and mocks seamlessly
+  // Allow candidates and visitors to explore official PYQs and mocks seamlessly
 
   return (
     <div className="min-h-screen w-full max-w-full bg-[var(--bg)]">

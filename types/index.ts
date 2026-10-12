@@ -65,6 +65,15 @@ export type ContentConfidenceStatus =
   | "approved"
   | "deprecated";
 
+export type AnswerSource = "nta_official_key" | "response_sheet" | "ai_solved";
+
+export type AnswerStatus =
+  | "verified"
+  | "conflict"
+  | "solved_unverified"
+  | "flag_for_review"
+  | "dropped";
+
 export interface Question {
   id: string;
   questionId?: string;
@@ -97,6 +106,19 @@ export interface Question {
   pyqSource?: string;
   topic: string;
   chapter?: string;
+  answer_source?: AnswerSource | null;
+  answer_status?: AnswerStatus | null;
+  official_answer?: string | null;
+  solved_answer?: string | null;
+  confidence?: "high" | "medium" | "low" | null;
+  answer_note?: string | null;
+  ncert_reference?: {
+    textbook?: string;
+    chapter?: string;
+    page_range?: string;
+    concept?: string;
+  } | null;
+  wrong_option_analysis?: Record<string, string> | null;
 }
 
 export interface UserAnswer {

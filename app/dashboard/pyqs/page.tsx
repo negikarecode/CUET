@@ -35,6 +35,8 @@ import {
   Sprout,
   Footprints,
   ChevronDown,
+  AlertTriangle,
+  BarChart2,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { getTestAttemptStats } from "@/lib/analytics";
@@ -95,7 +97,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "science",
     name: "Science Stream",
     shortName: "Science",
-    badge: "7 Domains • 150 Official Papers Live",
+    badge: "4 Core Domains • 90 Official Papers Live",
     accentBg: "#E0F2FE",
     accentText: "#0369A1",
     subjects: [
@@ -103,16 +105,13 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
       "chemistry",
       "mathematics",
       "biology",
-      "computer-science",
-      "agriculture",
-      "environmental-studies",
     ],
   },
   commerce: {
     key: "commerce",
     name: "Commerce Stream",
     shortName: "Commerce",
-    badge: "4 Domains • 81 Official Papers Live",
+    badge: "4 Core Domains • 81 Official Papers Live",
     accentBg: "#FEF3C7",
     accentText: "#D97706",
     subjects: [
@@ -126,7 +125,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     key: "humanities",
     name: "Humanities & Arts",
     shortName: "Humanities",
-    badge: "10 Domains • 150 Official Papers Live",
+    badge: "5 Core Domains • 55 Official Papers Live",
     accentBg: "#FCE7F3",
     accentText: "#BE185D",
     subjects: [
@@ -135,11 +134,6 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
       "geography",
       "psychology",
       "sociology",
-      "physical-education",
-      "home-science",
-      "mass-media",
-      "fine-arts",
-      "anthropology",
     ],
   },
   common: {
@@ -165,12 +159,13 @@ function makeSubjectMeta(
   icon: React.ComponentType<{ className?: string }>
 ): SubjectMeta {
   const tests = getPYQTestsForSubject(key);
-  const count = tests.length || 5;
+  const count = tests.length;
+  const isLive = count > 0;
   return {
     key,
     name,
     code,
-    isLive: true,
+    isLive,
     paperCount: count,
     totalQuestions: count * 50,
     durationMinutes,
@@ -268,14 +263,15 @@ export default function PYQsPage() {
       {/* Header Section */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-semibold bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full border border-emerald-200/60">
-              110 Official Papers Live
+            <span className="text-[11px] font-semibold bg-amber-50 text-amber-800 px-3 py-1 rounded-full border border-amber-200/80 flex items-center gap-1.5">
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+              <span>251 Official Papers (Answers Under Verification)</span>
             </span>
             <span className="text-[11px] font-semibold bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-200/60">
-              All 22 Subjects Live
+              14 Core Subjects
             </span>
             <span className="text-[11px] font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full border border-slate-200">
-              5,500 Questions
+              12,550 Shift Questions
             </span>
             <span className="text-[11px] font-semibold bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full border border-indigo-200/60">
               Official NTA Pattern (+5 / -1)
@@ -288,8 +284,28 @@ export default function PYQsPage() {
             Previous Year Questions (PYQs)
           </h1>
           <p className="text-slate-500 font-medium text-sm md:text-base max-w-3xl">
-            Practice authentic official NTA CUET UG CBT examination papers (2024, 2023, 2022) with verified solutions, continuous timer & AI diagnostics.
+            Official NTA CUET UG CBT past shift papers. Questions are extracted verbatim from official candidate response sheets.
           </p>
+        </div>
+
+        {/* Phase A Verification Notice Banner */}
+        <div className="bg-amber-50/90 border border-amber-200/90 rounded-3xl p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center gap-4 text-amber-900">
+          <div className="w-10 h-10 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0 text-amber-700">
+            <AlertTriangle className="w-5 h-5 stroke-[2.2]" />
+          </div>
+          <div className="space-y-0.5 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="font-bold text-sm sm:text-base text-amber-950">
+                Official NTA Past-Year Papers • Answers Under Verification
+              </h3>
+              <span className="text-[10px] font-bold bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded-full border border-amber-300">
+                Status: 251 Papers Unverified
+              </span>
+            </div>
+            <p className="text-xs text-amber-800 leading-relaxed font-medium">
+              All 251 past papers below contain verbatim questions extracted from official NTA CUET CBT shift response sheets. Solutions and explanations are currently undergoing line-by-line academic verification against official NTA answer keys. Mock duplicates have been quarantined from this section.
+            </p>
+          </div>
         </div>
 
         {/* Stream & Subject Dropdown Controls */}
@@ -306,10 +322,10 @@ export default function PYQsPage() {
                   onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
                   className="w-full bg-slate-50 hover:bg-slate-100/70 text-slate-800 font-semibold text-sm px-4 py-3 rounded-2xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-10 transition-all"
                 >
-                  <option value="all">All Streams (22 Subjects • 411 Papers Live)</option>
-                  <option value="science">Science Stream (7 Subjects • 150 Papers Live)</option>
+                  <option value="all">All Streams (14 Core Subjects • 251 Official Papers Live)</option>
+                  <option value="science">Science Stream (4 Subjects • 90 Papers Live)</option>
                   <option value="commerce">Commerce Stream (4 Subjects • 81 Papers Live)</option>
-                  <option value="humanities">Humanities & Arts (10 Subjects • 150 Papers Live)</option>
+                  <option value="humanities">Humanities & Arts (5 Subjects • 55 Papers Live)</option>
                   <option value="common">Common & Languages (2 Subjects • 50 Papers Live)</option>
                 </select>
                 <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -329,7 +345,7 @@ export default function PYQsPage() {
                 >
                   <option value="all">
                     {selectedStream === "all"
-                      ? "All 22 Subjects (411 Papers Live)"
+                      ? "All 14 Core Subjects (251 Papers Live)"
                       : `All Subjects in ${STREAM_CONFIGS[selectedStream].name} (${STREAM_CONFIGS[selectedStream].subjects.length} Subjects)`}
                   </option>
                   {selectedStream === "all" ? (
@@ -472,9 +488,15 @@ export default function PYQsPage() {
                       <span className="text-[11px] font-bold uppercase text-slate-400 tracking-wider">
                         {test.subjectName} • Code {test.code}
                       </span>
-                      <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
-                        {test.year} Official
-                      </span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
+                          {test.year} Official NTA
+                        </span>
+                        <span className="text-[10px] font-semibold bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200/60 flex items-center gap-1">
+                          <AlertTriangle className="w-2.5 h-2.5 text-amber-600" />
+                          <span>Under Verification</span>
+                        </span>
+                      </div>
                     </div>
 
                     <div>
@@ -537,10 +559,11 @@ export default function PYQsPage() {
                           <span>{t("reattemptTest", "Re-attempt")}</span>
                         </Link>
                         <Link
-                          href={`/test/${test.id}`}
-                          className="px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all"
+                          href={`/dashboard/pyqs/analysis/${best?.id || test.id}`}
+                          className="px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all flex items-center gap-1"
                         >
-                          {t("scorecardTitle", "Result")}
+                          <BarChart2 className="w-3.5 h-3.5 text-blue-600" />
+                          <span>{t("scorecardTitle", "Result & Analysis")}</span>
                         </Link>
                       </div>
                     ) : (

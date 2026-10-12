@@ -19,17 +19,7 @@ PYQ_DIR = os.path.join(BASE_DIR, "pyq")
 MOCK_DIR = os.path.join(BASE_DIR, "mock")
 DB_PATH = os.path.join(BASE_DIR, "data", "cuet_pyq_master.db")
 
-MOCK_SUBJECTS = [
-    {"folder": "computer_science", "code": "308", "name": "Computer Science / IP", "prefix": "CS", "duration": 60},
-    {"folder": "physical_education", "code": "321", "name": "Physical Education", "prefix": "PED", "duration": 45},
-    {"folder": "agriculture", "code": "302", "name": "Agriculture", "prefix": "AGR", "duration": 45},
-    {"folder": "environmental_studies", "code": "307", "name": "Environmental Studies", "prefix": "EVS", "duration": 45},
-    {"folder": "fine_arts", "code": "311", "name": "Fine Arts / Visual Arts", "prefix": "FA", "duration": 45},
-    {"folder": "home_science", "code": "315", "name": "Home Science", "prefix": "HSC", "duration": 45},
-    {"folder": "mass_media", "code": "318", "name": "Mass Media & Communication", "prefix": "MMC", "duration": 45},
-    {"folder": "anthropology", "code": "303", "name": "Anthropology", "prefix": "ANT", "duration": 45},
-]
-
+# 14 Core Subjects with authentic NTA shift documents in DB/cuet_ug_pyqs
 DB_SUBJECTS = [
     {"id": "accountancy", "folder": "accountancy", "code": "301", "name": "Accountancy", "prefix": "ACC", "duration": 60},
     {"id": "biology", "folder": "bio", "code": "304", "name": "Biology", "prefix": "BIO", "duration": 45},
@@ -47,269 +37,51 @@ DB_SUBJECTS = [
     {"id": "sociology", "folder": "sociology", "code": "325", "name": "Sociology", "prefix": "SOC", "duration": 45},
 ]
 
-TRAP_CATALOG = [
-    ("Conceptual Conflation Trap", "Conflates core domain concepts or theories with adjacent terminology."),
-    ("Direct Equating Fallacy", "Equates two distinct operational variables without adjusting for coefficients."),
-    ("Formula Inversion Trap", "Inverts numerator and denominator in the governing relationship."),
-    ("Sign Inversion Error", "Drops or reverses the algebraic sign during simplification."),
-    ("Factual Misattribution Trap", "Attributes historical facts, authors, or theories to an incorrect entity."),
-    ("Incomplete Step Fallacy", "Halts analysis at an intermediate calculation without deriving the final value."),
-    ("Overgeneralization Trap", "Assumes a general rule applies in a specialized conditional scenario."),
-    ("Distractor Substitution Trap", "Chooses an attractive distractor that closely mimics common terminology."),
-]
+VALID_ANSWER_SOURCES = ("nta_official_key", "response_sheet", "ai_solved")
 
 def clean_str(s):
     if not s:
         return ""
-    s = s.replace("\xa0", " ").strip()
-    return re.sub(r"[ \t]+", " ", s)
+    s = s.replace(" ", " ").strip()
+    return re.sub(r"[ 	]+", " ", s)
 
-def solve_db_question(subject_id, stem, options, meta_chapter, meta_topic):
+def format_clean_pyq_options(options, official_answer=None, answer_source=None, solution_text=None):
     """
-    Determines correct option, traps, mistake analysis, and comprehensive step-by-step NCERT solution.
+    Formats question options with strict academic provenance.
+    If answer_source is not one of ('nta_official_key', 'response_sheet', 'ai_solved'),
+    correctOption and all solution fields MUST remain None.
+    NEVER uses hash-modulo or heuristic guessing.
     """
-    opt_map = {opt["key"]: clean_str(opt["text"]) for opt in options}
+    if answer_source not in VALID_ANSWER_SOURCES:
+        official_answer = None
+        answer_source = None
+        solution_text = None
+
     opt_keys = ["A", "B", "C", "D"]
-
-    stem_lower = stem.lower()
-    correct_opt = None
-    solution_reasoning = ""
-
-    # Subject specific heuristic solving rules
-    if subject_id == "accountancy":
-        if "absence of partnership deed" in stem_lower and "drawings" in stem_lower:
-            for k, t in opt_map.items():
-                if "nil" in t.lower() or "no interest" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "According to the Indian Partnership Act, 1932 (Section 13), in the absence of a partnership deed, no interest is charged on drawings made by partners."
-                    break
-        elif "tarun retires" in stem_lower and "5:3:2" in stem_lower:
-            for k, t in opt_map.items():
-                if "19:11" in t or "19 : 11" in t:
-                    correct_opt = k
-                    solution_reasoning = "Old ratio = 5:3:2. Tarun's retiring share = 2/10. Naveen's gain = 2/10 * 2/3 = 4/30. Naveen's new share = 5/10 + 4/30 = 19/30. Suresh's gain = 2/10 * 1/3 = 2/30. Suresh's new share = 3/10 + 2/30 = 11/30. New profit sharing ratio = 19:11."
-                    break
-        elif "compulsorily" in stem_lower and "dissolved" in stem_lower:
-            for k, t in opt_map.items():
-                if "(a), (b) and (d)" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "Under Section 41 of the Indian Partnership Act, 1932, a firm is dissolved compulsorily when all partners become insolvent, or the business becomes unlawful. Earning profit is not a ground for compulsory dissolution."
-                    break
-        elif "fixed" in stem_lower and "additional capital" in stem_lower:
-            for k, t in opt_map.items():
-                if "capital account" in t.lower() and "credited" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "When capital accounts are fixed, additional capital introduced is directly credited to Partner's Capital Account (not the Current Account)."
-                    break
-
-    elif subject_id == "physics":
-        if "charging capacitor" in stem_lower:
-            for k, t in opt_map.items():
-                if "both displacement and conduction" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "During charging of a capacitor, conduction current flows through the connecting wires, and a changing electric flux creates displacement current in the space between the capacitor plates."
-                    break
-        elif "polaroid" in stem_lower and "60" in stem_lower:
-            for k, t in opt_map.items():
-                if "1/8" in t:
-                    correct_opt = k
-                    solution_reasoning = "Unpolarized light passing through the first polaroid becomes polarized with intensity I1 = I0 / 2. By Malus's Law, after passing through the second polaroid at 60 degrees, I2 = I1 * cos^2(60 deg) = (I0 / 2) * (1/2)^2 = I0 / 8."
-                    break
-        elif "voltage sensitivity" in stem_lower and "moving coil galvanometer" in stem_lower:
-            for k, t in opt_map.items():
-                if "remain unchanged" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "Voltage sensitivity Vs = (N * B * A) / (k * R). When number of turns N is doubled, the total wire length and resistance R also double. Hence, the ratio N / R remains constant and voltage sensitivity remains unchanged."
-                    break
-        elif "point charges" in stem_lower and "36" in stem_lower and "9" in stem_lower:
-            for k, t in opt_map.items():
-                if "60" in t:
-                    correct_opt = k
-                    solution_reasoning = "For two opposite charges +36 uC and -9 uC at distance 30 cm, the null point lies outside the smaller charge: sqrt(36)/d = sqrt(9)/(d - 30) => 6/d = 3/(d - 30) => 2d - 60 = d => d = 60 cm from the +36 uC charge."
-                    break
-
-    elif subject_id == "biology":
-        if "bacillus thuringiensis" in stem_lower or "insecticidal protein" in stem_lower:
-            for k, t in opt_map.items():
-                if "does not bind" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "The activated Bt endotoxin binds specifically to the surface of midgut epithelial cells, creating pores that cause cell swelling and lysis, killing the insect larva. Thus, stating it 'does not bind' is incorrect."
-                    break
-        elif "melanised moth" in stem_lower:
-            for k, t in opt_map.items():
-                if "camouflage" in t.lower() and "tree trunks" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "During industrialisation in England, tree trunks were darkened by soot. Dark melanised moths camouflaged effectively against dark backgrounds and were protected from bird predators, demonstrating natural selection."
-                    break
-
-    elif subject_id == "political_science":
-        if "bharatiya kranti party" in stem_lower or "chambal" in stem_lower or "mandal commission" in stem_lower:
-            for k, t in opt_map.items():
-                if "national front" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "In August 1990, the National Front government led by Prime Minister V.P. Singh implemented the Mandal Commission recommendation of 27% reservation for Other Backward Classes (OBCs)."
-                    break
-                elif "(a) - (ii)" in t.lower() and "(d) - (iv)" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "(A) Charan Singh founded Bharatiya Kranti Party (II). (B) E.V. Ramasami Naicker propounded the Aryan-Dravidian thesis (I). (C) Jayaprakash Narayan facilitated the surrender of dacoits in Chambal (III). (D) Morarji Desai was the first non-Congress PM (IV)."
-                    break
-
-    elif subject_id == "english":
-        if "sabyasachi" in stem_lower:
-            for k, t in opt_map.items():
-                if "perseverance" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "The central thesis of the passage emphasizes Mukherjee's determination and perseverance in establishing his fashion house in Kolkata despite immense discouragement."
-                    break
-                elif "unassuming" in t.lower():
-                    correct_opt = k
-                    solution_reasoning = "The author explicitly describes Mukherjee as 'refreshingly unromantic about his achievements' and notes that 'his modesty is engaging', confirming he is an unassuming man."
-                    break
-
-    # General Match pattern resolver
-    if not correct_opt and "match list" in stem_lower:
-        for k in opt_keys:
-            txt = opt_map.get(k, "")
-            if "(a) - (i" in txt.lower() or "(a) - (ii" in txt.lower():
-                correct_opt = k
-                solution_reasoning = f"Option {k} provides the authentic pairing matching all entities from List-I with their corresponding definitions in List-II."
-                break
-
-    # Assertion-Reasoning resolver
-    if not correct_opt and "assertion (a)" in stem_lower and "reason (r)" in stem_lower:
-        for k in opt_keys:
-            txt = opt_map.get(k, "").lower()
-            if "both (a) and (r) are true and (r) is the correct explanation" in txt:
-                correct_opt = k
-                solution_reasoning = "Both Assertion (A) and Reason (R) are factually correct statements grounded in the NCERT syllabus, and Reason (R) provides the valid causal explanation for Assertion (A)."
-                break
-
-    # Default robust solver: select option based on hash of stem
-    if not correct_opt:
-        seed_val = sum(ord(c) for c in stem[:40])
-        correct_opt = opt_keys[seed_val % 4]
-        corr_txt = opt_map.get(correct_opt, "")
-        solution_reasoning = f"According to NCERT Class 12 curriculum, '{corr_txt}' is the scientifically and conceptually validated answer. Distractors represent common student misconceptions or inverted conditions."
+    opt_map = {opt["key"]: clean_str(opt["text"]) for opt in options}
 
     final_options = []
-    trap_idx = 0
-    corr_txt = opt_map.get(correct_opt, "")
-
     for k in opt_keys:
         txt = opt_map.get(k, "")
-        if k == correct_opt:
-            final_options.append({
-                "id": k,
-                "text": txt,
-                "isCorrect": True,
-                "studentSelectionTrap": None,
-                "mistakeAnalysis": f"Correct answer. {solution_reasoning}"
-            })
-        else:
-            trap_name, trap_desc = TRAP_CATALOG[trap_idx % len(TRAP_CATALOG)]
-            trap_idx += 1
-            final_options.append({
-                "id": k,
-                "text": txt,
-                "isCorrect": False,
-                "studentSelectionTrap": trap_name,
-                "mistakeAnalysis": f"Incorrect option. {trap_desc}"
-            })
-
-    detailed_solution = (
-        f"1. **Core Concept**: {meta_chapter or 'Key Syllabus Concept'} - {meta_topic or 'Core Application'}\n"
-        f"2. **Analysis**: {solution_reasoning}\n"
-        f"3. **Conclusion**: Hence, Option ({correct_opt}) is the correct choice."
-    )
-
-    solution_obj = {
-        "quick": f"Correct option is ({correct_opt}): {corr_txt}",
-        "concept": f"{meta_chapter or 'Core Principle'}: {meta_topic or 'Fundamental Definition'}",
-        "detailed": detailed_solution
-    }
-
-    return correct_opt, final_options, detailed_solution, solution_obj
-
-def build_mock_subject_pyqs(sub):
-    folder = sub["folder"]
-    src_dir = os.path.join(MOCK_DIR, folder)
-    dest_dir = os.path.join(PYQ_DIR, folder)
-    os.makedirs(dest_dir, exist_ok=True)
-
-    print(f"Building PYQs for Mock Subject: {sub['name']} ({folder})...")
-    manifest_entries = []
-
-    # 20 papers per mock subject
-    for p_num in range(1, 21):
-        if p_num <= 6:
-            year = "2024"
-            shift = f"Shift {(p_num - 1) % 2 + 1}"
-            shift_code = f"S{(p_num - 1) % 2 + 1}"
-            label = f"CUET UG 2024 {shift} Official CBT Paper"
-        elif p_num <= 12:
-            year = "2023"
-            shift = f"Shift {(p_num - 7) % 2 + 1}"
-            shift_code = f"S{(p_num - 7) % 2 + 1}"
-            label = f"CUET UG 2023 {shift} Official CBT Paper"
-        elif p_num <= 18:
-            year = "2022"
-            shift = f"Shift {(p_num - 13) % 2 + 1}"
-            shift_code = f"S{(p_num - 13) % 2 + 1}"
-            label = f"CUET UG 2022 {shift} Official CBT Paper"
-        else:
-            year = "2024"
-            shift = f"Special Shift {p_num - 18}"
-            shift_code = f"SS{p_num - 18}"
-            label = f"CUET UG 2024 Re-Exam Official CBT Paper"
-
-        src_path = os.path.join(src_dir, f"{p_num}.json")
-        if not os.path.exists(src_path):
-            src_path = os.path.join(src_dir, "1.json")
-
-        with open(src_path, "r", encoding="utf-8") as f:
-            qs = json.load(f)
-
-        transformed = []
-        for idx, q in enumerate(qs[:50], start=1):
-            q_copy = dict(q)
-            q_copy["questionNumber"] = idx
-            q_copy["questionId"] = f"CUET-UG-{sub['prefix']}-{year}-{shift_code}-Q{idx:02d}"
-            q_copy["pyqSource"] = f"CUET UG {year} ({shift} Official CBT Paper)"
-            q_copy["tags"] = [f"CUET UG {year}", shift, sub["name"], "Official CBT Paper"]
-            q_copy["testNumber"] = p_num
-            q_copy["subjectFolder"] = folder
-
-            corr_flags = [o["id"] for o in q_copy.get("options", []) if o.get("isCorrect")]
-            if len(corr_flags) == 1:
-                q_copy["correctOption"] = corr_flags[0]
-            else:
-                corr_opt = q_copy.get("correctOption", "A")
-                for o in q_copy.get("options", []):
-                    o["isCorrect"] = (o.get("id") == corr_opt)
-            transformed.append(q_copy)
-
-        dest_file = os.path.join(dest_dir, f"{p_num}.json")
-        with open(dest_file, "w", encoding="utf-8") as f:
-            json.dump(transformed, f, indent=2, ensure_ascii=False)
-
-        manifest_entries.append({
-            "id": f"{sub['folder']}-pyq-{p_num}",
-            "paperNumber": p_num,
-            "subjectSlug": sub["folder"],
-            "subjectName": sub["name"],
-            "code": sub["code"],
-            "year": year,
-            "shift": shift,
-            "label": label,
-            "yearLabel": f"CUET UG {year}",
-            "duration": f"{sub['duration']} mins",
-            "durationMinutes": sub["duration"],
-            "questions": 50,
-            "tags": [f"CUET {year}", shift, "Official CBT Paper", "Detailed NCERT Solutions"]
+        final_options.append({
+            "id": k,
+            "text": txt,
+            "isCorrect": True if (official_answer and k == official_answer) else (False if official_answer else None),
+            "studentSelectionTrap": None,
+            "mistakeAnalysis": None
         })
 
-    print(f"  -> Generated 20 papers for {sub['name']} in {dest_dir}")
-    return manifest_entries
+    detailed_solution = solution_text if (official_answer and solution_text) else None
+    solution_obj = None
+    if detailed_solution and official_answer:
+        solution_obj = {
+            "quick": f"Correct option is ({official_answer}): {opt_map.get(official_answer, '')}",
+            "concept": "Academic First-Principles Solution",
+            "detailed": detailed_solution
+        }
+
+    return official_answer, answer_source, final_options, detailed_solution, solution_obj
+
 
 def build_db_subject_pyqs(sub):
     sub_id = sub["id"]
@@ -444,9 +216,7 @@ def build_db_subject_pyqs(sub):
             chap = item["chapter"]
             top = item["topic"]
 
-            corr_opt, final_opts, det_sol, sol_obj = solve_db_question(
-                sub_id, stem, item["options"], chap, top
-            )
+            corr_opt, ans_src, final_opts, det_sol, sol_obj = format_clean_pyq_options(item["options"])
 
             diff_val = 3
             if item["difficulty"] == "easy":
@@ -464,6 +234,7 @@ def build_db_subject_pyqs(sub):
                 "diagramDescription": None,
                 "options": final_opts,
                 "correctOption": corr_opt,
+                "answer_source": ans_src,
                 "detailedSolution": det_sol,
                 "solution": sol_obj,
                 "questionType": "conceptual",
@@ -493,12 +264,14 @@ def build_db_subject_pyqs(sub):
             "shift": short_shift,
             "examDate": exam_date,
             "dateDisplay": date_display,
+            "status": "unverified",
+            "verificationNotice": "Answers and explanations currently under academic verification against official NTA answer keys.",
             "label": label,
             "yearLabel": f"CUET UG {paper_year} • {date_display}",
             "duration": f"{sub['duration']} mins",
             "durationMinutes": sub["duration"],
             "questions": 50,
-            "tags": [f"CUET {paper_year}", short_shift, date_display, "100% Real Shift Questions", "Verified NCERT Solutions"]
+            "tags": [f"CUET {paper_year}", short_shift, date_display, "Official Shift Questions", "Answers Under Verification"]
         })
 
     conn.close()
@@ -544,29 +317,17 @@ def main():
     os.makedirs(PYQ_DIR, exist_ok=True)
     manifest = {
         "generatedAt": datetime.now().isoformat(),
-        "totalSubjects": 22,
+        "totalSubjects": len(DB_SUBJECTS),
+        "totalOfficialPapers": 251,
+        "manifestStatus": "unverified",
+        "verificationNotice": "All 251 official core papers are unverified. Non-NTA mock duplicates deleted from official pipeline.",
         "totalPapers": 0,
         "totalQuestions": 0,
         "subjects": {}
     }
 
     print("==================================================")
-    print("STEP 1: Generating 8 Mock-based Subjects (160 Papers)")
-    print("==================================================")
-    for sub in MOCK_SUBJECTS:
-        entries = build_mock_subject_pyqs(sub)
-        manifest["subjects"][sub["folder"]] = {
-            "name": sub["name"],
-            "code": sub["code"],
-            "folder": sub["folder"],
-            "paperCount": len(entries),
-            "papers": entries
-        }
-        manifest["totalPapers"] += len(entries)
-        manifest["totalQuestions"] += len(entries) * 50
-
-    print("\n==================================================")
-    print("STEP 2: Generating 14 Database-based Subjects (251 Papers)")
+    print("Generating 14 Authentic Database-based Core Subjects (251 Papers)")
     print("==================================================")
     for sub in DB_SUBJECTS:
         entries = build_db_subject_pyqs(sub)
@@ -594,7 +355,7 @@ def main():
     print("==================================================")
     print(f"[SUCCESS] Complete Pipeline Finished!")
     print(f"Total Subjects:  {manifest['totalSubjects']}")
-    print(f"Total Papers:    {manifest['totalPapers']} (251 DB shifts + 160 domain papers)")
+    print(f"Total Papers:    {manifest['totalPapers']} (251 authentic DB shift papers)")
     print(f"Total Questions: {manifest['totalQuestions']} (All 50-Q papers)")
     print("==================================================")
 

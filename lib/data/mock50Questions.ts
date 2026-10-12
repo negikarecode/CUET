@@ -34,7 +34,8 @@ export interface RawQuestion {
     detailed: string;
   };
   questionType?: any;
-  difficulty?: number;
+  difficulty?: number | string;
+  difficultyLevel?: number;
   estimatedTimeSeconds?: number;
   formula?: string;
   keyConcept?: string;
@@ -138,9 +139,42 @@ export function mapQuestionsFromDataset(
   data: RawQuestion[]
 ): Question[] {
   return data.map((q) => {
-    const rawDiff = q.difficulty ?? (q.questionNumber <= 15 ? 1 : q.questionNumber <= 35 ? 3 : 4);
-    const difficultyStr: "easy" | "medium" | "hard" =
-      rawDiff <= 2 ? "easy" : rawDiff === 3 ? "medium" : "hard";
+    let difficultyStr: "easy" | "medium" | "hard" = "medium";
+    let difficultyLvl: 1 | 2 | 3 = 2;
+
+    const rawDiff = (q as any).difficulty;
+    const rawDiffLvl = (q as any).difficultyLevel;
+
+    if (rawDiffLvl === 1 || rawDiffLvl === 2 || rawDiffLvl === 3) {
+      difficultyLvl = rawDiffLvl;
+      difficultyStr = rawDiffLvl === 1 ? "easy" : rawDiffLvl === 2 ? "medium" : "hard";
+    } else if (typeof rawDiff === "string") {
+      const s = rawDiff.trim().toLowerCase();
+      if (s === "easy" || s === "1") {
+        difficultyStr = "easy";
+        difficultyLvl = 1;
+      } else if (s === "hard" || s === "4" || s === "5") {
+        difficultyStr = "hard";
+        difficultyLvl = 3;
+      } else {
+        difficultyStr = "medium";
+        difficultyLvl = 2;
+      }
+    } else if (typeof rawDiff === "number") {
+      if (rawDiff <= 1) {
+        difficultyStr = "easy";
+        difficultyLvl = 1;
+      } else if (rawDiff >= 4) {
+        difficultyStr = "hard";
+        difficultyLvl = 3;
+      } else {
+        difficultyStr = "medium";
+        difficultyLvl = 2;
+      }
+    } else {
+      difficultyLvl = q.questionNumber <= 15 ? 1 : q.questionNumber <= 40 ? 2 : 3;
+      difficultyStr = difficultyLvl === 1 ? "easy" : difficultyLvl === 2 ? "medium" : "hard";
+    }
 
     return {
       id: `${testId}_q_${q.questionNumber.toString().padStart(2, "0")}`,
@@ -163,7 +197,7 @@ export function mapQuestionsFromDataset(
       solution: q.solution,
       questionType: q.questionType || "conceptual",
       difficulty: difficultyStr,
-      difficultyLevel: (q.difficulty ?? 3) as any,
+      difficultyLevel: difficultyLvl,
       estimatedTimeSeconds: q.estimatedTimeSeconds || 60,
       formula: q.formula,
       keyConcept: q.keyConcept,

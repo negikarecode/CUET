@@ -363,7 +363,7 @@ function Navigation({
             onClick={() => setMobileMenuOpen(false)}
           >
             <span>Previous Year Papers</span>
-            <span className="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-bold">411 Papers</span>
+            <span className="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-bold">251 Papers</span>
           </Link>
           <Link
             href="#features"
@@ -516,7 +516,7 @@ function Hero({
               className="px-5 py-3 rounded-full font-bold text-sm bg-white/95 hover:bg-white text-slate-800 hover:text-blue-600 border border-slate-200/90 shadow-sm hover:shadow transition-all flex items-center gap-2"
             >
               <FileText className="w-4 h-4 text-blue-600" />
-              <span>Solve 411+ Official PYQs</span>
+              <span>Solve 251+ Official PYQs</span>
             </Link>
 
             <div className="flex items-center gap-3">
@@ -540,7 +540,7 @@ function Hero({
             <Icon icon={FileText} size={19} />
           </div>
           <strong className="text-slate-800 font-bold text-xs sm:text-sm leading-snug">
-            411 Official<br />PYQ Shift Papers
+            251 Official<br />PYQ Shift Papers
           </strong>
         </Link>
         <Feature

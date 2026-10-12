@@ -213,21 +213,28 @@ export default function PostMockAnalysisClient({
   const secondsTaken = overall.totalTimeSeconds % 60;
   const timeTakenFormatted = `${minutesTaken}m ${secondsTaken.toString().padStart(2, "0")}s`;
 
+  const isPYQ = report.testId.toLowerCase().includes("pyq");
+  const backHref = isPYQ ? "/dashboard/pyqs" : "/dashboard/mocks";
+  const backLabel = isPYQ ? "All PYQ Papers" : "Mocks History";
+  const badgeLabel = isPYQ ? "OFFICIAL PYQ CBT ANALYSIS" : "POST-MOCK RESULTS";
+  const retakeLabel = isPYQ ? "Retake PYQ Paper" : "Retake Mock";
+  const backButtonText = isPYQ ? "Back to PYQs" : "Back to Mocks";
+
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* Top Simple Navigation Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
           <Link
-            href="/dashboard/mocks"
+            href={backHref}
             className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-colors"
           >
             <span>←</span>
-            <span>Mocks History</span>
+            <span>{backLabel}</span>
           </Link>
           <span className="text-slate-300">|</span>
           <span className="text-xs font-semibold uppercase tracking-wider bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full border border-slate-200 font-mono">
-            POST-MOCK RESULTS
+            {badgeLabel}
           </span>
         </div>
 
@@ -239,7 +246,7 @@ export default function PostMockAnalysisClient({
               className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center gap-2 cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
-              <span>Retake Mock</span>
+              <span>{retakeLabel}</span>
             </button>
           ) : (
             <button
@@ -248,14 +255,14 @@ export default function PostMockAnalysisClient({
               className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center gap-2 cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
-              <span>Retake Mock</span>
+              <span>{retakeLabel}</span>
             </button>
           )}
           <Link
-            href="/dashboard/mocks"
+            href={backHref}
             className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all"
           >
-            Back to Mocks
+            {backButtonText}
           </Link>
         </div>
       </div>

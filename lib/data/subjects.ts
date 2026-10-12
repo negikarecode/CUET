@@ -336,6 +336,10 @@ export interface PYQTestItem {
   duration: string;
   questions: number;
   tags: string[];
+  status?: "unverified" | "verified" | "duplicate_of_mock";
+  verificationNotice?: string;
+  examDate?: string;
+  dateDisplay?: string;
 }
 
 export function loadPYQFromManifest(subjectSlug: string): PYQTestItem[] {
@@ -366,7 +370,8 @@ export function loadPYQFromManifest(subjectSlug: string): PYQTestItem[] {
 
   const manifestSub = (pyqManifest.subjects as Record<string, { papers: PYQTestItem[] }>)[folder];
   if (manifestSub && manifestSub.papers && manifestSub.papers.length > 0) {
-    return manifestSub.papers;
+    // Phase A: Exclude all duplicate_of_mock papers so they are NEVER listed under official PYQs
+    return manifestSub.papers.filter((p) => p.status !== "duplicate_of_mock");
   }
   return [];
 }
