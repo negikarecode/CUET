@@ -648,8 +648,8 @@ export function calculateSpeedVsAccuracyState(
   }
   if (isLowAccuracy && isUnusuallyFast) {
     return {
-      state: "Rapid Response Pattern",
-      explanation: "Very fast responses detected alongside incorrect answers. Telemetry indicates rapid answer selection, though intent cannot be determined.",
+      state: "Concept/Knowledge Gap",
+      explanation: "Lower accuracy indicates conceptual gap or recall uncertainty.",
     };
   }
 
@@ -882,9 +882,9 @@ export function generateFullTopicDiagnosis(
   } else if (errorTaxonomy.applicationGapCount > 0) {
     primaryDiagnosis = "Concept Application Gap";
     contributingFactor = "Multi-Variable Scenario Transfer";
-  } else if (speedVsAcc.state === "Rapid Response Pattern" || (avgTimeSeconds < 15 && accuracyPercentage < 60)) {
-    primaryDiagnosis = "Rapid Response Pacing";
-    contributingFactor = "High-Speed Answer Selection";
+  } else if (speedVsAcc.state === "Rapid Response Pattern") {
+    primaryDiagnosis = "Concept Application Gap";
+    contributingFactor = "Practice Calibration";
   } else if (accuracyPercentage < 50) {
     primaryDiagnosis = "Conceptual Gap";
     contributingFactor = "Foundational Knowledge Retrieval";
@@ -1306,16 +1306,11 @@ export function generateDiagnosticSummaryReport(
   }
 
   const slowTopics = diagnoses.filter((d) => d.observedPerformance.avgTimeSeconds > d.observedPerformance.targetTimeSeconds + 15);
-  const fastTopics = diagnoses.filter((d) => d.observedPerformance.avgTimeSeconds < 10 && d.observedPerformance.attemptsCount > 0);
 
   if (slowTopics.length > 0 && slowTopics[0]) {
     const slowItem = slowTopics[0];
     pacingLabel = "PACING ALERT";
     pacingIssue = `Numerical calculations in ${slowItem.chapter} exceed target pace (${slowItem.observedPerformance.avgTimeSeconds}s vs ${slowItem.observedPerformance.targetTimeSeconds}s).`;
-  } else if (fastTopics.length > 0 && fastTopics[0]) {
-    const fastItem = fastTopics[0];
-    pacingLabel = "RESPONSE PATTERN";
-    pacingIssue = `Very fast responses detected (~${fastItem.observedPerformance.avgTimeSeconds}s/Q). Telemetry cannot determine whether this reflects rapid guessing or instant selection.`;
   } else {
     pacingLabel = "RESPONSE PATTERN";
     pacingIssue = "Standard response pace maintained across attempted questions.";

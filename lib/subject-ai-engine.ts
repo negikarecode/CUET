@@ -138,13 +138,6 @@ export function buildDeterministicSubjectRadarAI(
     );
   }
 
-  // Rapid responses observation (Purely observational, no psychological guessing)
-  const rapidResponses = questions.filter((q) => q.timeSpentSeconds < 15);
-  if (rapidResponses.length >= 3) {
-    performancePatterns.push(
-      `Telemetry observation: ${rapidResponses.length} questions answered in under 15s. Telemetry records rapid selection; verify pacing allows deliberate stem reading.`
-    );
-  }
 
   // Conceptual / Knowledge Gaps
   const conceptualErrors = questions.filter(

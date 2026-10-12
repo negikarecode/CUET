@@ -347,7 +347,6 @@ export async function POST(req: NextRequest) {
     };
 
     const fatalTimeSinks: Array<{ question: (typeof questionsPool)[number]; time: number }> = [];
-    const speedAccuracyTraps: Array<{ question: (typeof questionsPool)[number]; time: number }> = [];
     const failedQuestions: Array<{
       question: (typeof questionsPool)[number];
       selectedOption: string;
@@ -396,10 +395,6 @@ export async function POST(req: NextRequest) {
         fatalTimeSinks.push({ question: q, time: att.timeSpentSeconds });
       }
 
-      // Speed-accuracy traps: timeSpentSeconds < 25 and incorrect
-      if (att.timeSpentSeconds < 25 && isIncorrect) {
-        speedAccuracyTraps.push({ question: q, time: att.timeSpentSeconds });
-      }
 
       // Failed question log for AI diagnosis
       if (isIncorrect) {
@@ -452,13 +447,6 @@ export async function POST(req: NextRequest) {
       category: "slow_and_inaccurate",
     }));
 
-    speedAccuracyTraps.forEach((item) => {
-      timeSinkAlerts.push({
-        question_number: item.question.question_number,
-        message: `Question ${item.question.question_number} (${item.question.micro_topic}): Rushed in ${item.time}s (<25s) falling for a quick distractor trap. Slow down on keyword qualifiers.`,
-        category: "fast_but_careless",
-      });
-    });
 
     // 5. Invoke Groq LPU with CUET AI Performance Intelligence Engine Master System Prompt
     let aiDiagnostic: {
@@ -735,7 +723,7 @@ Return a valid JSON object matching this schema:
       time_analysis: {
         average_time_per_question: avgTimePerQuestion,
         slow_areas: fatalTimeSinks.map((f) => f.question.micro_topic),
-        fast_incorrect_areas: speedAccuracyTraps.map((s) => s.question.micro_topic),
+        fast_incorrect_areas: [],
         time_management_issue:
           fatalTimeSinks.length > 0
             ? `${fatalTimeSinks.length} time-sinks (>72s) drained exam clock.`
@@ -809,7 +797,7 @@ Return a valid JSON object matching this schema:
         chapterAccuracy,
         microTopicAccuracy,
         timeSinksCount: fatalTimeSinks.length,
-        speedTrapsCount: speedAccuracyTraps.length,
+        speedTrapsCount: 0,
       },
       structured_report: structuredReport,
       natural_language_report: naturalLanguageReport,

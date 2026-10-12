@@ -186,9 +186,7 @@ export function computeCycleMetrics(
 
   // 4. Response Telemetry Pacing note
   let pacingIssue = "Standard response pace maintained across attempted questions.";
-  if (fastResponsesCount >= 20) {
-    pacingIssue = `Very fast responses detected (~${avgTimeSeconds}s/Q). Telemetry cannot determine whether this reflects rapid guessing or instant selection.`;
-  } else if (slowResponsesCount >= 15) {
+  if (slowResponsesCount >= 15) {
     pacingIssue = "Extended solving times detected on multi-step calculation stems.";
   }
 
@@ -695,8 +693,6 @@ export async function processQuestionsIntoCycles(
 
   for (const q of allAttempts) {
     if (q.selectedOption === null || q.selectedOption === undefined) continue;
-    // Skip questions answered in low-effort sessions (Validity Gate)
-    if ((q as any).isLowEffort === true) continue;
     const testKey = ((q as any).testId || (q as any).mockId || (q as any).sessionId || "mock").trim();
     const qKey = (q.questionId || (q.questionNumber !== undefined ? `q_${q.questionNumber}` : "q")).trim();
     const canonicalKey = `${testKey}:::${qKey}`;

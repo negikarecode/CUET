@@ -531,32 +531,11 @@ export default function WeaknessRadarClient({
   const isCurrentCycleComplete = totalAttempted >= 150 && completedCycleCount >= 1;
   const isCalibrationLocked = totalAttempted < 150;
 
-  // Session-level pacing pattern alert (Phase 1 Item 11)
-  const sessionPacingAlert = React.useMemo(() => {
-    if (!weaknessRadar || weaknessRadar.length === 0) return null;
-    const fastTopics = weaknessRadar.filter(
-      (t) => (t.avgTimeSeconds || 0) > 0 && (t.avgTimeSeconds || 0) < 15
-    );
-    const ratio = fastTopics.length / weaknessRadar.length;
-    if (ratio >= 0.5) {
-      const avgSec = Math.round(
-        fastTopics.reduce((s, t) => s + (t.avgTimeSeconds || 0), 0) / fastTopics.length
-      );
-      return {
-        avgSec,
-        title: "Session Pacing Observation",
-        message: `You answered in about ${avgSec}s per question across most weak topics. Slow down and read every option carefully before selecting.`,
-      };
-    }
-    return null;
-  }, [weaknessRadar]);
-
   // Synchronize missed questions with spaced repetition
   useEffect(() => {
     if (isClient && cleanTestAttempts.length > 0) {
       const uId = storeUser?.id || initialData.user.id;
       cleanTestAttempts.forEach((t) => {
-        if (t.isLowEffort) return; // Skip low effort
         (t.questions || []).forEach((q) => {
           if (q.selectedOption !== null && q.selectedOption !== undefined && q.isCorrect === false) {
             enrollMissedQuestion(uId, {
@@ -956,25 +935,6 @@ export default function WeaknessRadarClient({
         </div>
       </div>
 
-      {/* Session Pacing Behavior Alert (Phase 1 Item 11 & 12) */}
-      {sessionPacingAlert && (
-        <div className="p-4 rounded-2xl bg-amber-50/90 border border-amber-200 text-xs flex items-center justify-between gap-3 shadow-xs">
-          <div className="flex items-center gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
-            <div>
-              <span className="font-bold text-amber-900 uppercase tracking-wider text-[11px] block">
-                {sessionPacingAlert.title}
-              </span>
-              <p className="text-amber-800 font-medium">
-                {sessionPacingAlert.message}
-              </p>
-            </div>
-          </div>
-          <span className="text-[10px] font-mono font-semibold px-2.5 py-1 rounded-full bg-amber-200/70 text-amber-900 shrink-0">
-            Avg {sessionPacingAlert.avgSec}s / question
-          </span>
-        </div>
-      )}
 
       {/* ============================================================== */}
       {/* 2. CALIBRATION GATED EXPERIENCE                                */}

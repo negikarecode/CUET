@@ -222,14 +222,6 @@ export default function DashboardClient({
       })[0] || candidateWeaknesses[0];
   }, [candidateWeaknesses]);
 
-  // Check if pacing guidance is relevant (only if attempts exist)
-  const hasPacingIssue = Boolean(
-    totalAttempted > 0 && (
-      candidateWeaknesses.some((w) => w.fullDiagnosis?.primaryDiagnosis === "Rapid Response Pacing") ||
-      (testAttempts && testAttempts.some((a) => a.isLowEffort))
-    )
-  );
-
   return (
     <div className="space-y-6">
       {/* 1. Greeting line plus one-line summary */}
@@ -238,13 +230,6 @@ export default function DashboardClient({
           userName={fullName}
         />
       </section>
-
-      {/* Single pacing guidance banner if relevant */}
-      {hasPacingIssue && (
-        <div className="p-3 bg-[var(--warning-subtle)] text-[var(--warning)] border border-[var(--warning)]/20 rounded-[8px] text-[14px] leading-[1.5]">
-          Pacing note: Rapid answering under 10 seconds per question leads to avoidable errors. Take time to read each question completely.
-        </div>
-      )}
 
       {/* 2. Next action card: topic, one-sentence reason, one primary button ("Practice this topic") */}
       <section aria-label="Next action">

@@ -191,29 +191,21 @@ export function evaluateSessionQuality(params: {
   const isIndistinguishableFromChance =
     totalAttempted >= 15 && sampleProportion <= chanceAccuracy + 1.28 * seChance;
 
-  const isRushedBelowMinimum = medianTime < SESSION_VALIDITY_THRESHOLDS.MIN_VALID_MEDIAN_TIME_SECONDS;
-  const isLowAccuracyRushed = medianTime < SESSION_VALIDITY_THRESHOLDS.RUSHED_PACING_SECONDS && sampleProportion <= chanceAccuracy;
-
-  const isLowEffort = isRushedBelowMinimum || isLowAccuracyRushed || isIndistinguishableFromChance;
+  // Quick answers are accepted with no pacing penalties
+  const isLowEffort = isIndistinguishableFromChance;
 
   let confidence: SessionConfidenceLevel = "Low";
   let message = "Session validated under timed practice conditions.";
 
   if (isLowEffort) {
     confidence = "Low";
-    if (isRushedBelowMinimum) {
-      message = `Low-effort session, results not reliable. Median answering pace of ${medianTime}s/Q is below the valid minimum (${SESSION_VALIDITY_THRESHOLDS.MIN_VALID_MEDIAN_TIME_SECONDS} seconds).`;
-    } else {
-      message = `Low-effort session, results not reliable. Accuracy (${accuracy}%) is statistically indistinguishable from random guessing.`;
-    }
+    message = `Low-effort session, results not reliable. Accuracy (${accuracy}%) is statistically indistinguishable from random guessing.`;
   } else if (
-    totalAttempted >= SESSION_VALIDITY_THRESHOLDS.SESSION_HIGH_CONFIDENCE_MIN_QUESTIONS &&
-    medianTime >= SESSION_VALIDITY_THRESHOLDS.NORMAL_PACING_MIN_SECONDS
+    totalAttempted >= SESSION_VALIDITY_THRESHOLDS.SESSION_HIGH_CONFIDENCE_MIN_QUESTIONS
   ) {
     confidence = "High";
   } else if (
-    totalAttempted >= SESSION_VALIDITY_THRESHOLDS.SESSION_MEDIUM_CONFIDENCE_MIN_QUESTIONS &&
-    medianTime >= SESSION_VALIDITY_THRESHOLDS.RUSHED_PACING_SECONDS
+    totalAttempted >= SESSION_VALIDITY_THRESHOLDS.SESSION_MEDIUM_CONFIDENCE_MIN_QUESTIONS
   ) {
     confidence = "Medium";
   }
@@ -228,7 +220,7 @@ export function evaluateSessionQuality(params: {
     attemptCount: totalAttempted,
     message,
     reason: message,
-    remedyAction: isLowEffort ? "Retake with normal pacing" : undefined,
+    remedyAction: undefined,
   };
 }
 
@@ -469,20 +461,7 @@ export function formatPlainLanguageDiagnosis(params: {
 } {
   const primary = (params.primaryDiagnosis || '').toLowerCase();
   const contributing = (params.contributingFactor || '').toLowerCase();
-  const avgTime = params.avgTimeSeconds || 0;
 
-  if (
-    primary.includes('rapid') ||
-    primary.includes('pacing') ||
-    contributing.includes('high-speed') ||
-    (avgTime > 0 && avgTime <= 10)
-  ) {
-    const timeStr = avgTime > 0 ? `${avgTime}s` : 'about 2s';
-    return {
-      humanSentence: `You're answering in ${timeStr} per question. Slow down and read all options before choosing.`,
-      actionGuidance: 'Pause for 5 seconds before selecting an option on multi-statement questions.',
-    };
-  }
 
   if (primary.includes('formula') || contributing.includes('formula')) {
     return {
