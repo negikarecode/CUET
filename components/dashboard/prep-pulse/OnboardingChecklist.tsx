@@ -23,7 +23,7 @@ export const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({
     {
       id: 2,
       title: 'Review your mistakes',
-      description: 'Analyze question pacing, conceptual slips, and topic blindspots.',
+      description: 'Analyze question accuracy, conceptual slips, and topic blindspots.',
       isDone: attemptsCount >= 1 && totalAttempted >= 50,
       href: '/dashboard/sessions',
       ctaText: 'Review session',

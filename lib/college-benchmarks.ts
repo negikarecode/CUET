@@ -219,7 +219,7 @@ export function calculateCollegeReadiness(
       status: "surpassed",
       statusLabel: `Cutoff Surpassed (+${delta}%)`,
       statusBadgeClass: "bg-emerald-50 text-emerald-800 border-emerald-200",
-      recommendation: `High probability admission! Maintain pacing consistency and avoid negative marking traps.`,
+      recommendation: `High probability admission! Maintain score consistency and avoid negative marking traps.`,
     };
   }
 

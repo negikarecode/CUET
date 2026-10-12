@@ -126,6 +126,7 @@ export interface WeaknessRadarInitialData {
     reason: string;
   };
   subjectCalibration: Record<string, SubjectCalibrationData>;
+  serverAttempts?: RecordedTestAttempt[];
 }
 
 // Helper to ensure full diagnosis exists on a TopicMastery
@@ -328,6 +329,20 @@ export default function WeaknessRadarClient({
       setSelectedRadarSubject(paramSubject);
     }
   }, [paramSubject]);
+
+  // Synchronize authentic server attempts if present and store has missing attempts
+  useEffect(() => {
+    if (initialData.serverAttempts && initialData.serverAttempts.length > 0) {
+      const { testAttempts: localAttempts, recordTestAttempt } = useTestStore.getState();
+      const localKeys = new Set((localAttempts || []).map((a) => (a.testId || a.id || "").trim()));
+      initialData.serverAttempts.forEach((att) => {
+        const k = (att.testId || att.id || "").trim();
+        if (!localKeys.has(k)) {
+          recordTestAttempt(att);
+        }
+      });
+    }
+  }, [initialData.serverAttempts]);
 
   // Session recovery on mount
   useEffect(() => {

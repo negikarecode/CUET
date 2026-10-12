@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo } from "react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
-import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData } from "@/types";
+import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData, RecordedTestAttempt } from "@/types";
 import { normalizeSubject } from "@/lib/analytics";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { calculateCUETScore, MARKING_SCHEME } from "@/lib/config/dashboardConfig";
@@ -31,6 +31,7 @@ export interface DashboardInitialData {
   };
   kpi: {
     totalAttempted: number;
+    correctCount?: number;
     accuracyPercentage: number;
     dailyStreak: number;
     xpLevel: string;
@@ -49,6 +50,7 @@ export interface DashboardInitialData {
   weaknessRadar: TopicMastery[];
   timeSinkAlerts: TimeSinkAlertData[];
   subjectCalibration?: Record<string, SubjectCalibrationData>;
+  serverAttempts?: RecordedTestAttempt[];
 }
 
 export default function DashboardClient({
@@ -62,6 +64,8 @@ export default function DashboardClient({
   const testAttempts = useTestStore((state) => state.testAttempts);
   const currentCycleNumber = useTestStore((state) => state.currentCycleNumber || 1);
   const currentCycleQuestionCount = useTestStore((state) => state.currentCycleQuestionCount || 0);
+
+  const isServerUser = Boolean(initialData.user && initialData.user.id !== "guest");
 
   // Attempt recovery on mount: ingests any completed CBT session from localStorage that was missed
   useEffect(() => {
@@ -77,12 +81,37 @@ export default function DashboardClient({
     }
   }, []);
 
-  // Allow guest visitors to explore dashboard, mocks, and PYQs seamlessly without blocking
+  // Synchronize authenticated server data and test attempts into store
   useEffect(() => {
-    // Guest mode active for practice
-  }, []);
+    if (isServerUser && initialData.user) {
+      const state = useTestStore.getState();
+      if (state.user.id !== initialData.user.id || !state.user.targetCollege) {
+        state.loginUser({
+          id: initialData.user.id,
+          name: initialData.user.fullName,
+          targetCollege: initialData.user.targetCollege,
+          targetUniversity: initialData.user.targetUniversity,
+          targetCourse: initialData.user.targetCourse,
+          preferredStream: (initialData.user.targetStream?.toLowerCase() || "science") as any,
+          selectedSubjects: initialData.user.selectedSubjects,
+          xpPoints: initialData.user.xp,
+          campusCoins: initialData.user.campusCoins,
+          dailyStreak: initialData.user.currentStreak,
+        });
+      }
 
-  const isServerUser = initialData?.user && initialData.user.id !== "guest";
+      if (initialData.serverAttempts && initialData.serverAttempts.length > 0) {
+        const localAttempts = state.testAttempts || [];
+        const localKeys = new Set(localAttempts.map((a) => (a.testId || a.id || "").trim()));
+        initialData.serverAttempts.forEach((att) => {
+          const k = (att.testId || att.id || "").trim();
+          if (!localKeys.has(k)) {
+            state.recordTestAttempt(att);
+          }
+        });
+      }
+    }
+  }, [isServerUser, initialData.user, initialData.serverAttempts]);
 
   // ---------------------------------------------------------------------------
   // SINGLE SOURCE OF TRUTH FOR ALL NUMBERS (No fake defaults)
@@ -96,6 +125,7 @@ export default function DashboardClient({
     isClient && clientAnalytics ? (clientAnalytics.totalQuestionsAttempted ?? 0) : 0;
 
   const serverAttempted = initialData?.kpi?.totalAttempted ?? 0;
+  const serverCorrectCount = initialData?.kpi?.correctCount ?? 0;
 
   // Single source for total attempted
   const totalAttempted = isClient && testAttempts && testAttempts.length > 0
@@ -106,7 +136,7 @@ export default function DashboardClient({
   const correctCount =
     isClient && testAttempts && testAttempts.length > 0
       ? testAttempts.reduce((sum, a) => sum + (a.correctCount || 0), 0)
-      : (clientAnalytics?.totalCorrectAnswers ?? 0);
+      : (isServerUser ? serverCorrectCount : (clientAnalytics?.totalCorrectAnswers ?? 0));
 
   // Single source for accuracy: strictly correct / attempted
   const accuracyPercentage =

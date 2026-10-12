@@ -104,7 +104,7 @@ export function SubjectRadarAISection({
         </div>
         <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200/60 flex flex-col items-center justify-center text-center space-y-2 animate-pulse">
           <span className="text-xs font-semibold text-slate-700">Analyzing verified question telemetry...</span>
-          <span className="text-[11px] text-slate-500">Cross-referencing error taxonomy, speed pacing, and difficulty progression</span>
+          <span className="text-[11px] text-slate-500">Cross-referencing error taxonomy, accuracy patterns, and difficulty progression</span>
         </div>
       </div>
     );

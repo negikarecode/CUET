@@ -35,6 +35,7 @@ import {
 import { StreamOption } from "@/types/database";
 import { calculateCollegeReadiness } from "@/lib/college-benchmarks";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
+import { computeAnalyticsFromAttempts } from "@/lib/analytics";
 import {
   isPushNotificationSupported,
   getNotificationPermissionState,
@@ -118,6 +119,19 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       }
     }
   }, [profile.id, zustandUser, profile.currentStreak, profile.xp]);
+
+  // Hydrate useTestStore if empty and server provided real attempts
+  useEffect(() => {
+    if (initialData.serverAttempts && initialData.serverAttempts.length > 0) {
+      const currentAttempts = useTestStore.getState().testAttempts;
+      if (!currentAttempts || currentAttempts.length === 0) {
+        useTestStore.setState({
+          testAttempts: initialData.serverAttempts,
+          analytics: computeAnalyticsFromAttempts(initialData.serverAttempts),
+        });
+      }
+    }
+  }, [initialData.serverAttempts]);
 
   // Robust accuracy reconciliation between server and client store attempts
   const clientAttempted =
@@ -756,7 +770,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                   <span>Persistent Red Zones (Top 3 Weak Spots)</span>
                 </span>
                 <span className="text-[10px] text-slate-400 font-mono font-semibold">
-                  Pacing Sinks
+                  Time Sinks
                 </span>
               </div>
 

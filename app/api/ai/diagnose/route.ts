@@ -727,7 +727,7 @@ Return a valid JSON object matching this schema:
         time_management_issue:
           fatalTimeSinks.length > 0
             ? `${fatalTimeSinks.length} time-sinks (>72s) drained exam clock.`
-            : "Pacing is well calibrated.",
+            : "Time management is well calibrated.",
       },
       difficulty_analysis: {
         easy: {

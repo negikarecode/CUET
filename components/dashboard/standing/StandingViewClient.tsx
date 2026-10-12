@@ -27,14 +27,57 @@ import {
 import { CategoryCode } from "@/lib/config/standingConfig";
 import { StreamType } from "@/types";
 
-export default function StandingViewClient() {
+interface StandingViewClientProps {
+  initialUser?: { targetCollege?: string; targetCourse?: string; targetStream?: string };
+  initialAttempts?: import("@/types").RecordedTestAttempt[];
+}
+
+export default function StandingViewClient({
+  initialUser,
+  initialAttempts = [],
+}: StandingViewClientProps = {}) {
   const isClient = useIsClient();
-  const user = useTestStore((state) => state.user);
+  const storeUser = useTestStore((state) => state.user);
+  const user = useMemo(() => {
+    return {
+      ...storeUser,
+      targetCollege: initialUser?.targetCollege || storeUser.targetCollege,
+      targetCourse: initialUser?.targetCourse || storeUser.targetCourse,
+      preferredStream: initialUser?.targetStream
+        ? (initialUser.targetStream.toLowerCase() as StreamType)
+        : storeUser.preferredStream,
+    };
+  }, [storeUser, initialUser]);
+
   const selectedStream = useTestStore((state) => state.selectedStream);
   const setSelectedStream = useTestStore((state) => state.setSelectedStream);
   const testAttemptsRaw = useTestStore((state) => state.testAttempts);
-  const testAttempts = useMemo(() => testAttemptsRaw || [], [testAttemptsRaw]);
+  const testAttempts = useMemo(() => {
+    if (testAttemptsRaw && testAttemptsRaw.length > 0) return testAttemptsRaw;
+    if (initialAttempts && initialAttempts.length > 0) return initialAttempts;
+    return [];
+  }, [testAttemptsRaw, initialAttempts]);
   const setTargetCollege = useTestStore((state) => state.setTargetCollege);
+
+  // Sync server attempts into store if missing locally
+  useEffect(() => {
+    if (initialAttempts && initialAttempts.length > 0) {
+      const { testAttempts: localAttempts, recordTestAttempt } = useTestStore.getState();
+      const localKeys = new Set((localAttempts || []).map((a) => (a.testId || a.id || "").trim()));
+      initialAttempts.forEach((att) => {
+        const k = (att.testId || att.id || "").trim();
+        if (!localKeys.has(k)) {
+          recordTestAttempt(att);
+        }
+      });
+    }
+  }, [initialAttempts]);
+
+  useEffect(() => {
+    if (initialUser?.targetCollege) {
+      setTargetCollege(initialUser.targetCollege);
+    }
+  }, [initialUser?.targetCollege, setTargetCollege]);
 
   const coursesList: CanonicalCourse[] = useMemo(() => {
     return Object.values(CANONICAL_COURSES_MAP);

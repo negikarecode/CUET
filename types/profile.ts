@@ -58,4 +58,5 @@ export interface ProfileInitialData {
   diagnostic: DiagnosticReadiness;
   weakTopics: WeakMicroTopicItem[];
   trophies: ProfileTrophyItem[];
+  serverAttempts?: import("@/types").RecordedTestAttempt[];
 }

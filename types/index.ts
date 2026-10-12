@@ -303,6 +303,7 @@ export type DetailedErrorCategory =
   | "Multi-Step Reasoning Failure"
   | "Application Gap"
   | "Time / Pacing Issue"
+  | "Time Management Issue"
   | "Guessing / Uncertainty"
   | "Memory Confusion";
 
@@ -320,7 +321,7 @@ export interface ErrorTaxonomyBreakdown {
   guessingCount: number;
   memoryConfusionCount: number;
   totalErrors: number;
-  percentages?: Record<DetailedErrorCategory, number>;
+  percentages?: Partial<Record<DetailedErrorCategory, number>>;
 }
 
 export interface DiagnosticSubtopic {
@@ -392,7 +393,7 @@ export interface FullTopicDiagnosis {
     accuracyPercentage: number;
     avgTimeSeconds: number;
     targetTimeSeconds: number;
-    speedVsAccuracyState: "Concept/Knowledge Gap" | "Pacing/Fluency Deficit" | "Validated Core Strength" | "Major Systemic Weakness" | "Rapid Response Pattern";
+    speedVsAccuracyState: "Concept/Knowledge Gap" | "Pacing/Fluency Deficit" | "Fluency Deficit" | "Validated Core Strength" | "Major Systemic Weakness" | "Rapid Response Pattern";
   };
   diagnosticConfidence: "HIGH" | "MEDIUM" | "LOW" | "INSUFFICIENT_EVIDENCE";
   confidenceRationale: string;

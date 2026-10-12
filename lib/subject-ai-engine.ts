@@ -50,7 +50,7 @@ export function buildDeterministicSubjectRadarAI(
       priorityAreas: [
         {
           title: "Complete Baseline Qualification",
-          reason: "Need at least 5 attempts to calibrate error taxonomy and pacing.",
+          reason: "Need at least 5 attempts to calibrate error taxonomy and baseline accuracy.",
           evidenceQuestionIds: questions.map((q) => q.questionId),
           actions: ["Attempt domain CBT mock to generate representative telemetry."],
           recommendedDrillType: "5-Question Concept Repair",
@@ -125,16 +125,6 @@ export function buildDeterministicSubjectRadarAI(
     });
     performancePatterns.push(
       `Execution drag on multi-step numericals (${calculationErrors.length} instances). Intermediate sign and unit tracking required.`
-    );
-  }
-
-  // Correct but slow observation (Pacing observation, NOT an accuracy weakness)
-  const slowCorrectQuestions = questions.filter(
-    (q) => q.isCorrect === true && q.timeSpentSeconds > 80
-  );
-  if (slowCorrectQuestions.length >= 2) {
-    performancePatterns.push(
-      `Pacing observation: ${slowCorrectQuestions.length} questions were answered correctly but required >80s. Concepts are solid, but retrieval speed can be improved with timed drills.`
     );
   }
 
@@ -241,7 +231,7 @@ export function buildDeterministicSubjectRadarAI(
   if (priorityAreas.length === 0) {
     priorityAreas.push({
       title: "Maintain Domain Speed & Exam Stamina",
-      reason: `Accuracy is solid at ${accuracyPercentage}% across ${totalAttempted} questions. Focus is now on pacing and zero careless errors.`,
+      reason: `Accuracy is solid at ${accuracyPercentage}% across ${totalAttempted} questions. Focus is now on zero careless errors.`,
       evidenceQuestionIds: questions.map((q) => q.questionId).slice(0, 3),
       actions: ["Attempt full-length mixed CBT mock under strict 45-minute timing."],
       recommendedDrillType: "15-Question Mixed Remediation",

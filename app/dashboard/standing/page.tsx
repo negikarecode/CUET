@@ -1,5 +1,8 @@
 import { Metadata } from "next";
+import { createClient } from "@/lib/supabase/server";
 import StandingViewClient from "@/components/dashboard/standing/StandingViewClient";
+import { fetchServerTestAttempts } from "@/lib/server-attempts";
+import { RecordedTestAttempt } from "@/types";
 
 export const metadata: Metadata = {
   title: "Where Do I Stand | CUET AI-Prep",
@@ -9,6 +12,36 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function StandingPage() {
-  return <StandingViewClient />;
+export default async function StandingPage() {
+  let initialUser: { targetCollege?: string; targetCourse?: string; targetStream?: string } | undefined;
+  let initialAttempts: RecordedTestAttempt[] = [];
+
+  try {
+    const supabase = createClient();
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+
+    if (authUser) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("target_college, target_course, target_stream")
+        .eq("id", authUser.id)
+        .maybeSingle();
+
+      if (profile) {
+        initialUser = {
+          targetCollege: profile.target_college,
+          targetCourse: profile.target_course,
+          targetStream: profile.target_stream,
+        };
+      }
+
+      initialAttempts = await fetchServerTestAttempts(supabase, authUser.id);
+    }
+  } catch (err) {
+    console.warn("StandingPage server query notice:", err);
+  }
+
+  return <StandingViewClient initialUser={initialUser} initialAttempts={initialAttempts} />;
 }

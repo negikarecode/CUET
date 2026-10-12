@@ -112,7 +112,7 @@ export function generateWeeklyReportData(params: {
   } else if (accuracyDelta < 0) {
     narrativeSummary += `Accuracy shifted by ${accuracyDelta}% as question complexity increased. `;
   } else {
-    narrativeSummary += `Performance remained stable under timed test pacing. `;
+    narrativeSummary += `Performance remained stable under timed test conditions. `;
   }
 
   if (weakestTopics.length > 0) {

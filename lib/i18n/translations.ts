@@ -133,7 +133,7 @@ export const translations: Record<string, TranslationDictionary> = {
     upgradeToPro: "Upgrade to Pro",
 
     // Footer
-    footerAbout: "Purpose-built for the updated 2025/2026 zero-internal-choice CUET UG format. We calibrate 72-second pacing and expose the exact conceptual traps that turn +5s into -1s.",
+    footerAbout: "Purpose-built for the updated 2025/2026 zero-internal-choice CUET UG format. We calibrate 72-second exam timing and expose the exact conceptual traps that turn +5s into -1s.",
     patternAligned: "NTA Exam Pattern Aligned",
     officialSimulation: "Official NTA Simulation",
     quickLinks: "Quick Links",

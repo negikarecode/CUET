@@ -71,7 +71,7 @@ const DEFAULT_ANALYTICS: UserAnalyticsSummary = {
     durationMinutes: 60,
     questionCount: 50,
     reason:
-      "Complete your first 50-question diagnostic test to establish your baseline pace and detect trap options.",
+      "Complete your first 50-question diagnostic test to establish your baseline accuracy and detect trap options.",
   },
   subjectCalibration: buildDefaultSubjectCalibration(),
 };

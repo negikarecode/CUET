@@ -80,7 +80,7 @@ export function buildDeterministicPostMockAIInsight(
     const timeSinkQIds = allQuestions.filter((q) => q.isTimeSink).map((q) => q.questionId);
     notablePatterns.push({
       title: "Time-Sink Questions (>72s)",
-      description: `${overall.timeSinkCount} question${overall.timeSinkCount === 1 ? "" : "s"} required more than 72 seconds in this mock, which impacted overall pacing.`,
+      description: `${overall.timeSinkCount} question${overall.timeSinkCount === 1 ? "" : "s"} required more than 72 seconds in this mock, which consumed extra exam time.`,
       evidenceQuestionIds: timeSinkQIds,
     });
   }

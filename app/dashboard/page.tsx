@@ -4,6 +4,7 @@ import DashboardClient, { DashboardInitialData } from "@/components/dashboard/Da
 import { buildDefaultSubjectCalibration, normalizeSubject } from "@/lib/analytics";
 import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
 import { StreamType } from "@/types";
+import { fetchServerTestAttempts } from "@/lib/server-attempts";
 
 export const metadata: Metadata = {
   title: "Dashboard | CUET AI-Prep",
@@ -45,7 +46,7 @@ export default async function DashboardPage() {
       durationMinutes: 60,
       questionCount: 50,
       reason:
-        "Complete your first 50-question diagnostic test to establish your baseline pace and detect trap options.",
+        "Complete your first 50-question diagnostic test to establish your baseline accuracy and detect trap options.",
     },
     weaknessRadar: [],
     timeSinkAlerts: [],
@@ -134,6 +135,7 @@ export default async function DashboardPage() {
           totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0;
 
         serverData.kpi.totalAttempted = totalAttempted;
+        serverData.kpi.correctCount = correctCount;
         serverData.kpi.accuracyPercentage = overallAccuracy;
 
         const subMap = serverData.subjectCalibration || buildDefaultSubjectCalibration();
@@ -302,6 +304,9 @@ export default async function DashboardPage() {
           };
         }
       }
+
+      // Reconstruct authentic test attempts directly synced from Supabase
+      serverData.serverAttempts = await fetchServerTestAttempts(supabase, authUser.id);
     }
   } catch {
     // Graceful fallback to serverData

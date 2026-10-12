@@ -595,7 +595,7 @@ export function calculateEvidenceThreshold(attemptsCount: number): {
     return {
       label: "Emerging weakness",
       confidence: "MEDIUM",
-      rationale: `Emerging pattern observed across ${attemptsCount} questions. Performance reflects a recurring difficulty under exam pacing.`,
+      rationale: `Emerging pattern observed across ${attemptsCount} questions. Performance reflects a recurring difficulty under exam timing.`,
     };
   }
   return {
@@ -614,7 +614,7 @@ export function calculateSpeedVsAccuracyState(
   avgTimeSeconds: number,
   targetTimeSeconds: number
 ): {
-  state: "Concept/Knowledge Gap" | "Pacing/Fluency Deficit" | "Validated Core Strength" | "Major Systemic Weakness" | "Rapid Response Pattern";
+  state: "Concept/Knowledge Gap" | "Fluency Deficit" | "Validated Core Strength" | "Major Systemic Weakness" | "Rapid Response Pattern";
   explanation: string;
 } {
   const isHighAccuracy = accuracyPercentage >= 75;
@@ -630,8 +630,8 @@ export function calculateSpeedVsAccuracyState(
   }
   if (isHighAccuracy && isExcessiveTime) {
     return {
-      state: "Pacing/Fluency Deficit",
-      explanation: "High accuracy accompanied by high response time indicates sound grasp but slow execution pace.",
+      state: "Fluency Deficit",
+      explanation: "High accuracy accompanied by high response time indicates sound grasp but deliberate execution time.",
     };
   }
   if (isHighAccuracy && !isExcessiveTime) {
@@ -781,6 +781,7 @@ export function classifyErrorTaxonomy(
       "Multi-Step Reasoning Failure": Math.round((multiStepReasoningCount / totalErrors) * 100),
       "Application Gap": Math.round((applicationGapCount / totalErrors) * 100),
       "Time / Pacing Issue": Math.round((timePacingCount / totalErrors) * 100),
+      "Time Management Issue": Math.round((timePacingCount / totalErrors) * 100),
       "Guessing / Uncertainty": Math.round((guessingCount / totalErrors) * 100),
       "Memory Confusion": Math.round((memoryConfusionCount / totalErrors) * 100),
     };
@@ -947,9 +948,6 @@ export function generateFullTopicDiagnosis(
     } else if (primaryDiagnosis === "Concept Application Gap") {
       specificWeakness = `Concept Application & Multi-Step Scenarios: ${incorrectCount} of ${attemptsCount} questions were incorrect, clustering on multi-variable application problems.`;
       interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect. Responses demonstrate familiarity on direct single-step stems, but incorrect answers cluster on multi-step or application scenarios requiring multi-variable synthesis.`;
-    } else if (primaryDiagnosis === "Rapid Response Pacing") {
-      specificWeakness = `Rapid Response Timing: Fast responses recorded (~${avgTimeSeconds}s/Q, target: ${targetTimeSeconds}s) alongside ${incorrectCount} incorrect selections out of ${attemptsCount} attempts.`;
-      interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect with an average response time of ~${avgTimeSeconds}s per question. Very fast responses detected. Telemetry cannot determine whether this reflects rapid guessing or instant selection.`;
     } else if (accuracyPercentage < 50) {
       specificWeakness = `Foundational Knowledge Retrieval: ${incorrectCount} of ${attemptsCount} questions were incorrect (${accuracyPercentage}% accuracy). Core definitions in ${chapter || microTopic} require direct NCERT review.`;
       interpretation = `What the data suggests: ${incorrectCount} of ${attemptsCount} questions were incorrect (${accuracyPercentage}% accuracy). Telemetry records multiple errors across core definitions and standard relationships in ${chapter || microTopic}. This pattern indicates foundational knowledge gaps requiring direct NCERT textbook review.`;
@@ -963,10 +961,6 @@ export function generateFullTopicDiagnosis(
     `${incorrectCount}/${attemptsCount} questions incorrect (${accuracyPercentage}% accuracy)`,
     `Avg Response: ${avgTimeSeconds}s per question (Target: ≤${targetTimeSeconds}s)`,
   ];
-
-  if (avgTimeSeconds < 10 && attemptsCount > 0) {
-    evidenceList.push(`Very fast responses detected (~${avgTimeSeconds}s/Q). Telemetry cannot determine whether this reflects rapid guessing or instant selection.`);
-  }
 
   if (attemptsCount < 5) {
     evidenceList.push(`Sample size: ${attemptsCount} attempt${attemptsCount === 1 ? "" : "s"} (Insufficient evidence threshold: <5 attempts)`);
@@ -1046,7 +1040,7 @@ export function generateFullTopicDiagnosis(
     practiceType = "10-Question Timed Drill";
     phases = [
       { phase: 1, title: "Phase 1: Accuracy Lock", questionType: "Numerical & Formula", questionCount: 5, targetAccuracyPercentage: 90, targetPacingSeconds: targetTimeSeconds, description: "Verify formula selection without time pressure." },
-      { phase: 2, title: "Phase 2: Timed Pacing Drill", questionType: "Timed Exam Simulation", questionCount: 10, targetAccuracyPercentage: 80, targetPacingSeconds: targetTimeSeconds, description: "Enforce strict speed under ≤" + targetTimeSeconds + "s per question." },
+      { phase: 2, title: "Phase 2: Timed Exam Simulation", questionType: "Timed Exam Simulation", questionCount: 10, targetAccuracyPercentage: 80, targetPacingSeconds: targetTimeSeconds, description: "Enforce strict speed under ≤" + targetTimeSeconds + "s per question." },
     ];
   } else if (errorTaxonomy.distractorTrapCount > 0) {
     practiceType = "Misconception Repair Drill";
@@ -1110,7 +1104,6 @@ export function generateFullTopicDiagnosis(
     problemClassification = "QUESTION_INTERPRETATION";
   } else if (
     primaryDiagnosis === "Calculation Error" ||
-    primaryDiagnosis === "Rapid Response Pacing" ||
     primaryDiagnosis === "Precision Slip / Careless Error" ||
     errorTaxonomy.calculationCount > 0 ||
     errorTaxonomy.timePacingCount > 0 ||
@@ -1309,8 +1302,8 @@ export function generateDiagnosticSummaryReport(
 
   if (slowTopics.length > 0 && slowTopics[0]) {
     const slowItem = slowTopics[0];
-    pacingLabel = "PACING ALERT";
-    pacingIssue = `Numerical calculations in ${slowItem.chapter} exceed target pace (${slowItem.observedPerformance.avgTimeSeconds}s vs ${slowItem.observedPerformance.targetTimeSeconds}s).`;
+    pacingLabel = "TIME ANALYSIS";
+    pacingIssue = `Numerical calculations in ${slowItem.chapter} require additional time (${slowItem.observedPerformance.avgTimeSeconds}s vs ${slowItem.observedPerformance.targetTimeSeconds}s).`;
   } else {
     pacingLabel = "RESPONSE PATTERN";
     pacingIssue = "Standard response pace maintained across attempted questions.";

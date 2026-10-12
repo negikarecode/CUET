@@ -303,7 +303,7 @@ export function computeAnalyticsFromAttempts(
         durationMinutes: 60,
         questionCount: 50,
         reason:
-          "Complete your first 50-question diagnostic test to establish your baseline pace and detect trap options.",
+          "Complete your first 50-question diagnostic test to establish your baseline accuracy and detect trap options.",
       },
       subjectCalibration: buildDefaultSubjectCalibration(),
     };
@@ -683,7 +683,7 @@ export function computeAnalyticsFromAttempts(
     } else if (topicState.state === "emerging_weakness") {
       remedialPrescription = `Attempt a 5-question targeted repair drill in ${bucket.chapter} to stabilize accuracy above 75%.`;
     } else if (topicState.state === "early_signal") {
-      remedialPrescription = `Early signal. Complete 5-10 more practice questions under exam pacing to confirm topic consistency.`;
+      remedialPrescription = `Early signal. Complete 5-10 more practice questions under exam timing to confirm topic consistency.`;
     } else if (topicState.isStrength || isRecovered) {
       remedialPrescription = `Stronghold. Maintain sharpness with a quick 5-minute revision drill once a week.`;
     }

@@ -270,7 +270,7 @@ export function getTopicDiagnosticState(params: {
       isStrength: true,
       isRecovered: true,
       confidenceLevel: "high",
-      explanation: `Topic mastery recovered (≥80% accuracy over 10+ attempts under exam pacing).`,
+      explanation: `Topic mastery recovered (≥80% accuracy over 10+ attempts under exam timing).`,
     };
   }
 
@@ -715,7 +715,7 @@ export const SUBJECT_METADATA_REGISTRY: Record<string, SubjectMetadataConfig> = 
       "Review governing formulas and boundary conditions in NCERT",
       "Write out explicit SI units and negative signs",
       "Practice dimensional elimination on multi-variable numericals",
-      "Attempt 5-question numerical drill under 60s pacing",
+      "Attempt 5-question numerical drill under 60s timing",
     ],
   },
   chemistry: {

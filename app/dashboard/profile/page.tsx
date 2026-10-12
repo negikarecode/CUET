@@ -13,6 +13,7 @@ import {
 import { calculateCollegeReadiness } from "@/lib/college-benchmarks";
 import { MASTER_TROPHIES } from "@/lib/gamification";
 import { StreamOption } from "@/types/database";
+import { fetchServerTestAttempts } from "@/lib/server-attempts";
 
 export const metadata: Metadata = {
   title: "Aspirant Profile & Readiness | CUET AI-Prep",
@@ -50,6 +51,7 @@ export default async function ProfilePage() {
   let accuracyPercentage = 0;
   let weakTopics: WeakMicroTopicItem[] = [];
   let userUnlockedTrophyMap: Record<string, string> = {};
+  let serverAttempts: import("@/types").RecordedTestAttempt[] = [];
 
   // 2. Fetch authenticated Supabase session & real-time data
   try {
@@ -100,16 +102,24 @@ export default async function ProfilePage() {
         };
       }
 
+      // Reconstruct authentic test attempts for store hydration
+      serverAttempts = await fetchServerTestAttempts(supabase, authUser.id);
+
       // 2b. Query attempts count & accuracy from public.user_attempts
       const { data: attemptsRows } = await supabase
         .from("user_attempts")
-        .select("id, is_correct, selected_option, questions(correct_option)")
+        .select("id, test_id, question_id, is_correct, selected_option, questions(correct_option)")
         .eq("user_id", authUser.id);
 
       if (attemptsRows) {
-        const attemptedQuestions = attemptsRows.filter(
-          (a) => a.selected_option !== null && a.selected_option !== undefined
-        );
+        const seenCanonical = new Set<string>();
+        const attemptedQuestions = attemptsRows.filter((a: any) => {
+          if (a.selected_option === null || a.selected_option === undefined) return false;
+          const key = `${a.test_id || "default"}:::${a.question_id || a.id}`;
+          if (seenCanonical.has(key)) return false;
+          seenCanonical.add(key);
+          return true;
+        });
         totalAttempts = attemptedQuestions.length;
         correctAttempts = attemptedQuestions.filter((a: any) => {
           if (a.is_correct === true || a.is_correct === "true" || a.is_correct === 1) return true;
@@ -272,6 +282,7 @@ export default async function ProfilePage() {
     diagnostic,
     weakTopics,
     trophies,
+    serverAttempts,
   };
 
   return <ProfileClient initialData={initialData} />;

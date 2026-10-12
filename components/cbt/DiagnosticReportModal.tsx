@@ -368,12 +368,12 @@ export default function DiagnosticReportModal({
               {/* TAB 1: NCERT Error Decrypter */}
               {activeTab === "decrypter" && (
                 <>
-                  {/* Pacing Bottlenecks & Alerts */}
+                  {/* Time Sink Bottlenecks & Alerts */}
                   {data.time_sink_alerts.length > 0 && (
                     <div className="space-y-3">
                       <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800">
                         <Hourglass className="w-4 h-4 text-amber-500 stroke-[2]" />
-                        <span>Pacing Bottlenecks Detected ({data.time_sink_alerts.length})</span>
+                        <span>Time Sinks Detected ({data.time_sink_alerts.length})</span>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -385,7 +385,7 @@ export default function DiagnosticReportModal({
                             <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5 stroke-[2]" />
                             <div>
                               <span className="font-bold text-slate-900">
-                                Pacing Alert (Q{alert.question_number}):
+                                Question Timing Alert (Q{alert.question_number}):
                               </span>
                               <p className="text-slate-700 mt-0.5 leading-relaxed font-medium">
                                 {alert.message}

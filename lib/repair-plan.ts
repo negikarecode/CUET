@@ -291,7 +291,7 @@ export function deriveTopicRepairPlan(
   const step3: RepairPlanStepInfo = {
     stepNumber: 3,
     title: "③ TIMED RETEST",
-    description: "10 Qs at expected exam pacing.",
+    description: "10 Qs under timed exam conditions.",
     state: step3State,
     status: step3State,
     isCompleted: step3Completed,

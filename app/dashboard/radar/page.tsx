@@ -10,6 +10,7 @@ import { buildDefaultSubjectCalibration, normalizeSubject } from "@/lib/analytic
 import { generateFullTopicDiagnosis } from "@/lib/diagnostic-engine";
 import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
 import { StreamType } from "@/types";
+import { fetchServerTestAttempts } from "@/lib/server-attempts";
 
 export const metadata: Metadata = {
   title: "Weakness report | CUET AI-Prep",
@@ -90,6 +91,9 @@ export default async function WeaknessRadarPage() {
           currentStreak: profile.current_streak,
         };
       }
+
+      // Reconstruct server test attempts for store hydration
+      serverData.serverAttempts = await fetchServerTestAttempts(supabase, authUser.id);
 
       // Query authentic attempt history
       const { data: userAttempts } = await supabase
