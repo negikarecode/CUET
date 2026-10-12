@@ -84,9 +84,11 @@ export default function StandingViewClient({
   }, []);
 
   // Determine user's remembered dream college from authentication / profile
+  const userDreamRaw = (user?.targetCollege || initialUser?.targetCollege || storeUser?.targetCollege || "").trim();
   const dreamCollegeResolved = useMemo(() => {
-    return resolveTargetCollegeMatch(user?.targetCollege || "");
-  }, [user?.targetCollege]);
+    if (!userDreamRaw) return null;
+    return resolveTargetCollegeMatch(userDreamRaw) || userDreamRaw;
+  }, [userDreamRaw]);
 
   // Initial state with dream college prioritized
   const [selectedCourseId, setSelectedCourseId] = useState<string>("bcom_hons");
@@ -100,6 +102,14 @@ export default function StandingViewClient({
   );
 
   const searchParams = useSearchParams();
+
+  // Keep targetCollege synced with dreamCollegeResolved as soon as available
+  useEffect(() => {
+    if (dreamCollegeResolved) {
+      setTargetCollegeLocal(dreamCollegeResolved);
+      setTrendCollege(dreamCollegeResolved);
+    }
+  }, [dreamCollegeResolved]);
 
   // Sync target college & course from search params or user profile with dream college precedence
   useEffect(() => {

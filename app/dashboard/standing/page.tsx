@@ -29,11 +29,15 @@ export default async function StandingPage() {
         .eq("id", authUser.id)
         .maybeSingle();
 
-      if (profile) {
+      const college = profile?.target_college || (authUser.user_metadata?.target_college as string | undefined);
+      const course = profile?.target_course || (authUser.user_metadata?.target_course as string | undefined);
+      const stream = profile?.target_stream || (authUser.user_metadata?.target_stream as string | undefined);
+
+      if (college || course || stream) {
         initialUser = {
-          targetCollege: profile.target_college,
-          targetCourse: profile.target_course,
-          targetStream: profile.target_stream,
+          targetCollege: college,
+          targetCourse: course,
+          targetStream: stream,
         };
       }
 

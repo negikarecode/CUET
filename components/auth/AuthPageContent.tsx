@@ -161,7 +161,7 @@ export default function AuthPageContent({
           name: userFullName,
           email: cleanEmail,
           age: data.user.user_metadata?.age || "18",
-          targetCollege: dreamCollege || userCollege,
+          targetCollege: userCollege || dreamCollege,
           targetUniversity: userUniversity,
           targetCourse: userCourse,
           preferredStream: userStream,
