@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { DiagnosticCycle } from "@/types/cycle";
 import { generateCycleAIInterpretation } from "@/lib/cycle-engine";
+import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
 
 /**
  * GET /api/student/diagnostic-cycle
@@ -56,6 +57,16 @@ export async function POST(req: NextRequest) {
 
     if (!cycle || !cycle.cycleNumber) {
       return NextResponse.json({ error: "Invalid cycle payload" }, { status: 400 });
+    }
+
+    // Rate limit AI interpretation to prevent cost/DoS abuse
+    const clientIdentifier = getClientIdentifier(req, user?.id);
+    const rateCheck = checkServerRateLimit("diagnostic_cycle", clientIdentifier, 30);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: "Daily limit for diagnostic cycle interpretation reached.", remaining: 0 },
+        { status: 429, headers: getRateLimitHeaders(rateCheck) }
+      );
     }
 
     // Generate AI interpretation using Groq LPU with deterministic fallback

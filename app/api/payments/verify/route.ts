@@ -18,24 +18,30 @@ export async function POST(req: NextRequest) {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
-      userId = "user_cuet_aspirant_01",
       tier = "ai_practice_pass",
     } = body;
 
-    // Resolve authenticated user session to prevent IDOR
-    let targetUserId = userId;
+    // Require authenticated user session to prevent IDOR and unauthorized upgrades
+    const supabase = createClient();
+    let authUser = null;
     try {
-      const supabase = createClient();
       const {
-        data: { user: authUser },
+        data: { user },
       } = await supabase.auth.getUser();
-      if (authUser) {
-        targetUserId = authUser.id;
-      }
-    } catch {
-      // Offline fallback
+      authUser = user;
+    } catch {}
+
+    if (!authUser) {
+      return NextResponse.json(
+        {
+          error: "Unauthorized: Active user session required to verify subscription.",
+          code: "UNAUTHORIZED",
+        },
+        { status: 401 }
+      );
     }
 
+    const targetUserId = authUser.id;
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
 
     // FAIL-CLOSED SECURITY POLICY:
@@ -68,10 +74,12 @@ export async function POST(req: NextRequest) {
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest("hex");
 
-    const signaturesMatch = crypto.timingSafeEqual(
-      Buffer.from(expectedSignature, "utf-8"),
-      Buffer.from(razorpay_signature, "utf-8")
-    );
+    const expectedBuf = Buffer.from(expectedSignature, "utf-8");
+    const actualBuf = Buffer.from(razorpay_signature, "utf-8");
+
+    const signaturesMatch =
+      expectedBuf.length === actualBuf.length &&
+      crypto.timingSafeEqual(expectedBuf, actualBuf);
 
     if (!signaturesMatch) {
       console.warn(`[SECURITY] Tampered payment signature for order ${razorpay_order_id}`);

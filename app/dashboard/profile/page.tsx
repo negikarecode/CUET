@@ -11,7 +11,7 @@ import {
   ProfileTrophyItem,
 } from "@/types/profile";
 import { calculateCollegeReadiness } from "@/lib/college-benchmarks";
-import { MASTER_TROPHIES } from "@/lib/gamification";
+import { MASTER_TROPHIES, calculateActiveStreak } from "@/lib/gamification";
 import { StreamOption } from "@/types/database";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
 
@@ -37,7 +37,7 @@ export default async function ProfilePage() {
     targetCollege: "SRCC",
     xp: 0,
     campusCoins: 50,
-    currentStreak: 1,
+    currentStreak: 0,
     isPremium: false,
     subscriptionTier: "free",
     subscriptionExpiresAt: null,
@@ -85,7 +85,10 @@ export default async function ProfilePage() {
           targetCollege: profileRow.target_college || "SRCC",
           xp: profileRow.xp ?? 0,
           campusCoins: profileRow.campus_coins ?? 50,
-          currentStreak: profileRow.current_streak ?? 1,
+          currentStreak: calculateActiveStreak(
+            profileRow.current_streak ?? 0,
+            profileRow.last_practice_date
+          ),
           isPremium: Boolean(profileRow.is_premium),
           subscriptionTier: profileRow.subscription_tier || "free",
           subscriptionExpiresAt: profileRow.subscription_expires_at ?? null,

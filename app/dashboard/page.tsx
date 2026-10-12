@@ -5,6 +5,7 @@ import { buildDefaultSubjectCalibration, normalizeSubject } from "@/lib/analytic
 import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
 import { StreamType } from "@/types";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
+import { calculateActiveStreak } from "@/lib/gamification";
 
 export const metadata: Metadata = {
   title: "Dashboard | CUET AI-Prep",
@@ -28,12 +29,12 @@ export default async function DashboardPage() {
       selectedSubjects: ["Physics", "Chemistry", "Mathematics", "Biology"],
       xp: 0,
       campusCoins: 0,
-      currentStreak: 1,
+      currentStreak: 0,
     },
     kpi: {
       totalAttempted: 0,
       accuracyPercentage: 0,
-      dailyStreak: 1,
+      dailyStreak: 0,
       xpLevel: "Level 1 - Aspirant",
       xpLevelNumber: 1,
       xpProgressInLevel: 0,
@@ -77,6 +78,11 @@ export default async function DashboardPage() {
             ? profile.selected_subjects
             : fallbackSubs;
 
+        const activeStreak = calculateActiveStreak(
+          profile.current_streak ?? 0,
+          profile.last_practice_date
+        );
+
         serverData.user = {
           id: profile.id,
           fullName: profile.full_name,
@@ -87,9 +93,9 @@ export default async function DashboardPage() {
           selectedSubjects: profileSubjects,
           xp: profile.xp,
           campusCoins: profile.campus_coins,
-          currentStreak: profile.current_streak,
+          currentStreak: activeStreak,
         };
-        serverData.kpi.dailyStreak = profile.current_streak;
+        serverData.kpi.dailyStreak = activeStreak;
       }
 
       // Query real attempts count and attempt history with question metadata

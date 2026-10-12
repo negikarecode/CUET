@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { runSundayRitual } from "@/lib/sunday-ritual";
 
@@ -6,11 +7,18 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get("Authorization");
+  const authHeader = request.headers.get("Authorization") || "";
   const secret = process.env.CRON_SECRET;
 
   // Strict fail-closed check for cron endpoint
-  if (!secret || secret.includes("placeholder") || authHeader !== `Bearer ${secret}`) {
+  if (!secret || secret.includes("placeholder") || secret.trim() === "") {
+    return new Response("Unauthorized: Valid Bearer CRON_SECRET required", { status: 401 });
+  }
+
+  const expectedHeader = `Bearer ${secret}`;
+  const authBuf = Buffer.from(authHeader);
+  const expBuf = Buffer.from(expectedHeader);
+  if (authBuf.length !== expBuf.length || !crypto.timingSafeEqual(authBuf, expBuf)) {
     return new Response("Unauthorized: Valid Bearer CRON_SECRET required", { status: 401 });
   }
 

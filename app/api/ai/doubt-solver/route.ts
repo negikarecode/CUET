@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkAndRecordRateLimit } from "@/lib/config/dashboardConfig";
+import { createClient } from "@/lib/supabase/server";
+import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
 import { tokenLogger } from "@/lib/ai/token-logger";
 import Groq from "groq-sdk";
 
@@ -24,14 +25,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Message is required." }, { status: 400 });
     }
 
-    // 1. Check Daily Rate Limit
-    const rateCheck = checkAndRecordRateLimit(userId, "doubt_solver_messages");
+    // 1. Authenticate & Check Server-Side Rate Limit
+    let authUserId: string | null = null;
+    try {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (authUser) authUserId = authUser.id;
+    } catch {}
+
+    const clientIdentifier = getClientIdentifier(req, authUserId || userId);
+    const rateCheck = checkServerRateLimit("doubt_solver", clientIdentifier, 40);
     if (!rateCheck.allowed) {
-      return NextResponse.json({
-        success: false,
-        error: rateCheck.message,
-        rateLimited: true,
-      });
+      return NextResponse.json(
+        {
+          success: false,
+          error: rateCheck.error,
+          rateLimited: true,
+        },
+        { status: 429, headers: getRateLimitHeaders(rateCheck) }
+      );
     }
 
     // 2. Format grounding facts

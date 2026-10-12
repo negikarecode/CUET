@@ -22,6 +22,7 @@ export default function CBTResultView() {
   const addXP = useTestStore((state) => state.addXP);
   const addCoins = useTestStore((state) => state.addCoins);
   const recordTestAttempt = useTestStore((state) => state.recordTestAttempt);
+  const setStreak = useTestStore((state) => state.setStreak);
 
   const [earnedXP, setEarnedXP] = useState(0);
   const [unlockedTrophies, setUnlockedTrophies] = useState<Trophy[]>([]);
@@ -122,7 +123,11 @@ export default function CBTResultView() {
     addXP(xp);
 
     // Update practice streak
-    updateStreak(user.id);
+    updateStreak(user.id).then(({ newStreak }) => {
+      if (typeof newStreak === "number") {
+        setStreak(newStreak);
+      }
+    });
 
     // Evaluate trophy achievements
     evaluateTrophies(user.id, {
@@ -147,6 +152,7 @@ export default function CBTResultView() {
     answers,
     testMeta,
     recordTestAttempt,
+    setStreak,
     user.id,
     user.dailyStreak,
     addXP,

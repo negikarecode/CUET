@@ -34,8 +34,12 @@ export async function POST(
     const body = await req.json().catch(() => ({}));
     const { action } = body;
 
-    // Reveal authentic answer keys and solutions upon verified submission
-    if (action === "reveal" || action === "submit") {
+    // Reveal authentic answer keys and solutions ONLY upon verified test submission
+    const isVerifiedSubmission =
+      action === "submit" &&
+      (body.answersSubmitted === true || (body.questionStates && typeof body.questionStates === "object"));
+
+    if (isVerifiedSubmission) {
       const { testMeta, questions } = getQuestionsForTest(params.testId);
       return NextResponse.json({
         success: true,
@@ -45,8 +49,8 @@ export async function POST(
     }
 
     return NextResponse.json(
-      { error: "Invalid action. Expected 'reveal' or 'submit'." },
-      { status: 400 }
+      { error: "Forbidden: Test answers are only revealed upon verified submission of attempts." },
+      { status: 403 }
     );
   } catch (err: any) {
     console.error("[Test Reveal Error]:", err);

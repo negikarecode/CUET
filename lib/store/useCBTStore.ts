@@ -729,7 +729,11 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
         const res = await fetch(`/api/test/${testId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "reveal" }),
+          body: JSON.stringify({
+            action: "submit",
+            questionStates,
+            answersSubmitted: true,
+          }),
         });
         if (res.ok) {
           const data = await res.json();
@@ -868,7 +872,14 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(attemptRecord),
-        }).catch((err) => console.warn("Background API attempt record notice:", err));
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (typeof data?.streak === "number") {
+              useTestStore.getState().setStreak(data.streak);
+            }
+          })
+          .catch((err) => console.warn("Background API attempt record notice:", err));
       }
     } catch (err) {
       console.warn("Failed to immediately record test attempt:", err);

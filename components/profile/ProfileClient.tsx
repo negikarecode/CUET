@@ -109,10 +109,10 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
     // If Zustand user has more recent local xp or streak, synchronize gracefully
     if (zustandUser && zustandUser.id === profile.id) {
-      if (zustandUser.dailyStreak > profile.currentStreak || zustandUser.xpPoints > profile.xp) {
+      if (zustandUser.dailyStreak !== profile.currentStreak || zustandUser.xpPoints > profile.xp) {
         setProfile((prev) => ({
           ...prev,
-          currentStreak: Math.max(prev.currentStreak, zustandUser.dailyStreak),
+          currentStreak: zustandUser.dailyStreak,
           xp: Math.max(prev.xp, zustandUser.xpPoints),
           campusCoins: Math.max(prev.campusCoins, zustandUser.campusCoins ?? 0),
         }));

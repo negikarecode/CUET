@@ -44,7 +44,7 @@ export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
       id: 'streak',
       label: 'Streak',
       value: `${dailyStreak} ${dailyStreak === 1 ? 'day' : 'days'}`,
-      context: 'Daily practice sessions',
+      context: dailyStreak > 0 ? 'Consecutive practice days' : 'Practice today to start streak',
     },
   ];
 

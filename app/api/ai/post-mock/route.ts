@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PostMockDeterministicReport } from "@/types/postMockAnalysis";
 import { generatePostMockAIInsight } from "@/lib/post-mock-ai-engine";
 import { getCachedPostMockAI, setCachedPostMockAI } from "@/lib/ai-cache";
+import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { aiInsight: cached, cached: true },
         { headers: { "X-Cache": "HIT" } }
+      );
+    }
+
+    const clientIdentifier = getClientIdentifier(req, activeUserId);
+    const rateCheck = checkServerRateLimit("post_mock", clientIdentifier, 30);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: "Daily limit for Post-Mock AI insight reached.", remaining: 0 },
+        { status: 429, headers: getRateLimitHeaders(rateCheck) }
       );
     }
 

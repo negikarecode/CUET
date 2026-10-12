@@ -1,7 +1,8 @@
+import { NextRequest } from "next/server";
+
 /**
- * High-Performance Rate Limiter & Usage Tracker
- * Free tier: 3 AI diagnostic runs per 24 hours
- * Paid tier (is_premium): 25 AI diagnostic runs per 24 hours
+ * Server-Side Rate Limiter & Abuse Prevention Engine
+ * Supports user-scoped and IP-scoped rate limiting with daily reset.
  */
 
 export interface RateLimitResult {
@@ -13,7 +14,7 @@ export interface RateLimitResult {
 }
 
 // In-Memory Daily Tracker
-// Key format: `${userId}:${YYYY-MM-DD}`
+// Key format: `${feature}:${identifier}:${YYYY-MM-DD}`
 const memoryUsageStore = new Map<string, number>();
 
 // Clean up keys older than 2 days periodically
@@ -24,7 +25,7 @@ function cleanupOldKeys() {
 
   for (const key of memoryUsageStore.keys()) {
     const parts = key.split(":");
-    const keyDate = parts[1];
+    const keyDate = parts[parts.length - 1];
     if (keyDate && keyDate < cutoffDateStr) {
       memoryUsageStore.delete(key);
     }
@@ -42,7 +43,80 @@ export function getDailyResetTimestamp(): number {
 }
 
 /**
- * Checks if user is permitted to make an AI request
+ * Safely extracts client IP address from request headers
+ */
+export function getClientIp(req: Request | NextRequest): string {
+  try {
+    const headers = req.headers;
+    const xForwardedFor = headers.get("x-forwarded-for");
+    if (xForwardedFor) {
+      const firstIp = xForwardedFor.split(",")[0]?.trim();
+      if (firstIp) return firstIp;
+    }
+    const xRealIp = headers.get("x-real-ip");
+    if (xRealIp) return xRealIp.trim();
+
+    const cfIp = headers.get("cf-connecting-ip");
+    if (cfIp) return cfIp.trim();
+  } catch {
+    // Ignore header reading errors
+  }
+  return "127.0.0.1";
+}
+
+/**
+ * Resolves a trusted client identifier for rate limiting:
+ * Prefers verified auth user ID; falls back to client IP address.
+ */
+export function getClientIdentifier(
+  req: Request | NextRequest,
+  authUserId?: string | null
+): string {
+  if (authUserId && authUserId !== "guest" && !authUserId.startsWith("anon_")) {
+    return `user:${authUserId}`;
+  }
+  return `ip:${getClientIp(req)}`;
+}
+
+/**
+ * Checks and increments rate limit usage for a given feature and identifier.
+ */
+export function checkServerRateLimit(
+  feature: string,
+  identifier: string,
+  dailyLimit: number = 30
+): RateLimitResult {
+  cleanupOldKeys();
+
+  const todayStr = new Date().toISOString().split("T")[0]!;
+  const key = `${feature}:${identifier}:${todayStr}`;
+
+  const currentCount = memoryUsageStore.get(key) ?? 0;
+  const resetAt = getDailyResetTimestamp();
+
+  if (currentCount >= dailyLimit) {
+    return {
+      allowed: false,
+      limit: dailyLimit,
+      remaining: 0,
+      resetAt,
+      error: `Daily limit of ${dailyLimit} requests for ${feature} reached. Resets at midnight UTC.`,
+    };
+  }
+
+  // Atomically record usage
+  memoryUsageStore.set(key, currentCount + 1);
+
+  return {
+    allowed: true,
+    limit: dailyLimit,
+    remaining: Math.max(0, dailyLimit - (currentCount + 1)),
+    resetAt,
+  };
+}
+
+/**
+ * Checks if user is permitted to make an AI request (compatibility method)
  */
 export async function checkRateLimit(
   userId: string,
@@ -51,7 +125,7 @@ export async function checkRateLimit(
   cleanupOldKeys();
 
   const todayStr = new Date().toISOString().split("T")[0]!;
-  const key = `${userId}:${todayStr}`;
+  const key = `ai_diagnose:${userId}:${todayStr}`;
 
   const limit = isPaid ? 25 : 3;
   const currentCount = memoryUsageStore.get(key) ?? 0;
@@ -76,11 +150,11 @@ export async function checkRateLimit(
 }
 
 /**
- * Increments AI analysis usage count for today
+ * Increments AI analysis usage count for today (compatibility method)
  */
 export async function incrementUsage(userId: string): Promise<number> {
   const todayStr = new Date().toISOString().split("T")[0]!;
-  const key = `${userId}:${todayStr}`;
+  const key = `ai_diagnose:${userId}:${todayStr}`;
 
   const currentCount = memoryUsageStore.get(key) ?? 0;
   const nextCount = currentCount + 1;

@@ -10,30 +10,27 @@ export const dynamic = "force-dynamic";
 const CADENCE_LIMIT_HOURS = 12;
 const CADENCE_LIMIT_MS = CADENCE_LIMIT_HOURS * 60 * 60 * 1000;
 
-export async function POST(req: NextRequest) {
+export async function POST(_req: NextRequest) {
   try {
-    let userId = "user_cuet_aspirant_01";
-
     const supabase = createClient();
+    let authUser = null;
     try {
       const {
-        data: { user: authUser },
+        data: { user },
       } = await supabase.auth.getUser();
-      if (authUser) {
-        userId = authUser.id;
-      }
+      authUser = user;
     } catch {
-      // Fallback to body or default
+      // Fallback
     }
 
-    try {
-      const body = await req.json().catch(() => ({}));
-      if (body?.userId && userId === "user_cuet_aspirant_01") {
-        userId = body.userId;
-      }
-    } catch {
-      // Ignore body parse errors if empty
+    if (!authUser) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized: Active user session required." },
+        { status: 401 }
+      );
     }
+
+    const userId = authUser.id;
 
     // ─── 1. COLD-START QUALIFICATION GATE CHECK (Phase 2) ───────────────────
     const gateStatus = await checkAIQualificationGate(userId);

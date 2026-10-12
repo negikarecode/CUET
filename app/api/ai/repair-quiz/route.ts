@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { Question } from "@/types";
 import { getQuestionsForTest } from "@/lib/data/mock50Questions";
-import { checkAndRecordRateLimit } from "@/lib/config/dashboardConfig";
+import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
 import { tokenLogger } from "@/lib/ai/token-logger";
  
 export const dynamic = "force-dynamic";
@@ -38,7 +38,6 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as RepairQuizRequestBody;
     const { userId: bodyUserId, weakMicroTopics, subject } = body;
-    const userId = bodyUserId || `anon_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
     if (!Array.isArray(weakMicroTopics) || weakMicroTopics.length === 0) {
       return NextResponse.json(
@@ -47,10 +46,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const primaryTopics = weakMicroTopics.slice(0, 3);
-    const cacheKey = `${userId}:${subject || "general"}:${primaryTopics.sort().join("_")}`;
+    // 1. Resolve Auth User & Identifier
+    let authUserId: string | null = null;
+    try {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (authUser?.id) authUserId = authUser.id;
+    } catch {}
 
-    // 1. Check Response Cache FIRST
+    const clientIdentifier = getClientIdentifier(req, authUserId || bodyUserId);
+    const userId = authUserId || bodyUserId || clientIdentifier;
+
+    const primaryTopics = weakMicroTopics.slice(0, 3);
+    const cacheKey = `${clientIdentifier}:${subject || "general"}:${primaryTopics.sort().join("_")}`;
+
+    // 2. Check Response Cache FIRST
     const cachedQuiz = memoryQuizCache.get(cacheKey);
     if (cachedQuiz && Date.now() - cachedQuiz.cachedAt < QUIZ_CACHE_TTL_MS) {
       tokenLogger.logUsage({
@@ -67,15 +77,15 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 2. Check Daily Rate Limit (abuse protection only, no paywall)
-    const rateLimit = checkAndRecordRateLimit(userId, "repair_drills");
+    // 3. Check Daily Server Rate Limit
+    const rateLimit = checkServerRateLimit("repair_drills", clientIdentifier, 30);
     if (!rateLimit.allowed) {
       return NextResponse.json(
         {
-          error: rateLimit.message || "Daily practice drill limit reached for today. Resets tomorrow.",
+          error: rateLimit.error || "Daily practice drill limit reached for today. Resets tomorrow.",
           remaining: 0,
         },
-        { status: 429 }
+        { status: 429, headers: getRateLimitHeaders(rateLimit) }
       );
     }
 

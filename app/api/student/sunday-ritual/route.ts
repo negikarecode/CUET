@@ -5,27 +5,28 @@ import { checkAIQualificationGate } from "@/lib/ai-gate";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   try {
-    let userId = "user_cuet_aspirant_01";
     const supabase = createClient();
+    let authUser = null;
 
     try {
       const {
-        data: { user: authUser },
+        data: { user },
       } = await supabase.auth.getUser();
-      if (authUser) {
-        userId = authUser.id;
-      }
+      authUser = user;
     } catch {
       // Fallback
     }
 
-    const { searchParams } = new URL(req.url);
-    const paramUserId = searchParams.get("userId");
-    if (paramUserId && userId === "user_cuet_aspirant_01") {
-      userId = paramUserId;
+    if (!authUser) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized: Active user session required." },
+        { status: 401 }
+      );
     }
+
+    const userId = authUser.id;
 
     // Qualification gate check
     const gate = await checkAIQualificationGate(userId);

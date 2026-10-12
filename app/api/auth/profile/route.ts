@@ -28,20 +28,29 @@ export async function POST(req: Request) {
     }
 
     // Verify authenticated user session to prevent IDOR attacks
+    let authUser = null;
     try {
       const supabase = createClient();
       const {
-        data: { user: authUser },
+        data: { user },
       } = await supabase.auth.getUser();
-
-      if (authUser && authUser.id !== id) {
-        return NextResponse.json(
-          { error: "Forbidden: Cannot update profile of another user." },
-          { status: 403 }
-        );
-      }
+      authUser = user;
     } catch {
       // Continue for offline sandbox development
+    }
+
+    if (!authUser) {
+      return NextResponse.json(
+        { error: "Unauthorized: Active session required to update profile." },
+        { status: 401 }
+      );
+    }
+
+    if (authUser.id !== id) {
+      return NextResponse.json(
+        { error: "Forbidden: Cannot update profile of another user." },
+        { status: 403 }
+      );
     }
 
     // Capitalize target stream for database constraint: 'Science' | 'Commerce' | 'Humanities'
@@ -80,8 +89,8 @@ export async function POST(req: Request) {
       // First-time initialization
       profilePayload.xp = 0;
       profilePayload.campus_coins = 50;
-      profilePayload.current_streak = 1;
-      profilePayload.last_practice_date = new Date().toISOString().split("T")[0];
+      profilePayload.current_streak = 0;
+      profilePayload.last_practice_date = null;
       profilePayload.is_premium = false;
       profilePayload.subscription_tier = "free";
     }
@@ -110,6 +119,7 @@ export async function POST(req: Request) {
 /**
  * GET /api/auth/profile?id=<userId>
  * Retrieves authentic user profile data from public.profiles
+ * Requires authenticated session; filters private fields for non-owners.
  */
 export async function GET(req: Request) {
   try {
@@ -123,12 +133,35 @@ export async function GET(req: Request) {
       );
     }
 
+    let authUser = null;
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      authUser = user;
+    } catch {}
+
+    if (!authUser) {
+      return NextResponse.json(
+        { error: "Unauthorized: Active session required." },
+        { status: 401 }
+      );
+    }
+
+    const isSelf = authUser.id === id;
     const supabaseAdmin = createAdminClient();
-    const { data: profile, error } = await supabaseAdmin
-      .from("profiles")
-      .select("*")
-      .eq("id", id)
-      .single();
+
+    // If viewing another student, only expose public safe display fields
+    const query = isSelf
+      ? supabaseAdmin.from("profiles").select("*").eq("id", id).single()
+      : supabaseAdmin
+          .from("profiles")
+          .select("id, full_name, avatar_url, target_stream, target_college, target_university, xp, current_streak")
+          .eq("id", id)
+          .single();
+
+    const { data: profile, error } = await query;
 
     if (error || !profile) {
       return NextResponse.json(

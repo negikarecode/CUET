@@ -14,29 +14,27 @@ export async function POST(req: NextRequest) {
     const body = (await req.json().catch(() => ({}))) as CreateOrderRequestBody;
 
     // 1. Authenticate user via Supabase Server Session
-    let userId = body.userId || "user_cuet_aspirant_01";
-    let userEmail = body.email || "aspirant@cuet-prep.in";
+    const supabase = createClient();
+    let authUser = null;
 
     try {
-      const supabase = createClient();
       const {
-        data: { user: authUser },
+        data: { user },
       } = await supabase.auth.getUser();
-
-      if (authUser) {
-        userId = authUser.id;
-        userEmail = authUser.email || userEmail;
-      }
+      authUser = user;
     } catch {
-      // Fall back to client-provided userId for local offline development
+      // Fall back for local development
     }
 
-    if (!userId) {
+    if (!authUser) {
       return NextResponse.json(
-        { error: "Unauthorized. Authentication required to initiate checkout." },
+        { error: "Unauthorized. Active user session required to initiate checkout." },
         { status: 401 }
       );
     }
+
+    const userId = authUser.id;
+    const userEmail = authUser.email || body.email || "aspirant@cuet-prep.in";
 
     // 2. Determine Pricing Tier
     const is399 = body.planId === "ai_pass_399";

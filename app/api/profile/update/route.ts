@@ -21,28 +21,23 @@ export async function POST(req: NextRequest) {
     const body = (await req.json().catch(() => ({}))) as ProfileUpdatePayload;
     const { targetStream, targetUniversity, targetCollege, fullName, selectedSubjects, selected_subjects } = body;
 
-    let targetUserId = body.userId;
-
-    // 1. Authenticate user from Supabase Server Session
+    let authUser = null;
     try {
       const supabase = createClient();
       const {
-        data: { user: authUser },
+        data: { user },
       } = await supabase.auth.getUser();
+      authUser = user;
+    } catch {}
 
-      if (authUser) {
-        targetUserId = authUser.id;
-      }
-    } catch {
-      // Local dev fallback
-    }
-
-    if (!targetUserId) {
+    if (!authUser) {
       return NextResponse.json(
-        { error: "Unauthorized: User session not found." },
+        { error: "Unauthorized: Active user session required." },
         { status: 401 }
       );
     }
+
+    const targetUserId = authUser.id;
 
     // Normalize stream option
     let formattedStream: StreamOption = "Science";

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCachedWhyWrongExplanation, setCachedWhyWrongExplanation } from "@/lib/ai-cache";
-import { checkAndRecordRateLimit } from "@/lib/config/dashboardConfig";
+import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
+import { createClient } from "@/lib/supabase/server";
 import { tokenLogger } from "@/lib/ai/token-logger";
 import Groq from "groq-sdk";
 
@@ -148,7 +149,15 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Check Daily Rate Limit
-    const rateCheck = checkAndRecordRateLimit(userId, "why_wrong_explanations");
+    let authUserId: string | null = null;
+    try {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (authUser) authUserId = authUser.id;
+    } catch {}
+
+    const clientIdentifier = getClientIdentifier(req, authUserId || userId);
+    const rateCheck = checkServerRateLimit("why_wrong", clientIdentifier, 40);
     if (!rateCheck.allowed) {
       // Return deterministic fallback if rate limited
       const fallback = buildDeterministicWhyWrong({
@@ -162,12 +171,15 @@ export async function POST(req: NextRequest) {
         source,
         reviewed_by_human,
       });
-      return NextResponse.json({
-        success: true,
-        data: fallback,
-        rateLimited: true,
-        message: rateCheck.message,
-      });
+      return NextResponse.json(
+        {
+          success: true,
+          data: fallback,
+          rateLimited: true,
+          message: rateCheck.error,
+        },
+        { headers: getRateLimitHeaders(rateCheck) }
+      );
     }
 
     // 3. Attempt LLM generation using fast, cheap model (Groq Llama 3.1 8B Instant)

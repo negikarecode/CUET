@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { StreamType } from "@/types";
+import { calculateActiveStreak } from "@/lib/gamification";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,7 @@ export async function GET(_req: NextRequest) {
     // 2. Fetch real student profiles from Supabase
     const { data: profiles, error: pErr } = await supabaseAdmin
       .from("profiles")
-      .select("id, full_name, target_stream, target_college, target_university, current_streak, xp, selected_subjects, avatar_url, created_at")
+      .select("id, full_name, target_stream, target_college, target_university, current_streak, last_practice_date, xp, selected_subjects, avatar_url, created_at")
       .order("xp", { ascending: false });
 
     if (pErr) {
@@ -153,20 +154,22 @@ export async function GET(_req: NextRequest) {
         ? Math.round((agg.totalCorrect / agg.totalAttempted) * 100)
         : 0;
 
+      const isCurrentUser = Boolean(currentUserId && p.id === currentUserId);
+
       return {
-        userId: p.id,
+        userId: isCurrentUser ? p.id : `student_${p.id.substring(0, 8)}`,
         name: p.full_name || "Aspirant",
         stream,
         targetCollege: p.target_college || "Central University",
         targetUniversity: p.target_university || "Delhi University",
-        streak: p.current_streak || 1,
+        streak: calculateActiveStreak(p.current_streak ?? 0, p.last_practice_date),
         accuracyPercentage: accuracy,
         totalXp: p.xp || 0,
         totalTrophies: agg.totalTrophies,
         subjectTrophies: agg.subjectTrophies,
         completedTestsCount: agg.completedTestsCount,
         selectedSubjects: p.selected_subjects || [],
-        isCurrentUser: Boolean(currentUserId && p.id === currentUserId),
+        isCurrentUser,
       };
     });
 

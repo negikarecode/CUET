@@ -11,6 +11,7 @@ import { generateFullTopicDiagnosis } from "@/lib/diagnostic-engine";
 import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
 import { StreamType } from "@/types";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
+import { calculateActiveStreak } from "@/lib/gamification";
 
 export const metadata: Metadata = {
   title: "Weakness report | CUET AI-Prep",
@@ -35,7 +36,7 @@ export default async function WeaknessRadarPage() {
       selectedSubjects: ["Physics", "Chemistry", "Mathematics", "Biology"],
       xp: 0,
       campusCoins: 0,
-      currentStreak: 1,
+      currentStreak: 0,
     },
     totalAttempted: 0,
     accuracyPercentage: 0,
@@ -88,7 +89,10 @@ export default async function WeaknessRadarPage() {
           selectedSubjects: profileSubjects,
           xp: profile.xp,
           campusCoins: profile.campus_coins,
-          currentStreak: profile.current_streak,
+          currentStreak: calculateActiveStreak(
+            profile.current_streak ?? 0,
+            profile.last_practice_date
+          ),
         };
       }
 

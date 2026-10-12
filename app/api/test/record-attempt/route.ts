@@ -5,6 +5,7 @@ import { RecordedTestAttempt } from "@/types";
 import { stringToUuid, computeAnalyticsFromAttempts } from "@/lib/analytics";
 import { getQuestionsForTest } from "@/lib/data/mock50Questions";
 import { CUET_UG_2026_CONFIG, calculateExamScore } from "@/lib/config/examConfig";
+import { calculateNextStreakOnPractice, getLocalDateString } from "@/lib/gamification";
 
 export const dynamic = "force-dynamic";
 
@@ -89,8 +90,8 @@ export async function POST(req: NextRequest) {
         ? Math.round((verifiedCorrectCount / verifiedAttemptedCount) * 100)
         : 0;
 
-    // Determine target User ID
-    let targetUserId = attempt.userId || "guest";
+    // Determine target User ID securely
+    let targetUserId = "guest";
     let isSupabaseAuthenticated = false;
 
     try {
@@ -99,7 +100,7 @@ export async function POST(req: NextRequest) {
         data: { user: authUser },
       } = await supabase.auth.getUser();
 
-      if (authUser) {
+      if (authUser?.id) {
         targetUserId = authUser.id;
         isSupabaseAuthenticated = true;
       }
@@ -107,11 +108,10 @@ export async function POST(req: NextRequest) {
       // Offline / client-only fallback
     }
 
-    // If we have a valid Supabase authenticated user or UUID profile, persist to Supabase
-    const uuidRegex =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    const canPersistToDatabase =
-      isSupabaseAuthenticated || uuidRegex.test(targetUserId);
+    // Persist to database ONLY when user has a verified Supabase authenticated session
+    const canPersistToDatabase = isSupabaseAuthenticated;
+
+    let updatedStreak: number | undefined;
 
     if (canPersistToDatabase) {
       try {
@@ -238,12 +238,13 @@ export async function POST(req: NextRequest) {
 
         if (profile) {
           const earnedXP = (attempt.correctCount || 0) * 10;
-          const todayStr = new Date().toISOString().split("T")[0];
+          const todayStr = getLocalDateString();
 
-          let updatedStreak = profile.current_streak || 1;
-          if (profile.last_practice_date !== todayStr) {
-            updatedStreak += 1;
-          }
+          updatedStreak = calculateNextStreakOnPractice(
+            profile.current_streak ?? 0,
+            profile.last_practice_date,
+            todayStr
+          );
 
           await supabaseAdmin
             .from("profiles")
@@ -270,6 +271,7 @@ export async function POST(req: NextRequest) {
       analytics,
       attempt,
       questions: authoritativeQuestions,
+      streak: updatedStreak,
     });
   } catch (error: any) {
     console.error("[Record Attempt Unexpected Error]:", error);

@@ -6,6 +6,7 @@ import {
   checkRateLimit,
   incrementUsage,
   getRateLimitHeaders,
+  getClientIdentifier,
 } from "@/lib/rate-limiter";
 import {
   getCachedDiagnosticReport,
@@ -220,8 +221,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Determine User Identity & Premium Tier
-    let userId = payloadUserId || `anon_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    // Determine User Identity & Premium Tier securely
+    let authUserId: string | null = null;
     let isPaidUser = false;
 
     try {
@@ -230,22 +231,27 @@ export async function POST(req: NextRequest) {
         data: { user: authUser },
       } = await supabase.auth.getUser();
       if (authUser?.id) {
-        userId = authUser.id;
+        authUserId = authUser.id;
       }
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("is_premium")
-        .eq("id", userId)
-        .single();
-      if (profile?.is_premium) {
-        isPaidUser = true;
+      if (authUserId) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("is_premium")
+          .eq("id", authUserId)
+          .single();
+        if (profile?.is_premium) {
+          isPaidUser = true;
+        }
       }
     } catch {
       // Fallback
     }
 
+    const clientIdentifier = getClientIdentifier(req, authUserId || payloadUserId);
+    const trackingId = authUserId || (payloadUserId && !payloadUserId.startsWith("anon_") ? payloadUserId : clientIdentifier);
+
     // 1. Check Response Cache FIRST: If student already ran diagnosis for this testId, return cached JSON!
-    const cachedReport = await getCachedDiagnosticReport(userId, testId);
+    const cachedReport = await getCachedDiagnosticReport(trackingId, testId);
     if (cachedReport) {
       return NextResponse.json(cachedReport.data, {
         headers: {
@@ -256,7 +262,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Check Daily Rate Limit (Free: 3 / day, Paid: 25 / day)
-    const rateLimitResult = await checkRateLimit(userId, isPaidUser);
+    const rateLimitResult = await checkRateLimit(clientIdentifier, isPaidUser);
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
         {
@@ -804,10 +810,10 @@ Return a valid JSON object matching this schema:
     };
 
     // 9. Record rate limit usage
-    await incrementUsage(userId);
+    await incrementUsage(clientIdentifier);
 
     // 10. Store generated report in memory cache
-    await setCachedDiagnosticReport(userId, testId, responsePayload);
+    await setCachedDiagnosticReport(trackingId, testId, responsePayload);
 
     return NextResponse.json(responsePayload, {
       headers: {

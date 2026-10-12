@@ -22,6 +22,7 @@ import { StreamType } from "@/types";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { createClient } from "@/lib/supabase/client";
+import { calculateActiveStreak } from "@/lib/gamification";
 import CollegeSearchDropdown from "./CollegeSearchDropdown";
 import CourseSearchDropdown from "./CourseSearchDropdown";
 import { DEFAULT_STREAM_SUBJECTS, getSubjectsForStream } from "@/lib/constants/cuetSubjects";
@@ -132,7 +133,10 @@ export default function AuthPageContent({
                 userSelectedSubjects = json.profile.selected_subjects;
               }
               userXp = json.profile.xp ?? 0;
-              userStreak = json.profile.current_streak ?? 1;
+              userStreak = calculateActiveStreak(
+                json.profile.current_streak ?? 0,
+                json.profile.last_practice_date
+              );
               userCoins = json.profile.campus_coins ?? 0;
             }
           } else {

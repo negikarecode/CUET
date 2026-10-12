@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { generateSubjectRadarAIAnalysis } from "@/lib/subject-ai-engine";
 import { getCachedSubjectRadarAI, setCachedSubjectRadarAI } from "@/lib/ai-cache";
 import { SubjectRadarAIPayload } from "@/types/subject-ai";
+import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -59,6 +60,15 @@ export async function POST(req: NextRequest) {
         source: "cache",
         analysis: cached,
       });
+    }
+
+    const clientIdentifier = getClientIdentifier(req, user?.id || body.userId);
+    const rateCheck = checkServerRateLimit("subject_radar", clientIdentifier, 30);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: "Daily limit for Subject Radar AI analysis reached.", remaining: 0 },
+        { status: 429, headers: getRateLimitHeaders(rateCheck) }
+      );
     }
 
     // 2. Run Evidence-Based AI Analysis (Groq LPU with verified deterministic fallback)

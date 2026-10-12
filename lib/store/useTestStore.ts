@@ -12,6 +12,7 @@ import type {
 import { computeAnalyticsFromAttempts, buildDefaultSubjectCalibration } from "@/lib/analytics";
 import { processQuestionsIntoCycles } from "@/lib/cycle-engine";
 import { evaluateSessionValidity } from "@/lib/session-validity";
+import { calculateStreakFromAttempts, calculateActiveStreak } from "@/lib/gamification";
 
 interface TestStoreState {
   // Gamification & User Auth state
@@ -19,6 +20,7 @@ interface TestStoreState {
   selectedStream: StreamType;
   setSelectedStream: (stream: StreamType) => void;
   incrementStreak: () => void;
+  setStreak: (streak: number) => void;
   addXP: (amount: number) => void;
   addCoins: (amount: number) => void;
   setTargetCollege: (college: string) => void;
@@ -120,6 +122,15 @@ export const useTestStore = create<TestStoreState>()(
         }));
       },
 
+      setStreak: (streak: number) => {
+        set((state) => ({
+          user: {
+            ...state.user,
+            dailyStreak: Math.max(0, streak),
+          },
+        }));
+      },
+
       addXP: (amount: number) => {
         set((state) => ({
           user: {
@@ -166,11 +177,20 @@ export const useTestStore = create<TestStoreState>()(
                 const savedAttempts = parsed.state.testAttempts || [];
                 const savedCycles = parsed.state.diagnosticCycles || [];
                 const savedAnalytics = parsed.state.analytics || computeAnalyticsFromAttempts(savedAttempts);
+                const computedStreak = savedAttempts.length > 0
+                  ? calculateStreakFromAttempts(savedAttempts)
+                  : calculateActiveStreak(
+                      profile.dailyStreak !== undefined
+                        ? profile.dailyStreak
+                        : parsed.state?.user?.dailyStreak ?? 0,
+                      parsed.state?.user?.lastActiveDate
+                    );
 
                 set({
                   user: {
                     ...parsed.state.user,
                     ...profile,
+                    dailyStreak: computedStreak,
                     id: targetId,
                     isLoggedIn: true,
                     lastActiveDate: new Date().toISOString(),
@@ -300,11 +320,13 @@ export const useTestStore = create<TestStoreState>()(
         const xpAward = validity.isLowEffort ? 5 : 50;
 
         // Synchronously update testAttempts and analytics IMMEDIATELY so any concurrent read sees the recorded attempt
+        const dynamicStreak = calculateStreakFromAttempts(updatedAttempts);
         set((state) => ({
           testAttempts: updatedAttempts,
           analytics,
           user: {
             ...state.user,
+            dailyStreak: dynamicStreak,
             accuracyPercentage: analytics.overallAccuracyPercentage,
             completedTestsCount: analytics.completedTestsCount,
             xpPoints: (state.user.xpPoints || 0) + xpAward,
@@ -503,11 +525,13 @@ export const useTestStore = create<TestStoreState>()(
             const allQuestions = chronologicalAttempts.flatMap((t) => t.questions || []);
             const existingCycles = get().diagnosticCycles || [];
 
+            const dynamicStreak = calculateStreakFromAttempts(allAttempts);
             set((state) => ({
               testAttempts: allAttempts,
               analytics,
               user: {
                 ...state.user,
+                dailyStreak: dynamicStreak,
                 accuracyPercentage: analytics.overallAccuracyPercentage,
                 completedTestsCount: analytics.completedTestsCount,
               },
@@ -542,6 +566,7 @@ export const useTestStore = create<TestStoreState>()(
           activeCompletionNotification: null,
           user: {
             ...state.user,
+            dailyStreak: 0,
             accuracyPercentage: 0,
             completedTestsCount: 0,
           },

@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { editQuestion, getIngestionStats, getQuestionDetail, getQuestionsList, updateQuestionReview } from "@/lib/pyq/db";
 
+import crypto from "crypto";
+
 export const runtime = "nodejs";
 
 function authorized(req: NextRequest) {
   const expected = process.env.PYQ_ADMIN_TOKEN;
-  return Boolean(expected && req.headers.get("authorization") === `Bearer ${expected}`);
+  if (!expected || expected.trim() === "") return false;
+  const authHeader = req.headers.get("authorization") || "";
+  const expectedHeader = `Bearer ${expected}`;
+  const authBuf = Buffer.from(authHeader);
+  const expBuf = Buffer.from(expectedHeader);
+  return authBuf.length === expBuf.length && crypto.timingSafeEqual(authBuf, expBuf);
 }
 
 export async function GET(req: NextRequest) {

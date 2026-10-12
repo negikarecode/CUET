@@ -63,21 +63,15 @@ export async function updateSession(request: NextRequest) {
     pathname === "/dashboard" || pathname.startsWith("/dashboard/");
   const isAuthRoute = pathname === "/signup" || pathname === "/login";
 
-  const cuetAuthCookie = request.cookies.get("cuet_auth")?.value === "1";
-  const isAuthenticated = Boolean(authUser || cuetAuthCookie);
+  const isAuthenticated = Boolean(authUser);
 
-  // If visiting a practice route or dashboard as a visitor, allow seamless guest access
-  if (isPracticeRoute && !isAuthenticated) {
-    supabaseResponse.cookies.set("cuet_auth", "1", {
-      path: "/",
-      maxAge: 2592000,
-      sameSite: "lax",
-    });
+  // If visiting a practice route as a guest, allow access without requiring account creation
+  if (isPracticeRoute) {
     return supabaseResponse;
   }
 
   // 1. Unauthenticated users cannot enter protected dashboard core routes -> redirect to /signup
-  if (isDashboardRoute && !isAuthenticated && !isPracticeRoute) {
+  if (isDashboardRoute && !isAuthenticated) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/signup";
     redirectUrl.search = "";
