@@ -192,8 +192,15 @@ export function mapQuestionsFromDataset(
         studentSelectionTrap: opt.studentSelectionTrap,
         mistakeAnalysis: opt.mistakeAnalysis,
       })),
-      correctOptionId: q.correctOption,
-      explanation: q.detailedSolution,
+      correctOptionId:
+        q.correctOption ||
+        (q as any).correctOptionId ||
+        q.options?.find((o) => o.isCorrect)?.id,
+      explanation:
+        q.detailedSolution ||
+        (q as any).explanation ||
+        (q.options?.find((o) => o.isCorrect) as any)?.explanation ||
+        "",
       solution: q.solution,
       questionType: q.questionType || "conceptual",
       difficulty: difficultyStr,

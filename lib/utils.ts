@@ -26,3 +26,38 @@ export function stringToUuid(str: string): string {
     hash.substring(20, 32),
   ].join("-");
 }
+
+const PROTECTED_OPTION_PREFIXES = [
+  "o-", "p-", "m-", "cis-", "trans-", "tert-", "sec-", "n-", "t-", "s-", "d-", "l-", "dl-",
+  "pH", "pKa", "pKb", "pOH", "mRNA", "tRNA", "rRNA", "cDNA", "siRNA", "miRNA",
+  "sp ", "sp2", "sp3", "d2sp3", "sp3d2",
+];
+
+/**
+ * Safely capitalizes sentence beginnings of textual answer options,
+ * protecting stereochemical prefixes, units, and mathematical expressions.
+ */
+export function safeCapitalizeOptionText(text: string): string {
+  if (!text || typeof text !== "string") return text;
+  // Strip trailing NTA section/options header noise if present
+  const cleaned = text.replace(/(\r?\n|\s{2,})(?:Options\s+\d+.*|Section\s*:.*)$/is, "").trim();
+  if (!cleaned) return text;
+
+  const match = cleaned.match(/^(\s*)([a-zA-Z])(.*)$/s);
+  if (!match || !match[2]) return cleaned;
+
+  const leadingSpace = match[1] ?? "";
+  const firstChar = match[2];
+  const rest = match[3] ?? "";
+
+  if (firstChar === firstChar.toUpperCase()) return cleaned;
+
+  const checkStr = firstChar + rest;
+  for (const prefix of PROTECTED_OPTION_PREFIXES) {
+    if (checkStr.startsWith(prefix)) return cleaned;
+  }
+  if (/^[a-z]\s*=/.test(checkStr)) return cleaned;
+
+  return leadingSpace + firstChar.toUpperCase() + rest;
+}
+

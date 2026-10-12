@@ -25,6 +25,7 @@ import CBTDiagramViewer from "./CBTDiagramViewer";
 import LanguageSelector from "@/components/i18n/LanguageSelector";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { getActiveExamConfig } from "@/lib/config/examConfig";
+import { safeCapitalizeOptionText } from "@/lib/utils";
 
 export default function CBTPlayer() {
   const { t, translateStem } = useTranslation();
@@ -364,7 +365,7 @@ export default function CBTPlayer() {
 
                       {/* Option Text with MathRenderer and translation stem */}
                       <div className="text-sm font-medium leading-relaxed pt-0.5 flex-1">
-                        <MathRenderer text={translateStem(opt.text)} inline />
+                        <MathRenderer text={safeCapitalizeOptionText(translateStem(opt.text))} inline />
                       </div>
                     </button>
                   );
@@ -382,7 +383,7 @@ export default function CBTPlayer() {
                   type="button"
                   onClick={clearResponse}
                   disabled={selectedOption === null}
-                  className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all touch-manipulation cursor-pointer flex items-center justify-center"
+                  className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all touch-manipulation cursor-pointer flex items-center justify-center shrink-0 whitespace-nowrap"
                 >
                   <span className="hidden sm:inline">{t("clearResponse", "Clear Response")}</span>
                   <span className="sm:hidden">{t("clear", "Clear")}</span>
@@ -391,7 +392,7 @@ export default function CBTPlayer() {
                 <button
                   type="button"
                   onClick={markForReviewAndNext}
-                  className={`min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border transition-all flex items-center justify-center gap-1.5 shadow-xs touch-manipulation cursor-pointer ${
+                  className={`min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border transition-all flex items-center justify-center gap-1.5 shadow-xs touch-manipulation cursor-pointer shrink-0 whitespace-nowrap ${
                     currentAnswer?.isMarkedForReview
                       ? "bg-amber-100 border-amber-300 text-amber-900"
                       : "bg-amber-50 border-amber-200 text-amber-800 hover:bg-amber-100/80"
@@ -403,60 +404,52 @@ export default function CBTPlayer() {
                 </button>
               </div>
 
-              {/* Right Actions: Prev, Next, Save & Next */}
+              {/* Right Actions: Prev, Next, Save & Next / Submit Exam */}
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={goToPrevious}
                   disabled={currentQuestionIndex === 0}
-                  className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all flex items-center justify-center gap-1 touch-manipulation cursor-pointer"
+                  className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all flex items-center justify-center gap-1 touch-manipulation cursor-pointer shrink-0 whitespace-nowrap"
                 >
                   <ChevronLeft className="w-4 h-4 stroke-[2]" />
                   <span className="hidden sm:inline">{t("previous", "Previous")}</span>
                 </button>
 
                 {isLastQuestion ? (
+                  /* Exactly ONE final submission action on the last question */
                   <button
                     type="button"
-                    onClick={openSubmitModal}
-                    className="min-h-[44px] px-4 sm:px-5 py-2 text-xs font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer"
+                    onClick={() => {
+                      saveAndNext();
+                      openSubmitModal();
+                    }}
+                    className="min-h-[44px] px-4 sm:px-6 py-2 text-xs font-semibold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer shrink-0 whitespace-nowrap"
                   >
                     <CheckCircle2 className="w-4 h-4 stroke-[2]" />
-                    <span className="hidden sm:inline">{t("submitExam", "Submit Exam")}</span>
-                    <span className="sm:hidden">{t("submit", "Submit")}</span>
+                    <span>{t("submitExam", "Submit Exam")}</span>
                   </button>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={goToNext}
-                    className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all flex items-center justify-center gap-1 touch-manipulation cursor-pointer"
-                  >
-                    <span className="hidden sm:inline">{t("next", "Next")}</span>
-                    <ChevronRight className="w-4 h-4 stroke-[2]" />
-                  </button>
-                )}
+                  <>
+                    <button
+                      type="button"
+                      onClick={goToNext}
+                      className="min-h-[44px] px-3 sm:px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none shadow-xs transition-all flex items-center justify-center gap-1 touch-manipulation cursor-pointer shrink-0 whitespace-nowrap"
+                    >
+                      <span className="hidden sm:inline">{t("next", "Next")}</span>
+                      <ChevronRight className="w-4 h-4 stroke-[2]" />
+                    </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    saveAndNext();
-                    if (isLastQuestion) {
-                      openSubmitModal();
-                    }
-                  }}
-                  className={`min-h-[44px] px-4 sm:px-5 py-2 rounded-xl font-semibold text-xs tracking-wide shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer ${
-                    isLastQuestion
-                      ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
-                      : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
-                  }`}
-                >
-                  <span>{isLastQuestion ? t("saveAndSubmit", "Save & Submit") : t("saveAndNext", "Save & Next")}</span>
-                  {isLastQuestion ? (
-                    <CheckCircle2 className="w-4 h-4 stroke-[2]" />
-                  ) : (
-                    <ChevronRight className="w-4 h-4 stroke-[2]" />
-                  )}
-                </button>
+                    <button
+                      type="button"
+                      onClick={saveAndNext}
+                      className="min-h-[44px] px-4 sm:px-5 py-2 rounded-xl font-semibold text-xs tracking-wide shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shrink-0 whitespace-nowrap"
+                    >
+                      <span>{t("saveAndNext", "Save & Next")}</span>
+                      <ChevronRight className="w-4 h-4 stroke-[2]" />
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </section>

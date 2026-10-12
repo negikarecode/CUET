@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { BookOpen, ChevronDown, ChevronUp } from "lucide-react";
 import MathRenderer from "./MathRenderer";
 
+import CBTMatchTheFollowingView, { parseMatchTheFollowing } from "./CBTMatchTheFollowingView";
+
 interface CBTCaseStudyPanelProps {
   prompt: string;
   questionNumber: number;
@@ -33,7 +35,6 @@ export function parsePassageFromPrompt(rawPrompt: string): ParsedPromptResult {
     const afterIntro = trimmed.slice(match[0].length).trim();
     
     // Look for paragraph separation where the question begins
-    // Often separated by two newlines, or lines starting with "Q.", "Question:", or a paragraph ending in a question mark
     const paragraphs = afterIntro.split(/\n\s*\n/);
 
     if (paragraphs.length >= 2) {
@@ -65,12 +66,19 @@ export default function CBTCaseStudyPanel({
   const parsed = parsePassageFromPrompt(prompt);
 
   if (!parsed.hasPassage) {
+    const matchData = parseMatchTheFollowing(prompt);
+    if (matchData) {
+      return <CBTMatchTheFollowingView data={matchData} />;
+    }
+
     return (
       <div className="text-base sm:text-lg font-medium text-slate-900 leading-relaxed font-sans whitespace-pre-line">
         <MathRenderer text={prompt} />
       </div>
     );
   }
+
+  const stemMatchData = parseMatchTheFollowing(parsed.questionStem);
 
   return (
     <div className="space-y-5">
@@ -114,9 +122,13 @@ export default function CBTCaseStudyPanel({
         <div className="inline-block px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 text-[10px] font-bold tracking-wider uppercase">
           Question {questionNumber} Target
         </div>
-        <div className="text-base sm:text-lg font-medium text-slate-900 leading-relaxed font-sans whitespace-pre-line">
-          <MathRenderer text={parsed.questionStem} />
-        </div>
+        {stemMatchData ? (
+          <CBTMatchTheFollowingView data={stemMatchData} />
+        ) : (
+          <div className="text-base sm:text-lg font-medium text-slate-900 leading-relaxed font-sans whitespace-pre-line">
+            <MathRenderer text={parsed.questionStem} />
+          </div>
+        )}
       </div>
     </div>
   );

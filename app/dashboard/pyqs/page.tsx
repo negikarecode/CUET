@@ -484,27 +484,33 @@ export default function PYQsPage() {
                   className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4 min-w-0"
                 >
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold uppercase text-slate-400 tracking-wider">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] font-bold uppercase text-slate-400 tracking-wider truncate">
                         {test.subjectName} • Code {test.code}
                       </span>
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
-                          {test.year} Official NTA
-                        </span>
-                        <span className="text-[10px] font-semibold bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200/60 flex items-center gap-1">
-                          <AlertTriangle className="w-2.5 h-2.5 text-amber-600" />
-                          <span>Under Verification</span>
-                        </span>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {test.status === "unverified" || test.verificationNotice ? (
+                          <span
+                            className="text-[10px] font-semibold bg-amber-50 text-amber-800 px-2.5 py-0.5 rounded-full border border-amber-200/70 flex items-center gap-1"
+                            title={test.verificationNotice || "Official NTA paper under academic provenance review"}
+                          >
+                            <AlertTriangle className="w-2.5 h-2.5 text-amber-600" />
+                            <span>Provisional Key</span>
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
+                            {test.year} Official NTA
+                          </span>
+                        )}
                       </div>
                     </div>
 
                     <div>
-                      <h4 className="text-lg font-bold text-slate-900 leading-snug">
+                      <h4 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
                         {test.label}
                       </h4>
                       <p className="text-xs text-slate-500 font-medium mt-0.5">
-                        {test.yearLabel}
+                        {test.shift ? `${test.yearLabel} • ${test.shift}` : test.yearLabel}
                       </p>
                     </div>
 
@@ -524,27 +530,18 @@ export default function PYQsPage() {
                       </div>
                     )}
 
-                    <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+                    <div className="flex items-center gap-2 text-xs font-medium text-slate-500 pt-0.5">
                       <span className="flex items-center gap-1">
-                        <FileCheck2 className="w-3.5 h-3.5" />
+                        <FileCheck2 className="w-3.5 h-3.5 text-slate-400" />
                         {test.questions} Compulsory Qs
                       </span>
                       <span>•</span>
                       <span className="flex items-center gap-1">
-                        <Timer className="w-3.5 h-3.5" />
+                        <Timer className="w-3.5 h-3.5 text-slate-400" />
                         {test.duration}
                       </span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {test.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[10px] font-medium bg-slate-50 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200/60"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                      <span>•</span>
+                      <span className="text-slate-400 font-mono">+5 / -1</span>
                     </div>
                   </div>
 
@@ -553,14 +550,14 @@ export default function PYQsPage() {
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/test/${test.id}?reattempt=true`}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-2xs hover:shadow-sm transition-all"
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-2xs hover:shadow-sm transition-all shrink-0 whitespace-nowrap"
                         >
                           <RotateCcw className="w-3.5 h-3.5 stroke-[2.2]" />
                           <span>{t("reattemptTest", "Re-attempt")}</span>
                         </Link>
                         <Link
                           href={`/dashboard/pyqs/analysis/${best?.id || test.id}`}
-                          className="px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all flex items-center gap-1"
+                          className="px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all flex items-center gap-1 shrink-0 whitespace-nowrap"
                         >
                           <BarChart2 className="w-3.5 h-3.5 text-blue-600" />
                           <span>{t("scorecardTitle", "Result & Analysis")}</span>
@@ -569,7 +566,7 @@ export default function PYQsPage() {
                     ) : (
                       <Link
                         href={`/test/${test.id}`}
-                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all"
+                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all shrink-0 whitespace-nowrap"
                       >
                         <span>Start Official Paper</span>
                         <ArrowRight className="w-4 h-4" />
