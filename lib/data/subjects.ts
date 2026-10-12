@@ -385,7 +385,7 @@ export function createPYQTestList(
   return loadPYQFromManifest(subjectSlug);
 }
 
-export const PHYSICS_PYQ_TESTS = createPYQTestList("physics", "Physics", "312", 60);
+export const PHYSICS_PYQ_TESTS = createPYQTestList("physics", "Physics", "322", 60);
 export const CHEMISTRY_PYQ_TESTS = createPYQTestList("chemistry", "Chemistry", "306", 60);
 export const MATHS_PYQ_TESTS = createPYQTestList("mathematics", "Mathematics", "319", 60);
 export const BIOLOGY_PYQ_TESTS = createPYQTestList("biology", "Biology", "304", 45);
@@ -396,13 +396,13 @@ export const HISTORY_PYQ_TESTS = createPYQTestList("history", "History", "314", 
 export const POLITICAL_SCIENCE_PYQ_TESTS = createPYQTestList("political-science", "Political Science", "323", 45);
 export const GEOGRAPHY_PYQ_TESTS = createPYQTestList("geography", "Geography", "313", 45);
 export const PSYCHOLOGY_PYQ_TESTS = createPYQTestList("psychology", "Psychology", "324", 45);
-export const SOCIOLOGY_PYQ_TESTS = createPYQTestList("sociology", "Sociology", "325", 45);
+export const SOCIOLOGY_PYQ_TESTS = createPYQTestList("sociology", "Sociology", "326", 45);
 export const PHYSICAL_EDUCATION_PYQ_TESTS = createPYQTestList("physical-education", "Physical Education", "321", 45);
 export const COMPUTER_SCIENCE_PYQ_TESTS = createPYQTestList("computer-science", "Computer Science", "308", 60);
 export const HOME_SCIENCE_PYQ_TESTS = createPYQTestList("home-science", "Home Science", "315", 45);
 export const MASS_MEDIA_PYQ_TESTS = createPYQTestList("mass-media", "Mass Media", "318", 45);
-export const ENVIRONMENTAL_STUDIES_PYQ_TESTS = createPYQTestList("environmental-studies", "Environmental Studies", "307", 45);
-export const FINE_ARTS_PYQ_TESTS = createPYQTestList("fine-arts", "Fine Arts", "311", 45);
+export const ENVIRONMENTAL_STUDIES_PYQ_TESTS = createPYQTestList("environmental-studies", "Environmental Science", "307", 45);
+export const FINE_ARTS_PYQ_TESTS = createPYQTestList("fine-arts", "Fine Arts", "312", 45);
 export const AGRICULTURE_PYQ_TESTS = createPYQTestList("agriculture", "Agriculture", "302", 45);
 export const ANTHROPOLOGY_PYQ_TESTS = createPYQTestList("anthropology", "Anthropology", "303", 45);
 export const ENGLISH_PYQ_TESTS = createPYQTestList("english", "English", "101", 45);
@@ -507,7 +507,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
   {
     id: "physics",
     name: "Physics",
-    code: "312",
+    code: "322",
     stream: "science",
     iconName: "Atom",
     description: "Electrostatics, Optics, Modern Physics, Magnetic Effects of Current",
@@ -655,7 +655,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
   {
     id: "sociology",
     name: "Sociology",
-    code: "325",
+    code: "326",
     stream: "humanities",
     iconName: "Users",
     description: "Structure of Indian Society, Social Institutions, Social Change and Development",
@@ -714,7 +714,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
   },
   {
     id: "environmental-studies",
-    name: "Environmental Studies",
+    name: "Environmental Science",
     code: "307",
     stream: "science",
     iconName: "Leaf",
@@ -727,7 +727,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
   {
     id: "fine-arts",
     name: "Fine Arts / Visual Arts",
-    code: "311",
+    code: "312",
     stream: "humanities",
     iconName: "Palette",
     description: "Miniature Painting, Mughal & Deccan Schools, Bengal School, Modern Indian Art",

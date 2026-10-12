@@ -31,7 +31,7 @@ export const SUPPORTED_SUBJECTS_REGISTRY: Record<string, SubjectMetadata> = {
   physics: {
     id: "physics",
     name: "Physics",
-    officialCode: "312",
+    officialCode: "322",
     syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
     supportedStatus: "active",
     mockCount: 20,
@@ -49,7 +49,7 @@ export const SUPPORTED_SUBJECTS_REGISTRY: Record<string, SubjectMetadata> = {
     },
     lastContentAudit: "2026-09-28",
     contentStatus: "approved",
-    disclaimer: "CUET UG 2026-pattern practice for Domain Code 312. Not endorsed by NTA.",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 322. Not endorsed by NTA.",
   },
   chemistry: {
     id: "chemistry",
@@ -284,7 +284,7 @@ export const SUPPORTED_SUBJECTS_REGISTRY: Record<string, SubjectMetadata> = {
   sociology: {
     id: "sociology",
     name: "Sociology",
-    officialCode: "325",
+    officialCode: "326",
     syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
     supportedStatus: "active",
     mockCount: 20,
@@ -302,7 +302,7 @@ export const SUPPORTED_SUBJECTS_REGISTRY: Record<string, SubjectMetadata> = {
     },
     lastContentAudit: "2026-09-28",
     contentStatus: "approved",
-    disclaimer: "CUET UG 2026-pattern practice for Domain Code 325. Not endorsed by NTA.",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 326. Not endorsed by NTA.",
   },
   physical_education: {
     id: "physical_education",
@@ -422,7 +422,7 @@ export const SUPPORTED_SUBJECTS_REGISTRY: Record<string, SubjectMetadata> = {
   fine_arts: {
     id: "fine_arts",
     name: "Fine Arts / Visual Arts",
-    officialCode: "311",
+    officialCode: "312",
     syllabusVersion: "CUET UG 2026 (NCERT Class 12 Aligned)",
     supportedStatus: "active",
     mockCount: 20,
@@ -440,7 +440,7 @@ export const SUPPORTED_SUBJECTS_REGISTRY: Record<string, SubjectMetadata> = {
     },
     lastContentAudit: "2026-09-28",
     contentStatus: "approved",
-    disclaimer: "CUET UG 2026-pattern practice for Domain Code 311. Not endorsed by NTA.",
+    disclaimer: "CUET UG 2026-pattern practice for Domain Code 312. Not endorsed by NTA.",
   },
   agriculture: {
     id: "agriculture",

@@ -1,0 +1,313 @@
+import os
+import json
+import re
+
+TEXT_DIR = "reports/official_cuet_ug_2026_text"
+OFFICIAL_LIST_PATH = "reports/cuet_ug_official_syllabus.json"
+OUTPUT_PATH = "lib/data/official_cuet_ug_syllabus.json"
+
+with open(OFFICIAL_LIST_PATH, "r", encoding="utf-8") as f:
+    official_list = json.load(f)
+
+# Definitive curated units from the 2026 NTA PDFs for domain & language subjects
+CURATED_UNITS = {
+    "322": { # Physics
+        "officialSubject": "Physics",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Electrostatics", "topics": ["Electric Charges and Fields", "Electrostatic Potential and Capacitance"]},
+            {"unitNumber": 2, "unitTitle": "Current Electricity", "topics": ["Electric Current, Ohm's Law, Kirchhoff's Laws, Potentiometer & Meter Bridge"]},
+            {"unitNumber": 3, "unitTitle": "Magnetic Effects of Current and Magnetism", "topics": ["Moving Charges and Magnetism", "Magnetism and Matter, Magnetic Dipole, Galvanometer"]},
+            {"unitNumber": 4, "unitTitle": "Electromagnetic Induction and Alternating Currents", "topics": ["Faraday's & Lenz's Law", "AC Circuits, Resonance, Power in AC, Transformers"]},
+            {"unitNumber": 5, "unitTitle": "Electromagnetic Waves", "topics": ["Displacement Current", "Electromagnetic Spectrum & Applications"]},
+            {"unitNumber": 6, "unitTitle": "Optics", "topics": ["Ray Optics and Optical Instruments", "Wave Optics: Interference, Diffraction, Polarization"]},
+            {"unitNumber": 7, "unitTitle": "Dual Nature of Matter and Radiation", "topics": ["Photoelectric Effect, Einstein's Equation, de-Broglie Wavelength"]},
+            {"unitNumber": 8, "unitTitle": "Atoms and Nuclei", "topics": ["Rutherford & Bohr Models of Atom", "Nuclear Structure, Mass Defect, Radioactivity & Nuclear Energy"]},
+            {"unitNumber": 9, "unitTitle": "Electronic Devices", "topics": ["Semiconductor Electronics", "p-n Junction Diodes, Rectifiers, Logic Gates / Special Diodes"]}
+        ]
+    },
+    "306": { # Chemistry
+        "officialSubject": "Chemistry",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Solutions", "topics": ["Types of Solutions, Raoult's Law, Colligative Properties, Van't Hoff Factor"]},
+            {"unitNumber": 2, "unitTitle": "Electrochemistry", "topics": ["Galvanic & Electrolytic Cells, Nernst Equation, Conductance, Kohlrausch's Law, Batteries"]},
+            {"unitNumber": 3, "unitTitle": "Chemical Kinetics", "topics": ["Rate of Reaction, Order and Molecularity, Integrated Rate Equations, Arrhenius Theory"]},
+            {"unitNumber": 4, "unitTitle": "d and f Block Elements", "topics": ["Transition Metals, Lanthanoids and Actinoids, Coordination & Color Properties"]},
+            {"unitNumber": 5, "unitTitle": "Coordination Compounds", "topics": ["Werner's Theory, IUPAC Nomenclature, Valence Bond & Crystal Field Theories, Isomerism"]},
+            {"unitNumber": 6, "unitTitle": "Haloalkanes and Haloarenes", "topics": ["Nomenclature, Nature of C-X Bond, SN1 and SN2 Mechanisms, Optical Activity"]},
+            {"unitNumber": 7, "unitTitle": "Alcohols, Phenols and Ethers", "topics": ["Classification, Preparation, Physical and Chemical Properties, Reaction Mechanisms"]},
+            {"unitNumber": 8, "unitTitle": "Aldehydes, Ketones and Carboxylic Acids", "topics": ["Nucleophilic Addition Reactions, Acidity, Carboxylic Acid Derivatives"]},
+            {"unitNumber": 9, "unitTitle": "Amines", "topics": ["Classification, Preparation, Diazonium Salts and Synthetic Applications"]},
+            {"unitNumber": 10, "unitTitle": "Biomolecules", "topics": ["Carbohydrates, Proteins, Amino Acids, Nucleic Acids (DNA & RNA), Vitamins"]}
+        ]
+    },
+    "319": { # Mathematics / Applied Mathematics
+        "officialSubject": "Mathematics / Applied Mathematics",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Relations and Functions", "topics": ["Types of Relations, One-one and Onto Functions, Inverse Trigonometric Functions"]},
+            {"unitNumber": 2, "unitTitle": "Algebra (Matrices and Determinants)", "topics": ["Matrix Operations, Invertible Matrices, Determinants, Adjoint and System of Linear Equations"]},
+            {"unitNumber": 3, "unitTitle": "Calculus", "topics": ["Continuity & Differentiability, Applications of Derivatives, Integrals, Applications of Integrals, Differential Equations"]},
+            {"unitNumber": 4, "unitTitle": "Vectors and Three-Dimensional Geometry", "topics": ["Dot and Cross Products of Vectors, Direction Cosines, Lines and Planes in 3D Space"]},
+            {"unitNumber": 5, "unitTitle": "Linear Programming", "topics": ["Mathematical Formulation, Graphical Method of Solution, Feasible and Infeasible Regions"]},
+            {"unitNumber": 6, "unitTitle": "Probability", "topics": ["Conditional Probability, Multiplication Theorem, Bayes' Theorem, Random Variables and Distributions"]},
+            {"unitNumber": 7, "unitTitle": "Applied Mathematics: Financial & Numerical Concepts", "topics": ["Numbers and Quantification, Time Series, Inferential Statistics, Financial Mathematics"]}
+        ]
+    },
+    "304": { # Biology
+        "officialSubject": "Biology/ Biological Science/ Biotechnology /Biochemistry",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Reproduction", "topics": ["Sexual Reproduction in Flowering Plants", "Human Reproduction & Reproductive Health"]},
+            {"unitNumber": 2, "unitTitle": "Genetics and Evolution", "topics": ["Mendelian Inheritance, Chromosomal Theory, Molecular Basis of Inheritance, Evolution"]},
+            {"unitNumber": 3, "unitTitle": "Biology and Human Welfare", "topics": ["Human Health and Diseases, Microbes in Human Welfare"]},
+            {"unitNumber": 4, "unitTitle": "Biotechnology and its Applications", "topics": ["Principles and Processes of Biotechnology (Recombinant DNA)", "Applications in Health and Agriculture"]},
+            {"unitNumber": 5, "unitTitle": "Ecology and Environment", "topics": ["Organisms and Populations, Ecosystems, Biodiversity and its Conservation"]}
+        ]
+    },
+    "301": { # Accountancy / Book-Keeping
+        "officialSubject": "Accountancy / Book-Keeping",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Accounting for Partnership", "topics": ["Partnership Fundamentals, Goodwill Valuation, Profit Sharing Ratio"]},
+            {"unitNumber": 2, "unitTitle": "Reconstitution of a Partnership Firm", "topics": ["Admission, Retirement and Death of a Partner"]},
+            {"unitNumber": 3, "unitTitle": "Dissolution of Partnership Firm", "topics": ["Realisation Account, Settlement of Accounts"]},
+            {"unitNumber": 4, "unitTitle": "Company Accounts: Accounting for Share and Debenture Capital", "topics": ["Issue, Forfeiture and Reissue of Shares, Issue and Redemption of Debentures"]},
+            {"unitNumber": 5, "unitTitle": "Analysis of Financial Statements", "topics": ["Financial Statement Analysis, Accounting Ratios, Cash Flow Statement"]},
+            {"unitNumber": 6, "unitTitle": "Computerised Accounting System", "topics": ["Electronic Spreadsheets, Database Management System for Accounting"]}
+        ]
+    },
+    "305": { # Business Studies
+        "officialSubject": "Business Studies",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Nature and Significance of Management", "topics": ["Management Concept, Objectives, Importance, Management as Science/Art/Profession, Coordination"]},
+            {"unitNumber": 2, "unitTitle": "Principles of Management", "topics": ["Fayol's Principles, Taylor's Scientific Management"]},
+            {"unitNumber": 3, "unitTitle": "Business Environment", "topics": ["Dimensions of Business Environment, Economic Reforms 1991, Demonetization"]},
+            {"unitNumber": 4, "unitTitle": "Planning", "topics": ["Planning Process, Types of Plans"]},
+            {"unitNumber": 5, "unitTitle": "Organising", "topics": ["Organisational Structure, Delegation and Decentralisation"]},
+            {"unitNumber": 6, "unitTitle": "Staffing", "topics": ["Recruitment, Selection, Training and Development"]},
+            {"unitNumber": 7, "unitTitle": "Directing", "topics": ["Supervision, Motivation (Maslow), Leadership Styles, Communication"]},
+            {"unitNumber": 8, "unitTitle": "Controlling", "topics": ["Controlling Process, Relationship between Planning and Controlling"]},
+            {"unitNumber": 9, "unitTitle": "Business Finance / Financial Management", "topics": ["Financial Decisions, Capital Structure, Fixed and Working Capital"]},
+            {"unitNumber": 10, "unitTitle": "Financial Markets", "topics": ["Money Market, Capital Market, Stock Exchange, SEBI"]},
+            {"unitNumber": 11, "unitTitle": "Marketing", "topics": ["Marketing Mix: Product, Price, Place, Promotion"]},
+            {"unitNumber": 12, "unitTitle": "Consumer Protection", "topics": ["Consumer Rights, Consumer Protection Act 2019, Redressal Agencies"]}
+        ]
+    },
+    "309": { # Economics / Business Economics
+        "officialSubject": "Economics / Business Economics",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Consumer Behaviour and Demand", "topics": ["Utility Analysis, Indifference Curves, Law of Demand, Elasticity of Demand"]},
+            {"unitNumber": 2, "unitTitle": "Production and Costs", "topics": ["Production Function, Law of Variable Proportions, Cost Curves, Revenue"]},
+            {"unitNumber": 3, "unitTitle": "Market Equilibrium & Firm Theory", "topics": ["Perfect Competition, Price Determination, Shifts in Demand and Supply"]},
+            {"unitNumber": 4, "unitTitle": "National Income and Related Aggregates", "topics": ["Circular Flow of Income, GDP, GNP, Measurement Methods (Value Added, Income, Expenditure)"]},
+            {"unitNumber": 5, "unitTitle": "Money and Banking", "topics": ["Money Creation, Central Bank (RBI) Functions, Monetary Policy Tools"]},
+            {"unitNumber": 6, "unitTitle": "Determination of Income and Employment", "topics": ["Aggregate Demand and Supply, Propensities to Consume and Save, Multiplier Mechanism"]},
+            {"unitNumber": 7, "unitTitle": "Government Budget and the Economy", "topics": ["Budget Components, Revenue and Capital Budgets, Deficits and Fiscal Policy"]},
+            {"unitNumber": 8, "unitTitle": "Open Economy Macroeconomics", "topics": ["Balance of Payments, Foreign Exchange Rate Determination"]},
+            {"unitNumber": 9, "unitTitle": "Indian Economic Development & Structural Reforms", "topics": ["Development Policies (1947-1990), LPG Reforms 1991, Current Challenges, Comparison with Neighbors"]}
+        ]
+    },
+    "314": { # History
+        "officialSubject": "History",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Harappan Civilisation and Archaeology (Bricks, Beads and Bones)", "topics": ["Urban Planning, Craft Production, Subsistence Strategies, Decipherment"]},
+            {"unitNumber": 2, "unitTitle": "Political and Economic Systems in Early States (Kings, Farmers and Towns)", "topics": ["16 Mahajanapadas, Mauryan Empire, Epigraphy, Inscriptional Evidences"]},
+            {"unitNumber": 3, "unitTitle": "Social Histories of Early Societies (Kinship, Caste and Class)", "topics": ["Mahabharata as Source, Varna and Jati, Gender and Property Access"]},
+            {"unitNumber": 4, "unitTitle": "History of Buddhism and Jainism (Thinkers, Beliefs and Buildings)", "topics": ["Stupas at Sanchi and Bharhut, Teachings of Mahavira and Buddha, Puranic Hinduism"]},
+            {"unitNumber": 5, "unitTitle": "Medieval Society through Travellers Accounts", "topics": ["Al-Biruni, Ibn Battuta, Francois Bernier: Insights on Society and Caste"]},
+            {"unitNumber": 6, "unitTitle": "Religious History: Bhakti-Sufi Traditions", "topics": ["Alvars, Nayanars, Virashaiva Movement, Sufi Silsilas, Kabir, Guru Nanak, Mirabai"]},
+            {"unitNumber": 7, "unitTitle": "Vijayanagara Empire: Politics, Economy and Architecture", "topics": ["Hampi Archeology, Royal Center, Sacred Center, Mahanavami Dibba"]},
+            {"unitNumber": 8, "unitTitle": "The Mughal Empire and Agrarian Society (Peasants, Zamindars and State)", "topics": ["Ain-i-Akbari, Land Revenue System, Village Community and Mansabdari"]},
+            {"unitNumber": 9, "unitTitle": "Colonialism and Rural Society (Colonialism and Countryside)", "topics": ["Permanent Settlement, Santhal Uprising, Deccan Riots Commission"]},
+            {"unitNumber": 10, "unitTitle": "Revolt of 1857: Patterns and Representations", "topics": ["Outbreak, Leadership, Rebel Proclamations, British Counter-offensive, Visual Imagery"]},
+            {"unitNumber": 11, "unitTitle": "Mahatma Gandhi and National Movement", "topics": ["Non-Cooperation, Civil Disobedience, Salt March, Quit India Movement, Partition"]},
+            {"unitNumber": 12, "unitTitle": "The Making of the Constitution (Framing the Constitution)", "topics": ["Constituent Assembly Debates, Objectives Resolution, Federalism, Language Debates"]}
+        ]
+    },
+    "323": { # Political Science
+        "officialSubject": "Political Science",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Era of One-Party Dominance", "topics": ["First Three General Elections, Congress Dominance, Emergence of Opposition Parties"]},
+            {"unitNumber": 2, "unitTitle": "Nation-Building and Its Problems", "topics": ["Partition Legacy, Kashmir Issue, States Reorganisation, Linguistic Reorganization"]},
+            {"unitNumber": 3, "unitTitle": "Politics of Planned Development", "topics": ["Planning Commission, Five Year Plans, State Sector Expansion"]},
+            {"unitNumber": 4, "unitTitle": "India's External Relations", "topics": ["Nehruvian Foreign Policy, 1962 Sino-Indian War, 1965 & 1971 Indo-Pak Wars, Nuclear Policy"]},
+            {"unitNumber": 5, "unitTitle": "Challenge to and Restoration of Congress System", "topics": ["1967 General Elections, Non-Congressism, Congress Split 1969, 1971 Resurgence"]},
+            {"unitNumber": 6, "unitTitle": "Crises of the Constitutional Order", "topics": ["Navnirman Movement, Emergency 1975, Civil Liberties, 1977 Lok Sabha Elections"]},
+            {"unitNumber": 7, "unitTitle": "Regional Aspirations and Conflicts", "topics": ["Punjab Crisis & Accord, Kashmir Situation, Assam Accord, North-East Sub-nationalisms"]},
+            {"unitNumber": 8, "unitTitle": "Democratic Upsurge and Coalition Politics", "topics": ["Mandal Commission, Rise of Coalition Governments (UF, NDA, UPA), 1990s-2020s Politics"]},
+            {"unitNumber": 9, "unitTitle": "Recent Issues and Challenges in Indian Politics", "topics": ["Economic Reforms Opposition, Rise of OBC & Dalit Politics, Communalism vs Secularism"]},
+            {"unitNumber": 10, "unitTitle": "Disintegration of Second World & Collapse of Bipolarity", "topics": ["Soviet System, Gorbachev's Reforms, Shock Therapy, Post-Communist Regimes"]},
+            {"unitNumber": 11, "unitTitle": "Alternative Centres of Power", "topics": ["European Union, ASEAN, Rise of China, Regional Economic Blocs"]},
+            {"unitNumber": 12, "unitTitle": "South Asia in the Post-Cold War Era", "topics": ["Democratisation in Pakistan & Nepal, Ethnic Conflict in Sri Lanka, SAARC"]},
+            {"unitNumber": 13, "unitTitle": "International Organisations in a Changing World", "topics": ["UN Restructuring, Security Council Reform, Specialized Agencies, IMF & World Bank"]},
+            {"unitNumber": 14, "unitTitle": "Security, Environment & Globalisation in Contemporary World", "topics": ["Traditional and Non-Traditional Security, Global Environmental Governance, Globalisation Manifestations"]}
+        ]
+    },
+    "313": { # Geography / Geology
+        "officialSubject": "Geography / Geology",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Human Geography - Nature and Scope", "topics": ["Determinism, Possibilism, Neo-Determinism, Environmental Approaches"]},
+            {"unitNumber": 2, "unitTitle": "People (World Population and Human Development)", "topics": ["World Population Distribution, Density, Growth, Demographic Transition, HDI"]},
+            {"unitNumber": 3, "unitTitle": "Human Activities (Primary, Secondary, Tertiary)", "topics": ["Subsistence & Commercial Agriculture, Mining, Manufacturing, Service Sectors"]},
+            {"unitNumber": 4, "unitTitle": "Transport, Communication and International Trade", "topics": ["Land, Water and Air Transport, Pipelines, Major Trade Blocs"]},
+            {"unitNumber": 5, "unitTitle": "India: People and Economy - Population & Settlements", "topics": ["Indian Demographic Dynamics, Rural and Urban Settlements, Urbanisation Trends"]},
+            {"unitNumber": 6, "unitTitle": "India: Resources and Development", "topics": ["Land, Water, Mineral and Energy Resources, Planning and Sustainable Development"]},
+            {"unitNumber": 7, "unitTitle": "India: Transport, Communication & Trade", "topics": ["Indian Transportation Infrastructure, Ports, Foreign Trade Composition"]},
+            {"unitNumber": 8, "unitTitle": "Geographical Perspective on Selected Issues and Problems", "topics": ["Environmental Pollution, Urban Waste Disposal, Rural-Urban Migration, Land Degradation"]}
+        ]
+    },
+    "324": { # Psychology
+        "officialSubject": "Psychology",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Variations in Psychological Attributes", "topics": ["Individual Differences, Theories of Intelligence, Emotional Intelligence, Aptitude & Creativity"]},
+            {"unitNumber": 2, "unitTitle": "Self and Personality", "topics": ["Concept of Self, Type and Trait Theories, Psychodynamic Approach, Humanistic Approach, Assessment"]},
+            {"unitNumber": 3, "unitTitle": "Meeting Life Challenges", "topics": ["Nature of Stress, Sources, Stress Management Techniques, Coping Strategies"]},
+            {"unitNumber": 4, "unitTitle": "Psychological Disorders", "topics": ["Anxiety Disorders, Somatoform, Dissociative, Mood Disorders, Schizophrenia"]},
+            {"unitNumber": 5, "unitTitle": "Therapeutic Approaches", "topics": ["Psychodynamic Therapy, Behavior Therapy, Cognitive Therapy, Humanistic-Existential, Biomedical"]},
+            {"unitNumber": 6, "unitTitle": "Attitude and Social Cognition", "topics": ["Attitude Formation and Change, Social Cognition, Schemas and Stereotypes, Projudice"]},
+            {"unitNumber": 7, "unitTitle": "Social Influence and Group Processes", "topics": ["Conformity, Compliance, Obedience, Group Dynamics, Cooperation and Competition"]}
+        ]
+    },
+    "326": { # Sociology
+        "officialSubject": "Sociology",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Structure of Indian Society", "topics": ["Demographic Structure, Rural-Urban Linkages and Divisions"]},
+            {"unitNumber": 2, "unitTitle": "Social Institutions: Continuity and Change", "topics": ["Caste, Tribe, Family and Kinship in India"]},
+            {"unitNumber": 3, "unitTitle": "Social Inequality and Exclusion", "topics": ["Caste Discrimination, Untouchability, Tribal Movements, Gender and Disability Inequities"]},
+            {"unitNumber": 4, "unitTitle": "The Challenges of Unity in Diversity", "topics": ["Cultural Diversity, Communalism, Regionalism, Secularism and Nation-State"]},
+            {"unitNumber": 5, "unitTitle": "Process of Social Change in India", "topics": ["Colonialism, Industrialisation, Urbanisation, Modernisation, Westernisation, Sanskritisation"]},
+            {"unitNumber": 6, "unitTitle": "Social Change and the Polity / Economy", "topics": ["Constitution as Instrument of Social Change, Land Reforms, Green Revolution, Class Structure"]},
+            {"unitNumber": 7, "unitTitle": "New Arenas of Social Change & Social Movements", "topics": ["Media, Globalisation, Peasant, Workers, Dalit, Tribal and Women's Movements"]}
+        ]
+    },
+    "321": { # Physical Education
+        "officialSubject": "Physical Education (Yoga, Sports)",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Health Status and Programmes in India", "topics": ["Major Diseases, National Health Programmes, Hygiene and Community Health"]},
+            {"unitNumber": 2, "unitTitle": "Psychological and Sociological Aspects of Sports", "topics": ["Motivation, Anxiety, Aggression, Socialization through Sports"]},
+            {"unitNumber": 3, "unitTitle": "Yoga and Yogic Practices", "topics": ["Asanas, Pranayama, Kriyas, Stress Management through Yogic Lifestyle"]},
+            {"unitNumber": 4, "unitTitle": "Nutrition and Athlete Care", "topics": ["Balanced Diet, Sports Nutrition, Hydration, Common Sports Injuries and First Aid"]},
+            {"unitNumber": 5, "unitTitle": "Physical Fitness, Measurement and Biomechanics", "topics": ["Components of Fitness, Test and Measurement, Laws of Motion in Sports, Levers"]}
+        ]
+    },
+    "308": { # Computer Science / IP
+        "officialSubject": "Computer Science / Information Practices",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Section A: Common Computing Concepts", "topics": ["Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks"]},
+            {"unitNumber": 2, "unitTitle": "Section B1: Computer Science Core", "topics": ["Data Structures: Stacks and Queues, Searching and Sorting, Understanding Data, Societal Impacts"]},
+            {"unitNumber": 3, "unitTitle": "Section B2: Informatics Practices Core", "topics": ["Data Handling using Pandas and Matplotlib, Database Query using SQL, Societal Impacts & Cyber Law"]}
+        ]
+    },
+    "307": { # Environmental Science
+        "officialSubject": "Environmental Science",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Human Beings and Nature", "topics": ["Deep Ecology, Shallow Ecology, Social Ecology, Ecofeminism, Mission LiFE, Sustainable Development Goals"]},
+            {"unitNumber": 2, "unitTitle": "Population and Conservation Ecology", "topics": ["Population Dynamics, Carrying Capacity, Biodiversity Conservation, Wildlife Protection Act"]},
+            {"unitNumber": 3, "unitTitle": "Environmental Pollution", "topics": ["Air, Water, Soil and Noise Pollution, Solid Waste Management, E-Waste Management"]},
+            {"unitNumber": 4, "unitTitle": "Development and Environment", "topics": ["Urbanisation, Industrialization, Mega Dams, Environmental Impact Assessment (EIA)"]},
+            {"unitNumber": 5, "unitTitle": "Sustainable Agriculture in India", "topics": ["Green Revolution Impacts, Organic Farming, Integrated Pest Management, Water Conservation"]},
+            {"unitNumber": 6, "unitTitle": "Environmental and Natural Resource Economics", "topics": ["Resource Valuation, Carbon Credits, Polluter Pays Principle, Green Accounting"]},
+            {"unitNumber": 7, "unitTitle": "International Relations and Environment", "topics": ["UNFCCC, Kyoto Protocol, Paris Agreement, Montreal Protocol, Global Environmental Treaties"]}
+        ]
+    },
+    "312": { # Fine Arts/Visual Arts/Commercial Arts
+        "officialSubject": "Fine Arts/Visual Arts/Commercial Arts",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Rajasthani and Pahari Miniature Painting", "topics": ["Origin, Evolution and Sub-schools of Rajasthani and Pahari Painting"]},
+            {"unitNumber": 2, "unitTitle": "Mughal and Deccani Schools of Miniature Painting", "topics": ["Mughal Emperor Patronage, Akbar, Jahangir, Shah Jahan, Deccani Sub-schools (Bijapur, Golconda)"]},
+            {"unitNumber": 3, "unitTitle": "The Bengal School and Cultural Nationalism", "topics": ["Abanindranath Tagore, Nandalal Bose, Jamini Roy, National Flag Symbolism"]},
+            {"unitNumber": 4, "unitTitle": "Modern Trends in Indian Art", "topics": ["Sculptures, Graphic Prints, Paintings of Modern Indian Masters (M.F. Husain, Amrita Sher-Gil)"]}
+        ]
+    },
+    "315": { # Home Science
+        "officialSubject": "Home Science",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Work, Livelihood and Career", "topics": ["Work and Meaningful Livelihood, Standard of Living, Ergonomics"]},
+            {"unitNumber": 2, "unitTitle": "Nutrition, Food Science and Technology", "topics": ["Clinical Nutrition, Food Processing and Technology, Food Quality and Safety"]},
+            {"unitNumber": 3, "unitTitle": "Human Development and Family Studies", "topics": ["Early Childhood Care and Education, Management of Support Services, Children and Youth Programs"]},
+            {"unitNumber": 4, "unitTitle": "Fabric and Apparel", "topics": ["Fabric Care and Maintenance, Fashion Design and Merchandising"]},
+            {"unitNumber": 5, "unitTitle": "Resource Management", "topics": ["Human Resource Management, Hospitality Management, Consumer Education and Protection"]},
+            {"unitNumber": 6, "unitTitle": "Communication and Extension", "topics": ["Development Communication, Journalism, Corporate Communication and Media"]}
+        ]
+    },
+    "318": { # Mass Media
+        "officialSubject": "Mass Media / Mass Communication",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Communication Concepts and Theories", "topics": ["Communication Levels, Models of Communication, Culture and Media"]},
+            {"unitNumber": 2, "unitTitle": "Journalism", "topics": ["News Values, Reporting, Editing, Print Journalism, Ethics of Journalism"]},
+            {"unitNumber": 3, "unitTitle": "Advertising and Public Relations", "topics": ["Advertising Campaigns, PR Strategies, Brand Communication"]},
+            {"unitNumber": 4, "unitTitle": "Radio and Cinema", "topics": ["Radio Production, History of Indian Cinema, Film Genres and Aesthetics"]},
+            {"unitNumber": 5, "unitTitle": "Television and New Media", "topics": ["TV Production Process, Digital Journalism, Social Media Impact, Cyber Ethics"]}
+        ]
+    },
+    "302": { # Agriculture
+        "officialSubject": "Agriculture",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Agrometeorology, Genetics & Plant Breeding", "topics": ["Weather Elements, Plant Genetics, Seed Production, Plant Breeding Methods"]},
+            {"unitNumber": 2, "unitTitle": "Livestock Production", "topics": ["Care and Management of Cattle, Poultry, Dairy Technology, Animal Nutrition"]},
+            {"unitNumber": 3, "unitTitle": "Crop Production", "topics": ["Soil Science, Fertilizers, Irrigation, Agronomy of Major Crops"]},
+            {"unitNumber": 4, "unitTitle": "Horticulture", "topics": ["Fruits and Vegetables Production, Floriculture, Post-Harvest Management, Landscaping"]}
+        ]
+    },
+    "303": { # Anthropology
+        "officialSubject": "Anthropology",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Physical/Biological Anthropology", "topics": ["Human Evolution, Primatology, Genetics, Human Variation"]},
+            {"unitNumber": 2, "unitTitle": "Archaeological Anthropology", "topics": ["Palaeolithic, Mesolithic, Neolithic and Megalithic Cultures of India"]},
+            {"unitNumber": 3, "unitTitle": "Socio-Cultural Anthropology", "topics": ["Family, Marriage, Kinship, Religion, Economic and Political Organization"]},
+            {"unitNumber": 4, "unitTitle": "Linguistic and Tribal Anthropology", "topics": ["Tribal Society in India, Classification, Problems, Constitutional Safeguards"]},
+            {"unitNumber": 5, "unitTitle": "Social Change and Applied Anthropology", "topics": ["Development Anthropology, Tribal Welfare, Action Anthropology"]}
+        ]
+    },
+    "101": { # English
+        "officialSubject": "English",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "Reading Comprehension", "topics": ["Factual Passages", "Narrative Passages", "Literary Passages"]},
+            {"unitNumber": 2, "unitTitle": "Verbal Ability & Sentence Rearrangement", "topics": ["Para Jumbles", "Rearranging parts of a sentence", "Sentence completion"]},
+            {"unitNumber": 3, "unitTitle": "Choosing the Correct Word & Word Usage", "topics": ["Contextual Word Choice", "Grammar & Fill in the Blanks", "Common Errors"]},
+            {"unitNumber": 4, "unitTitle": "Synonyms and Antonyms", "topics": ["Synonyms in Context", "Antonyms in Context", "Etymology"]},
+            {"unitNumber": 5, "unitTitle": "Vocabulary, Idioms and Phrases", "topics": ["Idiomatic Expressions", "Phrasal Verbs", "One Word Substitution", "Spelling Accuracy"]}
+        ]
+    },
+    "501": { # General Aptitude Test
+        "officialSubject": "General Aptitude Test",
+        "units": [
+            {"unitNumber": 1, "unitTitle": "General Knowledge & Current Affairs", "topics": ["National & International Current Events", "Indian History & Heritage", "Geography & Polity", "Science Discoveries"]},
+            {"unitNumber": 2, "unitTitle": "General Mental Ability & Numerical Ability", "topics": ["Number Series", "Coding-Decoding", "Analogy", "Blood Relations", "Direction Sense"]},
+            {"unitNumber": 3, "unitTitle": "Quantitative Reasoning & Arithmetic", "topics": ["Percentages, Profit & Loss, Ratio & Proportion", "Average, Work & Time, Speed & Distance", "Simple & Compound Interest"]},
+            {"unitNumber": 4, "unitTitle": "Logical & Analytical Reasoning", "topics": ["Syllogisms", "Venn Diagrams", "Statement & Assumptions", "Deductive & Inductive Reasoning", "Critical Thinking"]},
+            {"unitNumber": 5, "unitTitle": "General Science & Environment Literacy", "topics": ["Basic Scientific Principles", "Everyday Physics & Chemistry", "Environmental Conservation", "Sustainable Development"]}
+        ]
+    }
+}
+
+full_manifest = []
+
+for sub in official_list:
+    code = sub["code"]
+    name = sub["name"]
+    category = sub["category"]
+    pdf_url = sub["pdfUrl"]
+    
+    curated = CURATED_UNITS.get(code)
+    if curated:
+        units = curated["units"]
+    else:
+        # Generic language structure
+        units = [
+            {"unitNumber": 1, "unitTitle": "Reading Comprehension", "topics": ["Factual, Narrative, Literary"]},
+            {"unitNumber": 2, "unitTitle": "Verbal Ability & Grammar", "topics": ["Rearranging parts, Sentence Correction"]},
+            {"unitNumber": 3, "unitTitle": "Vocabulary & Usage", "topics": ["Synonyms, Antonyms, Idioms"]}
+        ]
+        
+    full_manifest.append({
+        "officialCode": code,
+        "officialName": name,
+        "officialCategory": category,
+        "officialPdfUrl": pdf_url,
+        "unitsCount": len(units),
+        "units": units
+    })
+
+os.makedirs("lib/data", exist_ok=True)
+with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+    json.dump(full_manifest, f, indent=2, ensure_ascii=False)
+
+print(f"Generated authoritative syllabus manifest with {len(full_manifest)} subjects in {OUTPUT_PATH}")
