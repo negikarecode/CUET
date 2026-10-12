@@ -7,7 +7,7 @@ import {
   ChanceBandInfo,
 } from "@/lib/config/standingConfig";
 
-// Load normalized datasets from data/cutoff or lib/data/standing
+// Load normalized datasets from lib/data/standing
 import canonicalCoursesData from "@/lib/data/standing/canonical_courses.json";
 import canonicalSubjectsData from "@/lib/data/standing/canonical_subjects.json";
 import normalizedCutoffsData from "@/lib/data/standing/normalized_cutoffs.json";
@@ -64,8 +64,10 @@ export interface UserSubjectPerformance {
   answeredQuestions: number;
   validSessionsCount: number;
   excludedLowEffortCount: number;
-  rawAveragePercentage: number;
-  weightedPercentage: number;
+  averageMarks: number; // arithmetic mean of marks across completed mock-tests
+  maxMarks: number; // standard subject max marks (normally 250)
+  rawAveragePercentage?: number;
+  weightedPercentage?: number;
   hasSufficientData: boolean;
   status: "valid" | "insufficient_data" | "no_attempts";
 }
@@ -75,9 +77,13 @@ export interface ResolvedSubjectChoice {
   subjectName: string;
   ruleType: "required" | "one_of" | "best_of";
   hasData: boolean;
-  userPercentage: number | null;
+  averageMarks: number | null; // arithmetic mean marks out of maxMarks, e.g. 36.8
+  maxMarks: number; // 250
+  targetMarks: number; // equal-share or weighted target marks, e.g. 106.5
+  marksNeeded: number; // max(0, targetMarks - (averageMarks ?? 0))
   answeredQuestions: number;
   isBestOptionChosen?: boolean;
+  userPercentage?: number | null;
 }
 
 export interface CourseResolutionResult {
@@ -86,12 +92,16 @@ export interface CourseResolutionResult {
   resolvedSubjects: ResolvedSubjectChoice[];
   totalRequiredCount: number;
   subjectsWithDataCount: number;
-  coverage: number; // 0.0 to 1.0
+  coverage: number; // 0.0 to 1.0 (subjectsWithDataCount / totalRequiredCount)
+  isComplete: boolean; // subjectsWithDataCount === totalRequiredCount
   isBelowCoverageThreshold: boolean;
   hasNoData: boolean;
-  userPct: number | null; // average percentage across participating subjects with data
+  combinedAverageMarks: number | null; // sum of averageMarks if isComplete, else null!
+  standingStatus: "complete" | "incomplete" | "no_data";
+  standingLabel: string; // "Incomplete — awaiting remaining subjects" when incomplete
   participatingSubjectNames: string[];
   missingSubjectNames: string[];
+  userPct?: number | null;
 }
 
 export interface MultiYearCutoffStats {
@@ -101,27 +111,31 @@ export interface MultiYearCutoffStats {
   cutoffScale: number;
   years: number[];
   latestYear: number;
-  latestValue: number;
-  latestPercentage: number;
-  averagePercentage: number;
-  minPercentage: number;
-  maxPercentage: number;
+  latestValue: number; // in marks, e.g. 319.5
+  averageMarks: number; // arithmetic mean of yearly cutoffs in marks
+  minMarks: number;
+  maxMarks: number;
   trend: "rising" | "falling" | "stable" | "not enough years";
-  trendDeltaPercentage: number | null;
+  trendDeltaMarks: number | null;
   expectedRange: {
-    lowPct: number;
-    highPct: number;
-    midpointPct: number;
     lowMarks: number;
     highMarks: number;
     midpointMarks: number;
+    lowPct?: number;
+    highPct?: number;
+    midpointPct?: number;
   };
   yearlyData: Array<{
     year: number;
-    cutoffValue: number;
-    cutoffMax: number;
-    cutoffPct: number;
+    cutoffValue: number; // in marks
+    cutoffMax: number;   // scale
+    cutoffPct?: number;
   }>;
+  latestPercentage?: number;
+  averagePercentage?: number;
+  minPercentage?: number;
+  maxPercentage?: number;
+  trendDeltaPercentage?: number | null;
 }
 
 export interface CollegeStandingResult {
@@ -129,23 +143,35 @@ export interface CollegeStandingResult {
   universityName: string;
   courseName: string;
   category: CategoryCode;
-  band: ChanceBand;
-  bandInfo: ChanceBandInfo;
-  userPct: number | null;
-  expectedRange: {
-    lowPct: number;
-    highPct: number;
-    midpointPct: number;
-    lowMarks: number;
-    highMarks: number;
-  };
-  gapPercentagePoints: number;
-  gapMarks: number;
-  coverage: number;
-  isRoughEstimate: boolean;
+  cutoffScale: number;
+  cutoffMarks: number; // expected cutoff marks, e.g. 319.5
+  cutoffDisplay: string; // e.g. "319.5/750 marks"
+  cutoffRangeDisplay: string; // e.g. "310.0 - 330.0/750 marks"
+  combinedAverageMarks: number | null; // null if incomplete
+  marksGap: number | null; // cutoffMarks - combinedAverageMarks (null if incomplete)
+  status: "above_cutoff" | "below_cutoff" | "incomplete" | "no_data";
+  statusLabel: string; // "Incomplete — awaiting remaining subjects", "10 marks above cutoff", "25 marks below cutoff"
+  gapDisplay: string; // "10 marks above cutoff", "25 marks below cutoff", "Awaiting all subjects"
+  isComplete: boolean;
   hasNoData: boolean;
   reasoning: string;
   multiYearStats: MultiYearCutoffStats;
+  expectedRange: {
+    lowMarks: number;
+    highMarks: number;
+    midpointMarks: number;
+    lowPct?: number;
+    highPct?: number;
+    midpointPct?: number;
+  };
+  // Legacy compatibility fields
+  band?: ChanceBand;
+  bandInfo?: ChanceBandInfo;
+  userPct?: number | null;
+  gapPercentagePoints?: number;
+  gapMarks?: number;
+  coverage?: number;
+  isRoughEstimate?: boolean;
 }
 
 export interface DreamCollegeGapAnalysis {
@@ -153,26 +179,38 @@ export interface DreamCollegeGapAnalysis {
   targetCourse: string;
   category: CategoryCode;
   cutoffScale: number;
-  expectedCutoffPct: number;
-  expectedCutoffMarks: number;
-  userPct: number | null;
-  userEquivalentMarks: number | null;
-  gapPercentagePoints: number;
-  gapMarks: number;
-  band: ChanceBand;
-  coverage: number;
+  expectedCutoffMarks: number; // e.g. 319.5
+  cutoffDisplay: string; // e.g. "319.5/750 marks"
+  isComplete: boolean;
+  hasNoData: boolean;
+  status: "above_cutoff" | "below_cutoff" | "incomplete" | "no_data";
+  statusLabel: string; // "Incomplete — awaiting remaining subjects", "10 marks above cutoff", "25 marks below cutoff"
+  combinedMarks: number | null; // sum of subject averages if complete, else null
+  combinedMarksDisplay: string; // e.g. "300.0/750 marks" or "Incomplete"
+  marksGap: number | null; // cutoffMarks - combinedMarks (null if incomplete)
+  gapDisplay: string; // "10 marks above cutoff", "25 marks below cutoff", or "Awaiting all subjects"
   summaryMessage: string;
   actionGuidance: string[];
   subjectImprovementBreakdown: Array<{
     subjectId: string;
     subjectName: string;
-    currentPct: number | null;
-    currentMarks: number | null;
-    targetPctNeeded: number;
-    targetMarksNeeded: number;
-    pctDelta: number;
-    marksDelta: number;
+    hasData: boolean;
+    currentMarks: number | null; // arithmetic mean, e.g. 36.8
+    subjectMaxMarks: number; // 250
+    currentPerformanceDisplay: string; // "36.8/250 marks" or "No data yet"
+    targetMarks: number; // e.g. 106.5
+    targetMarksDisplay: string; // "106.5/250 marks"
+    marksNeeded: number; // max(0, targetMarks - (currentMarks ?? 0))
+    marksNeededDisplay: string; // "70 marks" or "Target met"
   }>;
+  // Legacy compatibility fields
+  expectedCutoffPct?: number;
+  userPct?: number | null;
+  userEquivalentMarks?: number | null;
+  gapPercentagePoints?: number;
+  gapMarks?: number;
+  band?: ChanceBand;
+  coverage?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -260,7 +298,6 @@ export function resolveTargetCollegeMatch(userCollege: string): string | null {
 
   const allColleges = Array.from(new Set(NORMALIZED_CUTOFFS.map((r) => r.college)));
 
-  // Clean string: remove parenthetical suffixes like (SRCC), (DU), (Delhi University), (W), (LSR), etc.
   const cleanInput = userCollege
     .toLowerCase()
     .replace(/\(.*?\)/g, "")
@@ -298,6 +335,7 @@ export function resolveTargetCollegeMatch(userCollege: string): string | null {
       bestCandidate = c;
     }
   }
+
   return bestCandidate;
 }
 
@@ -331,33 +369,57 @@ export function matchCourseToId(
 }
 
 // ---------------------------------------------------------------------------
-// 2. User Subject Performance Evaluator
+// 2. Target Marks Calculation Helper
+// ---------------------------------------------------------------------------
+
+/**
+ * Calculates equal-share or proportional target marks for a subject in a course combination.
+ * For equal weighting (composite scale === totalCount * subjectMax), calculates cutoffMarks / totalCount.
+ * For unequal weighting, calculates cutoffMarks * (subjectMax / cutoffScale).
+ */
+export function calculateSubjectTargetMarks(
+  cutoffMarks: number,
+  cutoffScale: number,
+  subjectMaxMarks: number = STANDING_CONFIG.MAX_MARKS_PER_SUBJECT,
+  totalSubjectCount: number = 3
+): number {
+  if (totalSubjectCount > 0 && cutoffScale === totalSubjectCount * subjectMaxMarks) {
+    // Standard equally weighted CUET papers: exact equal division
+    return Math.round((cutoffMarks / totalSubjectCount) * 10) / 10;
+  }
+  if (cutoffScale > 0) {
+    // Proportional weighting based on paper maximum
+    return Math.round((cutoffMarks * (subjectMaxMarks / cutoffScale)) * 10) / 10;
+  }
+  return totalSubjectCount > 0 ? Math.round((cutoffMarks / totalSubjectCount) * 10) / 10 : 0;
+}
+
+// ---------------------------------------------------------------------------
+// 3. User Subject Performance Evaluator
 // ---------------------------------------------------------------------------
 
 /**
  * Computes deterministic user performance per subject from all recorded sessions.
- * Allows all marks scored by user without low-effort session exclusion.
- * Weights recent sessions higher using configurable decay.
+ * Calculates arithmetic mean of marks across completed mock-test scores.
  * Marks subjects with fewer than MIN_ANSWERED_QUESTIONS_PER_SUBJECT as insufficient_data.
  */
 export function computeUserSubjectPerformance(
   attempts: RecordedTestAttempt[],
   options?: {
-    decayFactor?: number;
     minAnsweredQuestions?: number;
+    decayFactor?: number;
     scoreAdjustmentFactor?: number;
   }
 ): Record<string, UserSubjectPerformance> {
-  const decayFactor = options?.decayFactor ?? STANDING_CONFIG.SESSION_RECENCY_DECAY_FACTOR;
   const minQuestions = options?.minAnsweredQuestions ?? STANDING_CONFIG.MIN_ANSWERED_QUESTIONS_PER_SUBJECT;
-  const adjFactor = options?.scoreAdjustmentFactor ?? STANDING_CONFIG.SCORE_ADJUSTMENT_FACTOR;
 
   // Group attempts by normalized subject key
   const subjectSessionsMap: Record<
     string,
     Array<{
       attempt: RecordedTestAttempt;
-      percentage: number;
+      marks: number;
+      maxMarks: number;
       answeredCount: number;
       isValid: boolean;
       submittedAtMs: number;
@@ -374,11 +436,9 @@ export function computeUserSubjectPerformance(
         ? questionsList.filter((q) => q.selectedOption !== null && q.selectedOption !== undefined).length
         : att.attemptedCount || 0;
 
-    // Calculate percentage on the standardized subject scale
     const maxMarks = att.maxMarks > 0 ? att.maxMarks : STANDING_CONFIG.MAX_MARKS_PER_SUBJECT;
-    const marks = att.totalMarks ?? (att.correctCount * 5 - (att.incorrectCount || 0));
-    const sessionPct = Math.max(0, Math.min(100, (marks / maxMarks) * 100));
-
+    // Score in marks according to CUET (+5 correct, -1 incorrect)
+    const marks = att.totalMarks !== undefined ? att.totalMarks : (att.correctCount * 5 - (att.incorrectCount || 0) * 1);
     const submittedAtMs = att.submittedAt ? new Date(att.submittedAt).getTime() : 0;
 
     if (!subjectSessionsMap[subjKey]) {
@@ -387,7 +447,8 @@ export function computeUserSubjectPerformance(
 
     subjectSessionsMap[subjKey]!.push({
       attempt: att,
-      percentage: sessionPct,
+      marks,
+      maxMarks,
       answeredCount,
       isValid: true,
       submittedAtMs,
@@ -404,6 +465,8 @@ export function computeUserSubjectPerformance(
       answeredQuestions: 0,
       validSessionsCount: 0,
       excludedLowEffortCount: 0,
+      averageMarks: 0,
+      maxMarks: STANDING_CONFIG.MAX_MARKS_PER_SUBJECT,
       rawAveragePercentage: 0,
       weightedPercentage: 0,
       hasSufficientData: false,
@@ -411,34 +474,21 @@ export function computeUserSubjectPerformance(
     };
   }
 
-  // Calculate metrics for subjects that have user attempts
+  // Calculate arithmetic mean marks for subjects that have user attempts
   for (const [sKey, sessions] of Object.entries(subjectSessionsMap)) {
-    // Sort chronological: newest session first
     const sorted = [...sessions].sort((a, b) => b.submittedAtMs - a.submittedAtMs);
-
     const validSessions = sorted.filter((s) => s.isValid);
-    const lowEffortSessions = sorted.filter((s) => !s.isValid);
 
     const totalAnswered = validSessions.reduce((sum, s) => sum + s.answeredCount, 0);
+    const totalMarks = validSessions.reduce((sum, s) => sum + s.marks, 0);
 
-    let rawAvg = 0;
-    let weightedAvg = 0;
+    // Arithmetic mean of user's eligible completed mock scores
+    const averageMarks = validSessions.length > 0
+      ? Math.round((totalMarks / validSessions.length) * 10) / 10
+      : 0;
 
-    if (validSessions.length > 0) {
-      rawAvg = validSessions.reduce((sum, s) => sum + s.percentage, 0) / validSessions.length;
-
-      let totalWeight = 0;
-      let weightedSum = 0;
-      validSessions.forEach((s, rank) => {
-        const weight = Math.pow(decayFactor, rank);
-        totalWeight += weight;
-        weightedSum += s.percentage * weight;
-      });
-
-      weightedAvg = totalWeight > 0 ? (weightedSum / totalWeight) * adjFactor : 0;
-      weightedAvg = Math.max(0, Math.min(100, Math.round(weightedAvg * 10) / 10));
-      rawAvg = Math.max(0, Math.min(100, Math.round(rawAvg * 10) / 10));
-    }
+    const subjMax = validSessions[0]?.maxMarks || STANDING_CONFIG.MAX_MARKS_PER_SUBJECT;
+    const rawPct = subjMax > 0 ? Math.round((averageMarks / subjMax) * 1000) / 10 : 0;
 
     const hasSufficientData = totalAnswered >= minQuestions && validSessions.length > 0;
     const metaName = CANONICAL_SUBJECTS_MAP[sKey]?.name || sKey;
@@ -448,9 +498,11 @@ export function computeUserSubjectPerformance(
       subjectName: metaName,
       answeredQuestions: totalAnswered,
       validSessionsCount: validSessions.length,
-      excludedLowEffortCount: lowEffortSessions.length,
-      rawAveragePercentage: rawAvg,
-      weightedPercentage: weightedAvg,
+      excludedLowEffortCount: 0,
+      averageMarks,
+      maxMarks: subjMax,
+      rawAveragePercentage: rawPct,
+      weightedPercentage: rawPct,
       hasSufficientData,
       status: hasSufficientData
         ? "valid"
@@ -464,24 +516,24 @@ export function computeUserSubjectPerformance(
 }
 
 // ---------------------------------------------------------------------------
-// 3. Course Requirement Resolution
+// 4. Course Requirement Resolution
 // ---------------------------------------------------------------------------
 
 /**
  * Resolves required subjects for a course based on its combinations and student's valid scores.
  * Picks the optimal combination and best-scoring subjects for the user.
- * Missing subjects are NOT treated as zero: uses available subjects with coverage tracking.
+ * Missing subjects are NOT treated as zero. Never fabricates an overall score for incomplete data.
  */
 export function resolveCourseRequirements(
   courseId: string,
   userPerformance: Record<string, UserSubjectPerformance>,
-  targetCombinationId?: string
+  targetCombinationId?: string,
+  cutoffMarks?: number
 ): CourseResolutionResult {
   const course = CANONICAL_COURSES_MAP[courseId] || CANONICAL_COURSES_MAP["bcom_hons"]!;
   const combinations = course.combinations || [];
 
   if (combinations.length === 0) {
-    // Fallback if no explicit combinations
     return {
       course,
       chosenCombination: { id: "default", label: "Default", rules: [] },
@@ -489,22 +541,26 @@ export function resolveCourseRequirements(
       totalRequiredCount: course.subjectCount || 4,
       subjectsWithDataCount: 0,
       coverage: 0,
+      isComplete: false,
       isBelowCoverageThreshold: true,
       hasNoData: true,
-      userPct: null,
+      combinedAverageMarks: null,
+      standingStatus: "no_data",
+      standingLabel: "No attempts recorded",
       participatingSubjectNames: [],
       missingSubjectNames: [],
+      userPct: null,
     };
   }
 
-  // Evaluate each combination to find the one that yields highest valid coverage & score
   interface CombEvaluation {
     combination: CourseCombination;
     resolved: ResolvedSubjectChoice[];
     totalRequired: number;
     subjectsWithData: number;
     coverage: number;
-    userPct: number | null;
+    isComplete: boolean;
+    combinedAverageMarks: number | null;
   }
 
   const evaluatedCombos: CombEvaluation[] = combinations.map((comb) => {
@@ -518,37 +574,53 @@ export function resolveCourseRequirements(
             usedSubjectKeys.add(subKey);
             const perf = userPerformance[subKey];
             const hasData = Boolean(perf && (perf.hasSufficientData || perf.validSessionsCount > 0));
+            const maxMarks = perf?.maxMarks || STANDING_CONFIG.MAX_MARKS_PER_SUBJECT;
+            const averageMarks = hasData && perf
+              ? (perf.averageMarks !== undefined
+                  ? perf.averageMarks
+                  : perf.rawAveragePercentage !== undefined
+                  ? Math.round(((perf.rawAveragePercentage * maxMarks) / 100) * 10) / 10
+                  : null)
+              : null;
+
             resolved.push({
               subjectId: subKey,
               subjectName: perf?.subjectName || CANONICAL_SUBJECTS_MAP[subKey]?.name || subKey,
               ruleType: "required",
               hasData,
-              userPercentage: hasData && perf ? perf.weightedPercentage : null,
+              averageMarks,
+              maxMarks,
+              targetMarks: 0,
+              marksNeeded: 0,
               answeredQuestions: perf?.answeredQuestions || 0,
+              userPercentage: perf ? perf.rawAveragePercentage : null,
             });
           }
         }
       } else if (rule.type === "one_of" || rule.type === "best_of") {
-        // Pool of available candidate subjects for this rule that haven't been picked yet
         const candidates = rule.subjects.filter((s) => !usedSubjectKeys.has(s));
 
-        // Sort candidates: subjects with valid data first (descending by weighted percentage),
-        // then subjects without data
         const rankedCandidates = candidates.map((subKey) => {
           const perf = userPerformance[subKey];
           const hasData = Boolean(perf && (perf.hasSufficientData || perf.validSessionsCount > 0));
+          const maxM = perf?.maxMarks || STANDING_CONFIG.MAX_MARKS_PER_SUBJECT;
+          const candidateMarks = hasData && perf
+            ? (perf.averageMarks !== undefined
+                ? perf.averageMarks
+                : ((perf.rawAveragePercentage ?? 0) * maxM) / 100)
+            : -1;
           return {
             subKey,
             perf,
             hasData,
-            pct: hasData && perf ? perf.weightedPercentage : -1,
+            marks: candidateMarks,
           };
         });
 
         rankedCandidates.sort((a, b) => {
           if (a.hasData && !b.hasData) return -1;
           if (!a.hasData && b.hasData) return 1;
-          return b.pct - a.pct;
+          return b.marks - a.marks;
         });
 
         const countToPick = Math.min(rule.count, rankedCandidates.length);
@@ -556,14 +628,24 @@ export function resolveCourseRequirements(
 
         for (const item of picked) {
           usedSubjectKeys.add(item.subKey);
+          const maxMarks = item.perf?.maxMarks || STANDING_CONFIG.MAX_MARKS_PER_SUBJECT;
+          const itemAverageMarks = item.hasData && item.perf
+            ? (item.perf.averageMarks !== undefined
+                ? item.perf.averageMarks
+                : Math.round((((item.perf.rawAveragePercentage ?? 0) * maxMarks) / 100) * 10) / 10)
+            : null;
           resolved.push({
             subjectId: item.subKey,
             subjectName: item.perf?.subjectName || CANONICAL_SUBJECTS_MAP[item.subKey]?.name || item.subKey,
             ruleType: rule.type,
             hasData: item.hasData,
-            userPercentage: item.hasData && item.perf ? item.perf.weightedPercentage : null,
+            averageMarks: itemAverageMarks,
+            maxMarks,
+            targetMarks: 0,
+            marksNeeded: 0,
             answeredQuestions: item.perf?.answeredQuestions || 0,
             isBestOptionChosen: true,
+            userPercentage: item.perf ? item.perf.rawAveragePercentage : null,
           });
         }
       }
@@ -572,16 +654,22 @@ export function resolveCourseRequirements(
     const totalRequired = course.subjectCount || resolved.length || 4;
     const subjectsWithData = resolved.filter((s) => s.hasData).length;
     const coverage = totalRequired > 0 ? Math.round((subjectsWithData / totalRequired) * 100) / 100 : 0;
+    const isComplete = subjectsWithData === totalRequired;
 
-    // user_pct is the arithmetic mean across ONLY participating subjects that have valid data
-    const validScores = resolved
-      .filter((s) => s.hasData && s.userPercentage !== null)
-      .map((s) => s.userPercentage!);
+    // Calculate subject target marks and marks needed
+    const effectiveCutoff = cutoffMarks ?? course.cutoffScale;
+    resolved.forEach((sub) => {
+      sub.targetMarks = calculateSubjectTargetMarks(effectiveCutoff, course.cutoffScale, sub.maxMarks, totalRequired);
+      sub.marksNeeded = sub.hasData && sub.averageMarks !== null
+        ? Math.max(0, Math.round((sub.targetMarks - sub.averageMarks) * 10) / 10)
+        : sub.targetMarks;
+    });
 
-    const userPct =
-      validScores.length > 0
-        ? Math.round((validScores.reduce((a, b) => a + b, 0) / validScores.length) * 10) / 10
-        : null;
+    // Combined average marks is ONLY calculated when ALL required subjects have data!
+    // Never fabricate an overall score for incomplete subject data!
+    const combinedAverageMarks = isComplete
+      ? Math.round(resolved.reduce((sum, s) => sum + (s.averageMarks || 0), 0) * 10) / 10
+      : null;
 
     return {
       combination: comb,
@@ -589,21 +677,21 @@ export function resolveCourseRequirements(
       totalRequired,
       subjectsWithData,
       coverage,
-      userPct,
+      isComplete,
+      combinedAverageMarks,
     };
   });
 
-  // Pick combination: if targetCombinationId specified, use it; otherwise pick best coverage / score
   let chosen = evaluatedCombos[0]!;
   if (targetCombinationId) {
     const found = evaluatedCombos.find((c) => c.combination.id === targetCombinationId);
     if (found) chosen = found;
   } else {
     evaluatedCombos.sort((a, b) => {
-      // Primary: higher coverage
-      if (b.coverage !== a.coverage) return b.coverage - a.coverage;
-      // Secondary: higher user percentage
-      return (b.userPct || 0) - (a.userPct || 0);
+      if (b.subjectsWithData !== a.subjectsWithData) return b.subjectsWithData - a.subjectsWithData;
+      const bMarksSum = b.resolved.filter((s) => s.hasData).reduce((sum, s) => sum + (s.averageMarks || 0), 0);
+      const aMarksSum = a.resolved.filter((s) => s.hasData).reduce((sum, s) => sum + (s.averageMarks || 0), 0);
+      return bMarksSum - aMarksSum;
     });
     chosen = evaluatedCombos[0]!;
   }
@@ -619,6 +707,21 @@ export function resolveCourseRequirements(
   const isBelowCoverageThreshold =
     chosen.coverage < STANDING_CONFIG.COVERAGE_CONFIDENCE_THRESHOLD;
 
+  const standingStatus: "complete" | "incomplete" | "no_data" =
+    chosen.subjectsWithData === 0 ? "no_data" : chosen.isComplete ? "complete" : "incomplete";
+
+  const standingLabel = chosen.isComplete
+    ? "Complete"
+    : chosen.subjectsWithData === 0
+    ? "No attempts recorded"
+    : "Incomplete — awaiting remaining subjects";
+
+  // Legacy userPct calculation for backward compatibility
+  const validScores = chosen.resolved
+    .filter((s) => s.hasData && s.userPercentage !== null && s.userPercentage !== undefined)
+    .map((s) => s.userPercentage!);
+  const userPct = validScores.length > 0 ? Math.round((validScores.reduce((a, b) => a + b, 0) / validScores.length) * 10) / 10 : null;
+
   return {
     course,
     chosenCombination: chosen.combination,
@@ -626,21 +729,24 @@ export function resolveCourseRequirements(
     totalRequiredCount: chosen.totalRequired,
     subjectsWithDataCount: chosen.subjectsWithData,
     coverage: chosen.coverage,
+    isComplete: chosen.isComplete,
     isBelowCoverageThreshold,
     hasNoData: chosen.subjectsWithData === 0,
-    userPct: chosen.userPct,
+    combinedAverageMarks: chosen.combinedAverageMarks,
+    standingStatus,
+    standingLabel,
     participatingSubjectNames,
     missingSubjectNames,
+    userPct,
   };
 }
 
 // ---------------------------------------------------------------------------
-// 4. Multi-Year Cutoff Statistical Analysis
+// 5. Multi-Year Cutoff Statistical Analysis
 // ---------------------------------------------------------------------------
 
 /**
- * Computes statistical cutoff metrics across available years for a college + course + category.
- * Derives expected cutoff as a range (low - high) with trend analysis.
+ * Computes statistical cutoff metrics in marks across available years for a college + course + category.
  */
 export function computeMultiYearCutoff(
   collegeName: string,
@@ -660,7 +766,6 @@ export function computeMultiYearCutoff(
     return null;
   }
 
-  // Sort chronological
   records.sort((a, b) => a.year - b.year);
 
   const years = records.map((r) => r.year);
@@ -668,61 +773,59 @@ export function computeMultiYearCutoff(
 
   const yearlyData = records.map((r) => ({
     year: r.year,
-    cutoffValue: r.cutoff_value,
+    cutoffValue: Math.round(r.cutoff_value * 10) / 10,
     cutoffMax: r.cutoff_max,
     cutoffPct: Math.round((r.cutoff_value / r.cutoff_max) * 1000) / 10,
   }));
 
-  const percentages = yearlyData.map((y) => y.cutoffPct);
+  const values = yearlyData.map((y) => y.cutoffValue);
   const latestRecord = yearlyData[yearlyData.length - 1]!;
   const latestYear = latestRecord.year;
   const latestValue = latestRecord.cutoffValue;
-  const latestPercentage = latestRecord.cutoffPct;
 
-  const minPercentage = Math.min(...percentages);
-  const maxPercentage = Math.max(...percentages);
-  const averagePercentage =
-    Math.round((percentages.reduce((a, b) => a + b, 0) / percentages.length) * 10) / 10;
+  const minMarks = Math.min(...values);
+  const maxMarks = Math.max(...values);
+  const averageMarks = Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 10) / 10;
 
-  // Trend detection
   let trend: "rising" | "falling" | "stable" | "not enough years" = "not enough years";
-  let trendDeltaPercentage: number | null = null;
+  let trendDeltaMarks: number | null = null;
 
   if (yearlyData.length >= 2) {
-    const first = yearlyData[0]!.cutoffPct;
-    const last = yearlyData[yearlyData.length - 1]!.cutoffPct;
-    trendDeltaPercentage = Math.round((last - first) * 10) / 10;
-    if (trendDeltaPercentage > 0.8) trend = "rising";
-    else if (trendDeltaPercentage < -0.8) trend = "falling";
+    const first = yearlyData[0]!.cutoffValue;
+    const last = yearlyData[yearlyData.length - 1]!.cutoffValue;
+    trendDeltaMarks = Math.round((last - first) * 10) / 10;
+    if (trendDeltaMarks > 5) trend = "rising";
+    else if (trendDeltaMarks < -5) trend = "falling";
     else trend = "stable";
   }
 
-  // Derive Expected Range (low - high) without false precision
-  let rangeLowPct: number;
-  let rangeHighPct: number;
+  let rangeLowMarks: number;
+  let rangeHighMarks: number;
 
   if (yearlyData.length === 1) {
-    // Single year: widen range by +/- SINGLE_YEAR_WIDEN_PERCENTAGE (e.g. 2.5%)
-    rangeLowPct = Math.max(0, latestPercentage - STANDING_CONFIG.SINGLE_YEAR_WIDEN_PERCENTAGE);
-    rangeHighPct = Math.min(100, latestPercentage + STANDING_CONFIG.SINGLE_YEAR_WIDEN_PERCENTAGE);
+    // Single year: widen range by +/- 2.5% of cutoff scale
+    const delta = cutoffScale * 0.025;
+    rangeLowMarks = Math.max(0, Math.round((latestValue - delta) * 10) / 10);
+    rangeHighMarks = Math.min(cutoffScale, Math.round((latestValue + delta) * 10) / 10);
   } else {
     // Multiple years: use min & max with margin expansion
-    const spread = maxPercentage - minPercentage;
-    const margin = Math.max(
-      STANDING_CONFIG.MIN_RANGE_SPREAD_PERCENTAGE,
-      spread * 0.15
-    );
-    rangeLowPct = Math.max(0, minPercentage - margin);
-    rangeHighPct = Math.min(100, maxPercentage + margin);
+    const spread = maxMarks - minMarks;
+    const margin = Math.max(cutoffScale * 0.015, spread * 0.15);
+    rangeLowMarks = Math.max(0, Math.round((minMarks - margin) * 10) / 10);
+    rangeHighMarks = Math.min(cutoffScale, Math.round((maxMarks + margin) * 10) / 10);
   }
 
-  rangeLowPct = Math.round(rangeLowPct * 10) / 10;
-  rangeHighPct = Math.round(rangeHighPct * 10) / 10;
-  const midpointPct = Math.round(((rangeLowPct + rangeHighPct) / 2) * 10) / 10;
+  const midpointMarks = Math.round(((rangeLowMarks + rangeHighMarks) / 2) * 10) / 10;
 
-  const lowMarks = Math.round((rangeLowPct / 100) * cutoffScale * 10) / 10;
-  const highMarks = Math.round((rangeHighPct / 100) * cutoffScale * 10) / 10;
-  const midpointMarks = Math.round((midpointPct / 100) * cutoffScale * 10) / 10;
+  // Percentage representations for legacy compatibility
+  const latestPercentage = Math.round((latestValue / cutoffScale) * 1000) / 10;
+  const averagePercentage = Math.round((averageMarks / cutoffScale) * 1000) / 10;
+  const minPercentage = Math.round((minMarks / cutoffScale) * 1000) / 10;
+  const maxPercentage = Math.round((maxMarks / cutoffScale) * 1000) / 10;
+  const lowPct = Math.round((rangeLowMarks / cutoffScale) * 1000) / 10;
+  const highPct = Math.round((rangeHighMarks / cutoffScale) * 1000) / 10;
+  const midpointPct = Math.round((midpointMarks / cutoffScale) * 1000) / 10;
+  const trendDeltaPercentage = trendDeltaMarks !== null ? Math.round((trendDeltaMarks / cutoffScale) * 1000) / 10 : null;
 
   return {
     college: collegeName,
@@ -732,36 +835,32 @@ export function computeMultiYearCutoff(
     years,
     latestYear,
     latestValue,
+    averageMarks,
+    minMarks,
+    maxMarks,
+    trend,
+    trendDeltaMarks,
+    expectedRange: {
+      lowMarks: rangeLowMarks,
+      highMarks: rangeHighMarks,
+      midpointMarks,
+      lowPct,
+      highPct,
+      midpointPct,
+    },
+    yearlyData,
     latestPercentage,
     averagePercentage,
     minPercentage,
     maxPercentage,
-    trend,
     trendDeltaPercentage,
-    expectedRange: {
-      lowPct: rangeLowPct,
-      highPct: rangeHighPct,
-      midpointPct,
-      lowMarks,
-      highMarks,
-      midpointMarks,
-    },
-    yearlyData,
   };
 }
 
 // ---------------------------------------------------------------------------
-// 5. Chance Band Classification
+// 6. Legacy Chance Band Evaluator (Preserved for backward compatibility)
 // ---------------------------------------------------------------------------
 
-/**
- * Deterministically classifies user standing against expected cutoff range into:
- * - Safe: above high end
- * - Likely: above midpoint
- * - Possible: within range [low, midpoint)
- * - Reach: below range by small margin (<= 5%)
- * - Far: well below
- */
 export function evaluateChanceBand(
   userPct: number | null,
   rangeLowPct: number,
@@ -789,11 +888,12 @@ export function evaluateChanceBand(
 }
 
 // ---------------------------------------------------------------------------
-// 6. Comprehensive College Standings Calculation
+// 7. Comprehensive College Standings Calculation (Marks-Only)
 // ---------------------------------------------------------------------------
 
 /**
  * Computes standing across all colleges offering the chosen course.
+ * Standing is communicated strictly in marks. Incomplete subjects are never fabricated.
  */
 export function computeCollegeStandings(params: {
   courseId: string;
@@ -801,11 +901,16 @@ export function computeCollegeStandings(params: {
   userAttempts: RecordedTestAttempt[];
   filterYear?: number;
   filterUniversity?: string;
-  filterBand?: ChanceBand;
+  filterStatus?: "above_cutoff" | "below_cutoff" | "incomplete" | "all";
 }): {
   resolution: CourseResolutionResult;
   userSubjectPerformance: Record<string, UserSubjectPerformance>;
   standings: CollegeStandingResult[];
+  groupedByStatus: {
+    aboveCutoff: CollegeStandingResult[];
+    belowCutoff: CollegeStandingResult[];
+    incomplete: CollegeStandingResult[];
+  };
   groupedByBand: {
     likely: CollegeStandingResult[];
     possible: CollegeStandingResult[];
@@ -819,13 +924,12 @@ export function computeCollegeStandings(params: {
     userAttempts,
     filterYear,
     filterUniversity,
-    filterBand,
+    filterStatus,
   } = params;
 
   const userSubjectPerformance = computeUserSubjectPerformance(userAttempts);
   const resolution = resolveCourseRequirements(courseId, userSubjectPerformance);
 
-  // Find all distinct colleges offering this course
   const offeringColleges = Array.from(
     new Set(
       NORMALIZED_CUTOFFS.filter((r) => r.canonical_course_id === courseId).map(
@@ -840,7 +944,6 @@ export function computeCollegeStandings(params: {
     const multiYear = computeMultiYearCutoff(college, courseId, category, filterYear);
     if (!multiYear) continue;
 
-    // Resolve University
     const matchedRecord = NORMALIZED_CUTOFFS.find(
       (r) => r.college.toLowerCase().trim() === college.toLowerCase().trim() && r.canonical_course_id === courseId
     );
@@ -850,84 +953,126 @@ export function computeCollegeStandings(params: {
       continue;
     }
 
-    const band = resolution.hasNoData
-      ? "Far"
-      : evaluateChanceBand(
-          resolution.userPct,
-          multiYear.expectedRange.lowPct,
-          multiYear.expectedRange.highPct
-        );
+    const cutoffScale = multiYear.cutoffScale;
+    const cutoffMarks = multiYear.expectedRange.midpointMarks;
+    const cutoffDisplay = `${cutoffMarks}/${cutoffScale} marks`;
+    const cutoffRangeDisplay = `${multiYear.expectedRange.lowMarks} - ${multiYear.expectedRange.highMarks}/${cutoffScale} marks`;
 
-    if (filterBand && band !== filterBand) {
+    let status: "above_cutoff" | "below_cutoff" | "incomplete" | "no_data";
+    let statusLabel: string;
+    let gapDisplay: string;
+    let marksGap: number | null = null;
+    let combinedAverageMarks: number | null = null;
+
+    if (resolution.hasNoData) {
+      status = "no_data";
+      statusLabel = "No attempts recorded";
+      gapDisplay = "—";
+    } else if (!resolution.isComplete) {
+      status = "incomplete";
+      statusLabel = "Incomplete — awaiting remaining subjects";
+      gapDisplay = "Awaiting all subjects";
+    } else {
+      combinedAverageMarks = resolution.combinedAverageMarks!;
+      marksGap = Math.round((cutoffMarks - combinedAverageMarks) * 10) / 10;
+      if (marksGap > 0) {
+        status = "below_cutoff";
+        statusLabel = `${marksGap} marks below cutoff`;
+        gapDisplay = `${marksGap} marks below cutoff`;
+      } else {
+        status = "above_cutoff";
+        const above = Math.abs(marksGap);
+        statusLabel = above === 0 ? "Meets cutoff" : `${above} marks above cutoff`;
+        gapDisplay = above === 0 ? "0 marks (meets cutoff)" : `${above} marks above cutoff`;
+      }
+    }
+
+    if (filterStatus && filterStatus !== "all" && status !== filterStatus) {
       continue;
     }
 
-    const bandInfo = CHANCE_BANDS[band];
-
-    // Gap computation
-    let gapPct = 0;
-    if (resolution.userPct !== null) {
-      gapPct = Math.max(0, Math.round((multiYear.expectedRange.midpointPct - resolution.userPct) * 10) / 10);
+    const yearsStr = multiYear.years.join(", ");
+    let reasoning = "";
+    if (resolution.hasNoData) {
+      reasoning = `No valid mock attempts recorded. Target admission cutoff is ${cutoffDisplay} based on ${yearsStr} admissions.`;
+    } else if (!resolution.isComplete) {
+      reasoning = `Incomplete data (${resolution.subjectsWithDataCount}/${resolution.totalRequiredCount} subjects completed). Official standing requires all required subjects. Expected cutoff: ${cutoffDisplay}.`;
     } else {
-      gapPct = multiYear.expectedRange.midpointPct;
+      reasoning = `Combined score is ${combinedAverageMarks}/${cutoffScale} marks (${gapDisplay}) against historical ${yearsStr} cutoff of ${cutoffDisplay}.`;
     }
 
-    const gapMarks = Math.round((gapPct / 100) * multiYear.cutoffScale * 10) / 10;
-
-    // Reasoning statement
-    const yearsStr = multiYear.years.join(", ");
-    const reasoning = resolution.hasNoData
-      ? `No valid mock attempts recorded. Target admission cutoff is ~${multiYear.expectedRange.midpointPct}% (${multiYear.expectedRange.midpointMarks} / ${multiYear.cutoffScale} marks) based on ${yearsStr} admissions.`
-      : `Based on your ${resolution.participatingSubjectNames.join(", ")} score (${resolution.userPct}%, ${Math.round(resolution.coverage * 100)}% coverage) against historical ${yearsStr} cutoffs [${multiYear.expectedRange.lowPct}% - ${multiYear.expectedRange.highPct}%].`;
+    // Legacy chance band mapping for backward compatibility
+    const legacyBand: ChanceBand = resolution.hasNoData
+      ? "Far"
+      : evaluateChanceBand(
+          resolution.userPct ?? null,
+          multiYear.expectedRange.lowPct ?? 70,
+          multiYear.expectedRange.highPct ?? 80
+        );
 
     standings.push({
       collegeName: college,
       universityName: resolvedUniversity,
       courseName: resolution.course.name,
       category,
-      band,
-      bandInfo,
-      userPct: resolution.userPct,
-      expectedRange: multiYear.expectedRange,
-      gapPercentagePoints: gapPct,
-      gapMarks,
-      coverage: resolution.coverage,
-      isRoughEstimate: resolution.isBelowCoverageThreshold,
+      cutoffScale,
+      cutoffMarks,
+      cutoffDisplay,
+      cutoffRangeDisplay,
+      combinedAverageMarks,
+      marksGap,
+      status,
+      statusLabel,
+      gapDisplay,
+      isComplete: resolution.isComplete,
       hasNoData: resolution.hasNoData,
       reasoning,
       multiYearStats: multiYear,
+      expectedRange: multiYear.expectedRange,
+      band: legacyBand,
+      bandInfo: CHANCE_BANDS[legacyBand],
+      userPct: resolution.userPct,
+      gapPercentagePoints: marksGap !== null && cutoffScale > 0 ? Math.max(0, Math.round((marksGap / cutoffScale) * 1000) / 10) : 0,
+      gapMarks: marksGap !== null ? Math.max(0, marksGap) : cutoffMarks,
+      coverage: resolution.coverage,
+      isRoughEstimate: resolution.isBelowCoverageThreshold,
     });
   }
 
-  // Sort standings: highest cutoffs first (or lowest gap)
-  standings.sort((a, b) => b.expectedRange.midpointPct - a.expectedRange.midpointPct);
+  // Sort standings by cutoffMarks descending
+  standings.sort((a, b) => b.cutoffMarks - a.cutoffMarks);
 
-  // Group into UI sections:
-  // "You can likely get": Safe & Likely
-  // "Possible": Possible
-  // "Reach": Reach & Far
+  const groupedByStatus = {
+    aboveCutoff: standings.filter((s) => s.status === "above_cutoff"),
+    belowCutoff: standings.filter((s) => s.status === "below_cutoff"),
+    incomplete: standings.filter((s) => s.status === "incomplete" || s.status === "no_data"),
+  };
+
   const groupedByBand = {
-    likely: standings.filter((s) => s.band === "Safe" || s.band === "Likely"),
-    possible: standings.filter((s) => s.band === "Possible"),
-    reach: standings.filter((s) => s.band === "Reach" || s.band === "Far"),
+    likely: groupedByStatus.aboveCutoff,
+    possible: groupedByStatus.belowCutoff,
+    reach: groupedByStatus.incomplete,
   };
 
   return {
     resolution,
     userSubjectPerformance,
     standings,
+    groupedByStatus,
     groupedByBand,
     totalCollegesCount: standings.length,
   };
 }
 
 // ---------------------------------------------------------------------------
-// 7. Dream College Gap Engine
+// 8. Dream College Gap Engine (Marks-Only)
 // ---------------------------------------------------------------------------
 
 /**
- * Computes gap analysis for a student's chosen dream college + course target.
- * Calculates needed percentage increase per subject and "what it would take" narrative.
+ * Computes marks-only gap analysis for a student's chosen dream college + course target.
+ * Preserves the official cutoff and its scale.
+ * When incomplete, displays available subject averages and marks needed without fabricating overall scores.
+ * When complete, compares combined marks directly against official cutoff marks.
  */
 export function computeDreamCollegeGap(params: {
   collegeName: string;
@@ -940,89 +1085,145 @@ export function computeDreamCollegeGap(params: {
   const multiYear = computeMultiYearCutoff(collegeName, courseId, category);
   if (!multiYear) return null;
 
+  const cutoffScale = multiYear.cutoffScale;
+  const expectedCutoffMarks = multiYear.expectedRange.midpointMarks;
+  const cutoffDisplay = `${expectedCutoffMarks}/${cutoffScale} marks`;
+
   const userSubjectPerformance = computeUserSubjectPerformance(userAttempts);
-  const resolution = resolveCourseRequirements(courseId, userSubjectPerformance);
+  const resolution = resolveCourseRequirements(courseId, userSubjectPerformance, undefined, expectedCutoffMarks);
 
-  const targetPct = multiYear.expectedRange.midpointPct;
-  const targetMarks = multiYear.expectedRange.midpointMarks;
-  const userPct = resolution.userPct;
-  const scale = multiYear.cutoffScale;
+  const isComplete = resolution.isComplete;
+  const hasNoData = resolution.hasNoData;
 
-  const userEquivalentMarks =
-    userPct !== null ? Math.round((userPct / 100) * scale * 10) / 10 : null;
-
-  const gapPct = userPct !== null ? Math.max(0, Math.round((targetPct - userPct) * 10) / 10) : targetPct;
-  const gapMarks =
-    userEquivalentMarks !== null
-      ? Math.max(0, Math.round((targetMarks - userEquivalentMarks) * 10) / 10)
+  // Calculate subject improvement breakdown in marks
+  const subjectBreakdown = resolution.resolvedSubjects.map((sub) => {
+    const targetMarks = calculateSubjectTargetMarks(
+      expectedCutoffMarks,
+      cutoffScale,
+      sub.maxMarks,
+      resolution.totalRequiredCount
+    );
+    const curMarks = sub.averageMarks;
+    const marksNeeded = sub.hasData && curMarks !== null
+      ? Math.max(0, Math.round((targetMarks - curMarks) * 10) / 10)
       : targetMarks;
 
-  const band = resolution.hasNoData
-    ? "Far"
-    : evaluateChanceBand(userPct, multiYear.expectedRange.lowPct, multiYear.expectedRange.highPct);
-
-  // Per-subject improvement breakdown:
-  // How much does each subject need to improve if other subjects remain constant?
-  // user_pct = sum(scores) / N. To raise user_pct by gapPct, sum must increase by N * gapPct.
-  // If distributed equally across all participating subjects: each subject needs +gapPct.
-  // In marks out of 250: +gapPct * 2.5 marks.
-  const subjectBreakdown = resolution.resolvedSubjects.map((sub) => {
-    const curPct = sub.userPercentage;
-    const curMarks = curPct !== null ? Math.round((curPct / 100) * STANDING_CONFIG.MAX_MARKS_PER_SUBJECT) : null;
-
-    // Equal-distribution target
-    const targetSubPct = Math.min(100, Math.round(((curPct ?? targetPct) + gapPct) * 10) / 10);
-    const targetSubMarks = Math.round((targetSubPct / 100) * STANDING_CONFIG.MAX_MARKS_PER_SUBJECT);
-    const marksDelta = curMarks !== null ? Math.max(0, targetSubMarks - curMarks) : targetSubMarks;
+    const currentPerformanceDisplay = sub.hasData && curMarks !== null
+      ? `${curMarks}/${sub.maxMarks} marks`
+      : "No data yet";
+    const targetMarksDisplay = `${targetMarks}/${sub.maxMarks} marks`;
+    const marksNeededDisplay = sub.hasData && curMarks !== null
+      ? marksNeeded > 0 ? `${marksNeeded} marks needed` : "Target met"
+      : "No data yet";
 
     return {
       subjectId: sub.subjectId,
       subjectName: sub.subjectName,
-      currentPct: curPct,
+      hasData: sub.hasData,
       currentMarks: curMarks,
-      targetPctNeeded: targetSubPct,
-      targetMarksNeeded: targetSubMarks,
-      pctDelta: gapPct,
-      marksDelta,
+      subjectMaxMarks: sub.maxMarks,
+      currentPerformanceDisplay,
+      targetMarks,
+      targetMarksDisplay,
+      marksNeeded,
+      marksNeededDisplay,
     };
   });
 
-  // What it would take summary narrative
+  let status: "above_cutoff" | "below_cutoff" | "incomplete" | "no_data";
+  let statusLabel: string;
+  let combinedMarks: number | null = null;
+  let combinedMarksDisplay: string;
+  let marksGap: number | null = null;
+  let gapDisplay: string;
   let summaryMessage = "";
   const actionGuidance: string[] = [];
 
-  if (resolution.hasNoData) {
-    summaryMessage = `To target ${collegeName} (${resolution.course.name}), complete mocks in ${resolution.resolvedSubjects.map((s) => s.subjectName).join(", ")} to calibrate your baseline standing against the ~${targetPct}% cutoff.`;
+  if (hasNoData) {
+    status = "no_data";
+    statusLabel = "No attempts recorded";
+    combinedMarks = null;
+    combinedMarksDisplay = "No data yet";
+    marksGap = null;
+    gapDisplay = "No data yet";
+    summaryMessage = `To target ${collegeName} (${resolution.course.name}), complete mocks in ${resolution.resolvedSubjects.map((s) => s.subjectName).join(", ")} to calibrate your baseline standing against the expected cutoff of ${cutoffDisplay}.`;
     actionGuidance.push(`Take an initial 50-question mock in ${resolution.resolvedSubjects[0]?.subjectName || "your core domain"}.`);
-    actionGuidance.push(`Target at least ${Math.round(targetPct * 2.5)} / 250 marks (+5 / -1 marking scheme).`);
-  } else if (gapPct === 0) {
-    summaryMessage = `You are currently matching or exceeding the historical cutoff (${targetPct}%) for ${collegeName}! Maintain consistency and avoid negative marking traps.`;
-    actionGuidance.push("Focus on timed speed drills to maintain fluency under pressure.");
-    actionGuidance.push("Review high-yield misread traps in Section II domain subjects.");
+    actionGuidance.push(`Target at least ${subjectBreakdown[0]?.targetMarks || 100} / 250 marks (+5 / -1 marking scheme).`);
+  } else if (!isComplete) {
+    status = "incomplete";
+    statusLabel = "Incomplete — awaiting remaining subjects";
+    combinedMarks = null;
+    combinedMarksDisplay = "Incomplete";
+    marksGap = null;
+    gapDisplay = "Awaiting all subjects";
+
+    const availableSummary = subjectBreakdown
+      .filter((s) => s.hasData && s.currentMarks !== null)
+      .map((s) => `${s.subjectName} is ${s.currentMarks}/${s.subjectMaxMarks} marks (target: ${s.targetMarks} marks, ${s.marksNeeded} marks needed)`)
+      .join("; ");
+
+    summaryMessage = `Current performance on available subjects: ${availableSummary}. Complete mocks in remaining required subject(s): ${resolution.missingSubjectNames.join(", ")} to calculate your overall standing against the ${cutoffDisplay} cutoff.`;
+    actionGuidance.push(`Take a mock in ${resolution.missingSubjectNames.join(", ")} to unlock your combined score.`);
+    subjectBreakdown.filter((s) => s.hasData && s.marksNeeded > 0).forEach((s) => {
+      actionGuidance.push(`Bridge the ${s.marksNeeded} marks gap in ${s.subjectName} to reach its target (${s.targetMarks} marks).`);
+    });
   } else {
-    summaryMessage = `Raise your domain average from ${userPct}% to ${targetPct}% (+${gapPct}% overall, or ~${Math.round(gapPct * 2.5)} marks per subject) to reach the expected cutoff for ${collegeName}.`;
-    actionGuidance.push(`Bridge the ${gapMarks} marks gap across your ${resolution.subjectsWithDataCount} tested subject(s).`);
-    if (resolution.missingSubjectNames.length > 0) {
-      actionGuidance.push(`Take mocks in missing required subject(s): ${resolution.missingSubjectNames.join(", ")} to raise your coverage.`);
+    // All required subjects available!
+    combinedMarks = resolution.combinedAverageMarks!;
+    combinedMarksDisplay = `${combinedMarks}/${cutoffScale} marks`;
+    marksGap = Math.round((expectedCutoffMarks - combinedMarks) * 10) / 10;
+
+    if (marksGap > 0) {
+      status = "below_cutoff";
+      statusLabel = `${marksGap} marks below cutoff`;
+      gapDisplay = `${marksGap} marks below cutoff`;
+      summaryMessage = `Your combined mock score is ${combinedMarksDisplay} against the expected cutoff of ${cutoffDisplay} (${marksGap} marks below cutoff). Increase your total score by ${marksGap} marks across your subjects to reach the admission threshold for ${collegeName}.`;
+      actionGuidance.push(`Bridge the ${marksGap} marks gap across your ${resolution.totalRequiredCount} required subjects.`);
+      actionGuidance.push("Target 3 to 4 additional correct questions per subject to eliminate negative deductions.");
+    } else {
+      status = "above_cutoff";
+      const above = Math.abs(marksGap);
+      statusLabel = above === 0 ? "Meets cutoff" : `${above} marks above cutoff`;
+      gapDisplay = above === 0 ? "0 marks (meets cutoff)" : `${above} marks above cutoff`;
+      summaryMessage = `Your combined mock score is ${combinedMarksDisplay}, which ${above === 0 ? "matches" : `is ${above} marks above`} the historical cutoff (${cutoffDisplay}) for ${collegeName}! Maintain consistency and avoid negative marking traps.`;
+      actionGuidance.push("Focus on timed mock simulations to maintain accuracy under exam conditions.");
+      actionGuidance.push("Review high-yield trap options to protect your score from negative marks.");
     }
-    actionGuidance.push("Target 3 to 4 additional correct questions per subject to eliminate negative deductions.");
   }
+
+  // Legacy compatibility calculations
+  const legacyTargetPct = Math.round((expectedCutoffMarks / cutoffScale) * 1000) / 10;
+  const legacyUserPct = resolution.userPct ?? null;
+  const legacyGapMarks = marksGap !== null ? Math.max(0, marksGap) : expectedCutoffMarks;
+  const legacyGapPct = legacyUserPct !== null ? Math.max(0, Math.round((legacyTargetPct - legacyUserPct) * 10) / 10) : legacyTargetPct;
+  const legacyBand = resolution.hasNoData
+    ? "Far"
+    : evaluateChanceBand(legacyUserPct, multiYear.expectedRange.lowPct ?? 70, multiYear.expectedRange.highPct ?? 80);
 
   return {
     targetCollege: collegeName,
     targetCourse: resolution.course.name,
     category,
-    cutoffScale: scale,
-    expectedCutoffPct: targetPct,
-    expectedCutoffMarks: targetMarks,
-    userPct,
-    userEquivalentMarks,
-    gapPercentagePoints: gapPct,
-    gapMarks,
-    band,
-    coverage: resolution.coverage,
+    cutoffScale,
+    expectedCutoffMarks,
+    cutoffDisplay,
+    isComplete,
+    hasNoData,
+    status,
+    statusLabel,
+    combinedMarks,
+    combinedMarksDisplay,
+    marksGap,
+    gapDisplay,
     summaryMessage,
     actionGuidance,
     subjectImprovementBreakdown: subjectBreakdown,
+    expectedCutoffPct: legacyTargetPct,
+    userPct: legacyUserPct,
+    userEquivalentMarks: combinedMarks,
+    gapPercentagePoints: legacyGapPct,
+    gapMarks: legacyGapMarks,
+    band: legacyBand,
+    coverage: resolution.coverage,
   };
 }

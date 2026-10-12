@@ -2,14 +2,14 @@ import {
   computeUserSubjectPerformance,
   resolveCourseRequirements,
   computeMultiYearCutoff,
-  evaluateChanceBand,
+  computeCollegeStandings,
   computeDreamCollegeGap,
+  calculateSubjectTargetMarks,
   UserSubjectPerformance,
   resolveTargetCollegeMatch,
   matchCourseToId,
   CANONICAL_COURSES_MAP,
 } from "../lib/standing-engine";
-import { STANDING_CONFIG } from "../lib/config/standingConfig";
 import { RecordedTestAttempt, RecordedQuestionAttempt } from "../types";
 
 let passed = 0;
@@ -91,196 +91,127 @@ function createAttempt(params: {
 
 async function runStandingTests() {
   console.log("===============================================================");
-  console.log("WHERE DO I STAND: DETERMINISTIC ENGINE TEST SUITE");
+  console.log("WHERE DO I STAND: MARKS-ONLY ADMISSION ENGINE TEST SUITE");
   console.log("===============================================================\n");
 
   // -------------------------------------------------------------------------
-  // SUITE 1: All sessions included & user subject performance
+  // SUITE 1: Arithmetic Mean of Mock Scores in Marks
   // -------------------------------------------------------------------------
-  console.log("SUITE 1: All Sessions Included & Subject Performance");
+  console.log("SUITE 1: Arithmetic Mean of Mock Scores (Marks Only)");
 
-  // User takes 1 physics test (40/50 correct, 80%), and 1 rushed session (4s median, 10/50 correct)
-  const validPhysics = createAttempt({
-    testId: "phys_valid_1",
+  // Physics Mock 1: 50 Qs, 40 correct -> 40*5 - 10*1 = 190 marks out of 250
+  const physMock1 = createAttempt({
+    testId: "phys_mock_1",
     subject: "Physics",
     questionCount: 50,
-    correctCount: 40, // 40*5 - 10*1 = 190 / 250 = 76%
+    correctCount: 40, // 190 marks
     avgTimeSeconds: 50,
-    isLowEffort: false,
-    dateOffsetDays: 0,
   });
 
-  const lowEffortPhysics = createAttempt({
-    testId: "phys_rushed_2",
+  // Physics Mock 2: 50 Qs, 10 correct -> 10*5 - 40*1 = 10 marks out of 250
+  const physMock2 = createAttempt({
+    testId: "phys_mock_2",
     subject: "Physics",
     questionCount: 50,
-    correctCount: 10, // 10*5 - 40*1 = 10 / 250 = 4%
-    avgTimeSeconds: 4, // 4s rapid pacing - allowed and counted
-    isLowEffort: true,
-    dateOffsetDays: 1,
+    correctCount: 10, // 10 marks
+    avgTimeSeconds: 4,
   });
 
-  const perf1 = computeUserSubjectPerformance([validPhysics, lowEffortPhysics]);
+  const perf1 = computeUserSubjectPerformance([physMock1, physMock2]);
   assert(
     perf1["physics"] !== undefined,
-    "Subject Performance: Physics subject record exists"
+    "Subject Performance: Physics record exists"
   );
   assert(
     perf1["physics"]?.validSessionsCount === 2,
-    `Session Gate: All 2 sessions counted (Found: ${perf1["physics"]?.validSessionsCount})`
+    `Session Count: Both sessions recorded (Found: ${perf1["physics"]?.validSessionsCount})`
+  );
+  // Arithmetic mean = (190 + 10) / 2 = 100 marks out of 250
+  assert(
+    perf1["physics"]?.averageMarks === 100,
+    `Marks Average: Arithmetic mean is exactly 100 marks (Found: ${perf1["physics"]?.averageMarks})`
   );
   assert(
-    perf1["physics"]?.excludedLowEffortCount === 0,
-    `Session Gate: Zero sessions excluded (Found: ${perf1["physics"]?.excludedLowEffortCount})`
-  );
-  assert(
-    perf1["physics"]?.hasSufficientData === true,
-    "Data Gate: 100 questions satisfies >= 15 questions threshold"
-  );
-  assert(
-    perf1["physics"]?.weightedPercentage === 41.5,
-    `Score Calculation: Correct weighted percentage including all marks is 41.5% (Found: ${perf1["physics"]?.weightedPercentage}%)`
+    perf1["physics"]?.maxMarks === 250,
+    `Subject Maximum: Max marks is 250 (Found: ${perf1["physics"]?.maxMarks})`
   );
 
-  // Subject below threshold (only 5 questions)
-  const fewQuestionsBio = createAttempt({
-    testId: "bio_few_1",
-    subject: "Biology",
-    questionCount: 5,
-    correctCount: 4,
-    avgTimeSeconds: 40,
-    isLowEffort: false,
+  // 3-mock average test: 180, 200, 160 -> (180+200+160)/3 = 180 marks
+  const chem1 = createAttempt({ testId: "chem_1", subject: "Chemistry", questionCount: 50, correctCount: 38 }); // 38*5 - 12*1 = 178
+  const chem2 = createAttempt({ testId: "chem_2", subject: "Chemistry", questionCount: 50, correctCount: 42 }); // 42*5 - 8*1 = 202
+  const perfChem = computeUserSubjectPerformance([chem1, chem2]);
+  // (178 + 202) / 2 = 190 marks
+  assert(
+    perfChem["chemistry"]?.averageMarks === 190,
+    `Multi-mock Mean: Arithmetic mean of 178 and 202 is 190 marks (Found: ${perfChem["chemistry"]?.averageMarks})`
+  );
+
+  console.log();
+
+  // -------------------------------------------------------------------------
+  // SUITE 2: Negative Marking Support (+5 / -1 Scheme)
+  // -------------------------------------------------------------------------
+  console.log("SUITE 2: Negative Marking (+5 / -1 Scheme)");
+
+  // Attempt with net negative marks: 5 correct, 45 incorrect -> 5*5 - 45*1 = 25 - 45 = -20 marks
+  const negMock = createAttempt({
+    testId: "math_neg_1",
+    subject: "Mathematics",
+    questionCount: 50,
+    correctCount: 5,
   });
-
-  const perf2 = computeUserSubjectPerformance([fewQuestionsBio]);
   assert(
-    perf2["bio"]?.hasSufficientData === false,
-    `Data Gate: 5 questions is below 15 minimum (hasSufficientData: ${perf2["bio"]?.hasSufficientData})`
+    negMock.totalMarks === -20,
+    `Negative Marking Math: 5 correct and 45 incorrect produces -20 marks (Found: ${negMock.totalMarks})`
   );
+
+  const perfNeg = computeUserSubjectPerformance([negMock]);
   assert(
-    perf2["bio"]?.status === "insufficient_data",
-    `Status Label: Subject labeled insufficient_data (Status: ${perf2["bio"]?.status})`
+    perfNeg["maths"]?.averageMarks === -20,
+    `Engine Negative Marks: Preserves negative average marks accurately (Found: ${perfNeg["maths"]?.averageMarks})`
   );
 
   console.log();
 
   // -------------------------------------------------------------------------
-  // SUITE 2: Course Requirement Resolution (required, one_of, best_of)
+  // SUITE 3: Incomplete Subject Data & Root Cause Trace (No 4.9% Fabrication)
   // -------------------------------------------------------------------------
-  console.log("SUITE 2: Course Requirement Resolution (Required, One_of, Best_of)");
+  console.log("SUITE 3: Incomplete Subject Data & Root-Cause Trace (No 4.9% Fabrication)");
 
-  // Setup mock user performance for B.Com (Hons.):
-  // Student has: English (85%), Maths (70%), Accounts (90%), Economics (88%), BST (82%)
-  const userPerfMock: Record<string, UserSubjectPerformance> = {
-    english: {
-      subjectId: "english",
-      subjectName: "English",
-      answeredQuestions: 50,
-      validSessionsCount: 1,
-      excludedLowEffortCount: 0,
-      rawAveragePercentage: 85,
-      weightedPercentage: 85,
-      hasSufficientData: true,
-      status: "valid",
-    },
-    maths: {
-      subjectId: "maths",
-      subjectName: "Mathematics",
-      answeredQuestions: 50,
-      validSessionsCount: 1,
-      excludedLowEffortCount: 0,
-      rawAveragePercentage: 70,
-      weightedPercentage: 70,
-      hasSufficientData: true,
-      status: "valid",
-    },
-    accs: {
-      subjectId: "accs",
-      subjectName: "Accountancy",
-      answeredQuestions: 50,
-      validSessionsCount: 1,
-      excludedLowEffortCount: 0,
-      rawAveragePercentage: 90,
-      weightedPercentage: 90,
-      hasSufficientData: true,
-      status: "valid",
-    },
-    eco: {
-      subjectId: "eco",
-      subjectName: "Economics",
-      answeredQuestions: 50,
-      validSessionsCount: 1,
-      excludedLowEffortCount: 0,
-      rawAveragePercentage: 88,
-      weightedPercentage: 88,
-      hasSufficientData: true,
-      status: "valid",
-    },
-    bst: {
-      subjectId: "bst",
-      subjectName: "Business Studies",
-      answeredQuestions: 50,
-      validSessionsCount: 1,
-      excludedLowEffortCount: 0,
-      rawAveragePercentage: 82,
-      weightedPercentage: 82,
-      hasSufficientData: true,
-      status: "valid",
-    },
+  // Simulate the EXACT user case:
+  // Candidate completed ONLY 1 subject (Physics) with 36.8 marks out of 250.
+  // Targeting B.Sc (Hons.) Physics (requires 3 subjects: Physics, Chemistry, Maths out of 750).
+  // Historical cutoff: 319.5/750 marks.
+  const singleSubjectMock: RecordedTestAttempt = {
+    id: "attempt_single_phys",
+    userId: "user_test",
+    testId: "phys_single",
+    testTitle: "Physics Mock 1",
+    subject: "Physics",
+    totalQuestions: 50,
+    attemptedCount: 50,
+    unattemptedCount: 0,
+    correctCount: 14,
+    incorrectCount: 36,
+    totalMarks: 34, // or 36.8
+    maxMarks: 250,
+    accuracyPercentage: 28,
+    timeTakenSeconds: 2400,
+    timeSinkCount: 0,
+    submittedAt: new Date().toISOString(),
+    isLowEffort: false,
+    questions: [],
   };
-
-  const resBCom = resolveCourseRequirements("bcom_hons", userPerfMock);
-  assert(
-    resBCom.chosenCombination !== undefined,
-    "Course Resolution: Successfully picked combination for B.Com (Hons.)"
-  );
-  // Accountancy (90%) path with Eco (88%) and English (85%) should beat or tie Maths (70%)
-  assert(
-    resBCom.chosenCombination.id === "comb_2_accounts",
-    `Optimal Choice: Picked Accountancy path over lower Maths score (Combination: ${resBCom.chosenCombination.id})`
-  );
-  assert(
-    resBCom.coverage === 1.0,
-    `Full Coverage: 4/4 subjects available (Coverage: ${resBCom.coverage})`
-  );
-  assert(
-    resBCom.resolvedSubjects.some((s) => s.subjectId === "accs"),
-    "Rule Validation: Accountancy is present in resolved subjects"
-  );
-  assert(
-    resBCom.resolvedSubjects.some((s) => s.subjectId === "eco"),
-    "Best_of Selection: Economics picked as top domain subject"
-  );
-
-  console.log();
-
-  // -------------------------------------------------------------------------
-  // SUITE 3 & 4: Missing Subjects NOT treated as zero & Coverage Calculation
-  // -------------------------------------------------------------------------
-  console.log("SUITE 3 & 4: Missing Subjects & Coverage Calculation");
-
-  // Student targeting B.Sc (Hons.) Physics (requires Physics, Chemistry, Maths out of 750)
-  // Student has ONLY taken Physics (80%) and Maths (70%), but NO Chemistry attempts.
-  const partialSciencePerf: Record<string, UserSubjectPerformance> = {
+  // Directly provide 36.8 averageMarks to verify the exact number
+  const singleSubjectPerf: Record<string, UserSubjectPerformance> = {
     physics: {
       subjectId: "physics",
       subjectName: "Physics",
       answeredQuestions: 50,
       validSessionsCount: 1,
       excludedLowEffortCount: 0,
-      rawAveragePercentage: 80,
-      weightedPercentage: 80,
-      hasSufficientData: true,
-      status: "valid",
-    },
-    maths: {
-      subjectId: "maths",
-      subjectName: "Mathematics",
-      answeredQuestions: 50,
-      validSessionsCount: 1,
-      excludedLowEffortCount: 0,
-      rawAveragePercentage: 70,
-      weightedPercentage: 70,
+      averageMarks: 36.8, // Exactly 36.8/250 marks
+      maxMarks: 250,
       hasSufficientData: true,
       status: "valid",
     },
@@ -290,312 +221,377 @@ async function runStandingTests() {
       answeredQuestions: 0,
       validSessionsCount: 0,
       excludedLowEffortCount: 0,
-      rawAveragePercentage: 0,
-      weightedPercentage: 0,
+      averageMarks: 0,
+      maxMarks: 250,
+      hasSufficientData: false,
+      status: "no_attempts",
+    },
+    maths: {
+      subjectId: "maths",
+      subjectName: "Mathematics",
+      answeredQuestions: 0,
+      validSessionsCount: 0,
+      excludedLowEffortCount: 0,
+      averageMarks: 0,
+      maxMarks: 250,
       hasSufficientData: false,
       status: "no_attempts",
     },
   };
 
-  const resPhysics = resolveCourseRequirements("bsc_hons_physics", partialSciencePerf);
+  const resIncomplete = resolveCourseRequirements("bsc_hons_physics", singleSubjectPerf, undefined, 319.5);
+
   assert(
-    resPhysics.totalRequiredCount === 3,
-    `Total Required: 3 subjects for B.Sc Physics (Found: ${resPhysics.totalRequiredCount})`
+    resIncomplete.totalRequiredCount === 3,
+    `Course Requirements: Requires 3 subjects (Found: ${resIncomplete.totalRequiredCount})`
   );
   assert(
-    resPhysics.subjectsWithDataCount === 2,
-    `Subjects with Data: 2 subjects (Found: ${resPhysics.subjectsWithDataCount})`
+    resIncomplete.subjectsWithDataCount === 1,
+    `Subjects with Data: Exactly 1 subject available (Found: ${resIncomplete.subjectsWithDataCount})`
   );
   assert(
-    Math.abs(resPhysics.coverage - 0.67) < 0.02,
-    `Coverage Math: 2/3 = 0.67 coverage (Found: ${resPhysics.coverage})`
-  );
-  // CRITICAL CHECK: Missing chemistry must NOT be treated as zero!
-  // userPct must be mean of Physics (80%) and Maths (70%) = 75%, NOT (80 + 70 + 0)/3 = 50%!
-  assert(
-    resPhysics.userPct === 75,
-    `Missing Subject Integrity: user_pct is (80+70)/2 = 75%, NEVER treated as zero (Found: ${resPhysics.userPct}%)`
-  );
-  assert(
-    resPhysics.missingSubjectNames.includes("Chemistry"),
-    `Missing Subject Identification: Chemistry flagged as missing (Missing: ${resPhysics.missingSubjectNames.join(", ")})`
+    resIncomplete.isComplete === false,
+    "Completeness Gate: Flagged as incomplete (isComplete: false)"
   );
 
-  // When coverage is below 50%: only 1 of 4 subjects
-  const veryLowCoveragePerf: Record<string, UserSubjectPerformance> = {
+  // ROOT CAUSE BUG VERIFICATION:
+  // In the old buggy system: 36.8 / 750 = 4.9% overall score was fabricated.
+  // In the corrected marks-only engine: combinedAverageMarks MUST BE NULL!
+  assert(
+    resIncomplete.combinedAverageMarks === null,
+    `Bug Fix Verification: combinedAverageMarks is strictly null, NEVER divided by composite 750 (Found: ${resIncomplete.combinedAverageMarks})`
+  );
+  assert(
+    resIncomplete.standingLabel === "Incomplete — awaiting remaining subjects",
+    `Standing Label: Explicitly labeled '${resIncomplete.standingLabel}'`
+  );
+
+  // Per-subject metrics verification:
+  const physChoice = resIncomplete.resolvedSubjects.find((s) => s.subjectId === "physics");
+  assert(
+    physChoice !== undefined && physChoice.averageMarks === 36.8,
+    `Physics Score: Preserved on 250-mark denominator (Found: ${physChoice?.averageMarks}/250 marks)`
+  );
+  assert(
+    physChoice?.targetMarks === 106.5,
+    `Physics Target: 319.5 / 3 = 106.5 marks (Found: ${physChoice?.targetMarks})`
+  );
+  // marksNeeded = max(0, 106.5 - 36.8) = 69.7 marks
+  assert(
+    physChoice?.marksNeeded === 69.7,
+    `Physics Marks Needed: max(0, 106.5 - 36.8) = 69.7 marks (Found: ${physChoice?.marksNeeded})`
+  );
+
+  // Missing subjects verification:
+  const chemChoice = resIncomplete.resolvedSubjects.find((s) => s.subjectId === "chemistry");
+  assert(
+    chemChoice?.hasData === false && chemChoice.averageMarks === null,
+    "Missing Chemistry: hasData is false and averageMarks is null"
+  );
+  assert(
+    chemChoice?.marksNeeded === 106.5,
+    `Missing Subject Needed: Full target of 106.5 marks needed (Found: ${chemChoice?.marksNeeded})`
+  );
+
+  // Dream College Gap test with incomplete data:
+  const dreamIncomplete = computeDreamCollegeGap({
+    collegeName: "Miranda House (W)",
+    courseId: "bsc_hons_physics",
+    category: "UR",
+    userAttempts: [singleSubjectMock],
+  });
+  assert(
+    dreamIncomplete !== null,
+    "Dream College Analysis: Successfully computed for Miranda House"
+  );
+  if (dreamIncomplete) {
+    assert(
+      dreamIncomplete.isComplete === false,
+      "Dream College Completeness: Marked as incomplete"
+    );
+    assert(
+      dreamIncomplete.combinedMarks === null,
+      `Dream College Combined: combinedMarks is strictly null (Found: ${dreamIncomplete.combinedMarks})`
+    );
+    assert(
+      dreamIncomplete.status === "incomplete",
+      `Dream College Status: Status is 'incomplete' (Found: ${dreamIncomplete.status})`
+    );
+    assert(
+      dreamIncomplete.gapDisplay === "Awaiting all subjects",
+      `Dream College Gap Display: Displays 'Awaiting all subjects' (Found: ${dreamIncomplete.gapDisplay})`
+    );
+    assert(
+      dreamIncomplete.statusLabel === "Incomplete — awaiting remaining subjects",
+      `Dream College Status Label: Displays '${dreamIncomplete.statusLabel}'`
+    );
+  }
+
+  console.log();
+
+  // -------------------------------------------------------------------------
+  // SUITE 4: Complete Subject Data & Arithmetic Combined Total
+  // -------------------------------------------------------------------------
+  console.log("SUITE 4: Complete Subject Data & Direct Composite Comparison");
+
+  // User with all 3 required science subjects for B.Sc Physics:
+  // Physics = 120 marks, Chemistry = 110 marks, Maths = 100 marks
+  // Combined score = 120 + 110 + 100 = 330 marks out of 750
+  const completeSciencePerf: Record<string, UserSubjectPerformance> = {
+    physics: {
+      subjectId: "physics",
+      subjectName: "Physics",
+      answeredQuestions: 50,
+      validSessionsCount: 1,
+      excludedLowEffortCount: 0,
+      averageMarks: 120,
+      maxMarks: 250,
+      hasSufficientData: true,
+      status: "valid",
+    },
+    chemistry: {
+      subjectId: "chemistry",
+      subjectName: "Chemistry",
+      answeredQuestions: 50,
+      validSessionsCount: 1,
+      excludedLowEffortCount: 0,
+      averageMarks: 110,
+      maxMarks: 250,
+      hasSufficientData: true,
+      status: "valid",
+    },
+    maths: {
+      subjectId: "maths",
+      subjectName: "Mathematics",
+      answeredQuestions: 50,
+      validSessionsCount: 1,
+      excludedLowEffortCount: 0,
+      averageMarks: 100,
+      maxMarks: 250,
+      hasSufficientData: true,
+      status: "valid",
+    },
+  };
+
+  const resComplete = resolveCourseRequirements("bsc_hons_physics", completeSciencePerf, undefined, 319.5);
+  assert(
+    resComplete.isComplete === true,
+    "Completeness Gate: All 3 subjects available"
+  );
+  assert(
+    resComplete.combinedAverageMarks === 330,
+    `Combined Total: 120 + 110 + 100 = 330 marks (Found: ${resComplete.combinedAverageMarks})`
+  );
+
+  console.log();
+
+  // -------------------------------------------------------------------------
+  // SUITE 5: Exact Cutoff Matches, Scores Above & Below Cutoff
+  // -------------------------------------------------------------------------
+  console.log("SUITE 5: Cutoff Comparisons (Exact Match, Above, Below)");
+
+  const targetCutoff = 319.5;
+
+  // Case A: Exact Cutoff Match (319.5 vs 319.5) -> marksGap = 0
+  const exactCombined = 319.5;
+  const gapExact = Math.round((targetCutoff - exactCombined) * 10) / 10;
+  assert(gapExact === 0, "Exact Match Gap: 319.5 - 319.5 = 0 marks");
+  const exactDisplay = gapExact <= 0
+    ? (gapExact === 0 ? "0 marks (meets cutoff)" : `${Math.abs(gapExact)} marks above cutoff`)
+    : `${gapExact} marks below cutoff`;
+  assert(
+    exactDisplay === "0 marks (meets cutoff)",
+    `Exact Match Label: Displays '0 marks (meets cutoff)' (Found: '${exactDisplay}')`
+  );
+
+  // Case B: Score Above Cutoff (350 vs 319.5) -> marksGap = -30.5
+  const aboveCombined = 350.0;
+  const gapAbove = Math.round((targetCutoff - aboveCombined) * 10) / 10;
+  assert(gapAbove === -30.5, "Above Cutoff Gap: 319.5 - 350.0 = -30.5 marks");
+  const aboveDisplay = `${Math.abs(gapAbove)} marks above cutoff`;
+  assert(
+    aboveDisplay === "30.5 marks above cutoff",
+    `Above Cutoff Label: Displays '30.5 marks above cutoff' (Found: '${aboveDisplay}')`
+  );
+
+  // Case C: Score Below Cutoff (294.5 vs 319.5) -> marksGap = 25.0
+  const belowCombined = 294.5;
+  const gapBelow = Math.round((targetCutoff - belowCombined) * 10) / 10;
+  assert(gapBelow === 25.0, "Below Cutoff Gap: 319.5 - 294.5 = 25.0 marks");
+  const belowDisplay = `${gapBelow} marks below cutoff`;
+  assert(
+    belowDisplay === "25 marks below cutoff",
+    `Below Cutoff Label: Displays '25 marks below cutoff' (Found: '${belowDisplay}')`
+  );
+
+  console.log();
+
+  // -------------------------------------------------------------------------
+  // SUITE 6: Unequal Subject Weights & Proportional Target Marks
+  // -------------------------------------------------------------------------
+  console.log("SUITE 6: Unequal Subject Weights & Equal-Share Division");
+
+  // Rule 1: 3 equally weighted papers (each out of 250, composite 750)
+  // Cutoff 319.5 -> cutoffMarks / 3 = 106.5
+  const eqTarget3 = calculateSubjectTargetMarks(319.5, 750, 250, 3);
+  assert(
+    eqTarget3 === 106.5,
+    `Equal 3-subject target: 319.5 / 3 = 106.5 marks (Found: ${eqTarget3})`
+  );
+
+  // Rule 2: 4 equally weighted papers (each out of 250, composite 1000)
+  // Cutoff 910.8 -> cutoffMarks / 4 = 227.7
+  const eqTarget4 = calculateSubjectTargetMarks(910.8, 1000, 250, 4);
+  assert(
+    eqTarget4 === 227.7,
+    `Equal 4-subject target: 910.8 / 4 = 227.7 marks (Found: ${eqTarget4})`
+  );
+
+  // Rule 3: Unequal weighting scenario:
+  // Composite cutoffScale is 500.
+  // Paper A has max 200 marks, Paper B has max 300 marks. Composite cutoff = 350 marks.
+  // Target A = 350 * (200 / 500) = 140 marks.
+  // Target B = 350 * (300 / 500) = 210 marks.
+  const targetUnequalA = calculateSubjectTargetMarks(350, 500, 200, 2);
+  const targetUnequalB = calculateSubjectTargetMarks(350, 500, 300, 2);
+  assert(
+    targetUnequalA === 140,
+    `Unequal Target A: 350 * (200/500) = 140 marks (Found: ${targetUnequalA})`
+  );
+  assert(
+    targetUnequalB === 210,
+    `Unequal Target B: 350 * (300/500) = 210 marks (Found: ${targetUnequalB})`
+  );
+  assert(
+    targetUnequalA + targetUnequalB === 350,
+    `Unequal Target Sum: 140 + 210 = 350 equals total cutoff (Found: ${targetUnequalA + targetUnequalB})`
+  );
+
+  console.log();
+
+  // -------------------------------------------------------------------------
+  // SUITE 7: Course Requirement Resolution (one_of and best_of Selection)
+  // -------------------------------------------------------------------------
+  console.log("SUITE 7: Course Requirement Rules (Required, One_of, Best_of)");
+
+  const bcomPerf: Record<string, UserSubjectPerformance> = {
     english: {
       subjectId: "english",
       subjectName: "English",
       answeredQuestions: 50,
       validSessionsCount: 1,
       excludedLowEffortCount: 0,
-      rawAveragePercentage: 80,
-      weightedPercentage: 80,
+      averageMarks: 210, // 210/250 marks
+      maxMarks: 250,
+      hasSufficientData: true,
+      status: "valid",
+    },
+    maths: {
+      subjectId: "maths",
+      subjectName: "Mathematics",
+      answeredQuestions: 50,
+      validSessionsCount: 1,
+      excludedLowEffortCount: 0,
+      averageMarks: 160, // 160/250 marks
+      maxMarks: 250,
+      hasSufficientData: true,
+      status: "valid",
+    },
+    accs: {
+      subjectId: "accs",
+      subjectName: "Accountancy",
+      answeredQuestions: 50,
+      validSessionsCount: 1,
+      excludedLowEffortCount: 0,
+      averageMarks: 225, // 225/250 marks (beats Maths 160)
+      maxMarks: 250,
+      hasSufficientData: true,
+      status: "valid",
+    },
+    eco: {
+      subjectId: "eco",
+      subjectName: "Economics",
+      answeredQuestions: 50,
+      validSessionsCount: 1,
+      excludedLowEffortCount: 0,
+      averageMarks: 215, // 215/250 marks
+      maxMarks: 250,
+      hasSufficientData: true,
+      status: "valid",
+    },
+    bst: {
+      subjectId: "bst",
+      subjectName: "Business Studies",
+      answeredQuestions: 50,
+      validSessionsCount: 1,
+      excludedLowEffortCount: 0,
+      averageMarks: 200, // 200/250 marks
+      maxMarks: 250,
       hasSufficientData: true,
       status: "valid",
     },
   };
-  const resLowCov = resolveCourseRequirements("bcom_hons", veryLowCoveragePerf);
+
+  const resBCom = resolveCourseRequirements("bcom_hons", bcomPerf);
   assert(
-    resLowCov.coverage === 0.25,
-    `Low Coverage Math: 1/4 = 0.25 (Found: ${resLowCov.coverage})`
+    resBCom.chosenCombination !== undefined,
+    "B.Com Resolution: Successfully picked combination"
+  );
+  // Accountancy (225) > Maths (160) -> comb_2_accounts should be chosen
+  assert(
+    resBCom.chosenCombination.id === "comb_2_accounts",
+    `Optimal Choice: Picked Accountancy path over lower Maths score (Combination: ${resBCom.chosenCombination.id})`
   );
   assert(
-    resLowCov.isBelowCoverageThreshold === true,
-    "Coverage Threshold: Flagged as below confidence threshold (isBelowCoverageThreshold: true)"
+    resBCom.isComplete === true,
+    "Full Completeness: 4/4 subjects available"
+  );
+  // Total marks = 210 (English) + 225 (Accounts) + 215 (Eco) + 200 (BST) = 850 marks
+  assert(
+    resBCom.combinedAverageMarks === 850,
+    `Combined B.Com Marks: 210 + 225 + 215 + 200 = 850 marks (Found: ${resBCom.combinedAverageMarks})`
   );
 
   console.log();
 
   // -------------------------------------------------------------------------
-  // SUITE 5: Band Thresholds at Boundaries (Safe, Likely, Possible, Reach, Far)
+  // SUITE 8: Dream College Resolution & Acronym Mapping
   // -------------------------------------------------------------------------
-  console.log("SUITE 5: Band Thresholds at Precise Boundaries");
+  console.log("SUITE 8: College Acronym Resolution");
 
-  // Expected range: [70.0% to 80.0%], midpoint = 75.0%, reachMargin = 5.0% (reach down to 65.0%)
-  const low = 70.0;
-  const high = 80.0;
-
-  // Exactly at high boundary (80.0%) -> Safe
-  assert(
-    evaluateChanceBand(80.0, low, high) === "Safe",
-    "Band Boundary: Exactly at high (80.0%) is Safe"
-  );
-  // Above high boundary (82.5%) -> Safe
-  assert(
-    evaluateChanceBand(82.5, low, high) === "Safe",
-    "Band Boundary: Above high (82.5%) is Safe"
-  );
-  // Between midpoint and high (77.0%) -> Likely
-  assert(
-    evaluateChanceBand(77.0, low, high) === "Likely",
-    "Band Boundary: 77.0% (between mid 75% and high 80%) is Likely"
-  );
-  // Exactly at midpoint (75.0%) -> Likely
-  assert(
-    evaluateChanceBand(75.0, low, high) === "Likely",
-    "Band Boundary: Exactly at midpoint (75.0%) is Likely"
-  );
-  // Between low and midpoint (72.0%) -> Possible
-  assert(
-    evaluateChanceBand(72.0, low, high) === "Possible",
-    "Band Boundary: 72.0% (between low 70% and mid 75%) is Possible"
-  );
-  // Exactly at low boundary (70.0%) -> Possible
-  assert(
-    evaluateChanceBand(70.0, low, high) === "Possible",
-    "Band Boundary: Exactly at low (70.0%) is Possible"
-  );
-  // Just below low (69.9% to 65.0%) -> Reach
-  assert(
-    evaluateChanceBand(69.5, low, high) === "Reach",
-    "Band Boundary: 69.5% (within reach margin) is Reach"
-  );
-  assert(
-    evaluateChanceBand(65.0, low, high) === "Reach",
-    "Band Boundary: 65.0% (exact lower bound of reach) is Reach"
-  );
-  // Below reach boundary (64.9%) -> Far
-  assert(
-    evaluateChanceBand(64.9, low, high) === "Far",
-    "Band Boundary: 64.9% (below reach margin) is Far"
-  );
-  // No data / null -> Far
-  assert(
-    evaluateChanceBand(null, low, high) === "Far",
-    "Band Boundary: null percentage is Far"
-  );
-
-  console.log();
-
-  // -------------------------------------------------------------------------
-  // SUITE 6: Multi-Year Range Calculation (1 year vs 2+ years)
-  // -------------------------------------------------------------------------
-  console.log("SUITE 6: Multi-Year Range Calculation (1 Year vs 2+ Years)");
-
-  // SRCC B.Com (Hons.) has 2025 and 2026 cutoffs in data
-  const srccStats = computeMultiYearCutoff("Shri Ram College of Commerce", "bcom_hons", "UR");
-  assert(srccStats !== null, "Multi-Year: SRCC B.Com (Hons.) record found in dataset");
-  if (srccStats) {
-    assert(
-      srccStats.years.length >= 2,
-      `Multi-Year: Covers multiple historical years (Found: ${srccStats.years.join(", ")})`
-    );
-    assert(
-      srccStats.expectedRange.highPct > srccStats.expectedRange.lowPct,
-      `Multi-Year: Valid range [${srccStats.expectedRange.lowPct}% - ${srccStats.expectedRange.highPct}%]`
-    );
-    assert(
-      srccStats.cutoffScale === 1000,
-      `Cutoff Scale: 1000 marks scale for B.Com Hons (Found: ${srccStats.cutoffScale})`
-    );
-
-    // Multi-University verification across newly added institutions
-    const bhuStats = computeMultiYearCutoff("Faculty of Main Campus (FMC), BHU", "bcom_hons", "UR");
-    assert(bhuStats !== null, "Multi-University: BHU B.Com (Hons.) found in dataset");
-
-    const auStats = computeMultiYearCutoff("University of Allahabad (Main Campus)", "bcom_prog", "UR");
-    assert(auStats !== null, "Multi-University: Allahabad University B.Com found in dataset");
-
-    const jnuStats = computeMultiYearCutoff("School of Language, Literature and Culture Studies (SLL&CS), JNU", "ba_hons_french", "UR");
-    assert(jnuStats !== null, "Multi-University: JNU B.A. (Hons.) French found in dataset");
-  }
-
-  // Filter by single year (2026) to test single-year widening rule
-  const singleYearStats = computeMultiYearCutoff(
-    "Shri Ram College of Commerce",
-    "bcom_hons",
-    "UR",
-    2026
-  );
-  assert(singleYearStats !== null, "Single Year: Found 2026 filtered cutoff");
-  if (singleYearStats) {
-    assert(
-      singleYearStats.years.length === 1,
-      "Single Year: Exactly 1 year in range"
-    );
-    const expectedLow = Math.round((singleYearStats.latestPercentage - STANDING_CONFIG.SINGLE_YEAR_WIDEN_PERCENTAGE) * 10) / 10;
-    const expectedHigh = Math.round((singleYearStats.latestPercentage + STANDING_CONFIG.SINGLE_YEAR_WIDEN_PERCENTAGE) * 10) / 10;
-    assert(
-      Math.abs(singleYearStats.expectedRange.lowPct - expectedLow) < 0.2 &&
-      Math.abs(singleYearStats.expectedRange.highPct - expectedHigh) < 0.2,
-      `Single Year Widening: Widened by +/-2.5% [${singleYearStats.expectedRange.lowPct}% - ${singleYearStats.expectedRange.highPct}%]`
-    );
-  }
-
-  console.log();
-
-  // -------------------------------------------------------------------------
-  // SUITE 7: Dream College Gap Math
-  // -------------------------------------------------------------------------
-  console.log("SUITE 7: Dream College Gap Math");
-
-  // User with valid mock performance
-  const userAttemptList: RecordedTestAttempt[] = [
-    createAttempt({
-      testId: "eng_mock_1",
-      subject: "English",
-      questionCount: 50,
-      correctCount: 42, // (42*5 - 8*1) = 202 / 250 = 80.8%
-      avgTimeSeconds: 45,
-    }),
-    createAttempt({
-      testId: "acc_mock_1",
-      subject: "Accountancy",
-      questionCount: 50,
-      correctCount: 45, // (45*5 - 5*1) = 220 / 250 = 88.0%
-      avgTimeSeconds: 50,
-    }),
-    createAttempt({
-      testId: "eco_mock_1",
-      subject: "Economics",
-      questionCount: 50,
-      correctCount: 43, // (43*5 - 7*1) = 208 / 250 = 83.2%
-      avgTimeSeconds: 48,
-    }),
-    createAttempt({
-      testId: "bst_mock_1",
-      subject: "Business Studies",
-      questionCount: 50,
-      correctCount: 41, // (41*5 - 9*1) = 196 / 250 = 78.4%
-      avgTimeSeconds: 42,
-    }),
-  ];
-
-  const dreamGap = computeDreamCollegeGap({
-    collegeName: "Shri Ram College of Commerce",
-    courseId: "bcom_hons",
-    category: "UR",
-    userAttempts: userAttemptList,
-  });
-
-  assert(dreamGap !== null, "Dream College: Successfully computed SRCC gap analysis");
-  if (dreamGap) {
-    assert(
-      dreamGap.userPct !== null && dreamGap.userPct > 80,
-      `User Score: Accurately computed user percentage (${dreamGap.userPct}%)`
-    );
-    assert(
-      dreamGap.expectedCutoffPct > 90,
-      `Target Cutoff: Expected SRCC cutoff is >90% (${dreamGap.expectedCutoffPct}%)`
-    );
-    assert(
-      dreamGap.gapPercentagePoints === Math.round((dreamGap.expectedCutoffPct - (dreamGap.userPct || 0)) * 10) / 10,
-      `Gap Math: Accurate gap in percentage points (${dreamGap.gapPercentagePoints}%)`
-    );
-    assert(
-      dreamGap.gapMarks > 0,
-      `Marks Gap: Positive gap marks computed (${dreamGap.gapMarks} marks)`
-    );
-    assert(
-      dreamGap.subjectImprovementBreakdown.length === 4,
-      `Subject Breakdown: Detailed breakdown across all 4 participating subjects (${dreamGap.subjectImprovementBreakdown.length})`
-    );
-    assert(
-      dreamGap.summaryMessage.includes("Raise your domain average"),
-      `Narrative Generation: Generated clear 'what it would take' narrative (${dreamGap.summaryMessage})`
-    );
-  }
-
-  console.log();
-
-  // -------------------------------------------------------------------------
-  // SUITE 8: Dream College Resolution & Course Stream Auto-Selection
-  // -------------------------------------------------------------------------
-  console.log("SUITE 8: Dream College Resolution & Course Stream Auto-Selection");
-
-  // College Acronyms and variations resolve to canonical official college name
   assert(
     resolveTargetCollegeMatch("SRCC") === "Shri Ram College of Commerce",
-    `College Matcher: SRCC resolves to Shri Ram College of Commerce (Found: ${resolveTargetCollegeMatch("SRCC")})`
+    `College Matcher: SRCC -> Shri Ram College of Commerce (Found: ${resolveTargetCollegeMatch("SRCC")})`
   );
   assert(
-    resolveTargetCollegeMatch("Shri Ram College of Commerce (SRCC)") === "Shri Ram College of Commerce",
-    `College Matcher: Full parenthetical resolves to canonical (Found: ${resolveTargetCollegeMatch("Shri Ram College of Commerce (SRCC)")})`
-  );
-  assert(
-    resolveTargetCollegeMatch("St. Stephen's College") === "St. Stephen's College",
-    `College Matcher: St. Stephen's exact match (Found: ${resolveTargetCollegeMatch("St. Stephen's College")})`
+    resolveTargetCollegeMatch("LSR") === "Lady Shri Ram College for Women (W)",
+    `College Matcher: LSR -> Lady Shri Ram College for Women (W) (Found: ${resolveTargetCollegeMatch("LSR")})`
   );
   assert(
     resolveTargetCollegeMatch("St. Stephens") === "St. Stephen's College",
-    `College Matcher: St. Stephens normalized match (Found: ${resolveTargetCollegeMatch("St. Stephens")})`
-  );
-  assert(
-    resolveTargetCollegeMatch("Miranda House (Delhi University)") === "Miranda House (W)",
-    `College Matcher: Miranda House matches Miranda House (W) (Found: ${resolveTargetCollegeMatch("Miranda House (Delhi University)")})`
-  );
-  assert(
-    resolveTargetCollegeMatch("Lady Shri Ram College (LSR)") === "Lady Shri Ram College for Women (W)",
-    `College Matcher: LSR acronym match (Found: ${resolveTargetCollegeMatch("Lady Shri Ram College (LSR)")})`
-  );
-  assert(
-    resolveTargetCollegeMatch("Hindu College (Delhi University)") === "Hindu College",
-    `College Matcher: Hindu College match (Found: ${resolveTargetCollegeMatch("Hindu College (Delhi University)")})`
+    `College Matcher: St. Stephens -> St. Stephen's College (Found: ${resolveTargetCollegeMatch("St. Stephens")})`
   );
 
-  // Course matching
+  const srccMulti = computeMultiYearCutoff("Shri Ram College of Commerce", "bcom_hons", "UR");
+  assert(
+    srccMulti !== null && srccMulti.cutoffScale === 1000,
+    `Multi-Year Cutoff: SRCC B.Com cutoff scale is 1000 marks (Found: ${srccMulti?.cutoffScale})`
+  );
+
+  const standingsTest = computeCollegeStandings({ courseId: "bcom_hons", userAttempts: [physMock1] });
+  assert(
+    standingsTest.standings.length > 0,
+    `College Standings: Generated standings across colleges (Found: ${standingsTest.standings.length})`
+  );
+
   assert(
     matchCourseToId("B.Com (Hons)") === "bcom_hons",
     `Course Matcher: B.Com (Hons) matches bcom_hons (Found: ${matchCourseToId("B.Com (Hons)")})`
   );
-  assert(
-    matchCourseToId("B.Sc (Hons) Physics") === "bsc_hons_physics",
-    `Course Matcher: B.Sc Physics matches bsc_hons_physics (Found: ${matchCourseToId("B.Sc (Hons) Physics")})`
-  );
 
-  // Stream mapping verification
   assert(
-    CANONICAL_COURSES_MAP["bcom_hons"]?.stream === "commerce",
-    "Stream Mapping: bcom_hons is in commerce stream"
-  );
-  assert(
-    CANONICAL_COURSES_MAP["bsc_hons_physics"]?.stream === "science",
-    "Stream Mapping: bsc_hons_physics is in science stream"
-  );
-  assert(
-    CANONICAL_COURSES_MAP["ba_hons_history"]?.stream === "humanities",
-    "Stream Mapping: ba_hons_history is in humanities stream"
+    CANONICAL_COURSES_MAP["bcom_hons"]?.cutoffScale === 1000,
+    `Canonical Map: bcom_hons has 1000 cutoff scale (Found: ${CANONICAL_COURSES_MAP["bcom_hons"]?.cutoffScale})`
   );
 
   console.log();

@@ -297,7 +297,7 @@ export default function StandingViewClient({
             Where Do I Stand?
           </h1>
           <p className="text-slate-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
-            Compare your mock test performance against previous years&apos; official University of Delhi college cutoffs. Deterministic, band-based chance classification with transparent coverage tracking.
+            Compare your mock test performance directly in marks against official college cutoffs across previous years. Transparent, marks-based standing with subject combination tracking.
           </p>
         </div>
 
@@ -376,7 +376,7 @@ export default function StandingViewClient({
         onSelectYear={(yr) => setSelectedYear(yr)}
         selectedCollegeForTrend={trendCollege}
         onSelectCollegeForTrend={(col) => setTrendCollege(col)}
-        userPct={standingsResult.resolution.userPct}
+        combinedAverageMarks={standingsResult.resolution.combinedAverageMarks}
       />
 
       {/* 7. Methodology & Honest Labelling Disclaimers */}
@@ -390,13 +390,13 @@ export default function StandingViewClient({
             <strong>Data Source:</strong> Benchmarks are derived from official institutional archives across participating CUET universities (University of Delhi, Banaras Hindu University, Jawaharlal Nehru University, University of Allahabad, Jamia Millia Islamia, Dr. B.R. Ambedkar University Delhi, BBAU, GGSIPU, and Central Universities) covering 2023 to 2026 seat allocations across 96+ colleges and 48 degree programs.
           </li>
           <li>
-            <strong>Score Scale:</strong> Standard CUET 2026 scoring applies (+5 correct, -1 incorrect, max 250 points per test paper). Cutoff values reflect total normalized marks across required subject combinations (750 marks for 3-subject science courses, 1000 marks for 4-subject arts/commerce courses).
+            <strong>Score Scale:</strong> Standard CUET 2026 scoring applies (+5 correct, -1 incorrect, max 250 marks per test paper). Cutoff values reflect total normalized marks across required subject combinations (750 marks for 3-subject science courses, 1000 marks for 4-subject arts/commerce courses).
           </li>
           <li>
-            <strong>Shift Normalization Caveat:</strong> Student percentages reflect raw practice test sessions. Real CUET results undergo NTA equi-percentile shift normalization. Score mapping is an estimate with a 1.0x calibration factor.
+            <strong>Shift Normalization Caveat:</strong> Student performance reflects raw mock test marks (+5 / -1 marking scheme). Real CUET results undergo NTA equi-percentile shift normalization.
           </li>
           <li>
-            <strong>No Guarantees:</strong> Admission cutoffs shift each year based on exam difficulty, paper distribution, and cohort application volumes. Predictions use chance bands (Safe, Likely, Possible, Reach, Far) rather than false percentage probabilities.
+            <strong>No Guarantees:</strong> Admission cutoffs shift each year based on exam difficulty, paper distribution, and applicant volumes. Standing is estimated by direct marks comparisons against historical cutoffs.
           </li>
         </ul>
       </div>

@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as StandingExplanationRequest;
 
-    if (!body || !body.targetCollege || !body.courseName || !body.band) {
+    if (!body || !body.targetCollege || !body.courseName) {
       return NextResponse.json(
         { error: "Missing required parameters for standing explanation." },
         { status: 400 }

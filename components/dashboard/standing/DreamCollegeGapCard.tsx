@@ -16,7 +16,6 @@ import {
   DreamCollegeGapAnalysis,
 } from "@/lib/standing-engine";
 import { StandingExplanationResult } from "@/lib/ai/standing-explainer";
-import { CHANCE_BANDS } from "@/lib/config/standingConfig";
 
 interface DreamCollegeGapCardProps {
   analysis: DreamCollegeGapAnalysis | null;
@@ -41,7 +40,7 @@ export default function DreamCollegeGapCard({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
 
-  // AI Explanation State (Phase 4)
+  // AI Explanation State
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const [aiExplanation, setAiExplanation] = useState<StandingExplanationResult | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
@@ -67,21 +66,29 @@ export default function DreamCollegeGapCard({
       const payload = {
         targetCollege: analysis.targetCollege,
         courseName: analysis.targetCourse,
-        band: analysis.band,
-        userPct: analysis.userPct,
-        cutoffRange: {
-          lowPct: Math.max(0, analysis.expectedCutoffPct - 2.5),
-          highPct: Math.min(100, analysis.expectedCutoffPct + 2.5),
-          midpointPct: analysis.expectedCutoffPct,
-        },
-        gapPercentagePoints: analysis.gapPercentagePoints,
-        coverage: analysis.coverage,
+        cutoffScale: analysis.cutoffScale,
+        expectedCutoffMarks: analysis.expectedCutoffMarks,
+        cutoffDisplay: analysis.cutoffDisplay,
+        combinedMarks: analysis.combinedMarks,
+        marksGap: analysis.marksGap,
+        gapDisplay: analysis.gapDisplay,
+        status: analysis.status,
+        statusLabel: analysis.statusLabel,
+        isComplete: analysis.isComplete,
+        hasNoData: analysis.hasNoData,
         participatingSubjects: analysis.subjectImprovementBreakdown
-          .filter((s) => s.currentPct !== null)
+          .filter((s) => s.hasData)
           .map((s) => s.subjectName),
         missingSubjects: analysis.subjectImprovementBreakdown
-          .filter((s) => s.currentPct === null)
+          .filter((s) => !s.hasData)
           .map((s) => s.subjectName),
+        subjectBreakdown: analysis.subjectImprovementBreakdown.map((s) => ({
+          subjectName: s.subjectName,
+          currentMarks: s.currentMarks,
+          subjectMaxMarks: s.subjectMaxMarks,
+          targetMarks: s.targetMarks,
+          marksNeeded: s.marksNeeded,
+        })),
         userId,
       };
 
@@ -115,8 +122,15 @@ export default function DreamCollegeGapCard({
     );
   }
 
-  const bandInfo = CHANCE_BANDS[analysis.band];
-  const isTargetMet = analysis.gapPercentagePoints === 0;
+  const isAboveCutoff = analysis.status === "above_cutoff";
+  const isBelowCutoff = analysis.status === "below_cutoff";
+  const isIncomplete = analysis.status === "incomplete";
+
+  const gapLabel = !analysis.isComplete
+    ? "Overall Gap"
+    : isBelowCutoff
+    ? "Marks below cutoff"
+    : "Marks above cutoff";
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
@@ -142,7 +156,7 @@ export default function DreamCollegeGapCard({
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/80 text-xs font-semibold text-slate-700 flex items-center gap-1.5 transition-all"
+              className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/80 text-xs font-semibold text-slate-700 flex items-center gap-1.5 transition-all cursor-pointer"
             >
               <Search className="w-3.5 h-3.5 text-slate-400" />
               <span className="max-w-[160px] truncate">{analysis.targetCollege}</span>
@@ -168,7 +182,7 @@ export default function DreamCollegeGapCard({
                         setIsDropdownOpen(false);
                         setSearchQuery("");
                       }}
-                      className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs transition-all ${
+                      className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
                         c === targetCollege
                           ? "bg-blue-50 text-blue-700 font-bold"
                           : "text-slate-700 hover:bg-slate-50"
@@ -187,7 +201,7 @@ export default function DreamCollegeGapCard({
             type="button"
             onClick={handleSaveTarget}
             disabled={isSavedAsTarget || justSaved}
-            className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
               isSavedAsTarget || justSaved
                 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                 : "bg-blue-600 hover:bg-blue-700 text-white border-transparent shadow-xs"
@@ -208,67 +222,83 @@ export default function DreamCollegeGapCard({
         </div>
       </div>
 
-      {/* Metrics Row */}
+      {/* Metrics Row (Strict Marks Only) */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
             Expected Cutoff
           </span>
-          <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-lg font-bold text-slate-900">
-              {analysis.expectedCutoffPct}%
+          <div className="mt-1">
+            <span className="text-base sm:text-lg font-bold text-slate-900 block truncate">
+              {analysis.cutoffDisplay}
             </span>
-            <span className="text-xs text-slate-500">
-              ({analysis.expectedCutoffMarks}/{analysis.cutoffScale} pts)
+            <span className="text-[11px] text-slate-500">
+              Historical threshold
             </span>
           </div>
         </div>
 
         <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            Your Current Level
+            Current Performance
           </span>
-          <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-lg font-bold text-slate-900">
-              {analysis.userPct !== null ? `${analysis.userPct}%` : "No data"}
+          <div className="mt-1">
+            <span className="text-base sm:text-lg font-bold text-slate-900 block truncate">
+              {analysis.isComplete && analysis.combinedMarks !== null
+                ? `${analysis.combinedMarks}/${analysis.cutoffScale} marks`
+                : analysis.hasNoData
+                ? "No data yet"
+                : "Incomplete"}
             </span>
-            {analysis.userEquivalentMarks !== null && (
-              <span className="text-xs text-slate-500">
-                (~{analysis.userEquivalentMarks} pts)
-              </span>
-            )}
+            <span className="text-[11px] text-slate-500">
+              {analysis.isComplete
+                ? "Combined arithmetic average"
+                : analysis.hasNoData
+                ? "No mock attempts"
+                : "Awaiting remaining subjects"}
+            </span>
           </div>
         </div>
 
         <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            Cutoff Gap
-          </span>
-          <div className="mt-1 flex items-baseline gap-1.5">
-            <span
-              className={`text-lg font-bold ${
-                isTargetMet ? "text-emerald-700" : "text-orange-700"
-              }`}
-            >
-              {isTargetMet ? "Matched" : `+${analysis.gapPercentagePoints}%`}
-            </span>
-            {!isTargetMet && (
-              <span className="text-xs text-slate-500">
-                (+{analysis.gapMarks} marks)
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            Standing Band
+            {gapLabel}
           </span>
           <div className="mt-1">
             <span
-              className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold border ${bandInfo.badgeClass}`}
+              className={`text-base sm:text-lg font-bold block truncate ${
+                isAboveCutoff
+                  ? "text-emerald-700"
+                  : isBelowCutoff
+                  ? "text-orange-700"
+                  : "text-slate-700"
+              }`}
             >
-              {bandInfo.label}
+              {analysis.gapDisplay}
+            </span>
+            <span className="text-[11px] text-slate-500">
+              {analysis.isComplete ? "Target difference" : "Pending all tests"}
+            </span>
+          </div>
+        </div>
+
+        <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            Admission Standing
+          </span>
+          <div className="mt-1">
+            <span
+              className={`inline-flex px-2.5 py-1 rounded-lg text-xs font-bold border ${
+                isAboveCutoff
+                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                  : isBelowCutoff
+                  ? "bg-amber-50 text-amber-900 border-amber-200"
+                  : isIncomplete
+                  ? "bg-blue-50 text-blue-900 border-blue-200"
+                  : "bg-slate-100 text-slate-700 border-slate-200"
+              }`}
+            >
+              {analysis.statusLabel}
             </span>
           </div>
         </div>
@@ -279,7 +309,7 @@ export default function DreamCollegeGapCard({
         <TrendingUp className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
         <div className="space-y-1">
           <p className="text-xs font-bold text-blue-950">
-            What it would take to secure admission:
+            Admission Trajectory & Guidance:
           </p>
           <p className="text-xs text-blue-900 leading-relaxed">
             {analysis.summaryMessage}
@@ -287,39 +317,61 @@ export default function DreamCollegeGapCard({
         </div>
       </div>
 
-      {/* Per-Subject Improvement Breakdown */}
+      {/* Per-Subject Improvement Breakdown (Marks Only) */}
       <div className="space-y-2">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-          Per-Subject Target Breakdown (Assuming Equal Improvement)
-        </h4>
+        <div className="flex items-center justify-between">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            Per-Subject Target Breakdown
+          </h4>
+          <span className="text-[11px] text-slate-400">
+            Standard 250 marks per test paper
+          </span>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
           {analysis.subjectImprovementBreakdown.map((s) => (
             <div
               key={s.subjectId}
-              className="p-2.5 bg-white rounded-xl border border-slate-200 text-xs space-y-1"
+              className={`p-3 rounded-xl border text-xs space-y-1.5 ${
+                s.hasData
+                  ? "bg-white border-slate-200"
+                  : "bg-rose-50/30 border-rose-200/60"
+              }`}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-1">
                 <span className="font-bold text-slate-900 truncate">
                   {s.subjectName}
                 </span>
-                <span className="text-[10px] font-semibold text-slate-500">
-                  Target: {s.targetPctNeeded}%
+                <span className="text-[10px] font-semibold text-slate-500 shrink-0">
+                  Target: {s.targetMarksDisplay}
                 </span>
               </div>
-              <div className="flex items-center justify-between text-[11px] text-slate-500">
+              <div className="flex items-center justify-between text-[11px] text-slate-600 pt-1 border-t border-slate-100">
                 <span>
-                  Current: {s.currentPct !== null ? `${s.currentPct}%` : "No data"}
+                  Current: {s.currentPerformanceDisplay}
                 </span>
-                <span className="font-bold text-blue-600">
-                  {s.marksDelta > 0 ? `+${s.marksDelta} pts needed` : "Met"}
-                </span>
+                {s.hasData ? (
+                  s.marksNeeded > 0 ? (
+                    <span className="font-bold text-blue-600 shrink-0">
+                      {s.marksNeeded} marks needed
+                    </span>
+                  ) : (
+                    <span className="font-bold text-emerald-600 shrink-0">
+                      Target met
+                    </span>
+                  )
+                ) : (
+                  <span className="font-semibold text-rose-600 shrink-0">
+                    No data yet
+                  </span>
+                )}
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* AI Explanation Action Strip (Phase 4) */}
+      {/* AI Explanation Action Strip */}
       <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-xs text-slate-500">
           <Bot className="w-4 h-4 text-purple-600 shrink-0" />
@@ -335,7 +387,7 @@ export default function DreamCollegeGapCard({
           {isLoadingAI ? (
             <>
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              <span>Analyzing Fact Matrix...</span>
+              <span>Analyzing Score Matrix...</span>
             </>
           ) : (
             <>

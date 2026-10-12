@@ -29,7 +29,8 @@ interface CollegeStandingsTableProps {
   onSelectYear: (year: number | "all") => void;
   selectedCollegeForTrend: string;
   onSelectCollegeForTrend: (collegeName: string) => void;
-  userPct: number | null;
+  combinedAverageMarks?: number | null;
+  userPct?: number | null; // legacy prop compatibility
 }
 
 export default function CollegeStandingsTable({
@@ -40,9 +41,9 @@ export default function CollegeStandingsTable({
   onSelectYear,
   selectedCollegeForTrend,
   onSelectCollegeForTrend,
-  userPct,
+  combinedAverageMarks = null,
 }: CollegeStandingsTableProps) {
-  const [bandFilter, setBandFilter] = useState<string>("all");
+  const [standingFilter, setStandingFilter] = useState<string>("all");
   const [searchFilter, setSearchFilter] = useState("");
   const [selectedUniversity, setSelectedUniversity] = useState<string>("all");
 
@@ -62,18 +63,18 @@ export default function CollegeStandingsTable({
       const matchesUniversity =
         selectedUniversity === "all" || item.universityName === selectedUniversity;
 
-      let matchesBand = true;
-      if (bandFilter === "likely") {
-        matchesBand = item.band === "Safe" || item.band === "Likely";
-      } else if (bandFilter === "possible") {
-        matchesBand = item.band === "Possible";
-      } else if (bandFilter === "reach") {
-        matchesBand = item.band === "Reach" || item.band === "Far";
+      let matchesFilter = true;
+      if (standingFilter === "above") {
+        matchesFilter = item.status === "above_cutoff";
+      } else if (standingFilter === "below") {
+        matchesFilter = item.status === "below_cutoff";
+      } else if (standingFilter === "incomplete") {
+        matchesFilter = item.status === "incomplete" || item.status === "no_data";
       }
 
-      return matchesSearch && matchesUniversity && matchesBand;
+      return matchesSearch && matchesUniversity && matchesFilter;
     });
-  }, [standings, searchFilter, selectedUniversity, bandFilter]);
+  }, [standings, searchFilter, selectedUniversity, standingFilter]);
 
   // Data for trend chart of the selected college
   const selectedStandingItem =
@@ -84,7 +85,6 @@ export default function CollegeStandingsTable({
     if (!selectedStandingItem?.multiYearStats?.yearlyData) return [];
     return selectedStandingItem.multiYearStats.yearlyData.map((d) => ({
       year: String(d.year),
-      cutoffPct: d.cutoffPct,
       cutoffMarks: d.cutoffValue,
       cutoffMax: d.cutoffMax,
     }));
@@ -92,7 +92,7 @@ export default function CollegeStandingsTable({
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-5">
-      {/* Controls Bar: Category, Year, Band, Search */}
+      {/* Controls Bar: Category, Year, Filter, Search */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-4">
         {/* Category Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 [scrollbar-width:none]">
@@ -121,7 +121,7 @@ export default function CollegeStandingsTable({
             <button
               type="button"
               onClick={() => onSelectYear("all")}
-              className={`px-2 py-1 rounded-lg transition-all ${
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                 selectedYear === "all"
                   ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-500 hover:text-slate-900"
@@ -132,7 +132,7 @@ export default function CollegeStandingsTable({
             <button
               type="button"
               onClick={() => onSelectYear(2026)}
-              className={`px-2 py-1 rounded-lg transition-all ${
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                 selectedYear === 2026
                   ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-500 hover:text-slate-900"
@@ -143,7 +143,7 @@ export default function CollegeStandingsTable({
             <button
               type="button"
               onClick={() => onSelectYear(2025)}
-              className={`px-2 py-1 rounded-lg transition-all ${
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                 selectedYear === 2025
                   ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-500 hover:text-slate-900"
@@ -154,7 +154,7 @@ export default function CollegeStandingsTable({
             <button
               type="button"
               onClick={() => onSelectYear(2024)}
-              className={`px-2 py-1 rounded-lg transition-all ${
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                 selectedYear === 2024
                   ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-500 hover:text-slate-900"
@@ -165,7 +165,7 @@ export default function CollegeStandingsTable({
             <button
               type="button"
               onClick={() => onSelectYear(2023)}
-              className={`px-2 py-1 rounded-lg transition-all ${
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                 selectedYear === 2023
                   ? "bg-white text-slate-900 shadow-2xs font-bold"
                   : "text-slate-500 hover:text-slate-900"
@@ -206,13 +206,13 @@ export default function CollegeStandingsTable({
         </div>
       </div>
 
-      {/* Band Filter Pills */}
+      {/* Filter Pills (Marks-Based Status) */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
         <button
           type="button"
-          onClick={() => setBandFilter("all")}
-          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 ${
-            bandFilter === "all"
+          onClick={() => setStandingFilter("all")}
+          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+            standingFilter === "all"
               ? "bg-slate-900 text-white"
               : "bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/60"
           }`}
@@ -221,36 +221,36 @@ export default function CollegeStandingsTable({
         </button>
         <button
           type="button"
-          onClick={() => setBandFilter("likely")}
-          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 ${
-            bandFilter === "likely"
+          onClick={() => setStandingFilter("above")}
+          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+            standingFilter === "above"
               ? "bg-emerald-600 text-white"
               : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/60"
           }`}
         >
-          Likely & Safe ({standings.filter((s) => s.band === "Safe" || s.band === "Likely").length})
+          Meets Cutoff ({standings.filter((s) => s.status === "above_cutoff").length})
         </button>
         <button
           type="button"
-          onClick={() => setBandFilter("possible")}
-          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 ${
-            bandFilter === "possible"
+          onClick={() => setStandingFilter("below")}
+          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+            standingFilter === "below"
               ? "bg-amber-600 text-white"
               : "bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/60"
           }`}
         >
-          Possible ({standings.filter((s) => s.band === "Possible").length})
+          Below Cutoff ({standings.filter((s) => s.status === "below_cutoff").length})
         </button>
         <button
           type="button"
-          onClick={() => setBandFilter("reach")}
-          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 ${
-            bandFilter === "reach"
-              ? "bg-rose-600 text-white"
-              : "bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200/60"
+          onClick={() => setStandingFilter("incomplete")}
+          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+            standingFilter === "incomplete"
+              ? "bg-blue-600 text-white"
+              : "bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200/60"
           }`}
         >
-          Reach ({standings.filter((s) => s.band === "Reach" || s.band === "Far").length})
+          Incomplete / Awaiting ({standings.filter((s) => s.status === "incomplete" || s.status === "no_data").length})
         </button>
       </div>
 
@@ -267,12 +267,12 @@ export default function CollegeStandingsTable({
             <div className="flex items-center gap-3 text-[11px] text-slate-500">
               <span className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block" />
-                Historical Cutoff
+                Historical Cutoff Marks
               </span>
-              {userPct !== null && (
+              {combinedAverageMarks !== null && (
                 <span className="flex items-center gap-1.5">
                   <span className="w-2.5 h-0.5 bg-emerald-600 inline-block" />
-                  Your Current Level ({userPct}%)
+                  Your Current Performance ({combinedAverageMarks} marks)
                 </span>
               )}
             </div>
@@ -281,32 +281,32 @@ export default function CollegeStandingsTable({
           {/* Accessible Chart Summary */}
           <p className="sr-only">
             Cutoff trend for {selectedStandingItem.collegeName} in {category} category:{" "}
-            {trendData.map((d) => `${d.year}: ${d.cutoffPct}% (${d.cutoffMarks} marks)`).join(", ")}.
-            {userPct !== null ? ` Candidate level is ${userPct}%.` : ""}
+            {trendData.map((d) => `${d.year}: ${d.cutoffMarks}/${d.cutoffMax} marks`).join(", ")}.
+            {combinedAverageMarks !== null ? ` Candidate combined score is ${combinedAverageMarks} marks.` : ""}
           </p>
 
           <div className="h-44 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={trendData} margin={{ top: 10, right: 20, left: -20, bottom: 0 }}>
+              <LineChart data={trendData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
                 <XAxis dataKey="year" tick={{ fontSize: 11, fill: "#64748B" }} />
                 <YAxis
-                  domain={["dataMin - 5", "dataMax + 5"]}
+                  domain={["dataMin - 10", "dataMax + 10"]}
                   tick={{ fontSize: 11, fill: "#64748B" }}
-                  unit="%"
+                  unit=" marks"
                 />
                 <Tooltip
-                  formatter={(val: any) => [`${val}%`, "Historical Cutoff"]}
+                  formatter={(val: any) => [`${val} marks`, "Historical Cutoff"]}
                   labelFormatter={(lbl) => `Year ${lbl}`}
                 />
-                {userPct !== null && (
+                {combinedAverageMarks !== null && (
                   <ReferenceLine
-                    y={userPct}
+                    y={combinedAverageMarks}
                     stroke="#059669"
                     strokeDasharray="4 4"
                     strokeWidth={2}
                     label={{
-                      value: `Your Level (${userPct}%)`,
+                      value: `Your Level (${combinedAverageMarks} marks)`,
                       fill: "#059669",
                       fontSize: 10,
                       position: "insideBottomRight",
@@ -315,7 +315,7 @@ export default function CollegeStandingsTable({
                 )}
                 <Line
                   type="monotone"
-                  dataKey="cutoffPct"
+                  dataKey="cutoffMarks"
                   stroke="#2563EB"
                   strokeWidth={2.5}
                   dot={{ r: 4, fill: "#2563EB" }}
@@ -335,9 +335,9 @@ export default function CollegeStandingsTable({
             <thead className="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
               <tr>
                 <th scope="col" className="py-3 px-4">College Name</th>
-                <th scope="col" className="py-3 px-4">Standing Band</th>
-                <th scope="col" className="py-3 px-4">Historical Cutoff Range</th>
-                <th scope="col" className="py-3 px-4">Score Gap</th>
+                <th scope="col" className="py-3 px-4">Admission Standing</th>
+                <th scope="col" className="py-3 px-4">Expected Cutoff</th>
+                <th scope="col" className="py-3 px-4">Marks Gap</th>
                 <th scope="col" className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -351,7 +351,8 @@ export default function CollegeStandingsTable({
               ) : (
                 filteredStandings.map((item) => {
                   const isSelected = item.collegeName === selectedCollegeForTrend;
-                  const isTargetMet = item.gapPercentagePoints === 0;
+                  const isAbove = item.status === "above_cutoff";
+                  const isBelow = item.status === "below_cutoff";
 
                   return (
                     <tr
@@ -377,19 +378,27 @@ export default function CollegeStandingsTable({
 
                       <td className="py-3 px-4">
                         <span
-                          className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-bold border ${item.bandInfo.badgeClass}`}
+                          className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-bold border ${
+                            isAbove
+                              ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                              : isBelow
+                              ? "bg-amber-50 text-amber-900 border-amber-200"
+                              : item.status === "incomplete"
+                              ? "bg-blue-50 text-blue-900 border-blue-200"
+                              : "bg-slate-100 text-slate-700 border-slate-200"
+                          }`}
                         >
-                          {item.bandInfo.label}
+                          {item.statusLabel}
                         </span>
                       </td>
 
                       <td className="py-3 px-4 text-slate-700">
                         <div className="flex flex-col">
                           <span className="font-semibold">
-                            {item.expectedRange.lowPct}% - {item.expectedRange.highPct}%
+                            {item.cutoffDisplay}
                           </span>
                           <span className="text-[10px] text-slate-400">
-                            ~{item.expectedRange.lowMarks} - {item.expectedRange.highMarks} pts
+                            Range: {item.cutoffRangeDisplay}
                           </span>
                         </div>
                       </td>
@@ -397,10 +406,14 @@ export default function CollegeStandingsTable({
                       <td className="py-3 px-4">
                         <span
                           className={`font-semibold ${
-                            isTargetMet ? "text-emerald-700" : "text-orange-700"
+                            isAbove
+                              ? "text-emerald-700"
+                              : isBelow
+                              ? "text-orange-700"
+                              : "text-slate-600"
                           }`}
                         >
-                          {isTargetMet ? "Target Met" : `+${item.gapPercentagePoints}% (+${item.gapMarks} pts)`}
+                          {item.gapDisplay}
                         </span>
                       </td>
 
@@ -424,7 +437,7 @@ export default function CollegeStandingsTable({
           </table>
         </div>
 
-        {/* Mobile View: Collapses to Cards for < 640px / 390px screens */}
+        {/* Mobile View: Collapses to Cards for small screens */}
         <div className="md:hidden space-y-2.5">
           {filteredStandings.length === 0 ? (
             <div className="p-6 text-center text-xs text-slate-500 bg-slate-50 rounded-xl">
@@ -433,13 +446,14 @@ export default function CollegeStandingsTable({
           ) : (
             filteredStandings.map((item) => {
               const isSelected = item.collegeName === selectedCollegeForTrend;
-              const isTargetMet = item.gapPercentagePoints === 0;
+              const isAbove = item.status === "above_cutoff";
+              const isBelow = item.status === "below_cutoff";
 
               return (
                 <div
                   key={item.collegeName}
                   onClick={() => onSelectCollegeForTrend(item.collegeName)}
-                  className={`p-3.5 rounded-xl border transition-all space-y-2.5 ${
+                  className={`p-3.5 rounded-xl border transition-all space-y-2.5 cursor-pointer ${
                     isSelected
                       ? "bg-blue-50/50 border-blue-200"
                       : "bg-white border-slate-200"
@@ -455,28 +469,40 @@ export default function CollegeStandingsTable({
                       </span>
                     </div>
                     <span
-                      className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold border shrink-0 ${item.bandInfo.badgeClass}`}
+                      className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold border shrink-0 ${
+                        isAbove
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                          : isBelow
+                          ? "bg-amber-50 text-amber-900 border-amber-200"
+                          : item.status === "incomplete"
+                          ? "bg-blue-50 text-blue-900 border-blue-200"
+                          : "bg-slate-100 text-slate-700 border-slate-200"
+                      }`}
                     >
-                      {item.bandInfo.label}
+                      {item.statusLabel}
                     </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-slate-100">
                     <div>
-                      <span className="text-[10px] text-slate-400 block">Cutoff Range</span>
+                      <span className="text-[10px] text-slate-400 block">Cutoff</span>
                       <span className="font-semibold text-slate-800">
-                        {item.expectedRange.lowPct}% - {item.expectedRange.highPct}%
+                        {item.cutoffDisplay}
                       </span>
                     </div>
 
                     <div>
-                      <span className="text-[10px] text-slate-400 block">Score Gap</span>
+                      <span className="text-[10px] text-slate-400 block">Marks Gap</span>
                       <span
                         className={`font-semibold ${
-                          isTargetMet ? "text-emerald-700" : "text-orange-700"
+                          isAbove
+                            ? "text-emerald-700"
+                            : isBelow
+                            ? "text-orange-700"
+                            : "text-slate-600"
                         }`}
                       >
-                        {isTargetMet ? "Target Met" : `+${item.gapPercentagePoints}%`}
+                        {item.gapDisplay}
                       </span>
                     </div>
                   </div>
@@ -487,7 +513,7 @@ export default function CollegeStandingsTable({
                       e.stopPropagation();
                       onSelectCollegeForTrend(item.collegeName);
                     }}
-                    className="w-full py-1 text-center text-[11px] font-semibold text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-100"
+                    className="w-full py-1 text-center text-[11px] font-semibold text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-100 cursor-pointer"
                   >
                     {isSelected ? "Viewing Cutoff Trend" : "View Cutoff Trend"}
                   </button>

@@ -5,18 +5,37 @@ import { ChanceBand } from "@/lib/config/standingConfig";
 export interface StandingExplanationRequest {
   targetCollege: string;
   courseName: string;
-  band: ChanceBand;
-  userPct: number | null;
-  cutoffRange: {
+  cutoffScale?: number;
+  expectedCutoffMarks?: number;
+  cutoffDisplay?: string;
+  combinedMarks?: number | null;
+  marksGap?: number | null;
+  gapDisplay?: string;
+  status?: "above_cutoff" | "below_cutoff" | "incomplete" | "no_data";
+  statusLabel?: string;
+  isComplete?: boolean;
+  hasNoData?: boolean;
+  participatingSubjects: string[];
+  missingSubjects: string[];
+  subjectBreakdown?: Array<{
+    subjectName: string;
+    currentMarks: number | null;
+    subjectMaxMarks: number;
+    targetMarks: number;
+    marksNeeded: number;
+  }>;
+  userId?: string;
+
+  // Legacy fields
+  band?: ChanceBand;
+  userPct?: number | null;
+  cutoffRange?: {
     lowPct: number;
     highPct: number;
     midpointPct: number;
   };
-  gapPercentagePoints: number;
-  coverage: number;
-  participatingSubjects: string[];
-  missingSubjects: string[];
-  userId?: string;
+  gapPercentagePoints?: number;
+  coverage?: number;
 }
 
 export interface StandingExplanationResult {
@@ -41,13 +60,12 @@ function computeFactHash(req: StandingExplanationRequest): string {
   const payload = [
     req.targetCollege,
     req.courseName,
-    req.band,
-    req.userPct,
-    req.cutoffRange.midpointPct,
-    req.gapPercentagePoints,
-    req.coverage,
-    req.participatingSubjects.sort().join(","),
-    req.missingSubjects.sort().join(","),
+    req.cutoffDisplay || "",
+    req.combinedMarks ?? "none",
+    req.marksGap ?? "none",
+    req.status || "",
+    req.participatingSubjects.slice().sort().join(","),
+    req.missingSubjects.slice().sort().join(","),
   ].join("::");
 
   return crypto.createHash("sha256").update(payload).digest("hex");
@@ -55,40 +73,50 @@ function computeFactHash(req: StandingExplanationRequest): string {
 
 /**
  * Deterministic fallback template when LLM is unavailable, rate-limited, or fails verification.
+ * Communicates strictly in marks with no percentages.
  */
 export function generateDeterministicExplanation(
   req: StandingExplanationRequest
 ): StandingExplanationResult {
-  const { targetCollege, courseName, band, userPct, cutoffRange, gapPercentagePoints, coverage, missingSubjects } = req;
-  const coveragePct = Math.round(coverage * 100);
+  const {
+    targetCollege,
+    courseName,
+    cutoffDisplay = "the historical cutoff",
+    combinedMarks,
+    marksGap,
+    gapDisplay,
+    status = "no_data",
+    isComplete = false,
+    hasNoData = false,
+    missingSubjects = [],
+    subjectBreakdown = [],
+  } = req;
 
   let summary = "";
   const nextActions: string[] = [];
 
-  if (userPct === null || coverage === 0) {
-    summary = `You haven't recorded any valid mocks for ${courseName} yet. The expected historical cutoff for ${targetCollege} is around ${cutoffRange.midpointPct}%. Complete mocks in your core domain subjects to establish your baseline standing.`;
+  if (hasNoData || status === "no_data" || (combinedMarks === null && missingSubjects.length === 0 && !isComplete)) {
+    summary = `You haven't recorded any mock tests for ${courseName} yet. The expected historical cutoff for ${targetCollege} is ${cutoffDisplay}. Complete mocks in your core domain subjects to establish your baseline standing.`;
     nextActions.push(`Attempt an initial 50-question mock for ${courseName}.`);
     nextActions.push("Review high-yield NCERT Class 12 formulas and key definitions.");
-  } else if (band === "Safe" || band === "Likely") {
-    summary = `Your current mock average (${userPct}%) places you in the ${band} band for ${targetCollege} in ${courseName}. Your standing exceeds the historical cutoff threshold (${cutoffRange.midpointPct}%).`;
+  } else if (!isComplete || status === "incomplete") {
+    summary = `You have completed partial subjects, but official admission standing requires all required subjects evaluated against the ${cutoffDisplay} cutoff for ${targetCollege}.`;
+    nextActions.push(`Attempt a timed mock in ${missingSubjects.join(", ") || "your remaining required subjects"} to compute your combined standing.`);
+    const highestGapSubject = [...subjectBreakdown].filter((s) => s.currentMarks !== null).sort((a, b) => b.marksNeeded - a.marksNeeded)[0];
+    if (highestGapSubject && highestGapSubject.marksNeeded > 0) {
+      nextActions.push(`Focus on ${highestGapSubject.subjectName} to close its ${highestGapSubject.marksNeeded} marks gap toward its ${highestGapSubject.targetMarks} marks target.`);
+    } else {
+      nextActions.push("Maintain timing discipline: avoid guessing to protect your score from negative marks (-1).");
+    }
+  } else if (status === "above_cutoff" || (marksGap !== null && marksGap !== undefined && marksGap <= 0)) {
+    summary = `Your combined mock score of ${combinedMarks} marks meets or exceeds the historical cutoff (${cutoffDisplay}) for ${targetCollege}! You are currently ${gapDisplay || "meeting the cutoff threshold"}.`;
     nextActions.push("Maintain timing discipline: avoid guessing on ambiguous questions to protect your score from negative marks (-1).");
     nextActions.push("Take full multi-subject timed mocks to build stamina for exam day.");
-  } else if (band === "Possible") {
-    summary = `Your performance (${userPct}%) is within the historical admission window (${cutoffRange.lowPct}% - ${cutoffRange.highPct}%) for ${targetCollege}. A minor increase in your domain average can push your standing into the likely zone.`;
-    nextActions.push(`Close the small ${gapPercentagePoints}% gap with 2 targeted subject drills.`);
-    nextActions.push("Analyze questions that took longer than 60 seconds to eliminate time-sink calculation traps.");
-  } else if (band === "Reach") {
-    summary = `You are within striking distance of ${targetCollege} (${courseName}) with a gap of ${gapPercentagePoints} percentage points. The historical threshold is ~${cutoffRange.midpointPct}%.`;
-    nextActions.push(`Target 3 to 4 more correct answers per subject to bridge the ${gapPercentagePoints}% difference.`);
-    if (missingSubjects.length > 0) {
-      nextActions.push(`Take a mock in ${missingSubjects.join(", ")} to raise your coverage from ${coveragePct}%.`);
-    } else {
-      nextActions.push("Focus on your lowest scoring domain subject for the fastest point gains.");
-    }
   } else {
-    summary = `There is currently a substantial gap (${gapPercentagePoints}%) between your mock score (${userPct}%) and the historical cutoff for ${targetCollege} (~${cutoffRange.midpointPct}%). Significant score elevation is needed.`;
-    nextActions.push("Rebuild foundational NCERT concepts before taking timed full-length mocks.");
-    nextActions.push("Focus revision on high-weightage chapters where you have recurring errors.");
+    // below_cutoff
+    summary = `Your combined mock score of ${combinedMarks} marks is ${gapDisplay || `${marksGap} marks below cutoff`} against the historical cutoff (${cutoffDisplay}) for ${targetCollege}.`;
+    nextActions.push(`Bridge the ${marksGap ?? "score"} marks gap by targeting 3 to 4 more correct questions per subject.`);
+    nextActions.push("Analyze questions that took longer than 60 seconds to eliminate time-sink calculation traps.");
   }
 
   return {
@@ -99,19 +127,16 @@ export function generateDeterministicExplanation(
 }
 
 /**
- * Validates that LLM output does NOT contradict deterministic facts.
+ * Validates that LLM output does NOT contain percentages or contradict deterministic facts.
  */
-function validateLLMOutput(
-  text: string,
-  band: ChanceBand
-): boolean {
+function validateLLMOutput(text: string): boolean {
   const lower = text.toLowerCase();
-  // Forbidden phrases that create false precision or contradict bands
-  if (lower.includes("guaranteed") || lower.includes("100% chance") || lower.includes("certain to get")) {
+  // Strictly no percentages
+  if (text.includes("%") || lower.includes("percent")) {
     return false;
   }
-  // If Reach or Far, should not say "you are safe" or "you will definitely get in"
-  if ((band === "Reach" || band === "Far") && (lower.includes("you will easily get") || lower.includes("safe admission"))) {
+  // Forbidden phrases that create false guarantees
+  if (lower.includes("guaranteed") || lower.includes("100% chance") || lower.includes("certain to get")) {
     return false;
   }
   return true;
@@ -160,19 +185,19 @@ You are an expert CUET UG admissions counselor. Analyze the candidate's standing
 FACTS:
 - Target College: ${req.targetCollege}
 - Course: ${req.courseName}
-- Candidate Standing Band: ${req.band} (Safe, Likely, Possible, Reach, Far)
-- Candidate Average: ${req.userPct !== null ? `${req.userPct}%` : "No valid data yet"}
-- Historical Expected Cutoff Range: ${req.cutoffRange.lowPct}% - ${req.cutoffRange.highPct}% (Midpoint: ${req.cutoffRange.midpointPct}%)
-- Gap to Midpoint: ${req.gapPercentagePoints} percentage points
-- Subject Coverage: ${Math.round(req.coverage * 100)}%
+- Expected Historical Cutoff: ${req.cutoffDisplay || `${req.expectedCutoffMarks}/${req.cutoffScale} marks`}
+- Candidate Combined Score: ${req.combinedMarks !== null && req.combinedMarks !== undefined ? `${req.combinedMarks} marks` : "Incomplete / awaiting remaining subjects"}
+- Cutoff Gap: ${req.gapDisplay || `${req.marksGap} marks`}
+- Admission Standing Status: ${req.statusLabel || req.status || "Incomplete"}
 - Tested Subjects: ${req.participatingSubjects.join(", ") || "None"}
 - Missing Required Subjects: ${req.missingSubjects.join(", ") || "None"}
 
 RULES:
-1. DO NOT change or invent numbers. Keep all numbers identical to the facts.
-2. DO NOT promise admission or use words like "guaranteed" or "chance %".
-3. Provide objective, supportive guidance tailored to their band.
-4. Output strict JSON with keys: "summary" (string) and "nextActions" (array of 2-3 strings).
+1. All scores and targets MUST be communicated strictly in MARKS (+5 / -1 marking scheme). ABSOLUTELY DO NOT use percentage symbols (%) or percentage numbers anywhere.
+2. DO NOT change or invent numbers. Keep all numbers identical to the facts.
+3. DO NOT promise admission or use words like "guaranteed".
+4. Provide objective, supportive guidance.
+5. Output strict JSON with keys: "summary" (string) and "nextActions" (array of 2-3 strings).
 `;
 
     const response = await client.models.generateContent({
@@ -191,7 +216,7 @@ RULES:
       parsed &&
       typeof parsed.summary === "string" &&
       Array.isArray(parsed.nextActions) &&
-      validateLLMOutput(parsed.summary, req.band)
+      validateLLMOutput(parsed.summary)
     ) {
       // Increment user usage
       usage.count += 1;
