@@ -92,11 +92,11 @@ async function runStandingTests() {
   console.log("===============================================================\n");
 
   // -------------------------------------------------------------------------
-  // SUITE 1: Low-effort session exclusion & user subject performance
+  // SUITE 1: All sessions included & user subject performance
   // -------------------------------------------------------------------------
-  console.log("SUITE 1: Low-Effort Session Exclusion & Subject Performance");
+  console.log("SUITE 1: All Sessions Included & Subject Performance");
 
-  // User takes 1 valid physics test (40/50 correct, 80%), and 1 rushed/guessing session (5s median, 10/50 correct)
+  // User takes 1 physics test (40/50 correct, 80%), and 1 rushed session (4s median, 10/50 correct)
   const validPhysics = createAttempt({
     testId: "phys_valid_1",
     subject: "Physics",
@@ -104,15 +104,17 @@ async function runStandingTests() {
     correctCount: 40, // 40*5 - 10*1 = 190 / 250 = 76%
     avgTimeSeconds: 50,
     isLowEffort: false,
+    dateOffsetDays: 0,
   });
 
   const lowEffortPhysics = createAttempt({
     testId: "phys_rushed_2",
     subject: "Physics",
     questionCount: 50,
-    correctCount: 10,
-    avgTimeSeconds: 4, // 4s < 8s threshold -> Low Effort!
+    correctCount: 10, // 10*5 - 40*1 = 10 / 250 = 4%
+    avgTimeSeconds: 4, // 4s rapid pacing - allowed and counted
     isLowEffort: true,
+    dateOffsetDays: 1,
   });
 
   const perf1 = computeUserSubjectPerformance([validPhysics, lowEffortPhysics]);
@@ -121,20 +123,20 @@ async function runStandingTests() {
     "Subject Performance: Physics subject record exists"
   );
   assert(
-    perf1["physics"]?.validSessionsCount === 1,
-    `Session Gate: Exactly 1 valid session counted (Found: ${perf1["physics"]?.validSessionsCount})`
+    perf1["physics"]?.validSessionsCount === 2,
+    `Session Gate: All 2 sessions counted (Found: ${perf1["physics"]?.validSessionsCount})`
   );
   assert(
-    perf1["physics"]?.excludedLowEffortCount === 1,
-    `Session Gate: Exactly 1 low-effort session excluded (Found: ${perf1["physics"]?.excludedLowEffortCount})`
+    perf1["physics"]?.excludedLowEffortCount === 0,
+    `Session Gate: Zero sessions excluded (Found: ${perf1["physics"]?.excludedLowEffortCount})`
   );
   assert(
     perf1["physics"]?.hasSufficientData === true,
-    "Data Gate: 50 valid questions satisfies >= 15 questions threshold"
+    "Data Gate: 100 questions satisfies >= 15 questions threshold"
   );
   assert(
-    perf1["physics"]?.weightedPercentage === 76,
-    `Score Calculation: Correct weighted percentage is 76% (Found: ${perf1["physics"]?.weightedPercentage}%)`
+    perf1["physics"]?.weightedPercentage === 41.5,
+    `Score Calculation: Correct weighted percentage including all marks is 41.5% (Found: ${perf1["physics"]?.weightedPercentage}%)`
   );
 
   // Subject below threshold (only 5 questions)

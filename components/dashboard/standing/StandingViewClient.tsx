@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 import {
   Compass,
   ClipboardCheck,
-  AlertTriangle,
   Info,
   ArrowRight,
 } from "lucide-react";
@@ -119,11 +118,8 @@ export default function StandingViewClient() {
     });
   }, [targetCollege, selectedCourseId, selectedCategory, testAttempts]);
 
-  // Check if student has zero attempts or all low-effort
+  // Check if student has zero attempts
   const hasZeroAttempts = testAttempts.length === 0;
-  const allSessionsLowEffort =
-    testAttempts.length > 0 &&
-    testAttempts.every((a) => a.isLowEffort === true);
 
   const handleSaveProfileTarget = (colName: string) => {
     setTargetCollege(colName);
@@ -175,16 +171,16 @@ export default function StandingViewClient() {
         </div>
       </div>
 
-      {/* 2. Low-Effort or Zero Attempts Warning Banner */}
+      {/* 2. Zero Attempts Guidance Banner */}
       {hasZeroAttempts ? (
         <div className="p-6 bg-blue-50 border border-blue-200/80 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-sm font-bold text-blue-900">
               <ClipboardCheck className="w-5 h-5 text-blue-600" />
-              <span>Take your first mock to calibrate your standing</span>
+              <span>Take your first mock to see your standing</span>
             </div>
             <p className="text-xs text-blue-800 leading-relaxed max-w-2xl">
-              You haven&apos;t taken any mock tests yet. Complete at least one 50-question mock in your core domain subject to calibrate your standing against previous cutoffs.
+              You haven&apos;t taken any mock tests yet. Complete at least one mock test in your core domain subject to see your standing against previous cutoffs.
             </p>
           </div>
           <Link
@@ -192,25 +188,6 @@ export default function StandingViewClient() {
             className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 flex items-center gap-2"
           >
             <span>Take Your First Mock</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      ) : allSessionsLowEffort ? (
-        <div className="p-5 bg-amber-50 border border-amber-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-sm font-bold text-amber-900">
-              <AlertTriangle className="w-5 h-5 text-amber-600" />
-              <span>Low-effort sessions detected: results not calibrated</span>
-            </div>
-            <p className="text-xs text-amber-800 leading-relaxed max-w-2xl">
-              All recorded sessions had very rapid pacing (&lt;8s/Q) or chance accuracy (&le;25%). To prevent false confidence, standing predictions require sessions completed under normal exam timing.
-            </p>
-          </div>
-          <Link
-            href="/dashboard/mocks"
-            className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 flex items-center gap-2"
-          >
-            <span>Retake with Timed Pacing</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

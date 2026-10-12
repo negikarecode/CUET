@@ -1,5 +1,4 @@
 import { RecordedTestAttempt } from "@/types";
-import { evaluateSessionValidity } from "@/lib/session-validity";
 import {
   STANDING_CONFIG,
   CategoryCode,
@@ -226,8 +225,8 @@ export function normalizeSubjectToKey(rawSubject: string): string {
 // ---------------------------------------------------------------------------
 
 /**
- * Computes deterministic user performance per subject from valid sessions.
- * Excludes low-effort sessions (too fast pacing or chance accuracy).
+ * Computes deterministic user performance per subject from all recorded sessions.
+ * Allows all marks scored by user without low-effort session exclusion.
  * Weights recent sessions higher using configurable decay.
  * Marks subjects with fewer than MIN_ANSWERED_QUESTIONS_PER_SUBJECT as insufficient_data.
  */
@@ -259,13 +258,6 @@ export function computeUserSubjectPerformance(
     const rawSubj = att.subject || att.testTitle || "";
     const subjKey = normalizeSubjectToKey(rawSubj);
 
-    // Evaluate session effort/validity gate
-    let isLowEffort = att.isLowEffort;
-    if (isLowEffort === undefined && att.questions && att.questions.length > 0) {
-      const validity = evaluateSessionValidity(att.questions);
-      isLowEffort = validity.isLowEffort;
-    }
-
     const questionsList = att.questions || [];
     const answeredCount =
       questionsList.length > 0
@@ -287,7 +279,7 @@ export function computeUserSubjectPerformance(
       attempt: att,
       percentage: sessionPct,
       answeredCount,
-      isValid: !isLowEffort,
+      isValid: true,
       submittedAtMs,
     });
   }
@@ -415,7 +407,7 @@ export function resolveCourseRequirements(
           if (!usedSubjectKeys.has(subKey)) {
             usedSubjectKeys.add(subKey);
             const perf = userPerformance[subKey];
-            const hasData = Boolean(perf && perf.hasSufficientData);
+            const hasData = Boolean(perf && (perf.hasSufficientData || perf.validSessionsCount > 0));
             resolved.push({
               subjectId: subKey,
               subjectName: perf?.subjectName || CANONICAL_SUBJECTS_MAP[subKey]?.name || subKey,
@@ -434,7 +426,7 @@ export function resolveCourseRequirements(
         // then subjects without data
         const rankedCandidates = candidates.map((subKey) => {
           const perf = userPerformance[subKey];
-          const hasData = Boolean(perf && perf.hasSufficientData);
+          const hasData = Boolean(perf && (perf.hasSufficientData || perf.validSessionsCount > 0));
           return {
             subKey,
             perf,
