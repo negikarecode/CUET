@@ -15,6 +15,7 @@ import {
   LogOut,
   X,
   Menu,
+  History,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { createClient } from "@/lib/supabase/client";
@@ -72,6 +73,13 @@ export default function DashboardSidebar() {
       href: "/dashboard/mocks",
       icon: ClipboardCheck,
       active: pathname.startsWith("/dashboard/mocks"),
+    },
+    {
+      id: "sessions",
+      label: "Past sessions",
+      href: "/dashboard/sessions",
+      icon: History,
+      active: pathname.startsWith("/dashboard/sessions"),
     },
     {
       id: "standing",

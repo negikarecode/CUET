@@ -58,6 +58,7 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/dashboard/pyqs") ||
     pathname.startsWith("/dashboard/mocks") ||
     pathname.startsWith("/dashboard/standing") ||
+    pathname.startsWith("/dashboard/sessions") ||
     pathname.startsWith("/test");
   const isDashboardRoute =
     pathname === "/dashboard" || pathname.startsWith("/dashboard/");
