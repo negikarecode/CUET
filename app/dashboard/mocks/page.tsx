@@ -142,7 +142,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
   physics: {
     key: "physics",
     name: "Physics",
-    code: "312",
+    code: "322",
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
@@ -252,7 +252,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
   sociology: {
     key: "sociology",
     name: "Sociology",
-    code: "325",
+    code: "326",
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,
@@ -301,7 +301,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
   },
   "environmental-studies": {
     key: "environmental-studies",
-    name: "Environmental Studies",
+    name: "Environmental Science",
     code: "307",
     isLive: true,
     mockCount: 20,
@@ -312,7 +312,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
   "fine-arts": {
     key: "fine-arts",
     name: "Fine Arts / Visual Arts",
-    code: "311",
+    code: "312",
     isLive: true,
     mockCount: 20,
     totalQuestions: 1000,

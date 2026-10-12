@@ -85,7 +85,7 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
   const title = `${subjectName} Official CUET PYQ Papers`;
 
   const durationMinutes =
-    code === "312" || code === "306" || code === "319" || code === "301" || code === "309" || code === "308"
+    code === "322" || code === "306" || code === "319" || code === "301" || code === "309" || code === "308" || code === "501"
       ? 60
       : 45;
 

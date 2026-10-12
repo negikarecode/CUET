@@ -35,7 +35,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
   const code = metadata?.officialCode ?? subjectConfig?.code ?? "300";
 
   const durationMinutes =
-    code === "312" || code === "306" || code === "319" || code === "301" || code === "309" || code === "308"
+    code === "322" || code === "306" || code === "319" || code === "301" || code === "309" || code === "308" || code === "501"
       ? 60
       : 45;
 
