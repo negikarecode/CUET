@@ -220,6 +220,116 @@ export function normalizeSubjectToKey(rawSubject: string): string {
   return clean.replace(/\s+/g, "_");
 }
 
+export const KNOWN_COLLEGE_ACRONYMS: Record<string, string> = {
+  srcc: "Shri Ram College of Commerce",
+  lsr: "Lady Shri Ram College for Women (W)",
+  arsd: "Atma Ram Sanatan Dharma College",
+  dcac: "Delhi College of Arts and Commerce",
+  cvs: "College of Vocational Studies",
+  sgtb: "Sri Guru Tegh Bahadur Khalsa College",
+  kmc: "Kirori Mal College",
+  dduc: "Deen Dayal Upadhyaya College",
+  andc: "Acharya Narendra Dev College",
+  jmc: "Jesus and Mary College (W)",
+  ipcw: "Indraprastha College for Women (W)",
+  stephens: "St. Stephen's College",
+  venky: "Sri Venketeswara College",
+  venkateswara: "Sri Venketeswara College",
+  venketeswara: "Sri Venketeswara College",
+  bhu: "Banaras Hindu University",
+  jnu: "Jawaharlal Nehru University",
+};
+
+/**
+ * Resolves a user dream college string to the canonical college name in NORMALIZED_CUTOFFS.
+ */
+export function resolveTargetCollegeMatch(userCollege: string): string | null {
+  if (!userCollege) return null;
+  const raw = userCollege.toLowerCase().trim();
+
+  // 1. Direct acronym match or acronym in parenthetical
+  const stripped = raw.replace(/[^a-z]/g, "");
+  if (KNOWN_COLLEGE_ACRONYMS[stripped]) {
+    return KNOWN_COLLEGE_ACRONYMS[stripped];
+  }
+  for (const [acr, col] of Object.entries(KNOWN_COLLEGE_ACRONYMS)) {
+    if (raw.includes(acr) || raw.includes(`(${acr})`)) {
+      return col;
+    }
+  }
+
+  const allColleges = Array.from(new Set(NORMALIZED_CUTOFFS.map((r) => r.college)));
+
+  // Clean string: remove parenthetical suffixes like (SRCC), (DU), (Delhi University), (W), (LSR), etc.
+  const cleanInput = userCollege
+    .toLowerCase()
+    .replace(/\(.*?\)/g, "")
+    .replace(/[-_]/g, " ")
+    .trim();
+
+  // 2. Exact match (case insensitive)
+  const exact = allColleges.find((c) => c.toLowerCase() === userCollege.toLowerCase().trim());
+  if (exact) return exact;
+
+  // 3. Exact match on cleaned name
+  const cleanExact = allColleges.find((c) => {
+    const cleanC = c.toLowerCase().replace(/\(.*?\)/g, "").replace(/[-_]/g, " ").trim();
+    return cleanC === cleanInput;
+  });
+  if (cleanExact) return cleanExact;
+
+  // 4. One includes the other
+  const includesMatch = allColleges.find((c) => {
+    const cleanC = c.toLowerCase().replace(/\(.*?\)/g, "").replace(/[-_]/g, " ").trim();
+    return cleanInput.includes(cleanC) || cleanC.includes(cleanInput);
+  });
+  if (includesMatch) return includesMatch;
+
+  // 5. Token overlap without stopwords
+  const stopWords = new Set(["college", "for", "women", "university", "institute", "department", "of", "the", "and"]);
+  const inputTokens = cleanInput.split(/\s+/).filter((t) => t.length > 2 && !stopWords.has(t));
+  let bestCandidate: string | null = null;
+  let maxMatchedTokens = 0;
+  for (const c of allColleges) {
+    const cTokens = c.toLowerCase().split(/\s+/).filter((t) => t.length > 2 && !stopWords.has(t));
+    const matchedCount = inputTokens.filter((t) => cTokens.some((ct) => ct.includes(t) || t.includes(ct))).length;
+    if (matchedCount > maxMatchedTokens && matchedCount >= 1) {
+      maxMatchedTokens = matchedCount;
+      bestCandidate = c;
+    }
+  }
+  return bestCandidate;
+}
+
+/**
+ * Matches a user target course string to a canonical course ID.
+ */
+export function matchCourseToId(
+  courseNameOrId: string,
+  courses: CanonicalCourse[] = Object.values(CANONICAL_COURSES_MAP)
+): string | null {
+  if (!courseNameOrId) return null;
+  const raw = courseNameOrId.toLowerCase().trim();
+
+  // 1. Direct ID match
+  const byId = courses.find((c) => c.id.toLowerCase() === raw);
+  if (byId) return byId.id;
+
+  // 2. Exact name match
+  const byName = courses.find((c) => c.name.toLowerCase() === raw);
+  if (byName) return byName.id;
+
+  // 3. Clean alphanumeric substring match
+  const clean = raw.replace(/[^a-z0-9]/g, "");
+  const byClean = courses.find((c) => {
+    const cClean = c.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+    return cClean.includes(clean) || clean.includes(cClean);
+  });
+  if (byClean) return byClean.id;
+
+  return null;
+}
+
 // ---------------------------------------------------------------------------
 // 2. User Subject Performance Evaluator
 // ---------------------------------------------------------------------------

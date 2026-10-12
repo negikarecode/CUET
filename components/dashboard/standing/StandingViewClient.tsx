@@ -21,12 +21,17 @@ import {
   computeDreamCollegeGap,
   NORMALIZED_CUTOFFS,
   CanonicalCourse,
+  resolveTargetCollegeMatch,
+  matchCourseToId,
 } from "@/lib/standing-engine";
 import { CategoryCode } from "@/lib/config/standingConfig";
+import { StreamType } from "@/types";
 
 export default function StandingViewClient() {
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
+  const selectedStream = useTestStore((state) => state.selectedStream);
+  const setSelectedStream = useTestStore((state) => state.setSelectedStream);
   const testAttemptsRaw = useTestStore((state) => state.testAttempts);
   const testAttempts = useMemo(() => testAttemptsRaw || [], [testAttemptsRaw]);
   const setTargetCollege = useTestStore((state) => state.setTargetCollege);
@@ -35,48 +40,116 @@ export default function StandingViewClient() {
     return Object.values(CANONICAL_COURSES_MAP);
   }, []);
 
-  // Determine initial course
+  // Determine user's remembered dream college from authentication / profile
+  const dreamCollegeResolved = useMemo(() => {
+    return resolveTargetCollegeMatch(user?.targetCollege || "");
+  }, [user?.targetCollege]);
+
+  // Initial state with dream college prioritized
   const [selectedCourseId, setSelectedCourseId] = useState<string>("bcom_hons");
   const [selectedCategory, setSelectedCategory] = useState<CategoryCode>("UR");
   const [selectedYear, setSelectedYear] = useState<number | "all">("all");
-  const [targetCollege, setTargetCollegeLocal] = useState<string>("Shri Ram College of Commerce");
-  const [trendCollege, setTrendCollege] = useState<string>("Shri Ram College of Commerce");
+  const [targetCollege, setTargetCollegeLocal] = useState<string>(
+    dreamCollegeResolved || "Shri Ram College of Commerce"
+  );
+  const [trendCollege, setTrendCollege] = useState<string>(
+    dreamCollegeResolved || "Shri Ram College of Commerce"
+  );
 
   const searchParams = useSearchParams();
 
-  // Sync target college & course from search params or user profile
+  // Sync target college & course from search params or user profile with dream college precedence
   useEffect(() => {
     const collegeParam = searchParams.get("college");
     const courseParam = searchParams.get("course");
 
+    // 1. Explicit search param takes first priority
     if (courseParam && CANONICAL_COURSES_MAP[courseParam]) {
       setSelectedCourseId(courseParam);
+      const chosen = CANONICAL_COURSES_MAP[courseParam];
+      if (
+        chosen &&
+        (chosen.stream === "science" ||
+          chosen.stream === "commerce" ||
+          chosen.stream === "humanities")
+      ) {
+        setSelectedStream(chosen.stream as StreamType);
+      }
+    } else if (dreamCollegeResolved) {
+      // 2. Default to a course offered by user's dream college!
+      const offeredCourseIds = Array.from(
+        new Set(
+          NORMALIZED_CUTOFFS.filter((r) => r.college === dreamCollegeResolved).map(
+            (r) => r.canonical_course_id
+          )
+        )
+      );
+
+      if (offeredCourseIds.length > 0) {
+        // A. Match target course if specified by user profile
+        const matchedTarget = matchCourseToId(user?.targetCourse || "", coursesList);
+        if (matchedTarget && offeredCourseIds.includes(matchedTarget)) {
+          setSelectedCourseId(matchedTarget);
+          const chosen = CANONICAL_COURSES_MAP[matchedTarget];
+          if (
+            chosen &&
+            (chosen.stream === "science" ||
+              chosen.stream === "commerce" ||
+              chosen.stream === "humanities")
+          ) {
+            setSelectedStream(chosen.stream as StreamType);
+          }
+        } else {
+          // B. Otherwise match course by user's active/preferred stream
+          const activeStream = user?.preferredStream || selectedStream;
+          const streamCourse = offeredCourseIds.find(
+            (cid) => CANONICAL_COURSES_MAP[cid]?.stream === activeStream
+          );
+          const pickedCourseId = streamCourse || offeredCourseIds[0]!;
+          setSelectedCourseId(pickedCourseId);
+          const chosen = CANONICAL_COURSES_MAP[pickedCourseId];
+          if (
+            chosen &&
+            (chosen.stream === "science" ||
+              chosen.stream === "commerce" ||
+              chosen.stream === "humanities")
+          ) {
+            setSelectedStream(chosen.stream as StreamType);
+          }
+        }
+      }
+    } else if (user?.preferredStream || selectedStream) {
+      // 3. Fall back to stream default course
+      const activeStream = user?.preferredStream || selectedStream;
+      const streamCourse = coursesList.find((c) => c.stream === activeStream);
+      if (streamCourse) {
+        setSelectedCourseId(streamCourse.id);
+      }
     }
 
+    // Initialize college
     if (collegeParam) {
-      const matched = NORMALIZED_CUTOFFS.find((r) =>
-        r.college.toLowerCase().includes(collegeParam.toLowerCase()) ||
-        collegeParam.toLowerCase().includes(r.college.toLowerCase())
-      );
+      const matched = resolveTargetCollegeMatch(collegeParam);
       if (matched) {
-        setTargetCollegeLocal(matched.college);
-        setTrendCollege(matched.college);
+        setTargetCollegeLocal(matched);
+        setTrendCollege(matched);
         return;
       }
     }
 
-    if (user?.targetCollege) {
-      // Find closest matching college in cutoff data
-      const matched = NORMALIZED_CUTOFFS.find((r) =>
-        user.targetCollege.toLowerCase().includes(r.college.toLowerCase()) ||
-        r.college.toLowerCase().includes(user.targetCollege.toLowerCase())
-      );
-      if (matched) {
-        setTargetCollegeLocal(matched.college);
-        setTrendCollege(matched.college);
-      }
+    if (dreamCollegeResolved) {
+      setTargetCollegeLocal(dreamCollegeResolved);
+      setTrendCollege(dreamCollegeResolved);
     }
-  }, [searchParams, user?.targetCollege]);
+  }, [
+    searchParams,
+    dreamCollegeResolved,
+    user?.targetCourse,
+    user?.preferredStream,
+    coursesList,
+    selectedStream,
+    setSelectedStream,
+  ]);
 
   // Compute standings for selected course
   const standingsResult = useMemo(() => {
@@ -100,13 +173,26 @@ export default function StandingViewClient() {
     return list;
   }, [selectedCourseId]);
 
-  // Update target & trend college if current target is not offering the new course
+  // Keep target & trend college synced with dream college or available colleges
   useEffect(() => {
-    if (availableColleges.length > 0 && !availableColleges.includes(targetCollege)) {
-      setTargetCollegeLocal(availableColleges[0]!);
-      setTrendCollege(availableColleges[0]!);
+    if (availableColleges.length === 0) return;
+
+    // 1. If user's dream college offers this course, ALWAYS prioritize it as default!
+    if (dreamCollegeResolved && availableColleges.includes(dreamCollegeResolved)) {
+      setTargetCollegeLocal(dreamCollegeResolved);
+      setTrendCollege(dreamCollegeResolved);
+      return;
     }
-  }, [availableColleges, targetCollege]);
+
+    // 2. If current targetCollege is in availableColleges, keep it
+    if (availableColleges.includes(targetCollege)) {
+      return;
+    }
+
+    // 3. Otherwise fall back to first offering college
+    setTargetCollegeLocal(availableColleges[0]!);
+    setTrendCollege(availableColleges[0]!);
+  }, [availableColleges, dreamCollegeResolved, targetCollege]);
 
   // Dream College Gap Analysis
   const dreamCollegeGap = useMemo(() => {
@@ -121,8 +207,23 @@ export default function StandingViewClient() {
   // Check if student has zero attempts
   const hasZeroAttempts = testAttempts.length === 0;
 
+  const handleSelectCourse = (courseId: string) => {
+    setSelectedCourseId(courseId);
+    const chosen = CANONICAL_COURSES_MAP[courseId];
+    if (
+      chosen &&
+      (chosen.stream === "science" ||
+        chosen.stream === "commerce" ||
+        chosen.stream === "humanities")
+    ) {
+      setSelectedStream(chosen.stream as StreamType);
+    }
+  };
+
   const handleSaveProfileTarget = (colName: string) => {
     setTargetCollege(colName);
+    setTargetCollegeLocal(colName);
+    setTrendCollege(colName);
   };
 
   if (!isClient) {
@@ -195,11 +296,13 @@ export default function StandingViewClient() {
 
       {/* 3. Course Picker Section */}
       <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
-        <div className="max-w-xl">
+        <div className="max-w-2xl">
           <CoursePicker
             courses={coursesList}
             selectedCourseId={selectedCourseId}
-            onSelectCourse={(id) => setSelectedCourseId(id)}
+            onSelectCourse={handleSelectCourse}
+            selectedStream={selectedStream}
+            onSelectStream={(st) => setSelectedStream(st)}
           />
         </div>
       </div>

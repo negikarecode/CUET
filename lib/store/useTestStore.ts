@@ -102,7 +102,13 @@ export const useTestStore = create<TestStoreState>()(
       selectedStream: "science",
 
       setSelectedStream: (stream: StreamType) => {
-        set({ selectedStream: stream });
+        set((state) => ({
+          selectedStream: stream,
+          user: {
+            ...state.user,
+            preferredStream: stream,
+          },
+        }));
       },
 
       incrementStreak: () => {

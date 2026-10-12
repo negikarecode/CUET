@@ -5,6 +5,9 @@ import {
   evaluateChanceBand,
   computeDreamCollegeGap,
   UserSubjectPerformance,
+  resolveTargetCollegeMatch,
+  matchCourseToId,
+  CANONICAL_COURSES_MAP,
 } from "../lib/standing-engine";
 import { STANDING_CONFIG } from "../lib/config/standingConfig";
 import { RecordedTestAttempt, RecordedQuestionAttempt } from "../types";
@@ -533,6 +536,67 @@ async function runStandingTests() {
       `Narrative Generation: Generated clear 'what it would take' narrative (${dreamGap.summaryMessage})`
     );
   }
+
+  console.log();
+
+  // -------------------------------------------------------------------------
+  // SUITE 8: Dream College Resolution & Course Stream Auto-Selection
+  // -------------------------------------------------------------------------
+  console.log("SUITE 8: Dream College Resolution & Course Stream Auto-Selection");
+
+  // College Acronyms and variations resolve to canonical official college name
+  assert(
+    resolveTargetCollegeMatch("SRCC") === "Shri Ram College of Commerce",
+    `College Matcher: SRCC resolves to Shri Ram College of Commerce (Found: ${resolveTargetCollegeMatch("SRCC")})`
+  );
+  assert(
+    resolveTargetCollegeMatch("Shri Ram College of Commerce (SRCC)") === "Shri Ram College of Commerce",
+    `College Matcher: Full parenthetical resolves to canonical (Found: ${resolveTargetCollegeMatch("Shri Ram College of Commerce (SRCC)")})`
+  );
+  assert(
+    resolveTargetCollegeMatch("St. Stephen's College") === "St. Stephen's College",
+    `College Matcher: St. Stephen's exact match (Found: ${resolveTargetCollegeMatch("St. Stephen's College")})`
+  );
+  assert(
+    resolveTargetCollegeMatch("St. Stephens") === "St. Stephen's College",
+    `College Matcher: St. Stephens normalized match (Found: ${resolveTargetCollegeMatch("St. Stephens")})`
+  );
+  assert(
+    resolveTargetCollegeMatch("Miranda House (Delhi University)") === "Miranda House (W)",
+    `College Matcher: Miranda House matches Miranda House (W) (Found: ${resolveTargetCollegeMatch("Miranda House (Delhi University)")})`
+  );
+  assert(
+    resolveTargetCollegeMatch("Lady Shri Ram College (LSR)") === "Lady Shri Ram College for Women (W)",
+    `College Matcher: LSR acronym match (Found: ${resolveTargetCollegeMatch("Lady Shri Ram College (LSR)")})`
+  );
+  assert(
+    resolveTargetCollegeMatch("Hindu College (Delhi University)") === "Hindu College",
+    `College Matcher: Hindu College match (Found: ${resolveTargetCollegeMatch("Hindu College (Delhi University)")})`
+  );
+
+  // Course matching
+  assert(
+    matchCourseToId("B.Com (Hons)") === "bcom_hons",
+    `Course Matcher: B.Com (Hons) matches bcom_hons (Found: ${matchCourseToId("B.Com (Hons)")})`
+  );
+  assert(
+    matchCourseToId("B.Sc (Hons) Physics") === "bsc_hons_physics",
+    `Course Matcher: B.Sc Physics matches bsc_hons_physics (Found: ${matchCourseToId("B.Sc (Hons) Physics")})`
+  );
+
+  // Stream mapping verification
+  assert(
+    CANONICAL_COURSES_MAP["bcom_hons"]?.stream === "commerce",
+    "Stream Mapping: bcom_hons is in commerce stream"
+  );
+  assert(
+    CANONICAL_COURSES_MAP["bsc_hons_physics"]?.stream === "science",
+    "Stream Mapping: bsc_hons_physics is in science stream"
+  );
+  assert(
+    CANONICAL_COURSES_MAP["ba_hons_history"]?.stream === "humanities",
+    "Stream Mapping: ba_hons_history is in humanities stream"
+  );
 
   console.log();
   console.log("===============================================================");
