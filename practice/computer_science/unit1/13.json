@@ -3,1180 +3,1180 @@
     "questionNumber": 1,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q01",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "During an in-depth examination of Section A: Common Computing Concepts (Computer Science), an analyst observes the behavior of Exception and File Handling in Python. Which of the following best describes the principal operational rule governing this scenario?",
+    "topic": "Entity Integrity Rule",
+    "questionText": "What does the 'Entity Integrity Rule' dictate in relational databases?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It establishes the fundamental standard that maintains structural coherence and predictable dynamics in Exception and File Handling in Python.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "All table names must be in uppercase letters",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "It temporarily suspends all governing rules of Section A: Common Computing Concepts without causal mechanism.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "text": "No component of a Primary Key can be NULL, ensuring every entity instance is distinctly identifiable",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Entity Integrity Rule."
       },
       {
         "id": "C",
-        "text": "It operates solely when ambient boundary conditions are entirely non-existent.",
+        "text": "Passwords must be changed every 30 days",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "D",
-        "text": "It produces indeterminate outcomes that contradict standard Computer Science theory.",
+        "text": "Every table must have at least 100 rows",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option A is the accurate conclusion.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Entity Integrity Rule):\nNo component of a Primary Key can be NULL, ensuring every entity instance is distinctly identifiable\n\nDetailed Analysis:\nEntity integrity dictates that primary keys cannot contain NULL values, guaranteeing unambiguous entity identification.\nHence, Option B is correct.\n\nTherefore, option (B) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option A.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option A is the accurate conclusion."
+      "quick": "Correct answer is option (B).",
+      "concept": "Section A: Common Computing Concepts: Entity Integrity Rule.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Entity Integrity Rule):\nNo component of a Primary Key can be NULL, ensuring every entity instance is distinctly identifiable\n\nDetailed Analysis:\nEntity integrity dictates that primary keys cannot contain NULL values, guaranteeing unambiguous entity identification.\nHence, Option B is correct.\n\nTherefore, option (B) is the correct answer."
     },
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Entity Integrity Rule",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Entity Integrity Rule",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 2,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q02",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "During an in-depth examination of Section A: Common Computing Concepts (Computer Science), an analyst observes the behavior of Exception and File Handling in Python. Which of the following best describes the principal operational rule governing this scenario?",
+    "topic": "Read/Write Binary Mode 'rb+'",
+    "questionText": "Read the following case study on binary file operations in a library system and answer the questions that follow:\n\nAn automated library management system maintains catalog records in a binary file 'books.dat'. Each book entry is stored as a list: [BookId, Title, Author, Price, Status], where Status is 'Available' or 'Issued'. The software developer writes two primary routines:\n1. issue_book(target_id): Opens 'books.dat' in 'rb+' mode. Inside a while True loop, it reads records using pickle.load(f). Upon finding a record where record[0] == target_id and record[4] == 'Available', it updates record[4] = 'Issued'. To overwrite the updated record in place, the developer calculates the byte offset using f.tell(), rewinds the pointer using f.seek(), and overwrites the record using pickle.dump(record, f).\n2. Exception Handling: The routine wraps the read loop inside a try block and intercepts EOFError when all records have been inspected.\n\nQuestion: Why did the developer open 'books.dat' in 'rb+' mode instead of 'rb' or 'wb'?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It establishes the fundamental standard that maintains structural coherence and predictable dynamics in Exception and File Handling in Python.",
+        "text": "'rb+' encrypts the file automatically",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "It temporarily suspends all governing rules of Section A: Common Computing Concepts without causal mechanism.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "'rb+' makes the file read-only",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "It operates solely when ambient boundary conditions are entirely non-existent.",
+        "text": "'rb+' deletes previous books",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       },
       {
         "id": "D",
-        "text": "It produces indeterminate outcomes that contradict standard Computer Science theory.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "text": "'rb+' permits reading and writing without truncating existing content",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Read/Write Binary Mode 'rb+'."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option B is the accurate conclusion.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Read/Write Binary Mode 'rb+'):\n'rb+' permits reading and writing without truncating existing content\n\nDetailed Analysis:\n'rb+' opens a file for both reading and writing; 'wb' truncates the file, and 'rb' does not permit writing.\nHence, Option D is correct.\n\nTherefore, option (D) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option B.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option B is the accurate conclusion."
+      "quick": "Correct answer is option (D).",
+      "concept": "Section A: Common Computing Concepts: Read/Write Binary Mode 'rb+'.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Read/Write Binary Mode 'rb+'):\n'rb+' permits reading and writing without truncating existing content\n\nDetailed Analysis:\n'rb+' opens a file for both reading and writing; 'wb' truncates the file, and 'rb' does not permit writing.\nHence, Option D is correct.\n\nTherefore, option (D) is the correct answer."
     },
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Read/Write Binary Mode 'rb+'",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Read/Write Binary Mode 'rb+'",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 3,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q03",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "During an in-depth examination of Section A: Common Computing Concepts (Computer Science), an analyst observes the behavior of Exception and File Handling in Python. Which of the following best describes the principal operational rule governing this scenario?",
+    "topic": "Result of fetchone() When No Rows Match",
+    "questionText": "If a query matches zero rows, what does cur.fetchone() return immediately?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It establishes the fundamental standard that maintains structural coherence and predictable dynamics in Exception and File Handling in Python.",
+        "text": "Raises an IndexError",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "It temporarily suspends all governing rules of Section A: Common Computing Concepts without causal mechanism.",
+        "text": "An empty tuple ()",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "It operates solely when ambient boundary conditions are entirely non-existent.",
+        "text": "None",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Result of fetchone() When No Rows Match."
       },
       {
         "id": "D",
-        "text": "It produces indeterminate outcomes that contradict standard Computer Science theory.",
+        "text": "An empty list []",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option C is the accurate conclusion.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Result of fetchone() When No Rows Match):\nNone\n\nDetailed Analysis:\nWhen no rows match the query criteria, fetchone() returns None immediately.\nHence, Option C is correct.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option C.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option C is the accurate conclusion."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: Result of fetchone() When No Rows Match.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Result of fetchone() When No Rows Match):\nNone\n\nDetailed Analysis:\nWhen no rows match the query criteria, fetchone() returns None immediately.\nHence, Option C is correct.\n\nTherefore, option (C) is the correct answer."
     },
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Result of fetchone() When No Rows Match",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Result of fetchone() When No Rows Match",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 4,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q04",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "During an in-depth examination of Section A: Common Computing Concepts (Computer Science), an analyst observes the behavior of Exception and File Handling in Python. Which of the following best describes the principal operational rule governing this scenario?",
+    "topic": "Optimal Topology Selection",
+    "questionText": "Read the following networking infrastructure case study and answer the questions that follow:\n\nGlobal Knowledge University is establishing a new campus comprising four main building blocks:\n- Admin Block (50 computers)\n- Science Block (140 computers)\n- Humanities Block (40 computers)\n- Central Library (30 computers)\n\nDistances between blocks are as follows:\n- Admin to Science: 120 metres\n- Admin to Humanities: 60 metres\n- Admin to Library: 80 metres\n- Science to Humanities: 170 metres\n- Science to Library: 150 metres\n- Humanities to Library: 90 metres\n\nThe network engineering committee must select the optimal location for the central server, the most suitable network topology, necessary transmission media, and hardware devices to ensure reliable high-speed connectivity.\n\nQuestion: Which network topology is most cost-effective and structurally robust for interconnecting the blocks?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It establishes the fundamental standard that maintains structural coherence and predictable dynamics in Exception and File Handling in Python.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "text": "Star or Tree topology centered at the Science Block",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Optimal Topology Selection."
       },
       {
         "id": "B",
-        "text": "It temporarily suspends all governing rules of Section A: Common Computing Concepts without causal mechanism.",
+        "text": "Bus topology along a single 500-metre cable",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "C",
-        "text": "It operates solely when ambient boundary conditions are entirely non-existent.",
+        "text": "Ring topology connecting all blocks in a loop",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "D",
-        "text": "It produces indeterminate outcomes that contradict standard Computer Science theory.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "Full Mesh topology connecting every block to all others",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option D is the accurate conclusion.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Optimal Topology Selection):\nStar or Tree topology centered at the Science Block\n\nDetailed Analysis:\nStar / Tree topology centered at the main server block provides efficient routing, fault isolation, and minimal cabling.\nHence, Option C is correct.\n\nTherefore, option (A) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option D.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option D is the accurate conclusion."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section A: Common Computing Concepts: Optimal Topology Selection.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Optimal Topology Selection):\nStar or Tree topology centered at the Science Block\n\nDetailed Analysis:\nStar / Tree topology centered at the main server block provides efficient routing, fault isolation, and minimal cabling.\nHence, Option C is correct.\n\nTherefore, option (A) is the correct answer."
     },
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Optimal Topology Selection",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Optimal Topology Selection",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 5,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q05",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "Consider the following two statements concerning Exception and File Handling in Python in Section A: Common Computing Concepts (Computer Science):\n\nStatement I: The primary parameter of Exception and File Handling in Python exhibits predictable proportionality under standard benchmark specifications.\nStatement II: Systemic variations in Exception and File Handling in Python remain bounded by the foundational equilibrium laws of Section A: Common Computing Concepts.\n\nIn light of the above statements, choose the correct answer from the options given below:",
+    "topic": "Extracting Column Headers from Cursor",
+    "questionText": "Given D = {'roll': 101, 'name': 'Aman'}, which statement raises a 'KeyError'?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both Statement I and Statement II are correct.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "print(D.get('marks'))",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Both Statement I and Statement II are incorrect.",
+        "text": "print(D['name'])",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "Statement I is correct but Statement II is incorrect.",
+        "text": "print(D['roll'])",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       },
       {
         "id": "D",
-        "text": "Statement I is incorrect but Statement II is correct.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "text": "print(D['marks'])",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for KeyError Trigger Condition."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\n1. Statement I is valid: Under standard curriculum specifications for Computer Science, Exception and File Handling in Python maintains predictable proportionality.\n2. Statement II is valid: Governing laws of Section A: Common Computing Concepts establish that systemic responses remain strictly bounded.\n3. Conclusion: Both statements are evaluated as correct, confirming option A.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nFor KeyError Trigger Condition (Section A: Common Computing Concepts):\nAccessing a non-existent key via D['marks'] raises KeyError. Note that D.get('marks') safely returns None.\nHence, Option B is correct.\n\nTherefore, option (D) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option A.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\n1. Statement I is valid: Under standard curriculum specifications for Computer Science, Exception and File Handling in Python maintains predictable proportionality.\n2. Statement II is valid: Governing laws of Section A: Common Computing Concepts establish that systemic responses remain strictly bounded.\n3. Conclusion: Both statements are evaluated as correct, confirming option A."
+      "quick": "Correct answer is option (D).",
+      "concept": "Section A: Common Computing Concepts: Extracting Column Headers from Cursor.",
+      "detailed": "Detailed Solution:\nFor KeyError Trigger Condition (Section A: Common Computing Concepts):\nAccessing a non-existent key via D['marks'] raises KeyError. Note that D.get('marks') safely returns None.\nHence, Option B is correct.\n\nTherefore, option (D) is the correct answer."
     },
-    "questionType": "statement_evaluation",
+    "questionType": "application",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Extracting Column Headers from Cursor",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Extracting Column Headers from Cursor",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 6,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q06",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "Consider the following two statements concerning Exception and File Handling in Python in Section A: Common Computing Concepts (Computer Science):\n\nStatement I: The primary parameter of Exception and File Handling in Python exhibits predictable proportionality under standard benchmark specifications.\nStatement II: Systemic variations in Exception and File Handling in Python remain bounded by the foundational equilibrium laws of Section A: Common Computing Concepts.\n\nIn light of the above statements, choose the correct answer from the options given below:",
+    "topic": "Checking Connection Object Type",
+    "questionText": "Read the following case study on binary file operations in a library system and answer the questions that follow:\n\nAn automated library management system maintains catalog records in a binary file 'books.dat'. Each book entry is stored as a list: [BookId, Title, Author, Price, Status], where Status is 'Available' or 'Issued'. The software developer writes two primary routines:\n1. issue_book(target_id): Opens 'books.dat' in 'rb+' mode. Inside a while True loop, it reads records using pickle.load(f). Upon finding a record where record[0] == target_id and record[4] == 'Available', it updates record[4] = 'Issued'. To overwrite the updated record in place, the developer calculates the byte offset using f.tell(), rewinds the pointer using f.seek(), and overwrites the record using pickle.dump(record, f).\n2. Exception Handling: The routine wraps the read loop inside a try block and intercepts EOFError when all records have been inspected.\n\nQuestion: What is the purpose of invoking f.tell() before calling pickle.load() during in-place record updates?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both Statement I and Statement II are correct.",
+        "text": "To count the total number of book entries stored in the binary file",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Both Statement I and Statement II are incorrect.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "To verify that the file stream has reached its end before processing",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "Statement I is correct but Statement II is incorrect.",
-        "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "text": "To determine the current byte offset position of the file pointer before the record",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Byte Pointer Offset Tracking."
       },
       {
         "id": "D",
-        "text": "Statement I is incorrect but Statement II is correct.",
+        "text": "To check the total size of the file on disk in bytes for memory allocation",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\n1. Statement I is valid: Under standard curriculum specifications for Computer Science, Exception and File Handling in Python maintains predictable proportionality.\n2. Statement II is valid: Governing laws of Section A: Common Computing Concepts establish that systemic responses remain strictly bounded.\n3. Conclusion: Both statements are evaluated as correct, confirming option B.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nFor Byte Pointer Offset Tracking (Section A: Common Computing Concepts):\nf.tell() records the byte offset where the record begins so f.seek() can return to that spot to overwrite it.\nHence, Option C is correct.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option B.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\n1. Statement I is valid: Under standard curriculum specifications for Computer Science, Exception and File Handling in Python maintains predictable proportionality.\n2. Statement II is valid: Governing laws of Section A: Common Computing Concepts establish that systemic responses remain strictly bounded.\n3. Conclusion: Both statements are evaluated as correct, confirming option B."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: Checking Connection Object Type.",
+      "detailed": "Detailed Solution:\nFor Byte Pointer Offset Tracking (Section A: Common Computing Concepts):\nf.tell() records the byte offset where the record begins so f.seek() can return to that spot to overwrite it.\nHence, Option C is correct.\n\nTherefore, option (C) is the correct answer."
     },
-    "questionType": "statement_evaluation",
+    "questionType": "application",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Checking Connection Object Type",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Checking Connection Object Type",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 7,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q07",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "Consider the following two statements concerning Exception and File Handling in Python in Section A: Common Computing Concepts (Computer Science):\n\nStatement I: The primary parameter of Exception and File Handling in Python exhibits predictable proportionality under standard benchmark specifications.\nStatement II: Systemic variations in Exception and File Handling in Python remain bounded by the foundational equilibrium laws of Section A: Common Computing Concepts.\n\nIn light of the above statements, choose the correct answer from the options given below:",
+    "topic": "SQL Aggregate Functions and Behaviors with NULLs",
+    "questionText": "Read the following database design case study and answer the questions that follow:\n\nThe Apex Public School database administrator created two relational tables in MySQL to track student enrollments and fee payments:\n1. Table STUDENT (AdmNo INT PRIMARY KEY, SName VARCHAR(30), Stream VARCHAR(15), Class INT);\n2. Table FEES (RcptNo INT PRIMARY KEY, AdmNo INT, FeeAmount DECIMAL(8,2), FeeDate DATE, FOREIGN KEY (AdmNo) REFERENCES STUDENT(AdmNo));\n\nThe administrator enforces Referential Integrity through the Foreign Key on AdmNo. A query is written to display the student name, stream, and fee amount paid by joining STUDENT and FEES on STUDENT.AdmNo = FEES.AdmNo. Furthermore, the school principal requests an executive summary displaying the total fee collected per stream, filtering for streams where total collections exceed 100,000, sorted in descending order of total collection.\n\nQuestion: What constraint in table FEES enforces that fee records can only be created for existing students?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both Statement I and Statement II are correct.",
+        "text": "NOT NULL on Stream",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Both Statement I and Statement II are incorrect.",
+        "text": "PRIMARY KEY (RcptNo)",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "Statement I is correct but Statement II is incorrect.",
+        "text": "FOREIGN KEY (AdmNo) REFERENCES STUDENT(AdmNo)",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Referential Integrity Enforcement."
       },
       {
         "id": "D",
-        "text": "Statement I is incorrect but Statement II is correct.",
+        "text": "CHECK (FeeAmount > 0)",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\n1. Statement I is valid: Under standard curriculum specifications for Computer Science, Exception and File Handling in Python maintains predictable proportionality.\n2. Statement II is valid: Governing laws of Section A: Common Computing Concepts establish that systemic responses remain strictly bounded.\n3. Conclusion: Both statements are evaluated as correct, confirming option C.",
+    "detailedSolution": "Detailed Solution:\nFor Referential Integrity Enforcement (Section A: Common Computing Concepts):\nThe FOREIGN KEY constraint links AdmNo in FEES to the primary key AdmNo in STUDENT, preserving referential integrity.\nHence, Option A is correct.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option C.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\n1. Statement I is valid: Under standard curriculum specifications for Computer Science, Exception and File Handling in Python maintains predictable proportionality.\n2. Statement II is valid: Governing laws of Section A: Common Computing Concepts establish that systemic responses remain strictly bounded.\n3. Conclusion: Both statements are evaluated as correct, confirming option C."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: SQL Aggregate Functions and Behaviors with NULLs.",
+      "detailed": "Detailed Solution:\nFor Referential Integrity Enforcement (Section A: Common Computing Concepts):\nThe FOREIGN KEY constraint links AdmNo in FEES to the primary key AdmNo in STUDENT, preserving referential integrity.\nHence, Option A is correct.\n\nTherefore, option (C) is the correct answer."
     },
-    "questionType": "statement_evaluation",
+    "questionType": "application",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: SQL Aggregate Functions and Behaviors with NULLs",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "SQL Aggregate Functions and Behaviors with NULLs",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 8,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q08",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "Given below are two statements, one labeled as Assertion (A) and the other labeled as Reason (R) regarding Exception and File Handling in Python in CUET UG Computer Science (Unit 1: Section A: Common Computing Concepts):\n\nAssertion (A): The normative mechanism governing Exception and File Handling in Python under standard operational conditions ensures consistent systemic outcomes.\nReason (R): Under the theoretical framework of Section A: Common Computing Concepts, structural equilibrium is preserved when governing boundary parameters remain balanced.\n\nIn light of the above statements, choose the most appropriate answer from the options given below:",
+    "topic": "SQL Pattern Matching with LIKE Operator",
+    "questionText": "Read the following relational database and transaction processing case study and answer the questions that follow:\n\nA core banking engine processes fund transfers between checking accounts in a MySQL database. A balance transfer of 10,000 from Account 101 to Account 102 involves two distinct database operations:\n1. UPDATE ACCOUNT SET Balance = Balance - 10000 WHERE AccNo = 101;\n2. UPDATE ACCOUNT SET Balance = Balance + 10000 WHERE AccNo = 102;\n\nTo guarantee data consistency, the transaction is managed according to ACID properties:\n- Atomicity: Either both updates succeed completely or neither update takes effect (all-or-nothing).\n- Consistency: Account balances must satisfy domain rules (e.g. Balance >= MinBalance) before and after execution.\n- Isolation: Concurrent transactions operating simultaneously do not read intermediate uncommitted balances.\n- Durability: Once con.commit() executes, balance changes persist permanently on non-volatile disk storage even if a power failure occurs.\n\nQuestion: What does the 'Isolation' property prevent during simultaneous banking transactions?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
+        "text": "Guarantees that partial updates are reverted if the system experiences an unexpected power failure",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A).",
-        "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "text": "Prevents transactions from reading data that has been written but not yet committed by concurrent transactions",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for ACID Isolation Guarantee."
       },
       {
         "id": "C",
-        "text": "(A) is true but (R) is false.",
+        "text": "Ensures that account balances always remain above the minimum threshold required by business rules",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "D",
-        "text": "(A) is false but (R) is true.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "Certifies that once a transaction is committed, the data changes are permanent and non-erasable",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\n1. Analyzing Assertion (A): In Computer Science, Exception and File Handling in Python operates under established normative principles that yield consistent outcomes when valid boundary conditions hold.\n2. Analyzing Reason (R): The core principle of Section A: Common Computing Concepts specifies that equilibrium and stability depend directly on these governing parameters.\n3. Rational Connection: Because (R) provides the underlying conceptual cause that justifies why (A) holds true, the correct answer is D.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor ACID Isolation Guarantee (Section A: Common Computing Concepts):\nIsolation ensures concurrently executing transactions operate independently without seeing incomplete intermediate states.\nHence, Option C is correct.\n\nTherefore, option (B) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option D.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\n1. Analyzing Assertion (A): In Computer Science, Exception and File Handling in Python operates under established normative principles that yield consistent outcomes when valid boundary conditions hold.\n2. Analyzing Reason (R): The core principle of Section A: Common Computing Concepts specifies that equilibrium and stability depend directly on these governing parameters.\n3. Rational Connection: Because (R) provides the underlying conceptual cause that justifies why (A) holds true, the correct answer is D."
+      "quick": "Correct answer is option (B).",
+      "concept": "Section A: Common Computing Concepts: SQL Pattern Matching with LIKE Operator.",
+      "detailed": "Detailed Solution:\nFor ACID Isolation Guarantee (Section A: Common Computing Concepts):\nIsolation ensures concurrently executing transactions operate independently without seeing incomplete intermediate states.\nHence, Option C is correct.\n\nTherefore, option (B) is the correct answer."
     },
-    "questionType": "assertion_reason",
+    "questionType": "application",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: SQL Pattern Matching with LIKE Operator",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "SQL Pattern Matching with LIKE Operator",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 9,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q09",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "Given below are two statements, one labeled as Assertion (A) and the other labeled as Reason (R) regarding Exception and File Handling in Python in CUET UG Computer Science (Unit 1: Section A: Common Computing Concepts):\n\nAssertion (A): The normative mechanism governing Exception and File Handling in Python under standard operational conditions ensures consistent systemic outcomes.\nReason (R): Under the theoretical framework of Section A: Common Computing Concepts, structural equilibrium is preserved when governing boundary parameters remain balanced.\n\nIn light of the above statements, choose the most appropriate answer from the options given below:",
+    "topic": "Complete SQL Query Processing Sequence with GROUP BY and HAVING",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): A Foreign Key in a child table references the Primary Key (or unique key) of a parent table to enforce Referential Integrity.\nReason (R): A Foreign Key constraint prevents inserting values into the child table that do not exist in the referenced column of the parent table.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Confusion Trap",
+        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
       },
       {
         "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A).",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Causality Blindspot",
+        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
       },
       {
         "id": "C",
-        "text": "(A) is true but (R) is false.",
-        "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "text": "(A) is true but (R) is false",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Assertion is true but Reason contains a factual error."
       },
       {
         "id": "D",
-        "text": "(A) is false but (R) is true.",
+        "text": "(A) is false but (R) is true",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Assertion Acceptance Trap",
+        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\n1. Analyzing Assertion (A): In Computer Science, Exception and File Handling in Python operates under established normative principles that yield consistent outcomes when valid boundary conditions hold.\n2. Analyzing Reason (R): The core principle of Section A: Common Computing Concepts specifies that equilibrium and stability depend directly on these governing parameters.\n3. Rational Connection: Because (R) provides the underlying conceptual cause that justifies why (A) holds true, the correct answer is A.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Foreign keys preserve relational integrity by disallowing orphaned foreign references.\nHence, Option B is correct.\nHence, option (C) is the correct choice.",
     "solution": {
-      "quick": "Correct answer is option A.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\n1. Analyzing Assertion (A): In Computer Science, Exception and File Handling in Python operates under established normative principles that yield consistent outcomes when valid boundary conditions hold.\n2. Analyzing Reason (R): The core principle of Section A: Common Computing Concepts specifies that equilibrium and stability depend directly on these governing parameters.\n3. Rational Connection: Because (R) provides the underlying conceptual cause that justifies why (A) holds true, the correct answer is A."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: Complete SQL Query Processing Sequence with GROUP BY and HAVING.",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Foreign keys preserve relational integrity by disallowing orphaned foreign references.\nHence, Option B is correct.\nHence, option (C) is the correct choice."
     },
-    "questionType": "assertion_reason",
+    "questionType": "assertion-reasoning",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Complete SQL Query Processing Sequence with GROUP BY and HAVING",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Complete SQL Query Processing Sequence with GROUP BY and HAVING",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 10,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q10",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "Given below are two statements, one labeled as Assertion (A) and the other labeled as Reason (R) regarding Exception and File Handling in Python in CUET UG Computer Science (Unit 1: Section A: Common Computing Concepts):\n\nAssertion (A): The normative mechanism governing Exception and File Handling in Python under standard operational conditions ensures consistent systemic outcomes.\nReason (R): Under the theoretical framework of Section A: Common Computing Concepts, structural equilibrium is preserved when governing boundary parameters remain balanced.\n\nIn light of the above statements, choose the most appropriate answer from the options given below:",
+    "topic": "Binary vs Text Line Endings",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): When a user types 'www.example.com' into a web browser, the Domain Name System (DNS) resolves the human-readable domain name into an IP address.\nReason (R): Routers and network switches on the internet route packets using numerical IP addresses, not alphanumeric domain names.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
-        "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Validates both statements and confirms causal explanation."
       },
       {
         "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A).",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Blindspot",
+        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
       },
       {
         "id": "C",
-        "text": "(A) is true but (R) is false.",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Reason Acceptance Trap",
+        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
       },
       {
         "id": "D",
-        "text": "(A) is false but (R) is true.",
+        "text": "(A) is false but (R) is true",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Assertion Acceptance Trap",
+        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\n1. Analyzing Assertion (A): In Computer Science, Exception and File Handling in Python operates under established normative principles that yield consistent outcomes when valid boundary conditions hold.\n2. Analyzing Reason (R): The core principle of Section A: Common Computing Concepts specifies that equilibrium and stability depend directly on these governing parameters.\n3. Rational Connection: Because (R) provides the underlying conceptual cause that justifies why (A) holds true, the correct answer is B.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). DNS acts as the phonebook of the internet, mapping names to routable IP addresses.\nHence, Option C is correct.\nHence, option (A) is the correct choice.",
     "solution": {
-      "quick": "Correct answer is option B.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\n1. Analyzing Assertion (A): In Computer Science, Exception and File Handling in Python operates under established normative principles that yield consistent outcomes when valid boundary conditions hold.\n2. Analyzing Reason (R): The core principle of Section A: Common Computing Concepts specifies that equilibrium and stability depend directly on these governing parameters.\n3. Rational Connection: Because (R) provides the underlying conceptual cause that justifies why (A) holds true, the correct answer is B."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section A: Common Computing Concepts: Binary vs Text Line Endings.",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). DNS acts as the phonebook of the internet, mapping names to routable IP addresses.\nHence, Option C is correct.\nHence, option (A) is the correct choice."
     },
-    "questionType": "assertion_reason",
+    "questionType": "assertion-reasoning",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Binary vs Text Line Endings",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Binary vs Text Line Endings",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 11,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q11",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "Match List-I with List-II in the context of Section A: Common Computing Concepts (Exception and File Handling in Python):\n\nList-I (Conceptual Component)\n(A) Core Principle of Exception and File Handling in Python\n(B) Functional Mechanism\n(C) Limiting Boundary Parameter\n(D) Standard Application Metric\n\nList-II (Defining Property)\n(I) Determines critical operational threshold\n(II) Coordinates systematic state transitions\n(III) Governs fundamental relational behavior\n(IV) Quantifies baseline output calibration\n\nChoose the correct answer from the options given below:",
+    "topic": "Private IP Address Characteristic",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Placing file closing statements (file.close()) inside a 'finally' block is considered standard programming practice.\nReason (R): The 'finally' clause guarantees execution even if an unexpected exception occurs inside the 'try' block, preventing file handle leaks.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "(A)-(III), (B)-(II), (C)-(I), (D)-(IV)",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Causality Confusion Trap",
+        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
       },
       {
         "id": "B",
-        "text": "(A)-(I), (B)-(III), (C)-(IV), (D)-(II)",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Causality Blindspot",
+        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
       },
       {
         "id": "C",
-        "text": "(A)-(IV), (B)-(I), (C)-(II), (D)-(III)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reason Acceptance Trap",
+        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
       },
       {
         "id": "D",
-        "text": "(A)-(II), (B)-(IV), (C)-(III), (D)-(I)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "text": "(A) is false but (R) is true",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Assertion is false while Reason represents an accurate principle."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\n- (A) matches with (III): The core principle directly governs fundamental relational behavior in Exception and File Handling in Python.\n- (B) matches with (II): The functional mechanism coordinates systematic state transitions.\n- (C) matches with (I): Limiting boundary parameter determines critical operational thresholds.\n- (D) matches with (IV): The application metric quantifies baseline output calibration.\nTherefore, the accurate matching combination is represented by option C.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). 'finally' guarantees clean teardown of external resources like files and network sockets.\nHence, Option D is correct.\nHence, option (D) is the correct choice.",
     "solution": {
-      "quick": "Correct answer is option C.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\n- (A) matches with (III): The core principle directly governs fundamental relational behavior in Exception and File Handling in Python.\n- (B) matches with (II): The functional mechanism coordinates systematic state transitions.\n- (C) matches with (I): Limiting boundary parameter determines critical operational thresholds.\n- (D) matches with (IV): The application metric quantifies baseline output calibration.\nTherefore, the accurate matching combination is represented by option C."
+      "quick": "Correct answer is option (D).",
+      "concept": "Section A: Common Computing Concepts: Private IP Address Characteristic.",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). 'finally' guarantees clean teardown of external resources like files and network sockets.\nHence, Option D is correct.\nHence, option (D) is the correct choice."
     },
-    "questionType": "matching",
+    "questionType": "assertion-reasoning",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Private IP Address Characteristic",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Private IP Address Characteristic",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 12,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q12",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "Match List-I with List-II in the context of Section A: Common Computing Concepts (Exception and File Handling in Python):\n\nList-I (Conceptual Component)\n(A) Core Principle of Exception and File Handling in Python\n(B) Functional Mechanism\n(C) Limiting Boundary Parameter\n(D) Standard Application Metric\n\nList-II (Defining Property)\n(I) Determines critical operational threshold\n(II) Coordinates systematic state transitions\n(III) Governs fundamental relational behavior\n(IV) Quantifies baseline output calibration\n\nChoose the correct answer from the options given below:",
+    "topic": "Full Outer Join Emulation in MySQL",
+    "questionText": "Given below are two statements:\nStatement I: A Network Hub is a broadcast device (operates at Physical Layer) that retransmits incoming packets to all connected ports indiscriminately.\nStatement II: A Network Switch is an intelligent unicast device (operates at Data Link Layer) that inspects MAC addresses to direct frames specifically to the destination port.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "(A)-(III), (B)-(II), (C)-(I), (D)-(IV)",
+        "text": "Both Statement I and Statement II are correct",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Dual Acceptance Trap",
+        "mistakeAnalysis": "Erroneously assumed both statements were valid."
       },
       {
         "id": "B",
-        "text": "(A)-(I), (B)-(III), (C)-(IV), (D)-(II)",
-        "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies that both statements contain factual errors."
       },
       {
         "id": "C",
-        "text": "(A)-(IV), (B)-(I), (C)-(II), (D)-(III)",
+        "text": "Statement I is correct but Statement II is incorrect",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Statement II Blindspot",
+        "mistakeAnalysis": "Failed to recognize the fallacy in Statement II."
       },
       {
         "id": "D",
-        "text": "(A)-(II), (B)-(IV), (C)-(III), (D)-(I)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Statement I Blindspot",
+        "mistakeAnalysis": "Failed to recognize the fallacy in Statement I."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\n- (A) matches with (III): The core principle directly governs fundamental relational behavior in Exception and File Handling in Python.\n- (B) matches with (II): The functional mechanism coordinates systematic state transitions.\n- (C) matches with (I): Limiting boundary parameter determines critical operational thresholds.\n- (D) matches with (IV): The application metric quantifies baseline output calibration.\nTherefore, the accurate matching combination is represented by option D.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. Hubs broadcast to all ports causing collisions; switches learn MAC addresses and forward unicast frames.\nHence, Option D is correct.\nHence, option (B) is correct.",
     "solution": {
-      "quick": "Correct answer is option D.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\n- (A) matches with (III): The core principle directly governs fundamental relational behavior in Exception and File Handling in Python.\n- (B) matches with (II): The functional mechanism coordinates systematic state transitions.\n- (C) matches with (I): Limiting boundary parameter determines critical operational thresholds.\n- (D) matches with (IV): The application metric quantifies baseline output calibration.\nTherefore, the accurate matching combination is represented by option D."
+      "quick": "Correct answer is option (B).",
+      "concept": "Section A: Common Computing Concepts: Full Outer Join Emulation in MySQL.",
+      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. Hubs broadcast to all ports causing collisions; switches learn MAC addresses and forward unicast frames.\nHence, Option D is correct.\nHence, option (B) is correct."
     },
-    "questionType": "matching",
+    "questionType": "statement-evaluation",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Full Outer Join Emulation in MySQL",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Full Outer Join Emulation in MySQL",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 13,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q13",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "Match List-I with List-II in the context of Section A: Common Computing Concepts (Exception and File Handling in Python):\n\nList-I (Conceptual Component)\n(A) Core Principle of Exception and File Handling in Python\n(B) Functional Mechanism\n(C) Limiting Boundary Parameter\n(D) Standard Application Metric\n\nList-II (Defining Property)\n(I) Determines critical operational threshold\n(II) Coordinates systematic state transitions\n(III) Governs fundamental relational behavior\n(IV) Quantifies baseline output calibration\n\nChoose the correct answer from the options given below:",
+    "topic": "Reading Specific Columns by Index",
+    "questionText": "Given below are two statements:\nStatement I: The DROP TABLE command deletes the table data along with the entire structural schema definition from the database.\nStatement II: The DELETE FROM command removes tuples from the table while retaining the table structure for future insertions.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "(A)-(III), (B)-(II), (C)-(I), (D)-(IV)",
+        "text": "Both Statement I and Statement II are correct",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "mistakeAnalysis": "Correct answer. Validates both propositions as sound NCERT facts."
       },
       {
         "id": "B",
-        "text": "(A)-(I), (B)-(III), (C)-(IV), (D)-(II)",
+        "text": "Both Statement I and Statement II are incorrect",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Dual Rejection Error",
+        "mistakeAnalysis": "Rejected valid scientific statements erroneously."
       },
       {
         "id": "C",
-        "text": "(A)-(IV), (B)-(I), (C)-(II), (D)-(III)",
+        "text": "Statement I is correct but Statement II is incorrect",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Statement II Blindspot",
+        "mistakeAnalysis": "Failed to recognize the fallacy in Statement II."
       },
       {
         "id": "D",
-        "text": "(A)-(II), (B)-(IV), (C)-(III), (D)-(I)",
+        "text": "Statement I is incorrect but Statement II is correct",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Statement I Blindspot",
+        "mistakeAnalysis": "Failed to recognize the fallacy in Statement I."
       }
     ],
     "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\n- (A) matches with (III): The core principle directly governs fundamental relational behavior in Exception and File Handling in Python.\n- (B) matches with (II): The functional mechanism coordinates systematic state transitions.\n- (C) matches with (I): Limiting boundary parameter determines critical operational thresholds.\n- (D) matches with (IV): The application metric quantifies baseline output calibration.\nTherefore, the accurate matching combination is represented by option A.",
+    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. DROP removes structure and data; DELETE removes rows while preserving table schema.\nHence, Option D is correct.\nHence, option (A) is correct.",
     "solution": {
-      "quick": "Correct answer is option A.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\n- (A) matches with (III): The core principle directly governs fundamental relational behavior in Exception and File Handling in Python.\n- (B) matches with (II): The functional mechanism coordinates systematic state transitions.\n- (C) matches with (I): Limiting boundary parameter determines critical operational thresholds.\n- (D) matches with (IV): The application metric quantifies baseline output calibration.\nTherefore, the accurate matching combination is represented by option A."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section A: Common Computing Concepts: Reading Specific Columns by Index.",
+      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. DROP removes structure and data; DELETE removes rows while preserving table schema.\nHence, Option D is correct.\nHence, option (A) is correct."
     },
-    "questionType": "matching",
+    "questionType": "statement-evaluation",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Reading Specific Columns by Index",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Reading Specific Columns by Index",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 14,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q14",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "In an analytical evaluation of Exception and File Handling in Python within Section A: Common Computing Concepts, if the initial primary variable is scaled by a factor of 26 while all secondary equilibrium conditions are kept constant, how does the resulting output calibrate in Computer Science?",
+    "topic": "COUNT(*) vs COUNT(column_name)",
+    "questionText": "Given below are two statements:\nStatement I: The mysql.connector.connect() function requires parameter arguments including host, user, password, and optionally database.\nStatement II: The is_connected() method of a MySQLConnection object returns a boolean indicating whether the database socket connection remains active.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It increases proportionally by a factor of 26.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Validates both propositions as sound NCERT facts."
       },
       {
         "id": "B",
-        "text": "It remains completely unchanged at unity.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dual Rejection Error",
+        "mistakeAnalysis": "Rejected valid scientific statements erroneously."
       },
       {
         "id": "C",
-        "text": "It decreases inversely by a factor of 52.",
+        "text": "Statement I is correct but Statement II is incorrect",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Statement II Blindspot",
+        "mistakeAnalysis": "Failed to recognize the fallacy in Statement II."
       },
       {
         "id": "D",
-        "text": "It drops abruptly to zero.",
+        "text": "Statement I is incorrect but Statement II is correct",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Statement I Blindspot",
+        "mistakeAnalysis": "Failed to recognize the fallacy in Statement I."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \n1. Let the baseline relationship be denoted by $Y = k \\cdot X$.\n2. When variable $X$ is scaled by a factor of 26 ($X' = 26X$), the resulting output becomes $Y' = k \\cdot (26X) = 26Y$.\n3. Thus, the system responds with proportional scaling by a factor of 26, making option B correct.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. connect() establishes the authenticated session; is_connected() verifies socket health.\nHence, Option A is correct.\nHence, option (A) is correct.",
     "solution": {
-      "quick": "Correct answer is option B.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \n1. Let the baseline relationship be denoted by $Y = k \\cdot X$.\n2. When variable $X$ is scaled by a factor of 26 ($X' = 26X$), the resulting output becomes $Y' = k \\cdot (26X) = 26Y$.\n3. Thus, the system responds with proportional scaling by a factor of 26, making option B correct."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section A: Common Computing Concepts: COUNT(*) vs COUNT(column_name).",
+      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. connect() establishes the authenticated session; is_connected() verifies socket health.\nHence, Option A is correct.\nHence, option (A) is correct."
     },
-    "questionType": "numerical",
+    "questionType": "statement-evaluation",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: COUNT(*) vs COUNT(column_name)",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "COUNT(*) vs COUNT(column_name)",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 15,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q15",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "In an analytical evaluation of Exception and File Handling in Python within Section A: Common Computing Concepts, if the initial primary variable is scaled by a factor of 26 while all secondary equilibrium conditions are kept constant, how does the resulting output calibrate in Computer Science?",
+    "topic": "CSV File Creation and Writing Sequence",
+    "questionText": "Match the application layer protocol in List I with its primary function in List II:\n\nList I:\n(A) HTTP / HTTPS\n(B) FTP (File Transfer Protocol)\n(C) SMTP (Simple Mail Transfer Protocol)\n(D) POP3 / IMAP\n\nList II:\n(I) Transferring hypertext web pages and secure encrypted web transactions across the World Wide Web\n(II) Transferring and managing files between a client and a remote server over TCP/IP\n(III) Pushing and transmitting outgoing electronic mail messages between mail servers\n(IV) Retrieving and downloading incoming emails from a remote mail server to a client email application\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It increases proportionally by a factor of 26.",
+        "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "It remains completely unchanged at unity.",
+        "text": "A-II, B-I, C-III, D-IV",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "It decreases inversely by a factor of 52.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       },
       {
         "id": "D",
-        "text": "It drops abruptly to zero.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \n1. Let the baseline relationship be denoted by $Y = k \\cdot X$.\n2. When variable $X$ is scaled by a factor of 26 ($X' = 26X$), the resulting output becomes $Y' = k \\cdot (26X) = 26Y$.\n3. Thus, the system responds with proportional scaling by a factor of 26, making option C correct.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nHTTP/S transfers web pages; FTP transfers files; SMTP transmits outgoing email; POP3/IMAP retrieves incoming mail.\nHence, Option D is correct.\nHence, option (D) is the correct match.",
     "solution": {
-      "quick": "Correct answer is option C.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \n1. Let the baseline relationship be denoted by $Y = k \\cdot X$.\n2. When variable $X$ is scaled by a factor of 26 ($X' = 26X$), the resulting output becomes $Y' = k \\cdot (26X) = 26Y$.\n3. Thus, the system responds with proportional scaling by a factor of 26, making option C correct."
+      "quick": "Correct answer is option (D).",
+      "concept": "Section A: Common Computing Concepts: CSV File Creation and Writing Sequence.",
+      "detailed": "Detailed Solution:\nHTTP/S transfers web pages; FTP transfers files; SMTP transmits outgoing email; POP3/IMAP retrieves incoming mail.\nHence, Option D is correct.\nHence, option (D) is the correct match."
     },
-    "questionType": "numerical",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "questionType": "match-the-following",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section A: Common Computing Concepts: CSV File Creation and Writing Sequence",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "CSV File Creation and Writing Sequence",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 16,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q16",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "During an in-depth examination of Section A: Common Computing Concepts (Computer Science), an analyst observes the behavior of Exception and File Handling in Python. Which of the following best describes the principal operational rule governing this scenario?",
+    "topic": "Logical Operator Precedence in WHERE",
+    "questionText": "Match the SQL string function on 'Computer' in List I with its evaluated output in List II:\n\nList I:\n(A) SUBSTR('Computer', 1, 4)\n(B) UPPER('Computer')\n(C) INSTR('Computer', 'put')\n(D) RIGHT('Computer', 3)\n\nList II:\n(I) 'Comp'\n(II) 'COMPUTER'\n(III) 4 (1-based index position)\n(IV) 'ter'\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It establishes the fundamental standard that maintains structural coherence and predictable dynamics in Exception and File Handling in Python.",
+        "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "It temporarily suspends all governing rules of Section A: Common Computing Concepts without causal mechanism.",
+        "text": "A-II, B-I, C-III, D-IV",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "It operates solely when ambient boundary conditions are entirely non-existent.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
       },
       {
         "id": "D",
-        "text": "It produces indeterminate outcomes that contradict standard Computer Science theory.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option D is the accurate conclusion.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nSUBSTR extracts substring from pos 1 for len 4 ('Comp'), UPPER converts to uppercase, INSTR finds 1-based position (4), and RIGHT extracts last 3 chars ('ter').\nHence, Option A is correct.\nHence, option (C) is the correct match.",
     "solution": {
-      "quick": "Correct answer is option D.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option D is the accurate conclusion."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: Logical Operator Precedence in WHERE.",
+      "detailed": "Detailed Solution:\nSUBSTR extracts substring from pos 1 for len 4 ('Comp'), UPPER converts to uppercase, INSTR finds 1-based position (4), and RIGHT extracts last 3 chars ('ter').\nHence, Option A is correct.\nHence, option (C) is the correct match."
     },
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "questionType": "match-the-following",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section A: Common Computing Concepts: Logical Operator Precedence in WHERE",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Logical Operator Precedence in WHERE",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 17,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q17",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "During an in-depth examination of Section A: Common Computing Concepts (Computer Science), an analyst observes the behavior of Exception and File Handling in Python. Which of the following best describes the principal operational rule governing this scenario?",
+    "topic": "PAN vs LAN vs MAN vs WAN",
+    "questionText": "Match the parameter concept in List I with its operational rule in List II:\n\nList I:\n(A) Positional Arguments\n(B) Default Arguments\n(C) Keyword Arguments\n(D) global Keyword\n\nList II:\n(I) Arguments matched to parameters strictly based on their physical order in the function call\n(II) Parameters that assume assigned baseline values if omitted in the caller invocation\n(III) Arguments prefixed with parameter names allowing values to be passed in arbitrary order\n(IV) Statement allowing a function to bind and reassign an identifier in the module-level namespace\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It establishes the fundamental standard that maintains structural coherence and predictable dynamics in Exception and File Handling in Python.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "It temporarily suspends all governing rules of Section A: Common Computing Concepts without causal mechanism.",
+        "text": "A-II, B-I, C-III, D-IV",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "It operates solely when ambient boundary conditions are entirely non-existent.",
+        "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       },
       {
         "id": "D",
-        "text": "It produces indeterminate outcomes that contradict standard Computer Science theory.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option A is the accurate conclusion.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nPositional match by order; Default supply fallback values; Keyword match by name; Global binds module-level variables.\nHence, Option C is correct.\nHence, option (D) is the correct match.",
     "solution": {
-      "quick": "Correct answer is option A.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option A is the accurate conclusion."
+      "quick": "Correct answer is option (D).",
+      "concept": "Section A: Common Computing Concepts: PAN vs LAN vs MAN vs WAN.",
+      "detailed": "Detailed Solution:\nPositional match by order; Default supply fallback values; Keyword match by name; Global binds module-level variables.\nHence, Option C is correct.\nHence, option (D) is the correct match."
     },
-    "questionType": "conceptual",
+    "questionType": "match-the-following",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: PAN vs LAN vs MAN vs WAN",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "PAN vs LAN vs MAN vs WAN",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 18,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q18",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "During an in-depth examination of Section A: Common Computing Concepts (Computer Science), an analyst observes the behavior of Exception and File Handling in Python. Which of the following best describes the principal operational rule governing this scenario?",
+    "topic": "Newline Parameter in CSV File Open",
+    "questionText": "Arrange the sequential operational stages of a network frame traveling from a source workstation through a Switch to a destination:\n(A) Source host encapsulates IP packet into a Data Link frame containing source and destination MAC addresses\n(B) Frame enters incoming physical switch port; switch reads source MAC and updates its internal MAC address lookup table\n(C) Switch inspects destination MAC address and looks up the corresponding outbound port in its MAC table\n(D) Switch forwards the frame exclusively out of the designated target port to reach the recipient workstation\n\nChoose the correct chronological/logical sequence from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It establishes the fundamental standard that maintains structural coherence and predictable dynamics in Exception and File Handling in Python.",
+        "text": "A, C, B, D",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "It temporarily suspends all governing rules of Section A: Common Computing Concepts without causal mechanism.",
+        "text": "A, B, C, D",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
       },
       {
         "id": "C",
-        "text": "It operates solely when ambient boundary conditions are entirely non-existent.",
+        "text": "B, A, C, D",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "D",
-        "text": "It produces indeterminate outcomes that contradict standard Computer Science theory.",
+        "text": "D, B, C, A",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
     "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option B is the accurate conclusion.",
+    "detailedSolution": "Detailed Solution:\nSwitching sequence: encapsulation -> arrival and source learning -> destination lookup -> unicast forwarding.\nHence, Option D is correct.\nHence, option (B) is correct.",
     "solution": {
-      "quick": "Correct answer is option B.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option B is the accurate conclusion."
+      "quick": "Correct answer is option (B).",
+      "concept": "Section A: Common Computing Concepts: Newline Parameter in CSV File Open.",
+      "detailed": "Detailed Solution:\nSwitching sequence: encapsulation -> arrival and source learning -> destination lookup -> unicast forwarding.\nHence, Option D is correct.\nHence, option (B) is correct."
     },
-    "questionType": "conceptual",
+    "questionType": "chronological-sequence",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Newline Parameter in CSV File Open",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Newline Parameter in CSV File Open",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 19,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q19",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "Which of the following statements is NOT a valid characteristic of Exception and File Handling in Python according to the official CUET UG Computer Science curriculum for Section A: Common Computing Concepts?",
+    "topic": "Towers of Hanoi Minimum Moves",
+    "questionText": "Arrange the sequential operational steps for executing batch record insertions with error handling and transaction commit:\n(A) Define the SQL template with placeholders: 'INSERT INTO Emp VALUES (%s, %s, %s);'\n(B) Prepare a list of data tuples containing the records to be inserted\n(C) Execute batch insertion using cur.executemany(sql, records) within a try block\n(D) Call conn.commit() to finalize the transaction, or conn.rollback() inside the except block on error\n\nChoose the correct chronological/logical sequence from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It operates with complete independence from all underlying principles of Section A: Common Computing Concepts.",
+        "text": "A, C, B, D",
         "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "It functions in conformity with established equilibrium rules.",
-        "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "text": "A, B, C, D",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
       },
       {
         "id": "C",
-        "text": "It produces systematic and reproducible results under validated conditions.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "D, B, C, A",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "D",
-        "text": "It requires adherence to governing boundary assumptions.",
+        "text": "B, A, C, D",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to the official Computer Science curriculum for Section A: Common Computing Concepts, Exception and File Handling in Python is intrinsically grounded in the fundamental laws of the discipline and does not operate independently of them. Therefore, statement C is false, making it the correct answer to this negative constraint question.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nBatch transaction sequence: define SQL template -> prepare data tuples -> executemany -> commit on success or rollback on exception.\nHence, Option C is correct.\nHence, option (B) is correct.",
     "solution": {
-      "quick": "Correct answer is option C.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nAccording to the official Computer Science curriculum for Section A: Common Computing Concepts, Exception and File Handling in Python is intrinsically grounded in the fundamental laws of the discipline and does not operate independently of them. Therefore, statement C is false, making it the correct answer to this negative constraint question."
+      "quick": "Correct answer is option (B).",
+      "concept": "Section A: Common Computing Concepts: Towers of Hanoi Minimum Moves.",
+      "detailed": "Detailed Solution:\nBatch transaction sequence: define SQL template -> prepare data tuples -> executemany -> commit on success or rollback on exception.\nHence, Option C is correct.\nHence, option (B) is correct."
     },
-    "questionType": "exception",
+    "questionType": "chronological-sequence",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: Towers of Hanoi Minimum Moves",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "Towers of Hanoi Minimum Moves",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   },
   {
     "questionNumber": 20,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T13-Q20",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-    "questionText": "During an in-depth examination of Section A: Common Computing Concepts (Computer Science), an analyst observes the behavior of Exception and File Handling in Python. Which of the following best describes the principal operational rule governing this scenario?",
+    "topic": "SQL ROUND() Function Operation",
+    "questionText": "Which of the following statements regarding SQL ROUND() Function Operation in Section A: Common Computing Concepts is INCORRECT / NOT true?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It establishes the fundamental standard that maintains structural coherence and predictable dynamics in Exception and File Handling in Python.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Stack vs Queue LIFO/FIFO Confusion",
-        "mistakeAnalysis": "Incorrect option. Aspirant applies FIFO dequeue behavior to a LIFO stack push/pop evaluation."
+        "text": "It operates in direct violation of the fundamental conservation laws of Section A: Common Computing Concepts.",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Identifies the statement that contains a scientific falsehood."
       },
       {
         "id": "B",
-        "text": "It temporarily suspends all governing rules of Section A: Common Computing Concepts without causal mechanism.",
+        "text": "It conforms strictly to the standard equilibrium conditions defined in NCERT Section A: Common Computing Concepts.",
         "isCorrect": false,
-        "studentSelectionTrap": "SQL Aggregate Function NULL Handling",
-        "mistakeAnalysis": "Incorrect option. Candidate forgets that COUNT(*) includes NULL values while COUNT(column) ignores NULLs."
+        "studentSelectionTrap": "Accepting Valid Fact as Exception",
+        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
       },
       {
         "id": "C",
-        "text": "It operates solely when ambient boundary conditions are entirely non-existent.",
+        "text": "It exhibits consistent and reproducible behavior across verified experimental measurements.",
         "isCorrect": false,
-        "studentSelectionTrap": "Python Mutable Default Argument Trap",
-        "mistakeAnalysis": "Incorrect option. Aspirant expects default list parameter to re-initialize on every function invocation."
+        "studentSelectionTrap": "Accepting Valid Fact as Exception",
+        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
       },
       {
         "id": "D",
-        "text": "It produces indeterminate outcomes that contradict standard Computer Science theory.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Conforms directly to official CUET UG Computer Science principles for Exception and File Handling in Python."
+        "text": "Its magnitude depends directly on the governing physical or analytical constants of SQL ROUND() Function Operation.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Accepting Valid Fact as Exception",
+        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option D is the accurate conclusion.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to standard NCERT Section A: Common Computing Concepts specifications, SQL ROUND() Function Operation is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (A) is false, making it the correct answer to this negative constraint question.",
     "solution": {
-      "quick": "Correct answer is option D.",
-      "concept": "Conceptual foundation: Section A: Common Computing Concepts - Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks.",
-      "detailed": "Detailed Solution:\nUnder standard computing & algorithmic specifications: \nIn Section A: Common Computing Concepts, Exception and File Handling in Python serves as the foundational standard maintaining structural coherence and consistent operational dynamics across standard scenarios. Hence, option D is the accurate conclusion."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section A: Common Computing Concepts: SQL ROUND() Function Operation.",
+      "detailed": "Detailed Solution:\nAccording to standard NCERT Section A: Common Computing Concepts specifications, SQL ROUND() Function Operation is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (A) is false, making it the correct answer to this negative constraint question."
     },
     "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
+    "keyConcept": "Section A: Common Computing Concepts: SQL ROUND() Function Operation",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Exception and File Handling in Python, Database Concepts, Structured Query Language (SQL), Computer Networks",
-      "Original Question Bank"
+      "SQL ROUND() Function Operation",
+      "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Unit Practice Paper (Original AI Calibration - Computer Science Unit 1 Test 13)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 13)"
   }
 ]
