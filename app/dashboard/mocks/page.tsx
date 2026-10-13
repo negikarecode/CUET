@@ -24,11 +24,15 @@ import {
   Palette,
   Sprout,
   Footprints,
-  BookOpen,
   CheckCircle2,
   HelpCircle,
   Clock,
+  Play,
+  FileText,
 } from "lucide-react";
+import { SUBJECT_MOCK_COUNTS, SUBJECT_TO_MOCK } from "@/lib/data/subjects";
+import { useTestStore } from "@/lib/store/useTestStore";
+import { useIsClient } from "@/lib/hooks/useIsClient";
 
 type SubjectKey =
   | "all"
@@ -334,6 +338,8 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
 };
 
 export default function MocksPage() {
+  const isClient = useIsClient();
+  const testAttempts = useTestStore((state) => state.testAttempts);
   const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
   const [selectedTab, setSelectedTab] = useState<SubjectKey>("all");
 
@@ -380,13 +386,38 @@ export default function MocksPage() {
   return (
     <div className="w-full min-w-0 max-w-[1120px] mx-auto space-y-6">
       {/* Page Header */}
-      <div className="space-y-1">
-        <h1 className="text-[28px] font-semibold text-[var(--text)] leading-[1.25]">
-          Domain Mock Assessments
-        </h1>
-        <p className="text-[14px] text-[var(--text-secondary)] leading-[1.5]">
-          Official NTA CUET UG domain examination specifications, syllabus coverage, and verified practice papers.
-        </p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-mono border border-blue-200/60">
+              Full Syllabus Simulator
+            </span>
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+              +5 / -1 NTA Marking
+            </span>
+          </div>
+          <h1 className="text-[28px] font-semibold text-[var(--text)] leading-[1.25]">
+            Full-Length Domain Mock Exams
+          </h1>
+          <p className="text-[14px] text-[var(--text-secondary)] leading-[1.5]">
+            Complete 50-question full syllabus domain papers simulated under official NTA CUET CBT interface conditions with instant answer analysis.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 flex-wrap shrink-0">
+          <Link
+            href="/dashboard/practice"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-all"
+          >
+            <span>Unit Practice Tests</span>
+          </Link>
+          <Link
+            href="/dashboard/pyqs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-all"
+          >
+            <span>Official PYQ Papers</span>
+          </Link>
+        </div>
       </div>
 
       {/* Stream & Subject Dropdown Controls */}
@@ -481,6 +512,17 @@ export default function MocksPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
           {displayedSubjects.map((sub) => {
             const Icon = sub.icon;
+            const mockCount = SUBJECT_MOCK_COUNTS[sub.key] ?? 20;
+            const baseMockId = SUBJECT_TO_MOCK[sub.key] || `${sub.key}-mock`;
+            const firstMockId = `${baseMockId}-1`;
+
+            const attemptsCount = isClient && testAttempts
+              ? testAttempts.filter((a) => {
+                  const tid = (a.testId || "").toLowerCase();
+                  return tid.includes("mock") && (tid.includes(sub.key) || tid.startsWith(baseMockId));
+                }).length
+              : 0;
+
             return (
               <div
                 key={sub.key}
@@ -491,9 +533,17 @@ export default function MocksPage() {
                     <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200/60 flex items-center justify-center shrink-0 text-blue-600">
                       <Icon className="w-6 h-6" />
                     </div>
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-mono">
-                      Code {sub.code}
-                    </span>
+                    <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                      {attemptsCount > 0 && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center gap-1">
+                          <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
+                          <span>{attemptsCount} Attempted</span>
+                        </span>
+                      )}
+                      <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-mono">
+                        Code {sub.code}
+                      </span>
+                    </div>
                   </div>
 
                   <div>
@@ -512,28 +562,30 @@ export default function MocksPage() {
                     </div>
                     <div className="flex items-center gap-1.5 text-slate-600 font-medium">
                       <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{sub.totalQuestions} Questions</span>
+                      <span>50 Questions</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-slate-600 font-medium col-span-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                      <span>NTA Marking: +5 / -1</span>
+                      <FileText className="w-3.5 h-3.5 text-blue-600" />
+                      <span>{mockCount} Full Mock Papers (+5 / -1)</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="pt-3 border-t border-slate-100 flex items-center gap-2">
                   <Link
-                    href={`/dashboard/pyqs?subject=${sub.key}`}
+                    href={`/dashboard/mocks/${sub.key}`}
                     className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all text-center"
                   >
-                    <BookOpen className="w-3.5 h-3.5" />
-                    <span>Official PYQs</span>
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>View Mock Tests</span>
                   </Link>
                   <Link
-                    href={`/dashboard/radar?subject=${sub.key}`}
-                    className="px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-all text-center"
+                    href={`/test/${firstMockId}`}
+                    className="px-3.5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-xs transition-all text-center flex items-center gap-1.5 shrink-0"
+                    title={`Start Mock 1 for ${sub.name}`}
                   >
-                    <span>Diagnostics</span>
+                    <Play className="w-3 h-3 fill-current" />
+                    <span>Mock 1</span>
                   </Link>
                 </div>
               </div>
