@@ -7,6 +7,7 @@ import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData, RecordedTestAt
 import { normalizeSubject } from "@/lib/analytics";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { calculateCUETScore, MARKING_SCHEME } from "@/lib/config/dashboardConfig";
+import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
 
 import { WelcomeBanner } from "@/components/dashboard/prep-pulse/WelcomeBanner";
 import { NextBestActionCard } from "@/components/dashboard/prep-pulse/NextBestActionCard";
@@ -51,6 +52,9 @@ export interface DashboardInitialData {
   timeSinkAlerts: TimeSinkAlertData[];
   subjectCalibration?: Record<string, SubjectCalibrationData>;
   serverAttempts?: RecordedTestAttempt[];
+  currentCycleNumber?: number;
+  currentCycleQuestionCount?: number;
+  isDiagnosticUnlocked?: boolean;
 }
 
 export default function DashboardClient({
@@ -62,8 +66,9 @@ export default function DashboardClient({
   const storeUser = useTestStore((state) => state.user);
   const clientAnalytics = useTestStore((state) => state.analytics);
   const testAttempts = useTestStore((state) => state.testAttempts);
-  const currentCycleNumber = useTestStore((state) => state.currentCycleNumber || 1);
-  const currentCycleQuestionCount = useTestStore((state) => state.currentCycleQuestionCount || 0);
+  const storeCycleNumber = useTestStore((state) => state.currentCycleNumber || 1);
+  const storeCycleQuestionCount = useTestStore((state) => state.currentCycleQuestionCount || 0);
+  const storeDiagnosticCycles = useTestStore((state) => state.diagnosticCycles || []);
 
   const isServerUser = Boolean(initialData.user && initialData.user.id !== "guest");
 
@@ -144,6 +149,24 @@ export default function DashboardClient({
 
   // Single source for score: CUET marking scheme (+5 correct, -1 incorrect)
   const currentScore = totalAttempted > 0 ? calculateCUETScore(correctCount, totalAttempted).score : 0;
+
+  // Authoritative diagnostic cycle progress driving unlock status, next-action card & cycles
+  const diagnosticProgress = useMemo(() => {
+    return computeAuthoritativeDiagnosticProgress({
+      totalAttempted,
+      currentCycleNumber: isClient && storeCycleNumber ? storeCycleNumber : initialData?.currentCycleNumber,
+      currentCycleQuestionCount: isClient && storeCycleQuestionCount !== undefined ? storeCycleQuestionCount : initialData?.currentCycleQuestionCount,
+      completedCyclesCount: isClient ? storeDiagnosticCycles.length : undefined,
+    });
+  }, [
+    totalAttempted,
+    isClient,
+    storeCycleNumber,
+    storeCycleQuestionCount,
+    storeDiagnosticCycles.length,
+    initialData?.currentCycleNumber,
+    initialData?.currentCycleQuestionCount,
+  ]);
 
   // User profile identifiers
   const fullName = isServerUser
@@ -266,8 +289,9 @@ export default function DashboardClient({
         <NextBestActionCard
           prioritizedTopic={prioritizedTopic}
           totalAttempted={totalAttempted}
-          currentCycleNumber={currentCycleNumber}
-          currentCycleQuestionCount={currentCycleQuestionCount}
+          currentCycleNumber={diagnosticProgress.currentCycleNumber}
+          currentCycleQuestionCount={diagnosticProgress.currentCycleQuestionCount}
+          isUnlocked={diagnosticProgress.isUnlocked}
         />
       </section>
 

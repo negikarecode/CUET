@@ -3,11 +3,6 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import {
-  getMockTestsForSubject,
-  MockTestItem,
-} from "@/lib/data/subjects";
-import {
-  ArrowRight,
   ChevronDown,
   Atom,
   FlaskConical,
@@ -20,8 +15,6 @@ import {
   Landmark,
   Globe,
   BrainCircuit,
-  RotateCcw,
-  Trophy,
   Users,
   Activity,
   Laptop,
@@ -31,11 +24,11 @@ import {
   Palette,
   Sprout,
   Footprints,
+  BookOpen,
+  CheckCircle2,
+  HelpCircle,
+  Clock,
 } from "lucide-react";
-import { useTestStore } from "@/lib/store/useTestStore";
-import { getTestAttemptStats } from "@/lib/analytics";
-import { useIsClient } from "@/lib/hooks/useIsClient";
-import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type SubjectKey =
   | "all"
@@ -67,7 +60,7 @@ interface SubjectMeta {
   name: string;
   code: string;
   isLive: boolean;
-  mockCount: number;
+  durationMinutes: number;
   totalQuestions: number;
   subtitle: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -143,9 +136,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Physics",
     code: "322",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 60 minutes per paper",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Electrostatics, Optics, Magnetism & Modern Physics",
     icon: Atom,
   },
   chemistry: {
@@ -153,9 +146,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Chemistry",
     code: "306",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 60 minutes per paper",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Physical, Inorganic & Organic Chemistry",
     icon: FlaskConical,
   },
   mathematics: {
@@ -163,9 +156,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Mathematics",
     code: "319",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 60 minutes per paper",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Calculus, Algebra, Vectors & 3D Geometry",
     icon: Binary,
   },
   biology: {
@@ -173,9 +166,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Biology",
     code: "304",
     isLive: true,
-    mockCount: 12,
-    totalQuestions: 600,
-    subtitle: "12 full-length CBT mocks · 600 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Genetics, Ecology, Physiology & Biotechnology",
     icon: Dna,
   },
   accountancy: {
@@ -183,9 +176,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Accountancy",
     code: "301",
     isLive: true,
-    mockCount: 18,
-    totalQuestions: 900,
-    subtitle: "18 full-length CBT mocks · 900 questions · 60 minutes per paper",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Partnership, Company Accounts & Financial Analysis",
     icon: Calculator,
   },
   "business-studies": {
@@ -193,9 +186,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Business Studies",
     code: "305",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Principles of Management, Marketing & Finance",
     icon: Briefcase,
   },
   economics: {
@@ -203,9 +196,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Economics",
     code: "309",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 60 minutes per paper",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Microeconomics, Macroeconomics & Indian Economy",
     icon: TrendingUp,
   },
   history: {
@@ -213,9 +206,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "History",
     code: "314",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Ancient, Medieval & Modern Indian History",
     icon: ScrollText,
   },
   "political-science": {
@@ -223,9 +216,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Political Science",
     code: "323",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Contemporary World Politics & Politics in India",
     icon: Landmark,
   },
   geography: {
@@ -233,9 +226,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Geography",
     code: "313",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Human Geography, India: People & Economy",
     icon: Globe,
   },
   psychology: {
@@ -243,9 +236,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Psychology",
     code: "324",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Psychological Attributes, Self & Personality",
     icon: BrainCircuit,
   },
   sociology: {
@@ -253,9 +246,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Sociology",
     code: "326",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Indian Society & Social Change in India",
     icon: Users,
   },
   "physical-education": {
@@ -263,9 +256,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Physical Education",
     code: "321",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Management of Sporting Events, Yoga & Nutrition",
     icon: Activity,
   },
   "computer-science": {
@@ -273,9 +266,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Computer Science / IP",
     code: "308",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 60 minutes per paper",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Computational Thinking, SQL & Computer Networks",
     icon: Laptop,
   },
   "home-science": {
@@ -283,9 +276,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Home Science",
     code: "315",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Human Development, Nutrition, Resource Management",
     icon: Home,
   },
   "mass-media": {
@@ -293,9 +286,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Mass Media & Communication",
     code: "318",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Communication Concepts, Journalism & Digital Media",
     icon: Tv,
   },
   "environmental-studies": {
@@ -303,9 +296,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Environmental Science",
     code: "307",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Ecology, Sustainable Development & Environmental Issues",
     icon: Leaf,
   },
   "fine-arts": {
@@ -313,9 +306,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Fine Arts / Visual Arts",
     code: "312",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Painting, Graphics, Sculpture & Applied Art",
     icon: Palette,
   },
   agriculture: {
@@ -323,9 +316,9 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Agriculture",
     code: "302",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Agronomy, Soil Science & Plant Genetics",
     icon: Sprout,
   },
   anthropology: {
@@ -333,54 +326,18 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     name: "Anthropology",
     code: "303",
     isLive: true,
-    mockCount: 20,
-    totalQuestions: 1000,
-    subtitle: "20 full-length CBT mocks · 1,000 questions · 45 minutes per paper",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Physical Anthropology, Cultural & Social Anthropology",
     icon: Footprints,
   },
 };
 
 export default function MocksPage() {
-  const { t } = useTranslation();
-  const isClient = useIsClient();
-  const testAttempts = useTestStore((state) => state.testAttempts);
   const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
   const [selectedTab, setSelectedTab] = useState<SubjectKey>("all");
 
-  const allMocksList = useMemo(() => {
-    const list: Array<
-      MockTestItem & { subjectName: string; subjectSlug: string; code: string }
-    > = [];
-
-    (Object.keys(SUBJECT_CONFIGS) as Array<Exclude<SubjectKey, "all">>).forEach((subKey) => {
-      const config = SUBJECT_CONFIGS[subKey];
-      const tests = getMockTestsForSubject(subKey);
-      tests.forEach((t) => {
-        list.push({
-          ...t,
-          subjectName: config.name,
-          subjectSlug: config.key,
-          code: config.code,
-        });
-      });
-    });
-
-    return list;
-  }, []);
-
-  const displayedTests = useMemo(() => {
-    if (selectedTab !== "all") {
-      return allMocksList.filter((m) => m.subjectSlug === selectedTab);
-    }
-    if (selectedStream !== "all") {
-      const allowed = STREAM_CONFIGS[selectedStream].subjects;
-      return allMocksList.filter((m) => allowed.includes(m.subjectSlug as any));
-    }
-    return allMocksList;
-  }, [allMocksList, selectedStream, selectedTab]);
-
   const activeSubjectInfo = selectedTab !== "all" ? SUBJECT_CONFIGS[selectedTab] : null;
-  const activeStreamInfo = selectedStream !== "all" ? STREAM_CONFIGS[selectedStream] : null;
 
   const handleSelectStream = (stream: StreamKey) => {
     setSelectedStream(stream);
@@ -403,6 +360,16 @@ export default function MocksPage() {
     }
   };
 
+  const displayedSubjects = useMemo(() => {
+    if (selectedTab !== "all" && activeSubjectInfo) {
+      return [activeSubjectInfo];
+    }
+    if (selectedStream !== "all") {
+      return STREAM_CONFIGS[selectedStream].subjects.map((k) => SUBJECT_CONFIGS[k]);
+    }
+    return Object.values(SUBJECT_CONFIGS);
+  }, [selectedStream, selectedTab, activeSubjectInfo]);
+
   const availableSubjectsForDropdown = useMemo(() => {
     if (selectedStream === "all") {
       return Object.values(SUBJECT_CONFIGS);
@@ -415,10 +382,10 @@ export default function MocksPage() {
       {/* Page Header */}
       <div className="space-y-1">
         <h1 className="text-[28px] font-semibold text-[var(--text)] leading-[1.25]">
-          Mock tests
+          Domain Mock Assessments
         </h1>
         <p className="text-[14px] text-[var(--text-secondary)] leading-[1.5]">
-          Full-length practice tests across domain subjects with standard CUET scoring (+5 / -1).
+          Official NTA CUET UG domain examination specifications, syllabus coverage, and verified practice papers.
         </p>
       </div>
 
@@ -499,164 +466,80 @@ export default function MocksPage() {
         </div>
       </div>
 
-      {/* Active Subject Banner */}
-      {activeSubjectInfo && (
-        <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200/60 flex items-center justify-center shrink-0 text-blue-600">
-              <activeSubjectInfo.icon className="w-6 h-6" />
-            </div>
-            <div className="space-y-1">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-                {activeSubjectInfo.name}
-              </h2>
-              <p className="text-xs sm:text-sm font-medium text-slate-500">
-                {activeSubjectInfo.mockCount} full-length CBT mocks · {activeSubjectInfo.totalQuestions.toLocaleString()} questions · Code {activeSubjectInfo.code}
-              </p>
-            </div>
-          </div>
-
-          <Link
-            href={`/dashboard/mocks/${activeSubjectInfo.key}`}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-sm hover:shadow-md transition-all shrink-0 self-start md:self-auto"
-          >
-            <span>Open Full Subject Suite</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      )}
-
-      {/* Active Stream Banner */}
-      {!activeSubjectInfo && activeStreamInfo && (
-        <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm space-y-1">
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-            {activeStreamInfo.name}
-          </h2>
-          <p className="text-xs sm:text-sm font-medium text-slate-500">
-            {displayedTests.length} full-length CBT mocks available across {activeStreamInfo.name.toLowerCase()}
-          </p>
-        </div>
-      )}
-
-      {/* Mock Test Cards Grid */}
+      {/* Domain Subjects Overview Grid */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-            {selectedTab === "all"
-              ? selectedStream === "all"
-                ? "Available Mock Papers"
-                : `${STREAM_CONFIGS[selectedStream].name} Papers`
-              : `${activeSubjectInfo?.name} CBT Papers`}
-            <span className="text-xs font-medium text-slate-400 ml-2">
-              ({displayedTests.length} papers)
-            </span>
-          </h3>
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+            {selectedTab !== "all" && activeSubjectInfo
+              ? `${activeSubjectInfo.name} Domain Specification`
+              : selectedStream !== "all"
+              ? `${STREAM_CONFIGS[selectedStream].name} (${displayedSubjects.length} Domains)`
+              : `All CUET UG Domain Subjects (${displayedSubjects.length})`}
+          </h2>
         </div>
 
-        {displayedTests.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
-            {displayedTests.map((test) => {
-              const stats = isClient
-                ? getTestAttemptStats(testAttempts, test.id)
-                : { attemptsCount: 0, bestAttempt: null, latestAttempt: null, hasAttempted: false };
-              const hasAttempted = stats.hasAttempted && stats.bestAttempt !== null;
-              const best = stats.bestAttempt;
-
-              return (
-                <div
-                  key={test.id}
-                  className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4 min-w-0"
-                >
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                        {test.subjectName} · Code {test.code}
-                      </p>
-                      <h4 className="text-lg font-bold text-slate-900 leading-snug mt-0.5">
-                        {test.label}
-                      </h4>
-                      <p className="text-xs font-medium text-slate-500 mt-0.5">
-                        {test.mockLabel} · Full Syllabus CBT
-                      </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
+          {displayedSubjects.map((sub) => {
+            const Icon = sub.icon;
+            return (
+              <div
+                key={sub.key}
+                className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4 min-w-0"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200/60 flex items-center justify-center shrink-0 text-blue-600">
+                      <Icon className="w-6 h-6" />
                     </div>
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-mono">
+                      Code {sub.code}
+                    </span>
+                  </div>
 
-                    {hasAttempted && best && (
-                      <div className="px-3.5 py-2 rounded-2xl bg-amber-50/70 border border-amber-200/60 flex items-center justify-between gap-2 text-xs font-semibold text-amber-900">
-                        <div className="flex items-center gap-1.5">
-                          <Trophy className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                          <span>Best: {best.totalMarks} / {best.maxMarks}</span>
-                        </div>
-                        <span className="text-amber-700/80 text-[11px] font-mono">
-                          {best.accuracyPercentage}% Acc ({stats.attemptsCount} {stats.attemptsCount === 1 ? "attempt" : "attempts"})
-                        </span>
-                      </div>
-                    )}
-
-                    <p className="text-xs font-medium text-slate-500">
-                      50 Questions · {test.duration}
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                      {sub.name}
+                    </h3>
+                    <p className="text-xs font-medium text-slate-500 mt-1 line-clamp-2">
+                      {sub.subtitle}
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-100">
-                    {hasAttempted ? (
-                      <div className="flex items-center gap-2">
-                        <Link
-                          href={`/test/${test.id}?reattempt=true`}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-2xs hover:shadow-sm transition-all shrink-0 whitespace-nowrap"
-                        >
-                          <RotateCcw className="w-3.5 h-3.5 stroke-[2.2]" />
-                          <span>{t("reattemptTest", "Re-attempt")}</span>
-                        </Link>
-                        <Link
-                          href={`/dashboard/mocks/analysis/${best?.id || test.id}`}
-                          className="px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-all shrink-0 whitespace-nowrap"
-                        >
-                          Analysis
-                        </Link>
-                        <Link
-                          href={`/test/${test.id}`}
-                          className="px-2.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all shrink-0 whitespace-nowrap"
-                        >
-                          Scorecard
-                        </Link>
-                      </div>
-                    ) : (
-                      <Link
-                        href={`/test/${test.id}`}
-                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all shrink-0 whitespace-nowrap"
-                      >
-                        <span>{t("startTest", "Start Test")}</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    )}
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-xs">
+                    <div className="flex items-center gap-1.5 text-slate-600 font-medium">
+                      <Clock className="w-3.5 h-3.5 text-slate-400" />
+                      <span>{sub.durationMinutes} Mins</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-slate-600 font-medium">
+                      <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
+                      <span>{sub.totalQuestions} Questions</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-slate-600 font-medium col-span-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                      <span>NTA Marking: +5 / -1</span>
+                    </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="bg-white rounded-3xl border border-slate-100 p-8 md:p-12 shadow-sm text-center space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200/60 flex items-center justify-center mx-auto text-amber-600">
-              <RotateCcw className="w-6 h-6 stroke-[2]" />
-            </div>
-            <div className="space-y-2 max-w-lg mx-auto">
-              <h3 className="text-xl font-bold text-slate-900">
-                {activeSubjectInfo ? `${activeSubjectInfo.name} Mocks Being Prepared` : "Mock Papers Under Preparation"}
-              </h3>
-              <p className="text-sm text-slate-500 leading-relaxed font-medium">
-                Full CBT mock papers for this subject are being calibrated according to the latest NTA CUET UG CBT pattern and will be published shortly.
-              </p>
-            </div>
-            <div className="pt-2">
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm transition-all"
-              >
-                <span>Back to Command Dashboard</span>
-              </Link>
-            </div>
-          </div>
-        )}
+
+                <div className="pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <Link
+                    href={`/dashboard/pyqs?subject=${sub.key}`}
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all text-center"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>Official PYQs</span>
+                  </Link>
+                  <Link
+                    href={`/dashboard/radar?subject=${sub.key}`}
+                    className="px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-all text-center"
+                  >
+                    <span>Diagnostics</span>
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

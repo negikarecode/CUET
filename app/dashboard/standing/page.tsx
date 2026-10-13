@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import StandingViewClient from "@/components/dashboard/standing/StandingViewClient";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
@@ -11,6 +12,16 @@ export const metadata: Metadata = {
 };
 
 export const dynamic = "force-dynamic";
+
+function StandingLoadingFallback() {
+  return (
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6 animate-pulse">
+      <div className="h-10 bg-slate-200 rounded-xl w-64" />
+      <div className="h-32 bg-slate-200 rounded-2xl w-full" />
+      <div className="h-64 bg-slate-200 rounded-2xl w-full" />
+    </div>
+  );
+}
 
 export default async function StandingPage() {
   let initialUser: { targetCollege?: string; targetCourse?: string; targetStream?: string } | undefined;
@@ -47,5 +58,10 @@ export default async function StandingPage() {
     console.warn("StandingPage server query notice:", err);
   }
 
-  return <StandingViewClient initialUser={initialUser} initialAttempts={initialAttempts} />;
+  return (
+    <Suspense fallback={<StandingLoadingFallback />}>
+      <StandingViewClient initialUser={initialUser} initialAttempts={initialAttempts} />
+    </Suspense>
+  );
 }
+

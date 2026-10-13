@@ -2,6 +2,15 @@ import { create } from "zustand";
 import { Question, QuestionStatus, FullTestMeta, RecordedTestAttempt, RecordedQuestionAttempt } from "@/types";
 import { CUET_UG_2026_CONFIG, calculateExamScore } from "@/lib/config/examConfig";
 import { useTestStore } from "@/lib/store/useTestStore";
+import {
+  StoredCBTSession,
+  compactQuestionStates,
+  saveCBTSessionSync,
+  loadCBTSessionSync,
+  clearCBTSessionSync,
+  cbtAutosave,
+  getActiveUserId as getStorageActiveUid,
+} from "@/lib/storage/cbt-session-storage";
 
 export interface QuestionSessionState {
   visited: boolean;
@@ -95,110 +104,63 @@ export function deriveQuestionStatus(
 
 function getActiveUserId(): string {
   if (typeof window === "undefined") return "guest";
-  return window.localStorage.getItem("cuet_active_uid") || useTestStore.getState().user?.id || "guest";
+  return getStorageActiveUid() || useTestStore.getState().user?.id || "guest";
 }
 
-function getStorageKey(testId: string): string {
-  const uid = getActiveUserId();
-  return `cuet_cbt_session_${uid}_${testId}`;
-}
+export type StoredSession = StoredCBTSession;
 
-interface StoredSession {
-  userId?: string;
-  testId: string;
-  testMeta: FullTestMeta | null;
-  currentQuestionIndex: number;
-  durationSeconds: number;
-  remainingSeconds: number;
-  expiresAt: number | null;
-  questionStates: Record<string, QuestionSessionState>;
-  isSubmitted: boolean;
-  submittedScore: CBTScoreSummary | null;
-}
-
-function loadSessionFromStorage(testId: string): StoredSession | null {
+function loadSessionFromStorage(testId: string): StoredCBTSession | null {
   if (typeof window === "undefined" || !testId) return null;
-  try {
-    const key = getStorageKey(testId);
-    const raw =
-      window.sessionStorage.getItem(key) || window.localStorage.getItem(key);
-    if (!raw) return null;
-    const session = JSON.parse(raw) as StoredSession;
-    const currentUid = getActiveUserId();
-    // Validate session user isolation
-    if (session.userId && currentUid !== "guest" && session.userId !== currentUid) {
-      return null;
-    }
-    return session;
-  } catch {
-    return null;
-  }
+  const currentUid = getActiveUserId();
+  return loadCBTSessionSync(testId, currentUid);
 }
 
-function pruneOldStorageSessions(): void {
-  if (typeof window === "undefined") return;
-  try {
-    const uid = getActiveUserId();
-    const prefix = `cuet_cbt_session_${uid}_`;
-    const keysToRemove: string[] = [];
-    for (let i = 0; i < window.localStorage.length; i++) {
-      const k = window.localStorage.key(i);
-      if (k && k.startsWith(prefix)) {
-        keysToRemove.push(k);
-      }
-    }
-    // Remove oldest completed sessions to relieve quota pressure
-    keysToRemove.slice(0, Math.max(1, Math.ceil(keysToRemove.length / 2))).forEach((k) => {
-      window.localStorage.removeItem(k);
-    });
-  } catch {}
-}
-
-function saveSessionToStorage(state: CBTStoreState): void {
+function saveSessionToStorage(state: CBTStoreState, immediate = false): void {
   if (typeof window === "undefined" || !state.testId) return;
   try {
     const currentUid = getActiveUserId();
-    const data: StoredSession = {
+    const compactStates = compactQuestionStates(state.questionStates || {});
+
+    const session: StoredCBTSession = {
+      version: 2,
       userId: currentUid,
       testId: state.testId,
-      testMeta: state.testMeta,
+      testMeta: state.testMeta
+        ? {
+            id: state.testMeta.id,
+            title: state.testMeta.title,
+            subject: state.testMeta.subject,
+            code: state.testMeta.code,
+            totalQuestions: state.testMeta.totalQuestions,
+            durationMinutes: state.testMeta.durationMinutes,
+          }
+        : null,
       currentQuestionIndex: state.currentQuestionIndex,
       durationSeconds: state.durationSeconds,
       remainingSeconds: state.remainingSeconds,
       expiresAt: state.expiresAt,
-      questionStates: state.questionStates,
+      questionStates: compactStates,
       isSubmitted: state.isSubmitted,
       submittedScore: state.submittedScore,
+      lastSavedAt: Date.now(),
+      saveSequence: 0,
     };
-    const key = getStorageKey(state.testId);
-    const serialized = JSON.stringify(data);
-    try {
-      window.sessionStorage.setItem(key, serialized);
-    } catch {}
 
-    try {
-      window.localStorage.setItem(key, serialized);
-    } catch (storageErr) {
-      // Safe Quota Handling: Prune old completed sessions and retry
-      pruneOldStorageSessions();
-      try {
-        window.localStorage.setItem(key, serialized);
-      } catch {
-        // Fallback gracefully without crashing the exam interface
-      }
+    if (immediate) {
+      cbtAutosave.flush();
+      saveCBTSessionSync(session);
+    } else {
+      cbtAutosave.schedule(session);
     }
-  } catch {}
+  } catch (err) {
+    console.warn("[useCBTStore] Safe storage save warning:", err);
+  }
 }
 
 export function clearSessionFromStorage(testId: string): void {
   if (typeof window === "undefined" || !testId) return;
-  try {
-    const key = getStorageKey(testId);
-    const uid = getActiveUserId();
-    window.sessionStorage.removeItem(key);
-    window.localStorage.removeItem(key);
-    window.localStorage.removeItem(`cuet_cbt_active_session_${uid}`);
-  } catch {}
+  const currentUid = getActiveUserId();
+  clearCBTSessionSync(testId, currentUid);
 }
 
 /**
@@ -330,6 +292,34 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
               submittedScore: null,
             });
             return;
+          } else {
+            // Timer expired while candidate was away: restore answers and auto-submit
+            const validIndex =
+              stored.currentQuestionIndex >= 0 &&
+              stored.currentQuestionIndex < questionsList.length
+                ? stored.currentQuestionIndex
+                : 0;
+
+            set({
+              isInitialized: true,
+              testId,
+              testMeta: meta,
+              questions: questionsList.map(sanitizeQuestionForActiveExam),
+              currentQuestionIndex: validIndex,
+              durationSeconds: stored.durationSeconds || (meta.durationMinutes || 60) * 60,
+              remainingSeconds: 0,
+              expiresAt: stored.expiresAt,
+              isTimerRunning: false,
+              questionStates: stored.questionStates,
+              answers: stored.questionStates,
+              isSubmitModalOpen: false,
+              isSubmitted: false,
+              submittedScore: null,
+            });
+            setTimeout(() => {
+              get().submitTest();
+            }, 0);
+            return;
           }
         }
       }
@@ -370,7 +360,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     };
 
     set(freshState);
-    saveSessionToStorage(get());
+    saveSessionToStorage(get(), true);
   },
 
   selectOption: (opt) => {
@@ -399,7 +389,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       questionStates: updatedStates,
       answers: updatedStates,
     });
-    saveSessionToStorage(get());
+    saveSessionToStorage(get(), false);
   },
 
   clearResponse: () => {
@@ -425,7 +415,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       questionStates: updatedStates,
       answers: updatedStates,
     });
-    saveSessionToStorage(get());
+    saveSessionToStorage(get(), false);
   },
 
   saveAndNext: () => {
@@ -474,7 +464,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       answers: updatedStates,
       currentQuestionIndex: nextIndex,
     });
-    saveSessionToStorage(get());
+    saveSessionToStorage(get(), false);
   },
 
   markForReviewAndNext: () => {
@@ -523,7 +513,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       answers: updatedStates,
       currentQuestionIndex: nextIndex,
     });
-    saveSessionToStorage(get());
+    saveSessionToStorage(get(), false);
   },
 
   goToPrevious: () => {
@@ -554,7 +544,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       questionStates: updatedStates,
       answers: updatedStates,
     });
-    saveSessionToStorage(get());
+    saveSessionToStorage(get(), false);
   },
 
   goToNext: () => {
@@ -585,7 +575,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       questionStates: updatedStates,
       answers: updatedStates,
     });
-    saveSessionToStorage(get());
+    saveSessionToStorage(get(), false);
   },
 
   jumpToQuestion: (index) => {
@@ -615,7 +605,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       questionStates: updatedStates,
       answers: updatedStates,
     });
-    saveSessionToStorage(get());
+    saveSessionToStorage(get(), false);
   },
 
   tickSecond: () => {
@@ -672,9 +662,9 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       answers: updatedStates,
     });
 
-    // Save session periodically (every 5 seconds or on important events to reduce write thrashing)
-    if (remaining % 5 === 0) {
-      saveSessionToStorage(get());
+    // Save session periodically (every 30 seconds to prevent write thrashing while ensuring timer integrity)
+    if (remaining % 30 === 0) {
+      saveSessionToStorage(get(), false);
     }
   },
 
@@ -719,12 +709,18 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
   },
 
   submitTest: async () => {
-    const { testId, questions, questionStates, remainingSeconds, durationSeconds } =
+    const { testId, questions, questionStates, remainingSeconds, durationSeconds, isSubmitted } =
       get();
+
+    // Prevent duplicate submissions
+    if (isSubmitted) return;
+
+    // Immediately flush any debounced state saves before computing final score
+    cbtAutosave.flush();
 
     // Check if we need to reveal authoritative questions from server first
     let authQuestions = secureExamVault.get(testId) || questions;
-    if (typeof window !== "undefined" && (!authQuestions[0]?.correctOptionId)) {
+    if (typeof window !== "undefined" && window.location?.origin && (!authQuestions[0]?.correctOptionId)) {
       try {
         const res = await fetch(`/api/test/${testId}`, {
           method: "POST",
@@ -810,7 +806,9 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       isSubmitModalOpen: false,
       submittedScore: summary,
     });
-    saveSessionToStorage(get());
+
+    // Synchronously persist submitted scorecard so refresh displays results rather than resetting
+    saveSessionToStorage(get(), true);
 
     // Immediately record completed attempt to useTestStore & background API so all solved questions are counted
     try {
@@ -867,7 +865,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
 
       useTestStore.getState().recordTestAttempt(attemptRecord);
 
-      if (typeof window !== "undefined") {
+      if (typeof window !== "undefined" && window.location?.origin) {
         fetch("/api/test/record-attempt", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

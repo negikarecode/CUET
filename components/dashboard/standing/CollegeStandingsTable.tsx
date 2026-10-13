@@ -78,8 +78,9 @@ export default function CollegeStandingsTable({
 
   // Data for trend chart of the selected college
   const selectedStandingItem =
-    standings.find((s) => s.collegeName === selectedCollegeForTrend) ||
-    standings[0];
+    standings && standings.length > 0
+      ? standings.find((s) => s.collegeName === selectedCollegeForTrend) || standings[0]
+      : null;
 
   const trendData = useMemo(() => {
     if (!selectedStandingItem?.multiYearStats?.yearlyData) return [];

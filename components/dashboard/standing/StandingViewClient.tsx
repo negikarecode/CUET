@@ -40,12 +40,12 @@ export default function StandingViewClient({
   const storeUser = useTestStore((state) => state.user);
   const user = useMemo(() => {
     return {
-      ...storeUser,
-      targetCollege: initialUser?.targetCollege || storeUser.targetCollege,
-      targetCourse: initialUser?.targetCourse || storeUser.targetCourse,
+      ...(storeUser || {}),
+      targetCollege: initialUser?.targetCollege || storeUser?.targetCollege,
+      targetCourse: initialUser?.targetCourse || storeUser?.targetCourse,
       preferredStream: initialUser?.targetStream
         ? (initialUser.targetStream.toLowerCase() as StreamType)
-        : storeUser.preferredStream,
+        : storeUser?.preferredStream,
     };
   }, [storeUser, initialUser]);
 
@@ -113,8 +113,8 @@ export default function StandingViewClient({
 
   // Sync target college & course from search params or user profile with dream college precedence
   useEffect(() => {
-    const collegeParam = searchParams.get("college");
-    const courseParam = searchParams.get("course");
+    const collegeParam = searchParams ? searchParams.get("college") : null;
+    const courseParam = searchParams ? searchParams.get("course") : null;
 
     // 1. Explicit search param takes first priority
     if (courseParam && CANONICAL_COURSES_MAP[courseParam]) {
@@ -320,7 +320,7 @@ export default function StandingViewClient({
             {targetCollege}
           </span>
           <span className="text-[11px] text-blue-200 block">
-            {standingsResult.resolution.course.name}
+            {standingsResult?.resolution?.course?.name || "Target Program"}
           </span>
         </div>
       </div>

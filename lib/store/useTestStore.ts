@@ -13,6 +13,10 @@ import { computeAnalyticsFromAttempts, buildDefaultSubjectCalibration } from "@/
 import { processQuestionsIntoCycles } from "@/lib/cycle-engine";
 import { evaluateSessionValidity } from "@/lib/session-validity";
 import { calculateStreakFromAttempts, calculateActiveStreak } from "@/lib/gamification";
+import {
+  computeAuthoritativeDiagnosticProgress,
+  countQualifyingFromTestAttempts,
+} from "@/lib/diagnostic-status";
 
 interface TestStoreState {
   // Gamification & User Auth state
@@ -96,6 +100,178 @@ const DEFAULT_USER: UserStats = {
   completedTestsCount: 0,
   isLoggedIn: false,
 };
+
+function compactQuestionAttempt(q: import("@/types").RecordedQuestionAttempt): import("@/types").RecordedQuestionAttempt {
+  return {
+    questionId: q.questionId,
+    conceptId: q.conceptId,
+    questionNumber: q.questionNumber,
+    subject: q.subject,
+    chapter: q.chapter,
+    microTopic: q.microTopic,
+    selectedOption: q.selectedOption,
+    correctOption: q.correctOption,
+    isCorrect: q.isCorrect,
+    timeSpentSeconds: q.timeSpentSeconds,
+    isTimeSink: q.isTimeSink,
+    difficulty: q.difficulty,
+    errorCategory: q.errorCategory,
+    isLowEffort: q.isLowEffort,
+    source: q.source,
+    reviewed_by_human: q.reviewed_by_human,
+  };
+}
+
+function compactTestAttemptForPersistence(
+  attempt: RecordedTestAttempt,
+  includeQuestions = true
+): RecordedTestAttempt {
+  return {
+    id: attempt.id,
+    userId: attempt.userId,
+    testId: attempt.testId,
+    testTitle: attempt.testTitle,
+    subject: attempt.subject,
+    totalQuestions: attempt.totalQuestions,
+    attemptedCount: attempt.attemptedCount,
+    unattemptedCount: attempt.unattemptedCount,
+    correctCount: attempt.correctCount,
+    incorrectCount: attempt.incorrectCount,
+    totalMarks: attempt.totalMarks,
+    maxMarks: attempt.maxMarks,
+    accuracyPercentage: attempt.accuracyPercentage,
+    timeTakenSeconds: attempt.timeTakenSeconds,
+    timeSinkCount: attempt.timeSinkCount,
+    submittedAt: attempt.submittedAt,
+    date: attempt.date,
+    timestamp: attempt.timestamp,
+    score: attempt.score,
+    isLowEffort: attempt.isLowEffort,
+    sessionConfidence: attempt.sessionConfidence,
+    sessionMessage: attempt.sessionMessage,
+    questions:
+      includeQuestions && Array.isArray(attempt.questions)
+        ? attempt.questions.map(compactQuestionAttempt)
+        : [],
+  };
+}
+
+function compactCycleForPersistence(cycle: DiagnosticCycle): DiagnosticCycle {
+  return {
+    ...cycle,
+    questions: [],
+  };
+}
+
+function compactAnalyticsForPersistence(analytics: UserAnalyticsSummary): UserAnalyticsSummary {
+  if (!analytics) return analytics;
+  return {
+    ...analytics,
+    weaknessRadar: (analytics.weaknessRadar || []).map((t) => ({
+      ...t,
+      questionsData: [],
+      recordedMistakes: (t.recordedMistakes || []).slice(0, 3).map((m) => ({
+        ...m,
+        options: undefined,
+        prompt: (m.prompt || "").slice(0, 80),
+        explanation: (m.explanation || "").slice(0, 100),
+      })),
+    })),
+    strengthList: (analytics.strengthList || []).map((t) => ({
+      ...t,
+      questionsData: [],
+      recordedMistakes: [],
+    })),
+    allTopics: (analytics.allTopics || []).map((t) => ({
+      ...t,
+      questionsData: [],
+      recordedMistakes: [],
+    })),
+  };
+}
+
+function pruneLocalStorageSafely(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem("cuet_ai_prep_session_storage");
+
+    const cbtKeys: string[] = [];
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const k = window.localStorage.key(i);
+      if (k && k.startsWith("cuet_cbt_session_")) {
+        cbtKeys.push(k);
+      }
+    }
+    cbtKeys.forEach((k) => {
+      try {
+        const raw = window.localStorage.getItem(k);
+        if (raw) {
+          const s = JSON.parse(raw);
+          if (s.isSubmitted) {
+            window.localStorage.removeItem(k);
+          }
+        }
+      } catch {
+        window.localStorage.removeItem(k);
+      }
+    });
+
+    for (let i = window.localStorage.length - 1; i >= 0; i--) {
+      const k = window.localStorage.key(i);
+      if (k && (k.startsWith("temp_") || k.includes("_cache_") || k.startsWith("debug_"))) {
+        window.localStorage.removeItem(k);
+      }
+    }
+  } catch {}
+}
+
+function emergencyCompactPayload(parsed: any): string {
+  try {
+    const state = parsed?.state || {};
+    const minimalAttempts = (state.testAttempts || []).slice(0, 15).map((att: any, idx: number) => ({
+      ...att,
+      questions: idx < 3 ? (att.questions || []).slice(0, 50).map(compactQuestionAttempt) : [],
+    }));
+    const minimalCycles = (state.diagnosticCycles || []).map((c: any) => ({
+      ...c,
+      questions: [],
+    }));
+    return JSON.stringify({
+      ...parsed,
+      state: {
+        ...state,
+        testAttempts: minimalAttempts,
+        diagnosticCycles: minimalCycles,
+        analytics: state.analytics
+          ? {
+              ...state.analytics,
+              weaknessRadar: (state.analytics.weaknessRadar || []).map((w: any) => ({
+                ...w,
+                questionsData: [],
+                recordedMistakes: [],
+              })),
+              strengthList: (state.analytics.strengthList || []).map((s: any) => ({
+                ...s,
+                questionsData: [],
+                recordedMistakes: [],
+              })),
+              allTopics: [],
+            }
+          : state.analytics,
+      },
+    });
+  } catch {
+    return JSON.stringify({
+      version: parsed?.version ?? 0,
+      state: {
+        user: parsed?.state?.user,
+        selectedStream: parsed?.state?.selectedStream,
+        currentCycleNumber: parsed?.state?.currentCycleNumber ?? 1,
+        currentCycleQuestionCount: parsed?.state?.currentCycleQuestionCount ?? 0,
+      },
+    });
+  }
+}
 
 export const useTestStore = create<TestStoreState>()(
   persist(
@@ -198,8 +374,26 @@ export const useTestStore = create<TestStoreState>()(
                   selectedStream: parsed.state.selectedStream || stream,
                   testAttempts: savedAttempts,
                   analytics: savedAnalytics,
-                  currentCycleNumber: parsed.state.currentCycleNumber || 1,
-                  currentCycleQuestionCount: parsed.state.currentCycleQuestionCount || 0,
+                  currentCycleNumber: (() => {
+                    const qualCount = countQualifyingFromTestAttempts(savedAttempts);
+                    const derived = computeAuthoritativeDiagnosticProgress({
+                      totalAttempted: qualCount,
+                      currentCycleNumber: parsed.state.currentCycleNumber,
+                      currentCycleQuestionCount: parsed.state.currentCycleQuestionCount,
+                      completedCyclesCount: savedCycles.length,
+                    });
+                    return derived.currentCycleNumber;
+                  })(),
+                  currentCycleQuestionCount: (() => {
+                    const qualCount = countQualifyingFromTestAttempts(savedAttempts);
+                    const derived = computeAuthoritativeDiagnosticProgress({
+                      totalAttempted: qualCount,
+                      currentCycleNumber: parsed.state.currentCycleNumber,
+                      currentCycleQuestionCount: parsed.state.currentCycleQuestionCount,
+                      completedCyclesCount: savedCycles.length,
+                    });
+                    return derived.currentCycleQuestionCount;
+                  })(),
                   diagnosticCycles: savedCycles,
                   activeCompletionNotification: parsed.state.activeCompletionNotification || null,
                   isSessionActive: false,
@@ -365,10 +559,22 @@ export const useTestStore = create<TestStoreState>()(
           };
         }
 
+        let finalCycleNumber = currentCycleNumber;
+        let finalCycleQuestionCount = currentCycleQuestionCount;
+
+        if (allQuestions.length === 0 && analytics.totalQuestionsAttempted > 0) {
+          const derived = computeAuthoritativeDiagnosticProgress({
+            totalAttempted: analytics.totalQuestionsAttempted,
+            completedCyclesCount: cycles.length,
+          });
+          finalCycleNumber = derived.currentCycleNumber;
+          finalCycleQuestionCount = derived.currentCycleQuestionCount;
+        }
+
         set((state) => ({
           diagnosticCycles: cycles,
-          currentCycleNumber,
-          currentCycleQuestionCount,
+          currentCycleNumber: finalCycleNumber,
+          currentCycleQuestionCount: finalCycleQuestionCount,
           activeCompletionNotification: completionNotification || state.activeCompletionNotification,
         }));
       },
@@ -504,6 +710,9 @@ export const useTestStore = create<TestStoreState>()(
                     };
                     recovered.push(attempt);
                     hasChanges = true;
+                    try {
+                      window.localStorage.removeItem(key);
+                    } catch {}
                   }
                 }
               } catch {}
@@ -539,10 +748,22 @@ export const useTestStore = create<TestStoreState>()(
 
             processQuestionsIntoCycles(existingCycles, allQuestions).then(
               ({ cycles, currentCycleNumber, currentCycleQuestionCount }) => {
+                let finalCycleNumber = currentCycleNumber;
+                let finalCycleQuestionCount = currentCycleQuestionCount;
+
+                if (allQuestions.length === 0 && analytics.totalQuestionsAttempted > 0) {
+                  const derived = computeAuthoritativeDiagnosticProgress({
+                    totalAttempted: analytics.totalQuestionsAttempted,
+                    completedCyclesCount: cycles.length,
+                  });
+                  finalCycleNumber = derived.currentCycleNumber;
+                  finalCycleQuestionCount = derived.currentCycleQuestionCount;
+                }
+
                 set(() => ({
                   diagnosticCycles: cycles,
-                  currentCycleNumber,
-                  currentCycleQuestionCount,
+                  currentCycleNumber: finalCycleNumber,
+                  currentCycleQuestionCount: finalCycleQuestionCount,
                 }));
               }
             );
@@ -694,19 +915,79 @@ export const useTestStore = create<TestStoreState>()(
             return null;
           },
           setItem: (_name: string, value: string) => {
+            if (typeof window === "undefined") return;
             try {
-              const parsed = JSON.parse(value);
-              const userId = parsed?.state?.user?.id;
-              if (userId && userId !== "guest") {
-                window.localStorage.setItem("cuet_active_uid", userId);
-                window.localStorage.setItem(`cuet_ai_prep_session_storage:${userId}`, value);
-              } else {
-                window.localStorage.removeItem("cuet_active_uid");
-                window.localStorage.setItem("cuet_ai_prep_session_storage:guest", value);
+              let parsed: any = null;
+              try {
+                parsed = JSON.parse(value);
+              } catch {
+                parsed = null;
               }
-            } catch {
-              window.localStorage.removeItem("cuet_active_uid");
-              window.localStorage.setItem(`cuet_ai_prep_session_storage:guest`, value);
+              const userId = parsed?.state?.user?.id;
+              const targetKey =
+                userId && userId !== "guest"
+                  ? `cuet_ai_prep_session_storage:${userId}`
+                  : "cuet_ai_prep_session_storage:guest";
+
+              if (userId && userId !== "guest") {
+                try {
+                  window.localStorage.setItem("cuet_active_uid", userId);
+                } catch {}
+              } else {
+                try {
+                  window.localStorage.removeItem("cuet_active_uid");
+                } catch {}
+              }
+
+              // 1. Direct write attempt
+              try {
+                window.localStorage.setItem(targetKey, value);
+                return;
+              } catch (primaryQuotaErr) {
+                console.warn(
+                  "[useTestStore] Storage quota reached on primary write. Starting pruning & compaction.",
+                  primaryQuotaErr
+                );
+              }
+
+              // 2. Prune old submitted sessions and legacy keys
+              pruneLocalStorageSafely();
+
+              // 3. Retry with original value
+              try {
+                window.localStorage.setItem(targetKey, value);
+                return;
+              } catch {}
+
+              // 4. Try emergency compacted payload
+              if (parsed) {
+                try {
+                  const emergencyPayload = emergencyCompactPayload(parsed);
+                  window.localStorage.setItem(targetKey, emergencyPayload);
+                  return;
+                } catch {}
+              }
+
+              // 5. Ultimate fallback: store minimal user & stream
+              try {
+                const minimal = JSON.stringify({
+                  version: parsed?.version ?? 0,
+                  state: {
+                    user: parsed?.state?.user,
+                    selectedStream: parsed?.state?.selectedStream,
+                    currentCycleNumber: parsed?.state?.currentCycleNumber ?? 1,
+                    currentCycleQuestionCount: parsed?.state?.currentCycleQuestionCount ?? 0,
+                  },
+                });
+                window.localStorage.setItem(targetKey, minimal);
+              } catch (finalErr) {
+                console.warn(
+                  "[useTestStore] Storage completely saturated; state retained safely in-memory.",
+                  finalErr
+                );
+              }
+            } catch (outerErr) {
+              console.warn("[useTestStore] Safe storage save warning:", outerErr);
             }
           },
           removeItem: (_name: string) => {
@@ -715,16 +996,25 @@ export const useTestStore = create<TestStoreState>()(
           },
         };
       }),
-      partialize: (state) => ({
-        user: state.user,
-        selectedStream: state.selectedStream,
-        testAttempts: state.testAttempts,
-        analytics: state.analytics,
-        currentCycleNumber: state.currentCycleNumber,
-        currentCycleQuestionCount: state.currentCycleQuestionCount,
-        diagnosticCycles: state.diagnosticCycles,
-        activeCompletionNotification: state.activeCompletionNotification,
-      }),
+      partialize: (state) => {
+        // Keep question telemetry on the latest 5 attempts; keep summary metrics on older attempts
+        const compactedAttempts = (state.testAttempts || []).map((att, idx) =>
+          compactTestAttemptForPersistence(att, idx < 5)
+        );
+        const compactedCycles = (state.diagnosticCycles || []).map(compactCycleForPersistence);
+        const compactedAnalytics = compactAnalyticsForPersistence(state.analytics);
+
+        return {
+          user: state.user,
+          selectedStream: state.selectedStream,
+          testAttempts: compactedAttempts,
+          analytics: compactedAnalytics,
+          currentCycleNumber: state.currentCycleNumber,
+          currentCycleQuestionCount: state.currentCycleQuestionCount,
+          diagnosticCycles: compactedCycles,
+          activeCompletionNotification: state.activeCompletionNotification,
+        };
+      },
     }
   )
 );

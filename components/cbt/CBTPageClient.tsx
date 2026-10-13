@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { Question, FullTestMeta } from "@/types";
 import CBTPlayer from "@/components/cbt/CBTPlayer";
+import { cbtAutosave } from "@/lib/storage/cbt-session-storage";
 
 interface CBTPageClientProps {
   testId: string;
@@ -46,17 +47,27 @@ export default function CBTPageClient({
     if (isSubmitted) return;
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
+      try {
+        cbtAutosave.flush();
+      } catch {}
       const msg = "Warning: No test data will be recorded if you close or leave this test.";
       e.returnValue = msg;
       return msg;
     };
 
+    const handlePageHide = () => {
+      try {
+        cbtAutosave.flush();
+      } catch {}
+    };
+
     window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("pagehide", handlePageHide);
     window.onbeforeunload = handleBeforeUnload;
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("pagehide", handlePageHide);
       window.onbeforeunload = null;
     };
   }, [isSubmitted]);

@@ -76,13 +76,13 @@ export default function DreamCollegeGapCard({
         statusLabel: analysis.statusLabel,
         isComplete: analysis.isComplete,
         hasNoData: analysis.hasNoData,
-        participatingSubjects: analysis.subjectImprovementBreakdown
+        participatingSubjects: (analysis.subjectImprovementBreakdown || [])
           .filter((s) => s.hasData)
           .map((s) => s.subjectName),
-        missingSubjects: analysis.subjectImprovementBreakdown
+        missingSubjects: (analysis.subjectImprovementBreakdown || [])
           .filter((s) => !s.hasData)
           .map((s) => s.subjectName),
-        subjectBreakdown: analysis.subjectImprovementBreakdown.map((s) => ({
+        subjectBreakdown: (analysis.subjectImprovementBreakdown || []).map((s) => ({
           subjectName: s.subjectName,
           currentMarks: s.currentMarks,
           subjectMaxMarks: s.subjectMaxMarks,
@@ -329,7 +329,7 @@ export default function DreamCollegeGapCard({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-          {analysis.subjectImprovementBreakdown.map((s) => (
+          {(analysis.subjectImprovementBreakdown || []).map((s) => (
             <div
               key={s.subjectId}
               className={`p-3 rounded-xl border text-xs space-y-1.5 ${

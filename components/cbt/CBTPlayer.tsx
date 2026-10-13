@@ -26,6 +26,7 @@ import LanguageSelector from "@/components/i18n/LanguageSelector";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { getActiveExamConfig } from "@/lib/config/examConfig";
 import { safeCapitalizeOptionText } from "@/lib/utils";
+import { cbtAutosave } from "@/lib/storage/cbt-session-storage";
 
 export default function CBTPlayer() {
   const { t, translateStem } = useTranslation();
@@ -102,17 +103,27 @@ export default function CBTPlayer() {
     if (isSubmitted) return;
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
+      try {
+        cbtAutosave.flush();
+      } catch {}
       const msg = "Warning: No test data will be recorded if you close or leave this test.";
       e.returnValue = msg;
       return msg;
     };
 
+    const handlePageHide = () => {
+      try {
+        cbtAutosave.flush();
+      } catch {}
+    };
+
     window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("pagehide", handlePageHide);
     window.onbeforeunload = handleBeforeUnload;
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("pagehide", handlePageHide);
       window.onbeforeunload = null;
     };
   }, [isSubmitted]);

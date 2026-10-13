@@ -6,6 +6,7 @@ import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
 import { StreamType } from "@/types";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
 import { calculateActiveStreak } from "@/lib/gamification";
+import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
 
 export const metadata: Metadata = {
   title: "Dashboard | CUET AI-Prep",
@@ -52,6 +53,9 @@ export default async function DashboardPage() {
     weaknessRadar: [],
     timeSinkAlerts: [],
     subjectCalibration: buildDefaultSubjectCalibration(),
+    currentCycleNumber: 1,
+    currentCycleQuestionCount: 0,
+    isDiagnosticUnlocked: false,
   };
 
   // 2. Query Supabase database to override with live data if available
@@ -143,6 +147,11 @@ export default async function DashboardPage() {
         serverData.kpi.totalAttempted = totalAttempted;
         serverData.kpi.correctCount = correctCount;
         serverData.kpi.accuracyPercentage = overallAccuracy;
+
+        const diagProgress = computeAuthoritativeDiagnosticProgress({ totalAttempted });
+        serverData.currentCycleNumber = diagProgress.currentCycleNumber;
+        serverData.currentCycleQuestionCount = diagProgress.currentCycleQuestionCount;
+        serverData.isDiagnosticUnlocked = diagProgress.isUnlocked;
 
         const subMap = serverData.subjectCalibration || buildDefaultSubjectCalibration();
         attemptedRows.forEach((ua: any) => {
