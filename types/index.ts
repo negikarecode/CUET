@@ -223,6 +223,10 @@ export interface RecordedQuestionAttempt {
   source?: string;
   reviewed_by_human?: boolean;
   isLowEffort?: boolean;
+  solution?: any;
+  formula?: string;
+  keyConcept?: string;
+  misconception?: any;
 }
 
 export interface RecordedTestAttempt {

@@ -210,7 +210,7 @@ export function mapQuestionsFromDataset(
         isCorrect: opt.isCorrect,
         misconception: opt.misconception,
         studentSelectionTrap: opt.studentSelectionTrap,
-        mistakeAnalysis: opt.mistakeAnalysis,
+        mistakeAnalysis: opt.mistakeAnalysis || (opt as any).explanation || opt.studentSelectionTrap || "",
       })),
       correctOptionId:
         q.correctOption ||
@@ -219,6 +219,9 @@ export function mapQuestionsFromDataset(
       explanation:
         q.detailedSolution ||
         (q as any).explanation ||
+        q.solution?.detailed ||
+        (q.solution as any)?.step_by_step ||
+        q.solution?.quick ||
         (q.options?.find((o) => o.isCorrect) as any)?.explanation ||
         "",
       solution: q.solution,

@@ -114,7 +114,12 @@ export function buildDeterministicPostMockAIInsight(
   }
 
   // Summary
-  const summary = `In this mock examination for ${subject}, you completed ${overall.attemptedCount} of ${overall.totalQuestions} questions with an overall accuracy of ${overall.accuracyPercentage}% (Score: ${overall.totalMarks}/${overall.maxMarks}). ${
+  const examType = report.testId.toLowerCase().includes("pyq")
+    ? "official PYQ examination"
+    : report.testId.toLowerCase().includes("practice")
+    ? "practice test"
+    : "mock examination";
+  const summary = `In this ${examType} for ${subject}, you completed ${overall.attemptedCount} of ${overall.totalQuestions} questions with an overall accuracy of ${overall.accuracyPercentage}% (Score: ${overall.totalMarks}/${overall.maxMarks}). ${
     overall.correctCount > 0 ? `${overall.correctCount} correct answers yielded +${overall.correctCount * 5} marks, ` : ""
   }while ${overall.incorrectCount} incorrect answers incurred -${overall.incorrectCount} negative marks.`;
 

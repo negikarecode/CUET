@@ -116,10 +116,10 @@ export function normalizeQuestionTelemetry(
       difficulty: normalizedDiff,
       rawDifficulty: rawDiff,
       explanation,
-      solution: fallbackQ?.solution,
-      formula: fallbackQ?.formula,
-      keyConcept: fallbackQ?.keyConcept,
-      misconception: fallbackQ?.misconception,
+      solution: fallbackQ?.solution || q.solution,
+      formula: fallbackQ?.formula || q.formula,
+      keyConcept: fallbackQ?.keyConcept || q.keyConcept,
+      misconception: fallbackQ?.misconception || q.misconception,
       ncertReference,
     };
   });

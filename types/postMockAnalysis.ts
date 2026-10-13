@@ -25,6 +25,8 @@ export interface NormalizedMockQuestionTelemetry {
     quick?: string;
     concept?: string;
     detailed?: string;
+    step_by_step?: string;
+    distractor_analysis?: Record<string, string>;
   };
   formula?: string;
   keyConcept?: string;

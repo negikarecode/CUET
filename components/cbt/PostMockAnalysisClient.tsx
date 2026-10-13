@@ -219,14 +219,16 @@ export default function PostMockAnalysisClient({
   const isPYQ = report.testId.toLowerCase().includes("pyq");
   const practiceSubjectMatch = report.testId.match(/practice-([a-z0-9_-]+)-unit/i);
   const practiceSubject = practiceSubjectMatch ? practiceSubjectMatch[1] : null;
+  const pyqSubjectMatch = report.testId.match(/pyq-([a-z0-9_-]+)-/i);
+  const pyqSubject = pyqSubjectMatch ? pyqSubjectMatch[1] : null;
 
   const backHref = isPractice
     ? (practiceSubject ? `/dashboard/practice/${practiceSubject}` : "/dashboard/practice")
     : isPYQ
-    ? "/dashboard/pyqs"
+    ? (pyqSubject ? `/dashboard/pyqs/${pyqSubject}` : "/dashboard/pyqs")
     : "/dashboard/mocks";
 
-  const backLabel = isPractice ? "Back to Practice Tests" : isPYQ ? "All PYQ Papers" : "Mocks History";
+  const backLabel = isPractice ? "Back to Practice Tests" : isPYQ ? "Back to PYQ Papers" : "Mocks History";
   const badgeLabel = isPractice ? "UNIT PRACTICE CBT ANALYSIS" : isPYQ ? "OFFICIAL PYQ CBT ANALYSIS" : "POST-MOCK RESULTS";
   const retakeLabel = isPractice ? "Retake Practice Test" : isPYQ ? "Retake PYQ Paper" : "Retake Mock";
   const backButtonText = isPractice ? "Back to Practice Tests" : isPYQ ? "Back to PYQs" : "Back to Mocks";
@@ -1141,8 +1143,20 @@ export default function PostMockAnalysisClient({
                           className={`p-3 rounded-xl flex items-start gap-2 text-xs shadow-xs transition-all ${optClasses}`}
                         >
                           <span className="font-mono font-bold shrink-0 text-slate-600">({opt.id})</span>
-                          <div className="flex-1">
+                          <div className="flex-1 space-y-1">
                             <MathRenderer text={safeCapitalizeOptionText(opt.text)} />
+                            {isCandidatePick && !isTrueCorrect && (opt.mistakeAnalysis || (q.solution as any)?.distractor_analysis?.[opt.id]) && (
+                              <div className="mt-1 pt-1 border-t border-rose-200/60 text-[11px] text-rose-800 font-normal">
+                                <span className="font-semibold uppercase text-[9px] text-rose-700 block">Trap / Misconception Note:</span>
+                                <MathRenderer text={opt.mistakeAnalysis || (q.solution as any)?.distractor_analysis?.[opt.id] || ""} />
+                              </div>
+                            )}
+                            {isTrueCorrect && (opt.mistakeAnalysis || (q.solution as any)?.distractor_analysis?.[opt.id]) && (
+                              <div className="mt-1 pt-1 border-t border-emerald-200/60 text-[11px] text-emerald-800 font-normal">
+                                <span className="font-semibold uppercase text-[9px] text-emerald-700 block">Key Rationale:</span>
+                                <MathRenderer text={opt.mistakeAnalysis || (q.solution as any)?.distractor_analysis?.[opt.id] || ""} />
+                              </div>
+                            )}
                           </div>
                           {isTrueCorrect && (
                             <span className="text-[10px] font-bold uppercase text-emerald-700 shrink-0">

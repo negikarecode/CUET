@@ -840,6 +840,10 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           difficulty: String(q.difficulty),
           ncertReference: q.pyqSource || `NCERT Class 12 (${q.chapter || q.topic})`,
           explanation: q.explanation,
+          solution: q.solution,
+          formula: q.formula,
+          keyConcept: q.keyConcept,
+          misconception: q.misconception,
         };
       });
 
