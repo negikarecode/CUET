@@ -17,6 +17,7 @@ import {
   computeAuthoritativeDiagnosticProgress,
   countQualifyingFromTestAttempts,
 } from "@/lib/diagnostic-status";
+import { safeStorage } from "@/lib/storage/safe-storage";
 
 interface TestStoreState {
   // Gamification & User Auth state
@@ -190,41 +191,6 @@ function compactAnalyticsForPersistence(analytics: UserAnalyticsSummary): UserAn
   };
 }
 
-function pruneLocalStorageSafely(): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.removeItem("cuet_ai_prep_session_storage");
-
-    const cbtKeys: string[] = [];
-    for (let i = 0; i < window.localStorage.length; i++) {
-      const k = window.localStorage.key(i);
-      if (k && k.startsWith("cuet_cbt_session_")) {
-        cbtKeys.push(k);
-      }
-    }
-    cbtKeys.forEach((k) => {
-      try {
-        const raw = window.localStorage.getItem(k);
-        if (raw) {
-          const s = JSON.parse(raw);
-          if (s.isSubmitted) {
-            window.localStorage.removeItem(k);
-          }
-        }
-      } catch {
-        window.localStorage.removeItem(k);
-      }
-    });
-
-    for (let i = window.localStorage.length - 1; i >= 0; i--) {
-      const k = window.localStorage.key(i);
-      if (k && (k.startsWith("temp_") || k.includes("_cache_") || k.startsWith("debug_"))) {
-        window.localStorage.removeItem(k);
-      }
-    }
-  } catch {}
-}
-
 function emergencyCompactPayload(parsed: any): string {
   try {
     const state = parsed?.state || {};
@@ -342,9 +308,9 @@ export const useTestStore = create<TestStoreState>()(
         const stream = (profile.preferredStream || "science") as StreamType;
 
         if (typeof window !== "undefined") {
-          window.localStorage.setItem("cuet_active_uid", targetId);
+          safeStorage.setItem("cuet_active_uid", targetId);
           // Check if this user already has persisted user-scoped data
-          const existingDataStr = window.localStorage.getItem(`cuet_ai_prep_session_storage:${targetId}`);
+          const existingDataStr = safeStorage.getItem(`cuet_ai_prep_session_storage:${targetId}`);
           if (existingDataStr) {
             try {
               const parsed = JSON.parse(existingDataStr);
@@ -446,7 +412,7 @@ export const useTestStore = create<TestStoreState>()(
           document.cookie = "cuet_auth=; path=/; max-age=0; SameSite=Lax";
         }
         if (typeof window !== "undefined") {
-          window.localStorage.removeItem("cuet_active_uid");
+          safeStorage.removeItem("cuet_active_uid");
         }
         set({
           user: DEFAULT_USER,
@@ -583,7 +549,7 @@ export const useTestStore = create<TestStoreState>()(
         if (typeof window === "undefined") return;
         try {
           const currentAttempts = [...(get().testAttempts || [])];
-          const activeUid = get().user?.id || (typeof window !== "undefined" ? window.localStorage.getItem("cuet_active_uid") : null);
+          const activeUid = get().user?.id || (typeof window !== "undefined" ? safeStorage.getItem("cuet_active_uid") : null);
           if (!activeUid || activeUid === "guest") return;
 
           // Track already registered testIds to prevent any duplication
@@ -887,25 +853,25 @@ export const useTestStore = create<TestStoreState>()(
         return {
           getItem: (_name: string) => {
             // Priority 1: Check active user pointer
-            const activeUid = window.localStorage.getItem("cuet_active_uid");
+            const activeUid = safeStorage.getItem("cuet_active_uid");
             if (activeUid) {
-              const userScoped = window.localStorage.getItem(`cuet_ai_prep_session_storage:${activeUid}`);
+              const userScoped = safeStorage.getItem(`cuet_ai_prep_session_storage:${activeUid}`);
               if (userScoped) return userScoped;
             }
             // Fallback for guest
-            const guestScoped = window.localStorage.getItem("cuet_ai_prep_session_storage:guest");
+            const guestScoped = safeStorage.getItem("cuet_ai_prep_session_storage:guest");
             if (guestScoped) return guestScoped;
 
             // Safe migration: ONLY if legacy data explicitly has an id that matches activeUid
-            const legacy = window.localStorage.getItem("cuet_ai_prep_session_storage");
+            const legacy = safeStorage.getItem("cuet_ai_prep_session_storage");
             if (legacy) {
               try {
                 const parsed = JSON.parse(legacy);
                 const legacyUserId = parsed?.state?.user?.id;
                 // If legacy owner matches current activeUid, migrate it safely
                 if (legacyUserId && activeUid && legacyUserId === activeUid) {
-                  window.localStorage.setItem(`cuet_ai_prep_session_storage:${activeUid}`, legacy);
-                  window.localStorage.removeItem("cuet_ai_prep_session_storage");
+                  safeStorage.setItem(`cuet_ai_prep_session_storage:${activeUid}`, legacy);
+                  safeStorage.removeItem("cuet_ai_prep_session_storage");
                   return legacy;
                 }
               } catch {
@@ -930,45 +896,27 @@ export const useTestStore = create<TestStoreState>()(
                   : "cuet_ai_prep_session_storage:guest";
 
               if (userId && userId !== "guest") {
-                try {
-                  window.localStorage.setItem("cuet_active_uid", userId);
-                } catch {}
+                safeStorage.setItem("cuet_active_uid", userId);
               } else {
-                try {
-                  window.localStorage.removeItem("cuet_active_uid");
-                } catch {}
+                safeStorage.removeItem("cuet_active_uid");
               }
 
-              // 1. Direct write attempt
-              try {
-                window.localStorage.setItem(targetKey, value);
+              // 1. Direct write attempt via safeStorage
+              const writeResult = safeStorage.setItem(targetKey, value);
+              if (writeResult.tier === "local") {
                 return;
-              } catch (primaryQuotaErr) {
-                console.warn(
-                  "[useTestStore] Storage quota reached on primary write. Starting pruning & compaction.",
-                  primaryQuotaErr
-                );
               }
 
-              // 2. Prune old submitted sessions and legacy keys
-              pruneLocalStorageSafely();
-
-              // 3. Retry with original value
-              try {
-                window.localStorage.setItem(targetKey, value);
-                return;
-              } catch {}
-
-              // 4. Try emergency compacted payload
+              // 2. If storage was degraded or full, try emergency compacted payload
               if (parsed) {
                 try {
                   const emergencyPayload = emergencyCompactPayload(parsed);
-                  window.localStorage.setItem(targetKey, emergencyPayload);
-                  return;
+                  const compactResult = safeStorage.setItem(targetKey, emergencyPayload);
+                  if (compactResult.tier === "local") return;
                 } catch {}
               }
 
-              // 5. Ultimate fallback: store minimal user & stream
+              // 3. Ultimate fallback: store minimal user & stream
               try {
                 const minimal = JSON.stringify({
                   version: parsed?.version ?? 0,
@@ -979,7 +927,7 @@ export const useTestStore = create<TestStoreState>()(
                     currentCycleQuestionCount: parsed?.state?.currentCycleQuestionCount ?? 0,
                   },
                 });
-                window.localStorage.setItem(targetKey, minimal);
+                safeStorage.setItem(targetKey, minimal);
               } catch (finalErr) {
                 console.warn(
                   "[useTestStore] Storage completely saturated; state retained safely in-memory.",
@@ -991,8 +939,8 @@ export const useTestStore = create<TestStoreState>()(
             }
           },
           removeItem: (_name: string) => {
-            const activeUid = window.localStorage.getItem("cuet_active_uid") || "guest";
-            window.localStorage.removeItem(`cuet_ai_prep_session_storage:${activeUid}`);
+            const activeUid = safeStorage.getItem("cuet_active_uid") || "guest";
+            safeStorage.removeItem(`cuet_ai_prep_session_storage:${activeUid}`);
           },
         };
       }),

@@ -1,4 +1,5 @@
 import { CALIBRATION_THRESHOLDS } from "@/lib/config/dashboardConfig";
+import { safeStorage } from "@/lib/storage/safe-storage";
 
 export interface TopicRepairPlanEvents {
   conceptReviewed: boolean;
@@ -78,7 +79,7 @@ export function getStoredTopicEvents(
 
   if (typeof window !== "undefined") {
     try {
-      const raw = window.localStorage.getItem(key);
+      const raw = safeStorage.getItem(key);
       if (raw) {
         const parsed = JSON.parse(raw);
         const merged = { ...DEFAULT_EVENTS, ...parsed };
@@ -86,7 +87,7 @@ export function getStoredTopicEvents(
         return merged;
       }
     } catch {
-      // Ignore localStorage error
+      // Ignore storage error
     }
   }
 
@@ -109,9 +110,9 @@ export function saveTopicEvents(
 
   if (typeof window !== "undefined") {
     try {
-      window.localStorage.setItem(key, JSON.stringify(updated));
+      safeStorage.setItem(key, JSON.stringify(updated));
     } catch {
-      // Ignore localStorage error
+      // Ignore storage error
     }
   }
 
@@ -126,7 +127,7 @@ export function clearRepairEvents(userId: string = "guest", topicKey: string): v
   memoryEventStore.delete(key);
   if (typeof window !== "undefined") {
     try {
-      window.localStorage.removeItem(key);
+      safeStorage.removeItem(key);
     } catch {
       // Ignore
     }

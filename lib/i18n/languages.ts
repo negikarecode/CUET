@@ -1,3 +1,5 @@
+import { safeStorage } from "@/lib/storage/safe-storage";
+
 export interface CUETLanguage {
   code: string;
   name: string;
@@ -39,7 +41,7 @@ export function getLanguageByCode(code: string): CUETLanguage {
 export function getActiveLanguage(): string {
   if (typeof window === "undefined") return "en";
   try {
-    const saved = localStorage.getItem("cuet_preferred_language");
+    const saved = safeStorage.getItem("cuet_preferred_language");
     if (saved && CUET_LANGUAGE_CODES.includes(saved)) {
       return saved;
     }
@@ -53,7 +55,7 @@ export function setAppLanguage(langCode: string): void {
   const validCode = CUET_LANGUAGE_CODES.includes(langCode) ? langCode : "en";
 
   try {
-    localStorage.setItem("cuet_preferred_language", validCode);
+    safeStorage.setItem("cuet_preferred_language", validCode);
     document.documentElement.lang = validCode;
     const langMeta = getLanguageByCode(validCode);
     if (langMeta.direction === "rtl") {

@@ -48,6 +48,7 @@ import {
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { createClient } from "@/lib/supabase/client";
+import { safeStorage } from "@/lib/storage/safe-storage";
 import { updateProfileGoalsAction } from "@/app/dashboard/profile/actions";
 import EditGoalsModal from "@/components/profile/EditGoalsModal";
 import SignOutModal from "@/components/profile/SignOutModal";
@@ -369,19 +370,10 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       // Safe fallback
     }
 
-    // 3. Clear session storage & exam caches
+    // 3. Clear user-scoped session storage & caches safely
     if (typeof window !== "undefined") {
-      sessionStorage.clear();
-      // Clear exam and session keys
       try {
-        const keysToRemove = Object.keys(localStorage).filter(
-          (k) =>
-            k.startsWith("cuet_cbt_session_") ||
-            k.startsWith("streak_") ||
-            k.startsWith("last_practice_date_") ||
-            k.startsWith("unlocked_trophies_")
-        );
-        keysToRemove.forEach((k) => localStorage.removeItem(k));
+        safeStorage.clearUserScopedData(zustandUser?.id || initialData.profile?.id || "");
       } catch {
         // Safe fallback
       }

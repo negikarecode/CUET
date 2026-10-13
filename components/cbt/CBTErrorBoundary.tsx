@@ -4,6 +4,7 @@ import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertOctagon, RotateCcw, Home, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { pruneOldCBTSessionsSafely, clearCBTSessionSync, getActiveUserId } from "@/lib/storage/cbt-session-storage";
+import { safeStorage, pruneDisposableStorage } from "@/lib/storage/safe-storage";
 
 interface Props {
   children: ReactNode;
@@ -38,6 +39,7 @@ export class CBTErrorBoundary extends Component<Props, State> {
     // If quota error, immediately run proactive pruning in the background
     if (typeof window !== "undefined") {
       try {
+        pruneDisposableStorage();
         const uid = getActiveUserId();
         pruneOldCBTSessionsSafely(uid);
       } catch {}
@@ -47,6 +49,7 @@ export class CBTErrorBoundary extends Component<Props, State> {
   private handleReload = () => {
     try {
       if (typeof window !== "undefined") {
+        pruneDisposableStorage();
         const uid = getActiveUserId();
         pruneOldCBTSessionsSafely(uid);
 
@@ -55,7 +58,7 @@ export class CBTErrorBoundary extends Component<Props, State> {
           const key = window.localStorage.key(i);
           if (key && key.startsWith("cuet_ai_prep_session_storage")) {
             try {
-              const raw = window.localStorage.getItem(key);
+              const raw = safeStorage.getItem(key);
               if (raw && raw.length > 500000) { // >500KB
                 const parsed = JSON.parse(raw);
                 if (parsed?.state?.testAttempts) {
@@ -65,7 +68,7 @@ export class CBTErrorBoundary extends Component<Props, State> {
                     questions: [],
                   }));
                   parsed.state.diagnosticCycles = [];
-                  window.localStorage.setItem(key, JSON.stringify(parsed));
+                  safeStorage.setItem(key, JSON.stringify(parsed));
                 }
               }
             } catch {}

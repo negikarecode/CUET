@@ -3,6 +3,8 @@
  * Integrates browser PushManager, ServiceWorker registration, and local fallback simulation.
  */
 
+import { safeStorage } from "@/lib/storage/safe-storage";
+
 export type PushPermissionStatus = "granted" | "denied" | "default" | "unsupported";
 
 export function isPushNotificationSupported(): boolean {
@@ -81,9 +83,9 @@ export async function enablePushNotifications(userId?: string): Promise<{
       }
     }
 
-    // Save preference to localStorage
+    // Save preference to safeStorage
     if (typeof window !== "undefined") {
-      localStorage.setItem("cuet_revision_push_enabled", "true");
+      safeStorage.setItem("cuet_revision_push_enabled", "true");
     }
 
     return {
@@ -106,16 +108,16 @@ export async function enablePushNotifications(userId?: string): Promise<{
  */
 export function disablePushNotifications(): void {
   if (typeof window !== "undefined") {
-    localStorage.setItem("cuet_revision_push_enabled", "false");
+    safeStorage.setItem("cuet_revision_push_enabled", "false");
   }
 }
 
 /**
- * Checks if revision alerts are enabled in localStorage
+ * Checks if revision alerts are enabled in safeStorage
  */
 export function isPushPreferenceEnabled(): boolean {
   if (typeof window === "undefined") return false;
-  return localStorage.getItem("cuet_revision_push_enabled") === "true";
+  return safeStorage.getItem("cuet_revision_push_enabled") === "true";
 }
 
 /**

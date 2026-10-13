@@ -9,6 +9,8 @@
  * - Standardized Indian date formatting
  */
 
+import { safeStorage } from "@/lib/storage/safe-storage";
+
 // -------------------------------------------------------------
 // 1. Exam Dates & Countdown
 // -------------------------------------------------------------
@@ -1046,7 +1048,7 @@ export function checkAndRecordRateLimit(
   try {
     const today = new Date().toISOString().split("T")[0];
     const storageKey = `cuet_rate_limit:${userId}:${today}:${canonicalFeature}`;
-    const raw = window.localStorage.getItem(storageKey);
+    const raw = safeStorage.getItem(storageKey);
     const usedToday = raw ? parseInt(raw, 10) : 0;
 
     if (usedToday >= limit) {
@@ -1061,7 +1063,7 @@ export function checkAndRecordRateLimit(
     }
 
     const newCount = usedToday + 1;
-    window.localStorage.setItem(storageKey, newCount.toString());
+    safeStorage.setItem(storageKey, newCount.toString());
     const remaining = Math.max(0, limit - newCount);
     return {
       allowed: true,

@@ -7,6 +7,7 @@
  */
 
 import { QuestionOption } from "@/types";
+import { safeStorage } from "@/lib/storage/safe-storage";
 
 export interface SpacedRepetitionItem {
   id: string; // questionId or testKey:::qId
@@ -77,7 +78,7 @@ export function loadSpacedRepetitionItems(userId: string): SpacedRepetitionItem[
 
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem(key);
+    const raw = safeStorage.getItem(key);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     memorySpacedRepetitionStore.set(key, parsed);
@@ -92,11 +93,13 @@ export function loadSpacedRepetitionItems(userId: string): SpacedRepetitionItem[
  */
 export function saveSpacedRepetitionItems(userId: string, items: SpacedRepetitionItem[]): void {
   const key = getStorageKey(userId);
-  memorySpacedRepetitionStore.set(key, items);
+  // Bound to at most 30 items to prevent storage bloat
+  const boundedItems = items.slice(0, 30);
+  memorySpacedRepetitionStore.set(key, boundedItems);
 
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(key, JSON.stringify(items));
+    safeStorage.setItem(key, JSON.stringify(boundedItems));
   } catch (err) {
     console.warn("Failed to persist spaced repetition items", err);
   }

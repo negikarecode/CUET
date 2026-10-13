@@ -1,5 +1,6 @@
 import { Trophy } from "@/types";
 import { createClient } from "@/lib/supabase/client";
+import { safeStorage } from "@/lib/storage/safe-storage";
 
 export interface TestResultMetrics {
   totalQuestions: number;
@@ -241,8 +242,8 @@ export async function updateStreak(
   } catch {
     // Client local storage fallback
     if (typeof window !== "undefined") {
-      const storedDate = localStorage.getItem(`last_practice_date_${userId}`);
-      const storedStreak = parseInt(localStorage.getItem(`streak_${userId}`) || "0", 10);
+      const storedDate = safeStorage.getItem(`last_practice_date_${userId}`);
+      const storedStreak = parseInt(safeStorage.getItem(`streak_${userId}`) || "0", 10);
       if (storedDate) lastPracticeDateStr = storedDate;
       if (!isNaN(storedStreak)) currentStreak = storedStreak;
     }
@@ -265,10 +266,10 @@ export async function updateStreak(
     // Graceful offline catch
   }
 
-  // Persist to local storage
+  // Persist to safe storage
   if (typeof window !== "undefined") {
-    localStorage.setItem(`last_practice_date_${userId}`, todayStr);
-    localStorage.setItem(`streak_${userId}`, newStreak.toString());
+    safeStorage.setItem(`last_practice_date_${userId}`, todayStr);
+    safeStorage.setItem(`streak_${userId}`, newStreak.toString());
   }
 
   return { newStreak, streakMaintained };
@@ -335,7 +336,7 @@ export async function evaluateTrophies(
     }
   } catch {
     if (typeof window !== "undefined") {
-      const stored = localStorage.getItem(`unlocked_trophies_${userId}`);
+      const stored = safeStorage.getItem(`unlocked_trophies_${userId}`);
       if (stored) alreadyUnlocked = JSON.parse(stored);
     }
   }
@@ -379,7 +380,7 @@ export async function evaluateTrophies(
 
   if (typeof window !== "undefined") {
     const updated = [...new Set([...alreadyUnlocked, ...newlyUnlockedIds])];
-    localStorage.setItem(`unlocked_trophies_${userId}`, JSON.stringify(updated));
+    safeStorage.setItem(`unlocked_trophies_${userId}`, JSON.stringify(updated));
   }
 
   return MASTER_TROPHIES.filter((t) => newlyUnlockedIds.includes(t.id)).map((t) => ({
@@ -408,11 +409,11 @@ export async function getUserTrophiesWithProgress(userId: string): Promise<Troph
       });
     }
   } catch {
-    // Fallback to local storage or defaults
+    // Fallback to safe storage or defaults
   }
 
   if (Object.keys(unlockedMap).length === 0 && typeof window !== "undefined") {
-    const stored = localStorage.getItem(`unlocked_trophies_${userId}`);
+    const stored = safeStorage.getItem(`unlocked_trophies_${userId}`);
     if (stored) {
       const arr = JSON.parse(stored) as string[];
       arr.forEach((id) => (unlockedMap[id] = new Date().toISOString()));

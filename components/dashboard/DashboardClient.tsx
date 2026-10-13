@@ -8,6 +8,7 @@ import { normalizeSubject } from "@/lib/analytics";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { calculateCUETScore, MARKING_SCHEME } from "@/lib/config/dashboardConfig";
 import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
+import { safeStorage } from "@/lib/storage/safe-storage";
 
 import { WelcomeBanner } from "@/components/dashboard/prep-pulse/WelcomeBanner";
 import { NextBestActionCard } from "@/components/dashboard/prep-pulse/NextBestActionCard";
@@ -72,10 +73,11 @@ export default function DashboardClient({
 
   const isServerUser = Boolean(initialData.user && initialData.user.id !== "guest");
 
-  // Attempt recovery on mount: ingests any completed CBT session from localStorage that was missed
+  // Attempt recovery on mount: cleans stale cache and ingests any completed CBT session from storage that was missed
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
+        safeStorage.initStartupCleanup();
         const { recoverUnrecordedCBTSessions } = useTestStore.getState();
         if (typeof recoverUnrecordedCBTSessions === "function") {
           recoverUnrecordedCBTSessions();

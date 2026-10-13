@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, Check } from 'lucide-react';
 import { UpcomingTest } from '@/types/dashboard';
 import { MOCK_FORMAT_OPTIONS, formatDateIndian } from '@/lib/config/dashboardConfig';
+import { safeStorage } from '@/lib/storage/safe-storage';
 
 interface ScheduleMockTestProps {
   onTestScheduled?: (newTest: UpcomingTest) => void;
@@ -35,9 +36,10 @@ export const ScheduleMockTest: React.FC<ScheduleMockTestProps> = ({ onTestSchedu
     };
 
     try {
-      const existingStr = typeof window !== 'undefined' ? localStorage.getItem('cuet_scheduled_mocks') : null;
+      const existingStr = safeStorage.getItem('cuet_scheduled_mocks');
       const existing = existingStr ? JSON.parse(existingStr) : [];
-      localStorage.setItem('cuet_scheduled_mocks', JSON.stringify([newTest, ...existing]));
+      const updated = [newTest, ...existing].slice(0, 10);
+      safeStorage.setItem('cuet_scheduled_mocks', JSON.stringify(updated));
     } catch {
       // storage quota fallback
     }

@@ -4,6 +4,8 @@
  * Supports in-memory caching + local storage persistence on client.
  */
 
+import { safeStorage } from "@/lib/storage/safe-storage";
+
 export interface TokenUsageLog {
   id: string;
   timestamp: string;
@@ -34,12 +36,12 @@ class TokenLogger {
   constructor() {
     if (typeof window !== "undefined") {
       try {
-        const stored = localStorage.getItem("cuet_ai_token_logs");
+        const stored = safeStorage.getItem("cuet_ai_token_logs");
         if (stored) {
           this.logs = JSON.parse(stored);
         }
       } catch (e) {
-        // Ignore localStorage error
+        // Ignore storage error
       }
     }
   }
@@ -76,14 +78,16 @@ class TokenLogger {
     };
 
     this.logs.unshift(entry);
-    // Keep last 500 logs
-    if (this.logs.length > 500) {
-      this.logs = this.logs.slice(0, 500);
+    // Keep last 100 in-memory logs
+    if (this.logs.length > 100) {
+      this.logs = this.logs.slice(0, 100);
     }
 
     if (typeof window !== "undefined") {
       try {
-        localStorage.setItem("cuet_ai_token_logs", JSON.stringify(this.logs));
+        // Bound client storage to at most 20 recent logs to prevent quota exhaustion
+        const logsToPersist = this.logs.slice(0, 20);
+        safeStorage.setItem("cuet_ai_token_logs", JSON.stringify(logsToPersist));
       } catch (e) {
         // Ignore quota errors
       }
@@ -138,7 +142,7 @@ class TokenLogger {
   clearLogs(): void {
     this.logs = [];
     if (typeof window !== "undefined") {
-      localStorage.removeItem("cuet_ai_token_logs");
+      safeStorage.removeItem("cuet_ai_token_logs");
     }
   }
 }

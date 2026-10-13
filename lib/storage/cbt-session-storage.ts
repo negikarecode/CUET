@@ -10,6 +10,7 @@
  */
 
 import { CBTScoreSummary } from "@/lib/store/useCBTStore";
+import { safeStorage, pruneDisposableStorage } from "@/lib/storage/safe-storage";
 
 export interface CompactQuestionState {
   visited: boolean;
@@ -54,7 +55,7 @@ const IDB_STORE_NAME = "exam_sessions";
 export function getActiveUserId(): string {
   if (typeof window === "undefined") return "guest";
   try {
-    return window.localStorage.getItem("cuet_active_uid") || "guest";
+    return safeStorage.getItem("cuet_active_uid") || "guest";
   } catch {
     return "guest";
   }
@@ -255,6 +256,8 @@ export function pruneOldCBTSessionsSafely(
 
   try {
     const activeKey = activeTestId ? getCBTSessionKey(activeTestId, currentUserId) : null;
+    pruneDisposableStorage(activeKey || undefined);
+
     const sessionKeys: string[] = [];
 
     for (let i = 0; i < window.localStorage.length; i++) {
@@ -345,23 +348,14 @@ export function saveCBTSessionSync(
     // SessionStorage unavailable or full
   }
 
-  // 2. LocalStorage Write (cross-tab, long-lived)
+  // 2. LocalStorage Write via safeStorage
   try {
-    window.localStorage.setItem(key, serialized);
-    savedToPersistentLayer = true;
-  } catch (quotaErr) {
-    // Quota exceeded: proactively prune submitted & stale sessions, then retry
-    pruneOldCBTSessionsSafely(session.userId, session.testId);
-
-    try {
-      window.localStorage.setItem(key, serialized);
+    const writeResult = safeStorage.setItem(key, serialized);
+    if (writeResult.tier === "local") {
       savedToPersistentLayer = true;
-    } catch {
-      // LocalStorage saturated; sessionStorage remains authoritative in-memory
-      console.warn(
-        `[CBTSessionStorage] LocalStorage quota reached for test ${session.testId}. State safely preserved in sessionStorage & memory.`
-      );
     }
+  } catch {
+    // safeStorage handles errors internally
   }
 
   // 3. IndexedDB Asynchronous Write
@@ -392,9 +386,9 @@ export function loadCBTSessionSync(
   try {
     const raw =
       window.sessionStorage.getItem(key) ||
-      window.localStorage.getItem(key) ||
+      safeStorage.getItem(key) ||
       // Backward compatibility with legacy un-scoped key
-      window.localStorage.getItem(`cuet_cbt_session_${testId}`);
+      safeStorage.getItem(`cuet_cbt_session_${testId}`);
 
     if (!raw) return null;
 
@@ -429,7 +423,7 @@ export function loadCBTSessionSync(
           ...parsed,
           questionStates: sanitizedStates,
         });
-        window.localStorage.setItem(key, compactJson);
+        safeStorage.setItem(key, compactJson);
       } catch {}
     }
 
@@ -470,10 +464,9 @@ export function clearCBTSessionSync(testId: string, userId?: string): void {
   const key = getCBTSessionKey(testId, targetUid);
 
   try {
-    window.sessionStorage.removeItem(key);
-    window.localStorage.removeItem(key);
-    window.localStorage.removeItem(`cuet_cbt_session_${testId}`);
-    window.localStorage.removeItem(`cuet_cbt_active_session_${targetUid}`);
+    safeStorage.removeItem(key);
+    safeStorage.removeItem(`cuet_cbt_session_${testId}`);
+    safeStorage.removeItem(`cuet_cbt_active_session_${targetUid}`);
   } catch {}
 
   clearSessionFromIndexedDB(testId, targetUid).catch(() => {});
