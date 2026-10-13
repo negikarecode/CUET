@@ -3,57 +3,57 @@
     "questionNumber": 1,
     "questionId": "PRACTICE-MATHS-U3-T17-Q01",
     "chapter": "Calculus",
-    "topic": "Rate of Change of Surface Area of a Cube",
-    "questionText": "The edge of a cube is increasing at a rate of $7\\text{ cm/s}$. The rate of change of surface area of the cube when the edge of the cube is $3\\text{ cm}$ is[cite: 3]:",
+    "topic": "Integration of $e^x(f(x) + f'(x))$ Forms via Substitution",
+    "questionText": "$\\int\\frac{\\log_{e}x}{(1+\\log_{e}x)^{2}}\\,dx$ is equal to (where $C$ is the constant of integration)[cite: 3]:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "$42\\text{ cm}^{2}\\text{/s}$",
+        "text": "$\\frac{1}{(1+\\log_{e}x)^{2}} + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "$168\\text{ cm}^{2}\\text{/s}$",
+        "text": "$\\frac{x}{(1+\\log_{e}x)^{2}} + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "$84\\text{ cm}^{2}\\text{/s}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+        "text": "$\\frac{x}{1+\\log_{e}x} + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Integration of $e^x(f(x) + f'(x))$ Forms via Substitution."
       },
       {
         "id": "D",
-        "text": "$252\\text{ cm}^{2}\\text{/s}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Rate of Change of Surface Area of a Cube."
+        "text": "$\\frac{1}{1+\\log_{e}x} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (Rate of Change of Surface Area of a Cube):\n$252\\text{ cm}^{2}\\text{/s}$\n\nDetailed Analysis:\nLet the side length of the cube be $x$[cite: 3].\nTotal surface area of the cube is $S = 6x^2$.\nDifferentiating with respect to time $t$ using the chain rule:\n$\\frac{dS}{dt} = 12x \\frac{dx}{dt}$.\nGiven $\\frac{dx}{dt} = 7\\text{ cm/s}$ and $x = 3\\text{ cm}$[cite: 3]:\n$\\frac{dS}{dt} = 12(3)(7) = 36 \\times 7 = 252\\text{ cm}^2\\text{/s}$[cite: 3].\n\nTherefore, option (D) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (Integration of $e^x(f(x) + f'(x))$ Forms via Substitution):\n$\\frac{x}{1+\\log_{e}x} + C$\n\nDetailed Analysis:\nSubstitute $t = \\log_e x \\implies x = e^t \\implies dx = e^t\\,dt$[cite: 3]:\n$\\int \\frac{\\log_e x}{(1 + \\log_e x)^2}\\,dx = \\int \\frac{t}{(1 + t)^2} e^t\\,dt$\nRewrite the numerator as $t = (1 + t) - 1$:\n$= \\int e^t \\left[ \\frac{(1 + t) - 1}{(1 + t)^2} \\right] dt = \\int e^t \\left[ \\frac{1}{1 + t} - \\frac{1}{(1 + t)^2} \\right] dt$.\nLet $f(t) = \\frac{1}{1 + t} \\implies f'(t) = -\\frac{1}{(1 + t)^2}$.\nUsin\n\nTherefore, option (C) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (D).",
-      "concept": "Calculus: Rate of Change of Surface Area of a Cube.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (Rate of Change of Surface Area of a Cube):\n$252\\text{ cm}^{2}\\text{/s}$\n\nDetailed Analysis:\nLet the side length of the cube be $x$[cite: 3].\nTotal surface area of the cube is $S = 6x^2$.\nDifferentiating with respect to time $t$ using the chain rule:\n$\\frac{dS}{dt} = 12x \\frac{dx}{dt}$.\nGiven $\\frac{dx}{dt} = 7\\text{ cm/s}$ and $x = 3\\text{ cm}$[cite: 3]:\n$\\frac{dS}{dt} = 12(3)(7) = 36 \\times 7 = 252\\text{ cm}^2\\text{/s}$[cite: 3].\n\nTherefore, option (D) is the correct answer."
+      "quick": "Correct answer is option (C).",
+      "concept": "Calculus: Integration of $e^x(f(x) + f'(x))$ Forms via Substitution.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (Integration of $e^x(f(x) + f'(x))$ Forms via Substitution):\n$\\frac{x}{1+\\log_{e}x} + C$\n\nDetailed Analysis:\nSubstitute $t = \\log_e x \\implies x = e^t \\implies dx = e^t\\,dt$[cite: 3]:\n$\\int \\frac{\\log_e x}{(1 + \\log_e x)^2}\\,dx = \\int \\frac{t}{(1 + t)^2} e^t\\,dt$\nRewrite the numerator as $t = (1 + t) - 1$:\n$= \\int e^t \\left[ \\frac{(1 + t) - 1}{(1 + t)^2} \\right] dt = \\int e^t \\left[ \\frac{1}{1 + t} - \\frac{1}{(1 + t)^2} \\right] dt$.\nLet $f(t) = \\frac{1}{1 + t} \\implies f'(t) = -\\frac{1}{(1 + t)^2}$.\nUsin\n\nTherefore, option (C) is the correct answer."
     },
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Calculus: Rate of Change of Surface Area of a Cube",
+    "keyConcept": "Calculus: Integration of $e^x(f(x) + f'(x))$ Forms via Substitution",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Rate of Change of Surface Area of a Cube",
+      "Integration of $e^x(f(x) + f'(x))$ Forms via Substitution",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -62,57 +62,57 @@
     "questionNumber": 2,
     "questionId": "PRACTICE-MATHS-U3-T17-Q02",
     "chapter": "Calculus",
-    "topic": "Logarithmic Differentiation",
-    "questionText": "If $y = x^{x}$, then the value of $\\frac{dy}{dx}$ at $x = 1$ is:",
+    "topic": "Continuity at a Point",
+    "questionText": "If $f(x) = \\begin{cases} \\frac{k \\cos x}{\\pi - 2x}, & x \\ne \\frac{\\pi}{2} \\\\ 3, & x = \\frac{\\pi}{2} \\end{cases}$ is continuous at $x = \\frac{\\pi}{2}$, then $k$ is equal to:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "0",
+        "text": "3",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "$e$",
+        "text": "6",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Continuity at a Point."
+      },
+      {
+        "id": "C",
+        "text": "12",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
-        "id": "C",
-        "text": "1",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Logarithmic Differentiation."
-      },
-      {
         "id": "D",
-        "text": "2",
+        "text": "$\\frac{3}{2}$",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (Logarithmic Differentiation):\n1\n\nDetailed Analysis:\nGiven $y = x^x$.\nTaking natural logarithm on both sides:\n$\\log_e y = x \\log_e x$.\nDifferentiating both sides with respect to $x$:\n$\\frac{1}{y}\\frac{dy}{dx} = \\frac{d}{dx}(x)\\log_e x + x\\frac{d}{dx}(\\log_e x)$\n$\\frac{1}{y}\\frac{dy}{dx} = 1 \\cdot \\log_e x + x \\cdot \\frac{1}{x} = 1 + \\log_e x$.\nMultiply both sides by $y$:\n$\\frac{dy}{dx} = x^x (1 + \\log_e x)$.\nEvaluating at $x = 1$:\n$\\left.\\frac{dy}{d\n\nTherefore, option (C) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (Continuity at a Point):\n6\n\nDetailed Analysis:\nFor continuity at $x = \\frac{\\pi}{2}$, $\\lim_{x \\to \\pi/2} f(x) = f\\left(\\frac{\\pi}{2}\\right) = 3$.\nEvaluating the limit using L'Hôpital's Rule ($0/0$ indeterminate form):\n$\\lim_{x \\to \\pi/2} \\frac{k \\cos x}{\\pi - 2x} = \\lim_{x \\to \\pi/2} \\frac{-k \\sin x}{-2} = \\frac{k \\sin(\\pi/2)}{2} = \\frac{k}{2}$.\nEquating to $f(\\pi/2)$:\n$\\frac{k}{2} = 3 \\implies k = 6$.\n\nTherefore, option (B) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Calculus: Logarithmic Differentiation.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (Logarithmic Differentiation):\n1\n\nDetailed Analysis:\nGiven $y = x^x$.\nTaking natural logarithm on both sides:\n$\\log_e y = x \\log_e x$.\nDifferentiating both sides with respect to $x$:\n$\\frac{1}{y}\\frac{dy}{dx} = \\frac{d}{dx}(x)\\log_e x + x\\frac{d}{dx}(\\log_e x)$\n$\\frac{1}{y}\\frac{dy}{dx} = 1 \\cdot \\log_e x + x \\cdot \\frac{1}{x} = 1 + \\log_e x$.\nMultiply both sides by $y$:\n$\\frac{dy}{dx} = x^x (1 + \\log_e x)$.\nEvaluating at $x = 1$:\n$\\left.\\frac{dy}{d\n\nTherefore, option (C) is the correct answer."
+      "quick": "Correct answer is option (B).",
+      "concept": "Calculus: Continuity at a Point.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (Continuity at a Point):\n6\n\nDetailed Analysis:\nFor continuity at $x = \\frac{\\pi}{2}$, $\\lim_{x \\to \\pi/2} f(x) = f\\left(\\frac{\\pi}{2}\\right) = 3$.\nEvaluating the limit using L'Hôpital's Rule ($0/0$ indeterminate form):\n$\\lim_{x \\to \\pi/2} \\frac{k \\cos x}{\\pi - 2x} = \\lim_{x \\to \\pi/2} \\frac{-k \\sin x}{-2} = \\frac{k \\sin(\\pi/2)}{2} = \\frac{k}{2}$.\nEquating to $f(\\pi/2)$:\n$\\frac{k}{2} = 3 \\implies k = 6$.\n\nTherefore, option (B) is the correct answer."
     },
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Calculus: Logarithmic Differentiation",
+    "keyConcept": "Calculus: Continuity at a Point",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Logarithmic Differentiation",
+      "Continuity at a Point",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -121,57 +121,57 @@
     "questionNumber": 3,
     "questionId": "PRACTICE-MATHS-U3-T17-Q03",
     "chapter": "Calculus",
-    "topic": "General Solution of Separable Variable Equations",
-    "questionText": "The general solution of the differential equation $\\frac{dy}{dx} = \\frac{y}{x}$ is (where $C$ is an arbitrary constant):",
+    "topic": "Present Value of a Perpetuity",
+    "questionText": "The present value of a sequence of payments of Rs. 2000 made at the end of every 6 months and continuing\nforever, if money is worth 8% per annum compounded semi-annually, is:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "$y = x + C$",
+        "text": "Rs 50000",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
+      },
+      {
+        "id": "B",
+        "text": "Rs. 25000",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
-        "id": "B",
-        "text": "$y^2 = x^2 + C$",
+        "id": "C",
+        "text": "Rs. 40000",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
-        "id": "C",
-        "text": "$y = Cx$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for General Solution of Separable Variable Equations."
-      },
-      {
         "id": "D",
-        "text": "$xy = C$",
+        "text": "Rs. 5000",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (General Solution of Separable Variable Equations):\n$y = Cx$\n\nDetailed Analysis:\nSeparating variables:\n$\\frac{dy}{y} = \\frac{dx}{x}$.\nIntegrating both sides:\n$\\int \\frac{dy}{y} = \\int \\frac{dx}{x}$\n$\\log_e|y| = \\log_e|x| + \\log_e C = \\log_e|Cx|$\n$y = Cx$.\n\nTherefore, option (C) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nStep 1: Convert the nominal annual rate to the effective rate per 6‑month period: 8%/2 = 4% (0.04). Step 2: Apply the perpetuity formula: PV = Payment / rate = 2000 / 0.04. Step 3: Compute: 2000 ÷ 0.04 = 50000. Step 4: Match the result with the options – option B.\nHence, option (A) is correct.",
     "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Calculus: General Solution of Separable Variable Equations.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (General Solution of Separable Variable Equations):\n$y = Cx$\n\nDetailed Analysis:\nSeparating variables:\n$\\frac{dy}{y} = \\frac{dx}{x}$.\nIntegrating both sides:\n$\\int \\frac{dy}{y} = \\int \\frac{dx}{x}$\n$\\log_e|y| = \\log_e|x| + \\log_e C = \\log_e|Cx|$\n$y = Cx$.\n\nTherefore, option (C) is the correct answer."
+      "quick": "Correct answer is option (A).",
+      "concept": "Calculus: Present Value of a Perpetuity.",
+      "detailed": "Detailed Solution:\nStep 1: Convert the nominal annual rate to the effective rate per 6‑month period: 8%/2 = 4% (0.04). Step 2: Apply the perpetuity formula: PV = Payment / rate = 2000 / 0.04. Step 3: Compute: 2000 ÷ 0.04 = 50000. Step 4: Match the result with the options – option B.\nHence, option (A) is correct."
     },
-    "questionType": "conceptual",
+    "questionType": "chronological-sequence",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Calculus: General Solution of Separable Variable Equations",
+    "keyConcept": "Calculus: Present Value of a Perpetuity",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "General Solution of Separable Variable Equations",
+      "Present Value of a Perpetuity",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -180,57 +180,57 @@
     "questionNumber": 4,
     "questionId": "PRACTICE-MATHS-U3-T17-Q04",
     "chapter": "Calculus",
-    "topic": "Second Order Derivatives and Algebraic Identities",
-    "questionText": "If $y = \\sqrt{ax+b}$, then $y\\frac{d^{2}y}{dx^{2}} + \\left(\\frac{dy}{dx}\\right)^{2}$ is equal to[cite: 3]:",
+    "topic": "Slopes of Tangents to Polynomial Curves",
+    "questionText": "The slope of the tangent to the parabola $y = x^2$ at the point $(2, 4)$ is:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "1",
+        "text": "2",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "2",
+        "text": "8",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "4",
+        "text": "$\\frac{1}{4}$",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       },
       {
         "id": "D",
-        "text": "0",
+        "text": "4",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Second Order Derivatives and Algebraic Identities."
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Slopes of Tangents to Polynomial Curves."
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (Second Order Derivatives and Algebraic Identities):\n0\n\nDetailed Analysis:\nGiven $y = \\sqrt{ax + b}$[cite: 3].\nSquaring both sides:\n$y^2 = ax + b$.\nDifferentiating with respect to $x$ using the chain rule:\n$2y \\frac{dy}{dx} = a$.\nDifferentiating both sides again with respect to $x$ using the product rule:\n$\\frac{d}{dx}\\left(2y \\frac{dy}{dx}\\right) = \\frac{d}{dx}(a)$\n$2\\left[ y \\frac{d^2y}{dx^2} + \\left(\\frac{dy}{dx}\\right)\\left(\\frac{dy}{dx}\\right) \\right] = 0$\n$2\\left[ \n\nTherefore, option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nFor Slopes of Tangents to Polynomial Curves (Calculus):\nDifferentiate $y = x^2$ with respect to $x$:\n$\\frac{dy}{dx} = 2x$.\nEvaluate at $x = 2$:\n$m = \\left.\\frac{dy}{dx}\\right|_{x=2} = 2(2) = 4$.\n\nTherefore, option (D) is the correct answer.",
     "solution": {
       "quick": "Correct answer is option (D).",
-      "concept": "Calculus: Second Order Derivatives and Algebraic Identities.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (Second Order Derivatives and Algebraic Identities):\n0\n\nDetailed Analysis:\nGiven $y = \\sqrt{ax + b}$[cite: 3].\nSquaring both sides:\n$y^2 = ax + b$.\nDifferentiating with respect to $x$ using the chain rule:\n$2y \\frac{dy}{dx} = a$.\nDifferentiating both sides again with respect to $x$ using the product rule:\n$\\frac{d}{dx}\\left(2y \\frac{dy}{dx}\\right) = \\frac{d}{dx}(a)$\n$2\\left[ y \\frac{d^2y}{dx^2} + \\left(\\frac{dy}{dx}\\right)\\left(\\frac{dy}{dx}\\right) \\right] = 0$\n$2\\left[ \n\nTherefore, option (D) is the correct answer."
+      "concept": "Calculus: Slopes of Tangents to Polynomial Curves.",
+      "detailed": "Detailed Solution:\nFor Slopes of Tangents to Polynomial Curves (Calculus):\nDifferentiate $y = x^2$ with respect to $x$:\n$\\frac{dy}{dx} = 2x$.\nEvaluate at $x = 2$:\n$m = \\left.\\frac{dy}{dx}\\right|_{x=2} = 2(2) = 4$.\n\nTherefore, option (D) is the correct answer."
     },
-    "questionType": "conceptual",
+    "questionType": "direct-numerical",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Calculus: Second Order Derivatives and Algebraic Identities",
+    "keyConcept": "Calculus: Slopes of Tangents to Polynomial Curves",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Second Order Derivatives and Algebraic Identities",
+      "Slopes of Tangents to Polynomial Curves",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -239,7 +239,7 @@
     "questionNumber": 5,
     "questionId": "PRACTICE-MATHS-U3-T17-Q05",
     "chapter": "Calculus",
-    "topic": "Rate of Change of Area of a Circle",
+    "topic": "Integration of $e^x(f(x) + f'(x))$ Rational Forms",
     "questionText": "$\\int e^{x}\\left(\\frac{1-x}{1+x^{2}}\\right)^{2}\\,dx$ is equal to:",
     "hasDiagram": false,
     "diagramDescription": null,
@@ -277,19 +277,19 @@
     "detailedSolution": "Detailed Solution:\nFor Integration of $e^x(f(x) + f'(x))$ Rational Forms (Calculus):\nExpand the rational factor:\n$\\left(\\frac{1-x}{1+x^2}\\right)^2 = \\frac{(1-x)^2}{(1+x^2)^2} = \\frac{1 - 2x + x^2}{(1+x^2)^2} = \\frac{(1+x^2) - 2x}{(1+x^2)^2} = \\frac{1}{1+x^2} - \\frac{2x}{(1+x^2)^2}$.\nLet $f(x) = \\frac{1}{1+x^2}$.\nDifferentiating $f(x)$:\n$f'(x) = \\frac{d}{dx}(1+x^2)^{-1} = -(1+x^2)^{-2}(2x) = -\\frac{2x}{(1+x^2)^2}$.\nThe integral takes the standard form:\n$\\int e^x [f(x) + f'(x)]\\,dx = e^x f(x) + C = \\frac{e^x}{1+x^2} + C$.\n\nTherefore, option (D) is the correct answer.",
     "solution": {
       "quick": "Correct answer is option (D).",
-      "concept": "Calculus: Rate of Change of Area of a Circle.",
+      "concept": "Calculus: Integration of $e^x(f(x) + f'(x))$ Rational Forms.",
       "detailed": "Detailed Solution:\nFor Integration of $e^x(f(x) + f'(x))$ Rational Forms (Calculus):\nExpand the rational factor:\n$\\left(\\frac{1-x}{1+x^2}\\right)^2 = \\frac{(1-x)^2}{(1+x^2)^2} = \\frac{1 - 2x + x^2}{(1+x^2)^2} = \\frac{(1+x^2) - 2x}{(1+x^2)^2} = \\frac{1}{1+x^2} - \\frac{2x}{(1+x^2)^2}$.\nLet $f(x) = \\frac{1}{1+x^2}$.\nDifferentiating $f(x)$:\n$f'(x) = \\frac{d}{dx}(1+x^2)^{-1} = -(1+x^2)^{-2}(2x) = -\\frac{2x}{(1+x^2)^2}$.\nThe integral takes the standard form:\n$\\int e^x [f(x) + f'(x)]\\,dx = e^x f(x) + C = \\frac{e^x}{1+x^2} + C$.\n\nTherefore, option (D) is the correct answer."
     },
     "questionType": "direct-numerical",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Calculus: Rate of Change of Area of a Circle",
+    "keyConcept": "Calculus: Integration of $e^x(f(x) + f'(x))$ Rational Forms",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Rate of Change of Area of a Circle",
+      "Integration of $e^x(f(x) + f'(x))$ Rational Forms",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -298,57 +298,57 @@
     "questionNumber": 6,
     "questionId": "PRACTICE-MATHS-U3-T17-Q06",
     "chapter": "Calculus",
-    "topic": "Continuity of Rational Fractions",
-    "questionText": "$\\int\\frac{\\log_{e}x}{(1+\\log_{e}x)^{2}}\\,dx$ is equal to (where $C$ is the constant of integration)[cite: 3]:",
+    "topic": "Standard Exponential Integrals",
+    "questionText": "$\\int e^{5x}\\,dx$ is equal to (where $C$ is an arbitrary constant):",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "$\\frac{x}{1+\\log_{e}x} + C$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Integration of $e^x(f(x) + f'(x))$ Forms via Substitution."
-      },
-      {
-        "id": "B",
-        "text": "$\\frac{1}{(1+\\log_{e}x)^{2}} + C$",
+        "text": "$e^{5x} + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
-        "id": "C",
-        "text": "$\\frac{x}{(1+\\log_{e}x)^{2}} + C$",
+        "id": "B",
+        "text": "$\\frac{e^{5x}}{x} + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
+        "id": "C",
+        "text": "$\\frac{e^{5x}}{5} + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Standard Exponential Integrals."
+      },
+      {
         "id": "D",
-        "text": "$\\frac{1}{1+\\log_{e}x} + C$",
+        "text": "$5e^{5x} + C$",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nFor Integration of $e^x(f(x) + f'(x))$ Forms via Substitution (Calculus):\nSubstitute $t = \\log_e x \\implies x = e^t \\implies dx = e^t\\,dt$[cite: 3]:\n$\\int \\frac{\\log_e x}{(1 + \\log_e x)^2}\\,dx = \\int \\frac{t}{(1 + t)^2} e^t\\,dt$\nRewrite the numerator as $t = (1 + t) - 1$:\n$= \\int e^t \\left[ \\frac{(1 + t) - 1}{(1 + t)^2} \\right] dt = \\int e^t \\left[ \\frac{1}{1 + t} - \\frac{1}{(1 + t)^2} \\right] dt$.\nLet $f(t) = \\frac{1}{1 + t} \\implies f'(t) = -\\frac{1}{(1 + t)^2}$.\nUsing the standard identity $\\int e^t [f(t) + f'(t)]\\,dt = e^t f(t) + C$:\n$= e^t \\left( \\frac{1}{1 + t} \\right) + C$.\nSubstitute back $t = \\log_e x$ and $e^t = x$:\n$= \\frac{x}{1 + \\log_e x} + C$[cite: 3].\n\nTherefore, option (A) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (Standard Exponential Integrals):\n$\\frac{e^{5x}}{5} + C$\n\nDetailed Analysis:\nUsing the standard formula $\\int e^{kx}\\,dx = \\frac{e^{kx}}{k} + C$ for constant $k \\ne 0$:\nHere $k = 5$:\n$\\int e^{5x}\\,dx = \\frac{e^{5x}}{5} + C$.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Calculus: Continuity of Rational Fractions.",
-      "detailed": "Detailed Solution:\nFor Integration of $e^x(f(x) + f'(x))$ Forms via Substitution (Calculus):\nSubstitute $t = \\log_e x \\implies x = e^t \\implies dx = e^t\\,dt$[cite: 3]:\n$\\int \\frac{\\log_e x}{(1 + \\log_e x)^2}\\,dx = \\int \\frac{t}{(1 + t)^2} e^t\\,dt$\nRewrite the numerator as $t = (1 + t) - 1$:\n$= \\int e^t \\left[ \\frac{(1 + t) - 1}{(1 + t)^2} \\right] dt = \\int e^t \\left[ \\frac{1}{1 + t} - \\frac{1}{(1 + t)^2} \\right] dt$.\nLet $f(t) = \\frac{1}{1 + t} \\implies f'(t) = -\\frac{1}{(1 + t)^2}$.\nUsing the standard identity $\\int e^t [f(t) + f'(t)]\\,dt = e^t f(t) + C$:\n$= e^t \\left( \\frac{1}{1 + t} \\right) + C$.\nSubstitute back $t = \\log_e x$ and $e^t = x$:\n$= \\frac{x}{1 + \\log_e x} + C$[cite: 3].\n\nTherefore, option (A) is the correct answer."
+      "quick": "Correct answer is option (C).",
+      "concept": "Calculus: Standard Exponential Integrals.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (Standard Exponential Integrals):\n$\\frac{e^{5x}}{5} + C$\n\nDetailed Analysis:\nUsing the standard formula $\\int e^{kx}\\,dx = \\frac{e^{kx}}{k} + C$ for constant $k \\ne 0$:\nHere $k = 5$:\n$\\int e^{5x}\\,dx = \\frac{e^{5x}}{5} + C$.\n\nTherefore, option (C) is the correct answer."
     },
-    "questionType": "direct-numerical",
+    "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Calculus: Continuity of Rational Fractions",
+    "keyConcept": "Calculus: Standard Exponential Integrals",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Continuity of Rational Fractions",
+      "Standard Exponential Integrals",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -357,57 +357,57 @@
     "questionNumber": 7,
     "questionId": "PRACTICE-MATHS-U3-T17-Q07",
     "chapter": "Calculus",
-    "topic": "Critical Points of Polynomials",
-    "questionText": "If $f(x) = \\begin{cases} \\frac{k \\cos x}{\\pi - 2x}, & x \\ne \\frac{\\pi}{2} \\\\ 3, & x = \\frac{\\pi}{2} \\end{cases}$ is continuous at $x = \\frac{\\pi}{2}$, then $k$ is equal to:",
+    "topic": "Area Enclosed by a Symmetrical Circle in First Quadrant",
+    "questionText": "Given below are two statements: one is labelled as Assertion (A) and the other is labelled as Reason (R).\n\nAssertion (A): In Calculus, $\\frac{9\\pi}{4}$.\nReason (R): The equation $x^2 + y^2 = 9$ represents a circle centered at the origin with radius $r = 3$\n\nIn light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "3",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Validates both statements and confirms causal explanation."
       },
       {
         "id": "B",
-        "text": "6",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Continuity at a Point."
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Blindspot",
+        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
       },
       {
         "id": "C",
-        "text": "12",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+        "studentSelectionTrap": "Reason Acceptance Trap",
+        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
       },
       {
         "id": "D",
-        "text": "$\\frac{3}{2}$",
+        "text": "(A) is false but (R) is true",
         "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+        "studentSelectionTrap": "Assertion Acceptance Trap",
+        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nFor Continuity at a Point (Calculus):\nFor continuity at $x = \\frac{\\pi}{2}$, $\\lim_{x \\to \\pi/2} f(x) = f\\left(\\frac{\\pi}{2}\\right) = 3$.\nEvaluating the limit using L'Hôpital's Rule ($0/0$ indeterminate form):\n$\\lim_{x \\to \\pi/2} \\frac{k \\cos x}{\\pi - 2x} = \\lim_{x \\to \\pi/2} \\frac{-k \\sin x}{-2} = \\frac{k \\sin(\\pi/2)}{2} = \\frac{k}{2}$.\nEquating to $f(\\pi/2)$:\n$\\frac{k}{2} = 3 \\implies k = 6$.\n\nTherefore, option (B) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\n- Assertion (A): In Calculus, $\\frac{9\\pi}{4}$. (True).\n- Reason (R): The equation $x^2 + y^2 = 9$ represents a circle centered at the origin with radius $r = 3$ (True).\n\nBoth (A) and (R) are true, and Reason (R) provides the accurate causal explanation for Assertion (A). Hence, option (A) is correct.",
     "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Calculus: Critical Points of Polynomials.",
-      "detailed": "Detailed Solution:\nFor Continuity at a Point (Calculus):\nFor continuity at $x = \\frac{\\pi}{2}$, $\\lim_{x \\to \\pi/2} f(x) = f\\left(\\frac{\\pi}{2}\\right) = 3$.\nEvaluating the limit using L'Hôpital's Rule ($0/0$ indeterminate form):\n$\\lim_{x \\to \\pi/2} \\frac{k \\cos x}{\\pi - 2x} = \\lim_{x \\to \\pi/2} \\frac{-k \\sin x}{-2} = \\frac{k \\sin(\\pi/2)}{2} = \\frac{k}{2}$.\nEquating to $f(\\pi/2)$:\n$\\frac{k}{2} = 3 \\implies k = 6$.\n\nTherefore, option (B) is the correct answer."
+      "quick": "Correct answer is option (A).",
+      "concept": "Calculus: Area Enclosed by a Symmetrical Circle in First Quadrant.",
+      "detailed": "Detailed Solution:\n- Assertion (A): In Calculus, $\\frac{9\\pi}{4}$. (True).\n- Reason (R): The equation $x^2 + y^2 = 9$ represents a circle centered at the origin with radius $r = 3$ (True).\n\nBoth (A) and (R) are true, and Reason (R) provides the accurate causal explanation for Assertion (A). Hence, option (A) is correct."
     },
-    "questionType": "direct-numerical",
+    "questionType": "assertion-reasoning",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Calculus: Critical Points of Polynomials",
+    "keyConcept": "Calculus: Area Enclosed by a Symmetrical Circle in First Quadrant",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Critical Points of Polynomials",
+      "Area Enclosed by a Symmetrical Circle in First Quadrant",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -416,302 +416,7 @@
     "questionNumber": 8,
     "questionId": "PRACTICE-MATHS-U3-T17-Q08",
     "chapter": "Calculus",
-    "topic": "Definite Integral of Sine Squared Function",
-    "questionText": "$\\int \\frac{dx}{x^2 - 9}$ is equal to (where $C$ is an arbitrary constant):",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "$\\frac{1}{3}\\tan^{-1}\\left(\\frac{x}{3}\\right) + C$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "$\\frac{1}{6}\\log_e\\left|\\frac{x + 3}{x - 3}\\right| + C$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
-        "text": "$\\frac{1}{3}\\log_e\\left|\\frac{x - 3}{x + 3}\\right| + C$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      },
-      {
-        "id": "D",
-        "text": "$\\frac{1}{6}\\log_e\\left|\\frac{x - 3}{x + 3}\\right| + C$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Standard Algebraic Antiderivatives."
-      }
-    ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nFor Standard Algebraic Antiderivatives (Calculus):\nUsing the standard integration formula for $x^2 - a^2$:\n$\\int \\frac{dx}{x^2 - a^2} = \\frac{1}{2a}\\log_e\\left|\\frac{x - a}{x + a}\\right| + C$.\nHere $a^2 = 9 \\implies a = 3$:\n$\\int \\frac{dx}{x^2 - 3^2} = \\frac{1}{2(3)}\\log_e\\left|\\frac{x - 3}{x + 3}\\right| + C = \\frac{1}{6}\\log_e\\left|\\frac{x - 3}{x + 3}\\right| + C$.\n\nTherefore, option (D) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (D).",
-      "concept": "Calculus: Definite Integral of Sine Squared Function.",
-      "detailed": "Detailed Solution:\nFor Standard Algebraic Antiderivatives (Calculus):\nUsing the standard integration formula for $x^2 - a^2$:\n$\\int \\frac{dx}{x^2 - a^2} = \\frac{1}{2a}\\log_e\\left|\\frac{x - a}{x + a}\\right| + C$.\nHere $a^2 = 9 \\implies a = 3$:\n$\\int \\frac{dx}{x^2 - 3^2} = \\frac{1}{2(3)}\\log_e\\left|\\frac{x - 3}{x + 3}\\right| + C = \\frac{1}{6}\\log_e\\left|\\frac{x - 3}{x + 3}\\right| + C$.\n\nTherefore, option (D) is the correct answer."
-    },
-    "questionType": "direct-numerical",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Calculus: Definite Integral of Sine Squared Function",
-    "tags": [
-      "CUET UG 2026",
-      "Mathematics",
-      "Calculus",
-      "Definite Integral of Sine Squared Function",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 9,
-    "questionId": "PRACTICE-MATHS-U3-T17-Q09",
-    "chapter": "Calculus",
-    "topic": "Standard Definite Integral of Cosine",
-    "questionText": "Given below are two statements: one is labelled as Assertion (A) and the other is labelled as Reason (R).\n\nAssertion (A): In Calculus, Standard Definite Integral of Cosine exhibits characteristic behavior consistent with verified NCERT principles.\nReason (R): It satisfies the governing laws and theoretical principles established in NCERT Calculus.\n\nIn light of the above statements, choose the correct answer from the options given below:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Validates both statements and confirms causal explanation."
-      },
-      {
-        "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Causality Blindspot",
-        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
-      },
-      {
-        "id": "C",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reason Acceptance Trap",
-        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
-      },
-      {
-        "id": "D",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false,
-        "studentSelectionTrap": "Assertion Acceptance Trap",
-        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\n- Assertion (A): In Calculus, Standard Definite Integral of Cosine exhibits characteristic behavior consistent with verified NCERT principles. (True).\n- Reason (R): It satisfies the governing laws and theoretical principles established in NCERT Calculus. (True).\n\nBoth (A) and (R) are true, and Reason (R) provides the accurate causal explanation for Assertion (A). Hence, option (A) is correct.",
-    "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Calculus: Standard Definite Integral of Cosine.",
-      "detailed": "Detailed Solution:\n- Assertion (A): In Calculus, Standard Definite Integral of Cosine exhibits characteristic behavior consistent with verified NCERT principles. (True).\n- Reason (R): It satisfies the governing laws and theoretical principles established in NCERT Calculus. (True).\n\nBoth (A) and (R) are true, and Reason (R) provides the accurate causal explanation for Assertion (A). Hence, option (A) is correct."
-    },
-    "questionType": "assertion-reasoning",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Calculus: Standard Definite Integral of Cosine",
-    "tags": [
-      "CUET UG 2026",
-      "Mathematics",
-      "Calculus",
-      "Standard Definite Integral of Cosine",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 10,
-    "questionId": "PRACTICE-MATHS-U3-T17-Q10",
-    "chapter": "Calculus",
-    "topic": "Equations of Normals to Curves",
-    "questionText": "Given below are two statements: one is labelled as Assertion (A) and the other is labelled as Reason (R).\n\nAssertion (A): Regarding Equations of Normals to Curves: $-\\frac{1}{11}$\nReason (R): Differentiate $y = x^3 - x$ with respect to $x$:\n$\\frac{dy}{dx} = 3x^2 - 1$\n\nIn light of the above statements, choose the correct answer from the options given below:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Validates both statements and confirms causal explanation."
-      },
-      {
-        "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Causality Blindspot",
-        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
-      },
-      {
-        "id": "C",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reason Acceptance Trap",
-        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
-      },
-      {
-        "id": "D",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false,
-        "studentSelectionTrap": "Assertion Acceptance Trap",
-        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\n- Assertion (A): Regarding Equations of Normals to Curves: $-\\frac{1}{11}$ (True).\n- Reason (R): Differentiate $y = x^3 - x$ with respect to $x$:\n$\\frac{dy}{dx} = 3x^2 - 1$ (True).\n\nBoth (A) and (R) are true, and Reason (R) provides the accurate causal explanation for Assertion (A). Hence, option (A) is correct.",
-    "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Calculus: Equations of Normals to Curves.",
-      "detailed": "Detailed Solution:\n- Assertion (A): Regarding Equations of Normals to Curves: $-\\frac{1}{11}$ (True).\n- Reason (R): Differentiate $y = x^3 - x$ with respect to $x$:\n$\\frac{dy}{dx} = 3x^2 - 1$ (True).\n\nBoth (A) and (R) are true, and Reason (R) provides the accurate causal explanation for Assertion (A). Hence, option (A) is correct."
-    },
-    "questionType": "assertion-reasoning",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Calculus: Equations of Normals to Curves",
-    "tags": [
-      "CUET UG 2026",
-      "Mathematics",
-      "Calculus",
-      "Equations of Normals to Curves",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 11,
-    "questionId": "PRACTICE-MATHS-U3-T17-Q11",
-    "chapter": "Calculus",
-    "topic": "Special Integrals Involving Square Roots",
-    "questionText": "Given below are two statements: one is labelled as Assertion (A) and the other is labelled as Reason (R).\n\nAssertion (A): Regarding Special Integrals Involving Square Roots: $\\log_e|x + \\sqrt{x^2 + 16}| + C$\nReason (R): Second Order Derivatives is a foundational concept established in NCERT Calculus.\n\nIn light of the above statements, choose the correct answer from the options given below:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Causality Confusion Trap",
-        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
-      },
-      {
-        "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Both statements are factually valid, but Reason does not explain Assertion."
-      },
-      {
-        "id": "C",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reason Acceptance Trap",
-        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
-      },
-      {
-        "id": "D",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false,
-        "studentSelectionTrap": "Assertion Acceptance Trap",
-        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\n- Assertion (A): Regarding Special Integrals Involving Square Roots: $\\log_e|x + \\sqrt{x^2 + 16}| + C$ (True).\n- Reason (R): Second Order Derivatives is a foundational concept established in NCERT Calculus. (True).\n\nBoth (A) and (R) are true, but Reason (R) does not explain Assertion (A). Hence, option (B) is correct.",
-    "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Calculus: Special Integrals Involving Square Roots.",
-      "detailed": "Detailed Solution:\n- Assertion (A): Regarding Special Integrals Involving Square Roots: $\\log_e|x + \\sqrt{x^2 + 16}| + C$ (True).\n- Reason (R): Second Order Derivatives is a foundational concept established in NCERT Calculus. (True).\n\nBoth (A) and (R) are true, but Reason (R) does not explain Assertion (A). Hence, option (B) is correct."
-    },
-    "questionType": "assertion-reasoning",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Calculus: Special Integrals Involving Square Roots",
-    "tags": [
-      "CUET UG 2026",
-      "Mathematics",
-      "Calculus",
-      "Special Integrals Involving Square Roots",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 12,
-    "questionId": "PRACTICE-MATHS-U3-T17-Q12",
-    "chapter": "Calculus",
-    "topic": "Separable Differential Equations with Exponential RHS",
-    "questionText": "Match \\textbf{List-I} with \\textbf{List-I}\nList-I List-II\nStatement Its value\nP, 1) 2\n(A) Degree of the differential equation oy = elti/dz ig ®\n2 @B Tl) not defined\n(B) Order of the differential equation (“%) 4 7% ois () not defin\ndx dx}\n2 2 (mt) 3\n(C) Degree of the differential equation a + (2) —b27=0 (m1)\n(D) Ifp is the order and q is the degree of the differential equation wy +8y =e, thenp + qis (V) 1\nChoose the \\textbf{correct} answer from the options given below:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Both Statement I and Statement II are correct",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dual Acceptance Trap",
-        "mistakeAnalysis": "Erroneously assumed both statements were valid."
-      },
-      {
-        "id": "B",
-        "text": "Both Statement I and Statement II are incorrect",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dual Rejection Error",
-        "mistakeAnalysis": "Rejected valid scientific statements erroneously."
-      },
-      {
-        "id": "C",
-        "text": "Statement I is correct but Statement II is incorrect",
-        "isCorrect": false,
-        "studentSelectionTrap": "Statement II Blindspot",
-        "mistakeAnalysis": "Failed to recognize the fallacy in Statement II."
-      },
-      {
-        "id": "D",
-        "text": "Statement I is incorrect but Statement II is correct",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Statement I is false while Statement II is factually sound."
-      }
-    ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Calculus.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (D) is correct.",
-    "solution": {
-      "quick": "Correct answer is option (D).",
-      "concept": "Calculus: Separable Differential Equations with Exponential RHS.",
-      "detailed": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Calculus.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (D) is correct."
-    },
-    "questionType": "statement-evaluation",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Calculus: Separable Differential Equations with Exponential RHS",
-    "tags": [
-      "CUET UG 2026",
-      "Mathematics",
-      "Calculus",
-      "Separable Differential Equations with Exponential RHS",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 13,
-    "questionId": "PRACTICE-MATHS-U3-T17-Q13",
-    "chapter": "Calculus",
-    "topic": "Piecewise Function Continuity",
+    "topic": "Integrals",
     "questionText": "Match \\textbf{List-I} with \\textbf{List-I}\nList-I List-II\nStatement Its value\nP, 1) 2\n(A) Degree of the differential equation oy = elti/dz ig ®\n2 @B Tl) not defined\n(B) Order of the differential equation (“%) 4 7% ois () not defin\ndx dx}\n2 2 (mt) 3\n(C) Degree of the differential equation a + (2) —b27=0 (m1)\n(D) Ifp is the order and q is the degree of the differential equation wy +8y =e, thenp + qis (V) 1\nChoose the \\textbf{correct} answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
@@ -749,45 +454,163 @@
     "detailedSolution": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Calculus.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (B) is correct.",
     "solution": {
       "quick": "Correct answer is option (B).",
-      "concept": "Calculus: Piecewise Function Continuity.",
+      "concept": "Calculus: Integrals.",
       "detailed": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Calculus.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (B) is correct."
     },
     "questionType": "statement-evaluation",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Calculus: Piecewise Function Continuity",
+    "keyConcept": "Calculus: Integrals",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Piecewise Function Continuity",
+      "Integrals",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
   },
   {
-    "questionNumber": 14,
-    "questionId": "PRACTICE-MATHS-U3-T17-Q14",
+    "questionNumber": 9,
+    "questionId": "PRACTICE-MATHS-U3-T17-Q09",
     "chapter": "Calculus",
-    "topic": "Particular Solution of Separable Differential Equations",
-    "questionText": "———————eeeeeeeeeeeeeee—————————\n8 The value of which of the following integrals is zero?\n(A) few\n(B) few\n© [ite\n(D) fve(25)#\nChoose the correct answer from the options given below:",
+    "topic": "Slopes of Tangents to Rational Curves",
+    "questionText": "The slope of the tangent to the curve $y = \\frac{1}{x - 1}$ at $x = 3$ is:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$-\\frac{1}{4}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Slopes of Tangents to Rational Curves."
+      },
+      {
+        "id": "B",
+        "text": "$-\\frac{1}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{4}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nFor Slopes of Tangents to Rational Curves (Calculus):\nExpress $y$ as $y = (x - 1)^{-1}$.\nDifferentiating with respect to $x$ using the power rule:\n$\\frac{dy}{dx} = -1(x - 1)^{-2} \\cdot (1) = -\\frac{1}{(x - 1)^2}$.\nEvaluating at $x = 3$:\n$\\left.\\frac{dy}{dx}\\right|_{x=3} = -\\frac{1}{(3 - 1)^2} = -\\frac{1}{2^2} = -\\frac{1}{4}$.\n\nTherefore, option (A) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Calculus: Slopes of Tangents to Rational Curves.",
+      "detailed": "Detailed Solution:\nFor Slopes of Tangents to Rational Curves (Calculus):\nExpress $y$ as $y = (x - 1)^{-1}$.\nDifferentiating with respect to $x$ using the power rule:\n$\\frac{dy}{dx} = -1(x - 1)^{-2} \\cdot (1) = -\\frac{1}{(x - 1)^2}$.\nEvaluating at $x = 3$:\n$\\left.\\frac{dy}{dx}\\right|_{x=3} = -\\frac{1}{(3 - 1)^2} = -\\frac{1}{2^2} = -\\frac{1}{4}$.\n\nTherefore, option (A) is the correct answer."
+    },
+    "questionType": "direct-numerical",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Calculus: Slopes of Tangents to Rational Curves",
+    "tags": [
+      "CUET UG 2026",
+      "Mathematics",
+      "Calculus",
+      "Slopes of Tangents to Rational Curves",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 10,
+    "questionId": "PRACTICE-MATHS-U3-T17-Q10",
+    "chapter": "Calculus",
+    "topic": "Separable Differential Equations",
+    "questionText": "The general solution of the differential equation $\\frac{dy}{dx} = 3$ is (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$xy = 3 + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "$y = \\frac{3x^2}{2} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "$y = 3x + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Separable Differential Equations."
+      },
+      {
+        "id": "D",
+        "text": "$y = C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (Separable Differential Equations):\n$y = 3x + C$\n\nDetailed Analysis:\nIntegrating both sides with respect to $x$:\n$y = \\int 3\\,dx = 3x + C$.\n\nTherefore, option (C) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Calculus: Separable Differential Equations.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (Separable Differential Equations):\n$y = 3x + C$\n\nDetailed Analysis:\nIntegrating both sides with respect to $x$:\n$y = \\int 3\\,dx = 3x + C$.\n\nTherefore, option (C) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Calculus: Separable Differential Equations",
+    "tags": [
+      "CUET UG 2026",
+      "Mathematics",
+      "Calculus",
+      "Separable Differential Equations",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 11,
+    "questionId": "PRACTICE-MATHS-U3-T17-Q11",
+    "chapter": "Calculus",
+    "topic": "Indefinite Integrals of standard forms",
+    "questionText": "ime\n{& Vo =aVl-2? +B: 2+, where C is an arbitrary constant, then which of the following are TRUE?\n(elt\n(B)a=-1\n(C)p=\n(D) s=-\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
         "text": "Both Statement I and Statement II are correct",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dual Acceptance Trap",
-        "mistakeAnalysis": "Erroneously assumed both statements were valid."
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Validates both propositions as sound NCERT facts."
       },
       {
         "id": "B",
         "text": "Both Statement I and Statement II are incorrect",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies that both statements contain factual errors."
+        "isCorrect": false,
+        "studentSelectionTrap": "Dual Rejection Error",
+        "mistakeAnalysis": "Rejected valid scientific statements erroneously."
       },
       {
         "id": "C",
@@ -804,23 +627,200 @@
         "mistakeAnalysis": "Failed to recognize the fallacy in Statement I."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nStep 1: Analyze each integral option for odd/even nature or symmetric bounds. Step 2: Identify that integrand in (B) is an odd function over a symmetric interval, making its integral zero. Step 3: Identify that integrand in (D) evaluates symmetrically to zero. Step 4: Conclude that (B) and (D) only are correct.\nHence, option (B) is correct.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nStep 1: Differentiate the given expression on both sides or use standard integration results.\nStep 2: Match the coefficients to find alpha and beta as per standard textbook derivations.\nHence, option (A) is correct.",
     "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Calculus: Particular Solution of Separable Differential Equations.",
-      "detailed": "Detailed Solution:\nStep 1: Analyze each integral option for odd/even nature or symmetric bounds. Step 2: Identify that integrand in (B) is an odd function over a symmetric interval, making its integral zero. Step 3: Identify that integrand in (D) evaluates symmetrically to zero. Step 4: Conclude that (B) and (D) only are correct.\nHence, option (B) is correct."
+      "quick": "Correct answer is option (A).",
+      "concept": "Calculus: Indefinite Integrals of standard forms.",
+      "detailed": "Detailed Solution:\nStep 1: Differentiate the given expression on both sides or use standard integration results.\nStep 2: Match the coefficients to find alpha and beta as per standard textbook derivations.\nHence, option (A) is correct."
     },
     "questionType": "statement-evaluation",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Calculus: Particular Solution of Separable Differential Equations",
+    "keyConcept": "Calculus: Indefinite Integrals of standard forms",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Particular Solution of Separable Differential Equations",
+      "Indefinite Integrals of standard forms",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 12,
+    "questionId": "PRACTICE-MATHS-U3-T17-Q12",
+    "chapter": "Calculus",
+    "topic": "Special Integrals Involving Square Roots",
+    "questionText": "$\\int \\frac{dx}{\\sqrt{9 - 25x^2}}$ is equal to (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\frac{1}{5}\\cos^{-1}\\left(\\frac{5x}{3}\\right) + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "$\\sin^{-1}\\left(\\frac{5x}{3}\\right) + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "$\\frac{1}{3}\\sin^{-1}\\left(\\frac{5x}{3}\\right) + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      },
+      {
+        "id": "D",
+        "text": "$\\frac{1}{5}\\sin^{-1}\\left(\\frac{5x}{3}\\right) + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Special Integrals Involving Square Roots."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nFor Special Integrals Involving Square Roots (Calculus):\nFactor 25 from the radical in the denominator:\n$\\sqrt{9 - 25x^2} = \\sqrt{25\\left(\\frac{9}{25} - x^2\\right)} = 5\\sqrt{\\left(\\frac{3}{5}\\right)^2 - x^2}$.\nThe integral becomes:\n$\\int \\frac{dx}{5\\sqrt{\\left(\\frac{3}{5}\\right)^2 - x^2}} = \\frac{1}{5} \\int \\frac{dx}{\\sqrt{\\left(\\frac{3}{5}\\right)^2 - x^2}}$.\nUsing the standard formula $\\int \\frac{dx}{\\sqrt{a^2 - x^2}} = \\sin^{-1}\\left(\\frac{x}{a}\\right) + C$ with $a = \\frac{3}{5}$:\n$= \\frac{1}{5} \\sin^{-1}\\left(\\frac{x}{3/5}\\right) + C = \\frac{1}{5}\\sin^{-1}\\left(\\frac{5x}{3}\\right) + C$.\n\nTherefore, option (D) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Calculus: Special Integrals Involving Square Roots.",
+      "detailed": "Detailed Solution:\nFor Special Integrals Involving Square Roots (Calculus):\nFactor 25 from the radical in the denominator:\n$\\sqrt{9 - 25x^2} = \\sqrt{25\\left(\\frac{9}{25} - x^2\\right)} = 5\\sqrt{\\left(\\frac{3}{5}\\right)^2 - x^2}$.\nThe integral becomes:\n$\\int \\frac{dx}{5\\sqrt{\\left(\\frac{3}{5}\\right)^2 - x^2}} = \\frac{1}{5} \\int \\frac{dx}{\\sqrt{\\left(\\frac{3}{5}\\right)^2 - x^2}}$.\nUsing the standard formula $\\int \\frac{dx}{\\sqrt{a^2 - x^2}} = \\sin^{-1}\\left(\\frac{x}{a}\\right) + C$ with $a = \\frac{3}{5}$:\n$= \\frac{1}{5} \\sin^{-1}\\left(\\frac{x}{3/5}\\right) + C = \\frac{1}{5}\\sin^{-1}\\left(\\frac{5x}{3}\\right) + C$.\n\nTherefore, option (D) is the correct answer."
+    },
+    "questionType": "direct-numerical",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Calculus: Special Integrals Involving Square Roots",
+    "tags": [
+      "CUET UG 2026",
+      "Mathematics",
+      "Calculus",
+      "Special Integrals Involving Square Roots",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 13,
+    "questionId": "PRACTICE-MATHS-U3-T17-Q13",
+    "chapter": "Calculus",
+    "topic": "Separable Differential Equations",
+    "questionText": "The general solution of the differential equation $\\frac{dy}{dx} = 3$ is (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$xy = 3 + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "$y = 3x + C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Separable Differential Equations."
+      },
+      {
+        "id": "C",
+        "text": "$y = \\frac{3x^2}{2} + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "$y = C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Separable Differential Equations (Calculus):\nIntegrating both sides with respect to $x$:\n$y = \\int 3\\,dx = 3x + C$.\n\nTherefore, option (B) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Calculus: Separable Differential Equations.",
+      "detailed": "Detailed Solution:\nFor Separable Differential Equations (Calculus):\nIntegrating both sides with respect to $x$:\n$y = \\int 3\\,dx = 3x + C$.\n\nTherefore, option (B) is the correct answer."
+    },
+    "questionType": "direct-numerical",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Calculus: Separable Differential Equations",
+    "tags": [
+      "CUET UG 2026",
+      "Mathematics",
+      "Calculus",
+      "Separable Differential Equations",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 14,
+    "questionId": "PRACTICE-MATHS-U3-T17-Q14",
+    "chapter": "Calculus",
+    "topic": "Tangents Parallel to Straight Lines",
+    "questionText": "Given below are two statements: one is labelled as Assertion (A) and the other is labelled as Reason (R).\n\nAssertion (A): In Calculus, $(3, 6)$.\nReason (R): Slope of the given line $y = 4x - 5$ is $m = 4$\n\nIn light of the above statements, choose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Validates both statements and confirms causal explanation."
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Blindspot",
+        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
+      },
+      {
+        "id": "C",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reason Acceptance Trap",
+        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
+      },
+      {
+        "id": "D",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false,
+        "studentSelectionTrap": "Assertion Acceptance Trap",
+        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\n- Assertion (A): In Calculus, $(3, 6)$. (True).\n- Reason (R): Slope of the given line $y = 4x - 5$ is $m = 4$ (True).\n\nBoth (A) and (R) are true, and Reason (R) provides the accurate causal explanation for Assertion (A). Hence, option (A) is correct.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Calculus: Tangents Parallel to Straight Lines.",
+      "detailed": "Detailed Solution:\n- Assertion (A): In Calculus, $(3, 6)$. (True).\n- Reason (R): Slope of the given line $y = 4x - 5$ is $m = 4$ (True).\n\nBoth (A) and (R) are true, and Reason (R) provides the accurate causal explanation for Assertion (A). Hence, option (A) is correct."
+    },
+    "questionType": "assertion-reasoning",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Calculus: Tangents Parallel to Straight Lines",
+    "tags": [
+      "CUET UG 2026",
+      "Mathematics",
+      "Calculus",
+      "Tangents Parallel to Straight Lines",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -829,57 +829,57 @@
     "questionNumber": 15,
     "questionId": "PRACTICE-MATHS-U3-T17-Q15",
     "chapter": "Calculus",
-    "topic": "Monotonicity of Natural Exponential",
-    "questionText": "Match List-I with List-I (Where R is the set of real numbers)\nList-I\nList-II\n(A) sina is continuous on:\n@R- {0}\n(B) tan is continuous on: ()R\n(C) cot # is continuous on: (II) R — {nw :n € Z}\n(D) 2™, n € Nis continuous on: (ty) R— {(2n+ vs ine Z}\nChoose the correct answer from the options given below:",
+    "topic": "Area Enclosed by Standard Ellipse",
+    "questionText": "Which of the following statements regarding Area Enclosed by Standard Ellipse in Calculus is INCORRECT / NOT true?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "(A) — (HZ), (B) — (IV), (C) - (EH), (D) - ()",
+        "text": "It conforms strictly to the standard equilibrium conditions defined in NCERT Calculus.",
         "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+        "studentSelectionTrap": "Accepting Valid Fact as Exception",
+        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
       },
       {
         "id": "B",
-        "text": "(A) - (D, (B) - IV), (C) - (ED), (DB) -",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
+        "text": "It exhibits consistent and reproducible behavior across verified experimental measurements.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Accepting Valid Fact as Exception",
+        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
       },
       {
         "id": "C",
-        "text": "(A) — (IZ), a (HID, (C) - IV), (D) -",
+        "text": "Its magnitude depends directly on the governing physical or analytical constants of Area Enclosed by Standard Ellipse.",
         "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+        "studentSelectionTrap": "Accepting Valid Fact as Exception",
+        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
       },
       {
         "id": "D",
-        "text": "(A) — (IZ), (B) - (IH), (C) - IV), (D) - (2)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+        "text": "It operates in direct violation of the fundamental conservation laws of Calculus.",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Identifies the statement that contains a scientific falsehood."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Mathematics.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (B) is the correct match.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to standard NCERT Calculus specifications, Area Enclosed by Standard Ellipse is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (D) is false, making it the correct answer to this negative constraint question.",
     "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Calculus: Monotonicity of Natural Exponential.",
-      "detailed": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Mathematics.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (B) is the correct match."
+      "quick": "Correct answer is option (D).",
+      "concept": "Calculus: Area Enclosed by Standard Ellipse.",
+      "detailed": "Detailed Solution:\nAccording to standard NCERT Calculus specifications, Area Enclosed by Standard Ellipse is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (D) is false, making it the correct answer to this negative constraint question."
     },
-    "questionType": "match-the-following",
+    "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Calculus: Monotonicity of Natural Exponential",
+    "keyConcept": "Calculus: Area Enclosed by Standard Ellipse",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Monotonicity of Natural Exponential",
+      "Area Enclosed by Standard Ellipse",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -888,57 +888,57 @@
     "questionNumber": 16,
     "questionId": "PRACTICE-MATHS-U3-T17-Q16",
     "chapter": "Calculus",
-    "topic": "Local Extrema Parameters",
-    "questionText": "Match \\textbf{List-I} with \\textbf{List-I}\nThe function f(x) = (« — 1)(z + 1)” has\nList-I List-II\n(A) A local maxima at © =__ a\nOF\n(B) A local minima at ¢ = __ ao\n(©) The local minimum value of f(x) = (1M) —1\n(D) The local maximum value of f(2) = (yy _ 32\n27\nChoose the \\textbf{correct} answer from the options given below:",
+    "topic": "Definite Integral of Logarithmic Tangent Function",
+    "questionText": "The value of $\\int_{0}^{\\pi/2}\\log_{e}(\\tan x)\\,dx$ is:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "(A)- @; (8)- @), (C)- GV), ©)- @)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
-      },
-      {
-        "id": "B",
-        "text": "(A) - (OD), (B) - (EY), (C) - (HD), () - ©",
+        "text": "$\\frac{\\pi}{2}\\log 2$",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
+        "id": "B",
+        "text": "0",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Definite Integral of Logarithmic Tangent Function."
+      },
+      {
         "id": "C",
-        "text": "(A) - (ID), (B)- @), (C)- (IV), @)- @)",
+        "text": "$\\pi$",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "D",
-        "text": "(A) - (TY), (B) - (), (C)- @; )- @)\nOBO gi ee gn te thas aeninct thras teame 7. Thand Th The nrnhahility of winning a match avainet teame",
+        "text": "$-\\frac{\\pi}{2}\\log 2$",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Mathematics.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (A) is the correct match.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (Definite Integral of Logarithmic Tangent Function):\n0\n\nDetailed Analysis:\nLet $I = \\int_0^{\\pi/2} \\log_e(\\tan x)\\,dx$  --- (1)\nUsing the property $\\int_0^a f(x)\\,dx = \\int_0^a f(a-x)\\,dx$ with $a = \\frac{\\pi}{2}$:\n$I = \\int_0^{\\pi/2} \\log_e\\left(\\tan\\left(\\frac{\\pi}{2} - x\\right)\\right)\\,dx = \\int_0^{\\pi/2} \\log_e(\\cot x)\\,dx$  --- (2)\nAdding equations (1) and (2):\n$2I = \\int_0^{\\pi/2} [\\log_e(\\tan x) + \\log_e(\\cot x)]\\,dx = \\int_0^{\\pi/2} \\log_e(\\tan x \\cdot \\cot x)\\,d\n\nTherefore, option (B) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Calculus: Local Extrema Parameters.",
-      "detailed": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Mathematics.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (A) is the correct match."
+      "quick": "Correct answer is option (B).",
+      "concept": "Calculus: Definite Integral of Logarithmic Tangent Function.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (Definite Integral of Logarithmic Tangent Function):\n0\n\nDetailed Analysis:\nLet $I = \\int_0^{\\pi/2} \\log_e(\\tan x)\\,dx$  --- (1)\nUsing the property $\\int_0^a f(x)\\,dx = \\int_0^a f(a-x)\\,dx$ with $a = \\frac{\\pi}{2}$:\n$I = \\int_0^{\\pi/2} \\log_e\\left(\\tan\\left(\\frac{\\pi}{2} - x\\right)\\right)\\,dx = \\int_0^{\\pi/2} \\log_e(\\cot x)\\,dx$  --- (2)\nAdding equations (1) and (2):\n$2I = \\int_0^{\\pi/2} [\\log_e(\\tan x) + \\log_e(\\cot x)]\\,dx = \\int_0^{\\pi/2} \\log_e(\\tan x \\cdot \\cot x)\\,d\n\nTherefore, option (B) is the correct answer."
     },
-    "questionType": "match-the-following",
+    "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Calculus: Local Extrema Parameters",
+    "keyConcept": "Calculus: Definite Integral of Logarithmic Tangent Function",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Local Extrema Parameters",
+      "Definite Integral of Logarithmic Tangent Function",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -947,7 +947,125 @@
     "questionNumber": 17,
     "questionId": "PRACTICE-MATHS-U3-T17-Q17",
     "chapter": "Calculus",
-    "topic": "Rate of Change of Volume of a Cone",
+    "topic": "Separable Differential Equations",
+    "questionText": "The general solution of the differential equation $\\frac{dy}{dx} = \\frac{x}{y}$ is (where $C$ is an arbitrary constant):",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "$y^2 + x^2 = C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "$y = x + C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "$xy = C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      },
+      {
+        "id": "D",
+        "text": "$y^2 - x^2 = C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Separable Differential Equations."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (Separable Differential Equations):\n$y^2 - x^2 = C$\n\nDetailed Analysis:\nSeparate the variables:\n$y\\,dy = x\\,dx$.\nIntegrating both sides:\n$\\int y\\,dy = \\int x\\,dx$\n$\\frac{y^2}{2} = \\frac{x^2}{2} + C_1$\nMultiply throughout by 2:\n$y^2 = x^2 + 2C_1 \\implies y^2 - x^2 = C$ (where $C = 2C_1$ is an arbitrary constant).\n\nTherefore, option (D) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Calculus: Separable Differential Equations.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (Separable Differential Equations):\n$y^2 - x^2 = C$\n\nDetailed Analysis:\nSeparate the variables:\n$y\\,dy = x\\,dx$.\nIntegrating both sides:\n$\\int y\\,dy = \\int x\\,dx$\n$\\frac{y^2}{2} = \\frac{x^2}{2} + C_1$\nMultiply throughout by 2:\n$y^2 = x^2 + 2C_1 \\implies y^2 - x^2 = C$ (where $C = 2C_1$ is an arbitrary constant).\n\nTherefore, option (D) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Calculus: Separable Differential Equations",
+    "tags": [
+      "CUET UG 2026",
+      "Mathematics",
+      "Calculus",
+      "Separable Differential Equations",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 18,
+    "questionId": "PRACTICE-MATHS-U3-T17-Q18",
+    "chapter": "Calculus",
+    "topic": "Integrals",
+    "questionText": "Match List-I with List-II\nList-I (Integral)\nList-II (Value)\n(I) 0\n(II) 2\n(III) 5\n(IV) 3\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) - (II), (B) - (III), (C) - (IV), (D) - (I)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "(A) - (III), (B) - (IV), (C) - (I), (D) - (II)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "(A) - (I), (B) - (IV), (C) - (III), (D) - (II)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
+      },
+      {
+        "id": "D",
+        "text": "(A) - (IV), (B) - (III), (C) - (II), (D) - (I)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Calculus.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (C) is the correct match.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Calculus: Integrals.",
+      "detailed": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Calculus.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (C) is the correct match."
+    },
+    "questionType": "match-the-following",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Calculus: Integrals",
+    "tags": [
+      "CUET UG 2026",
+      "Mathematics",
+      "Calculus",
+      "Integrals",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 19,
+    "questionId": "PRACTICE-MATHS-U3-T17-Q19",
+    "chapter": "Calculus",
+    "topic": "Core Concept",
     "questionText": "Match List-I with List-II\nList-I\nList-II\nFunction\nPoints of discontinuity\n(I) x=4\n\n(II) x=2\n(III) x=0 \n(IV) x=1\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
@@ -961,17 +1079,17 @@
       },
       {
         "id": "B",
-        "text": "(A) - (III), (B) - (IV), (C) - (II), (D) - (I)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
         "text": "(A) - (IV), (B) - (III), (C) - (II), (D) - (I)",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
+      },
+      {
+        "id": "C",
+        "text": "(A) - (III), (B) - (IV), (C) - (II), (D) - (I)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "D",
@@ -981,141 +1099,23 @@
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Mathematics.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (C) is the correct match.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Mathematics.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (B) is the correct match.",
     "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Calculus: Rate of Change of Volume of a Cone.",
-      "detailed": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Mathematics.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (C) is the correct match."
+      "quick": "Correct answer is option (B).",
+      "concept": "Calculus: Core Concept.",
+      "detailed": "Detailed Solution:\n1. Analyze the stem and evaluate the criteria established in Mathematics.\n2. Compare each given option against NCERT textbook statements.\n3. Option A is consistent with the canonical curriculum.\nHence, option (B) is the correct match."
     },
     "questionType": "match-the-following",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Calculus: Rate of Change of Volume of a Cone",
+    "keyConcept": "Calculus: Core Concept",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Rate of Change of Volume of a Cone",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 18,
-    "questionId": "PRACTICE-MATHS-U3-T17-Q18",
-    "chapter": "Calculus",
-    "topic": "Variable Separable Form",
-    "questionText": "The present value of a sequence of payments of Rs. 2000 made at the end of every 6 months and continuing\nforever, if money is worth 8% per annum compounded semi-annually, is:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Rs. 25000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "Rs. 40000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
-        "text": "Rs 50000",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
-      },
-      {
-        "id": "D",
-        "text": "Rs. 5000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nStep 1: Convert the nominal annual rate to the effective rate per 6‑month period: 8%/2 = 4% (0.04). Step 2: Apply the perpetuity formula: PV = Payment / rate = 2000 / 0.04. Step 3: Compute: 2000 ÷ 0.04 = 50000. Step 4: Match the result with the options – option B.\nHence, option (C) is correct.",
-    "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Calculus: Variable Separable Form.",
-      "detailed": "Detailed Solution:\nStep 1: Convert the nominal annual rate to the effective rate per 6‑month period: 8%/2 = 4% (0.04). Step 2: Apply the perpetuity formula: PV = Payment / rate = 2000 / 0.04. Step 3: Compute: 2000 ÷ 0.04 = 50000. Step 4: Match the result with the options – option B.\nHence, option (C) is correct."
-    },
-    "questionType": "chronological-sequence",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Calculus: Variable Separable Form",
-    "tags": [
-      "CUET UG 2026",
-      "Mathematics",
-      "Calculus",
-      "Variable Separable Form",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 19,
-    "questionId": "PRACTICE-MATHS-U3-T17-Q19",
-    "chapter": "Calculus",
-    "topic": "Integration of Quadratic Denominators",
-    "questionText": "The present value of a sequence of payments of Rs. 2000 made at the end of every 6 months and continuing\nforever, if money is worth 8% per annum compounded semi-annually, is:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Rs. 25000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "Rs. 40000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
-        "text": "Rs 50000",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
-      },
-      {
-        "id": "D",
-        "text": "Rs. 5000",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nStep 1: Convert the nominal annual rate to the effective rate per 6‑month period: 8%/2 = 4% (0.04). Step 2: Apply the perpetuity formula: PV = Payment / rate = 2000 / 0.04. Step 3: Compute: 2000 ÷ 0.04 = 50000. Step 4: Match the result with the options – option B.\nHence, option (C) is correct.",
-    "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Calculus: Integration of Quadratic Denominators.",
-      "detailed": "Detailed Solution:\nStep 1: Convert the nominal annual rate to the effective rate per 6‑month period: 8%/2 = 4% (0.04). Step 2: Apply the perpetuity formula: PV = Payment / rate = 2000 / 0.04. Step 3: Compute: 2000 ÷ 0.04 = 50000. Step 4: Match the result with the options – option B.\nHence, option (C) is correct."
-    },
-    "questionType": "chronological-sequence",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Calculus: Integration of Quadratic Denominators",
-    "tags": [
-      "CUET UG 2026",
-      "Mathematics",
-      "Calculus",
-      "Integration of Quadratic Denominators",
+      "Core Concept",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"
@@ -1124,57 +1124,57 @@
     "questionNumber": 20,
     "questionId": "PRACTICE-MATHS-U3-T17-Q20",
     "chapter": "Calculus",
-    "topic": "Rates of Change of Geometric Solids",
-    "questionText": "Which of the following statements regarding Rates of Change of Geometric Solids in Calculus is INCORRECT / NOT true?",
+    "topic": "Exact Differential Forms",
+    "questionText": "The general solution of the differential equation $e^{x}dy + (ye^{x} + 2x)dx = 0$ is (where $C$ is constant of integration)[cite: 4]:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "It operates in direct violation of the fundamental conservation laws of Calculus.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Identifies the statement that contains a scientific falsehood."
+        "text": "$ye^{y} + x^{2} = C$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "It conforms strictly to the standard equilibrium conditions defined in NCERT Calculus.",
+        "text": "$xe^{y} + y^{2} = C$",
         "isCorrect": false,
-        "studentSelectionTrap": "Accepting Valid Fact as Exception",
-        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "It exhibits consistent and reproducible behavior across verified experimental measurements.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Accepting Valid Fact as Exception",
-        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
+        "text": "$ye^{x} + x^{2} = C$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Exact Differential Forms."
       },
       {
         "id": "D",
-        "text": "Its magnitude depends directly on the governing physical or analytical constants of Rates of Change of Geometric Solids.",
+        "text": "$xe^{y} + x^{2} = C$",
         "isCorrect": false,
-        "studentSelectionTrap": "Accepting Valid Fact as Exception",
-        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to standard NCERT Calculus specifications, Rates of Change of Geometric Solids is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (A) is false, making it the correct answer to this negative constraint question.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Calculus (Exact Differential Forms):\n$ye^{x} + x^{2} = C$\n\nDetailed Analysis:\nRegroup the terms of the differential equation[cite: 4]:\n$(e^x dy + y e^x dx) + 2x dx = 0$.\nRecognize the product rule differential $d(y e^x) = y e^x dx + e^x dy$:\n$d(y e^x) + 2x dx = 0$.\nIntegrating term by term:\n$\\int d(y e^x) + \\int 2x dx = C$\n$y e^x + x^2 = C$[cite: 4].\n\nTherefore, option (C) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Calculus: Rates of Change of Geometric Solids.",
-      "detailed": "Detailed Solution:\nAccording to standard NCERT Calculus specifications, Rates of Change of Geometric Solids is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (A) is false, making it the correct answer to this negative constraint question."
+      "quick": "Correct answer is option (C).",
+      "concept": "Calculus: Exact Differential Forms.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Calculus (Exact Differential Forms):\n$ye^{x} + x^{2} = C$\n\nDetailed Analysis:\nRegroup the terms of the differential equation[cite: 4]:\n$(e^x dy + y e^x dx) + 2x dx = 0$.\nRecognize the product rule differential $d(y e^x) = y e^x dx + e^x dy$:\n$d(y e^x) + 2x dx = 0$.\nIntegrating term by term:\n$\\int d(y e^x) + \\int 2x dx = C$\n$y e^x + x^2 = C$[cite: 4].\n\nTherefore, option (C) is the correct answer."
     },
     "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Calculus: Rates of Change of Geometric Solids",
+    "keyConcept": "Calculus: Exact Differential Forms",
     "tags": [
       "CUET UG 2026",
       "Mathematics",
       "Calculus",
-      "Rates of Change of Geometric Solids",
+      "Exact Differential Forms",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Mathematics Unit 3 Test 17)"

@@ -54,16 +54,33 @@ export function parseMatchTheFollowing(raw: string): MatchTheFollowingResult | n
     lines = lines.slice(0, -1);
   }
 
-  // Filter out standalone "List-I", "List-II" header lines
+  const isHeaderLine = (l: string) =>
+    /^(?:List|Column)[\s\-–—]*(?:I|II|1|2|A|B)(?:\s*\([^)]+\))?[:\]]?\s*$/i.test(l.trim());
+
+  let list1CustomTitle = "List I";
+  let list2CustomTitle = "List II";
+
+  // Filter out divider lines and capture custom titles from headers
   const contentLines: string[] = [];
   for (const line of lines) {
-    if (/^(?:List|Column)[\s\-–—]*(?:I|II|1|2|A|B)\]?$/i.test(line)) {
+    if (/^[\-\s|—–=]{3,}$/.test(line.trim())) {
+      continue;
+    }
+    const hMatch = line.trim().match(/^(?:List|Column)[\s\-–—]*(I|II|1|2|A|B)(\s*\([^)]+\))?[:\]]?\s*$/i);
+    if (hMatch && hMatch[1]) {
+      const colNum = hMatch[1].toUpperCase();
+      const subtitle = hMatch[2] ? hMatch[2].trim() : "";
+      if (colNum === "I" || colNum === "1" || colNum === "A") {
+        list1CustomTitle = `List I${subtitle ? " " + subtitle : ""}`;
+      } else {
+        list2CustomTitle = `List II${subtitle ? " " + subtitle : ""}`;
+      }
       continue;
     }
     contentLines.push(line);
   }
 
-  const combinedRegex = /(\([A-D]\)|[A-D]\.)\s*(.*?)\s*(\([IVX]+\)|[IVX]+\.)\s*(.*)/i;
+  const combinedRegex = /(\([A-D]\)|[A-D]\.)\s*(.*?)\s*\|?\s*(\([IVX]+\)|[IVX]+\.)\s*(.*)/i;
   const singleItemRegex = /^(\([A-D]\)|[A-D]\.|\([IVX]+\)|[IVX]+\.)\s*(.*)/i;
 
   const list1Items: MatchItem[] = [];
@@ -77,11 +94,11 @@ export function parseMatchTheFollowing(raw: string): MatchTheFollowingResult | n
     if (combMatch && combMatch[1] && combMatch[2] && combMatch[3] && combMatch[4]) {
       list1Items.push({
         id: combMatch[1].replace(/[().]/g, "").trim().toUpperCase(),
-        text: combMatch[2].trim(),
+        text: combMatch[2].replace(/[|\s]+$/, "").trim(),
       });
       list2Items.push({
         id: combMatch[3].replace(/[().]/g, "").trim().toUpperCase(),
-        text: combMatch[4].trim(),
+        text: combMatch[4].replace(/^[|\s]+/, "").trim(),
       });
       continue;
     }
@@ -91,14 +108,20 @@ export function parseMatchTheFollowing(raw: string): MatchTheFollowingResult | n
       const tag = singleMatch[1].replace(/[().]/g, "").trim().toUpperCase();
       let itemText = singleMatch[2].trim();
 
-      // Collect continuation lines that don't start with an item bullet
+      // Collect continuation lines that don't start with an item bullet, header, or divider
       while (idx + 1 < contentLines.length) {
         const nextLine = contentLines[idx + 1];
-        if (!nextLine || singleItemRegex.test(nextLine) || combinedRegex.test(nextLine)) {
+        if (
+          !nextLine ||
+          singleItemRegex.test(nextLine) ||
+          combinedRegex.test(nextLine) ||
+          isHeaderLine(nextLine) ||
+          /^[\-\s|—–=]{3,}$/.test(nextLine.trim())
+        ) {
           break;
         }
         idx++;
-        itemText += " " + nextLine;
+        itemText += " " + nextLine.trim();
       }
 
       if (/^[A-D]$/.test(tag)) {
@@ -113,9 +136,9 @@ export function parseMatchTheFollowing(raw: string): MatchTheFollowingResult | n
     return {
       isMatch: true,
       intro: intro || "Match List-I with List-II",
-      list1Title: "List I",
+      list1Title: list1CustomTitle,
       list1Items,
-      list2Title: "List II",
+      list2Title: list2CustomTitle,
       list2Items,
       instruction: instruction || "Choose the correct answer from the options given below:",
     };

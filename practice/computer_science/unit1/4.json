@@ -3,57 +3,57 @@
     "questionNumber": 1,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q01",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Aggregate Functions Ignore NULLs",
-    "questionText": "Which SQL aggregate function is the ONLY one that does NOT ignore NULL values in its calculation?",
+    "topic": "Difference Between Cursor and Connection Commit",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Invoking cur.commit() will result in an AttributeError in Python.\nReason (R): The commit() and rollback() methods belong to the database Connection object, not to individual Cursor objects.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "SUM()",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Difference Between Cursor and Connection Commit."
+      },
+      {
+        "id": "B",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
-        "id": "B",
-        "text": "MAX()",
+        "id": "C",
+        "text": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
-        "id": "C",
-        "text": "COUNT(*)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Aggregate Functions Ignore NULLs."
-      },
-      {
         "id": "D",
-        "text": "AVG()",
+        "text": "(A) is false but (R) is true",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Aggregate Functions Ignore NULLs):\nCOUNT(*)\n\nDetailed Analysis:\nAll aggregate functions (SUM, AVG, MIN, MAX, COUNT(col)) ignore NULL values, except COUNT(*) which counts total rows.\nHence, Option C is correct.\n\nTherefore, option (C) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Difference Between Cursor and Connection Commit):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Analysis:\nBoth (A) and (R) are true, and (R) correctly explains (A). Transactions span entire database connections, so commit() is a method of the connection.\nHence, Option C is correct.\n\nTherefore, option (A) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Section A: Common Computing Concepts: Aggregate Functions Ignore NULLs.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Aggregate Functions Ignore NULLs):\nCOUNT(*)\n\nDetailed Analysis:\nAll aggregate functions (SUM, AVG, MIN, MAX, COUNT(col)) ignore NULL values, except COUNT(*) which counts total rows.\nHence, Option C is correct.\n\nTherefore, option (C) is the correct answer."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section A: Common Computing Concepts: Difference Between Cursor and Connection Commit.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Difference Between Cursor and Connection Commit):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Analysis:\nBoth (A) and (R) are true, and (R) correctly explains (A). Transactions span entire database connections, so commit() is a method of the connection.\nHence, Option C is correct.\n\nTherefore, option (A) is the correct answer."
     },
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Aggregate Functions Ignore NULLs",
+    "keyConcept": "Section A: Common Computing Concepts: Difference Between Cursor and Connection Commit",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Aggregate Functions Ignore NULLs",
+      "Difference Between Cursor and Connection Commit",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
@@ -62,57 +62,57 @@
     "questionNumber": 2,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q02",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "WAN Connection Medium",
-    "questionText": "Read the following enterprise network architecture case study and answer the questions that follow:\n\nNational Trust Bank is upgrading its network architecture connecting its Regional Headquarters with five local branches. The network design specifications are established as follows:\n1. Headquarters houses the core transactional database cluster, protected behind a stateful Packet Filtering Firewall and Intrusion Detection System (IDS).\n2. Inside each local branch, all teller workstations are wired to a high-speed Central Switch configured in a Star Topology.\n3. The connection between Headquarters and Branch 1 (distance 35 km) utilizes a dedicated High-Speed Leased Line over Optical Fiber.\n4. Wireless connectivity within the customer lounge is segregated on a guest VLAN protected with WPA3 Wi-Fi encryption.\n5. Inter-branch communication over public telecommunication networks is encrypted inside a Virtual Private Network (VPN) tunnel.\n\nQuestion: Why is Optical Fiber Cable preferred over microwave wireless for connecting Headquarters with Branch 1 across 35 km?",
+    "topic": "Pure Functions Concept",
+    "questionText": "In functional programming, what defines a 'Pure Function'?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Optical fiber does not use light signals",
+        "text": "A function that only accepts string arguments",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Optical fiber requires no installation",
+        "text": "A function that contains no comments or docstrings",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "Optical fiber provides high data throughput, low latency, and immunity to atmospheric weather interference and eavesdropping",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for WAN Connection Medium."
-      },
-      {
-        "id": "D",
-        "text": "Optical fiber cable is cheaper than copper telephone wire",
+        "text": "A function that has zero return statements",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      },
+      {
+        "id": "D",
+        "text": "A function whose return value depends exclusively on its inputs, without modifying external state or producing side effects",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Pure Functions Concept."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (WAN Connection Medium):\nOptical fiber provides high data throughput, low latency, and immunity to atmospheric weather interference and eavesdropping\n\nDetailed Analysis:\nFiber optic cables offer massive bandwidth, minimal attenuation, and immunity to weather and electromagnetic interference.\nHence, Option C is correct.\n\nTherefore, option (C) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Pure Functions Concept):\nA function whose return value depends exclusively on its inputs, without modifying external state or producing side effects\n\nDetailed Analysis:\nPure functions have no side effects (no global mutations, I/O writes) and always return the same output for identical inputs.\nHence, Option A is correct.\n\nTherefore, option (D) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Section A: Common Computing Concepts: WAN Connection Medium.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (WAN Connection Medium):\nOptical fiber provides high data throughput, low latency, and immunity to atmospheric weather interference and eavesdropping\n\nDetailed Analysis:\nFiber optic cables offer massive bandwidth, minimal attenuation, and immunity to weather and electromagnetic interference.\nHence, Option C is correct.\n\nTherefore, option (C) is the correct answer."
+      "quick": "Correct answer is option (D).",
+      "concept": "Section A: Common Computing Concepts: Pure Functions Concept.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Pure Functions Concept):\nA function whose return value depends exclusively on its inputs, without modifying external state or producing side effects\n\nDetailed Analysis:\nPure functions have no side effects (no global mutations, I/O writes) and always return the same output for identical inputs.\nHence, Option A is correct.\n\nTherefore, option (D) is the correct answer."
     },
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: WAN Connection Medium",
+    "keyConcept": "Section A: Common Computing Concepts: Pure Functions Concept",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "WAN Connection Medium",
+      "Pure Functions Concept",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
@@ -121,57 +121,57 @@
     "questionNumber": 3,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q03",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Commit Not Required for SELECT",
-    "questionText": "Why is calling connection.commit() NOT necessary after executing a SELECT query?",
+    "topic": "Referential Integrity Enforcement",
+    "questionText": "Read the following database design case study and answer the questions that follow:\n\nThe Apex Public School database administrator created two relational tables in MySQL to track student enrollments and fee payments:\n1. Table STUDENT (AdmNo INT PRIMARY KEY, SName VARCHAR(30), Stream VARCHAR(15), Class INT);\n2. Table FEES (RcptNo INT PRIMARY KEY, AdmNo INT, FeeAmount DECIMAL(8,2), FeeDate DATE, FOREIGN KEY (AdmNo) REFERENCES STUDENT(AdmNo));\n\nThe administrator enforces Referential Integrity through the Foreign Key on AdmNo. A query is written to display the student name, stream, and fee amount paid by joining STUDENT and FEES on STUDENT.AdmNo = FEES.AdmNo. Furthermore, the school principal requests an executive summary displaying the total fee collected per stream, filtering for streams where total collections exceed 100,000, sorted in descending order of total collection.\n\nQuestion: What constraint in table FEES enforces that fee records can only be created for existing students?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "SELECT queries cannot connect to databases",
+        "text": "FOREIGN KEY (AdmNo) REFERENCES STUDENT(AdmNo)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Referential Integrity Enforcement."
+      },
+      {
+        "id": "B",
+        "text": "NOT NULL on Stream",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
-        "id": "B",
-        "text": "SELECT is a read-only Data Query Language (DQL) operation that does not modify persistent database state",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Commit Not Required for SELECT."
-      },
-      {
         "id": "C",
-        "text": "SELECT runs only on temporary RAM tables",
+        "text": "PRIMARY KEY (RcptNo)",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "D",
-        "text": "SELECT automatically commits before running",
+        "text": "CHECK (FeeAmount > 0)",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Commit Not Required for SELECT):\nSELECT is a read-only Data Query Language (DQL) operation that does not modify persistent database state\n\nDetailed Analysis:\nRead-only queries do not mutate data or alter storage pages, rendering commit() redundant.\nHence, Option C is correct.\n\nTherefore, option (B) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nFor Referential Integrity Enforcement (Section A: Common Computing Concepts):\nThe FOREIGN KEY constraint links AdmNo in FEES to the primary key AdmNo in STUDENT, preserving referential integrity.\nHence, Option A is correct.\n\nTherefore, option (A) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Section A: Common Computing Concepts: Commit Not Required for SELECT.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Commit Not Required for SELECT):\nSELECT is a read-only Data Query Language (DQL) operation that does not modify persistent database state\n\nDetailed Analysis:\nRead-only queries do not mutate data or alter storage pages, rendering commit() redundant.\nHence, Option C is correct.\n\nTherefore, option (B) is the correct answer."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section A: Common Computing Concepts: Referential Integrity Enforcement.",
+      "detailed": "Detailed Solution:\nFor Referential Integrity Enforcement (Section A: Common Computing Concepts):\nThe FOREIGN KEY constraint links AdmNo in FEES to the primary key AdmNo in STUDENT, preserving referential integrity.\nHence, Option A is correct.\n\nTherefore, option (A) is the correct answer."
     },
-    "questionType": "conceptual",
+    "questionType": "application",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Commit Not Required for SELECT",
+    "keyConcept": "Section A: Common Computing Concepts: Referential Integrity Enforcement",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Commit Not Required for SELECT",
+      "Referential Integrity Enforcement",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
@@ -180,480 +180,8 @@
     "questionNumber": 4,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q04",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Rowcount After UPDATE Statement",
-    "questionText": "If cur.execute('UPDATE Student SET Marks = Marks + 5 WHERE Marks < 40;') updates 8 students, what does cur.rowcount return?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "0",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "40",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
-        "text": "8",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Rowcount After UPDATE Statement."
-      },
-      {
-        "id": "D",
-        "text": "-1",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Rowcount After UPDATE Statement):\n8\n\nDetailed Analysis:\nFor DML statements (INSERT, UPDATE, DELETE), cur.rowcount returns the exact number of rows affected by the statement.\nHence, Option B is correct.\n\nTherefore, option (C) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Section A: Common Computing Concepts: Rowcount After UPDATE Statement.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Rowcount After UPDATE Statement):\n8\n\nDetailed Analysis:\nFor DML statements (INSERT, UPDATE, DELETE), cur.rowcount returns the exact number of rows affected by the statement.\nHence, Option B is correct.\n\nTherefore, option (C) is the correct answer."
-    },
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Rowcount After UPDATE Statement",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section A: Common Computing Concepts",
-      "Rowcount After UPDATE Statement",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
-  },
-  {
-    "questionNumber": 5,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q05",
-    "chapter": "Section A: Common Computing Concepts",
-    "topic": "Seek and Tell Methods in File Navigation",
-    "questionText": "Read the following algorithmic search case study and answer the questions that follow:\n\nAn administrative software engineer is optimizing citizen identification lookups across a database of 1,000,000 enrolled citizens. Each record has a unique 12-digit CitizenID. The engineer tests two search algorithms:\n1. Linear Search: Examines records sequentially from index 0 to n-1 until a match is found or end of array is reached. If the ID is located at the end or absent, it requires 1,000,000 comparisons (O(n) worst-case time complexity).\n2. Binary Search: Operates on an array that is strictly sorted by CitizenID. It compares the target ID with the middle element. If target is smaller, it searches the left half; if larger, it searches the right half. With each comparison, the search space is cut in half, locating any citizen in at most 20 comparisons (O(log2 n) worst case).\n\nQuestion: Approximately how many comparisons does Binary Search require in the worst case for n = 1,000,000 elements?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "10,000 comparisons",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "500,000 comparisons",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
-        "text": "About 20 comparisons (since 2^20 = 1,048,576)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Worst-case Comparison Count for 1,000,000 Elements."
-      },
-      {
-        "id": "D",
-        "text": "1,000,000 comparisons",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nFor Worst-case Comparison Count for 1,000,000 Elements (Section A: Common Computing Concepts):\nlog2(1,000,000) is approximately 19.93, requiring at most 20 comparisons to locate any item or confirm absence.\nHence, Option D is correct.\n\nTherefore, option (C) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Section A: Common Computing Concepts: Seek and Tell Methods in File Navigation.",
-      "detailed": "Detailed Solution:\nFor Worst-case Comparison Count for 1,000,000 Elements (Section A: Common Computing Concepts):\nlog2(1,000,000) is approximately 19.93, requiring at most 20 comparisons to locate any item or confirm absence.\nHence, Option D is correct.\n\nTherefore, option (C) is the correct answer."
-    },
-    "questionType": "application",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Seek and Tell Methods in File Navigation",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section A: Common Computing Concepts",
-      "Seek and Tell Methods in File Navigation",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
-  },
-  {
-    "questionNumber": 6,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q06",
-    "chapter": "Section A: Common Computing Concepts",
-    "topic": "Guaranteed Cleanup via finally",
-    "questionText": "Read the following Python-MySQL connectivity case study and answer the questions that follow:\n\nA software developer is writing a Python script to automate employee bonus updates in a MySQL database. She imports mysql.connector and establishes a database connection using con = mysql.connector.connect(host='localhost', user='root', password='mypassword', database='company_db'). She instantiates a database cursor: cur = con.cursor(). To prevent SQL Injection vulnerabilities, she utilizes parameterized queries with %s placeholders: query = 'UPDATE EMP SET Bonus = %s WHERE DeptNo = %s'\ncur.execute(query, (5000, 10))\nBecause UPDATE is a Data Manipulation Language (DML) statement, she must invoke con.commit() to make the changes permanent. To verify the update, she executes a SELECT statement and uses cur.fetchall() to retrieve all matching rows as a list of tuples.\n\nQuestion: What data structure is returned by cur.fetchall() after executing a SELECT query?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "A single concatenated string",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "A dictionary of column names",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
-        "text": "A Pandas DataFrame directly",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      },
-      {
-        "id": "D",
-        "text": "A list of tuples, where each tuple represents a single row of data",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Fetching All Rows via fetchall()."
-      }
-    ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nFor Fetching All Rows via fetchall() (Section A: Common Computing Concepts):\ncur.fetchall() returns all remaining rows of a query result set as a list of tuples.\nHence, Option D is correct.\n\nTherefore, option (D) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (D).",
-      "concept": "Section A: Common Computing Concepts: Guaranteed Cleanup via finally.",
-      "detailed": "Detailed Solution:\nFor Fetching All Rows via fetchall() (Section A: Common Computing Concepts):\ncur.fetchall() returns all remaining rows of a query result set as a list of tuples.\nHence, Option D is correct.\n\nTherefore, option (D) is the correct answer."
-    },
-    "questionType": "application",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 45,
-    "keyConcept": "Section A: Common Computing Concepts: Guaranteed Cleanup via finally",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section A: Common Computing Concepts",
-      "Guaranteed Cleanup via finally",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
-  },
-  {
-    "questionNumber": 7,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q07",
-    "chapter": "Section A: Common Computing Concepts",
-    "topic": "Aggregate Query Output Cardinality",
-    "questionText": "Read the following relational database and transaction processing case study and answer the questions that follow:\n\nA core banking engine processes fund transfers between checking accounts in a MySQL database. A balance transfer of 10,000 from Account 101 to Account 102 involves two distinct database operations:\n1. UPDATE ACCOUNT SET Balance = Balance - 10000 WHERE AccNo = 101;\n2. UPDATE ACCOUNT SET Balance = Balance + 10000 WHERE AccNo = 102;\n\nTo guarantee data consistency, the transaction is managed according to ACID properties:\n- Atomicity: Either both updates succeed completely or neither update takes effect (all-or-nothing).\n- Consistency: Account balances must satisfy domain rules (e.g. Balance >= MinBalance) before and after execution.\n- Isolation: Concurrent transactions operating simultaneously do not read intermediate uncommitted balances.\n- Durability: Once con.commit() executes, balance changes persist permanently on non-volatile disk storage even if a power failure occurs.\n\nQuestion: Which SQL command establishes an intermediate marker inside a transaction to which a partial rollback can be performed?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "MARK marker_name;",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "SAVEPOINT marker_name;",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Rolling Back to an Intermediate Point."
-      },
-      {
-        "id": "C",
-        "text": "CHECKPOINT marker_name;",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "D",
-        "text": "RESTORE marker_name;",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nFor Rolling Back to an Intermediate Point (Section A: Common Computing Concepts):\nSAVEPOINT identifies a point in a transaction to which you can later roll back without discarding earlier work.\nHence, Option D is correct.\n\nTherefore, option (B) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Section A: Common Computing Concepts: Aggregate Query Output Cardinality.",
-      "detailed": "Detailed Solution:\nFor Rolling Back to an Intermediate Point (Section A: Common Computing Concepts):\nSAVEPOINT identifies a point in a transaction to which you can later roll back without discarding earlier work.\nHence, Option D is correct.\n\nTherefore, option (B) is the correct answer."
-    },
-    "questionType": "application",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Aggregate Query Output Cardinality",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section A: Common Computing Concepts",
-      "Aggregate Query Output Cardinality",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
-  },
-  {
-    "questionNumber": 8,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q08",
-    "chapter": "Section A: Common Computing Concepts",
-    "topic": "Inner Loop Range in Python Bubble Sort",
-    "questionText": "Read the following case study on binary file operations in a library system and answer the questions that follow:\n\nAn automated library management system maintains catalog records in a binary file 'books.dat'. Each book entry is stored as a list: [BookId, Title, Author, Price, Status], where Status is 'Available' or 'Issued'. The software developer writes two primary routines:\n1. issue_book(target_id): Opens 'books.dat' in 'rb+' mode. Inside a while True loop, it reads records using pickle.load(f). Upon finding a record where record[0] == target_id and record[4] == 'Available', it updates record[4] = 'Issued'. To overwrite the updated record in place, the developer calculates the byte offset using f.tell(), rewinds the pointer using f.seek(), and overwrites the record using pickle.dump(record, f).\n2. Exception Handling: The routine wraps the read loop inside a try block and intercepts EOFError when all records have been inspected.\n\nQuestion: Why should record objects modified in memory be written back using pickle.dump()?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "To change the text encoding",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "Because Python deletes variables after 5 seconds",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
-        "text": "Because pickle requires constant saving",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      },
-      {
-        "id": "D",
-        "text": "Because modifying the Python list in RAM does not alter the persisted binary bytes on disk without re-serializing",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Serialization Integrity."
-      }
-    ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nFor Serialization Integrity (Section A: Common Computing Concepts):\nIn-memory mutations exist only in RAM; pickle.dump() converts modified objects back into persisted byte sequences.\nHence, Option B is correct.\n\nTherefore, option (D) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (D).",
-      "concept": "Section A: Common Computing Concepts: Inner Loop Range in Python Bubble Sort.",
-      "detailed": "Detailed Solution:\nFor Serialization Integrity (Section A: Common Computing Concepts):\nIn-memory mutations exist only in RAM; pickle.dump() converts modified objects back into persisted byte sequences.\nHence, Option B is correct.\n\nTherefore, option (D) is the correct answer."
-    },
-    "questionType": "application",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Inner Loop Range in Python Bubble Sort",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section A: Common Computing Concepts",
-      "Inner Loop Range in Python Bubble Sort",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
-  },
-  {
-    "questionNumber": 9,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q09",
-    "chapter": "Section A: Common Computing Concepts",
-    "topic": "Composite Primary Key",
-    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Reading binary files with pickle.load() inside a while True loop requires catching the built-in 'EOFError' exception.\nReason (R): The pickle.load() function does not return an empty object or None when the end of a binary file is reached; it raises EOFError.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Causality Confusion Trap",
-        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
-      },
-      {
-        "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Both statements are factually valid, but Reason does not explain Assertion."
-      },
-      {
-        "id": "C",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reason Acceptance Trap",
-        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
-      },
-      {
-        "id": "D",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false,
-        "studentSelectionTrap": "Assertion Acceptance Trap",
-        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). pickle.load() signals end-of-file by raising EOFError, which serves as the loop termination signal.\nHence, Option D is correct.\nHence, option (B) is the correct choice.",
-    "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Section A: Common Computing Concepts: Composite Primary Key.",
-      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). pickle.load() signals end-of-file by raising EOFError, which serves as the loop termination signal.\nHence, Option D is correct.\nHence, option (B) is the correct choice."
-    },
-    "questionType": "assertion-reasoning",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Composite Primary Key",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section A: Common Computing Concepts",
-      "Composite Primary Key",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
-  },
-  {
-    "questionNumber": 10,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q10",
-    "chapter": "Section A: Common Computing Concepts",
-    "topic": "Foreign Key Nullability",
-    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): The tell() method returns the current byte position of the file pointer within an open file.\nReason (R): The seek(offset, whence) method alters the position of the file pointer, where whence=0 indicates positioning relative to the beginning of the file.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Validates both statements and confirms causal explanation."
-      },
-      {
-        "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Causality Blindspot",
-        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
-      },
-      {
-        "id": "C",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reason Acceptance Trap",
-        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
-      },
-      {
-        "id": "D",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false,
-        "studentSelectionTrap": "Assertion Acceptance Trap",
-        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). tell() queries the byte offset; seek() repositions the file pointer relative to reference points.\nHence, Option B is correct.\nHence, option (A) is the correct choice.",
-    "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Section A: Common Computing Concepts: Foreign Key Nullability.",
-      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). tell() queries the byte offset; seek() repositions the file pointer relative to reference points.\nHence, Option B is correct.\nHence, option (A) is the correct choice."
-    },
-    "questionType": "assertion-reasoning",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Foreign Key Nullability",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section A: Common Computing Concepts",
-      "Foreign Key Nullability",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
-  },
-  {
-    "questionNumber": 11,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q11",
-    "chapter": "Section A: Common Computing Concepts",
-    "topic": "Bridge Function in LAN Segmentation",
-    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): The SQL query SELECT LENGTH('CUET Exam'); returns 9.\nReason (R): The LENGTH() function in MySQL calculates the length of a string in bytes/characters, counting spaces as characters.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Validates both statements and confirms causal explanation."
-      },
-      {
-        "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Causality Blindspot",
-        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
-      },
-      {
-        "id": "C",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reason Acceptance Trap",
-        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
-      },
-      {
-        "id": "D",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false,
-        "studentSelectionTrap": "Assertion Acceptance Trap",
-        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). 'CUET' (4) + ' ' (1) + 'Exam' (4) = 9 characters.\nHence, Option C is correct.\nHence, option (A) is the correct choice.",
-    "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Section A: Common Computing Concepts: Bridge Function in LAN Segmentation.",
-      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). 'CUET' (4) + ' ' (1) + 'Exam' (4) = 9 characters.\nHence, Option C is correct.\nHence, option (A) is the correct choice."
-    },
-    "questionType": "assertion-reasoning",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Bridge Function in LAN Segmentation",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section A: Common Computing Concepts",
-      "Bridge Function in LAN Segmentation",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
-  },
-  {
-    "questionNumber": 12,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q12",
-    "chapter": "Section A: Common Computing Concepts",
-    "topic": "Database Connection Module in Python",
-    "questionText": "Given below are two statements:\nStatement I: In Python database programming, changes made by DML statements (INSERT, UPDATE, DELETE) are not permanently saved to disk until connection.commit() is invoked.\nStatement II: The rollback() method of a connection object undoes all uncommitted transactions executed during the current transaction block.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "topic": "DELETE vs DROP vs TRUNCATE",
+    "questionText": "Given below are two statements:\nStatement I: The DROP TABLE command deletes the table data along with the entire structural schema definition from the database.\nStatement II: The DELETE FROM command removes tuples from the table while retaining the table structure for future insertions.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -687,91 +215,268 @@
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. Transaction ACID durability requires commit() to finalize changes; rollback() aborts pending uncommitted mutations.\nHence, Option A is correct.\nHence, option (D) is correct.",
+    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. DROP removes structure and data; DELETE removes rows while preserving table schema.\nHence, Option D is correct.\nHence, option (D) is correct.",
     "solution": {
       "quick": "Correct answer is option (D).",
-      "concept": "Section A: Common Computing Concepts: Database Connection Module in Python.",
-      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. Transaction ACID durability requires commit() to finalize changes; rollback() aborts pending uncommitted mutations.\nHence, Option A is correct.\nHence, option (D) is correct."
+      "concept": "Section A: Common Computing Concepts: DELETE vs DROP vs TRUNCATE.",
+      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. DROP removes structure and data; DELETE removes rows while preserving table schema.\nHence, Option D is correct.\nHence, option (D) is correct."
     },
     "questionType": "statement-evaluation",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Database Connection Module in Python",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section A: Common Computing Concepts: DELETE vs DROP vs TRUNCATE",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Database Connection Module in Python",
+      "DELETE vs DROP vs TRUNCATE",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
   },
   {
-    "questionNumber": 13,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q13",
+    "questionNumber": 5,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q05",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Function Signature Identity",
-    "questionText": "Given below are two statements:\nStatement I: In a Python function header, any parameter with a default value must be placed after all parameters without default values.\nStatement II: A function call in Python can provide positional arguments after keyword arguments.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "topic": "EOFError in Pickle Load Operations",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Reading binary files with pickle.load() inside a while True loop requires catching the built-in 'EOFError' exception.\nReason (R): The pickle.load() function does not return an empty object or None when the end of a binary file is reached; it raises EOFError.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both Statement I and Statement II are correct",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Validates both propositions as sound NCERT facts."
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Both Statement I and Statement II are incorrect",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dual Rejection Error",
-        "mistakeAnalysis": "Rejected valid scientific statements erroneously."
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for EOFError in Pickle Load Operations."
       },
       {
         "id": "C",
-        "text": "Statement I is correct but Statement II is incorrect",
+        "text": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
         "isCorrect": false,
-        "studentSelectionTrap": "Statement II Blindspot",
-        "mistakeAnalysis": "Failed to recognize the fallacy in Statement II."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "D",
-        "text": "Statement I is incorrect but Statement II is correct",
+        "text": "(A) is false but (R) is true",
         "isCorrect": false,
-        "studentSelectionTrap": "Statement I Blindspot",
-        "mistakeAnalysis": "Failed to recognize the fallacy in Statement I."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nStatement I is correct: non-default arguments cannot follow default arguments. Statement II is incorrect: positional arguments cannot follow keyword arguments in a function call.\nHence, Option C is correct.\nHence, option (A) is correct.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (EOFError in Pickle Load Operations):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Analysis:\nBoth (A) and (R) are true, and (R) correctly explains (A). pickle.load() signals end-of-file by raising EOFError, which serves as the loop termination signal.\nHence, Option D is correct.\n\nTherefore, option (B) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Section A: Common Computing Concepts: Function Signature Identity.",
-      "detailed": "Detailed Solution:\nStatement I is correct: non-default arguments cannot follow default arguments. Statement II is incorrect: positional arguments cannot follow keyword arguments in a function call.\nHence, Option C is correct.\nHence, option (A) is correct."
+      "quick": "Correct answer is option (B).",
+      "concept": "Section A: Common Computing Concepts: EOFError in Pickle Load Operations.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (EOFError in Pickle Load Operations):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Analysis:\nBoth (A) and (R) are true, and (R) correctly explains (A). pickle.load() signals end-of-file by raising EOFError, which serves as the loop termination signal.\nHence, Option D is correct.\n\nTherefore, option (B) is the correct answer."
     },
-    "questionType": "statement-evaluation",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Function Signature Identity",
+    "questionType": "conceptual",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section A: Common Computing Concepts: EOFError in Pickle Load Operations",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Function Signature Identity",
+      "EOFError in Pickle Load Operations",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
   },
   {
-    "questionNumber": 14,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q14",
+    "questionNumber": 6,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q06",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Referential Integrity Cascade Delete",
-    "questionText": "Given below are two statements:\nStatement I: The WHERE clause filters individual rows before any grouping operation takes place.\nStatement II: The HAVING clause filters groups and can evaluate aggregate functions (e.g., HAVING COUNT(*) > 5), which is strictly forbidden in WHERE.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "topic": "Role of Repeaters in Long-Distance Networks",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): A Repeater is installed at regular intervals along network transmission cabling to extend the maximum geographical reach of a network.\nReason (R): As electrical or optical signals travel through a physical medium, signal strength naturally degrades due to attenuation, requiring amplification or regeneration.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Confusion Trap",
+        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Blindspot",
+        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
+      },
+      {
+        "id": "C",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reason Acceptance Trap",
+        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
+      },
+      {
+        "id": "D",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Assertion is false while Reason represents an accurate principle."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Signal attenuation over distance causes data degradation; repeaters regenerate clean signals.\nHence, Option C is correct.\nHence, option (D) is the correct choice.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Section A: Common Computing Concepts: Role of Repeaters in Long-Distance Networks.",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Signal attenuation over distance causes data degradation; repeaters regenerate clean signals.\nHence, Option C is correct.\nHence, option (D) is the correct choice."
+    },
+    "questionType": "assertion-reasoning",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section A: Common Computing Concepts: Role of Repeaters in Long-Distance Networks",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section A: Common Computing Concepts",
+      "Role of Repeaters in Long-Distance Networks",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
+  },
+  {
+    "questionNumber": 7,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q07",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Twisted Pair Maximum Distance",
+    "questionText": "Read the following transmission media case study and answer the questions that follow:\n\nHighSpeed Rail Corporation is deploying a communication network along a new 300-kilometer railway corridor. The engineering team evaluates different transmission media for signaling, automated train control, and passenger Wi-Fi:\n1. Unshielded Twisted Pair (UTP): Cost-effective for short connections inside stations (up to 100 meters), but susceptible to electromagnetic interference (EMI) generated by high-voltage electric train locomotives.\n2. Coaxial Cable: Better shielding than UTP, but bulky and high attenuation over long distances.\n3. Optical Fiber Cable: Transmits data as pulses of light through glass/plastic core via Total Internal Reflection. It provides massive bandwidth (gigabits to terabits per second), minimal signal attenuation over tens of kilometers, and total immunity to electromagnetic interference from electric traction lines.\n4. Wireless Radio (GSM-R / LTE-R): Provides continuous wireless train-to-ground telemetry while in transit.\n\nQuestion: What is the maximum reliable transmission distance of standard Category 6 UTP copper Ethernet cable before signal degradation requires a repeater?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "500 metres",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "100 metres",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Twisted Pair Maximum Distance."
+      },
+      {
+        "id": "C",
+        "text": "10 kilometres",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "1 metre",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Twisted Pair Maximum Distance):\n100 metres\n\nDetailed Analysis:\nStandard twisted pair copper Ethernet cables are limited to 100 metres without intermediate amplification.\nHence, Option D is correct.\n\nTherefore, option (B) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section A: Common Computing Concepts: Twisted Pair Maximum Distance.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Twisted Pair Maximum Distance):\n100 metres\n\nDetailed Analysis:\nStandard twisted pair copper Ethernet cables are limited to 100 metres without intermediate amplification.\nHence, Option D is correct.\n\nTherefore, option (B) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section A: Common Computing Concepts: Twisted Pair Maximum Distance",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section A: Common Computing Concepts",
+      "Twisted Pair Maximum Distance",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
+  },
+  {
+    "questionNumber": 8,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q08",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "writelines() List Argument",
+    "questionText": "What does the writelines() method require as its input argument?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "An iterable of strings (such as a list of strings)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for writelines() List Argument."
+      },
+      {
+        "id": "B",
+        "text": "A binary bytearray",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "C",
+        "text": "A dictionary of numbers",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "A single integer number",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (writelines() List Argument):\nAn iterable of strings (such as a list of strings)\n\nDetailed Analysis:\nfile.writelines(lines) takes an iterable sequence of strings and writes them to the file without adding automatic newlines.\nHence, Option D is correct.\n\nTherefore, option (A) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Section A: Common Computing Concepts: writelines() List Argument.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (writelines() List Argument):\nAn iterable of strings (such as a list of strings)\n\nDetailed Analysis:\nfile.writelines(lines) takes an iterable sequence of strings and writes them to the file without adding automatic newlines.\nHence, Option D is correct.\n\nTherefore, option (A) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section A: Common Computing Concepts: writelines() List Argument",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section A: Common Computing Concepts",
+      "writelines() List Argument",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
+  },
+  {
+    "questionNumber": 9,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q09",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Explicit Exception Raising",
+    "questionText": "Which Python statement is used to explicitly trigger an exception during program execution?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -785,16 +490,16 @@
       {
         "id": "B",
         "text": "Both Statement I and Statement II are incorrect",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies that both statements contain factual errors."
+        "isCorrect": false,
+        "studentSelectionTrap": "Dual Rejection Error",
+        "mistakeAnalysis": "Rejected valid scientific statements erroneously."
       },
       {
         "id": "C",
         "text": "Statement I is correct but Statement II is incorrect",
-        "isCorrect": false,
-        "studentSelectionTrap": "Statement II Blindspot",
-        "mistakeAnalysis": "Failed to recognize the fallacy in Statement II."
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Statement I is true while Statement II contains a factual error."
       },
       {
         "id": "D",
@@ -804,23 +509,318 @@
         "mistakeAnalysis": "Failed to recognize the fallacy in Statement I."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. WHERE filters raw tuples before grouping; HAVING filters aggregated groups and supports aggregate conditions.\nHence, Option A is correct.\nHence, option (B) is correct.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nPython uses the 'raise' keyword to deliberately signal and throw an exception.\nHence, Option D is correct.\nHence, option (C) is correct.",
     "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Section A: Common Computing Concepts: Referential Integrity Cascade Delete.",
-      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. WHERE filters raw tuples before grouping; HAVING filters aggregated groups and supports aggregate conditions.\nHence, Option A is correct.\nHence, option (B) is correct."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: Explicit Exception Raising.",
+      "detailed": "Detailed Solution:\nPython uses the 'raise' keyword to deliberately signal and throw an exception.\nHence, Option D is correct.\nHence, option (C) is correct."
     },
     "questionType": "statement-evaluation",
     "difficulty": 2,
     "difficultyLevel": 2,
     "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Referential Integrity Cascade Delete",
+    "keyConcept": "Section A: Common Computing Concepts: Explicit Exception Raising",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Referential Integrity Cascade Delete",
+      "Explicit Exception Raising",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
+  },
+  {
+    "questionNumber": 10,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q10",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Function Parameter Passing Types",
+    "questionText": "Match the parameter concept in List I with its operational rule in List II:\n\nList I:\n(A) Positional Arguments\n(B) Default Arguments\n(C) Keyword Arguments\n(D) global Keyword\n\nList II:\n(I) Arguments matched to parameters strictly based on their physical order in the function call\n(II) Parameters that assume assigned baseline values if omitted in the caller invocation\n(III) Arguments prefixed with parameter names allowing values to be passed in arbitrary order\n(IV) Statement allowing a function to bind and reassign an identifier in the module-level namespace\n\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
+      },
+      {
+        "id": "D",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nPositional match by order; Default supply fallback values; Keyword match by name; Global binds module-level variables.\nHence, Option C is correct.\nHence, option (C) is the correct match.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: Function Parameter Passing Types.",
+      "detailed": "Detailed Solution:\nPositional match by order; Default supply fallback values; Keyword match by name; Global binds module-level variables.\nHence, Option C is correct.\nHence, option (C) is the correct match."
+    },
+    "questionType": "match-the-following",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section A: Common Computing Concepts: Function Parameter Passing Types",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section A: Common Computing Concepts",
+      "Function Parameter Passing Types",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
+  },
+  {
+    "questionNumber": 11,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q11",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "SQL MID() Function",
+    "questionText": "What is the output of SELECT MID('Informatics', 3, 4); in MySQL?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "'nfor'",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "'Info'",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "'form'",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for SQL MID() Function."
+      },
+      {
+        "id": "D",
+        "text": "'rmat'",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (SQL MID() Function):\n'form'\n\nDetailed Analysis:\nMID(str, pos, len) is a synonym for SUBSTR; starting at 1-based index 3 ('f') for length 4 extracts 'form'.\nHence, Option B is correct.\n\nTherefore, option (C) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: SQL MID() Function.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (SQL MID() Function):\n'form'\n\nDetailed Analysis:\nMID(str, pos, len) is a synonym for SUBSTR; starting at 1-based index 3 ('f') for length 4 extracts 'form'.\nHence, Option B is correct.\n\nTherefore, option (C) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section A: Common Computing Concepts: SQL MID() Function",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section A: Common Computing Concepts",
+      "SQL MID() Function",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
+  },
+  {
+    "questionNumber": 12,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q12",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Base Case Functional Role",
+    "questionText": "Read the following case study on recursion in Python and answer the questions that follow:\n\nDeepak is implementing algorithmic simulations for mathematical models in Python. He develops a recursive function to compute the power of a number: def power(x, n):\n    if n == 0:\n        return 1\n    else:\n        return x * power(x, n - 1)\n\nWhen computing power(2, 3), Python allocates an activation record (stack frame) on the system call stack for each call: power(2, 3) calls power(2, 2), which calls power(2, 1), which calls power(2, 0). Upon reaching n == 0, the base case executes without making another recursive call, returning 1. The call stack then unwinds in Last-In-First-Out (LIFO) order: power(2, 1) computes 2 * 1 = 2; power(2, 2) computes 2 * 2 = 4; and power(2, 3) computes 2 * 4 = 8, returning the final result to the caller.\n\nQuestion: What vital role does the condition if n == 0: return 1 perform in Deepak's power function?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "It serves as the base case that stops recursion and prevents infinite recursive calls",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Base Case Functional Role."
+      },
+      {
+        "id": "B",
+        "text": "It prints the result to console",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "C",
+        "text": "It clears the memory call stack",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "It multiplies the number by zero",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Base Case Functional Role):\nIt serves as the base case that stops recursion and prevents infinite recursive calls\n\nDetailed Analysis:\nThe base case provides the termination condition that halts recursion without making further recursive calls.\nHence, Option B is correct.\n\nTherefore, option (A) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Section A: Common Computing Concepts: Base Case Functional Role.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Base Case Functional Role):\nIt serves as the base case that stops recursion and prevents infinite recursive calls\n\nDetailed Analysis:\nThe base case provides the termination condition that halts recursion without making further recursive calls.\nHence, Option B is correct.\n\nTherefore, option (A) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section A: Common Computing Concepts: Base Case Functional Role",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section A: Common Computing Concepts",
+      "Base Case Functional Role",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
+  },
+  {
+    "questionNumber": 13,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q13",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Foreign Key Deletion Restriction",
+    "questionText": "Read the following database design case study and answer the questions that follow:\n\nThe Apex Public School database administrator created two relational tables in MySQL to track student enrollments and fee payments:\n1. Table STUDENT (AdmNo INT PRIMARY KEY, SName VARCHAR(30), Stream VARCHAR(15), Class INT);\n2. Table FEES (RcptNo INT PRIMARY KEY, AdmNo INT, FeeAmount DECIMAL(8,2), FeeDate DATE, FOREIGN KEY (AdmNo) REFERENCES STUDENT(AdmNo));\n\nThe administrator enforces Referential Integrity through the Foreign Key on AdmNo. A query is written to display the student name, stream, and fee amount paid by joining STUDENT and FEES on STUDENT.AdmNo = FEES.AdmNo. Furthermore, the school principal requests an executive summary displaying the total fee collected per stream, filtering for streams where total collections exceed 100,000, sorted in descending order of total collection.\n\nQuestion: What happens by default if the administrator attempts to DELETE a row from STUDENT whose AdmNo is present in FEES?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "All corresponding fee records in FEES are silently deleted",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "The FEES table is permanently dropped",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "MySQL rejects the deletion and raises a foreign key constraint violation error",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Foreign Key Deletion Restriction."
+      },
+      {
+        "id": "D",
+        "text": "The student record is deleted and FEES remains unaffected",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nFor Foreign Key Deletion Restriction (Section A: Common Computing Concepts):\nBy default (RESTRICT / NO ACTION), a parent table row referenced by a foreign key in a child table cannot be deleted.\nHence, Option D is correct.\n\nTherefore, option (C) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: Foreign Key Deletion Restriction.",
+      "detailed": "Detailed Solution:\nFor Foreign Key Deletion Restriction (Section A: Common Computing Concepts):\nBy default (RESTRICT / NO ACTION), a parent table row referenced by a foreign key in a child table cannot be deleted.\nHence, Option D is correct.\n\nTherefore, option (C) is the correct answer."
+    },
+    "questionType": "application",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section A: Common Computing Concepts: Foreign Key Deletion Restriction",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section A: Common Computing Concepts",
+      "Foreign Key Deletion Restriction",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
+  },
+  {
+    "questionNumber": 14,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q14",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Foreign Key Referential Rule",
+    "questionText": "Read the following database case study on joins and group aggregations and answer the questions that follow:\n\nA grand resort hotel manages guest reservations using two relational tables in MySQL:\n1. Table ROOMS (RoomNo INT PRIMARY KEY, RoomType VARCHAR(20), PricePerNight DECIMAL(8,2), Floor INT);\n2. Table BOOKINGS (BookingId INT PRIMARY KEY, RoomNo INT, GuestName VARCHAR(40), CheckIn DATE, CheckOut DATE, FOREIGN KEY (RoomNo) REFERENCES ROOMS(RoomNo));\n\nThe resort manager requests a report showing the RoomType, total number of bookings per RoomType, and average revenue generated. The report must only include RoomTypes that have received at least 5 bookings, arranged in descending order of total bookings. The senior database developer constructs an SQL query utilizing an inner equi-join, GROUP BY ROOMS.RoomType, HAVING COUNT(BOOKINGS.BookingId) >= 5, and ORDER BY COUNT(BOOKINGS.BookingId) DESC.\n\nQuestion: What error occurs if a receptionist attempts to insert a booking record with RoomNo = 999 when RoomNo 999 does not exist in ROOMS?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "The table ROOMS is deleted",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "Cannot add or update a child row: a foreign key constraint fails",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Foreign Key Referential Rule."
+      },
+      {
+        "id": "C",
+        "text": "The database creates Room 999 automatically",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "The booking is recorded with RoomNo = NULL silently",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Foreign Key Referential Rule (Section A: Common Computing Concepts):\nReferential integrity prohibits inserting foreign key values into child tables that do not exist in the parent table.\nHence, Option D is correct.\n\nTherefore, option (B) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section A: Common Computing Concepts: Foreign Key Referential Rule.",
+      "detailed": "Detailed Solution:\nFor Foreign Key Referential Rule (Section A: Common Computing Concepts):\nReferential integrity prohibits inserting foreign key values into child tables that do not exist in the parent table.\nHence, Option D is correct.\n\nTherefore, option (B) is the correct answer."
+    },
+    "questionType": "application",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section A: Common Computing Concepts: Foreign Key Referential Rule",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section A: Common Computing Concepts",
+      "Foreign Key Referential Rule",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
@@ -829,31 +829,31 @@
     "questionNumber": 15,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q15",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Sorting Aggregate Results",
+    "topic": "SQL Aggregate Functions and Behaviors with NULLs",
     "questionText": "Match the aggregate function in List I with its operational computation in List II (assuming column values: [10, 20, NULL, 30]):\n\nList I:\n(A) SUM(Marks)\n(B) AVG(Marks)\n(C) COUNT(Marks)\n(D) COUNT(*)\n\nList II:\n(I) Calculates 60 (ignores NULL: 10 + 20 + 30)\n(II) Calculates 20.0 (divides by non-null count: 60 / 3)\n(III) Returns 3 (counts only the 3 non-null entries)\n(IV) Returns 4 (counts all 4 total rows in the relation)\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A-I, B-II, C-III, D-IV",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
-      },
-      {
-        "id": "B",
         "text": "A-II, B-I, C-III, D-IV",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
-        "id": "C",
+        "id": "B",
         "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
       },
       {
         "id": "D",
@@ -863,23 +863,23 @@
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nSUM ignores nulls (60); AVG divides by non-null count (60/3=20); COUNT(col) counts non-nulls (3); COUNT(*) counts all rows (4).\nHence, Option B is correct.\nHence, option (A) is the correct match.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nSUM ignores nulls (60); AVG divides by non-null count (60/3=20); COUNT(col) counts non-nulls (3); COUNT(*) counts all rows (4).\nHence, Option B is correct.\nHence, option (C) is the correct match.",
     "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Section A: Common Computing Concepts: Sorting Aggregate Results.",
-      "detailed": "Detailed Solution:\nSUM ignores nulls (60); AVG divides by non-null count (60/3=20); COUNT(col) counts non-nulls (3); COUNT(*) counts all rows (4).\nHence, Option B is correct.\nHence, option (A) is the correct match."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: SQL Aggregate Functions and Behaviors with NULLs.",
+      "detailed": "Detailed Solution:\nSUM ignores nulls (60); AVG divides by non-null count (60/3=20); COUNT(col) counts non-nulls (3); COUNT(*) counts all rows (4).\nHence, Option B is correct.\nHence, option (C) is the correct match."
     },
     "questionType": "match-the-following",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Sorting Aggregate Results",
+    "keyConcept": "Section A: Common Computing Concepts: SQL Aggregate Functions and Behaviors with NULLs",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Sorting Aggregate Results",
+      "SQL Aggregate Functions and Behaviors with NULLs",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
@@ -888,57 +888,57 @@
     "questionNumber": 16,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q16",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Accidental Column Matching in Natural Join",
-    "questionText": "Match the table constraint in List I with its operational validation rule in List II:\n\nList I:\n(A) NOT NULL\n(B) DEFAULT\n(C) UNIQUE\n(D) CHECK\n\nList II:\n(I) Guarantees that a column cannot be left empty or assigned a NULL value\n(II) Supplies a predefined fallback value when no explicit value is provided during insertion\n(III) Ensures all non-null values stored in the column are distinct and unique\n(IV) Validates that attribute values satisfy a specified boolean mathematical predicate\n\nChoose the correct answer from the options given below:",
+    "topic": "Newline Parameter in CSV File Open",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): When opening a file for writing CSV data on Windows (e.g., open('data.csv', 'w', newline='')), setting newline='' is mandatory.\nReason (R): If newline='' is omitted on Windows, the csv.writer will write an extra blank line (carriage return '\r\r\n') between consecutive rows.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A-II, B-I, C-III, D-IV",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
         "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+        "studentSelectionTrap": "Causality Confusion Trap",
+        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
       },
       {
         "id": "B",
-        "text": "A-I, B-II, C-III, D-IV",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
+        "mistakeAnalysis": "Correct answer. Both statements are factually valid, but Reason does not explain Assertion."
       },
       {
         "id": "C",
-        "text": "A-I, B-III, C-IV, D-II",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+        "studentSelectionTrap": "Reason Acceptance Trap",
+        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
       },
       {
         "id": "D",
-        "text": "A-IV, B-II, C-I, D-III",
+        "text": "(A) is false but (R) is true",
         "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+        "studentSelectionTrap": "Assertion Acceptance Trap",
+        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
       }
     ],
     "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nNOT NULL forbids empty values; DEFAULT assigns fallback; UNIQUE enforces distinctness; CHECK enforces boolean condition.\nHence, Option C is correct.\nHence, option (B) is the correct match.",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Windows default text mode translates '\n' to '\n'; passing newline='' suppresses double newline insertion.\nHence, Option A is correct.\nHence, option (B) is the correct choice.",
     "solution": {
       "quick": "Correct answer is option (B).",
-      "concept": "Section A: Common Computing Concepts: Accidental Column Matching in Natural Join.",
-      "detailed": "Detailed Solution:\nNOT NULL forbids empty values; DEFAULT assigns fallback; UNIQUE enforces distinctness; CHECK enforces boolean condition.\nHence, Option C is correct.\nHence, option (B) is the correct match."
+      "concept": "Section A: Common Computing Concepts: Newline Parameter in CSV File Open.",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Windows default text mode translates '\n' to '\n'; passing newline='' suppresses double newline insertion.\nHence, Option A is correct.\nHence, option (B) is the correct choice."
     },
-    "questionType": "match-the-following",
+    "questionType": "assertion-reasoning",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Accidental Column Matching in Natural Join",
+    "keyConcept": "Section A: Common Computing Concepts: Newline Parameter in CSV File Open",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Accidental Column Matching in Natural Join",
+      "Newline Parameter in CSV File Open",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
@@ -947,57 +947,57 @@
     "questionNumber": 17,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q17",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Dynamic Host Configuration Protocol (DHCP)",
-    "questionText": "Match the file open mode in List I with its operational behavior in List II:\n\nList I:\n(A) 'r'\n(B) 'w'\n(C) 'a'\n(D) 'r+'\n\nList II:\n(I) Read-only mode; file pointer placed at start; raises FileNotFoundError if file does not exist\n(II) Write-only mode; overwrites existing file or creates new file; truncates content to 0 bytes\n(III) Append mode; file pointer placed at the end; new data is written at the end without truncation\n(IV) Read and write mode; file pointer placed at start; does NOT truncate existing contents\n\nChoose the correct answer from the options given below:",
+    "topic": "Email Retrieval Protocol Distinction",
+    "questionText": "Read the following networking protocols case study and answer the questions that follow:\n\nAn e-commerce enterprise maintains a web application deployed across cloud servers. When a consumer accesses the store, several network protocols cooperate across the TCP/IP protocol suite:\n1. The consumer types 'www.shopfast.co.in' into their browser, prompting the Domain Name System (DNS) to resolve the human-readable domain name into an IP address (e.g., 203.0.113.45).\n2. The client establishes a secure, encrypted communication channel using HTTPS, which runs HTTP over Transport Layer Security (TLS/SSL), securing payment card transactions on port 443.\n3. Below the application layer, Transmission Control Protocol (TCP) breaks messages into packets, manages sequence numbers, and guarantees reliable, connection-oriented data delivery via a three-way handshake.\n4. Transactional confirmation emails are dispatched using Simple Mail Transfer Protocol (SMTP), while consumers retrieve order emails using POP3 or IMAP.\n\nQuestion: What is the operational difference between IMAP and POP3 for email retrieval?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A-I, B-III, C-IV, D-II",
+        "text": "IMAP supports synchronization of mail state across multiple devices on the server, while POP3 typically downloads and removes messages locally",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
+      },
+      {
+        "id": "B",
+        "text": "IMAP stores emails locally on the client device, whereas POP3 retains a persistent copy on the remote mail server",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
-        "id": "B",
-        "text": "A-II, B-I, C-III, D-IV",
+        "id": "C",
+        "text": "IMAP is exclusively designed for incoming mail transmission, while POP3 handles both sending and receiving messages",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
-        "id": "C",
-        "text": "A-IV, B-II, C-I, D-III",
+        "id": "D",
+        "text": "IMAP requires an encrypted TLS connection to function, whereas POP3 operates exclusively over unencrypted plain-text channels",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      },
-      {
-        "id": "D",
-        "text": "A-I, B-II, C-III, D-IV",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\n'r' is read-only non-truncating; 'w' is write-only truncating; 'a' appends at end; 'r+' reads and writes without initial truncation.\nHence, Option A is correct.\nHence, option (D) is the correct match.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nIMAP keeps mail on the server and synchronizes state across multiple clients; POP3 downloads messages locally to a single device.\nHence, Option D is correct.\nHence, option (A) is correct.",
     "solution": {
-      "quick": "Correct answer is option (D).",
-      "concept": "Section A: Common Computing Concepts: Dynamic Host Configuration Protocol (DHCP).",
-      "detailed": "Detailed Solution:\n'r' is read-only non-truncating; 'w' is write-only truncating; 'a' appends at end; 'r+' reads and writes without initial truncation.\nHence, Option A is correct.\nHence, option (D) is the correct match."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section A: Common Computing Concepts: Email Retrieval Protocol Distinction.",
+      "detailed": "Detailed Solution:\nIMAP keeps mail on the server and synchronizes state across multiple clients; POP3 downloads messages locally to a single device.\nHence, Option D is correct.\nHence, option (A) is correct."
     },
-    "questionType": "match-the-following",
+    "questionType": "chronological-sequence",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Dynamic Host Configuration Protocol (DHCP)",
+    "keyConcept": "Section A: Common Computing Concepts: Email Retrieval Protocol Distinction",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Dynamic Host Configuration Protocol (DHCP)",
+      "Email Retrieval Protocol Distinction",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
@@ -1006,57 +1006,57 @@
     "questionNumber": 18,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q18",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Catching Multiple Exception Types",
-    "questionText": "Arrange the execution and unwinding sequence of recursive calls for computing fact(3) using def fact(n): return 1 if n<=1 else n * fact(n-1):\n(A) fact(3) calls 3 * fact(2), pushing stack frame for fact(2)\n(B) fact(2) calls 2 * fact(1), pushing stack frame for fact(1)\n(C) fact(1) hits base condition (n <= 1) and returns 1 immediately\n(D) Unwinding: fact(2) computes 2 * 1 = 2; fact(3) computes 3 * 2 = 6 and returns 6\n\nChoose the correct chronological/logical sequence from the options given below:",
+    "topic": "writerow vs writerows Distinction",
+    "questionText": "Read the following case study on CSV inventory management in Python and answer the questions that follow:\n\nRajesh operates a warehouse distribution center and manages inventory items using Python's csv module. He creates a script 'inventory_manager.py' to record incoming inventory shipments into 'warehouse.csv'.\n\nTo record data, he opens the file using with open('warehouse.csv', 'w', newline='') as f: and instantiates a writer object using writer = csv.writer(f, delimiter=','). He writes the column headers using writer.writerow(['ItemId', 'ItemName', 'Quantity', 'UnitPrice']). To insert multiple inventory shipment rows at once from a nested list of records, he uses writer.writerows(shipment_data).\nLater, to search for low-stock items, he reads the file using csv.reader, checks if int(row[2]) < 20, and prints alerts for restock.\n\nQuestion: What is the difference between writer.writerow() and writer.writerows() in Python's csv module?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A, B, C, D",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
-      },
-      {
-        "id": "B",
-        "text": "D, B, C, A",
+        "text": "writerow() is used exclusively for writing header rows, while writerows() is restricted to running total calculations on existing data",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
+        "id": "B",
+        "text": "writerow() accepts a single 1D sequence to write one line, while writerows() accepts a 2D iterable to write multiple lines in a single call",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for writerow vs writerows Distinction."
+      },
+      {
         "id": "C",
-        "text": "A, C, B, D",
+        "text": "writerow() handles string data types only, whereas writerows() uniquely processes integer-based inventory quantities for the file",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "D",
-        "text": "B, A, C, D",
+        "text": "writerow() overwrites the entire CSV file with a new record, while writerows() appends data to the end of the current file",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nRecursion execution: push fact(3) -> push fact(2) -> push fact(1) -> unwind fact(1)->1 -> fact(2)->2 -> fact(3)->6.\nHence, Option C is correct.\nHence, option (A) is correct.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence, Option A is correct.\n\nTherefore, option (B) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Section A: Common Computing Concepts: Catching Multiple Exception Types.",
-      "detailed": "Detailed Solution:\nRecursion execution: push fact(3) -> push fact(2) -> push fact(1) -> unwind fact(1)->1 -> fact(2)->2 -> fact(3)->6.\nHence, Option C is correct.\nHence, option (A) is correct."
+      "quick": "Correct answer is option (B).",
+      "concept": "Section A: Common Computing Concepts: writerow vs writerows Distinction.",
+      "detailed": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence, Option A is correct.\n\nTherefore, option (B) is the correct answer."
     },
-    "questionType": "chronological-sequence",
+    "questionType": "application",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Catching Multiple Exception Types",
+    "keyConcept": "Section A: Common Computing Concepts: writerow vs writerows Distinction",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Catching Multiple Exception Types",
+      "writerow vs writerows Distinction",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
@@ -1065,57 +1065,57 @@
     "questionNumber": 19,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q19",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Star vs Bus Network Topology Resilience",
-    "questionText": "Arrange the correct sequence of steps for reading all serialized records from a binary file using pickle:\n(A) Open the target binary file in read-binary mode ('rb') within a try block\n(B) Initialize an infinite 'while True:' loop to sequentially consume stored objects\n(C) Execute record = pickle.load(file) and process or display the extracted object\n(D) Catch the EOFError exception to cleanly terminate the loop when all records have been read, and close the file\n\nChoose the correct chronological/logical sequence from the options given below:",
+    "topic": "Missing Base Case Error",
+    "questionText": "Read the following case study on recursion in Python and answer the questions that follow:\n\nDeepak is implementing algorithmic simulations for mathematical models in Python. He develops a recursive function to compute the power of a number: def power(x, n):\n    if n == 0:\n        return 1\n    else:\n        return x * power(x, n - 1)\n\nWhen computing power(2, 3), Python allocates an activation record (stack frame) on the system call stack for each call: power(2, 3) calls power(2, 2), which calls power(2, 1), which calls power(2, 0). Upon reaching n == 0, the base case executes without making another recursive call, returning 1. The call stack then unwinds in Last-In-First-Out (LIFO) order: power(2, 1) computes 2 * 1 = 2; power(2, 2) computes 2 * 2 = 4; and power(2, 3) computes 2 * 4 = 8, returning the final result to the caller.\n\nQuestion: What runtime exception is thrown if Deepak accidentally removes the base case from his recursive function?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "B, A, C, D",
+        "text": "SyntaxError",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "D, B, C, A",
+        "text": "ZeroDivisionError",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "A, C, B, D",
+        "text": "TypeError",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       },
       {
         "id": "D",
-        "text": "A, B, C, D",
+        "text": "RecursionError: maximum recursion depth exceeded",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Missing Base Case Error."
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nPickle reading protocol: open 'rb' -> while True -> pickle.load -> catch EOFError to exit loop.\nHence, Option D is correct.\nHence, option (D) is correct.",
+    "detailedSolution": "Detailed Solution:\nFor Missing Base Case Error (Section A: Common Computing Concepts):\nUnbounded recursion continues pushing frames until Python hits its recursion limit, raising RecursionError.\nHence, Option B is correct.\n\nTherefore, option (D) is the correct answer.",
     "solution": {
       "quick": "Correct answer is option (D).",
-      "concept": "Section A: Common Computing Concepts: Star vs Bus Network Topology Resilience.",
-      "detailed": "Detailed Solution:\nPickle reading protocol: open 'rb' -> while True -> pickle.load -> catch EOFError to exit loop.\nHence, Option D is correct.\nHence, option (D) is correct."
+      "concept": "Section A: Common Computing Concepts: Missing Base Case Error.",
+      "detailed": "Detailed Solution:\nFor Missing Base Case Error (Section A: Common Computing Concepts):\nUnbounded recursion continues pushing frames until Python hits its recursion limit, raising RecursionError.\nHence, Option B is correct.\n\nTherefore, option (D) is the correct answer."
     },
-    "questionType": "chronological-sequence",
+    "questionType": "application",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Star vs Bus Network Topology Resilience",
+    "keyConcept": "Section A: Common Computing Concepts: Missing Base Case Error",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Star vs Bus Network Topology Resilience",
+      "Missing Base Case Error",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"
@@ -1124,8 +1124,8 @@
     "questionNumber": 20,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T4-Q20",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Bandwidth Definition in Networking",
-    "questionText": "Which of the following statements regarding Bandwidth Definition in Networking in Section A: Common Computing Concepts is INCORRECT / NOT true?",
+    "topic": "Buffered Cursor Purpose",
+    "questionText": "Which of the following statements regarding Buffered Cursor Purpose in Section A: Common Computing Concepts is INCORRECT / NOT true?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -1145,36 +1145,36 @@
       },
       {
         "id": "C",
+        "text": "Its magnitude depends directly on the governing physical or analytical constants of Buffered Cursor Purpose.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Accepting Valid Fact as Exception",
+        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
+      },
+      {
+        "id": "D",
         "text": "It operates in direct violation of the fundamental conservation laws of Section A: Common Computing Concepts.",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Identifies the statement that contains a scientific falsehood."
-      },
-      {
-        "id": "D",
-        "text": "Its magnitude depends directly on the governing physical or analytical constants of Bandwidth Definition in Networking.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Accepting Valid Fact as Exception",
-        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to standard NCERT Section A: Common Computing Concepts specifications, Bandwidth Definition in Networking is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (C) is false, making it the correct answer to this negative constraint question.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to standard NCERT Section A: Common Computing Concepts specifications, Buffered Cursor Purpose is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (D) is false, making it the correct answer to this negative constraint question.",
     "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Section A: Common Computing Concepts: Bandwidth Definition in Networking.",
-      "detailed": "Detailed Solution:\nAccording to standard NCERT Section A: Common Computing Concepts specifications, Bandwidth Definition in Networking is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (C) is false, making it the correct answer to this negative constraint question."
+      "quick": "Correct answer is option (D).",
+      "concept": "Section A: Common Computing Concepts: Buffered Cursor Purpose.",
+      "detailed": "Detailed Solution:\nAccording to standard NCERT Section A: Common Computing Concepts specifications, Buffered Cursor Purpose is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (D) is false, making it the correct answer to this negative constraint question."
     },
     "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Bandwidth Definition in Networking",
+    "keyConcept": "Section A: Common Computing Concepts: Buffered Cursor Purpose",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Bandwidth Definition in Networking",
+      "Buffered Cursor Purpose",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 4)"

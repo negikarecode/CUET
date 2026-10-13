@@ -215,12 +215,21 @@ export default function PostMockAnalysisClient({
   const secondsTaken = overall.totalTimeSeconds % 60;
   const timeTakenFormatted = `${minutesTaken}m ${secondsTaken.toString().padStart(2, "0")}s`;
 
+  const isPractice = report.testId.toLowerCase().includes("practice") || report.testId.toLowerCase().includes("unit");
   const isPYQ = report.testId.toLowerCase().includes("pyq");
-  const backHref = isPYQ ? "/dashboard/pyqs" : "/dashboard/mocks";
-  const backLabel = isPYQ ? "All PYQ Papers" : "Mocks History";
-  const badgeLabel = isPYQ ? "OFFICIAL PYQ CBT ANALYSIS" : "POST-MOCK RESULTS";
-  const retakeLabel = isPYQ ? "Retake PYQ Paper" : "Retake Mock";
-  const backButtonText = isPYQ ? "Back to PYQs" : "Back to Mocks";
+  const practiceSubjectMatch = report.testId.match(/practice-([a-z0-9_-]+)-unit/i);
+  const practiceSubject = practiceSubjectMatch ? practiceSubjectMatch[1] : null;
+
+  const backHref = isPractice
+    ? (practiceSubject ? `/dashboard/practice/${practiceSubject}` : "/dashboard/practice")
+    : isPYQ
+    ? "/dashboard/pyqs"
+    : "/dashboard/mocks";
+
+  const backLabel = isPractice ? "Back to Practice Tests" : isPYQ ? "All PYQ Papers" : "Mocks History";
+  const badgeLabel = isPractice ? "UNIT PRACTICE CBT ANALYSIS" : isPYQ ? "OFFICIAL PYQ CBT ANALYSIS" : "POST-MOCK RESULTS";
+  const retakeLabel = isPractice ? "Retake Practice Test" : isPYQ ? "Retake PYQ Paper" : "Retake Mock";
+  const backButtonText = isPractice ? "Back to Practice Tests" : isPYQ ? "Back to PYQs" : "Back to Mocks";
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
