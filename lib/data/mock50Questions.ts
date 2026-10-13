@@ -129,6 +129,26 @@ export function loadRawPYQData(folder: string, paperNumber: number): RawQuestion
 }
 
 /**
+ * Loads raw practice test question data from practice/<subjectFolder>/unit<unitNumber>/<testNumber>.json
+ */
+export function loadRawPracticeData(folder: string, unitNumber: number, testNumber: number): RawQuestion[] {
+  const cacheKey = `practice_${folder}_u${unitNumber}_t${testNumber}`;
+  const cached = mockRawDataCache.get(cacheKey);
+  if (cached) return cached;
+
+  const basePath = path.join(process.cwd(), "practice", folder, `unit${unitNumber}`, `${testNumber}.json`);
+  if (!fs.existsSync(basePath)) {
+    console.warn(`[PracticeLoader] Practice test not found at ${basePath}. Returning empty bank.`);
+    return [];
+  }
+
+  const content = fs.readFileSync(basePath, "utf-8");
+  const parsed = JSON.parse(content) as RawQuestion[];
+  mockRawDataCache.set(cacheKey, parsed);
+  return parsed;
+}
+
+/**
  * Transforms raw mock dataset questions to runtime Question objects
  */
 export function mapQuestionsFromDataset(
@@ -284,7 +304,47 @@ export function getQuestionsForTest(testId: string): {
     };
   }
 
-  // 2. Official PYQ or Full-length Mock Test
+  // 2. Unit-wise Practice Tests
+  const isPractice =
+    lowerId.includes("practice") ||
+    (lowerId.includes("unit") && (lowerId.includes("test") || /unit[-_]?\d+/.test(lowerId)));
+
+  if (isPractice) {
+    const unitMatch = lowerId.match(/unit[-_]?(\d+)/) || lowerId.match(/u[-_]?(\d+)/);
+    const testMatch = lowerId.match(/test[-_]?(\d+)/) || lowerId.match(/t[-_]?(\d+)/) || lowerId.match(/-(\d+)$/);
+    const unitNumber = unitMatch && unitMatch[1] ? parseInt(unitMatch[1], 10) : 1;
+    const testNumber = testMatch && testMatch[1] ? parseInt(testMatch[1], 10) : 1;
+
+    const rawQuestions = loadRawPracticeData(subjectDef.folder, unitNumber, testNumber);
+    const firstQ = rawQuestions[0];
+    const unitTitle = firstQ?.chapter || `Unit ${unitNumber}`;
+
+    const title = `CUET UG ${subjectDef.name} - Unit ${unitNumber}: ${unitTitle} (Practice Test ${testNumber})`;
+    const sourceLabel = `CUET UG Unit Practice Paper (${subjectDef.name} Unit ${unitNumber} Test ${testNumber})`;
+    const notesPrefix = `CUET UG 2026 Unit Practice (${subjectDef.name} Unit ${unitNumber})`;
+
+    const questions = mapQuestionsFromDataset(
+      testId,
+      subjectDef.name,
+      sourceLabel,
+      notesPrefix,
+      rawQuestions
+    );
+
+    return {
+      testMeta: {
+        id: testId,
+        title,
+        subject: subjectDef.name,
+        code: subjectDef.code,
+        totalQuestions: questions.length,
+        durationMinutes: 25, // 20 questions standard timed test
+      },
+      questions,
+    };
+  }
+
+  // 3. Official PYQ or Full-length Mock Test
   let validMockNumber = 1;
   let title = "";
   let sourceLabel = "";

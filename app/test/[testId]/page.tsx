@@ -28,6 +28,7 @@ export default function TestPage({ params, searchParams }: PageProps) {
   const { testMeta, questions } = getQuestionsForTest(params.testId);
 
   if (questions.length === 0) {
+    const isPractice = params.testId.toLowerCase().includes("practice") || params.testId.toLowerCase().includes("unit");
     const isMock = params.testId.toLowerCase().includes("mock");
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
@@ -43,15 +44,15 @@ export default function TestPage({ params, searchParams }: PageProps) {
               {testMeta?.title || "Exam Paper Under Reconstruction"}
             </h2>
             <p className="text-xs text-slate-500 font-medium leading-relaxed">
-              This paper is currently being remade and recalibrated with official CUET NTA past year papers according to the latest 50 compulsory questions pattern.
+              This paper is currently being remade and recalibrated with official CUET NTA past year papers according to the latest pattern.
             </p>
           </div>
           <div className="pt-2 flex flex-col gap-2.5">
             <Link
-              href={isMock ? "/dashboard/mocks" : "/dashboard/pyqs"}
+              href={isPractice ? "/dashboard/practice" : isMock ? "/dashboard/mocks" : "/dashboard/pyqs"}
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all"
             >
-              <span>{isMock ? "Back to All Mocks" : "Back to All PYQ Papers"}</span>
+              <span>{isPractice ? "Back to Practice Tests" : isMock ? "Back to All Mocks" : "Back to All PYQ Papers"}</span>
             </Link>
             <Link
               href="/dashboard"
