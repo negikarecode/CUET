@@ -1,0 +1,611 @@
+{
+  "id": "chemistry_u2_t1",
+  "slug": "galvanic-and-electrolytic-cells-nernst-equation-conductance-kohlrausch-s-law-batteries",
+  "subject": "chemistry",
+  "subjectName": "Chemistry",
+  "subjectCode": "306",
+  "unitNumber": 2,
+  "unitTitle": "Electrochemistry",
+  "topicTitle": "Galvanic & Electrolytic Cells, Nernst Equation, Conductance, Kohlrausch's Law, Batteries",
+  "ncertReference": {
+    "class": "Class 12",
+    "book": "Chemistry Part 1",
+    "chapterNumber": 2,
+    "chapterName": "Electrochemistry",
+    "sections": [
+      "2.1 Electrochemical Cells",
+      "2.2 Galvanic Cells & Standard Hydrogen Electrode",
+      "2.3 Nernst Equation & Equilibrium Constant",
+      "2.4 Conductance of Electrolytic Solutions",
+      "2.5 Kohlrausch's Law and its Applications",
+      "2.6 Electrolytic Cells and Faraday's Laws",
+      "2.7 Batteries, Fuel Cells and Corrosion"
+    ]
+  },
+  "cuetRelevance": {
+    "level": "High",
+    "pyqFrequency": "Appears in 100% of tested CUET shifts (3-4 questions per shift)",
+    "totalPyqsInRepo": 48,
+    "weightagePercentage": 8
+  },
+  "summary30Seconds": [
+    "Galvanic cell convention: LOAN (Left, Oxidation, Anode, Negative). $E_{\\text{cell}}^\\circ = E_{\\text{cathode}}^\\circ - E_{\\text{anode}}^\\circ$ using standard REDUCTION potentials.",
+    "Nernst equation at $298\\text{ K}$: $E_{\\text{cell}} = E_{\\text{cell}}^\\circ - \\frac{0.0591}{n} \\log Q$. At equilibrium: $E_{\\text{cell}} = 0 \\implies E_{\\text{cell}}^\\circ = \\frac{0.0591}{n} \\log K_c$.",
+    "Thermodynamics: $\\Delta G^\\circ = -n F E_{\\text{cell}}^\\circ$. For spontaneous reaction, $E_{\\text{cell}} > 0$ and $\\Delta G < 0$.",
+    "Conductivity $\\kappa = G \\cdot (l/A) = G \\cdot G^*$. On dilution: Specific conductivity $\\kappa$ decreases (fewer ions per unit volume); Molar conductivity $\\Lambda_m = \\frac{1000 \\kappa}{M}$ increases.",
+    "Kohlrausch's Law: $\\Lambda_m^\\circ = \\nu_+ \\lambda_+^\\circ + \\nu_- \\lambda_-^\\circ$. Used to determine $\\Lambda_m^\\circ$ for weak electrolytes like $CH_3COOH$.",
+    "Batteries: Primary (Leclanché dry cell, Mercury cell has constant $1.35\\text{ V}$); Secondary (Lead storage battery: discharges $PbSO_4$ on both plates, density of $H_2SO_4$ drops; recharged by reversing current)."
+  ],
+  "coreConcepts": [
+    {
+      "title": "Standard Electrode Potential & Daniell Cell",
+      "content": "In a Galvanic cell, chemical energy of a spontaneous redox reaction is converted into electrical energy.\n- **Daniell Cell**: $Zn(s) | Zn^{2+}(aq) \\parallel Cu^{2+}(aq) | Cu(s)$. Anode (oxidation): $Zn \\rightarrow Zn^{2+} + 2e^-$; Cathode (reduction): $Cu^{2+} + 2e^- \\rightarrow Cu$.\n- **Standard Reduction Potential ($E^\\circ$)**: Measured relative to Standard Hydrogen Electrode ($SHE$, $E^\\circ = 0.00\\text{ V}$ at $298\\text{ K}, 1\\text{ bar } H_2, 1\\text{ M } H^+$).\n- **Cell Potential**: $E_{\\text{cell}}^\\circ = E_{\\text{cathode}}^\\circ - E_{\\text{anode}}^\\circ = E_{\\text{right}}^\\circ - E_{\\text{left}}^\\circ$.\n- **External Potential ($V_{\\text{ext}}$) Effect on Daniell Cell**:\n  1. $V_{\\text{ext}} < 1.1\\text{ V}$: Electrons flow $Zn \\rightarrow Cu$, normal galvanic action.\n  2. $V_{\\text{ext}} = 1.1\\text{ V}$: No electron flow, reaction stops (equilibrium).\n  3. $V_{\\text{ext}} > 1.1\\text{ V}$: Electrons reverse $Cu \\rightarrow Zn$, operates as electrolytic cell.",
+      "ncertPointers": [
+        "More negative $E^\\circ$ means stronger reducing agent (e.g., $Li$ with $E^\\circ = -3.05\\text{ V}$).",
+        "More positive $E^\\circ$ means stronger oxidizing agent (e.g., $F_2$ with $E^\\circ = +2.87\\text{ V}$)."
+      ]
+    },
+    {
+      "title": "Nernst Equation & Electrochemical Thermodynamics",
+      "content": "For general redox reaction $aA + bB \\xrightarrow{n e^-} cC + dD$:\n$$E_{\\text{cell}} = E_{\\text{cell}}^\\circ - \\frac{RT}{nF} \\ln Q = E_{\\text{cell}}^\\circ - \\frac{2.303 RT}{nF} \\log_{10} \\frac{[C]^c [D]^d}{[A]^a [B]^b}$$\nAt $T = 298\\text{ K}$, substituting constants $R = 8.314\\text{ J K}^{-1}\\text{mol}^{-1}$ and $F = 96487 \\approx 96500\\text{ C mol}^{-1}$:\n$$E_{\\text{cell}} = E_{\\text{cell}}^\\circ - \\frac{0.0591}{n} \\log_{10} Q$$\n\n**Key Thermodynamic Relations**:\n1. Maximum electrical work: $W_{\\text{max}} = -\\Delta G = n F E_{\\text{cell}}$.\n2. Standard state: $\\Delta G^\\circ = -n F E_{\\text{cell}}^\\circ$.\n3. Relation to Equilibrium Constant ($K_c$): At equilibrium, cell reaction ceases $\\implies E_{\\text{cell}} = 0$ and $Q = K_c$:\n$$E_{\\text{cell}}^\\circ = \\frac{0.0591}{n} \\log_{10} K_c \\implies \\Delta G^\\circ = -2.303 RT \\log_{10} K_c$$",
+      "ncertPointers": [
+        "Pure solids and liquids have activity = 1 (do not include $[Cu(s)]$ or $[Zn(s)]$ in $Q$).",
+        "Concentration cell has $E_{\\text{cell}}^\\circ = 0\\text{ V}$; potential is driven purely by concentration gradient: $E = \\frac{0.0591}{n} \\log \\frac{C_2}{C_1}$ where $C_2 > C_1$."
+      ]
+    },
+    {
+      "title": "Conductance, Kohlrausch's Law & Faraday's Laws",
+      "content": "1. **Conductivity ($\\kappa$)**: Conductance of $1\\text{ cm}^3$ solution: $\\kappa = G \\cdot G^* = \\frac{1}{R} \\cdot \\frac{l}{A}$. Units: $\\text{S m}^{-1}$ or $\\text{S cm}^{-1}$.\n2. **Molar Conductivity ($\\Lambda_m$)**: Conductance of solution containing 1 mole of electrolyte:\n   $$\\Lambda_m = \\frac{\\kappa \\times 1000}{M} \\quad (\\text{in S cm}^2 \\text{mol}^{-1})$$\n3. **Effect of Dilution**:\n   - **Conductivity ($\\kappa$) decreases**: Number of current-carrying ions per unit volume decreases.\n   - **Molar conductivity ($\\Lambda_m$) increases**: Volume containing 1 mole electrolyte expands; interionic attraction weakens.\n   - Strong electrolytes obey **Debye-Hückel-Onsager equation**: $\\Lambda_m = \\Lambda_m^\\circ - A \\sqrt{C}$. Plot of $\\Lambda_m$ vs $\\sqrt{C}$ gives straight line with intercept $\\Lambda_m^\\circ$.\n   - Weak electrolytes dissociate further on dilution (Ostwald's dilution law); curve steepens at near-zero concentration, so $\\Lambda_m^\\circ$ cannot be obtained by direct extrapolation.\n4. **Kohlrausch's Law of Independent Migration of Ions**:\n   $$\\Lambda_m^\\circ (A_x B_y) = x \\lambda_+^\\circ + y \\lambda_-^\\circ$$\n   Degree of dissociation of weak electrolyte: $\\alpha = \\frac{\\Lambda_m}{\\Lambda_m^\\circ}$, and $K_a = \\frac{C \\alpha^2}{1 - \\alpha}$.\n5. **Faraday's Laws of Electrolysis**:\n   - First Law: Mass deposited $m = Z Q = Z I t = \\frac{M}{n F} I t$.\n   - Second Law: When same quantity of electricity passes through series cells: $m_1 / m_2 = E_1 / E_2$ where $E = M/n$.",
+      "ncertPointers": [
+        "1 Faraday ($F \\approx 96500\\text{ C}$) is the charge of 1 mole of electrons.",
+        "To deposit 1 mole of $Al$ from $Al^{3+}$, $3 F$ of charge is required; for $Cu$ from $Cu^{2+}$, $2 F$; for $Na$ from $Na^+$, $1 F$."
+      ]
+    }
+  ],
+  "keyFormulasAndTables": [
+    {
+      "name": "Nernst Equation at 298 K",
+      "formula": "E_{\\text{cell}} = E_{\\text{cell}}^\\circ - \\frac{0.0591}{n} \\log_{10} Q",
+      "symbols": "E = \\text{cell EMF}, n = \\text{moles of electrons exchanged}, Q = \\text{reaction quotient}",
+      "siUnits": "Volt (V)",
+      "applicationCondition": "Applies at T = 298 K"
+    },
+    {
+      "name": "Standard Gibbs Energy & Equilibrium Constant",
+      "formula": "\\Delta G^\\circ = -n F E_{\\text{cell}}^\\circ = -2.303 R T \\log K_c",
+      "symbols": "F = 96487\\text{ C/mol}, R = 8.314\\text{ J/(mol K)}",
+      "siUnits": "J/mol or kJ/mol",
+      "applicationCondition": "Standard state (1 M, 1 bar, 298 K)"
+    },
+    {
+      "name": "Molar Conductivity",
+      "formula": "\\Lambda_m = \\frac{1000 \\cdot \\kappa}{M}",
+      "symbols": "\\kappa = \\text{conductivity in S cm}^{-1}, M = \\text{molarity in mol/L}",
+      "siUnits": "\\text{S cm}^2 \\text{mol}^{-1}",
+      "applicationCondition": "Valid for all electrolytic solutions"
+    },
+    {
+      "name": "Kohlrausch's Law & Dissociation Constant",
+      "formula": "\\Lambda_m^\\circ = \\nu_+ \\lambda_+^\\circ + \\nu_- \\lambda_-^\\circ, \\quad \\alpha = \\frac{\\Lambda_m}{\\Lambda_m^\\circ}",
+      "symbols": "\\nu_+, \\nu_- = \\text{number of cations/anions per formula unit}",
+      "siUnits": "\\text{S cm}^2 \\text{mol}^{-1}",
+      "applicationCondition": "Infinite dilution"
+    },
+    {
+      "name": "Faraday's First Law of Electrolysis",
+      "formula": "m = \\frac{M \\cdot I \\cdot t}{n \\cdot 96500}",
+      "symbols": "M = \\text{molar mass}, I = \\text{current in A}, t = \\text{seconds}, n = \\text{valency factor}",
+      "siUnits": "Grams (g)",
+      "applicationCondition": "Constant current electrolysis"
+    }
+  ],
+  "diagramSvg": "<svg viewBox=\"0 0 760 280\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <rect width=\"760\" height=\"280\" rx=\"14\" fill=\"#0f172a\" stroke=\"#334155\" strokeWidth=\"1.5\"/>\n  <text x=\"380\" y=\"32\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"16\" fontWeight=\"bold\">Daniell Cell (Galvanic Cell) Schematic</text>\n  \n  <!-- Left Beaker (Anode) -->\n  <rect x=\"100\" y=\"70\" width=\"160\" height=\"150\" rx=\"6\" fill=\"#1e293b\" stroke=\"#64748b\" strokeWidth=\"1.5\"/>\n  <rect x=\"110\" y=\"110\" width=\"140\" height=\"100\" fill=\"#0284c7\" opacity=\"0.2\"/>\n  <rect x=\"160\" y=\"60\" width=\"20\" height=\"120\" fill=\"#94a3b8\" stroke=\"#cbd5e1\" strokeWidth=\"1\"/>\n  <text x=\"170\" y=\"50\" textAnchor=\"middle\" fill=\"#94a3b8\" fontSize=\"11\" fontWeight=\"bold\">Zn Rod (Anode, -)</text>\n  <text x=\"170\" y=\"195\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"10\">1 M ZnSO₄</text>\n\n  <!-- Right Beaker (Cathode) -->\n  <rect x=\"500\" y=\"70\" width=\"160\" height=\"150\" rx=\"6\" fill=\"#1e293b\" stroke=\"#64748b\" strokeWidth=\"1.5\"/>\n  <rect x=\"510\" y=\"110\" width=\"140\" height=\"100\" fill=\"#0369a1\" opacity=\"0.4\"/>\n  <rect x=\"560\" y=\"60\" width=\"20\" height=\"120\" fill=\"#d97706\" stroke=\"#f59e0b\" strokeWidth=\"1\"/>\n  <text x=\"570\" y=\"50\" textAnchor=\"middle\" fill=\"#f59e0b\" fontSize=\"11\" fontWeight=\"bold\">Cu Rod (Cathode, +)</text>\n  <text x=\"570\" y=\"195\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"10\">1 M CuSO₄</text>\n\n  <!-- Salt Bridge -->\n  <path d=\"M 220,130 L 220,80 L 540,80 L 540,130\" fill=\"none\" stroke=\"#22c55e\" strokeWidth=\"14\" strokeLinejoin=\"round\"/>\n  <text x=\"380\" y=\"75\" textAnchor=\"middle\" fill=\"#4ade80\" fontSize=\"11\" fontWeight=\"bold\">Salt Bridge (Agar-agar + KCl/KNO₃)</text>\n\n  <!-- Wire & Voltmeter -->\n  <path d=\"M 170,60 L 170,20 L 350,20\" fill=\"none\" stroke=\"#facc15\" strokeWidth=\"2\"/>\n  <circle cx=\"380\" cy=\"20\" r=\"14\" fill=\"#0f172a\" stroke=\"#facc15\" strokeWidth=\"2\"/>\n  <text x=\"380\" y=\"24\" textAnchor=\"middle\" fill=\"#facc15\" fontSize=\"11\" fontWeight=\"bold\">V</text>\n  <path d=\"M 410,20 L 570,20 L 570,60\" fill=\"none\" stroke=\"#facc15\" strokeWidth=\"2\"/>\n\n  <!-- Legend / Info -->\n  <text x=\"380\" y=\"240\" textAnchor=\"middle\" fill=\"#e2e8f0\" fontSize=\"12\">e⁻ Flow: Zn (Anode) → Cu (Cathode) | Current: Cu → Zn</text>\n  <text x=\"380\" y=\"260\" textAnchor=\"middle\" fill=\"#94a3b8\" fontSize=\"11\">E°cell = E°(Cu²⁺/Cu) - E°(Zn²⁺/Zn) = +0.34 V - (-0.76 V) = +1.10 V</text>\n</svg>",
+  "workedExamples": [
+    {
+      "id": "chem_u2_we1",
+      "questionNumber": 1,
+      "question": "Calculate the EMF of the cell at $298\\text{ K}$: $Mg(s) | Mg^{2+}(0.1\\text{ M}) \\parallel Cu^{2+}(1 \\times 10^{-3}\\text{ M}) | Cu(s)$. Given $E^\\circ(Mg^{2+}/Mg) = -2.37\\text{ V}$, $E^\\circ(Cu^{2+}/Cu) = +0.34\\text{ V}$.",
+      "options": [
+        {
+          "id": "A",
+          "text": "2.65 V"
+        },
+        {
+          "id": "B",
+          "text": "2.71 V"
+        },
+        {
+          "id": "C",
+          "text": "2.77 V"
+        },
+        {
+          "id": "D",
+          "text": "2.12 V"
+        }
+      ],
+      "correctOption": "A",
+      "solutionSteps": [
+        "Step 1: Calculate $E_{\\text{cell}}^\\circ = E_{\\text{cathode}}^\\circ - E_{\\text{anode}}^\\circ = +0.34 - (-2.37) = +2.71\\text{ V}$.",
+        "Step 2: Overall reaction: $Mg(s) + Cu^{2+}(aq) \\rightarrow Mg^{2+}(aq) + Cu(s)$, with $n = 2$ electrons.",
+        "Step 3: Reaction quotient $Q = \\frac{[Mg^{2+}]}{[Cu^{2+}]} = \\frac{0.1}{10^{-3}} = 10^2 = 100$.",
+        "Step 4: Apply Nernst equation: $E_{\\text{cell}} = 2.71 - \\frac{0.0591}{2} \\log_{10}(100) = 2.71 - 0.02955 \\times 2 = 2.71 - 0.0591 = 2.6509\\text{ V} \\approx 2.65\\text{ V}$."
+      ],
+      "cuetTip": "Notice that $\\log(100) = 2$, which cancels the 2 in the denominator $\\frac{0.0591}{2} \\times 2 = 0.0591$! Speed calculations like this save minutes in CUET."
+    },
+    {
+      "id": "chem_u2_we2",
+      "questionNumber": 2,
+      "question": "How much electricity in Coulombs is required to produce 20 g of calcium from molten $CaCl_2$? (Atomic mass of Ca = 40 g/mol, $F = 96500\\text{ C}$).",
+      "options": [
+        {
+          "id": "A",
+          "text": "48,250 C"
+        },
+        {
+          "id": "B",
+          "text": "96,500 C"
+        },
+        {
+          "id": "C",
+          "text": "193,000 C"
+        },
+        {
+          "id": "D",
+          "text": "24,125 C"
+        }
+      ],
+      "correctOption": "B",
+      "solutionSteps": [
+        "Step 1: Cathode reduction reaction: $Ca^{2+} + 2e^- \\rightarrow Ca(s)$. 1 mole of $Ca$ (40 g) requires $2 F$ of charge.",
+        "Step 2: Number of moles of Ca produced = $20\\text{ g} / 40\\text{ g/mol} = 0.5\\text{ mole}$.",
+        "Step 3: Charge required $Q = 0.5 \\times 2 F = 1 F = 96,500\\text{ C}$."
+      ],
+      "cuetTip": "Always relate charge directly to moles: $\\text{Moles of electrons} = n \\times \\text{moles of substance}$."
+    }
+  ],
+  "howCuetAsksThis": [
+    {
+      "type": "Direct Calculation of Limiting Molar Conductivity via Kohlrausch Law",
+      "frequency": "Very High",
+      "pyqExample": {
+        "question": "Given $\\Lambda_m^\\circ(NaCl) = 126.4$, $\\Lambda_m^\\circ(HCl) = 425.9$, and $\\Lambda_m^\\circ(CH_3COONa) = 91.0\\text{ S cm}^2\\text{mol}^{-1}$. The limiting molar conductivity of acetic acid $\\Lambda_m^\\circ(CH_3COOH)$ is:",
+        "options": [
+          {
+            "id": "A",
+            "text": "390.5 S cm² mol⁻¹"
+          },
+          {
+            "id": "B",
+            "text": "425.9 S cm² mol⁻¹"
+          },
+          {
+            "id": "C",
+            "text": "516.9 S cm² mol⁻¹"
+          },
+          {
+            "id": "D",
+            "text": "290.5 S cm² mol⁻¹"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "$\\Lambda_m^\\circ(CH_3COOH) = \\Lambda_m^\\circ(CH_3COONa) + \\Lambda_m^\\circ(HCl) - \\Lambda_m^\\circ(NaCl) = 91.0 + 425.9 - 126.4 = 390.5\\text{ S cm}^2\\text{mol}^{-1}$."
+      },
+      "strategy": "Use addition/subtraction of strong electrolyte values: Salt of desired acid + Strong acid - Common byproduct salt."
+    },
+    {
+      "type": "Battery & Fuel Cell Matching",
+      "frequency": "High",
+      "pyqExample": {
+        "question": "Match the cell in List-I with its key characteristic in List-II:\nP. Mercury cell\nQ. Lead storage battery\nR. Hydrogen-oxygen fuel cell\nS. Dry cell",
+        "options": [
+          {
+            "id": "A",
+            "text": "P-Constant 1.35 V, Q-Secondary cell with PbSO4, R-Eco-friendly with 70% efficiency, S-Primary cell with Zn anode"
+          },
+          {
+            "id": "B",
+            "text": "P-Secondary cell, Q-Constant voltage, R-Primary cell, S-Eco-friendly"
+          },
+          {
+            "id": "C",
+            "text": "P-Eco-friendly, Q-Primary cell, R-Constant 1.35 V, S-Secondary cell"
+          },
+          {
+            "id": "D",
+            "text": "P-Constant 1.35 V, Q-Eco-friendly, R-Secondary cell, S-Primary cell"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "Mercury cell voltage remains constant at 1.35 V because no ions in solution change concentration. Lead battery is secondary. H2-O2 cell efficiency is ~70%."
+      },
+      "strategy": "Remember why Mercury cell has constant voltage: the overall reaction has no dissolved ions whose concentrations change during its lifetime."
+    }
+  ],
+  "commonTraps": [
+    {
+      "misconception": "Using standard oxidation potential directly in $E_{\\text{cathode}} - E_{\\text{anode}}$.",
+      "whyWrong": "IUPAC convention strictly defines electrode potentials as standard REDUCTION potentials. Using oxidation potential reverses signs and yields incorrect results.",
+      "correctUnderstanding": "Always convert any given oxidation potential to reduction potential by flipping the sign ($E^\\circ_{\\text{red}} = -E^\\circ_{\\text{ox}}$) before using $E_{\\text{cathode}}^\\circ - E_{\\text{anode}}^\\circ$."
+    },
+    {
+      "misconception": "Thinking conductivity $\\kappa$ increases on dilution because ions move more freely.",
+      "whyWrong": "While molar conductivity $\\Lambda_m$ increases, specific conductivity $\\kappa$ strictly DECREASES on dilution because the number of ions per unit volume ($1\\text{ cm}^3$) decreases.",
+      "correctUnderstanding": "Conductivity $\\kappa \\propto$ number of ions in $1\\text{ cm}^3$. On adding water, ions spread out, so $\\kappa$ drops."
+    }
+  ],
+  "mnemonicsAndShortcuts": [
+    {
+      "title": "Galvanic Anode Memory Hook",
+      "mnemonic": "LOAN: Left, Oxidation, Anode, Negative.",
+      "rule": "In standard electrochemical cell representation, the left half-cell is the site of Oxidation, is called Anode, and carries Negative polarity.",
+      "shortcut": "Opposite for cathode: Right, Reduction, Cathode, Positive.",
+      "whenToApply": "Setting up cell diagrams and identifying polarity in galvanic cells."
+    },
+    {
+      "title": "Kohlrausch Combination Trick",
+      "mnemonic": "Add the parents, subtract the spectator.",
+      "rule": "To find $\\Lambda_m^\\circ$ of $HA$: Add $NaA$ (provides $A^-$) + $HCl$ (provides $H^+$) - $NaCl$ (removes $Na^+$ and $Cl^-$).",
+      "shortcut": "Wanted = (Salt with desired anion) + (Acid with desired cation) - (Salt of bystanders).",
+      "whenToApply": "Limiting molar conductivity calculation questions."
+    }
+  ],
+  "quickRevisionCard": {
+    "title": "Electrochemistry — High-Yield Review",
+    "bulletPoints": [
+      "Daniell Cell: $Zn + Cu^{2+} \\rightarrow Zn^{2+} + Cu$; $E^\\circ = +1.10\\text{ V}$. Anode is $Zn$, Cathode is $Cu$.",
+      "Nernst Eq ($298\\text{ K}$): $E = E^\\circ - \\frac{0.0591}{n} \\log Q$.",
+      "Equilibrium: $E^\\circ = \\frac{0.0591}{n} \\log K_c$; $\\Delta G^\\circ = -nFE^\\circ = -2.303 RT \\log K_c$.",
+      "Conductivity: $\\kappa = \\frac{1}{R} \\frac{l}{A} = G \\cdot G^*$. On dilution, $\\kappa \\downarrow$ (fewer ions per mL).",
+      "Molar conductivity: $\\Lambda_m = \\frac{1000 \\kappa}{M}$. On dilution, $\\Lambda_m \\uparrow$ for all electrolytes.",
+      "Debye-Hückel-Onsager: $\\Lambda_m = \\Lambda_m^\\circ - A \\sqrt{C}$ (strong electrolytes).",
+      "Kohlrausch Law: $\\Lambda_m^\\circ = \\nu_+ \\lambda_+^\\circ + \\nu_- \\lambda_-^\\circ$; $\\alpha = \\Lambda_m / \\Lambda_m^\\circ$.",
+      "Faraday's 1st Law: $m = \\frac{M \\cdot I \\cdot t}{n \\cdot 96500}$; 1 mole $e^- = 96500\\text{ C} = 1\\text{ F}$.",
+      "Mercury Cell: $Zn(Hg) + HgO \\rightarrow ZnO + Hg$; constant $1.35\\text{ V}$ (no ionic concentration changes).",
+      "Lead Battery Discharging: $Pb(s) + PbO_2(s) + 2H_2SO_4(aq) \\rightarrow 2PbSO_4(s) + 2H_2O(l)$."
+    ],
+    "keyPoints": [
+      "Daniell Cell: $Zn + Cu^{2+} \\rightarrow Zn^{2+} + Cu$; $E^\\circ = +1.10\\text{ V}$. Anode is $Zn$, Cathode is $Cu$.",
+      "Nernst Eq ($298\\text{ K}$): $E = E^\\circ - \\frac{0.0591}{n} \\log Q$.",
+      "Equilibrium: $E^\\circ = \\frac{0.0591}{n} \\log K_c$; $\\Delta G^\\circ = -nFE^\\circ = -2.303 RT \\log K_c$.",
+      "Conductivity: $\\kappa = \\frac{1}{R} \\frac{l}{A} = G \\cdot G^*$. On dilution, $\\kappa \\downarrow$ (fewer ions per mL).",
+      "Molar conductivity: $\\Lambda_m = \\frac{1000 \\kappa}{M}$. On dilution, $\\Lambda_m \\uparrow$ for all electrolytes.",
+      "Debye-Hückel-Onsager: $\\Lambda_m = \\Lambda_m^\\circ - A \\sqrt{C}$ (strong electrolytes).",
+      "Kohlrausch Law: $\\Lambda_m^\\circ = \\nu_+ \\lambda_+^\\circ + \\nu_- \\lambda_-^\\circ$; $\\alpha = \\Lambda_m / \\Lambda_m^\\circ$.",
+      "Faraday's 1st Law: $m = \\frac{M \\cdot I \\cdot t}{n \\cdot 96500}$; 1 mole $e^- = 96500\\text{ C} = 1\\text{ F}$.",
+      "Mercury Cell: $Zn(Hg) + HgO \\rightarrow ZnO + Hg$; constant $1.35\\text{ V}$ (no ionic concentration changes).",
+      "Lead Battery Discharging: $Pb(s) + PbO_2(s) + 2H_2SO_4(aq) \\rightarrow 2PbSO_4(s) + 2H_2O(l)$."
+    ]
+  },
+  "practiceQuestions": [
+    {
+      "id": "chem_u2_q1",
+      "question": "For the cell reaction $2Fe^{3+}(aq) + 2I^-(aq) \\rightarrow 2Fe^{2+}(aq) + I_2(s)$, the number of electrons transferred $n$ is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "1"
+        },
+        {
+          "id": "B",
+          "text": "2"
+        },
+        {
+          "id": "C",
+          "text": "4"
+        },
+        {
+          "id": "D",
+          "text": "6"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "$2I^- \\rightarrow I_2 + 2e^-$ and $2Fe^{3+} + 2e^- \\rightarrow 2Fe^{2+}$. Total 2 moles of electrons are transferred ($n=2$).",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "chem_u2_q2",
+      "question": "When a lead storage battery is discharged:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "Lead sulphate is formed at both electrodes"
+        },
+        {
+          "id": "B",
+          "text": "Sulphuric acid is consumed and its density decreases"
+        },
+        {
+          "id": "C",
+          "text": "Water is produced"
+        },
+        {
+          "id": "D",
+          "text": "All of the above"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "During discharge, $Pb + PbO_2 + 2H_2SO_4 \\rightarrow 2PbSO_4 + 2H_2O$. $PbSO_4$ deposits on both electrodes and $H_2SO_4$ density drops from 1.30 to ~1.20 g/mL.",
+      "difficulty": "medium",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "chem_u2_q3",
+      "question": "Assertion (A): The cell potential of a mercury cell remains constant throughout its life.\nReason (R): The overall cell reaction does not involve any ions in solution whose concentration can change.",
+      "type": "assertion-reason",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both A and R are true and R is the correct explanation of A"
+        },
+        {
+          "id": "B",
+          "text": "Both A and R are true but R is not the correct explanation of A"
+        },
+        {
+          "id": "C",
+          "text": "A is true but R is false"
+        },
+        {
+          "id": "D",
+          "text": "A is false but R is true"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Overall reaction is $Zn(Hg) + HgO(s) \\rightarrow ZnO(s) + Hg(l)$. No ions appear in the equation, keeping the potential steady at 1.35 V.",
+      "difficulty": "medium",
+      "questionType": "Assertion-Reason"
+    },
+    {
+      "id": "chem_u2_q4",
+      "question": "The quantity of charge required to obtain 1 mole of iron from $Fe_3O_4$ is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "2 F"
+        },
+        {
+          "id": "B",
+          "text": "2.67 F"
+        },
+        {
+          "id": "C",
+          "text": "3 F"
+        },
+        {
+          "id": "D",
+          "text": "8 F"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "In $Fe_3O_4$, average oxidation state of Fe is $+8/3$. To reduce 1 mole of Fe from $+8/3$ to 0 requires $8/3\\text{ F} = 2.67\\text{ F}$.",
+      "difficulty": "hard",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "chem_u2_q5",
+      "question": "On increasing dilution, which of the following statements is TRUE?",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both conductivity and molar conductivity increase"
+        },
+        {
+          "id": "B",
+          "text": "Both conductivity and molar conductivity decrease"
+        },
+        {
+          "id": "C",
+          "text": "Conductivity decreases, while molar conductivity increases"
+        },
+        {
+          "id": "D",
+          "text": "Conductivity increases, while molar conductivity decreases"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "Conductivity $\\kappa$ decreases due to fewer ions per mL, whereas molar conductivity $\\Lambda_m = \\frac{1000\\kappa}{M}$ increases due to dilution of M.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "chem_u2_q6",
+      "question": "The cell constant of a conductivity cell is given by:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "l / A"
+        },
+        {
+          "id": "B",
+          "text": "A / l"
+        },
+        {
+          "id": "C",
+          "text": "R / κ"
+        },
+        {
+          "id": "D",
+          "text": "κ / R"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Cell constant $G^* = l / A$, where $l$ is the distance between electrodes and $A$ is the cross-sectional area.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "chem_u2_q7",
+      "question": "In the electrolysis of aqueous $NaCl$ using platinum electrodes, the product liberated at the cathode is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "Na metal"
+        },
+        {
+          "id": "B",
+          "text": "Cl₂ gas"
+        },
+        {
+          "id": "C",
+          "text": "H₂ gas"
+        },
+        {
+          "id": "D",
+          "text": "O₂ gas"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "At cathode, reduction of $H^+$ ($E^\\circ = 0.00\\text{ V}$) is favored over reduction of $Na^+$ ($E^\\circ = -2.71\\text{ V}$), liberating $H_2$ gas.",
+      "difficulty": "medium",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "chem_u2_q8",
+      "question": "Rusting of iron is catalyzed by the presence of:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "Fe²⁺ ions"
+        },
+        {
+          "id": "B",
+          "text": "H⁺ ions"
+        },
+        {
+          "id": "C",
+          "text": "Zn ions"
+        },
+        {
+          "id": "D",
+          "text": "Pure dry oxygen"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Rusting is an electrochemical process where $H^+$ ions (from dissolved $CO_2$ forming $H_2CO_3$) act as a catalyst.",
+      "difficulty": "medium",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "chem_u2_q9",
+      "question": "If $E_{\\text{cell}}^\\circ$ for a given reaction is negative, then:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "ΔG° > 0 and K_c < 1"
+        },
+        {
+          "id": "B",
+          "text": "ΔG° < 0 and K_c > 1"
+        },
+        {
+          "id": "C",
+          "text": "ΔG° > 0 and K_c > 1"
+        },
+        {
+          "id": "D",
+          "text": "ΔG° = 0 and K_c = 1"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Since $\\Delta G^\\circ = -nFE^\\circ$, a negative $E^\\circ$ yields $\\Delta G^\\circ > 0$ (non-spontaneous) and $K_c < 1$.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "chem_u2_q10",
+      "question": "The standard reduction potentials are: $E^\\circ(Zn^{2+}/Zn) = -0.76\\text{ V}$, $E^\\circ(Fe^{2+}/Fe) = -0.44\\text{ V}$, $E^\\circ(Cu^{2+}/Cu) = +0.34\\text{ V}$, $E^\\circ(Ag^+/Ag) = +0.80\\text{ V}$. The strongest reducing agent is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ag"
+        },
+        {
+          "id": "B",
+          "text": "Cu"
+        },
+        {
+          "id": "C",
+          "text": "Fe"
+        },
+        {
+          "id": "D",
+          "text": "Zn"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "The element with the lowest (most negative) reduction potential has the highest tendency to lose electrons $\\implies Zn$ is the strongest reducing agent.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct"
+    }
+  ],
+  "links": {
+    "prerequisites": [
+      "chemistry_u1_t1"
+    ],
+    "relatedTopics": [
+      "chemistry_u3_t1"
+    ],
+    "practiceTestId": "practice-chemistry-unit2-test1",
+    "practiceTestUrl": "/test/practice-chemistry-unit2-test1",
+    "weaknessReportUrl": "/dashboard/radar?subject=chemistry",
+    "weaknessRadarUrl": "/dashboard/radar?subject=chemistry"
+  },
+  "subjectSpecific": {
+    "chemistry": {
+      "exceptionsList": [
+        "Overpotential of Oxygen: In electrolysis of aqueous $NaCl$, oxidation of $H_2O$ to $O_2$ is thermodynamically favored ($1.23\\text{ V}$), but $Cl_2$ is liberated at the anode ($1.36\\text{ V}$) due to overpotential of oxygen.",
+        "Hydrogen-Oxygen Fuel Cell: Operates continuously as long as fuel is supplied; does not need recharging like storage cells and produces pure water."
+      ],
+      "trendsTable": [
+        {
+          "property": "Standard Reduction Potential (E°)",
+          "trend": "Li (-3.05 V) to F2 (+2.87 V)",
+          "reason": "Higher positive E° means stronger oxidizing agent; more negative E° means stronger reducing agent"
+        },
+        {
+          "property": "Molar Conductivity (Λm)",
+          "trend": "Increases on dilution for all electrolytes",
+          "reason": "Interionic forces weaken; degree of dissociation increases"
+        }
+      ]
+    }
+  },
+  "diagram": {
+    "type": "svg",
+    "title": "Galvanic & Electrolytic Cells, Nernst Equation, Conductance, Kohlrausch's Law, Batteries",
+    "caption": "Technical diagram illustrating key concepts for Galvanic & Electrolytic Cells, Nernst Equation, Conductance, Kohlrausch's Law, Batteries",
+    "code": "<svg viewBox=\"0 0 760 280\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <rect width=\"760\" height=\"280\" rx=\"14\" fill=\"#0f172a\" stroke=\"#334155\" strokeWidth=\"1.5\"/>\n  <text x=\"380\" y=\"32\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"16\" fontWeight=\"bold\">Daniell Cell (Galvanic Cell) Schematic</text>\n  \n  <!-- Left Beaker (Anode) -->\n  <rect x=\"100\" y=\"70\" width=\"160\" height=\"150\" rx=\"6\" fill=\"#1e293b\" stroke=\"#64748b\" strokeWidth=\"1.5\"/>\n  <rect x=\"110\" y=\"110\" width=\"140\" height=\"100\" fill=\"#0284c7\" opacity=\"0.2\"/>\n  <rect x=\"160\" y=\"60\" width=\"20\" height=\"120\" fill=\"#94a3b8\" stroke=\"#cbd5e1\" strokeWidth=\"1\"/>\n  <text x=\"170\" y=\"50\" textAnchor=\"middle\" fill=\"#94a3b8\" fontSize=\"11\" fontWeight=\"bold\">Zn Rod (Anode, -)</text>\n  <text x=\"170\" y=\"195\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"10\">1 M ZnSO₄</text>\n\n  <!-- Right Beaker (Cathode) -->\n  <rect x=\"500\" y=\"70\" width=\"160\" height=\"150\" rx=\"6\" fill=\"#1e293b\" stroke=\"#64748b\" strokeWidth=\"1.5\"/>\n  <rect x=\"510\" y=\"110\" width=\"140\" height=\"100\" fill=\"#0369a1\" opacity=\"0.4\"/>\n  <rect x=\"560\" y=\"60\" width=\"20\" height=\"120\" fill=\"#d97706\" stroke=\"#f59e0b\" strokeWidth=\"1\"/>\n  <text x=\"570\" y=\"50\" textAnchor=\"middle\" fill=\"#f59e0b\" fontSize=\"11\" fontWeight=\"bold\">Cu Rod (Cathode, +)</text>\n  <text x=\"570\" y=\"195\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"10\">1 M CuSO₄</text>\n\n  <!-- Salt Bridge -->\n  <path d=\"M 220,130 L 220,80 L 540,80 L 540,130\" fill=\"none\" stroke=\"#22c55e\" strokeWidth=\"14\" strokeLinejoin=\"round\"/>\n  <text x=\"380\" y=\"75\" textAnchor=\"middle\" fill=\"#4ade80\" fontSize=\"11\" fontWeight=\"bold\">Salt Bridge (Agar-agar + KCl/KNO₃)</text>\n\n  <!-- Wire & Voltmeter -->\n  <path d=\"M 170,60 L 170,20 L 350,20\" fill=\"none\" stroke=\"#facc15\" strokeWidth=\"2\"/>\n  <circle cx=\"380\" cy=\"20\" r=\"14\" fill=\"#0f172a\" stroke=\"#facc15\" strokeWidth=\"2\"/>\n  <text x=\"380\" y=\"24\" textAnchor=\"middle\" fill=\"#facc15\" fontSize=\"11\" fontWeight=\"bold\">V</text>\n  <path d=\"M 410,20 L 570,20 L 570,60\" fill=\"none\" stroke=\"#facc15\" strokeWidth=\"2\"/>\n\n  <!-- Legend / Info -->\n  <text x=\"380\" y=\"240\" textAnchor=\"middle\" fill=\"#e2e8f0\" fontSize=\"12\">e⁻ Flow: Zn (Anode) → Cu (Cathode) | Current: Cu → Zn</text>\n  <text x=\"380\" y=\"260\" textAnchor=\"middle\" fill=\"#94a3b8\" fontSize=\"11\">E°cell = E°(Cu²⁺/Cu) - E°(Zn²⁺/Zn) = +0.34 V - (-0.76 V) = +1.10 V</text>\n</svg>"
+  },
+  "howCuetAsks": [
+    {
+      "patternType": "Direct Calculation of Limiting Molar Conductivity via Kohlrausch Law",
+      "frequency": "Very High",
+      "typicalStem": "Given $\\Lambda_m^\\circ(NaCl) = 126.4$, $\\Lambda_m^\\circ(HCl) = 425.9$, and $\\Lambda_m^\\circ(CH_3COONa) = 91.0\\text{ S cm}^2\\text{mol}^{-1}$. The limiting molar conductivity of acetic acid $\\Lambda_m^\\circ(CH_3COOH)$ is:",
+      "strategy": "Use addition/subtraction of strong electrolyte values: Salt of desired acid + Strong acid - Common byproduct salt."
+    },
+    {
+      "patternType": "Battery & Fuel Cell Matching",
+      "frequency": "High",
+      "typicalStem": "Match the cell in List-I with its key characteristic in List-II:\nP. Mercury cell\nQ. Lead storage battery\nR. Hydrogen-oxygen fuel cell\nS. Dry cell",
+      "strategy": "Remember why Mercury cell has constant voltage: the overall reaction has no dissolved ions whose concentrations change during its lifetime."
+    }
+  ],
+  "metadata": {
+    "confidence": "high",
+    "needsHumanReview": false,
+    "lastUpdated": "2026-10-14T14:37:28.843Z",
+    "version": 1,
+    "wordCount": 2829,
+    "isFreePreview": true
+  }
+}

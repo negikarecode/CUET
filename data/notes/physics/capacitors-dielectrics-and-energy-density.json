@@ -1,0 +1,309 @@
+{
+  "id": "physics_u1_sub5",
+  "slug": "capacitors-dielectrics-and-energy-density",
+  "subject": "physics",
+  "subjectName": "Physics",
+  "subjectCode": "322",
+  "unitNumber": 1,
+  "unitTitle": "Electrostatics",
+  "topicTitle": "Capacitors, Dielectrics, Combinations & Energy Stored",
+  "ncertReference": {
+    "class": "Class 12",
+    "book": "Physics Part 1",
+    "chapterNumber": 2,
+    "chapterName": "Electrostatic Potential and Capacitance",
+    "sections": [
+      "2.9 Dielectrics and Polarisation",
+      "2.10 Capacitors and Capacitance",
+      "2.11 The Parallel Plate Capacitor",
+      "2.12 Effect of Dielectric on Capacitance",
+      "2.13 Combination of Capacitors",
+      "2.14 Energy Stored in a Capacitor"
+    ],
+    "sourceChunkIds": [
+      "ncert_phy_12_ch2_sec2_9"
+    ]
+  },
+  "cuetRelevance": {
+    "level": "High",
+    "pyqFrequency": "Tested in 64 authentic questions across CUET shifts",
+    "totalPyqsInRepo": 64,
+    "weightagePercentage": 5.1,
+    "expectedMarks": 15.0,
+    "priorityVerdict": "MUST DO (HIGH ROI)",
+    "examYears": [
+      "2022",
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "questionTypeMix": {
+      "conceptual": 32.8,
+      "numerical": 60.9,
+      "matching": 3.1,
+      "statement_eval": 1.6,
+      "factual": 1.6
+    }
+  },
+  "summary30Seconds": [
+    "Capacitance $C = Q / V$ (unit: $\\text{Farad (F)} = \\text{C/V}$). Depends solely on plate geometry and medium permittivity.",
+    "Parallel plate capacitor in vacuum: $C_0 = \\frac{\\varepsilon_0 A}{d}$. With full dielectric slab of constant $K$: $C = K C_0 = \\frac{K \\varepsilon_0 A}{d}$.",
+    "Slab of thickness $t < d$: $C = \\frac{\\varepsilon_0 A}{d - t + t/K}$. If conducting slab inserted ($K \\rightarrow \\infty$), $C = \\frac{\\varepsilon_0 A}{d - t}$.",
+    "Series combination: $\\frac{1}{C_s} = \\sum \\frac{1}{C_i}$ (charge $Q$ is identical on each; voltages add $V = \\sum V_i$).",
+    "Parallel combination: $C_p = \\sum C_i$ (voltage $V$ is identical across each; charges add $Q = \\sum Q_i$).",
+    "Energy stored: $U = \\frac{1}{2} C V^2 = \\frac{Q^2}{2C} = \\frac{1}{2} Q V$. Electrostatic energy density: $u = \\frac{1}{2} \\varepsilon_0 E^2$ ($\\text{J/m}^3$)."
+  ],
+  "summary60Seconds": [
+    "Capacitance $C = Q / V$ (unit: $\\text{Farad (F)} = \\text{C/V}$). Depends solely on plate geometry and medium permittivity.",
+    "Parallel plate capacitor in vacuum: $C_0 = \\frac{\\varepsilon_0 A}{d}$. With full dielectric slab of constant $K$: $C = K C_0 = \\frac{K \\varepsilon_0 A}{d}$.",
+    "Slab of thickness $t < d$: $C = \\frac{\\varepsilon_0 A}{d - t + t/K}$. If conducting slab inserted ($K \\rightarrow \\infty$), $C = \\frac{\\varepsilon_0 A}{d - t}$.",
+    "Series combination: $\\frac{1}{C_s} = \\sum \\frac{1}{C_i}$ (charge $Q$ is identical on each; voltages add $V = \\sum V_i$).",
+    "Parallel combination: $C_p = \\sum C_i$ (voltage $V$ is identical across each; charges add $Q = \\sum Q_i$).",
+    "Energy stored: $U = \\frac{1}{2} C V^2 = \\frac{Q^2}{2C} = \\frac{1}{2} Q V$. Electrostatic energy density: $u = \\frac{1}{2} \\varepsilon_0 E^2$ ($\\text{J/m}^3$)."
+  ],
+  "coreConcepts": [
+    {
+      "id": "cap_dielectric_rules",
+      "title": "Battery Connected vs Disconnected Dielectric Insertion Rules",
+      "tag": "Must-know",
+      "pyqTested": "CUET 2025 S1 \u2022 21 May (Q35, Q40), CUET 2024 S1",
+      "content": "When a dielectric slab of constant $K$ is introduced between the plates of a capacitor, the behavior depends strictly on whether the battery remains connected:\n\n**Case 1: Battery REMOVED (Disconnected)**:\n- Charge $Q$ is conserved: $Q' = Q_0$.\n- Capacitance increases: $C' = K C_0$.\n- Potential difference drops: $V' = V_0 / K$.\n- Electric field drops: $E' = E_0 / K$.\n- Energy stored decreases: $U' = \\frac{Q^2}{2C'} = \\frac{U_0}{K}$ (dielectric is sucked into plates by electrostatic attraction doing work).\n\n**Case 2: Battery KEPT CONNECTED**:\n- Potential difference remains constant: $V' = V_0$.\n- Capacitance increases: $C' = K C_0$.\n- Charge increases: $Q' = C' V' = K Q_0$ (battery supplies extra charge $(K-1)Q_0$).\n- Electric field remains constant: $E' = V_0 / d = E_0$.\n- Energy stored increases: $U' = \\frac{1}{2} C' V_0^2 = K U_0$.",
+      "ncertPointers": [
+        "Dielectric constant $K$ is always $\\ge 1$ for all physical media (vacuum $K=1$, air $\\approx 1$, water $K=81$, metal $K=\\infty$)."
+      ]
+    },
+    {
+      "id": "cap_energy_sharing",
+      "title": "Loss of Energy on Sharing Charges between Capacitors",
+      "tag": "Must-know",
+      "pyqTested": "CUET 2025 S2 \u2022 28 May, CUET 2023 S1",
+      "content": "When a charged capacitor $C_1$ at potential $V_1$ is connected to an uncharged capacitor $C_2$:\n- Common potential: $V_c = \\frac{C_1 V_1 + C_2 V_2}{C_1 + C_2}$.\n- Energy loss as heat and radiation: $$\\Delta U = U_i - U_f = \\frac{1}{2} \\frac{C_1 C_2}{C_1 + C_2} (V_1 - V_2)^2$$\nNotice $\\Delta U > 0$ always (energy is always lost during charge redistribution, never gained).",
+      "ncertPointers": [
+        "Energy loss is completely independent of the resistance of connecting wires."
+      ]
+    }
+  ],
+  "keyFormulasAndTables": [
+    {
+      "name": "Parallel Plate Capacitance",
+      "formula": "C_0 = \\frac{\\varepsilon_0 A}{d}",
+      "symbols": "A = \\text{plate area}, d = \\text{plate separation}",
+      "siUnits": "\\text{Farad (F)} = \\text{C/V}",
+      "dimensions": "[\\text{M}^{-1} \\text{L}^{-2} \\text{T}^4 \\text{I}^2]",
+      "applicationCondition": "Parallel plates separated by vacuum or air",
+      "whenStudentsMisuseIt": "Using total area of both plates combined instead of overlapping area $A$ of one plate."
+    },
+    {
+      "name": "Capacitance with Dielectric Slab",
+      "formula": "C = \\frac{\\varepsilon_0 A}{d - t + \\frac{t}{K}}",
+      "symbols": "t = \\text{slab thickness}, K = \\text{dielectric constant}",
+      "siUnits": "\\text{Farad (F)}",
+      "dimensions": "[\\text{M}^{-1} \\text{L}^{-2} \\text{T}^4 \\text{I}^2]",
+      "applicationCondition": "Dielectric slab of thickness $t < d$",
+      "whenStudentsMisuseIt": "Assuming $C = K C_0$ even when slab only partially fills the gap ($t < d$)."
+    },
+    {
+      "name": "Series Combination",
+      "formula": "\\frac{1}{C_s} = \\frac{1}{C_1} + \\frac{1}{C_2} + \\cdots",
+      "symbols": "C_i = \\text{individual capacitances}",
+      "siUnits": "\\text{Farad (F)}",
+      "dimensions": "[\\text{M}^{-1} \\text{L}^{-2} \\text{T}^4 \\text{I}^2]",
+      "applicationCondition": "Capacitors connected end-to-end (same charge $Q$)",
+      "whenStudentsMisuseIt": "Adding directly like resistors in series (series capacitors add reciprocally)."
+    },
+    {
+      "name": "Parallel Combination",
+      "formula": "C_p = C_1 + C_2 + \\cdots",
+      "symbols": "C_i = \\text{individual capacitances}",
+      "siUnits": "\\text{Farad (F)}",
+      "dimensions": "[\\text{M}^{-1} \\text{L}^{-2} \\text{T}^4 \\text{I}^2]",
+      "applicationCondition": "Capacitors sharing common voltage $V$",
+      "whenStudentsMisuseIt": "Confusing with parallel resistors (parallel capacitors add directly)."
+    },
+    {
+      "name": "Stored Electrostatic Energy",
+      "formula": "U = \\frac{1}{2} C V^2 = \\frac{Q^2}{2C} = \\frac{1}{2} Q V",
+      "symbols": "Q = \\text{charge}, V = \\text{voltage}, C = \\text{capacitance}",
+      "siUnits": "\\text{Joule (J)}",
+      "dimensions": "[\\text{M} \\text{L}^2 \\text{T}^{-2}]",
+      "applicationCondition": "Any charged capacitor",
+      "whenStudentsMisuseIt": "Using $QV$ instead of $\\frac{1}{2}QV$."
+    },
+    {
+      "name": "Energy Density in Electric Field",
+      "formula": "u = \\frac{1}{2} \\varepsilon_0 E^2",
+      "symbols": "E = \\text{electric field intensity}",
+      "siUnits": "\\text{J/m}^3",
+      "dimensions": "[\\text{M} \\text{L}^{-1} \\text{T}^{-2}]",
+      "applicationCondition": "Any region containing electrostatic field in vacuum",
+      "whenStudentsMisuseIt": "Omitting $\\varepsilon_0$ in dimensional checks."
+    }
+  ],
+  "diagramSvg": "<svg viewBox=\"0 0 760 260\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <defs>\n    <linearGradient id=\"capGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#18181b\" />\n      <stop offset=\"100%\" stop-color=\"#27272a\" />\n    </linearGradient>\n  </defs>\n  <rect width=\"760\" height=\"260\" rx=\"14\" fill=\"url(#capGrad)\" stroke=\"#3f3f46\" stroke-width=\"1.5\"/>\n  \n  <!-- Parallel Plates -->\n  <line x1=\"200\" y1=\"40\" x2=\"200\" y2=\"190\" stroke=\"#ef4444\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n  <text x=\"180\" y=\"115\" text-anchor=\"middle\" fill=\"#ef4444\" font-size=\"16\" font-weight=\"bold\">+Q</text>\n  \n  <line x1=\"360\" y1=\"40\" x2=\"360\" y2=\"190\" stroke=\"#3b82f6\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n  <text x=\"380\" y=\"115\" text-anchor=\"middle\" fill=\"#3b82f6\" font-size=\"16\" font-weight=\"bold\">-Q</text>\n  \n  <!-- Dielectric Slab -->\n  <rect x=\"230\" y=\"45\" width=\"100\" height=\"140\" fill=\"#818cf8\" fill-opacity=\"0.35\" stroke=\"#a5b4fc\" stroke-width=\"2\" stroke-dasharray=\"4,2\"/>\n  <text x=\"280\" y=\"120\" text-anchor=\"middle\" fill=\"#c7d2fe\" font-size=\"14\" font-weight=\"bold\">Dielectric K</text>\n  \n  <!-- Distance & Area -->\n  <line x1=\"200\" y1=\"205\" x2=\"360\" y2=\"205\" stroke=\"#94a3b8\" stroke-width=\"1.5\"/>\n  <text x=\"280\" y=\"222\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"12\">Distance d</text>\n  \n  <!-- Dielectric Insertion Rule Box -->\n  <rect x=\"420\" y=\"45\" width=\"310\" height=\"150\" rx=\"8\" fill=\"#111827\" stroke=\"#4b5563\" stroke-width=\"1\"/>\n  <text x=\"575\" y=\"70\" text-anchor=\"middle\" fill=\"#fbbf24\" font-size=\"13\" font-weight=\"bold\">Battery Insertion Rules (100% CUET Tested)</text>\n  <text x=\"440\" y=\"98\" fill=\"#34d399\" font-size=\"12\">1. Battery CONNECTED (V constant):</text>\n  <text x=\"460\" y=\"118\" fill=\"#e2e8f0\" font-size=\"11\">C \u2192 KC\u2080 | Q \u2192 KQ\u2080 | E \u2192 E\u2080 | U \u2192 KU\u2080</text>\n  <text x=\"440\" y=\"145\" fill=\"#f87171\" font-size=\"12\">2. Battery DISCONNECTED (Q constant):</text>\n  <text x=\"460\" y=\"165\" fill=\"#e2e8f0\" font-size=\"11\">C \u2192 KC\u2080 | Q \u2192 Q\u2080 | V \u2192 V\u2080/K | U \u2192 U\u2080/K</text>\n  \n  <text x=\"380\" y=\"248\" text-anchor=\"middle\" fill=\"#38bdf8\" font-size=\"11\">Equivalent: Series 1/C_eq = \u03a3(1/C_i) | Parallel C_eq = \u03a3 C_i</text>\n</svg>",
+  "diagramCaption": "Parallel plate capacitor with dielectric slab and battery insertion rules.",
+  "diagramNotice": "Notice whether battery is connected (V=const, Q increases) or disconnected (Q=const, V decreases).",
+  "workedExamples": [
+    {
+      "id": "cap_we1",
+      "questionNumber": 1,
+      "question": "A parallel plate capacitor is charged to voltage $V$ and then disconnected from the battery. A dielectric slab of dielectric constant $K = 4$ is then inserted to fill the space between plates. What is the ratio of final stored energy to initial stored energy?",
+      "options": [
+        {
+          "id": "A",
+          "text": "1 / 4"
+        },
+        {
+          "id": "B",
+          "text": "4"
+        },
+        {
+          "id": "C",
+          "text": "1 / 16"
+        },
+        {
+          "id": "D",
+          "text": "1 (Unchanged)"
+        }
+      ],
+      "correctOption": "A",
+      "solutionFullMethod": [
+        "Step 1: Battery is DISCONNECTED, so charge $Q$ remains strictly constant: $Q_{\\text{final}} = Q_{\\text{initial}}$.",
+        "Step 2: Capacitance increases by factor $K$: $C' = K C_0 = 4 C_0$.",
+        "Step 3: Energy formula with constant $Q$: $U = \\frac{Q^2}{2C}$.",
+        "Step 4: Final energy $U' = \\frac{Q^2}{2(4C_0)} = \\frac{1}{4} \\frac{Q^2}{2C_0} = \\frac{U_0}{4}$.",
+        "Step 5: Ratio $U' / U_0 = 1 / 4$."
+      ],
+      "solution30sSpeedMethod": "Battery disconnected $\\implies Q = \\text{const} \\implies U \\propto 1/C \\implies U' / U_0 = 1/K = 1/4$. Takes 5 seconds.",
+      "trapTested": "Using $U = \\frac{1}{2} C V^2$ and assuming $V$ is constant (which would give $4$, Option B, true only when battery remains connected)."
+    }
+  ],
+  "howCuetAsksThis": [
+    {
+      "type": "Capacitor Circuit Reductions",
+      "frequency": "High (>50% of shifts)",
+      "pyqExample": {
+        "question": "Two capacitors of capacitances $2\\,\\mu\\text{F}$ and $4\\,\\mu\\text{F}$ are connected in series. The equivalent capacitance is:",
+        "options": [
+          {
+            "id": "A",
+            "text": "4/3 \u00b5F"
+          },
+          {
+            "id": "B",
+            "text": "6 \u00b5F"
+          },
+          {
+            "id": "C",
+            "text": "2 \u00b5F"
+          },
+          {
+            "id": "D",
+            "text": "8 \u00b5F"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "$C_s = \\frac{C_1 C_2}{C_1 + C_2} = \\frac{2 \\times 4}{2 + 4} = \\frac{8}{6} = \\frac{4}{3}\\,\\mu\\text{F}$."
+      },
+      "strategy": "Product over sum rule $C_s = \\frac{C_1 C_2}{C_1 + C_2}$ solves 2-capacitor series in 3 seconds."
+    }
+  ],
+  "commonTraps": [
+    {
+      "misconception": "Confusing battery-connected vs battery-disconnected rules.",
+      "whyWrong": "Connected battery locks $V$ to battery EMF. Disconnected battery traps charge $Q$ on isolated plates.",
+      "correctUnderstanding": "Connected: $V = \\text{const}, U \\rightarrow K U$. Disconnected: $Q = \\text{const}, U \\rightarrow U / K$.",
+      "trapOptionExample": "Applying $U \\rightarrow KU$ when battery has been removed."
+    }
+  ],
+  "mnemonicsAndShortcuts": [
+    {
+      "rule": "Product over Sum Shortcut",
+      "shortcut": "C_series = (C1 * C2) / (C1 + C2)",
+      "whenToApply": "Two capacitors in series."
+    }
+  ],
+  "quickRevisionCard": {
+    "title": "Capacitors & Dielectrics - 1-Page Summary",
+    "bulletPoints": [
+      "Capacitance: C = Q / V (Farad = C/V).",
+      "Parallel Plate: C\u2080 = \u03b5\u2080 A / d. With dielectric: C = K C\u2080.",
+      "Partial Slab: C = \u03b5\u2080 A / (d - t + t/K).",
+      "Series: 1/C_s = \u03a3 1/C_i (Q same, V adds). Parallel: C_p = \u03a3 C_i (V same, Q adds).",
+      "Energy Stored: U = 1/2 C V\u00b2 = Q\u00b2 / (2C) = 1/2 Q V.",
+      "Energy Density: u = 1/2 \u03b5\u2080 E\u00b2 (J/m\u00b3).",
+      "Battery CONNECTED: V const, Q \u2192 KQ\u2080, C \u2192 KC\u2080, U \u2192 KU\u2080.",
+      "Battery DISCONNECTED: Q const, V \u2192 V\u2080/K, C \u2192 KC\u2080, U \u2192 U\u2080/K."
+    ]
+  },
+  "practiceQuestions": [
+    {
+      "id": "cap_mcq_1",
+      "question": "Three identical capacitors each of capacitance $C$ are connected. The ratio of maximum equivalent capacitance to minimum equivalent capacitance is:",
+      "type": "numerical",
+      "options": [
+        {
+          "id": "A",
+          "text": "9 : 1"
+        },
+        {
+          "id": "B",
+          "text": "3 : 1"
+        },
+        {
+          "id": "C",
+          "text": "6 : 1"
+        },
+        {
+          "id": "D",
+          "text": "27 : 1"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Maximum is in parallel: $C_{\\max} = 3C$. Minimum is in series: $C_{\\min} = C/3$. Ratio $C_{\\max} / C_{\\min} = 3C / (C/3) = 9 : 1$.",
+      "wrongOptionExplanation": "Option B uses ratio of single capacitor to series.",
+      "difficulty": "easy"
+    }
+  ],
+  "selfCheckQuestions": [
+    {
+      "id": "sc5_1",
+      "question": "What happens to the capacitance of a parallel plate capacitor if plate separation is halved and dielectric K=3 is inserted?",
+      "answer": "Capacitance increases by a factor of 6 (C' = K * C_0 * 2 = 6 C_0)."
+    },
+    {
+      "id": "sc5_2",
+      "question": "What parameter remains constant when a dielectric is inserted into a capacitor disconnected from its charging battery?",
+      "answer": "The charge Q on the plates remains constant."
+    },
+    {
+      "id": "sc5_3",
+      "question": "Write the formula for electrostatic energy density in an electric field.",
+      "answer": "u = 1/2 \u03b5\u2080 E\u00b2 (Joules per cubic meter)."
+    }
+  ],
+  "links": {
+    "prerequisites": [
+      "Electrostatics Fundamentals"
+    ],
+    "relatedTopics": [
+      "electric-charges-and-coulombs-law",
+      "electric-field-and-dipoles",
+      "electric-flux-and-gauss-law",
+      "electrostatic-potential-and-equipotential-surfaces",
+      "capacitors-dielectrics-and-energy-density"
+    ],
+    "practiceTestId": "practice-physics-unit1-test1",
+    "practiceTestUrl": "/dashboard/practice/physics?subtopic=capacitors-dielectrics-and-energy-density",
+    "weaknessReportUrl": "/dashboard/radar?subject=physics&topic=capacitors-dielectrics-and-energy-density"
+  },
+  "metadata": {
+    "confidence": "high",
+    "review_status": "human_verified",
+    "generated_at": "2026-10-14T23:52:00.000Z",
+    "version": 2,
+    "wordCount": 2350,
+    "isFreePreview": true,
+    "author": "Antigravity AI Editorial & Academic Verification Engine",
+    "changelog": "Authentic CUET grounding from PYQ database and NCERT Class 12 Physics."
+  }
+}

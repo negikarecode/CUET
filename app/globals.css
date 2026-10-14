@@ -828,3 +828,27 @@ body {
   background: none !important;
   box-shadow: none !important;
 }
+
+/* ============================================================================
+   Revision Notes Print Styles (Quick Revision Card 1-Page PDF Export)
+   ============================================================================ */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  header, nav, aside, footer, .sticky, button, [role="navigation"] {
+    display: none !important;
+  }
+  .print-card-only {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 1cm !important;
+    box-shadow: none !important;
+    border: none !important;
+    page-break-inside: avoid !important;
+  }
+}
+

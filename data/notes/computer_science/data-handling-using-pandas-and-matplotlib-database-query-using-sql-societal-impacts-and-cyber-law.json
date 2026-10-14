@@ -1,0 +1,598 @@
+{
+  "id": "computer_science_u3_t1",
+  "slug": "data-handling-using-pandas-and-matplotlib-database-query-using-sql-societal-impacts-and-cyber-law",
+  "subject": "computer_science",
+  "subjectName": "Computer Science",
+  "subjectCode": "308",
+  "unitNumber": 3,
+  "unitTitle": "Section B2: Informatics Practices Core",
+  "topicTitle": "Data Handling using Pandas and Matplotlib, Database Query using SQL, Societal Impacts & Cyber Law",
+  "ncertReference": {
+    "class": "12",
+    "book": "Informatics Practices NCERT Class XII",
+    "chapterNumber": 2,
+    "chapterName": "Data Handling using Pandas and Data Visualization",
+    "sections": [
+      "2.1 Pandas Series and DataFrames",
+      "2.2 Matplotlib Visualization (Line, Bar, Hist)",
+      "2.3 Advanced SQL Joins & Functions",
+      "2.4 Cyber Crime & Intellectual Property Rights"
+    ]
+  },
+  "cuetRelevance": {
+    "level": "High",
+    "pyqFrequency": "Section B2 core. Extensive coverage of Pandas indexing (loc vs iloc), DataFrame manipulation, and SQL single-row vs aggregate functions.",
+    "totalPyqsInRepo": 0,
+    "weightagePercentage": 35
+  },
+  "summary30Seconds": [
+    "Series: 1D labeled array (homogeneous data, size-immutable, value-mutable); DataFrame: 2D labeled tabular structure (heterogeneous data, size-mutable, value-mutable).",
+    "loc is label-based (includes endpoint!); iloc is integer position-based (excludes endpoint!).",
+    "Matplotlib: plt.plot() for line plots, plt.bar() / plt.barh() for bar charts, plt.hist() for frequency distributions.",
+    "SQL Single Row Functions: Math (POWER, ROUND, MOD, TRUNCATE), String (LENGTH, SUBSTR, INSTR, UPPER, TRIM), Date (CURDATE, NOW, YEAR, MONTHNAME, DAYOFWEEK).",
+    "SQL Joins: Equi-join, Natural Join (eliminates duplicate common columns), Left/Right Outer Joins."
+  ],
+  "coreConcepts": [
+    {
+      "title": "1. Pandas Data Structures: Series and DataFrame",
+      "content": "Pandas provides two foundational data structures:\n1. Series: A one-dimensional labeled array capable of holding any data type (integers, strings, floats, Python objects). Axis labels are collectively called index. Created using `pd.Series(data, index=...)`. A Series is value-mutable (elements can be changed) but size-immutable (length cannot change dynamically).\n2. DataFrame: A two-dimensional, size-mutable, potentially heterogeneous tabular data structure with labeled axes (rows and columns). Can be thought of as a dict of Series. Created from dictionaries of lists, 2D ndarrays, or lists of dicts. Default index is 0 to n-1.",
+      "ncertPointers": [
+        "Attributes: df.index, df.columns, df.axes, df.dtypes, df.size (total elements = rows × cols), df.shape (tuple: (rows, cols)), df.ndim (always 2 for DataFrame, 1 for Series), df.empty, df.T (transposition).",
+        "Head and Tail: df.head(n) returns first n rows (default 5); df.tail(n) returns last n rows (default 5).",
+        "Mathematical operations between Series align automatically by index labels; unaligned indices receive NaN (Not a Number)."
+      ]
+    },
+    {
+      "title": "2. Indexing, Slicing, and Data Manipulation (loc vs iloc)",
+      "content": "Pandas provides two explicit indexers for row/column selection:\n- `df.loc[row_label, col_label]`: Label-based indexing. IMPORTANT: Slicing with labels `df.loc['A':'C']` INCLUDES both endpoints ('A' and 'C').\n- `df.iloc[row_pos, col_pos]`: Integer position-based indexing (0 to n-1). Slicing with integers `df.iloc[0:3]` EXCLUDES the end index (selects 0, 1, 2 only, just like Python slices).\n\nModifying DataFrames:\n- Adding column: `df['NewCol'] = [val1, val2]`\n- Dropping: `df.drop(labels, axis=0)` drops rows; `df.drop(labels, axis=1)` drops columns. By default `inplace=False`.\n- Renaming: `df.rename(columns={'old':'new'}, inplace=True)`.\n- Boolean indexing: `df[df['Marks'] > 80]` filters rows matching the condition.",
+      "ncertPointers": [
+        "df.drop() requires axis=1 or columns=['colname'] to delete a column; default axis=0 deletes rows.",
+        "To make changes permanent without reassignment, specify `inplace=True`.",
+        "Missing values: df.isna() / df.isnull() detects missing data; df.dropna() removes rows/columns with NaN; df.fillna(value) imputes missing data."
+      ]
+    },
+    {
+      "title": "3. Data Visualization with Matplotlib.pyplot",
+      "content": "The `matplotlib.pyplot` module provides a MATLAB-like plotting framework. Key functions:\n- Line Chart: `plt.plot(x, y, color='red', linestyle='--', linewidth=2, marker='o')` shows trends over time.\n- Bar Chart: Vertical `plt.bar(x, height, width=0.8, color='blue')` and Horizontal `plt.barh(y, width)` compare categorical data.\n- Histogram: `plt.hist(data, bins=10, edgecolor='black', cumulative=False)` plots continuous frequency distribution divided into class intervals (bins).\n- Chart Customization: `plt.title('...')`, `plt.xlabel('...')`, `plt.ylabel('...')`, `plt.grid(True)`, `plt.legend()`, `plt.savefig('chart.png')`, and `plt.show()`.",
+      "ncertPointers": [
+        "Bar chart vs Histogram: Bar charts have gaps between bars and represent categorical data; Histograms have adjacent bars representing continuous ranges.",
+        "The legend requires label parameters inside the plotting calls (e.g. `plt.plot(x, y, label='Sales')`) followed by `plt.legend()`.",
+        "plt.savefig() must be called BEFORE plt.show(), otherwise an empty blank canvas is saved."
+      ]
+    },
+    {
+      "title": "4. Advanced SQL Functions and Table Joins",
+      "content": "SQL Built-in Functions:\n1. Math Functions: POWER(m, n) or POW(), ROUND(m, d) (rounds to d places; negative d rounds to tens/hundreds), MOD(m, n), TRUNCATE(m, d) (chops off without rounding).\n2. String Functions: LENGTH(str), SUBSTR(str, pos, len) or MID(), INSTR(str, substr) (returns 1-based index or 0), UPPER()/UCASE(), LOWER()/LCASE(), TRIM(), LTRIM(), RTRIM().\n3. Date Functions: NOW() (date and time), CURDATE() / CURRENT_DATE() (date only), DATE(), MONTH(date), MONTHNAME(date), YEAR(date), DAYOFWEEK(date) (1=Sunday, 7=Saturday), DAYOFMONTH(date).\n\nTable Joins:\n- Cartesian Product (Cross Join): Combines every row of table 1 with every row of table 2.\n- Equi-Join: Join condition uses equality operator '=' between common columns. Degree = D1 + D2.\n- Natural Join: Equi-join that automatically merges common named columns, suppressing duplicates. Degree = D1 + D2 - (common columns).\n- Outer Joins: LEFT JOIN (all rows from left table + matched right), RIGHT JOIN (all rows from right table + matched left).",
+      "ncertPointers": [
+        "In SQL SUBSTR('COMPUTER', 4, 3): pos=4 is 'P', length=3 gives 'PUT'. SQL strings are 1-INDEXED, not 0-indexed!",
+        "ROUND(145.678, 2) -> 145.68; ROUND(145.678, -1) -> 150; TRUNCATE(145.678, 1) -> 145.6.",
+        "NATURAL JOIN does not require an ON clause; it automatically links columns with identical names and data types."
+      ]
+    }
+  ],
+  "keyFormulasAndTables": [
+    {
+      "name": "Pandas DataFrame Slicing Comparison",
+      "formula": "loc[start:end] includes end; iloc[start:end] excludes end",
+      "symbols": "loc vs iloc",
+      "siUnits": "Subsetting syntax",
+      "applicationCondition": "Selecting rows and columns from pandas DataFrames",
+      "notes": "loc uses row/column labels; iloc uses 0-based integer positions."
+    },
+    {
+      "name": "SQL Substring & Round Mechanics",
+      "formula": "SUBSTR(str, pos, len) [1-based]; ROUND(num, dec) / TRUNCATE(num, dec)",
+      "symbols": "SQL Scalar Functions",
+      "siUnits": "String and numeric scalars",
+      "applicationCondition": "Single row data transformation queries",
+      "notes": "INSTR returns 0 if string is not found (unlike Python find which returns -1)."
+    },
+    {
+      "name": "DataFrame Shape and Size Relation",
+      "formula": "df.size = df.shape[0] × df.shape[1]",
+      "symbols": "rows × columns",
+      "siUnits": "Total elements",
+      "applicationCondition": "2D pandas DataFrame",
+      "notes": "df.ndim is always 2 for any DataFrame, regardless of dimensions."
+    }
+  ],
+  "diagramSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 420\" width=\"100%\" height=\"100%\">\n  <defs>\n    <linearGradient id=\"cs3Grad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#090d16\"/>\n      <stop offset=\"100%\" stop-color=\"#1e1b4b\"/>\n    </linearGradient>\n    <linearGradient id=\"dfGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#06b6d4\"/>\n      <stop offset=\"100%\" stop-color=\"#0891b2\"/>\n    </linearGradient>\n    <linearGradient id=\"plotGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#f97316\"/>\n      <stop offset=\"100%\" stop-color=\"#c2410c\"/>\n    </linearGradient>\n    <linearGradient id=\"joinGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#a855f7\"/>\n      <stop offset=\"100%\" stop-color=\"#7e22ce\"/>\n    </linearGradient>\n  </defs>\n  <rect width=\"800\" height=\"420\" rx=\"12\" fill=\"url(#cs3Grad)\"/>\n  <text x=\"400\" y=\"32\" fill=\"#38bdf8\" font-size=\"18\" font-weight=\"bold\" text-anchor=\"middle\" font-family=\"system-ui, sans-serif\">CUET Informatics Practices: Pandas, Matplotlib &amp; SQL Mastery</text>\n  \n  <!-- Left Box: Pandas DataFrame & Indexing -->\n  <g transform=\"translate(30, 60)\">\n    <rect width=\"230\" height=\"320\" rx=\"8\" fill=\"#1e293b\" stroke=\"#06b6d4\" stroke-width=\"2\"/>\n    <rect width=\"230\" height=\"35\" rx=\"8\" fill=\"url(#dfGrad)\"/>\n    <text x=\"115\" y=\"23\" fill=\"#ffffff\" font-size=\"13\" font-weight=\"bold\" text-anchor=\"middle\">1. Pandas Data Structures</text>\n    \n    <text x=\"15\" y=\"65\" fill=\"#67e8f9\" font-size=\"11\" font-weight=\"bold\">Series vs DataFrame:</text>\n    <text x=\"20\" y=\"83\" fill=\"#cbd5e1\" font-size=\"10\">• Series: 1D, Size-Immutable</text>\n    <text x=\"20\" y=\"100\" fill=\"#cbd5e1\" font-size=\"10\">• DataFrame: 2D, Size-Mutable</text>\n    <text x=\"20\" y=\"117\" fill=\"#cbd5e1\" font-size=\"10\">• Both are Value-Mutable!</text>\n    \n    <text x=\"15\" y=\"145\" fill=\"#67e8f9\" font-size=\"11\" font-weight=\"bold\">Slicing Golden Rule:</text>\n    <rect x=\"15\" y=\"155\" width=\"200\" height=\"48\" rx=\"4\" fill=\"#0891b2\" opacity=\"0.25\"/>\n    <text x=\"25\" y=\"173\" fill=\"#a5f3fc\" font-size=\"10\" font-weight=\"bold\">df.loc['A':'C'] -> INCLUDES 'C'</text>\n    <text x=\"25\" y=\"193\" fill=\"#fdba74\" font-size=\"10\" font-weight=\"bold\">df.iloc[0:2] -> EXCLUDES index 2</text>\n    \n    <text x=\"15\" y=\"230\" fill=\"#67e8f9\" font-size=\"11\" font-weight=\"bold\">Key Attributes:</text>\n    <text x=\"20\" y=\"248\" fill=\"#cbd5e1\" font-size=\"10\">df.shape -> (rows, cols) tuple</text>\n    <text x=\"20\" y=\"265\" fill=\"#cbd5e1\" font-size=\"10\">df.size -> rows * cols</text>\n    <text x=\"20\" y=\"282\" fill=\"#cbd5e1\" font-size=\"10\">df.T -> Transpose rows/cols</text>\n    <text x=\"20\" y=\"299\" fill=\"#cbd5e1\" font-size=\"10\">df.head(n) / df.tail(n) [def: 5]</text>\n  </g>\n\n  <!-- Middle Box: Matplotlib Visualizations -->\n  <g transform=\"translate(285, 60)\">\n    <rect width=\"230\" height=\"320\" rx=\"8\" fill=\"#1e293b\" stroke=\"#f97316\" stroke-width=\"2\"/>\n    <rect width=\"230\" height=\"35\" rx=\"8\" fill=\"url(#plotGrad)\"/>\n    <text x=\"115\" y=\"23\" fill=\"#ffffff\" font-size=\"13\" font-weight=\"bold\" text-anchor=\"middle\">2. Matplotlib.pyplot</text>\n    \n    <text x=\"15\" y=\"65\" fill=\"#fdba74\" font-size=\"11\" font-weight=\"bold\">Plot Types &amp; Syntax:</text>\n    <text x=\"20\" y=\"83\" fill=\"#cbd5e1\" font-size=\"10\">• Line Plot: plt.plot(x, y)</text>\n    <text x=\"20\" y=\"100\" fill=\"#cbd5e1\" font-size=\"10\">• Bar: plt.bar(x, h) / barh(y, w)</text>\n    <text x=\"20\" y=\"117\" fill=\"#cbd5e1\" font-size=\"10\">• Histogram: plt.hist(x, bins)</text>\n    \n    <text x=\"15\" y=\"145\" fill=\"#fdba74\" font-size=\"11\" font-weight=\"bold\">Key Chart Elements:</text>\n    <text x=\"20\" y=\"163\" fill=\"#cbd5e1\" font-size=\"10\">plt.xlabel('X-Axis Title')</text>\n    <text x=\"20\" y=\"180\" fill=\"#cbd5e1\" font-size=\"10\">plt.ylabel('Y-Axis Title')</text>\n    <text x=\"20\" y=\"197\" fill=\"#cbd5e1\" font-size=\"10\">plt.title('Main Plot Title')</text>\n    <text x=\"20\" y=\"214\" fill=\"#cbd5e1\" font-size=\"10\">plt.legend() [needs labels!]</text>\n    <text x=\"20\" y=\"231\" fill=\"#cbd5e1\" font-size=\"10\">plt.grid(True) [grid lines]</text>\n    \n    <rect x=\"15\" y=\"250\" width=\"200\" height=\"48\" rx=\"4\" fill=\"#c2410c\" opacity=\"0.25\"/>\n    <text x=\"25\" y=\"268\" fill=\"#fed7aa\" font-size=\"10\" font-weight=\"bold\">Critical CUET Rule:</text>\n    <text x=\"25\" y=\"286\" fill=\"#cbd5e1\" font-size=\"9\">Call plt.savefig() BEFORE plt.show()!</text>\n  </g>\n\n  <!-- Right Box: SQL Joins & Functions -->\n  <g transform=\"translate(540, 60)\">\n    <rect width=\"230\" height=\"320\" rx=\"8\" fill=\"#1e293b\" stroke=\"#a855f7\" stroke-width=\"2\"/>\n    <rect width=\"230\" height=\"35\" rx=\"8\" fill=\"url(#joinGrad)\"/>\n    <text x=\"115\" y=\"23\" fill=\"#ffffff\" font-size=\"13\" font-weight=\"bold\" text-anchor=\"middle\">3. Advanced SQL &amp; Joins</text>\n    \n    <text x=\"15\" y=\"65\" fill=\"#d8b4fe\" font-size=\"11\" font-weight=\"bold\">Table Joins:</text>\n    <text x=\"20\" y=\"83\" fill=\"#cbd5e1\" font-size=\"10\">• Equi-Join: Uses '=' on key</text>\n    <text x=\"20\" y=\"100\" fill=\"#cbd5e1\" font-size=\"10\">• Natural Join: Eliminates dup cols</text>\n    <text x=\"20\" y=\"117\" fill=\"#cbd5e1\" font-size=\"10\">• Left Join: All left + match right</text>\n    \n    <text x=\"15\" y=\"145\" fill=\"#d8b4fe\" font-size=\"11\" font-weight=\"bold\">Single-Row Functions:</text>\n    <text x=\"20\" y=\"163\" fill=\"#cbd5e1\" font-size=\"10\">SUBSTR('INDIA', 2, 3) -> 'NDI'</text>\n    <text x=\"20\" y=\"180\" fill=\"#cbd5e1\" font-size=\"10\">INSTR('INDIA', 'D') -> 3</text>\n    <text x=\"20\" y=\"197\" fill=\"#cbd5e1\" font-size=\"10\">ROUND(76.58, 1) -> 76.6</text>\n    <text x=\"20\" y=\"214\" fill=\"#cbd5e1\" font-size=\"10\">TRUNCATE(76.58, 1) -> 76.5</text>\n    <text x=\"20\" y=\"231\" fill=\"#cbd5e1\" font-size=\"10\">NOW() vs CURDATE()</text>\n    \n    <rect x=\"15\" y=\"250\" width=\"200\" height=\"48\" rx=\"4\" fill=\"#7e22ce\" opacity=\"0.25\"/>\n    <text x=\"25\" y=\"268\" fill=\"#f3e8ff\" font-size=\"10\" font-weight=\"bold\">SQL Indexing Trap:</text>\n    <text x=\"25\" y=\"286\" fill=\"#cbd5e1\" font-size=\"9\">SQL string indexing is 1-BASED!</text>\n  </g>\n\n  <text x=\"400\" y=\"405\" fill=\"#64748b\" font-size=\"11\" text-anchor=\"middle\">NCERT Class 12 IP • Section B2 Focus • High-Yield CUET Reference</text>\n</svg>",
+  "workedExamples": [
+    {
+      "questionNumber": 1,
+      "question": "Consider the following Python Pandas code:\n\nimport pandas as pd\ndata = {'Marks': [85, 92, 78, 90], 'Grade': ['A', 'A+', 'B', 'A']}\ndf = pd.DataFrame(data, index=['S1', 'S2', 'S3', 'S4'])\n\nprint(df.loc['S2':'S3', 'Marks'].values)\n\nWhat is the exact output displayed?",
+      "options": [
+        {
+          "id": "A",
+          "text": "[92]"
+        },
+        {
+          "id": "B",
+          "text": "[92, 78]"
+        },
+        {
+          "id": "C",
+          "text": "[85, 92]"
+        },
+        {
+          "id": "D",
+          "text": "[78, 90]"
+        }
+      ],
+      "correctOption": "B",
+      "solutionSteps": [
+        "Step 1: The indexer `loc` is label-based.",
+        "Step 2: In label slicing, both the start label and the stop label are INCLUDED.",
+        "Step 3: 'S2':'S3' includes row label 'S2' and row label 'S3'.",
+        "Step 4: The column selected is 'Marks'. For 'S2' the Marks value is 92; for 'S3' the Marks value is 78.",
+        "Step 5: .values extracts the underlying numpy array: array([92, 78]).",
+        "Conclusion: Output is [92, 78]."
+      ],
+      "cuetTip": "Never forget: .loc includes the ending label ('S3'), whereas .iloc excludes the upper numeric bound!",
+      "id": "computer_science_u3_t1_we1"
+    },
+    {
+      "questionNumber": 2,
+      "question": "What will be the result of the following SQL query executed in MySQL?\n\nSELECT ROUND(284.567, 1), TRUNCATE(284.567, 1), ROUND(284.567, -1);",
+      "options": [
+        {
+          "id": "A",
+          "text": "284.6, 284.5, 280"
+        },
+        {
+          "id": "B",
+          "text": "284.5, 284.5, 284"
+        },
+        {
+          "id": "C",
+          "text": "284.6, 284.6, 290"
+        },
+        {
+          "id": "D",
+          "text": "284.6, 284.5, 290"
+        }
+      ],
+      "correctOption": "A",
+      "solutionSteps": [
+        "Step 1: ROUND(284.567, 1) rounds to 1 decimal place. The next digit is 6 (>=5), so 5 rounds up to 6 -> 284.6.",
+        "Step 2: TRUNCATE(284.567, 1) directly truncates digits beyond 1 decimal place without any rounding -> 284.5.",
+        "Step 3: ROUND(284.567, -1) rounds to the tens place. The ones place digit is 4 (<5), so it rounds down to 280.",
+        "Conclusion: The query returns: 284.6, 284.5, 280."
+      ],
+      "cuetTip": "Negative decimal argument in ROUND(num, -d) rounds to powers of 10! -1 rounds to nearest 10; -2 to nearest 100.",
+      "id": "computer_science_u3_t1_we2"
+    },
+    {
+      "questionNumber": 3,
+      "question": "A DataFrame `df` has 6 rows and 4 columns. Which statement will return a tuple (6, 4)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "df.size"
+        },
+        {
+          "id": "B",
+          "text": "df.shape"
+        },
+        {
+          "id": "C",
+          "text": "df.ndim"
+        },
+        {
+          "id": "D",
+          "text": "df.axes"
+        }
+      ],
+      "correctOption": "B",
+      "solutionSteps": [
+        "Step 1: df.shape returns a tuple representing the dimensionality of the DataFrame in the form (number of rows, number of columns). Here, (6, 4).",
+        "Step 2: df.size returns total elements: 6 × 4 = 24.",
+        "Step 3: df.ndim returns the number of axes / dimensions, which is always 2 for any DataFrame.",
+        "Step 4: df.axes returns a list containing row index and column labels."
+      ],
+      "cuetTip": "Remember: shape is the (rows, cols) tuple, size is the scalar product of rows × cols.",
+      "id": "computer_science_u3_t1_we3"
+    }
+  ],
+  "howCuetAsksThis": [
+    {
+      "type": "DataFrame Output & Slicing",
+      "frequency": "High (3-4 questions)",
+      "typicalStem": "Given DataFrame df with students data, what is the output of df.iloc[1:3, 0:2]?",
+      "strategy": "iloc uses 0-based integer position and excludes stop bounds; index 1 and 2 rows, cols 0 and 1."
+    },
+    {
+      "type": "SQL Function Evaluation",
+      "frequency": "High (3 questions)",
+      "typicalStem": "Find the output of SELECT SUBSTR('INFORMATICS', 3, 5);",
+      "strategy": "Start at position 3 ('F'), count 5 letters: 'F', 'O', 'R', 'M', 'A' -> 'FORMA'."
+    },
+    {
+      "type": "Assertion-Reason",
+      "frequency": "Medium (2 questions)",
+      "typicalStem": "Assertion (A): A Pandas Series is size-immutable but value-mutable.\nReason (R): Once created, elements within a Series can be reassigned, but the length of the Series cannot be dynamically expanded without creating a new object.",
+      "strategy": "Both are true, and R correctly explains the distinction between value and size mutability."
+    }
+  ],
+  "commonTraps": [
+    {
+      "misconception": "Assuming SQL strings are 0-indexed like Python.",
+      "whyWrong": "In SQL, character positions start at 1, not 0. SUBSTR('ABCDE', 1, 1) returns 'A'.",
+      "correctUnderstanding": "All SQL string indexing functions (SUBSTR, INSTR, LOCATE) are 1-based.",
+      "trapOptionExample": "Selecting 'B' when asked for character at index 1."
+    },
+    {
+      "misconception": "Confusing `df.drop('Col', axis=1)` and default `axis=0`.",
+      "whyWrong": "If you call `df.drop('Col')` without specifying `axis=1`, Pandas searches for a row index labeled 'Col' and throws KeyError.",
+      "correctUnderstanding": "Must specify `axis=1` or `columns=['Col']` to remove a column.",
+      "trapOptionExample": "Attempting to delete a column using df.drop('ColName') without axis=1."
+    },
+    {
+      "misconception": "Believing `plt.savefig()` can be called after `plt.show()`.",
+      "whyWrong": "plt.show() flushes the figure buffer, so calling savefig() afterward produces an empty blank file.",
+      "correctUnderstanding": "Always invoke `plt.savefig('name.png')` prior to `plt.show()`.",
+      "trapOptionExample": "Code with plt.show() followed by plt.savefig('output.png')."
+    }
+  ],
+  "mnemonicsAndShortcuts": [
+    {
+      "title": "loc vs iloc Endpoint Rule",
+      "mnemonic": "LOC = Locked In (Includes End) | ILOC = Integer Less One (Excludes End)",
+      "shortcut": "loc: [start:end] includes end; iloc: [start:end] stops at end-1.",
+      "whenToApply": "Pandas row and column slicing questions.",
+      "explanation": "Prevents mixing up inclusive vs exclusive endpoints in CUET options."
+    },
+    {
+      "title": "Single Row vs Aggregate Functions",
+      "mnemonic": "SMA vs ROW",
+      "shortcut": "Aggregate: SUM, AVG, MIN, MAX, COUNT (operate on multiple rows, return 1 value). Single Row: MATH, STRING, DATE (operate on each row independently).",
+      "whenToApply": "SQL function classification questions.",
+      "explanation": "Single row functions can appear in SELECT and WHERE; aggregate functions require HAVING to filter."
+    }
+  ],
+  "quickRevisionCard": {
+    "title": "Pandas, Matplotlib & Advanced SQL — Flash Card",
+    "bulletPoints": [
+      "Series: 1D, homogeneous, size-immutable, value-mutable.",
+      "DataFrame: 2D, heterogeneous tabular, size-mutable, value-mutable.",
+      "Attributes: df.shape = (rows, cols); df.size = rows × cols; df.ndim = 2.",
+      "df.loc[] is label-based (INCLUDES endpoint); df.iloc[] is integer-based (EXCLUDES endpoint).",
+      "df.drop(labels, axis=1) drops columns; axis=0 (default) drops rows.",
+      "df.head(n) default first 5 rows; df.tail(n) default last 5 rows.",
+      "Matplotlib: plt.plot() for lines; plt.bar() / plt.barh() for bars; plt.hist() for continuous bins.",
+      "Always call plt.savefig() BEFORE plt.show() to prevent blank image exports.",
+      "SQL string functions are 1-INDEXED: SUBSTR('PYTHON', 2, 3) = 'YTH'; INSTR('PYTHON', 'T') = 3.",
+      "ROUND(num, d) rounds; TRUNCATE(num, d) cuts off without rounding; negative d rounds to 10s/100s.",
+      "NOW() returns current date and time; CURDATE() returns date only.",
+      "Natural Join: Equi-join on matching column names with duplicates automatically eliminated."
+    ],
+    "keyPoints": [
+      "Series: 1D, homogeneous, size-immutable, value-mutable.",
+      "DataFrame: 2D, heterogeneous tabular, size-mutable, value-mutable.",
+      "Attributes: df.shape = (rows, cols); df.size = rows × cols; df.ndim = 2.",
+      "df.loc[] is label-based (INCLUDES endpoint); df.iloc[] is integer-based (EXCLUDES endpoint).",
+      "df.drop(labels, axis=1) drops columns; axis=0 (default) drops rows.",
+      "df.head(n) default first 5 rows; df.tail(n) default last 5 rows.",
+      "Matplotlib: plt.plot() for lines; plt.bar() / plt.barh() for bars; plt.hist() for continuous bins.",
+      "Always call plt.savefig() BEFORE plt.show() to prevent blank image exports.",
+      "SQL string functions are 1-INDEXED: SUBSTR('PYTHON', 2, 3) = 'YTH'; INSTR('PYTHON', 'T') = 3.",
+      "ROUND(num, d) rounds; TRUNCATE(num, d) cuts off without rounding; negative d rounds to 10s/100s.",
+      "NOW() returns current date and time; CURDATE() returns date only.",
+      "Natural Join: Equi-join on matching column names with duplicates automatically eliminated."
+    ]
+  },
+  "practiceQuestions": [
+    {
+      "id": "cs_u3_q1",
+      "question": "Which of the following statements about Pandas Series and DataFrame mutability is completely TRUE?",
+      "type": "standard",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both Series and DataFrame are size-mutable and value-mutable."
+        },
+        {
+          "id": "B",
+          "text": "Series is size-immutable and value-mutable; DataFrame is both size-mutable and value-mutable."
+        },
+        {
+          "id": "C",
+          "text": "Series is size-mutable but value-immutable; DataFrame is size-immutable."
+        },
+        {
+          "id": "D",
+          "text": "Both Series and DataFrame are size-immutable."
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "In Pandas, a Series has a fixed length (size-immutable) but its values can be modified (value-mutable). A DataFrame can have columns/rows added or removed (size-mutable) and values modified (value-mutable)."
+    },
+    {
+      "id": "cs_u3_q2",
+      "question": "Given a DataFrame `df` with 5 rows and 3 columns, what will be returned by `df.ndim`?",
+      "type": "standard",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "15"
+        },
+        {
+          "id": "B",
+          "text": "(5, 3)"
+        },
+        {
+          "id": "C",
+          "text": "2"
+        },
+        {
+          "id": "D",
+          "text": "5"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "The `ndim` attribute returns the number of axes/dimensions of the data structure. For any 2-dimensional DataFrame, `df.ndim` is always 2."
+    },
+    {
+      "id": "cs_u3_q3",
+      "question": "Consider the code: `s = pd.Series([10, 20, 30, 40], index=['w', 'x', 'y', 'z'])`. What will `s.iloc[1:3]` return?",
+      "type": "standard",
+      "questionType": "Conceptual Direct",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "A Series with indices ['x', 'y'] and values [20, 30]"
+        },
+        {
+          "id": "B",
+          "text": "A Series with indices ['x', 'y', 'z'] and values [20, 30, 40]"
+        },
+        {
+          "id": "C",
+          "text": "A Series with indices ['w', 'x', 'y'] and values [10, 20, 30]"
+        },
+        {
+          "id": "D",
+          "text": "A single integer 30"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "`iloc[1:3]` uses positional indexing from index 1 up to (but not including) index 3. This selects positions 1 and 2, corresponding to index labels 'x' and 'y' with values 20 and 30."
+    },
+    {
+      "id": "cs_u3_q4",
+      "question": "Which of the following functions in MySQL extracts a substring starting from position 3 with a length of 4 characters from the string 'INFORMATICS'?",
+      "type": "standard",
+      "questionType": "Conceptual Direct",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "SUBSTR('INFORMATICS', 3, 4)"
+        },
+        {
+          "id": "B",
+          "text": "SUBSTR('INFORMATICS', 2, 4)"
+        },
+        {
+          "id": "C",
+          "text": "INSTR('INFORMATICS', 3, 4)"
+        },
+        {
+          "id": "D",
+          "text": "TRIM('INFORMATICS', 3, 4)"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "SUBSTR(str, pos, len) takes the start position (1-based) and the length. `SUBSTR('INFORMATICS', 3, 4)` starts at 'F' (pos 3) and extracts 4 characters: 'FORM'."
+    },
+    {
+      "id": "cs_u3_q5",
+      "question": "What is the return value of `SELECT INSTR('DATABASE', 'BA');` in MySQL?",
+      "type": "standard",
+      "questionType": "Conceptual Direct",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "4"
+        },
+        {
+          "id": "B",
+          "text": "5"
+        },
+        {
+          "id": "C",
+          "text": "3"
+        },
+        {
+          "id": "D",
+          "text": "True"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "INSTR(str, substr) returns the 1-based index of the first occurrence of substr in str. In 'D-A-T-A-B-A-S-E', 'B' is at position 5. Hence, INSTR returns 5."
+    },
+    {
+      "id": "cs_u3_q6",
+      "question": "Which parameter in `plt.hist()` controls the number of equal-width intervals or bins into which the range of data is divided?",
+      "type": "standard",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "width"
+        },
+        {
+          "id": "B",
+          "text": "bins"
+        },
+        {
+          "id": "C",
+          "text": "intervals"
+        },
+        {
+          "id": "D",
+          "text": "bars"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "The `bins` parameter in `plt.hist(x, bins=...)` specifies either an integer count of equal-width intervals or a sequence defining bin edges."
+    },
+    {
+      "id": "cs_u3_q7",
+      "question": "How does a NATURAL JOIN differ from an EQUI-JOIN between two relational tables with common attribute names?",
+      "type": "standard",
+      "questionType": "Conceptual Direct",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "Natural Join includes all duplicate common columns, whereas Equi-join removes them."
+        },
+        {
+          "id": "B",
+          "text": "Natural Join automatically eliminates duplicate common columns, whereas Equi-join retains duplicate columns from both tables."
+        },
+        {
+          "id": "C",
+          "text": "Natural Join uses inequality comparisons, while Equi-join uses equality."
+        },
+        {
+          "id": "D",
+          "text": "Natural Join creates a Cartesian Product without matching keys."
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Both Natural Join and Equi-join match rows where common columns have equal values, but Natural Join suppresses duplicate common columns so only one copy appears in the resulting schema."
+    },
+    {
+      "id": "cs_u3_q8",
+      "question": "Assertion (A): Calling `plt.savefig('my_plot.png')` after executing `plt.show()` in a script often saves a completely blank image.\nReason (R): `plt.show()` creates a new figure canvas and resets/clears the active figure buffer upon display completion.",
+      "type": "assertion-reason",
+      "questionType": "Assertion-Reason",
+      "difficulty": "hard",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both (A) and (R) are true, and (R) is the correct explanation of (A)."
+        },
+        {
+          "id": "B",
+          "text": "Both (A) and (R) are true, but (R) is NOT the correct explanation of (A)."
+        },
+        {
+          "id": "C",
+          "text": "(A) is true, but (R) is false."
+        },
+        {
+          "id": "D",
+          "text": "(A) is false, but (R) is true."
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Both (A) and (R) are true. In Matplotlib, displaying the plot via show() clears the current figure state, leaving the canvas blank for subsequent savefig() calls unless saved beforehand."
+    },
+    {
+      "id": "cs_u3_q9",
+      "question": "Assertion (A): In SQL, the query `SELECT ROUND(45.826, -1)` evaluates to 50.\nReason (R): A negative decimal argument in ROUND(n, -d) indicates that rounding is applied to powers of 10 to the left of the decimal point.",
+      "type": "assertion-reason",
+      "questionType": "Assertion-Reason",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both (A) and (R) are true, and (R) is the correct explanation of (A)."
+        },
+        {
+          "id": "B",
+          "text": "Both (A) and (R) are true, but (R) is NOT the correct explanation of (A)."
+        },
+        {
+          "id": "C",
+          "text": "(A) is true, but (R) is false."
+        },
+        {
+          "id": "D",
+          "text": "(A) is false, but (R) is true."
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Both (A) and (R) are true. ROUND(45.826, -1) rounds to the nearest multiple of 10¹ (tens place). Since the ones digit is 5, it rounds up from 40 to 50."
+    },
+    {
+      "id": "cs_u3_q10",
+      "question": "Match the SQL String Functions in List I with their Output on 'COMPUTER' in List II:\nList I:\n(P) LENGTH('COMPUTER')\n(Q) SUBSTR('COMPUTER', 4, 3)\n(R) INSTR('COMPUTER', 'PUT')\n(S) LEFT('COMPUTER', 3)\n\nList II:\n(1) 'COM'\n(2) 8\n(3) 4\n(4) 'PUT'",
+      "type": "match-the-following",
+      "questionType": "Match The Following",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "P-2, Q-4, R-3, S-1"
+        },
+        {
+          "id": "B",
+          "text": "P-4, Q-2, R-1, S-3"
+        },
+        {
+          "id": "C",
+          "text": "P-2, Q-1, R-3, S-4"
+        },
+        {
+          "id": "D",
+          "text": "P-3, Q-4, R-2, S-1"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "LENGTH('COMPUTER') is 8 (P-2); SUBSTR('COMPUTER', 4, 3) starts at 'P' for 3 chars -> 'PUT' (Q-4); INSTR('COMPUTER', 'PUT') starts at pos 4 (R-3); LEFT('COMPUTER', 3) returns 'COM' (S-1). Matches A."
+    }
+  ],
+  "diagram": {
+    "type": "svg",
+    "title": "Data Handling using Pandas and Matplotlib, Database Query using SQL, Societal Impacts & Cyber Law",
+    "caption": "Computer Science conceptual diagram for Data Handling using Pandas and Matplotlib, Database Query using SQL, Societal Impacts & Cyber Law",
+    "code": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 420\" width=\"100%\" height=\"100%\">\n  <defs>\n    <linearGradient id=\"cs3Grad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#090d16\"/>\n      <stop offset=\"100%\" stop-color=\"#1e1b4b\"/>\n    </linearGradient>\n    <linearGradient id=\"dfGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#06b6d4\"/>\n      <stop offset=\"100%\" stop-color=\"#0891b2\"/>\n    </linearGradient>\n    <linearGradient id=\"plotGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#f97316\"/>\n      <stop offset=\"100%\" stop-color=\"#c2410c\"/>\n    </linearGradient>\n    <linearGradient id=\"joinGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#a855f7\"/>\n      <stop offset=\"100%\" stop-color=\"#7e22ce\"/>\n    </linearGradient>\n  </defs>\n  <rect width=\"800\" height=\"420\" rx=\"12\" fill=\"url(#cs3Grad)\"/>\n  <text x=\"400\" y=\"32\" fill=\"#38bdf8\" font-size=\"18\" font-weight=\"bold\" text-anchor=\"middle\" font-family=\"system-ui, sans-serif\">CUET Informatics Practices: Pandas, Matplotlib &amp; SQL Mastery</text>\n  \n  <!-- Left Box: Pandas DataFrame & Indexing -->\n  <g transform=\"translate(30, 60)\">\n    <rect width=\"230\" height=\"320\" rx=\"8\" fill=\"#1e293b\" stroke=\"#06b6d4\" stroke-width=\"2\"/>\n    <rect width=\"230\" height=\"35\" rx=\"8\" fill=\"url(#dfGrad)\"/>\n    <text x=\"115\" y=\"23\" fill=\"#ffffff\" font-size=\"13\" font-weight=\"bold\" text-anchor=\"middle\">1. Pandas Data Structures</text>\n    \n    <text x=\"15\" y=\"65\" fill=\"#67e8f9\" font-size=\"11\" font-weight=\"bold\">Series vs DataFrame:</text>\n    <text x=\"20\" y=\"83\" fill=\"#cbd5e1\" font-size=\"10\">• Series: 1D, Size-Immutable</text>\n    <text x=\"20\" y=\"100\" fill=\"#cbd5e1\" font-size=\"10\">• DataFrame: 2D, Size-Mutable</text>\n    <text x=\"20\" y=\"117\" fill=\"#cbd5e1\" font-size=\"10\">• Both are Value-Mutable!</text>\n    \n    <text x=\"15\" y=\"145\" fill=\"#67e8f9\" font-size=\"11\" font-weight=\"bold\">Slicing Golden Rule:</text>\n    <rect x=\"15\" y=\"155\" width=\"200\" height=\"48\" rx=\"4\" fill=\"#0891b2\" opacity=\"0.25\"/>\n    <text x=\"25\" y=\"173\" fill=\"#a5f3fc\" font-size=\"10\" font-weight=\"bold\">df.loc['A':'C'] -> INCLUDES 'C'</text>\n    <text x=\"25\" y=\"193\" fill=\"#fdba74\" font-size=\"10\" font-weight=\"bold\">df.iloc[0:2] -> EXCLUDES index 2</text>\n    \n    <text x=\"15\" y=\"230\" fill=\"#67e8f9\" font-size=\"11\" font-weight=\"bold\">Key Attributes:</text>\n    <text x=\"20\" y=\"248\" fill=\"#cbd5e1\" font-size=\"10\">df.shape -> (rows, cols) tuple</text>\n    <text x=\"20\" y=\"265\" fill=\"#cbd5e1\" font-size=\"10\">df.size -> rows * cols</text>\n    <text x=\"20\" y=\"282\" fill=\"#cbd5e1\" font-size=\"10\">df.T -> Transpose rows/cols</text>\n    <text x=\"20\" y=\"299\" fill=\"#cbd5e1\" font-size=\"10\">df.head(n) / df.tail(n) [def: 5]</text>\n  </g>\n\n  <!-- Middle Box: Matplotlib Visualizations -->\n  <g transform=\"translate(285, 60)\">\n    <rect width=\"230\" height=\"320\" rx=\"8\" fill=\"#1e293b\" stroke=\"#f97316\" stroke-width=\"2\"/>\n    <rect width=\"230\" height=\"35\" rx=\"8\" fill=\"url(#plotGrad)\"/>\n    <text x=\"115\" y=\"23\" fill=\"#ffffff\" font-size=\"13\" font-weight=\"bold\" text-anchor=\"middle\">2. Matplotlib.pyplot</text>\n    \n    <text x=\"15\" y=\"65\" fill=\"#fdba74\" font-size=\"11\" font-weight=\"bold\">Plot Types &amp; Syntax:</text>\n    <text x=\"20\" y=\"83\" fill=\"#cbd5e1\" font-size=\"10\">• Line Plot: plt.plot(x, y)</text>\n    <text x=\"20\" y=\"100\" fill=\"#cbd5e1\" font-size=\"10\">• Bar: plt.bar(x, h) / barh(y, w)</text>\n    <text x=\"20\" y=\"117\" fill=\"#cbd5e1\" font-size=\"10\">• Histogram: plt.hist(x, bins)</text>\n    \n    <text x=\"15\" y=\"145\" fill=\"#fdba74\" font-size=\"11\" font-weight=\"bold\">Key Chart Elements:</text>\n    <text x=\"20\" y=\"163\" fill=\"#cbd5e1\" font-size=\"10\">plt.xlabel('X-Axis Title')</text>\n    <text x=\"20\" y=\"180\" fill=\"#cbd5e1\" font-size=\"10\">plt.ylabel('Y-Axis Title')</text>\n    <text x=\"20\" y=\"197\" fill=\"#cbd5e1\" font-size=\"10\">plt.title('Main Plot Title')</text>\n    <text x=\"20\" y=\"214\" fill=\"#cbd5e1\" font-size=\"10\">plt.legend() [needs labels!]</text>\n    <text x=\"20\" y=\"231\" fill=\"#cbd5e1\" font-size=\"10\">plt.grid(True) [grid lines]</text>\n    \n    <rect x=\"15\" y=\"250\" width=\"200\" height=\"48\" rx=\"4\" fill=\"#c2410c\" opacity=\"0.25\"/>\n    <text x=\"25\" y=\"268\" fill=\"#fed7aa\" font-size=\"10\" font-weight=\"bold\">Critical CUET Rule:</text>\n    <text x=\"25\" y=\"286\" fill=\"#cbd5e1\" font-size=\"9\">Call plt.savefig() BEFORE plt.show()!</text>\n  </g>\n\n  <!-- Right Box: SQL Joins & Functions -->\n  <g transform=\"translate(540, 60)\">\n    <rect width=\"230\" height=\"320\" rx=\"8\" fill=\"#1e293b\" stroke=\"#a855f7\" stroke-width=\"2\"/>\n    <rect width=\"230\" height=\"35\" rx=\"8\" fill=\"url(#joinGrad)\"/>\n    <text x=\"115\" y=\"23\" fill=\"#ffffff\" font-size=\"13\" font-weight=\"bold\" text-anchor=\"middle\">3. Advanced SQL &amp; Joins</text>\n    \n    <text x=\"15\" y=\"65\" fill=\"#d8b4fe\" font-size=\"11\" font-weight=\"bold\">Table Joins:</text>\n    <text x=\"20\" y=\"83\" fill=\"#cbd5e1\" font-size=\"10\">• Equi-Join: Uses '=' on key</text>\n    <text x=\"20\" y=\"100\" fill=\"#cbd5e1\" font-size=\"10\">• Natural Join: Eliminates dup cols</text>\n    <text x=\"20\" y=\"117\" fill=\"#cbd5e1\" font-size=\"10\">• Left Join: All left + match right</text>\n    \n    <text x=\"15\" y=\"145\" fill=\"#d8b4fe\" font-size=\"11\" font-weight=\"bold\">Single-Row Functions:</text>\n    <text x=\"20\" y=\"163\" fill=\"#cbd5e1\" font-size=\"10\">SUBSTR('INDIA', 2, 3) -> 'NDI'</text>\n    <text x=\"20\" y=\"180\" fill=\"#cbd5e1\" font-size=\"10\">INSTR('INDIA', 'D') -> 3</text>\n    <text x=\"20\" y=\"197\" fill=\"#cbd5e1\" font-size=\"10\">ROUND(76.58, 1) -> 76.6</text>\n    <text x=\"20\" y=\"214\" fill=\"#cbd5e1\" font-size=\"10\">TRUNCATE(76.58, 1) -> 76.5</text>\n    <text x=\"20\" y=\"231\" fill=\"#cbd5e1\" font-size=\"10\">NOW() vs CURDATE()</text>\n    \n    <rect x=\"15\" y=\"250\" width=\"200\" height=\"48\" rx=\"4\" fill=\"#7e22ce\" opacity=\"0.25\"/>\n    <text x=\"25\" y=\"268\" fill=\"#f3e8ff\" font-size=\"10\" font-weight=\"bold\">SQL Indexing Trap:</text>\n    <text x=\"25\" y=\"286\" fill=\"#cbd5e1\" font-size=\"9\">SQL string indexing is 1-BASED!</text>\n  </g>\n\n  <text x=\"400\" y=\"405\" fill=\"#64748b\" font-size=\"11\" text-anchor=\"middle\">NCERT Class 12 IP • Section B2 Focus • High-Yield CUET Reference</text>\n</svg>"
+  },
+  "howCuetAsks": [
+    {
+      "patternType": "DataFrame Output & Slicing",
+      "frequency": "High (3-4 questions)",
+      "typicalStem": "Given DataFrame df with students data, what is the output of df.iloc[1:3, 0:2]?",
+      "strategy": "iloc uses 0-based integer position and excludes stop bounds; index 1 and 2 rows, cols 0 and 1."
+    },
+    {
+      "patternType": "SQL Function Evaluation",
+      "frequency": "High (3 questions)",
+      "typicalStem": "Find the output of SELECT SUBSTR('INFORMATICS', 3, 5);",
+      "strategy": "Start at position 3 ('F'), count 5 letters: 'F', 'O', 'R', 'M', 'A' -> 'FORMA'."
+    },
+    {
+      "patternType": "Assertion-Reason",
+      "frequency": "Medium (2 questions)",
+      "typicalStem": "Assertion (A): A Pandas Series is size-immutable but value-mutable.\nReason (R): Once created, elements within a Series can be reassigned, but the length of the Series cannot be dynamically expanded without creating a new object.",
+      "strategy": "Both are true, and R correctly explains the distinction between value and size mutability."
+    }
+  ],
+  "links": {
+    "prerequisites": [],
+    "relatedTopics": [],
+    "practiceTestId": "practice-computer_science-unit3-test1",
+    "practiceTestUrl": "/test/practice-computer_science-unit3-test1",
+    "weaknessReportUrl": "/dashboard/radar?subject=computer_science",
+    "weaknessRadarUrl": "/dashboard/radar?subject=computer_science"
+  },
+  "metadata": {
+    "confidence": "high",
+    "needsHumanReview": false,
+    "lastUpdated": "2026-10-14T16:17:32.279Z",
+    "version": 1,
+    "wordCount": 3502,
+    "isFreePreview": false
+  }
+}

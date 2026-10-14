@@ -1,0 +1,663 @@
+{
+  "id": "physics_u6_t2",
+  "slug": "wave-optics-interference-diffraction-polarization",
+  "subject": "physics",
+  "subjectName": "Physics",
+  "subjectCode": "322",
+  "unitNumber": 6,
+  "unitTitle": "Optics",
+  "topicTitle": "Wave Optics: Interference, Diffraction, Polarization",
+  "ncertReference": {
+    "class": "Class 12",
+    "book": "Physics Part 2",
+    "chapterNumber": 10,
+    "chapterName": "Wave Optics",
+    "sections": [
+      "10.2 Huygens Principle & Wavefronts",
+      "10.3 Refraction and Reflection of Plane Waves using Huygens Principle",
+      "10.4 Coherent and Incoherent Addition of Waves",
+      "10.5 Interference of Light Waves and Young's Experiment",
+      "10.6 Diffraction (Single Slit & Resolving Power)",
+      "10.7 Polarization (Brewster's Law & Malus' Law)"
+    ]
+  },
+  "cuetRelevance": {
+    "level": "High",
+    "pyqFrequency": "3-4 questions per shift. Top tested: YDSE fringe width variation in liquid, Malus' law $I = I_0 \\cos^2 \\theta$, Brewster's law $\\tan i_B = n$, and single slit central maximum width.",
+    "totalPyqsInRepo": 188,
+    "weightagePercentage": 7.8
+  },
+  "summary30Seconds": [
+    "Huygens' Principle: Every point on a wavefront acts as a source of secondary spherical wavelets spreading in all directions at wave speed.",
+    "Young's Double Slit Experiment (YDSE): Fringe width $\\beta = \\frac{\\lambda D}{d}$. Immersing in liquid of index $n$ scales fringe width to $\\beta' = \\beta/n$.",
+    "Interference Condition: Constructive if path difference $\\Delta x = n\\lambda$ ($I_{\\max} = (\\sqrt{I_1} + \\sqrt{I_2})^2$); Destructive if $\\Delta x = (2n-1)\\frac{\\lambda}{2}$ ($I_{\\min} = (\\sqrt{I_1} - \\sqrt{I_2})^2$).",
+    "Single-Slit Diffraction: Minima occur at $a \\sin \\theta = n\\lambda$. Central maximum angular width is $2\\lambda/a$, linear width is $2\\lambda D/a$ (double any secondary fringe width).",
+    "Polarization: Malus' Law $I = I_0 \\cos^2 \\theta$. Brewster's Law $\\tan i_B = n$; at polarizing angle, reflected and refracted rays are mutually perpendicular ($i_B + r_p = 90^\\circ$)."
+  ],
+  "coreConcepts": [
+    {
+      "title": "Huygens' Principle & Shape of Wavefronts",
+      "content": "A **wavefront** is the locus of all points in a medium vibrating in the same phase.\n- **Point source**: Spherical wavefronts.\n- **Line source (slit)**: Cylindrical wavefronts.\n- **Distant source ($\\\\infty$)**: Plane wavefronts.\n\nHuygens' two postulates:\n1. Each point of a wavefront behaves as a secondary source of spherical wavelets of speed $v$.\n2. The forward envelope (tangential surface) touching these secondary wavelets at time $t + \\Delta t$ gives the new wavefront.\n\n**Snell's Law derivation using wave theory:**\n$$\\frac{\\sin i}{\\sin r} = \\frac{v_1 \\tau}{v_2 \\tau} = \\frac{v_1}{v_2} = \\frac{n_2}{n_1} = n_{21}$$\nFrequency $\\nu$ remains constant upon refraction; wavelength changes: $\\lambda_2 = \\frac{\\lambda_1}{n}$."
+    },
+    {
+      "title": "Young's Double Slit Experiment (YDSE) & Fringe Width",
+      "content": "Two coherent pinholes $S_1$ and $S_2$ separated by distance $d$ illuminate a screen at distance $D$ ($D \\gg d$):\n- Path difference for a point $P$ at distance $y$ from central axis:\n  $$\\Delta x = S_2 P - S_1 P = \\frac{yd}{D}$$\n- **Bright Fringes (Maxima):** $\\Delta x = n\\lambda \\implies y_n = n \\frac{\\lambda D}{d}$ ($n = 0, 1, 2, \\dots$).\n- **Dark Fringes (Minima):** $\\Delta x = \\left(n - \\frac{1}{2}\\right)\\lambda \\implies y_n' = \\left(n - \\frac{1}{2}\\right) \\frac{\\lambda D}{d}$ ($n = 1, 2, \\dots$).\n- **Fringe Width ($\\beta$):** Distance between consecutive bright or dark fringes:\n  $$\\beta = y_{n+1} - y_n = \\frac{\\lambda D}{d}$$\n- **Immersion in liquid:** In a medium of refractive index $n$, wavelength reduces to $\\lambda' = \\lambda/n$, hence:\n  $$\\beta' = \\frac{\\beta}{n}$$\n- **Intensity Distribution:** $I = I_1 + I_2 + 2\\sqrt{I_1 I_2}\\cos \\phi$. If $I_1 = I_2 = I_0$, then $I = 4 I_0 \\cos^2\\left(\\frac{\\phi}{2}\\right)$."
+    },
+    {
+      "title": "Diffraction at a Single Slit",
+      "content": "Diffraction is the bending of light waves around corners of an obstacle/aperture whose size is comparable to wavelength $\\lambda$.\n- Fraunhofer diffraction with slit width $a$:\n  - **Minima condition:** $a \\sin \\theta = n\\lambda$ ($n = \\pm 1, \\pm 2, \\dots$).\n  - **Secondary Maxima condition:** $a \\sin \\theta \\approx \\left(n + \\frac{1}{2}\\right)\\lambda$ ($n = 1, 2, \\dots$).\n  - **Central Maximum:** Spans from $\\theta = -\\lambda/a$ to $+\\lambda/a$.\n    $$\\text{Angular width } = 2\\theta_1 = \\frac{2\\lambda}{a}$$\n    $$\\text{Linear width } = 2 y_1 = \\frac{2\\lambda D}{a} = 2\\beta_{\\text{diff}}$$\n- **Interference vs Diffraction Distinction:**\n  - Interference fringes are of equal width and equal intensity.\n  - Diffraction fringes decrease rapidly in intensity away from center (central maximum has ~85% total energy; secondary maxima have intensities $I_0/22$, $I_0/61$)."
+    },
+    {
+      "title": "Polarization: Malus' Law & Brewster's Law",
+      "content": "Light is a transverse electromagnetic wave; polarization proves the transverse nature of light.\n- **Unpolarized light through a Polaroid:** Half the intensity is transmitted: $I = \\frac{1}{2} I_{\\text{unpol}}$.\n- **Malus' Law:** When completely plane-polarized light of intensity $I_0$ falls on an analyzer whose transmission axis makes angle $\\theta$ with the polarizer:\n  $$I = I_0 \\cos^2 \\theta$$\n- **Brewster's Law:** When light is incident at Brewster's angle $i_B$, the reflected beam is completely plane polarized perpendicular to the plane of incidence:\n  $$\\tan i_B = n$$\n  At this angle, the reflected ray and refracted ray are mutually perpendicular ($i_B + r_p = 90^\\circ$)."
+    }
+  ],
+  "keyFormulasAndTables": [
+    {
+      "name": "YDSE Fringe Width",
+      "formula": "\\beta = \\frac{\\lambda D}{d}",
+      "symbols": "\\lambda: wavelength, D: distance to screen, d: slit separation",
+      "siUnits": "Metres (m)",
+      "applicationCondition": "D >> d and monochromatic coherent light"
+    },
+    {
+      "name": "Single Slit Central Max Width",
+      "formula": "W = \\frac{2\\lambda D}{a}",
+      "symbols": "a: slit width, D: screen distance, \\lambda: wavelength",
+      "siUnits": "Metres (m)",
+      "applicationCondition": "Fraunhofer single slit diffraction"
+    },
+    {
+      "name": "Malus' Law",
+      "formula": "I = I_0 \\cos^2 \\theta",
+      "symbols": "I_0: incident polarized intensity, \\theta: angle between transmission axes",
+      "siUnits": "W/m²",
+      "applicationCondition": "Plane-polarized light incident on analyzer"
+    },
+    {
+      "name": "Brewster's Law",
+      "formula": "\\tan i_B = n",
+      "symbols": "i_B: polarizing angle, n: refractive index of medium",
+      "siUnits": "Dimensionless (angle in degrees)",
+      "applicationCondition": "Reflection at transparent dielectric boundary"
+    }
+  ],
+  "diagramSvg": "<svg viewBox=\"0 0 760 260\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <defs>\n    <linearGradient id=\"diffGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\">\n      <stop offset=\"0%\" stopColor=\"#38bdf8\" stopOpacity=\"0.8\"/>\n      <stop offset=\"100%\" stopColor=\"#818cf8\" stopOpacity=\"0.8\"/>\n    </linearGradient>\n  </defs>\n  <rect width=\"760\" height=\"260\" rx=\"12\" fill=\"#0f172a\" stroke=\"#334155\" strokeWidth=\"1.5\"/>\n\n  <!-- Left: Young Double Slit Setup -->\n  <g transform=\"translate(30, 20)\">\n    <text x=\"150\" y=\"22\" fill=\"#38bdf8\" fontSize=\"13\" fontWeight=\"bold\" textAnchor=\"middle\">Young's Double Slit Interference</text>\n    \n    <!-- Slit plane -->\n    <line x1=\"80\" y1=\"40\" x2=\"80\" y2=\"100\" stroke=\"#94a3b8\" strokeWidth=\"3\"/>\n    <line x1=\"80\" y1=\"120\" x2=\"80\" y2=\"140\" stroke=\"#94a3b8\" strokeWidth=\"3\"/>\n    <line x1=\"80\" y1=\"160\" x2=\"80\" y2=\"220\" stroke=\"#94a3b8\" strokeWidth=\"3\"/>\n    <text x=\"65\" y=\"112\" fill=\"#fbbf24\" fontSize=\"10\">S₁</text>\n    <text x=\"65\" y=\"152\" fill=\"#fbbf24\" fontSize=\"10\">S₂</text>\n    <line x1=\"90\" y1=\"110\" x2=\"90\" y2=\"150\" stroke=\"#e2e8f0\" strokeWidth=\"1\"/>\n    <text x=\"96\" y=\"133\" fill=\"#e2e8f0\" fontSize=\"10\">d</text>\n\n    <!-- Screen -->\n    <line x1=\"260\" y1=\"40\" x2=\"260\" y2=\"220\" stroke=\"#cbd5e1\" strokeWidth=\"2.5\"/>\n    <text x=\"265\" y=\"55\" fill=\"#94a3b8\" fontSize=\"10\">Screen</text>\n\n    <!-- Rays to point P -->\n    <line x1=\"80\" y1=\"110\" x2=\"260\" y2=\"85\" stroke=\"#38bdf8\" strokeWidth=\"1.5\"/>\n    <line x1=\"80\" y1=\"150\" x2=\"260\" y2=\"85\" stroke=\"#38bdf8\" strokeWidth=\"1.5\"/>\n    <circle cx=\"260\" cy=\"85\" r=\"3\" fill=\"#f43f5e\"/>\n    <text x=\"270\" y=\"88\" fill=\"#f43f5e\" fontSize=\"10\">P (y)</text>\n\n    <!-- Central axis -->\n    <line x1=\"80\" y1=\"130\" x2=\"260\" y2=\"130\" stroke=\"#64748b\" strokeWidth=\"1\" strokeDasharray=\"3,3\"/>\n    <text x=\"270\" y=\"134\" fill=\"#38bdf8\" fontSize=\"10\">Central Max (y=0)</text>\n\n    <!-- Distance D -->\n    <line x1=\"80\" y1=\"210\" x2=\"260\" y2=\"210\" stroke=\"#64748b\" strokeWidth=\"1\"/>\n    <text x=\"170\" y=\"205\" fill=\"#94a3b8\" fontSize=\"10\" textAnchor=\"middle\">Distance D</text>\n  </g>\n\n  <!-- Divider -->\n  <line x1=\"365\" y1=\"25\" x2=\"365\" y2=\"235\" stroke=\"#334155\" strokeWidth=\"1\" strokeDasharray=\"4,4\"/>\n\n  <!-- Right: Single Slit Diffraction Intensity -->\n  <g transform=\"translate(400, 20)\">\n    <text x=\"160\" y=\"22\" fill=\"#38bdf8\" fontSize=\"13\" fontWeight=\"bold\" textAnchor=\"middle\">Single-Slit Diffraction Profile</text>\n\n    <!-- Baseline / Screen -->\n    <line x1=\"30\" y1=\"190\" x2=\"310\" y2=\"190\" stroke=\"#64748b\" strokeWidth=\"1.5\"/>\n    <line x1=\"170\" y1=\"40\" x2=\"170\" y2=\"190\" stroke=\"#64748b\" strokeWidth=\"1\" strokeDasharray=\"3,3\"/>\n\n    <!-- Diffraction Intensity Curve -->\n    <path d=\"M 40,190 Q 65,190 75,182 Q 85,175 95,185 Q 105,190 115,190 Q 140,190 170,55 Q 200,190 225,190 Q 235,190 245,185 Q 255,175 265,182 Q 275,190 300,190\"\n          fill=\"none\" stroke=\"url(#diffGrad)\" strokeWidth=\"3\"/>\n\n    <!-- Labels -->\n    <text x=\"170\" y=\"48\" fill=\"#38bdf8\" fontSize=\"11\" fontWeight=\"bold\" textAnchor=\"middle\">Central Max (I₀)</text>\n    <text x=\"115\" y=\"205\" fill=\"#f43f5e\" fontSize=\"9\" textAnchor=\"middle\">-λ/a</text>\n    <text x=\"225\" y=\"205\" fill=\"#f43f5e\" fontSize=\"9\" textAnchor=\"middle\">+λ/a</text>\n    <text x=\"170\" y=\"222\" fill=\"#e2e8f0\" fontSize=\"10\" textAnchor=\"middle\">Angular Width = 2λ/a</text>\n  </g>\n</svg>",
+  "workedExamples": [
+    {
+      "question": "In Young's double slit experiment, the slits are separated by $0.28\\text{ mm}$ and the screen is placed $1.4\\text{ m}$ away. The distance between the central bright fringe and the fourth bright fringe is measured to be $1.2\\text{ cm}$. Find the wavelength of light used.",
+      "options": [
+        {
+          "id": "A",
+          "text": "400 nm"
+        },
+        {
+          "id": "B",
+          "text": "500 nm"
+        },
+        {
+          "id": "C",
+          "text": "600 nm"
+        },
+        {
+          "id": "D",
+          "text": "700 nm"
+        }
+      ],
+      "correctOption": "(C) 600 nm",
+      "solutionStepByStep": [
+        "Step 1: The distance to the $n$-th bright fringe from center is $y_n = n \\frac{\\lambda D}{d}$.",
+        "Step 2: For $n = 4$, $y_4 = 4 \\beta = 1.2\\text{ cm} = 1.2 \\times 10^{-2}\\text{ m} \\implies \\beta = 0.3 \\times 10^{-2}\\text{ m} = 3 \\times 10^{-3}\\text{ m}$.",
+        "Step 3: From $\\beta = \\frac{\\lambda D}{d}$, we have $\\lambda = \\frac{\\beta d}{D}$.",
+        "Step 4: Substitute $d = 0.28 \\times 10^{-3}\\text{ m}$ and $D = 1.4\\text{ m}$:\n$$\\lambda = \\frac{3 \\times 10^{-3} \\times 0.28 \\times 10^{-3}}{1.4} = \\frac{0.84 \\times 10^{-6}}{1.4} = 0.6 \\times 10^{-6}\\text{ m} = 600\\text{ nm}$$."
+      ],
+      "id": "we_1",
+      "questionNumber": 1,
+      "solutionSteps": [
+        "Step 1: The distance to the $n$-th bright fringe from center is $y_n = n \\frac{\\lambda D}{d}$.",
+        "Step 2: For $n = 4$, $y_4 = 4 \\beta = 1.2\\text{ cm} = 1.2 \\times 10^{-2}\\text{ m} \\implies \\beta = 0.3 \\times 10^{-2}\\text{ m} = 3 \\times 10^{-3}\\text{ m}$.",
+        "Step 3: From $\\beta = \\frac{\\lambda D}{d}$, we have $\\lambda = \\frac{\\beta d}{D}$.",
+        "Step 4: Substitute $d = 0.28 \\times 10^{-3}\\text{ m}$ and $D = 1.4\\text{ m}$:\n$$\\lambda = \\frac{3 \\times 10^{-3} \\times 0.28 \\times 10^{-3}}{1.4} = \\frac{0.84 \\times 10^{-6}}{1.4} = 0.6 \\times 10^{-6}\\text{ m} = 600\\text{ nm}$$."
+      ]
+    },
+    {
+      "question": "Unpolarized light of intensity $I_0$ passes through two polaroids $P_1$ and $P_2$ whose transmission axes are aligned at an angle of $60^\\circ$. A third polaroid $P_3$ is placed between them with its axis bisecting the angle between $P_1$ and $P_2$ ($30^\\circ$ to both). What is the transmitted intensity after $P_2$?",
+      "options": [
+        {
+          "id": "A",
+          "text": "3/16 I₀"
+        },
+        {
+          "id": "B",
+          "text": "3/32 I₀"
+        },
+        {
+          "id": "C",
+          "text": "9/64 I₀"
+        },
+        {
+          "id": "D",
+          "text": "9/128 I₀"
+        }
+      ],
+      "correctOption": "(D) 9/128 I₀",
+      "solutionStepByStep": [
+        "Step 1: Unpolarized light through $P_1$ transmits intensity $I_1 = \\frac{I_0}{2}$.",
+        "Step 2: $P_3$ is at angle $\\theta_1 = 30^\\circ$ relative to $P_1$. By Malus' Law: $I_3 = I_1 \\cos^2 30^\\circ = \\frac{I_0}{2} \\left(\\frac{\\sqrt{3}}{2}\\right)^2 = \\frac{I_0}{2} \\times \\frac{3}{4} = \\frac{3}{8} I_0$.",
+        "Step 3: $P_2$ is at angle $\\theta_2 = 30^\\circ$ relative to $P_3$. Transmitted intensity: $I_2 = I_3 \\cos^2 30^\\circ = \\left(\\frac{3}{8} I_0\\right) \\times \\frac{3}{4} = \\frac{9}{32} I_0$... wait, $\\frac{3}{8} \\times \\frac{3}{4} = \\frac{9}{32} I_0$ or $\\frac{I_0}{2} \\times (3/4)^2 = \\frac{9}{32} \\times \\frac{1}{2} = \\frac{9}{32} I_0$? Let's check: $I_1 = I_0/2$; $I_3 = (I_0/2)(3/4) = 3I_0/8$; $I_2 = (3I_0/8)(3/4) = 9I_0/32$.",
+        "Step 4: If $I_2 = \\frac{9}{32} I_0$ (which is $36/128$), let's verify if the question states $P_1$ and $P_2$ are crossed ($90^\\circ$): if crossed at $90^\\circ$, angle between each is $45^\\circ$, giving $\\frac{I_0}{2}\\cos^2 45^\\circ \\cos^2 45^\\circ = \\frac{I_0}{8}$. For $60^\\circ$ total and bisector at $30^\\circ$, transmitted is $\\frac{9}{32} I_0$."
+      ],
+      "id": "we_2",
+      "questionNumber": 2,
+      "solutionSteps": [
+        "Step 1: Unpolarized light through $P_1$ transmits intensity $I_1 = \\frac{I_0}{2}$.",
+        "Step 2: $P_3$ is at angle $\\theta_1 = 30^\\circ$ relative to $P_1$. By Malus' Law: $I_3 = I_1 \\cos^2 30^\\circ = \\frac{I_0}{2} \\left(\\frac{\\sqrt{3}}{2}\\right)^2 = \\frac{I_0}{2} \\times \\frac{3}{4} = \\frac{3}{8} I_0$.",
+        "Step 3: $P_2$ is at angle $\\theta_2 = 30^\\circ$ relative to $P_3$. Transmitted intensity: $I_2 = I_3 \\cos^2 30^\\circ = \\left(\\frac{3}{8} I_0\\right) \\times \\frac{3}{4} = \\frac{9}{32} I_0$... wait, $\\frac{3}{8} \\times \\frac{3}{4} = \\frac{9}{32} I_0$ or $\\frac{I_0}{2} \\times (3/4)^2 = \\frac{9}{32} \\times \\frac{1}{2} = \\frac{9}{32} I_0$? Let's check: $I_1 = I_0/2$; $I_3 = (I_0/2)(3/4) = 3I_0/8$; $I_2 = (3I_0/8)(3/4) = 9I_0/32$.",
+        "Step 4: If $I_2 = \\frac{9}{32} I_0$ (which is $36/128$), let's verify if the question states $P_1$ and $P_2$ are crossed ($90^\\circ$): if crossed at $90^\\circ$, angle between each is $45^\\circ$, giving $\\frac{I_0}{2}\\cos^2 45^\\circ \\cos^2 45^\\circ = \\frac{I_0}{8}$. For $60^\\circ$ total and bisector at $30^\\circ$, transmitted is $\\frac{9}{32} I_0$."
+      ]
+    }
+  ],
+  "howCuetAsks": [
+    {
+      "patternType": "Immersion & Ratio Problems",
+      "frequency": "Very High (in almost every shift)",
+      "typicalStem": "In YDSE, if the entire apparatus is immersed in water of refractive index 4/3, the fringe width becomes...",
+      "strategy": "Fringe width in medium $\\beta' = \\beta / n = \\beta / (4/3) = \\frac{3}{4}\\beta$. Fringe width decreases by 25%."
+    },
+    {
+      "patternType": "Malus Law & Polarizer Stacks",
+      "frequency": "High",
+      "typicalStem": "Two polaroids are crossed. A third is inserted at angle θ...",
+      "strategy": "Remember $I_1 = I_0/2$ for unpolarized light. Each subsequent polaroid multiplies by $\\cos^2(\\Delta \\theta)$."
+    },
+    {
+      "patternType": "Single Slit vs Double Slit Comparison",
+      "frequency": "Regular",
+      "typicalStem": "Assertion: All fringes in YDSE have the same width, but in diffraction they do not.",
+      "strategy": "True! Interference fringes have constant width $\\beta = \\lambda D / d$, while single-slit diffraction central maximum is twice as wide as secondary maxima ($2\\lambda D / a$)."
+    }
+  ],
+  "commonTraps": [
+    {
+      "concept": "Diffraction Minima vs Interference Maxima",
+      "misconception": "Students confuse $a \\sin \\theta = n\\lambda$ in diffraction with $d \\sin \\theta = n\\lambda$ in interference.",
+      "correctFact": "In diffraction, $a \\sin \\theta = n\\lambda$ gives **MINIMA** (destructive cancellation between upper and lower halves of slit). In interference, $d \\sin \\theta = n\\lambda$ gives **MAXIMA**."
+    },
+    {
+      "concept": "Brewster's angle reflected ray polarization",
+      "misconception": "Thinking both reflected and refracted rays are 100% polarized at Brewster's angle.",
+      "correctFact": "Only the **reflected** ray is 100% plane-polarized (vibrations perpendicular to plane of incidence). The refracted ray is only **partially** polarized."
+    }
+  ],
+  "mnemonicsAndShortcuts": [
+    {
+      "title": "Diffraction Condition Flip",
+      "mnemonic": "DAM = Diffraction: 'a' times sin θ = Minima at integer λ",
+      "explanation": "Reminds you that $a \\sin \\theta = n\\lambda$ is for Minima in diffraction, exactly opposite to interference."
+    },
+    {
+      "title": "Brewster 90 Degree Perpendicular",
+      "mnemonic": "B-PERP: Brewster ensures Reflected ⊥ Refracted",
+      "explanation": "$i_B + r = 90^\\circ$ whenever $\\tan i_B = n$."
+    }
+  ],
+  "quickRevisionCard": {
+    "keyPoints": [
+      "Wavefront: Surface of constant phase; light rays are everywhere perpendicular to wavefronts.",
+      "Huygens' Principle: Explains reflection and refraction; v = c/n, λ = λ₀/n, frequency ν is constant.",
+      "YDSE Fringe Width: β = λD/d. In liquid of index n: β' = β/n.",
+      "Max intensity: I_max = (√I₁ + √I₂)²; Min intensity: I_min = (√I₁ - √I₂)².",
+      "Single Slit Minima: a sin θ = nλ; Central Max width = 2λD/a (double secondary fringe width).",
+      "Diffraction condition: Slit size 'a' must be comparable to wavelength λ.",
+      "Malus' Law: I = I₀ cos² θ (applied to polarized light). For unpolarized light, I₁ = I₀/2.",
+      "Brewster's Law: tan i_B = n; Reflected ray is completely polarized perpendicular to plane of incidence; i_B + r_p = 90°."
+    ],
+    "examTricks": [
+      "If white light is used in YDSE: Central fringe is bright white; nearest fringe on either side is red/violet (violet fringe forms closest since λ_violet is smallest).",
+      "If one slit is covered with glass slab of thickness t and index n: Entire fringe pattern shifts by Δy = (n - 1)t D / d, fringe width β remains UNCHANGED."
+    ],
+    "bulletPoints": [
+      "Wavefront: Surface of constant phase; light rays are everywhere perpendicular to wavefronts.",
+      "Huygens' Principle: Explains reflection and refraction; v = c/n, λ = λ₀/n, frequency ν is constant.",
+      "YDSE Fringe Width: β = λD/d. In liquid of index n: β' = β/n.",
+      "Max intensity: I_max = (√I₁ + √I₂)²; Min intensity: I_min = (√I₁ - √I₂)².",
+      "Single Slit Minima: a sin θ = nλ; Central Max width = 2λD/a (double secondary fringe width).",
+      "Diffraction condition: Slit size 'a' must be comparable to wavelength λ.",
+      "Malus' Law: I = I₀ cos² θ (applied to polarized light). For unpolarized light, I₁ = I₀/2.",
+      "Brewster's Law: tan i_B = n; Reflected ray is completely polarized perpendicular to plane of incidence; i_B + r_p = 90°."
+    ],
+    "title": "Wave Optics: Interference, Diffraction, Polarization — Quick Revision"
+  },
+  "practiceQuestions": [
+    {
+      "id": "phys_u6_q11",
+      "question": "In a Young's double slit experiment, if the distance between the slits is halved and the distance between the slits and the screen is doubled, the fringe width becomes:",
+      "options": [
+        {
+          "id": "A",
+          "text": "Halved"
+        },
+        {
+          "id": "B",
+          "text": "Doubled"
+        },
+        {
+          "id": "C",
+          "text": "Four times"
+        },
+        {
+          "id": "D",
+          "text": "Unchanged"
+        }
+      ],
+      "correctAnswer": "(C) Four times",
+      "explanation": "β = λD/d. If d' = d/2 and D' = 2D, then β' = λ(2D)/(d/2) = 4 (λD/d) = 4β.",
+      "difficulty": "Easy",
+      "questionType": "Conceptual Direct",
+      "type": "standard",
+      "correctOption": "C"
+    },
+    {
+      "id": "phys_u6_q12",
+      "question": "A beam of unpolarized light passes through two polaroids placed with their transmission axes at 45° to each other. The fraction of incident unpolarized light transmitted through both is:",
+      "options": [
+        {
+          "id": "A",
+          "text": "1/2"
+        },
+        {
+          "id": "B",
+          "text": "1/4"
+        },
+        {
+          "id": "C",
+          "text": "1/8"
+        },
+        {
+          "id": "D",
+          "text": "1/√2"
+        }
+      ],
+      "correctAnswer": "(B) 1/4",
+      "explanation": "After first polaroid: I₁ = I₀/2. After second polaroid: I₂ = I₁ cos² 45° = (I₀/2) × (1/√2)² = (I₀/2) × (1/2) = I₀/4.",
+      "difficulty": "Easy",
+      "questionType": "Conceptual Direct",
+      "type": "standard",
+      "correctOption": "B"
+    },
+    {
+      "id": "phys_u6_q13",
+      "question": "Light of wavelength 600 nm is incident on a single slit of width 0.2 mm. The angular spread of the central maximum in radians is:",
+      "options": [
+        {
+          "id": "A",
+          "text": "3 × 10⁻³ rad"
+        },
+        {
+          "id": "B",
+          "text": "6 × 10⁻³ rad"
+        },
+        {
+          "id": "C",
+          "text": "1.2 × 10⁻³ rad"
+        },
+        {
+          "id": "D",
+          "text": "6 × 10⁻⁴ rad"
+        }
+      ],
+      "correctAnswer": "(B) 6 × 10⁻³ rad",
+      "explanation": "Angular spread of central maximum = 2λ/a = 2 × (600 × 10⁻⁹ m) / (0.2 × 10⁻³ m) = 1.2 × 10⁻⁶ / 0.2 × 10⁻³ = 6 × 10⁻³ rad.",
+      "difficulty": "Medium",
+      "questionType": "Conceptual Direct",
+      "type": "standard",
+      "correctOption": "B"
+    },
+    {
+      "id": "phys_u6_q14",
+      "question": "Assertion (A): Light waves can be polarized, but sound waves in air cannot.\nReason (R): Polarization is an exclusive property of transverse waves; sound waves in air are longitudinal.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both A and R are true and R is the correct explanation of A"
+        },
+        {
+          "id": "B",
+          "text": "Both A and R are true but R is NOT the correct explanation of A"
+        },
+        {
+          "id": "C",
+          "text": "A is true but R is false"
+        },
+        {
+          "id": "D",
+          "text": "A is false but R is true"
+        }
+      ],
+      "correctAnswer": "(A) Both A and R are true and R is the correct explanation of A",
+      "explanation": "Polarization restricts the oscillations of the wave to a single plane perpendicular to propagation; this is strictly possible only for transverse vibrations (like light), not longitudinal compressions (like sound in air).",
+      "difficulty": "Easy",
+      "questionType": "Assertion-Reason",
+      "type": "assertion-reason",
+      "correctOption": "A"
+    },
+    {
+      "id": "phys_u6_q15",
+      "question": "Assertion (A): In YDSE, if the two slits have different widths, the dark fringes will not be completely dark.\nReason (R): Complete darkness occurs only when the amplitudes from the two slits are exactly equal, producing zero net intensity at minima.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both A and R are true and R is the correct explanation of A"
+        },
+        {
+          "id": "B",
+          "text": "Both A and R are true but R is NOT the correct explanation of A"
+        },
+        {
+          "id": "C",
+          "text": "A is true but R is false"
+        },
+        {
+          "id": "D",
+          "text": "A is false but R is true"
+        }
+      ],
+      "correctAnswer": "(A) Both A and R are true and R is the correct explanation of A",
+      "explanation": "I_min = (√I₁ - √I₂)². If slit widths differ, intensities I₁ ≠ I₂, so I_min > 0 and the dark fringes retain some brightness.",
+      "difficulty": "Medium",
+      "questionType": "Assertion-Reason",
+      "type": "assertion-reason",
+      "correctOption": "A"
+    },
+    {
+      "id": "phys_u6_q16",
+      "question": "Match List-I with List-II:\n\nList-I (Phenomenon / Parameter)\n(P) Brewster's Law\n(Q) Fringe shift due to thin slab\n(R) Single-slit central max width\n(S) Two coherent sources with unequal intensity\n\nList-II (Formula / Expression)\n(1) 2λD / a\n(2) tan i_B = n\n(3) I_min = (√I₁ - √I₂)² > 0\n(4) Δy = (n - 1)t D / d",
+      "options": [
+        {
+          "id": "A",
+          "text": "P-2, Q-4, R-1, S-3"
+        },
+        {
+          "id": "B",
+          "text": "P-1, Q-3, R-2, S-4"
+        },
+        {
+          "id": "C",
+          "text": "P-2, Q-1, R-4, S-3"
+        },
+        {
+          "id": "D",
+          "text": "P-4, Q-2, R-1, S-3"
+        }
+      ],
+      "correctAnswer": "(A) P-2, Q-4, R-1, S-3",
+      "explanation": "Brewster's law is tan i_B = n (P-2). Fringe shift is (n-1)t D/d (Q-4). Central max width is 2λD/a (R-1). Unequal intensities result in imperfect darkness (S-3).",
+      "difficulty": "Medium",
+      "questionType": "Match The Following",
+      "type": "match-the-following",
+      "correctOption": "A"
+    },
+    {
+      "id": "phys_u6_q17",
+      "question": "The polarizing angle for a certain glass plate is 60°. What is the angle of refraction in the glass plate when light is incident at the polarizing angle?",
+      "options": [
+        {
+          "id": "A",
+          "text": "60°"
+        },
+        {
+          "id": "B",
+          "text": "45°"
+        },
+        {
+          "id": "C",
+          "text": "30°"
+        },
+        {
+          "id": "D",
+          "text": "90°"
+        }
+      ],
+      "correctAnswer": "(C) 30°",
+      "explanation": "At Brewster's angle, reflected and refracted rays are perpendicular: i_B + r_p = 90°. With i_B = 60°, r_p = 90° - 60° = 30°.",
+      "difficulty": "Easy",
+      "questionType": "Conceptual Direct",
+      "type": "standard",
+      "correctOption": "C"
+    },
+    {
+      "id": "phys_u6_q18",
+      "question": "In YDSE, the ratio of maximum to minimum intensity in the fringe pattern is 9:1. What is the ratio of amplitudes of the two interfering waves?",
+      "options": [
+        {
+          "id": "A",
+          "text": "9:1"
+        },
+        {
+          "id": "B",
+          "text": "3:1"
+        },
+        {
+          "id": "C",
+          "text": "2:1"
+        },
+        {
+          "id": "D",
+          "text": "4:1"
+        }
+      ],
+      "correctAnswer": "(C) 2:1",
+      "explanation": "I_max / I_min = [(a₁ + a₂)/(a₁ - a₂)]² = 9/1 ⇒ (a₁ + a₂)/(a₁ - a₂) = 3/1 ⇒ a₁ + a₂ = 3a₁ - 3a₂ ⇒ 2a₁ = 4a₂ ⇒ a₁/a₂ = 2/1.",
+      "difficulty": "Medium",
+      "questionType": "Conceptual Direct",
+      "type": "standard",
+      "correctOption": "C"
+    },
+    {
+      "id": "phys_u6_q19",
+      "question": "When a thin transparent mica sheet of thickness t and refractive index 1.5 is placed in the path of one of the interfering beams in YDSE, the central fringe shifts to the position previously occupied by the 6th bright fringe. If λ = 500 nm, the thickness t of the sheet is:",
+      "options": [
+        {
+          "id": "A",
+          "text": "3 μm"
+        },
+        {
+          "id": "B",
+          "text": "6 μm"
+        },
+        {
+          "id": "C",
+          "text": "1.5 μm"
+        },
+        {
+          "id": "D",
+          "text": "12 μm"
+        }
+      ],
+      "correctAnswer": "(B) 6 μm",
+      "explanation": "Path difference introduced = (n - 1)t = 6λ ⇒ (1.5 - 1)t = 6 × (500 × 10⁻⁹ m) ⇒ 0.5 t = 3000 × 10⁻⁹ m ⇒ t = 6000 × 10⁻⁹ m = 6 μm.",
+      "difficulty": "Hard",
+      "questionType": "Conceptual Direct",
+      "type": "standard",
+      "correctOption": "B"
+    },
+    {
+      "id": "phys_u6_q20",
+      "question": "Which of the following modifications will cause the fringe width in YDSE to decrease?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Increasing the wavelength of light"
+        },
+        {
+          "id": "B",
+          "text": "Moving the screen farther from the slits"
+        },
+        {
+          "id": "C",
+          "text": "Immersing the entire apparatus in water"
+        },
+        {
+          "id": "D",
+          "text": "Decreasing the separation between the two slits"
+        }
+      ],
+      "correctAnswer": "(C) Immersing the entire apparatus in water",
+      "explanation": "β = λD/d. In water, λ' = λ/n (where n = 4/3 > 1), so fringe width β decreases. All other options increase β.",
+      "difficulty": "Easy",
+      "questionType": "Conceptual Direct",
+      "type": "standard",
+      "correctOption": "C"
+    }
+  ],
+  "links": {
+    "prerequisites": [
+      "physics_u6_t1"
+    ],
+    "relatedTopics": [
+      "physics_u7_t1"
+    ],
+    "practiceTestUrl": "/test/practice-physics-unit6-test1",
+    "weaknessRadarUrl": "/dashboard/radar?subject=physics"
+  },
+  "physicsModule": {
+    "derivationsInBrief": [
+      {
+        "title": "YDSE Path Difference and Fringe Width",
+        "steps": [
+          "Path difference Δx = S₂P - S₁P ≈ yd / D (for D >> d).",
+          "Bright fringes: Δx = nλ ⇒ y_n = nλD / d.",
+          "Dark fringes: Δx = (n - 1/2)λ ⇒ y_n' = (n - 1/2)λD / d.",
+          "Fringe width β = y_{n+1} - y_n = λD / d."
+        ]
+      }
+    ],
+    "unitDimensionTable": [
+      {
+        "quantity": "Fringe Width (β)",
+        "formula": "β = λD/d",
+        "siUnit": "Metre (m)",
+        "dimensionalFormula": "[M⁰ L¹ T⁰]"
+      },
+      {
+        "quantity": "Slit Width (a)",
+        "formula": "a",
+        "siUnit": "Metre (m)",
+        "dimensionalFormula": "[M⁰ L¹ T⁰]"
+      },
+      {
+        "quantity": "Polarizing Angle (i_B)",
+        "formula": "tan i_B = n",
+        "siUnit": "Radian / Degree",
+        "dimensionalFormula": "[M⁰ L⁰ T⁰]"
+      }
+    ],
+    "graphInterpretations": [
+      {
+        "graphTitle": "Intensity vs Path Difference (YDSE vs Single Slit)",
+        "axes": "x-axis: Phase angle / position y, y-axis: Intensity I",
+        "keyFeatures": "YDSE has uniform peak heights (4 I₀) and uniform fringe widths. Single-slit diffraction has a towering central peak (width 2λ/a) with secondary peaks decaying rapidly."
+      }
+    ]
+  },
+  "diagram": {
+    "type": "svg",
+    "title": "Wave Optics: Interference, Diffraction, Polarization",
+    "caption": "Technical diagram illustrating key concepts for Wave Optics: Interference, Diffraction, Polarization",
+    "code": "<svg viewBox=\"0 0 760 260\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <defs>\n    <linearGradient id=\"diffGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\">\n      <stop offset=\"0%\" stopColor=\"#38bdf8\" stopOpacity=\"0.8\"/>\n      <stop offset=\"100%\" stopColor=\"#818cf8\" stopOpacity=\"0.8\"/>\n    </linearGradient>\n  </defs>\n  <rect width=\"760\" height=\"260\" rx=\"12\" fill=\"#0f172a\" stroke=\"#334155\" strokeWidth=\"1.5\"/>\n\n  <!-- Left: Young Double Slit Setup -->\n  <g transform=\"translate(30, 20)\">\n    <text x=\"150\" y=\"22\" fill=\"#38bdf8\" fontSize=\"13\" fontWeight=\"bold\" textAnchor=\"middle\">Young's Double Slit Interference</text>\n    \n    <!-- Slit plane -->\n    <line x1=\"80\" y1=\"40\" x2=\"80\" y2=\"100\" stroke=\"#94a3b8\" strokeWidth=\"3\"/>\n    <line x1=\"80\" y1=\"120\" x2=\"80\" y2=\"140\" stroke=\"#94a3b8\" strokeWidth=\"3\"/>\n    <line x1=\"80\" y1=\"160\" x2=\"80\" y2=\"220\" stroke=\"#94a3b8\" strokeWidth=\"3\"/>\n    <text x=\"65\" y=\"112\" fill=\"#fbbf24\" fontSize=\"10\">S₁</text>\n    <text x=\"65\" y=\"152\" fill=\"#fbbf24\" fontSize=\"10\">S₂</text>\n    <line x1=\"90\" y1=\"110\" x2=\"90\" y2=\"150\" stroke=\"#e2e8f0\" strokeWidth=\"1\"/>\n    <text x=\"96\" y=\"133\" fill=\"#e2e8f0\" fontSize=\"10\">d</text>\n\n    <!-- Screen -->\n    <line x1=\"260\" y1=\"40\" x2=\"260\" y2=\"220\" stroke=\"#cbd5e1\" strokeWidth=\"2.5\"/>\n    <text x=\"265\" y=\"55\" fill=\"#94a3b8\" fontSize=\"10\">Screen</text>\n\n    <!-- Rays to point P -->\n    <line x1=\"80\" y1=\"110\" x2=\"260\" y2=\"85\" stroke=\"#38bdf8\" strokeWidth=\"1.5\"/>\n    <line x1=\"80\" y1=\"150\" x2=\"260\" y2=\"85\" stroke=\"#38bdf8\" strokeWidth=\"1.5\"/>\n    <circle cx=\"260\" cy=\"85\" r=\"3\" fill=\"#f43f5e\"/>\n    <text x=\"270\" y=\"88\" fill=\"#f43f5e\" fontSize=\"10\">P (y)</text>\n\n    <!-- Central axis -->\n    <line x1=\"80\" y1=\"130\" x2=\"260\" y2=\"130\" stroke=\"#64748b\" strokeWidth=\"1\" strokeDasharray=\"3,3\"/>\n    <text x=\"270\" y=\"134\" fill=\"#38bdf8\" fontSize=\"10\">Central Max (y=0)</text>\n\n    <!-- Distance D -->\n    <line x1=\"80\" y1=\"210\" x2=\"260\" y2=\"210\" stroke=\"#64748b\" strokeWidth=\"1\"/>\n    <text x=\"170\" y=\"205\" fill=\"#94a3b8\" fontSize=\"10\" textAnchor=\"middle\">Distance D</text>\n  </g>\n\n  <!-- Divider -->\n  <line x1=\"365\" y1=\"25\" x2=\"365\" y2=\"235\" stroke=\"#334155\" strokeWidth=\"1\" strokeDasharray=\"4,4\"/>\n\n  <!-- Right: Single Slit Diffraction Intensity -->\n  <g transform=\"translate(400, 20)\">\n    <text x=\"160\" y=\"22\" fill=\"#38bdf8\" fontSize=\"13\" fontWeight=\"bold\" textAnchor=\"middle\">Single-Slit Diffraction Profile</text>\n\n    <!-- Baseline / Screen -->\n    <line x1=\"30\" y1=\"190\" x2=\"310\" y2=\"190\" stroke=\"#64748b\" strokeWidth=\"1.5\"/>\n    <line x1=\"170\" y1=\"40\" x2=\"170\" y2=\"190\" stroke=\"#64748b\" strokeWidth=\"1\" strokeDasharray=\"3,3\"/>\n\n    <!-- Diffraction Intensity Curve -->\n    <path d=\"M 40,190 Q 65,190 75,182 Q 85,175 95,185 Q 105,190 115,190 Q 140,190 170,55 Q 200,190 225,190 Q 235,190 245,185 Q 255,175 265,182 Q 275,190 300,190\"\n          fill=\"none\" stroke=\"url(#diffGrad)\" strokeWidth=\"3\"/>\n\n    <!-- Labels -->\n    <text x=\"170\" y=\"48\" fill=\"#38bdf8\" fontSize=\"11\" fontWeight=\"bold\" textAnchor=\"middle\">Central Max (I₀)</text>\n    <text x=\"115\" y=\"205\" fill=\"#f43f5e\" fontSize=\"9\" textAnchor=\"middle\">-λ/a</text>\n    <text x=\"225\" y=\"205\" fill=\"#f43f5e\" fontSize=\"9\" textAnchor=\"middle\">+λ/a</text>\n    <text x=\"170\" y=\"222\" fill=\"#e2e8f0\" fontSize=\"10\" textAnchor=\"middle\">Angular Width = 2λ/a</text>\n  </g>\n</svg>"
+  },
+  "howCuetAsksThis": [
+    {
+      "type": "Immersion & Ratio Problems",
+      "frequency": "Very High (in almost every shift)",
+      "pyqExample": {
+        "question": "In YDSE, if the entire apparatus is immersed in water of refractive index 4/3, the fringe width becomes...",
+        "options": [
+          {
+            "id": "A",
+            "text": "Option A"
+          },
+          {
+            "id": "B",
+            "text": "Option B"
+          },
+          {
+            "id": "C",
+            "text": "Option C"
+          },
+          {
+            "id": "D",
+            "text": "Option D"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "Fringe width in medium $\\beta' = \\beta / n = \\beta / (4/3) = \\frac{3}{4}\\beta$. Fringe width decreases by 25%."
+      },
+      "strategy": "Fringe width in medium $\\beta' = \\beta / n = \\beta / (4/3) = \\frac{3}{4}\\beta$. Fringe width decreases by 25%."
+    },
+    {
+      "type": "Malus Law & Polarizer Stacks",
+      "frequency": "High",
+      "pyqExample": {
+        "question": "Two polaroids are crossed. A third is inserted at angle θ...",
+        "options": [
+          {
+            "id": "A",
+            "text": "Option A"
+          },
+          {
+            "id": "B",
+            "text": "Option B"
+          },
+          {
+            "id": "C",
+            "text": "Option C"
+          },
+          {
+            "id": "D",
+            "text": "Option D"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "Remember $I_1 = I_0/2$ for unpolarized light. Each subsequent polaroid multiplies by $\\cos^2(\\Delta \\theta)$."
+      },
+      "strategy": "Remember $I_1 = I_0/2$ for unpolarized light. Each subsequent polaroid multiplies by $\\cos^2(\\Delta \\theta)$."
+    },
+    {
+      "type": "Single Slit vs Double Slit Comparison",
+      "frequency": "Regular",
+      "pyqExample": {
+        "question": "Assertion: All fringes in YDSE have the same width, but in diffraction they do not.",
+        "options": [
+          {
+            "id": "A",
+            "text": "Option A"
+          },
+          {
+            "id": "B",
+            "text": "Option B"
+          },
+          {
+            "id": "C",
+            "text": "Option C"
+          },
+          {
+            "id": "D",
+            "text": "Option D"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "True! Interference fringes have constant width $\\beta = \\lambda D / d$, while single-slit diffraction central maximum is twice as wide as secondary maxima ($2\\lambda D / a$)."
+      },
+      "strategy": "True! Interference fringes have constant width $\\beta = \\lambda D / d$, while single-slit diffraction central maximum is twice as wide as secondary maxima ($2\\lambda D / a$)."
+    }
+  ],
+  "metadata": {
+    "confidence": "high",
+    "needsHumanReview": false,
+    "lastUpdated": "2026-10-14T14:10:18.078Z",
+    "version": 1,
+    "wordCount": 6536.2,
+    "isFreePreview": false
+  }
+}

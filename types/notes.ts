@@ -13,7 +13,10 @@ export interface WorkedExample {
   solutionSteps?: string[];
   solutionStepByStep?: string[];
   solution?: string;
+  explanation?: string;
   cuetTip?: string;
+  cuetInsight?: string;
+  [key: string]: any;
 }
 
 export interface QuestionPattern {
@@ -28,15 +31,21 @@ export interface QuestionPattern {
     explanation?: string;
   };
   strategy: string;
+  [key: string]: any;
 }
 
 export interface CommonTrap {
   misconception?: string;
   concept?: string;
+  trap?: string;
   whyWrong?: string;
+  whyStudentsFail?: string;
   correctUnderstanding?: string;
   correctFact?: string;
+  correctConcept?: string;
+  howToAvoid?: string;
   trapOptionExample?: string;
+  [key: string]: any;
 }
 
 export interface PracticeMCQ {
@@ -90,29 +99,45 @@ export interface NoteDocument {
     class?: string;
     book?: string;
     chapterNumber?: number;
+    chapterNumbers?: number[];
     chapterName?: string;
     sections?: string[];
+    [key: string]: any;
   };
   cuetRelevance: {
-    level: "High" | "Medium" | "Low" | string;
+    level?: "High" | "Medium" | "Low" | string;
     pyqFrequency?: string;
     totalPyqsInRepo?: number;
     weightagePercentage?: number;
+    expectedQuestions?: string;
+    examYears?: string[];
+    totalAppearances?: number;
+    [key: string]: any;
   };
-  summary30Seconds: string[];
+  summary30Seconds?: string[];
+  summary30s?: string[];
+  thirtySecondSummary?: string[];
+  shortSummary?: string[];
   coreConcepts: {
+    id?: string;
     title: string;
-    content: string;
+    content?: string;
+    explanation?: string;
     ncertPointers?: string[];
+    ncertPointer?: string;
+    keyTakeaways?: string[];
+    [key: string]: any;
   }[];
-  keyFormulasAndTables: FormulaDefinitionItem[];
+  keyFormulasAndTables?: FormulaDefinitionItem[];
+  keyFormulas?: any[];
+  keyFacts?: any[];
   diagram?: VisualDiagram;
   diagramSvg?: string;
   workedExamples?: WorkedExample[];
   howCuetAsksThis?: QuestionPattern[];
   howCuetAsks?: QuestionPattern[];
   commonTraps: CommonTrap[];
-  mnemonicsAndShortcuts: {
+  mnemonicsAndShortcuts?: {
     title?: string;
     mnemonic?: string;
     rule?: string;
@@ -120,7 +145,9 @@ export interface NoteDocument {
     whenToApply?: string;
     explanation?: string;
     notes?: string;
+    [key: string]: any;
   }[];
+  mnemonics?: any[];
   quickRevisionCard: {
     title?: string;
     bulletPoints?: string[];

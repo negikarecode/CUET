@@ -160,8 +160,14 @@ export function NoteReader({ note }: Props) {
               }`}
             >
               <CheckCircle2 className={`w-3.5 h-3.5 mr-1.5 ${isRevised ? "fill-emerald-500" : ""}`} />
-              {isRevised ? "Revised" : "Mark Revised"}
+              {isRevised ? "Revised (Day 1)" : "Mark Revised"}
             </button>
+
+            {isRevised && (
+              <span className="hidden sm:inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                Spaced: Day 3 in 48h
+              </span>
+            )}
 
             <button
               onClick={handlePrint}
@@ -307,7 +313,7 @@ export function NoteReader({ note }: Props) {
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">
                       {concept.title}
                     </h3>
-                    <NotesMarkdownRenderer content={concept.content} />
+                    <NotesMarkdownRenderer content={concept.content || concept.explanation || ""} />
                     {concept.ncertPointers && concept.ncertPointers.length > 0 && (
                       <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80">
                         <span className="text-xs font-semibold uppercase text-slate-400 dark:text-slate-500 tracking-wider">
@@ -587,7 +593,7 @@ export function NoteReader({ note }: Props) {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {note.mnemonicsAndShortcuts.map((m, idx) => (
+                  {((note.mnemonicsAndShortcuts || note.mnemonics || []) as any[]).map((m: any, idx: number) => (
                     <div
                       key={idx}
                       className="bg-amber-50/50 dark:bg-amber-950/20 rounded-2xl p-5 border border-amber-200 dark:border-amber-900/60 shadow-sm space-y-2"
@@ -755,7 +761,7 @@ export function NoteReader({ note }: Props) {
           {/* RIGHT COLUMN: Quick Revision Card & User Stats (Desktop Sticky) */}
           <aside className="hidden lg:block lg:col-span-3 sticky top-24 space-y-6">
             {/* Quick Revision Card */}
-            <div className="bg-gradient-to-b from-sky-500/5 to-white dark:from-slate-900 dark:to-slate-900/80 rounded-2xl p-5 border border-sky-200/80 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="print-card-only bg-gradient-to-b from-sky-500/5 to-white dark:from-slate-900 dark:to-slate-900/80 rounded-2xl p-5 border border-sky-200/80 dark:border-slate-800 shadow-sm space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider flex items-center">
                   <Award className="w-4 h-4 mr-1.5" />

@@ -1,10 +1,11 @@
 import React from "react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getNoteBySlug } from "@/lib/notes/store";
 import { getTaxonomyTopic } from "@/lib/notes/taxonomy";
-import { getPYQEvidenceForTopic } from "@/lib/notes/pyq-evidence";
 import { NoteReader } from "@/components/notes/NoteReader";
 import { NoteDocument } from "@/types/notes";
+import { ArrowLeft, BookOpen, Clock, Target, ShieldCheck } from "lucide-react";
 
 interface Props {
   params: {
@@ -19,172 +20,86 @@ export function generateMetadata({ params }: Props) {
 
   return {
     title: `${topic.title} Notes — ${topic.subjectName} Unit ${topic.unitNumber} | CUET-UG`,
-    description: `NCERT-aligned exam revision notes, key formulas, worked examples, and 10 practice MCQs for ${topic.title} in CUET-UG ${topic.subjectName}.`,
+    description: `NCERT-aligned exam revision notes, key formulas, worked examples, and practice MCQs for ${topic.title} in CUET-UG ${topic.subjectName}.`,
   };
 }
 
 export default function NoteDetailPage({ params }: Props) {
   const { subject: subjectFolder, slug } = params;
 
-  // 1. Try to load saved note from disk
-  let note: NoteDocument | null = getNoteBySlug(subjectFolder, slug);
+  // 1. Try to load verified saved note from disk
+  const note: NoteDocument | null = getNoteBySlug(subjectFolder, slug);
 
-  // 2. If not on disk, verify against canonical taxonomy
-  if (!note) {
-    const topic = getTaxonomyTopic(subjectFolder, slug);
-    if (!topic) {
-      notFound();
-    }
-
-    const pyq = getPYQEvidenceForTopic(subjectFolder, topic.title, topic.unitTitle);
-
-    // Build standard high-yield document for the topic
-    note = {
-      id: topic.id,
-      slug: topic.slug,
-      subject: topic.subjectFolder,
-      subjectName: topic.subjectName,
-      subjectCode: topic.subjectCode,
-      unitNumber: topic.unitNumber,
-      unitTitle: topic.unitTitle,
-      topicTitle: topic.title,
-      ncertReference: {
-        class: "Class 12",
-        book: `${topic.subjectName} NCERT`,
-        chapterNumber: topic.unitNumber,
-        chapterName: topic.unitTitle,
-        sections: [`Chapter ${topic.unitNumber}: ${topic.title}`],
-      },
-      cuetRelevance: {
-        level: pyq.relevance,
-        pyqFrequency: pyq.frequencyDescription,
-        totalPyqsInRepo: pyq.totalPyqs,
-        weightagePercentage: Math.max(3, Math.min(10, Math.round((pyq.totalPyqs / 500) * 100))),
-      },
-      summary30Seconds: [
-        `Key syllabus concept for **${topic.title}** under Unit ${topic.unitNumber}: ${topic.unitTitle}.`,
-        `Directly aligned to NCERT Class 12 curriculum and tested frequently in NTA shift papers.`,
-        `Focus on standard definitions, fundamental equations, and high-frequency problem archetypes.`,
-      ],
-      coreConcepts: [
-        {
-          title: `Fundamental Principles of ${topic.title}`,
-          content: `In CUET-UG ${topic.subjectName}, questions from **${topic.title}** test direct conceptual understanding, core mathematical relations, and standard textbook definitions.\n\nStudents should review the foundational principles outlined in NCERT Chapter ${topic.unitNumber} and verify standard relations before attempting timed speed drills.`,
-          ncertPointers: [
-            `Standard definitions and fundamental properties strictly adhere to NCERT.`,
-            `Pay close attention to unit conversions and sign conventions.`,
-          ],
-        },
-      ],
-      keyFormulasAndTables: [
-        {
-          name: `${topic.title} Standard Formulation`,
-          formula: "\\text{Core Relation}",
-          symbols: "Standard notation according to NCERT",
-          siUnits: "Standard SI units",
-          applicationCondition: "Standard state / equilibrium conditions",
-        },
-      ],
-      diagramSvg: `<svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-  <rect width="760" height="220" rx="12" fill="#0f172a" stroke="#334155" strokeWidth="1.5"/>
-  <text x="380" y="90" textAnchor="middle" fill="#38bdf8" fontSize="16" fontWeight="bold">${topic.title}</text>
-  <text x="380" y="125" textAnchor="middle" fill="#94a3b8" fontSize="12">Unit ${topic.unitNumber}: ${topic.unitTitle} • ${topic.subjectName}</text>
-  <text x="380" y="155" textAnchor="middle" fill="#34d399" fontSize="11" fontWeight="bold">NCERT Class 12 Syllabus Aligned</text>
-</svg>`,
-      workedExamples: [
-        {
-          id: `${topic.id}_we1`,
-          questionNumber: 1,
-          question: `Which of the following correctly describes the fundamental characteristic of ${topic.title}?`,
-          options: [
-            { id: "A", text: `It strictly obeys the standard conservation principles outlined in NCERT Unit ${topic.unitNumber}` },
-            { id: "B", text: "It is completely independent of environmental conditions" },
-            { id: "C", text: "It violates standard equilibrium laws" },
-            { id: "D", text: "None of the above" },
-          ],
-          correctOption: "A",
-          solutionSteps: [
-            `Step 1: Refer to NCERT Class 12 ${topic.subjectName} chapter on ${topic.unitTitle}.`,
-            `Step 2: The fundamental properties strictly obey canonical conservation and equilibrium principles.`,
-            `Hence, Option A is correct.`,
-          ],
-          cuetTip: "Read the question stem carefully to avoid confusing standard conditions with extreme boundary cases.",
-        },
-      ],
-      howCuetAsksThis: [
-        {
-          type: "Direct Conceptual Recall",
-          frequency: "Regular",
-          pyqExample: {
-            question: `In official CUET shifts, questions on ${topic.title} primarily test canonical definitions and formulas.`,
-            options: [
-              { id: "A", text: "Option A" },
-              { id: "B", text: "Option B" },
-              { id: "C", text: "Option C" },
-              { id: "D", text: "Option D" },
-            ],
-            correctOption: "A",
-            explanation: "Direct application of NCERT formula.",
-          },
-          strategy: "Focus on exact formula recall and eliminate obviously mismatched dimensional units.",
-        },
-      ],
-      commonTraps: [
-        {
-          misconception: "Overlooking standard boundary conditions.",
-          whyWrong: "Equations apply under specific conditions outlined in NCERT.",
-          correctUnderstanding: "Always check applicability conditions before substituting numerical values.",
-        },
-      ],
-      mnemonicsAndShortcuts: [
-        {
-          rule: "Dimensional Analysis Shortcut",
-          shortcut: "Check units of each option before calculating full algebraic steps",
-          whenToApply: "Numerical MCQs with distinct option units",
-        },
-      ],
-      quickRevisionCard: {
-        title: `${topic.title} Quick Card`,
-        bulletPoints: [
-          `Unit ${topic.unitNumber}: ${topic.unitTitle}.`,
-          `NCERT Class 12 core chapter reference.`,
-          `Authentic CUET relevance: ${pyq.relevance}.`,
-          `Total shift questions analyzed: ${pyq.totalPyqs}.`,
-        ],
-      },
-      practiceQuestions: [
-        {
-          id: `${topic.id}_q1`,
-          question: `Which statement regarding ${topic.title} is correct according to NCERT?`,
-          type: "standard",
-          options: [
-            { id: "A", text: "It represents a core principle in the official CUET syllabus" },
-            { id: "B", text: "It has been excluded from the latest exam specification" },
-            { id: "C", text: "It applies only under zero-gravity conditions" },
-            { id: "D", text: "It does not have practical applications" },
-          ],
-          correctOption: "A",
-          explanation: `This topic is an integral part of the official CUET syllabus for ${topic.subjectName}.`,
-          difficulty: "easy",
-        },
-      ],
-      links: {
-        prerequisites: [],
-        relatedTopics: [],
-        practiceTestId: topic.practiceTestId,
-        practiceTestUrl: topic.practiceTestUrl,
-        weaknessReportUrl: topic.weaknessReportUrl,
-      },
-      metadata: {
-        confidence: "high",
-        needsHumanReview: false,
-        lastUpdated: new Date().toISOString(),
-        version: 1,
-        wordCount: 1200,
-        isFreePreview: topic.isFreePreview,
-      },
-    };
+  if (note) {
+    return <NoteReader note={note} />;
   }
 
-  return <NoteReader note={note} />;
+  // 2. If not on disk, verify against canonical taxonomy
+  const topic = getTaxonomyTopic(subjectFolder, slug);
+  if (!topic) {
+    notFound();
+  }
+
+  // 3. Strict Rule 4: Never render generic filler or placeholder notes.
+  // Display clean "Notes Coming Soon" with authentic syllabus grounding and practice test CTA.
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className="flex items-center gap-3">
+          <Link
+            href={`/dashboard/notes?subject=${encodeURIComponent(topic.subjectFolder)}`}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to {topic.subjectName} Notes
+          </Link>
+        </div>
+
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-12 border border-slate-200 dark:border-slate-800 shadow-sm text-center space-y-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
+            <Clock className="w-8 h-8" />
+          </div>
+
+          <div className="space-y-2 max-w-xl mx-auto">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              Academic Quality Gate Active
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              {topic.title}
+            </h1>
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+              Unit {topic.unitNumber}: {topic.unitTitle} • {topic.subjectName}
+            </p>
+          </div>
+
+          <div className="max-w-md mx-auto p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-left space-y-2">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              <BookOpen className="w-4 h-4 text-sky-500" />
+              Syllabus & NCERT Scope
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-300">
+              This topic is currently undergoing rigorous dual-solver mathematical verification and PYQ distractor analysis to ensure 100% data-driven accuracy before release.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <Link
+              href={topic.practiceTestUrl || `/dashboard/practice/${topic.subjectFolder}`}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold text-white bg-sky-600 hover:bg-sky-500 shadow-md shadow-sky-600/20 transition-all"
+            >
+              <Target className="w-4 h-4" />
+              Practice Authentic Shift PYQs Now
+            </Link>
+            <Link
+              href={`/dashboard/notes?subject=${encodeURIComponent(topic.subjectFolder)}`}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+            >
+              Explore Other Topics
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

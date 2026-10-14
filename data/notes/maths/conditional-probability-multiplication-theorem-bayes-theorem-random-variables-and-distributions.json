@@ -1,0 +1,596 @@
+{
+  "id": "maths_u6_t1",
+  "slug": "conditional-probability-multiplication-theorem-bayes-theorem-random-variables-and-distributions",
+  "subject": "maths",
+  "subjectName": "Mathematics",
+  "subjectCode": "319",
+  "unitNumber": 6,
+  "unitTitle": "Probability",
+  "topicTitle": "Conditional Probability, Multiplication Theorem, Bayes' Theorem, Random Variables and Distributions",
+  "ncertReference": {
+    "class": "Class 12",
+    "book": "Mathematics Part 2",
+    "chapterNumber": 6,
+    "chapterName": "Probability",
+    "sections": [
+      "13.1 Conditional Probability: Definition & Properties",
+      "13.2 Multiplication Theorem on Probability & Independent Events",
+      "13.3 Bayes' Theorem and Law of Total Probability",
+      "13.4 Random Variables and their Probability Distributions",
+      "13.5 Mean (Expectation) and Variance of a Random Variable",
+      "13.6 Bernoulli Trials and Binomial Distribution"
+    ]
+  },
+  "cuetRelevance": {
+    "level": "High",
+    "pyqFrequency": "Appears in 100% of tested CUET shifts (5-6 questions per shift)",
+    "totalPyqsInRepo": 260,
+    "weightagePercentage": 12
+  },
+  "summary30Seconds": [
+    "Conditional probability: $P(A|B) = \\frac{P(A \\cap B)}{P(B)}$ where $P(B) > 0$. If $A$ and $B$ are independent, $P(A|B) = P(A)$.",
+    "Independent events: $P(A \\cap B) = P(A) \\cdot P(B)$. If $A$ and $B$ are independent, then $A'$ and $B'$, $A$ and $B'$, and $A'$ and $B$ are also mutually independent.",
+    "Law of Total Probability: For a partition $\\{E_1, E_2, \\dots, E_n\\}$, $P(A) = \\sum_{i=1}^n P(E_i) P(A|E_i)$.",
+    "Bayes' Theorem: Calculates posterior probability: $P(E_i|A) = \\frac{P(E_i) P(A|E_i)}{\\sum_{j=1}^n P(E_j) P(A|E_j)}$.",
+    "Probability distribution: $\\sum p_i = 1$. Mean (Expected Value) $E(X) = \\mu = \\sum x_i p_i$. Variance $\\text{Var}(X) = \\sigma^2 = E(X^2) - [E(X)]^2 = \\sum x_i^2 p_i - \\mu^2$. Standard deviation $\\sigma = \\sqrt{\\text{Var}(X)}$.",
+    "Binomial Distribution: $P(X = r) = ^n C_r p^r q^{n-r}$ where $p + q = 1$. Mean $= np$, Variance $= npq$. Note that $\\text{Variance} < \\text{Mean}$ for any binomial distribution."
+  ],
+  "coreConcepts": [
+    {
+      "title": "Conditional Probability & Independent Events",
+      "content": "1. **Conditional Probability**:\n   The probability of occurrence of event $A$, given that event $B$ has already occurred:\n   $$P(A|B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) \\ne 0$$\n   - Properties:\n     - $P(S|B) = 1$, $P(B|B) = 1$\n     - $P(A'|B) = 1 - P(A|B)$\n     - $P((A \\cup B)|E) = P(A|E) + P(B|E) - P((A \\cap B)|E)$\n\n2. **Multiplication Theorem**:\n   $$P(A \\cap B) = P(A) \\cdot P(B|A) = P(B) \\cdot P(A|B)$$\n\n3. **Independent Events**:\n   Two events $A$ and $B$ are independent if the occurrence of one does not affect the probability of the other:\n   $$P(A \\cap B) = P(A) \\cdot P(B)$$\n   - **Difference between Independent & Mutually Exclusive Events**:\n     - Mutually exclusive means $A \\cap B = \\emptyset \\implies P(A \\cap B) = 0$.\n     - Independent means $P(A \\cap B) = P(A) P(B) \\ne 0$ (for non-zero probability events). Two non-empty events cannot be simultaneously mutually exclusive and independent!\n   - **Important Independence Theorem**: If $A$ and $B$ are independent, then:\n     1. $A$ and $B'$ are independent: $P(A \\cap B') = P(A) P(B')$\n     2. $A'$ and $B$ are independent\n     3. $A'$ and $B'$ are independent: $P(A' \\cap B') = P(A') P(B') = [1 - P(A)][1 - P(B)]$",
+      "ncertPointers": [
+        "Probability of at least one of independent events A and B occurring: P(A U B) = 1 - P(A') P(B') = 1 - [1 - P(A)][1 - P(B)]."
+      ]
+    },
+    {
+      "title": "Bayes' Theorem & The Law of Total Probability",
+      "content": "Let $\\{E_1, E_2, \\dots, E_n\\}$ form a partition of the sample space $S$ ($E_i \\cap E_j = \\emptyset$ for $i \\ne j$, $\\bigcup_{i=1}^n E_i = S$, and $P(E_i) > 0$).\n\n1. **Law of Total Probability**:\n   For any event $A$ associated with $S$:\n   $$P(A) = P(E_1) P(A|E_1) + P(E_2) P(A|E_2) + \\dots + P(E_n) P(A|E_n) = \\sum_{i=1}^n P(E_i) P(A|E_i)$$\n\n2. **Bayes' Theorem**:\n   If event $A$ has occurred, the conditional probability that it was caused by event $E_i$ (posterior probability) is:\n   $$P(E_i|A) = \\frac{P(E_i) P(A|E_i)}{\\sum_{j=1}^n P(E_j) P(A|E_j)}$$\n   - $P(E_i)$: Prior probability of hypothesis $E_i$.\n   - $P(A|E_i)$: Likelihood of observing event $A$ given $E_i$.\n   - $P(E_i|A)$: Posterior probability of $E_i$ given evidence $A$.",
+      "ncertPointers": [
+        "Bag and Ball problems, Disease diagnostic tests, and Factory defect questions in CUET are direct applications of Bayes' Theorem."
+      ]
+    },
+    {
+      "title": "Random Variables, Variance & The Binomial Distribution",
+      "content": "1. **Random Variable ($X$)**:\n   A real-valued function whose domain is the sample space $S$.\n   - Probability Distribution: Pairs $(x_i, p_i)$ such that $p_i \\ge 0$ and $\\sum_{i=1}^n p_i = 1$.\n   - **Mean / Expectation**: $\\mu = E(X) = \\sum_{i=1}^n x_i p_i$.\n   - **Variance**: $\\text{Var}(X) = \\sigma^2 = E(X^2) - [E(X)]^2 = \\sum_{i=1}^n x_i^2 p_i - \\mu^2$.\n   - **Standard Deviation**: $\\sigma = \\sqrt{\\text{Var}(X)}$.\n\n2. **Binomial Distribution $B(n, p)$**:\n   Applies to $n$ independent Bernoulli trials (each trial has only two outcomes: Success with probability $p$, Failure with probability $q = 1 - p$):\n   $$P(X = r) = ^n C_r p^r q^{n - r}, \\quad r = 0, 1, 2, \\dots, n$$\n   - **Mean**: $E(X) = n p$\n   - **Variance**: $\\text{Var}(X) = n p q$\n   - **Crucial Inequality**: Since $0 < q < 1$, $npq < np$, which means **$\\text{Variance} < \\text{Mean}$** always holds.",
+      "ncertPointers": [
+        "If a problem states Mean = 4 and Variance = 6 for a binomial distribution, the data is IMPOSSIBLE because variance must be strictly less than mean."
+      ]
+    }
+  ],
+  "keyFormulasAndTables": [
+    {
+      "name": "Bayes' Theorem Formula",
+      "formula": "P(E_i|A) = \\frac{P(E_i) P(A|E_i)}{\\sum_{j=1}^n P(E_j) P(A|E_j)}",
+      "symbols": "E_i = \\text{partition events}, A = \\text{observed evidence event}",
+      "siUnits": "Probability (0 to 1)",
+      "applicationCondition": "Inverting conditional probability with mutually exclusive partition"
+    },
+    {
+      "name": "Binomial Mean and Variance",
+      "formula": "\\text{Mean } \\mu = n p, \\quad \\text{Variance } \\sigma^2 = n p q",
+      "symbols": "n = \\text{trials}, p = \\text{success probability}, q = 1 - p",
+      "siUnits": "Moments of distribution",
+      "applicationCondition": "Bernoulli trials with independent constant probability"
+    },
+    {
+      "name": "Random Variable Variance",
+      "formula": "\\text{Var}(X) = E(X^2) - [E(X)]^2 = \\sum x_i^2 p_i - \\left(\\sum x_i p_i\\right)^2",
+      "symbols": "x_i = \\text{values of random variable}, p_i = \\text{probabilities}",
+      "siUnits": "Variance units",
+      "applicationCondition": "Discrete probability distributions"
+    }
+  ],
+  "diagramSvg": "<svg viewBox=\"0 0 760 250\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <rect width=\"760\" height=\"250\" rx=\"14\" fill=\"#0f172a\" stroke=\"#334155\" strokeWidth=\"1.5\"/>\n  <text x=\"380\" y=\"30\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"16\" fontWeight=\"bold\">Bayes' Theorem Tree Diagram Architecture</text>\n\n  <!-- Root: Sample Space -->\n  <circle cx=\"120\" cy=\"130\" r=\"28\" fill=\"#1e293b\" stroke=\"#38bdf8\" strokeWidth=\"2\"/>\n  <text x=\"120\" y=\"135\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"11\" fontWeight=\"bold\">Start</text>\n\n  <!-- Path 1: E1 -->\n  <line x1=\"148\" y1=\"120\" x2=\"280\" y2=\"80\" stroke=\"#64748b\" strokeWidth=\"2\"/>\n  <text x=\"210\" y=\"90\" fill=\"#94a3b8\" fontSize=\"10\">P(E₁)</text>\n  <circle cx=\"295\" cy=\"80\" r=\"18\" fill=\"#1e293b\" stroke=\"#22c55e\" strokeWidth=\"1.5\"/>\n  <text x=\"295\" y=\"84\" textAnchor=\"middle\" fill=\"#22c55e\" fontSize=\"10\" fontWeight=\"bold\">E₁</text>\n\n  <!-- Branch E1 -> A -->\n  <line x1=\"313\" y1=\"80\" x2=\"450\" y2=\"80\" stroke=\"#22c55e\" strokeWidth=\"2\"/>\n  <text x=\"380\" y=\"73\" fill=\"#86efac\" fontSize=\"9\">P(A|E₁)</text>\n  <rect x=\"450\" y=\"65\" width=\"240\" height=\"30\" rx=\"6\" fill=\"#1e293b\" stroke=\"#22c55e\" strokeWidth=\"1\"/>\n  <text x=\"570\" y=\"84\" textAnchor=\"middle\" fill=\"#86efac\" fontSize=\"10\">P(E₁) · P(A|E₁) (Branch 1)</text>\n\n  <!-- Path 2: E2 -->\n  <line x1=\"148\" y1=\"140\" x2=\"280\" y2=\"180\" stroke=\"#64748b\" strokeWidth=\"2\"/>\n  <text x=\"210\" y=\"175\" fill=\"#94a3b8\" fontSize=\"10\">P(E₂)</text>\n  <circle cx=\"295\" cy=\"180\" r=\"18\" fill=\"#1e293b\" stroke=\"#f43f5e\" strokeWidth=\"1.5\"/>\n  <text x=\"295\" y=\"184\" textAnchor=\"middle\" fill=\"#f43f5e\" fontSize=\"10\" fontWeight=\"bold\">E₂</text>\n\n  <!-- Branch E2 -> A -->\n  <line x1=\"313\" y1=\"180\" x2=\"450\" y2=\"180\" stroke=\"#f43f5e\" strokeWidth=\"2\"/>\n  <text x=\"380\" y=\"173\" fill=\"#fca5a5\" fontSize=\"9\">P(A|E₂)</text>\n  <rect x=\"450\" y=\"165\" width=\"240\" height=\"30\" rx=\"6\" fill=\"#1e293b\" stroke=\"#f43f5e\" strokeWidth=\"1\"/>\n  <text x=\"570\" y=\"184\" textAnchor=\"middle\" fill=\"#fca5a5\" fontSize=\"10\">P(E₂) · P(A|E₂) (Branch 2)</text>\n\n  <text x=\"380\" y=\"230\" textAnchor=\"middle\" fill=\"#facc15\" fontSize=\"11\" fontWeight=\"bold\">P(E₁|A) = Branch 1 / [Branch 1 + Branch 2]</text>\n</svg>",
+  "workedExamples": [
+    {
+      "id": "maths_u6_we1",
+      "questionNumber": 1,
+      "question": "Bag I contains 3 red and 4 black balls, while Bag II contains 5 red and 6 black balls. One ball is drawn at random from one of the bags and it is found to be red. Find the probability that it was drawn from Bag II.",
+      "options": [
+        {
+          "id": "A",
+          "text": "35 / 68"
+        },
+        {
+          "id": "B",
+          "text": "33 / 68"
+        },
+        {
+          "id": "C",
+          "text": "5 / 11"
+        },
+        {
+          "id": "D",
+          "text": "12 / 68"
+        }
+      ],
+      "correctOption": "A",
+      "solutionSteps": [
+        "Step 1: Let $E_1$ = Bag I is chosen, $E_2$ = Bag II is chosen. $P(E_1) = P(E_2) = 1/2$.",
+        "Step 2: Let $A$ = Drawn ball is red.",
+        "Step 3: Likelihoods: $P(A|E_1) = 3/7$ and $P(A|E_2) = 5/11$.",
+        "Step 4: Total probability of red: $P(A) = P(E_1) P(A|E_1) + P(E_2) P(A|E_2) = \\frac{1}{2} \\left(\\frac{3}{7}\\right) + \\frac{1}{2} \\left(\\frac{5}{11}\\right) = \\frac{1}{2} \\left(\\frac{33 + 35}{77}\\right) = \\frac{68}{154} = \\frac{34}{77}$.",
+        "Step 5: Apply Bayes' Theorem: $P(E_2|A) = \\frac{P(E_2) P(A|E_2)}{P(A)} = \\frac{\\frac{1}{2} \\times \\frac{5}{11}}{\\frac{1}{2} \\times \\frac{68}{77}} = \\frac{5/11}{68/77} = \\frac{5}{11} \\times \\frac{77}{68} = \\frac{35}{68}$."
+      ],
+      "cuetTip": "Notice the cross-multiplication in numerator: $5 \\times 7 = 35$ and $3 \\times 11 = 33$. Denominator is $35 + 33 = 68$. Thus $P(E_2|A) = 35/68$ in 10 seconds!"
+    },
+    {
+      "id": "maths_u6_we2",
+      "questionNumber": 2,
+      "question": "For a random variable $X$, the probability distribution is given by: $P(X = 0) = k$, $P(X = 1) = 2k$, $P(X = 2) = 3k$. Find the value of $k$ and the expected value $E(X)$.",
+      "options": [
+        {
+          "id": "A",
+          "text": "k = 1/6, E(X) = 4/3"
+        },
+        {
+          "id": "B",
+          "text": "k = 1/6, E(X) = 1"
+        },
+        {
+          "id": "C",
+          "text": "k = 1/3, E(X) = 2"
+        },
+        {
+          "id": "D",
+          "text": "k = 1/5, E(X) = 7/5"
+        }
+      ],
+      "correctOption": "A",
+      "solutionSteps": [
+        "Step 1: Total probability must equal 1: $\\sum p_i = k + 2k + 3k = 6k = 1 \\implies k = 1/6$.",
+        "Step 2: Probabilities are $P(0) = 1/6$, $P(1) = 2/6$, $P(2) = 3/6$.",
+        "Step 3: Calculate expectation: $E(X) = \\sum x_i p_i = 0(1/6) + 1(2/6) + 2(3/6) = 0 + 2/6 + 6/6 = 8/6 = 4/3$."
+      ],
+      "cuetTip": "Two-part check: First find k using sum of probabilities = 1, then calculate expectation."
+    }
+  ],
+  "howCuetAsksThis": [
+    {
+      "type": "Independent Events Intersection Formula",
+      "frequency": "Very High",
+      "pyqExample": {
+        "question": "If $A$ and $B$ are two independent events such that $P(A) = 0.3$ and $P(B) = 0.4$, then $P(A \\cup B)$ is equal to:",
+        "options": [
+          {
+            "id": "A",
+            "text": "0.58"
+          },
+          {
+            "id": "B",
+            "text": "0.70"
+          },
+          {
+            "id": "C",
+            "text": "0.12"
+          },
+          {
+            "id": "D",
+            "text": "0.82"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "For independent events, $P(A \\cap B) = P(A) P(B) = (0.3)(0.4) = 0.12$. Then $P(A \\cup B) = P(A) + P(B) - P(A \\cap B) = 0.3 + 0.4 - 0.12 = 0.58$."
+      },
+      "strategy": "Or use $P(A \\cup B) = 1 - P(A') P(B') = 1 - (0.7)(0.6) = 1 - 0.42 = 0.58$."
+    },
+    {
+      "type": "Binomial Mean and Variance Relation",
+      "frequency": "High",
+      "pyqExample": {
+        "question": "The mean and variance of a binomial distribution are 4 and 2 respectively. The number of trials $n$ is:",
+        "options": [
+          {
+            "id": "A",
+            "text": "8"
+          },
+          {
+            "id": "B",
+            "text": "16"
+          },
+          {
+            "id": "C",
+            "text": "4"
+          },
+          {
+            "id": "D",
+            "text": "12"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "Mean $= np = 4$. Variance $= npq = 2$. Divide variance by mean: $\\frac{npq}{np} = q = \\frac{2}{4} = \\frac{1}{2}$. Since $p + q = 1$, $p = 1 - 1/2 = 1/2$. Then $n(1/2) = 4 \\implies n = 8$."
+      },
+      "strategy": "Divide variance by mean to find $q$, then $p = 1 - q$, then $n = \\text{Mean} / p$."
+    }
+  ],
+  "commonTraps": [
+    {
+      "misconception": "Assuming mutually exclusive events are independent.",
+      "whyWrong": "If events are mutually exclusive, $P(A \\cap B) = 0$. If they were independent, $P(A \\cap B) = P(A) P(B) > 0$.",
+      "correctUnderstanding": "Mutually exclusive events with positive probabilities are NEVER independent; the occurrence of one guarantees the non-occurrence of the other."
+    },
+    {
+      "misconception": "Forgetting to square the mean when calculating variance.",
+      "whyWrong": "$\\text{Var}(X) = E(X^2) - [E(X)]^2$. Forgetting the square yields incorrect negative or distorted values.",
+      "correctUnderstanding": "Always compute $E(X^2) = \\sum x_i^2 p_i$ and subtract the square of $\\mu = E(X)$."
+    }
+  ],
+  "mnemonicsAndShortcuts": [
+    {
+      "title": "Bayes Cross-Product Shortcut",
+      "mnemonic": "Cross and Conquer.",
+      "rule": "For two bags with $(r_1/t_1)$ and $(r_2/t_2)$: $P(E_2|A) = \\frac{r_2 t_1}{r_1 t_2 + r_2 t_1}$.",
+      "shortcut": "No need to write full denominator expansion.",
+      "whenToApply": "Two-bag Bayes theorem problems."
+    },
+    {
+      "title": "Binomial Parameter Extraction",
+      "mnemonic": "q = Var / Mean.",
+      "rule": "Dividing variance by mean instantly reveals $q$.",
+      "shortcut": "$q = \\sigma^2 / \\mu \\implies p = 1 - q \\implies n = \\mu / p$.",
+      "whenToApply": "Binomial parameter reconstruction."
+    }
+  ],
+  "quickRevisionCard": {
+    "title": "Probability — High-Yield Review Card",
+    "bulletPoints": [
+      "Conditional: $P(A|B) = \\frac{P(A \\cap B)}{P(B)}$ ($P(B) > 0$).",
+      "Independent: $P(A \\cap B) = P(A) P(B)$. Then $A'$ and $B'$ are also independent.",
+      "At least one: $P(A \\cup B) = 1 - P(A') P(B')$ for independent events.",
+      "Total probability: $P(A) = \\sum P(E_i) P(A|E_i)$.",
+      "Bayes' theorem: $P(E_i|A) = \\frac{P(E_i) P(A|E_i)}{\\sum P(E_j) P(A|E_j)}$.",
+      "Expectation: $E(X) = \\mu = \\sum x_i p_i$. Variance: $\\text{Var}(X) = \\sum x_i^2 p_i - \\mu^2$.",
+      "Binomial: $P(X = r) = ^n C_r p^r q^{n-r}$. Mean $= np$, Variance $= npq$.",
+      "Variance < Mean always for binomial distribution.",
+      "Mutually exclusive ($A \\cap B = \\emptyset$) $\\ne$ Independent ($P(A \\cap B) = P(A)P(B)$)."
+    ],
+    "keyPoints": [
+      "Conditional: $P(A|B) = \\frac{P(A \\cap B)}{P(B)}$ ($P(B) > 0$).",
+      "Independent: $P(A \\cap B) = P(A) P(B)$. Then $A'$ and $B'$ are also independent.",
+      "At least one: $P(A \\cup B) = 1 - P(A') P(B')$ for independent events.",
+      "Total probability: $P(A) = \\sum P(E_i) P(A|E_i)$.",
+      "Bayes' theorem: $P(E_i|A) = \\frac{P(E_i) P(A|E_i)}{\\sum P(E_j) P(A|E_j)}$.",
+      "Expectation: $E(X) = \\mu = \\sum x_i p_i$. Variance: $\\text{Var}(X) = \\sum x_i^2 p_i - \\mu^2$.",
+      "Binomial: $P(X = r) = ^n C_r p^r q^{n-r}$. Mean $= np$, Variance $= npq$.",
+      "Variance < Mean always for binomial distribution.",
+      "Mutually exclusive ($A \\cap B = \\emptyset$) $\\ne$ Independent ($P(A \\cap B) = P(A)P(B)$)."
+    ]
+  },
+  "practiceQuestions": [
+    {
+      "id": "maths_u6_q1",
+      "question": "If $P(A) = 0.4$, $P(B) = 0.8$, and $P(B|A) = 0.6$, then $P(A \\cup B)$ is equal to:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "0.96"
+        },
+        {
+          "id": "B",
+          "text": "0.24"
+        },
+        {
+          "id": "C",
+          "text": "0.84"
+        },
+        {
+          "id": "D",
+          "text": "0.48"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "$P(A \\cap B) = P(A) P(B|A) = (0.4)(0.6) = 0.24$. Then $P(A \\cup B) = P(A) + P(B) - P(A \\cap B) = 0.4 + 0.8 - 0.24 = 1.20 - 0.24 = 0.96$.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u6_q2",
+      "question": "A coin is tossed 5 times. The probability of getting EXACTLY 3 heads is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "5 / 16"
+        },
+        {
+          "id": "B",
+          "text": "5 / 32"
+        },
+        {
+          "id": "C",
+          "text": "10 / 16"
+        },
+        {
+          "id": "D",
+          "text": "1 / 2"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Binomial with $n = 5, p = 1/2, q = 1/2$. $P(X = 3) = ^5 C_3 (1/2)^3 (1/2)^2 = 10 \\times (1/32) = 10/32 = 5/16$.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u6_q3",
+      "question": "The variance of a random variable $X$ with distribution $P(X = 1) = 0.2$, $P(X = 2) = 0.5$, $P(X = 3) = 0.3$ is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "0.49"
+        },
+        {
+          "id": "B",
+          "text": "2.1"
+        },
+        {
+          "id": "C",
+          "text": "4.9"
+        },
+        {
+          "id": "D",
+          "text": "0.7"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "$E(X) = 1(0.2) + 2(0.5) + 3(0.3) = 0.2 + 1.0 + 0.9 = 2.1$. $E(X^2) = 1^2(0.2) + 2^2(0.5) + 3^2(0.3) = 0.2 + 2.0 + 2.7 = 4.9$. $\\text{Var}(X) = E(X^2) - [E(X)]^2 = 4.9 - (2.1)^2 = 4.9 - 4.41 = 0.49$.",
+      "difficulty": "medium",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u6_q4",
+      "question": "Assertion (A): If $P(A) = 0.5$ and $P(B) = 0.6$, then $A$ and $B$ cannot be mutually exclusive events.\nReason (R): For mutually exclusive events $P(A \\cup B) = P(A) + P(B) \\le 1$.",
+      "type": "assertion-reason",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both A and R are true and R is the correct explanation of A"
+        },
+        {
+          "id": "B",
+          "text": "Both A and R are true but R is not the correct explanation of A"
+        },
+        {
+          "id": "C",
+          "text": "A is true but R is false"
+        },
+        {
+          "id": "D",
+          "text": "A is false but R is true"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "If they were mutually exclusive, $P(A \\cup B) = 0.5 + 0.6 = 1.1 > 1$, which is impossible since probability cannot exceed 1.",
+      "difficulty": "easy",
+      "questionType": "Assertion-Reason"
+    },
+    {
+      "id": "maths_u6_q5",
+      "question": "Match List-I (Probability Concept) with List-II (Mathematical Formula):\nP. Conditional Probability P(A|B)\nQ. Independent Events P(A ∩ B)\nR. Law of Total Probability P(A)\nS. Binomial Variance",
+      "type": "match-the-following",
+      "options": [
+        {
+          "id": "A",
+          "text": "P-P(A ∩ B)/P(B), Q-P(A)·P(B), R-Σ P(Ei)·P(A|Ei), S-npq"
+        },
+        {
+          "id": "B",
+          "text": "P-P(A)·P(B), Q-P(A ∩ B)/P(B), R-npq, S-Σ P(Ei)·P(A|Ei)"
+        },
+        {
+          "id": "C",
+          "text": "P-npq, Q-P(A)·P(B), R-P(A ∩ B)/P(B), S-Σ P(Ei)·P(A|Ei)"
+        },
+        {
+          "id": "D",
+          "text": "P-P(A ∩ B)/P(B), Q-npq, R-P(A)·P(B), S-Σ P(Ei)·P(A|Ei)"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Direct matching of canonical definitions and formulas from NCERT Chapter 13.",
+      "difficulty": "easy",
+      "questionType": "Match The Following"
+    },
+    {
+      "id": "maths_u6_q6",
+      "question": "Two cards are drawn successively without replacement from a pack of 52 cards. What is the probability that both are aces?",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "1 / 221"
+        },
+        {
+          "id": "B",
+          "text": "1 / 169"
+        },
+        {
+          "id": "C",
+          "text": "4 / 221"
+        },
+        {
+          "id": "D",
+          "text": "1 / 13"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "First ace: $4/52 = 1/13$. Second ace without replacement: $3/51 = 1/17$. Joint probability $= (1/13) \\times (1/17) = 1/221$.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u6_q7",
+      "question": "In a binomial distribution with parameters $n$ and $p$, the ratio of variance to mean is equal to:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "p"
+        },
+        {
+          "id": "B",
+          "text": "q (1 - p)"
+        },
+        {
+          "id": "C",
+          "text": "n"
+        },
+        {
+          "id": "D",
+          "text": "np"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "$\\frac{\\text{Variance}}{\\text{Mean}} = \\frac{n p q}{n p} = q = 1 - p$.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u6_q8",
+      "question": "A problem in mathematics is given to three students whose chances of solving it are $1/2, 1/3$, and $1/4$. What is the probability that the problem is solved?",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "3 / 4"
+        },
+        {
+          "id": "B",
+          "text": "1 / 4"
+        },
+        {
+          "id": "C",
+          "text": "1 / 24"
+        },
+        {
+          "id": "D",
+          "text": "23 / 24"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Probability of problem solved $= 1 - P(\\text{none solves}) = 1 - P(A') P(B') P(C') = 1 - (1 - 1/2)(1 - 1/3)(1 - 1/4) = 1 - (1/2)(2/3)(3/4) = 1 - 1/4 = 3/4$.",
+      "difficulty": "medium",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u6_q9",
+      "question": "If $P(A) = 0.8$ and $P(B|A) = 0.5$, then $P(A \\cap B)$ is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "0.4"
+        },
+        {
+          "id": "B",
+          "text": "0.3"
+        },
+        {
+          "id": "C",
+          "text": "0.1"
+        },
+        {
+          "id": "D",
+          "text": "0.5"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "$P(A \\cap B) = P(A) \\cdot P(B|A) = 0.8 \\times 0.5 = 0.4$.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u6_q10",
+      "question": "A fair die is thrown 6 times. What is the probability of obtaining AT LEAST one six?",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "1 - (5/6)⁶"
+        },
+        {
+          "id": "B",
+          "text": "(5/6)⁶"
+        },
+        {
+          "id": "C",
+          "text": "(1/6)⁶"
+        },
+        {
+          "id": "D",
+          "text": "1 - (1/6)⁶"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "$P(\\text{at least one 6}) = 1 - P(\\text{no six in 6 throws}) = 1 - (5/6)^6$.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    }
+  ],
+  "links": {
+    "prerequisites": [
+      "maths_u5_t1"
+    ],
+    "relatedTopics": [
+      "maths_u7_t1"
+    ],
+    "practiceTestId": "practice-maths-unit6-test1",
+    "practiceTestUrl": "/test/practice-maths-unit6-test1",
+    "weaknessReportUrl": "/dashboard/radar?subject=maths",
+    "weaknessRadarUrl": "/dashboard/radar?subject=maths"
+  },
+  "subjectSpecific": {
+    "mathematics": {
+      "standardResults": [
+        {
+          "result": "P(A \\cup B) = 1 - P(A') P(B')",
+          "condition": "Independent events"
+        },
+        {
+          "result": "\\text{Variance} = npq < np = \\text{Mean}",
+          "condition": "Binomial distribution"
+        },
+        {
+          "result": "P(E_i|A) = \\frac{P(E_i)P(A|E_i)}{\\sum P(E_j)P(A|E_j)}",
+          "condition": "Bayes' Theorem"
+        }
+      ],
+      "graphProperties": [
+        {
+          "curve": "Binomial Distribution",
+          "keyPoints": "Symmetric when p = 0.5, positively skewed when p < 0.5, negatively skewed when p > 0.5"
+        }
+      ]
+    }
+  },
+  "diagram": {
+    "type": "svg",
+    "title": "Conditional Probability, Multiplication Theorem, Bayes' Theorem, Random Variables and Distributions",
+    "caption": "Mathematical geometry and visual representation for Conditional Probability, Multiplication Theorem, Bayes' Theorem, Random Variables and Distributions",
+    "code": "<svg viewBox=\"0 0 760 250\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <rect width=\"760\" height=\"250\" rx=\"14\" fill=\"#0f172a\" stroke=\"#334155\" strokeWidth=\"1.5\"/>\n  <text x=\"380\" y=\"30\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"16\" fontWeight=\"bold\">Bayes' Theorem Tree Diagram Architecture</text>\n\n  <!-- Root: Sample Space -->\n  <circle cx=\"120\" cy=\"130\" r=\"28\" fill=\"#1e293b\" stroke=\"#38bdf8\" strokeWidth=\"2\"/>\n  <text x=\"120\" y=\"135\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"11\" fontWeight=\"bold\">Start</text>\n\n  <!-- Path 1: E1 -->\n  <line x1=\"148\" y1=\"120\" x2=\"280\" y2=\"80\" stroke=\"#64748b\" strokeWidth=\"2\"/>\n  <text x=\"210\" y=\"90\" fill=\"#94a3b8\" fontSize=\"10\">P(E₁)</text>\n  <circle cx=\"295\" cy=\"80\" r=\"18\" fill=\"#1e293b\" stroke=\"#22c55e\" strokeWidth=\"1.5\"/>\n  <text x=\"295\" y=\"84\" textAnchor=\"middle\" fill=\"#22c55e\" fontSize=\"10\" fontWeight=\"bold\">E₁</text>\n\n  <!-- Branch E1 -> A -->\n  <line x1=\"313\" y1=\"80\" x2=\"450\" y2=\"80\" stroke=\"#22c55e\" strokeWidth=\"2\"/>\n  <text x=\"380\" y=\"73\" fill=\"#86efac\" fontSize=\"9\">P(A|E₁)</text>\n  <rect x=\"450\" y=\"65\" width=\"240\" height=\"30\" rx=\"6\" fill=\"#1e293b\" stroke=\"#22c55e\" strokeWidth=\"1\"/>\n  <text x=\"570\" y=\"84\" textAnchor=\"middle\" fill=\"#86efac\" fontSize=\"10\">P(E₁) · P(A|E₁) (Branch 1)</text>\n\n  <!-- Path 2: E2 -->\n  <line x1=\"148\" y1=\"140\" x2=\"280\" y2=\"180\" stroke=\"#64748b\" strokeWidth=\"2\"/>\n  <text x=\"210\" y=\"175\" fill=\"#94a3b8\" fontSize=\"10\">P(E₂)</text>\n  <circle cx=\"295\" cy=\"180\" r=\"18\" fill=\"#1e293b\" stroke=\"#f43f5e\" strokeWidth=\"1.5\"/>\n  <text x=\"295\" y=\"184\" textAnchor=\"middle\" fill=\"#f43f5e\" fontSize=\"10\" fontWeight=\"bold\">E₂</text>\n\n  <!-- Branch E2 -> A -->\n  <line x1=\"313\" y1=\"180\" x2=\"450\" y2=\"180\" stroke=\"#f43f5e\" strokeWidth=\"2\"/>\n  <text x=\"380\" y=\"173\" fill=\"#fca5a5\" fontSize=\"9\">P(A|E₂)</text>\n  <rect x=\"450\" y=\"165\" width=\"240\" height=\"30\" rx=\"6\" fill=\"#1e293b\" stroke=\"#f43f5e\" strokeWidth=\"1\"/>\n  <text x=\"570\" y=\"184\" textAnchor=\"middle\" fill=\"#fca5a5\" fontSize=\"10\">P(E₂) · P(A|E₂) (Branch 2)</text>\n\n  <text x=\"380\" y=\"230\" textAnchor=\"middle\" fill=\"#facc15\" fontSize=\"11\" fontWeight=\"bold\">P(E₁|A) = Branch 1 / [Branch 1 + Branch 2]</text>\n</svg>"
+  },
+  "howCuetAsks": [
+    {
+      "patternType": "Independent Events Intersection Formula",
+      "frequency": "Very High",
+      "typicalStem": "If $A$ and $B$ are two independent events such that $P(A) = 0.3$ and $P(B) = 0.4$, then $P(A \\cup B)$ is equal to:",
+      "strategy": "Or use $P(A \\cup B) = 1 - P(A') P(B') = 1 - (0.7)(0.6) = 1 - 0.42 = 0.58$."
+    },
+    {
+      "patternType": "Binomial Mean and Variance Relation",
+      "frequency": "High",
+      "typicalStem": "The mean and variance of a binomial distribution are 4 and 2 respectively. The number of trials $n$ is:",
+      "strategy": "Divide variance by mean to find $q$, then $p = 1 - q$, then $n = \\text{Mean} / p$."
+    }
+  ],
+  "metadata": {
+    "confidence": "high",
+    "needsHumanReview": false,
+    "lastUpdated": "2026-10-14T14:49:35.333Z",
+    "version": 1,
+    "wordCount": 2655,
+    "isFreePreview": false
+  }
+}

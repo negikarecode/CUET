@@ -1,0 +1,548 @@
+{
+  "id": "accountancy_u6_t1",
+  "slug": "electronic-spreadsheets-database-management-system-for-accounting",
+  "subject": "accountancy",
+  "subjectName": "Accountancy",
+  "subjectCode": "301",
+  "unitNumber": 6,
+  "unitTitle": "Computerised Accounting System",
+  "topicTitle": "Electronic Spreadsheets, Database Management System for Accounting",
+  "ncertReference": {
+    "class": "Class 12",
+    "book": "Accountancy — Computerised Accounting System",
+    "chapterNumber": 1,
+    "chapterName": "Overview of Computerised Accounting System & Electronic Spreadsheets",
+    "sections": [
+      "1.1 Concept and Features of Computerised Accounting System (CAS)",
+      "1.2 Comparison between Manual and Computerised Accounting",
+      "2.1 Electronic Spreadsheet: Concept, Features and Formulas (SUM, AVERAGE, IF, VLOOKUP, HLOOKUP, PMT, FV, RATE)",
+      "2.2 Pivot Tables, Data Validation, Charts and Graphs",
+      "3.1 Database Management System (DBMS) Concepts: Data Models, Tables, Records, Fields, Primary Key, Foreign Key",
+      "3.2 SQL Queries (SELECT, INSERT, UPDATE, DELETE, WHERE, ORDER BY, GROUP BY)"
+    ]
+  },
+  "cuetRelevance": {
+    "level": "Medium",
+    "pyqFrequency": "Appears in 100% of tested CUET shifts (4-6 questions per shift)",
+    "totalPyqsInRepo": 170,
+    "weightagePercentage": 8
+  },
+  "summary30Seconds": [
+    "Computerised Accounting System (CAS) relies on the framework of software, database, and hardware to process transactions via codified ledgers with automatic trail generation.",
+    "Spreadsheet Financial Functions: PMT(rate, nper, pv) calculates loan installment; VLOOKUP(lookup_value, table_array, col_index, [range_lookup]) performs vertical table search; PV calculates present value.",
+    "DBMS: Relational data model organizes data into tables (Relations) where columns are Attributes/Fields and rows are Tuples/Records; Primary key uniquely identifies each record; Foreign key enforces referential integrity."
+  ],
+  "coreConcepts": [
+    {
+      "title": "Computerised Accounting System: Features & Structure",
+      "content": "**Core Architecture of CAS**:\n- **Data Entry**: Transactions are recorded through structured accounting vouchers (Payment, Receipt, Contra, Journal, Sales, Purchase).\n- **Data Storage**: Stored in relational databases with tables linked via primary and foreign keys.\n- **Reporting**: Automated generation of Trial Balance, Profit & Loss Statement, and Balance Sheet without manual ledger balancing.\n\n**Manual vs Computerised Accounting**:\n- *Identification of transactions*: Same in both (source documents).\n- *Recording*: Manual requires physical journalizing; CAS uses voucher entry with pre-set ledger accounts.\n- *Posting & Balancing*: Manual requires labor-intensive posting to individual ledger folios; CAS automates instant posting upon voucher save.\n- *Trail Balance & Financial Statements*: Manual requires period-end manual extraction; CAS generates them dynamically at any instant.\n- *Storage & Audit Trail*: CAS provides permanent electronic audit trails and access control security.",
+      "ncertPointers": [
+        "Codification of accounts: Sequential, Block, or Hierarchical/Mnemonic codes are assigned to ledger accounts for structured grouping.",
+        "Security features of CAS: Password security, Data audit, Role-based user rights, Data encryption."
+      ]
+    },
+    {
+      "title": "Electronic Spreadsheet: Financial & Logical Functions",
+      "content": "**Key Financial Functions in Spreadsheets**:\n1. **PMT**: Calculates the payment for a loan based on constant payments and a constant interest rate:\n   $$\\text{=PMT(rate, nper, pv, [fv], [type])}$$\n   - *rate*: Interest rate per period (if annual rate is $r$, monthly rate is $r/12$).\n   - *nper*: Total number of payment periods (e.g., 5 years monthly = $5 \\times 12 = 60$).\n   - *pv*: Present value (principal loan amount).\n2. **PV**: Calculates present value of an investment: $\\text{=PV(rate, nper, pmt, [fv], [type])}$.\n3. **FV**: Calculates future value of an investment: $\\text{=FV(rate, nper, pmt, [pv], [type])}$.\n4. **RATE**: Returns interest rate per period of an annuity: $\\text{=RATE(nper, pmt, pv)}$.\n\n**Lookup and Logical Functions**:\n- **VLOOKUP**: Searches for a value in the leftmost column of a table and returns a value in the same row from a specified column:\n  $$\\text{=VLOOKUP(lookup\\_value, table\\_array, col\\_index\\_num, [range\\_lookup])}$$\n  *(Range_lookup = FALSE for exact match; TRUE for approximate match).*\n- **IF Function**: Conditional logical test: $\\text{=IF(logical\\_test, value\\_if\\_true, value\\_if\\_false)}$.\n- **SUMIF / COUNTIF**: Conditional arithmetic aggregates based on criteria.",
+      "ncertPointers": [
+        "Absolute cell referencing uses dollar signs (e.g., $A$1) so cell coordinate does not change when copied; Relative referencing (A1) adjusts automatically.",
+        "Pivot Table: Interactive tool used to summarize, analyze, explore, and present summary data."
+      ]
+    },
+    {
+      "title": "Database Management System (DBMS) & SQL Basics",
+      "content": "**Relational Database Model Terminology**:\n- **Relation**: A two-dimensional table consisting of rows and columns.\n- **Tuple / Record**: A single row in a table representing a complete entity record (e.g., one customer).\n- **Attribute / Field**: A column in a table representing a specific property (e.g., CustomerID, Name).\n- **Domain**: Pool of legal values from which actual attribute values are drawn.\n- **Keys**:\n  - **Primary Key**: An attribute (or set of attributes) that **uniquely identifies** each tuple in a relation (cannot be NULL).\n  - **Candidate Key**: Any attribute that has the potential to become a primary key.\n  - **Foreign Key**: An attribute in a table whose values are derived from the primary key of another table, ensuring **referential integrity**.\n\n**SQL Command Categories**:\n1. **DDL (Data Definition Language)**: Defines database structure: $\\text{CREATE, ALTER, DROP}$.\n2. **DML (Data Manipulation Language)**: Modifies and queries data: $\\text{SELECT, INSERT, UPDATE, DELETE}$.\n- Standard Query Syntax:\n  $$\\text{SELECT column1, column2 FROM TableName WHERE condition ORDER BY column1 ASC/DESC;}$$",
+      "ncertPointers": [
+        "Referential integrity prevents orphan records in child tables.",
+        "NULL value represents missing, unknown, or inapplicable data; it is not equal to zero or blank space."
+      ]
+    }
+  ],
+  "keyFormulasAndTables": [
+    {
+      "name": "Spreadsheet PMT Function Syntax",
+      "formula": "\\text{=PMT(rate/12, nper*12, pv)} \\quad \\text{for monthly loan repayment calculation}",
+      "symbols": "rate = annual rate, nper = years, pv = loan principal",
+      "siUnits": "Currency per period",
+      "applicationCondition": "Loan amortization schedules"
+    },
+    {
+      "name": "VLOOKUP Parameter Order",
+      "formula": "\\text{=VLOOKUP(LookupValue, TableRange, ColumnNumber, FALSE)} \\quad \\text{[FALSE = Exact Match]}",
+      "symbols": "Lookup search parameters",
+      "siUnits": "Spreadsheet function syntax",
+      "applicationCondition": "Data lookup across accounting ledgers"
+    }
+  ],
+  "diagramSvg": "<svg viewBox=\"0 0 760 300\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <rect width=\"760\" height=\"300\" rx=\"14\" fill=\"#0f172a\" stroke=\"#334155\" strokeWidth=\"2\"/>\n  <text x=\"380\" y=\"32\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"16\" fontWeight=\"bold\">Relational Database Model &amp; Primary / Foreign Key Integrity</text>\n  \n  <!-- Parent Table: Customers -->\n  <rect x=\"50\" y=\"65\" width=\"300\" height=\"210\" rx=\"8\" fill=\"#1e293b\" stroke=\"#3b82f6\" strokeWidth=\"2\"/>\n  <text x=\"200\" y=\"90\" textAnchor=\"middle\" fill=\"#60a5fa\" fontSize=\"13\" fontWeight=\"bold\">Parent Table: CUSTOMERS</text>\n  \n  <!-- Table Header -->\n  <rect x=\"65\" y=\"105\" width=\"270\" height=\"30\" fill=\"#0f172a\" stroke=\"#475569\"/>\n  <text x=\"110\" y=\"125\" textAnchor=\"middle\" fill=\"#fbbf24\" fontSize=\"11\" fontWeight=\"bold\">CustomerID (PK)</text>\n  <text x=\"195\" y=\"125\" textAnchor=\"middle\" fill=\"#cbd5e1\" fontSize=\"11\">CustName</text>\n  <text x=\"280\" y=\"125\" textAnchor=\"middle\" fill=\"#cbd5e1\" fontSize=\"11\">City</text>\n  \n  <!-- Row 1 -->\n  <rect x=\"65\" y=\"135\" width=\"270\" height=\"30\" fill=\"#1e293b\" stroke=\"#334155\"/>\n  <text x=\"110\" y=\"155\" textAnchor=\"middle\" fill=\"#34d399\" fontSize=\"11\" fontWeight=\"bold\">C101</text>\n  <text x=\"195\" y=\"155\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">Apex Corp</text>\n  <text x=\"280\" y=\"155\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">Delhi</text>\n  \n  <!-- Row 2 -->\n  <rect x=\"65\" y=\"165\" width=\"270\" height=\"30\" fill=\"#1e293b\" stroke=\"#334155\"/>\n  <text x=\"110\" y=\"185\" textAnchor=\"middle\" fill=\"#34d399\" fontSize=\"11\" fontWeight=\"bold\">C102</text>\n  <text x=\"195\" y=\"185\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">Zenith Ltd</text>\n  <text x=\"280\" y=\"185\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">Mumbai</text>\n  \n  <text x=\"200\" y=\"240\" textAnchor=\"middle\" fill=\"#fbbf24\" fontSize=\"11\" fontWeight=\"bold\">Primary Key (PK): Unique, NOT NULL</text>\n  \n  <!-- Child Table: Orders -->\n  <rect x=\"410\" y=\"65\" width=\"300\" height=\"210\" rx=\"8\" fill=\"#1e293b\" stroke=\"#10b981\" strokeWidth=\"2\"/>\n  <text x=\"560\" y=\"90\" textAnchor=\"middle\" fill=\"#34d399\" fontSize=\"13\" fontWeight=\"bold\">Child Table: ORDERS</text>\n  \n  <!-- Table Header -->\n  <rect x=\"425\" y=\"105\" width=\"270\" height=\"30\" fill=\"#0f172a\" stroke=\"#475569\"/>\n  <text x=\"470\" y=\"125\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"11\" fontWeight=\"bold\">OrderID (PK)</text>\n  <text x=\"560\" y=\"125\" textAnchor=\"middle\" fill=\"#fbbf24\" fontSize=\"11\" fontWeight=\"bold\">CustID (FK)</text>\n  <text x=\"645\" y=\"125\" textAnchor=\"middle\" fill=\"#cbd5e1\" fontSize=\"11\">Amount</text>\n  \n  <!-- Row 1 -->\n  <rect x=\"425\" y=\"135\" width=\"270\" height=\"30\" fill=\"#1e293b\" stroke=\"#334155\"/>\n  <text x=\"470\" y=\"155\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">O801</text>\n  <text x=\"560\" y=\"155\" textAnchor=\"middle\" fill=\"#fbbf24\" fontSize=\"11\" fontWeight=\"bold\">C101</text>\n  <text x=\"645\" y=\"155\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">₹45,000</text>\n  \n  <!-- Row 2 -->\n  <rect x=\"425\" y=\"165\" width=\"270\" height=\"30\" fill=\"#1e293b\" stroke=\"#334155\"/>\n  <text x=\"470\" y=\"185\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">O802</text>\n  <text x=\"560\" y=\"185\" textAnchor=\"middle\" fill=\"#fbbf24\" fontSize=\"11\" fontWeight=\"bold\">C102</text>\n  <text x=\"645\" y=\"185\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">₹92,000</text>\n  \n  <text x=\"560\" y=\"240\" textAnchor=\"middle\" fill=\"#34d399\" fontSize=\"11\" fontWeight=\"bold\">Foreign Key (FK) enforces Referential Integrity</text>\n</svg>",
+  "workedExamples": [
+    {
+      "id": "accountancy_u6_t1_we1",
+      "questionNumber": 1,
+      "question": "To calculate the monthly installment of a car loan of ₹5,00,000 borrowed at an annual interest rate of 12% for a tenure of 3 years, which of the following spreadsheet formula is correct?",
+      "options": [
+        {
+          "id": "A",
+          "text": "=PMT(12%/12, 3*12, 500000)"
+        },
+        {
+          "id": "B",
+          "text": "=PMT(12%, 3, 500000)"
+        },
+        {
+          "id": "C",
+          "text": "=PV(12%/12, 36, 500000)"
+        },
+        {
+          "id": "D",
+          "text": "=FV(12%, 3, 500000)"
+        }
+      ],
+      "correctOption": "A",
+      "solutionSteps": [
+        "Step 1: The function to calculate loan payment installment is PMT.",
+        "Step 2: Since installments are monthly, the interest rate per period must be annual rate divided by 12 $\\implies 12\\%/12$.",
+        "Step 3: Number of periods is tenure in years multiplied by 12 $\\implies 3 \\times 12 = 36$.",
+        "Step 4: Present value is loan principal = 500000.",
+        "Step 5: Formula: =PMT(12%/12, 3*12, 500000). Option A is exact."
+      ]
+    },
+    {
+      "id": "accountancy_u6_t1_we2",
+      "questionNumber": 2,
+      "question": "In a relational database, what is the role of a Foreign Key?",
+      "options": [
+        {
+          "id": "A",
+          "text": "To uniquely identify each record in its own table"
+        },
+        {
+          "id": "B",
+          "text": "To establish a relationship between two tables and maintain referential integrity"
+        },
+        {
+          "id": "C",
+          "text": "To encrypt confidential customer passwords"
+        },
+        {
+          "id": "D",
+          "text": "To automatically calculate financial totals"
+        }
+      ],
+      "correctOption": "B",
+      "solutionSteps": [
+        "Step 1: A primary key uniquely identifies rows in its own relation.",
+        "Step 2: A foreign key is a field in one table that refers to the primary key in another table.",
+        "Step 3: Its main role is to link tables together and enforce referential integrity so that no record references a non-existent parent. Option B is correct."
+      ]
+    }
+  ],
+  "howCuetAsks": [
+    {
+      "patternType": "Spreadsheet Function Syntax",
+      "frequency": "Very High",
+      "typicalStem": "In Excel/Calc, what does the fourth argument [range_lookup] in the VLOOKUP function signify when set to FALSE?",
+      "strategy": "FALSE specifies an EXACT match; TRUE specifies an approximate match."
+    },
+    {
+      "patternType": "Relational Key Terminology",
+      "frequency": "High",
+      "typicalStem": "An attribute in a table that can never contain a NULL value and uniquely distinguishes each row is called a:",
+      "strategy": "Primary Key."
+    }
+  ],
+  "commonTraps": [
+    {
+      "concept": "Monthly Rate in PMT",
+      "misconception": "Entering annual rate directly into PMT for monthly installments.",
+      "correctUnderstanding": "For monthly installments, rate MUST be divided by 12, and nper MUST be multiplied by 12."
+    },
+    {
+      "concept": "Tuple vs Attribute",
+      "misconception": "Confusing row and column terminology in DBMS.",
+      "correctUnderstanding": "Tuple = Row = Record. Attribute = Column = Field."
+    }
+  ],
+  "mnemonicsAndShortcuts": [
+    {
+      "title": "DBMS Row & Column",
+      "mnemonic": "T-R-A-C: Tuple is Row, Attribute is Column.",
+      "explanation": "Simple acronym to avoid misidentifying rows and columns in DBMS questions."
+    }
+  ],
+  "quickRevisionCard": {
+    "title": "Computerised Accounting — Quick Revision Card",
+    "bulletPoints": [
+      "CAS automates ledger posting, trial balance extraction, and financial reporting.",
+      "PMT(rate, nper, pv): Rate and nper must match payment frequency (divide rate by 12 for monthly).",
+      "VLOOKUP(val, table, col, FALSE): FALSE guarantees exact match.",
+      "Absolute reference: $A$1 does not change on copy; Relative: A1 changes.",
+      "Tuple = Row/Record; Attribute = Column/Field.",
+      "Primary Key: Uniquely identifies records, CANNOT be NULL.",
+      "Foreign Key: References primary key of another table, preserves referential integrity.",
+      "SQL: DDL (CREATE, ALTER, DROP); DML (SELECT, INSERT, UPDATE, DELETE)."
+    ],
+    "keyPoints": [
+      "CAS automates ledger posting, trial balance extraction, and financial reporting.",
+      "PMT(rate, nper, pv): Rate and nper must match payment frequency (divide rate by 12 for monthly).",
+      "VLOOKUP(val, table, col, FALSE): FALSE guarantees exact match.",
+      "Absolute reference: $A$1 does not change on copy; Relative: A1 changes.",
+      "Tuple = Row/Record; Attribute = Column/Field.",
+      "Primary Key: Uniquely identifies records, CANNOT be NULL.",
+      "Foreign Key: References primary key of another table, preserves referential integrity.",
+      "SQL: DDL (CREATE, ALTER, DROP); DML (SELECT, INSERT, UPDATE, DELETE)."
+    ]
+  },
+  "practiceQuestions": [
+    {
+      "id": "accountancy_u6_t1_q1",
+      "question": "In a relational database table, a row is technically called a:",
+      "options": [
+        {
+          "id": "A",
+          "text": "Attribute"
+        },
+        {
+          "id": "B",
+          "text": "Tuple"
+        },
+        {
+          "id": "C",
+          "text": "Domain"
+        },
+        {
+          "id": "D",
+          "text": "Schema"
+        }
+      ],
+      "correctOption": "B",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "explanation": "In relational database terminology, a row in a table is called a Tuple (or Record), and a column is called an Attribute (or Field).",
+      "type": "standard"
+    },
+    {
+      "id": "accountancy_u6_t1_q2",
+      "question": "In electronic spreadsheets, which function is used to calculate the periodic payment for an annuity based on constant payments and a constant interest rate?",
+      "options": [
+        {
+          "id": "A",
+          "text": "PV"
+        },
+        {
+          "id": "B",
+          "text": "FV"
+        },
+        {
+          "id": "C",
+          "text": "PMT"
+        },
+        {
+          "id": "D",
+          "text": "NPER"
+        }
+      ],
+      "correctOption": "C",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "explanation": "The PMT function calculates the payment for a loan based on constant payments and a constant interest rate.",
+      "type": "standard"
+    },
+    {
+      "id": "accountancy_u6_t1_q3",
+      "question": "Which of the following keys in a relational database cannot contain a NULL value?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Foreign Key"
+        },
+        {
+          "id": "B",
+          "text": "Primary Key"
+        },
+        {
+          "id": "C",
+          "text": "Secondary Key"
+        },
+        {
+          "id": "D",
+          "text": "Composite Candidate Key"
+        }
+      ],
+      "correctOption": "B",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "explanation": "Under the Entity Integrity constraint, a Primary Key must uniquely identify each record and therefore can never accept a NULL value.",
+      "type": "standard"
+    },
+    {
+      "id": "accountancy_u6_t1_q4",
+      "question": "In electronic spreadsheet software, which symbol is used to create an absolute cell reference?",
+      "options": [
+        {
+          "id": "A",
+          "text": "#"
+        },
+        {
+          "id": "B",
+          "text": "$"
+        },
+        {
+          "id": "C",
+          "text": "&"
+        },
+        {
+          "id": "D",
+          "text": "@"
+        }
+      ],
+      "correctOption": "B",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "explanation": "The dollar sign ($) is used in spreadsheets to fix a column or row coordinate (e.g. $A$1) so that the reference remains absolute when copied.",
+      "type": "standard"
+    },
+    {
+      "id": "accountancy_u6_t1_q5",
+      "question": "Which of the following SQL commands belongs to Data Definition Language (DDL)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "SELECT"
+        },
+        {
+          "id": "B",
+          "text": "INSERT"
+        },
+        {
+          "id": "C",
+          "text": "CREATE"
+        },
+        {
+          "id": "D",
+          "text": "UPDATE"
+        }
+      ],
+      "correctOption": "C",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "explanation": "CREATE, ALTER, and DROP are DDL commands because they define and modify the schema/structure of the database.",
+      "type": "standard"
+    },
+    {
+      "id": "accountancy_u6_t1_q6",
+      "question": "In the VLOOKUP function, setting the fourth argument [range_lookup] to FALSE specifies:",
+      "options": [
+        {
+          "id": "A",
+          "text": "An approximate match"
+        },
+        {
+          "id": "B",
+          "text": "An exact match"
+        },
+        {
+          "id": "C",
+          "text": "Search from bottom to top"
+        },
+        {
+          "id": "D",
+          "text": "Case sensitive matching"
+        }
+      ],
+      "correctOption": "B",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "explanation": "Setting [range_lookup] to FALSE tells VLOOKUP to find an exact match for the lookup value.",
+      "type": "standard"
+    },
+    {
+      "id": "accountancy_u6_t1_q7",
+      "question": "Referential integrity in a database ensures that:",
+      "options": [
+        {
+          "id": "A",
+          "text": "All data entries are in capital letters"
+        },
+        {
+          "id": "B",
+          "text": "A foreign key value must always match an existing primary key value in the referenced parent table"
+        },
+        {
+          "id": "C",
+          "text": "Tables are automatically backed up every hour"
+        },
+        {
+          "id": "D",
+          "text": "Numerical fields do not contain alphabetic characters"
+        }
+      ],
+      "correctOption": "B",
+      "questionType": "Conceptual Direct",
+      "difficulty": "medium",
+      "explanation": "Referential integrity is a database constraint that prevents orphan records by requiring foreign key values to match valid primary key values in the parent table.",
+      "type": "standard"
+    },
+    {
+      "id": "accountancy_u6_t1_q8",
+      "question": "An interactive spreadsheet tool used to quickly summarize, aggregate, and analyze large amounts of tabular data is called a:",
+      "options": [
+        {
+          "id": "A",
+          "text": "Macro"
+        },
+        {
+          "id": "B",
+          "text": "Pivot Table"
+        },
+        {
+          "id": "C",
+          "text": "Sparkline"
+        },
+        {
+          "id": "D",
+          "text": "Data Validation dropdown"
+        }
+      ],
+      "correctOption": "B",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "explanation": "A Pivot Table is a powerful spreadsheet feature that enables users to reorganize and summarize selected columns and rows of data.",
+      "type": "standard"
+    },
+    {
+      "id": "accountancy_u6_t1_q9",
+      "question": "Which of the following is a key advantage of Computerised Accounting Systems over manual systems?",
+      "options": [
+        {
+          "id": "A",
+          "text": "No requirement for skilled personnel"
+        },
+        {
+          "id": "B",
+          "text": "Instant and automated posting of transactions to ledger accounts and financial statements"
+        },
+        {
+          "id": "C",
+          "text": "Complete immunity from power failures or computer viruses"
+        },
+        {
+          "id": "D",
+          "text": "Zero cost of hardware and software installation"
+        }
+      ],
+      "correctOption": "B",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "explanation": "In a computerized system, entering an accounting voucher automatically posts entries to all relevant ledgers and updates Trial Balance and financial statements simultaneously.",
+      "type": "standard"
+    },
+    {
+      "id": "accountancy_u6_t1_q10",
+      "question": "In SQL, which clause is used to filter records based on a specified condition?",
+      "options": [
+        {
+          "id": "A",
+          "text": "GROUP BY"
+        },
+        {
+          "id": "B",
+          "text": "ORDER BY"
+        },
+        {
+          "id": "C",
+          "text": "WHERE"
+        },
+        {
+          "id": "D",
+          "text": "HAVING"
+        }
+      ],
+      "correctOption": "C",
+      "questionType": "Conceptual Direct",
+      "difficulty": "easy",
+      "explanation": "The WHERE clause is used to extract only those records that fulfill a specified condition in SQL.",
+      "type": "standard"
+    }
+  ],
+  "diagram": {
+    "type": "svg",
+    "title": "Electronic Spreadsheets, Database Management System for Accounting",
+    "caption": "Accounting ledger flowchart and visual framework for Electronic Spreadsheets, Database Management System for Accounting",
+    "code": "<svg viewBox=\"0 0 760 300\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <rect width=\"760\" height=\"300\" rx=\"14\" fill=\"#0f172a\" stroke=\"#334155\" strokeWidth=\"2\"/>\n  <text x=\"380\" y=\"32\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"16\" fontWeight=\"bold\">Relational Database Model &amp; Primary / Foreign Key Integrity</text>\n  \n  <!-- Parent Table: Customers -->\n  <rect x=\"50\" y=\"65\" width=\"300\" height=\"210\" rx=\"8\" fill=\"#1e293b\" stroke=\"#3b82f6\" strokeWidth=\"2\"/>\n  <text x=\"200\" y=\"90\" textAnchor=\"middle\" fill=\"#60a5fa\" fontSize=\"13\" fontWeight=\"bold\">Parent Table: CUSTOMERS</text>\n  \n  <!-- Table Header -->\n  <rect x=\"65\" y=\"105\" width=\"270\" height=\"30\" fill=\"#0f172a\" stroke=\"#475569\"/>\n  <text x=\"110\" y=\"125\" textAnchor=\"middle\" fill=\"#fbbf24\" fontSize=\"11\" fontWeight=\"bold\">CustomerID (PK)</text>\n  <text x=\"195\" y=\"125\" textAnchor=\"middle\" fill=\"#cbd5e1\" fontSize=\"11\">CustName</text>\n  <text x=\"280\" y=\"125\" textAnchor=\"middle\" fill=\"#cbd5e1\" fontSize=\"11\">City</text>\n  \n  <!-- Row 1 -->\n  <rect x=\"65\" y=\"135\" width=\"270\" height=\"30\" fill=\"#1e293b\" stroke=\"#334155\"/>\n  <text x=\"110\" y=\"155\" textAnchor=\"middle\" fill=\"#34d399\" fontSize=\"11\" fontWeight=\"bold\">C101</text>\n  <text x=\"195\" y=\"155\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">Apex Corp</text>\n  <text x=\"280\" y=\"155\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">Delhi</text>\n  \n  <!-- Row 2 -->\n  <rect x=\"65\" y=\"165\" width=\"270\" height=\"30\" fill=\"#1e293b\" stroke=\"#334155\"/>\n  <text x=\"110\" y=\"185\" textAnchor=\"middle\" fill=\"#34d399\" fontSize=\"11\" fontWeight=\"bold\">C102</text>\n  <text x=\"195\" y=\"185\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">Zenith Ltd</text>\n  <text x=\"280\" y=\"185\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">Mumbai</text>\n  \n  <text x=\"200\" y=\"240\" textAnchor=\"middle\" fill=\"#fbbf24\" fontSize=\"11\" fontWeight=\"bold\">Primary Key (PK): Unique, NOT NULL</text>\n  \n  <!-- Child Table: Orders -->\n  <rect x=\"410\" y=\"65\" width=\"300\" height=\"210\" rx=\"8\" fill=\"#1e293b\" stroke=\"#10b981\" strokeWidth=\"2\"/>\n  <text x=\"560\" y=\"90\" textAnchor=\"middle\" fill=\"#34d399\" fontSize=\"13\" fontWeight=\"bold\">Child Table: ORDERS</text>\n  \n  <!-- Table Header -->\n  <rect x=\"425\" y=\"105\" width=\"270\" height=\"30\" fill=\"#0f172a\" stroke=\"#475569\"/>\n  <text x=\"470\" y=\"125\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"11\" fontWeight=\"bold\">OrderID (PK)</text>\n  <text x=\"560\" y=\"125\" textAnchor=\"middle\" fill=\"#fbbf24\" fontSize=\"11\" fontWeight=\"bold\">CustID (FK)</text>\n  <text x=\"645\" y=\"125\" textAnchor=\"middle\" fill=\"#cbd5e1\" fontSize=\"11\">Amount</text>\n  \n  <!-- Row 1 -->\n  <rect x=\"425\" y=\"135\" width=\"270\" height=\"30\" fill=\"#1e293b\" stroke=\"#334155\"/>\n  <text x=\"470\" y=\"155\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">O801</text>\n  <text x=\"560\" y=\"155\" textAnchor=\"middle\" fill=\"#fbbf24\" fontSize=\"11\" fontWeight=\"bold\">C101</text>\n  <text x=\"645\" y=\"155\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">₹45,000</text>\n  \n  <!-- Row 2 -->\n  <rect x=\"425\" y=\"165\" width=\"270\" height=\"30\" fill=\"#1e293b\" stroke=\"#334155\"/>\n  <text x=\"470\" y=\"185\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">O802</text>\n  <text x=\"560\" y=\"185\" textAnchor=\"middle\" fill=\"#fbbf24\" fontSize=\"11\" fontWeight=\"bold\">C102</text>\n  <text x=\"645\" y=\"185\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">₹92,000</text>\n  \n  <text x=\"560\" y=\"240\" textAnchor=\"middle\" fill=\"#34d399\" fontSize=\"11\" fontWeight=\"bold\">Foreign Key (FK) enforces Referential Integrity</text>\n</svg>"
+  },
+  "howCuetAsksThis": [
+    {
+      "type": "Spreadsheet Function Syntax",
+      "frequency": "Very High",
+      "pyqExample": {
+        "question": "In Excel/Calc, what does the fourth argument [range_lookup] in the VLOOKUP function signify when set to FALSE?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Option A"
+          },
+          {
+            "id": "B",
+            "text": "Option B"
+          },
+          {
+            "id": "C",
+            "text": "Option C"
+          },
+          {
+            "id": "D",
+            "text": "Option D"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "FALSE specifies an EXACT match; TRUE specifies an approximate match."
+      },
+      "strategy": "FALSE specifies an EXACT match; TRUE specifies an approximate match."
+    },
+    {
+      "type": "Relational Key Terminology",
+      "frequency": "High",
+      "pyqExample": {
+        "question": "An attribute in a table that can never contain a NULL value and uniquely distinguishes each row is called a:",
+        "options": [
+          {
+            "id": "A",
+            "text": "Option A"
+          },
+          {
+            "id": "B",
+            "text": "Option B"
+          },
+          {
+            "id": "C",
+            "text": "Option C"
+          },
+          {
+            "id": "D",
+            "text": "Option D"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "Primary Key."
+      },
+      "strategy": "Primary Key."
+    }
+  ],
+  "links": {
+    "prerequisites": [],
+    "relatedTopics": [],
+    "practiceTestId": "practice-accountancy-unit6-test1",
+    "practiceTestUrl": "/test/practice-accountancy-unit6-test1",
+    "weaknessReportUrl": "/dashboard/radar?subject=accountancy",
+    "weaknessRadarUrl": "/dashboard/radar?subject=accountancy"
+  },
+  "metadata": {
+    "confidence": "high",
+    "needsHumanReview": false,
+    "lastUpdated": "2026-10-14T15:02:07.450Z",
+    "version": 1,
+    "wordCount": 2285,
+    "isFreePreview": false
+  }
+}

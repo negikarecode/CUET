@@ -1,0 +1,562 @@
+{
+  "id": "general-test-unit3-simple-and-compound-interest",
+  "slug": "simple-and-compound-interest",
+  "subject": "general-test",
+  "subjectName": "General Aptitude Test",
+  "subjectCode": "501",
+  "unitNumber": 3,
+  "unitTitle": "Quantitative Reasoning & Arithmetic",
+  "topicTitle": "Simple & Compound Interest",
+  "ncertReference": {
+    "book": "CUET General Test / Quantitative Aptitude & Arithmetic",
+    "chapter": "Section 12: Financial Mathematics, Annual Accruals & CI-SI Differentials",
+    "pages": "Pages 415-448"
+  },
+  "pyqFrequency": {
+    "examYears": [
+      "2022",
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "totalAppearances": 106,
+    "weightagePercentage": 14.8
+  },
+  "thirtySecondSummary": [
+    "Interest calculations quantify the time value of money under linear accrual (Simple Interest) and exponential accrual (Compound Interest).",
+    "Simple Interest (SI): SI = (P * R * T) / 100. Total Amount A = P + SI. Interest earned remains strictly identical every year because it is computed solely on the initial Principal.",
+    "Compound Interest (CI): Amount A = P * [1 + (R / 100)]^T. CI = A - P. Interest earns interest recursively.",
+    "Compounding Frequencies: Half-yearly -> Rate = R/2, Time = 2T; Quarterly -> Rate = R/4, Time = 4T.",
+    "Golden Difference Formulas: For 2 years: CI - SI = P * (R / 100)^2. For 3 years: CI - SI = P * (R / 100)^2 * [(300 + R) / 100].",
+    "Doubling Rule (Rule of 72): Time to double under compound interest ≈ 72 / R years."
+  ],
+  "coreConcepts": [
+    {
+      "title": "Simple Interest Mechanics and Sum Doubling Rules",
+      "explanation": "Under Simple Interest, capital grows linearly:\n1. Standard Formula: SI = (P * R * T) / 100; Total Amount A = P * [1 + (R * T / 100)].\n2. Sum Multiples (n-folding):\n  - If a sum becomes n times itself in T years:\n  - SI earned = (n - 1) * P\n  - Therefore: R * T = (n - 1) * 100.\n  - Example: A sum doubles itself (n=2) in 5 years -> R * 5 = (2 - 1) * 100 = 100 -> R = 20% per annum.\n  - Example: To become 4 times (n=4) at same rate: R * T2 = (4 - 1) * 100 = 300 -> 20 * T2 = 300 -> T2 = 15 years.",
+      "keyTakeaways": [
+        "SI remains constant every year: SI_1 = SI_2 = SI_3.",
+        "Formula for sum becoming n times: R * T = (n - 1) * 100."
+      ],
+      "ncertPointer": "CUET Quantitative Aptitude, Simple Interest & Multipliers, pp. 416-426."
+    },
+    {
+      "title": "Compound Interest and Fractional/Sub-Annual Compounding",
+      "explanation": "Compound Interest reflects exponential capital reinvestment:\n1. Standard Annual Compounding: A = P * (1 + R/100)^T; CI = P * [(1 + R/100)^T - 1].\n2. Sub-Annual Compounding Periods:\n  - Semi-Annually (Half-Yearly): Rate becomes R/2, number of periods becomes 2T: A = P * [1 + R / (2 * 100)]^(2T).\n  - Quarterly: Rate becomes R/4, number of periods becomes 4T: A = P * [1 + R / (4 * 100)]^(4T).\n3. Fractional Years (e.g., T = 2 years and 3 months = 2 1/4 years):\n  - A = P * (1 + R/100)^2 * [1 + (1/4 * R) / 100].",
+      "keyTakeaways": [
+        "Half-yearly compounding: R -> R/2, T -> 2T.",
+        "Quarterly compounding: R -> R/4, T -> 4T."
+      ],
+      "ncertPointer": "CUET Quantitative Aptitude, Compound Interest & Annuities, pp. 428-438."
+    },
+    {
+      "title": "The CI - SI Difference Master Shortcuts",
+      "explanation": "Questions comparing CI and SI over 2 and 3 years are perennial CUET staples:\n1. For T = 2 Years:\n  - First year: CI_1 = SI_1 (both equal P * R / 100).\n  - Second year: CI_2 exceeds SI_2 by the interest earned on the 1st year's interest: (SI_1 * R / 100) = P * (R / 100)^2.\n  - Difference D_2 = P * (R / 100)^2.\n2. For T = 3 Years:\n  - D_3 = P * (R / 100)^2 * [(300 + R) / 100] = D_2 * [(300 + R) / 100].\n  - This identity saves 3-4 minutes of calculation in 3-year difference problems.",
+      "keyTakeaways": [
+        "2-Year Difference: D_2 = P * (R / 100)^2.",
+        "3-Year Difference: D_3 = P * (R / 100)^2 * [(300 + R) / 100]."
+      ],
+      "ncertPointer": "CUET Quantitative Aptitude, CI-SI Differential Shortcuts, pp. 440-448."
+    }
+  ],
+  "keyFacts": [
+    {
+      "concept": "2-Year CI-SI Difference",
+      "formulaOrFact": "D_2 = P * (R / 100)^2",
+      "explanation": "Equals interest on the first year's interest.",
+      "examTip": "Given D and R, find P = D * (100 / R)^2 instantly."
+    },
+    {
+      "concept": "3-Year CI-SI Difference",
+      "formulaOrFact": "D_3 = P * (R / 100)^2 * [(300 + R) / 100]",
+      "explanation": "Direct formula avoiding cubic expansion.",
+      "examTip": "High-frequency question in hard-difficulty slots."
+    },
+    {
+      "concept": "SI n-fold Multiplier",
+      "formulaOrFact": "R * T = (n - 1) * 100",
+      "explanation": "Finds time or rate for a principal to become n times itself.",
+      "examTip": "For doubling, n=2 -> RT = 100; for tripling, n=3 -> RT = 200."
+    }
+  ],
+  "diagramSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 700 320\" width=\"100%\" height=\"100%\">\n  <defs>\n    <linearGradient id=\"intGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#b45309\"/>\n      <stop offset=\"100%\" stop-color=\"#d97706\"/>\n    </linearGradient>\n    <filter id=\"shadowInt\" x=\"-5%\" y=\"-5%\" width=\"110%\" height=\"110%\">\n      <feDropShadow dx=\"2\" dy=\"2\" stdDeviation=\"3\" flood-opacity=\"0.15\"/>\n    </filter>\n  </defs>\n  <rect width=\"100%\" height=\"100%\" fill=\"#fffbeb\" rx=\"10\"/>\n  <text x=\"350\" y=\"30\" font-family=\"system-ui, sans-serif\" font-size=\"16\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#78350f\">Simple vs Compound Interest Comparative Accrual</text>\n\n  <!-- Left: Simple Interest Linear -->\n  <g transform=\"translate(45, 60)\" filter=\"url(#shadowInt)\">\n    <rect width=\"285\" height=\"230\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fde68a\" stroke-width=\"1.5\"/>\n    <rect width=\"285\" height=\"38\" rx=\"8\" fill=\"url(#intGrad)\"/>\n    <text x=\"142\" y=\"24\" font-family=\"system-ui, sans-serif\" font-size=\"12.5\" font-weight=\"700\" fill=\"#ffffff\" text-anchor=\"middle\">Simple Interest (Linear Accrual)</text>\n    \n    <text x=\"20\" y=\"68\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#92400e\">• Core Formula: SI = (P × R × T) / 100</text>\n    <text x=\"20\" y=\"94\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#92400e\">• Constant Annual Yield:</text>\n    <text x=\"30\" y=\"112\" font-family=\"system-ui, sans-serif\" font-size=\"10.5\" fill=\"#334155\">Year 1 = PR/100 | Year 2 = PR/100</text>\n    \n    <text x=\"20\" y=\"140\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#92400e\">• Sum Multiples Rule:</text>\n    <rect x=\"25\" y=\"152\" width=\"235\" height=\"32\" rx=\"4\" fill=\"#fef3c7\" stroke=\"#f59e0b\"/>\n    <text x=\"142\" y=\"172\" font-family=\"monospace\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b45309\" text-anchor=\"middle\">R × T = (n - 1) × 100</text>\n\n    <text x=\"20\" y=\"210\" font-family=\"system-ui, sans-serif\" font-size=\"10.5\" fill=\"#64748b\">Doubles (n=2): RT = 100</text>\n    <text x=\"20\" y=\"226\" font-family=\"system-ui, sans-serif\" font-size=\"10.5\" fill=\"#64748b\">Triples (n=3): RT = 200</text>\n  </g>\n\n  <!-- Right: Compound Interest & Difference -->\n  <g transform=\"translate(370, 60)\" filter=\"url(#shadowInt)\">\n    <rect width=\"285\" height=\"230\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fde68a\" stroke-width=\"1.5\"/>\n    <rect width=\"285\" height=\"38\" rx=\"8\" fill=\"#78350f\"/>\n    <text x=\"142\" y=\"24\" font-family=\"system-ui, sans-serif\" font-size=\"12.5\" font-weight=\"700\" fill=\"#ffffff\" text-anchor=\"middle\">Compound Interest & Differences</text>\n    \n    <text x=\"20\" y=\"68\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#78350f\">• Core Formula: A = P(1 + R/100)^T</text>\n    <text x=\"20\" y=\"94\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#78350f\">• 2-Year Difference (CI - SI):</text>\n    <rect x=\"25\" y=\"104\" width=\"235\" height=\"30\" rx=\"4\" fill=\"#fef3c7\" stroke=\"#f59e0b\"/>\n    <text x=\"142\" y=\"124\" font-family=\"monospace\" font-size=\"12\" font-weight=\"700\" fill=\"#b45309\" text-anchor=\"middle\">D_2 = P × (R / 100)^2</text>\n\n    <text x=\"20\" y=\"156\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#78350f\">• 3-Year Difference (CI - SI):</text>\n    <rect x=\"25\" y=\"166\" width=\"235\" height=\"30\" rx=\"4\" fill=\"#fef3c7\" stroke=\"#f59e0b\"/>\n    <text x=\"142\" y=\"186\" font-family=\"monospace\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b45309\" text-anchor=\"middle\">D_3 = D_2 × (300 + R) / 100</text>\n\n    <text x=\"20\" y=\"218\" font-family=\"system-ui, sans-serif\" font-size=\"10\" fill=\"#64748b\">Half-yearly: R -> R/2, Time -> 2T</text>\n  </g>\n</svg>",
+  "workedExamples": [
+    {
+      "id": "general-test-u3-we5",
+      "questionNumber": 1,
+      "question": "The difference between compound interest and simple interest on a certain sum of money at 10% per annum for 2 years is ₹65. What is the principal sum?",
+      "options": [
+        {
+          "id": "A",
+          "text": "₹6,000"
+        },
+        {
+          "id": "B",
+          "text": "₹6,500"
+        },
+        {
+          "id": "C",
+          "text": "₹7,000"
+        },
+        {
+          "id": "D",
+          "text": "₹7,500"
+        }
+      ],
+      "correctOption": "B",
+      "solutionStepByStep": [
+        "Step 1: Use the 2-Year Difference Shortcut:\n  - D_2 = P * (R / 100)^2.",
+        "Step 2: Plug in given values: D_2 = 65, R = 10%.\n  - 65 = P * (10 / 100)^2 = P * (1 / 10)^2 = P * (1 / 100).",
+        "Step 3: Solve for P:\n  - P = 65 * 100 = ₹6,500."
+      ],
+      "cuetInsight": "Applying the 2-year difference formula yields the answer in under 15 seconds.",
+      "solutionSteps": [
+        "Step 1: Use the 2-Year Difference Shortcut:\n  - D_2 = P * (R / 100)^2.",
+        "Step 2: Plug in given values: D_2 = 65, R = 10%.\n  - 65 = P * (10 / 100)^2 = P * (1 / 10)^2 = P * (1 / 100).",
+        "Step 3: Solve for P:\n  - P = 65 * 100 = ₹6,500."
+      ]
+    },
+    {
+      "id": "general-test-u3-we6",
+      "questionNumber": 2,
+      "question": "A sum of money invested at simple interest doubles itself in 8 years. In how many years will it become 4 times itself at the same rate of interest?",
+      "options": [
+        {
+          "id": "A",
+          "text": "16 years"
+        },
+        {
+          "id": "B",
+          "text": "20 years"
+        },
+        {
+          "id": "C",
+          "text": "24 years"
+        },
+        {
+          "id": "D",
+          "text": "32 years"
+        }
+      ],
+      "correctOption": "C",
+      "solutionStepByStep": [
+        "Step 1: Under Simple Interest, use R * T = (n - 1) * 100.\n  - Case 1 (doubles -> n=2): R * 8 = (2 - 1) * 100 = 100 -> R = 100 / 8 = 12.5% per annum.",
+        "Step 2: Case 2 (becomes 4 times -> n=4):\n  - R * T2 = (4 - 1) * 100 = 300.",
+        "Step 3: Substitute R = 12.5%:\n  - 12.5 * T2 = 300 -> T2 = 300 / 12.5 = 24 years."
+      ],
+      "cuetInsight": "Notice that tripling or quadrupling under SI is linear, not geometric (24 years, NOT 16 or 32).",
+      "solutionSteps": [
+        "Step 1: Under Simple Interest, use R * T = (n - 1) * 100.\n  - Case 1 (doubles -> n=2): R * 8 = (2 - 1) * 100 = 100 -> R = 100 / 8 = 12.5% per annum.",
+        "Step 2: Case 2 (becomes 4 times -> n=4):\n  - R * T2 = (4 - 1) * 100 = 300.",
+        "Step 3: Substitute R = 12.5%:\n  - 12.5 * T2 = 300 -> T2 = 300 / 12.5 = 24 years."
+      ]
+    }
+  ],
+  "howCuetAsks": [
+    {
+      "patternType": "2-Year Difference Formula",
+      "frequency": "Very High",
+      "typicalStem": "If the difference between CI and SI on a sum at 5% per annum for 2 years is ₹25, find the sum.",
+      "strategy": "Use P = D * (100 / R)^2 = 25 * (20)^2 = 25 * 400 = ₹10,000."
+    },
+    {
+      "patternType": "Half-Yearly Compounding Rate Shift",
+      "frequency": "High",
+      "typicalStem": "Find the compound interest on ₹10,000 for 1 year at 20% per annum compounded half-yearly.",
+      "strategy": "Rate = 10%, Time = 2 periods -> A = 10,000 * (1.10)^2 = ₹12,100 -> CI = ₹2,100."
+    }
+  ],
+  "commonTraps": [
+    {
+      "trap": "Confusing SI sum doubling with CI sum doubling",
+      "whyStudentsFail": "Under CI, if sum doubles in 8 years, it becomes 4 times in 16 years (2^2); under SI, it takes 24 years.",
+      "howToAvoid": "Check whether question specifies 'at simple interest' or 'at compound interest'."
+    },
+    {
+      "trap": "Omitting the half-yearly rate division",
+      "whyStudentsFail": "Keeping R = 20% instead of dividing by 2 to get 10%.",
+      "howToAvoid": "For half-yearly: ALWAYS halve the rate and double the years immediately."
+    }
+  ],
+  "mnemonics": [
+    {
+      "concept": "Half-Yearly Adjustment",
+      "mnemonic": "H-D (Halve Rate, Double Time)",
+      "explanation": "Halve the rate, Double the number of periods."
+    }
+  ],
+  "quickRevisionCard": {
+    "title": "Interest Essentials High-Yield Card",
+    "bulletPoints": [
+      "Simple Interest: SI = (P * R * T) / 100.",
+      "SI Multiplier: R * T = (n - 1) * 100.",
+      "Compound Interest: A = P(1 + R/100)^T.",
+      "Half-yearly: R' = R/2, T' = 2T; Quarterly: R' = R/4, T' = 4T.",
+      "2-Year Difference: D_2 = P * (R / 100)^2.",
+      "3-Year Difference: D_3 = D_2 * [(300 + R) / 100]."
+    ],
+    "keyPoints": [
+      "Simple Interest: SI = (P * R * T) / 100.",
+      "SI Multiplier: R * T = (n - 1) * 100.",
+      "Compound Interest: A = P(1 + R/100)^T.",
+      "Half-yearly: R' = R/2, T' = 2T; Quarterly: R' = R/4, T' = 4T.",
+      "2-Year Difference: D_2 = P * (R / 100)^2.",
+      "3-Year Difference: D_3 = D_2 * [(300 + R) / 100]."
+    ]
+  },
+  "practiceQuestions": [
+    {
+      "id": "general-test-u3-t3-q1",
+      "question": "What will be the compound interest on ₹8,000 at 5% per annum for 2 years, compounded annually?",
+      "type": "standard",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "₹800"
+        },
+        {
+          "id": "B",
+          "text": "₹820"
+        },
+        {
+          "id": "C",
+          "text": "₹840"
+        },
+        {
+          "id": "D",
+          "text": "₹850"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Amount = 8000 * (1 + 5/100)^2 = 8000 * (21/20) * (21/20) = 8000 * (441 / 400) = 20 * 441 = ₹8,820.\nCompound Interest = 8,820 - 8,000 = ₹820.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u3-t3-q2",
+      "question": "The difference between simple and compound interest on ₹5,000 for 2 years at 8% per annum is:",
+      "type": "standard",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "₹32"
+        },
+        {
+          "id": "B",
+          "text": "₹36"
+        },
+        {
+          "id": "C",
+          "text": "₹40"
+        },
+        {
+          "id": "D",
+          "text": "₹48"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Difference D_2 = P * (R / 100)^2 = 5000 * (8 / 100)^2 = 5000 * (64 / 10000) = 64 / 2 = ₹32.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u3-t3-q3",
+      "question": "At what rate of simple interest per annum will a sum of money triple itself in 10 years?",
+      "type": "standard",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "15%"
+        },
+        {
+          "id": "B",
+          "text": "20%"
+        },
+        {
+          "id": "C",
+          "text": "25%"
+        },
+        {
+          "id": "D",
+          "text": "30%"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Using R * T = (n - 1) * 100:\nHere n = 3, T = 10 -> R * 10 = (3 - 1) * 100 = 200 -> R = 20% per annum.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u3-t3-q4",
+      "question": "A sum of ₹12,000 deposited at compound interest becomes double after 5 years. How much will it become after 20 years?",
+      "type": "standard",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "₹48,000"
+        },
+        {
+          "id": "B",
+          "text": "₹96,000"
+        },
+        {
+          "id": "C",
+          "text": "₹1,44,000"
+        },
+        {
+          "id": "D",
+          "text": "₹1,92,000"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "Under compound interest, growth is exponential. 20 years = 4 cycles of 5 years (20 / 5 = 4).\nThe sum doubles in each cycle -> After 4 cycles, it becomes 2^4 = 16 times the original principal.\nFinal Amount = 16 * 12,000 = ₹1,92,000.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u3-t3-q5",
+      "question": "Assertion (A): For the first year on an annual compounding scheme, Simple Interest and Compound Interest on the same principal at the same rate are identical.\nReason (R): In the first year, interest is calculated solely on the principal sum in both cases, as no prior interest has accrued.",
+      "type": "assertion-reason",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)"
+        },
+        {
+          "id": "B",
+          "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)"
+        },
+        {
+          "id": "C",
+          "text": "(A) is true but (R) is false"
+        },
+        {
+          "id": "D",
+          "text": "(A) is false but (R) is true"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Both statements are true and (R) provides the exact reason why SI and CI are equal for Year 1 under annual compounding.",
+      "questionType": "Assertion-Reason"
+    },
+    {
+      "id": "general-test-u3-t3-q6",
+      "question": "Match List-I (Term) with List-II (Formula):\n(P) Simple Interest — 1. (P * R * T) / 100\n(Q) 2-Year CI-SI Difference — 2. P * (R / 100)^2\n(R) Compound Amount (Annual) — 3. P * (1 + R/100)^T\n(S) Sum Tripling under SI — 4. R * T = 200",
+      "type": "match-the-following",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "A",
+          "text": "P-1, Q-2, R-3, S-4"
+        },
+        {
+          "id": "B",
+          "text": "P-2, Q-1, R-4, S-3"
+        },
+        {
+          "id": "C",
+          "text": "P-1, Q-3, R-2, S-4"
+        },
+        {
+          "id": "D",
+          "text": "P-4, Q-2, R-1, S-3"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Standard formulas in interest mathematics.",
+      "questionType": "Match The Following"
+    },
+    {
+      "id": "general-test-u3-t3-q7",
+      "question": "Find the compound interest on ₹10,000 for 1 year at 20% per annum, compounded half-yearly.",
+      "type": "standard",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "₹2,000"
+        },
+        {
+          "id": "B",
+          "text": "₹2,100"
+        },
+        {
+          "id": "C",
+          "text": "₹2,200"
+        },
+        {
+          "id": "D",
+          "text": "₹2,400"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Half-yearly: Rate = 20/2 = 10%; Time = 1 * 2 = 2 periods.\nAmount = 10,000 * (1 + 10/100)^2 = 10,000 * 1.21 = ₹12,100.\nCI = 12,100 - 10,000 = ₹2,100.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u3-t3-q8",
+      "question": "A sum of ₹1,600 gives a simple interest of ₹252 in 2 years and 3 months. The rate of interest per annum is:",
+      "type": "standard",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "6%"
+        },
+        {
+          "id": "B",
+          "text": "7%"
+        },
+        {
+          "id": "C",
+          "text": "8%"
+        },
+        {
+          "id": "D",
+          "text": "9%"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Time T = 2 years 3 months = 2 + 3/12 = 2 + 1/4 = 9/4 years.\nSI = (P * R * T) / 100 -> 252 = (1600 * R * (9/4)) / 100 = 16 * R * (9/4) = 4 * 9 * R = 36 * R.\nR = 252 / 36 = 7% per annum.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u3-t3-q9",
+      "question": "The simple interest on a certain sum of money for 3 years at 8% per annum is ₹1,200. What would be the compound interest on the same sum at the same rate and for the same period?",
+      "type": "standard",
+      "difficulty": "hard",
+      "options": [
+        {
+          "id": "A",
+          "text": "₹1,298.56"
+        },
+        {
+          "id": "B",
+          "text": "₹1,324.60"
+        },
+        {
+          "id": "C",
+          "text": "₹1,280.00"
+        },
+        {
+          "id": "D",
+          "text": "₹1,350.25"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "SI = (P * R * T) / 100 -> 1200 = (P * 8 * 3) / 100 -> P = (1200 * 100) / 24 = ₹5,000.\nCompound Amount for 3 years at 8%:\nA = 5000 * (1.08)^3 = 5000 * 1.259712 = ₹6,298.56.\nCI = 6,298.56 - 5,000 = ₹1,298.56.",
+      "questionType": "Conceptual Direct"
+    },
+    {
+      "id": "general-test-u3-t3-q10",
+      "question": "A sum invested at 5% simple interest per annum grows to ₹520 in 5 years and to ₹568 in 7 years. What is the principal sum?",
+      "type": "standard",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "A",
+          "text": "₹400"
+        },
+        {
+          "id": "B",
+          "text": "₹420"
+        },
+        {
+          "id": "C",
+          "text": "₹450"
+        },
+        {
+          "id": "D",
+          "text": "₹380"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Interest earned in 2 years (from year 5 to year 7) = 568 - 520 = ₹48.\nInterest per year = 48 / 2 = ₹24.\nInterest for 5 years = 5 * 24 = ₹120.\nPrincipal = Amount at 5 years - 5 years interest = 520 - 120 = ₹400.",
+      "questionType": "Conceptual Direct"
+    }
+  ],
+  "links": {
+    "prerequisites": [],
+    "relatedTopics": [
+      "percentages-profit-and-loss-ratio-and-proportion",
+      "average-work-and-time-speed-and-distance"
+    ],
+    "practiceTestId": "practice-general-test-unit3-test1",
+    "practiceTestUrl": "/test/practice-general-test-unit3-test1",
+    "weaknessReportUrl": "/dashboard/radar?subject=general-test",
+    "weaknessRadarUrl": "/dashboard/radar?subject=general-test"
+  },
+  "diagram": {
+    "type": "svg",
+    "title": "Simple & Compound Interest",
+    "caption": "General Aptitude Test schematic and conceptual diagram for Simple & Compound Interest",
+    "code": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 700 320\" width=\"100%\" height=\"100%\">\n  <defs>\n    <linearGradient id=\"intGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#b45309\"/>\n      <stop offset=\"100%\" stop-color=\"#d97706\"/>\n    </linearGradient>\n    <filter id=\"shadowInt\" x=\"-5%\" y=\"-5%\" width=\"110%\" height=\"110%\">\n      <feDropShadow dx=\"2\" dy=\"2\" stdDeviation=\"3\" flood-opacity=\"0.15\"/>\n    </filter>\n  </defs>\n  <rect width=\"100%\" height=\"100%\" fill=\"#fffbeb\" rx=\"10\"/>\n  <text x=\"350\" y=\"30\" font-family=\"system-ui, sans-serif\" font-size=\"16\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#78350f\">Simple vs Compound Interest Comparative Accrual</text>\n\n  <!-- Left: Simple Interest Linear -->\n  <g transform=\"translate(45, 60)\" filter=\"url(#shadowInt)\">\n    <rect width=\"285\" height=\"230\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fde68a\" stroke-width=\"1.5\"/>\n    <rect width=\"285\" height=\"38\" rx=\"8\" fill=\"url(#intGrad)\"/>\n    <text x=\"142\" y=\"24\" font-family=\"system-ui, sans-serif\" font-size=\"12.5\" font-weight=\"700\" fill=\"#ffffff\" text-anchor=\"middle\">Simple Interest (Linear Accrual)</text>\n    \n    <text x=\"20\" y=\"68\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#92400e\">• Core Formula: SI = (P × R × T) / 100</text>\n    <text x=\"20\" y=\"94\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#92400e\">• Constant Annual Yield:</text>\n    <text x=\"30\" y=\"112\" font-family=\"system-ui, sans-serif\" font-size=\"10.5\" fill=\"#334155\">Year 1 = PR/100 | Year 2 = PR/100</text>\n    \n    <text x=\"20\" y=\"140\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#92400e\">• Sum Multiples Rule:</text>\n    <rect x=\"25\" y=\"152\" width=\"235\" height=\"32\" rx=\"4\" fill=\"#fef3c7\" stroke=\"#f59e0b\"/>\n    <text x=\"142\" y=\"172\" font-family=\"monospace\" font-size=\"11.5\" font-weight=\"700\" fill=\"#b45309\" text-anchor=\"middle\">R × T = (n - 1) × 100</text>\n\n    <text x=\"20\" y=\"210\" font-family=\"system-ui, sans-serif\" font-size=\"10.5\" fill=\"#64748b\">Doubles (n=2): RT = 100</text>\n    <text x=\"20\" y=\"226\" font-family=\"system-ui, sans-serif\" font-size=\"10.5\" fill=\"#64748b\">Triples (n=3): RT = 200</text>\n  </g>\n\n  <!-- Right: Compound Interest & Difference -->\n  <g transform=\"translate(370, 60)\" filter=\"url(#shadowInt)\">\n    <rect width=\"285\" height=\"230\" rx=\"8\" fill=\"#ffffff\" stroke=\"#fde68a\" stroke-width=\"1.5\"/>\n    <rect width=\"285\" height=\"38\" rx=\"8\" fill=\"#78350f\"/>\n    <text x=\"142\" y=\"24\" font-family=\"system-ui, sans-serif\" font-size=\"12.5\" font-weight=\"700\" fill=\"#ffffff\" text-anchor=\"middle\">Compound Interest & Differences</text>\n    \n    <text x=\"20\" y=\"68\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#78350f\">• Core Formula: A = P(1 + R/100)^T</text>\n    <text x=\"20\" y=\"94\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#78350f\">• 2-Year Difference (CI - SI):</text>\n    <rect x=\"25\" y=\"104\" width=\"235\" height=\"30\" rx=\"4\" fill=\"#fef3c7\" stroke=\"#f59e0b\"/>\n    <text x=\"142\" y=\"124\" font-family=\"monospace\" font-size=\"12\" font-weight=\"700\" fill=\"#b45309\" text-anchor=\"middle\">D_2 = P × (R / 100)^2</text>\n\n    <text x=\"20\" y=\"156\" font-family=\"system-ui, sans-serif\" font-size=\"11\" font-weight=\"700\" fill=\"#78350f\">• 3-Year Difference (CI - SI):</text>\n    <rect x=\"25\" y=\"166\" width=\"235\" height=\"30\" rx=\"4\" fill=\"#fef3c7\" stroke=\"#f59e0b\"/>\n    <text x=\"142\" y=\"186\" font-family=\"monospace\" font-size=\"10.5\" font-weight=\"700\" fill=\"#b45309\" text-anchor=\"middle\">D_3 = D_2 × (300 + R) / 100</text>\n\n    <text x=\"20\" y=\"218\" font-family=\"system-ui, sans-serif\" font-size=\"10\" fill=\"#64748b\">Half-yearly: R -> R/2, Time -> 2T</text>\n  </g>\n</svg>"
+  },
+  "howCuetAsksThis": [
+    {
+      "type": "2-Year Difference Formula",
+      "frequency": "Very High",
+      "pyqExample": {
+        "question": "If the difference between CI and SI on a sum at 5% per annum for 2 years is ₹25, find the sum.",
+        "options": [
+          {
+            "id": "A",
+            "text": "Option A"
+          },
+          {
+            "id": "B",
+            "text": "Option B"
+          },
+          {
+            "id": "C",
+            "text": "Option C"
+          },
+          {
+            "id": "D",
+            "text": "Option D"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "Use P = D * (100 / R)^2 = 25 * (20)^2 = 25 * 400 = ₹10,000."
+      },
+      "strategy": "Use P = D * (100 / R)^2 = 25 * (20)^2 = 25 * 400 = ₹10,000."
+    },
+    {
+      "type": "Half-Yearly Compounding Rate Shift",
+      "frequency": "High",
+      "pyqExample": {
+        "question": "Find the compound interest on ₹10,000 for 1 year at 20% per annum compounded half-yearly.",
+        "options": [
+          {
+            "id": "A",
+            "text": "Option A"
+          },
+          {
+            "id": "B",
+            "text": "Option B"
+          },
+          {
+            "id": "C",
+            "text": "Option C"
+          },
+          {
+            "id": "D",
+            "text": "Option D"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "Rate = 10%, Time = 2 periods -> A = 10,000 * (1.10)^2 = ₹12,100 -> CI = ₹2,100."
+      },
+      "strategy": "Rate = 10%, Time = 2 periods -> A = 10,000 * (1.10)^2 = ₹12,100 -> CI = ₹2,100."
+    }
+  ],
+  "metadata": {
+    "confidence": "high",
+    "needsHumanReview": false,
+    "lastUpdated": "2026-10-14T17:33:48.844Z",
+    "version": 1,
+    "wordCount": 2756,
+    "isFreePreview": false
+  }
+}

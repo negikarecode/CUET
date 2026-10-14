@@ -95,13 +95,20 @@ export function getAllTaxonomySubjects(): TaxonomySubject[] {
  */
 export function getTaxonomySubject(subjectFolder: string): TaxonomySubject | null {
   const subjects = getAllTaxonomySubjects();
-  const normalized = subjectFolder.toLowerCase().trim();
+  let normalized = subjectFolder.toLowerCase().trim();
+  try {
+    normalized = decodeURIComponent(subjectFolder).toLowerCase().trim();
+  } catch (e) {
+    // ignore
+  }
   return (
     subjects.find(
       (s) =>
         s.folder.toLowerCase() === normalized ||
         s.name.toLowerCase() === normalized ||
-        s.code === normalized
+        s.code === normalized ||
+        slugify(s.name) === normalized ||
+        slugify(s.folder) === normalized
     ) || null
   );
 }

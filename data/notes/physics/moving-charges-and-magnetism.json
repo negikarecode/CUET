@@ -1,0 +1,647 @@
+{
+  "id": "physics_u3_t1",
+  "slug": "moving-charges-and-magnetism",
+  "subject": "physics",
+  "subjectName": "Physics",
+  "subjectCode": "322",
+  "unitNumber": 3,
+  "unitTitle": "Magnetic Effects of Current and Magnetism",
+  "topicTitle": "Moving Charges and Magnetism",
+  "ncertReference": {
+    "class": "Class 12",
+    "book": "Physics Part 1",
+    "chapterNumber": 4,
+    "chapterName": "Moving Charges and Magnetism",
+    "sections": [
+      "4.2 Magnetic Force",
+      "4.3 Motion in a Magnetic Field",
+      "4.4 Motion in Combined Electric and Magnetic Fields",
+      "4.5 Magnetic Field due to a Current Element, Biot-Savart Law",
+      "4.6 Magnetic Field on the Axis of a Circular Current Loop",
+      "4.7 Ampere's Circuital Law",
+      "4.8 The Solenoid and the Toroid",
+      "4.9 Force between Two Parallel Currents, the Ampere",
+      "4.10 Torque on Current Loop, Magnetic Dipole",
+      "4.11 The Moving Coil Galvanometer"
+    ]
+  },
+  "cuetRelevance": {
+    "level": "High",
+    "pyqFrequency": "Appears in every shift: 2-3 questions covering Lorentz force, circular loop field, or parallel conductors",
+    "totalPyqsInRepo": 62,
+    "weightagePercentage": 7
+  },
+  "summary30Seconds": [
+    "Lorentz Force $\\vec{F} = q(\\vec{E} + \\vec{v} \\times \\vec{B})$; Magnetic force $\\vec{F}_B = q(\\vec{v} \\times \\vec{B})$ does zero work because force is always perpendicular to velocity ($W = 0, \\Delta K = 0$).",
+    "Motion in uniform $\\vec{B}$: Particle injected at $90^\\circ$ travels in circle of radius $r = \\frac{mv}{qB} = \\frac{\\sqrt{2mK}}{qB}$; Frequency $f = \\frac{qB}{2\\pi m}$ is independent of speed/radius.",
+    "Biot-Savart Law: $d\\vec{B} = \\frac{\\mu_0}{4\\pi} \\frac{I(d\\vec{l} \\times \\hat{r})}{r^2}$. Axis of circular loop of radius $R$: $B = \\frac{\\mu_0 N I R^2}{2(R^2 + x^2)^{3/2}}$; at center ($x=0$): $B = \\frac{\\mu_0 N I}{2R}$.",
+    "Ampere's Circuital Law: $\\oint \\vec{B} \\cdot d\\vec{l} = \\mu_0 I_{\\text{enclosed}}$. Long straight wire: $B = \\frac{\\mu_0 I}{2\\pi r}$; Long solenoid: $B = \\mu_0 n I$ (where $n = N/L$).",
+    "Force between two parallel currents: $\\frac{F}{L} = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$. Parallel currents in same direction ATTRACT; antiparallel REPEL. Defines the SI Ampere."
+  ],
+  "coreConcepts": [
+    {
+      "title": "Lorentz Force & Helical Trajectory",
+      "content": "Total Lorentz force on charge $q$ moving with velocity $\\vec{v}$ in presence of both $\\vec{E}$ and $\\vec{B}$ is:\n$$\\vec{F} = q\\vec{E} + q(\\vec{v} \\times \\vec{B})$$\nSince $\\vec{F}_B \\cdot \\vec{v} = q(\\vec{v} \\times \\vec{B}) \\cdot \\vec{v} = 0$, magnetic force can never change the kinetic energy or speed of a charged particle—it only changes the direction of motion.\n\n**Trajectories:**\n1. $\\vec{v} \\parallel \\vec{B}$ ($\\theta = 0^\\circ$ or $180^\\circ$): $\\vec{F}_B = 0$ -> Straight line motion.\n2. $\\vec{v} \\perp \\vec{B}$ ($\\theta = 90^\\circ$): Uniform circular motion with centripetal force $q v B = \\frac{m v^2}{r} \\implies r = \\frac{mv}{qB}$.\n3. General angle $\\theta$: Helical motion with radius $r = \\frac{m v \\sin\\theta}{qB}$ and pitch $p = (v \\cos\\theta) T = \\frac{2\\pi m v \\cos\\theta}{qB}$."
+    },
+    {
+      "title": "Biot-Savart Law & Circular Loops",
+      "content": "The magnetic field produced by an infinitesimal current element $I d\\vec{l}$ at displacement $\\vec{r}$ is:\n$$d\\vec{B} = \\frac{\\mu_0}{4\\pi} \\frac{I d\\vec{l} \\times \\hat{r}}{r^2}$$\nwhere $\\frac{\\mu_0}{4\\pi} = 10^{-7}\\text{ T}\\cdot\\text{m}\\cdot\\text{A}^{-1}$.\n\nFor a circular coil of $N$ turns and radius $R$ carrying current $I$:\n- At center: $B_c = \\frac{\\mu_0 N I}{2R}$.\n- At an axial distance $x$: $B_x = \\frac{\\mu_0 N I R^2}{2(R^2 + x^2)^{3/2}}$.\n- At large distance ($x \\gg R$): $B_x \\approx \\frac{\\mu_0 (N I \\pi R^2)}{2\\pi x^3} = \\frac{\\mu_0}{4\\pi} \\frac{2m}{x^3}$ where $m = N I A$ is the magnetic dipole moment."
+    },
+    {
+      "title": "Ampere's Circuital Law & Force between Currents",
+      "content": "Ampere's Law states $\\oint_C \\vec{B} \\cdot d\\vec{l} = \\mu_0 I_{\\text{enc}}$.\n- **Long solenoid** (turns per unit length $n = N/L$): Inside core $B = \\mu_0 n I$; at either end of a semi-infinite solenoid $B = \\frac{1}{2} \\mu_0 n I$.\n- **Toroid:** Inside core $B = \\frac{\\mu_0 N I}{2\\pi r}$; in open space outside or inside central hole $B = 0$.\n\n**Parallel Currents:** Two straight infinite parallel wires separated by distance $d$ carrying currents $I_1, I_2$ exert a mutual magnetic force per unit length:\n$$\\frac{F}{L} = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$$\n- **Like currents attract**, opposite currents repel (exact opposite of electrostatics!).\n- One Ampere is the constant current which, maintained in two straight parallel conductors of infinite length and negligible cross-section placed 1 metre apart in vacuum, produces between them a force of $2 \\times 10^{-7}\\text{ N/m}$."
+    }
+  ],
+  "keyFormulasAndTables": [
+    {
+      "name": "Magnetic Lorentz Force",
+      "formula": "F = q v B \\sin\\theta",
+      "symbols": "\\theta: angle between \\vec{v} and \\vec{B}",
+      "siUnits": "Newtons (N)",
+      "applicationCondition": "Charged particle moving in magnetic field"
+    },
+    {
+      "name": "Radius in Circular Orbit",
+      "formula": "r = \\frac{m v}{q B} = \\frac{p}{q B} = \\frac{\\sqrt{2 m K}}{q B}",
+      "symbols": "p: momentum, K: kinetic energy",
+      "siUnits": "Meters (m)",
+      "applicationCondition": "Perpendicular injection (\\theta = 90^\\circ)"
+    },
+    {
+      "name": "Cyclotron Frequency",
+      "formula": "f = \\frac{q B}{2\\pi m}, \\quad \\omega = \\frac{q B}{m}",
+      "symbols": "Independent of speed and radius",
+      "siUnits": "Hertz (Hz)",
+      "applicationCondition": "Non-relativistic speeds (v << c)"
+    },
+    {
+      "name": "Circular Loop Center Field",
+      "formula": "B = \\frac{\\mu_0 N I}{2R}",
+      "symbols": "N: turns, R: radius, I: current",
+      "siUnits": "Tesla (T)",
+      "applicationCondition": "Center of flat circular coil"
+    },
+    {
+      "name": "Long Straight Wire Field",
+      "formula": "B = \\frac{\\mu_0 I}{2\\pi r}",
+      "symbols": "r: radial distance from wire axis",
+      "siUnits": "Tesla (T)",
+      "applicationCondition": "Infinitely long straight thin conductor"
+    },
+    {
+      "name": "Force between Parallel Currents",
+      "formula": "\\frac{F}{L} = \\frac{\\mu_0 I_1 I_2}{2\\pi d}",
+      "symbols": "d: separation, \\mu_0 = 4\\pi \\times 10^{-7}",
+      "siUnits": "N/m",
+      "applicationCondition": "Two long parallel currents in vacuum"
+    }
+  ],
+  "diagram": {
+    "type": "svg",
+    "title": "Biot-Savart Loop & Parallel Current Forces",
+    "caption": "Left: Magnetic field on the axis of a circular current loop. Right: Mutual magnetic attraction between parallel conductors carrying current in the same direction.",
+    "code": "<svg viewBox=\"0 0 760 250\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <defs>\n    <marker id=\"arrB\" viewBox=\"0 0 10 10\" refX=\"6\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563EB\" />\n    </marker>\n    <marker id=\"arrRed\" viewBox=\"0 0 10 10\" refX=\"6\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#DC2626\" />\n    </marker>\n  </defs>\n  <!-- Left panel: Circular Loop Axis -->\n  <rect x=\"15\" y=\"10\" width=\"350\" height=\"230\" rx=\"12\" fill=\"#F8FAFC\" stroke=\"#E2E8F0\" strokeWidth=\"1.5\"/>\n  <text x=\"190\" y=\"32\" textAnchor=\"middle\" fill=\"#0F172A\" fontSize=\"13\" fontWeight=\"bold\">Field on Axis of Circular Loop</text>\n\n  <!-- Loop viewed edge-on -->\n  <ellipse cx=\"100\" cy=\"125\" rx=\"16\" ry=\"65\" fill=\"#DBEAFE\" stroke=\"#2563EB\" strokeWidth=\"2.5\"/>\n  <text x=\"75\" y=\"75\" fill=\"#2563EB\" fontSize=\"11\" fontWeight=\"bold\">Current I</text>\n  <line x1=\"100\" y1=\"125\" x2=\"330\" y2=\"125\" stroke=\"#64748B\" strokeWidth=\"1.5\" strokeDasharray=\"3 3\"/>\n  <circle cx=\"100\" cy=\"125\" r=\"3\" fill=\"#64748B\"/>\n  <text x=\"95\" y=\"142\" fill=\"#64748B\" fontSize=\"10\">O</text>\n\n  <!-- Point P on axis -->\n  <circle cx=\"260\" cy=\"125\" r=\"4\" fill=\"#DC2626\"/>\n  <text x=\"260\" y=\"145\" textAnchor=\"middle\" fill=\"#DC2626\" fontSize=\"11\" fontWeight=\"bold\">P (x)</text>\n  <line x1=\"260\" y1=\"125\" x2=\"330\" y2=\"125\" stroke=\"#DC2626\" strokeWidth=\"2.5\" markerEnd=\"url(#arrRed)\"/>\n  <text x=\"310\" y=\"115\" fill=\"#DC2626\" fontSize=\"12\" fontWeight=\"bold\">B⃗_axis</text>\n  <text x=\"190\" y=\"225\" textAnchor=\"middle\" fill=\"#1E293B\" fontSize=\"11\" fontWeight=\"bold\">B = μ₀ I R² / [2(R² + x²)^(3/2)]</text>\n\n  <!-- Right panel: Parallel Currents -->\n  <rect x=\"380\" y=\"10\" width=\"365\" height=\"230\" rx=\"12\" fill=\"#F8FAFC\" stroke=\"#E2E8F0\" strokeWidth=\"1.5\"/>\n  <text x=\"562\" y=\"32\" textAnchor=\"middle\" fill=\"#0F172A\" fontSize=\"13\" fontWeight=\"bold\">Parallel Currents Attract</text>\n\n  <!-- Wire 1 -->\n  <line x1=\"470\" y1=\"50\" x2=\"470\" y2=\"200\" stroke=\"#2563EB\" strokeWidth=\"4\"/>\n  <line x1=\"470\" y1=\"90\" x2=\"470\" y2=\"70\" stroke=\"#FFFFFF\" strokeWidth=\"2\" markerEnd=\"url(#arrB)\"/>\n  <text x=\"455\" y=\"125\" fill=\"#2563EB\" fontSize=\"13\" fontWeight=\"bold\">I₁</text>\n\n  <!-- Wire 2 -->\n  <line x1=\"640\" y1=\"50\" x2=\"640\" y2=\"200\" stroke=\"#2563EB\" strokeWidth=\"4\"/>\n  <line x1=\"640\" y1=\"90\" x2=\"640\" y2=\"70\" stroke=\"#FFFFFF\" strokeWidth=\"2\" markerEnd=\"url(#arrB)\"/>\n  <text x=\"655\" y=\"125\" fill=\"#2563EB\" fontSize=\"13\" fontWeight=\"bold\">I₂</text>\n\n  <!-- Distance d -->\n  <line x1=\"470\" y1=\"170\" x2=\"640\" y2=\"170\" stroke=\"#64748B\" strokeWidth=\"1.5\"/>\n  <text x=\"555\" y=\"185\" textAnchor=\"middle\" fill=\"#64748B\" fontSize=\"11\" fontWeight=\"bold\">Distance d</text>\n\n  <!-- Attractive forces -->\n  <line x1=\"470\" y1=\"125\" x2=\"520\" y2=\"125\" stroke=\"#DC2626\" strokeWidth=\"2\" markerEnd=\"url(#arrRed)\"/>\n  <text x=\"495\" y=\"115\" fill=\"#DC2626\" fontSize=\"11\" fontWeight=\"bold\">F⃗₁₂</text>\n  <line x1=\"640\" y1=\"125\" x2=\"590\" y2=\"125\" stroke=\"#DC2626\" strokeWidth=\"2\" markerEnd=\"url(#arrRed)\"/>\n  <text x=\"605\" y=\"115\" fill=\"#DC2626\" fontSize=\"11\" fontWeight=\"bold\">F⃗₂₁</text>\n  <text x=\"562\" y=\"225\" textAnchor=\"middle\" fill=\"#059669\" fontSize=\"11\" fontWeight=\"bold\">F/L = μ₀ I₁ I₂ / (2πd) (Attractive)</text>\n</svg>"
+  },
+  "workedExamples": [
+    {
+      "id": "we_phys_3_1",
+      "questionNumber": 1,
+      "question": "A circular coil of wire consisting of 100 turns, each of radius 8.0 cm carries a current of 0.40 A. What is the magnitude of the magnetic field B at the center of the coil?",
+      "options": [
+        {
+          "id": "A",
+          "text": "3.14 × 10⁻⁴ T"
+        },
+        {
+          "id": "B",
+          "text": "6.28 × 10⁻⁴ T"
+        },
+        {
+          "id": "C",
+          "text": "1.57 × 10⁻⁴ T"
+        },
+        {
+          "id": "D",
+          "text": "3.14 × 10⁻⁵ T"
+        }
+      ],
+      "correctOption": "A",
+      "solutionSteps": [
+        "Step 1: Formula for magnetic field at center of circular coil: $B = \\frac{\\mu_0 N I}{2R}$.",
+        "Step 2: Given $N = 100$, $I = 0.40\\text{ A}$, $R = 8.0\\text{ cm} = 0.08\\text{ m}$, $\\mu_0 = 4\\pi \\times 10^{-7}\\text{ T}\\cdot\\text{m/A}$.",
+        "Step 3: Substitute: $B = \\frac{(4\\pi \\times 10^{-7}) \\times 100 \\times 0.40}{2 \\times 0.08} = \\frac{4\\pi \\times 10^{-5} \\times 0.4}{0.16} = \\frac{1.6\\pi \\times 10^{-5}}{0.16} = 10\\pi \\times 10^{-5} = \\pi \\times 10^{-4}\\text{ T}$.",
+        "Step 4: Value is $3.1416 \\times 10^{-4}\\text{ T} \\approx 3.14 \\times 10^{-4}\\text{ T}$.",
+        "Hence, Option A is correct."
+      ],
+      "cuetTip": "Notice the factor 2 in denominator of circular coil center $2R$ (unlike straight wire which has $2\\pi r$). Don't mix up the $\\pi$ in the denominator!",
+      "solutionStepByStep": [
+        "Step 1: Formula for magnetic field at center of circular coil: $B = \\frac{\\mu_0 N I}{2R}$.",
+        "Step 2: Given $N = 100$, $I = 0.40\\text{ A}$, $R = 8.0\\text{ cm} = 0.08\\text{ m}$, $\\mu_0 = 4\\pi \\times 10^{-7}\\text{ T}\\cdot\\text{m/A}$.",
+        "Step 3: Substitute: $B = \\frac{(4\\pi \\times 10^{-7}) \\times 100 \\times 0.40}{2 \\times 0.08} = \\frac{4\\pi \\times 10^{-5} \\times 0.4}{0.16} = \\frac{1.6\\pi \\times 10^{-5}}{0.16} = 10\\pi \\times 10^{-5} = \\pi \\times 10^{-4}\\text{ T}$.",
+        "Step 4: Value is $3.1416 \\times 10^{-4}\\text{ T} \\approx 3.14 \\times 10^{-4}\\text{ T}$.",
+        "Hence, Option A is correct."
+      ]
+    },
+    {
+      "id": "we_phys_3_2",
+      "questionNumber": 2,
+      "question": "Two long straight parallel wires separated by 0.1 m carry currents of 10 A and 20 A in the same direction. What is the force per unit length between them?",
+      "options": [
+        {
+          "id": "A",
+          "text": "4 × 10⁻⁴ N/m (attractive)"
+        },
+        {
+          "id": "B",
+          "text": "4 × 10⁻⁴ N/m (repulsive)"
+        },
+        {
+          "id": "C",
+          "text": "2 × 10⁻⁴ N/m (attractive)"
+        },
+        {
+          "id": "D",
+          "text": "2 × 10⁻⁴ N/m (repulsive)"
+        }
+      ],
+      "correctOption": "A",
+      "solutionSteps": [
+        "Step 1: Formula for force per unit length: $F/L = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$.",
+        "Step 2: Substitute $I_1 = 10\\text{ A}$, $I_2 = 20\\text{ A}$, $d = 0.1\\text{ m}$, and $\\frac{\\mu_0}{2\\pi} = 2 \\times 10^{-7}$.",
+        "Step 3: Calculate: $F/L = 2 \\times 10^{-7} \\times \\frac{10 \\times 20}{0.1} = 2 \\times 10^{-7} \\times 2000 = 4 \\times 10^{-4}\\text{ N/m}$.",
+        "Step 4: Since currents are in the same direction, the force is attractive."
+      ],
+      "cuetTip": "Remember parallel currents in same direction attract, unlike like charges in electrostatics.",
+      "solutionStepByStep": [
+        "Step 1: Formula for force per unit length: $F/L = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$.",
+        "Step 2: Substitute $I_1 = 10\\text{ A}$, $I_2 = 20\\text{ A}$, $d = 0.1\\text{ m}$, and $\\frac{\\mu_0}{2\\pi} = 2 \\times 10^{-7}$.",
+        "Step 3: Calculate: $F/L = 2 \\times 10^{-7} \\times \\frac{10 \\times 20}{0.1} = 2 \\times 10^{-7} \\times 2000 = 4 \\times 10^{-4}\\text{ N/m}$.",
+        "Step 4: Since currents are in the same direction, the force is attractive."
+      ]
+    }
+  ],
+  "howCuetAsksThis": [
+    {
+      "type": "Work Done by Magnetic Force",
+      "frequency": "Repeated in multiple shifts",
+      "pyqExample": {
+        "question": "A proton enters a uniform magnetic field with a velocity perpendicular to the field lines. The kinetic energy of the proton after time t will be:",
+        "options": [
+          {
+            "id": "A",
+            "text": "Increased"
+          },
+          {
+            "id": "B",
+            "text": "Decreased"
+          },
+          {
+            "id": "C",
+            "text": "Constant"
+          },
+          {
+            "id": "D",
+            "text": "Zero"
+          }
+        ],
+        "correctOption": "C",
+        "explanation": "Magnetic force is always perpendicular to velocity: $\\vec{F} \\cdot \\vec{v} = 0$. Hence power $P = 0$, work done $W = 0$, and kinetic energy remains constant."
+      },
+      "strategy": "Magnetic force changes direction of velocity, NEVER speed or kinetic energy."
+    },
+    {
+      "type": "Radius of Circular Orbit in Magnetic Field",
+      "frequency": "Very High",
+      "pyqExample": {
+        "question": "A proton and an alpha particle enter a uniform magnetic field with the same velocity perpendicular to B. The ratio of their orbital radii r_p / r_α is:",
+        "options": [
+          {
+            "id": "A",
+            "text": "1 : 2"
+          },
+          {
+            "id": "B",
+            "text": "1 : 1"
+          },
+          {
+            "id": "C",
+            "text": "2 : 1"
+          },
+          {
+            "id": "D",
+            "text": "1 : 4"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "r = mv / (qB). With equal v and B: r_p / r_α = (m_p / m_α) × (q_α / q_p) = (1 / 4) × (2 / 1) = 2/4 = 1/2."
+      },
+      "strategy": "Always write r ∝ m/q for equal velocity, or r ∝ √m / q for equal kinetic energy."
+    }
+  ],
+  "commonTraps": [
+    {
+      "misconception": "Thinking parallel currents with same direction repel like similar electric charges.",
+      "whyWrong": "In electrostatics, like charges repel. In magnetostatics, parallel currents in the SAME direction ATTRACT each other.",
+      "correctUnderstanding": "Parallel currents in same direction attract; antiparallel currents repel.",
+      "trapOptionExample": "Choosing 'repel' for two parallel wires carrying current in same direction."
+    }
+  ],
+  "mnemonicsAndShortcuts": [
+    {
+      "mnemonic": "PCA: Parallel Currents Attract",
+      "rule": "Direction of force between parallel currents",
+      "shortcut": "Same direction = Attract, Opposite = Repel",
+      "whenToApply": "Current-carrying wire interactions"
+    }
+  ],
+  "quickRevisionCard": {
+    "title": "Moving Charges & Magnetism — Quick Summary",
+    "bulletPoints": [
+      "Lorentz Force: F⃗ = q(E⃗ + v⃗ × B⃗). Magnetic force does NO work (W = 0, ΔK = 0).",
+      "Circular Orbit: r = mv / (qB) = p / (qB); Time period T = 2πm / (qB) (independent of v).",
+      "Biot-Savart: dB⃗ = (μ₀/4π) [I dl⃗ × r̂ / r²] with μ₀/4π = 10⁻⁷ T·m/A.",
+      "Circular Coil (center): B = μ₀NI / (2R). On axis at distance x: B = μ₀NIR² / [2(R² + x²)^(3/2)].",
+      "Straight Wire: B = μ₀I / (2πr).",
+      "Solenoid: B = μ₀nI inside; B = ½μ₀nI at ends (where n = N/L). Toroid: B = μ₀NI / (2πr).",
+      "Parallel Currents: F/L = μ₀I₁I₂ / (2πd). Same direction attracts, opposite repels.",
+      "Magnetic Dipole Moment: m⃗ = NI A⃗ (A·m²). Torque on loop: τ⃗ = m⃗ × B⃗."
+    ],
+    "keyPoints": [
+      "Lorentz Force: F⃗ = q(E⃗ + v⃗ × B⃗). Magnetic force does NO work (W = 0, ΔK = 0).",
+      "Circular Orbit: r = mv / (qB) = p / (qB); Time period T = 2πm / (qB) (independent of v).",
+      "Biot-Savart: dB⃗ = (μ₀/4π) [I dl⃗ × r̂ / r²] with μ₀/4π = 10⁻⁷ T·m/A.",
+      "Circular Coil (center): B = μ₀NI / (2R). On axis at distance x: B = μ₀NIR² / [2(R² + x²)^(3/2)].",
+      "Straight Wire: B = μ₀I / (2πr).",
+      "Solenoid: B = μ₀nI inside; B = ½μ₀nI at ends (where n = N/L). Toroid: B = μ₀NI / (2πr).",
+      "Parallel Currents: F/L = μ₀I₁I₂ / (2πd). Same direction attracts, opposite repels.",
+      "Magnetic Dipole Moment: m⃗ = NI A⃗ (A·m²). Torque on loop: τ⃗ = m⃗ × B⃗."
+    ]
+  },
+  "practiceQuestions": [
+    {
+      "id": "pq_phys_3_1",
+      "question": "A charged particle is moving in a circular path of radius R in a uniform magnetic field. If its kinetic energy is doubled, the radius of the circular path will become:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "2R"
+        },
+        {
+          "id": "B",
+          "text": "√2 R"
+        },
+        {
+          "id": "C",
+          "text": "4R"
+        },
+        {
+          "id": "D",
+          "text": "R / √2"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Radius $r = \\frac{\\sqrt{2mK}}{qB} \\propto \\sqrt{K}$. Doubling $K$ scales radius by $\\sqrt{2}$.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(B)"
+    },
+    {
+      "id": "pq_phys_3_2",
+      "question": "Assertion (A): A magnetic field does not change the kinetic energy of a moving charged particle.\nReason (R): The magnetic force acting on a moving charged particle is always perpendicular to its velocity vector.",
+      "type": "assertion-reason",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)"
+        },
+        {
+          "id": "B",
+          "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)"
+        },
+        {
+          "id": "C",
+          "text": "(A) is true but (R) is false"
+        },
+        {
+          "id": "D",
+          "text": "(A) is false but (R) is true"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Work done $dW = \\vec{F} \\cdot d\\vec{r} = (\\vec{F} \\cdot \\vec{v}) dt = 0$ since $\\vec{F} \\perp \\vec{v}$. By work-energy theorem, $\\Delta K = 0$.",
+      "difficulty": "easy",
+      "questionType": "Assertion-Reason",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_3_3",
+      "question": "Match List I (Configuration) with List II (Magnetic Field B):\nList I: (A) Center of circular loop of radius R, (B) Long straight wire at distance r, (C) Inside an ideal long solenoid, (D) At the end of a long solenoid\nList II: (I) μ₀I / (2πr), (II) μ₀nI, (III) μ₀I / (2R), (IV) ½ μ₀nI",
+      "type": "match-the-following",
+      "options": [
+        {
+          "id": "A",
+          "text": "A-(III), B-(I), C-(II), D-(IV)"
+        },
+        {
+          "id": "B",
+          "text": "A-(I), B-(III), C-(II), D-(IV)"
+        },
+        {
+          "id": "C",
+          "text": "A-(III), B-(II), C-(I), D-(IV)"
+        },
+        {
+          "id": "D",
+          "text": "A-(IV), B-(I), C-(II), D-(III)"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Center of loop is $\\mu_0 I/(2R)$ (III); Straight wire is $\\mu_0 I/(2\\pi r)$ (I); Solenoid inside is $\\mu_0 n I$ (II); Solenoid end is $\\frac{1}{2}\\mu_0 n I$ (IV).",
+      "difficulty": "easy",
+      "questionType": "Match The Following",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_3_4",
+      "question": "Two long parallel wires separated by 20 cm in vacuum carry currents of 4 A and 6 A in the same direction. The force per unit length between them is (take μ₀ = 4π × 10⁻⁷ T·m/A):",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "2.4 × 10⁻⁵ N/m (attractive)"
+        },
+        {
+          "id": "B",
+          "text": "2.4 × 10⁻⁵ N/m (repulsive)"
+        },
+        {
+          "id": "C",
+          "text": "4.8 × 10⁻⁵ N/m (attractive)"
+        },
+        {
+          "id": "D",
+          "text": "1.2 × 10⁻⁵ N/m (repulsive)"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "$F/L = \\frac{\\mu_0 I_1 I_2}{2\\pi d} = \\frac{(4\\pi \\times 10^{-7}) \\times 4 \\times 6}{2\\pi \\times 0.20} = 2 \\times 10^{-7} \\times \\frac{24}{0.20} = 2.4 \\times 10^{-5}\\text{ N/m}$. Same direction implies attractive.",
+      "difficulty": "medium",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_3_5",
+      "question": "A galvanometer of resistance 50 Ω gives full scale deflection for a current of 0.05 A. To convert it into an ammeter of range 0 to 5 A, the required shunt resistance is approximately:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "0.505 Ω"
+        },
+        {
+          "id": "B",
+          "text": "0.500 Ω"
+        },
+        {
+          "id": "C",
+          "text": "5.0 Ω"
+        },
+        {
+          "id": "D",
+          "text": "2.5 Ω"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Shunt $S = \\frac{I_g G}{I - I_g} = \\frac{0.05 \\times 50}{5 - 0.05} = \\frac{2.5}{4.95} \\approx 0.505\\,\\Omega$.",
+      "difficulty": "medium",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_3_6",
+      "question": "To convert the same galvanometer of resistance 50 Ω and full scale current 0.05 A into a voltmeter of range 0 to 10 V, the series resistance required is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "150 Ω"
+        },
+        {
+          "id": "B",
+          "text": "200 Ω"
+        },
+        {
+          "id": "C",
+          "text": "100 Ω"
+        },
+        {
+          "id": "D",
+          "text": "50 Ω"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Series resistance $R = \\frac{V}{I_g} - G = \\frac{10}{0.05} - 50 = 200 - 50 = 150\\,\\Omega$.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_3_7",
+      "question": "An electron and a proton having the same kinetic energy enter perpendicularly into a uniform magnetic field. The ratio of radius of electron's path to that of proton's path (r_e / r_p) is (m_p ≈ 1836 m_e):",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "1 / 1836"
+        },
+        {
+          "id": "B",
+          "text": "1 / √1836"
+        },
+        {
+          "id": "C",
+          "text": "√1836"
+        },
+        {
+          "id": "D",
+          "text": "1"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "$r = \\frac{\\sqrt{2mK}}{qB}$. Since $K, q, B$ are identical, $r \\propto \\sqrt{m}$. Thus $r_e / r_p = \\sqrt{m_e / m_p} = 1 / \\sqrt{1836}$.",
+      "difficulty": "hard",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(B)"
+    },
+    {
+      "id": "pq_phys_3_8",
+      "question": "A current loop placed in a magnetic field behaves as a magnetic dipole of moment m = IA. The torque acting on it is maximum when the angle between the normal to the loop and the magnetic field is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "0°"
+        },
+        {
+          "id": "B",
+          "text": "45°"
+        },
+        {
+          "id": "C",
+          "text": "90°"
+        },
+        {
+          "id": "D",
+          "text": "180°"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "Torque $\\tau = m B \\sin\\theta$. Maximum torque $\\tau_{\\text{max}} = mB$ occurs when $\\theta = 90^\\circ$.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(C)"
+    },
+    {
+      "id": "pq_phys_3_9",
+      "question": "Assertion (A): Increasing the current sensitivity of a galvanometer may not necessarily increase its voltage sensitivity.\nReason (R): If the number of turns N is doubled, resistance of the coil also doubles, keeping voltage sensitivity (N B A / (k R)) constant.",
+      "type": "assertion-reason",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)"
+        },
+        {
+          "id": "B",
+          "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)"
+        },
+        {
+          "id": "C",
+          "text": "(A) is true but (R) is false"
+        },
+        {
+          "id": "D",
+          "text": "(A) is false but (R) is true"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Current sensitivity $I_s = \\frac{NBA}{k}$ is proportional to $N$. But coil resistance $R \\propto N$. Voltage sensitivity $V_s = \\frac{I_s}{R} = \\frac{NBA}{kR}$ remains unchanged.",
+      "difficulty": "medium",
+      "questionType": "Assertion-Reason",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_3_10",
+      "question": "A closely wound solenoid of 800 turns and area of cross section 2.5 × 10⁻⁴ m² carries a current of 3.0 A. Its magnetic dipole moment is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "0.60 J/T or A·m²"
+        },
+        {
+          "id": "B",
+          "text": "0.30 A·m²"
+        },
+        {
+          "id": "C",
+          "text": "1.20 A·m²"
+        },
+        {
+          "id": "D",
+          "text": "0.15 A·m²"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "$m = N I A = 800 \\times 3.0\\text{ A} \\times (2.5 \\times 10^{-4}\\text{ m}^2) = 2400 \\times 2.5 \\times 10^{-4} = 0.60\\text{ A}\\cdot\\text{m}^2$.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(A)"
+    }
+  ],
+  "links": {
+    "prerequisites": [
+      {
+        "title": "Current Electricity",
+        "slug": "electric-current-ohms-law-kirchhoffs-laws-potentiometer-meter-bridge"
+      }
+    ],
+    "relatedTopics": [
+      {
+        "title": "Magnetism and Matter",
+        "slug": "magnetism-and-matter-magnetic-dipole-galvanometer"
+      },
+      {
+        "title": "Electromagnetic Induction",
+        "slug": "faradays-and-lenzs-law"
+      }
+    ],
+    "practiceTestId": "practice-physics-unit3-test1",
+    "practiceTestUrl": "/test/practice-physics-unit3-test1",
+    "weaknessReportUrl": "/dashboard/radar?subject=physics"
+  },
+  "subjectSpecific": {
+    "physics": {
+      "examinableDerivations": [
+        {
+          "title": "Conversion of Galvanometer into Ammeter",
+          "briefSteps": [
+            "A galvanometer of resistance $G$ and full scale current $I_g$ is converted into an ammeter of range $I$ by connecting a small resistance $S$ (shunt) in parallel.",
+            "Potential difference across $G$ equals potential difference across $S$:",
+            "$V_G = V_S \\implies I_g G = (I - I_g) S$.",
+            "Solving for shunt resistance: $S = \\frac{I_g G}{I - I_g}$.",
+            "Equivalent resistance of ammeter: $R_A = \\frac{G S}{G + S} \\approx S$ (very low, ideal is zero)."
+          ]
+        }
+      ],
+      "unitDimensionTable": [
+        {
+          "quantity": "Magnetic Field (B)",
+          "dimension": "[M T⁻² A⁻¹]",
+          "unit": "Tesla (T) or Wb/m²"
+        },
+        {
+          "quantity": "Magnetic Permeability (μ₀)",
+          "dimension": "[M L T⁻² A⁻²]",
+          "unit": "T·m/A or H/m"
+        },
+        {
+          "quantity": "Magnetic Dipole Moment (m)",
+          "dimension": "[L² A]",
+          "unit": "A·m² or J/T"
+        }
+      ],
+      "graphInterpretations": [
+        {
+          "graphName": "B vs x for Circular Coil Axis",
+          "slopeMeaning": "Rate of change of magnetic field along axis",
+          "areaMeaning": "Line integral of B",
+          "keyFeature": "Symmetric bell-shaped curve with max at x = 0 (B = μ₀NI/2R); points of inflection at x = ±R/2 (Helmholtz condition)."
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "confidence": "high",
+    "needsHumanReview": false,
+    "lastUpdated": "2026-10-14T14:10:17.961Z",
+    "version": 1,
+    "wordCount": 1580,
+    "isFreePreview": false
+  },
+  "diagramSvg": "<svg viewBox=\"0 0 760 250\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <defs>\n    <marker id=\"arrB\" viewBox=\"0 0 10 10\" refX=\"6\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563EB\" />\n    </marker>\n    <marker id=\"arrRed\" viewBox=\"0 0 10 10\" refX=\"6\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#DC2626\" />\n    </marker>\n  </defs>\n  <!-- Left panel: Circular Loop Axis -->\n  <rect x=\"15\" y=\"10\" width=\"350\" height=\"230\" rx=\"12\" fill=\"#F8FAFC\" stroke=\"#E2E8F0\" strokeWidth=\"1.5\"/>\n  <text x=\"190\" y=\"32\" textAnchor=\"middle\" fill=\"#0F172A\" fontSize=\"13\" fontWeight=\"bold\">Field on Axis of Circular Loop</text>\n\n  <!-- Loop viewed edge-on -->\n  <ellipse cx=\"100\" cy=\"125\" rx=\"16\" ry=\"65\" fill=\"#DBEAFE\" stroke=\"#2563EB\" strokeWidth=\"2.5\"/>\n  <text x=\"75\" y=\"75\" fill=\"#2563EB\" fontSize=\"11\" fontWeight=\"bold\">Current I</text>\n  <line x1=\"100\" y1=\"125\" x2=\"330\" y2=\"125\" stroke=\"#64748B\" strokeWidth=\"1.5\" strokeDasharray=\"3 3\"/>\n  <circle cx=\"100\" cy=\"125\" r=\"3\" fill=\"#64748B\"/>\n  <text x=\"95\" y=\"142\" fill=\"#64748B\" fontSize=\"10\">O</text>\n\n  <!-- Point P on axis -->\n  <circle cx=\"260\" cy=\"125\" r=\"4\" fill=\"#DC2626\"/>\n  <text x=\"260\" y=\"145\" textAnchor=\"middle\" fill=\"#DC2626\" fontSize=\"11\" fontWeight=\"bold\">P (x)</text>\n  <line x1=\"260\" y1=\"125\" x2=\"330\" y2=\"125\" stroke=\"#DC2626\" strokeWidth=\"2.5\" markerEnd=\"url(#arrRed)\"/>\n  <text x=\"310\" y=\"115\" fill=\"#DC2626\" fontSize=\"12\" fontWeight=\"bold\">B⃗_axis</text>\n  <text x=\"190\" y=\"225\" textAnchor=\"middle\" fill=\"#1E293B\" fontSize=\"11\" fontWeight=\"bold\">B = μ₀ I R² / [2(R² + x²)^(3/2)]</text>\n\n  <!-- Right panel: Parallel Currents -->\n  <rect x=\"380\" y=\"10\" width=\"365\" height=\"230\" rx=\"12\" fill=\"#F8FAFC\" stroke=\"#E2E8F0\" strokeWidth=\"1.5\"/>\n  <text x=\"562\" y=\"32\" textAnchor=\"middle\" fill=\"#0F172A\" fontSize=\"13\" fontWeight=\"bold\">Parallel Currents Attract</text>\n\n  <!-- Wire 1 -->\n  <line x1=\"470\" y1=\"50\" x2=\"470\" y2=\"200\" stroke=\"#2563EB\" strokeWidth=\"4\"/>\n  <line x1=\"470\" y1=\"90\" x2=\"470\" y2=\"70\" stroke=\"#FFFFFF\" strokeWidth=\"2\" markerEnd=\"url(#arrB)\"/>\n  <text x=\"455\" y=\"125\" fill=\"#2563EB\" fontSize=\"13\" fontWeight=\"bold\">I₁</text>\n\n  <!-- Wire 2 -->\n  <line x1=\"640\" y1=\"50\" x2=\"640\" y2=\"200\" stroke=\"#2563EB\" strokeWidth=\"4\"/>\n  <line x1=\"640\" y1=\"90\" x2=\"640\" y2=\"70\" stroke=\"#FFFFFF\" strokeWidth=\"2\" markerEnd=\"url(#arrB)\"/>\n  <text x=\"655\" y=\"125\" fill=\"#2563EB\" fontSize=\"13\" fontWeight=\"bold\">I₂</text>\n\n  <!-- Distance d -->\n  <line x1=\"470\" y1=\"170\" x2=\"640\" y2=\"170\" stroke=\"#64748B\" strokeWidth=\"1.5\"/>\n  <text x=\"555\" y=\"185\" textAnchor=\"middle\" fill=\"#64748B\" fontSize=\"11\" fontWeight=\"bold\">Distance d</text>\n\n  <!-- Attractive forces -->\n  <line x1=\"470\" y1=\"125\" x2=\"520\" y2=\"125\" stroke=\"#DC2626\" strokeWidth=\"2\" markerEnd=\"url(#arrRed)\"/>\n  <text x=\"495\" y=\"115\" fill=\"#DC2626\" fontSize=\"11\" fontWeight=\"bold\">F⃗₁₂</text>\n  <line x1=\"640\" y1=\"125\" x2=\"590\" y2=\"125\" stroke=\"#DC2626\" strokeWidth=\"2\" markerEnd=\"url(#arrRed)\"/>\n  <text x=\"605\" y=\"115\" fill=\"#DC2626\" fontSize=\"11\" fontWeight=\"bold\">F⃗₂₁</text>\n  <text x=\"562\" y=\"225\" textAnchor=\"middle\" fill=\"#059669\" fontSize=\"11\" fontWeight=\"bold\">F/L = μ₀ I₁ I₂ / (2πd) (Attractive)</text>\n</svg>",
+  "howCuetAsks": [
+    {
+      "patternType": "Work Done by Magnetic Force",
+      "frequency": "Repeated in multiple shifts",
+      "typicalStem": "A proton enters a uniform magnetic field with a velocity perpendicular to the field lines. The kinetic energy of the proton after time t will be:",
+      "strategy": "Magnetic force changes direction of velocity, NEVER speed or kinetic energy."
+    },
+    {
+      "patternType": "Radius of Circular Orbit in Magnetic Field",
+      "frequency": "Very High",
+      "typicalStem": "A proton and an alpha particle enter a uniform magnetic field with the same velocity perpendicular to B. The ratio of their orbital radii r_p / r_α is:",
+      "strategy": "Always write r ∝ m/q for equal velocity, or r ∝ √m / q for equal kinetic energy."
+    }
+  ]
+}

@@ -1,0 +1,610 @@
+{
+  "id": "physics_u4_t1",
+  "slug": "faradays-and-lenzs-law",
+  "subject": "physics",
+  "subjectName": "Physics",
+  "subjectCode": "322",
+  "unitNumber": 4,
+  "unitTitle": "Electromagnetic Induction and Alternating Currents",
+  "topicTitle": "Faraday's & Lenz's Law",
+  "ncertReference": {
+    "class": "Class 12",
+    "book": "Physics Part 1",
+    "chapterNumber": 6,
+    "chapterName": "Electromagnetic Induction",
+    "sections": [
+      "6.2 The Experiments of Faraday and Henry",
+      "6.3 Magnetic Flux",
+      "6.4 Faraday's Law of Induction",
+      "6.5 Lenz's Law and Conservation of Energy",
+      "6.6 Motional Electromotive Force",
+      "6.7 Energy Consideration: A Quantitative Study",
+      "6.8 Eddy Currents",
+      "6.9 Inductance (Self and Mutual Inductance)",
+      "6.10 AC Generator"
+    ]
+  },
+  "cuetRelevance": {
+    "level": "High",
+    "pyqFrequency": "2-3 questions per shift: Motional EMF e = Bvl, Self/Mutual Inductance, and Lenz's law directions",
+    "totalPyqsInRepo": 54,
+    "weightagePercentage": 6.2
+  },
+  "summary30Seconds": [
+    "Magnetic flux $\\Phi_B = \\vec{B} \\cdot \\vec{A} = B A \\cos\\theta$; Faraday's Law: Induced EMF $\\varepsilon = -N \\frac{d\\Phi_B}{dt}$.",
+    "Lenz's Law: Induced current always opposes the very cause (change in flux) producing it. Manifests Conservation of Energy.",
+    "Motional EMF: A conducting rod of length $l$ moving with velocity $v$ perpendicular to uniform field $B$ develops EMF $\\varepsilon = B v l$. Rotating rod about one end: $\\varepsilon = \\frac{1}{2} B \\omega l^2$.",
+    "Self-inductance: $\\Phi = L I \\implies \\varepsilon = -L \\frac{dI}{dt}$; Solenoid $L = \\mu_0 n^2 A l$; Energy stored in inductor $U = \\frac{1}{2} L I^2$.",
+    "Mutual inductance between two coaxial solenoids: $M = \\mu_0 n_1 n_2 A l = k \\sqrt{L_1 L_2}$; Coupling factor $k \\le 1$."
+  ],
+  "coreConcepts": [
+    {
+      "title": "Faraday's Laws & Lenz's Law Mechanics",
+      "content": "Magnetic flux through area $A$ is $\\Phi_B = \\int \\vec{B} \\cdot d\\vec{A}$. The induced EMF in a closed loop is:\n$$\\varepsilon = -\\frac{d\\Phi_B}{dt} = -\\frac{d}{dt}(B A \\cos\\theta)$$\nEMF can be induced by three methods: changing $B$, changing $A$, or changing orientation $\\theta$ (basis of AC generators).\n\n**Lenz's Law & Conservation of Energy:**\nThe negative sign in Faraday's law represents Lenz's Law. When a North pole approaches a coil, an induced current flows counter-clockwise (viewed from outside) to create a North pole repelling the approaching magnet. The mechanical work done against this repulsive force is converted into electrical energy."
+    },
+    {
+      "title": "Motional EMF & Eddy Currents",
+      "content": "When a conductor of length $l$ moves at speed $v$ across a perpendicular magnetic field $B$:\n$$\\varepsilon = B v l$$\n- Induced current: $I = \\frac{\\varepsilon}{R} = \\frac{B v l}{R}$.\n- External force required to keep velocity constant: $F = I l B = \\frac{B^2 l^2 v}{R}$.\n- Power dissipated: $P = F v = I^2 R = \\frac{B^2 l^2 v^2}{R}$. Mechanical power completely matches Joule heating!\n\n**Rotating Rod:** If a rod of length $l$ rotates with angular frequency $\\omega$ in field $B$:\n$$\\varepsilon = \\int_0^l B (\\omega r) dr = \\frac{1}{2} B \\omega l^2$$\n\n**Eddy Currents:** Circulating currents induced in bulk conductors when exposed to changing magnetic flux. Minimized by using laminated cores (e.g. in transformers). Useful in induction furnaces, electromagnetic damping, and electric brakes."
+    },
+    {
+      "title": "Self and Mutual Inductance",
+      "content": "**Self-Inductance (L):** Flux through coil due to its own current is $\\Phi = L I$. Induced back-EMF is $\\varepsilon = -L \\frac{dI}{dt}$.\n- Long solenoid of radius $r$, length $l$, and $N$ turns: $L = \\mu_0 \\frac{N^2}{l} A = \\mu_0 n^2 A l$.\n- Energy stored in magnetic field: $U = \\frac{1}{2} L I^2$; Magnetic energy density: $u_B = \\frac{B^2}{2\\mu_0}$.\n\n**Mutual Inductance (M):** $\\Phi_2 = M I_1 \\implies \\varepsilon_2 = -M \\frac{dI_1}{dt}$.\n- Reciprocity Theorem: $M_{12} = M_{21} = M$.\n- Two coaxial solenoids: $M = \\mu_0 n_1 n_2 A l$. Coupling coefficient $k = \\frac{M}{\\sqrt{L_1 L_2}}$ ($0 \\le k \\le 1$)."
+    }
+  ],
+  "keyFormulasAndTables": [
+    {
+      "name": "Faraday-Lenz Law",
+      "formula": "\\varepsilon = -N \\frac{d\\Phi_B}{dt}",
+      "symbols": "N: turns, \\Phi_B: magnetic flux",
+      "siUnits": "Volts (V)",
+      "applicationCondition": "Any loop with time-varying magnetic flux"
+    },
+    {
+      "name": "Motional EMF (Straight Conductor)",
+      "formula": "\\varepsilon = B v l",
+      "symbols": "B, v, l mutually perpendicular",
+      "siUnits": "Volts (V)",
+      "applicationCondition": "Translational motion across uniform field"
+    },
+    {
+      "name": "Motional EMF (Rotating Rod)",
+      "formula": "\\varepsilon = \\frac{1}{2} B \\omega l^2",
+      "symbols": "\\omega: angular velocity, l: length from pivot",
+      "siUnits": "Volts (V)",
+      "applicationCondition": "Rod rotated about one end perpendicular to field"
+    },
+    {
+      "name": "Self-Inductance of Solenoid",
+      "formula": "L = \\mu_0 n^2 A l = \\frac{\\mu_0 N^2 A}{l}",
+      "symbols": "n = N/l: turns per unit length, A: area, l: length",
+      "siUnits": "Henry (H)",
+      "applicationCondition": "Air-core long solenoid"
+    },
+    {
+      "name": "Energy Stored in Inductor",
+      "formula": "U = \\frac{1}{2} L I^2",
+      "symbols": "L: inductance, I: instantaneous current",
+      "siUnits": "Joules (J)",
+      "applicationCondition": "Current carrying inductor in steady state"
+    }
+  ],
+  "diagram": {
+    "type": "svg",
+    "title": "Motional EMF Rod & Faraday Coil Induction",
+    "caption": "Left: Conductor sliding on rails in a perpendicular magnetic field generating motional EMF Bvl. Right: Magnet approaching a coil inducing opposing magnetic polarity (Lenz's Law).",
+    "code": "<svg viewBox=\"0 0 760 250\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <defs>\n    <marker id=\"arrInd\" viewBox=\"0 0 10 10\" refX=\"6\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563EB\" />\n    </marker>\n    <marker id=\"arrRedInd\" viewBox=\"0 0 10 10\" refX=\"6\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#DC2626\" />\n    </marker>\n  </defs>\n  <!-- Left Panel: Motional EMF Rails -->\n  <rect x=\"15\" y=\"10\" width=\"350\" height=\"230\" rx=\"12\" fill=\"#F8FAFC\" stroke=\"#E2E8F0\" strokeWidth=\"1.5\"/>\n  <text x=\"190\" y=\"32\" textAnchor=\"middle\" fill=\"#0F172A\" fontSize=\"13\" fontWeight=\"bold\">Motional EMF: Sliding Rod on Rails</text>\n\n  <!-- Rails -->\n  <line x1=\"50\" y1=\"80\" x2=\"310\" y2=\"80\" stroke=\"#64748B\" strokeWidth=\"3\"/>\n  <line x1=\"50\" y1=\"180\" x2=\"310\" y2=\"180\" stroke=\"#64748B\" strokeWidth=\"3\"/>\n  <line x1=\"50\" y1=\"80\" x2=\"50\" y2=\"180\" stroke=\"#64748B\" strokeWidth=\"3\"/>\n  <rect x=\"42\" y=\"115\" width=\"16\" height=\"30\" fill=\"#EF4444\" rx=\"2\"/>\n  <text x=\"32\" y=\"134\" fill=\"#EF4444\" fontSize=\"10\" fontWeight=\"bold\">R</text>\n\n  <!-- Inward Magnetic field symbols (crosses) -->\n  <text x=\"100\" y=\"105\" fill=\"#94A3B8\" fontSize=\"14\">⊗</text>\n  <text x=\"150\" y=\"105\" fill=\"#94A3B8\" fontSize=\"14\">⊗</text>\n  <text x=\"100\" y=\"160\" fill=\"#94A3B8\" fontSize=\"14\">⊗</text>\n  <text x=\"150\" y=\"160\" fill=\"#94A3B8\" fontSize=\"14\">⊗</text>\n  <text x=\"260\" y=\"105\" fill=\"#94A3B8\" fontSize=\"14\">⊗ B⃗</text>\n\n  <!-- Sliding rod -->\n  <rect x=\"190\" y=\"70\" width=\"10\" height=\"120\" fill=\"#2563EB\" rx=\"2\"/>\n  <text x=\"195\" y=\"62\" textAnchor=\"middle\" fill=\"#2563EB\" fontSize=\"11\" fontWeight=\"bold\">Rod (l)</text>\n  <line x1=\"205\" y1=\"130\" x2=\"265\" y2=\"130\" stroke=\"#DC2626\" strokeWidth=\"2.5\" markerEnd=\"url(#arrRedInd)\"/>\n  <text x=\"240\" y=\"122\" fill=\"#DC2626\" fontSize=\"12\" fontWeight=\"bold\">v⃗</text>\n\n  <!-- Induced current direction -->\n  <line x1=\"195\" y1=\"170\" x2=\"195\" y2=\"90\" stroke=\"#059669\" strokeWidth=\"2\" markerEnd=\"url(#arrInd)\"/>\n  <text x=\"175\" y=\"135\" fill=\"#059669\" fontSize=\"11\" fontWeight=\"bold\">I</text>\n  <text x=\"190\" y=\"222\" textAnchor=\"middle\" fill=\"#1E293B\" fontSize=\"11\" fontWeight=\"bold\">ε = B v l (Counter-Clockwise)</text>\n\n  <!-- Right Panel: Lenz Law Magnet and Coil -->\n  <rect x=\"380\" y=\"10\" width=\"365\" height=\"230\" rx=\"12\" fill=\"#F8FAFC\" stroke=\"#E2E8F0\" strokeWidth=\"1.5\"/>\n  <text x=\"562\" y=\"32\" textAnchor=\"middle\" fill=\"#0F172A\" fontSize=\"13\" fontWeight=\"bold\">Lenz's Law: Approaching Magnet</text>\n\n  <!-- Bar magnet moving left -->\n  <rect x=\"580\" y=\"90\" width=\"55\" height=\"30\" fill=\"#EF4444\" rx=\"2\"/>\n  <text x=\"607\" y=\"110\" textAnchor=\"middle\" fill=\"#FFFFFF\" fontSize=\"12\" fontWeight=\"bold\">N</text>\n  <rect x=\"635\" y=\"90\" width=\"55\" height=\"30\" fill=\"#3B82F6\" rx=\"2\"/>\n  <text x=\"662\" y=\"110\" textAnchor=\"middle\" fill=\"#FFFFFF\" fontSize=\"12\" fontWeight=\"bold\">S</text>\n  <line x1=\"570\" y1=\"105\" x2=\"520\" y2=\"105\" stroke=\"#DC2626\" strokeWidth=\"2.5\" markerEnd=\"url(#arrRedInd)\"/>\n  <text x=\"545\" y=\"98\" fill=\"#DC2626\" fontSize=\"12\" fontWeight=\"bold\">v⃗</text>\n\n  <!-- Coil -->\n  <ellipse cx=\"440\" cy=\"105\" rx=\"14\" ry=\"50\" fill=\"#DBEAFE\" stroke=\"#2563EB\" strokeWidth=\"2.5\"/>\n  <text x=\"440\" y=\"45\" textAnchor=\"middle\" fill=\"#2563EB\" fontSize=\"11\" fontWeight=\"bold\">Coil Face</text>\n  <text x=\"440\" y=\"110\" textAnchor=\"middle\" fill=\"#DC2626\" fontSize=\"16\" fontWeight=\"bold\">N</text>\n  <text x=\"562\" y=\"175\" textAnchor=\"middle\" fill=\"#475569\" fontSize=\"11\">Induced current forms N-pole to oppose approach</text>\n  <text x=\"562\" y=\"222\" textAnchor=\"middle\" fill=\"#059669\" fontSize=\"12\" fontWeight=\"bold\">Work done = Electrical Energy (Energy Conserved)</text>\n</svg>"
+  },
+  "workedExamples": [
+    {
+      "id": "we_phys_4_1",
+      "questionNumber": 1,
+      "question": "A 1.0 m long metallic rod is rotated with an angular frequency of 400 rad/s about an axis normal to the rod passing through its one end. The other end of the rod is in contact with a circular metallic ring. A constant and uniform magnetic field of 0.5 T parallel to the axis exists everywhere. The EMF developed between the center and the metallic ring is:",
+      "options": [
+        {
+          "id": "A",
+          "text": "50 V"
+        },
+        {
+          "id": "B",
+          "text": "100 V"
+        },
+        {
+          "id": "C",
+          "text": "200 V"
+        },
+        {
+          "id": "D",
+          "text": "25 V"
+        }
+      ],
+      "correctOption": "B",
+      "solutionSteps": [
+        "Step 1: Formula for induced EMF in rotating conductor about one end: $\\varepsilon = \\frac{1}{2} B \\omega l^2$.",
+        "Step 2: Given $B = 0.5\\text{ T}$, $\\omega = 400\\text{ rad/s}$, $l = 1.0\\text{ m}$.",
+        "Step 3: $\\varepsilon = \\frac{1}{2} \\times 0.5 \\times 400 \\times (1.0)^2 = 0.25 \\times 400 = 100\\text{ V}$.",
+        "Hence, Option B is correct."
+      ],
+      "cuetTip": "Average linear speed of the rotating rod is $v_{\\text{avg}} = \\frac{0 + \\omega l}{2} = \\frac{\\omega l}{2}$. Motional EMF is $\\varepsilon = B v_{\\text{avg}} l = \\frac{1}{2} B \\omega l^2$.",
+      "solutionStepByStep": [
+        "Step 1: Formula for induced EMF in rotating conductor about one end: $\\varepsilon = \\frac{1}{2} B \\omega l^2$.",
+        "Step 2: Given $B = 0.5\\text{ T}$, $\\omega = 400\\text{ rad/s}$, $l = 1.0\\text{ m}$.",
+        "Step 3: $\\varepsilon = \\frac{1}{2} \\times 0.5 \\times 400 \\times (1.0)^2 = 0.25 \\times 400 = 100\\text{ V}$.",
+        "Hence, Option B is correct."
+      ]
+    },
+    {
+      "id": "we_phys_4_2",
+      "questionNumber": 2,
+      "question": "Current in a circuit falls from 5.0 A to 0.0 A in 0.1 s. If an average EMF of 200 V is induced, give an estimate of the self-inductance of the circuit.",
+      "options": [
+        {
+          "id": "A",
+          "text": "2 H"
+        },
+        {
+          "id": "B",
+          "text": "4 H"
+        },
+        {
+          "id": "C",
+          "text": "8 H"
+        },
+        {
+          "id": "D",
+          "text": "1 H"
+        }
+      ],
+      "correctOption": "B",
+      "solutionSteps": [
+        "Step 1: Formula for induced EMF due to self-inductance: $\\varepsilon = -L \\frac{\\Delta I}{\\Delta t}$.",
+        "Step 2: Here $\\varepsilon = 200\\text{ V}$, $\\Delta I = 0 - 5 = -5\\text{ A}$, $\\Delta t = 0.1\\text{ s}$.",
+        "Step 3: $200 = -L \\frac{-5}{0.1} = 50 L \\implies L = \\frac{200}{50} = 4\\text{ H}$."
+      ],
+      "cuetTip": "Self-inductance L is always positive; the minus sign in Faraday's law accounts for Lenz opposition.",
+      "solutionStepByStep": [
+        "Step 1: Formula for induced EMF due to self-inductance: $\\varepsilon = -L \\frac{\\Delta I}{\\Delta t}$.",
+        "Step 2: Here $\\varepsilon = 200\\text{ V}$, $\\Delta I = 0 - 5 = -5\\text{ A}$, $\\Delta t = 0.1\\text{ s}$.",
+        "Step 3: $200 = -L \\frac{-5}{0.1} = 50 L \\implies L = \\frac{200}{50} = 4\\text{ H}$."
+      ]
+    }
+  ],
+  "howCuetAsksThis": [
+    {
+      "type": "Physical Principle of Lenz's Law",
+      "frequency": "Guaranteed in ~60% of test shifts",
+      "pyqExample": {
+        "question": "Lenz's law of electromagnetic induction is a direct manifestation of the law of conservation of:",
+        "options": [
+          {
+            "id": "A",
+            "text": "Charge"
+          },
+          {
+            "id": "B",
+            "text": "Energy"
+          },
+          {
+            "id": "C",
+            "text": "Momentum"
+          },
+          {
+            "id": "D",
+            "text": "Angular Momentum"
+          }
+        ],
+        "correctOption": "B",
+        "explanation": "Mechanical work done against opposing induced magnetic forces is directly transformed into electrical energy. If Lenz's law did not oppose, perpetual energy would be created from nothing."
+      },
+      "strategy": "Lenz's Law = Conservation of Energy (always!)."
+    },
+    {
+      "type": "Self & Mutual Inductance Ratios",
+      "frequency": "High",
+      "pyqExample": {
+        "question": "If the number of turns in a coil is doubled without altering its length or radius, its self-inductance becomes:",
+        "options": [
+          {
+            "id": "A",
+            "text": "Doubled"
+          },
+          {
+            "id": "B",
+            "text": "Quadrupled"
+          },
+          {
+            "id": "C",
+            "text": "Halved"
+          },
+          {
+            "id": "D",
+            "text": "Four times smaller"
+          }
+        ],
+        "correctOption": "B",
+        "explanation": "L = μ₀ N² A / l. Since L ∝ N², doubling turns N multiplies self-inductance by 2² = 4."
+      },
+      "strategy": "Remember L ∝ N² (quadratic in turns!)."
+    }
+  ],
+  "commonTraps": [
+    {
+      "misconception": "Using ε = Bvl for rotating rods without the factor of 1/2.",
+      "whyWrong": "Different segments of the rotating rod move with different linear speeds ($v = \\omega r$). Integrating over radius introduces factor 1/2.",
+      "correctUnderstanding": "Translating rod: $\\varepsilon = B v l$. Rotating rod about end: $\\varepsilon = \\frac{1}{2} B \\omega l^2$.",
+      "trapOptionExample": "Selecting 200 V instead of 100 V."
+    }
+  ],
+  "mnemonicsAndShortcuts": [
+    {
+      "mnemonic": "Lenz = Life: Opposes the very cause that gave it birth!",
+      "rule": "Lenz's Law direction rule",
+      "shortcut": "Induced current opposes change in flux (flux increasing -> oppose, flux decreasing -> support)",
+      "whenToApply": "Direction of induced current in coils and circuits"
+    }
+  ],
+  "quickRevisionCard": {
+    "title": "Electromagnetic Induction — Quick Revision",
+    "bulletPoints": [
+      "Magnetic Flux: Φ_B = B⃗ · A⃗ = BA cosθ (Weber, Wb).",
+      "Faraday's Law: ε = −N (dΦ_B / dt).",
+      "Lenz's Law: Negative sign signifies opposition; conservation of energy.",
+      "Translational Motional EMF: ε = Bvl (B, v, l mutually perpendicular).",
+      "Rotational Motional EMF: ε = ½ Bωl².",
+      "Self-Inductance: Φ = LI, ε = −L (dI/dt). Solenoid L = μ₀n²Al.",
+      "Energy in Inductor: U = ½LI². Energy density u_B = B² / (2μ₀).",
+      "Mutual Inductance: Φ₂ = MI₁, ε₂ = −M (dI₁/dt). Coaxial solenoids M = μ₀n₁n₂Al.",
+      "Eddy currents: Circulate in bulk metal; minimized by lamination.",
+      "AC Generator: ε = NBAω sin(ωt) = ε₀ sin(ωt)."
+    ],
+    "keyPoints": [
+      "Magnetic Flux: Φ_B = B⃗ · A⃗ = BA cosθ (Weber, Wb).",
+      "Faraday's Law: ε = −N (dΦ_B / dt).",
+      "Lenz's Law: Negative sign signifies opposition; conservation of energy.",
+      "Translational Motional EMF: ε = Bvl (B, v, l mutually perpendicular).",
+      "Rotational Motional EMF: ε = ½ Bωl².",
+      "Self-Inductance: Φ = LI, ε = −L (dI/dt). Solenoid L = μ₀n²Al.",
+      "Energy in Inductor: U = ½LI². Energy density u_B = B² / (2μ₀).",
+      "Mutual Inductance: Φ₂ = MI₁, ε₂ = −M (dI₁/dt). Coaxial solenoids M = μ₀n₁n₂Al.",
+      "Eddy currents: Circulate in bulk metal; minimized by lamination.",
+      "AC Generator: ε = NBAω sin(ωt) = ε₀ sin(ωt)."
+    ]
+  },
+  "practiceQuestions": [
+    {
+      "id": "pq_phys_4_1",
+      "question": "If current in an inductor of inductance 2.0 H decreases uniformly from 5 A to 0 A in 0.1 s, the induced EMF is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "100 V"
+        },
+        {
+          "id": "B",
+          "text": "50 V"
+        },
+        {
+          "id": "C",
+          "text": "25 V"
+        },
+        {
+          "id": "D",
+          "text": "10 V"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "$\\varepsilon = -L \\frac{\\Delta I}{\\Delta t} = -2.0 \\times \\left(\\frac{0 - 5}{0.1}\\right) = -2.0 \\times (-50) = 100\\text{ V}$.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_4_2",
+      "question": "Assertion (A): Eddy currents cause undesirable heating in the core of transformers.\nReason (R): Eddy currents can be eliminated by replacing the solid metallic core with thin insulated laminated sheets.",
+      "type": "assertion-reason",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)"
+        },
+        {
+          "id": "B",
+          "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)"
+        },
+        {
+          "id": "C",
+          "text": "(A) is true but (R) is false"
+        },
+        {
+          "id": "D",
+          "text": "(A) is false but (R) is true"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Both statements are true. Lamination breaks closed current loops, reducing eddy current heat dissipation.",
+      "difficulty": "easy",
+      "questionType": "Assertion-Reason",
+      "correctAnswer": "(B)"
+    },
+    {
+      "id": "pq_phys_4_3",
+      "question": "Match List I (Phenomenon) with List II (Formula / Law):\nList I: (A) Self-Inductance EMF, (B) Motional EMF of rotating rod, (C) Energy stored in inductor, (D) Faraday's Law\nList II: (I) ½ LI², (II) −L dI/dt, (III) ½ Bωl², (IV) −dΦ/dt",
+      "type": "match-the-following",
+      "options": [
+        {
+          "id": "A",
+          "text": "A-(II), B-(III), C-(I), D-(IV)"
+        },
+        {
+          "id": "B",
+          "text": "A-(I), B-(II), C-(III), D-(IV)"
+        },
+        {
+          "id": "C",
+          "text": "A-(II), B-(I), C-(IV), D-(III)"
+        },
+        {
+          "id": "D",
+          "text": "A-(IV), B-(III), C-(I), D-(II)"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Self inductance EMF is $-L dI/dt$ (II). Rotating rod EMF is $\\frac{1}{2}B\\omega l^2$ (III). Stored energy is $\\frac{1}{2}LI^2$ (I). Faraday's law is $-d\\Phi/dt$ (IV).",
+      "difficulty": "easy",
+      "questionType": "Match The Following",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_4_1_4",
+      "question": "A copper ring is held horizontally and a bar magnet is dropped through the ring with its North pole pointing downwards. The acceleration of the falling magnet is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "Equal to g"
+        },
+        {
+          "id": "B",
+          "text": "Less than g while approaching and greater than g while receding"
+        },
+        {
+          "id": "C",
+          "text": "Less than g throughout the fall"
+        },
+        {
+          "id": "D",
+          "text": "Greater than g throughout the fall"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "By Lenz's law, the induced current in the ring opposes the motion of the magnet at all times (upward magnetic repulsion when approaching, upward magnetic attraction when receding), so a < g throughout.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(C)"
+    },
+    {
+      "id": "pq_phys_4_1_5",
+      "question": "Assertion (A): Lenz's law is a direct consequence of the law of conservation of energy.\nReason (R): The mechanical work done against the opposing induced electromagnetic force is converted into electrical energy in the circuit.",
+      "type": "assertion-reason",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)"
+        },
+        {
+          "id": "B",
+          "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)"
+        },
+        {
+          "id": "C",
+          "text": "(A) is true but (R) is false"
+        },
+        {
+          "id": "D",
+          "text": "(A) is false but (R) is true"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "If Lenz's law did not hold, a slight displacement would accelerate the magnet indefinitely without work, creating energy out of nothing, which violates the first law of thermodynamics.",
+      "difficulty": "easy",
+      "questionType": "Assertion-Reason",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_4_1_6",
+      "question": "A conducting rod of length 1 m is rotated in a horizontal plane with an angular speed of 100 rad/s about an axis passing through one end, perpendicular to a uniform vertical magnetic field of 0.2 T. The EMF induced across its ends is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "5 V"
+        },
+        {
+          "id": "B",
+          "text": "10 V"
+        },
+        {
+          "id": "C",
+          "text": "20 V"
+        },
+        {
+          "id": "D",
+          "text": "100 V"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "ε = ½ B ω l² = ½ × 0.2 × 100 × (1)² = 10 V.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(B)"
+    },
+    {
+      "id": "pq_phys_4_1_7",
+      "question": "The mutual inductance of two coaxial long solenoids of radii r₁ and r₂ (r₁ < r₂) having turns N₁ and N₂ and common length l is given by:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "μ₀ N₁ N₂ π r₁² / l"
+        },
+        {
+          "id": "B",
+          "text": "μ₀ N₁ N₂ π r₂² / l"
+        },
+        {
+          "id": "C",
+          "text": "μ₀ N₁ N₂ π (r₁ + r₂)² / (2l)"
+        },
+        {
+          "id": "D",
+          "text": "μ₀ N₁² π r₁² / l"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Magnetic flux of the outer solenoid links the smaller inner area π r₁² of the inner solenoid: M = μ₀ n₁ n₂ π r₁² l = μ₀ (N₁ N₂ / l) π r₁².",
+      "difficulty": "medium",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_4_1_8",
+      "question": "When current in a circular coil of 50 turns changes from +2 A to -2 A in 0.05 s, an EMF of 8 V is induced. The self-inductance of the coil is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "0.1 H"
+        },
+        {
+          "id": "B",
+          "text": "0.2 H"
+        },
+        {
+          "id": "C",
+          "text": "0.05 H"
+        },
+        {
+          "id": "D",
+          "text": "0.4 H"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "|ε| = L |ΔI / Δt| ⇒ 8 = L × |(-2 - 2) / 0.05| = L × (4 / 0.05) = 80 L ⇒ L = 8 / 80 = 0.1 H.",
+      "difficulty": "medium",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(A)"
+    },
+    {
+      "id": "pq_phys_4_1_9",
+      "question": "A metallic square loop of side 10 cm and resistance 0.5 Ω is moved with a constant velocity of 2 m/s perpendicular to a uniform magnetic field of 0.5 T out of the field region. What is the induced current?",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "0.1 A"
+        },
+        {
+          "id": "B",
+          "text": "0.2 A"
+        },
+        {
+          "id": "C",
+          "text": "0.05 A"
+        },
+        {
+          "id": "D",
+          "text": "1.0 A"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "ε = B v l = 0.5 × 2 × 0.1 = 0.1 V. Induced current I = ε / R = 0.1 / 0.5 = 0.2 A.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(B)"
+    },
+    {
+      "id": "pq_phys_4_1_10",
+      "question": "Two coils have self-inductances L₁ = 4 mH and L₂ = 9 mH. If the coupling between them is perfect (coefficient of coupling k = 1), their mutual inductance is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "6 mH"
+        },
+        {
+          "id": "B",
+          "text": "13 mH"
+        },
+        {
+          "id": "C",
+          "text": "36 mH"
+        },
+        {
+          "id": "D",
+          "text": "2.25 mH"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "M = k √(L₁ L₂) = 1 × √(4 × 9) = √36 = 6 mH.",
+      "difficulty": "easy",
+      "questionType": "Conceptual Direct",
+      "correctAnswer": "(A)"
+    }
+  ],
+  "links": {
+    "prerequisites": [
+      {
+        "title": "Moving Charges and Magnetism",
+        "slug": "moving-charges-and-magnetism"
+      }
+    ],
+    "relatedTopics": [
+      {
+        "title": "AC Circuits, Resonance, Power in AC, Transformers",
+        "slug": "ac-circuits-resonance-power-in-ac-transformers"
+      }
+    ],
+    "practiceTestId": "practice-physics-unit4-test1",
+    "practiceTestUrl": "/test/practice-physics-unit4-test1",
+    "weaknessReportUrl": "/dashboard/radar?subject=physics"
+  },
+  "subjectSpecific": {
+    "physics": {
+      "unitDimensionTable": [
+        {
+          "quantity": "Magnetic Flux (Φ_B)",
+          "dimension": "[M L² T⁻² A⁻¹]",
+          "unit": "Weber (Wb) or T·m²"
+        },
+        {
+          "quantity": "Self / Mutual Inductance (L, M)",
+          "dimension": "[M L² T⁻² A⁻²]",
+          "unit": "Henry (H)"
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "confidence": "high",
+    "needsHumanReview": false,
+    "lastUpdated": "2026-10-14T14:10:17.982Z",
+    "version": 1,
+    "wordCount": 1490,
+    "isFreePreview": false
+  },
+  "diagramSvg": "<svg viewBox=\"0 0 760 250\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <defs>\n    <marker id=\"arrInd\" viewBox=\"0 0 10 10\" refX=\"6\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#2563EB\" />\n    </marker>\n    <marker id=\"arrRedInd\" viewBox=\"0 0 10 10\" refX=\"6\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 1 L 10 5 L 0 9 z\" fill=\"#DC2626\" />\n    </marker>\n  </defs>\n  <!-- Left Panel: Motional EMF Rails -->\n  <rect x=\"15\" y=\"10\" width=\"350\" height=\"230\" rx=\"12\" fill=\"#F8FAFC\" stroke=\"#E2E8F0\" strokeWidth=\"1.5\"/>\n  <text x=\"190\" y=\"32\" textAnchor=\"middle\" fill=\"#0F172A\" fontSize=\"13\" fontWeight=\"bold\">Motional EMF: Sliding Rod on Rails</text>\n\n  <!-- Rails -->\n  <line x1=\"50\" y1=\"80\" x2=\"310\" y2=\"80\" stroke=\"#64748B\" strokeWidth=\"3\"/>\n  <line x1=\"50\" y1=\"180\" x2=\"310\" y2=\"180\" stroke=\"#64748B\" strokeWidth=\"3\"/>\n  <line x1=\"50\" y1=\"80\" x2=\"50\" y2=\"180\" stroke=\"#64748B\" strokeWidth=\"3\"/>\n  <rect x=\"42\" y=\"115\" width=\"16\" height=\"30\" fill=\"#EF4444\" rx=\"2\"/>\n  <text x=\"32\" y=\"134\" fill=\"#EF4444\" fontSize=\"10\" fontWeight=\"bold\">R</text>\n\n  <!-- Inward Magnetic field symbols (crosses) -->\n  <text x=\"100\" y=\"105\" fill=\"#94A3B8\" fontSize=\"14\">⊗</text>\n  <text x=\"150\" y=\"105\" fill=\"#94A3B8\" fontSize=\"14\">⊗</text>\n  <text x=\"100\" y=\"160\" fill=\"#94A3B8\" fontSize=\"14\">⊗</text>\n  <text x=\"150\" y=\"160\" fill=\"#94A3B8\" fontSize=\"14\">⊗</text>\n  <text x=\"260\" y=\"105\" fill=\"#94A3B8\" fontSize=\"14\">⊗ B⃗</text>\n\n  <!-- Sliding rod -->\n  <rect x=\"190\" y=\"70\" width=\"10\" height=\"120\" fill=\"#2563EB\" rx=\"2\"/>\n  <text x=\"195\" y=\"62\" textAnchor=\"middle\" fill=\"#2563EB\" fontSize=\"11\" fontWeight=\"bold\">Rod (l)</text>\n  <line x1=\"205\" y1=\"130\" x2=\"265\" y2=\"130\" stroke=\"#DC2626\" strokeWidth=\"2.5\" markerEnd=\"url(#arrRedInd)\"/>\n  <text x=\"240\" y=\"122\" fill=\"#DC2626\" fontSize=\"12\" fontWeight=\"bold\">v⃗</text>\n\n  <!-- Induced current direction -->\n  <line x1=\"195\" y1=\"170\" x2=\"195\" y2=\"90\" stroke=\"#059669\" strokeWidth=\"2\" markerEnd=\"url(#arrInd)\"/>\n  <text x=\"175\" y=\"135\" fill=\"#059669\" fontSize=\"11\" fontWeight=\"bold\">I</text>\n  <text x=\"190\" y=\"222\" textAnchor=\"middle\" fill=\"#1E293B\" fontSize=\"11\" fontWeight=\"bold\">ε = B v l (Counter-Clockwise)</text>\n\n  <!-- Right Panel: Lenz Law Magnet and Coil -->\n  <rect x=\"380\" y=\"10\" width=\"365\" height=\"230\" rx=\"12\" fill=\"#F8FAFC\" stroke=\"#E2E8F0\" strokeWidth=\"1.5\"/>\n  <text x=\"562\" y=\"32\" textAnchor=\"middle\" fill=\"#0F172A\" fontSize=\"13\" fontWeight=\"bold\">Lenz's Law: Approaching Magnet</text>\n\n  <!-- Bar magnet moving left -->\n  <rect x=\"580\" y=\"90\" width=\"55\" height=\"30\" fill=\"#EF4444\" rx=\"2\"/>\n  <text x=\"607\" y=\"110\" textAnchor=\"middle\" fill=\"#FFFFFF\" fontSize=\"12\" fontWeight=\"bold\">N</text>\n  <rect x=\"635\" y=\"90\" width=\"55\" height=\"30\" fill=\"#3B82F6\" rx=\"2\"/>\n  <text x=\"662\" y=\"110\" textAnchor=\"middle\" fill=\"#FFFFFF\" fontSize=\"12\" fontWeight=\"bold\">S</text>\n  <line x1=\"570\" y1=\"105\" x2=\"520\" y2=\"105\" stroke=\"#DC2626\" strokeWidth=\"2.5\" markerEnd=\"url(#arrRedInd)\"/>\n  <text x=\"545\" y=\"98\" fill=\"#DC2626\" fontSize=\"12\" fontWeight=\"bold\">v⃗</text>\n\n  <!-- Coil -->\n  <ellipse cx=\"440\" cy=\"105\" rx=\"14\" ry=\"50\" fill=\"#DBEAFE\" stroke=\"#2563EB\" strokeWidth=\"2.5\"/>\n  <text x=\"440\" y=\"45\" textAnchor=\"middle\" fill=\"#2563EB\" fontSize=\"11\" fontWeight=\"bold\">Coil Face</text>\n  <text x=\"440\" y=\"110\" textAnchor=\"middle\" fill=\"#DC2626\" fontSize=\"16\" fontWeight=\"bold\">N</text>\n  <text x=\"562\" y=\"175\" textAnchor=\"middle\" fill=\"#475569\" fontSize=\"11\">Induced current forms N-pole to oppose approach</text>\n  <text x=\"562\" y=\"222\" textAnchor=\"middle\" fill=\"#059669\" fontSize=\"12\" fontWeight=\"bold\">Work done = Electrical Energy (Energy Conserved)</text>\n</svg>",
+  "howCuetAsks": [
+    {
+      "patternType": "Physical Principle of Lenz's Law",
+      "frequency": "Guaranteed in ~60% of test shifts",
+      "typicalStem": "Lenz's law of electromagnetic induction is a direct manifestation of the law of conservation of:",
+      "strategy": "Lenz's Law = Conservation of Energy (always!)."
+    },
+    {
+      "patternType": "Self & Mutual Inductance Ratios",
+      "frequency": "High",
+      "typicalStem": "If the number of turns in a coil is doubled without altering its length or radius, its self-inductance becomes:",
+      "strategy": "Remember L ∝ N² (quadratic in turns!)."
+    }
+  ]
+}

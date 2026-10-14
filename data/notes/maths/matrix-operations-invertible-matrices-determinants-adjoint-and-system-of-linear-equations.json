@@ -1,0 +1,605 @@
+{
+  "id": "maths_u2_t1",
+  "slug": "matrix-operations-invertible-matrices-determinants-adjoint-and-system-of-linear-equations",
+  "subject": "maths",
+  "subjectName": "Mathematics",
+  "subjectCode": "319",
+  "unitNumber": 2,
+  "unitTitle": "Algebra (Matrices and Determinants)",
+  "topicTitle": "Matrix Operations, Invertible Matrices, Determinants, Adjoint and System of Linear Equations",
+  "ncertReference": {
+    "class": "Class 12",
+    "book": "Mathematics Part 1",
+    "chapterNumber": 2,
+    "chapterName": "Matrices and Determinants",
+    "sections": [
+      "3.1 Matrix Definition & Types",
+      "3.2 Matrix Operations (Addition, Scalar Multiplication, Matrix Multiplication)",
+      "3.3 Transpose of a Matrix, Symmetric and Skew-Symmetric Matrices",
+      "3.4 Invertible Matrices & Elementary Operations",
+      "4.1 Determinant Definition & Properties",
+      "4.2 Area of a Triangle using Determinants",
+      "4.3 Minors and Cofactors",
+      "4.4 Adjoint and Inverse of a Matrix",
+      "4.5 Applications: System of Linear Equations (Matrix Method & Consistency)"
+    ]
+  },
+  "cuetRelevance": {
+    "level": "High",
+    "pyqFrequency": "Appears in 100% of tested CUET shifts (5-6 questions per shift)",
+    "totalPyqsInRepo": 280,
+    "weightagePercentage": 12
+  },
+  "summary30Seconds": [
+    "Matrix multiplication: If $A$ is $m \\times n$ and $B$ is $n \\times p$, then $AB$ is $m \\times p$. Multiplication is associative ($A(BC) = (AB)C$), but generally NON-COMMUTATIVE ($AB \\ne BA$).",
+    "Transpose properties: $(AB)^T = B^T A^T$; $(A^T)^T = A$; $(kA)^T = k A^T$.",
+    "Symmetric: $A^T = A$; Skew-symmetric: $A^T = -A$ (diagonal elements are strictly ZERO). Any square matrix can be uniquely written as $A = \\frac{1}{2}(A + A^T) + \\frac{1}{2}(A - A^T)$.",
+    "Determinant scalar rule: For an $n \\times n$ matrix $A$, $|kA| = k^n |A|$.",
+    "Adjoint properties: $A \\cdot (\\text{adj } A) = (\\text{adj } A) \\cdot A = |A| I_n$; $|\\text{adj } A| = |A|^{n-1}$; $|\\text{adj}(\\text{adj } A)| = |A|^{(n-1)^2}$; $\\text{adj}(AB) = (\\text{adj } B)(\\text{adj } A)$.",
+    "Inverse: $A^{-1} = \\frac{1}{|A|} \\text{adj } A$. Exists if and only if $A$ is non-singular ($|A| \\ne 0$). $(AB)^{-1} = B^{-1} A^{-1}$.",
+    "System of linear equations $AX = B$:\n  - If $|A| \\ne 0$: Unique solution $X = A^{-1}B$ (Consistent).\n  - If $|A| = 0$ and $(\\text{adj } A) B = O$: Infinitely many solutions or inconsistent.\n  - If $|A| = 0$ and $(\\text{adj } A) B \\ne O$: NO SOLUTION (Inconsistent)."
+  ],
+  "coreConcepts": [
+    {
+      "title": "Matrix Operations, Transpose & Symmetric Matrices",
+      "content": "1. **Matrix Multiplication**:\n   - Conformability: Product $AB$ exists $\\iff$ number of columns in $A$ equals number of rows in $B$.\n   - Commutativity: Generally $AB \\ne BA$. Even if $AB = O$, neither $A$ nor $B$ needs to be zero matrix.\n\n2. **Transpose & Symmetry**:\n   - **Symmetric Matrix**: $A^T = A \\iff a_{ij} = a_{ji}$.\n   - **Skew-Symmetric Matrix**: $A^T = -A \\iff a_{ij} = -a_{ji}$. For diagonal elements: $a_{ii} = -a_{ii} \\implies 2a_{ii} = 0 \\implies a_{ii} = 0$. **Every diagonal element of a skew-symmetric matrix is ZERO**.\n   - Determinant of an odd-order skew-symmetric matrix is **always zero**: $|A| = |A^T| = |-A| = (-1)^n |A| = -|A| \\implies 2|A| = 0 \\implies |A| = 0$ for odd $n$.\n   - **Decomposition Theorem**: Any square matrix $A$ can be uniquely expressed as the sum of a symmetric and a skew-symmetric matrix:\n     $$A = P + Q = \\frac{1}{2}(A + A^T) + \\frac{1}{2}(A - A^T)$$",
+      "ncertPointers": [
+        "If A and B are symmetric matrices of the same order, then AB - BA is always a SKEW-SYMMETRIC matrix.",
+        "If A and B are symmetric, AB + BA is always a SYMMETRIC matrix."
+      ]
+    },
+    {
+      "title": "Determinants, Adjoints & Multiplicative Inverses",
+      "content": "1. **Key Determinant Theorems**:\n   - $|AB| = |A| |B|$\n   - $|A^T| = |A|$\n   - $|A^{-1}| = \\frac{1}{|A|}$\n   - $|kA| = k^n |A|$ where $n$ is the order of square matrix $A$.\n   - If any two rows or columns are identical or proportional, $|A| = 0$.\n\n2. **Adjoint of a Square Matrix ($n \\times n$)**:\n   - Adjoint is the **transpose of the cofactor matrix**: $\\text{adj } A = [C_{ij}]^T$.\n   - **Fundamental Identity**: $A (\\text{adj } A) = (\\text{adj } A) A = |A| I_n$\n   - **Determinant of Adjoint**: Taking determinants of both sides:\n     $$|A| |\\text{adj } A| = |(|A| I_n)| = |A|^n |I_n| = |A|^n \\implies |\\text{adj } A| = |A|^{n - 1}$$\n   - **Adjoint of Adjoint**: $|\\text{adj}(\\text{adj } A)| = |A|^{(n - 1)^2}$, and $\\text{adj}(\\text{adj } A) = |A|^{n - 2} A$.\n\n3. **Inverse of a Matrix ($A^{-1}$)**:\n   - $A^{-1}$ exists $\\iff |A| \\ne 0$ (non-singular matrix).\n   - Formula: $A^{-1} = \\frac{1}{|A|} \\text{adj } A$.\n   - Reversal Law: $(AB)^{-1} = B^{-1} A^{-1}$.",
+      "ncertPointers": [
+        "Area of triangle with vertices (x1, y1), (x2, y2), (x3, y3): Area = 1/2 |det [[x1, y1, 1], [x2, y2, 1], [x3, y3, 1]]|. If area = 0, the three points are collinear."
+      ]
+    },
+    {
+      "title": "Solving Systems of Linear Equations (Matrix Method)",
+      "content": "A system of linear equations:\n$$\\begin{cases} a_1 x + b_1 y + c_1 z = d_1 \\\\ a_2 x + b_2 y + c_2 z = d_2 \\\\ a_3 x + b_3 y + c_3 z = d_3 \\end{cases} \\iff A X = B$$\nwhere $A = \\begin{bmatrix} a_1 & b_1 & c_1 \\\\ a_2 & b_2 & c_2 \\\\ a_3 & b_3 & c_3 \\end{bmatrix}$, $X = \\begin{bmatrix} x \\\\ y \\\\ z \\end{bmatrix}$, $B = \\begin{bmatrix} d_1 \\\\ d_2 \\\\ d_3 \\end{bmatrix}$.\n\n**Consistency Criteria (Cramer / Matrix Method)**:\n1. **Case 1: $|A| \\ne 0$ (Non-singular)**:\n   - The system is **Consistent**.\n   - Possesses a **Unique Solution**: $X = A^{-1} B$.\n2. **Case 2: $|A| = 0$ (Singular)**:\n   - Compute $(\\text{adj } A) B$:\n     - If $(\\text{adj } A) B \\ne O$: The system is **Inconsistent** and has **NO SOLUTION**.\n     - If $(\\text{adj } A) B = O$: The system may be **Consistent with Infinitely Many Solutions**, or Inconsistent.",
+      "ncertPointers": [
+        "Homogeneous system AX = O: If |A| != 0, only trivial solution X = 0 exists. If |A| = 0, non-trivial (infinitely many) solutions exist."
+      ]
+    }
+  ],
+  "keyFormulasAndTables": [
+    {
+      "name": "Scalar Multiple Determinant",
+      "formula": "|k A| = k^n |A|",
+      "symbols": "n = \\text{order of square matrix } A",
+      "siUnits": "Scalar determinant value",
+      "applicationCondition": "Applies to all square matrices of order n"
+    },
+    {
+      "name": "Adjoint Determinant Power Law",
+      "formula": "|\\text{adj } A| = |A|^{n - 1}, \\quad |\\text{adj}(\\text{adj } A)| = |A|^{(n - 1)^2}",
+      "symbols": "n = \\text{order of matrix } A",
+      "siUnits": "Pure numeric value",
+      "applicationCondition": "Square matrix of order n >= 2"
+    },
+    {
+      "name": "Matrix Inverse Formula",
+      "formula": "A^{-1} = \\frac{1}{|A|} \\text{adj } A",
+      "symbols": "|A| \\ne 0 \\text{ (non-singular condition)}",
+      "siUnits": "Matrix of order n",
+      "applicationCondition": "Invertible matrices"
+    }
+  ],
+  "diagramSvg": "<svg viewBox=\"0 0 760 250\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <rect width=\"760\" height=\"250\" rx=\"14\" fill=\"#0f172a\" stroke=\"#334155\" strokeWidth=\"1.5\"/>\n  <text x=\"380\" y=\"30\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"16\" fontWeight=\"bold\">Matrix Method: Consistency Decision Tree for AX = B</text>\n\n  <!-- Top Root: Calculate |A| -->\n  <rect x=\"290\" y=\"55\" width=\"180\" height=\"40\" rx=\"6\" fill=\"#1e293b\" stroke=\"#38bdf8\" strokeWidth=\"1.5\"/>\n  <text x=\"380\" y=\"80\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"12\" fontWeight=\"bold\">Evaluate Determinant |A|</text>\n\n  <!-- Branch Left: |A| != 0 -->\n  <line x1=\"330\" y1=\"95\" x2=\"160\" y2=\"140\" stroke=\"#22c55e\" strokeWidth=\"2\"/>\n  <rect x=\"70\" y=\"140\" width=\"180\" height=\"75\" rx=\"8\" fill=\"#1e293b\" stroke=\"#22c55e\" strokeWidth=\"1.5\"/>\n  <text x=\"160\" y=\"162\" textAnchor=\"middle\" fill=\"#22c55e\" fontSize=\"12\" fontWeight=\"bold\">|A| ≠ 0 (Non-Singular)</text>\n  <text x=\"160\" y=\"182\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">Consistent System</text>\n  <text x=\"160\" y=\"202\" textAnchor=\"middle\" fill=\"#34d399\" fontSize=\"11\" fontWeight=\"bold\">Unique Solution: X = A⁻¹ B</text>\n\n  <!-- Branch Right: |A| == 0 -->\n  <line x1=\"430\" y1=\"95\" x2=\"600\" y2=\"140\" stroke=\"#f43f5e\" strokeWidth=\"2\"/>\n  <rect x=\"490\" y=\"140\" width=\"220\" height=\"85\" rx=\"8\" fill=\"#1e293b\" stroke=\"#f43f5e\" strokeWidth=\"1.5\"/>\n  <text x=\"600\" y=\"162\" textAnchor=\"middle\" fill=\"#f43f5e\" fontSize=\"12\" fontWeight=\"bold\">|A| = 0 (Singular Matrix)</text>\n  <text x=\"600\" y=\"182\" textAnchor=\"middle\" fill=\"#f87171\" fontSize=\"10\">If (adj A)·B ≠ O → No Solution</text>\n  <text x=\"600\" y=\"202\" textAnchor=\"middle\" fill=\"#facc15\" fontSize=\"10\">If (adj A)·B = O → Infinitely Many Sol.</text>\n</svg>",
+  "workedExamples": [
+    {
+      "id": "maths_u2_we1",
+      "questionNumber": 1,
+      "question": "Let $A$ be a $3 \\times 3$ non-singular matrix such that $|A| = 4$. What is the value of $|\\text{adj } A|$ and $|3A|$?",
+      "options": [
+        {
+          "id": "A",
+          "text": "|adj A| = 16, |3A| = 108"
+        },
+        {
+          "id": "B",
+          "text": "|adj A| = 64, |3A| = 12"
+        },
+        {
+          "id": "C",
+          "text": "|adj A| = 16, |3A| = 36"
+        },
+        {
+          "id": "D",
+          "text": "|adj A| = 4, |3A| = 108"
+        }
+      ],
+      "correctOption": "A",
+      "solutionSteps": [
+        "Step 1: Formula for determinant of adjoint of $n \\times n$ matrix: $|\\text{adj } A| = |A|^{n - 1}$.",
+        "Step 2: Here $n = 3$ and $|A| = 4 \\implies |\\text{adj } A| = 4^{3 - 1} = 4^2 = 16$.",
+        "Step 3: Formula for scalar multiple determinant: $|k A| = k^n |A|$.",
+        "Step 4: Here $k = 3$ and $n = 3 \\implies |3A| = 3^3 |A| = 27 \\times 4 = 108$.",
+        "Step 5: Thus, $|\\text{adj } A| = 16$ and $|3A| = 108$."
+      ],
+      "cuetTip": "Never forget the power $n$ when taking a scalar out of a determinant: $|kA| = k^n |A|$!"
+    },
+    {
+      "id": "maths_u2_we2",
+      "questionNumber": 2,
+      "question": "If $A$ and $B$ are symmetric matrices of the same order, then $AB - BA$ is ALWAYS a:",
+      "options": [
+        {
+          "id": "A",
+          "text": "Symmetric matrix"
+        },
+        {
+          "id": "B",
+          "text": "Skew-symmetric matrix"
+        },
+        {
+          "id": "C",
+          "text": "Identity matrix"
+        },
+        {
+          "id": "D",
+          "text": "Zero matrix"
+        }
+      ],
+      "correctOption": "B",
+      "solutionSteps": [
+        "Step 1: Given $A^T = A$ and $B^T = B$.",
+        "Step 2: Let $C = AB - BA$. Take transpose of both sides: $C^T = (AB - BA)^T = (AB)^T - (BA)^T$.",
+        "Step 3: By reversal law of transposes, $(AB)^T = B^T A^T$ and $(BA)^T = A^T B^T$.",
+        "Step 4: Substitute $A^T = A, B^T = B$: $C^T = B A - A B = -(AB - BA) = -C$.",
+        "Step 5: Since $C^T = -C$, the matrix $AB - BA$ is strictly skew-symmetric."
+      ],
+      "cuetTip": "Analogous result: $(AB + BA)^T = AB + BA \\implies$ symmetric. $(AB - BA)^T = -(AB - BA) \\implies$ skew-symmetric."
+    }
+  ],
+  "howCuetAsksThis": [
+    {
+      "type": "Adjoint Determinant Power Calculation",
+      "frequency": "Very High (every shift)",
+      "pyqExample": {
+        "question": "If $A$ is a square matrix of order 3 such that $|A| = 5$, then $|\\text{adj}(\\text{adj } A)|$ is equal to:",
+        "options": [
+          {
+            "id": "A",
+            "text": "25"
+          },
+          {
+            "id": "B",
+            "text": "125"
+          },
+          {
+            "id": "C",
+            "text": "625"
+          },
+          {
+            "id": "D",
+            "text": "5"
+          }
+        ],
+        "correctOption": "C",
+        "explanation": "Formula: $|\\text{adj}(\\text{adj } A)| = |A|^{(n-1)^2}$. For $n = 3$, power is $(3 - 1)^2 = 2^2 = 4$. Thus $|A|^4 = 5^4 = 625$."
+      },
+      "strategy": "Memorize: $|\\text{adj } A| = |A|^{n-1}$ (for $n=3$, power 2); $|\\text{adj}(\\text{adj } A)| = |A|^{(n-1)^2}$ (for $n=3$, power 4)."
+    },
+    {
+      "type": "System of Equations Consistency Check",
+      "frequency": "High",
+      "pyqExample": {
+        "question": "The system of equations $x + y + z = 6$, $x + 2y + 3z = 10$, $x + 2y + \\lambda z = \\mu$ has a UNIQUE solution if:",
+        "options": [
+          {
+            "id": "A",
+            "text": "λ ≠ 3, μ can be any real number"
+          },
+          {
+            "id": "B",
+            "text": "λ = 3, μ = 10"
+          },
+          {
+            "id": "C",
+            "text": "λ = 3, μ ≠ 10"
+          },
+          {
+            "id": "D",
+            "text": "λ = 0, μ = 0"
+          }
+        ],
+        "correctOption": "A",
+        "explanation": "A unique solution requires $|A| \\ne 0$. $|A| = \\det \\begin{pmatrix} 1 & 1 & 1 \\\\ 1 & 2 & 3 \\\\ 1 & 2 & \\lambda \\end{pmatrix} = \\lambda - 3$. Thus $|A| \\ne 0 \\iff \\lambda \\ne 3$, independent of $\\mu$."
+      },
+      "strategy": "For unique solution, ONLY the coefficient determinant $|A| \\ne 0$ matters. The constant vector $\\mu$ is irrelevant."
+    }
+  ],
+  "commonTraps": [
+    {
+      "misconception": "Assuming (A + B)^2 = A^2 + 2AB + B^2 for matrices.",
+      "whyWrong": "Matrix multiplication is non-commutative ($AB \\ne BA$).",
+      "correctUnderstanding": "$(A + B)^2 = (A + B)(A + B) = A^2 + AB + BA + B^2$. It equals $A^2 + 2AB + B^2$ ONLY IF $AB = BA$."
+    },
+    {
+      "misconception": "Thinking the determinant of a skew-symmetric matrix is always zero.",
+      "whyWrong": "The determinant of an ODD-order skew-symmetric matrix is zero. An EVEN-order skew-symmetric matrix has a non-zero determinant (it is a perfect square).",
+      "correctUnderstanding": "For order $3 \\times 3$, $|A| = 0$. For order $2 \\times 2$ or $4 \\times 4$, $|A| \\ne 0$ in general."
+    }
+  ],
+  "mnemonicsAndShortcuts": [
+    {
+      "title": "Reversal Law for Inverses and Transposes",
+      "mnemonic": "Socks and Shoes rule: Put on socks then shoes; take off shoes then socks.",
+      "rule": "$(AB)^T = B^T A^T$ and $(AB)^{-1} = B^{-1} A^{-1}$.",
+      "shortcut": "Always reverse the order of terms when expanding transpose or inverse.",
+      "whenToApply": "Matrix algebra expansions."
+    },
+    {
+      "title": "Adjoint Power Countdown",
+      "mnemonic": "n-1 for one adj, (n-1)^2 for two adjs.",
+      "rule": "$|\\text{adj } A| = |A|^{n-1}$. $|\\text{adj}(\\text{adj } A)| = |A|^{(n-1)^2}$.",
+      "shortcut": "For order 3: single adj $\\rightarrow$ square; double adj $\\rightarrow$ 4th power.",
+      "whenToApply": "Evaluating adjoint determinants."
+    }
+  ],
+  "quickRevisionCard": {
+    "title": "Matrices & Determinants — Quick Card",
+    "bulletPoints": [
+      "Matrix multiplication: Non-commutative ($AB \\ne BA$ generally). Associative: $A(BC) = (AB)C$.",
+      "Transpose: $(AB)^T = B^T A^T$. Symmetric: $A^T = A$. Skew-symmetric: $A^T = -A$ (diagonal is 0).",
+      "Odd-order skew-symmetric matrix: Determinant is ALWAYS ZERO ($|A| = 0$).",
+      "Determinants: $|kA| = k^n |A|$; $|AB| = |A| |B|$; $|A^{-1}| = 1 / |A|$.",
+      "Adjoint: $A (\\text{adj } A) = |A| I_n$; $|\\text{adj } A| = |A|^{n-1}$.",
+      "Double adjoint: $|\\text{adj}(\\text{adj } A)| = |A|^{(n-1)^2}$; $\\text{adj}(\\text{adj } A) = |A|^{n-2} A$.",
+      "Inverse: $A^{-1} = \\frac{1}{|A|} \\text{adj } A$. Exists iff $|A| \\ne 0$.",
+      "System $AX = B$: If $|A| \\ne 0 \\implies$ unique solution $X = A^{-1} B$.",
+      "If $|A| = 0$ and $(\\text{adj } A) B \\ne O \\implies$ NO SOLUTION (Inconsistent).",
+      "If $|A| = 0$ and $(\\text{adj } A) B = O \\implies$ Infinitely many solutions or inconsistent."
+    ],
+    "keyPoints": [
+      "Matrix multiplication: Non-commutative ($AB \\ne BA$ generally). Associative: $A(BC) = (AB)C$.",
+      "Transpose: $(AB)^T = B^T A^T$. Symmetric: $A^T = A$. Skew-symmetric: $A^T = -A$ (diagonal is 0).",
+      "Odd-order skew-symmetric matrix: Determinant is ALWAYS ZERO ($|A| = 0$).",
+      "Determinants: $|kA| = k^n |A|$; $|AB| = |A| |B|$; $|A^{-1}| = 1 / |A|$.",
+      "Adjoint: $A (\\text{adj } A) = |A| I_n$; $|\\text{adj } A| = |A|^{n-1}$.",
+      "Double adjoint: $|\\text{adj}(\\text{adj } A)| = |A|^{(n-1)^2}$; $\\text{adj}(\\text{adj } A) = |A|^{n-2} A$.",
+      "Inverse: $A^{-1} = \\frac{1}{|A|} \\text{adj } A$. Exists iff $|A| \\ne 0$.",
+      "System $AX = B$: If $|A| \\ne 0 \\implies$ unique solution $X = A^{-1} B$.",
+      "If $|A| = 0$ and $(\\text{adj } A) B \\ne O \\implies$ NO SOLUTION (Inconsistent).",
+      "If $|A| = 0$ and $(\\text{adj } A) B = O \\implies$ Infinitely many solutions or inconsistent."
+    ]
+  },
+  "practiceQuestions": [
+    {
+      "id": "maths_u2_q1",
+      "question": "If $A$ is a square matrix of order 3 and $|A| = 2$, then $|\\text{adj } A|$ is equal to:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "2"
+        },
+        {
+          "id": "B",
+          "text": "4"
+        },
+        {
+          "id": "C",
+          "text": "8"
+        },
+        {
+          "id": "D",
+          "text": "16"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Formula: $|\\text{adj } A| = |A|^{n-1}$. For $n = 3$, $|\\text{adj } A| = 2^{3-1} = 2^2 = 4$.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u2_q2",
+      "question": "If $A = \\begin{bmatrix} 2 & 3 \\\\ 1 & 4 \\end{bmatrix}$, then $A^{-1}$ is equal to:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "1/5 [4, -3; -1, 2]"
+        },
+        {
+          "id": "B",
+          "text": "1/5 [4, 3; 1, 2]"
+        },
+        {
+          "id": "C",
+          "text": "1/5 [-4, 3; 1, -2]"
+        },
+        {
+          "id": "D",
+          "text": "[4, -3; -1, 2]"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "$|A| = (2)(4) - (3)(1) = 8 - 3 = 5$. Adjoint of a $2 \\times 2$ matrix $[a, b; c, d]$ swaps diagonal elements and negates off-diagonal elements: $[d, -b; -c, a] = [4, -3; -1, 2]$. Thus $A^{-1} = \\frac{1}{5}\\begin{bmatrix} 4 & -3 \\\\ -1 & 2 \\end{bmatrix}$.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u2_q3",
+      "question": "For any square matrix $A$, which of the following is ALWAYS a symmetric matrix?",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "A - Aᵀ"
+        },
+        {
+          "id": "B",
+          "text": "A + Aᵀ"
+        },
+        {
+          "id": "C",
+          "text": "Aᵀ"
+        },
+        {
+          "id": "D",
+          "text": "A² - Aᵀ"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "$(A + A^T)^T = A^T + (A^T)^T = A^T + A = A + A^T$, so $A + A^T$ is always symmetric.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u2_q4",
+      "question": "Assertion (A): The determinant of a skew-symmetric matrix of order 3 is always zero.\nReason (R): For any skew-symmetric matrix $A$ of odd order $n$, $|A| = 0$.",
+      "type": "assertion-reason",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both A and R are true and R is the correct explanation of A"
+        },
+        {
+          "id": "B",
+          "text": "Both A and R are true but R is not the correct explanation of A"
+        },
+        {
+          "id": "C",
+          "text": "A is true but R is false"
+        },
+        {
+          "id": "D",
+          "text": "A is false but R is true"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "$|A| = |A^T| = |-A| = (-1)^n |A|$. For odd $n$, $|A| = -|A| \\implies 2|A| = 0 \\implies |A| = 0$.",
+      "difficulty": "easy",
+      "questionType": "Assertion-Reason"
+    },
+    {
+      "id": "maths_u2_q5",
+      "question": "Match List-I (Property / Expression) with List-II (Result for 3x3 Matrix):\nP. |adj A|\nQ. |adj(adj A)|\nR. |2A|\nS. A · adj(A)",
+      "type": "match-the-following",
+      "options": [
+        {
+          "id": "A",
+          "text": "P-|A|², Q-|A|⁴, R-8|A|, S-|A| I"
+        },
+        {
+          "id": "B",
+          "text": "P-|A|⁴, Q-|A|², R-8|A|, S-|A| I"
+        },
+        {
+          "id": "C",
+          "text": "P-|A|², Q-|A|⁴, R-2|A|, S-I"
+        },
+        {
+          "id": "D",
+          "text": "P-8|A|, Q-|A|², R-|A|⁴, S-|A| I"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "For $n=3$: $|\\text{adj } A| = |A|^2$, $|\\text{adj}(\\text{adj } A)| = |A|^4$, $|2A| = 2^3 |A| = 8|A|$, and $A \\cdot \\text{adj } A = |A| I$.",
+      "difficulty": "easy",
+      "questionType": "Match The Following"
+    },
+    {
+      "id": "maths_u2_q6",
+      "question": "If points $(k, 0)$, $(4, 0)$, and $(0, 2)$ form a triangle of area 4 square units, the value of $k$ is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "0 or 8"
+        },
+        {
+          "id": "B",
+          "text": "-8 or 0"
+        },
+        {
+          "id": "C",
+          "text": "4 or -4"
+        },
+        {
+          "id": "D",
+          "text": "2 or 6"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Area $= \\frac{1}{2} |\\det [k, 0, 1; 4, 0, 1; 0, 2, 1]| = \\frac{1}{2} |-2(k - 4)| = |4 - k| = 4 \\implies 4 - k = \\pm 4 \\implies k = 0$ or $k = 8$.",
+      "difficulty": "medium",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u2_q7",
+      "question": "If $A$ is an invertible matrix of order 3, then $|A^{-1}|$ equals:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "|A|"
+        },
+        {
+          "id": "B",
+          "text": "1 / |A|"
+        },
+        {
+          "id": "C",
+          "text": "1"
+        },
+        {
+          "id": "D",
+          "text": "|A|³"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Since $A A^{-1} = I$, $|A A^{-1}| = |A| |A^{-1}| = |I| = 1 \\implies |A^{-1}| = 1 / |A|$.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u2_q8",
+      "question": "A system of linear equations $AX = B$ with a non-singular matrix $A$ has:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "Infinitely many solutions"
+        },
+        {
+          "id": "B",
+          "text": "No solution"
+        },
+        {
+          "id": "C",
+          "text": "A unique solution given by X = A⁻¹ B"
+        },
+        {
+          "id": "D",
+          "text": "Two solutions"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "When $|A| \\ne 0$, $A^{-1}$ exists uniquely, guaranteeing exactly one unique solution $X = A^{-1}B$.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u2_q9",
+      "question": "If $A$ and $B$ are square matrices of the same order such that $AB = A$ and $BA = B$, then $A^2$ is equal to:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "A"
+        },
+        {
+          "id": "B",
+          "text": "B"
+        },
+        {
+          "id": "C",
+          "text": "I"
+        },
+        {
+          "id": "D",
+          "text": "O"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "$A^2 = A A = A (AB) = (AB) B = A B = A$. So $A$ is idempotent ($A^2 = A$).",
+      "difficulty": "medium",
+      "questionType": "Calculation-Intensive MCQ"
+    },
+    {
+      "id": "maths_u2_q10",
+      "question": "The value of a third-order determinant whose elements in the first row are equal to the elements in the third row is:",
+      "type": "standard",
+      "options": [
+        {
+          "id": "A",
+          "text": "1"
+        },
+        {
+          "id": "B",
+          "text": "0"
+        },
+        {
+          "id": "C",
+          "text": "-1"
+        },
+        {
+          "id": "D",
+          "text": "Product of diagonal elements"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "If any two rows (or columns) of a determinant are identical, the value of the determinant is zero.",
+      "difficulty": "easy",
+      "questionType": "Calculation-Intensive MCQ"
+    }
+  ],
+  "links": {
+    "prerequisites": [
+      "maths_u1_t1"
+    ],
+    "relatedTopics": [
+      "maths_u3_t1"
+    ],
+    "practiceTestId": "practice-maths-unit2-test1",
+    "practiceTestUrl": "/test/practice-maths-unit2-test1",
+    "weaknessReportUrl": "/dashboard/radar?subject=maths",
+    "weaknessRadarUrl": "/dashboard/radar?subject=maths"
+  },
+  "subjectSpecific": {
+    "mathematics": {
+      "standardResults": [
+        {
+          "result": "|k A| = k^n |A|",
+          "condition": "Square matrix of order n"
+        },
+        {
+          "result": "|\\text{adj } A| = |A|^{n - 1}",
+          "condition": "Square matrix of order n"
+        },
+        {
+          "result": "A (\\text{adj } A) = |A| I_n",
+          "condition": "All square matrices"
+        }
+      ],
+      "graphProperties": [
+        {
+          "curve": "AX = B (2 variables)",
+          "keyPoints": "Intersecting lines = unique solution; parallel lines = inconsistent; coincident lines = infinite solutions"
+        }
+      ]
+    }
+  },
+  "diagram": {
+    "type": "svg",
+    "title": "Matrix Operations, Invertible Matrices, Determinants, Adjoint and System of Linear Equations",
+    "caption": "Mathematical geometry and visual representation for Matrix Operations, Invertible Matrices, Determinants, Adjoint and System of Linear Equations",
+    "code": "<svg viewBox=\"0 0 760 250\" xmlns=\"http://www.w3.org/2000/svg\" className=\"w-full h-auto\">\n  <rect width=\"760\" height=\"250\" rx=\"14\" fill=\"#0f172a\" stroke=\"#334155\" strokeWidth=\"1.5\"/>\n  <text x=\"380\" y=\"30\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"16\" fontWeight=\"bold\">Matrix Method: Consistency Decision Tree for AX = B</text>\n\n  <!-- Top Root: Calculate |A| -->\n  <rect x=\"290\" y=\"55\" width=\"180\" height=\"40\" rx=\"6\" fill=\"#1e293b\" stroke=\"#38bdf8\" strokeWidth=\"1.5\"/>\n  <text x=\"380\" y=\"80\" textAnchor=\"middle\" fill=\"#38bdf8\" fontSize=\"12\" fontWeight=\"bold\">Evaluate Determinant |A|</text>\n\n  <!-- Branch Left: |A| != 0 -->\n  <line x1=\"330\" y1=\"95\" x2=\"160\" y2=\"140\" stroke=\"#22c55e\" strokeWidth=\"2\"/>\n  <rect x=\"70\" y=\"140\" width=\"180\" height=\"75\" rx=\"8\" fill=\"#1e293b\" stroke=\"#22c55e\" strokeWidth=\"1.5\"/>\n  <text x=\"160\" y=\"162\" textAnchor=\"middle\" fill=\"#22c55e\" fontSize=\"12\" fontWeight=\"bold\">|A| ≠ 0 (Non-Singular)</text>\n  <text x=\"160\" y=\"182\" textAnchor=\"middle\" fill=\"#f8fafc\" fontSize=\"11\">Consistent System</text>\n  <text x=\"160\" y=\"202\" textAnchor=\"middle\" fill=\"#34d399\" fontSize=\"11\" fontWeight=\"bold\">Unique Solution: X = A⁻¹ B</text>\n\n  <!-- Branch Right: |A| == 0 -->\n  <line x1=\"430\" y1=\"95\" x2=\"600\" y2=\"140\" stroke=\"#f43f5e\" strokeWidth=\"2\"/>\n  <rect x=\"490\" y=\"140\" width=\"220\" height=\"85\" rx=\"8\" fill=\"#1e293b\" stroke=\"#f43f5e\" strokeWidth=\"1.5\"/>\n  <text x=\"600\" y=\"162\" textAnchor=\"middle\" fill=\"#f43f5e\" fontSize=\"12\" fontWeight=\"bold\">|A| = 0 (Singular Matrix)</text>\n  <text x=\"600\" y=\"182\" textAnchor=\"middle\" fill=\"#f87171\" fontSize=\"10\">If (adj A)·B ≠ O → No Solution</text>\n  <text x=\"600\" y=\"202\" textAnchor=\"middle\" fill=\"#facc15\" fontSize=\"10\">If (adj A)·B = O → Infinitely Many Sol.</text>\n</svg>"
+  },
+  "howCuetAsks": [
+    {
+      "patternType": "Adjoint Determinant Power Calculation",
+      "frequency": "Very High (every shift)",
+      "typicalStem": "If $A$ is a square matrix of order 3 such that $|A| = 5$, then $|\\text{adj}(\\text{adj } A)|$ is equal to:",
+      "strategy": "Memorize: $|\\text{adj } A| = |A|^{n-1}$ (for $n=3$, power 2); $|\\text{adj}(\\text{adj } A)| = |A|^{(n-1)^2}$ (for $n=3$, power 4)."
+    },
+    {
+      "patternType": "System of Equations Consistency Check",
+      "frequency": "High",
+      "typicalStem": "The system of equations $x + y + z = 6$, $x + 2y + 3z = 10$, $x + 2y + \\lambda z = \\mu$ has a UNIQUE solution if:",
+      "strategy": "For unique solution, ONLY the coefficient determinant $|A| \\ne 0$ matters. The constant vector $\\mu$ is irrelevant."
+    }
+  ],
+  "metadata": {
+    "confidence": "high",
+    "needsHumanReview": false,
+    "lastUpdated": "2026-10-14T14:49:35.326Z",
+    "version": 1,
+    "wordCount": 2802,
+    "isFreePreview": true
+  }
+}
