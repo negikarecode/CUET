@@ -25,14 +25,20 @@ import {
   Sprout,
   Footprints,
   CheckCircle2,
-  HelpCircle,
   Clock,
   Play,
   FileText,
+  Target,
+  ArrowRight,
+  RotateCw,
+  Sparkles,
 } from "lucide-react";
 import { SUBJECT_MOCK_COUNTS, SUBJECT_TO_MOCK } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { useTarget } from "@/lib/hooks/useTarget";
+import { getMockStats } from "@/lib/mock-stats";
+import { normalizeSubject } from "@/lib/analytics";
 
 type SubjectKey =
   | "all"
@@ -58,6 +64,7 @@ type SubjectKey =
   | "anthropology";
 
 type StreamKey = "all" | "science" | "commerce" | "humanities";
+type StatusFilter = "all" | "started" | "not_started";
 
 interface SubjectMeta {
   key: SubjectKey;
@@ -104,7 +111,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     shortName: "Commerce",
     badge: "4 Domains",
     accentBg: "#FEF3C7",
-    accentText: "#92400E",
+    accentText: "#D97706",
     subjects: [
       "accountancy",
       "business-studies",
@@ -118,7 +125,7 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     shortName: "Humanities",
     badge: "10 Domains",
     accentBg: "#FCE7F3",
-    accentText: "#9D174D",
+    accentText: "#BE185D",
     subjects: [
       "history",
       "political-science",
@@ -142,7 +149,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 60,
     totalQuestions: 50,
-    subtitle: "Electrostatics, Optics, Magnetism & Modern Physics",
+    subtitle: "Electrostatics, Optics, Magnetism, Modern Physics & Semiconductor Devices",
     icon: Atom,
   },
   chemistry: {
@@ -152,7 +159,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 60,
     totalQuestions: 50,
-    subtitle: "Physical, Inorganic & Organic Chemistry",
+    subtitle: "Physical Chemistry, Organic Mechanisms, Coordination Compounds & Biomolecules",
     icon: FlaskConical,
   },
   mathematics: {
@@ -162,7 +169,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 60,
     totalQuestions: 50,
-    subtitle: "Calculus, Algebra, Vectors & 3D Geometry",
+    subtitle: "Calculus, Linear Programming, Vectors, 3D Geometry & Probability",
     icon: Binary,
   },
   biology: {
@@ -172,7 +179,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Genetics, Ecology, Physiology & Biotechnology",
+    subtitle: "Genetics, Reproduction, Biotechnology, Human Health & Ecology",
     icon: Dna,
   },
   accountancy: {
@@ -182,7 +189,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 60,
     totalQuestions: 50,
-    subtitle: "Partnership, Company Accounts & Financial Analysis",
+    subtitle: "Partnership, Share Capital, Cash Flow & Financial Statement Analysis",
     icon: Calculator,
   },
   "business-studies": {
@@ -192,7 +199,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Principles of Management, Marketing & Finance",
+    subtitle: "Principles of Management, Marketing, Business Finance & Consumer Protection",
     icon: Briefcase,
   },
   economics: {
@@ -202,7 +209,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 60,
     totalQuestions: 50,
-    subtitle: "Microeconomics, Macroeconomics & Indian Economy",
+    subtitle: "Macroeconomic Identities, National Income, Fiscal Policy & Indian Economy",
     icon: TrendingUp,
   },
   history: {
@@ -212,7 +219,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Ancient, Medieval & Modern Indian History",
+    subtitle: "Ancient Harappa, Medieval Agrarian Society, Colonialism & Constitution",
     icon: ScrollText,
   },
   "political-science": {
@@ -222,7 +229,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Contemporary World Politics & Politics in India",
+    subtitle: "Contemporary World Order, South Asia, Indian Democracy & Foreign Policy",
     icon: Landmark,
   },
   geography: {
@@ -232,7 +239,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Human Geography, India: People & Economy",
+    subtitle: "Human Geography, Population, Resource Allocation & Spatial Organization",
     icon: Globe,
   },
   psychology: {
@@ -242,7 +249,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Psychological Attributes, Self & Personality",
+    subtitle: "Psychological Attributes, Self, Personality, Disorders & Social Influence",
     icon: BrainCircuit,
   },
   sociology: {
@@ -252,7 +259,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Indian Society & Social Change in India",
+    subtitle: "Indian Social Structure, Caste, Stratification, Demographic Dynamics & Change",
     icon: Users,
   },
   "physical-education": {
@@ -262,7 +269,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Management of Sporting Events, Yoga & Nutrition",
+    subtitle: "Management of Sporting Events, Yoga, Sports Nutrition & Biomechanics",
     icon: Activity,
   },
   "computer-science": {
@@ -272,7 +279,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 60,
     totalQuestions: 50,
-    subtitle: "Computational Thinking, SQL & Computer Networks",
+    subtitle: "Python Structures, SQL Queries, Computer Networks & Cyber Ethics",
     icon: Laptop,
   },
   "home-science": {
@@ -282,7 +289,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Human Development, Nutrition, Resource Management",
+    subtitle: "Clinical Nutrition, Human Development, Fabric Care & Resource Management",
     icon: Home,
   },
   "mass-media": {
@@ -292,7 +299,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Communication Concepts, Journalism & Digital Media",
+    subtitle: "Journalism Traditions, Cinema Grammar, Digital Media & Advertising",
     icon: Tv,
   },
   "environmental-studies": {
@@ -302,7 +309,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Ecology, Sustainable Development & Environmental Issues",
+    subtitle: "Ecosystem Conservation, Pollution Control & Sustainable Development",
     icon: Leaf,
   },
   "fine-arts": {
@@ -312,7 +319,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Painting, Graphics, Sculpture & Applied Art",
+    subtitle: "Rajasthani & Pahari Miniatures, Bengal School of Art & Modern Sculptures",
     icon: Palette,
   },
   agriculture: {
@@ -322,7 +329,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Agronomy, Soil Science & Plant Genetics",
+    subtitle: "Agrometeorology, Genetics, Livestock Husbandry & Crop Cultivation",
     icon: Sprout,
   },
   anthropology: {
@@ -332,7 +339,7 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     isLive: true,
     durationMinutes: 45,
     totalQuestions: 50,
-    subtitle: "Physical Anthropology, Cultural & Social Anthropology",
+    subtitle: "Physical Evolution, Archaeological Foundations & Socio-Cultural Institutions",
     icon: Footprints,
   },
 };
@@ -340,8 +347,11 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
 export default function MocksPage() {
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
+  const targetData = useTarget();
+
   const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
   const [selectedTab, setSelectedTab] = useState<SubjectKey>("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
 
   const activeSubjectInfo = selectedTab !== "all" ? SUBJECT_CONFIGS[selectedTab] : null;
 
@@ -366,7 +376,7 @@ export default function MocksPage() {
     }
   };
 
-  const displayedSubjects = useMemo(() => {
+  const allSubjects = useMemo(() => {
     if (selectedTab !== "all" && activeSubjectInfo) {
       return [activeSubjectInfo];
     }
@@ -376,6 +386,35 @@ export default function MocksPage() {
     return Object.values(SUBJECT_CONFIGS);
   }, [selectedStream, selectedTab, activeSubjectInfo]);
 
+  // Filtered by status (All / Started / Not started) using authoritative getMockStats
+  const displayedSubjects = useMemo(() => {
+    return allSubjects.filter((sub) => {
+      if (statusFilter === "all") return true;
+      const stats = getMockStats(sub.key, isClient ? testAttempts : []);
+      if (statusFilter === "started") return stats.attemptedMocksCount > 0;
+      if (statusFilter === "not_started") return stats.attemptedMocksCount === 0;
+      return true;
+    });
+  }, [allSubjects, statusFilter, isClient, testAttempts]);
+
+  // Recommended subjects for user target dream college/course
+  const recommendedSubjects = useMemo(() => {
+    if (!targetData.hasTarget || !targetData.requiredSubjects || targetData.requiredSubjects.length === 0) {
+      return [];
+    }
+    const reqKeys = new Set(
+      targetData.requiredSubjects.map((s) => normalizeSubject(s).key)
+    );
+    return Object.values(SUBJECT_CONFIGS).filter((sub) => reqKeys.has(sub.key));
+  }, [targetData]);
+
+  // Other subjects (excluding recommended) when recommended section is shown
+  const otherSubjects = useMemo(() => {
+    if (recommendedSubjects.length === 0) return displayedSubjects;
+    const recKeys = new Set(recommendedSubjects.map((s) => s.key));
+    return displayedSubjects.filter((s) => !recKeys.has(s.key));
+  }, [displayedSubjects, recommendedSubjects]);
+
   const availableSubjectsForDropdown = useMemo(() => {
     if (selectedStream === "all") {
       return Object.values(SUBJECT_CONFIGS);
@@ -383,16 +422,169 @@ export default function MocksPage() {
     return STREAM_CONFIGS[selectedStream].subjects.map((k) => SUBJECT_CONFIGS[k]);
   }, [selectedStream]);
 
+  // Render a standard subject card
+  const renderSubjectCard = (sub: SubjectMeta, isRecommended = false) => {
+    const Icon = sub.icon;
+    const mockCount = SUBJECT_MOCK_COUNTS[sub.key] ?? 20;
+    const baseMockId = SUBJECT_TO_MOCK[sub.key] || `${sub.key}-mock`;
+
+    const stats = isClient
+      ? getMockStats(sub.key, testAttempts)
+      : {
+          attemptedMocksCount: 0,
+          totalMocksCount: mockCount,
+          peakScore: null,
+          peakMaxMarks: 250,
+          averageScore: null,
+          nextUnattemptedMockIndex: 1,
+          isAllAttempted: false,
+          hasAttempts: false,
+        };
+
+    const nextMockNum = stats.nextUnattemptedMockIndex;
+    const nextMockId = `${baseMockId}-${nextMockNum}`;
+    const progressPercent = Math.min(100, Math.round((stats.attemptedMocksCount / mockCount) * 100));
+
+    return (
+      <div
+        key={sub.key}
+        className={`bg-white rounded-3xl border transition-all flex flex-col justify-between p-5 sm:p-6 min-w-0 ${
+          isRecommended
+            ? "border-blue-200/80 shadow-md ring-1 ring-blue-500/10"
+            : "border-slate-100 shadow-sm hover:shadow-md"
+        }`}
+      >
+        <div className="space-y-3.5 flex-1 flex flex-col min-w-0">
+          {/* Top Header Row: Icon + Badges */}
+          <div className="flex items-start justify-between gap-3">
+            <div
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+                isRecommended
+                  ? "bg-blue-600 text-white shadow-sm shadow-blue-500/25"
+                  : "bg-blue-50 border border-blue-200/60 text-blue-600"
+              }`}
+            >
+              <Icon className="w-6 h-6" />
+            </div>
+
+            <div className="flex items-center gap-1.5 flex-wrap justify-end">
+              {stats.attemptedMocksCount > 0 ? (
+                <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                  <span>
+                    {stats.attemptedMocksCount} of {mockCount} Attempted
+                  </span>
+                </span>
+              ) : (
+                <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                  0/{mockCount} Attempted
+                </span>
+              )}
+
+              <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-mono">
+                Code {sub.code}
+              </span>
+            </div>
+          </div>
+
+          {/* Title & Description */}
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                {sub.name}
+              </h3>
+              {isRecommended && (
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200/70 inline-flex items-center gap-1 shrink-0">
+                  <Sparkles className="w-2.5 h-2.5 text-amber-600" />
+                  Target Required
+                </span>
+              )}
+            </div>
+            {/* Description clamped to exactly 2 lines with fixed height so cards align */}
+            <p className="text-[13px] font-normal text-slate-500 line-clamp-2 h-10 leading-relaxed">
+              {sub.subtitle}
+            </p>
+          </div>
+
+          {/* Progress bar */}
+          <div className="space-y-1 pt-1">
+            <div className="flex items-center justify-between text-[12px] font-medium text-slate-500">
+              <span>Mock Progress</span>
+              <span className="font-semibold text-slate-700 tabular-nums">
+                {stats.attemptedMocksCount} / {mockCount} ({progressPercent}%)
+              </span>
+            </div>
+            <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
+              <div
+                className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Meta specs row: raised to at least 13px with darker text */}
+          <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2 text-[13px] text-slate-600 font-medium">
+            <div className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span>{sub.durationMinutes} Mins</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span>50 Questions</span>
+            </div>
+            <div className="flex items-center gap-1.5 col-span-2 text-slate-700">
+              <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+              <span>{mockCount} Full Mock Papers (+5/−1)</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Actions: Pinned with mt-auto */}
+        <div className="pt-3 border-t border-slate-100 mt-auto flex items-center gap-2 w-full">
+          <Link
+            href={`/dashboard/mocks/${sub.key}`}
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-sm hover:shadow-md transition-all text-center"
+          >
+            <span>View All Mocks</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+
+          <Link
+            href={stats.isAllAttempted ? `/dashboard/mocks/${sub.key}` : `/test/${nextMockId}`}
+            className="px-3.5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-[13px] transition-all text-center flex items-center gap-1.5 shrink-0"
+            title={
+              stats.isAllAttempted
+                ? `All mocks attempted for ${sub.name}`
+                : `Start Mock ${nextMockNum} for ${sub.name}`
+            }
+          >
+            {stats.isAllAttempted ? (
+              <>
+                <RotateCw className="w-3.5 h-3.5" />
+                <span>Review</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-3 h-3 fill-current" />
+                <span>Next: Mock {nextMockNum}</span>
+              </>
+            )}
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="w-full min-w-0 max-w-[1120px] mx-auto space-y-6">
-      {/* Page Header */}
+    <div className="w-full min-w-0 max-w-7xl mx-auto space-y-6">
+      {/* 1. Header & Navigation */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-[28px] font-semibold text-[var(--text)] leading-[1.25]">
-            Full-Length Domain Mock Exams
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            Domain Mock Exams
           </h1>
-          <p className="text-[14px] text-[var(--text-secondary)] leading-[1.5]">
-            Complete 50-question full syllabus domain papers simulated under official NTA CUET CBT interface conditions with instant answer analysis.
+          <p className="text-[13px] sm:text-[14px] text-slate-500 leading-relaxed max-w-3xl">
+            Simulate 50-question full syllabus domain papers under authentic NTA CUET CBT interface conditions with instant answer analysis.
           </p>
         </div>
 
@@ -412,44 +604,38 @@ export default function MocksPage() {
         </div>
       </div>
 
-      {/* Stream & Subject Dropdown Controls */}
-      <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Select Stream */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase text-slate-400 tracking-wider block">
-              Filter by Stream:
-            </label>
-            <div className="relative">
+      {/* 2. Slim Toolbar: Stream, Subject, and Status Filter (56-64px tall) */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-4 shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
+            {/* Stream Selector */}
+            <div className="relative min-w-[180px] sm:min-w-[200px]">
               <select
+                aria-label="Filter by Stream"
                 value={selectedStream}
                 onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
-                className="w-full bg-slate-50 hover:bg-slate-100/70 text-slate-800 font-semibold text-sm px-4 py-3 rounded-2xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-10 transition-all"
+                className="w-full bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold text-[13px] px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-8 transition-colors"
               >
-                <option value="all">All Domain Streams (20 Subjects)</option>
-                <option value="science">Science Stream (7 Subjects)</option>
-                <option value="commerce">Commerce Stream (4 Subjects)</option>
-                <option value="humanities">Humanities & Arts (10 Subjects)</option>
+                <option value="all">All Streams (20 Subjects)</option>
+                <option value="science">Science Stream (7 Domains)</option>
+                <option value="commerce">Commerce Stream (4 Domains)</option>
+                <option value="humanities">Humanities Stream (10 Domains)</option>
               </select>
-              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
-          </div>
 
-          {/* Select Subject */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase text-slate-400 tracking-wider block">
-              Filter by Subject:
-            </label>
-            <div className="relative">
+            {/* Subject Selector */}
+            <div className="relative min-w-[180px] sm:min-w-[220px]">
               <select
+                aria-label="Filter by Subject"
                 value={selectedTab}
                 onChange={(e) => handleSelectSubject(e.target.value as SubjectKey)}
-                className="w-full bg-slate-50 hover:bg-slate-100/70 text-slate-800 font-semibold text-sm px-4 py-3 rounded-2xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-10 transition-all"
+                className="w-full bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold text-[13px] px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-8 transition-colors"
               >
                 <option value="all">
                   {selectedStream === "all"
                     ? "All 20 Domain Subjects"
-                    : `All Subjects in ${STREAM_CONFIGS[selectedStream].name} (${STREAM_CONFIGS[selectedStream].subjects.length} Subjects)`}
+                    : `All Subjects in ${STREAM_CONFIGS[selectedStream].name}`}
                 </option>
                 {selectedStream === "all" ? (
                   <>
@@ -483,107 +669,122 @@ export default function MocksPage() {
                   ))
                 )}
               </select>
-              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
+          </div>
+
+          {/* Status Filter Segmented Control */}
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-[12px] font-semibold">
+            <button
+              type="button"
+              onClick={() => setStatusFilter("all")}
+              className={`px-3 py-1.5 rounded-lg transition-all ${
+                statusFilter === "all"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              All
+            </button>
+            <button
+              type="button"
+              onClick={() => setStatusFilter("started")}
+              className={`px-3 py-1.5 rounded-lg transition-all ${
+                statusFilter === "started"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Started
+            </button>
+            <button
+              type="button"
+              onClick={() => setStatusFilter("not_started")}
+              className={`px-3 py-1.5 rounded-lg transition-all ${
+                statusFilter === "not_started"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Not started
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Domain Subjects Overview Grid */}
+      {/* 3. Recommended for your target row */}
+      {targetData.hasTarget && recommendedSubjects.length > 0 ? (
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-2">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                <Target className="w-4 h-4" />
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+                Recommended for your target
+              </h2>
+            </div>
+            <p className="text-[12px] font-medium text-slate-500">
+              Required for <strong>{targetData.course}</strong> at <strong>{targetData.college}</strong>
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
+            {recommendedSubjects.map((sub) => renderSubjectCard(sub, true))}
+          </div>
+        </div>
+      ) : (
+        <div className="bg-blue-50/50 border border-blue-200/60 rounded-2xl p-3 sm:p-4 flex items-center justify-between gap-3 text-[13px] text-blue-900">
+          <div className="flex items-center gap-2.5">
+            <Target className="w-4 h-4 text-blue-600 shrink-0" />
+            <span>Set your dream college & course to see priority mock recommendations.</span>
+          </div>
+          <Link
+            href="/dashboard/profile"
+            className="text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline shrink-0"
+          >
+            Set your dream college &rarr;
+          </Link>
+        </div>
+      )}
+
+      {/* 4. All Other Subjects Grid */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-            {selectedTab !== "all" && activeSubjectInfo
-              ? `${activeSubjectInfo.name} Domain Specification`
+            {targetData.hasTarget && recommendedSubjects.length > 0
+              ? "All other domain subjects"
+              : selectedTab !== "all" && activeSubjectInfo
+              ? `${activeSubjectInfo.name} Specification`
               : selectedStream !== "all"
-              ? `${STREAM_CONFIGS[selectedStream].name} (${displayedSubjects.length} Domains)`
-              : `All CUET UG Domain Subjects (${displayedSubjects.length})`}
+              ? `${STREAM_CONFIGS[selectedStream].name}`
+              : "All CUET UG Domain Subjects"}
+            <span className="text-xs font-normal text-slate-400 ml-2 font-mono">
+              ({otherSubjects.length})
+            </span>
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
-          {displayedSubjects.map((sub) => {
-            const Icon = sub.icon;
-            const mockCount = SUBJECT_MOCK_COUNTS[sub.key] ?? 20;
-            const baseMockId = SUBJECT_TO_MOCK[sub.key] || `${sub.key}-mock`;
-            const firstMockId = `${baseMockId}-1`;
-
-            const attemptsCount = isClient && testAttempts
-              ? testAttempts.filter((a) => {
-                  const tid = (a.testId || "").toLowerCase();
-                  return tid.includes("mock") && (tid.includes(sub.key) || tid.startsWith(baseMockId));
-                }).length
-              : 0;
-
-            return (
-              <div
-                key={sub.key}
-                className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4 min-w-0"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200/60 flex items-center justify-center shrink-0 text-blue-600">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <div className="flex items-center gap-1.5 flex-wrap justify-end">
-                      {attemptsCount > 0 && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center gap-1">
-                          <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
-                          <span>{attemptsCount} Attempted</span>
-                        </span>
-                      )}
-                      <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-mono">
-                        Code {sub.code}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900 leading-snug">
-                      {sub.name}
-                    </h3>
-                    <p className="text-xs font-medium text-slate-500 mt-1 line-clamp-2">
-                      {sub.subtitle}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-xs">
-                    <div className="flex items-center gap-1.5 text-slate-600 font-medium">
-                      <Clock className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{sub.durationMinutes} Mins</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-slate-600 font-medium">
-                      <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
-                      <span>50 Questions</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-slate-600 font-medium col-span-2">
-                      <FileText className="w-3.5 h-3.5 text-blue-600" />
-                      <span>{mockCount} Full Mock Papers (+5 / -1)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <Link
-                    href={`/dashboard/mocks/${sub.key}`}
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all text-center"
-                  >
-                    <FileText className="w-3.5 h-3.5" />
-                    <span>View Mock Tests</span>
-                  </Link>
-                  <Link
-                    href={`/test/${firstMockId}`}
-                    className="px-3.5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-xs transition-all text-center flex items-center gap-1.5 shrink-0"
-                    title={`Start Mock 1 for ${sub.name}`}
-                  >
-                    <Play className="w-3 h-3 fill-current" />
-                    <span>Mock 1</span>
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {otherSubjects.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
+            {otherSubjects.map((sub) => renderSubjectCard(sub, false))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-3xl border border-slate-100 p-8 text-center space-y-2">
+            <p className="text-sm font-semibold text-slate-700">No subjects match the selected filters.</p>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedStream("all");
+                setSelectedTab("all");
+                setStatusFilter("all");
+              }}
+              className="text-xs font-bold text-blue-600 hover:underline cursor-pointer"
+            >
+              Reset filters
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

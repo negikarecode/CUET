@@ -24,26 +24,28 @@ export interface HeatmapGridResult {
 }
 
 /**
- * Generates a 90-day activity heatmap grid ending on endDate (inclusive).
+ * Generates an activity heatmap grid ending on endDate (inclusive).
  * Columns represent calendar weeks starting Monday.
  * Rows 0..6 represent Monday..Sunday.
+ * Defaults to last 60 days for a balanced, prominent presentation.
  */
-export function generate90DayHeatmap(
+export function generateHeatmapGrid(
   endDateInput: Date | string = new Date(),
   attemptData: Array<{
     submittedAt?: string;
     subject?: string;
     attemptedCount?: number;
     score?: number;
-  }> = []
+  }> = [],
+  numDays: number = 60
 ): HeatmapGridResult {
   const endDate = typeof endDateInput === 'string' ? new Date(endDateInput) : new Date(endDateInput.getTime());
   // Normalize to midnight UTC/local to avoid time drift
   const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
   
-  // Start date is 89 days prior (total 90 days)
+  // Start date is (numDays - 1) days prior
   const start = new Date(end);
-  start.setDate(start.getDate() - 89);
+  start.setDate(start.getDate() - (numDays - 1));
 
   // Build attempt map keyed by YYYY-MM-DD
   const attemptsByDate: Record<string, { count: number; questionCount: number; subjects: Set<string> }> = {};
@@ -156,3 +158,8 @@ export function generate90DayHeatmap(
     totalQuestions,
   };
 }
+
+export const generate90DayHeatmap = (
+  endDateInput: Date | string = new Date(),
+  attemptData: any[] = []
+) => generateHeatmapGrid(endDateInput, attemptData, 90);

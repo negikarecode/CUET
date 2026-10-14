@@ -26,6 +26,7 @@ import { RecordedTestAttempt } from "@/types";
 import { formatDateTimeIndian } from "@/lib/config/dashboardConfig";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { stringToUuid } from "@/lib/utils";
+import { deduplicateTestAttempts } from "@/lib/analytics";
 
 interface SessionsHistoryClientProps {
   initialAttempts?: RecordedTestAttempt[];
@@ -148,20 +149,7 @@ export default function SessionsHistoryClient({
   // Canonical deduplication across store and server attempts
   const allAttempts = useMemo(() => {
     const list = storeAttempts.length > 0 ? storeAttempts : initialAttempts;
-    const seen = new Set<string>();
-    const unique: RecordedTestAttempt[] = [];
-
-    list.forEach((att) => {
-      const canonicalKey = stringToUuid(att.testId || att.id || att.testTitle || "");
-      const normKey = `${(att.subject || "").toLowerCase().trim()}:::${(att.testTitle || "").toLowerCase().trim()}`;
-      if (!seen.has(canonicalKey) && !seen.has(normKey)) {
-        seen.add(canonicalKey);
-        seen.add(normKey);
-        unique.push(att);
-      }
-    });
-
-    return unique;
+    return deduplicateTestAttempts(list);
   }, [storeAttempts, initialAttempts]);
 
   // Filter & Search states

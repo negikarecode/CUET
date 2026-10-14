@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useTestStore } from '@/lib/store/useTestStore';
-import { generate90DayHeatmap, HeatmapDay } from '@/lib/heatmap-utils';
+import { generateHeatmapGrid, HeatmapDay } from '@/lib/heatmap-utils';
+import { deduplicateTestAttempts } from '@/lib/analytics';
 
 export const DailyPracticeCalendar: React.FC = () => {
   const [hoveredDay, setHoveredDay] = useState<HeatmapDay | null>(null);
@@ -9,11 +10,11 @@ export const DailyPracticeCalendar: React.FC = () => {
   const testAttempts = useTestStore((s) => s.testAttempts);
 
   const attempts = useMemo(() => {
-    return testAttempts || [];
+    return deduplicateTestAttempts(testAttempts || []);
   }, [testAttempts]);
 
   const heatmapData = useMemo(() => {
-    return generate90DayHeatmap(new Date(), attempts);
+    return generateHeatmapGrid(new Date(), attempts, 60);
   }, [attempts]);
 
   const getCellColor = (count: number, isInRange: boolean) => {
@@ -40,6 +41,9 @@ export const DailyPracticeCalendar: React.FC = () => {
     setTooltipPos(null);
   };
 
+  // 18px cell + 4px gap = 22px pitch
+  const PITCH = 22;
+
   return (
     <div className="app-card space-y-4 relative">
       {/* Header */}
@@ -49,25 +53,25 @@ export const DailyPracticeCalendar: React.FC = () => {
             Activity
           </h2>
           <p className="text-[14px] text-[var(--text-secondary)] mt-0.5">
-            Practice sessions over the last 90 days.
+            Practice sessions over the last 60 days.
           </p>
         </div>
 
-        <div className="text-[12px] text-[var(--text-muted)] tabular-nums self-start sm:self-auto">
+        <div className="text-[12px] text-[var(--text-muted)] tabular-nums self-start sm:self-auto font-medium">
           {heatmapData.totalMocks} tests completed • {heatmapData.totalQuestions} questions
         </div>
       </div>
 
       {/* Heatmap Grid */}
       <div className="overflow-x-auto pt-2 pb-2">
-        <div className="inline-block min-w-[500px]">
-          {/* Month labels aligned with week columns (12px square + 3px gap = 15px pitch) */}
+        <div className="inline-block min-w-[340px]">
+          {/* Month labels aligned with week columns (18px square + 4px gap = 22px pitch) */}
           <div className="relative h-5 mb-1 pl-8">
             {heatmapData.monthLabels.map((m, idx) => (
               <span
                 key={`${m.name}-${idx}`}
                 className="absolute text-[12px] font-medium text-[var(--text-muted)]"
-                style={{ left: `${32 + m.columnIndex * 15}px` }}
+                style={{ left: `${32 + m.columnIndex * PITCH}px` }}
               >
                 {m.name}
               </span>
@@ -75,28 +79,28 @@ export const DailyPracticeCalendar: React.FC = () => {
           </div>
 
           {/* Grid: Day labels + Week columns */}
-          <div className="flex gap-[3px] items-start">
+          <div className="flex gap-1 items-start">
             {/* Day of week labels */}
-            <div className="flex flex-col gap-[3px] text-[12px] text-[var(--text-muted)] w-8 text-right pr-2 select-none">
-              <span className="h-3 leading-[12px]">Mon</span>
-              <span className="h-3 leading-[12px] opacity-0" aria-hidden="true">Tue</span>
-              <span className="h-3 leading-[12px]">Wed</span>
-              <span className="h-3 leading-[12px] opacity-0" aria-hidden="true">Thu</span>
-              <span className="h-3 leading-[12px]">Fri</span>
-              <span className="h-3 leading-[12px] opacity-0" aria-hidden="true">Sat</span>
-              <span className="h-3 leading-[12px] opacity-0" aria-hidden="true">Sun</span>
+            <div className="flex flex-col gap-1 text-[11px] sm:text-[12px] text-[var(--text-muted)] w-8 text-right pr-2 select-none">
+              <span className="h-[18px] leading-[18px]">Mon</span>
+              <span className="h-[18px] leading-[18px] opacity-0" aria-hidden="true">Tue</span>
+              <span className="h-[18px] leading-[18px]">Wed</span>
+              <span className="h-[18px] leading-[18px] opacity-0" aria-hidden="true">Thu</span>
+              <span className="h-[18px] leading-[18px]">Fri</span>
+              <span className="h-[18px] leading-[18px] opacity-0" aria-hidden="true">Sat</span>
+              <span className="h-[18px] leading-[18px] opacity-0" aria-hidden="true">Sun</span>
             </div>
 
             {/* Weeks */}
-            <div className="flex gap-[3px]" role="grid" aria-label="Activity heatmap">
+            <div className="flex gap-1" role="grid" aria-label="Activity heatmap">
               {heatmapData.weeks.map((week, colIdx) => (
-                <div key={colIdx} className="flex flex-col gap-[3px]" role="row">
+                <div key={colIdx} className="flex flex-col gap-1" role="row">
                   {week.map((day, rowIdx) => {
                     if (!day) {
                       return (
                         <div
                           key={`empty-${rowIdx}`}
-                          className="w-3 h-3 rounded-[2px] bg-transparent"
+                          className="w-[18px] h-[18px] rounded-[3px] bg-transparent"
                           aria-hidden="true"
                         />
                       );
@@ -109,7 +113,7 @@ export const DailyPracticeCalendar: React.FC = () => {
                         aria-label={day.tooltipText}
                         onMouseEnter={(e) => handleMouseEnter(day, e)}
                         onMouseLeave={handleMouseLeave}
-                        className={`w-3 h-3 rounded-[2px] transition-colors cursor-pointer ${getCellColor(
+                        className={`w-[18px] h-[18px] rounded-[3px] transition-colors cursor-pointer ${getCellColor(
                           day.count,
                           day.isInRange
                         )}`}
@@ -124,12 +128,12 @@ export const DailyPracticeCalendar: React.FC = () => {
           {/* Scale Legend */}
           <div className="flex items-center justify-end gap-1.5 mt-4 text-[12px] text-[var(--text-muted)]">
             <span>Less</span>
-            <div className="flex gap-[3px]">
-              <div className="w-3 h-3 rounded-[2px] bg-slate-100 border border-slate-200/50" />
-              <div className="w-3 h-3 rounded-[2px] bg-[#BFDBFE] border border-[#93C5FD]" />
-              <div className="w-3 h-3 rounded-[2px] bg-[#60A5FA] border border-[#3B82F6]" />
-              <div className="w-3 h-3 rounded-[2px] bg-[var(--accent)] border border-[var(--accent)]" />
-              <div className="w-3 h-3 rounded-[2px] bg-[var(--accent-hover)] border border-[var(--accent-hover)]" />
+            <div className="flex gap-1">
+              <div className="w-[18px] h-[18px] rounded-[3px] bg-slate-100 border border-slate-200/50" />
+              <div className="w-[18px] h-[18px] rounded-[3px] bg-[#BFDBFE] border border-[#93C5FD]" />
+              <div className="w-[18px] h-[18px] rounded-[3px] bg-[#60A5FA] border border-[#3B82F6]" />
+              <div className="w-[18px] h-[18px] rounded-[3px] bg-[var(--accent)] border border-[var(--accent)]" />
+              <div className="w-[18px] h-[18px] rounded-[3px] bg-[var(--accent-hover)] border border-[var(--accent-hover)]" />
             </div>
             <span>More</span>
           </div>

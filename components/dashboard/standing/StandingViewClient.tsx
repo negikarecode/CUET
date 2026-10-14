@@ -7,9 +7,11 @@ import {
   ClipboardCheck,
   Info,
   ArrowRight,
+  RotateCcw,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { useTarget } from "@/lib/hooks/useTarget";
 import CoursePicker from "./CoursePicker";
 import SubjectCombinationCard from "./SubjectCombinationCard";
 import DreamCollegeGapCard from "./DreamCollegeGapCard";
@@ -27,6 +29,7 @@ import {
 import { CategoryCode } from "@/lib/config/standingConfig";
 import { StreamType } from "@/types";
 import { stringToUuid } from "@/lib/utils";
+import { deduplicateTestAttempts } from "@/lib/analytics";
 
 interface StandingViewClientProps {
   initialUser?: { targetCollege?: string; targetCourse?: string; targetStream?: string };
@@ -38,25 +41,30 @@ export default function StandingViewClient({
   initialAttempts = [],
 }: StandingViewClientProps = {}) {
   const isClient = useIsClient();
+  const profileTarget = useTarget();
   const storeUser = useTestStore((state) => state.user);
   const user = useMemo(() => {
     return {
       ...(storeUser || {}),
-      targetCollege: initialUser?.targetCollege || storeUser?.targetCollege,
-      targetCourse: initialUser?.targetCourse || storeUser?.targetCourse,
+      targetCollege: profileTarget.college || initialUser?.targetCollege || storeUser?.targetCollege,
+      targetCourse: profileTarget.course || initialUser?.targetCourse || storeUser?.targetCourse,
       preferredStream: initialUser?.targetStream
         ? (initialUser.targetStream.toLowerCase() as StreamType)
         : storeUser?.preferredStream,
     };
-  }, [storeUser, initialUser]);
+  }, [storeUser, initialUser, profileTarget]);
 
   const selectedStream = useTestStore((state) => state.selectedStream);
   const setSelectedStream = useTestStore((state) => state.setSelectedStream);
   const testAttemptsRaw = useTestStore((state) => state.testAttempts);
   const testAttempts = useMemo(() => {
-    if (testAttemptsRaw && testAttemptsRaw.length > 0) return testAttemptsRaw;
-    if (initialAttempts && initialAttempts.length > 0) return initialAttempts;
-    return [];
+    const raw =
+      testAttemptsRaw && testAttemptsRaw.length > 0
+        ? testAttemptsRaw
+        : initialAttempts && initialAttempts.length > 0
+        ? initialAttempts
+        : [];
+    return deduplicateTestAttempts(raw);
   }, [testAttemptsRaw, initialAttempts]);
   const setTargetCollege = useTestStore((state) => state.setTargetCollege);
 
@@ -86,32 +94,27 @@ export default function StandingViewClient({
     }
   }, [initialAttempts]);
 
-  useEffect(() => {
-    if (initialUser?.targetCollege) {
-      setTargetCollege(initialUser.targetCollege);
-    }
-  }, [initialUser?.targetCollege, setTargetCollege]);
-
   const coursesList: CanonicalCourse[] = useMemo(() => {
     return Object.values(CANONICAL_COURSES_MAP);
   }, []);
 
-  // Determine user's remembered dream college from authentication / profile
-  const userDreamRaw = (user?.targetCollege || initialUser?.targetCollege || storeUser?.targetCollege || "").trim();
+  // Determine user's remembered dream college from single source of truth useTarget()
   const dreamCollegeResolved = useMemo(() => {
-    if (!userDreamRaw) return null;
-    return resolveTargetCollegeMatch(userDreamRaw) || userDreamRaw;
-  }, [userDreamRaw]);
+    const col = profileTarget.college || user?.targetCollege || "Hindu College";
+    return resolveTargetCollegeMatch(col) || col;
+  }, [profileTarget.college, user?.targetCollege]);
 
   // Initial state with dream college prioritized
-  const [selectedCourseId, setSelectedCourseId] = useState<string>("bcom_hons");
+  const [selectedCourseId, setSelectedCourseId] = useState<string>(
+    profileTarget.courseId || "bsc_phys"
+  );
   const [selectedCategory, setSelectedCategory] = useState<CategoryCode>("UR");
   const [selectedYear, setSelectedYear] = useState<number | "all">("all");
   const [targetCollege, setTargetCollegeLocal] = useState<string>(
-    dreamCollegeResolved || "Shri Ram College of Commerce"
+    dreamCollegeResolved || "Hindu College"
   );
   const [trendCollege, setTrendCollege] = useState<string>(
-    dreamCollegeResolved || "Shri Ram College of Commerce"
+    dreamCollegeResolved || "Hindu College"
   );
 
   const searchParams = useSearchParams();
@@ -124,7 +127,7 @@ export default function StandingViewClient({
     }
   }, [dreamCollegeResolved]);
 
-  // Sync target college & course from search params or user profile with dream college precedence
+  // Sync target college & course from search params or profileTarget
   useEffect(() => {
     const collegeParam = searchParams ? searchParams.get("college") : null;
     const courseParam = searchParams ? searchParams.get("course") : null;
@@ -142,7 +145,7 @@ export default function StandingViewClient({
         setSelectedStream(chosen.stream as StreamType);
       }
     } else if (dreamCollegeResolved) {
-      // 2. Default to a course offered by user's dream college!
+      // 2. Default to a course offered by user's dream college
       const offeredCourseIds = Array.from(
         new Set(
           NORMALIZED_CUTOFFS.filter((r) => r.college === dreamCollegeResolved).map(
@@ -152,8 +155,8 @@ export default function StandingViewClient({
       );
 
       if (offeredCourseIds.length > 0) {
-        // A. Match target course if specified by user profile
-        const matchedTarget = matchCourseToId(user?.targetCourse || "", coursesList);
+        // A. Match target course if specified by profileTarget
+        const matchedTarget = matchCourseToId(profileTarget.course || user?.targetCourse || "", coursesList);
         if (matchedTarget && offeredCourseIds.includes(matchedTarget)) {
           setSelectedCourseId(matchedTarget);
           const chosen = CANONICAL_COURSES_MAP[matchedTarget];
@@ -210,6 +213,7 @@ export default function StandingViewClient({
   }, [
     searchParams,
     dreamCollegeResolved,
+    profileTarget.course,
     user?.targetCourse,
     user?.preferredStream,
     coursesList,
@@ -243,19 +247,16 @@ export default function StandingViewClient({
   useEffect(() => {
     if (availableColleges.length === 0) return;
 
-    // 1. If user's dream college offers this course, ALWAYS prioritize it as default!
     if (dreamCollegeResolved && availableColleges.includes(dreamCollegeResolved)) {
       setTargetCollegeLocal(dreamCollegeResolved);
       setTrendCollege(dreamCollegeResolved);
       return;
     }
 
-    // 2. If current targetCollege is in availableColleges, keep it
     if (availableColleges.includes(targetCollege)) {
       return;
     }
 
-    // 3. Otherwise fall back to first offering college
     setTargetCollegeLocal(availableColleges[0]!);
     setTrendCollege(availableColleges[0]!);
   }, [availableColleges, dreamCollegeResolved, targetCollege]);
@@ -271,7 +272,6 @@ export default function StandingViewClient({
   }, [targetCollege, selectedCourseId, selectedCategory, testAttempts]);
 
   // Compute exact mock averages per subject across all user test attempts
-  // TODO: If a dedicated backend field for mock test average and attempt count per subject is provided in API, reuse it directly here.
   const userSubjectAverages = useMemo(() => {
     const map: Record<string, number | null> = {};
     (standingsResult.resolution.resolvedSubjects || []).forEach((sub) => {
@@ -315,7 +315,6 @@ export default function StandingViewClient({
     return subjects.every((s) => userSubjectAverages[s.subjectId] !== null);
   }, [standingsResult.resolution.resolvedSubjects, userSubjectAverages]);
 
-  // Check if student has zero attempts
   const hasZeroAttempts = testAttempts.length === 0;
 
   const handleSelectCourse = (courseId: string) => {
@@ -337,8 +336,11 @@ export default function StandingViewClient({
     setTrendCollege(colName);
   };
 
+  const isViewingDifferentTarget =
+    profileTarget.college &&
+    targetCollege.toLowerCase() !== profileTarget.college.toLowerCase();
+
   if (!isClient) {
-    // Skeleton loader while hydrating
     return (
       <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 animate-pulse">
         <div className="h-14 bg-slate-200 rounded-2xl w-full" />
@@ -350,7 +352,7 @@ export default function StandingViewClient({
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 sm:space-y-6">
-      {/* Zero Attempts Guidance Banner (if candidate has no recorded attempts) */}
+      {/* Zero Attempts Guidance Banner */}
       {hasZeroAttempts ? (
         <div className="p-5 bg-blue-50 border border-blue-200/80 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
@@ -371,6 +373,28 @@ export default function StandingViewClient({
           </Link>
         </div>
       ) : null}
+
+      {/* Viewing vs Saved Target Chip (View-only for this page, never overwrites profile) */}
+      {isViewingDifferentTarget && (
+        <div className="flex items-center justify-between bg-amber-50 border border-amber-200/90 px-4 py-2.5 rounded-2xl text-xs sm:text-sm text-amber-900 shadow-2xs">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-semibold text-amber-800">Viewing:</span>
+            <span className="font-bold text-amber-950">{targetCollege}</span>
+            <span className="text-amber-700 hidden sm:inline">(view-only for this page)</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setTargetCollegeLocal(profileTarget.college);
+              setTrendCollege(profileTarget.college);
+            }}
+            className="inline-flex items-center gap-1.5 text-blue-700 hover:text-blue-900 font-bold hover:underline cursor-pointer ml-3 shrink-0"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Reset to saved target ({profileTarget.college})</span>
+          </button>
+        </div>
+      )}
 
       {/* 1. Clean Toolbar: Two equal-width dropdowns side by side (Program & Target College) */}
       <CoursePicker
@@ -406,11 +430,11 @@ export default function StandingViewClient({
         onSaveAsProfileTarget={handleSaveProfileTarget}
         availableColleges={availableColleges}
         userId={user?.id || "guest"}
-        isSavedAsTarget={user?.targetCollege === targetCollege}
+        isSavedAsTarget={profileTarget.college === targetCollege}
         compositeScore={compositeTotal}
       />
 
-      {/* 4. College Standings Table & Trend Chart (Sticky Category/Year Filters -> Chart -> Table) */}
+      {/* 4. College Standings Table & Trend Chart */}
       <CollegeStandingsTable
         standings={standingsResult.standings}
         category={selectedCategory}
@@ -421,6 +445,8 @@ export default function StandingViewClient({
         onSelectCollegeForTrend={(col) => setTrendCollege(col)}
         combinedAverageMarks={isAllSubjectsComplete ? compositeTotal : null}
         targetCollege={targetCollege}
+        savedTargetCollege={profileTarget.college}
+        cutoffScale={standingsResult.resolution.course.cutoffScale}
       />
 
       {/* 5. Methodology & Honest Labelling Disclaimers */}

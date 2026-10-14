@@ -249,6 +249,7 @@ export interface RecordedTestAttempt {
   date?: string;
   timestamp?: string;
   score?: number;
+  attemptId?: string;
   isLowEffort?: boolean;
   sessionConfidence?: "Low" | "Medium" | "High";
   sessionMessage?: string;

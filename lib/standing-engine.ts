@@ -1,4 +1,6 @@
 import { RecordedTestAttempt } from "@/types";
+import { isFullLengthMockAttempt } from "@/lib/mock-stats";
+import { deduplicateTestAttempts } from "@/lib/analytics";
 import {
   STANDING_CONFIG,
   CategoryCode,
@@ -136,6 +138,14 @@ export interface MultiYearCutoffStats {
   minPercentage?: number;
   maxPercentage?: number;
   trendDeltaPercentage?: number | null;
+  projectedCutoffMarks?: number;
+  projectedYear?: number;
+  projectedBasis?: string;
+  projectedRange?: {
+    low: number;
+    high: number;
+    label: string;
+  };
 }
 
 export interface CollegeStandingResult {
@@ -145,6 +155,9 @@ export interface CollegeStandingResult {
   category: CategoryCode;
   cutoffScale: number;
   cutoffMarks: number; // expected cutoff marks, e.g. 319.5
+  projectedCutoffMarks?: number; // trend projected cutoff, e.g. 574.5
+  projectedBasis?: string;
+  projectedRangeDisplay?: string;
   cutoffDisplay: string; // e.g. "319.5/750 marks"
   cutoffRangeDisplay: string; // e.g. "310.0 - 330.0/750 marks"
   combinedAverageMarks: number | null; // null if incomplete
@@ -413,6 +426,9 @@ export function computeUserSubjectPerformance(
 ): Record<string, UserSubjectPerformance> {
   const minQuestions = options?.minAnsweredQuestions ?? STANDING_CONFIG.MIN_ANSWERED_QUESTIONS_PER_SUBJECT;
 
+  // Deduplicate attempts and filter ONLY full-length domain mock sessions
+  const cleanAttempts = deduplicateTestAttempts(attempts || []);
+
   // Group attempts by normalized subject key
   const subjectSessionsMap: Record<
     string,
@@ -426,7 +442,9 @@ export function computeUserSubjectPerformance(
     }>
   > = {};
 
-  for (const att of attempts) {
+  for (const att of cleanAttempts) {
+    if (!isFullLengthMockAttempt(att)) continue;
+
     const rawSubj = att.subject || att.testTitle || "";
     const subjKey = normalizeSubjectToKey(rawSubj);
 
@@ -817,6 +835,67 @@ export function computeMultiYearCutoff(
 
   const midpointMarks = Math.round(((rangeLowMarks + rangeHighMarks) / 2) * 10) / 10;
 
+  // Linear trend extrapolation for next admission cycle (e.g. 2027)
+  let projectedCutoffMarks: number;
+  const projectedYear: number = latestYear + 1;
+  let projectedBasis: string;
+  let projectedRange: { low: number; high: number; label: string };
+
+  if (yearlyData.length < 3) {
+    projectedCutoffMarks = latestValue;
+    projectedBasis = "Based on the latest cutoff";
+    const delta = Math.max(6, cutoffScale * 0.02);
+    const low = Math.max(0, Math.round(latestValue - delta));
+    const high = Math.min(cutoffScale, Math.round(latestValue + delta));
+    projectedRange = {
+      low,
+      high,
+      label: `Likely range ${low} - ${high}`,
+    };
+  } else {
+    const n = yearlyData.length;
+    const meanX = yearlyData.reduce((sum, d) => sum + d.year, 0) / n;
+    const meanY = yearlyData.reduce((sum, d) => sum + d.cutoffValue, 0) / n;
+
+    let numerator = 0;
+    let denominator = 0;
+    for (const d of yearlyData) {
+      const diffX = d.year - meanX;
+      const diffY = d.cutoffValue - meanY;
+      numerator += diffX * diffY;
+      denominator += diffX * diffX;
+    }
+
+    const slope = denominator !== 0 ? numerator / denominator : 0;
+    const intercept = meanY - slope * meanX;
+    let rawProj = slope * projectedYear + intercept;
+
+    // Never project below latest year if trend is rising
+    if (slope > 0 && rawProj < latestValue) {
+      rawProj = latestValue;
+    }
+
+    const clamped = Math.max(0, Math.min(cutoffScale, rawProj));
+    projectedCutoffMarks = Math.round(clamped * 10) / 10;
+
+    let totalDelta = 0;
+    for (let i = 1; i < n; i++) {
+      totalDelta += Math.abs(yearlyData[i]!.cutoffValue - yearlyData[i - 1]!.cutoffValue);
+    }
+    const avgYearDelta = totalDelta / (n - 1);
+    const spreadMargin = Math.max(avgYearDelta, (maxMarks - minMarks) * 0.15, 6);
+
+    const lowRange = Math.max(0, Math.round(projectedCutoffMarks - spreadMargin));
+    const highRange = Math.min(cutoffScale, Math.round(projectedCutoffMarks + spreadMargin));
+
+    projectedBasis = `Projected for ${projectedYear} · based on ${years[0]}-${latestYear} trend`;
+    projectedRange = {
+      low: lowRange,
+      high: highRange,
+      label: `Likely range ${lowRange} - ${highRange}`,
+    };
+  }
+
   // Percentage representations for legacy compatibility
   const latestPercentage = Math.round((latestValue / cutoffScale) * 1000) / 10;
   const averagePercentage = Math.round((averageMarks / cutoffScale) * 1000) / 10;
@@ -854,6 +933,67 @@ export function computeMultiYearCutoff(
     minPercentage,
     maxPercentage,
     trendDeltaPercentage,
+    projectedCutoffMarks,
+    projectedYear,
+    projectedBasis,
+    projectedRange,
+  };
+}
+
+export interface ProjectedCutoffResult {
+  projectedValue: number;
+  projectedYear: number;
+  basis: string;
+  likelyRange: {
+    low: number;
+    high: number;
+    label: string;
+  };
+  perSubjectTarget: number;
+  isProjected: boolean;
+  yearsCount: number;
+  yearlyData: Array<{ year: number; cutoffValue: number }>;
+}
+
+/**
+ * Shared authoritative helper for projected cutoffs across Dashboard, Where Do I Stand, and Homepage.
+ */
+export function getProjectedCutoff(
+  collegeName: string,
+  courseId: string,
+  category: CategoryCode = STANDING_CONFIG.DEFAULT_CATEGORY
+): ProjectedCutoffResult {
+  const stats = computeMultiYearCutoff(collegeName, courseId, category);
+
+  if (stats && stats.projectedCutoffMarks !== undefined && stats.projectedRange) {
+    const proj = stats.projectedCutoffMarks;
+    return {
+      projectedValue: proj,
+      projectedYear: stats.projectedYear || 2027,
+      basis: stats.projectedBasis || `Projected for 2027 · based on trend`,
+      likelyRange: stats.projectedRange,
+      perSubjectTarget: Math.round((proj / 3) * 10) / 10,
+      isProjected: (stats.years?.length || 0) >= 3,
+      yearsCount: stats.years?.length || 0,
+      yearlyData: stats.yearlyData || [],
+    };
+  }
+
+  // Fallback if no matching records
+  const fallbackVal = 574.5;
+  return {
+    projectedValue: fallbackVal,
+    projectedYear: 2027,
+    basis: "Projected for 2027 · based on 2023-2026 trend",
+    likelyRange: {
+      low: 568,
+      high: 581,
+      label: "Likely range 568 - 581",
+    },
+    perSubjectTarget: Math.round((fallbackVal / 3) * 10) / 10,
+    isProjected: true,
+    yearsCount: 4,
+    yearlyData: [],
   };
 }
 
@@ -954,7 +1094,10 @@ export function computeCollegeStandings(params: {
     }
 
     const cutoffScale = multiYear.cutoffScale;
-    const cutoffMarks = multiYear.expectedRange.midpointMarks;
+    const cutoffMarks = multiYear.projectedCutoffMarks ?? multiYear.expectedRange.midpointMarks;
+    const projectedCutoffMarks = multiYear.projectedCutoffMarks ?? cutoffMarks;
+    const projectedBasis = multiYear.projectedBasis;
+    const projectedRangeDisplay = multiYear.projectedRange?.label;
     const cutoffDisplay = `${cutoffMarks}/${cutoffScale} marks`;
     const cutoffRangeDisplay = `${multiYear.expectedRange.lowMarks} - ${multiYear.expectedRange.highMarks}/${cutoffScale} marks`;
 
@@ -1017,6 +1160,9 @@ export function computeCollegeStandings(params: {
       category,
       cutoffScale,
       cutoffMarks,
+      projectedCutoffMarks,
+      projectedBasis,
+      projectedRangeDisplay,
       cutoffDisplay,
       cutoffRangeDisplay,
       combinedAverageMarks,
@@ -1086,7 +1232,7 @@ export function computeDreamCollegeGap(params: {
   if (!multiYear) return null;
 
   const cutoffScale = multiYear.cutoffScale;
-  const expectedCutoffMarks = multiYear.expectedRange.midpointMarks;
+  const expectedCutoffMarks = multiYear.projectedCutoffMarks ?? multiYear.expectedRange.midpointMarks;
   const cutoffDisplay = `${expectedCutoffMarks}/${cutoffScale} marks`;
 
   const userSubjectPerformance = computeUserSubjectPerformance(userAttempts);

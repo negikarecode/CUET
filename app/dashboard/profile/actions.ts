@@ -10,6 +10,7 @@ export interface UpdateProfileGoalsInput {
   targetStream?: StreamOption | string;
   targetUniversity?: string;
   targetCollege?: string;
+  targetCourse?: string;
   fullName?: string;
   selectedSubjects?: string[];
 }
@@ -50,6 +51,7 @@ export async function updateProfileGoalsAction(input: UpdateProfileGoalsInput) {
     }
     if (input.targetUniversity !== undefined) updatePayload.target_university = input.targetUniversity;
     if (input.targetCollege !== undefined) updatePayload.target_college = input.targetCollege;
+    if (input.targetCourse !== undefined) updatePayload.target_course = input.targetCourse;
     if (input.fullName) updatePayload.full_name = input.fullName;
 
     const { data: updatedProfile, error: dbError } = await supabaseAdmin

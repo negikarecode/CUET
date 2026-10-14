@@ -3,19 +3,21 @@ import Link from 'next/link';
 import { ArrowRight, History } from 'lucide-react';
 import { useTestStore } from '@/lib/store/useTestStore';
 import { RecordedTestAttempt } from '@/types';
-import { formatDateIndian, MARKING_SCHEME } from '@/lib/config/dashboardConfig';
+import { formatDateTimeIndian, MARKING_SCHEME } from '@/lib/config/dashboardConfig';
+import { deduplicateTestAttempts } from '@/lib/analytics';
 
 export const RecentEvaluationsTable: React.FC = () => {
-  const testAttempts = useTestStore((s) => s.testAttempts) || [];
-  
-  // Sort attempts newest first
+  const rawAttempts = useTestStore((s) => s.testAttempts) || [];
+
+  // Deduplicate attempts strictly and sort newest first
   const sortedAttempts = useMemo(() => {
-    return [...testAttempts].sort((a, b) => {
-      const timeA = new Date(a.submittedAt || 0).getTime();
-      const timeB = new Date(b.submittedAt || 0).getTime();
+    const deduped = deduplicateTestAttempts(rawAttempts);
+    return deduped.sort((a, b) => {
+      const timeA = new Date(a.submittedAt || (a as any).date || 0).getTime();
+      const timeB = new Date(b.submittedAt || (b as any).date || 0).getTime();
       return timeB - timeA;
     });
-  }, [testAttempts]);
+  }, [rawAttempts]);
 
   const hasRealAttempts = sortedAttempts.length > 0;
   const hasMoreThan5 = sortedAttempts.length > 5;
@@ -31,7 +33,7 @@ export const RecentEvaluationsTable: React.FC = () => {
               Recent sessions
             </h2>
             {hasRealAttempts && (
-              <span className="text-[12px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+              <span className="text-[13px] font-medium px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                 {sortedAttempts.length} total
               </span>
             )}
@@ -77,19 +79,23 @@ export const RecentEvaluationsTable: React.FC = () => {
             {/* Desktop Table */}
             <table className="hidden sm:table w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[var(--border)] text-[12px] font-medium text-[var(--text-muted)]">
+                <tr className="border-b border-[var(--border)] text-[13px] font-medium text-[var(--text-muted)]">
                   <th className="py-3 pr-4 font-medium">Test title</th>
                   <th className="py-3 px-4 font-medium">Subject</th>
-                  <th className="py-3 px-4 font-medium">Date</th>
+                  <th className="py-3 px-4 font-medium">Date & Time</th>
                   <th className="py-3 px-4 font-medium text-right">Score</th>
                   <th className="py-3 px-4 font-medium text-right">Accuracy</th>
                   <th className="py-3 pl-4 font-medium text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {displayedAttempts.map((att: RecordedTestAttempt, idx: number) => {
-                  const formattedDate = formatDateIndian(att.submittedAt || new Date());
-                  const maxMarks = att.maxMarks || MARKING_SCHEME.MAX_MARKS_PER_SUBJECT;
+                {displayedAttempts.map((att: RecordedTestAttempt) => {
+                  const formattedDateTime = formatDateTimeIndian(att.submittedAt || new Date());
+                  const isPracticeTest =
+                    att.testTitle?.toLowerCase().includes("practice") ||
+                    att.testTitle?.toLowerCase().includes("unit") ||
+                    (att.totalQuestions && att.totalQuestions <= 20);
+                  const maxMarks = att.maxMarks || (isPracticeTest ? 100 : MARKING_SCHEME.MAX_MARKS_PER_SUBJECT);
                   const title = att.testTitle || `${att.subject || 'Domain'} CBT Mock Test`;
                   const reviewHref = (att.id || att.testId)
                     ? (att.testId?.toLowerCase().includes("pyq")
@@ -99,17 +105,19 @@ export const RecentEvaluationsTable: React.FC = () => {
 
                   return (
                     <tr
-                      key={att.id || `attempt-${idx}`}
-                      className="h-12 border-b border-[var(--border)] text-[14px] hover:bg-slate-50/50 transition-colors"
+                      key={att.id}
+                      className="border-b border-[var(--border)] text-[14px] hover:bg-slate-50/50 transition-colors"
                     >
-                      <td className="py-3 pr-4 font-medium text-[var(--text)] truncate max-w-[200px]">
-                        {title}
+                      <td className="py-3 pr-4 font-medium text-[var(--text)] max-w-[280px]">
+                        <span className="line-clamp-2 leading-snug" title={title}>
+                          {title}
+                        </span>
                       </td>
                       <td className="py-3 px-4 text-[var(--text-secondary)]">
                         {att.subject || 'Domain'}
                       </td>
-                      <td className="py-3 px-4 text-[var(--text-muted)] whitespace-nowrap">
-                        {formattedDate}
+                      <td className="py-3 px-4 text-[var(--text-muted)] text-[13px] whitespace-nowrap">
+                        {formattedDateTime}
                       </td>
                       <td className="py-3 px-4 text-right font-medium text-[var(--text)] tabular-nums whitespace-nowrap">
                         {att.totalMarks} / {maxMarks}
@@ -133,9 +141,13 @@ export const RecentEvaluationsTable: React.FC = () => {
 
             {/* Mobile Collapsed Cards (<640px) */}
             <div className="sm:hidden space-y-3">
-              {displayedAttempts.map((att: RecordedTestAttempt, idx: number) => {
-                const formattedDate = formatDateIndian(att.submittedAt || new Date());
-                const maxMarks = att.maxMarks || MARKING_SCHEME.MAX_MARKS_PER_SUBJECT;
+              {displayedAttempts.map((att: RecordedTestAttempt) => {
+                const formattedDateTime = formatDateTimeIndian(att.submittedAt || new Date());
+                const isPracticeTest =
+                  att.testTitle?.toLowerCase().includes("practice") ||
+                  att.testTitle?.toLowerCase().includes("unit") ||
+                  (att.totalQuestions && att.totalQuestions <= 20);
+                const maxMarks = att.maxMarks || (isPracticeTest ? 100 : MARKING_SCHEME.MAX_MARKS_PER_SUBJECT);
                 const title = att.testTitle || `${att.subject || 'Domain'} CBT Mock Test`;
                 const reviewHref = (att.id || att.testId)
                   ? (att.testId?.toLowerCase().includes("pyq")
@@ -145,27 +157,27 @@ export const RecentEvaluationsTable: React.FC = () => {
 
                 return (
                   <div
-                    key={att.id || `mobile-att-${idx}`}
-                    className="p-3 rounded-[8px] border border-[var(--border)] space-y-2"
+                    key={att.id}
+                    className="p-3.5 rounded-[8px] border border-[var(--border)] space-y-2"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <h3 className="text-[14px] font-semibold text-[var(--text)]">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-[14px] font-semibold text-[var(--text)] line-clamp-2 leading-snug" title={title}>
                           {title}
                         </h3>
-                        <p className="text-[12px] text-[var(--text-muted)]">
-                          {att.subject || 'Domain'} • {formattedDate}
+                        <p className="text-[13px] text-[var(--text-muted)] mt-0.5">
+                          {att.subject || 'Domain'} • {formattedDateTime}
                         </p>
                       </div>
                       <Link
                         href={reviewHref}
-                        className="text-[14px] font-medium text-[var(--accent)] shrink-0"
+                        className="text-[14px] font-medium text-[var(--accent)] shrink-0 ml-2"
                       >
                         Review
                       </Link>
                     </div>
 
-                    <div className="flex items-center justify-between text-[14px] pt-1 border-t border-[var(--border)] tabular-nums">
+                    <div className="flex items-center justify-between text-[14px] pt-1.5 border-t border-[var(--border)] tabular-nums">
                       <span className="text-[var(--text-secondary)]">Score: {att.totalMarks} / {maxMarks}</span>
                       <span className="font-medium text-[var(--text)]">Accuracy: {att.accuracyPercentage}%</span>
                     </div>

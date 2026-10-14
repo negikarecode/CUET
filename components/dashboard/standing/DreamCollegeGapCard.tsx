@@ -9,9 +9,11 @@ import {
   Loader2,
   ChevronRight,
   Lock,
+  Info,
 } from "lucide-react";
 import {
   DreamCollegeGapAnalysis,
+  getProjectedCutoff,
 } from "@/lib/standing-engine";
 import { StandingExplanationResult } from "@/lib/ai/standing-explainer";
 
@@ -120,13 +122,31 @@ export default function DreamCollegeGapCard({
 
   const roundedTotal = Math.round(currentTotal * 10) / 10;
   const formattedTotal = formatScore(roundedTotal);
-  const formattedExpected = formatScore(analysis.expectedCutoffMarks);
+  const projection = getProjectedCutoff(
+    analysis.targetCollege,
+    (analysis as any).courseId || "bsc_hons_physics",
+    analysis.category
+  );
+  const formattedExpected = formatScore(projection.projectedValue);
 
-  const gap = Math.round(Math.abs(roundedTotal - analysis.expectedCutoffMarks) * 10) / 10;
+  const completedSubjects = (analysis.subjectImprovementBreakdown || []).filter((s) => s.hasData);
+  const pendingCount = (analysis.subjectImprovementBreakdown || []).length - completedSubjects.length;
+
+  let partialStatusText = "";
+  if (completedSubjects.length === 1 && completedSubjects[0]) {
+    partialStatusText = `${completedSubjects[0].subjectName} so far: ${completedSubjects[0].currentMarks ?? 0} / ${completedSubjects[0].subjectMaxMarks} · ${pendingCount} ${pendingCount === 1 ? "subject" : "subjects"} pending`;
+  } else if (completedSubjects.length > 1) {
+    const list = completedSubjects.map((s) => `${s.subjectName} (${s.currentMarks ?? 0})`).join(" + ");
+    partialStatusText = `${list} · ${pendingCount} ${pendingCount === 1 ? "subject" : "subjects"} pending`;
+  } else {
+    partialStatusText = "No mock tests attempted yet · 3 subjects pending";
+  }
+
+  const gap = Math.round(Math.abs(roundedTotal - projection.projectedValue) * 10) / 10;
   const formattedGap = formatScore(gap);
 
-  const isAboveCutoff = roundedTotal >= analysis.expectedCutoffMarks;
-  const isBelowCutoff = roundedTotal < analysis.expectedCutoffMarks;
+  const isAboveCutoff = roundedTotal >= projection.projectedValue;
+  const isBelowCutoff = roundedTotal < projection.projectedValue;
   const isIncomplete = analysis.status === "incomplete";
 
   const gapDisplay = isAboveCutoff
@@ -151,7 +171,7 @@ export default function DreamCollegeGapCard({
   );
   const targetTickPercent = Math.min(
     99,
-    Math.max(1, Math.round((analysis.expectedCutoffMarks / analysis.cutoffScale) * 100))
+    Math.max(1, Math.round((projection.projectedValue / analysis.cutoffScale) * 100))
   );
 
   return (
@@ -179,7 +199,7 @@ export default function DreamCollegeGapCard({
           role={!analysis.isComplete ? "region" : undefined}
           aria-label={
             !analysis.isComplete
-              ? "Complete all required subjects to unlock AI admission diagnosis"
+              ? "Complete all 3 subjects to unlock"
               : undefined
           }
         >
@@ -208,108 +228,188 @@ export default function DreamCollegeGapCard({
           {!analysis.isComplete && (
             <div
               role="tooltip"
-              className="pointer-events-none absolute bottom-full right-0 mb-2 hidden group-hover:block group-focus:block w-64 p-2 bg-slate-900 text-white text-[13px] rounded-xl shadow-xl z-50 text-center font-medium"
+              className="pointer-events-none absolute bottom-full right-0 mb-2 hidden group-hover:block group-focus:block w-60 p-2 bg-slate-900 text-white text-[12px] rounded-xl shadow-xl z-50 text-center font-medium"
             >
-              Complete all required subjects to unlock AI admission diagnosis
+              Complete all 3 subjects to unlock
             </div>
           )}
         </div>
       </div>
 
-      {/* 2. Expected Cutoff (28px+) & Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5">
-        {/* Expected Cutoff: 28px+ */}
-        <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/60 flex flex-col justify-between">
-          <span className="text-[13px] font-bold uppercase tracking-wider text-slate-500 block">
-            Expected Cutoff
-          </span>
-          <div className="my-1.5">
-            <div className="flex items-baseline">
-              <span className="text-[28px] sm:text-[32px] font-bold text-slate-900 tracking-tight leading-none">
-                {formattedExpected}
+      {/* 2. Metrics Section: Side-by-side when incomplete; 4-card grid when complete */}
+      {!analysis.isComplete ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          {/* Expected Cutoff: 28px+ */}
+          <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/60 flex flex-col justify-between">
+            <div className="flex items-center justify-between gap-1">
+              <span className="text-[12px] font-bold uppercase tracking-wider text-slate-500 block">
+                Expected Cutoff
               </span>
-              <span className="text-[16px] font-normal text-slate-500 ml-1.5">
-                /{analysis.cutoffScale}
+              <span
+                tabIndex={0}
+                role="note"
+                aria-label="A projection from past cutoffs. Actual cutoffs may differ."
+                title="A projection from past cutoffs. Actual cutoffs may differ."
+                className="cursor-help text-slate-400 hover:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-full"
+              >
+                <Info className="w-3.5 h-3.5" />
               </span>
             </div>
+            <div className="my-1.5 flex items-baseline gap-2 flex-wrap">
+              <div className="flex items-baseline">
+                <span className="text-[28px] sm:text-[32px] font-bold text-slate-900 tracking-tight leading-none">
+                  {formattedExpected}
+                </span>
+                <span className="text-[15px] font-normal text-slate-500 ml-1">
+                  /{analysis.cutoffScale}
+                </span>
+              </div>
+              <span className="text-[12px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
+                {projection.likelyRange.label}
+              </span>
+            </div>
+            <span className="text-xs text-slate-500 block">
+              {projection.basis}
+            </span>
           </div>
-          <span className="text-sm text-slate-500 block">
-            Historical admission threshold
-          </span>
-        </div>
 
-        {analysis.isComplete ? (
-          <>
-            <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/60 flex flex-col justify-between">
-              <span className="text-[13px] font-bold uppercase tracking-wider text-slate-500 block">
+          {/* Progress / Status Tile Side-by-side */}
+          <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/60 flex flex-col justify-between space-y-2">
+            <div className="flex items-center justify-between gap-1">
+              <span className="text-[12px] font-bold uppercase tracking-wider text-slate-500 block">
                 Current Performance
               </span>
-              <div className="my-1.5">
-                <span className="text-xl sm:text-2xl font-bold text-slate-900 block truncate">
-                  {formattedTotal}/{analysis.cutoffScale} marks
-                </span>
-              </div>
-              <span className="text-sm text-slate-500 block">
-                Combined arithmetic total
+              <span className="text-xs font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                {pendingCount} {pendingCount === 1 ? "Subject" : "Subjects"} Pending
               </span>
             </div>
-
-            <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/60 flex flex-col justify-between">
-              <span className="text-[13px] font-bold uppercase tracking-wider text-slate-500 block">
-                {gapLabel}
-              </span>
-              <div className="my-1.5">
-                <span
-                  className={`text-xl sm:text-2xl font-bold block truncate ${
-                    isAboveCutoff
-                      ? "text-emerald-700"
-                      : isBelowCutoff
-                      ? "text-orange-700"
-                      : "text-slate-700"
-                  }`}
-                >
-                  {gapDisplay}
-                </span>
+            <div className="my-1">
+              <p className="text-sm sm:text-base font-bold text-slate-900">
+                {partialStatusText}
+              </p>
+            </div>
+            {/* Visual Progress Bar with Target Position Tick */}
+            <div className="pt-1">
+              <div className="relative w-full h-[9px] bg-slate-200 rounded-full">
+                <div
+                  className="h-full rounded-full bg-blue-600 transition-all"
+                  style={{ width: `${userProgressPercent}%` }}
+                />
+                <div
+                  className="absolute top-[-2px] bottom-[-2px] w-[2px] bg-slate-900 z-10 rounded-full"
+                  style={{ left: `${targetTickPercent}%` }}
+                  title={`Expected Cutoff: ${formattedExpected}/${analysis.cutoffScale}`}
+                />
               </div>
-              <span className="text-sm text-slate-500 block">
-                Target difference
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Full 4-card grid when complete */
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5">
+          {/* Expected Cutoff: 28px+ */}
+          <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/60 flex flex-col justify-between">
+            <div className="flex items-center justify-between gap-1">
+              <span className="text-[12px] font-bold uppercase tracking-wider text-slate-500 block">
+                Expected Cutoff
+              </span>
+              <span
+                tabIndex={0}
+                role="note"
+                aria-label="A projection from past cutoffs. Actual cutoffs may differ."
+                title="A projection from past cutoffs. Actual cutoffs may differ."
+                className="cursor-help text-slate-400 hover:text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-full"
+              >
+                <Info className="w-3.5 h-3.5" />
               </span>
             </div>
-
-            <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/60 flex flex-col justify-between">
-              <span className="text-[13px] font-bold uppercase tracking-wider text-slate-500 block">
-                Admission Standing
-              </span>
-              <div className="my-1.5">
-                <span
-                  className={`inline-flex px-3 py-1 rounded-xl text-sm font-bold border ${
-                    isAboveCutoff
-                      ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                      : isBelowCutoff
-                      ? "bg-amber-50 text-amber-900 border-amber-200"
-                      : isIncomplete
-                      ? "bg-blue-50 text-blue-900 border-blue-200"
-                      : "bg-slate-100 text-slate-700 border-slate-200"
-                  }`}
-                >
-                  {analysis.statusLabel}
+            <div className="my-1.5 flex items-baseline gap-2 flex-wrap">
+              <div className="flex items-baseline">
+                <span className="text-[28px] sm:text-[32px] font-bold text-slate-900 tracking-tight leading-none">
+                  {formattedExpected}
+                </span>
+                <span className="text-[15px] font-normal text-slate-500 ml-1">
+                  /{analysis.cutoffScale}
                 </span>
               </div>
-              <span className="text-sm text-slate-500 block">
-                Official benchmark standing
+              <span className="text-[12px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
+                {projection.likelyRange.label}
               </span>
             </div>
-          </>
-        ) : null}
-      </div>
+            <span className="text-xs text-slate-500 block">
+              {projection.basis}
+            </span>
+          </div>
 
-      {/* 3. Composite Progress Line */}
-      <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-sm sm:text-base text-slate-700 font-medium">
-          <span>
-            Your total: <strong className="font-bold text-slate-900">{formattedTotal} / {analysis.cutoffScale}</strong> vs Expected <strong className="font-bold text-slate-900">{formattedExpected}</strong>
-          </span>
-          {analysis.isComplete ? (
+          <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/60 flex flex-col justify-between">
+            <span className="text-[13px] font-bold uppercase tracking-wider text-slate-500 block">
+              Current Performance
+            </span>
+            <div className="my-1.5">
+              <span className="text-xl sm:text-2xl font-bold text-slate-900 block truncate">
+                {formattedTotal}/{analysis.cutoffScale} marks
+              </span>
+            </div>
+            <span className="text-sm text-slate-500 block">
+              Combined arithmetic total
+            </span>
+          </div>
+
+          <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/60 flex flex-col justify-between">
+            <span className="text-[13px] font-bold uppercase tracking-wider text-slate-500 block">
+              {gapLabel}
+            </span>
+            <div className="my-1.5">
+              <span
+                className={`text-xl sm:text-2xl font-bold block truncate ${
+                  isAboveCutoff
+                    ? "text-emerald-700"
+                    : isBelowCutoff
+                    ? "text-orange-700"
+                    : "text-slate-700"
+                }`}
+              >
+                {gapDisplay}
+              </span>
+            </div>
+            <span className="text-sm text-slate-500 block">
+              Target difference
+            </span>
+          </div>
+
+          <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200/60 flex flex-col justify-between">
+            <span className="text-[13px] font-bold uppercase tracking-wider text-slate-500 block">
+              Admission Standing
+            </span>
+            <div className="my-1.5">
+              <span
+                className={`inline-flex px-3 py-1 rounded-xl text-sm font-bold border ${
+                  isAboveCutoff
+                    ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                    : isBelowCutoff
+                    ? "bg-amber-50 text-amber-900 border-amber-200"
+                    : isIncomplete
+                    ? "bg-blue-50 text-blue-900 border-blue-200"
+                    : "bg-slate-100 text-slate-700 border-slate-200"
+                }`}
+              >
+                {analysis.statusLabel}
+              </span>
+            </div>
+            <span className="text-sm text-slate-500 block">
+              Official benchmark standing
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* 3. Composite Progress Line (Shown only when all subjects have data) */}
+      {analysis.isComplete && (
+        <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-sm sm:text-base text-slate-700 font-medium">
+            <span>
+              Your total: <strong className="font-bold text-slate-900">{formattedTotal} / {analysis.cutoffScale}</strong> vs Expected <strong className="font-bold text-slate-900">{formattedExpected}</strong>
+            </span>
             <span
               className={`text-sm font-semibold ${
                 isAboveCutoff
@@ -321,32 +421,28 @@ export default function DreamCollegeGapCard({
             >
               {gapDisplay}
             </span>
-          ) : (
-            <span className="text-sm font-medium text-slate-500">
-              Awaiting remaining subjects
-            </span>
-          )}
-        </div>
+          </div>
 
-        {/* Visual Progress Bar with Target Position Tick */}
-        <div className="relative w-full h-[11px] bg-slate-200 rounded-full">
-          <div
-            className={`h-full rounded-full transition-all ${
-              isAboveCutoff
-                ? "bg-emerald-500"
-                : currentTotal > 0
-                ? "bg-blue-600"
-                : "bg-transparent"
-            }`}
-            style={{ width: `${userProgressPercent}%` }}
-          />
-          <div
-            className="absolute top-[-2px] bottom-[-2px] w-[2px] bg-slate-900 z-10 rounded-full"
-            style={{ left: `${targetTickPercent}%` }}
-            title={`Expected Cutoff: ${formattedExpected}/${analysis.cutoffScale}`}
-          />
+          {/* Visual Progress Bar with Target Position Tick */}
+          <div className="relative w-full h-[11px] bg-slate-200 rounded-full">
+            <div
+              className={`h-full rounded-full transition-all ${
+                isAboveCutoff
+                  ? "bg-emerald-500"
+                  : currentTotal > 0
+                  ? "bg-blue-600"
+                  : "bg-transparent"
+              }`}
+              style={{ width: `${userProgressPercent}%` }}
+            />
+            <div
+              className="absolute top-[-2px] bottom-[-2px] w-[2px] bg-slate-900 z-10 rounded-full"
+              style={{ left: `${targetTickPercent}%` }}
+              title={`Expected Cutoff: ${formattedExpected}/${analysis.cutoffScale}`}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* 4. One-line Inline Locked Banner (when incomplete) */}
       {!analysis.isComplete && (

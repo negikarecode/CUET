@@ -344,26 +344,27 @@ export default function DashboardClient({
           accuracyPercentage={accuracyPercentage}
           correctCount={correctCount}
           totalAttempted={totalAttempted}
+          completedTestsCount={deduplicatedAttempts.length}
           dailyStreak={streak}
         />
       </section>
 
-      {/* 4. Performance (trend and by-subject tabs in one card) */}
-      <section aria-label="Performance">
-        <CombinedPerformanceCard
-          calibrations={candidateSubjectCalibrations}
-          weaknesses={candidateWeaknesses}
-          targetScore={238}
-        />
-      </section>
+      {/* 4 & 5. Performance (2/3 width) and Topics to fix (1/3 width) side-by-side on desktop */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <section aria-label="Performance" className="lg:col-span-8 min-w-0">
+          <CombinedPerformanceCard
+            calibrations={candidateSubjectCalibrations}
+            weaknesses={candidateWeaknesses}
+          />
+        </section>
 
-      {/* 5. Topics to fix (top 3, each with a secondary "Practice" button and a "View all" link) */}
-      <section aria-label="Topics to fix">
-        <StrengthsWeaknesses
-          weaknesses={candidateWeaknesses}
-          strengths={candidateStrengths}
-        />
-      </section>
+        <section aria-label="Topics to fix" className="lg:col-span-4 min-w-0">
+          <StrengthsWeaknesses
+            weaknesses={candidateWeaknesses}
+            strengths={candidateStrengths}
+          />
+        </section>
+      </div>
 
       {/* 6. Recent sessions */}
       <section aria-label="Recent sessions">

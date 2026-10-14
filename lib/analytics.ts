@@ -274,6 +274,61 @@ export function getCanonicalAttemptId(
 }
 
 /**
+ * Authoritative test attempt deduplicator.
+ * Deduplicates by attemptId, canonical UUID, and content fingerprint (same test, score, accuracy <= 60s).
+ * Preserves legitimate re-attempts while eliminating all duplicate submissions.
+ */
+export function deduplicateTestAttempts(attempts: RecordedTestAttempt[]): RecordedTestAttempt[] {
+  if (!attempts || !Array.isArray(attempts) || attempts.length === 0) return [];
+
+  const seenIds = new Set<string>();
+  const seenFingerprints = new Set<string>();
+  const clean: RecordedTestAttempt[] = [];
+
+  // Sort newest first
+  const sorted = [...attempts].sort((a, b) => {
+    const ta = new Date(a.submittedAt || (a as any).date || 0).getTime();
+    const tb = new Date(b.submittedAt || (b as any).date || 0).getTime();
+    return tb - ta;
+  });
+
+  for (const att of sorted) {
+    if (!att) continue;
+    const rawId = (att.id || "").trim();
+    const rawTestId = (att.testId || "").trim();
+    const attemptId = (att.attemptId || "").trim();
+
+    if (attemptId) {
+      if (seenIds.has(attemptId)) continue;
+      seenIds.add(attemptId);
+    }
+    if (rawId && rawId !== rawTestId) {
+      if (seenIds.has(rawId)) continue;
+      seenIds.add(rawId);
+    }
+
+    const testCanonicalUuid = stringToUuid(rawTestId || rawId || att.testTitle || "mock");
+    const subTime = new Date(att.submittedAt || (att as any).date || 0).getTime();
+    const timeBucket = Math.round(subTime / 60000); // 60s window
+    const fingerprint1 = `${testCanonicalUuid}_${att.totalMarks ?? 0}_${att.accuracyPercentage ?? 0}_${timeBucket}`;
+    const fingerprint2 = `${(att.subject || "").toLowerCase().trim()}:::${(att.testTitle || "").toLowerCase().trim()}:::${att.totalMarks ?? 0}:::${att.accuracyPercentage ?? 0}:::${timeBucket}`;
+
+    if (seenFingerprints.has(fingerprint1) || seenFingerprints.has(fingerprint2)) {
+      continue;
+    }
+
+    seenFingerprints.add(fingerprint1);
+    seenFingerprints.add(fingerprint2);
+    if (rawTestId) seenIds.add(rawTestId);
+    seenIds.add(testCanonicalUuid);
+
+    clean.push(att);
+  }
+
+  return clean;
+}
+
+/**
  * Aggregates all recorded test attempts into actionable insights:
  * - Questions solved & Diagnostic accuracy
  * - Weakness radar (critical & polish topics)
@@ -309,25 +364,8 @@ export function computeAnalyticsFromAttempts(
     };
   }
 
-  // 1. Deduplicate test attempts by testId (or id if testId not present) so re-renders or multiple submissions cannot duplicate attempts
-  const deduplicatedAttemptsMap = new Map<string, RecordedTestAttempt>();
-  for (const a of attempts) {
-    const key = (a.testId ? a.testId.trim() : (a.id || "").trim());
-    if (!key) continue;
-    // Prefer attempt with questions data or highest answered count
-    const existing = deduplicatedAttemptsMap.get(key);
-    if (!existing) {
-      deduplicatedAttemptsMap.set(key, a);
-    } else {
-      const existingQCount = existing.questions?.filter((q) => q.selectedOption !== null && q.selectedOption !== undefined).length || 0;
-      const newQCount = a.questions?.filter((q) => q.selectedOption !== null && q.selectedOption !== undefined).length || 0;
-      if (newQCount >= existingQCount) {
-        deduplicatedAttemptsMap.set(key, a);
-      }
-    }
-  }
-
-  const cleanAttempts = Array.from(deduplicatedAttemptsMap.values());
+  // 1. Authoritative deduplication of test attempts
+  const cleanAttempts = deduplicateTestAttempts(attempts);
   const completedTestsCount = cleanAttempts.length;
 
   // 2. Canonical question-level deduplication:

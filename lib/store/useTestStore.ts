@@ -9,7 +9,11 @@ import type {
   DiagnosticCycle,
   CycleCompletionNotification,
 } from "@/types";
-import { computeAnalyticsFromAttempts, buildDefaultSubjectCalibration } from "@/lib/analytics";
+import {
+  computeAnalyticsFromAttempts,
+  buildDefaultSubjectCalibration,
+  deduplicateTestAttempts,
+} from "@/lib/analytics";
 import { processQuestionsIntoCycles } from "@/lib/cycle-engine";
 import { evaluateSessionValidity } from "@/lib/session-validity";
 import { calculateStreakFromAttempts, calculateActiveStreak } from "@/lib/gamification";
@@ -493,9 +497,10 @@ export const useTestStore = create<TestStoreState>()(
         };
 
         const currentAttempts = get().testAttempts || [];
-        // Strictly deduplicate by canonical testId or matching title + subject + close timestamp
+        // Strictly deduplicate by canonical testId, attemptId, or matching title + subject + close timestamp
         const existingIdx = currentAttempts.findIndex((a) => {
           if (!a) return false;
+          if (attempt.attemptId && a.attemptId && a.attemptId === attempt.attemptId) return true;
           const aKey = (a.testId || a.id || "").trim();
           if (aKey === testKey || a.id === attempt.id) return true;
           if (a.testId && stringToUuid(a.testId.trim()) === testCanonicalUuid) return true;
@@ -663,7 +668,24 @@ export const useTestStore = create<TestStoreState>()(
                   const finalAccuracy =
                     finalAttempted > 0 ? Math.round((finalCorrect / finalAttempted) * 100) : 0;
 
-                  const existingIdx = currentAttempts.findIndex((a) => a.testId === sTestId);
+                  const sTestUuid = stringToUuid(sTestId);
+                  const existingIdx = currentAttempts.findIndex((a) => {
+                    if (!a) return false;
+                    if (a.testId === sTestId) return true;
+                    if (a.testId && stringToUuid(a.testId) === sTestUuid) return true;
+                    if (session.attemptId && a.attemptId && a.attemptId === session.attemptId) return true;
+                    if (
+                      session.testMeta?.title &&
+                      a.testTitle &&
+                      a.testTitle.trim().toLowerCase() === session.testMeta.title.trim().toLowerCase() &&
+                      session.testMeta?.subject &&
+                      a.subject &&
+                      a.subject.trim().toLowerCase() === session.testMeta.subject.trim().toLowerCase()
+                    ) {
+                      return true;
+                    }
+                    return false;
+                  });
 
                   if (existingIdx >= 0 && currentAttempts[existingIdx]) {
                     const existing = currentAttempts[existingIdx]!;
@@ -680,8 +702,13 @@ export const useTestStore = create<TestStoreState>()(
                       };
                       hasChanges = true;
                     }
-                  } else if (!seenTestIds.has(sTestId) && (finalAttempted > 0 || session.isSubmitted)) {
+                  } else if (
+                    !seenTestIds.has(sTestId) &&
+                    !seenTestIds.has(sTestUuid) &&
+                    (finalAttempted > 0 || session.isSubmitted)
+                  ) {
                     seenTestIds.add(sTestId);
+                    seenTestIds.add(sTestUuid);
                     const testMeta = session.testMeta;
                     const questionAttempts = questionsList.map((q: any, idx: number) => {
                       const st = qStates[q.id];
@@ -717,6 +744,7 @@ export const useTestStore = create<TestStoreState>()(
 
                     const attempt: RecordedTestAttempt = {
                       id: `recovered_${sTestId}`,
+                      attemptId: session.attemptId || sTestUuid,
                       userId: get().user?.id || "guest",
                       testId: sTestId,
                       testTitle: testMeta?.title || "CUET Domain Examination Paper",
@@ -746,15 +774,8 @@ export const useTestStore = create<TestStoreState>()(
           }
 
           if (hasChanges || recovered.length > 0) {
-            // Deduplicate all attempts strictly by testId
-            const dedupMap = new Map<string, RecordedTestAttempt>();
-            [...currentAttempts, ...recovered].forEach((att) => {
-              const k = (att.testId || att.id).trim();
-              if (!dedupMap.has(k)) {
-                dedupMap.set(k, att);
-              }
-            });
-            const allAttempts = Array.from(dedupMap.values());
+            // Deduplicate all attempts strictly
+            const allAttempts = deduplicateTestAttempts([...currentAttempts, ...recovered]);
             const analytics = computeAnalyticsFromAttempts(allAttempts);
             const chronologicalAttempts = [...allAttempts].reverse();
             const allQuestions = chronologicalAttempts.flatMap((t) => t.questions || []);
@@ -1004,9 +1025,19 @@ export const useTestStore = create<TestStoreState>()(
           },
         };
       }),
+      onRehydrateStorage: () => (state) => {
+        if (state && Array.isArray(state.testAttempts) && state.testAttempts.length > 0) {
+          const deduped = deduplicateTestAttempts(state.testAttempts);
+          if (deduped.length !== state.testAttempts.length) {
+            state.testAttempts = deduped;
+            state.analytics = computeAnalyticsFromAttempts(deduped);
+          }
+        }
+      },
       partialize: (state) => {
         // Keep question telemetry on the latest 5 attempts; keep summary metrics on older attempts
-        const compactedAttempts = (state.testAttempts || []).map((att, idx) =>
+        const dedupedAttempts = deduplicateTestAttempts(state.testAttempts || []);
+        const compactedAttempts = dedupedAttempts.map((att: RecordedTestAttempt, idx: number) =>
           compactTestAttemptForPersistence(att, idx < 5)
         );
         const compactedCycles = (state.diagnosticCycles || []).map(compactCycleForPersistence);

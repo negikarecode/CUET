@@ -8,6 +8,7 @@ interface TopMetricsRowProps {
   accuracyPercentage?: number;
   correctCount?: number;
   totalAttempted?: number;
+  completedTestsCount?: number;
   dailyStreak?: number;
   percentile?: number;
 }
@@ -19,6 +20,7 @@ export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
   accuracyPercentage = 0,
   correctCount = 0,
   totalAttempted = 0,
+  completedTestsCount = 0,
   dailyStreak = 0,
 }) => {
   const hasAttempts = totalAttempted > 0;
@@ -29,6 +31,7 @@ export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
       label: 'Latest score',
       value: hasAttempts ? `${score} / ${maxScore}` : '—',
       context: testTitle || 'Marking scheme: +5 / -1',
+      tooltip: testTitle || undefined,
     },
     {
       id: 'accuracy',
@@ -40,13 +43,18 @@ export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
       id: 'attempted',
       label: 'Questions attempted',
       value: `${totalAttempted}`,
-      context: totalAttempted >= 150 ? 'Full diagnostic unlocked' : `${150 - totalAttempted} to unlock full report`,
+      context:
+        completedTestsCount > 0
+          ? `across ${completedTestsCount} ${completedTestsCount === 1 ? 'test' : 'tests'}`
+          : totalAttempted > 0
+          ? `${totalAttempted} answered`
+          : '0 answered',
     },
     {
       id: 'streak',
       label: 'Streak',
       value: `${dailyStreak} ${dailyStreak === 1 ? 'day' : 'days'}`,
-      context: dailyStreak > 0 ? 'Consecutive practice days' : 'Practice today to start streak',
+      context: dailyStreak > 0 ? 'days in a row' : 'Start your streak today',
     },
   ];
 
@@ -60,10 +68,13 @@ export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
           <span className="text-[14px] font-medium text-[var(--text-secondary)]">
             {card.label}
           </span>
-          <span className="text-[28px] font-semibold text-[var(--text)] tabular-nums mt-2">
+          <span className="text-[26px] sm:text-[28px] font-semibold text-[var(--text)] tabular-nums mt-1.5">
             {card.value}
           </span>
-          <span className="text-[14px] text-[var(--text-muted)] mt-1 truncate">
+          <span
+            className="text-[13px] text-[var(--text-muted)] mt-1 line-clamp-2 leading-snug"
+            title={card.tooltip || card.context}
+          >
             {card.context}
           </span>
         </div>

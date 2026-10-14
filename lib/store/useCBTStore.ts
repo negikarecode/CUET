@@ -50,6 +50,7 @@ export interface CBTStoreState {
   isExitModalOpen: boolean;
   isSubmitted: boolean;
   isSubmitting: boolean;
+  attemptId: string | null;
   submittedScore: CBTScoreSummary | null;
 
   // Actions
@@ -127,6 +128,7 @@ function saveSessionToStorage(state: CBTStoreState, immediate = false): void {
       version: 2,
       userId: currentUid,
       testId: state.testId,
+      attemptId: state.attemptId || undefined,
       testMeta: state.testMeta
         ? {
             id: state.testMeta.id,
@@ -199,6 +201,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
   isExitModalOpen: false,
   isSubmitted: false,
   isSubmitting: false,
+  attemptId: null,
   submittedScore: null,
 
   initTest: (testId, meta, questionsList, forceFresh = false) => {
@@ -224,11 +227,18 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     if (!forceFresh) {
       const stored = loadSessionFromStorage(testId);
       if (stored && stored.testId === testId) {
+        const storedAttemptId =
+          stored.attemptId ||
+          (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+            ? crypto.randomUUID()
+            : stringToUuid(`${testId}_${Date.now()}`));
+
         // If the test was already submitted, restore the completed scorecard view
         if (stored.isSubmitted && stored.submittedScore) {
           set({
             isInitialized: true,
             testId,
+            attemptId: storedAttemptId,
             testMeta: meta,
             questions: questionsList,
             currentQuestionIndex: stored.currentQuestionIndex || 0,
@@ -281,6 +291,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             set({
               isInitialized: true,
               testId,
+              attemptId: storedAttemptId,
               testMeta: meta,
               questions: questionsList.map(sanitizeQuestionForActiveExam),
               currentQuestionIndex: validIndex,
@@ -306,6 +317,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             set({
               isInitialized: true,
               testId,
+              attemptId: storedAttemptId,
               testMeta: meta,
               questions: questionsList.map(sanitizeQuestionForActiveExam),
               currentQuestionIndex: validIndex,
@@ -344,10 +356,15 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
 
     const durationSec = (meta?.durationMinutes ?? 60) * 60;
     const expiresAt = Date.now() + durationSec * 1000;
+    const freshAttemptId =
+      typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+        ? crypto.randomUUID()
+        : stringToUuid(`${testId}_${Date.now()}`);
 
     const freshState: Partial<CBTStoreState> = {
       isInitialized: true,
       testId,
+      attemptId: freshAttemptId,
       testMeta: meta,
       questions: questionsList.map(sanitizeQuestionForActiveExam),
       currentQuestionIndex: 0,
@@ -707,6 +724,8 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       isSubmitModalOpen: false,
       isExitModalOpen: false,
       isSubmitted: false,
+      isSubmitting: false,
+      attemptId: null,
       submittedScore: null,
     });
   },
@@ -853,9 +872,16 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           };
         });
 
-        const canonicalAttemptId = `attempt_${stringToUuid(testId || meta?.id || "cbt_exam")}`;
+        const effectiveAttemptId =
+          get().attemptId ||
+          (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+            ? crypto.randomUUID()
+            : stringToUuid(`${testId || meta?.id || "cbt_exam"}_${Date.now()}`));
+
+        const canonicalAttemptId = `attempt_${effectiveAttemptId}`;
         const attemptRecord: RecordedTestAttempt = {
           id: canonicalAttemptId,
+          attemptId: effectiveAttemptId,
           userId: storeUser?.id || "guest",
           testId: meta?.id ?? testId ?? "cbt_exam",
           testTitle: meta?.title ?? "CUET Domain Examination Paper",
@@ -877,18 +903,21 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
         useTestStore.getState().recordTestAttempt(attemptRecord);
 
         if (typeof window !== "undefined" && window.location?.origin) {
-          fetch("/api/test/record-attempt", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(attemptRecord),
-          })
-            .then((res) => res.json())
-            .then((data) => {
+          try {
+            const res = await fetch("/api/test/record-attempt", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(attemptRecord),
+            });
+            if (res.ok) {
+              const data = await res.json();
               if (typeof data?.streak === "number") {
                 useTestStore.getState().setStreak(data.streak);
               }
-            })
-            .catch((err) => console.warn("Background API attempt record notice:", err));
+            }
+          } catch (err) {
+            console.warn("Background API attempt record notice:", err);
+          }
         }
       } catch (err) {
         console.warn("Failed to immediately record test attempt:", err);

@@ -9,6 +9,7 @@ import { getTestAttemptStats } from "@/lib/analytics";
 import { Trophy, RecordedTestAttempt } from "@/types";
 import PostMockAnalysisClient from "./PostMockAnalysisClient";
 import { buildPostMockDeterministicReport } from "@/lib/post-mock-engine";
+import { stringToUuid } from "@/lib/utils";
 
 export default function CBTResultView() {
   const testMeta = useCBTStore((state) => state.testMeta);
@@ -89,7 +90,16 @@ export default function CBTResultView() {
     // Test attempt recording and database sync are already performed upon submission in submitTest().
     // We only retrieve/construct attempt record for local post-mock report viewing.
     const currentTId = testMeta?.id ?? "cbt_exam";
-    const existingAttempt = (testAttempts || []).find((a) => a.testId === currentTId);
+    const currentUuid = stringToUuid(currentTId);
+    const existingAttempt = (testAttempts || []).find(
+      (a) =>
+        a.testId === currentTId ||
+        (a.testId && stringToUuid(a.testId) === currentUuid) ||
+        (testMeta?.title &&
+          a.testTitle?.toLowerCase().trim() === testMeta.title.toLowerCase().trim() &&
+          testMeta?.subject &&
+          a.subject?.toLowerCase().trim() === testMeta.subject.toLowerCase().trim())
+    );
     const attemptRecord: RecordedTestAttempt = existingAttempt || {
       id: `attempt_${currentTId}_${Date.now()}`,
       userId: user.id || "guest",
@@ -111,11 +121,6 @@ export default function CBTResultView() {
     };
 
     currentAttemptRecordRef.current = attemptRecord;
-
-    // Safety fallback: only if the store completely missed it, record locally once without background duplicate POST
-    if (!existingAttempt && !testAttempts.some((a) => a.testId === currentTId)) {
-      recordTestAttempt(attemptRecord);
-    }
 
     const xp = calculateXP(
       submittedScore.correctCount,

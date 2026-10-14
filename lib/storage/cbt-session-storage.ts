@@ -23,6 +23,7 @@ export interface StoredCBTSession {
   version: number;
   userId: string;
   testId: string;
+  attemptId?: string;
   testMeta: {
     id: string;
     title: string;

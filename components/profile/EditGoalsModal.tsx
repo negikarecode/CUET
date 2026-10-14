@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   X,
   Target,
   GraduationCap,
   Building2,
+  BookOpen,
   User,
   Sparkles,
   Check,
@@ -13,6 +14,7 @@ import {
 import { StreamOption } from "@/types/database";
 import CollegeSearchDropdown from "@/components/auth/CollegeSearchDropdown";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
+import { CANONICAL_COURSES_MAP, CanonicalCourse } from "@/lib/standing-engine";
 
 interface EditGoalsModalProps {
   isOpen: boolean;
@@ -20,12 +22,14 @@ interface EditGoalsModalProps {
   initialStream: StreamOption;
   initialUniversity: string;
   initialCollege: string;
+  initialCourse?: string;
   initialFullName: string;
   initialSelectedSubjects?: string[];
   onSave: (data: {
     targetStream: StreamOption;
     targetUniversity: string;
     targetCollege: string;
+    targetCourse: string;
     fullName: string;
     selectedSubjects: string[];
   }) => Promise<void>;
@@ -37,13 +41,17 @@ export default function EditGoalsModal({
   initialStream,
   initialUniversity,
   initialCollege,
+  initialCourse,
   initialFullName,
   initialSelectedSubjects = [],
   onSave,
 }: EditGoalsModalProps) {
   const [stream, setStream] = useState<StreamOption>(initialStream || "Science");
   const [university, setUniversity] = useState<string>(initialUniversity || "Delhi University");
-  const [college, setCollege] = useState<string>(initialCollege || "SRCC");
+  const [college, setCollege] = useState<string>(initialCollege || "Hindu College");
+  const [course, setCourse] = useState<string>(
+    initialCourse || "B.Sc. (Hons.) Physics"
+  );
   const [fullName, setFullName] = useState<string>(initialFullName || "");
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>(
     initialSelectedSubjects && initialSelectedSubjects.length > 0
@@ -52,6 +60,65 @@ export default function EditGoalsModal({
   );
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Sync state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setStream(initialStream || "Science");
+      setUniversity(initialUniversity || "Delhi University");
+      setCollege(initialCollege || "Hindu College");
+      setCourse(initialCourse || "B.Sc. (Hons.) Physics");
+      setFullName(initialFullName || "");
+      setSelectedSubjects(
+        initialSelectedSubjects && initialSelectedSubjects.length > 0
+          ? initialSelectedSubjects
+          : getSubjectsForStream(initialStream || "Science")
+      );
+      setErrorMessage(null);
+      setIsSaving(false);
+    }
+  }, [
+    isOpen,
+    initialStream,
+    initialUniversity,
+    initialCollege,
+    initialCourse,
+    initialFullName,
+    initialSelectedSubjects,
+  ]);
+
+  // Keyboard accessibility: Escape to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  // Available courses filtered by chosen stream
+  const availableCourses: CanonicalCourse[] = useMemo(() => {
+    const list = Object.values(CANONICAL_COURSES_MAP).filter(
+      (c) => c.stream.toLowerCase() === stream.toLowerCase()
+    );
+    return list.length > 0 ? list : Object.values(CANONICAL_COURSES_MAP);
+  }, [stream]);
+
+  // When stream changes, ensure selected course belongs to that stream
+  const handleStreamChange = (newStream: StreamOption) => {
+    setStream(newStream);
+    const newSubjects = getSubjectsForStream(newStream);
+    setSelectedSubjects(newSubjects);
+
+    const streamCourses = Object.values(CANONICAL_COURSES_MAP).filter(
+      (c) => c.stream.toLowerCase() === newStream.toLowerCase()
+    );
+    if (streamCourses.length > 0 && !streamCourses.some((c) => c.name === course)) {
+      setCourse(streamCourses[0]!.name);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -69,7 +136,8 @@ export default function EditGoalsModal({
       await onSave({
         targetStream: stream,
         targetUniversity: university.trim() || "Delhi University",
-        targetCollege: college.trim() || "SRCC",
+        targetCollege: college.trim() || "Hindu College",
+        targetCourse: course.trim() || "B.Sc. (Hons.) Physics",
         fullName: fullName.trim() || initialFullName,
         selectedSubjects,
       });
@@ -106,6 +174,7 @@ export default function EditGoalsModal({
     <div
       role="dialog"
       aria-modal="true"
+      aria-labelledby="edit-goals-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200"
     >
       <div className="w-full max-w-xl bg-white rounded-3xl border border-slate-100 shadow-xl p-6 sm:p-7 text-left animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
@@ -116,11 +185,11 @@ export default function EditGoalsModal({
               <Target className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 tracking-tight">
-                Edit Academic Goals & Domain Subjects
+              <h3 id="edit-goals-title" className="text-lg font-bold text-slate-900 tracking-tight">
+                Edit Academic Goals
               </h3>
               <p className="text-xs text-slate-500 font-medium">
-                Update your dream college target and domain subjects you are preparing for
+                Update your dream target college, degree course, and academic stream
               </p>
             </div>
           </div>
@@ -128,6 +197,7 @@ export default function EditGoalsModal({
             type="button"
             onClick={onClose}
             className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all cursor-pointer"
+            aria-label="Close"
           >
             <X className="w-4 h-4" />
           </button>
@@ -139,7 +209,7 @@ export default function EditGoalsModal({
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
           {/* Full Name */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
@@ -168,11 +238,8 @@ export default function EditGoalsModal({
                   <button
                     key={opt.id}
                     type="button"
-                    onClick={() => {
-                      setStream(opt.id);
-                      setSelectedSubjects(getSubjectsForStream(opt.id));
-                    }}
-                    className={`p-3 rounded-2xl border text-left transition-all relative ${
+                    onClick={() => handleStreamChange(opt.id)}
+                    className={`p-3 rounded-2xl border text-left transition-all relative cursor-pointer ${
                       isSelected
                         ? `${opt.selectedColor} shadow-xs font-bold`
                         : "bg-white border-slate-200/80 hover:border-slate-300 text-slate-700 font-medium hover:bg-slate-50"
@@ -197,33 +264,26 @@ export default function EditGoalsModal({
             </div>
           </div>
 
-          {/* Stream Domain Subjects (Auto-Calibrated) */}
-          <div className="p-3.5 rounded-2xl border border-slate-200/60 bg-slate-50 space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                <span>Stream Domain Subjects (Auto-Calibrated)</span>
-              </label>
-              <span className="text-[10px] font-bold bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-600">
-                {selectedSubjects.length} Domains
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {selectedSubjects.map((sub) => (
-                <span
-                  key={sub}
-                  className="px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-200 rounded-lg shadow-xs"
-                >
-                  {sub}
-                </span>
+          {/* Dream Target Course Dropdown */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+              <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+              <span>Dream Degree Course / Program</span>
+            </label>
+            <select
+              value={course}
+              onChange={(e) => setCourse(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 font-semibold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer"
+            >
+              {availableCourses.map((c) => (
+                <option key={c.id} value={c.name}>
+                  {c.name} ({c.degreeType})
+                </option>
               ))}
-            </div>
-            <p className="text-[11px] font-medium text-slate-500 pt-0.5">
-              Domain subjects are calibrated automatically based on your {stream} stream.
-            </p>
+            </select>
           </div>
 
-          {/* Dream College Dropdown */}
+          {/* Dream Target College Dropdown */}
           <div className="space-y-1.5">
             <CollegeSearchDropdown
               selectedCollege={college}
@@ -251,30 +311,56 @@ export default function EditGoalsModal({
             />
           </div>
 
+          {/* Domain Subjects (Auto-Calibrated) */}
+          <div className="p-3.5 rounded-2xl border border-slate-200/60 bg-slate-50 space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                <span>Stream Domain Subjects (Auto-Calibrated)</span>
+              </label>
+              <span className="text-[11px] font-bold bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-600">
+                {selectedSubjects.length} Domains
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {selectedSubjects.map((sub) => (
+                <span
+                  key={sub}
+                  className="px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-200 rounded-lg shadow-xs"
+                >
+                  {sub}
+                </span>
+              ))}
+            </div>
+            <p className="text-xs font-medium text-slate-500 pt-0.5">
+              Domain subjects are calibrated automatically based on your {stream} stream.
+            </p>
+          </div>
+
           {/* Action Buttons */}
           <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
             <button
               type="button"
               disabled={isSaving}
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-slate-200 transition-all disabled:opacity-50 cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm transition-all disabled:opacity-50 cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {isSaving ? (
                 <>
                   <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Saving Goals & Subjects...</span>
+                  <span>Saving Goals...</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Save Academic Goals & Subjects</span>
+                  <span>Save Academic Goals</span>
                 </>
               )}
             </button>

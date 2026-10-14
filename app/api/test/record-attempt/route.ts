@@ -112,11 +112,14 @@ export async function POST(req: NextRequest) {
       // Offline / client-only fallback
     }
 
-    // Server Idempotency Guard: prevent identical double submissions within 30 seconds
-    const idempotencyKey = `${targetUserId}_${stringToUuid(attempt.testId)}_${attempt.id || ""}`;
+    // Server Idempotency Guard: prevent duplicate submissions within 60 seconds
+    const attemptIdStr = (attempt.attemptId || attempt.id || "").trim();
+    const idempotencyKey = attemptIdStr
+      ? `${targetUserId}_${attemptIdStr}`
+      : `${targetUserId}_${stringToUuid(attempt.testId)}_${attempt.id || ""}`;
     const nowMs = Date.now();
     const lastSeen = recentAttemptSubmissions.get(idempotencyKey);
-    if (lastSeen && nowMs - lastSeen < 30000) {
+    if (lastSeen && nowMs - lastSeen < 60000) {
       return NextResponse.json({
         success: true,
         deduplicated: true,
@@ -194,7 +197,42 @@ export async function POST(req: NextRequest) {
           await supabaseAdmin.from("questions").upsert(questionsToUpsert, { onConflict: "id" });
         }
 
-        // 3. Prepare and insert user_attempts for all attempted questions (deduplicated by question UUID)
+        // 3. Database Idempotency Check & user_attempts insertion
+        let attemptUuid: string | null = null;
+        if (attempt.attemptId) {
+          attemptUuid = /^[0-9a-f-]{36}$/i.test(attempt.attemptId)
+            ? attempt.attemptId
+            : stringToUuid(attempt.attemptId);
+        }
+
+        let hasAttemptIdCol = false;
+        if (attemptUuid) {
+          try {
+            const { data: existingSessionRows, error: colCheckError } = await supabaseAdmin
+              .from("user_attempts")
+              .select("id")
+              .eq("user_id", targetUserId)
+              .eq("attempt_id", attemptUuid)
+              .limit(1);
+
+            if (!colCheckError) {
+              hasAttemptIdCol = true;
+              if (existingSessionRows && existingSessionRows.length > 0) {
+                // Existing session already recorded! Return idempotent success
+                return NextResponse.json({
+                  success: true,
+                  deduplicated: true,
+                  persistedToDatabase: true,
+                  attempt,
+                });
+              }
+            }
+          } catch {
+            hasAttemptIdCol = false;
+          }
+        }
+
+        // Prepare user_attempts for all attempted questions (deduplicated by question UUID)
         const seenQuestionUuids = new Set<string>();
         const attemptsToInsert: any[] = [];
 
@@ -220,23 +258,38 @@ export async function POST(req: NextRequest) {
             const validOption =
               rawOpt && ["A", "B", "C", "D"].includes(rawOpt) ? rawOpt : null;
 
-            attemptsToInsert.push({
+            const rowData: any = {
               user_id: targetUserId,
               test_id: testUuid,
               question_id: qUuid,
               selected_option: validOption,
               is_correct: isCorrect,
               time_spent_seconds: Math.max(0, q.timeSpentSeconds || 0),
-            });
+            };
+
+            if (hasAttemptIdCol && attemptUuid) {
+              rowData.attempt_id = attemptUuid;
+            }
+
+            attemptsToInsert.push(rowData);
           });
 
         if (attemptsToInsert.length > 0) {
-          // Idempotent write: Remove any prior attempt records for this user & test before inserting
-          await supabaseAdmin
-            .from("user_attempts")
-            .delete()
-            .eq("user_id", targetUserId)
-            .eq("test_id", testUuid);
+          if (hasAttemptIdCol && attemptUuid) {
+            // Delete only if this exact attempt_id was previously partially inserted
+            await supabaseAdmin
+              .from("user_attempts")
+              .delete()
+              .eq("user_id", targetUserId)
+              .eq("attempt_id", attemptUuid);
+          } else {
+            // Fallback for legacy schema: remove previous attempt on this test
+            await supabaseAdmin
+              .from("user_attempts")
+              .delete()
+              .eq("user_id", targetUserId)
+              .eq("test_id", testUuid);
+          }
 
           const { error: insertErr } = await supabaseAdmin
             .from("user_attempts")
