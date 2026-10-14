@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Search,
@@ -50,24 +51,46 @@ function getSessionType(att: RecordedTestAttempt): SessionType {
 }
 
 function getSessionSubtitle(att: RecordedTestAttempt, type: SessionType): string {
-  const title = (att.testTitle || "").toLowerCase();
-  const testId = (att.testId || "").toLowerCase();
+  const title = (att.testTitle || "").trim();
+  const testId = (att.testId || "").trim();
   const combined = `${title} ${testId}`;
 
   const yearMatch = combined.match(/202[0-9]/);
   const shiftMatch = combined.match(/shift\s*([1-3]|i{1,3})/i);
+  const dateMatch = combined.match(/(\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*)/i);
 
   if (type === "Past Paper") {
-    const year = yearMatch ? yearMatch[0] : "Official";
-    const shift = shiftMatch ? ` · ${shiftMatch[0].toUpperCase()}` : "";
-    return `CUET UG ${year} Past Paper${shift}`;
+    const year = yearMatch ? yearMatch[0] : "2025";
+    const datePart = dateMatch ? dateMatch[0] : "";
+    const shiftPart = shiftMatch && shiftMatch[0]
+      ? shiftMatch[0].replace(/([a-z]+)/i, (m) => (m && m[0] ? m[0].toUpperCase() + m.slice(1).toLowerCase() : m))
+      : "";
+    const parts = [year, datePart, shiftPart].filter(Boolean);
+    return parts.length > 0 ? parts.join(" · ") : "Official Past Paper";
   }
   if (type === "Practice") {
-    const qCount = att.totalQuestions || 20;
+    const qCount = att.totalQuestions || (att.questions?.length) || 20;
     return `Chapter Practice Drill · ${qCount} Questions`;
   }
-  const qCount = att.totalQuestions || 50;
-  return `Full Syllabus CBT Mock · ${qCount} Compulsory Questions`;
+  const qCount = att.totalQuestions || (att.questions?.length) || 50;
+  return `Full Syllabus CBT Mock · ${qCount} Questions`;
+}
+
+function splitDateTimeIndian(dateStr?: string | Date): { date: string; time: string } {
+  if (!dateStr) return { date: "—", time: "—" };
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return { date: "—", time: "—" };
+  const date = d.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  const time = d.toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+  return { date, time };
 }
 
 function getReviewHref(att: RecordedTestAttempt): string {
@@ -87,6 +110,7 @@ function getRetakeHref(att: RecordedTestAttempt): string {
 export default function SessionsHistoryClient({
   initialAttempts = [],
 }: SessionsHistoryClientProps) {
+  const router = useRouter();
   const isClient = useIsClient();
   const rawStoreAttempts = useTestStore((s) => s.testAttempts);
   const storeAttempts = useMemo(() => rawStoreAttempts || [], [rawStoreAttempts]);
@@ -190,8 +214,11 @@ export default function SessionsHistoryClient({
 
     allAttempts.forEach((att) => {
       const score = att.totalMarks ?? 0;
-      const maxM = att.maxMarks || (att.totalQuestions ? att.totalQuestions * 5 : 250);
-      const acc = att.accuracyPercentage || 0;
+      const totalQ = att.totalQuestions || (att.questions?.length) || (att.maxMarks ? Math.round(att.maxMarks / 5) : 50);
+      const maxM = totalQ * 5;
+      const acc = att.attemptedCount && att.attemptedCount > 0
+        ? Math.round(((att.correctCount || 0) / att.attemptedCount) * 100)
+        : (att.accuracyPercentage || 0);
 
       sumScore += score;
       sumMaxMarks += maxM;
@@ -671,55 +698,61 @@ export default function SessionsHistoryClient({
             </span>
           </div>
 
-          {/* Desktop Table View */}
-          <div className="overflow-x-auto max-h-[720px] overflow-y-auto">
-            <table className="w-full text-left border-collapse">
-              <thead className="sticky top-0 z-10 bg-slate-50 shadow-xs border-b border-[var(--border)]">
+          {/* Desktop Table View - No nested vertical scroll, sticky thead, fits without horizontal scroll at 1280px */}
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left border-collapse table-auto">
+              <thead className="sticky top-0 z-10 bg-slate-50 shadow-2xs border-b border-[var(--border)]">
                 <tr className="text-[12px] font-semibold text-[var(--text-muted)] bg-slate-50">
-                  <th className="py-3 px-4 font-semibold">Test Title</th>
-                  <th className="py-3 px-4 font-semibold min-w-[190px]">Subject</th>
-                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Date & Time</th>
-                  <th className="py-3 px-4 font-semibold text-right">Marks Scored</th>
-                  <th className="py-3 px-4 font-semibold text-right">Accuracy</th>
-                  <th className="py-3 px-4 font-semibold text-right">Breakdown</th>
-                  <th className="py-3 pr-4 pl-2 font-semibold text-right min-w-[160px]">Actions</th>
+                  <th className="py-2.5 pl-3 pr-2 font-semibold">Test Title</th>
+                  <th className="py-2.5 px-2 font-semibold">Subject</th>
+                  <th className="py-2.5 px-2 font-semibold whitespace-nowrap">Date & Time</th>
+                  <th className="py-2.5 px-2 font-semibold text-right whitespace-nowrap">Marks Scored</th>
+                  <th className="py-2 px-2 font-semibold text-right" title="Calculated as correct / attempted questions">
+                    <span className="block leading-tight">Accuracy</span>
+                    <span className="block text-[10px] text-[var(--text-muted)] font-normal">(attempted)</span>
+                  </th>
+                  <th className="py-2.5 px-2 font-semibold text-right whitespace-nowrap">Breakdown</th>
+                  <th className="py-2.5 pr-3 pl-1 font-semibold text-right whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--border)] bg-white">
                 {paginatedAttempts.map((att: RecordedTestAttempt, idx: number) => {
                   const type = getSessionType(att);
                   const subtitle = getSessionSubtitle(att, type);
-                  const maxMarks = att.maxMarks || (att.totalQuestions ? att.totalQuestions * 5 : 250);
+                  const totalQ = att.totalQuestions || (att.questions?.length) || (att.maxMarks ? Math.round(att.maxMarks / 5) : 50);
+                  const maxMarks = totalQ * 5;
                   const title = att.testTitle || `${att.subject || "Domain"} CBT Mock Test`;
                   const reviewHref = getReviewHref(att);
                   const retakeHref = getRetakeHref(att);
                   const isPersonalBest = stats.bestScore > 0 && att.totalMarks === stats.bestScore;
                   const correct = att.correctCount || 0;
                   const wrong = att.incorrectCount || 0;
-                  const totalQ = att.totalQuestions || (maxMarks ? Math.round(maxMarks / 5) : 50);
                   const skipped = Math.max(0, totalQ - (correct + wrong));
+                  const acc = att.attemptedCount && att.attemptedCount > 0
+                    ? Math.round(((att.correctCount || 0) / att.attemptedCount) * 100)
+                    : (att.accuracyPercentage || 0);
+                  const dt = splitDateTimeIndian(att.submittedAt);
 
                   return (
                     <tr
                       key={att.id || `session-${idx}`}
-                      className="hover:bg-slate-50/70 transition-colors text-[14px] group"
+                      onClick={() => router.push(reviewHref)}
+                      className="hover:bg-slate-50/80 transition-colors text-[13px] group cursor-pointer"
                     >
                       {/* Test Title with Wrap to Two Lines and Subtitle */}
-                      <td className="py-3.5 px-4 font-medium max-w-[320px]">
+                      <td className="py-2.5 pl-3 pr-2 font-medium max-w-[220px]">
                         <div className="space-y-1">
-                          <div className="flex items-start gap-2">
-                            <p className="font-semibold text-slate-900 leading-snug line-clamp-2 whitespace-normal break-words">
-                              {title}
-                            </p>
+                          <p className="font-semibold text-slate-900 leading-snug whitespace-normal break-words">
+                            {title}
+                          </p>
+                          <div className="flex items-center gap-1.5 flex-wrap">
                             {isPersonalBest && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs shrink-0 whitespace-nowrap">
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 shrink-0">
                                 ★ Personal Best
                               </span>
                             )}
-                          </div>
-                          <div className="flex items-center gap-2 flex-wrap">
                             <span
-                              className={`inline-block px-2 py-0.5 rounded-[4px] text-[11px] font-semibold border ${
+                              className={`inline-block px-1.5 py-0.2 rounded text-[10px] font-semibold border ${
                                 type === "Mock"
                                   ? "bg-blue-50 text-blue-700 border-blue-200"
                                   : type === "Past Paper"
@@ -729,32 +762,35 @@ export default function SessionsHistoryClient({
                             >
                               {type}
                             </span>
-                            <span className="text-[12px] text-[var(--text-muted)] whitespace-normal">
+                            <span className="text-[11px] text-[var(--text-muted)] whitespace-normal">
                               {subtitle}
                             </span>
                           </div>
                         </div>
                       </td>
 
-                      {/* Subject (Wide so Environmental Studies stays on one line) */}
-                      <td className="py-3.5 px-4 min-w-[190px] whitespace-nowrap">
-                        <span className="inline-block px-2.5 py-1 rounded-full text-[12px] font-semibold bg-slate-100 text-slate-700 border border-slate-200/80">
+                      {/* Subject */}
+                      <td className="py-2.5 px-2 whitespace-normal">
+                        <span className="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200/80 whitespace-nowrap">
                           {att.subject || "Domain"}
                         </span>
                       </td>
 
-                      {/* Date & Time */}
-                      <td className="py-3.5 px-4 text-[var(--text-muted)] whitespace-nowrap text-[12px] font-medium">
-                        <div className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                          <span>{formatDateTimeIndian(att.submittedAt || new Date())}</span>
+                      {/* Date & Time (Two lines) */}
+                      <td className="py-2.5 px-2 text-[var(--text-muted)] text-[12px] font-medium leading-tight whitespace-nowrap">
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex items-center gap-1.5 text-slate-800 font-medium">
+                            <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                            <span>{dt.date}</span>
+                          </div>
+                          <span className="text-[11px] text-slate-500 pl-5">{dt.time}</span>
                         </div>
                       </td>
 
                       {/* Marks Scored (Negative in Red) */}
-                      <td className="py-3.5 px-4 text-right tabular-nums whitespace-nowrap">
+                      <td className="py-2.5 px-2 text-right tabular-nums whitespace-nowrap">
                         <span
-                          className={`text-[15px] ${
+                          className={`text-[14px] ${
                             (att.totalMarks ?? 0) < 0
                               ? "text-rose-600 font-extrabold"
                               : "text-[var(--text)] font-bold"
@@ -762,31 +798,31 @@ export default function SessionsHistoryClient({
                         >
                           {att.totalMarks}
                         </span>
-                        <span className="text-[13px] font-normal text-[var(--text-muted)]">
+                        <span className="text-[12px] font-normal text-[var(--text-muted)]">
                           {" "}
                           / {maxMarks}
                         </span>
                       </td>
 
                       {/* Accuracy */}
-                      <td className="py-3.5 px-4 text-right tabular-nums whitespace-nowrap">
+                      <td className="py-2.5 px-2 text-right tabular-nums whitespace-nowrap">
                         <span
                           className={`inline-block px-2 py-0.5 rounded-[6px] text-[12px] font-semibold border ${
-                            (att.accuracyPercentage || 0) >= 70
+                            acc >= 70
                               ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                              : (att.accuracyPercentage || 0) >= 40
+                              : acc >= 40
                               ? "bg-blue-50 text-blue-700 border-blue-200"
                               : "bg-amber-50 text-amber-700 border-amber-200"
                           }`}
                         >
-                          {att.accuracyPercentage}%
+                          {acc}%
                         </span>
                       </td>
 
                       {/* Breakdown: 7 correct · 6 wrong · 37 skipped */}
-                      <td className="py-3.5 px-4 text-right tabular-nums whitespace-nowrap">
+                      <td className="py-2.5 px-2 text-right tabular-nums whitespace-nowrap">
                         <div className="flex flex-col items-end gap-1">
-                          <div className="text-[12px] font-medium whitespace-nowrap">
+                          <div className="text-[11px] font-medium whitespace-nowrap">
                             <span className="text-emerald-600 font-semibold">{correct} correct</span>
                             <span className="text-slate-300 mx-1">·</span>
                             <span className="text-rose-500 font-semibold">{wrong} wrong</span>
@@ -794,7 +830,7 @@ export default function SessionsHistoryClient({
                             <span className="text-slate-500">{skipped} skipped</span>
                           </div>
                           {/* Mini Progress Ratio */}
-                          <div className="w-24 h-1.5 rounded-full bg-slate-100 overflow-hidden flex">
+                          <div className="w-20 h-1.5 rounded-full bg-slate-100 overflow-hidden flex">
                             <div
                               style={{ width: `${Math.min(100, (correct / totalQ) * 100)}%` }}
                               className="bg-emerald-500 h-full"
@@ -812,11 +848,12 @@ export default function SessionsHistoryClient({
                       </td>
 
                       {/* Action Buttons: Review, Retake, Delete */}
-                      <td className="py-3.5 pr-4 pl-2 text-right whitespace-nowrap">
+                      <td className="py-2.5 pr-3 pl-1 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-1.5">
                           <Link
                             href={reviewHref}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[6px] text-[12px] font-semibold text-[var(--accent)] hover:bg-blue-50 transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[6px] text-[12px] font-semibold bg-blue-50 text-[var(--accent)] hover:bg-blue-100 transition-colors"
                             title="Review test report and solutions"
                           >
                             <span>Review</span>
@@ -825,16 +862,20 @@ export default function SessionsHistoryClient({
 
                           <Link
                             href={retakeHref}
+                            onClick={(e) => e.stopPropagation()}
                             className="inline-flex items-center gap-1 px-2 py-1.5 rounded-[6px] text-[12px] font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
                             title="Retake this test"
                           >
                             <RotateCw className="w-3.5 h-3.5" />
-                            <span>Retake</span>
+                            <span className="hidden xl:inline">Retake</span>
                           </Link>
 
                           <button
                             type="button"
-                            onClick={() => setSessionToDelete(att)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSessionToDelete(att);
+                            }}
                             className="p-1.5 rounded-[6px] text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                             title="Delete this test session"
                           >
@@ -987,21 +1028,29 @@ interface ScoreLineChartProps {
 function ScoreLineChart({ points }: ScoreLineChartProps) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  const chartHeight = 160;
-  const paddingLeft = 40;
-  const paddingRight = 24;
+  const chartHeight = 180;
+  const paddingLeft = 45;
+  const paddingRight = 48;
   const paddingTop = 20;
-  const paddingBottom = 30;
+  const paddingBottom = 42;
 
-  // Find max marks ceiling for Y-axis (default 250)
-  const maxCeiling = useMemo(() => {
+  // Find max marks ceiling and min floor for Y-axis (allowing negative scores)
+  const { minFloor, maxCeiling } = useMemo(() => {
     let max = 250;
+    let min = 0;
     points.forEach((p) => {
-      const m = p.maxMarks || 250;
+      const totalQ = p.totalQuestions || (p.questions?.length) || (p.maxMarks ? Math.round(p.maxMarks / 5) : 50);
+      const m = totalQ * 5;
       if (m > max) max = m;
+      const s = p.totalMarks ?? 0;
+      if (s < min) min = s;
     });
-    return max;
+    // Snap min to clean 50 step below if negative
+    const floor = min < 0 ? Math.floor(min / 50) * 50 : 0;
+    return { minFloor: floor, maxCeiling: max };
   }, [points]);
+
+  const scoreRange = maxCeiling - minFloor;
 
   // Compute average score across points
   const avgScore = useMemo(() => {
@@ -1019,11 +1068,12 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
     if (points.length <= 1) return [];
     return points.map((p, idx) => {
       const x = paddingLeft + (idx / (points.length - 1)) * plotW;
-      const score = Math.max(0, p.totalMarks ?? 0);
-      const y = paddingTop + plotH - (score / maxCeiling) * plotH;
-      return { x, y, score: p.totalMarks ?? 0, attempt: p };
+      const rawScore = p.totalMarks ?? 0;
+      const ratio = scoreRange > 0 ? (rawScore - minFloor) / scoreRange : 0;
+      const y = paddingTop + plotH - ratio * plotH;
+      return { x, y, score: rawScore, attempt: p, idx };
     });
-  }, [points, maxCeiling, plotW, plotH, paddingLeft, paddingTop]);
+  }, [points, minFloor, scoreRange, plotW, plotH, paddingLeft, paddingTop]);
 
   // Construct SVG path string
   const pathD = useMemo(() => {
@@ -1033,7 +1083,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
     }, "");
   }, [coords]);
 
-  // Area path for gradient fill
+  // Area path for gradient fill down to zero or minFloor line
   const areaD = useMemo(() => {
     if (coords.length < 2) return "";
     const firstCoord = coords[0];
@@ -1041,12 +1091,29 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
     if (!firstCoord || !lastCoord) return "";
     const firstX = firstCoord.x;
     const lastX = lastCoord.x;
-    const bottomY = paddingTop + plotH;
-    return `${pathD} L ${lastX} ${bottomY} L ${firstX} ${bottomY} Z`;
-  }, [pathD, coords, paddingTop, plotH]);
+    const zeroRatio = scoreRange > 0 ? (0 - minFloor) / scoreRange : 0;
+    const baselineY = paddingTop + plotH - zeroRatio * plotH;
+    return `${pathD} L ${lastX} ${baselineY} L ${firstX} ${baselineY} Z`;
+  }, [pathD, coords, minFloor, scoreRange, paddingTop, plotH]);
 
   // Average line Y coordinate
-  const avgY = paddingTop + plotH - (Math.max(0, avgScore) / maxCeiling) * plotH;
+  const avgRatio = scoreRange > 0 ? (avgScore - minFloor) / scoreRange : 0;
+  const avgY = paddingTop + plotH - avgRatio * plotH;
+
+  // Selected X-axis tick indices to prevent overlapping labels
+  const xTickIndices = useMemo(() => {
+    const n = points.length;
+    if (n <= 6) return points.map((_, i) => i);
+    const step = Math.ceil(n / 5);
+    const indices: number[] = [];
+    for (let i = 0; i < n; i += step) {
+      indices.push(i);
+    }
+    if (indices[indices.length - 1] !== n - 1) {
+      indices.push(n - 1);
+    }
+    return indices;
+  }, [points]);
 
   return (
     <div className="relative w-full">
@@ -1064,7 +1131,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
         {/* Horizontal gridlines */}
         {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
           const y = paddingTop + plotH - ratio * plotH;
-          const label = Math.round(ratio * maxCeiling);
+          const label = Math.round(minFloor + ratio * scoreRange);
           return (
             <g key={ratio}>
               <line
@@ -1073,8 +1140,8 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
                 x2={totalW - paddingRight}
                 y2={y}
                 stroke="#E2E8F0"
-                strokeDasharray={ratio === 0 ? undefined : "3 3"}
-                strokeWidth={ratio === 0 ? "1.5" : "1"}
+                strokeDasharray={label === 0 ? undefined : "3 3"}
+                strokeWidth={label === 0 ? "1.5" : "1"}
               />
               <text
                 x={paddingLeft - 8}
@@ -1102,9 +1169,9 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
             />
             <text
               x={totalW - paddingRight}
-              y={avgY - 5}
+              y={avgY - 6}
               textAnchor="end"
-              className="text-[10px] fill-emerald-600 font-bold font-sans"
+              className="text-[11px] fill-emerald-600 font-bold font-sans"
             >
               Avg: {avgScore} marks
             </text>
@@ -1150,7 +1217,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
                 cx={pt.x}
                 cy={pt.y}
                 r={isHovered ? "5.5" : "4"}
-                fill={isHovered ? "#1D4ED8" : "#2563EB"}
+                fill={isHovered ? "#1D4ED8" : pt.score < 0 ? "#E11D48" : "#2563EB"}
                 stroke="#FFFFFF"
                 strokeWidth="2"
                 className="transition-all duration-150"
@@ -1158,6 +1225,35 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
             </g>
           );
         })}
+
+        {/* Visible X-Axis Labels */}
+        {coords.length > 0 &&
+          xTickIndices.map((ptIdx) => {
+            const pt = coords[ptIdx];
+            if (!pt) return null;
+            const dt = splitDateTimeIndian(pt.attempt.submittedAt);
+            const labelText = dt.date !== "—" ? dt.date.split(" ").slice(0, 2).join(" ") : `Mock ${ptIdx + 1}`;
+            return (
+              <g key={`xtick-${ptIdx}`}>
+                <line
+                  x1={pt.x}
+                  y1={paddingTop + plotH}
+                  x2={pt.x}
+                  y2={paddingTop + plotH + 5}
+                  stroke="#CBD5E1"
+                  strokeWidth="1"
+                />
+                <text
+                  x={pt.x}
+                  y={paddingTop + plotH + 18}
+                  textAnchor="middle"
+                  className="text-[10px] fill-slate-500 font-medium"
+                >
+                  {labelText}
+                </text>
+              </g>
+            );
+          })}
       </svg>
 
       {/* Tooltip on Hover */}
@@ -1165,6 +1261,8 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
         (() => {
           const hoveredCoord = coords[hoveredIdx];
           if (!hoveredCoord) return null;
+          const totalQ = hoveredCoord.attempt.totalQuestions || 50;
+          const maxM = totalQ * 5;
           return (
             <div
               className="absolute z-30 pointer-events-none bg-slate-900 text-white text-[12px] rounded-[8px] p-2.5 shadow-xl max-w-xs space-y-1 transition-all duration-150 -translate-x-1/2 bottom-[80%]"
@@ -1176,9 +1274,17 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
                 {hoveredCoord.attempt.testTitle}
               </p>
               <div className="flex items-center gap-2 text-[11px] text-slate-300">
-                <span>Score: <strong className="text-emerald-400">{hoveredCoord.score}</strong>/{hoveredCoord.attempt.maxMarks || 250}</span>
+                <span>
+                  Score:{" "}
+                  <strong className={hoveredCoord.score < 0 ? "text-rose-400 font-bold" : "text-emerald-400 font-bold"}>
+                    {hoveredCoord.score}
+                  </strong>
+                  /{maxM}
+                </span>
                 <span>·</span>
-                <span>Acc: <strong className="text-blue-400">{hoveredCoord.attempt.accuracyPercentage}%</strong></span>
+                <span>
+                  Acc: <strong className="text-blue-400 font-bold">{hoveredCoord.attempt.accuracyPercentage}%</strong>
+                </span>
               </div>
               <p className="text-[10px] text-slate-400">
                 {formatDateTimeIndian(hoveredCoord.attempt.submittedAt || new Date())}

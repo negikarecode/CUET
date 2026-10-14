@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import ProfileClient from "@/components/profile/ProfileClient";
 import {
@@ -14,6 +13,7 @@ import { calculateCollegeReadiness } from "@/lib/college-benchmarks";
 import { MASTER_TROPHIES, calculateActiveStreak } from "@/lib/gamification";
 import { StreamOption } from "@/types/database";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
+import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
 
 export const metadata: Metadata = {
   title: "Aspirant Profile & Readiness | CUET AI-Prep",
@@ -61,7 +61,7 @@ export default async function ProfilePage() {
     } = await supabase.auth.getUser();
 
     if (!authUser && !cuetAuth) {
-      redirect("/signup");
+      // Allow guest candidate mode to proceed with initialProfile; client hydrates from local storage
     }
 
     if (authUser) {
@@ -226,24 +226,33 @@ export default async function ProfilePage() {
     console.warn("Supabase profile page data resolution warning:", err);
   }
 
-  // 3. Calculate 150-Question Calibration Progress & College Benchmark
-  const calibrationProgress = Math.min(100, Math.round((totalAttempts / 150) * 100));
-  const isAiMentorUnlocked = totalAttempts >= 150;
+  // 3. Authoritative 150-Question Diagnostic Calibration & Cutoff Gap
+  const authDiagnostic = computeAuthoritativeDiagnosticProgress({
+    totalAttempted: totalAttempts,
+    completedCyclesCount: 0,
+  });
+
+  const latestScore = serverAttempts.length > 0 ? serverAttempts[0]?.totalMarks : 0;
+  const avgScore = serverAttempts.length > 0
+    ? Math.round(serverAttempts.reduce((sum, a) => sum + (a.totalMarks || 0), 0) / serverAttempts.length)
+    : 0;
+  const currentScore = latestScore ?? avgScore ?? 0;
 
   const collegeCutoff = calculateCollegeReadiness(
     initialProfile.targetCollege,
     initialProfile.targetUniversity,
     accuracyPercentage,
-    totalAttempts
+    totalAttempts,
+    currentScore
   );
 
   const diagnostic: DiagnosticReadiness = {
-    totalAttempts,
+    totalAttempts: authDiagnostic.currentCycleQuestionCount,
     correctAttempts,
     accuracyPercentage,
     calibrationThreshold: 150,
-    calibrationProgress,
-    isAiMentorUnlocked,
+    calibrationProgress: authDiagnostic.unlockProgressPercentage,
+    isAiMentorUnlocked: authDiagnostic.isUnlocked,
     predictedPercentile: collegeCutoff.predictedPercentile,
     collegeCutoff,
   };

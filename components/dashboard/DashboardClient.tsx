@@ -162,8 +162,33 @@ export default function DashboardClient({
   const accuracyPercentage =
     totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0;
 
-  // Single source for score: CUET marking scheme (+5 correct, -1 incorrect)
-  const currentScore = totalAttempted > 0 ? calculateCUETScore(correctCount, totalAttempted).score : 0;
+  // Deduplicated attempts sorted newest first for authoritative latest session score
+  const deduplicatedAttempts = useMemo(() => {
+    const list = testAttempts || [];
+    const seen = new Set<string>();
+    const unique: RecordedTestAttempt[] = [];
+    list.forEach((att) => {
+      const canonicalKey = stringToUuid(att.testId || att.id || att.testTitle || "");
+      const normKey = `${(att.subject || "").toLowerCase().trim()}:::${(att.testTitle || "").toLowerCase().trim()}`;
+      if (!seen.has(canonicalKey) && !seen.has(normKey)) {
+        seen.add(canonicalKey);
+        seen.add(normKey);
+        unique.push(att);
+      }
+    });
+    return unique.sort(
+      (a, b) => new Date(b.submittedAt || 0).getTime() - new Date(a.submittedAt || 0).getTime()
+    );
+  }, [testAttempts]);
+
+  const latestSession = deduplicatedAttempts.length > 0 ? deduplicatedAttempts[0] : null;
+  const latestSessionScore = latestSession
+    ? (latestSession.totalMarks ?? 0)
+    : (totalAttempted > 0 ? calculateCUETScore(correctCount, totalAttempted).score : 0);
+  const latestSessionMaxMarks = latestSession
+    ? (latestSession.totalQuestions ? latestSession.totalQuestions * 5 : (latestSession.maxMarks || 250))
+    : MARKING_SCHEME.MAX_SCORE_PER_SUBJECT;
+  const latestTestTitle = latestSession?.testTitle;
 
   // Authoritative diagnostic cycle progress driving unlock status, next-action card & cycles
   const diagnosticProgress = useMemo(() => {
@@ -313,8 +338,9 @@ export default function DashboardClient({
       {/* 3. Four stat cards (Latest score, Accuracy, Questions attempted, Streak) */}
       <section aria-label="Overview statistics">
         <TopMetricsRow
-          score={currentScore}
-          maxScore={MARKING_SCHEME.MAX_SCORE_PER_SUBJECT}
+          score={latestSessionScore}
+          maxScore={latestSessionMaxMarks}
+          testTitle={latestTestTitle}
           accuracyPercentage={accuracyPercentage}
           correctCount={correctCount}
           totalAttempted={totalAttempted}

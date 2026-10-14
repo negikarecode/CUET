@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import WeaknessRadarClient, {
@@ -61,7 +60,7 @@ export default async function WeaknessRadarPage() {
     } = await supabase.auth.getUser();
 
     if (!authUser && !cuetAuth) {
-      redirect("/signup?redirect=/dashboard/radar");
+      // Allow guest candidate mode to proceed with serverData; client hydrates from local storage
     }
 
     if (authUser) {

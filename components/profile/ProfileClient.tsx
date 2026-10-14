@@ -26,6 +26,12 @@ import {
   Clock,
   ArrowRight,
   Shield,
+  Activity,
+  Calendar,
+  Download,
+  Trash2,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import {
   ProfileInitialData,
@@ -34,6 +40,7 @@ import {
 } from "@/types/profile";
 import { StreamOption } from "@/types/database";
 import { calculateCollegeReadiness } from "@/lib/college-benchmarks";
+import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { computeAnalyticsFromAttempts } from "@/lib/analytics";
 import {
@@ -160,25 +167,82 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       ? diagnostic.accuracyPercentage
       : clientAccuracy;
 
+  // User settings: Target Exam Date and Leaderboard Privacy
+  const [examDate, setExamDate] = useState<string>("May 2026");
+  const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
+
+  useEffect(() => {
+    try {
+      const savedDate = localStorage.getItem("cuet_target_exam_date");
+      if (savedDate) setExamDate(savedDate);
+      const savedAnon = localStorage.getItem("cuet_leaderboard_anonymous");
+      if (savedAnon === "true") setIsAnonymous(true);
+    } catch {
+      // Ignore
+    }
+  }, []);
+
+  const handleExamDateChange = (val: string) => {
+    setExamDate(val);
+    try {
+      localStorage.setItem("cuet_target_exam_date", val);
+      setStatusMessage({ type: "success", text: `Target exam season set to ${val}.` });
+      setTimeout(() => setStatusMessage(null), 3000);
+    } catch {
+      // Ignore
+    }
+  };
+
+  const handleToggleLeaderboardPrivacy = () => {
+    const nextVal = !isAnonymous;
+    setIsAnonymous(nextVal);
+    try {
+      localStorage.setItem("cuet_leaderboard_anonymous", String(nextVal));
+      setStatusMessage({
+        type: "success",
+        text: nextVal
+          ? "Anonymous mode enabled on Leaderboard (initials only)."
+          : "Public mode enabled on Leaderboard.",
+      });
+      setTimeout(() => setStatusMessage(null), 3000);
+    } catch {
+      // Ignore
+    }
+  };
+
+  const authDiagnostic = useMemo(() => {
+    return computeAuthoritativeDiagnosticProgress({
+      totalAttempted: effectiveTotalAttempts,
+      completedCyclesCount: 0,
+    });
+  }, [effectiveTotalAttempts]);
+
+  const clientLatestScore = testAttempts && testAttempts.length > 0 ? testAttempts[0]?.totalMarks : 0;
+  const clientAvgScore = testAttempts && testAttempts.length > 0
+    ? Math.round(testAttempts.reduce((sum, a) => sum + (a.totalMarks || 0), 0) / testAttempts.length)
+    : 0;
+  const effectiveCurrentScore = clientLatestScore ?? clientAvgScore ?? 0;
+
   const effectiveDiagnostic = useMemo(() => {
-    const isUnlocked = effectiveTotalAttempts >= 150;
-    const progress = Math.min(100, Math.round((effectiveTotalAttempts / 150) * 100));
     return {
       ...diagnostic,
-      totalAttempts: effectiveTotalAttempts,
+      totalAttempts: Math.min(150, authDiagnostic.currentCycleQuestionCount),
       accuracyPercentage: effectiveAccuracy,
-      calibrationProgress: progress,
-      isAiMentorUnlocked: isUnlocked,
+      calibrationProgress: authDiagnostic.unlockProgressPercentage,
+      isAiMentorUnlocked: authDiagnostic.isUnlocked,
     };
-  }, [diagnostic, effectiveTotalAttempts, effectiveAccuracy]);
+  }, [diagnostic, authDiagnostic, effectiveAccuracy]);
 
   // Recalculate College Benchmark dynamically whenever target college or university changes
-  const collegeBenchmark = calculateCollegeReadiness(
-    profile.targetCollege,
-    profile.targetUniversity,
-    effectiveDiagnostic.accuracyPercentage,
-    effectiveDiagnostic.totalAttempts
-  );
+  const collegeBenchmark = useMemo(() => {
+    return calculateCollegeReadiness(
+      profile.targetCollege,
+      profile.targetUniversity,
+      effectiveDiagnostic.accuracyPercentage,
+      effectiveTotalAttempts,
+      effectiveCurrentScore
+    );
+  }, [profile.targetCollege, profile.targetUniversity, effectiveDiagnostic.accuracyPercentage, effectiveTotalAttempts, effectiveCurrentScore]);
 
   // Format stream badge color
   const streamBadgeColors: Record<StreamOption, { bg: string; text: string; border: string }> = {
@@ -385,6 +449,52 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       router.push("/");
       router.refresh();
     });
+  };
+
+  // Export User Preparation History
+  const handleExportData = () => {
+    try {
+      const exportPayload = {
+        profile,
+        attempts: testAttempts || [],
+        settings: {
+          examDate,
+          isAnonymous,
+          pushEnabled,
+        },
+        exportedAt: new Date().toISOString(),
+      };
+      const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `cuet-prep-data-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setStatusMessage({ type: "success", text: "Prep data successfully exported as JSON file." });
+      setTimeout(() => setStatusMessage(null), 4000);
+    } catch {
+      setStatusMessage({ type: "error", text: "Failed to export prep data." });
+    }
+  };
+
+  // Reset Local Practice Data
+  const handleResetData = () => {
+    if (confirm("Are you sure you want to clear your local practice attempts from this browser? This will not affect your registered account.")) {
+      try {
+        useTestStore.setState({ testAttempts: [] });
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("cbt_completed_attempts");
+          localStorage.removeItem("cuet_user_attempts");
+        }
+        setStatusMessage({ type: "info", text: "Local practice session data cleared." });
+        setTimeout(() => setStatusMessage(null), 4000);
+      } catch {
+        setStatusMessage({ type: "error", text: "Failed to reset practice data." });
+      }
+    }
   };
 
 
@@ -715,28 +825,40 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               {/* Comparison Visual Meter */}
               <div className="space-y-1.5 pt-1">
                 <div className="flex justify-between text-[11px] font-bold text-slate-700 font-mono">
-                  <span>Predicted: {collegeBenchmark.predictedPercentile}%tile</span>
+                  <span>
+                    {(testAttempts?.length || 0) >= 3
+                      ? `Predicted: ${collegeBenchmark.predictedPercentile}%tile`
+                      : "Percentile unlocks after 3 mocks"}
+                  </span>
                   <span>Cutoff: {collegeBenchmark.historicalCutoffPercentile}%tile ({collegeBenchmark.targetScoreFormatted})</span>
                 </div>
 
                 <div className="relative w-full h-3.5 bg-slate-100 rounded-full overflow-hidden">
-                  {/* Predicted Bar */}
-                  <div
-                    className={`h-full rounded-full transition-all duration-500 ${
-                      collegeBenchmark.status === "surpassed"
-                        ? "bg-emerald-500"
-                        : collegeBenchmark.status === "striking_distance"
-                        ? "bg-amber-500"
-                        : "bg-blue-600"
-                    }`}
-                    style={{ width: `${Math.min(100, collegeBenchmark.predictedPercentile)}%` }}
-                  />
-                  {/* Cutoff Target Marker Line */}
-                  <div
-                    className="absolute top-0 bottom-0 w-1 bg-slate-900 z-10"
-                    style={{ left: `${Math.min(99, collegeBenchmark.historicalCutoffPercentile)}%` }}
-                    title={`Target Cutoff: ${collegeBenchmark.historicalCutoffPercentile}%`}
-                  />
+                  {(testAttempts?.length || 0) >= 3 ? (
+                    <>
+                      {/* Predicted Bar */}
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          collegeBenchmark.status === "surpassed"
+                            ? "bg-emerald-500"
+                            : collegeBenchmark.status === "striking_distance"
+                            ? "bg-amber-500"
+                            : "bg-blue-600"
+                        }`}
+                        style={{ width: `${Math.min(100, collegeBenchmark.predictedPercentile)}%` }}
+                      />
+                      {/* Cutoff Target Marker Line */}
+                      <div
+                        className="absolute top-0 bottom-0 w-1 bg-slate-900 z-10"
+                        style={{ left: `${Math.min(99, collegeBenchmark.historicalCutoffPercentile)}%` }}
+                        title={`Target Cutoff: ${collegeBenchmark.historicalCutoffPercentile}%`}
+                      />
+                    </>
+                  ) : (
+                    <div className="h-full bg-slate-200/60 flex items-center justify-center text-[10px] text-slate-500 font-medium">
+                      {(testAttempts?.length || 0)} of 3 completed mocks
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -745,56 +867,47 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               </p>
             </div>
 
-            {/* 3. Persistent Red Zones */}
-            <div className="space-y-2.5">
+            {/* 3. Compact Exam Readiness & Health Card */}
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-                  <AlertTriangle className="w-3.5 h-3.5 text-rose-500" />
-                  <span>Persistent Red Zones (Top 3 Weak Spots)</span>
-                </span>
-                <span className="text-[10px] text-slate-400 font-mono font-semibold">
-                  Time Sinks
+                <div className="flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-indigo-600" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                    Exam Readiness & Health
+                  </span>
+                </div>
+                <span
+                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider font-mono ${
+                    effectiveDiagnostic.isAiMentorUnlocked
+                      ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                      : "bg-blue-100 text-blue-800 border border-blue-200"
+                  }`}
+                >
+                  {effectiveDiagnostic.isAiMentorUnlocked ? "Exam Calibrated" : "Calibration Stage"}
                 </span>
               </div>
 
-              {weakTopics.length === 0 ? (
-                <div className="p-4 rounded-2xl bg-slate-50 border border-dashed border-slate-200 text-center text-xs font-medium text-slate-500">
-                  No chronic weak spots detected yet. Start solving mocks to populate your topic radar!
+              {weakTopics.length > 0 ? (
+                <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/70">
+                  <div className="min-w-0 pr-2">
+                    <span className="text-[10px] uppercase font-bold text-rose-600 tracking-wider block">
+                      Priority Focus Topic
+                    </span>
+                    <p className="text-xs font-bold text-slate-900 truncate">
+                      {weakTopics[0]?.microTopic || weakTopics[0]?.chapter}
+                    </p>
+                    <p className="text-[11px] text-slate-500 truncate">
+                      {weakTopics[0]?.subject} · {weakTopics[0]?.totalAttempts || 0} questions
+                    </p>
+                  </div>
+                  <span className="text-xs font-bold text-rose-700 font-mono bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200 shrink-0">
+                    {weakTopics[0]?.accuracyPercentage}% Acc
+                  </span>
                 </div>
               ) : (
-                <div className="space-y-2">
-                  {weakTopics.map((topic, idx) => (
-                    <div
-                      key={idx}
-                      className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between gap-3 hover:bg-slate-100/60 transition-colors"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-4 h-4 rounded-full bg-slate-800 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
-                            {idx + 1}
-                          </span>
-                          <span className="text-xs font-bold text-slate-800 truncate">
-                            {topic.microTopic}
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-500 font-medium truncate pl-5">
-                          {topic.subject} • {topic.chapter}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[10px] font-bold text-rose-700 font-mono bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200/70">
-                          {topic.accuracyPercentage}% Acc
-                        </span>
-                        {topic.fatalTimeSinks > 0 && (
-                          <span className="text-[10px] font-bold text-slate-600 font-mono bg-white px-1.5 py-0.5 rounded-md border border-slate-200">
-                            {topic.fatalTimeSinks} Sinks
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <p className="text-xs text-slate-500 italic py-1">
+                  No critical red zones detected. Practice consistently across all domain subjects.
+                </p>
               )}
             </div>
           </div>
@@ -871,13 +984,13 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               <div>
                 <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                   {profile.isPremium
-                    ? "CUET AI Practice Pass (Valid until July 31)"
+                    ? "CUET AI Practice Pass (Active)"
                     : "Free Tier (1 Domain Mock / Day)"}
                 </h3>
                 <p className="text-xs text-slate-600 font-medium mt-1 leading-relaxed">
                   {profile.isPremium
-                    ? "Unlimited NTA CBT full mock simulations, instant NCERT mistake decrypter, and personalized Sunday ritual reports are fully unlocked."
-                    : "Upgrade to unlock unlimited 50-Q NTA simulations, zero-token AI repair quizzes, and target college cutoff projections."}
+                    ? "Unlimited full-length CUET mock simulations, targeted weak-topic practice drills, and All-India standing analytics are active."
+                    : "Free Tier includes 1 official mock test every 24 hours with complete score breakdown and answer key explanations. Upgrade to unlock unlimited simulations."}
                 </p>
               </div>
 
@@ -892,6 +1005,56 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                   />
                 </div>
               )}
+            </div>
+
+            {/* Target Exam Date Setting */}
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/70 shadow-xs flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+                  <Calendar className="w-4 h-4 text-indigo-600" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900">Target Exam Season</h4>
+                  <p className="text-[10px] text-slate-500 font-medium">CUET UG Examination Cycle</p>
+                </div>
+              </div>
+              <select
+                value={examDate}
+                onChange={(e) => handleExamDateChange(e.target.value)}
+                className="px-2.5 py-1.5 text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl text-slate-800 cursor-pointer shadow-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              >
+                <option value="May 2026">CUET UG May 2026</option>
+                <option value="May 2027">CUET UG May 2027</option>
+              </select>
+            </div>
+
+            {/* Leaderboard Privacy Toggle */}
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/70 shadow-xs flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                  {isAnonymous ? <EyeOff className="w-4 h-4 text-amber-600" /> : <Eye className="w-4 h-4 text-slate-600" />}
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900">Leaderboard Privacy</h4>
+                  <p className="text-[10px] text-slate-500 font-medium">
+                    {isAnonymous ? "Anonymous Mode (Initials only on All-India ranking)" : "Public (Full name displayed on rankings)"}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleToggleLeaderboardPrivacy}
+                className={`w-11 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${
+                  isAnonymous ? "bg-amber-600" : "bg-slate-200"
+                }`}
+                aria-label="Toggle anonymous mode"
+              >
+                <div
+                  className={`w-5 h-5 rounded-full bg-white shadow-xs transition-transform ${
+                    isAnonymous ? "translate-x-5" : "translate-x-0"
+                  }`}
+                />
+              </button>
             </div>
 
             {/* Study Alerts & Web Push Preference */}
@@ -1013,14 +1176,36 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setIsSignOutModalOpen(true)}
-          className="px-5 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold text-xs border border-rose-200 transition-all flex items-center justify-center gap-2 cursor-pointer self-start sm:self-auto"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
-        </button>
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <button
+            type="button"
+            onClick={handleExportData}
+            className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+            title="Download test attempts and prep settings as JSON"
+          >
+            <Download className="w-3.5 h-3.5 text-slate-500" />
+            <span>Export Prep Data</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleResetData}
+            className="px-3.5 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold text-xs border border-rose-200/80 transition-colors flex items-center gap-1.5 cursor-pointer"
+            title="Clear stored mock sessions from this browser"
+          >
+            <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+            <span>Reset Practice Data</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsSignOutModalOpen(true)}
+            className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer self-start sm:self-auto"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Sign Out</span>
+          </button>
+        </div>
       </section>
 
       {/* ──────────────────────────────────────────────────────────── */}

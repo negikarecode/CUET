@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -67,7 +67,50 @@ import { DoubtSolverDrawer } from "@/components/dashboard/DoubtSolverDrawer";
 import { WeeklyReportModal } from "@/components/dashboard/WeeklyReportModal";
 import { DailyStudyPlanCard } from "@/components/dashboard/DailyStudyPlanCard";
 import { RetentionLeaderboardCard } from "@/components/dashboard/RetentionLeaderboardCard";
-import { HelpCircle, ShieldCheck } from "lucide-react";
+import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
+import { HelpCircle, ShieldCheck, TrendingDown, Minus } from "lucide-react";
+
+export type TopicStatusType = "Needs work" | "Developing" | "Strong" | "Low confidence";
+
+export function getTopicStatus(accuracy: number, attempts: number): {
+  label: TopicStatusType;
+  badgeClass: string;
+  ruleTooltip: string;
+} {
+  if (attempts < 5) {
+    return {
+      label: "Low confidence",
+      badgeClass: "bg-amber-50 text-amber-700 border-amber-200",
+      ruleTooltip: "Fewer than 5 questions: sample size too small for diagnostic confidence.",
+    };
+  }
+  if (accuracy < 40) {
+    return {
+      label: "Needs work",
+      badgeClass: "bg-rose-50 text-rose-700 border-rose-200",
+      ruleTooltip: "Under 40% accuracy across 5+ questions: requires targeted concept repair.",
+    };
+  }
+  if (accuracy <= 70) {
+    return {
+      label: "Developing",
+      badgeClass: "bg-blue-50 text-blue-700 border-blue-200",
+      ruleTooltip: "40% to 70% accuracy: foundational principles understood, needs application drills.",
+    };
+  }
+  if (attempts >= 8) {
+    return {
+      label: "Strong",
+      badgeClass: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      ruleTooltip: "Over 70% accuracy with 8+ questions: verified core strength.",
+    };
+  }
+  return {
+    label: "Developing",
+    badgeClass: "bg-blue-50 text-blue-700 border-blue-200",
+    ruleTooltip: "Over 70% accuracy, but requires 8+ questions to qualify as Strong.",
+  };
+}
 
 const SUBJECT_ICON_MAP: Record<string, React.ElementType> = {
   Calculator,
@@ -371,18 +414,10 @@ export default function WeaknessRadarClient({
     }
   }, []);
 
-  // Auth check
+  // Candidates can view Weakness Radar with local or server session data
   useEffect(() => {
-    if (isClient) {
-      const isAuth = Boolean(
-        (storeUser?.isLoggedIn && storeUser?.name && storeUser?.id !== "guest") ||
-        (initialData?.user && initialData.user.id !== "guest")
-      );
-      if (!isAuth) {
-        router.replace("/signup?redirect=/dashboard/radar");
-      }
-    }
-  }, [isClient, storeUser, initialData, router]);
+    // No redirect: guest candidates can view report based on their completed test sessions
+  }, []);
 
   const activeStream =
     (storeUser.preferredStream || initialData.user.targetStream || "science").toLowerCase();
@@ -547,17 +582,43 @@ export default function WeaknessRadarClient({
       ? rawStrengthList
       : rawStrengthList.filter((t) => normalizeSubject(t.subject).key === selectedRadarSubject);
 
-  // Exact cycle calculation: 150 qualifying questions per cycle
-  // Fixes Cycle 2: 150/150 bug
-  const completedCycleCount = diagnosticCycles.filter((c) => c.status === "completed").length;
-  const currentCycleNumber = completedCycleCount + 1;
-  const effectiveCycleQuestionCount =
-    completedCycleCount > 0
-      ? (totalAttempted % 150)
-      : Math.min(150, totalAttempted);
+  // Authoritative cycle calculation: single source of truth shared with dashboard
+  const authDiagnostic = useMemo(() => {
+    return computeAuthoritativeDiagnosticProgress({
+      totalAttempted,
+      completedCyclesCount: diagnosticCycles.length,
+    });
+  }, [totalAttempted, diagnosticCycles.length]);
 
-  const isCurrentCycleComplete = totalAttempted >= 150 && completedCycleCount >= 1;
-  const isCalibrationLocked = totalAttempted < 150;
+  const currentCycleNumber = authDiagnostic.currentCycleNumber;
+  const effectiveCycleQuestionCount = authDiagnostic.currentCycleQuestionCount;
+  const isCurrentCycleComplete = authDiagnostic.isUnlocked;
+  const isCalibrationLocked = !authDiagnostic.isUnlocked;
+
+  // Verified Core Strengths require minimum 8+ questions and 80%+ accuracy
+  const qualifiedStrengths = useMemo(() => {
+    return strengthList.filter((s) => s.attemptsCount >= 8 && s.accuracyPercentage >= 80);
+  }, [strengthList]);
+
+  // Priority sort: topics with >= 5 attempts sorted by lowest accuracy first; < 5 attempts placed at bottom
+  const sortedTopics = useMemo(() => {
+    return [...weaknessRadar].sort((a, b) => {
+      const aAdequate = a.attemptsCount >= 5;
+      const bAdequate = b.attemptsCount >= 5;
+      if (aAdequate && !bAdequate) return -1;
+      if (!aAdequate && bAdequate) return 1;
+      if (aAdequate && bAdequate) {
+        if (a.accuracyPercentage !== b.accuracyPercentage) {
+          return a.accuracyPercentage - b.accuracyPercentage;
+        }
+        return b.attemptsCount - a.attemptsCount;
+      }
+      if (b.attemptsCount !== a.attemptsCount) {
+        return b.attemptsCount - a.attemptsCount;
+      }
+      return a.accuracyPercentage - b.accuracyPercentage;
+    });
+  }, [weaknessRadar]);
 
   // Synchronize missed questions with spaced repetition
   useEffect(() => {
@@ -881,9 +942,9 @@ export default function WeaknessRadarClient({
 
   return (
     <div className="space-y-6">
-      {/* 1. TOP HEADER & NAVIGATION */}
-      <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-7 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="space-y-1">
+      {/* 1. TOP HEADER & TOOLBAR ROW */}
+      <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-7 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
               href="/dashboard"
@@ -892,73 +953,60 @@ export default function WeaknessRadarClient({
             >
               <ArrowLeft className="w-4 h-4" strokeWidth={1.75} />
             </Link>
-            <h1 className="text-[28px] font-semibold text-[var(--text)] leading-[1.25]">
-              Weakness report
-            </h1>
-          </div>
-          <p className="text-[14px] text-[var(--text-secondary)] pl-11">
-            Topic-level accuracy, error patterns, and targeted practice.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
-          {/* Doubt Solver Drawer CTA */}
-          <button
-            type="button"
-            onClick={() => setIsDoubtDrawerOpen(true)}
-            className="inline-flex items-center gap-1.5 h-10 px-3 rounded-[8px] bg-white hover:bg-slate-50 text-[var(--text)] border border-[var(--border-strong)] text-[14px] font-medium transition-colors cursor-pointer"
-          >
-            <Brain className="w-4 h-4 text-[var(--text-muted)]" strokeWidth={1.75} />
-            <span>Ask doubt solver</span>
-          </button>
-
-          {/* Weekly Report CTA */}
-          <button
-            type="button"
-            onClick={() => setIsWeeklyReportOpen(true)}
-            className="inline-flex items-center gap-1.5 h-10 px-3 rounded-[8px] bg-white hover:bg-slate-50 text-[var(--text)] border border-[var(--border-strong)] text-[14px] font-medium transition-colors cursor-pointer"
-          >
-            <Activity className="w-4 h-4 text-[var(--text-muted)]" strokeWidth={1.75} />
-            <span>Weekly report</span>
-          </button>
-
-          {/* Weekly Report CTA */}
-          <button
-            type="button"
-            onClick={() => setIsWeeklyReportOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold text-xs shadow-xs transition-all cursor-pointer"
-          >
-            <Activity className="w-4 h-4 text-blue-600" />
-            <span>Weekly Report</span>
-          </button>
-
-          {/* Cycle Badge Indicator */}
-          <div className="px-3.5 py-2 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center gap-2.5 shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <div className="text-left font-mono">
-              <span className="text-[10px] font-bold uppercase text-emerald-800 block tracking-wider">
-                DIAGNOSTIC CYCLE {currentCycleNumber}
-              </span>
-              <span className="text-xs font-semibold text-emerald-700">
-                {effectiveCycleQuestionCount} / 150 QUESTIONS
-              </span>
+            <div>
+              <h1 className="text-[26px] font-bold text-[var(--text)] tracking-tight whitespace-nowrap">
+                Weakness Report
+              </h1>
+              <p className="text-[13px] text-[var(--text-secondary)]">
+                Topic-level accuracy, error patterns, and targeted practice.
+              </p>
             </div>
           </div>
 
-          {/* Cycle History Selector */}
-          <CycleHistorySelector
-            currentCycleNumber={currentCycleNumber}
-            currentCycleQuestionCount={effectiveCycleQuestionCount}
-            diagnosticCycles={diagnosticCycles}
-            onSelectCycle={(cycle) => setSelectedCycleForReport(cycle)}
-          />
+          {/* Cycle Badge Indicator (Single source of truth) */}
+          <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-semibold shrink-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Cycle {currentCycleNumber} · {effectiveCycleQuestionCount} / 150 Qs</span>
+          </div>
+        </div>
+
+        {/* Toolbar row under the title */}
+        <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-100 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              onClick={() => setIsDoubtDrawerOpen(true)}
+              className="inline-flex items-center gap-1.5 h-9 px-3 rounded-[8px] bg-white hover:bg-slate-50 text-[var(--text)] border border-[var(--border)] text-[13px] font-medium transition-colors cursor-pointer"
+            >
+              <Brain className="w-4 h-4 text-indigo-600" />
+              <span>Ask doubt solver</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsWeeklyReportOpen(true)}
+              className="inline-flex items-center gap-1.5 h-9 px-3 rounded-[8px] bg-white hover:bg-slate-50 text-[var(--text)] border border-[var(--border)] text-[13px] font-medium transition-colors cursor-pointer"
+            >
+              <Activity className="w-4 h-4 text-emerald-600" />
+              <span>Weekly report</span>
+            </button>
+
+            {diagnosticCycles.length > 0 && (
+              <CycleHistorySelector
+                currentCycleNumber={currentCycleNumber}
+                currentCycleQuestionCount={effectiveCycleQuestionCount}
+                diagnosticCycles={diagnosticCycles}
+                onSelectCycle={(cycle) => setSelectedCycleForReport(cycle)}
+              />
+            )}
+          </div>
 
           <Link
             href="/dashboard/mocks"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all"
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-[8px] bg-[var(--accent)] hover:bg-blue-600 text-white text-[13px] font-semibold shadow-xs transition-colors"
           >
             <Play className="w-3.5 h-3.5 fill-white" />
-            <span>Take Full CBT Mock</span>
+            <span>Take CBT Mock</span>
           </Link>
         </div>
       </div>
@@ -1251,8 +1299,7 @@ export default function WeaknessRadarClient({
                   {prioritizedCandidate.chapter}
                 </h2>
                 <p className="text-xs sm:text-sm font-semibold text-slate-500 font-mono mt-0.5">
-                  {prioritizedCandidate.accuracyPercentage}% Accuracy · {prioritizedCandidate.attemptsCount} Attempts
-                  {prioritizedCandidate.avgTimeSeconds ? ` · Avg response time: ${prioritizedCandidate.avgTimeSeconds}s / Q` : ""}
+                  {prioritizedCandidate.accuracyPercentage}% Accuracy · {prioritizedCandidate.attemptsCount} Questions Attempted
                 </p>
               </div>
 
@@ -1318,15 +1365,21 @@ export default function WeaknessRadarClient({
 
       {/* 3. REAL DIAGNOSTIC SUMMARY DASHBOARD REPORT (SECTIONS 18 & 25) */}
       <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-7 shadow-sm space-y-5">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-          <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+        <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+          <div className="flex items-center gap-2">
             <h2 className="text-[20px] font-semibold text-[var(--text)] leading-[1.25]">
               Diagnostic summary
             </h2>
-            <span className="text-[14px] text-[var(--text-muted)] tabular-nums">
-              {totalAttempted} questions analyzed
-            </span>
+            <div
+              className="group relative cursor-pointer"
+              title="Valid attempt: A unique question where an option was submitted across completed test sessions."
+            >
+              <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600 transition-colors" />
+            </div>
           </div>
+          <span className="text-[14px] text-[var(--text-muted)] tabular-nums pl-4">
+            {totalAttempted} questions analyzed
+          </span>
         </div>
 
         {/* Summary Row */}
@@ -1345,7 +1398,7 @@ export default function WeaknessRadarClient({
 
           <div className="app-card space-y-1">
             <span className="text-[14px] font-medium text-[var(--text-secondary)]">Main issue</span>
-            <p className="text-[16px] font-semibold text-[var(--text)] truncate mt-1">
+            <p className="text-[15px] font-semibold text-[var(--text)] whitespace-normal break-words mt-1">
               {summaryReport.biggestWeakness?.topic || "None detected"}
             </p>
             <p className="text-[12px] text-[var(--text-muted)]">
@@ -1353,6 +1406,41 @@ export default function WeaknessRadarClient({
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Verified Core Strengths Summary (Qualified topics only) */}
+      <div className="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6 shadow-sm space-y-3.5">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="flex items-center gap-2">
+            <Award className="w-4 h-4 text-emerald-600" />
+            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Verified Core Strengths</h3>
+          </div>
+          <span
+            className="text-[11px] text-slate-500 font-medium cursor-help"
+            title="Qualification rule: At least 8 questions attempted in topic with 80%+ accuracy"
+          >
+            Rule: ≥8 Qs &amp; ≥80% accuracy
+          </span>
+        </div>
+        {qualifiedStrengths.length === 0 ? (
+          <p className="text-[13px] text-slate-500 italic py-1">
+            Not enough data yet. Complete at least 8 questions with ≥80% accuracy in a topic to establish verified core strength.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {qualifiedStrengths.map((st: TopicMastery) => (
+              <div key={st.chapter} className="p-3.5 rounded-2xl border border-emerald-200/80 bg-emerald-50/50 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-900 text-xs">{st.chapter}</span>
+                  <span className="font-mono font-bold text-xs text-emerald-700">{st.accuracyPercentage}%</span>
+                </div>
+                <p className="text-[11px] text-slate-600">
+                  {st.subject} · {st.attemptsCount} questions verified
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 3. FILTER BY DOMAIN SUBJECT */}
@@ -1367,7 +1455,7 @@ export default function WeaknessRadarClient({
           </span>
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             type="button"
             onClick={() => {
@@ -1384,34 +1472,45 @@ export default function WeaknessRadarClient({
             <span>All Domains ({totalAttempted} Qs)</span>
           </button>
 
-          {candidateSubjectCalibrations.map((sub) => {
-            const isSelected = selectedRadarSubject === sub.subjectKey;
-            return (
-              <button
-                key={sub.subjectKey}
-                type="button"
-                onClick={() => {
-                  setSelectedRadarSubject(sub.subjectKey);
-                  router.replace(`/dashboard/radar?subject=${sub.subjectKey}`, { scroll: false });
-                }}
-                className={`px-3.5 py-2 rounded-xl text-xs font-semibold shrink-0 transition-all flex items-center gap-2 cursor-pointer ${
-                  isSelected
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs"
-                    : "bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200/80"
-                }`}
-              >
-                <SubjectIcon name={sub.icon} className={`w-4 h-4 ${isSelected ? "text-white" : "text-slate-600"}`} />
-                <span>{sub.subject}</span>
-                <span
-                  className={`font-mono text-[10px] px-1.5 py-0.2 rounded-full ${
-                    isSelected ? "bg-white/20 text-white" : "bg-slate-200/80 text-slate-700"
+          {/* Sort subjects: attempted domains first, 0-question domains moved to end in muted style */}
+          {[...candidateSubjectCalibrations]
+            .sort((a, b) => {
+              if ((a.totalAttempted > 0) !== (b.totalAttempted > 0)) {
+                return b.totalAttempted - a.totalAttempted;
+              }
+              return a.subject.localeCompare(b.subject);
+            })
+            .map((sub) => {
+              const isSelected = selectedRadarSubject === sub.subjectKey;
+              const hasAttempts = sub.totalAttempted > 0;
+              return (
+                <button
+                  key={sub.subjectKey}
+                  type="button"
+                  onClick={() => {
+                    setSelectedRadarSubject(sub.subjectKey);
+                    router.replace(`/dashboard/radar?subject=${sub.subjectKey}`, { scroll: false });
+                  }}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-semibold shrink-0 transition-all flex items-center gap-2 cursor-pointer ${
+                    isSelected
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs"
+                      : hasAttempts
+                      ? "bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200/80"
+                      : "bg-slate-50/60 text-slate-400 hover:bg-slate-100 border border-slate-200/50 opacity-70"
                   }`}
                 >
-                  {sub.totalAttempted} Qs
-                </span>
-              </button>
-            );
-          })}
+                  <SubjectIcon name={sub.icon} className={`w-4 h-4 ${isSelected ? "text-white" : hasAttempts ? "text-slate-600" : "text-slate-400"}`} />
+                  <span>{sub.subject}</span>
+                  <span
+                    className={`font-mono text-[10px] px-1.5 py-0.2 rounded-full ${
+                      isSelected ? "bg-white/20 text-white" : hasAttempts ? "bg-slate-200/80 text-slate-700" : "bg-slate-100 text-slate-400"
+                    }`}
+                  >
+                    {sub.totalAttempted} Qs
+                  </span>
+                </button>
+              );
+            })}
         </div>
       </div>
 
@@ -1447,8 +1546,8 @@ export default function WeaknessRadarClient({
         }}
       />
 
-      {/* 5. Topics Table */}
-      <div className="app-card space-y-4">
+      {/* 5. Topics Table & Visual Benchmark */}
+      <div className="app-card space-y-5">
         <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
           <div>
             <h2 className="text-[20px] font-semibold text-[var(--text)] leading-[1.25]">
@@ -1459,11 +1558,88 @@ export default function WeaknessRadarClient({
             </p>
           </div>
           <span className="text-[14px] text-[var(--text-muted)] tabular-nums">
-            {weaknessRadar.length} {weaknessRadar.length === 1 ? "topic" : "topics"}
+            {sortedTopics.length} {sortedTopics.length === 1 ? "topic" : "topics"}
           </span>
         </div>
 
-        {weaknessRadar.length === 0 ? (
+        {/* Visual Topic Accuracy vs 80% Mastery Benchmark */}
+        {sortedTopics.length > 0 && (
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/80 border border-slate-200/70 space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 text-indigo-600" />
+                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                  Topic Accuracy vs. 80% Mastery Benchmark
+                </h3>
+              </div>
+              <div className="flex items-center gap-3 text-[11px] text-slate-500">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block" />
+                  &lt;50% Critical
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" />
+                  50–79% Polish
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" />
+                  ≥80% Mastered
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-2.5 pt-1">
+              {sortedTopics.slice(0, 6).map((topic: TopicMastery, idx: number) => {
+                const acc = Math.max(0, Math.min(100, topic.accuracyPercentage));
+                const isAdequate = topic.attemptsCount >= 5;
+                const barColor =
+                  acc >= 80 ? "bg-emerald-500" : acc >= 50 ? "bg-amber-500" : "bg-rose-500";
+                return (
+                  <div key={`bench-${topic.chapter}`} className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-2 max-w-[75%] min-w-0">
+                        {isAdequate && idx < 3 && (
+                          <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-rose-100 text-rose-700 shrink-0">
+                            #{idx + 1}
+                          </span>
+                        )}
+                        <span className="font-medium text-slate-800 truncate" title={topic.chapter}>
+                          {topic.chapter}
+                        </span>
+                        <span className="text-[11px] text-slate-400 font-normal shrink-0">
+                          ({topic.attemptsCount} Qs)
+                        </span>
+                      </div>
+                      <span className="font-mono font-semibold text-slate-700 tabular-nums">
+                        {topic.accuracyPercentage}%
+                      </span>
+                    </div>
+
+                    {/* Relative Bar Container with 80% guideline */}
+                    <div className="relative w-full h-2.5 bg-slate-200/70 rounded-full overflow-hidden">
+                      {/* Target 80% benchmark line */}
+                      <div
+                        className="absolute top-0 bottom-0 w-[2px] bg-slate-400 z-10"
+                        style={{ left: "80%" }}
+                        title="80% Mastery benchmark"
+                      />
+                      {/* Accuracy fill */}
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${barColor}`}
+                        style={{ width: `${acc}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex justify-end text-[10px] text-slate-400 font-mono pr-0.5">
+              <span>Dashed guideline indicates 80% NTA mastery target</span>
+            </div>
+          </div>
+        )}
+
+        {sortedTopics.length === 0 ? (
           <div className="py-12 text-center space-y-3">
             <p className="text-[14px] text-[var(--text-secondary)]">
               No weak topics detected. Take more mock tests to calibrate your diagnosis.
@@ -1483,77 +1659,106 @@ export default function WeaknessRadarClient({
                 <tr className="border-b border-[var(--border)] text-[12px] font-medium text-[var(--text-muted)]">
                   <th className="py-3 pr-4 font-medium">Topic</th>
                   <th className="py-3 px-4 font-medium">Subject</th>
-                  <th className="py-3 px-4 font-medium text-right">Accuracy</th>
+                  <th className="py-3 px-4 font-medium text-left">Accuracy</th>
                   <th className="py-3 px-4 font-medium text-right">Questions</th>
+                  <th className="py-3 px-4 font-medium text-center">Trend</th>
                   <th className="py-3 px-4 font-medium">Status</th>
-                  <th className="py-3 pl-4 font-medium text-right">Actions</th>
+                  <th className="py-3 pl-4 font-medium text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {weaknessRadar.map((topicItem) => {
+                {sortedTopics.map((topicItem: TopicMastery, idx: number) => {
                   const diag = getOrGenerateDiagnosis(topicItem);
                   const isRepairing = activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter);
                   const accuracy = diag.observedPerformance.accuracyPercentage;
                   const attempts = diag.observedPerformance.attemptsCount;
-                  const isLowConf = attempts < 10;
+                  const isAdequate = attempts >= 5;
+                  const isTopPriority = isAdequate && idx < 3;
+                  const statusInfo = getTopicStatus(accuracy, attempts);
 
                   return (
                     <tr
                       key={topicItem.chapter}
-                      className="h-12 border-b border-[var(--border)] text-[14px] hover:bg-slate-50/50 transition-colors"
+                      onClick={() => setSelectedModalDiagnosis(diag)}
+                      className="h-12 border-b border-[var(--border)] text-[14px] hover:bg-slate-50 transition-colors cursor-pointer group"
                     >
                       <td className="py-3 pr-4 font-medium text-[var(--text)]">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedModalDiagnosis(diag)}
-                          className="hover:text-[var(--accent)] text-left hover:underline cursor-pointer"
-                        >
-                          {diag.chapter}
-                        </button>
+                        <div className="flex items-center gap-2">
+                          {isTopPriority && (
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 whitespace-nowrap">
+                              #{idx + 1} Priority
+                            </span>
+                          )}
+                          <span className="group-hover:text-[var(--accent)] transition-colors">
+                            {diag.chapter}
+                          </span>
+                        </div>
                       </td>
                       <td className="py-3 px-4 text-[var(--text-secondary)]">
                         {diag.subject}
                       </td>
-                      <td className="py-3 px-4 text-right tabular-nums text-[var(--text)] font-medium">
-                        {accuracy}%
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-2">
+                          <span className="tabular-nums text-[var(--text)] font-medium w-8 text-right">
+                            {accuracy}%
+                          </span>
+                          <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden shrink-0">
+                            <div
+                              className={`h-full rounded-full ${
+                                accuracy >= 80
+                                  ? "bg-emerald-500"
+                                  : accuracy >= 50
+                                  ? "bg-amber-500"
+                                  : "bg-rose-500"
+                              }`}
+                              style={{ width: `${Math.min(100, Math.max(4, accuracy))}%` }}
+                            />
+                          </div>
+                        </div>
                       </td>
                       <td className="py-3 px-4 text-right tabular-nums text-[var(--text-secondary)]">
                         {attempts}
                       </td>
-                      <td className="py-3 px-4">
-                        {accuracy < 50 ? (
-                          <span className="text-[12px] font-medium text-[var(--danger)] bg-[var(--danger-subtle)] px-2 py-0.5 rounded-[8px]">
-                            Needs work
+                      <td className="py-3 px-4 text-center">
+                        {attempts < 10 ? (
+                          <span className="text-[11px] font-medium text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
+                            New
                           </span>
-                        ) : isLowConf ? (
-                          <span className="text-[12px] font-medium text-[var(--warning)] bg-[var(--warning-subtle)] px-2 py-0.5 rounded-[8px]">
-                            Low confidence
+                        ) : accuracy >= 75 ? (
+                          <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-emerald-600">
+                            <TrendingUp className="w-3.5 h-3.5" /> Up
+                          </span>
+                        ) : accuracy < 50 ? (
+                          <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-rose-600">
+                            <TrendingDown className="w-3.5 h-3.5" /> Down
                           </span>
                         ) : (
-                          <span className="text-[12px] font-medium text-[var(--success)] bg-[var(--success-subtle)] px-2 py-0.5 rounded-[8px]">
-                            Recovered
+                          <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-slate-400">
+                            <Minus className="w-3.5 h-3.5" /> Flat
                           </span>
                         )}
                       </td>
-                      <td className="py-3 pl-4 text-right whitespace-nowrap space-x-2">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedModalDiagnosis(diag)}
-                          className="text-[14px] font-medium text-[var(--text-secondary)] hover:text-[var(--text)] hover:underline cursor-pointer"
+                      <td className="py-3 px-4">
+                        <span
+                          className={`text-[12px] font-medium px-2 py-0.5 rounded-[8px] ${statusInfo.badgeClass}`}
+                          title={statusInfo.ruleTooltip}
                         >
-                          Details
-                        </button>
+                          {statusInfo.label}
+                        </span>
+                      </td>
+                      <td className="py-3 pl-4 text-right whitespace-nowrap">
                         <button
                           type="button"
                           disabled={isRepairing}
-                          onClick={() =>
+                          onClick={(e) => {
+                            e.stopPropagation();
                             handleLaunchTargetedPractice(
                               topicItem.troubleTopics?.[0] || topicItem.chapter,
                               topicItem.subject,
                               diag.recommendedPracticeType
-                            )
-                          }
-                          className="inline-flex items-center justify-center h-8 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white hover:bg-slate-50 text-[12px] font-medium text-[var(--text)] transition-colors cursor-pointer disabled:opacity-50"
+                            );
+                          }}
+                          className="inline-flex items-center justify-center h-8 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white hover:bg-slate-50 text-[12px] font-medium text-[var(--text)] transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
                         >
                           {isRepairing ? "Building..." : "Practice"}
                         </button>
@@ -1566,70 +1771,67 @@ export default function WeaknessRadarClient({
 
             {/* Mobile Collapsed Cards (<640px) */}
             <div className="sm:hidden space-y-3">
-              {weaknessRadar.map((topicItem) => {
+              {sortedTopics.map((topicItem: TopicMastery, idx: number) => {
                 const diag = getOrGenerateDiagnosis(topicItem);
                 const isRepairing = activeRepairTopic === (topicItem.troubleTopics?.[0] || topicItem.chapter);
                 const accuracy = diag.observedPerformance.accuracyPercentage;
                 const attempts = diag.observedPerformance.attemptsCount;
-                const isLowConf = attempts < 10;
+                const isAdequate = attempts >= 5;
+                const isTopPriority = isAdequate && idx < 3;
+                const statusInfo = getTopicStatus(accuracy, attempts);
 
                 return (
                   <div
                     key={`mob-${topicItem.chapter}`}
-                    className="p-3 rounded-[8px] border border-[var(--border)] space-y-2"
+                    onClick={() => setSelectedModalDiagnosis(diag)}
+                    className="p-3 rounded-[8px] border border-[var(--border)] space-y-2 cursor-pointer hover:bg-slate-50/50 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <h3
-                          onClick={() => setSelectedModalDiagnosis(diag)}
-                          className="text-[14px] font-semibold text-[var(--text)] cursor-pointer hover:underline"
-                        >
-                          {diag.chapter}
-                        </h3>
-                        <p className="text-[12px] text-[var(--text-muted)]">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {isTopPriority && (
+                            <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-rose-100 text-rose-700">
+                              #{idx + 1}
+                            </span>
+                          )}
+                          <h3 className="text-[14px] font-semibold text-[var(--text)] truncate">
+                            {diag.chapter}
+                          </h3>
+                        </div>
+                        <p className="text-[12px] text-[var(--text-muted)] mt-0.5">
                           {diag.subject} • {attempts} questions
                         </p>
                       </div>
-                      {accuracy < 50 ? (
-                        <span className="text-[12px] font-medium text-[var(--danger)] bg-[var(--danger-subtle)] px-2 py-0.5 rounded-[8px]">
-                          Needs work
-                        </span>
-                      ) : isLowConf ? (
-                        <span className="text-[12px] font-medium text-[var(--warning)] bg-[var(--warning-subtle)] px-2 py-0.5 rounded-[8px]">
-                          Low confidence
-                        </span>
-                      ) : (
-                        <span className="text-[12px] font-medium text-[var(--success)] bg-[var(--success-subtle)] px-2 py-0.5 rounded-[8px]">
-                          Recovered
-                        </span>
-                      )}
+                      <span className={`text-[12px] font-medium px-2 py-0.5 rounded-[8px] shrink-0 ${statusInfo.badgeClass}`}>
+                        {statusInfo.label}
+                      </span>
                     </div>
 
                     <div className="flex items-center justify-between pt-2 border-t border-[var(--border)] text-[14px]">
-                      <span className="tabular-nums text-[var(--text-secondary)]">Accuracy: {accuracy}%</span>
                       <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedModalDiagnosis(diag)}
-                          className="text-[12px] text-[var(--text-secondary)] hover:underline"
-                        >
-                          Details
-                        </button>
-                        <button
-                          type="button"
-                          disabled={isRepairing}
-                          onClick={() =>
-                            handleLaunchTargetedPractice(
-                              topicItem.troubleTopics?.[0] || topicItem.chapter,
-                              topicItem.subject,
-                              diag.recommendedPracticeType
-                            )
-                          }
-                          className="h-8 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white text-[12px] font-medium text-[var(--text)]"
-                        >
-                          {isRepairing ? "..." : "Practice"}
-                        </button>
+                        <span className="tabular-nums text-[var(--text-secondary)] font-medium">Accuracy: {accuracy}%</span>
+                        <div className="w-12 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${accuracy >= 80 ? "bg-emerald-500" : accuracy >= 50 ? "bg-amber-500" : "bg-rose-500"}`}
+                            style={{ width: `${Math.min(100, Math.max(5, accuracy))}%` }}
+                          />
+                        </div>
                       </div>
+                      <button
+                        type="button"
+                        disabled={isRepairing}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLaunchTargetedPractice(
+                            topicItem.troubleTopics?.[0] || topicItem.chapter,
+                            topicItem.subject,
+                            diag.recommendedPracticeType
+                          );
+                        }}
+                        className="h-8 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white text-[12px] font-medium text-[var(--text)] shadow-xs"
+                      >
+                        {isRepairing ? "..." : "Practice"}
+                      </button>
                     </div>
                   </div>
                 );
@@ -1668,7 +1870,7 @@ export default function WeaknessRadarClient({
                   <span className="font-mono font-bold text-xs text-emerald-700">{st.accuracyPercentage}%</span>
                 </div>
                 <p className="text-[11px] text-slate-600 font-medium">
-                  Tested across {st.attemptsCount} questions · Avg speed {st.avgTimeSeconds}s/Q.
+                  Tested across {st.attemptsCount} verified questions.
                 </p>
                 <div className="pt-1 flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700">
                   <Check className="w-3.5 h-3.5 stroke-[3]" />
@@ -1728,8 +1930,8 @@ export default function WeaknessRadarClient({
                       <span className="text-base font-bold text-slate-900">{selectedModalDiagnosis.observedPerformance.attemptsCount}</span>
                     </div>
                     <div className="p-3 bg-white rounded-xl border border-slate-200/80">
-                      <span className="text-[10px] text-slate-500 block uppercase font-sans font-medium">Avg Response</span>
-                      <span className="text-base font-bold text-slate-900">{selectedModalDiagnosis.observedPerformance.avgTimeSeconds}s</span>
+                      <span className="text-[10px] text-slate-500 block uppercase font-sans font-medium">Target Accuracy</span>
+                      <span className="text-base font-bold text-emerald-600">≥80%</span>
                     </div>
                     <div className="p-3 bg-white rounded-xl border border-slate-200/80 flex flex-col justify-between items-center overflow-hidden">
                       <span className="text-[10px] text-slate-500 block uppercase font-sans font-medium">Confidence</span>
@@ -1779,8 +1981,8 @@ export default function WeaknessRadarClient({
                         <span className="text-sm font-bold text-slate-900">{selectedModalDiagnosis.observedPerformance.attemptsCount}</span>
                       </div>
                       <div className="p-2.5 bg-white rounded-xl border border-slate-200/80">
-                        <span className="text-[10px] text-slate-500 uppercase block font-sans">Avg Response</span>
-                        <span className="text-sm font-bold text-slate-900">{selectedModalDiagnosis.observedPerformance.avgTimeSeconds}s</span>
+                        <span className="text-[10px] text-slate-500 uppercase block font-sans">Target Accuracy</span>
+                        <span className="text-sm font-bold text-emerald-600">≥80%</span>
                       </div>
                       <div className="p-2.5 bg-white rounded-xl border border-slate-200/80">
                         <span className="text-[10px] text-slate-500 uppercase block font-sans">Needed Qs</span>

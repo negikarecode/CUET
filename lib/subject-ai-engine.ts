@@ -95,7 +95,7 @@ export function buildDeterministicSubjectRadarAI(
     const qIds = interpretationErrors.map((q) => q.questionId).slice(0, 4);
     keyPatterns.push({
       title: "Qualifier & Distractor Susceptibility",
-      description: `Observed ${interpretationErrors.length} mistake(s) on stems containing NOT/EXCEPT qualifiers or tempting boundary distractors. Evidence indicates rushing past negative condition markers.`,
+      description: `Observed ${interpretationErrors.length} mistake(s) on stems containing NOT/EXCEPT qualifiers or tempting boundary distractors (${qIds.length} sample questions cited below). Careful stem parsing required.`,
       evidenceQuestionIds: qIds,
       confidence: interpretationErrors.length >= 4 ? "high" : "medium",
       classification: "QUESTION_INTERPRETATION",
@@ -118,7 +118,7 @@ export function buildDeterministicSubjectRadarAI(
     const qIds = calculationErrors.map((q) => q.questionId).slice(0, 4);
     keyPatterns.push({
       title: "Calculation Setup & Sign Execution",
-      description: `Detected ${calculationErrors.length} calculation or sign execution slips. The underlying formula is generally targeted correctly, but multi-step numerical execution causes mark loss.`,
+      description: `Detected ${calculationErrors.length} calculation or sign execution slips (${qIds.length} sample questions cited below). The underlying formula is generally targeted correctly, but multi-step numerical execution causes mark loss.`,
       evidenceQuestionIds: qIds,
       confidence: calculationErrors.length >= 3 ? "high" : "medium",
       classification: "PERFORMANCE_PROBLEM",
@@ -142,7 +142,7 @@ export function buildDeterministicSubjectRadarAI(
     const qIds = conceptualErrors.map((q) => q.questionId).slice(0, 4);
     keyPatterns.push({
       title: "Core NCERT Theoretical Discrimination",
-      description: `Recorded ${conceptualErrors.length} foundational mistakes where similar principles or definitions were interchanged under timed conditions.`,
+      description: `Recorded ${conceptualErrors.length} foundational mistakes where similar principles or definitions were interchanged (${qIds.length} verified sample questions cited below).`,
       evidenceQuestionIds: qIds,
       confidence: conceptualErrors.length >= 4 ? "high" : "medium",
       classification: "KNOWLEDGE_PROBLEM",
@@ -176,7 +176,7 @@ export function buildDeterministicSubjectRadarAI(
       pattern: "Negative Stem Phrasing (NOT / EXCEPT / INCORRECT)",
       chapters: tList,
       evidenceQuestionIds: interpretationErrors.map((q) => q.questionId).slice(0, 4),
-      description: `Susceptibility to qualifier traps extends across ${tList.join(" and ")}. Under exam pace, the qualifying condition is overlooked before confirming the option.`,
+      description: `Susceptibility to qualifier traps extends across ${tList.join(" and ")}. The qualifying condition should be verified before confirming option selection.`,
     });
   }
 

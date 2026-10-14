@@ -45,12 +45,13 @@ export async function GET(_req: NextRequest) {
     }
 
     // 4. Calculate locked trophies per test for each user
-    // Rule: marks = Math.max(0, (correctCount * 5) - (incorrectCount * 1))
+    // Rule: marks = (correctCount * 5) - (incorrectCount * 1) [NTA authentic marking, no zero clamping]
     // trophies = marks. Locked per test (re-attempting same test adds 0 trophies).
     // Trophies are tracked separately for each subject.
     const userTestMap = new Map<string, {
       userId: string;
       testId: string;
+      testTitle: string;
       subject: string;
       correctCount: number;
       incorrectCount: number;
@@ -61,9 +62,11 @@ export async function GET(_req: NextRequest) {
       const key = `${a.user_id}_${a.test_id}`;
       if (!userTestMap.has(key)) {
         const rawSubject = a.tests?.subject || "General";
+        const testTitle = a.tests?.title || `${rawSubject} Test`;
         userTestMap.set(key, {
           userId: a.user_id,
           testId: a.test_id,
+          testTitle,
           subject: rawSubject,
           correctCount: 0,
           incorrectCount: 0,
@@ -85,6 +88,9 @@ export async function GET(_req: NextRequest) {
       completedTestsCount: number;
       totalAttempted: number;
       totalCorrect: number;
+      bestScore: number;
+      bestScoreTest: string;
+      lastActive: string;
     }>();
 
     userTestMap.forEach((testData) => {
@@ -95,15 +101,26 @@ export async function GET(_req: NextRequest) {
           completedTestsCount: 0,
           totalAttempted: 0,
           totalCorrect: 0,
+          bestScore: -Infinity,
+          bestScoreTest: "Official Test",
+          lastActive: testData.created_at,
         });
       }
       const agg = userAggregates.get(testData.userId)!;
-      const testMarks = Math.max(0, (testData.correctCount * 5) - (testData.incorrectCount * 1));
+      const testMarks = (testData.correctCount * 5) - (testData.incorrectCount * 1);
       
       agg.totalTrophies += testMarks;
       agg.completedTestsCount += 1;
       agg.totalAttempted += (testData.correctCount + testData.incorrectCount);
       agg.totalCorrect += testData.correctCount;
+
+      if (testMarks > agg.bestScore) {
+        agg.bestScore = testMarks;
+        agg.bestScoreTest = testData.testTitle;
+      }
+      if (!agg.lastActive || new Date(testData.created_at).getTime() > new Date(agg.lastActive).getTime()) {
+        agg.lastActive = testData.created_at;
+      }
 
       const subj = testData.subject;
       agg.subjectTrophies[subj] = (agg.subjectTrophies[subj] || 0) + testMarks;
@@ -143,6 +160,9 @@ export async function GET(_req: NextRequest) {
         completedTestsCount: 0,
         totalAttempted: 0,
         totalCorrect: 0,
+        bestScore: 0,
+        bestScoreTest: "Official Test",
+        lastActive: p.last_practice_date || p.created_at || new Date().toISOString(),
       };
 
       const streamRaw = (p.target_stream || "science").toLowerCase();
@@ -170,6 +190,9 @@ export async function GET(_req: NextRequest) {
         completedTestsCount: agg.completedTestsCount,
         selectedSubjects: p.selected_subjects || [],
         isCurrentUser,
+        bestScore: agg.bestScore === -Infinity ? 0 : agg.bestScore,
+        bestScoreTest: agg.bestScoreTest,
+        lastActive: agg.lastActive || p.last_practice_date || p.created_at || new Date().toISOString(),
       };
     });
 

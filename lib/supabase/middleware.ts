@@ -55,10 +55,15 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
   const isPracticeRoute =
+    pathname === "/dashboard" ||
     pathname.startsWith("/dashboard/pyqs") ||
     pathname.startsWith("/dashboard/mocks") ||
+    pathname.startsWith("/dashboard/practice") ||
     pathname.startsWith("/dashboard/standing") ||
     pathname.startsWith("/dashboard/sessions") ||
+    pathname.startsWith("/dashboard/radar") ||
+    pathname.startsWith("/dashboard/leaderboard") ||
+    pathname.startsWith("/dashboard/profile") ||
     pathname.startsWith("/test");
   const isDashboardRoute =
     pathname === "/dashboard" || pathname.startsWith("/dashboard/");

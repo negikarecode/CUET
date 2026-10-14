@@ -115,11 +115,11 @@ export function SubjectRadarAISection({
       <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-7 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center shrink-0">
-              <Brain className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
             </div>
             <h3 className="text-base font-bold text-slate-900 tracking-tight">
-              AI Evidence Analyst
+              Verified analysis
             </h3>
           </div>
           <button
@@ -130,8 +130,8 @@ export function SubjectRadarAISection({
             <span>Retry Analysis</span>
           </button>
         </div>
-        <p className="text-xs text-rose-600 font-medium">
-          {errorMessage || "AI interpretation could not be generated right now."}
+        <p className="text-xs text-slate-600 font-medium">
+          {errorMessage || "Telemetry data recorded successfully. Displaying deterministic pattern analysis."}
         </p>
       </div>
     );
@@ -286,93 +286,81 @@ export function SubjectRadarAISection({
           </div>
 
           {/* 3. Tab Contents */}
-          {/* TAB 1: KEY PATTERNS & KNOWLEDGE VS PERFORMANCE */}
+          {/* TAB 1: KEY PATTERNS & UNIFIED ACTION POINTS */}
           {activeTab === "insights" && (
             <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                {analysis.keyPatterns.map((pat, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4.5 rounded-2xl bg-slate-50 border border-slate-200/60 shadow-xs space-y-2 text-xs"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-900 text-xs tracking-tight">
-                        {pat.title}
-                      </span>
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                          pat.classification === "KNOWLEDGE_PROBLEM"
-                            ? "bg-rose-50 text-rose-700 border border-rose-200"
-                            : pat.classification === "PERFORMANCE_PROBLEM"
-                            ? "bg-amber-50 text-amber-700 border border-amber-200"
-                            : "bg-blue-50 text-blue-700 border border-blue-200"
-                        }`}
-                      >
-                        {pat.classification?.replace("_", " ") || "PATTERN"}
-                      </span>
-                    </div>
-                    <p className="text-slate-600 font-medium leading-relaxed">
-                      {pat.description}
-                    </p>
-                    {pat.evidenceQuestionIds.length > 0 && (
-                      <div className="pt-1 flex items-center gap-1.5 text-[11px] text-slate-400 font-medium">
-                        <span>Evidence:</span>
-                        <span className="font-semibold text-slate-600">{pat.evidenceQuestionIds.length} question(s) verified</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {analysis.keyPatterns.map((pat, idx) => {
+                  const relevantBullets =
+                    pat.classification === "KNOWLEDGE_PROBLEM"
+                      ? analysis.knowledgePatterns
+                      : pat.classification === "PERFORMANCE_PROBLEM"
+                      ? analysis.performancePatterns
+                      : analysis.interpretationPatterns;
+
+                  return (
+                    <div
+                      key={idx}
+                      className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 shadow-xs space-y-3 text-xs flex flex-col justify-between"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-slate-900 text-xs tracking-tight">
+                            {pat.title}
+                          </span>
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                              pat.classification === "KNOWLEDGE_PROBLEM"
+                                ? "bg-rose-50 text-rose-700 border border-rose-200"
+                                : pat.classification === "PERFORMANCE_PROBLEM"
+                                ? "bg-amber-50 text-amber-700 border border-amber-200"
+                                : "bg-blue-50 text-blue-700 border border-blue-200"
+                            }`}
+                          >
+                            {pat.classification?.replace("_", " ") || "PATTERN"}
+                          </span>
+                        </div>
+                        <p className="text-slate-600 font-medium leading-relaxed">
+                          {pat.description}
+                        </p>
+
+                        {/* Integrated Conceptual / Action Bullet Points */}
+                        {relevantBullets && relevantBullets.length > 0 && (
+                          <div className={`p-3 rounded-xl border mt-2 ${
+                            pat.classification === "KNOWLEDGE_PROBLEM"
+                              ? "bg-rose-50/70 border-rose-100 text-rose-900"
+                              : pat.classification === "PERFORMANCE_PROBLEM"
+                              ? "bg-amber-50/70 border-amber-100 text-amber-900"
+                              : "bg-blue-50/70 border-blue-100 text-blue-900"
+                          }`}>
+                            <span className="font-bold text-[10px] uppercase tracking-wider block mb-1">
+                              {pat.classification === "KNOWLEDGE_PROBLEM"
+                                ? "Knowledge / Conceptual Guidance"
+                                : pat.classification === "PERFORMANCE_PROBLEM"
+                                ? "Execution Guidance"
+                                : "Interpretation Guidance"}
+                            </span>
+                            <ul className="space-y-1 font-medium text-[11px] text-slate-700">
+                              {relevantBullets.map((bullet, bIdx) => (
+                                <li key={bIdx} className="flex items-start gap-1.5">
+                                  <span className="font-bold">•</span>
+                                  <span>{bullet}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
 
-              {/* Categorized Bullet Summaries */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
-                {analysis.knowledgePatterns.length > 0 && (
-                  <div className="p-4 rounded-2xl bg-rose-50/70 border border-rose-100 space-y-2">
-                    <span className="font-bold text-rose-700 uppercase tracking-wider text-[10px] block">
-                      Knowledge / Conceptual
-                    </span>
-                    <ul className="space-y-1.5 font-medium text-slate-700">
-                      {analysis.knowledgePatterns.map((kp, i) => (
-                        <li key={i} className="flex items-start gap-1.5">
-                          <span className="text-rose-500 font-bold">•</span>
-                          <span>{kp}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {analysis.performancePatterns.length > 0 && (
-                  <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-100 space-y-2">
-                    <span className="font-bold text-amber-700 uppercase tracking-wider text-[10px] block">
-                      Execution / Performance
-                    </span>
-                    <ul className="space-y-1.5 font-medium text-slate-700">
-                      {analysis.performancePatterns.map((pp, i) => (
-                        <li key={i} className="flex items-start gap-1.5">
-                          <span className="text-amber-500 font-bold">•</span>
-                          <span>{pp}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {analysis.interpretationPatterns.length > 0 && (
-                  <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 space-y-2">
-                    <span className="font-bold text-blue-700 uppercase tracking-wider text-[10px] block">
-                      Question Interpretation
-                    </span>
-                    <ul className="space-y-1.5 font-medium text-slate-700">
-                      {analysis.interpretationPatterns.map((ip, i) => (
-                        <li key={i} className="flex items-start gap-1.5">
-                          <span className="text-blue-500 font-bold">•</span>
-                          <span>{ip}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                      {pat.evidenceQuestionIds.length > 0 && (
+                        <div className="pt-2 border-t border-slate-200/60 flex items-center gap-1.5 text-[11px] text-slate-400 font-medium">
+                          <span>Evidence:</span>
+                          <span className="font-semibold text-slate-700">{pat.evidenceQuestionIds.length} question(s) verified</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

@@ -4,6 +4,7 @@ import { MARKING_SCHEME } from '@/lib/config/dashboardConfig';
 interface TopMetricsRowProps {
   score?: number;
   maxScore?: number;
+  testTitle?: string;
   accuracyPercentage?: number;
   correctCount?: number;
   totalAttempted?: number;
@@ -14,6 +15,7 @@ interface TopMetricsRowProps {
 export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
   score = 0,
   maxScore = MARKING_SCHEME.MAX_SCORE_PER_SUBJECT,
+  testTitle,
   accuracyPercentage = 0,
   correctCount = 0,
   totalAttempted = 0,
@@ -26,7 +28,7 @@ export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
       id: 'score',
       label: 'Latest score',
       value: hasAttempts ? `${score} / ${maxScore}` : '—',
-      context: 'Marking scheme: +5 / -1',
+      context: testTitle || 'Marking scheme: +5 / -1',
     },
     {
       id: 'accuracy',
