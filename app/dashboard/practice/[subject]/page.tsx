@@ -85,7 +85,7 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
     );
   }
 
-  const { name, code, folder, units } = subjectEntry;
+  const { name, folder, units } = subjectEntry;
   const totalTests = units.length * 20;
   const totalQuestions = units.length * 400;
 
@@ -106,14 +106,6 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
       <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-8 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-2">
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-mono border border-blue-200/60">
-                Official NTA Code {code}
-              </span>
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-                20 Tests per Unit
-              </span>
-            </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
               {name} Unit Practice Tests
             </h1>

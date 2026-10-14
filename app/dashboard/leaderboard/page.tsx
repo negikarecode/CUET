@@ -12,9 +12,6 @@ export default function LeaderboardPage() {
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-6">
       {/* Page Title & Context Banner */}
       <div className="space-y-1">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-200/60 rounded-full text-amber-800 text-xs font-semibold">
-          <span>🏆 National Trophy Standings</span>
-        </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           All-India CUET Trophy Leaderboard
         </h1>

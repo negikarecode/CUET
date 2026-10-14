@@ -122,10 +122,6 @@ export default function PracticeTestsHubPage() {
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-white via-blue-50/20 to-indigo-50/30 rounded-3xl border border-slate-100 p-6 sm:p-8 shadow-sm">
         <div className="max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/60 text-blue-700 text-xs font-semibold">
-            <BookOpen className="w-3.5 h-3.5" />
-            <span>Unit-Wise Practice Drills</span>
-          </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             CUET UG Unit Practice Tests
           </h1>

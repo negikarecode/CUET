@@ -293,35 +293,22 @@ export default function StandingViewClient({
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
       {/* 1. Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-tr from-blue-900 via-indigo-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
-        <div className="space-y-2 z-10">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-200 border border-blue-400/30">
-              Admission Cutoff Benchmarking
-            </span>
-            <span className="text-slate-400 text-xs">•</span>
-            <span className="text-slate-300 text-xs">Based on 2025–2026 DU Lists</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-            <Compass className="w-7 h-7 text-blue-400" />
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-gradient-to-tr from-blue-900 via-indigo-900 to-slate-900 rounded-2xl p-5 text-white shadow-md relative overflow-hidden">
+        <div className="space-y-1 z-10">
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
+            <Compass className="w-6 h-6 text-blue-400" />
             Where Do I Stand?
           </h1>
           <p className="text-slate-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
-            Compare your mock test performance directly in marks against official college cutoffs across previous years. Transparent, marks-based standing with subject combination tracking.
+            Compare your mock test performance directly in marks against official college cutoffs across previous years.
           </p>
         </div>
 
-        {/* Quick Summary Pill */}
-        <div className="z-10 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/15 shrink-0 self-start md:self-auto space-y-1">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300 block">
-            Target College
-          </span>
-          <span className="text-sm font-bold text-white block max-w-[200px] truncate">
-            {targetCollege}
-          </span>
-          <span className="text-[11px] text-blue-200 block">
-            {standingsResult?.resolution?.course?.name || "Target Program"}
-          </span>
+        <div className="z-10 flex items-center gap-2 text-xs bg-white/10 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shrink-0 self-start md:self-auto">
+          <span className="text-slate-400 uppercase text-[10px] font-bold tracking-wider">Target:</span>
+          <span className="font-bold text-white">{targetCollege}</span>
+          <span className="text-slate-400">•</span>
+          <span className="text-blue-200">{standingsResult?.resolution?.course?.name || "Target Program"}</span>
         </div>
       </div>
 
@@ -361,7 +348,11 @@ export default function StandingViewClient({
       </div>
 
       {/* 4. Subject Combination Card */}
-      <SubjectCombinationCard resolution={standingsResult.resolution} />
+      <SubjectCombinationCard
+        resolution={standingsResult.resolution}
+        subjectBreakdown={dreamCollegeGap?.subjectImprovementBreakdown || []}
+        targetCollege={targetCollege}
+      />
 
       {/* 5. Dream College Gap Card */}
       <DreamCollegeGapCard
@@ -387,6 +378,7 @@ export default function StandingViewClient({
         selectedCollegeForTrend={trendCollege}
         onSelectCollegeForTrend={(col) => setTrendCollege(col)}
         combinedAverageMarks={standingsResult.resolution.combinedAverageMarks}
+        targetCollege={targetCollege}
       />
 
       {/* 7. Methodology & Honest Labelling Disclaimers */}

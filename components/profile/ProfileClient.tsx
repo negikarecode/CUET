@@ -403,16 +403,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       {/* Page Title & Status Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-3 py-0.5 rounded-full bg-blue-50 border border-blue-200/60 text-blue-700 text-[11px] font-bold uppercase tracking-wider font-mono">
-              Official Student Record
-            </span>
-            <span className="text-xs text-slate-300 font-bold">•</span>
-            <span className="text-xs text-slate-500 font-mono font-semibold">
-              ID: {profile.id.slice(0, 8)}...
-            </span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Academic Identity & Readiness
           </h1>
         </div>

@@ -262,21 +262,6 @@ export default function PYQsPage() {
     <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-6 sm:space-y-8">
       {/* Header Section */}
         <div className="space-y-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-semibold bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full border border-emerald-200/80 flex items-center gap-1.5">
-              <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>251 Official Papers</span>
-            </span>
-            <span className="text-[11px] font-semibold bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-200/60">
-              14 Core Subjects
-            </span>
-            <span className="text-[11px] font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full border border-slate-200">
-              12,550 Shift Questions
-            </span>
-            <span className="text-[11px] font-semibold bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full border border-indigo-200/60">
-              Official NTA Pattern (+5 / -1)
-            </span>
-          </div>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 flex items-center gap-3">
             <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm shadow-blue-500/20 shrink-0">
               <FileText className="w-5 h-5 stroke-[2.2]" />

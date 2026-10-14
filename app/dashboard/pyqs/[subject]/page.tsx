@@ -127,29 +127,6 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
         </Link>
 
         <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-semibold bg-amber-50 text-amber-800 px-3 py-0.5 rounded-full border border-amber-200/60">
-              Code: {code}
-            </span>
-            <span
-              className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full ${
-                isLive && pyqTests.length > 0
-                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200/60"
-                  : "bg-amber-50 text-amber-800 border border-amber-200/60"
-              }`}
-            >
-              {isLive && pyqTests.length > 0 ? `${pyqTests.length} Official Papers Live` : "In Preparation"}
-            </span>
-            <span className="text-[10px] font-semibold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full border border-slate-200">
-              50 Compulsory Qs • {durationMinutes} Mins
-            </span>
-            {subjectChaptersInfo && (
-              <span className="text-[10px] font-semibold bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full border border-indigo-200/60">
-                {subjectChaptersInfo.chaptersCount} NCERT Chapters
-              </span>
-            )}
-          </div>
-
           <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/20 flex items-center justify-center shrink-0">
               <FileText className="w-5 h-5 stroke-[2.2]" />

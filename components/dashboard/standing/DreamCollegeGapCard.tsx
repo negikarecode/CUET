@@ -11,6 +11,7 @@ import {
   Bot,
   Loader2,
   ChevronRight,
+  Lock,
 } from "lucide-react";
 import {
   DreamCollegeGapAnalysis,
@@ -126,6 +127,10 @@ export default function DreamCollegeGapCard({
   const isBelowCutoff = analysis.status === "below_cutoff";
   const isIncomplete = analysis.status === "incomplete";
 
+  const missingSubjects = (analysis.subjectImprovementBreakdown || [])
+    .filter((s) => !s.hasData)
+    .map((s) => s.subjectName);
+
   const gapLabel = !analysis.isComplete
     ? "Overall Gap"
     : isBelowCutoff
@@ -150,8 +155,8 @@ export default function DreamCollegeGapCard({
           </div>
         </div>
 
-        {/* Search / Switch College Dropdown */}
-        <div className="flex items-center gap-2 relative">
+        {/* Actions: College Switch Dropdown, Save Target, Explain My Result */}
+        <div className="flex items-center gap-2 flex-wrap">
           <div className="relative">
             <button
               type="button"
@@ -219,6 +224,26 @@ export default function DreamCollegeGapCard({
               </>
             )}
           </button>
+
+          {/* Explain My Result Button */}
+          <button
+            type="button"
+            onClick={handleFetchAIExplanation}
+            disabled={isLoadingAI}
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100/80 text-purple-700 border border-purple-200/80 text-xs font-semibold transition-all shadow-2xs cursor-pointer"
+          >
+            {isLoadingAI ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Analyzing...</span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+                <span>Explain My Result</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
 
@@ -238,165 +263,91 @@ export default function DreamCollegeGapCard({
           </div>
         </div>
 
-        <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            Current Performance
-          </span>
-          <div className="mt-1">
-            <span className="text-base sm:text-lg font-bold text-slate-900 block truncate">
-              {analysis.isComplete && analysis.combinedMarks !== null
-                ? `${analysis.combinedMarks}/${analysis.cutoffScale} marks`
-                : analysis.hasNoData
-                ? "No data yet"
-                : "Incomplete"}
-            </span>
-            <span className="text-[11px] text-slate-500">
-              {analysis.isComplete
-                ? "Combined arithmetic average"
-                : analysis.hasNoData
-                ? "No mock attempts"
-                : "Awaiting remaining subjects"}
-            </span>
-          </div>
-        </div>
-
-        <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            {gapLabel}
-          </span>
-          <div className="mt-1">
-            <span
-              className={`text-base sm:text-lg font-bold block truncate ${
-                isAboveCutoff
-                  ? "text-emerald-700"
-                  : isBelowCutoff
-                  ? "text-orange-700"
-                  : "text-slate-700"
-              }`}
-            >
-              {analysis.gapDisplay}
-            </span>
-            <span className="text-[11px] text-slate-500">
-              {analysis.isComplete ? "Target difference" : "Pending all tests"}
-            </span>
-          </div>
-        </div>
-
-        <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            Admission Standing
-          </span>
-          <div className="mt-1">
-            <span
-              className={`inline-flex px-2.5 py-1 rounded-lg text-xs font-bold border ${
-                isAboveCutoff
-                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                  : isBelowCutoff
-                  ? "bg-amber-50 text-amber-900 border-amber-200"
-                  : isIncomplete
-                  ? "bg-blue-50 text-blue-900 border-blue-200"
-                  : "bg-slate-100 text-slate-700 border-slate-200"
-              }`}
-            >
-              {analysis.statusLabel}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* "What it would take" Narrative Banner */}
-      <div className="p-3.5 bg-blue-50/60 border border-blue-200/70 rounded-xl flex items-start gap-3">
-        <TrendingUp className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-        <div className="space-y-1">
-          <p className="text-xs font-bold text-blue-950">
-            Admission Trajectory & Guidance:
-          </p>
-          <p className="text-xs text-blue-900 leading-relaxed">
-            {analysis.summaryMessage}
-          </p>
-        </div>
-      </div>
-
-      {/* Per-Subject Improvement Breakdown (Marks Only) */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-            Per-Subject Target Breakdown
-          </h4>
-          <span className="text-[11px] text-slate-400">
-            Standard 250 marks per test paper
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-          {(analysis.subjectImprovementBreakdown || []).map((s) => (
-            <div
-              key={s.subjectId}
-              className={`p-3 rounded-xl border text-xs space-y-1.5 ${
-                s.hasData
-                  ? "bg-white border-slate-200"
-                  : "bg-rose-50/30 border-rose-200/60"
-              }`}
-            >
-              <div className="flex items-center justify-between gap-1">
-                <span className="font-bold text-slate-900 truncate">
-                  {s.subjectName}
+        {analysis.isComplete ? (
+          <>
+            <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Current Performance
+              </span>
+              <div className="mt-1">
+                <span className="text-base sm:text-lg font-bold text-slate-900 block truncate">
+                  {analysis.combinedMarks !== null
+                    ? `${analysis.combinedMarks}/${analysis.cutoffScale} marks`
+                    : "No data yet"}
                 </span>
-                <span className="text-[10px] font-semibold text-slate-500 shrink-0">
-                  Target: {s.targetMarksDisplay}
+                <span className="text-[11px] text-slate-500">
+                  Combined arithmetic average
                 </span>
-              </div>
-              <div className="flex items-center justify-between text-[11px] text-slate-600 pt-1 border-t border-slate-100">
-                <span>
-                  Current: {s.currentPerformanceDisplay}
-                </span>
-                {s.hasData ? (
-                  s.marksNeeded > 0 ? (
-                    <span className="font-bold text-blue-600 shrink-0">
-                      {s.marksNeeded} marks needed
-                    </span>
-                  ) : (
-                    <span className="font-bold text-emerald-600 shrink-0">
-                      Target met
-                    </span>
-                  )
-                ) : (
-                  <span className="font-semibold text-rose-600 shrink-0">
-                    No data yet
-                  </span>
-                )}
               </div>
             </div>
-          ))}
-        </div>
+
+            <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                {gapLabel}
+              </span>
+              <div className="mt-1">
+                <span
+                  className={`text-base sm:text-lg font-bold block truncate ${
+                    isAboveCutoff
+                      ? "text-emerald-700"
+                      : isBelowCutoff
+                      ? "text-orange-700"
+                      : "text-slate-700"
+                  }`}
+                >
+                  {analysis.gapDisplay}
+                </span>
+                <span className="text-[11px] text-slate-500">
+                  Target difference
+                </span>
+              </div>
+            </div>
+
+            <div className="p-3 bg-slate-50/70 rounded-xl border border-slate-200/60">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Admission Standing
+              </span>
+              <div className="mt-1">
+                <span
+                  className={`inline-flex px-2.5 py-1 rounded-lg text-xs font-bold border ${
+                    isAboveCutoff
+                      ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                      : isBelowCutoff
+                      ? "bg-amber-50 text-amber-900 border-amber-200"
+                      : isIncomplete
+                      ? "bg-blue-50 text-blue-900 border-blue-200"
+                      : "bg-slate-100 text-slate-700 border-slate-200"
+                  }`}
+                >
+                  {analysis.statusLabel}
+                </span>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="col-span-1 md:col-span-3 p-3 bg-slate-50/60 rounded-xl border border-dashed border-slate-200 flex items-center justify-center gap-2.5 text-slate-500">
+            <Lock className="w-4 h-4 text-slate-400 shrink-0" />
+            <span className="text-xs font-medium">
+              Complete {missingSubjects.length > 0 ? missingSubjects.join(" and ") : "all required subjects"} to unlock
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* AI Explanation Action Strip */}
-      <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-xs text-slate-500">
-          <Bot className="w-4 h-4 text-purple-600 shrink-0" />
-          <span>Need an AI breakdown of your test trajectory?</span>
+      {/* "What it would take" Narrative Banner - only show when complete */}
+      {analysis.isComplete && (
+        <div className="p-3.5 bg-blue-50/60 border border-blue-200/70 rounded-xl flex items-start gap-3">
+          <TrendingUp className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <p className="text-xs font-bold text-blue-950">
+              Admission Trajectory & Guidance:
+            </p>
+            <p className="text-xs text-blue-900 leading-relaxed">
+              {analysis.summaryMessage}
+            </p>
+          </div>
         </div>
-
-        <button
-          type="button"
-          onClick={handleFetchAIExplanation}
-          disabled={isLoadingAI}
-          className="inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100/80 text-purple-700 border border-purple-200/80 text-xs font-semibold transition-all shadow-2xs self-start sm:self-auto cursor-pointer"
-        >
-          {isLoadingAI ? (
-            <>
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              <span>Analyzing Score Matrix...</span>
-            </>
-          ) : (
-            <>
-              <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-              <span>Explain My Result</span>
-            </>
-          )}
-        </button>
-      </div>
+      )}
 
       {/* AI Explanation Result Box */}
       {aiExplanation && (

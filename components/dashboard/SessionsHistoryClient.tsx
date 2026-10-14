@@ -158,14 +158,9 @@ export default function SessionsHistoryClient({
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Dashboard</span>
           </Link>
-          <div className="flex items-center gap-3">
-            <h1 className="text-[26px] sm:text-[30px] font-bold text-[var(--text)] tracking-tight">
-              Session History
-            </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-[12px] font-semibold bg-blue-50 text-[var(--accent)] border border-blue-200">
-              {allAttempts.length} Total
-            </span>
-          </div>
+          <h1 className="text-[26px] sm:text-[30px] font-bold text-[var(--text)] tracking-tight">
+            Session History
+          </h1>
           <p className="text-[14px] text-[var(--text-secondary)] mt-1">
             Complete chronological record of all your completed CUET CBT mocks, past papers, and practice tests.
           </p>

@@ -388,14 +388,6 @@ export default function MocksPage() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2">
-            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-mono border border-blue-200/60">
-              Full Syllabus Simulator
-            </span>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-              +5 / -1 NTA Marking
-            </span>
-          </div>
           <h1 className="text-[28px] font-semibold text-[var(--text)] leading-[1.25]">
             Full-Length Domain Mock Exams
           </h1>

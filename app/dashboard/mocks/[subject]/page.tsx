@@ -116,17 +116,6 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
       <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-8 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-mono border border-blue-200/60">
-                Code {code}
-              </span>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 font-mono border border-indigo-200/60">
-                {mockTests.length} Full-Length Mocks
-              </span>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-                Authentic NTA CBT Simulator
-              </span>
-            </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               {subjectName} Full-Length Mock Exams
             </h1>
