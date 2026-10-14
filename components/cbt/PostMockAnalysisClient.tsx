@@ -29,6 +29,41 @@ import MathRenderer from "@/components/cbt/MathRenderer";
 import CBTMatchTheFollowingView, { parseMatchTheFollowing } from "@/components/cbt/CBTMatchTheFollowingView";
 import { safeCapitalizeOptionText } from "@/lib/utils";
 
+function isGenericFiller(text: string | null | undefined): boolean {
+  if (!text) return true;
+  const t = text.trim();
+  if (/inconsistent with canonical/i.test(t)) return true;
+  if (/conceptually verified answer according to/i.test(t)) return true;
+  if (/^Option [A-D] (?:is |\([^\)]+\) is )inconsistent/i.test(t)) return true;
+  if (/^Option [A-D] (?:is |\([^\)]+\) is )the conceptually verified/i.test(t)) return true;
+  if (/canonical textbook criteria/i.test(t)) return true;
+  return false;
+}
+
+function cleanChapterName(chapter: string | null | undefined): string {
+  if (!chapter) return "Core Concept";
+  return chapter.replace(/\$$/, "").replace(/^Chapter:\s*/i, "").trim();
+}
+
+function sanitizeSolutionExplanation(explanation: string | null | undefined): string {
+  if (!explanation) return "";
+  let s = explanation;
+  // Strip Option Analysis if it only contains generic filler
+  s = s.replace(/\*\*Option Analysis:\*\*[\s\S]*?(?=(\*\*NCERT Citation:\*\*|$))/i, (match) => {
+    if (/inconsistent with canonical|conceptually verified answer|is inconsistent with/i.test(match)) {
+      return "";
+    }
+    return match;
+  });
+  // Strip redundant NCERT citation from body text
+  s = s.replace(/\n\s*\*\*NCERT Citation:\*\*.*$/i, "");
+  // Clean stray backslashes before dollar or percent
+  s = s.replace(/\\+\$/g, "$").replace(/\\+([0-9.]+%)/g, "$1").replace(/\\+%/g, "%");
+  // Clean trailing dollar attached to words
+  s = s.replace(/([a-zA-Z0-9_\-\.\)]+)\$\s*$/, "$1");
+  return s.trim();
+}
+
 interface PostMockAnalysisClientProps {
   report: PostMockDeterministicReport;
   onRetake?: () => void;
@@ -1137,6 +1172,9 @@ export default function PostMockAnalysisClient({
                         optClasses = "border-2 border-rose-500 bg-rose-50/70 text-slate-900 font-medium";
                       }
 
+                      const rawAnalysis = opt.mistakeAnalysis || (q.solution as any)?.distractor_analysis?.[opt.id] || "";
+                      const hasRealAnalysis = !isGenericFiller(rawAnalysis);
+
                       return (
                         <div
                           key={opt.id}
@@ -1145,16 +1183,16 @@ export default function PostMockAnalysisClient({
                           <span className="font-mono font-bold shrink-0 text-slate-600">({opt.id})</span>
                           <div className="flex-1 space-y-1">
                             <MathRenderer text={safeCapitalizeOptionText(opt.text)} />
-                            {isCandidatePick && !isTrueCorrect && (opt.mistakeAnalysis || (q.solution as any)?.distractor_analysis?.[opt.id]) && (
+                            {isCandidatePick && !isTrueCorrect && hasRealAnalysis && (
                               <div className="mt-1 pt-1 border-t border-rose-200/60 text-[11px] text-rose-800 font-normal">
                                 <span className="font-semibold uppercase text-[9px] text-rose-700 block">Trap / Misconception Note:</span>
-                                <MathRenderer text={opt.mistakeAnalysis || (q.solution as any)?.distractor_analysis?.[opt.id] || ""} />
+                                <MathRenderer text={rawAnalysis} />
                               </div>
                             )}
-                            {isTrueCorrect && (opt.mistakeAnalysis || (q.solution as any)?.distractor_analysis?.[opt.id]) && (
+                            {isTrueCorrect && hasRealAnalysis && (
                               <div className="mt-1 pt-1 border-t border-emerald-200/60 text-[11px] text-emerald-800 font-normal">
                                 <span className="font-semibold uppercase text-[9px] text-emerald-700 block">Key Rationale:</span>
-                                <MathRenderer text={opt.mistakeAnalysis || (q.solution as any)?.distractor_analysis?.[opt.id] || ""} />
+                                <MathRenderer text={rawAnalysis} />
                               </div>
                             )}
                           </div>
@@ -1181,12 +1219,10 @@ export default function PostMockAnalysisClient({
                           <strong className="text-slate-900 font-bold uppercase text-[10px] tracking-wider block mb-1">
                             Verified Solution &amp; NCERT Rationale:
                           </strong>
-                          <MathRenderer text={q.explanation} className="text-slate-700 leading-relaxed" />
-                          {q.ncertReference && (
-                            <span className="text-[10px] font-medium text-slate-500 block pt-1.5">
-                              Source: {q.ncertReference}
-                            </span>
-                          )}
+                          <MathRenderer text={sanitizeSolutionExplanation(q.explanation)} className="text-slate-700 leading-relaxed" />
+                          <span className="text-[10px] font-medium text-slate-500 block pt-1.5 border-t border-slate-200/60 mt-2">
+                            Source: {q.pyqSource ? `${q.pyqSource} • ` : ""}NCERT Class 12 (Chapter: {cleanChapterName(q.chapter || q.topic)})
+                          </span>
                         </div>
                       )}
 

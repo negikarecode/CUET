@@ -35,6 +35,8 @@ export interface NormalizedMockQuestionTelemetry {
     description?: string;
   } | null;
   ncertReference?: string;
+  pyqSource?: string;
+  topic?: string;
 }
 
 export interface DifficultyMetric {

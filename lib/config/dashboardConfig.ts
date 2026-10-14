@@ -10,12 +10,13 @@
  */
 
 import { safeStorage } from "@/lib/storage/safe-storage";
+import { CUET_AUTHORITY } from "@/lib/constants/cuetAuthority";
 
 // -------------------------------------------------------------
 // 1. Exam Dates & Countdown
 // -------------------------------------------------------------
-export const CUET_EXAM_DATE = "2026-05-15"; // Official CUET UG 2026 exam start window
-export const CUET_EXAM_NAME = "CUET 2026";
+export const CUET_EXAM_DATE = CUET_AUTHORITY.examDates.examStartDate.slice(0, 10); // Official CUET UG exam start window from canonical data/cuet.json
+export const CUET_EXAM_NAME = `CUET ${CUET_AUTHORITY.examDates.academicSession.split("–")[0]}`;
 
 export function getDaysToExam(targetDateStr: string = CUET_EXAM_DATE, fromDate: Date = new Date()): number {
   const target = new Date(targetDateStr);

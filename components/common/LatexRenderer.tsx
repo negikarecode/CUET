@@ -78,6 +78,11 @@ export function cleanLatex(math: string): string {
   // Fix unescaped % inside math expressions (which LaTeX treats as comments)
   cleaned = cleaned.replace(/(?<!\\)%/g, "\\%");
 
+  // Fix stray backslashes before numbers or percentages: e.g. \6.25\% -> 6.25\%
+  cleaned = cleaned.replace(/\\([0-9.]+\s*\\?%)/g, "$1");
+  // Normalize stray currency or escaped dollars
+  cleaned = cleaned.replace(/\\+\$/g, "");
+
   return cleaned;
 }
 
@@ -147,14 +152,21 @@ const BARE_LATEX_REGEX =
 export function parseLatexSegments(text: string): Segment[] {
   if (!text) return [];
 
-  // Normalize unpaired dollars (e.g. single leading $ in formula with no closing $)
   let normalizedText = text;
+
+  // 1. Strip trailing stray dollar attached to words (e.g. Physics$ -> Physics)
+  normalizedText = normalizedText.replace(/([a-zA-Z0-9_\-\.\)]+)\$\s*$/, "$1");
+
+  // 2. Normalize unpaired dollars cleanly without wrapping whole prose paragraphs
   const dollarCount = (normalizedText.match(/(?<!\\)\$/g) || []).length;
   if (dollarCount % 2 === 1) {
-    if (normalizedText.trim().startsWith("$")) {
+    if (normalizedText.trim().endsWith("$")) {
+      normalizedText = normalizedText.trim().slice(0, -1);
+    } else if (normalizedText.trim().startsWith("$") && /[\\=+\-^_]/.test(normalizedText)) {
       normalizedText = normalizedText.trim() + "$";
-    } else if (normalizedText.trim().endsWith("$")) {
-      normalizedText = "$" + normalizedText.trim();
+    } else {
+      // Strip lone unmatched dollar
+      normalizedText = normalizedText.replace(/(?<!\\)\$/, "");
     }
   }
 
@@ -181,7 +193,7 @@ export function parseLatexSegments(text: string): Segment[] {
       // Check for bare LaTeX expressions (e.g. \sqrt{77}\text{ V m}^{-1} without $)
       if (BARE_LATEX_REGEX.test(part)) {
         // If part has multiple normal English words (prose), don't turn the whole sentence into math mode
-        const words = part.split(/\s+/).filter((w) => /^[a-zA-Z]{2,}$/.test(w));
+        const words = part.split(/\s+/).filter((w: string) => /^[a-zA-Z]{2,}$/.test(w));
         if (words.length >= 3) {
           // Tokenize bare macros inside prose
           const bareTokenRegex = /(\\(?:[a-zA-Z]+)(?:\{[^{}]*\})*)/g;
@@ -280,22 +292,8 @@ export default function LatexRenderer({
       );
     }
 
-    // Normal text - preserve line breaks if present
-    if (seg.content.includes("\n")) {
-      const lines = seg.content.split("\n");
-      return (
-        <span key={idx}>
-          {lines.map((line, lIdx) => (
-            <React.Fragment key={lIdx}>
-              {line}
-              {lIdx < lines.length - 1 && <br />}
-            </React.Fragment>
-          ))}
-        </span>
-      );
-    }
-
-    return <span key={idx}>{seg.content}</span>;
+    // Normal text - unescape \% to %, parse markdown bold, and preserve line breaks
+    return <span key={idx}>{renderFormattedText(seg.content)}</span>;
   });
 
   const Component = inline ? "span" : "div";
@@ -304,5 +302,62 @@ export default function LatexRenderer({
     <Component className={`${inline ? "inline" : "block"} ${className}`}>
       {renderedElements}
     </Component>
+  );
+}
+
+function renderFormattedText(text: string): React.ReactNode {
+  // 1. Unescape \% to % and clean stray backslashes
+  const unescaped = text
+    .replace(/\\+%/g, "%")
+    .replace(/\\+\$/g, "$")
+    .replace(/\\([0-9.]+\s*\\?%)/g, "$1");
+
+  // 2. Parse markdown bold **...**
+  if (!unescaped.includes("**")) {
+    if (unescaped.includes("\n")) {
+      const lines = unescaped.split("\n");
+      return (
+        <>
+          {lines.map((line, lIdx) => (
+            <React.Fragment key={lIdx}>
+              {line}
+              {lIdx < lines.length - 1 && <br />}
+            </React.Fragment>
+          ))}
+        </>
+      );
+    }
+    return unescaped;
+  }
+
+  // Split by **...**
+  const boldParts = unescaped.split(/(\*\*[\s\S]*?\*\*)/g);
+  return (
+    <>
+      {boldParts.map((part, pIdx) => {
+        if (part.startsWith("**") && part.endsWith("**") && part.length >= 4) {
+          const inner = part.slice(2, -2);
+          return (
+            <strong key={pIdx} className="font-bold text-slate-900 block my-1.5 first:mt-0">
+              {inner}
+            </strong>
+          );
+        }
+        if (part.includes("\n")) {
+          const lines = part.split("\n");
+          return (
+            <React.Fragment key={pIdx}>
+              {lines.map((line, lIdx) => (
+                <React.Fragment key={lIdx}>
+                  {line}
+                  {lIdx < lines.length - 1 && <br />}
+                </React.Fragment>
+              ))}
+            </React.Fragment>
+          );
+        }
+        return <React.Fragment key={pIdx}>{part}</React.Fragment>;
+      })}
+    </>
   );
 }

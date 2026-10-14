@@ -18,6 +18,7 @@ import {
   BarChart2,
   Sparkles,
 } from "lucide-react";
+import MathRenderer from "@/components/cbt/MathRenderer";
 import { getSubjectMetadata } from "@/lib/config/subjectRegistry";
 import { getPYQTestsForSubject, CUET_SUBJECTS, PYQTestItem } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -598,8 +599,8 @@ export default function SubjectPYQListPage({ params }: SubjectPageProps) {
                                     <BookOpen className="w-3.5 h-3.5 text-blue-600" />
                                     <span>NCERT Verified Detailed Solution:</span>
                                   </div>
-                                  <div className="whitespace-pre-line leading-relaxed text-slate-700 font-normal">
-                                    {q.detailedSolution}
+                                  <div className="leading-relaxed text-slate-700 font-normal">
+                                    <MathRenderer text={q.detailedSolution} />
                                   </div>
                                 </div>
                               )}
