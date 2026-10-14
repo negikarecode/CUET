@@ -36,13 +36,12 @@ export function saveNoteToDisk(note: NoteDocument): void {
  * Load a note by subject folder and topic slug
  */
 export function getNoteBySlug(subjectFolder: string, topicSlug: string): NoteDocument | null {
-  const decodedFolder = decodeURIComponent(subjectFolder);
-  const cacheKey = `${decodedFolder}/${topicSlug}`;
+  const cacheKey = `${subjectFolder}/${topicSlug}`;
   if (notesCache.has(cacheKey)) {
     return notesCache.get(cacheKey)!;
   }
 
-  const filePath = path.join(NOTES_DATA_DIR, decodedFolder, `${topicSlug}.json`);
+  const filePath = path.join(NOTES_DATA_DIR, subjectFolder, `${topicSlug}.json`);
   if (!fs.existsSync(filePath)) {
     return null;
   }
@@ -62,8 +61,7 @@ export function getNoteBySlug(subjectFolder: string, topicSlug: string): NoteDoc
  * Checks if a note exists on disk
  */
 export function hasNote(subjectFolder: string, topicSlug: string): boolean {
-  const decodedFolder = decodeURIComponent(subjectFolder);
-  const filePath = path.join(NOTES_DATA_DIR, decodedFolder, `${topicSlug}.json`);
+  const filePath = path.join(NOTES_DATA_DIR, subjectFolder, `${topicSlug}.json`);
   return fs.existsSync(filePath);
 }
 
