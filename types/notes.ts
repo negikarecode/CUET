@@ -47,8 +47,10 @@ export interface PracticeMCQ {
   options: OptionItem[];
   correctOption?: string;
   correctAnswer?: string;
-  explanation: string;
+  explanation?: string;
   difficulty?: "easy" | "medium" | "hard" | "Easy" | "Medium" | "Hard" | string;
+  solutionSteps?: string[];
+  [key: string]: any;
 }
 
 export interface FormulaDefinitionItem {
@@ -126,9 +128,9 @@ export interface NoteDocument {
     examTricks?: string[];
   };
   practiceQuestions: PracticeMCQ[];
-  links: {
-    prerequisites: (string | NoteLinkItem)[];
-    relatedTopics: (string | NoteLinkItem)[];
+  links?: {
+    prerequisites?: (string | NoteLinkItem)[];
+    relatedTopics?: (string | NoteLinkItem)[];
     practiceTestId?: string;
     practiceTestUrl?: string;
     weaknessReportUrl?: string;
