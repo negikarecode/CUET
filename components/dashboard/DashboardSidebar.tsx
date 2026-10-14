@@ -17,6 +17,7 @@ import {
   Menu,
   History,
   BookOpen,
+  BookMarked,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { createClient } from "@/lib/supabase/client";
@@ -81,6 +82,13 @@ export default function DashboardSidebar() {
       href: "/dashboard/practice",
       icon: BookOpen,
       active: pathname.startsWith("/dashboard/practice"),
+    },
+    {
+      id: "notes",
+      label: "Revision notes",
+      href: "/dashboard/notes",
+      icon: BookMarked,
+      active: pathname.startsWith("/dashboard/notes"),
     },
     {
       id: "sessions",

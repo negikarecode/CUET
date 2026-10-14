@@ -1350,14 +1350,24 @@ export default function WeaknessRadarClient({
                 </span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => setSelectedModalDiagnosis(nextActionDiagnosis)}
-                className="px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <FileText className="w-3.5 h-3.5" />
-                <span>View Full Diagnosis</span>
-              </button>
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <Link
+                  href={`/dashboard/notes/${normalizeSubject(prioritizedCandidate.subject).key}`}
+                  className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-600" />
+                  <span>Read Notes</span>
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedModalDiagnosis(nextActionDiagnosis)}
+                  className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>Full Diagnosis</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1747,21 +1757,31 @@ export default function WeaknessRadarClient({
                         </span>
                       </td>
                       <td className="py-3 pl-4 text-right whitespace-nowrap">
-                        <button
-                          type="button"
-                          disabled={isRepairing}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleLaunchTargetedPractice(
-                              topicItem.troubleTopics?.[0] || topicItem.chapter,
-                              topicItem.subject,
-                              diag.recommendedPracticeType
-                            );
-                          }}
-                          className="inline-flex items-center justify-center h-8 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white hover:bg-slate-50 text-[12px] font-medium text-[var(--text)] transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
-                        >
-                          {isRepairing ? "Building..." : "Practice"}
-                        </button>
+                        <div className="flex items-center gap-1.5 justify-end">
+                          <Link
+                            href={`/dashboard/notes/${normalizeSubject(topicItem.subject).key}`}
+                            className="inline-flex items-center justify-center h-8 px-2.5 rounded-[8px] border border-slate-200 bg-white hover:bg-slate-50 text-[12px] font-medium text-slate-700 transition-colors cursor-pointer shadow-xs"
+                            title="Read high-yield NCERT revision notes"
+                          >
+                            <BookOpen className="w-3.5 h-3.5 mr-1 text-sky-600" />
+                            Notes
+                          </Link>
+                          <button
+                            type="button"
+                            disabled={isRepairing}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleLaunchTargetedPractice(
+                                topicItem.troubleTopics?.[0] || topicItem.chapter,
+                                topicItem.subject,
+                                diag.recommendedPracticeType
+                              );
+                            }}
+                            className="inline-flex items-center justify-center h-8 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white hover:bg-slate-50 text-[12px] font-medium text-[var(--text)] transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
+                          >
+                            {isRepairing ? "Building..." : "Practice"}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

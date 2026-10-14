@@ -85,7 +85,13 @@ export const StrengthsWeaknesses: React.FC<StrengthsWeaknessesProps> = ({
                   </p>
                 </div>
 
-                <div className="shrink-0">
+                <div className="shrink-0 flex items-center gap-2">
+                  <Link
+                    href={`/dashboard/notes/${subjectKey}`}
+                    className="inline-flex items-center justify-center h-10 px-3.5 rounded-[8px] border border-slate-200 bg-white hover:bg-slate-50 text-[13px] font-medium text-slate-700 transition-colors cursor-pointer"
+                  >
+                    Read notes
+                  </Link>
                   <Link
                     href={`/dashboard/radar?subject=${subjectKey}`}
                     className="inline-flex items-center justify-center h-10 px-4 rounded-[8px] border border-[var(--border-strong)] bg-white hover:bg-slate-50 text-[14px] font-medium text-[var(--text)] transition-colors cursor-pointer"

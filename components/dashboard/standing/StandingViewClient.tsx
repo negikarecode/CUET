@@ -4,7 +4,6 @@ import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
-  Compass,
   ClipboardCheck,
   Info,
   ArrowRight,
@@ -295,51 +294,31 @@ export default function StandingViewClient({
   if (!isClient) {
     // Skeleton loader while hydrating
     return (
-      <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6 animate-pulse">
-        <div className="h-10 bg-slate-200 rounded-xl w-64" />
-        <div className="h-28 bg-slate-200 rounded-2xl w-full" />
-        <div className="h-48 bg-slate-200 rounded-2xl w-full" />
+      <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 animate-pulse">
+        <div className="h-14 bg-slate-200 rounded-2xl w-full" />
+        <div className="h-44 bg-slate-200 rounded-2xl w-full" />
+        <div className="h-64 bg-slate-200 rounded-2xl w-full" />
       </div>
     );
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
-      {/* 1. Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-gradient-to-tr from-blue-900 via-indigo-900 to-slate-900 rounded-2xl p-5 text-white shadow-md relative overflow-hidden">
-        <div className="space-y-1 z-10">
-          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-            <Compass className="w-6 h-6 text-blue-400" />
-            Where Do I Stand?
-          </h1>
-          <p className="text-slate-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
-            Compare your mock test performance directly in marks against official college cutoffs across previous years.
-          </p>
-        </div>
-
-        <div className="z-10 flex items-center gap-2 text-xs bg-white/10 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shrink-0 self-start md:self-auto">
-          <span className="text-slate-400 uppercase text-[10px] font-bold tracking-wider">Target:</span>
-          <span className="font-bold text-white">{targetCollege}</span>
-          <span className="text-slate-400">•</span>
-          <span className="text-blue-200">{standingsResult?.resolution?.course?.name || "Target Program"}</span>
-        </div>
-      </div>
-
-      {/* 2. Zero Attempts Guidance Banner */}
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 sm:space-y-6">
+      {/* Zero Attempts Guidance Banner (if candidate has no recorded attempts) */}
       {hasZeroAttempts ? (
-        <div className="p-6 bg-blue-50 border border-blue-200/80 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="p-5 bg-blue-50 border border-blue-200/80 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-sm font-bold text-blue-900">
               <ClipboardCheck className="w-5 h-5 text-blue-600" />
               <span>Take your first mock to see your standing</span>
             </div>
-            <p className="text-xs text-blue-800 leading-relaxed max-w-2xl">
+            <p className="text-sm text-blue-800 leading-relaxed max-w-2xl">
               You haven&apos;t taken any mock tests yet. Complete at least one mock test in your core domain subject to see your standing against previous cutoffs.
             </p>
           </div>
           <Link
             href="/dashboard/mocks"
-            className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 flex items-center gap-2"
+            className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-xs transition-all shrink-0 flex items-center gap-2"
           >
             <span>Take Your First Mock</span>
             <ArrowRight className="w-4 h-4" />
@@ -347,27 +326,32 @@ export default function StandingViewClient({
         </div>
       ) : null}
 
-      {/* 3. Course Picker Section */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
-        <div className="max-w-2xl">
-          <CoursePicker
-            courses={coursesList}
-            selectedCourseId={selectedCourseId}
-            onSelectCourse={handleSelectCourse}
-            selectedStream={selectedStream}
-            onSelectStream={(st) => setSelectedStream(st)}
-          />
-        </div>
-      </div>
+      {/* 1. Compact Unified Toolbar: Category Chips, Program Dropdown, Target College Search/Dropdown */}
+      <CoursePicker
+        courses={coursesList}
+        selectedCourseId={selectedCourseId}
+        onSelectCourse={handleSelectCourse}
+        selectedStream={selectedStream}
+        onSelectStream={(st) => setSelectedStream(st)}
+        targetCollege={targetCollege}
+        onSelectCollege={(c) => {
+          setTargetCollegeLocal(c);
+          setTrendCollege(c);
+        }}
+        availableColleges={availableColleges}
+        isSavedAsTarget={user?.targetCollege === targetCollege}
+        onSaveAsProfileTarget={handleSaveProfileTarget}
+      />
 
-      {/* 4. Subject Combination Card */}
+      {/* 2. Subject Cards Grid (Hero of the page) */}
       <SubjectCombinationCard
         resolution={standingsResult.resolution}
         subjectBreakdown={dreamCollegeGap?.subjectImprovementBreakdown || []}
         targetCollege={targetCollege}
+        testAttempts={testAttempts}
       />
 
-      {/* 5. Dream College Gap Card */}
+      {/* 3. Dream College Gap Analysis */}
       <DreamCollegeGapCard
         analysis={dreamCollegeGap}
         targetCollege={targetCollege}
@@ -381,7 +365,7 @@ export default function StandingViewClient({
         isSavedAsTarget={user?.targetCollege === targetCollege}
       />
 
-      {/* 6. College Standings Table & Trend Chart */}
+      {/* 4. College Standings Table & Trend Chart (Sticky Category/Year Filters -> Chart -> Table) */}
       <CollegeStandingsTable
         standings={standingsResult.standings}
         category={selectedCategory}
@@ -394,13 +378,13 @@ export default function StandingViewClient({
         targetCollege={targetCollege}
       />
 
-      {/* 7. Methodology & Honest Labelling Disclaimers */}
-      <div className="p-5 bg-slate-50/90 rounded-2xl border border-slate-200/80 space-y-2.5 text-xs text-slate-500">
+      {/* 5. Methodology & Honest Labelling Disclaimers */}
+      <div className="p-5 bg-slate-50/90 rounded-2xl border border-slate-200/80 space-y-2.5 text-sm text-slate-500">
         <div className="flex items-center gap-2 font-bold text-slate-700">
           <Info className="w-4 h-4 text-blue-600 shrink-0" />
           <span>Cutoff Methodology & Disclaimers</span>
         </div>
-        <ul className="space-y-1.5 list-disc list-inside text-[11px] leading-relaxed text-slate-600">
+        <ul className="space-y-1.5 list-disc list-inside text-[13px] leading-relaxed text-slate-600">
           <li>
             <strong>Data Source:</strong> Benchmarks are derived from official institutional archives across participating CUET universities (University of Delhi, Banaras Hindu University, Jawaharlal Nehru University, University of Allahabad, Jamia Millia Islamia, Dr. B.R. Ambedkar University Delhi, BBAU, GGSIPU, and Central Universities) covering 2023 to 2026 seat allocations across 96+ colleges and 48 degree programs.
           </li>
