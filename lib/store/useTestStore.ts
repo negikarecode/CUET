@@ -18,6 +18,7 @@ import {
   countQualifyingFromTestAttempts,
 } from "@/lib/diagnostic-status";
 import { safeStorage } from "@/lib/storage/safe-storage";
+import { stringToUuid } from "@/lib/utils";
 
 interface TestStoreState {
   // Gamification & User Auth state
@@ -42,6 +43,7 @@ interface TestStoreState {
   activeCompletionNotification: CycleCompletionNotification | null;
   dismissCycleCompletionNotification: () => void;
   recordTestAttempt: (attempt: RecordedTestAttempt) => void;
+  deleteTestAttempt: (attemptOrTestId: string) => void;
   recoverUnrecordedCBTSessions: () => void;
   getAnalytics: () => UserAnalyticsSummary;
   clearAttempts: () => void;
@@ -442,9 +444,40 @@ export const useTestStore = create<TestStoreState>()(
         set({ activeCompletionNotification: null });
       },
 
+      deleteTestAttempt: (attemptOrTestId: string) => {
+        if (!attemptOrTestId) return;
+        const targetKey = attemptOrTestId.trim();
+        const targetUuid = stringToUuid(targetKey);
+
+        const currentAttempts = get().testAttempts || [];
+        const updatedAttempts = currentAttempts.filter((a) => {
+          if (!a) return false;
+          if (a.id === targetKey || a.testId === targetKey) return false;
+          if (a.testId && stringToUuid(a.testId.trim()) === targetUuid) return false;
+          return true;
+        });
+
+        if (updatedAttempts.length === currentAttempts.length) return;
+
+        const analytics = computeAnalyticsFromAttempts(updatedAttempts);
+        const dynamicStreak = calculateStreakFromAttempts(updatedAttempts);
+
+        set((state) => ({
+          testAttempts: updatedAttempts,
+          analytics,
+          user: {
+            ...state.user,
+            dailyStreak: dynamicStreak,
+            accuracyPercentage: analytics.overallAccuracyPercentage,
+            completedTestsCount: analytics.completedTestsCount,
+          },
+        }));
+      },
+
       recordTestAttempt: async (attempt: RecordedTestAttempt) => {
         const testKey = (attempt.testId || attempt.id || "").trim();
         if (!testKey) return;
+        const testCanonicalUuid = stringToUuid(testKey);
 
         // Evaluate session validity gate
         const validity = evaluateSessionValidity(attempt.questions || []);
@@ -460,15 +493,42 @@ export const useTestStore = create<TestStoreState>()(
         };
 
         const currentAttempts = get().testAttempts || [];
-        // Strictly deduplicate by testId: replace existing, otherwise prepend
-        const existingIdx = currentAttempts.findIndex(
-          (a) => (a.testId && a.testId.trim() === testKey) || a.id === attempt.id
-        );
+        // Strictly deduplicate by canonical testId or matching title + subject + close timestamp
+        const existingIdx = currentAttempts.findIndex((a) => {
+          if (!a) return false;
+          const aKey = (a.testId || a.id || "").trim();
+          if (aKey === testKey || a.id === attempt.id) return true;
+          if (a.testId && stringToUuid(a.testId.trim()) === testCanonicalUuid) return true;
+          if (
+            a.testTitle &&
+            attempt.testTitle &&
+            a.testTitle.trim().toLowerCase() === attempt.testTitle.trim().toLowerCase() &&
+            a.subject &&
+            attempt.subject &&
+            a.subject.trim().toLowerCase() === attempt.subject.trim().toLowerCase()
+          ) {
+            const timeA = new Date(a.submittedAt || 0).getTime();
+            const timeB = new Date(attempt.submittedAt || 0).getTime();
+            if (timeA > 0 && timeB > 0 && Math.abs(timeA - timeB) <= 120000) {
+              return true;
+            }
+          }
+          return false;
+        });
 
         let updatedAttempts: RecordedTestAttempt[];
         if (existingIdx >= 0) {
+          const old = currentAttempts[existingIdx];
+          // Preserve friendly non-UUID testId if available for router paths
+          const preservedTestId =
+            old && old.testId && !/^[0-9a-f-]{36}$/i.test(old.testId)
+              ? old.testId
+              : attempt.testId;
           updatedAttempts = [...currentAttempts];
-          updatedAttempts[existingIdx] = enrichedAttempt;
+          updatedAttempts[existingIdx] = {
+            ...enrichedAttempt,
+            testId: preservedTestId,
+          };
         } else {
           updatedAttempts = [enrichedAttempt, ...currentAttempts];
         }

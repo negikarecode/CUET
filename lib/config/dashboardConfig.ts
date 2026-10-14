@@ -691,6 +691,21 @@ export function formatDateIndian(input: string | Date | number): string {
   return `${day} ${month} ${year}`;
 }
 
+export function formatDateTimeIndian(input: string | Date | number): string {
+  if (!input) return "";
+  const date = new Date(input);
+  if (isNaN(date.getTime())) return "";
+
+  const day = date.getDate();
+  const month = MONTH_NAMES_SHORT[date.getMonth()];
+  const year = date.getFullYear();
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12;
+  return `${day} ${month} ${year}, ${hours.toString().padStart(2, "0")}:${minutes} ${ampm}`;
+}
+
 // -------------------------------------------------------------
 // 7. Subject Classification, Types & Pacing Config (Phase 1)
 // -------------------------------------------------------------

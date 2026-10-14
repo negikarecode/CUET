@@ -73,7 +73,8 @@ export function calculateExamScore(
   correctCount: number,
   incorrectCount: number,
   unansweredCount: number,
-  config: ExamConfig = CUET_UG_2026_CONFIG
+  config: ExamConfig = CUET_UG_2026_CONFIG,
+  customTotalQuestions?: number
 ): {
   totalMarks: number;
   maxMarks: number;
@@ -84,7 +85,8 @@ export function calculateExamScore(
     incorrectCount * config.incorrectMarks +
     unansweredCount * config.unansweredMarks;
   
-  const maxMarks = config.totalQuestions * config.correctMarks;
+  const questionCount = customTotalQuestions || (correctCount + incorrectCount + unansweredCount) || config.totalQuestions;
+  const maxMarks = questionCount * config.correctMarks;
   const percentage = Math.max(0, Math.round((totalMarks / maxMarks) * 100));
 
   return { totalMarks, maxMarks, percentage };

@@ -11,6 +11,7 @@ import {
   cbtAutosave,
   getActiveUserId as getStorageActiveUid,
 } from "@/lib/storage/cbt-session-storage";
+import { stringToUuid } from "@/lib/utils";
 
 export interface QuestionSessionState {
   visited: boolean;
@@ -48,6 +49,7 @@ export interface CBTStoreState {
   isSubmitModalOpen: boolean;
   isExitModalOpen: boolean;
   isSubmitted: boolean;
+  isSubmitting: boolean;
   submittedScore: CBTScoreSummary | null;
 
   // Actions
@@ -196,6 +198,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
   isSubmitModalOpen: false,
   isExitModalOpen: false,
   isSubmitted: false,
+  isSubmitting: false,
   submittedScore: null,
 
   initTest: (testId, meta, questionsList, forceFresh = false) => {
@@ -709,182 +712,189 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
   },
 
   submitTest: async () => {
-    const { testId, questions, questionStates, remainingSeconds, durationSeconds, isSubmitted } =
+    const { testId, questions, questionStates, remainingSeconds, durationSeconds, isSubmitted, isSubmitting } =
       get();
 
-    // Prevent duplicate submissions
-    if (isSubmitted) return;
+    // Prevent duplicate submissions atomically
+    if (isSubmitted || isSubmitting) return;
+    set({ isSubmitting: true, isTimerRunning: false });
 
-    // Immediately flush any debounced state saves before computing final score
-    cbtAutosave.flush();
-
-    // Check if we need to reveal authoritative questions from server first
-    let authQuestions = secureExamVault.get(testId) || questions;
-    if (typeof window !== "undefined" && window.location?.origin && (!authQuestions[0]?.correctOptionId)) {
-      try {
-        const res = await fetch(`/api/test/${testId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "submit",
-            questionStates,
-            answersSubmitted: true,
-          }),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.questions && Array.isArray(data.questions) && data.questions.length > 0) {
-            authQuestions = data.questions;
-            secureExamVault.set(testId, authQuestions);
-          }
-        }
-      } catch (err) {
-        console.warn("Error fetching authoritative exam solutions:", err);
-      }
-    }
-
-    let attemptedCount = 0;
-    let markedReviewCount = 0;
-    let correctCount = 0;
-    let incorrectCount = 0;
-    let timeSinkCount = 0;
-
-    authQuestions.forEach((q) => {
-      const qState = questionStates[q.id];
-      const status = deriveQuestionStatus(qState);
-
-      if (status === "answered" || status === "answered_marked_review") {
-        attemptedCount += 1;
-      }
-      if (status === "marked_review" || status === "answered_marked_review") {
-        markedReviewCount += 1;
-      }
-
-      if (qState) {
-        if (qState.timeSpentSeconds > 72) {
-          timeSinkCount += 1;
-        }
-        if (qState.selectedOption !== null && qState.selectedOption !== undefined) {
-          if (qState.selectedOption === q.correctOptionId) {
-            correctCount += 1;
-          } else {
-            incorrectCount += 1;
-          }
-        }
-      }
-    });
-
-    const unattemptedCount = authQuestions.length - attemptedCount;
-    // Official CUET NTA 2026 Scoring: +5 per correct, -1 per incorrect, 0 for unattempted
-    const { totalMarks, maxMarks } = calculateExamScore(
-      correctCount,
-      incorrectCount,
-      unattemptedCount,
-      CUET_UG_2026_CONFIG
-    );
-    const accuracyPercentage =
-      attemptedCount > 0 ? Math.round((correctCount / attemptedCount) * 100) : 0;
-    const timeTakenSeconds = Math.max(0, durationSeconds - remainingSeconds);
-
-    const summary: CBTScoreSummary = {
-      attemptedCount,
-      unattemptedCount,
-      markedReviewCount,
-      correctCount,
-      incorrectCount,
-      totalMarks,
-      maxMarks,
-      accuracyPercentage,
-      timeTakenSeconds,
-      timeSinkCount,
-    };
-
-    set({
-      questions: authQuestions,
-      isSubmitted: true,
-      isTimerRunning: false,
-      isSubmitModalOpen: false,
-      submittedScore: summary,
-    });
-
-    // Synchronously persist submitted scorecard so refresh displays results rather than resetting
-    saveSessionToStorage(get(), true);
-
-    // Immediately record completed attempt to useTestStore & background API so all solved questions are counted
     try {
-      const storeUser = useTestStore.getState().user;
-      const meta = get().testMeta;
-      const questionAttempts: RecordedQuestionAttempt[] = authQuestions.map((q) => {
+      // Immediately flush any debounced state saves before computing final score
+      cbtAutosave.flush();
+
+      // Check if we need to reveal authoritative questions from server first
+      let authQuestions = secureExamVault.get(testId) || questions;
+      if (typeof window !== "undefined" && window.location?.origin && (!authQuestions[0]?.correctOptionId)) {
+        try {
+          const res = await fetch(`/api/test/${testId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "submit",
+              questionStates,
+              answersSubmitted: true,
+            }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.questions && Array.isArray(data.questions) && data.questions.length > 0) {
+              authQuestions = data.questions;
+              secureExamVault.set(testId, authQuestions);
+            }
+          }
+        } catch (err) {
+          console.warn("Error fetching authoritative exam solutions:", err);
+        }
+      }
+
+      let attemptedCount = 0;
+      let markedReviewCount = 0;
+      let correctCount = 0;
+      let incorrectCount = 0;
+      let timeSinkCount = 0;
+
+      authQuestions.forEach((q) => {
         const qState = questionStates[q.id];
-        const selectedOption = qState?.selectedOption ?? null;
-        const isCorrect =
-          selectedOption !== null && selectedOption !== undefined
-            ? selectedOption === q.correctOptionId
-            : null;
-        const timeSpent = qState?.timeSpentSeconds ?? 0;
-        return {
-          questionId: q.id,
-          conceptId: q.conceptId,
-          questionNumber: q.questionNumber,
-          subject: meta?.subject ?? "Physics",
-          chapter: q.chapter || q.topic || "Domain Core",
-          microTopic: q.topic,
-          prompt: q.prompt,
-          options: q.options,
-          questionType: q.questionType,
-          selectedOption,
-          correctOption: q.correctOptionId,
-          isCorrect,
-          timeSpentSeconds: timeSpent,
-          isTimeSink: timeSpent > 72,
-          difficulty: String(q.difficulty),
-          ncertReference: q.pyqSource || `NCERT Class 12 (${q.chapter || q.topic})`,
-          explanation: q.explanation,
-          solution: q.solution,
-          formula: q.formula,
-          keyConcept: q.keyConcept,
-          misconception: q.misconception,
-        };
+        const status = deriveQuestionStatus(qState);
+
+        if (status === "answered" || status === "answered_marked_review") {
+          attemptedCount += 1;
+        }
+        if (status === "marked_review" || status === "answered_marked_review") {
+          markedReviewCount += 1;
+        }
+
+        if (qState) {
+          if (qState.timeSpentSeconds > 72) {
+            timeSinkCount += 1;
+          }
+          if (qState.selectedOption !== null && qState.selectedOption !== undefined) {
+            if (qState.selectedOption === q.correctOptionId) {
+              correctCount += 1;
+            } else {
+              incorrectCount += 1;
+            }
+          }
+        }
       });
 
-      const attemptRecord: RecordedTestAttempt = {
-        id: `attempt_${testId}_${Date.now()}`,
-        userId: storeUser?.id || "guest",
-        testId: meta?.id ?? testId ?? "cbt_exam",
-        testTitle: meta?.title ?? "CUET Domain Examination Paper",
-        subject: meta?.subject ?? "Physics",
-        totalQuestions: authQuestions.length,
-        attemptedCount: summary.attemptedCount,
-        unattemptedCount: summary.unattemptedCount,
-        correctCount: summary.correctCount,
-        incorrectCount: summary.incorrectCount,
-        totalMarks: summary.totalMarks,
-        maxMarks: summary.maxMarks,
-        accuracyPercentage: summary.accuracyPercentage,
-        timeTakenSeconds: summary.timeTakenSeconds,
-        timeSinkCount: summary.timeSinkCount,
-        submittedAt: new Date().toISOString(),
-        questions: questionAttempts,
+      const unattemptedCount = authQuestions.length - attemptedCount;
+      // Official CUET NTA 2026 Scoring: +5 per correct, -1 per incorrect, 0 for unattempted
+      const { totalMarks, maxMarks } = calculateExamScore(
+        correctCount,
+        incorrectCount,
+        unattemptedCount,
+        CUET_UG_2026_CONFIG,
+        authQuestions.length
+      );
+      const accuracyPercentage =
+        attemptedCount > 0 ? Math.round((correctCount / attemptedCount) * 100) : 0;
+      const timeTakenSeconds = Math.max(0, durationSeconds - remainingSeconds);
+
+      const summary: CBTScoreSummary = {
+        attemptedCount,
+        unattemptedCount,
+        markedReviewCount,
+        correctCount,
+        incorrectCount,
+        totalMarks,
+        maxMarks,
+        accuracyPercentage,
+        timeTakenSeconds,
+        timeSinkCount,
       };
 
-      useTestStore.getState().recordTestAttempt(attemptRecord);
+      set({
+        questions: authQuestions,
+        isSubmitted: true,
+        isTimerRunning: false,
+        isSubmitModalOpen: false,
+        submittedScore: summary,
+      });
 
-      if (typeof window !== "undefined" && window.location?.origin) {
-        fetch("/api/test/record-attempt", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(attemptRecord),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (typeof data?.streak === "number") {
-              useTestStore.getState().setStreak(data.streak);
-            }
+      // Synchronously persist submitted scorecard so refresh displays results rather than resetting
+      saveSessionToStorage(get(), true);
+
+      // Immediately record completed attempt to useTestStore & background API so all solved questions are counted
+      try {
+        const storeUser = useTestStore.getState().user;
+        const meta = get().testMeta;
+        const questionAttempts: RecordedQuestionAttempt[] = authQuestions.map((q) => {
+          const qState = questionStates[q.id];
+          const selectedOption = qState?.selectedOption ?? null;
+          const isCorrect =
+            selectedOption !== null && selectedOption !== undefined
+              ? selectedOption === q.correctOptionId
+              : null;
+          const timeSpent = qState?.timeSpentSeconds ?? 0;
+          return {
+            questionId: q.id,
+            conceptId: q.conceptId,
+            questionNumber: q.questionNumber,
+            subject: meta?.subject ?? "Physics",
+            chapter: q.chapter || q.topic || "Domain Core",
+            microTopic: q.topic,
+            prompt: q.prompt,
+            options: q.options,
+            questionType: q.questionType,
+            selectedOption,
+            correctOption: q.correctOptionId,
+            isCorrect,
+            timeSpentSeconds: timeSpent,
+            isTimeSink: timeSpent > 72,
+            difficulty: String(q.difficulty),
+            ncertReference: q.pyqSource || `NCERT Class 12 (${q.chapter || q.topic})`,
+            explanation: q.explanation,
+            solution: q.solution,
+            formula: q.formula,
+            keyConcept: q.keyConcept,
+            misconception: q.misconception,
+          };
+        });
+
+        const canonicalAttemptId = `attempt_${stringToUuid(testId || meta?.id || "cbt_exam")}`;
+        const attemptRecord: RecordedTestAttempt = {
+          id: canonicalAttemptId,
+          userId: storeUser?.id || "guest",
+          testId: meta?.id ?? testId ?? "cbt_exam",
+          testTitle: meta?.title ?? "CUET Domain Examination Paper",
+          subject: meta?.subject ?? "Physics",
+          totalQuestions: authQuestions.length,
+          attemptedCount: summary.attemptedCount,
+          unattemptedCount: summary.unattemptedCount,
+          correctCount: summary.correctCount,
+          incorrectCount: summary.incorrectCount,
+          totalMarks: summary.totalMarks,
+          maxMarks: summary.maxMarks,
+          accuracyPercentage: summary.accuracyPercentage,
+          timeTakenSeconds: summary.timeTakenSeconds,
+          timeSinkCount: summary.timeSinkCount,
+          submittedAt: new Date().toISOString(),
+          questions: questionAttempts,
+        };
+
+        useTestStore.getState().recordTestAttempt(attemptRecord);
+
+        if (typeof window !== "undefined" && window.location?.origin) {
+          fetch("/api/test/record-attempt", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(attemptRecord),
           })
-          .catch((err) => console.warn("Background API attempt record notice:", err));
+            .then((res) => res.json())
+            .then((data) => {
+              if (typeof data?.streak === "number") {
+                useTestStore.getState().setStreak(data.streak);
+              }
+            })
+            .catch((err) => console.warn("Background API attempt record notice:", err));
+        }
+      } catch (err) {
+        console.warn("Failed to immediately record test attempt:", err);
       }
-    } catch (err) {
-      console.warn("Failed to immediately record test attempt:", err);
+    } finally {
+      set({ isSubmitting: false });
     }
   },
 

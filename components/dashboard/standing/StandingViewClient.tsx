@@ -26,6 +26,7 @@ import {
 } from "@/lib/standing-engine";
 import { CategoryCode } from "@/lib/config/standingConfig";
 import { StreamType } from "@/types";
+import { stringToUuid } from "@/lib/utils";
 
 interface StandingViewClientProps {
   initialUser?: { targetCollege?: string; targetCourse?: string; targetStream?: string };
@@ -63,10 +64,22 @@ export default function StandingViewClient({
   useEffect(() => {
     if (initialAttempts && initialAttempts.length > 0) {
       const { testAttempts: localAttempts, recordTestAttempt } = useTestStore.getState();
-      const localKeys = new Set((localAttempts || []).map((a) => (a.testId || a.id || "").trim()));
+      const localKeys = new Set(
+        (localAttempts || []).flatMap((a) => [
+          (a.testId || "").trim(),
+          (a.id || "").trim(),
+          stringToUuid((a.testId || "").trim()),
+        ])
+      );
       initialAttempts.forEach((att) => {
         const k = (att.testId || att.id || "").trim();
-        if (!localKeys.has(k)) {
+        const uuidK = stringToUuid(k);
+        const matchesLocal = (localAttempts || []).some(
+          (la) =>
+            la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
+            la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim()
+        );
+        if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !matchesLocal) {
           recordTestAttempt(att);
         }
       });

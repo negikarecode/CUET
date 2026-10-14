@@ -9,6 +9,7 @@ import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { calculateCUETScore, MARKING_SCHEME } from "@/lib/config/dashboardConfig";
 import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
 import { safeStorage } from "@/lib/storage/safe-storage";
+import { stringToUuid } from "@/lib/utils";
 
 import { WelcomeBanner } from "@/components/dashboard/prep-pulse/WelcomeBanner";
 import { NextBestActionCard } from "@/components/dashboard/prep-pulse/NextBestActionCard";
@@ -109,10 +110,22 @@ export default function DashboardClient({
 
       if (initialData.serverAttempts && initialData.serverAttempts.length > 0) {
         const localAttempts = state.testAttempts || [];
-        const localKeys = new Set(localAttempts.map((a) => (a.testId || a.id || "").trim()));
+        const localKeys = new Set(
+          localAttempts.flatMap((a) => [
+            (a.testId || "").trim(),
+            (a.id || "").trim(),
+            stringToUuid((a.testId || "").trim()),
+          ])
+        );
         initialData.serverAttempts.forEach((att) => {
           const k = (att.testId || att.id || "").trim();
-          if (!localKeys.has(k)) {
+          const uuidK = stringToUuid(k);
+          const matchesLocal = localAttempts.some(
+            (la) =>
+              la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
+              la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim()
+          );
+          if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !matchesLocal) {
             state.recordTestAttempt(att);
           }
         });

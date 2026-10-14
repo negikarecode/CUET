@@ -9,6 +9,8 @@ import { calculateNextStreakOnPractice, getLocalDateString } from "@/lib/gamific
 
 export const dynamic = "force-dynamic";
 
+const recentAttemptSubmissions = new Map<string, number>();
+
 export async function POST(req: NextRequest) {
   try {
     const attempt = (await req.json()) as RecordedTestAttempt;
@@ -76,11 +78,13 @@ export async function POST(req: NextRequest) {
     const unattemptedCount = Math.max(0, (attempt.totalQuestions || attempt.questions.length) - verifiedAttemptedCount);
     attempt.unattemptedCount = unattemptedCount;
 
+    const totalQ = attempt.totalQuestions || attempt.questions.length || 50;
     const { totalMarks, maxMarks } = calculateExamScore(
       verifiedCorrectCount,
       verifiedIncorrectCount,
       unattemptedCount,
-      CUET_UG_2026_CONFIG
+      CUET_UG_2026_CONFIG,
+      totalQ
     );
 
     attempt.totalMarks = totalMarks;
@@ -106,6 +110,25 @@ export async function POST(req: NextRequest) {
       }
     } catch {
       // Offline / client-only fallback
+    }
+
+    // Server Idempotency Guard: prevent identical double submissions within 30 seconds
+    const idempotencyKey = `${targetUserId}_${stringToUuid(attempt.testId)}_${attempt.id || ""}`;
+    const nowMs = Date.now();
+    const lastSeen = recentAttemptSubmissions.get(idempotencyKey);
+    if (lastSeen && nowMs - lastSeen < 30000) {
+      return NextResponse.json({
+        success: true,
+        deduplicated: true,
+        persistedToDatabase: isSupabaseAuthenticated,
+        attempt,
+      });
+    }
+    recentAttemptSubmissions.set(idempotencyKey, nowMs);
+    if (recentAttemptSubmissions.size > 500) {
+      for (const [k, t] of recentAttemptSubmissions.entries()) {
+        if (nowMs - t > 60000) recentAttemptSubmissions.delete(k);
+      }
     }
 
     // Persist to database ONLY when user has a verified Supabase authenticated session

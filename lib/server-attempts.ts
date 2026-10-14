@@ -32,7 +32,8 @@ export async function fetchServerTestAttempts(
         tests (
           id,
           title,
-          subject
+          subject,
+          total_questions
         )
       `)
       .eq("user_id", userId);
@@ -57,6 +58,7 @@ export async function fetchServerTestAttempts(
         testId: string;
         testTitle: string;
         subject: string;
+        totalQuestions: number;
         questions: any[];
         submittedAt: string;
       }
@@ -67,12 +69,14 @@ export async function fetchServerTestAttempts(
       const q = ua.questions;
       const subject = q?.subject || ua.tests?.subject || "Domain";
       const testTitle = ua.tests?.title || `CUET ${subject} Mock`;
+      const testTotalQuestions = ua.tests?.total_questions || 50;
 
       if (!testGroups.has(tId)) {
         testGroups.set(tId, {
           testId: tId,
           testTitle,
           subject,
+          totalQuestions: testTotalQuestions,
           questions: [],
           submittedAt: ua.created_at || new Date().toISOString(),
         });
@@ -104,20 +108,24 @@ export async function fetchServerTestAttempts(
       const correct = g.questions.filter((q) => q.isCorrect).length;
       const attempted = g.questions.length;
       const incorrect = attempted - correct;
-      const totalMarks = Math.max(0, correct * 5 - incorrect * 1);
+      const totalMarks = correct * 5 - incorrect * 1;
+      const totalQuestions = g.totalQuestions || Math.max(50, attempted);
+      const maxMarks = totalQuestions * 5;
+      const unattempted = Math.max(0, totalQuestions - attempted);
+
       return {
         id: g.testId,
         userId,
         testId: g.testId,
         testTitle: g.testTitle,
         subject: g.subject,
-        totalQuestions: Math.max(50, attempted),
+        totalQuestions,
         attemptedCount: attempted,
-        unattemptedCount: Math.max(0, 50 - attempted),
+        unattemptedCount: unattempted,
         correctCount: correct,
         incorrectCount: incorrect,
         totalMarks,
-        maxMarks: 250,
+        maxMarks,
         accuracyPercentage: attempted > 0 ? Math.round((correct / attempted) * 100) : 0,
         timeTakenSeconds: g.questions.reduce((sum, q) => sum + (q.timeSpentSeconds || 0), 0),
         timeSinkCount: g.questions.filter((q) => q.isTimeSink).length,

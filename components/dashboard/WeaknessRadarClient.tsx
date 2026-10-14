@@ -38,6 +38,7 @@ import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { RepairQuizResponse } from "@/app/api/ai/repair-quiz/route";
+import { stringToUuid } from "@/lib/utils";
 import {
   TopicMastery,
   TimeSinkAlertData,
@@ -334,10 +335,22 @@ export default function WeaknessRadarClient({
   useEffect(() => {
     if (initialData.serverAttempts && initialData.serverAttempts.length > 0) {
       const { testAttempts: localAttempts, recordTestAttempt } = useTestStore.getState();
-      const localKeys = new Set((localAttempts || []).map((a) => (a.testId || a.id || "").trim()));
+      const localKeys = new Set(
+        (localAttempts || []).flatMap((a) => [
+          (a.testId || "").trim(),
+          (a.id || "").trim(),
+          stringToUuid((a.testId || "").trim()),
+        ])
+      );
       initialData.serverAttempts.forEach((att) => {
         const k = (att.testId || att.id || "").trim();
-        if (!localKeys.has(k)) {
+        const uuidK = stringToUuid(k);
+        const matchesLocal = (localAttempts || []).some(
+          (la) =>
+            la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
+            la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim()
+        );
+        if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !matchesLocal) {
           recordTestAttempt(att);
         }
       });

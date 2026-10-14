@@ -13,49 +13,126 @@ import {
   ClipboardCheck,
   TrendingUp,
   RotateCcw,
+  RotateCw,
+  Trash2,
+  AlertTriangle,
+  ChevronLeft,
+  X,
+  Loader2,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { RecordedTestAttempt } from "@/types";
-import { formatDateIndian, MARKING_SCHEME } from "@/lib/config/dashboardConfig";
+import { formatDateTimeIndian } from "@/lib/config/dashboardConfig";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { stringToUuid } from "@/lib/utils";
 
 interface SessionsHistoryClientProps {
   initialAttempts?: RecordedTestAttempt[];
+}
+
+export type SessionType = "Mock" | "Past Paper" | "Practice";
+
+function getSessionType(att: RecordedTestAttempt): SessionType {
+  const str = `${att.testId || ""} ${att.testTitle || ""} ${att.subject || ""}`.toLowerCase();
+  if (str.includes("pyq") || str.includes("past paper") || str.includes("official past")) {
+    return "Past Paper";
+  }
+  if (
+    str.includes("practice") ||
+    str.includes("drill") ||
+    str.includes("unit") ||
+    str.includes("chapter") ||
+    (att.totalQuestions && att.totalQuestions <= 25)
+  ) {
+    return "Practice";
+  }
+  return "Mock";
+}
+
+function getSessionSubtitle(att: RecordedTestAttempt, type: SessionType): string {
+  const title = (att.testTitle || "").toLowerCase();
+  const testId = (att.testId || "").toLowerCase();
+  const combined = `${title} ${testId}`;
+
+  const yearMatch = combined.match(/202[0-9]/);
+  const shiftMatch = combined.match(/shift\s*([1-3]|i{1,3})/i);
+
+  if (type === "Past Paper") {
+    const year = yearMatch ? yearMatch[0] : "Official";
+    const shift = shiftMatch ? ` · ${shiftMatch[0].toUpperCase()}` : "";
+    return `CUET UG ${year} Past Paper${shift}`;
+  }
+  if (type === "Practice") {
+    const qCount = att.totalQuestions || 20;
+    return `Chapter Practice Drill · ${qCount} Questions`;
+  }
+  const qCount = att.totalQuestions || 50;
+  return `Full Syllabus CBT Mock · ${qCount} Compulsory Questions`;
+}
+
+function getReviewHref(att: RecordedTestAttempt): string {
+  const id = att.id || att.testId || "";
+  const testId = (att.testId || "").toLowerCase();
+  if (testId.includes("pyq") || testId.includes("past")) {
+    return `/dashboard/pyqs/analysis/${id}`;
+  }
+  return `/dashboard/mocks/analysis/${id}`;
+}
+
+function getRetakeHref(att: RecordedTestAttempt): string {
+  const targetId = att.testId || att.id || "";
+  return `/test/${targetId}?reattempt=true`;
 }
 
 export default function SessionsHistoryClient({
   initialAttempts = [],
 }: SessionsHistoryClientProps) {
   const isClient = useIsClient();
-  const storeAttempts = useTestStore((s) => s.testAttempts) || [];
+  const rawStoreAttempts = useTestStore((s) => s.testAttempts);
+  const storeAttempts = useMemo(() => rawStoreAttempts || [], [rawStoreAttempts]);
   const recordTestAttempt = useTestStore((s) => s.recordTestAttempt);
+  const deleteTestAttempt = useTestStore((s) => s.deleteTestAttempt);
 
-  // Synchronize initial server attempts into Zustand store if not already present
+  // Synchronize initial server attempts into Zustand store idempotently
   useEffect(() => {
     if (initialAttempts.length > 0) {
       const state = useTestStore.getState();
       const localAttempts = state.testAttempts || [];
-      const localKeys = new Set(localAttempts.map((a) => (a.testId || a.id || "").trim()));
+      const localKeys = new Set(
+        localAttempts.flatMap((a) => [
+          (a.testId || "").trim(),
+          (a.id || "").trim(),
+          stringToUuid((a.testId || "").trim()),
+        ])
+      );
 
       initialAttempts.forEach((att) => {
         const k = (att.testId || att.id || "").trim();
-        if (k && !localKeys.has(k)) {
+        const uuidK = stringToUuid(k);
+        const matchesLocal = localAttempts.some(
+          (la) =>
+            la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
+            la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim()
+        );
+        if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !matchesLocal) {
           recordTestAttempt(att);
         }
       });
     }
   }, [initialAttempts, recordTestAttempt]);
 
-  // Merge store and server attempts uniquely by testId / id
+  // Canonical deduplication across store and server attempts
   const allAttempts = useMemo(() => {
     const list = storeAttempts.length > 0 ? storeAttempts : initialAttempts;
     const seen = new Set<string>();
     const unique: RecordedTestAttempt[] = [];
 
     list.forEach((att) => {
-      const key = (att.id || att.testId || "").trim();
-      if (!key || !seen.has(key)) {
-        if (key) seen.add(key);
+      const canonicalKey = stringToUuid(att.testId || att.id || att.testTitle || "");
+      const normKey = `${(att.subject || "").toLowerCase().trim()}:::${(att.testTitle || "").toLowerCase().trim()}`;
+      if (!seen.has(canonicalKey) && !seen.has(normKey)) {
+        seen.add(canonicalKey);
+        seen.add(normKey);
         unique.push(att);
       }
     });
@@ -66,7 +143,20 @@ export default function SessionsHistoryClient({
   // Filter & Search states
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
+  const [selectedType, setSelectedType] = useState<string>("all");
+  const [dateRange, setDateRange] = useState<"all" | "today" | "7days" | "30days">("all");
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "highest_score" | "highest_accuracy">("newest");
+
+  // Chart subject filter
+  const [chartSubject, setChartSubject] = useState<string>("all");
+
+  // Pagination state (25 per page)
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 25;
+
+  // Deletion modal state
+  const [sessionToDelete, setSessionToDelete] = useState<RecordedTestAttempt | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Extract unique subjects
   const availableSubjects = useMemo(() => {
@@ -80,37 +170,87 @@ export default function SessionsHistoryClient({
   // Overall KPI statistics
   const stats = useMemo(() => {
     if (allAttempts.length === 0) {
-      return { totalCount: 0, avgScore: 0, avgAccuracy: 0, bestScore: 0 };
+      return {
+        totalCount: 0,
+        avgScore: 0,
+        avgMaxMarks: 250,
+        avgScorePercentage: 0,
+        avgAccuracy: 0,
+        bestScore: 0,
+        bestMaxMarks: 250,
+      };
     }
 
     const totalCount = allAttempts.length;
     let sumScore = 0;
+    let sumMaxMarks = 0;
     let sumAccuracy = 0;
-    let bestScore = 0;
+    let bestScore = -Infinity;
+    let bestMaxMarks = 250;
 
     allAttempts.forEach((att) => {
-      const score = att.totalMarks || 0;
+      const score = att.totalMarks ?? 0;
+      const maxM = att.maxMarks || (att.totalQuestions ? att.totalQuestions * 5 : 250);
       const acc = att.accuracyPercentage || 0;
+
       sumScore += score;
+      sumMaxMarks += maxM;
       sumAccuracy += acc;
-      if (score > bestScore) bestScore = score;
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestMaxMarks = maxM;
+      }
     });
+
+    const avgScore = Math.round(sumScore / totalCount);
+    const avgMaxMarks = Math.round(sumMaxMarks / totalCount);
+    const avgScorePercentage = avgMaxMarks > 0 ? Math.max(0, Math.round((avgScore / avgMaxMarks) * 100)) : 0;
+    const avgAccuracy = Math.round(sumAccuracy / totalCount);
 
     return {
       totalCount,
-      avgScore: Math.round(sumScore / totalCount),
-      avgAccuracy: Math.round(sumAccuracy / totalCount),
-      bestScore,
+      avgScore,
+      avgMaxMarks,
+      avgScorePercentage,
+      avgAccuracy,
+      bestScore: bestScore === -Infinity ? 0 : bestScore,
+      bestMaxMarks,
     };
   }, [allAttempts]);
 
   // Filtered & sorted attempts
   const filteredAttempts = useMemo(() => {
+    const now = Date.now();
     return allAttempts
       .filter((att) => {
         // Subject filter
         if (selectedSubject !== "all" && att.subject?.toLowerCase() !== selectedSubject.toLowerCase()) {
           return false;
+        }
+
+        // Type filter
+        if (selectedType !== "all") {
+          const t = getSessionType(att);
+          if (t.toLowerCase().replace(/\s+/g, "_") !== selectedType.toLowerCase()) {
+            return false;
+          }
+        }
+
+        // Date-range filter
+        if (dateRange !== "all") {
+          const attemptTime = new Date(att.submittedAt || 0).getTime();
+          if (dateRange === "today") {
+            const todayStart = new Date();
+            todayStart.setHours(0, 0, 0, 0);
+            if (attemptTime < todayStart.getTime()) return false;
+          } else if (dateRange === "7days") {
+            const cutoff = now - 7 * 24 * 60 * 60 * 1000;
+            if (attemptTime < cutoff) return false;
+          } else if (dateRange === "30days") {
+            const cutoff = now - 30 * 24 * 60 * 60 * 1000;
+            if (attemptTime < cutoff) return false;
+          }
         }
 
         // Search query filter
@@ -136,19 +276,61 @@ export default function SessionsHistoryClient({
         // Default: newest first
         return new Date(b.submittedAt || 0).getTime() - new Date(a.submittedAt || 0).getTime();
       });
-  }, [allAttempts, searchQuery, selectedSubject, sortBy]);
+  }, [allAttempts, searchQuery, selectedSubject, selectedType, dateRange, sortBy]);
+
+  // Reset pagination to page 1 on filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedSubject, selectedType, dateRange, sortBy]);
+
+  // Paginated items
+  const totalPages = Math.max(1, Math.ceil(filteredAttempts.length / pageSize));
+  const paginatedAttempts = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredAttempts.slice(start, start + pageSize);
+  }, [filteredAttempts, currentPage]);
+
+  // Chart data: Chronological points filtered by chartSubject
+  const chartPoints = useMemo(() => {
+    const list = allAttempts.filter((att) => {
+      if (chartSubject === "all") return true;
+      return att.subject?.toLowerCase() === chartSubject.toLowerCase();
+    });
+
+    return [...list].sort(
+      (a, b) => new Date(a.submittedAt || 0).getTime() - new Date(b.submittedAt || 0).getTime()
+    );
+  }, [allAttempts, chartSubject]);
+
+  // Delete session handler
+  const handleConfirmDelete = async () => {
+    if (!sessionToDelete) return;
+    setIsDeleting(true);
+    try {
+      const testKey = sessionToDelete.testId || sessionToDelete.id || "";
+      deleteTestAttempt(testKey);
+
+      await fetch(`/api/student/attempts?testId=${encodeURIComponent(testKey)}`, {
+        method: "DELETE",
+      }).catch((err) => console.warn("Failed to delete attempt from database:", err));
+
+      setSessionToDelete(null);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   if (!isClient) {
     return (
-      <div className="py-12 flex justify-center items-center">
-        <div className="w-8 h-8 border-3 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
+      <div className="py-16 flex justify-center items-center">
+        <div className="w-9 h-9 border-3 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Top Header & Breadcrumb */}
+    <div className="space-y-6 pb-12">
+      {/* Top Header & Navigation */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <Link
@@ -158,7 +340,7 @@ export default function SessionsHistoryClient({
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Dashboard</span>
           </Link>
-          <h1 className="text-[26px] sm:text-[30px] font-bold text-[var(--text)] tracking-tight">
+          <h1 className="text-[28px] font-bold text-[var(--text)] tracking-tight">
             Session History
           </h1>
           <p className="text-[14px] text-[var(--text-secondary)] mt-1">
@@ -166,10 +348,10 @@ export default function SessionsHistoryClient({
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-3 shrink-0">
           <Link
             href="/dashboard/mocks"
-            className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-[8px] bg-[var(--accent)] hover:bg-blue-600 text-white text-[14px] font-semibold shadow-sm transition-all"
+            className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-[8px] bg-[var(--accent)] hover:bg-blue-600 text-white text-[13px] font-semibold shadow-xs transition-all"
           >
             <ClipboardCheck className="w-4 h-4" />
             <span>Take a Mock Test</span>
@@ -179,95 +361,219 @@ export default function SessionsHistoryClient({
 
       {/* Summary KPI Cards */}
       {allAttempts.length > 0 && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="app-card p-4 flex items-center gap-3 border border-[var(--border)]">
-            <div className="w-10 h-10 rounded-[8px] bg-blue-50 flex items-center justify-center text-[var(--accent)] shrink-0">
-              <ClipboardCheck className="w-5 h-5" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <div className="app-card p-4 flex items-center gap-3.5 border border-[var(--border)] shadow-xs">
+            <div className="w-11 h-11 rounded-[10px] bg-blue-50 flex items-center justify-center text-[var(--accent)] shrink-0">
+              <ClipboardCheck className="w-5 h-5 stroke-[2.2]" />
             </div>
             <div>
-              <p className="text-[12px] font-medium text-[var(--text-secondary)]">Completed Sessions</p>
-              <p className="text-[20px] font-bold text-[var(--text)] tabular-nums">{stats.totalCount}</p>
+              <p className="text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+                Completed Sessions
+              </p>
+              <p className="text-[22px] font-bold text-[var(--text)] tabular-nums mt-0.5">
+                {stats.totalCount}
+              </p>
             </div>
           </div>
 
-          <div className="app-card p-4 flex items-center gap-3 border border-[var(--border)]">
-            <div className="w-10 h-10 rounded-[8px] bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
-              <TrendingUp className="w-5 h-5" />
+          <div className="app-card p-4 flex items-center gap-3.5 border border-[var(--border)] shadow-xs">
+            <div className="w-11 h-11 rounded-[10px] bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+              <TrendingUp className="w-5 h-5 stroke-[2.2]" />
             </div>
             <div>
-              <p className="text-[12px] font-medium text-[var(--text-secondary)]">Average Score</p>
-              <p className="text-[20px] font-bold text-[var(--text)] tabular-nums">{stats.avgScore} <span className="text-[13px] font-normal text-[var(--text-muted)]">marks</span></p>
+              <p className="text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+                Average Score
+              </p>
+              <div className="flex items-baseline gap-1.5 mt-0.5">
+                <span className="text-[22px] font-bold text-[var(--text)] tabular-nums">
+                  {stats.avgScore}
+                </span>
+                <span className="text-[13px] font-normal text-[var(--text-muted)] tabular-nums">
+                  / {stats.avgMaxMarks}
+                </span>
+                <span className="text-[12px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded ml-1">
+                  {stats.avgScorePercentage}%
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="app-card p-4 flex items-center gap-3 border border-[var(--border)]">
-            <div className="w-10 h-10 rounded-[8px] bg-amber-50 flex items-center justify-center text-amber-600 shrink-0">
-              <Target className="w-5 h-5" />
+          <div className="app-card p-4 flex items-center gap-3.5 border border-[var(--border)] shadow-xs">
+            <div className="w-11 h-11 rounded-[10px] bg-amber-50 flex items-center justify-center text-amber-600 shrink-0">
+              <Target className="w-5 h-5 stroke-[2.2]" />
             </div>
             <div>
-              <p className="text-[12px] font-medium text-[var(--text-secondary)]">Average Accuracy</p>
-              <p className="text-[20px] font-bold text-[var(--text)] tabular-nums">{stats.avgAccuracy}%</p>
+              <p className="text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+                Average Accuracy
+              </p>
+              <p className="text-[22px] font-bold text-[var(--text)] tabular-nums mt-0.5">
+                {stats.avgAccuracy}%
+              </p>
             </div>
           </div>
 
-          <div className="app-card p-4 flex items-center gap-3 border border-[var(--border)]">
-            <div className="w-10 h-10 rounded-[8px] bg-purple-50 flex items-center justify-center text-purple-600 shrink-0">
-              <Award className="w-5 h-5" />
+          <div className="app-card p-4 flex items-center gap-3.5 border border-[var(--border)] shadow-xs">
+            <div className="w-11 h-11 rounded-[10px] bg-purple-50 flex items-center justify-center text-purple-600 shrink-0">
+              <Award className="w-5 h-5 stroke-[2.2]" />
             </div>
             <div>
-              <p className="text-[12px] font-medium text-[var(--text-secondary)]">Personal Best</p>
-              <p className="text-[20px] font-bold text-[var(--text)] tabular-nums">{stats.bestScore} <span className="text-[13px] font-normal text-[var(--text-muted)]">marks</span></p>
+              <p className="text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+                Personal Best
+              </p>
+              <div className="flex items-baseline gap-1.5 mt-0.5">
+                <span className="text-[22px] font-bold text-purple-700 tabular-nums">
+                  {stats.bestScore}
+                </span>
+                <span className="text-[13px] font-normal text-[var(--text-muted)] tabular-nums">
+                  / {stats.bestMaxMarks}
+                </span>
+              </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Score-over-Time Line Chart Card */}
+      {allAttempts.length > 0 && (
+        <div className="app-card p-5 border border-[var(--border)] shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-[var(--border)]">
+            <div>
+              <h2 className="text-[16px] font-bold text-[var(--text)] flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-[var(--accent)]" />
+                <span>Score Trajectory Over Time</span>
+              </h2>
+              <p className="text-[12px] text-[var(--text-secondary)] mt-0.5">
+                Chronological marks scored across test sessions
+              </p>
+            </div>
+
+            {/* Subject Selector for Line Chart */}
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-[12px] text-[var(--text-muted)] font-medium">Filter Chart:</span>
+              <select
+                aria-label="Filter chart by subject"
+                value={chartSubject}
+                onChange={(e) => setChartSubject(e.target.value)}
+                className="h-8 px-2.5 rounded-[6px] border border-[var(--border)] bg-white text-[12px] font-semibold text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+              >
+                <option value="all">All Subjects ({allAttempts.length})</option>
+                {availableSubjects.map((sub) => {
+                  const count = allAttempts.filter(
+                    (a) => a.subject?.toLowerCase() === sub.toLowerCase()
+                  ).length;
+                  return (
+                    <option key={sub} value={sub}>
+                      {sub} ({count})
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
+
+          {/* SVG Score Line Chart */}
+          <div className="w-full">
+            {chartPoints.length === 0 ? (
+              <div className="py-12 text-center text-[13px] text-[var(--text-muted)]">
+                No attempts recorded for {chartSubject}.
+              </div>
+            ) : chartPoints.length === 1 && chartPoints[0] ? (
+              (() => {
+                const sp = chartPoints[0];
+                return (
+                  <div className="py-8 px-4 text-center bg-slate-50 rounded-[10px] border border-slate-100 flex flex-col items-center justify-center gap-1.5">
+                    <p className="text-[13px] font-medium text-[var(--text-secondary)]">Single session recorded:</p>
+                    <p className="text-[18px] font-bold text-[var(--text)]">
+                      {sp.testTitle} —{" "}
+                      <span className="text-[var(--accent)]">{sp.totalMarks}</span> /{" "}
+                      {sp.maxMarks || 250} marks
+                    </p>
+                    <p className="text-[12px] text-[var(--text-muted)]">
+                      {formatDateTimeIndian(sp.submittedAt || new Date())}
+                    </p>
+                  </div>
+                );
+              })()
+            ) : (
+              <ScoreLineChart points={chartPoints} />
+            )}
           </div>
         </div>
       )}
 
       {/* Filter and Search Bar */}
       {allAttempts.length > 0 && (
-        <div className="app-card p-4 space-y-3 border border-[var(--border)]">
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        <div className="app-card p-4 space-y-3.5 border border-[var(--border)] shadow-xs">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
             {/* Search Input */}
-            <div className="relative flex-1">
+            <div className="relative md:col-span-5">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
               <input
                 type="text"
                 placeholder="Search by test title or subject..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-10 pl-9 pr-3 rounded-[8px] border border-[var(--border)] bg-white text-[14px] text-[var(--text)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)] transition-colors"
+                className="w-full h-10 pl-9 pr-3 rounded-[8px] border border-[var(--border)] bg-white text-[13px] text-[var(--text)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)] transition-colors"
               />
             </div>
 
-            {/* Sort Selector */}
-            <div className="flex items-center gap-2 shrink-0">
-              <label htmlFor="sort-select" className="text-[13px] font-medium text-[var(--text-secondary)] whitespace-nowrap">
-                Sort:
-              </label>
+            {/* Type Filter */}
+            <div className="md:col-span-2">
               <select
-                id="sort-select"
+                aria-label="Filter by paper type"
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+                className="w-full h-10 px-3 rounded-[8px] border border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+              >
+                <option value="all">All Types</option>
+                <option value="mock">Full Mocks</option>
+                <option value="past_paper">Past Papers</option>
+                <option value="practice">Chapter Practice</option>
+              </select>
+            </div>
+
+            {/* Date Range Filter */}
+            <div className="md:col-span-2">
+              <select
+                aria-label="Filter by date range"
+                value={dateRange}
+                onChange={(e) => setDateRange(e.target.value as any)}
+                className="w-full h-10 px-3 rounded-[8px] border border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+              >
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="7days">Last 7 Days</option>
+                <option value="30days">Last 30 Days</option>
+              </select>
+            </div>
+
+            {/* Sort Selector */}
+            <div className="md:col-span-3">
+              <select
+                aria-label="Sort sessions"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="h-10 px-3 rounded-[8px] border border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
+                className="w-full h-10 px-3 rounded-[8px] border border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
               >
-                <option value="newest">Latest first</option>
-                <option value="oldest">Oldest first</option>
-                <option value="highest_score">Highest score</option>
-                <option value="highest_accuracy">Highest accuracy</option>
+                <option value="newest">Sort: Latest first</option>
+                <option value="oldest">Sort: Oldest first</option>
+                <option value="highest_score">Sort: Highest score</option>
+                <option value="highest_accuracy">Sort: Highest accuracy</option>
               </select>
             </div>
           </div>
 
           {/* Subject Pills */}
           {availableSubjects.length > 1 && (
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 text-[13px]">
-              <span className="text-[var(--text-muted)] mr-1 flex items-center gap-1">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 text-[13px] border-t border-slate-100">
+              <span className="text-[var(--text-muted)] mr-1 flex items-center gap-1 shrink-0 font-medium">
                 <Filter className="w-3.5 h-3.5" />
                 <span>Subject:</span>
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedSubject("all")}
-                className={`px-3 py-1 rounded-full font-medium transition-colors whitespace-nowrap ${
+                className={`px-3 py-1 rounded-full font-medium transition-colors whitespace-nowrap cursor-pointer ${
                   selectedSubject === "all"
                     ? "bg-[var(--accent)] text-white shadow-xs"
                     : "bg-slate-100 text-[var(--text-secondary)] hover:bg-slate-200"
@@ -276,13 +582,15 @@ export default function SessionsHistoryClient({
                 All Subjects ({allAttempts.length})
               </button>
               {availableSubjects.map((sub) => {
-                const count = allAttempts.filter((a) => a.subject?.toLowerCase() === sub.toLowerCase()).length;
+                const count = allAttempts.filter(
+                  (a) => a.subject?.toLowerCase() === sub.toLowerCase()
+                ).length;
                 return (
                   <button
                     key={sub}
                     type="button"
                     onClick={() => setSelectedSubject(sub)}
-                    className={`px-3 py-1 rounded-full font-medium transition-colors whitespace-nowrap ${
+                    className={`px-3 py-1 rounded-full font-medium transition-colors whitespace-nowrap cursor-pointer ${
                       selectedSubject.toLowerCase() === sub.toLowerCase()
                         ? "bg-[var(--accent)] text-white shadow-xs"
                         : "bg-slate-100 text-[var(--text-secondary)] hover:bg-slate-200"
@@ -313,7 +621,7 @@ export default function SessionsHistoryClient({
           <div className="pt-2">
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[8px] bg-[var(--accent)] hover:bg-blue-600 text-white text-[14px] font-semibold transition-all shadow-sm"
+              className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[8px] bg-[var(--accent)] hover:bg-blue-600 text-white text-[14px] font-semibold transition-all shadow-xs"
             >
               <ClipboardCheck className="w-4 h-4" />
               <span>Browse Mock Tests</span>
@@ -323,105 +631,216 @@ export default function SessionsHistoryClient({
       ) : filteredAttempts.length === 0 ? (
         /* Filter Zero State: No tests match search/subject */
         <div className="app-card py-12 px-4 text-center space-y-3 border border-[var(--border)]">
-          <p className="text-[15px] font-medium text-[var(--text)]">No sessions match your search or filter</p>
-          <p className="text-[13px] text-[var(--text-secondary)]">Try resetting the subject filter or entering different keywords.</p>
+          <p className="text-[15px] font-medium text-[var(--text)]">No sessions match your search or filters</p>
+          <p className="text-[13px] text-[var(--text-secondary)]">
+            Try resetting the filters or entering different search keywords.
+          </p>
           <button
             type="button"
             onClick={() => {
               setSearchQuery("");
               setSelectedSubject("all");
+              setSelectedType("all");
+              setDateRange("all");
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-white text-[13px] font-semibold text-[var(--text)] hover:bg-slate-50 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-white text-[13px] font-semibold text-[var(--text)] hover:bg-slate-50 transition-colors cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset filters</span>
           </button>
         </div>
       ) : (
-        <div className="app-card overflow-hidden border border-[var(--border)] space-y-0">
+        <div className="app-card overflow-hidden border border-[var(--border)] shadow-xs space-y-0">
           {/* Header count info */}
-          <div className="p-4 border-b border-[var(--border)] flex items-center justify-between text-[13px] text-[var(--text-secondary)]">
+          <div className="p-4 border-b border-[var(--border)] flex items-center justify-between text-[13px] text-[var(--text-secondary)] bg-white">
             <span>
-              Showing <strong>{filteredAttempts.length}</strong> session{filteredAttempts.length === 1 ? "" : "s"}
+              Showing <strong>{(currentPage - 1) * pageSize + 1}</strong> –{" "}
+              <strong>{Math.min(currentPage * pageSize, filteredAttempts.length)}</strong> of{" "}
+              <strong>{filteredAttempts.length}</strong> session
+              {filteredAttempts.length === 1 ? "" : "s"}
             </span>
-            <span className="text-[12px] text-[var(--text-muted)]">
-              Sorted by {sortBy === "newest" ? "latest date" : sortBy === "oldest" ? "oldest date" : sortBy === "highest_score" ? "highest marks" : "highest accuracy"}
+            <span className="text-[12px] text-[var(--text-muted)] font-medium">
+              Sorted by{" "}
+              {sortBy === "newest"
+                ? "latest date"
+                : sortBy === "oldest"
+                ? "oldest date"
+                : sortBy === "highest_score"
+                ? "highest marks"
+                : "highest accuracy"}
             </span>
           </div>
 
           {/* Desktop Table View */}
-          <div className="hidden sm:block overflow-x-auto">
+          <div className="overflow-x-auto max-h-[720px] overflow-y-auto">
             <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-[var(--border)] text-[12px] font-semibold text-[var(--text-muted)] bg-slate-50/75">
-                  <th className="py-3 px-4 font-medium">Test title</th>
-                  <th className="py-3 px-4 font-medium">Subject</th>
-                  <th className="py-3 px-4 font-medium">Date & Time</th>
-                  <th className="py-3 px-4 font-medium text-right">Marks Scored</th>
-                  <th className="py-3 px-4 font-medium text-right">Accuracy</th>
-                  <th className="py-3 px-4 font-medium text-right">Breakdown</th>
-                  <th className="py-3 pr-4 pl-2 font-medium text-right">Action</th>
+              <thead className="sticky top-0 z-10 bg-slate-50 shadow-xs border-b border-[var(--border)]">
+                <tr className="text-[12px] font-semibold text-[var(--text-muted)] bg-slate-50">
+                  <th className="py-3 px-4 font-semibold">Test Title</th>
+                  <th className="py-3 px-4 font-semibold min-w-[190px]">Subject</th>
+                  <th className="py-3 px-4 font-semibold whitespace-nowrap">Date & Time</th>
+                  <th className="py-3 px-4 font-semibold text-right">Marks Scored</th>
+                  <th className="py-3 px-4 font-semibold text-right">Accuracy</th>
+                  <th className="py-3 px-4 font-semibold text-right">Breakdown</th>
+                  <th className="py-3 pr-4 pl-2 font-semibold text-right min-w-[160px]">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--border)]">
-                {filteredAttempts.map((att: RecordedTestAttempt, idx: number) => {
-                  const formattedDate = formatDateIndian(att.submittedAt || new Date());
-                  const maxMarks = att.maxMarks || MARKING_SCHEME.MAX_MARKS_PER_SUBJECT;
+              <tbody className="divide-y divide-[var(--border)] bg-white">
+                {paginatedAttempts.map((att: RecordedTestAttempt, idx: number) => {
+                  const type = getSessionType(att);
+                  const subtitle = getSessionSubtitle(att, type);
+                  const maxMarks = att.maxMarks || (att.totalQuestions ? att.totalQuestions * 5 : 250);
                   const title = att.testTitle || `${att.subject || "Domain"} CBT Mock Test`;
-                  const reviewHref = (att.id || att.testId)
-                    ? (att.testId?.toLowerCase().includes("pyq")
-                        ? `/dashboard/pyqs/analysis/${att.id || att.testId}`
-                        : `/dashboard/mocks/analysis/${att.id || att.testId}`)
-                    : `/dashboard/mocks`;
+                  const reviewHref = getReviewHref(att);
+                  const retakeHref = getRetakeHref(att);
+                  const isPersonalBest = stats.bestScore > 0 && att.totalMarks === stats.bestScore;
+                  const correct = att.correctCount || 0;
+                  const wrong = att.incorrectCount || 0;
+                  const totalQ = att.totalQuestions || (maxMarks ? Math.round(maxMarks / 5) : 50);
+                  const skipped = Math.max(0, totalQ - (correct + wrong));
 
                   return (
                     <tr
                       key={att.id || `session-${idx}`}
-                      className="h-14 hover:bg-slate-50/60 transition-colors text-[14px]"
+                      className="hover:bg-slate-50/70 transition-colors text-[14px] group"
                     >
-                      <td className="py-3 px-4 font-medium text-[var(--text)] max-w-[280px]">
-                        <p className="truncate font-semibold text-slate-900">{title}</p>
-                        <p className="text-[12px] text-[var(--text-muted)]">{att.totalQuestions || 50} Questions</p>
+                      {/* Test Title with Wrap to Two Lines and Subtitle */}
+                      <td className="py-3.5 px-4 font-medium max-w-[320px]">
+                        <div className="space-y-1">
+                          <div className="flex items-start gap-2">
+                            <p className="font-semibold text-slate-900 leading-snug line-clamp-2 whitespace-normal break-words">
+                              {title}
+                            </p>
+                            {isPersonalBest && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs shrink-0 whitespace-nowrap">
+                                ★ Personal Best
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span
+                              className={`inline-block px-2 py-0.5 rounded-[4px] text-[11px] font-semibold border ${
+                                type === "Mock"
+                                  ? "bg-blue-50 text-blue-700 border-blue-200"
+                                  : type === "Past Paper"
+                                  ? "bg-purple-50 text-purple-700 border-purple-200"
+                                  : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              }`}
+                            >
+                              {type}
+                            </span>
+                            <span className="text-[12px] text-[var(--text-muted)] whitespace-normal">
+                              {subtitle}
+                            </span>
+                          </div>
+                        </div>
                       </td>
-                      <td className="py-3 px-4">
-                        <span className="inline-block px-2.5 py-0.5 rounded-full text-[12px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+
+                      {/* Subject (Wide so Environmental Studies stays on one line) */}
+                      <td className="py-3.5 px-4 min-w-[190px] whitespace-nowrap">
+                        <span className="inline-block px-2.5 py-1 rounded-full text-[12px] font-semibold bg-slate-100 text-slate-700 border border-slate-200/80">
                           {att.subject || "Domain"}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-[var(--text-muted)] whitespace-nowrap text-[13px]">
+
+                      {/* Date & Time */}
+                      <td className="py-3.5 px-4 text-[var(--text-muted)] whitespace-nowrap text-[12px] font-medium">
                         <div className="flex items-center gap-1.5">
                           <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                          <span>{formattedDate}</span>
+                          <span>{formatDateTimeIndian(att.submittedAt || new Date())}</span>
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-right font-bold text-[var(--text)] tabular-nums whitespace-nowrap">
-                        <span className="text-[15px]">{att.totalMarks}</span>
-                        <span className="text-[13px] font-normal text-[var(--text-muted)]"> / {maxMarks}</span>
+
+                      {/* Marks Scored (Negative in Red) */}
+                      <td className="py-3.5 px-4 text-right tabular-nums whitespace-nowrap">
+                        <span
+                          className={`text-[15px] ${
+                            (att.totalMarks ?? 0) < 0
+                              ? "text-rose-600 font-extrabold"
+                              : "text-[var(--text)] font-bold"
+                          }`}
+                        >
+                          {att.totalMarks}
+                        </span>
+                        <span className="text-[13px] font-normal text-[var(--text-muted)]">
+                          {" "}
+                          / {maxMarks}
+                        </span>
                       </td>
-                      <td className="py-3 px-4 text-right tabular-nums whitespace-nowrap">
-                        <span className={`inline-block px-2 py-0.5 rounded-md text-[13px] font-semibold ${
-                          (att.accuracyPercentage || 0) >= 70
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                            : (att.accuracyPercentage || 0) >= 40
-                            ? "bg-blue-50 text-blue-700 border border-blue-200"
-                            : "bg-amber-50 text-amber-700 border border-amber-200"
-                        }`}>
+
+                      {/* Accuracy */}
+                      <td className="py-3.5 px-4 text-right tabular-nums whitespace-nowrap">
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded-[6px] text-[12px] font-semibold border ${
+                            (att.accuracyPercentage || 0) >= 70
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              : (att.accuracyPercentage || 0) >= 40
+                              ? "bg-blue-50 text-blue-700 border-blue-200"
+                              : "bg-amber-50 text-amber-700 border-amber-200"
+                          }`}
+                        >
                           {att.accuracyPercentage}%
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-right text-[12px] text-[var(--text-muted)] tabular-nums whitespace-nowrap">
-                        <span className="text-emerald-600 font-medium">+{att.correctCount || 0}</span>
-                        <span className="mx-1">/</span>
-                        <span className="text-rose-500 font-medium">-{att.incorrectCount || 0}</span>
+
+                      {/* Breakdown: 7 correct · 6 wrong · 37 skipped */}
+                      <td className="py-3.5 px-4 text-right tabular-nums whitespace-nowrap">
+                        <div className="flex flex-col items-end gap-1">
+                          <div className="text-[12px] font-medium whitespace-nowrap">
+                            <span className="text-emerald-600 font-semibold">{correct} correct</span>
+                            <span className="text-slate-300 mx-1">·</span>
+                            <span className="text-rose-500 font-semibold">{wrong} wrong</span>
+                            <span className="text-slate-300 mx-1">·</span>
+                            <span className="text-slate-500">{skipped} skipped</span>
+                          </div>
+                          {/* Mini Progress Ratio */}
+                          <div className="w-24 h-1.5 rounded-full bg-slate-100 overflow-hidden flex">
+                            <div
+                              style={{ width: `${Math.min(100, (correct / totalQ) * 100)}%` }}
+                              className="bg-emerald-500 h-full"
+                            />
+                            <div
+                              style={{ width: `${Math.min(100, (wrong / totalQ) * 100)}%` }}
+                              className="bg-rose-500 h-full"
+                            />
+                            <div
+                              style={{ width: `${Math.min(100, (skipped / totalQ) * 100)}%` }}
+                              className="bg-slate-200 h-full"
+                            />
+                          </div>
+                        </div>
                       </td>
-                      <td className="py-3 pr-4 pl-2 text-right whitespace-nowrap">
-                        <Link
-                          href={reviewHref}
-                          className="inline-flex items-center gap-1 text-[13px] font-semibold text-[var(--accent)] hover:text-blue-700 hover:underline"
-                        >
-                          <span>Review</span>
-                          <ChevronRight className="w-4 h-4" />
-                        </Link>
+
+                      {/* Action Buttons: Review, Retake, Delete */}
+                      <td className="py-3.5 pr-4 pl-2 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Link
+                            href={reviewHref}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[6px] text-[12px] font-semibold text-[var(--accent)] hover:bg-blue-50 transition-colors"
+                            title="Review test report and solutions"
+                          >
+                            <span>Review</span>
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </Link>
+
+                          <Link
+                            href={retakeHref}
+                            className="inline-flex items-center gap-1 px-2 py-1.5 rounded-[6px] text-[12px] font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                            title="Retake this test"
+                          >
+                            <RotateCw className="w-3.5 h-3.5" />
+                            <span>Retake</span>
+                          </Link>
+
+                          <button
+                            type="button"
+                            onClick={() => setSessionToDelete(att)}
+                            className="p-1.5 rounded-[6px] text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                            title="Delete this test session"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -430,70 +849,344 @@ export default function SessionsHistoryClient({
             </table>
           </div>
 
-          {/* Mobile Card View (<640px) */}
-          <div className="sm:hidden divide-y divide-[var(--border)]">
-            {filteredAttempts.map((att: RecordedTestAttempt, idx: number) => {
-              const formattedDate = formatDateIndian(att.submittedAt || new Date());
-              const maxMarks = att.maxMarks || MARKING_SCHEME.MAX_MARKS_PER_SUBJECT;
-              const title = att.testTitle || `${att.subject || "Domain"} CBT Mock Test`;
-              const reviewHref = (att.id || att.testId)
-                ? (att.testId?.toLowerCase().includes("pyq")
-                    ? `/dashboard/pyqs/analysis/${att.id || att.testId}`
-                    : `/dashboard/mocks/analysis/${att.id || att.testId}`)
-                : `/dashboard/mocks`;
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="p-4 border-t border-[var(--border)] flex items-center justify-between bg-white text-[13px]">
+              <div className="text-[var(--text-secondary)]">
+                Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+              </div>
 
-              return (
-                <div key={att.id || `mobile-session-${idx}`} className="p-4 space-y-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="space-y-1">
-                      <span className="inline-block px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                        {att.subject || "Domain"}
-                      </span>
-                      <h4 className="text-[15px] font-semibold text-[var(--text)] leading-snug">{title}</h4>
-                      <p className="text-[12px] text-[var(--text-muted)] flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5" />
-                        <span>{formattedDate}</span>
-                      </p>
-                    </div>
-                    <Link
-                      href={reviewHref}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-[6px] bg-blue-50 text-[var(--accent)] border border-blue-200 text-[13px] font-semibold shrink-0"
-                    >
-                      <span>Review</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  disabled={currentPage <= 1}
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  className="px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-white text-[var(--text)] font-medium hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Previous</span>
+                </button>
 
-                  <div className="flex items-center justify-between text-[13px] pt-2 border-t border-[var(--border)] bg-slate-50/50 -mx-4 -mb-4 px-4 py-2.5 rounded-b-[8px] tabular-nums">
-                    <div>
-                      <span className="text-[var(--text-muted)] text-[11px] uppercase tracking-wider block">Score</span>
-                      <span className="font-bold text-[var(--text)] text-[14px]">
-                        {att.totalMarks} <span className="font-normal text-[var(--text-muted)] text-[12px]">/ {maxMarks}</span>
-                      </span>
-                    </div>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    type="button"
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-8 h-8 rounded-[6px] text-[13px] font-semibold transition-colors cursor-pointer ${
+                      currentPage === page
+                        ? "bg-[var(--accent)] text-white shadow-xs"
+                        : "bg-white border border-[var(--border)] text-[var(--text-secondary)] hover:bg-slate-50"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
 
-                    <div>
-                      <span className="text-[var(--text-muted)] text-[11px] uppercase tracking-wider block">Accuracy</span>
-                      <span className="font-bold text-[var(--text)] text-[14px]">
-                        {att.accuracyPercentage}%
-                      </span>
-                    </div>
+                <button
+                  type="button"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  className="px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-white text-[var(--text)] font-medium hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  <span>Next</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
-                    <div>
-                      <span className="text-[var(--text-muted)] text-[11px] uppercase tracking-wider block">Correct / Wrong</span>
-                      <span className="font-medium text-[13px]">
-                        <span className="text-emerald-600 font-semibold">+{att.correctCount || 0}</span>
-                        <span className="text-slate-300 mx-1">/</span>
-                        <span className="text-rose-500 font-semibold">-{att.incorrectCount || 0}</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+      {/* Delete Confirmation Modal */}
+      {sessionToDelete && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200"
+        >
+          <div className="w-full max-w-md bg-white rounded-2xl border border-slate-100 shadow-2xl p-6 space-y-4 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div className="flex items-center gap-2.5 text-rose-600">
+                <AlertTriangle className="w-5 h-5 stroke-[2.2]" />
+                <h3 className="text-[16px] font-bold text-slate-900">Delete Test Session</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSessionToDelete(null)}
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-md"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-2 text-[13px] text-slate-600">
+              <p>
+                Are you sure you want to permanently delete your session for:
+              </p>
+              <div className="p-3 bg-slate-50 rounded-[8px] border border-slate-200/70 space-y-1">
+                <p className="font-semibold text-slate-900">
+                  {sessionToDelete.testTitle || `${sessionToDelete.subject} Mock Test`}
+                </p>
+                <p className="text-[12px] text-slate-500">
+                  Score: <strong>{sessionToDelete.totalMarks}</strong> /{" "}
+                  {sessionToDelete.maxMarks || 250} marks · Accuracy:{" "}
+                  <strong>{sessionToDelete.accuracyPercentage}%</strong>
+                </p>
+                <p className="text-[12px] text-slate-400">
+                  {formatDateTimeIndian(sessionToDelete.submittedAt || new Date())}
+                </p>
+              </div>
+              <p className="text-rose-600 text-[12px] font-medium pt-1">
+                Warning: This will remove your attempt records and recalculate your dashboard stats. This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 pt-2">
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => setSessionToDelete(null)}
+                className="px-4 py-2 text-[13px] font-semibold rounded-[8px] border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 text-[13px] font-semibold rounded-[8px] bg-rose-600 hover:bg-rose-700 text-white transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4" />
+                    <span>Confirm Delete</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Interactive SVG Score-over-Time Line Chart Component
+// -----------------------------------------------------------------------------
+interface ScoreLineChartProps {
+  points: RecordedTestAttempt[];
+}
+
+function ScoreLineChart({ points }: ScoreLineChartProps) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  const chartHeight = 160;
+  const paddingLeft = 40;
+  const paddingRight = 24;
+  const paddingTop = 20;
+  const paddingBottom = 30;
+
+  // Find max marks ceiling for Y-axis (default 250)
+  const maxCeiling = useMemo(() => {
+    let max = 250;
+    points.forEach((p) => {
+      const m = p.maxMarks || 250;
+      if (m > max) max = m;
+    });
+    return max;
+  }, [points]);
+
+  // Compute average score across points
+  const avgScore = useMemo(() => {
+    if (points.length === 0) return 0;
+    const sum = points.reduce((acc, p) => acc + (p.totalMarks ?? 0), 0);
+    return Math.round(sum / points.length);
+  }, [points]);
+
+  // Calculate coordinates for each point
+  const totalW = 800; // viewBox coordinate space
+  const plotW = totalW - paddingLeft - paddingRight;
+  const plotH = chartHeight - paddingTop - paddingBottom;
+
+  const coords = useMemo(() => {
+    if (points.length <= 1) return [];
+    return points.map((p, idx) => {
+      const x = paddingLeft + (idx / (points.length - 1)) * plotW;
+      const score = Math.max(0, p.totalMarks ?? 0);
+      const y = paddingTop + plotH - (score / maxCeiling) * plotH;
+      return { x, y, score: p.totalMarks ?? 0, attempt: p };
+    });
+  }, [points, maxCeiling, plotW, plotH, paddingLeft, paddingTop]);
+
+  // Construct SVG path string
+  const pathD = useMemo(() => {
+    if (coords.length < 2) return "";
+    return coords.reduce((acc, pt, idx) => {
+      return idx === 0 ? `M ${pt.x} ${pt.y}` : `${acc} L ${pt.x} ${pt.y}`;
+    }, "");
+  }, [coords]);
+
+  // Area path for gradient fill
+  const areaD = useMemo(() => {
+    if (coords.length < 2) return "";
+    const firstCoord = coords[0];
+    const lastCoord = coords[coords.length - 1];
+    if (!firstCoord || !lastCoord) return "";
+    const firstX = firstCoord.x;
+    const lastX = lastCoord.x;
+    const bottomY = paddingTop + plotH;
+    return `${pathD} L ${lastX} ${bottomY} L ${firstX} ${bottomY} Z`;
+  }, [pathD, coords, paddingTop, plotH]);
+
+  // Average line Y coordinate
+  const avgY = paddingTop + plotH - (Math.max(0, avgScore) / maxCeiling) * plotH;
+
+  return (
+    <div className="relative w-full">
+      <svg
+        viewBox={`0 0 ${totalW} ${chartHeight}`}
+        className="w-full h-auto overflow-visible select-none"
+      >
+        <defs>
+          <linearGradient id="scoreAreaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#2563EB" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="#2563EB" stopOpacity="0.01" />
+          </linearGradient>
+        </defs>
+
+        {/* Horizontal gridlines */}
+        {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+          const y = paddingTop + plotH - ratio * plotH;
+          const label = Math.round(ratio * maxCeiling);
+          return (
+            <g key={ratio}>
+              <line
+                x1={paddingLeft}
+                y1={y}
+                x2={totalW - paddingRight}
+                y2={y}
+                stroke="#E2E8F0"
+                strokeDasharray={ratio === 0 ? undefined : "3 3"}
+                strokeWidth={ratio === 0 ? "1.5" : "1"}
+              />
+              <text
+                x={paddingLeft - 8}
+                y={y + 3.5}
+                textAnchor="end"
+                className="text-[10px] fill-slate-400 font-mono font-medium"
+              >
+                {label}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* Average Score dashed benchmark line */}
+        {points.length > 1 && (
+          <g>
+            <line
+              x1={paddingLeft}
+              y1={avgY}
+              x2={totalW - paddingRight}
+              y2={avgY}
+              stroke="#10B981"
+              strokeDasharray="4 4"
+              strokeWidth="1.5"
+            />
+            <text
+              x={totalW - paddingRight}
+              y={avgY - 5}
+              textAnchor="end"
+              className="text-[10px] fill-emerald-600 font-bold font-sans"
+            >
+              Avg: {avgScore} marks
+            </text>
+          </g>
+        )}
+
+        {/* Gradient fill area */}
+        {areaD && <path d={areaD} fill="url(#scoreAreaGrad)" />}
+
+        {/* Trendline */}
+        {pathD && (
+          <path
+            d={pathD}
+            fill="none"
+            stroke="#2563EB"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        )}
+
+        {/* Data points */}
+        {coords.map((pt, idx) => {
+          const isHovered = hoveredIdx === idx;
+          return (
+            <g
+              key={idx}
+              className="cursor-pointer"
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
+            >
+              {isHovered && (
+                <circle
+                  cx={pt.x}
+                  cy={pt.y}
+                  r="8"
+                  fill="#2563EB"
+                  fillOpacity="0.2"
+                  className="animate-ping"
+                />
+              )}
+              <circle
+                cx={pt.x}
+                cy={pt.y}
+                r={isHovered ? "5.5" : "4"}
+                fill={isHovered ? "#1D4ED8" : "#2563EB"}
+                stroke="#FFFFFF"
+                strokeWidth="2"
+                className="transition-all duration-150"
+              />
+            </g>
+          );
+        })}
+      </svg>
+
+      {/* Tooltip on Hover */}
+      {hoveredIdx !== null && coords[hoveredIdx] ? (
+        (() => {
+          const hoveredCoord = coords[hoveredIdx];
+          if (!hoveredCoord) return null;
+          return (
+            <div
+              className="absolute z-30 pointer-events-none bg-slate-900 text-white text-[12px] rounded-[8px] p-2.5 shadow-xl max-w-xs space-y-1 transition-all duration-150 -translate-x-1/2 bottom-[80%]"
+              style={{
+                left: `${(hoveredCoord.x / totalW) * 100}%`,
+              }}
+            >
+              <p className="font-semibold text-white leading-tight">
+                {hoveredCoord.attempt.testTitle}
+              </p>
+              <div className="flex items-center gap-2 text-[11px] text-slate-300">
+                <span>Score: <strong className="text-emerald-400">{hoveredCoord.score}</strong>/{hoveredCoord.attempt.maxMarks || 250}</span>
+                <span>·</span>
+                <span>Acc: <strong className="text-blue-400">{hoveredCoord.attempt.accuracyPercentage}%</strong></span>
+              </div>
+              <p className="text-[10px] text-slate-400">
+                {formatDateTimeIndian(hoveredCoord.attempt.submittedAt || new Date())}
+              </p>
+            </div>
+          );
+        })()
+      ) : null}
     </div>
   );
 }
