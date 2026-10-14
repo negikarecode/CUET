@@ -22,6 +22,7 @@ import {
   CanonicalCourse,
   resolveTargetCollegeMatch,
   matchCourseToId,
+  normalizeSubjectToKey,
 } from "@/lib/standing-engine";
 import { CategoryCode } from "@/lib/config/standingConfig";
 import { StreamType } from "@/types";
@@ -269,6 +270,51 @@ export default function StandingViewClient({
     });
   }, [targetCollege, selectedCourseId, selectedCategory, testAttempts]);
 
+  // Compute exact mock averages per subject across all user test attempts
+  // TODO: If a dedicated backend field for mock test average and attempt count per subject is provided in API, reuse it directly here.
+  const userSubjectAverages = useMemo(() => {
+    const map: Record<string, number | null> = {};
+    (standingsResult.resolution.resolvedSubjects || []).forEach((sub) => {
+      const normKey = normalizeSubjectToKey(sub.subjectId);
+      const normName = normalizeSubjectToKey(sub.subjectName);
+
+      const matched = testAttempts.filter((att) => {
+        const rawSubj = att.subject || att.testTitle || "";
+        const attKey = normalizeSubjectToKey(rawSubj);
+        return attKey === normKey || attKey === normName;
+      });
+
+      if (matched.length > 0) {
+        const totalMarks = matched.reduce((sum, att) => {
+          const marks =
+            att.totalMarks !== undefined
+              ? att.totalMarks
+              : att.correctCount * 5 - (att.incorrectCount || 0) * 1;
+          return sum + marks;
+        }, 0);
+        map[sub.subjectId] = Math.round((totalMarks / matched.length) * 10) / 10;
+      } else if (sub.averageMarks !== null && sub.averageMarks !== undefined && sub.averageMarks > 0) {
+        map[sub.subjectId] = Math.round(sub.averageMarks * 10) / 10;
+      } else {
+        map[sub.subjectId] = null;
+      }
+    });
+    return map;
+  }, [standingsResult.resolution.resolvedSubjects, testAttempts]);
+
+  // Composite total: exact sum of subject averages
+  const compositeTotal = useMemo(() => {
+    const vals = Object.values(userSubjectAverages).filter((v): v is number => v !== null);
+    if (vals.length === 0) return 0;
+    return Math.round(vals.reduce((a, b) => a + b, 0) * 10) / 10;
+  }, [userSubjectAverages]);
+
+  const isAllSubjectsComplete = useMemo(() => {
+    const subjects = standingsResult.resolution.resolvedSubjects || [];
+    if (subjects.length === 0) return false;
+    return subjects.every((s) => userSubjectAverages[s.subjectId] !== null);
+  }, [standingsResult.resolution.resolvedSubjects, userSubjectAverages]);
+
   // Check if student has zero attempts
   const hasZeroAttempts = testAttempts.length === 0;
 
@@ -326,7 +372,7 @@ export default function StandingViewClient({
         </div>
       ) : null}
 
-      {/* 1. Compact Unified Toolbar: Category Chips, Program Dropdown, Target College Search/Dropdown */}
+      {/* 1. Clean Toolbar: Two equal-width dropdowns side by side (Program & Target College) */}
       <CoursePicker
         courses={coursesList}
         selectedCourseId={selectedCourseId}
@@ -339,11 +385,9 @@ export default function StandingViewClient({
           setTrendCollege(c);
         }}
         availableColleges={availableColleges}
-        isSavedAsTarget={user?.targetCollege === targetCollege}
-        onSaveAsProfileTarget={handleSaveProfileTarget}
       />
 
-      {/* 2. Subject Cards Grid (Hero of the page) */}
+      {/* 2. Subject Cards Grid with average mock-test scores & subtle disclaimer */}
       <SubjectCombinationCard
         resolution={standingsResult.resolution}
         subjectBreakdown={dreamCollegeGap?.subjectImprovementBreakdown || []}
@@ -351,7 +395,7 @@ export default function StandingViewClient({
         testAttempts={testAttempts}
       />
 
-      {/* 3. Dream College Gap Analysis */}
+      {/* 3. Dream College Gap Analysis: composite score is sum of subject averages */}
       <DreamCollegeGapCard
         analysis={dreamCollegeGap}
         targetCollege={targetCollege}
@@ -363,6 +407,7 @@ export default function StandingViewClient({
         availableColleges={availableColleges}
         userId={user?.id || "guest"}
         isSavedAsTarget={user?.targetCollege === targetCollege}
+        compositeScore={compositeTotal}
       />
 
       {/* 4. College Standings Table & Trend Chart (Sticky Category/Year Filters -> Chart -> Table) */}
@@ -374,7 +419,7 @@ export default function StandingViewClient({
         onSelectYear={(yr) => setSelectedYear(yr)}
         selectedCollegeForTrend={trendCollege}
         onSelectCollegeForTrend={(col) => setTrendCollege(col)}
-        combinedAverageMarks={standingsResult.resolution.combinedAverageMarks}
+        combinedAverageMarks={isAllSubjectsComplete ? compositeTotal : null}
         targetCollege={targetCollege}
       />
 

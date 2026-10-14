@@ -7,7 +7,7 @@ import {
   ArrowRight,
   Info,
 } from "lucide-react";
-import { CourseResolutionResult } from "@/lib/standing-engine";
+import { CourseResolutionResult, normalizeSubjectToKey } from "@/lib/standing-engine";
 import { RecordedTestAttempt } from "@/types";
 
 interface SubjectCombinationCardProps {
@@ -33,6 +33,78 @@ function cleanSubjectName(name: string): { display: string; full: string } {
     return { display: "Mathematics", full: name };
   }
   return { display: name, full: name };
+}
+
+function formatScore(num: number): string {
+  const rounded = Math.round(num * 10) / 10;
+  return rounded % 1 === 0 ? String(rounded) : rounded.toFixed(1);
+}
+
+// TODO: If a dedicated backend field for mock test average and attempt count per subject is provided in API, reuse it directly here.
+function getSubjectMockStats(
+  subjectId: string,
+  subjectName: string,
+  testAttempts: RecordedTestAttempt[],
+  engineAverage: number | null
+): {
+  hasData: boolean;
+  averageMarks: number | null;
+  formattedScore: string;
+  mockCount: number;
+  helperText: string;
+} {
+  const normKey = normalizeSubjectToKey(subjectId);
+  const normName = normalizeSubjectToKey(subjectName);
+
+  const matched = testAttempts.filter((att) => {
+    const rawSubj = att.subject || att.testTitle || "";
+    const attKey = normalizeSubjectToKey(rawSubj);
+    return attKey === normKey || attKey === normName;
+  });
+
+  const count = matched.length;
+
+  if (count > 0) {
+    const totalMarks = matched.reduce((sum, att) => {
+      const marks =
+        att.totalMarks !== undefined
+          ? att.totalMarks
+          : att.correctCount * 5 - (att.incorrectCount || 0) * 1;
+      return sum + marks;
+    }, 0);
+    const avg = totalMarks / count;
+    const rounded = Math.round(avg * 10) / 10;
+    const formatted = formatScore(rounded);
+    const helper = count === 1 ? "avg of 1 mock test" : `avg of ${count} mock tests`;
+    return {
+      hasData: true,
+      averageMarks: rounded,
+      formattedScore: formatted,
+      mockCount: count,
+      helperText: helper,
+    };
+  }
+
+  // Fallback if testAttempts is empty or pending hydration but engine has computed valid average
+  if (engineAverage !== null && engineAverage !== undefined && engineAverage > 0) {
+    const rounded = Math.round(engineAverage * 10) / 10;
+    const formatted = formatScore(rounded);
+    return {
+      hasData: true,
+      averageMarks: rounded,
+      formattedScore: formatted,
+      mockCount: 1,
+      helperText: "avg of 1 mock test",
+    };
+  }
+
+  return {
+    hasData: false,
+    averageMarks: null,
+    formattedScore: "—",
+    mockCount: 0,
+    helperText: "No attempts recorded",
+  };
 }
 
 export default function SubjectCombinationCard({
@@ -97,30 +169,35 @@ export default function SubjectCombinationCard({
 
           // College target tied to selected college if available
           const collegeTarget = breakdownItem ? breakdownItem.targetMarks : sub.targetMarks;
-          const marksNeeded = breakdownItem
-            ? breakdownItem.marksNeeded
-            : Math.max(0, Math.round((collegeTarget - (sub.averageMarks ?? 0)) * 10) / 10);
+          const formattedTarget = formatScore(collegeTarget);
 
-          const hasData = sub.hasData && sub.averageMarks !== null;
-          const currentScore = sub.averageMarks ?? 0;
-          const isTargetMet = hasData && currentScore >= collegeTarget;
+          // Compute exact mock-test average marks and mock count
+          const stats = getSubjectMockStats(
+            sub.subjectId,
+            sub.subjectName,
+            testAttempts,
+            sub.averageMarks
+          );
 
-          // Progress percentage and target position tick mark
-          const progressPercent = Math.min(100, Math.max(0, Math.round((currentScore / 250) * 100)));
-          const targetTickPercent = Math.min(99, Math.max(1, Math.round((collegeTarget / 250) * 100)));
+          const hasData = stats.hasData && stats.averageMarks !== null;
+          const avgScore = stats.averageMarks ?? 0;
+          const isTargetMet = hasData && avgScore >= collegeTarget;
+
+          // "X to go" gap: target minus average, never below 0
+          const marksGap = Math.max(0, Math.round((collegeTarget - avgScore) * 10) / 10);
+          const formattedMarksGap = formatScore(marksGap);
+
+          // Progress bar fill: uses the same average
+          const progressPercent = hasData
+            ? Math.min(100, Math.max(0, Math.round((avgScore / 250) * 100)))
+            : 0;
+          const targetTickPercent = Math.min(
+            99,
+            Math.max(1, Math.round((collegeTarget / 250) * 100))
+          );
 
           const mockUrl = `/dashboard/mocks/${sub.subjectId}`;
           const { display: displayName, full: fullName } = cleanSubjectName(sub.subjectName);
-
-          // TODO: When mock session count is added directly to ResolvedSubjectChoice, replace this attempt lookup
-          const mockCount =
-            testAttempts.filter((a) => {
-              const aSub = (a.subject || "").toLowerCase().trim();
-              return (
-                aSub === sub.subjectId.toLowerCase().trim() ||
-                aSub === sub.subjectName.toLowerCase().trim()
-              );
-            }).length || 1;
 
           return (
             <div
@@ -151,20 +228,20 @@ export default function SubjectCombinationCard({
                   </span>
                 </div>
 
-                {/* Score Section */}
+                {/* Score Section: AVERAGE marks across all mock tests */}
                 <div>
                   {hasData ? (
                     <div>
                       <div className="flex items-baseline">
                         <span className="text-[34px] sm:text-[36px] font-bold text-slate-900 tracking-tight leading-none">
-                          {currentScore}
+                          {stats.formattedScore}
                         </span>
                         <span className="text-[16px] font-normal text-slate-500 ml-1.5">
                           /250
                         </span>
                       </div>
                       <span className="text-[13px] text-slate-500 font-medium mt-1 block">
-                        from {mockCount} mock test{mockCount === 1 ? "" : "s"}
+                        {stats.helperText}
                       </span>
                     </div>
                   ) : (
@@ -178,7 +255,7 @@ export default function SubjectCombinationCard({
                         </span>
                       </div>
                       <span className="text-[13px] text-slate-400 font-medium mt-1 block">
-                        No attempts recorded
+                        {stats.helperText}
                       </span>
                     </div>
                   )}
@@ -187,7 +264,7 @@ export default function SubjectCombinationCard({
                 {/* Target (16-18px) & Marks Gap Pill (14px) */}
                 <div className="flex items-center justify-between gap-2 pt-1 flex-wrap">
                   <span className="text-[16px] text-slate-700 font-medium">
-                    Target: <strong className="font-semibold text-slate-900">{collegeTarget}</strong>
+                    Target: <strong className="font-semibold text-slate-900">{formattedTarget}</strong>
                   </span>
 
                   {/* Marks gap pill */}
@@ -198,12 +275,12 @@ export default function SubjectCombinationCard({
                       </span>
                     ) : (
                       <span className="px-3 py-1 rounded-full text-[14px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
-                        {marksNeeded} to go
+                        {formattedMarksGap} to go
                       </span>
                     )
                   ) : (
                     <span className="px-3 py-1 rounded-full text-[14px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-                      {collegeTarget} to go
+                      {formattedTarget} to go
                     </span>
                   )}
                 </div>
@@ -227,7 +304,7 @@ export default function SubjectCombinationCard({
                       <div
                         className="absolute top-[-2px] bottom-[-2px] w-[2px] bg-slate-800 z-10 rounded-full"
                         style={{ left: `${targetTickPercent}%` }}
-                        title={`Target: ${collegeTarget}/250`}
+                        title={`Target: ${formattedTarget}/250`}
                       />
                     )}
                   </div>
@@ -257,6 +334,12 @@ export default function SubjectCombinationCard({
             </div>
           );
         })}
+      </div>
+
+      {/* 3. Subtle Disclaimer directly beneath subject cards grid */}
+      <div className="flex items-center gap-1.5 text-[12px] sm:text-[13px] text-gray-500 pt-1">
+        <Info className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+        <span>Marks shown are the average of your mock test scores in each subject.</span>
       </div>
     </div>
   );

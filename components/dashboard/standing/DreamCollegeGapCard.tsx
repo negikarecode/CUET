@@ -23,12 +23,19 @@ interface DreamCollegeGapCardProps {
   availableColleges?: string[];
   userId?: string;
   isSavedAsTarget?: boolean;
+  compositeScore?: number;
+}
+
+function formatScore(num: number): string {
+  const rounded = Math.round(num * 10) / 10;
+  return rounded % 1 === 0 ? String(rounded) : rounded.toFixed(1);
 }
 
 export default function DreamCollegeGapCard({
   analysis,
   targetCollege,
   userId = "guest",
+  compositeScore,
 }: DreamCollegeGapCardProps) {
   // AI Explanation State
   const [isLoadingAI, setIsLoadingAI] = useState(false);
@@ -100,9 +107,33 @@ export default function DreamCollegeGapCard({
     );
   }
 
-  const isAboveCutoff = analysis.status === "above_cutoff";
-  const isBelowCutoff = analysis.status === "below_cutoff";
+  // Calculate composite total: exact sum of subject averages
+  const currentTotal =
+    compositeScore !== undefined
+      ? compositeScore
+      : analysis.combinedMarks !== null
+      ? analysis.combinedMarks
+      : (analysis.subjectImprovementBreakdown || []).reduce(
+          (sum, s) => sum + (s.currentMarks || 0),
+          0
+        );
+
+  const roundedTotal = Math.round(currentTotal * 10) / 10;
+  const formattedTotal = formatScore(roundedTotal);
+  const formattedExpected = formatScore(analysis.expectedCutoffMarks);
+
+  const gap = Math.round(Math.abs(roundedTotal - analysis.expectedCutoffMarks) * 10) / 10;
+  const formattedGap = formatScore(gap);
+
+  const isAboveCutoff = roundedTotal >= analysis.expectedCutoffMarks;
+  const isBelowCutoff = roundedTotal < analysis.expectedCutoffMarks;
   const isIncomplete = analysis.status === "incomplete";
+
+  const gapDisplay = isAboveCutoff
+    ? gap === 0
+      ? "Meets cutoff"
+      : `+${formattedGap} marks above`
+    : `${formattedGap} marks below`;
 
   const missingSubjects = (analysis.subjectImprovementBreakdown || [])
     .filter((s) => !s.hasData)
@@ -113,15 +144,6 @@ export default function DreamCollegeGapCard({
     : isBelowCutoff
     ? "Marks below cutoff"
     : "Marks above cutoff";
-
-  // Calculate composite total: arithmetic sum across subjects
-  const currentTotal =
-    analysis.combinedMarks !== null
-      ? analysis.combinedMarks
-      : (analysis.subjectImprovementBreakdown || []).reduce(
-          (sum, s) => sum + (s.currentMarks || 0),
-          0
-        );
 
   const userProgressPercent = Math.min(
     100,
@@ -204,7 +226,7 @@ export default function DreamCollegeGapCard({
           <div className="my-1.5">
             <div className="flex items-baseline">
               <span className="text-[28px] sm:text-[32px] font-bold text-slate-900 tracking-tight leading-none">
-                {analysis.expectedCutoffMarks}
+                {formattedExpected}
               </span>
               <span className="text-[16px] font-normal text-slate-500 ml-1.5">
                 /{analysis.cutoffScale}
@@ -224,9 +246,7 @@ export default function DreamCollegeGapCard({
               </span>
               <div className="my-1.5">
                 <span className="text-xl sm:text-2xl font-bold text-slate-900 block truncate">
-                  {analysis.combinedMarks !== null
-                    ? `${analysis.combinedMarks}/${analysis.cutoffScale} marks`
-                    : "No data yet"}
+                  {formattedTotal}/{analysis.cutoffScale} marks
                 </span>
               </div>
               <span className="text-sm text-slate-500 block">
@@ -248,7 +268,7 @@ export default function DreamCollegeGapCard({
                       : "text-slate-700"
                   }`}
                 >
-                  {analysis.gapDisplay}
+                  {gapDisplay}
                 </span>
               </div>
               <span className="text-sm text-slate-500 block">
@@ -287,7 +307,7 @@ export default function DreamCollegeGapCard({
       <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-sm sm:text-base text-slate-700 font-medium">
           <span>
-            Your total: <strong className="font-bold text-slate-900">{currentTotal} / {analysis.cutoffScale}</strong> vs Expected <strong className="font-bold text-slate-900">{analysis.expectedCutoffMarks}</strong>
+            Your total: <strong className="font-bold text-slate-900">{formattedTotal} / {analysis.cutoffScale}</strong> vs Expected <strong className="font-bold text-slate-900">{formattedExpected}</strong>
           </span>
           {analysis.isComplete ? (
             <span
@@ -299,7 +319,7 @@ export default function DreamCollegeGapCard({
                   : "text-slate-700"
               }`}
             >
-              {analysis.gapDisplay}
+              {gapDisplay}
             </span>
           ) : (
             <span className="text-sm font-medium text-slate-500">
@@ -323,7 +343,7 @@ export default function DreamCollegeGapCard({
           <div
             className="absolute top-[-2px] bottom-[-2px] w-[2px] bg-slate-900 z-10 rounded-full"
             style={{ left: `${targetTickPercent}%` }}
-            title={`Expected Cutoff: ${analysis.expectedCutoffMarks}/${analysis.cutoffScale}`}
+            title={`Expected Cutoff: ${formattedExpected}/${analysis.cutoffScale}`}
           />
         </div>
       </div>

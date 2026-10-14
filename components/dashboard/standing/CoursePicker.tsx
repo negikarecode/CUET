@@ -7,12 +7,7 @@ import {
   Check,
   GraduationCap,
   X,
-  Layers,
-  Briefcase,
-  FlaskConical,
-  BookOpen,
   Building2,
-  Bookmark,
 } from "lucide-react";
 import { CanonicalCourse } from "@/lib/standing-engine";
 import { StreamType } from "@/types";
@@ -30,65 +25,22 @@ interface CoursePickerProps {
   onSaveAsProfileTarget?: (collegeName: string) => void;
 }
 
-type StreamFilter = "all" | StreamType;
-
-interface StreamOption {
-  id: StreamFilter;
-  label: string;
-  shortLabel: string;
-  icon: React.ComponentType<{ className?: string }>;
-  badgeClass: string;
-  activeClass: string;
-}
-
-const STREAM_OPTIONS: StreamOption[] = [
-  {
-    id: "all",
-    label: "All Streams",
-    shortLabel: "All",
-    icon: Layers,
-    badgeClass: "bg-slate-100 text-slate-700 border-slate-200",
-    activeClass: "bg-slate-900 text-white shadow-xs",
-  },
-  {
-    id: "commerce",
-    label: "Commerce",
-    shortLabel: "Commerce",
-    icon: Briefcase,
-    badgeClass: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    activeClass: "bg-emerald-600 text-white shadow-xs",
-  },
-  {
-    id: "science",
-    label: "Science",
-    shortLabel: "Science",
-    icon: FlaskConical,
-    badgeClass: "bg-blue-50 text-blue-700 border-blue-200",
-    activeClass: "bg-blue-600 text-white shadow-xs",
-  },
-  {
-    id: "humanities",
-    label: "Humanities / Arts",
-    shortLabel: "Humanities",
-    icon: BookOpen,
-    badgeClass: "bg-purple-50 text-purple-700 border-purple-200",
-    activeClass: "bg-purple-600 text-white shadow-xs",
-  },
+const STREAM_GROUPS: Array<{ key: string; label: string }> = [
+  { key: "science", label: "Science" },
+  { key: "commerce", label: "Commerce" },
+  { key: "humanities", label: "Humanities & Arts" },
 ];
 
 export default function CoursePicker({
   courses,
   selectedCourseId,
   onSelectCourse,
-  selectedStream,
   onSelectStream,
-  targetCollege = "Shri Ram College of Commerce",
+  targetCollege = "Hindu College",
   onSelectCollege,
   availableColleges = [],
-  isSavedAsTarget = false,
-  onSaveAsProfileTarget,
 }: CoursePickerProps) {
-  // Course dropdown state
+  // Course dropdown combobox state
   const [isCourseOpen, setIsCourseOpen] = useState(false);
   const [courseSearch, setCourseSearch] = useState("");
   const [highlightedCourseIndex, setHighlightedCourseIndex] = useState(0);
@@ -96,7 +48,6 @@ export default function CoursePicker({
   // College dropdown state
   const [isCollegeOpen, setIsCollegeOpen] = useState(false);
   const [collegeSearch, setCollegeSearch] = useState("");
-  const [justSaved, setJustSaved] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const courseInputRef = useRef<HTMLInputElement>(null);
@@ -108,40 +59,50 @@ export default function CoursePicker({
     return courses.find((c) => c.id === selectedCourseId) || courses[0];
   }, [courses, selectedCourseId]);
 
-  // Active stream filter state (defaults to selected course stream or selectedStream prop)
-  const [activeStream, setActiveStream] = useState<StreamFilter>(
-    selectedStream || (selectedCourse?.stream as StreamType) || "all"
-  );
-
-  // Synchronize stream tab when selected course changes
-  useEffect(() => {
-    if (selectedCourse?.stream) {
-      setActiveStream(selectedCourse.stream as StreamType);
-    }
-  }, [selectedCourse?.stream]);
-
-  // Stream counts
-  const streamCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: courses.length };
-    courses.forEach((c) => {
-      counts[c.stream] = (counts[c.stream] || 0) + 1;
-    });
-    return counts;
-  }, [courses]);
-
-  // Filtered courses based on search query and stream filter
+  // Filtered courses based on search query
   const filteredCourses = useMemo(() => {
+    const q = courseSearch.toLowerCase().trim();
+    if (!q) return courses;
     return courses.filter((c) => {
-      const matchesStream = activeStream === "all" || c.stream === activeStream;
-      const q = courseSearch.toLowerCase().trim();
-      const matchesSearch =
-        !q ||
+      return (
         c.name.toLowerCase().includes(q) ||
         c.stream.toLowerCase().includes(q) ||
-        c.degreeType.toLowerCase().includes(q);
-      return matchesStream && matchesSearch;
+        c.degreeType.toLowerCase().includes(q)
+      );
     });
-  }, [courses, activeStream, courseSearch]);
+  }, [courses, courseSearch]);
+
+  // Group filtered courses by stream
+  const groupedCourses = useMemo(() => {
+    const groups: Array<{ key: string; label: string; items: CanonicalCourse[] }> = [];
+
+    STREAM_GROUPS.forEach((g) => {
+      const items = filteredCourses.filter(
+        (c) => c.stream.toLowerCase() === g.key.toLowerCase()
+      );
+      if (items.length > 0) {
+        groups.push({ key: g.key, label: g.label, items });
+      }
+    });
+
+    // Catch any courses that don't match the known stream groups
+    const otherItems = filteredCourses.filter(
+      (c) =>
+        !STREAM_GROUPS.some(
+          (g) => g.key.toLowerCase() === c.stream.toLowerCase()
+        )
+    );
+    if (otherItems.length > 0) {
+      groups.push({ key: "other", label: "Other Programs", items: otherItems });
+    }
+
+    return groups;
+  }, [filteredCourses]);
+
+  // Flattened list of grouped courses for keyboard navigation index
+  const flattenedGroupedCourses = useMemo(() => {
+    return groupedCourses.flatMap((g) => g.items);
+  }, [groupedCourses]);
 
   // Filtered colleges based on search query
   const filteredColleges = useMemo(() => {
@@ -164,13 +125,14 @@ export default function CoursePicker({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Keyboard navigation for courses
+  // Keyboard navigation for program combobox
   const handleCourseKeyDown = (e: React.KeyboardEvent) => {
     if (!isCourseOpen) {
       if (e.key === "Enter" || e.key === "ArrowDown" || e.key === " ") {
         e.preventDefault();
         setIsCourseOpen(true);
         setIsCollegeOpen(false);
+        setTimeout(() => courseInputRef.current?.focus(), 50);
       }
       return;
     }
@@ -178,17 +140,17 @@ export default function CoursePicker({
     if (e.key === "ArrowDown") {
       e.preventDefault();
       setHighlightedCourseIndex((prev) =>
-        prev < filteredCourses.length - 1 ? prev + 1 : 0
+        prev < flattenedGroupedCourses.length - 1 ? prev + 1 : 0
       );
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setHighlightedCourseIndex((prev) =>
-        prev > 0 ? prev - 1 : filteredCourses.length - 1
+        prev > 0 ? prev - 1 : flattenedGroupedCourses.length - 1
       );
     } else if (e.key === "Enter") {
       e.preventDefault();
-      if (filteredCourses[highlightedCourseIndex]) {
-        handleSelectCourseItem(filteredCourses[highlightedCourseIndex]!);
+      if (flattenedGroupedCourses[highlightedCourseIndex]) {
+        handleSelectCourseItem(flattenedGroupedCourses[highlightedCourseIndex]!);
       }
     } else if (e.key === "Escape") {
       e.preventDefault();
@@ -199,7 +161,6 @@ export default function CoursePicker({
   // Select course & automatically select stream
   const handleSelectCourseItem = (course: CanonicalCourse) => {
     const courseStream = course.stream as StreamType;
-    setActiveStream(courseStream);
     if (onSelectStream) {
       onSelectStream(courseStream);
     }
@@ -208,118 +169,62 @@ export default function CoursePicker({
     setCourseSearch("");
   };
 
-  // Stream Tab click
-  const handleStreamTabClick = (streamId: StreamFilter) => {
-    setActiveStream(streamId);
-    setHighlightedCourseIndex(0);
-    if (streamId !== "all") {
-      if (onSelectStream) {
-        onSelectStream(streamId as StreamType);
-      }
-      if (selectedCourse?.stream !== streamId) {
-        const firstInStream = courses.find((c) => c.stream === streamId);
-        if (firstInStream) {
-          onSelectCourse(firstInStream.id);
-        }
-      }
-    }
-  };
-
-  // Stream styling helper
-  const getStreamBadgeStyle = (streamName: string) => {
-    switch (streamName.toLowerCase()) {
-      case "commerce":
-        return "bg-emerald-50 text-emerald-700 border-emerald-200";
-      case "science":
-        return "bg-blue-50 text-blue-700 border-blue-200";
-      case "humanities":
-        return "bg-purple-50 text-purple-700 border-purple-200";
-      default:
-        return "bg-slate-100 text-slate-700 border-slate-200";
-    }
-  };
-
-  const handleSaveTarget = () => {
-    if (onSaveAsProfileTarget && targetCollege) {
-      onSaveAsProfileTarget(targetCollege);
-      setJustSaved(true);
-      setTimeout(() => setJustSaved(false), 2000);
-    }
-  };
-
-  const isSaved = isSavedAsTarget || justSaved;
-
   return (
     <div
       ref={containerRef}
-      className="bg-white rounded-2xl border border-slate-200/90 shadow-xs px-3 sm:px-4 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-2.5 md:gap-4 md:min-h-[58px] md:max-h-[72px]"
+      className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-3 sm:p-4 w-full"
     >
-      {/* 1. Category Chips: All / Commerce / Science / Humanities (with counts) */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 [scrollbar-width:none] shrink-0">
-        {STREAM_OPTIONS.map((opt) => {
-          const count = streamCounts[opt.id] ?? 0;
-          const isSelected = activeStream === opt.id;
-          return (
-            <button
-              key={opt.id}
-              type="button"
-              onClick={() => handleStreamTabClick(opt.id)}
-              className={`px-3 py-1.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
-                isSelected
-                  ? opt.activeClass
-                  : "bg-slate-100 hover:bg-slate-200 text-slate-700"
-              }`}
-            >
-              <span>{opt.shortLabel}</span>
-              <span className="opacity-75">({count})</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* 2. Dropdowns Row: Program Dropdown + Target College Search/Dropdown */}
-      <div className="flex items-center gap-2 flex-1 md:justify-end min-w-0">
-        {/* Program Dropdown */}
-        <div className="relative flex-1 md:flex-initial" onKeyDown={handleCourseKeyDown}>
+      {/* Two equal-width dropdowns side by side on desktop/tablet, stacked on mobile */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 w-full">
+        {/* 1. Program Dropdown (Searchable Combobox Grouped by Stream) */}
+        <div className="relative w-full min-w-0" onKeyDown={handleCourseKeyDown}>
           <button
             id="course-picker-trigger"
             type="button"
             onClick={() => {
-              setIsCourseOpen(!isCourseOpen);
+              const next = !isCourseOpen;
+              setIsCourseOpen(next);
               setIsCollegeOpen(false);
-              setTimeout(() => courseInputRef.current?.focus(), 50);
+              if (next) {
+                setTimeout(() => courseInputRef.current?.focus(), 50);
+              }
             }}
             aria-haspopup="listbox"
             aria-expanded={isCourseOpen}
             aria-controls={courseListboxId}
-            className="w-full md:w-auto min-w-[170px] max-w-[260px] flex items-center justify-between gap-2 px-3 py-1.5 bg-slate-50 hover:bg-slate-100/90 rounded-xl border border-slate-200/90 text-left transition-all cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+            className="w-full flex items-center justify-between gap-3 px-3.5 py-2.5 sm:py-3 bg-slate-50 hover:bg-slate-100/90 rounded-xl border border-slate-200/90 text-left transition-all cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           >
-            <div className="flex items-center gap-2 min-w-0">
-              <GraduationCap className="w-4 h-4 text-blue-600 shrink-0" />
-              <div className="flex flex-col min-w-0">
-                <span className="font-semibold text-slate-900 text-sm truncate">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
+                <GraduationCap className="w-4 h-4" />
+              </div>
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-[12px] font-semibold text-slate-500 uppercase tracking-wider block leading-none">
+                  Target Program
+                </span>
+                <span className="font-semibold text-slate-900 text-sm truncate block mt-1">
                   {selectedCourse?.name || "Select Program"}
                 </span>
               </div>
             </div>
             <ChevronDown
-              className={`w-3.5 h-3.5 text-slate-400 transition-transform shrink-0 ${
+              className={`w-4 h-4 text-slate-400 transition-transform shrink-0 ${
                 isCourseOpen ? "rotate-180" : ""
               }`}
             />
           </button>
 
-          {/* Program Dropdown Menu */}
+          {/* Program Searchable Dropdown Menu */}
           {isCourseOpen && (
             <div
               id={courseListboxId}
               role="listbox"
               aria-label="Programs List"
-              className="absolute left-0 md:left-auto md:right-0 z-50 mt-1.5 w-72 sm:w-80 bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-100 max-h-96 flex flex-col"
+              className="absolute left-0 right-0 z-50 mt-1.5 w-full bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-100 max-h-96 flex flex-col"
             >
-              {/* Search Bar */}
-              <div className="p-2.5 border-b border-slate-100 sticky top-0 bg-white z-10 space-y-2">
-                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200/70 rounded-xl px-2.5 py-1.5">
+              {/* Search Bar Input */}
+              <div className="p-2.5 border-b border-slate-100 sticky top-0 bg-white z-20 space-y-2">
+                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200/80 rounded-xl px-3 py-2">
                   <Search className="w-4 h-4 text-slate-400 shrink-0" />
                   <input
                     ref={courseInputRef}
@@ -329,7 +234,7 @@ export default function CoursePicker({
                       setCourseSearch(e.target.value);
                       setHighlightedCourseIndex(0);
                     }}
-                    placeholder="Search program..."
+                    placeholder="Search 48 programs (e.g. Physics, B.Com, Economics)..."
                     className="w-full text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden bg-transparent"
                     aria-label="Filter programs"
                   />
@@ -337,7 +242,7 @@ export default function CoursePicker({
                     <button
                       type="button"
                       onClick={() => setCourseSearch("")}
-                      className="p-1 rounded-md text-slate-400 hover:text-slate-600"
+                      className="p-1 rounded-md text-slate-400 hover:text-slate-600 cursor-pointer"
                       aria-label="Clear program search"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -346,111 +251,107 @@ export default function CoursePicker({
                 </div>
               </div>
 
-              {/* Course Options */}
-              <div className="overflow-y-auto p-2 space-y-1 flex-1 [scrollbar-width:thin]">
-                {filteredCourses.length === 0 ? (
-                  <div className="p-4 text-center text-sm text-slate-500">
-                    No matching programs found.
+              {/* Options List Grouped by Stream */}
+              <div className="overflow-y-auto p-2 space-y-3 flex-1 [scrollbar-width:thin]">
+                {groupedCourses.length === 0 ? (
+                  <div className="p-6 text-center text-sm text-slate-500">
+                    No programs match &ldquo;{courseSearch}&rdquo;.
                   </div>
                 ) : (
-                  filteredCourses.map((c, index) => {
-                    const isSelected = c.id === selectedCourseId;
-                    const isHighlighted = index === highlightedCourseIndex;
-                    return (
-                      <button
-                        key={c.id}
-                        type="button"
-                        role="option"
-                        aria-selected={isSelected}
-                        onClick={() => handleSelectCourseItem(c)}
-                        onMouseEnter={() => setHighlightedCourseIndex(index)}
-                        className={`w-full flex items-center justify-between gap-2.5 px-3 py-2 rounded-xl text-left transition-all cursor-pointer ${
-                          isSelected
-                            ? "bg-blue-50 text-blue-900 border border-blue-200 font-semibold"
-                            : isHighlighted
-                            ? "bg-slate-50 text-slate-900"
-                            : "text-slate-700 hover:bg-slate-50"
-                        }`}
-                      >
-                        <div className="flex flex-col min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm font-semibold text-slate-900 truncate">
-                              {c.name}
-                            </span>
-                            <span
-                              className={`px-1.5 py-0.5 rounded text-[13px] font-semibold uppercase tracking-wider border ${getStreamBadgeStyle(
-                                c.stream
-                              )}`}
+                  groupedCourses.map((group) => (
+                    <div key={group.key} className="space-y-1">
+                      {/* Stream Group Heading */}
+                      <div className="px-2.5 py-1 text-[12px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100/80 rounded-lg flex items-center justify-between sticky top-0 z-10">
+                        <span>{group.label}</span>
+                        <span className="text-slate-400 font-normal">
+                          ({group.items.length})
+                        </span>
+                      </div>
+
+                      {/* Programs in this Stream */}
+                      <div className="space-y-0.5 pt-0.5">
+                        {group.items.map((c) => {
+                          const flatIndex = flattenedGroupedCourses.findIndex(
+                            (fc) => fc.id === c.id
+                          );
+                          const isSelected = c.id === selectedCourseId;
+                          const isHighlighted = flatIndex === highlightedCourseIndex;
+                          return (
+                            <button
+                              key={c.id}
+                              type="button"
+                              role="option"
+                              aria-selected={isSelected}
+                              onClick={() => handleSelectCourseItem(c)}
+                              onMouseEnter={() => setHighlightedCourseIndex(flatIndex)}
+                              className={`w-full flex items-center justify-between gap-2.5 px-3 py-2 rounded-xl text-left transition-all cursor-pointer ${
+                                isSelected
+                                  ? "bg-blue-50 text-blue-900 border border-blue-200 font-semibold"
+                                  : isHighlighted
+                                  ? "bg-slate-50 text-slate-900"
+                                  : "text-slate-700 hover:bg-slate-50"
+                              }`}
                             >
-                              {c.stream}
-                            </span>
-                          </div>
-                          <span className="text-[13px] text-slate-500 mt-0.5">
-                            {c.degreeType} • {c.subjectCount} Subjects ({c.cutoffScale} marks scale)
-                          </span>
-                        </div>
-                        {isSelected && (
-                          <Check className="w-4 h-4 text-blue-600 shrink-0" />
-                        )}
-                      </button>
-                    );
-                  })
+                              <div className="flex flex-col min-w-0 flex-1">
+                                <span className="text-sm font-semibold text-slate-900 truncate">
+                                  {c.name}
+                                </span>
+                                <span className="text-[13px] text-slate-500 mt-0.5">
+                                  {c.degreeType} • {c.subjectCount} Subjects ({c.cutoffScale} marks scale)
+                                </span>
+                              </div>
+                              {isSelected && (
+                                <Check className="w-4 h-4 text-blue-600 shrink-0" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))
                 )}
               </div>
             </div>
           )}
         </div>
 
-        {/* Target College Search & Dropdown */}
-        <div className="relative flex-1 md:flex-initial">
-          <div className="flex items-center gap-1.5">
-            <button
-              id="college-picker-trigger"
-              type="button"
-              onClick={() => {
-                setIsCollegeOpen(!isCollegeOpen);
-                setIsCourseOpen(false);
+        {/* 2. Target College Dropdown (Searchable Combobox) */}
+        <div className="relative w-full min-w-0">
+          <button
+            id="college-picker-trigger"
+            type="button"
+            onClick={() => {
+              const next = !isCollegeOpen;
+              setIsCollegeOpen(next);
+              setIsCourseOpen(false);
+              if (next) {
                 setTimeout(() => collegeInputRef.current?.focus(), 50);
-              }}
-              aria-haspopup="listbox"
-              aria-expanded={isCollegeOpen}
-              aria-controls={collegeListboxId}
-              className="w-full md:w-auto min-w-[170px] max-w-[260px] flex items-center justify-between gap-2 px-3 py-1.5 bg-slate-50 hover:bg-slate-100/90 rounded-xl border border-slate-200/90 text-left transition-all cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-            >
-              <div className="flex items-center gap-2 min-w-0">
-                <Building2 className="w-4 h-4 text-slate-500 shrink-0" />
-                <span className="font-semibold text-slate-900 text-sm truncate">
+              }
+            }}
+            aria-haspopup="listbox"
+            aria-expanded={isCollegeOpen}
+            aria-controls={collegeListboxId}
+            className="w-full flex items-center justify-between gap-3 px-3.5 py-2.5 sm:py-3 bg-slate-50 hover:bg-slate-100/90 rounded-xl border border-slate-200/90 text-left transition-all cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+          >
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 border border-slate-200">
+                <Building2 className="w-4 h-4 text-slate-600" />
+              </div>
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-[12px] font-semibold text-slate-500 uppercase tracking-wider block leading-none">
+                  Target College
+                </span>
+                <span className="font-semibold text-slate-900 text-sm truncate block mt-1">
                   {targetCollege || "Select College"}
                 </span>
               </div>
-              <ChevronDown
-                className={`w-3.5 h-3.5 text-slate-400 transition-transform shrink-0 ${
-                  isCollegeOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {/* Saved Target Green Badge or Set Target Action */}
-            {isSaved ? (
-              <span
-                className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[13px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 whitespace-nowrap"
-                title="Target college saved to your profile"
-              >
-                <Check className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Saved Target</span>
-              </span>
-            ) : onSaveAsProfileTarget ? (
-              <button
-                type="button"
-                onClick={handleSaveTarget}
-                title="Save as dream college target"
-                className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-[13px] font-semibold text-slate-600 hover:text-blue-700 hover:bg-blue-50 border border-slate-200 transition-colors shrink-0 cursor-pointer"
-              >
-                <Bookmark className="w-3.5 h-3.5" />
-                <span>Set Target</span>
-              </button>
-            ) : null}
-          </div>
+            </div>
+            <ChevronDown
+              className={`w-4 h-4 text-slate-400 transition-transform shrink-0 ${
+                isCollegeOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
 
           {/* College Dropdown Menu */}
           {isCollegeOpen && (
@@ -458,17 +359,18 @@ export default function CoursePicker({
               id={collegeListboxId}
               role="listbox"
               aria-label="Colleges List"
-              className="absolute right-0 z-50 mt-1.5 w-72 sm:w-80 bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-100 max-h-96 flex flex-col"
+              className="absolute left-0 right-0 z-50 mt-1.5 w-full bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-100 max-h-96 flex flex-col"
             >
-              <div className="p-2.5 border-b border-slate-100 sticky top-0 bg-white z-10 space-y-2">
-                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200/70 rounded-xl px-2.5 py-1.5">
+              {/* Search Bar Input */}
+              <div className="p-2.5 border-b border-slate-100 sticky top-0 bg-white z-20 space-y-2">
+                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200/80 rounded-xl px-3 py-2">
                   <Search className="w-4 h-4 text-slate-400 shrink-0" />
                   <input
                     ref={collegeInputRef}
                     type="text"
                     value={collegeSearch}
                     onChange={(e) => setCollegeSearch(e.target.value)}
-                    placeholder="Search college..."
+                    placeholder="Search college (e.g. Hindu, Miranda House, SRCC)..."
                     className="w-full text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden bg-transparent"
                     aria-label="Filter colleges"
                   />
@@ -476,7 +378,7 @@ export default function CoursePicker({
                     <button
                       type="button"
                       onClick={() => setCollegeSearch("")}
-                      className="p-1 rounded-md text-slate-400 hover:text-slate-600"
+                      className="p-1 rounded-md text-slate-400 hover:text-slate-600 cursor-pointer"
                       aria-label="Clear college search"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -485,10 +387,11 @@ export default function CoursePicker({
                 </div>
               </div>
 
-              <div className="overflow-y-auto p-2 space-y-1 flex-1 [scrollbar-width:thin]">
+              {/* College Options List */}
+              <div className="overflow-y-auto p-2 space-y-0.5 flex-1 [scrollbar-width:thin]">
                 {filteredColleges.length === 0 ? (
-                  <div className="p-4 text-center text-sm text-slate-500">
-                    No matching colleges found.
+                  <div className="p-6 text-center text-sm text-slate-500">
+                    No colleges match &ldquo;{collegeSearch}&rdquo;.
                   </div>
                 ) : (
                   filteredColleges.map((colName) => {
@@ -512,7 +415,7 @@ export default function CoursePicker({
                             : "text-slate-700 hover:bg-slate-50"
                         }`}
                       >
-                        <span className="text-sm font-semibold truncate">
+                        <span className="text-sm font-semibold truncate flex-1">
                           {colName}
                         </span>
                         {isSelected && (
