@@ -263,9 +263,9 @@ export default function PYQsPage() {
       {/* Header Section */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-semibold bg-amber-50 text-amber-800 px-3 py-1 rounded-full border border-amber-200/80 flex items-center gap-1.5">
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
-              <span>251 Official Papers (Answers Under Verification)</span>
+            <span className="text-[11px] font-semibold bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full border border-emerald-200/80 flex items-center gap-1.5">
+              <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>251 Official Papers</span>
             </span>
             <span className="text-[11px] font-semibold bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-200/60">
               14 Core Subjects
@@ -286,26 +286,6 @@ export default function PYQsPage() {
           <p className="text-slate-500 font-medium text-sm md:text-base max-w-3xl">
             Official NTA CUET UG CBT past shift papers. Questions are extracted verbatim from official candidate response sheets.
           </p>
-        </div>
-
-        {/* Phase A Verification Notice Banner */}
-        <div className="bg-amber-50/90 border border-amber-200/90 rounded-3xl p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center gap-4 text-amber-900">
-          <div className="w-10 h-10 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0 text-amber-700">
-            <AlertTriangle className="w-5 h-5 stroke-[2.2]" />
-          </div>
-          <div className="space-y-0.5 flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-bold text-sm sm:text-base text-amber-950">
-                Official NTA Past-Year Papers • Answers Under Verification
-              </h3>
-              <span className="text-[10px] font-bold bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded-full border border-amber-300">
-                Status: 251 Papers Unverified
-              </span>
-            </div>
-            <p className="text-xs text-amber-800 leading-relaxed font-medium">
-              All 251 past papers below contain verbatim questions extracted from official NTA CUET CBT shift response sheets. Solutions and explanations are currently undergoing line-by-line academic verification against official NTA answer keys. Mock duplicates have been quarantined from this section.
-            </p>
-          </div>
         </div>
 
         {/* Stream & Subject Dropdown Controls */}
