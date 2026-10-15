@@ -134,12 +134,16 @@ export default function SessionsHistoryClient({
       initialAttempts.forEach((att) => {
         const k = (att.testId || att.id || "").trim();
         const uuidK = stringToUuid(k);
-        const matchesLocal = localAttempts.some(
+        const isExactSameAttempt = localAttempts.some(
           (la) =>
-            la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
-            la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim()
+            (att.attemptId && la.attemptId && la.attemptId === att.attemptId) ||
+            (att.id && la.id && la.id === att.id) ||
+            (att.testId &&
+              la.testId &&
+              la.testId === att.testId &&
+              Math.abs(new Date(la.submittedAt || 0).getTime() - new Date(att.submittedAt || 0).getTime()) < 60000)
         );
-        if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !matchesLocal) {
+        if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !isExactSameAttempt) {
           recordTestAttempt(att);
         }
       });

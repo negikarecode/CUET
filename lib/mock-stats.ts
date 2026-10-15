@@ -56,7 +56,73 @@ export function isFullLengthMockAttempt(att: RecordedTestAttempt): boolean {
   }
 
   // Must be tagged as mock or full paper with >= 40 questions (or standard 50)
-  if (testId.includes("mock") || title.includes("mock") || (att.totalQuestions && att.totalQuestions >= 40)) {
+  if (
+    testId.includes("mock") ||
+    title.includes("mock") ||
+    (att.totalQuestions && att.totalQuestions >= 40) ||
+    (att.maxMarks && att.maxMarks >= 200)
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+export function matchesMockPaper(
+  att: RecordedTestAttempt,
+  subjectKey: string,
+  mockId: string,
+  mockNum: number
+): boolean {
+  if (!att) return false;
+  const attTId = (att.testId || "").toLowerCase().trim();
+  const attId = (att.id || "").toLowerCase().trim();
+  const lowerMockId = mockId.toLowerCase().trim();
+  const mockUuid = stringToUuid(lowerMockId);
+
+  // 1. Direct ID & UUID matching
+  if (attTId === lowerMockId || attId === lowerMockId) return true;
+  if (attTId && (stringToUuid(attTId) === mockUuid || attTId === mockUuid)) return true;
+  if (attId && (stringToUuid(attId) === mockUuid || attId === mockUuid)) return true;
+
+  // 2. Check canonical aliases for this subject
+  const aliases: string[] = [subjectKey];
+  if (subjectKey === "biology" || subjectKey === "bio") aliases.push("bio", "biology");
+  if (subjectKey === "mathematics" || subjectKey === "maths") aliases.push("maths", "mathematics", "math");
+  if (subjectKey === "business-studies" || subjectKey === "bst") aliases.push("bst", "business-studies", "business");
+  if (subjectKey === "political-science" || subjectKey === "pol science") aliases.push("pol-science", "political-science", "polscience", "pol");
+  if (subjectKey === "economics" || subjectKey === "eco") aliases.push("eco", "economics");
+  if (subjectKey === "geography" || subjectKey === "geo") aliases.push("geo", "geography");
+  if (subjectKey === "physical-education") aliases.push("physical-education", "physical_education", "ped");
+  if (subjectKey === "computer-science") aliases.push("computer-science", "computer_science", "cs", "csip");
+  if (subjectKey === "home-science") aliases.push("home-science", "home_science", "hsc");
+  if (subjectKey === "mass-media") aliases.push("mass-media", "mass_media", "mmc");
+  if (subjectKey === "environmental-studies") aliases.push("environmental-studies", "environmental_studies", "evs");
+  if (subjectKey === "fine-arts") aliases.push("fine-arts", "fine_arts", "fa");
+  if (subjectKey === "agriculture") aliases.push("agriculture", "agr");
+  if (subjectKey === "anthropology") aliases.push("anthropology", "ant");
+
+  for (const alias of aliases) {
+    const aliasId = `${alias}-mock-${mockNum}`;
+    if (attTId === aliasId || attId === aliasId) return true;
+    const aUuid = stringToUuid(aliasId);
+    if (attTId === aUuid || attId === aUuid) return true;
+    if (attTId && stringToUuid(attTId) === aUuid) return true;
+  }
+
+  // 3. Extract mock number from testId
+  const idMatch = attTId.match(/(?:mock|paper|test)[-_]?(\d+)/i) || attTId.match(/-(\d+)$/);
+  if (idMatch && idMatch[1] && parseInt(idMatch[1], 10) === mockNum) {
+    return true;
+  }
+
+  // 4. Extract mock number from testTitle with word boundaries
+  const attTitle = (att.testTitle || "").toLowerCase().trim();
+  const titleNumMatch =
+    attTitle.match(/\bmock(?:\s+paper|\s+test|\s+exam)?\s+(\d+)\b/i) ||
+    attTitle.match(/\bpaper\s+(\d+)\b/i) ||
+    attTitle.match(/\bmock\s*#\s*(\d+)\b/i);
+  if (titleNumMatch && titleNumMatch[1] && parseInt(titleNumMatch[1], 10) === mockNum) {
     return true;
   }
 
@@ -98,26 +164,11 @@ export function getMockStats(
   mockTestsList.forEach((mockItem, idx) => {
     const mockNum = idx + 1;
     const mockId = mockItem.id;
-    const mockUuid = stringToUuid(mockId);
 
     // Find any attempts matching this specific mock test
-    const matchingAttempts = subjectMockAttempts.filter((att) => {
-      const attTId = (att.testId || "").trim();
-      const attId = (att.id || "").trim();
-      const attTitle = (att.testTitle || "").toLowerCase().trim();
-
-      if (attTId === mockId || attId === mockId) return true;
-      if (attTId && stringToUuid(attTId) === mockUuid) return true;
-      const mockTitle = (mockItem as any).title || mockItem.label || "";
-      if (
-        attTitle.includes(`mock ${mockNum}`) ||
-        attTitle.includes(`mock paper ${mockNum}`) ||
-        (mockTitle && attTitle === mockTitle.toLowerCase())
-      ) {
-        return true;
-      }
-      return false;
-    });
+    const matchingAttempts = subjectMockAttempts.filter((att) =>
+      matchesMockPaper(att, subjectKey, mockId, mockNum)
+    );
 
     if (matchingAttempts.length > 0 && matchingAttempts[0]) {
       attemptedMockIds.add(mockId);
@@ -135,6 +186,31 @@ export function getMockStats(
       bestAttemptByMock.set(mockId, best);
     }
   });
+
+  // 4. Fallback for unassigned subject mock attempts (e.g. from server rows with unnumbered titles)
+  const matchedAttemptIds = new Set<string>();
+  Array.from(bestAttemptByMock.values()).forEach((att) => {
+    if (att.id) matchedAttemptIds.add(att.id);
+    if (att.attemptId) matchedAttemptIds.add(att.attemptId);
+  });
+
+  const unmatchedMocks = subjectMockAttempts.filter(
+    (att) =>
+      (!att.id || !matchedAttemptIds.has(att.id)) &&
+      (!att.attemptId || !matchedAttemptIds.has(att.attemptId))
+  );
+
+  if (unmatchedMocks.length > 0) {
+    for (const unassigned of unmatchedMocks) {
+      const nextAvailable = mockTestsList.find((m) => !attemptedMockIds.has(m.id));
+      if (nextAvailable) {
+        attemptedMockIds.add(nextAvailable.id);
+        bestAttemptByMock.set(nextAvailable.id, unassigned);
+        if (unassigned.id) matchedAttemptIds.add(unassigned.id);
+        if (unassigned.attemptId) matchedAttemptIds.add(unassigned.attemptId);
+      }
+    }
+  }
 
   // Calculate next unattempted mock index (1-based)
   let nextUnattemptedMockIndex = 1;

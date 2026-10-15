@@ -4,7 +4,7 @@ import React, { useEffect, useMemo } from "react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData, RecordedTestAttempt } from "@/types";
-import { normalizeSubject } from "@/lib/analytics";
+import { normalizeSubject, deduplicateTestAttempts, getCanonicalTestKey } from "@/lib/analytics";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { calculateCUETScore, MARKING_SCHEME } from "@/lib/config/dashboardConfig";
 import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
@@ -120,12 +120,16 @@ export default function DashboardClient({
         initialData.serverAttempts.forEach((att) => {
           const k = (att.testId || att.id || "").trim();
           const uuidK = stringToUuid(k);
-          const matchesLocal = localAttempts.some(
+          const isExactSameAttempt = localAttempts.some(
             (la) =>
-              la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
-              la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim()
+              (att.attemptId && la.attemptId && la.attemptId === att.attemptId) ||
+              (att.id && la.id && la.id === att.id) ||
+              (att.testId &&
+                la.testId &&
+                la.testId === att.testId &&
+                Math.abs(new Date(la.submittedAt || 0).getTime() - new Date(att.submittedAt || 0).getTime()) < 60000)
           );
-          if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !matchesLocal) {
+          if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !isExactSameAttempt) {
             state.recordTestAttempt(att);
           }
         });
@@ -165,14 +169,13 @@ export default function DashboardClient({
   // Deduplicated attempts sorted newest first for authoritative latest session score
   const deduplicatedAttempts = useMemo(() => {
     const list = testAttempts || [];
+    const clean = deduplicateTestAttempts(list);
     const seen = new Set<string>();
     const unique: RecordedTestAttempt[] = [];
-    list.forEach((att) => {
-      const canonicalKey = stringToUuid(att.testId || att.id || att.testTitle || "");
-      const normKey = `${(att.subject || "").toLowerCase().trim()}:::${(att.testTitle || "").toLowerCase().trim()}`;
-      if (!seen.has(canonicalKey) && !seen.has(normKey)) {
+    clean.forEach((att) => {
+      const canonicalKey = getCanonicalTestKey(att);
+      if (!seen.has(canonicalKey)) {
         seen.add(canonicalKey);
-        seen.add(normKey);
         unique.push(att);
       }
     });

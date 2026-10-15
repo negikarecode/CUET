@@ -1,5 +1,6 @@
 import { RecordedTestAttempt } from "@/types";
 import { deduplicateTestAttempts } from "@/lib/analytics";
+import { stringToUuid } from "@/lib/utils";
 import practiceManifest from "@/lib/data/practice_test_manifest.json";
 
 export interface PracticeTestStats {
@@ -122,6 +123,84 @@ function formatDate(isoStr?: string | null): string | null {
   }
 }
 
+export function matchesPracticePaper(
+  a: RecordedTestAttempt,
+  folder: string,
+  uNum: number,
+  tNum: number
+): boolean {
+  if (!a) return false;
+  const aTId = (a.testId || "").toLowerCase().trim();
+  const aId = (a.id || "").toLowerCase().trim();
+  const aTitle = (a.testTitle || "").toLowerCase().trim();
+
+  // 1. Direct ID matching
+  const testId = `practice-${folder}-unit${uNum}-test${tNum}`;
+  const altTestId = `practice-${folder}-u${uNum}-t${tNum}`;
+  const dashTestId = `practice-${folder}-unit-${uNum}-test-${tNum}`;
+  const plainTestId = `${folder}-unit${uNum}-test${tNum}`;
+
+  if (aTId === testId || aId === testId) return true;
+  if (aTId === altTestId || aId === altTestId) return true;
+  if (aTId === dashTestId || aId === dashTestId) return true;
+  if (aTId === plainTestId || aId === plainTestId) return true;
+
+  // UUID matching
+  const uuid1 = stringToUuid(testId);
+  const uuid2 = stringToUuid(altTestId);
+  if (aTId === uuid1 || aId === uuid1 || aTId === uuid2 || aId === uuid2) return true;
+  if (aTId && (stringToUuid(aTId) === uuid1 || stringToUuid(aTId) === uuid2)) return true;
+
+  // 2. Canonical aliases for folder
+  const aliases: string[] = [folder];
+  if (folder === "bio") aliases.push("biology");
+  if (folder === "maths") aliases.push("mathematics", "math");
+  if (folder === "bst") aliases.push("business-studies", "business_studies", "business");
+  if (folder === "pol science") aliases.push("political-science", "political_science", "pol-science", "polscience", "pol");
+  if (folder === "eco") aliases.push("economics");
+  if (folder === "geo") aliases.push("geography");
+  if (folder === "physical_education") aliases.push("physical-education", "physical_education", "ped");
+  if (folder === "computer_science") aliases.push("computer-science", "computer_science", "cs", "csip");
+  if (folder === "home_science") aliases.push("home-science", "home_science", "hsc");
+  if (folder === "mass_media") aliases.push("mass-media", "mass_media", "mmc");
+  if (folder === "environmental_studies") aliases.push("environmental-studies", "environmental_studies", "evs");
+  if (folder === "fine_arts") aliases.push("fine-arts", "fine_arts", "fa");
+  if (folder === "agriculture") aliases.push("agriculture", "agr");
+  if (folder === "anthropology") aliases.push("anthropology", "ant");
+  if (folder === "english") aliases.push("english", "eng");
+  if (folder === "general-test") aliases.push("general-test", "general", "gt", "gat");
+
+  for (const alias of aliases) {
+    const aliasTestId1 = `practice-${alias}-unit${uNum}-test${tNum}`;
+    const aliasTestId2 = `practice-${alias}-u${uNum}-t${tNum}`;
+    if (aTId === aliasTestId1 || aId === aliasTestId1 || aTId === aliasTestId2 || aId === aliasTestId2) return true;
+    const aUuid1 = stringToUuid(aliasTestId1);
+    const aUuid2 = stringToUuid(aliasTestId2);
+    if (aTId === aUuid1 || aId === aUuid1 || aTId === aUuid2 || aId === aUuid2) return true;
+    if (aTId && (stringToUuid(aTId) === aUuid1 || stringToUuid(aTId) === aUuid2)) return true;
+  }
+
+  // 3. Extract unit and test number from testId
+  const idUMatch = aTId.match(/unit[-_]?(\d+)/i) || aTId.match(/u[-_]?(\d+)/i);
+  const idTMatch = aTId.match(/test[-_]?(\d+)/i) || aTId.match(/t[-_]?(\d+)/i) || aTId.match(/-(\d+)$/);
+  if (idUMatch && idTMatch && idUMatch[1] && idTMatch[1]) {
+    if (parseInt(idUMatch[1], 10) === uNum && parseInt(idTMatch[1], 10) === tNum) {
+      return true;
+    }
+  }
+
+  // 4. Extract unit and test number from testTitle
+  const titleUMatch = aTitle.match(/\bunit\s*(\d+)\b/i);
+  const titleTMatch = aTitle.match(/\b(?:practice\s+test|test)\s*(\d+)\b/i) || aTitle.match(/\b#(\d+)\b/i);
+  if (titleUMatch && titleTMatch && titleUMatch[1] && titleTMatch[1]) {
+    if (parseInt(titleUMatch[1], 10) === uNum && parseInt(titleTMatch[1], 10) === tNum) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 /**
  * Authoritative single selector for unit practice test statistics.
  * Excludes full mocks, PYQ attempts, and duplicates.
@@ -144,10 +223,13 @@ export function getPracticeStats(
   const practiceAttempts = cleanAttempts.filter((att) => {
     if (!isPracticeAttempt(att)) return false;
     const testId = (att.testId || "").toLowerCase();
+    const title = (att.testTitle || "").toLowerCase();
     const subKey = normalizePracticeFolder(att.subject || att.testTitle || "");
     return (
       testId.includes(`practice-${folder}`) ||
       testId.includes(`-${folder}-`) ||
+      testId.includes(folder) ||
+      title.includes(folder) ||
       subKey === folder
     );
   });
@@ -175,11 +257,9 @@ export function getPracticeStats(
     for (let tNum = 1; tNum <= 20; tNum++) {
       totalCount++;
       const testId = `practice-${folder}-unit${uNum}-test${tNum}`;
-      // Also match alternate format like practice-physics-u1-t1
-      const altTestId = `practice-${folder}-u${uNum}-t${tNum}`;
 
-      const matchedAttempts = practiceAttempts.filter(
-        (a) => a.testId === testId || a.testId === altTestId
+      const matchedAttempts = practiceAttempts.filter((a) =>
+        matchesPracticePaper(a, folder, uNum, tNum)
       );
 
       if (matchedAttempts.length > 0) {
@@ -252,6 +332,52 @@ export function getPracticeStats(
           nextUnattemptedUnit = uNum;
           nextUnattemptedTestNumber = tNum;
         }
+      }
+    }
+  }
+
+  // 5. Fallback for unassigned subject practice attempts (e.g. from server rows with generic names)
+  const matchedAttemptIds = new Set<string>();
+  Array.from(testsMap.values()).forEach((ts) => {
+    if (ts.bestAttempt) {
+      if (ts.bestAttempt.id) matchedAttemptIds.add(ts.bestAttempt.id);
+      if (ts.bestAttempt.attemptId) matchedAttemptIds.add(ts.bestAttempt.attemptId);
+    }
+  });
+
+  const unmatchedPractice = practiceAttempts.filter(
+    (att) =>
+      (!att.id || !matchedAttemptIds.has(att.id)) &&
+      (!att.attemptId || !matchedAttemptIds.has(att.attemptId))
+  );
+
+  if (unmatchedPractice.length > 0) {
+    for (const unassigned of unmatchedPractice) {
+      let foundSlot = false;
+      for (const u of targetUnits) {
+        for (let tNum = 1; tNum <= 20; tNum++) {
+          const testId = `practice-${folder}-unit${u.unitNumber}-test${tNum}`;
+          const currentStat = testsMap.get(testId);
+          if (!currentStat || !currentStat.hasAttempted) {
+            attemptedCount++;
+            testsMap.set(testId, {
+              testId,
+              hasAttempted: true,
+              attemptsCount: 1,
+              bestScore: unassigned.totalMarks,
+              maxMarks: unassigned.maxMarks || 100,
+              lastScore: unassigned.totalMarks,
+              accuracy: unassigned.accuracyPercentage,
+              lastAttemptDate: formatDate(unassigned.submittedAt),
+              bestAttempt: unassigned,
+            });
+            if (unassigned.id) matchedAttemptIds.add(unassigned.id);
+            if (unassigned.attemptId) matchedAttemptIds.add(unassigned.attemptId);
+            foundSlot = true;
+            break;
+          }
+        }
+        if (foundSlot) break;
       }
     }
   }

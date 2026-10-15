@@ -83,6 +83,17 @@ export function cleanLatex(math: string): string {
   // Normalize stray currency or escaped dollars
   cleaned = cleaned.replace(/\\+\$/g, "");
 
+  // Auto-wrap negative exponents without braces: e.g. T^-2 -> T^{-2}, m^-1 -> m^{-1}
+  cleaned = cleaned.replace(/([0-9a-zA-Z\)\]\}])\^([+\-][0-9a-zA-Z]+)/g, "$1^{$2}");
+  // Auto-wrap multidigit exponents without braces: e.g. 10^12 -> 10^{12}
+  cleaned = cleaned.replace(/([0-9a-zA-Z\)\]\}])\^([0-9]{2,})/g, "$1^{$2}");
+  // Auto-wrap multidigit subscripts without braces: e.g. x_12 -> x_{12}
+  cleaned = cleaned.replace(/([0-9a-zA-Z\)\]\}])_([+\-]?[0-9a-zA-Z]{2,})/g, "$1_{$2}");
+
+  // Normalize simple text arrows
+  cleaned = cleaned.replace(/<->/g, "\\leftrightarrow ");
+  cleaned = cleaned.replace(/(?<!\\)->/g, "\\rightarrow ");
+
   return cleaned;
 }
 
@@ -144,7 +155,7 @@ function renderKaTeX(math: string, displayMode: boolean): { html: string; error?
  * Regex identifying bare LaTeX macros that indicate mathematical or chemical syntax
  */
 const BARE_LATEX_REGEX =
-  /\\(?:sqrt|frac|text|mathrm|mathbf|textit|vec|hat|mu|times|Omega|alpha|beta|gamma|delta|epsilon|theta|pi|lambda|sigma|omega|phi|psi|tau|rho|le|ge|leq|geq|pm|cdot|Delta|Phi|lambda|int|sum|partial|infty|approx|equiv|neq|rightarrow|leftarrow|rightleftharpoons|ce)\b|[_^]\{/;
+  /\\(?:sqrt|frac|text|mathrm|mathbf|textit|vec|hat|mu|times|Omega|alpha|beta|gamma|delta|epsilon|theta|pi|lambda|sigma|omega|phi|psi|tau|rho|le|ge|leq|geq|pm|cdot|Delta|Phi|lambda|int|sum|partial|infty|approx|equiv|neq|rightarrow|leftarrow|rightleftharpoons|ce|nu|eta|hbar|nabla|circ|degree)\b|[_^]\{|[_^][+\-]?[0-9a-zA-Z]/;
 
 /**
  * Parses mixed text containing $$...$$ (display), $...$ (inline), and bare LaTeX.

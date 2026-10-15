@@ -497,14 +497,24 @@ export const useTestStore = create<TestStoreState>()(
         };
 
         const currentAttempts = get().testAttempts || [];
-        // Strictly deduplicate by canonical testId, attemptId, or matching title + subject + close timestamp
+        const isGenericTestKey =
+          !testKey || testKey === "cbt_exam" || testKey === "default" || /^[0-9a-f-]{36}$/i.test(testKey);
+        // Strictly deduplicate by canonical testId, attemptId, or exact test paper reattempt
         const existingIdx = currentAttempts.findIndex((a) => {
           if (!a) return false;
           if (attempt.attemptId && a.attemptId && a.attemptId === attempt.attemptId) return true;
-          const aKey = (a.testId || a.id || "").trim();
-          if (aKey === testKey || a.id === attempt.id) return true;
-          if (a.testId && stringToUuid(a.testId.trim()) === testCanonicalUuid) return true;
+          if (attempt.id && a.id && a.id === attempt.id) return true;
+
+          const aKey = (a.testId || "").trim();
+          if (!isGenericTestKey && aKey && aKey !== "cbt_exam" && !/^[0-9a-f-]{36}$/i.test(aKey)) {
+            if (aKey === testKey) return true;
+            if (stringToUuid(aKey) === testCanonicalUuid) return true;
+          }
+
+          // Duplicate network submission within 60s
           if (
+            isGenericTestKey &&
+            (!aKey || aKey === "cbt_exam" || /^[0-9a-f-]{36}$/i.test(aKey)) &&
             a.testTitle &&
             attempt.testTitle &&
             a.testTitle.trim().toLowerCase() === attempt.testTitle.trim().toLowerCase() &&
@@ -514,7 +524,7 @@ export const useTestStore = create<TestStoreState>()(
           ) {
             const timeA = new Date(a.submittedAt || 0).getTime();
             const timeB = new Date(attempt.submittedAt || 0).getTime();
-            if (timeA > 0 && timeB > 0 && Math.abs(timeA - timeB) <= 120000) {
+            if (timeA > 0 && timeB > 0 && Math.abs(timeA - timeB) <= 60000) {
               return true;
             }
           }
@@ -526,9 +536,11 @@ export const useTestStore = create<TestStoreState>()(
           const old = currentAttempts[existingIdx];
           // Preserve friendly non-UUID testId if available for router paths
           const preservedTestId =
-            old && old.testId && !/^[0-9a-f-]{36}$/i.test(old.testId)
-              ? old.testId
-              : attempt.testId;
+            attempt.testId && !/^[0-9a-f-]{36}$/i.test(attempt.testId) && attempt.testId !== "cbt_exam"
+              ? attempt.testId
+              : (old && old.testId && !/^[0-9a-f-]{36}$/i.test(old.testId) && old.testId !== "cbt_exam"
+                ? old.testId
+                : attempt.testId);
           updatedAttempts = [...currentAttempts];
           updatedAttempts[existingIdx] = {
             ...enrichedAttempt,
@@ -669,12 +681,18 @@ export const useTestStore = create<TestStoreState>()(
                     finalAttempted > 0 ? Math.round((finalCorrect / finalAttempted) * 100) : 0;
 
                   const sTestUuid = stringToUuid(sTestId);
+                  const isGenericSession =
+                    !sTestId || sTestId === "cbt_exam" || /^[0-9a-f-]{36}$/i.test(sTestId);
                   const existingIdx = currentAttempts.findIndex((a) => {
                     if (!a) return false;
-                    if (a.testId === sTestId) return true;
-                    if (a.testId && stringToUuid(a.testId) === sTestUuid) return true;
                     if (session.attemptId && a.attemptId && a.attemptId === session.attemptId) return true;
+                    if (!isGenericSession && a.testId && a.testId !== "cbt_exam" && !/^[0-9a-f-]{36}$/i.test(a.testId)) {
+                      if (a.testId === sTestId) return true;
+                      if (stringToUuid(a.testId) === sTestUuid) return true;
+                    }
                     if (
+                      isGenericSession &&
+                      (!a.testId || a.testId === "cbt_exam" || /^[0-9a-f-]{36}$/i.test(a.testId)) &&
                       session.testMeta?.title &&
                       a.testTitle &&
                       a.testTitle.trim().toLowerCase() === session.testMeta.title.trim().toLowerCase() &&

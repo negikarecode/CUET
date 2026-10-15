@@ -22,9 +22,8 @@ import {
 } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
-import { getMockStats } from "@/lib/mock-stats";
-import { deduplicateTestAttempts } from "@/lib/analytics";
-import { stringToUuid } from "@/lib/utils";
+import { getMockStats, matchesMockPaper, isFullLengthMockAttempt } from "@/lib/mock-stats";
+import { deduplicateTestAttempts, normalizeSubject } from "@/lib/analytics";
 import { RecordedTestAttempt } from "@/types";
 
 interface SubjectPageProps {
@@ -87,6 +86,16 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
     return deduplicateTestAttempts(testAttempts || []);
   }, [testAttempts]);
 
+  // Subject-specific mock attempts
+  const subjectMockAttempts = useMemo(() => {
+    const canonicalKey = normalizeSubject(subjectKey).key;
+    return cleanAttempts.filter((att) => {
+      if (!isFullLengthMockAttempt(att)) return false;
+      const attSubj = normalizeSubject(att.subject || att.testTitle || "").key;
+      return attSubj === canonicalKey;
+    });
+  }, [cleanAttempts, subjectKey]);
+
   // Next unattempted mock ID for the header primary action button
   const nextMockId = useMemo(() => {
     const nextIdx = mockStats.nextUnattemptedMockIndex;
@@ -99,26 +108,11 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
     return mockTests.map((test, idx) => {
       const mockNum = test.mockNumber || idx + 1;
       const testId = test.id;
-      const testUuid = stringToUuid(testId);
 
       // Find all attempts matching this specific mock test
-      const matchingAttempts = cleanAttempts.filter((att) => {
-        const attTId = (att.testId || "").trim();
-        const attId = (att.id || "").trim();
-        const attTitle = (att.testTitle || "").toLowerCase().trim();
-
-        if (attTId === testId || attId === testId) return true;
-        if (attTId && stringToUuid(attTId) === testUuid) return true;
-        if (
-          attTitle.includes(`mock ${mockNum}`) ||
-          attTitle.includes(`mock paper ${mockNum}`) ||
-          attTitle === test.label.toLowerCase() ||
-          attTitle === (test.mockLabel || "").toLowerCase()
-        ) {
-          return true;
-        }
-        return false;
-      });
+      const matchingAttempts = subjectMockAttempts.filter((att) =>
+        matchesMockPaper(att, subjectKey, testId, mockNum)
+      );
 
       // Sort matching attempts chronologically to assign stable attempt numbers
       const sortedChronological = [...matchingAttempts].sort(

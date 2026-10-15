@@ -12,6 +12,7 @@ import {
   getActiveUserId as getStorageActiveUid,
 } from "@/lib/storage/cbt-session-storage";
 import { stringToUuid } from "@/lib/utils";
+import { normalizeSubject } from "@/lib/analytics";
 
 export interface QuestionSessionState {
   visited: boolean;
@@ -879,13 +880,22 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             : stringToUuid(`${testId || meta?.id || "cbt_exam"}_${Date.now()}`));
 
         const canonicalAttemptId = `attempt_${effectiveAttemptId}`;
+        const effectiveTestId = meta?.id ?? testId ?? "cbt_exam";
+        const normSub = normalizeSubject(meta?.subject || effectiveTestId || "physics");
+        const resolvedSubject = meta?.subject || normSub.name || "Physics";
+        const resolvedTitle =
+          meta?.title ||
+          (effectiveTestId && effectiveTestId !== "cbt_exam"
+            ? `CUET UG ${resolvedSubject} Test`
+            : "CUET Domain Examination Paper");
+
         const attemptRecord: RecordedTestAttempt = {
           id: canonicalAttemptId,
           attemptId: effectiveAttemptId,
           userId: storeUser?.id || "guest",
-          testId: meta?.id ?? testId ?? "cbt_exam",
-          testTitle: meta?.title ?? "CUET Domain Examination Paper",
-          subject: meta?.subject ?? "Physics",
+          testId: effectiveTestId,
+          testTitle: resolvedTitle,
+          subject: resolvedSubject,
           totalQuestions: authQuestions.length,
           attemptedCount: summary.attemptedCount,
           unattemptedCount: summary.unattemptedCount,

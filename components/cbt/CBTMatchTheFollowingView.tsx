@@ -55,7 +55,7 @@ export function parseMatchTheFollowing(raw: string): MatchTheFollowingResult | n
   }
 
   const isHeaderLine = (l: string) =>
-    /^(?:List|Column)[\s\-–—]*(?:I|II|1|2|A|B)(?:\s*\([^)]+\))?[:\]]?\s*$/i.test(l.trim());
+    /^(?:List|Column)[\s\-–—]*(?:I|II|1|2|A|B)\b/i.test(l.trim());
 
   let list1CustomTitle = "List I";
   let list2CustomTitle = "List II";
@@ -66,17 +66,34 @@ export function parseMatchTheFollowing(raw: string): MatchTheFollowingResult | n
     if (/^[\-\s|—–=]{3,}$/.test(line.trim())) {
       continue;
     }
-    const hMatch = line.trim().match(/^(?:List|Column)[\s\-–—]*(I|II|1|2|A|B)(\s*\([^)]+\))?[:\]]?\s*$/i);
-    if (hMatch && hMatch[1]) {
-      const colNum = hMatch[1].toUpperCase();
-      const subtitle = hMatch[2] ? hMatch[2].trim() : "";
-      if (colNum === "I" || colNum === "1" || colNum === "A") {
-        list1CustomTitle = `List I${subtitle ? " " + subtitle : ""}`;
-      } else {
-        list2CustomTitle = `List II${subtitle ? " " + subtitle : ""}`;
-      }
+
+    // Check if line contains both List I and List II side by side
+    const dualHeaderMatch = line.trim().match(
+      /^(?:List|Column)[\s\-–—]*(?:I|1|A)(.*?)(?:\||\s{3,}|\t+)(?:List|Column)[\s\-–—]*(?:II|2|B)(.*)$/i
+    );
+    if (dualHeaderMatch) {
+      const sub1 = dualHeaderMatch[1]?.trim() || "";
+      const sub2 = dualHeaderMatch[2]?.trim() || "";
+      list1CustomTitle = `List I${sub1 ? " " + sub1.replace(/^[:\-\s]+/, "") : ""}`;
+      list2CustomTitle = `List II${sub2 ? " " + sub2.replace(/^[:\-\s]+/, "") : ""}`;
       continue;
     }
+
+    // Single column header
+    const h1Match = line.trim().match(/^(?:List|Column)[\s\-–—]*(?:I|1|A)\b(?!\s*I\b)(.*)$/i);
+    if (h1Match) {
+      const rest = h1Match[1]?.trim() || "";
+      list1CustomTitle = `List I${rest ? " " + rest.replace(/^[:\-\s]+/, "") : ""}`;
+      continue;
+    }
+
+    const h2Match = line.trim().match(/^(?:List|Column)[\s\-–—]*(?:II|2|B)\b(.*)$/i);
+    if (h2Match) {
+      const rest = h2Match[1]?.trim() || "";
+      list2CustomTitle = `List II${rest ? " " + rest.replace(/^[:\-\s]+/, "") : ""}`;
+      continue;
+    }
+
     contentLines.push(line);
   }
 
@@ -172,8 +189,8 @@ export default function CBTMatchTheFollowingView({
         {/* List I Column */}
         <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-2.5 shadow-2xs">
           <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              {data.list1Title}
+            <span className="text-xs font-bold tracking-wider text-slate-700">
+              <MathRenderer text={data.list1Title} inline />
             </span>
             <span className="text-[10px] font-medium text-slate-400">Concepts / Terms</span>
           </div>
@@ -197,8 +214,8 @@ export default function CBTMatchTheFollowingView({
         {/* List II Column */}
         <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-2.5 shadow-2xs">
           <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              {data.list2Title}
+            <span className="text-xs font-bold tracking-wider text-slate-700">
+              <MathRenderer text={data.list2Title} inline />
             </span>
             <span className="text-[10px] font-medium text-slate-400">Descriptions / Matches</span>
           </div>

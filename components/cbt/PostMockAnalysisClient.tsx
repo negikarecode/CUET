@@ -7,6 +7,7 @@ import {
   Award,
   BarChart3,
   Brain,
+  ChevronDown,
   Filter,
   Hourglass,
   Layers,
@@ -204,6 +205,41 @@ export default function PostMockAnalysisClient({
   // Data for selected chapter in Chapter × Difficulty breakdown
   const currentChapterMatrixRow = chapterDifficultyMatrix[selectedChapter] || null;
 
+  // Collapsible dropdown / shrinking sections state
+  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({
+    scorecard: false,
+    benchmark: false,
+    difficulty: false,
+    chapters: false,
+    chapterDifficulty: false,
+    aiInsights: false,
+    questions: false,
+  });
+
+  const allCollapsed = useMemo(() => {
+    return Object.values(collapsedSections).every(Boolean);
+  }, [collapsedSections]);
+
+  const toggleAllSections = () => {
+    const nextState = !allCollapsed;
+    setCollapsedSections({
+      scorecard: nextState,
+      benchmark: nextState,
+      difficulty: nextState,
+      chapters: nextState,
+      chapterDifficulty: nextState,
+      aiInsights: nextState,
+      questions: nextState,
+    });
+  };
+
+  const toggleSection = (key: string) => {
+    setCollapsedSections((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   // Click-through to question review
   const handleInspectSlice = (options: {
     chapter?: string;
@@ -212,6 +248,8 @@ export default function PostMockAnalysisClient({
     questionIds?: string[];
     evidenceLabel?: string;
   }) => {
+    setCollapsedSections((prev) => (prev.questions ? { ...prev, questions: false } : prev));
+
     if (options.questionIds) {
       setFilterQuestionIds(options.questionIds);
       setActiveEvidenceLabel(options.evidenceLabel || `${options.questionIds.length} Question Evidence`);
@@ -286,7 +324,16 @@ export default function PostMockAnalysisClient({
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <button
+            type="button"
+            onClick={toggleAllSections}
+            className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center gap-2 cursor-pointer shrink-0 whitespace-nowrap"
+            title={allCollapsed ? "Expand all sections" : "Collapse all sections"}
+          >
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${allCollapsed ? "" : "rotate-180"}`} />
+            <span>{allCollapsed ? "Expand All" : "Collapse All"}</span>
+          </button>
           {onRetake ? (
             <button
               type="button"
@@ -338,95 +385,105 @@ export default function PostMockAnalysisClient({
               Scoring Rule: +5 Correct | -1 Incorrect | 0 Unattempted
             </p>
           </div>
+          <button
+            type="button"
+            onClick={() => toggleSection("scorecard")}
+            className="self-start md:self-center flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs shrink-0"
+          >
+            <span>{collapsedSections.scorecard ? "Expand Scorecard" : "Collapse"}</span>
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${collapsedSections.scorecard ? "" : "rotate-180"}`} />
+          </button>
         </div>
 
         {/* Primary Deterministic Scorecard Metrics */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 mt-6 pt-6 border-t border-slate-100">
-          {/* Score */}
-          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Score</span>
-              {propEarnedXP && propEarnedXP > 0 ? (
-                <span className="text-[9px] font-semibold font-mono bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded-full border border-amber-200">
-                  +{propEarnedXP} XP
-                </span>
-              ) : null}
+        {!collapsedSections.scorecard && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 mt-6 pt-6 border-t border-slate-100">
+            {/* Score */}
+            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Score</span>
+                {propEarnedXP && propEarnedXP > 0 ? (
+                  <span className="text-[9px] font-semibold font-mono bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded-full border border-amber-200">
+                    +{propEarnedXP} XP
+                  </span>
+                ) : null}
+              </div>
+              <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
+                {overall.totalMarks}{" "}
+                <span className="text-xs font-medium text-slate-400">/ {overall.maxMarks}</span>
+              </p>
+              <p className="text-[10px] text-blue-600 font-semibold mt-1">
+                {overall.totalMarks >= 225
+                  ? "Top 99th %tile"
+                  : overall.totalMarks >= 175
+                  ? "DU North Campus"
+                  : "Remediation"}
+              </p>
             </div>
-            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
-              {overall.totalMarks}{" "}
-              <span className="text-xs font-medium text-slate-400">/ {overall.maxMarks}</span>
-            </p>
-            <p className="text-[10px] text-blue-600 font-semibold mt-1">
-              {overall.totalMarks >= 225
-                ? "Top 99th %tile"
-                : overall.totalMarks >= 175
-                ? "DU North Campus"
-                : "Remediation"}
-            </p>
-          </div>
 
-          {/* Accuracy */}
-          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-            <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Accuracy</span>
-            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
-              {overall.accuracyPercentage}%
-            </p>
-            <p className="text-[10px] text-slate-500 font-medium mt-1">
-              {overall.correctCount} of {overall.attemptedCount} attempted
-            </p>
-          </div>
-
-          {/* Correct */}
-          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-            <span className="text-[10px] font-semibold uppercase text-emerald-600 tracking-wider">Correct</span>
-            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-emerald-600">
-              {overall.correctCount}
-            </p>
-            <p className="text-[10px] text-emerald-600 font-semibold mt-1">
-              +{overall.correctCount * 5} marks
-            </p>
-          </div>
-
-          {/* Incorrect */}
-          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-            <span className="text-[10px] font-semibold uppercase text-rose-600 tracking-wider">Incorrect</span>
-            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-rose-600">
-              {overall.incorrectCount}
-            </p>
-            <p className="text-[10px] text-rose-600 font-semibold mt-1">
-              -{overall.incorrectCount} penalty
-            </p>
-          </div>
-
-          {/* Unattempted / Skipped */}
-          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-            <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Unattempted</span>
-            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-600">
-              {overall.skippedCount}
-            </p>
-            <p className="text-[10px] text-slate-400 font-medium mt-1">
-              0 penalty
-            </p>
-          </div>
-
-          {/* Time Elapsed & Time Sinks */}
-          <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Time Elapsed</span>
-              {overall.timeSinkCount > 0 && (
-                <span className="text-[9px] font-semibold font-mono bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded-full border border-rose-200">
-                  {overall.timeSinkCount} Sinks
-                </span>
-              )}
+            {/* Accuracy */}
+            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+              <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Accuracy</span>
+              <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
+                {overall.accuracyPercentage}%
+              </p>
+              <p className="text-[10px] text-slate-500 font-medium mt-1">
+                {overall.correctCount} of {overall.attemptedCount} attempted
+              </p>
             </div>
-            <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
-              {timeTakenFormatted}
-            </p>
-            <p className="text-[10px] text-slate-500 font-medium mt-1">
-              Allocated: 60m ({overall.avgTimePerQuestionSeconds}s/Q)
-            </p>
+
+            {/* Correct */}
+            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+              <span className="text-[10px] font-semibold uppercase text-emerald-600 tracking-wider">Correct</span>
+              <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-emerald-600">
+                {overall.correctCount}
+              </p>
+              <p className="text-[10px] text-emerald-600 font-semibold mt-1">
+                +{overall.correctCount * 5} marks
+              </p>
+            </div>
+
+            {/* Incorrect */}
+            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+              <span className="text-[10px] font-semibold uppercase text-rose-600 tracking-wider">Incorrect</span>
+              <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-rose-600">
+                {overall.incorrectCount}
+              </p>
+              <p className="text-[10px] text-rose-600 font-semibold mt-1">
+                -{overall.incorrectCount} penalty
+              </p>
+            </div>
+
+            {/* Unattempted / Skipped */}
+            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+              <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Unattempted</span>
+              <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-600">
+                {overall.skippedCount}
+              </p>
+              <p className="text-[10px] text-slate-400 font-medium mt-1">
+                0 penalty
+              </p>
+            </div>
+
+            {/* Time Elapsed & Time Sinks */}
+            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Time Elapsed</span>
+                {overall.timeSinkCount > 0 && (
+                  <span className="text-[9px] font-semibold font-mono bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded-full border border-rose-200">
+                    {overall.timeSinkCount} Sinks
+                  </span>
+                )}
+              </div>
+              <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
+                {timeTakenFormatted}
+              </p>
+              <p className="text-[10px] text-slate-500 font-medium mt-1">
+                Allocated: 60m ({overall.avgTimePerQuestionSeconds}s/Q)
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* SECTION 2 — BEST RESULT / ATTEMPT HISTORY */}
@@ -463,28 +520,41 @@ export default function PostMockAnalysisClient({
               <span className="text-sm font-medium text-slate-500 font-mono">({bestAccuracy}% Accuracy)</span>
             </h2>
 
-            <p className="text-xs text-slate-600 font-normal leading-relaxed">
-              {attemptsCount <= 1
-                ? "This is your first completed attempt on this paper. Use the option to re-attempt anytime and strive for 225+ North Campus score!"
-                : isNewPersonalBest && scoreImprovement > 0
-                ? `Incredible progress! You outperformed your previous high by +${scoreImprovement} marks on this test.`
-                : isNewPersonalBest
-                ? "You matched your all-time high score on this test."
-                : `Your personal best on this paper is ${bestMarks} marks (${bestAccuracy}% accuracy). You scored ${overall.totalMarks} marks in this run.`}
-            </p>
+            {!collapsedSections.benchmark && (
+              <p className="text-xs text-slate-600 font-normal leading-relaxed">
+                {attemptsCount <= 1
+                  ? "This is your first completed attempt on this paper. Use the option to re-attempt anytime and strive for 225+ North Campus score!"
+                  : isNewPersonalBest && scoreImprovement > 0
+                  ? `Incredible progress! You outperformed your previous high by +${scoreImprovement} marks on this test.`
+                  : isNewPersonalBest
+                  ? "You matched your all-time high score on this test."
+                  : `Your personal best on this paper is ${bestMarks} marks (${bestAccuracy}% accuracy). You scored ${overall.totalMarks} marks in this run.`}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Trophies celebration if unlocked */}
-        {propUnlockedTrophies && propUnlockedTrophies.length > 0 && (
-          <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-center gap-3 shrink-0 shadow-xs">
-            <Award className="w-5 h-5 text-amber-600" />
-            <div className="text-xs font-semibold text-amber-900">
-              <span className="font-bold">Unlocked: </span>
-              {propUnlockedTrophies.map((t) => t.title).join(", ")}
+        <div className="flex items-center gap-3 shrink-0">
+          {/* Trophies celebration if unlocked */}
+          {propUnlockedTrophies && propUnlockedTrophies.length > 0 && (
+            <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-center gap-3 shrink-0 shadow-xs">
+              <Award className="w-5 h-5 text-amber-600" />
+              <div className="text-xs font-semibold text-amber-900">
+                <span className="font-bold">Unlocked: </span>
+                {propUnlockedTrophies.map((t) => t.title).join(", ")}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+          <button
+            type="button"
+            onClick={() => toggleSection("benchmark")}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs shrink-0"
+          >
+            <span>{collapsedSections.benchmark ? "Expand" : "Collapse"}</span>
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${collapsedSections.benchmark ? "" : "rotate-180"}`} />
+          </button>
+        </div>
       </div>
 
       {/* 2. DIFFICULTY ANALYSIS */}
@@ -499,79 +569,91 @@ export default function PostMockAnalysisClient({
               Accuracy and penalty distribution partitioned across difficulty tiers present in this mock.
             </p>
           </div>
-          <span className="text-[11px] font-medium text-slate-500 font-mono">
-            Click any tier to filter questions below
-          </span>
+          <div className="flex items-center gap-2.5">
+            <span className="text-[11px] font-medium text-slate-500 font-mono hidden sm:inline-block">
+              Click any tier to filter questions below
+            </span>
+            <button
+              type="button"
+              onClick={() => toggleSection("difficulty")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs shrink-0"
+            >
+              <span>{collapsedSections.difficulty ? "Expand" : "Collapse"}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${collapsedSections.difficulty ? "" : "rotate-180"}`} />
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-          {difficultyBreakdown.map((item) => {
-            const badgeBg =
-              item.difficulty === "easy"
-                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                : item.difficulty === "medium"
-                ? "bg-amber-50 text-amber-700 border-amber-200"
-                : item.difficulty === "hard"
-                ? "bg-rose-50 text-rose-700 border-rose-200"
-                : "bg-slate-100 text-slate-700 border-slate-200";
+        {!collapsedSections.difficulty && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            {difficultyBreakdown.map((item) => {
+              const badgeBg =
+                item.difficulty === "easy"
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                  : item.difficulty === "medium"
+                  ? "bg-amber-50 text-amber-700 border-amber-200"
+                  : item.difficulty === "hard"
+                  ? "bg-rose-50 text-rose-700 border-rose-200"
+                  : "bg-slate-100 text-slate-700 border-slate-200";
 
-            return (
-              <button
-                key={item.difficulty}
-                type="button"
-                onClick={() =>
-                  handleInspectSlice({
-                    difficulty: item.difficulty,
-                    chapter: "all",
-                    result: "all",
-                  })
-                }
-                className="text-left p-5 rounded-2xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 shadow-xs hover:border-slate-300 transition-all cursor-pointer group"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span
-                    className={`text-[10px] font-semibold uppercase px-2.5 py-0.5 rounded-full border shadow-xs ${badgeBg}`}
-                  >
-                    {item.label}
-                  </span>
-                  <span className="text-xs font-mono font-semibold text-slate-800">
-                    {item.attempted > 0 ? `${item.accuracy}% Accuracy` : "Unattempted"}
-                  </span>
-                </div>
+              return (
+                <button
+                  key={item.difficulty}
+                  type="button"
+                  onClick={() =>
+                    handleInspectSlice({
+                      difficulty: item.difficulty,
+                      chapter: "all",
+                      result: "all",
+                    })
+                  }
+                  className="text-left p-5 rounded-2xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 shadow-xs hover:border-slate-300 transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className={`text-[10px] font-semibold uppercase px-2.5 py-0.5 rounded-full border shadow-xs ${badgeBg}`}
+                    >
+                      {item.label}
+                    </span>
+                    <span className="text-xs font-mono font-semibold text-slate-800">
+                      {item.attempted > 0 ? `${item.accuracy}% Accuracy` : "Unattempted"}
+                    </span>
+                  </div>
 
-                <div className="flex items-baseline justify-between mt-3">
-                  <span className="text-2xl font-bold text-slate-900 font-mono">
-                    {item.correct}{" "}
-                    <span className="text-sm font-medium text-slate-400">/ {item.attempted}</span>
-                  </span>
-                  <span className="text-xs font-medium text-slate-500">
-                    {item.totalQuestions} Questions
-                  </span>
-                </div>
+                  <div className="flex items-baseline justify-between mt-3">
+                    <span className="text-2xl font-bold text-slate-900 font-mono">
+                      {item.correct}{" "}
+                      <span className="text-sm font-medium text-slate-400">/ {item.attempted}</span>
+                    </span>
+                    <span className="text-xs font-medium text-slate-500">
+                      {item.totalQuestions} Questions
+                    </span>
+                  </div>
 
-                {/* Progress bar */}
-                <div className="w-full h-2 rounded-full bg-slate-200 mt-3 overflow-hidden">
-                  <div
-                    className={`h-full transition-all ${
-                      item.accuracy >= 75
-                        ? "bg-emerald-500"
-                        : item.accuracy >= 50
-                        ? "bg-amber-500"
-                        : "bg-rose-500"
-                    }`}
-                    style={{ width: `${item.accuracy}%` }}
-                  />
-                </div>
+                  {/* Progress bar */}
+                  <div className="w-full h-2 rounded-full bg-slate-200 mt-3 overflow-hidden">
+                    <div
+                      className={`h-full transition-all ${
+                        item.accuracy >= 75
+                          ? "bg-emerald-500"
+                          : item.accuracy >= 50
+                          ? "bg-amber-500"
+                          : "bg-rose-500"
+                      }`}
+                      style={{ width: `${item.accuracy}%` }}
+                    />
+                  </div>
 
-                <div className="flex items-center justify-between text-[11px] font-medium text-slate-600 mt-3 pt-2.5 border-t border-slate-200/60">
-                  <span className="text-emerald-600">+{item.correct} correct</span>
-                  <span className="text-rose-600">-{item.incorrect} wrong</span>
-                  <span className="text-slate-400">{item.skipped} skipped</span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+                  <div className="flex items-center justify-between text-[11px] font-medium text-slate-600 mt-3 pt-2.5 border-t border-slate-200/60">
+                    <span className="text-emerald-600">+{item.correct} correct</span>
+                    <span className="text-rose-600">-{item.incorrect} wrong</span>
+                    <span className="text-slate-400">{item.skipped} skipped</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* 3. CHAPTER-WISE ANALYSIS */}
@@ -586,10 +668,22 @@ export default function PostMockAnalysisClient({
               Sorted by number of questions in this mock.
             </p>
           </div>
-          <span className="text-[11px] font-medium text-slate-500 font-mono">
-            {chapterBreakdown.length} Chapters Tested
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] font-medium text-slate-500 font-mono">
+              {chapterBreakdown.length} Chapters Tested
+            </span>
+            <button
+              type="button"
+              onClick={() => toggleSection("chapters")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs shrink-0"
+            >
+              <span>{collapsedSections.chapters ? "Expand" : "Collapse"}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${collapsedSections.chapters ? "" : "rotate-180"}`} />
+            </button>
+          </div>
         </div>
+
+        {!collapsedSections.chapters && (
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
@@ -658,6 +752,7 @@ export default function PostMockAnalysisClient({
             </tbody>
           </table>
         </div>
+        )}
       </div>
 
       {/* 4. CHAPTER × DIFFICULTY: Deep Concept vs Application Analysis */}
@@ -673,152 +768,167 @@ export default function PostMockAnalysisClient({
             </p>
           </div>
 
-          {/* Chapter Selector Dropdown */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-slate-700">Select Chapter:</span>
-            <select
-              value={selectedChapter}
-              onChange={(e) => setSelectedChapter(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none shadow-xs cursor-pointer"
-            >
-              {chapterBreakdown.map((c) => (
-                <option key={c.chapter} value={c.chapter}>
-                  {c.chapter} ({c.totalQuestions} Qs)
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Selected Chapter Breakdown Cards */}
-        {currentChapterMatrixRow ? (
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 mb-3">
-              Performance Tiers for &ldquo;{selectedChapter}&rdquo;:
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-              {(["easy", "medium", "hard"] as NormalizedDifficulty[]).map((diff) => {
-                const cell = currentChapterMatrixRow[diff];
-                const hasQuestions = cell && cell.totalQuestions > 0;
-                const isAttempted = cell && cell.attempted > 0;
-
-                return (
-                  <div
-                    key={diff}
-                    className={`p-5 rounded-2xl border flex flex-col justify-between shadow-xs ${
-                      hasQuestions ? "bg-slate-50/70 border-slate-200/80" : "bg-slate-50/40 border-slate-200/40 opacity-70"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase text-slate-700 tracking-wider">
-                        {diff}
-                      </span>
-                      <span className="font-mono font-bold text-xs text-slate-900">
-                        {isAttempted && cell.accuracy !== null ? `${cell.accuracy}%` : "—"}
-                      </span>
-                    </div>
-
-                    <div className="mt-3">
-                      <p className="text-xl font-bold text-slate-900 font-mono">
-                        {hasQuestions ? (
-                          isAttempted ? (
-                            <>
-                              {cell.correct}{" "}
-                              <span className="text-xs font-medium text-slate-400">
-                                / {cell.attempted} attempted
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-sm font-medium text-slate-500">
-                              0 attempted
-                            </span>
-                          )
-                        ) : (
-                          <span className="text-sm font-normal text-slate-400">
-                            No {diff} questions in this mock
-                          </span>
-                        )}
-                      </p>
-                      {hasQuestions && (
-                        <p className="text-[11px] font-medium text-slate-500 mt-1">
-                          {cell.totalQuestions} total questions ({cell.skipped} skipped)
-                        </p>
-                      )}
-                    </div>
-
-                    {hasQuestions && (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleInspectSlice({
-                            chapter: selectedChapter,
-                            difficulty: diff,
-                            result: "all",
-                          })
-                        }
-                        className="mt-4 w-full py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-[11px] transition-all shadow-xs cursor-pointer"
-                      >
-                        Inspect {diff.toUpperCase()} Questions
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* Chapter Selector Dropdown */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-slate-700">Select Chapter:</span>
+              <select
+                value={selectedChapter}
+                onChange={(e) => setSelectedChapter(e.target.value)}
+                className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none shadow-xs cursor-pointer"
+              >
+                {chapterBreakdown.map((c) => (
+                  <option key={c.chapter} value={c.chapter}>
+                    {c.chapter} ({c.totalQuestions} Qs)
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
-        ) : null}
 
-        {/* Compact Full-Paper Matrix */}
-        <div className="pt-4 border-t border-slate-100">
-          <h3 className="text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">
-            Full Chapter × Difficulty Matrix
-          </h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-center border-collapse text-xs">
-              <thead>
-                <tr className="border-b border-slate-200 bg-slate-50/70 text-[11px] font-semibold uppercase text-slate-500">
-                  <th className="py-2 px-3 text-left">Chapter</th>
-                  <th className="py-2 px-3">Easy</th>
-                  <th className="py-2 px-3">Medium</th>
-                  <th className="py-2 px-3">Hard</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y border-b border-slate-200 font-mono font-medium">
-                {chapterBreakdown.map((ch) => {
-                  const row = chapterDifficultyMatrix[ch.chapter];
-                  return (
-                    <tr key={ch.chapter} className="hover:bg-slate-50/80">
-                      <td className="py-2 px-3 text-left font-sans font-semibold text-slate-900">
-                        {ch.chapter}
-                      </td>
-                      <td className="py-2 px-3">
-                        {row?.easy?.accuracy !== null ? (
-                          <span className="font-semibold text-emerald-600">{row?.easy?.accuracy}%</span>
-                        ) : (
-                          <span className="text-slate-300">—</span>
-                        )}
-                      </td>
-                      <td className="py-2 px-3">
-                        {row?.medium?.accuracy !== null ? (
-                          <span className="font-semibold text-amber-600">{row?.medium?.accuracy}%</span>
-                        ) : (
-                          <span className="text-slate-300">—</span>
-                        )}
-                      </td>
-                      <td className="py-2 px-3">
-                        {row?.hard?.accuracy !== null ? (
-                          <span className="font-semibold text-rose-600">{row?.hard?.accuracy}%</span>
-                        ) : (
-                          <span className="text-slate-300">—</span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <button
+              type="button"
+              onClick={() => toggleSection("chapterDifficulty")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs shrink-0"
+            >
+              <span>{collapsedSections.chapterDifficulty ? "Expand" : "Collapse"}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${collapsedSections.chapterDifficulty ? "" : "rotate-180"}`} />
+            </button>
           </div>
         </div>
+
+        {!collapsedSections.chapterDifficulty && (
+          <>
+            {/* Selected Chapter Breakdown Cards */}
+            {currentChapterMatrixRow ? (
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 mb-3">
+                  Performance Tiers for &ldquo;{selectedChapter}&rdquo;:
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                  {(["easy", "medium", "hard"] as NormalizedDifficulty[]).map((diff) => {
+                    const cell = currentChapterMatrixRow[diff];
+                    const hasQuestions = cell && cell.totalQuestions > 0;
+                    const isAttempted = cell && cell.attempted > 0;
+
+                    return (
+                      <div
+                        key={diff}
+                        className={`p-5 rounded-2xl border flex flex-col justify-between shadow-xs ${
+                          hasQuestions ? "bg-slate-50/70 border-slate-200/80" : "bg-slate-50/40 border-slate-200/40 opacity-70"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold uppercase text-slate-700 tracking-wider">
+                            {diff}
+                          </span>
+                          <span className="font-mono font-bold text-xs text-slate-900">
+                            {isAttempted && cell.accuracy !== null ? `${cell.accuracy}%` : "—"}
+                          </span>
+                        </div>
+
+                        <div className="mt-3">
+                          <p className="text-xl font-bold text-slate-900 font-mono">
+                            {hasQuestions ? (
+                              isAttempted ? (
+                                <>
+                                  {cell.correct}{" "}
+                                  <span className="text-xs font-medium text-slate-400">
+                                    / {cell.attempted} attempted
+                                  </span>
+                                </>
+                              ) : (
+                                <span className="text-sm font-medium text-slate-500">
+                                  0 attempted
+                                </span>
+                              )
+                            ) : (
+                              <span className="text-sm font-normal text-slate-400">
+                                No {diff} questions in this mock
+                              </span>
+                            )}
+                          </p>
+                          {hasQuestions && (
+                            <p className="text-[11px] font-medium text-slate-500 mt-1">
+                              {cell.totalQuestions} total questions ({cell.skipped} skipped)
+                            </p>
+                          )}
+                        </div>
+
+                        {hasQuestions && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleInspectSlice({
+                                chapter: selectedChapter,
+                                difficulty: diff,
+                                result: "all",
+                              })
+                            }
+                            className="mt-4 w-full py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-[11px] transition-all shadow-xs cursor-pointer"
+                          >
+                            Inspect {diff.toUpperCase()} Questions
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+
+            {/* Compact Full-Paper Matrix */}
+            <div className="pt-4 border-t border-slate-100">
+              <h3 className="text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">
+                Full Chapter × Difficulty Matrix
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-center border-collapse text-xs">
+                  <thead>
+                    <tr className="border-b border-slate-200 bg-slate-50/70 text-[11px] font-semibold uppercase text-slate-500">
+                      <th className="py-2 px-3 text-left">Chapter</th>
+                      <th className="py-2 px-3">Easy</th>
+                      <th className="py-2 px-3">Medium</th>
+                      <th className="py-2 px-3">Hard</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y border-b border-slate-200 font-mono font-medium">
+                    {chapterBreakdown.map((ch) => {
+                      const row = chapterDifficultyMatrix[ch.chapter];
+                      return (
+                        <tr key={ch.chapter} className="hover:bg-slate-50/80">
+                          <td className="py-2 px-3 text-left font-sans font-semibold text-slate-900">
+                            {ch.chapter}
+                          </td>
+                          <td className="py-2 px-3">
+                            {row?.easy?.accuracy !== null ? (
+                              <span className="font-semibold text-emerald-600">{row?.easy?.accuracy}%</span>
+                            ) : (
+                              <span className="text-slate-300">—</span>
+                            )}
+                          </td>
+                          <td className="py-2 px-3">
+                            {row?.medium?.accuracy !== null ? (
+                              <span className="font-semibold text-amber-600">{row?.medium?.accuracy}%</span>
+                            ) : (
+                              <span className="text-slate-300">—</span>
+                            )}
+                          </td>
+                          <td className="py-2 px-3">
+                            {row?.hard?.accuracy !== null ? (
+                              <span className="font-semibold text-rose-600">{row?.hard?.accuracy}%</span>
+                            ) : (
+                              <span className="text-slate-300">—</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* 5. AI POST-MOCK INSIGHT: Grounded Observational Interpretation */}
@@ -837,92 +947,104 @@ export default function PostMockAnalysisClient({
               </p>
             </div>
           </div>
-          <span className="text-[10px] font-semibold uppercase bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200/80 shadow-xs">
-            Observational Engine
-          </span>
+          <div className="flex items-center gap-2.5">
+            <span className="text-[10px] font-semibold uppercase bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200/80 shadow-xs hidden sm:inline-block">
+              Observational Engine
+            </span>
+            <button
+              type="button"
+              onClick={() => toggleSection("aiInsights")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs shrink-0"
+            >
+              <span>{collapsedSections.aiInsights ? "Expand" : "Collapse"}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${collapsedSections.aiInsights ? "" : "rotate-180"}`} />
+            </button>
+          </div>
         </div>
 
-        {aiLoading ? (
-          <div className="py-8 flex flex-col items-center justify-center gap-2 text-center">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-            <p className="text-xs font-semibold text-slate-500">
-              Generating grounded AI observations from your verified telemetry...
-            </p>
-          </div>
-        ) : aiInsight ? (
-          <div className="space-y-4 text-xs font-normal leading-relaxed text-slate-700">
-            {/* Summary */}
-            <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 shadow-xs">
-              <span className="text-[10px] font-semibold uppercase text-slate-400 block mb-1">
-                Mock Summary
-              </span>
-              <p className="text-sm font-semibold text-slate-900">{aiInsight.summary}</p>
+        {!collapsedSections.aiInsights && (
+          aiLoading ? (
+            <div className="py-8 flex flex-col items-center justify-center gap-2 text-center">
+              <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+              <p className="text-xs font-semibold text-slate-500">
+                Generating grounded AI observations from your verified telemetry...
+              </p>
             </div>
-
-            {/* Difficulty Insight */}
-            {aiInsight.difficultyInsight && (
+          ) : aiInsight ? (
+            <div className="space-y-4 text-xs font-normal leading-relaxed text-slate-700">
+              {/* Summary */}
               <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 shadow-xs">
                 <span className="text-[10px] font-semibold uppercase text-slate-400 block mb-1">
-                  Difficulty Transition
+                  Mock Summary
                 </span>
-                <p className="text-xs font-medium text-slate-800">{aiInsight.difficultyInsight}</p>
+                <p className="text-sm font-semibold text-slate-900">{aiInsight.summary}</p>
               </div>
-            )}
 
-            {/* Notable Patterns */}
-            {aiInsight.notablePatterns && aiInsight.notablePatterns.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {aiInsight.notablePatterns.map((pat, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs"
-                  >
-                    <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5 mb-1">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                      <span>{pat.title}</span>
-                    </h4>
-                    <p className="text-[11px] text-slate-600">{pat.description}</p>
-                    {pat.evidenceQuestionIds && pat.evidenceQuestionIds.length > 0 && (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleInspectSlice({
-                            questionIds: pat.evidenceQuestionIds,
-                            evidenceLabel: `AI Pattern: ${pat.title}`,
-                          })
-                        }
-                        className="mt-2 text-[10px] font-semibold text-blue-600 hover:underline cursor-pointer"
-                      >
-                        Inspect evidence ({pat.evidenceQuestionIds.length} Qs)
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
+              {/* Difficulty Insight */}
+              {aiInsight.difficultyInsight && (
+                <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 shadow-xs">
+                  <span className="text-[10px] font-semibold uppercase text-slate-400 block mb-1">
+                    Difficulty Transition
+                  </span>
+                  <p className="text-xs font-medium text-slate-800">{aiInsight.difficultyInsight}</p>
+                </div>
+              )}
 
-            {/* Recommended Next Steps */}
-            {aiInsight.recommendedNextSteps && aiInsight.recommendedNextSteps.length > 0 && (
-              <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 shadow-xs">
-                <span className="text-[10px] font-bold uppercase text-amber-900 block mb-2 tracking-wider">
-                  Recommended Immediate Next Steps:
-                </span>
-                <ul className="space-y-1.5 list-disc list-inside text-xs font-semibold text-amber-800">
-                  {aiInsight.recommendedNextSteps.map((step, idx) => (
-                    <li key={idx}>{step}</li>
+              {/* Notable Patterns */}
+              {aiInsight.notablePatterns && aiInsight.notablePatterns.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {aiInsight.notablePatterns.map((pat, idx) => (
+                    <div
+                      key={idx}
+                      className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs"
+                    >
+                      <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                        <span>{pat.title}</span>
+                      </h4>
+                      <p className="text-[11px] text-slate-600">{pat.description}</p>
+                      {pat.evidenceQuestionIds && pat.evidenceQuestionIds.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleInspectSlice({
+                              questionIds: pat.evidenceQuestionIds,
+                              evidenceLabel: `AI Pattern: ${pat.title}`,
+                            })
+                          }
+                          className="mt-2 text-[10px] font-semibold text-blue-600 hover:underline cursor-pointer"
+                        >
+                          Inspect evidence ({pat.evidenceQuestionIds.length} Qs)
+                        </button>
+                      )}
+                    </div>
                   ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
-            <p className="text-xs font-medium text-slate-500">
-              {aiError
-                ? "AI insight is temporarily unavailable. All deterministic performance and question data above are fully verified."
-                : "AI insight unavailable for this mock. Deterministic analysis above is fully verified."}
-            </p>
-          </div>
+                </div>
+              )}
+
+              {/* Recommended Next Steps */}
+              {aiInsight.recommendedNextSteps && aiInsight.recommendedNextSteps.length > 0 && (
+                <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 shadow-xs">
+                  <span className="text-[10px] font-bold uppercase text-amber-900 block mb-2 tracking-wider">
+                    Recommended Immediate Next Steps:
+                  </span>
+                  <ul className="space-y-1.5 list-disc list-inside text-xs font-semibold text-amber-800">
+                    {aiInsight.recommendedNextSteps.map((step, idx) => (
+                      <li key={idx}>{step}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+              <p className="text-xs font-medium text-slate-500">
+                {aiError
+                  ? "AI insight is temporarily unavailable. All deterministic performance and question data above are fully verified."
+                  : "AI insight unavailable for this mock. Deterministic analysis above is fully verified."}
+              </p>
+            </div>
+          )
         )}
       </div>
 
@@ -932,7 +1054,7 @@ export default function PostMockAnalysisClient({
         className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden"
       >
         {/* Review Filter Bar */}
-        <div className="p-6 border-b border-slate-100 bg-slate-50/70 flex flex-col gap-4">
+        <div className={`p-6 bg-slate-50/70 flex flex-col gap-4 ${collapsedSections.questions ? "" : "border-b border-slate-100"}`}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
@@ -943,12 +1065,24 @@ export default function PostMockAnalysisClient({
                 Every metric above is backed by the questions below. Filter by chapter, difficulty, or result.
               </p>
             </div>
-            <span className="text-xs font-mono font-semibold text-blue-700 bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-xl shadow-xs">
-              Showing {filteredQuestions.length} of {allQuestions.length} Qs
-            </span>
+            <div className="flex items-center gap-2.5">
+              <span className="text-xs font-mono font-semibold text-blue-700 bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-xl shadow-xs">
+                Showing {filteredQuestions.length} of {allQuestions.length} Qs
+              </span>
+              <button
+                type="button"
+                onClick={() => toggleSection("questions")}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200 transition-all cursor-pointer shadow-xs shrink-0"
+              >
+                <span>{collapsedSections.questions ? "Expand Questions" : "Collapse"}</span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${collapsedSections.questions ? "" : "rotate-180"}`} />
+              </button>
+            </div>
           </div>
 
-          {/* Active Evidence Inspection Banner */}
+          {!collapsedSections.questions && (
+            <>
+              {/* Active Evidence Inspection Banner */}
           {filterQuestionIds !== null && (
             <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-50 border border-amber-200 text-xs font-medium text-amber-900">
               <span>
@@ -1080,9 +1214,12 @@ export default function PostMockAnalysisClient({
               ))}
             </select>
           </div>
-        </div>
+          </>
+        )}
+      </div>
 
-        {/* Question Cards List */}
+      {/* Question Cards List */}
+      {!collapsedSections.questions && (
         <div className="divide-y divide-slate-100 p-6 space-y-6">
           {filteredQuestions.length === 0 ? (
             <div className="text-center py-12 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
@@ -1286,6 +1423,7 @@ export default function PostMockAnalysisClient({
             })
           )}
         </div>
+      )}
       </div>
 
       {/* SECTION 8 — FINAL ACTIONS BAR */}

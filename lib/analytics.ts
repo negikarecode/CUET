@@ -273,6 +273,41 @@ export function getCanonicalAttemptId(
   return `${u}:::${t}:::${q}`;
 }
 
+export function getCanonicalTestKey(att: RecordedTestAttempt): string {
+  if (!att) return "unknown";
+  const sub = normalizeSubject(att.subject || att.testTitle || "domain").key;
+  const tId = (att.testId || "").toLowerCase().trim();
+  const title = (att.testTitle || "").toLowerCase().trim();
+
+  // If friendly testId exists (not generic and not raw UUID)
+  if (tId && tId !== "cbt_exam" && tId !== "default" && !/^[0-9a-f-]{36}$/i.test(tId)) {
+    return `${sub}:::${tId}`;
+  }
+
+  // If mock number exists in title or testId
+  const mockMatch =
+    title.match(/\bmock(?:\s+paper|\s+test|\s+exam)?\s+(\d+)\b/i) ||
+    title.match(/\bpaper\s+(\d+)\b/i) ||
+    tId.match(/(?:mock|paper)[-_]?(\d+)/i) ||
+    tId.match(/-(\d+)$/);
+  if (mockMatch) {
+    return `${sub}:::mock-${mockMatch[1]}`;
+  }
+
+  // If unit and test number exist
+  const uMatch = title.match(/\bunit\s*(\d+)\b/i) || tId.match(/unit[-_]?(\d+)/i) || tId.match(/u[-_]?(\d+)/i);
+  const tMatch = title.match(/\b(?:practice\s+test|test)\s*(\d+)\b/i) || tId.match(/test[-_]?(\d+)/i) || tId.match(/t[-_]?(\d+)/i);
+  if (uMatch && tMatch) {
+    return `${sub}:::unit-${uMatch[1]}-test-${tMatch[1]}`;
+  }
+
+  if (tId) {
+    return `${sub}:::${tId}`;
+  }
+
+  return `${sub}:::${title}`;
+}
+
 /**
  * Authoritative test attempt deduplicator.
  * Deduplicates by attemptId, canonical UUID, and content fingerprint (same test, score, accuracy <= 60s).
@@ -319,8 +354,6 @@ export function deduplicateTestAttempts(attempts: RecordedTestAttempt[]): Record
 
     seenFingerprints.add(fingerprint1);
     seenFingerprints.add(fingerprint2);
-    if (rawTestId) seenIds.add(rawTestId);
-    seenIds.add(testCanonicalUuid);
 
     clean.push(att);
   }
@@ -366,7 +399,8 @@ export function computeAnalyticsFromAttempts(
 
   // 1. Authoritative deduplication of test attempts
   const cleanAttempts = deduplicateTestAttempts(attempts);
-  const completedTestsCount = cleanAttempts.length;
+  const distinctTestKeys = new Set(cleanAttempts.map(getCanonicalTestKey));
+  const completedTestsCount = distinctTestKeys.size;
 
   // 2. Canonical question-level deduplication:
   // Key: testId:::questionId (or testId:::questionNumber)
