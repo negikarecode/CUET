@@ -35,36 +35,36 @@ export interface PracticeStatsResult {
 }
 
 export function normalizePracticeFolder(subjectInput: string): string {
-  if (!subjectInput) return "physics";
+  if (!subjectInput) return "";
   const lower = subjectInput.toLowerCase().trim();
   const cleaned = lower.replace(/[-_ ]/g, "");
 
+  if (cleaned === "physicaleducation" || cleaned === "ped" || cleaned.includes("physical")) return "physical_education";
   if (cleaned === "physics" || cleaned === "phys") return "physics";
   if (cleaned === "chemistry" || cleaned === "chem") return "chemistry";
-  if (cleaned === "mathematics" || cleaned === "maths" || cleaned === "math") return "maths";
-  if (cleaned === "biology" || cleaned === "bio") return "bio";
-  if (cleaned === "accountancy" || cleaned === "accounts" || cleaned === "acc") return "accountancy";
-  if (cleaned === "businessstudies" || cleaned === "business" || cleaned === "bst") return "bst";
-  if (cleaned === "economics" || cleaned === "eco") return "eco";
-  if (cleaned === "history" || cleaned === "hist") return "history";
-  if (cleaned === "politicalscience" || cleaned === "polscience" || cleaned === "pol") return "pol science";
-  if (cleaned === "geography" || cleaned === "geo") return "geo";
-  if (cleaned === "psychology" || cleaned === "psy" || cleaned === "psych") return "psychology";
-  if (cleaned === "sociology" || cleaned === "soc") return "sociology";
-  if (cleaned === "physicaleducation" || cleaned === "ped" || cleaned === "physical") return "physical_education";
-  if (cleaned === "computerscience" || cleaned === "cs" || cleaned === "csip") return "computer_science";
+  if (cleaned === "mathematics" || cleaned === "maths" || cleaned === "math" || cleaned.includes("math")) return "maths";
+  if (cleaned === "biology" || cleaned === "bio" || cleaned.includes("biolog")) return "bio";
+  if (cleaned === "accountancy" || cleaned === "accounts" || cleaned === "acc" || cleaned === "accs" || cleaned.includes("account")) return "accountancy";
+  if (cleaned === "economics" || cleaned === "eco" || cleaned.includes("econom")) return "eco";
+  if (cleaned === "businessstudies" || cleaned === "business" || cleaned === "bst" || cleaned.includes("business")) return "bst";
+  if (cleaned === "history" || cleaned === "hist" || cleaned.includes("history")) return "history";
+  if (cleaned === "politicalscience" || cleaned === "polscience" || cleaned === "pol" || cleaned.includes("politic")) return "pol science";
+  if (cleaned === "geography" || cleaned === "geo" || cleaned.includes("geograph")) return "geo";
+  if (cleaned === "psychology" || cleaned === "psy" || cleaned === "psych" || cleaned.includes("psych")) return "psychology";
+  if (cleaned === "sociology" || cleaned === "soc" || cleaned.includes("sociol")) return "sociology";
+  if (cleaned === "computerscience" || cleaned === "cs" || cleaned === "csip" || cleaned.includes("computer")) return "computer_science";
   if (cleaned === "homescience" || cleaned === "hsc") return "home_science";
   if (cleaned === "massmedia" || cleaned === "mmc" || cleaned === "masscomm") return "mass_media";
-  if (cleaned === "environmentalstudies" || cleaned === "evs" || cleaned === "environmental") return "environmental_studies";
+  if (cleaned === "environmentalstudies" || cleaned === "evs" || cleaned === "environmental" || cleaned.includes("environment")) return "environmental_studies";
   if (cleaned === "finearts" || cleaned === "fa" || cleaned === "visualarts") return "fine_arts";
-  if (cleaned === "agriculture" || cleaned === "agr") return "agriculture";
-  if (cleaned === "anthropology" || cleaned === "ant") return "anthropology";
-  if (cleaned === "english" || cleaned === "eng") return "english";
+  if (cleaned === "agriculture" || cleaned === "agr" || cleaned.includes("agri")) return "agriculture";
+  if (cleaned === "anthropology" || cleaned === "ant" || cleaned.includes("anthropolog")) return "anthropology";
+  if (cleaned === "english" || cleaned === "eng" || cleaned.includes("english")) return "english";
   if (cleaned === "generaltest" || cleaned === "general" || cleaned === "gt" || cleaned === "gat") return "general-test";
 
   // Check direct manifest match
   if ((practiceManifest as Record<string, any>)[lower]) return lower;
-  return "physics";
+  return lower;
 }
 
 export function isPracticeAttempt(att: RecordedTestAttempt): boolean {

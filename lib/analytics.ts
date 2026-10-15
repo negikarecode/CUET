@@ -37,6 +37,15 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
       mockUrl: "/dashboard/mocks/chemistry",
     };
   }
+  if (clean.includes("physical") || clean === "ped") {
+    return {
+      key: "physical-education",
+      name: "Physical Education",
+      icon: "Medal",
+      category: "Arts & Performing",
+      mockUrl: "/dashboard/mocks/physical_education",
+    };
+  }
   if (clean.includes("phys")) {
     return {
       key: "physics",
@@ -89,6 +98,15 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
       icon: "Briefcase",
       category: "Commerce",
       mockUrl: "/dashboard/mocks/bst",
+    };
+  }
+  if (clean.includes("anthropolog") || clean === "ant") {
+    return {
+      key: "anthropology",
+      name: "Anthropology",
+      icon: "Footprints",
+      category: "Humanities",
+      mockUrl: "/dashboard/mocks/anthropology",
     };
   }
   if (clean.includes("pol")) {
@@ -161,15 +179,6 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
       icon: "Laptop",
       category: "Science",
       mockUrl: "/dashboard/mocks/computer_science",
-    };
-  }
-  if (clean.includes("physical") || clean === "ped") {
-    return {
-      key: "physical-education",
-      name: "Physical Education",
-      icon: "Medal",
-      category: "Arts & Performing",
-      mockUrl: "/dashboard/mocks/physical_education",
     };
   }
 

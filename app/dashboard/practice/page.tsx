@@ -124,18 +124,49 @@ export default function PracticeTestsHubPage() {
     return map;
   }, [isClient, subjectsList, testAttempts]);
 
-  // Recommended subjects based on target dream college requirements
+  // Recommended subjects based on target dream college requirements (3-4 subjects)
   const recommendedSubjects = useMemo(() => {
     if (!target.hasTarget || !target.requiredSubjects || target.requiredSubjects.length === 0) {
       return [];
     }
-    const reqNormalized = target.requiredSubjects.map((s) => normalizePracticeFolder(s));
-    return subjectsList.filter((s) => reqNormalized.includes(normalizePracticeFolder(s.id)));
+    const reqNormalized = new Set(target.requiredSubjects.map((s) => normalizePracticeFolder(s)));
+    const seen = new Set<string>();
+    const list: SubjectItem[] = [];
+    for (const s of subjectsList) {
+      if (reqNormalized.has(normalizePracticeFolder(s.id))) {
+        if (!seen.has(s.id)) {
+          seen.add(s.id);
+          list.push(s);
+        }
+      }
+    }
+    return list;
   }, [target, subjectsList]);
 
-  // Filter subjects by stream, search, and status
+  const isSearchActive = Boolean(searchQuery.trim());
+  const isFilterActive = selectedStream !== "all" || statusFilter !== "all";
+  const showRecommendedRow = Boolean(
+    target.hasTarget &&
+    recommendedSubjects.length > 0 &&
+    !isSearchActive &&
+    !isFilterActive
+  );
+
+  const recommendedIds = useMemo(() => {
+    return new Set(recommendedSubjects.map((s) => s.id));
+  }, [recommendedSubjects]);
+
+  // Filter subjects by stream, search, and status (excludes recommended when recommended row is shown)
   const filteredSubjects = useMemo(() => {
-    return subjectsList.filter((s) => {
+    const baseList = showRecommendedRow
+      ? subjectsList.filter((s) => !recommendedIds.has(s.id))
+      : subjectsList;
+
+    const seen = new Set<string>();
+    return baseList.filter((s) => {
+      if (seen.has(s.id)) return false;
+      seen.add(s.id);
+
       const matchesStream = selectedStream === "all" || s.stream === selectedStream;
       const matchesSearch =
         !searchQuery ||
@@ -155,7 +186,7 @@ export default function PracticeTestsHubPage() {
 
       return matchesStream && matchesSearch && matchesStatus;
     });
-  }, [subjectsList, selectedStream, searchQuery, statusFilter, subjectStatsMap]);
+  }, [subjectsList, showRecommendedRow, recommendedIds, selectedStream, searchQuery, statusFilter, subjectStatsMap]);
 
   if (!isClient) {
     return <div className="min-h-screen bg-[#F8FAFC]" />;
@@ -193,7 +224,7 @@ export default function PracticeTestsHubPage() {
       </div>
 
       {/* 2. Recommended for Your Target Row */}
-      {target.hasTarget && recommendedSubjects.length > 0 ? (
+      {showRecommendedRow ? (
         <div className="bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-purple-50/40 rounded-2xl border border-blue-200/80 p-4 sm:p-5 shadow-2xs space-y-3.5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -289,7 +320,7 @@ export default function PracticeTestsHubPage() {
             })}
           </div>
         </div>
-      ) : !target.hasTarget ? (
+      ) : !target.hasTarget && !isSearchActive ? (
         <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 text-xs text-slate-600">
           <div className="flex items-center gap-2">
             <Target className="w-4 h-4 text-blue-600 shrink-0" />
@@ -382,7 +413,11 @@ export default function PracticeTestsHubPage() {
       {/* 4. All Subjects Grid */}
       <div className="space-y-3">
         <div className="flex items-center justify-between text-xs text-slate-500 font-semibold px-1">
-          <span>All Practice Subjects ({filteredSubjects.length})</span>
+          <span>
+            {showRecommendedRow
+              ? `Other subjects (${filteredSubjects.length})`
+              : `All Practice Subjects (${filteredSubjects.length})`}
+          </span>
           <span>Click card to open full syllabus units</span>
         </div>
 

@@ -397,7 +397,7 @@ export default function MocksPage() {
     });
   }, [allSubjects, statusFilter, isClient, testAttempts]);
 
-  // Recommended subjects for user target dream college/course
+  // Recommended subjects for user target dream college/course (3-4 subjects)
   const recommendedSubjects = useMemo(() => {
     if (!targetData.hasTarget || !targetData.requiredSubjects || targetData.requiredSubjects.length === 0) {
       return [];
@@ -405,15 +405,41 @@ export default function MocksPage() {
     const reqKeys = new Set(
       targetData.requiredSubjects.map((s) => normalizeSubject(s).key)
     );
-    return Object.values(SUBJECT_CONFIGS).filter((sub) => reqKeys.has(sub.key));
+    const seen = new Set<string>();
+    const list: SubjectMeta[] = [];
+    for (const sub of Object.values(SUBJECT_CONFIGS)) {
+      if (reqKeys.has(sub.key) && !seen.has(sub.key)) {
+        seen.add(sub.key);
+        list.push(sub);
+      }
+    }
+    return list;
   }, [targetData]);
+
+  const isFilterActive = selectedTab !== "all" || selectedStream !== "all" || statusFilter !== "all";
+  const showRecommendedRow = Boolean(
+    targetData.hasTarget &&
+    recommendedSubjects.length > 0 &&
+    !isFilterActive
+  );
+
+  const recommendedKeys = useMemo(() => {
+    return new Set(recommendedSubjects.map((s) => s.key));
+  }, [recommendedSubjects]);
 
   // Other subjects (excluding recommended) when recommended section is shown
   const otherSubjects = useMemo(() => {
-    if (recommendedSubjects.length === 0) return displayedSubjects;
-    const recKeys = new Set(recommendedSubjects.map((s) => s.key));
-    return displayedSubjects.filter((s) => !recKeys.has(s.key));
-  }, [displayedSubjects, recommendedSubjects]);
+    const baseList = showRecommendedRow
+      ? displayedSubjects.filter((s) => !recommendedKeys.has(s.key))
+      : displayedSubjects;
+
+    const seen = new Set<string>();
+    return baseList.filter((s) => {
+      if (seen.has(s.key)) return false;
+      seen.add(s.key);
+      return true;
+    });
+  }, [displayedSubjects, showRecommendedRow, recommendedKeys]);
 
   const availableSubjectsForDropdown = useMemo(() => {
     if (selectedStream === "all") {
@@ -713,7 +739,7 @@ export default function MocksPage() {
       </div>
 
       {/* 3. Recommended for your target row */}
-      {targetData.hasTarget && recommendedSubjects.length > 0 ? (
+      {showRecommendedRow ? (
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-2">
             <div className="flex items-center gap-2">
@@ -733,7 +759,7 @@ export default function MocksPage() {
             {recommendedSubjects.map((sub) => renderSubjectCard(sub, true))}
           </div>
         </div>
-      ) : (
+      ) : !targetData.hasTarget && !isFilterActive ? (
         <div className="bg-blue-50/50 border border-blue-200/60 rounded-2xl p-3 sm:p-4 flex items-center justify-between gap-3 text-[13px] text-blue-900">
           <div className="flex items-center gap-2.5">
             <Target className="w-4 h-4 text-blue-600 shrink-0" />
@@ -746,13 +772,13 @@ export default function MocksPage() {
             Set your dream college &rarr;
           </Link>
         </div>
-      )}
+      ) : null}
 
       {/* 4. All Other Subjects Grid */}
       <div className="space-y-4">
         <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-            {targetData.hasTarget && recommendedSubjects.length > 0
+            {showRecommendedRow
               ? "All other domain subjects"
               : selectedTab !== "all" && activeSubjectInfo
               ? `${activeSubjectInfo.name} Specification`

@@ -485,6 +485,7 @@ export default function PYQsPage() {
       (s) => normalizeSubject(s).key
     );
 
+    const seen = new Set<string>();
     const list: {
       subKey: SubjectKey;
       meta: SubjectMeta;
@@ -494,6 +495,9 @@ export default function PYQsPage() {
     }[] = [];
 
     for (const key of reqKeys) {
+      if (seen.has(key)) continue;
+      seen.add(key);
+
       const meta = PYQ_SUBJECT_CONFIGS[key as Exclude<SubjectKey, "all">];
       if (!meta) continue;
       const papers = getPYQTestsForSubject(key);
@@ -822,7 +826,10 @@ export default function PYQsPage() {
       </div>
 
       {/* 3. Optional "Recommended for your target" row */}
-      {targetData.hasTarget && recommendedSubjects.length > 0 && (
+      {targetData.hasTarget &&
+        recommendedSubjects.length > 0 &&
+        selectedTab === "all" &&
+        statusFilter === "all" && (
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-2">
             <div className="flex items-center gap-2">
