@@ -57,6 +57,7 @@ export default function CBTPlayer() {
   const isTimerRunning = useCBTStore((state) => state.isTimerRunning);
   const questionStates = useCBTStore((state) => state.questionStates);
   const isSubmitted = useCBTStore((state) => state.isSubmitted);
+  const isSubmitting = useCBTStore((state) => state.isSubmitting);
 
   const selectOption = useCBTStore((state) => state.selectOption);
   const clearResponse = useCBTStore((state) => state.clearResponse);
@@ -285,8 +286,9 @@ export default function CBTPlayer() {
               {/* Submit Test Button */}
               <button
                 type="button"
+                disabled={isSubmitting || isSubmitted}
                 onClick={openSubmitModal}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold text-xs sm:text-sm tracking-wide shadow-xs hover:shadow transition-all flex items-center gap-1.5 shrink-0"
+                className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold text-xs sm:text-sm tracking-wide shadow-xs hover:shadow disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center gap-1.5 shrink-0"
               >
                 <Send className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2]" />
                 <span className="hidden sm:inline">
@@ -431,11 +433,12 @@ export default function CBTPlayer() {
                   /* Exactly ONE final submission action on the last question */
                   <button
                     type="button"
+                    disabled={isSubmitting || isSubmitted}
                     onClick={() => {
                       saveAndNext();
                       openSubmitModal();
                     }}
-                    className="min-h-[44px] px-4 sm:px-6 py-2 text-xs font-semibold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer shrink-0 whitespace-nowrap"
+                    className="min-h-[44px] px-4 sm:px-6 py-2 text-xs font-semibold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-xs hover:shadow disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer shrink-0 whitespace-nowrap"
                   >
                     <CheckCircle2 className="w-4 h-4 stroke-[2]" />
                     <span>{t("submitExam", "Submit Exam")}</span>

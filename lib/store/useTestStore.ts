@@ -14,13 +14,9 @@ import {
   buildDefaultSubjectCalibration,
   deduplicateTestAttempts,
 } from "@/lib/analytics";
-import { processQuestionsIntoCycles } from "@/lib/cycle-engine";
 import { evaluateSessionValidity } from "@/lib/session-validity";
 import { calculateStreakFromAttempts, calculateActiveStreak } from "@/lib/gamification";
-import {
-  computeAuthoritativeDiagnosticProgress,
-  countQualifyingFromTestAttempts,
-} from "@/lib/diagnostic-status";
+import { getDiagnosticProgress } from "@/lib/diagnostic-status";
 import { safeStorage } from "@/lib/storage/safe-storage";
 import { stringToUuid } from "@/lib/utils";
 
@@ -323,10 +319,11 @@ export const useTestStore = create<TestStoreState>()(
               if (parsed?.state?.user && parsed.state.user.id === targetId) {
                 // Restore target user's existing isolated data merged with latest profile
                 const savedAttempts = parsed.state.testAttempts || [];
-                const savedCycles = parsed.state.diagnosticCycles || [];
-                const savedAnalytics = parsed.state.analytics || computeAnalyticsFromAttempts(savedAttempts);
-                const computedStreak = savedAttempts.length > 0
-                  ? calculateStreakFromAttempts(savedAttempts)
+                const cleanSaved = deduplicateTestAttempts(savedAttempts);
+                const derivedProgress = getDiagnosticProgress(cleanSaved);
+                const savedAnalytics = parsed.state.analytics || computeAnalyticsFromAttempts(cleanSaved);
+                const computedStreak = cleanSaved.length > 0
+                  ? calculateStreakFromAttempts(cleanSaved)
                   : calculateActiveStreak(
                       profile.dailyStreak !== undefined
                         ? profile.dailyStreak
@@ -344,29 +341,11 @@ export const useTestStore = create<TestStoreState>()(
                     lastActiveDate: new Date().toISOString(),
                   },
                   selectedStream: parsed.state.selectedStream || stream,
-                  testAttempts: savedAttempts,
+                  testAttempts: cleanSaved,
                   analytics: savedAnalytics,
-                  currentCycleNumber: (() => {
-                    const qualCount = countQualifyingFromTestAttempts(savedAttempts);
-                    const derived = computeAuthoritativeDiagnosticProgress({
-                      totalAttempted: qualCount,
-                      currentCycleNumber: parsed.state.currentCycleNumber,
-                      currentCycleQuestionCount: parsed.state.currentCycleQuestionCount,
-                      completedCyclesCount: savedCycles.length,
-                    });
-                    return derived.currentCycleNumber;
-                  })(),
-                  currentCycleQuestionCount: (() => {
-                    const qualCount = countQualifyingFromTestAttempts(savedAttempts);
-                    const derived = computeAuthoritativeDiagnosticProgress({
-                      totalAttempted: qualCount,
-                      currentCycleNumber: parsed.state.currentCycleNumber,
-                      currentCycleQuestionCount: parsed.state.currentCycleQuestionCount,
-                      completedCyclesCount: savedCycles.length,
-                    });
-                    return derived.currentCycleQuestionCount;
-                  })(),
-                  diagnosticCycles: savedCycles,
+                  currentCycleNumber: derivedProgress.currentCycleNumber,
+                  currentCycleQuestionCount: derivedProgress.currentCycleQuestionCount,
+                  diagnosticCycles: derivedProgress.completedCycles,
                   activeCompletionNotification: parsed.state.activeCompletionNotification || null,
                   isSessionActive: false,
                   recordedAnswers: {},
@@ -570,54 +549,36 @@ export const useTestStore = create<TestStoreState>()(
           },
         }));
 
-        // Collect all individual question attempts across all recorded tests (ordered chronologically)
-        const chronologicalAttempts = [...updatedAttempts].reverse();
-        const allQuestions = chronologicalAttempts.flatMap((t) => t.questions || []);
-
-        // Process questions into 150-question diagnostic cycles idempotently
-        const existingCycles = get().diagnosticCycles || [];
-        const {
-          cycles,
-          currentCycleNumber,
-          currentCycleQuestionCount,
-          justCompletedCycle,
-        } = await processQuestionsIntoCycles(existingCycles, allQuestions);
+        // Derives cycles and active progression strictly from deduplicated attempts
+        const derived = getDiagnosticProgress(updatedAttempts);
 
         let completionNotification: CycleCompletionNotification | null = null;
-        if (justCompletedCycle) {
-          completionNotification = {
-            cycleNumber: justCompletedCycle.cycleNumber,
-            totalAnalyzed: justCompletedCycle.totalQuestionsAttempted,
-            isBaseline: justCompletedCycle.cycleNumber === 1,
-            completedAt: justCompletedCycle.completedAt || new Date().toISOString(),
-            comparisonSummary: justCompletedCycle.comparison
-              ? {
-                  improvedCount: justCompletedCycle.comparison.improved.length,
-                  recurringCount: justCompletedCycle.comparison.recurringWeak.length,
-                  resolvedCount: justCompletedCycle.comparison.resolved.length,
-                  newMistakesCount: justCompletedCycle.comparison.newMistakes.length,
-                  declinedCount: justCompletedCycle.comparison.declined.length,
-                }
-              : undefined,
-          };
-        }
-
-        let finalCycleNumber = currentCycleNumber;
-        let finalCycleQuestionCount = currentCycleQuestionCount;
-
-        if (allQuestions.length === 0 && analytics.totalQuestionsAttempted > 0) {
-          const derived = computeAuthoritativeDiagnosticProgress({
-            totalAttempted: analytics.totalQuestionsAttempted,
-            completedCyclesCount: cycles.length,
-          });
-          finalCycleNumber = derived.currentCycleNumber;
-          finalCycleQuestionCount = derived.currentCycleQuestionCount;
+        if (derived.completedCycles.length > 0) {
+          const latestCycle = derived.completedCycles[derived.completedCycles.length - 1];
+          const prevCyclesCount = (get().diagnosticCycles || []).length;
+          if (latestCycle && derived.completedCycles.length > prevCyclesCount) {
+            completionNotification = {
+              cycleNumber: latestCycle.cycleNumber,
+              totalAnalyzed: latestCycle.totalQuestionsAttempted,
+              isBaseline: latestCycle.cycleNumber === 1,
+              completedAt: latestCycle.completedAt || new Date().toISOString(),
+              comparisonSummary: latestCycle.comparison
+                ? {
+                    improvedCount: latestCycle.comparison.improved.length,
+                    recurringCount: latestCycle.comparison.recurringWeak.length,
+                    resolvedCount: latestCycle.comparison.resolved.length,
+                    newMistakesCount: latestCycle.comparison.newMistakes.length,
+                    declinedCount: latestCycle.comparison.declined.length,
+                  }
+                : undefined,
+            };
+          }
         }
 
         set((state) => ({
-          diagnosticCycles: cycles,
-          currentCycleNumber: finalCycleNumber,
-          currentCycleQuestionCount: finalCycleQuestionCount,
+          diagnosticCycles: derived.completedCycles,
+          currentCycleNumber: derived.currentCycleNumber,
+          currentCycleQuestionCount: derived.currentCycleQuestionCount,
           activeCompletionNotification: completionNotification || state.activeCompletionNotification,
         }));
       },
@@ -795,10 +756,6 @@ export const useTestStore = create<TestStoreState>()(
             // Deduplicate all attempts strictly
             const allAttempts = deduplicateTestAttempts([...currentAttempts, ...recovered]);
             const analytics = computeAnalyticsFromAttempts(allAttempts);
-            const chronologicalAttempts = [...allAttempts].reverse();
-            const allQuestions = chronologicalAttempts.flatMap((t) => t.questions || []);
-            const existingCycles = get().diagnosticCycles || [];
-
             const dynamicStreak = calculateStreakFromAttempts(allAttempts);
             set((state) => ({
               testAttempts: allAttempts,
@@ -811,27 +768,12 @@ export const useTestStore = create<TestStoreState>()(
               },
             }));
 
-            processQuestionsIntoCycles(existingCycles, allQuestions).then(
-              ({ cycles, currentCycleNumber, currentCycleQuestionCount }) => {
-                let finalCycleNumber = currentCycleNumber;
-                let finalCycleQuestionCount = currentCycleQuestionCount;
-
-                if (allQuestions.length === 0 && analytics.totalQuestionsAttempted > 0) {
-                  const derived = computeAuthoritativeDiagnosticProgress({
-                    totalAttempted: analytics.totalQuestionsAttempted,
-                    completedCyclesCount: cycles.length,
-                  });
-                  finalCycleNumber = derived.currentCycleNumber;
-                  finalCycleQuestionCount = derived.currentCycleQuestionCount;
-                }
-
-                set(() => ({
-                  diagnosticCycles: cycles,
-                  currentCycleNumber: finalCycleNumber,
-                  currentCycleQuestionCount: finalCycleQuestionCount,
-                }));
-              }
-            );
+            const derived = getDiagnosticProgress(allAttempts);
+            set(() => ({
+              diagnosticCycles: derived.completedCycles,
+              currentCycleNumber: derived.currentCycleNumber,
+              currentCycleQuestionCount: derived.currentCycleQuestionCount,
+            }));
           }
         } catch (err) {
           console.warn("Session recovery notice:", err);
@@ -1046,10 +988,12 @@ export const useTestStore = create<TestStoreState>()(
       onRehydrateStorage: () => (state) => {
         if (state && Array.isArray(state.testAttempts) && state.testAttempts.length > 0) {
           const deduped = deduplicateTestAttempts(state.testAttempts);
-          if (deduped.length !== state.testAttempts.length) {
-            state.testAttempts = deduped;
-            state.analytics = computeAnalyticsFromAttempts(deduped);
-          }
+          state.testAttempts = deduped;
+          state.analytics = computeAnalyticsFromAttempts(deduped);
+          const derived = getDiagnosticProgress(deduped);
+          state.currentCycleNumber = derived.currentCycleNumber;
+          state.currentCycleQuestionCount = derived.currentCycleQuestionCount;
+          state.diagnosticCycles = derived.completedCycles;
         }
       },
       partialize: (state) => {

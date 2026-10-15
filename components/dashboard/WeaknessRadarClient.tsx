@@ -67,7 +67,7 @@ import { DoubtSolverDrawer } from "@/components/dashboard/DoubtSolverDrawer";
 import { WeeklyReportModal } from "@/components/dashboard/WeeklyReportModal";
 import { DailyStudyPlanCard } from "@/components/dashboard/DailyStudyPlanCard";
 import { RetentionLeaderboardCard } from "@/components/dashboard/RetentionLeaderboardCard";
-import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
+import { getDiagnosticProgress } from "@/lib/diagnostic-status";
 import { HelpCircle, ShieldCheck, TrendingDown, Minus } from "lucide-react";
 
 export type TopicStatusType = "Needs work" | "Developing" | "Strong" | "Low confidence";
@@ -584,12 +584,16 @@ export default function WeaknessRadarClient({
 
   // Authoritative cycle calculation: single source of truth shared with dashboard
   const authDiagnostic = useMemo(() => {
-    return computeAuthoritativeDiagnosticProgress({
+    return getDiagnosticProgress({
+      attempts: cleanTestAttempts,
       totalAttempted,
-      completedCyclesCount: diagnosticCycles.length,
-    });
-  }, [totalAttempted, diagnosticCycles.length]);
+    } as any);
+  }, [cleanTestAttempts, totalAttempted]);
 
+  const effectiveCompletedCycles =
+    authDiagnostic.completedCycles.length > 0
+      ? authDiagnostic.completedCycles
+      : diagnosticCycles.slice(0, authDiagnostic.completedCyclesCount);
   const currentCycleNumber = authDiagnostic.currentCycleNumber;
   const effectiveCycleQuestionCount = authDiagnostic.currentCycleQuestionCount;
   const isCurrentCycleComplete = authDiagnostic.isUnlocked;
@@ -964,7 +968,7 @@ export default function WeaknessRadarClient({
           </div>
 
           {/* Cycle Badge Indicator (Single source of truth) */}
-          <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-semibold shrink-0">
+          <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[13px] font-semibold shrink-0">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Cycle {currentCycleNumber} · {effectiveCycleQuestionCount} / 150 Qs</span>
           </div>
@@ -991,11 +995,11 @@ export default function WeaknessRadarClient({
               <span>Weekly report</span>
             </button>
 
-            {diagnosticCycles.length > 0 && (
+            {effectiveCompletedCycles.length > 0 && (
               <CycleHistorySelector
                 currentCycleNumber={currentCycleNumber}
                 currentCycleQuestionCount={effectiveCycleQuestionCount}
-                diagnosticCycles={diagnosticCycles}
+                diagnosticCycles={effectiveCompletedCycles}
                 onSelectCycle={(cycle) => setSelectedCycleForReport(cycle)}
               />
             )}
@@ -1105,14 +1109,14 @@ export default function WeaknessRadarClient({
                 <span>CONTINUE PRACTICING</span>
               </Link>
 
-              {diagnosticCycles.length > 0 && diagnosticCycles[diagnosticCycles.length - 1] && (
+              {effectiveCompletedCycles.length > 0 && effectiveCompletedCycles[effectiveCompletedCycles.length - 1] && (
                 <button
                   type="button"
-                  onClick={() => setSelectedCycleForReport(diagnosticCycles[diagnosticCycles.length - 1] || null)}
+                  onClick={() => setSelectedCycleForReport(effectiveCompletedCycles[effectiveCompletedCycles.length - 1] || null)}
                   className="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs sm:text-sm border border-slate-200 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
                 >
                   <Award className="w-4 h-4 text-amber-500" />
-                  <span>VIEW CYCLE {diagnosticCycles[diagnosticCycles.length - 1]?.cycleNumber} ANALYSIS</span>
+                  <span>VIEW CYCLE {effectiveCompletedCycles[effectiveCompletedCycles.length - 1]?.cycleNumber} ANALYSIS</span>
                 </button>
               )}
             </div>
@@ -1142,10 +1146,10 @@ export default function WeaknessRadarClient({
         /* CASE B: 150/150 REACHED, BUT ANALYSIS NOT TRIGGERED YET */
         <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-8 shadow-sm text-center space-y-6">
           <div className="space-y-2">
-            <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-[11px] font-bold uppercase tracking-wider font-mono inline-block">
-              🎯 DIAGNOSTIC CYCLE {currentCycleNumber} COMPLETE
+            <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-[11px] font-bold uppercase tracking-wider inline-block">
+              🎯 DIAGNOSTIC CYCLE {authDiagnostic.completedCyclesCount || 1} COMPLETE
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight font-mono">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               150 / 150 QUESTIONS
             </h2>
             <p className="text-base font-bold text-slate-800">

@@ -750,14 +750,16 @@ export async function processQuestionsIntoCycles(
     }
   }
 
-  // Sort cycles by cycleNumber
-  updatedCycles.sort((a, b) => a.cycleNumber - b.cycleNumber);
+  // Prune any cycles beyond completedCycleCount so cycles are strictly derived and never drift
+  const prunedCycles = updatedCycles
+    .filter((cy) => cy.cycleNumber <= completedCycleCount)
+    .sort((a, b) => a.cycleNumber - b.cycleNumber);
 
   const currentCycleNumber = completedCycleCount + 1;
   const currentCycleQuestionCount = remainderQuestions;
 
   return {
-    cycles: updatedCycles,
+    cycles: prunedCycles,
     currentCycleNumber,
     currentCycleQuestionCount,
     justCompletedCycle,
