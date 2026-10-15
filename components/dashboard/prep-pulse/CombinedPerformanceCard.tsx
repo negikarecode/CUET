@@ -10,13 +10,11 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  ReferenceLine,
 } from "recharts";
 import { SubjectCalibrationData, TopicMastery } from "@/types";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { formatDateTimeIndian } from "@/lib/config/dashboardConfig";
-import { useTarget } from "@/lib/hooks/useTarget";
 import { deduplicateTestAttempts } from "@/lib/analytics";
 
 type PerformanceTab = "trend" | "subjects";
@@ -36,7 +34,6 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
 
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts) || [];
-  const target = useTarget();
 
   // Deduplicate attempts strictly: same deduplication rules as Recent Sessions
   const cleanAttempts = useMemo(() => {
@@ -69,32 +66,6 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
 
   const attemptsCount = filteredAttempts.length;
 
-  // Compute active target value based on filter & metric
-  const activeTargetValue = useMemo(() => {
-    if (!target.hasTarget) return null;
-    if (metric === "accuracy") {
-      return target.targetAccuracy;
-    }
-    if (selectedSubjectFilter !== "all") {
-      const subTarget =
-        target.perSubjectTargets[selectedSubjectFilter.toLowerCase()] ||
-        target.perSubjectTargets[selectedSubjectFilter] ||
-        target.perSubjectTarget;
-      return subTarget;
-    }
-    return target.perSubjectTarget;
-  }, [target, metric, selectedSubjectFilter]);
-
-  const activeTargetLabel = useMemo(() => {
-    if (!target.hasTarget) return "";
-    if (metric === "accuracy") {
-      return `Target: ${target.targetAccuracy}% · ${target.college}`;
-    }
-    if (selectedSubjectFilter !== "all") {
-      return `Target: ${activeTargetValue} · ${selectedSubjectFilter} (${target.college})`;
-    }
-    return `Target (avg): ${target.perSubjectTarget} · ${target.college}, ${target.course}`;
-  }, [target, metric, selectedSubjectFilter, activeTargetValue]);
 
   // Construct chart data with sequential Mock labels and 5-mock rolling average
   const chartData = useMemo(() => {
@@ -144,23 +115,11 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
     return calibrations.filter((c) => c.totalAttempted > 0);
   }, [calibrations]);
 
-  // Accessible custom tooltip showing full test name, subject, date & time, score, accuracy, and target gap
+  // Accessible custom tooltip showing full test name, subject, date & time, score, and accuracy
   const CustomChartTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const item = payload[0]?.payload;
       if (!item) return null;
-
-      const currentVal = metric === "score" ? item.rawScore : item.accuracy;
-      const targetVal = activeTargetValue;
-      let gapText = "";
-      if (targetVal !== null && targetVal !== undefined) {
-        const gap = Math.round((currentVal - targetVal) * 10) / 10;
-        if (gap >= 0) {
-          gapText = `+${gap} above target`;
-        } else {
-          gapText = `${Math.abs(gap)} below target`;
-        }
-      }
 
       return (
         <div
@@ -197,15 +156,6 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                 {metric === "score" ? `${item.rollingScore} pts` : `${item.rollingAccuracy}%`}
               </span>
             </div>
-
-            {gapText && (
-              <div className="pt-1 border-t border-slate-100 flex items-center justify-between text-[12px] font-semibold">
-                <span className="text-[var(--text-muted)]">Target gap:</span>
-                <span className={gapText.includes("above") ? "text-emerald-600" : "text-amber-600"}>
-                  {gapText}
-                </span>
-              </div>
-            )}
           </div>
         </div>
       );
@@ -305,8 +255,7 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
         {activeTab === "trend" && (
           <div className="space-y-3">
             <div className="sr-only">
-              Score trend chart showing historical test attempts with a target line at{" "}
-              {activeTargetValue ?? "not set"}.
+              Score trend chart showing historical test attempts.
             </div>
 
             {attemptsCount < 2 ? (
@@ -344,19 +293,6 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                       <span>5-mock rolling average</span>
                     </span>
                   </div>
-
-                  {target.hasTarget && activeTargetValue !== null ? (
-                    <span className="text-amber-700 font-medium bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-[4px]">
-                      {activeTargetLabel}
-                    </span>
-                  ) : (
-                    <Link
-                      href="/dashboard/profile"
-                      className="text-[var(--accent)] hover:underline font-medium"
-                    >
-                      Set your dream college in Profile &rarr;
-                    </Link>
-                  )}
                 </div>
 
                 {/* Main Recharts Area: 320px Desktop, 240px Mobile */}
@@ -386,23 +322,6 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                         tickLine={false}
                       />
                       <Tooltip content={<CustomChartTooltip />} />
-
-                      {/* Authoritative Target Line */}
-                      {target.hasTarget && activeTargetValue !== null && (
-                        <ReferenceLine
-                          y={activeTargetValue}
-                          stroke="#d97706"
-                          strokeDasharray="4 4"
-                          strokeWidth={1.5}
-                          label={{
-                            value: `Target: ${activeTargetValue}`,
-                            fill: "#b45309",
-                            fontSize: 11,
-                            fontWeight: 600,
-                            position: "top",
-                          }}
-                        />
-                      )}
 
                       {/* Rolling Average Line (dashed, lighter) */}
                       <Line
@@ -453,11 +372,6 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
             ) : (
               <div className="space-y-3">
                 {subjectsWithData.map((sub) => {
-                  const subTarget =
-                    target.perSubjectTargets[sub.subjectKey.toLowerCase()] ||
-                    target.perSubjectTargets[sub.subject.toLowerCase()] ||
-                    target.perSubjectTarget;
-
                   return (
                     <div
                       key={sub.subjectKey}
@@ -468,11 +382,6 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                           <span className="text-[14px] font-semibold text-[var(--text)]">
                             {sub.subject}
                           </span>
-                          {target.hasTarget && (
-                            <span className="text-[12px] font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-[4px] border border-amber-200/60">
-                              Target: {subTarget} pts
-                            </span>
-                          )}
                         </div>
                         <div className="text-[13px] text-[var(--text-secondary)] tabular-nums">
                           {sub.totalAttempted} questions attempted • {sub.totalCorrect} correct
