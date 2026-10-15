@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Atom,
@@ -243,19 +243,20 @@ interface InProgressSessionInfo {
 
 export default function PYQsPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
   const targetData = useTarget();
 
   // Backward compatibility redirect: /dashboard/pyqs?subject=physics -> /dashboard/pyqs/physics
   useEffect(() => {
-    const subjParam = searchParams.get("subject");
+    if (typeof window === "undefined") return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const subjParam = urlParams.get("subject");
     if (subjParam) {
       const normalizedKey = normalizeSubject(subjParam).key;
       router.replace(`/dashboard/pyqs/${normalizedKey}`);
     }
-  }, [searchParams, router]);
+  }, [router]);
 
   const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
   const [selectedSubjectTab, setSelectedSubjectTab] = useState<string>("all");
