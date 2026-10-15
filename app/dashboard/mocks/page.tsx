@@ -3,7 +3,6 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import {
-  ChevronDown,
   Atom,
   FlaskConical,
   Binary,
@@ -39,6 +38,7 @@ import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useTarget } from "@/lib/hooks/useTarget";
 import { getMockStats } from "@/lib/mock-stats";
 import { normalizeSubject } from "@/lib/analytics";
+import SearchableSelect, { SearchableSelectOption } from "@/components/ui/SearchableSelect";
 
 type SubjectKey =
   | "all"
@@ -448,6 +448,64 @@ export default function MocksPage() {
     return STREAM_CONFIGS[selectedStream].subjects.map((k) => SUBJECT_CONFIGS[k]);
   }, [selectedStream]);
 
+  const streamSelectOptions: SearchableSelectOption[] = useMemo(
+    () => [
+      { value: "all", label: "All Streams (20 Subjects)" },
+      { value: "science", label: "Science Stream (7 Domains)" },
+      { value: "commerce", label: "Commerce Stream (4 Domains)" },
+      { value: "humanities", label: "Humanities Stream (10 Domains)" },
+    ],
+    []
+  );
+
+  const subjectSelectOptions: SearchableSelectOption[] = useMemo(() => {
+    if (selectedStream === "all") {
+      return [
+        { value: "all", label: "All 20 Domain Subjects" },
+        {
+          heading: "Science Stream",
+          options: STREAM_CONFIGS.science.subjects.map((k) => ({
+            value: k,
+            label: SUBJECT_CONFIGS[k].name,
+            badge: `Code ${SUBJECT_CONFIGS[k].code}`,
+            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k],
+          })),
+        },
+        {
+          heading: "Commerce Stream",
+          options: STREAM_CONFIGS.commerce.subjects.map((k) => ({
+            value: k,
+            label: SUBJECT_CONFIGS[k].name,
+            badge: `Code ${SUBJECT_CONFIGS[k].code}`,
+            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k],
+          })),
+        },
+        {
+          heading: "Humanities & Arts Stream",
+          options: STREAM_CONFIGS.humanities.subjects.map((k) => ({
+            value: k,
+            label: SUBJECT_CONFIGS[k].name,
+            badge: `Code ${SUBJECT_CONFIGS[k].code}`,
+            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k],
+          })),
+        },
+      ];
+    }
+
+    return [
+      {
+        value: "all",
+        label: `All Subjects in ${STREAM_CONFIGS[selectedStream].name}`,
+      },
+      ...availableSubjectsForDropdown.map((sub) => ({
+        value: sub.key,
+        label: sub.name,
+        badge: `Code ${sub.code}`,
+        keywords: [sub.code, sub.name, sub.key],
+      })),
+    ];
+  }, [selectedStream, availableSubjectsForDropdown]);
+
   // Render a standard subject card
   const renderSubjectCard = (sub: SubjectMeta, isRecommended = false) => {
     const Icon = sub.icon;
@@ -635,67 +693,28 @@ export default function MocksPage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
             {/* Stream Selector */}
-            <div className="relative min-w-[180px] sm:min-w-[200px]">
-              <select
-                aria-label="Filter by Stream"
+            <div className="min-w-[180px] sm:min-w-[200px]">
+              <SearchableSelect
+                ariaLabel="Filter by Stream"
                 value={selectedStream}
-                onChange={(e) => handleSelectStream(e.target.value as StreamKey)}
-                className="w-full bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold text-[13px] px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-8 transition-colors"
-              >
-                <option value="all">All Streams (20 Subjects)</option>
-                <option value="science">Science Stream (7 Domains)</option>
-                <option value="commerce">Commerce Stream (4 Domains)</option>
-                <option value="humanities">Humanities Stream (10 Domains)</option>
-              </select>
-              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                onChange={(val) => handleSelectStream(val as StreamKey)}
+                options={streamSelectOptions}
+                placeholder="All Streams"
+                className="w-full"
+              />
             </div>
 
             {/* Subject Selector */}
-            <div className="relative min-w-[180px] sm:min-w-[220px]">
-              <select
-                aria-label="Filter by Subject"
+            <div className="min-w-[180px] sm:min-w-[220px]">
+              <SearchableSelect
+                ariaLabel="Filter by Subject"
                 value={selectedTab}
-                onChange={(e) => handleSelectSubject(e.target.value as SubjectKey)}
-                className="w-full bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold text-[13px] px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-8 transition-colors"
-              >
-                <option value="all">
-                  {selectedStream === "all"
-                    ? "All 20 Domain Subjects"
-                    : `All Subjects in ${STREAM_CONFIGS[selectedStream].name}`}
-                </option>
-                {selectedStream === "all" ? (
-                  <>
-                    <optgroup label="Science Stream">
-                      {STREAM_CONFIGS.science.subjects.map((k) => (
-                        <option key={`sci-${k}`} value={k}>
-                          {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code})
-                        </option>
-                      ))}
-                    </optgroup>
-                    <optgroup label="Commerce Stream">
-                      {STREAM_CONFIGS.commerce.subjects.map((k) => (
-                        <option key={`com-${k}`} value={k}>
-                          {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code})
-                        </option>
-                      ))}
-                    </optgroup>
-                    <optgroup label="Humanities & Arts Stream">
-                      {STREAM_CONFIGS.humanities.subjects.map((k) => (
-                        <option key={`hum-${k}`} value={k}>
-                          {SUBJECT_CONFIGS[k].name} (Code {SUBJECT_CONFIGS[k].code})
-                        </option>
-                      ))}
-                    </optgroup>
-                  </>
-                ) : (
-                  availableSubjectsForDropdown.map((sub) => (
-                    <option key={sub.key} value={sub.key}>
-                      {sub.name} (Code {sub.code})
-                    </option>
-                  ))
-                )}
-              </select>
-              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                onChange={(val) => handleSelectSubject(val as SubjectKey)}
+                options={subjectSelectOptions}
+                placeholder="All Subjects"
+                searchPlaceholder="Search subjects by name or code (e.g. 322)..."
+                className="w-full"
+              />
             </div>
           </div>
 

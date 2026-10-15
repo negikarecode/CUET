@@ -36,6 +36,7 @@ import {
   StudentProfileData,
 } from "@/types/profile";
 import { StreamOption } from "@/types/database";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import {
@@ -1127,17 +1128,16 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                 <p className="text-[13px] text-slate-500 font-medium">Upcoming CUET UG Cycle</p>
               </div>
             </div>
-            <select
+            <SearchableSelect
+              ariaLabel="Target Exam Season"
               value={examDate}
-              onChange={(e) => handleExamDateChange(e.target.value)}
-              className="px-3 py-1.5 text-xs sm:text-sm font-semibold bg-slate-50 border border-slate-200 rounded-xl text-slate-800 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            >
-              {upcomingSeasons.map((season) => (
-                <option key={season} value={season}>
-                  CUET UG {season}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => handleExamDateChange(val)}
+              options={upcomingSeasons.map((season) => ({
+                value: season,
+                label: `CUET UG ${season}`,
+              }))}
+              buttonClassName="px-3 py-1.5 text-xs sm:text-sm font-semibold bg-slate-50 border-slate-200 rounded-xl text-slate-800"
+            />
           </div>
 
           {/* Leaderboard Privacy Explicit Toggle */}

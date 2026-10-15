@@ -15,6 +15,7 @@ import { StreamOption } from "@/types/database";
 import CollegeSearchDropdown from "@/components/auth/CollegeSearchDropdown";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { CANONICAL_COURSES_MAP, CanonicalCourse } from "@/lib/standing-engine";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface EditGoalsModalProps {
   isOpen: boolean;
@@ -270,17 +271,20 @@ export default function EditGoalsModal({
               <BookOpen className="w-3.5 h-3.5 text-blue-600" />
               <span>Dream Degree Course / Program</span>
             </label>
-            <select
+            <SearchableSelect
+              ariaLabel="Dream Degree Course / Program"
               value={course}
-              onChange={(e) => setCourse(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 font-semibold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer"
-            >
-              {availableCourses.map((c) => (
-                <option key={c.id} value={c.name}>
-                  {c.name} ({c.degreeType})
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setCourse(val)}
+              options={availableCourses.map((c) => ({
+                value: c.name,
+                label: c.name,
+                badge: c.degreeType,
+                keywords: [c.name, c.degreeType, c.stream, c.id],
+              }))}
+              buttonClassName="w-full px-3.5 py-2.5 rounded-xl border-slate-200 bg-white text-slate-800 font-semibold text-xs sm:text-sm"
+              placeholder="Select Dream Course"
+              searchPlaceholder="Search degree course (e.g. B.Sc. Computer Science)..."
+            />
           </div>
 
           {/* Dream Target College Dropdown */}

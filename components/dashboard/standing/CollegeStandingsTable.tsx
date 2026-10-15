@@ -23,6 +23,7 @@ import {
   CollegeStandingResult,
 } from "@/lib/standing-engine";
 import { CategoryCode } from "@/lib/config/standingConfig";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface CollegeStandingsTableProps {
   standings: CollegeStandingResult[];
@@ -360,22 +361,23 @@ export default function CollegeStandingsTable({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 pt-1 border-t border-slate-100">
           <div className="flex items-center gap-2 flex-wrap">
             {universities.length > 1 && (
-              <select
-                value={selectedUniversity}
-                onChange={(e) => {
-                  setSelectedUniversity(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-800 bg-white font-medium focus:outline-none focus:border-blue-500 max-w-[200px] truncate"
-                title="Filter by University"
-              >
-                <option value="all">All Universities ({universities.length})</option>
-                {universities.map((u) => (
-                  <option key={u} value={u}>
-                    {u}
-                  </option>
-                ))}
-              </select>
+              <div className="max-w-[200px]">
+                <SearchableSelect
+                  ariaLabel="Filter by University"
+                  value={selectedUniversity}
+                  onChange={(val) => {
+                    setSelectedUniversity(val);
+                    setCurrentPage(1);
+                  }}
+                  options={[
+                    { value: "all", label: `All Universities (${universities.length})` },
+                    ...universities.map((u) => ({ value: u, label: u })),
+                  ]}
+                  buttonClassName="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-800 bg-white font-medium truncate"
+                  placeholder="All Universities"
+                  searchPlaceholder="Search universities..."
+                />
+              </div>
             )}
 
             {!isAllIncomplete && (
@@ -441,20 +443,21 @@ export default function CollegeStandingsTable({
               />
             </div>
 
-            <select
+            <SearchableSelect
+              ariaLabel="Sort colleges"
               value={sortOption}
-              onChange={(e) => {
-                setSortOption(e.target.value as any);
+              onChange={(val) => {
+                setSortOption(val as any);
                 setCurrentPage(1);
               }}
-              className="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-800 bg-white font-medium focus:outline-none focus:border-blue-500"
-              title="Sort colleges"
-            >
-              <option value="cutoff_desc">Cutoff: High to Low</option>
-              <option value="cutoff_asc">Cutoff: Low to High</option>
-              <option value="name_asc">Name: A to Z</option>
-              <option value="name_desc">Name: Z to A</option>
-            </select>
+              options={[
+                { value: "cutoff_desc", label: "Cutoff: High to Low" },
+                { value: "cutoff_asc", label: "Cutoff: Low to High" },
+                { value: "name_asc", label: "Name: A to Z" },
+                { value: "name_desc", label: "Name: Z to A" },
+              ]}
+              buttonClassName="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-800 bg-white font-medium"
+            />
           </div>
         </div>
       </div>

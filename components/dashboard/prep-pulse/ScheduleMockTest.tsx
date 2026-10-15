@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { ChevronDown, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { UpcomingTest } from '@/types/dashboard';
 import { MOCK_FORMAT_OPTIONS, formatDateIndian } from '@/lib/config/dashboardConfig';
 import { safeStorage } from '@/lib/storage/safe-storage';
+import SearchableSelect from '@/components/ui/SearchableSelect';
 
 interface ScheduleMockTestProps {
   onTestScheduled?: (newTest: UpcomingTest) => void;
@@ -69,21 +70,22 @@ export const ScheduleMockTest: React.FC<ScheduleMockTestProps> = ({ onTestSchedu
           <label className="block text-[14px] font-medium text-[var(--text-secondary)]">
             Subject
           </label>
-          <div className="relative">
-            <select
-              value={testType}
-              onChange={(e) => setTestType(e.target.value)}
-              className="w-full h-10 appearance-none bg-white border border-[var(--border-strong)] rounded-[8px] px-3 text-[14px] text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer pr-9"
-            >
-              <option value="Physics Domain Test">Physics Domain Mock</option>
-              <option value="Chemistry Domain Test">Chemistry Domain Mock</option>
-              <option value="Mathematics Sectional">Mathematics Domain Mock</option>
-              <option value="Environmental Studies Test">Environmental Studies Mock</option>
-              <option value="English Speed Drill">English Language Drill</option>
-              <option value="General Test Mock">General Test Multi-Section</option>
-            </select>
-            <ChevronDown className="w-4 h-4 text-[var(--text-muted)] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
+          <SearchableSelect
+            ariaLabel="Select Subject"
+            value={testType}
+            onChange={(val) => setTestType(val)}
+            options={[
+              { value: "Physics Domain Test", label: "Physics Domain Mock" },
+              { value: "Chemistry Domain Test", label: "Chemistry Domain Mock" },
+              { value: "Mathematics Sectional", label: "Mathematics Domain Mock" },
+              { value: "Environmental Studies Test", label: "Environmental Studies Mock" },
+              { value: "English Speed Drill", label: "English Language Drill" },
+              { value: "General Test Mock", label: "General Test Multi-Section" },
+            ]}
+            className="w-full"
+            buttonClassName="h-10 bg-white border-[var(--border-strong)] rounded-[8px] px-3 text-[14px] text-[var(--text)] font-normal"
+            searchPlaceholder="Search subjects..."
+          />
         </div>
 
         {/* Date and Time */}
@@ -105,20 +107,21 @@ export const ScheduleMockTest: React.FC<ScheduleMockTestProps> = ({ onTestSchedu
             <label className="block text-[14px] font-medium text-[var(--text-secondary)]">
               Time slot
             </label>
-            <div className="relative">
-              <select
-                value={testTime}
-                onChange={(e) => setTestTime(e.target.value)}
-                className="w-full h-10 appearance-none bg-white border border-[var(--border-strong)] rounded-[8px] px-3 text-[14px] text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer pr-9"
-              >
-                <option value="09:00 AM">09:00 AM</option>
-                <option value="10:00 AM">10:00 AM</option>
-                <option value="02:00 PM">02:00 PM</option>
-                <option value="04:30 PM">04:30 PM</option>
-                <option value="07:00 PM">07:00 PM</option>
-              </select>
-              <ChevronDown className="w-4 h-4 text-[var(--text-muted)] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
+            <SearchableSelect
+              ariaLabel="Select Time slot"
+              value={testTime}
+              onChange={(val) => setTestTime(val)}
+              options={[
+                { value: "09:00 AM", label: "09:00 AM" },
+                { value: "10:00 AM", label: "10:00 AM" },
+                { value: "02:00 PM", label: "02:00 PM" },
+                { value: "04:30 PM", label: "04:30 PM" },
+                { value: "07:00 PM", label: "07:00 PM" },
+              ]}
+              className="w-full"
+              buttonClassName="h-10 bg-white border-[var(--border-strong)] rounded-[8px] px-3 text-[14px] text-[var(--text)] font-normal"
+              searchPlaceholder="Search time slot..."
+            />
           </div>
         </div>
 
@@ -127,20 +130,18 @@ export const ScheduleMockTest: React.FC<ScheduleMockTestProps> = ({ onTestSchedu
           <label className="block text-[14px] font-medium text-[var(--text-secondary)]">
             Test format
           </label>
-          <div className="relative">
-            <select
-              value={selectedFormatId}
-              onChange={(e) => setSelectedFormatId(e.target.value)}
-              className="w-full h-10 appearance-none bg-white border border-[var(--border-strong)] rounded-[8px] px-3 text-[14px] text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer pr-9"
-            >
-              {MOCK_FORMAT_OPTIONS.map((opt) => (
-                <option key={opt.id} value={opt.id}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="w-4 h-4 text-[var(--text-muted)] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
+          <SearchableSelect
+            ariaLabel="Select Test format"
+            value={selectedFormatId}
+            onChange={(val) => setSelectedFormatId(val)}
+            options={MOCK_FORMAT_OPTIONS.map((opt) => ({
+              value: opt.id,
+              label: opt.label,
+            }))}
+            className="w-full"
+            buttonClassName="h-10 bg-white border-[var(--border-strong)] rounded-[8px] px-3 text-[14px] text-[var(--text)] font-normal"
+            searchPlaceholder="Search format..."
+          />
         </div>
 
         {/* Submit */}

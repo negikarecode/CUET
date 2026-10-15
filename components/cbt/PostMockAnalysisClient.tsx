@@ -29,6 +29,7 @@ import { getTestAttemptStats } from "@/lib/analytics";
 import MathRenderer from "@/components/cbt/MathRenderer";
 import CBTMatchTheFollowingView, { parseMatchTheFollowing } from "@/components/cbt/CBTMatchTheFollowingView";
 import { safeCapitalizeOptionText } from "@/lib/utils";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 function isGenericFiller(text: string | null | undefined): boolean {
   if (!text) return true;
@@ -772,17 +773,19 @@ export default function PostMockAnalysisClient({
             {/* Chapter Selector Dropdown */}
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold text-slate-700">Select Chapter:</span>
-              <select
+              <SearchableSelect
+                ariaLabel="Select Chapter"
                 value={selectedChapter}
-                onChange={(e) => setSelectedChapter(e.target.value)}
-                className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none shadow-xs cursor-pointer"
-              >
-                {chapterBreakdown.map((c) => (
-                  <option key={c.chapter} value={c.chapter}>
-                    {c.chapter} ({c.totalQuestions} Qs)
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => setSelectedChapter(val)}
+                options={chapterBreakdown.map((c) => ({
+                  value: c.chapter,
+                  label: c.chapter,
+                  badge: `${c.totalQuestions} Qs`,
+                }))}
+                buttonClassName="px-3 py-1.5 rounded-xl border-slate-200 bg-white text-xs font-semibold text-slate-800 shadow-xs"
+                placeholder="Select Chapter"
+                searchPlaceholder="Search chapters..."
+              />
             </div>
 
             <button
@@ -1196,23 +1199,28 @@ export default function PostMockAnalysisClient({
 
             {/* Chapter Filter */}
             <span className="text-[11px] font-semibold text-slate-600 ml-3 mr-1">Chapter:</span>
-            <select
+            <SearchableSelect
+              ariaLabel="Filter Questions by Chapter"
               value={filterQuestionIds !== null ? "custom" : filterChapter}
-              onChange={(e) => {
+              onChange={(val) => {
                 setFilterQuestionIds(null);
                 setActiveEvidenceLabel(null);
-                setFilterChapter(e.target.value);
+                setFilterChapter(val);
               }}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none shadow-xs cursor-pointer"
-            >
-              {filterQuestionIds !== null && <option value="custom">Evidence Selection</option>}
-              <option value="all">All Chapters</option>
-              {chapterBreakdown.map((c) => (
-                <option key={c.chapter} value={c.chapter}>
-                  {c.chapter}
-                </option>
-              ))}
-            </select>
+              options={[
+                ...(filterQuestionIds !== null
+                  ? [{ value: "custom", label: "Evidence Selection" }]
+                  : []),
+                { value: "all", label: "All Chapters" },
+                ...chapterBreakdown.map((c) => ({
+                  value: c.chapter,
+                  label: c.chapter,
+                })),
+              ]}
+              buttonClassName="px-3 py-1.5 rounded-xl border-slate-200 bg-white text-xs font-semibold text-slate-800 shadow-xs"
+              placeholder="All Chapters"
+              searchPlaceholder="Search chapters..."
+            />
           </div>
           </>
         )}

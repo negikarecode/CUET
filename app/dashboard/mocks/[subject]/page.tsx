@@ -11,7 +11,6 @@ import {
   Trophy,
   Clock,
   Info,
-  ChevronDown,
 } from "lucide-react";
 import { getSubjectMetadata } from "@/lib/config/subjectRegistry";
 import {
@@ -25,6 +24,7 @@ import { useIsClient } from "@/lib/hooks/useIsClient";
 import { getMockStats, matchesMockPaper, isFullLengthMockAttempt } from "@/lib/mock-stats";
 import { deduplicateTestAttempts, normalizeSubject } from "@/lib/analytics";
 import { RecordedTestAttempt } from "@/types";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface SubjectPageProps {
   params: {
@@ -325,19 +325,17 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
         {/* Sort dropdown */}
         <div className="flex items-center gap-2">
           <span className="text-[12px] font-medium text-slate-500">Sort by:</span>
-          <div className="relative">
-            <select
-              aria-label="Sort mock tests"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold text-[13px] pl-3 pr-8 py-1.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer appearance-none transition-colors"
-            >
-              <option value="mock_number">Mock Number (1 to 20)</option>
-              <option value="best_score">Best Score (Highest)</option>
-              <option value="lowest_score">Lowest Score</option>
-            </select>
-            <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
+          <SearchableSelect
+            ariaLabel="Sort mock tests"
+            value={sortBy}
+            onChange={(val) => setSortBy(val as SortOption)}
+            options={[
+              { value: "mock_number", label: "Mock Number (1 to 20)" },
+              { value: "best_score", label: "Best Score (Highest)" },
+              { value: "lowest_score", label: "Lowest Score" },
+            ]}
+            buttonClassName="py-1.5 px-3 text-[13px] bg-slate-50 hover:bg-slate-100 font-semibold"
+          />
         </div>
       </div>
 

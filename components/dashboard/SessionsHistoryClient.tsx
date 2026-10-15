@@ -27,6 +27,7 @@ import { formatDateTimeIndian } from "@/lib/config/dashboardConfig";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { stringToUuid } from "@/lib/utils";
 import { deduplicateTestAttempts } from "@/lib/analytics";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface SessionsHistoryClientProps {
   initialAttempts?: RecordedTestAttempt[];
@@ -469,24 +470,25 @@ export default function SessionsHistoryClient({
             {/* Subject Selector for Line Chart */}
             <div className="flex items-center gap-2 shrink-0">
               <span className="text-[12px] text-[var(--text-muted)] font-medium">Filter Chart:</span>
-              <select
-                aria-label="Filter chart by subject"
+              <SearchableSelect
+                ariaLabel="Filter chart by subject"
                 value={chartSubject}
-                onChange={(e) => setChartSubject(e.target.value)}
-                className="h-8 px-2.5 rounded-[6px] border border-[var(--border)] bg-white text-[12px] font-semibold text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
-              >
-                <option value="all">All Subjects ({allAttempts.length})</option>
-                {availableSubjects.map((sub) => {
-                  const count = allAttempts.filter(
-                    (a) => a.subject?.toLowerCase() === sub.toLowerCase()
-                  ).length;
-                  return (
-                    <option key={sub} value={sub}>
-                      {sub} ({count})
-                    </option>
-                  );
-                })}
-              </select>
+                onChange={(val) => setChartSubject(val)}
+                options={[
+                  { value: "all", label: `All Subjects (${allAttempts.length})` },
+                  ...availableSubjects.map((sub) => {
+                    const count = allAttempts.filter(
+                      (a) => a.subject?.toLowerCase() === sub.toLowerCase()
+                    ).length;
+                    return {
+                      value: sub,
+                      label: `${sub} (${count})`,
+                    };
+                  }),
+                ]}
+                buttonClassName="h-8 px-2.5 rounded-[6px] border-[var(--border)] bg-white text-[12px] font-semibold text-[var(--text)]"
+                searchPlaceholder="Search subjects..."
+              />
             </div>
           </div>
 
@@ -538,47 +540,53 @@ export default function SessionsHistoryClient({
 
             {/* Type Filter */}
             <div className="md:col-span-2">
-              <select
-                aria-label="Filter by paper type"
+              <SearchableSelect
+                ariaLabel="Filter by paper type"
                 value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="w-full h-10 px-3 rounded-[8px] border border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
-              >
-                <option value="all">All Types</option>
-                <option value="mock">Full Mocks</option>
-                <option value="past_paper">Past Papers</option>
-                <option value="practice">Chapter Practice</option>
-              </select>
+                onChange={(val) => setSelectedType(val)}
+                options={[
+                  { value: "all", label: "All Types" },
+                  { value: "mock", label: "Full Mocks" },
+                  { value: "past_paper", label: "Past Papers" },
+                  { value: "practice", label: "Chapter Practice" },
+                ]}
+                className="w-full"
+                buttonClassName="h-10 px-3 rounded-[8px] border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)]"
+              />
             </div>
 
             {/* Date Range Filter */}
             <div className="md:col-span-2">
-              <select
-                aria-label="Filter by date range"
+              <SearchableSelect
+                ariaLabel="Filter by date range"
                 value={dateRange}
-                onChange={(e) => setDateRange(e.target.value as any)}
-                className="w-full h-10 px-3 rounded-[8px] border border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
-              >
-                <option value="all">All Time</option>
-                <option value="today">Today</option>
-                <option value="7days">Last 7 Days</option>
-                <option value="30days">Last 30 Days</option>
-              </select>
+                onChange={(val) => setDateRange(val as any)}
+                options={[
+                  { value: "all", label: "All Time" },
+                  { value: "today", label: "Today" },
+                  { value: "7days", label: "Last 7 Days" },
+                  { value: "30days", label: "Last 30 Days" },
+                ]}
+                className="w-full"
+                buttonClassName="h-10 px-3 rounded-[8px] border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)]"
+              />
             </div>
 
             {/* Sort Selector */}
             <div className="md:col-span-3">
-              <select
-                aria-label="Sort sessions"
+              <SearchableSelect
+                ariaLabel="Sort sessions"
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full h-10 px-3 rounded-[8px] border border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)] focus:outline-none focus:border-[var(--accent)] cursor-pointer"
-              >
-                <option value="newest">Sort: Latest first</option>
-                <option value="oldest">Sort: Oldest first</option>
-                <option value="highest_score">Sort: Highest score</option>
-                <option value="highest_accuracy">Sort: Highest accuracy</option>
-              </select>
+                onChange={(val) => setSortBy(val as any)}
+                options={[
+                  { value: "newest", label: "Sort: Latest first" },
+                  { value: "oldest", label: "Sort: Oldest first" },
+                  { value: "highest_score", label: "Sort: Highest score" },
+                  { value: "highest_accuracy", label: "Sort: Highest accuracy" },
+                ]}
+                className="w-full"
+                buttonClassName="h-10 px-3 rounded-[8px] border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)]"
+              />
             </div>
           </div>
 

@@ -2,11 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import {
-  getPYQTestsForSubject,
-  getAllPYQTests,
-  PYQTestItem,
-} from "@/lib/data/subjects";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   Atom,
@@ -20,246 +16,212 @@ import {
   Landmark,
   Globe,
   BrainCircuit,
-  RotateCcw,
+  RotateCw,
   Users,
-  Activity,
-  Laptop,
-  Home,
-  Tv,
-  Leaf,
-  Palette,
-  Sprout,
-  Footprints,
-  ChevronDown,
   Info,
-  AlertCircle,
   Play,
   CheckCircle2,
   Target,
+  Clock,
   FileText,
   Trophy,
+  Sparkles,
 } from "lucide-react";
+import {
+  getPYQTestsForSubject,
+  PYQTestItem,
+} from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { getTestAttemptStats, normalizeSubject } from "@/lib/analytics";
+import { deduplicateTestAttempts, normalizeSubject } from "@/lib/analytics";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useTarget } from "@/lib/hooks/useTarget";
+import SearchableSelect, { SearchableSelectOption } from "@/components/ui/SearchableSelect";
+import { RecordedTestAttempt } from "@/types";
 
-type SubjectKey =
-  | "all"
-  | "physics"
-  | "chemistry"
-  | "mathematics"
-  | "biology"
-  | "accountancy"
-  | "business-studies"
-  | "economics"
-  | "history"
-  | "political-science"
-  | "geography"
-  | "psychology"
-  | "sociology"
-  | "physical-education"
-  | "computer-science"
-  | "home-science"
-  | "mass-media"
-  | "environmental-studies"
-  | "fine-arts"
-  | "agriculture"
-  | "anthropology"
-  | "english"
-  | "general-test";
-
-type SortOption = "newest" | "oldest" | "best-score" | "lowest-score";
-
-type StatusFilter = "all" | "attempted" | "not-attempted";
+type StreamKey = "all" | "science" | "commerce" | "humanities" | "languages_general";
+type StatusFilter = "all" | "started" | "not_started";
 
 interface SubjectMeta {
-  key: SubjectKey;
+  key: string;
   name: string;
   code: string;
-  isLive: boolean;
-  paperCount: number;
-  totalQuestions: number;
+  stream: StreamKey;
   durationMinutes: number;
+  totalQuestions: number;
   subtitle: string;
   icon: React.ComponentType<{ className?: string }>;
 }
 
-function makeSubjectMeta(
-  key: Exclude<SubjectKey, "all">,
-  name: string,
-  code: string,
-  durationMinutes: number,
-  subtitle: string,
-  icon: React.ComponentType<{ className?: string }>
-): SubjectMeta {
-  const tests = getPYQTestsForSubject(key);
-  const count = tests.length;
-  const isLive = count > 0;
-  return {
-    key,
-    name,
-    code,
-    isLive,
-    paperCount: count,
-    totalQuestions: count * 50,
-    durationMinutes,
-    subtitle,
-    icon,
-  };
-}
-
-const PYQ_SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
-  physics: makeSubjectMeta("physics", "Physics", "322", 60, "Official NTA CUET CBT shift papers with complete step-by-step NCERT solutions.", Atom),
-  chemistry: makeSubjectMeta("chemistry", "Chemistry", "306", 60, "Official NTA CUET CBT shift papers covering Physical, Organic, and Inorganic Chemistry.", FlaskConical),
-  mathematics: makeSubjectMeta("mathematics", "Mathematics", "319", 60, "Official NTA CUET CBT shift papers covering Calculus, Algebra, Vectors, and Probability.", Binary),
-  biology: makeSubjectMeta("biology", "Biology", "304", 45, "Official NTA CUET CBT shift papers covering Genetics, Reproduction, and Biotechnology with NCERT references.", Dna),
-  accountancy: makeSubjectMeta("accountancy", "Accountancy", "301", 60, "Official NTA CUET CBT shift papers covering Partnership, Company Accounts, and Financial Analysis.", Calculator),
-  "business-studies": makeSubjectMeta("business-studies", "Business Studies", "305", 45, "Official NTA CUET CBT shift papers covering Principles of Management and Marketing.", Briefcase),
-  economics: makeSubjectMeta("economics", "Economics", "309", 60, "Official NTA CUET CBT shift papers covering Introductory Macroeconomics and Indian Economy.", TrendingUp),
-  history: makeSubjectMeta("history", "History", "314", 45, "Official NTA CUET CBT shift papers covering Themes in Indian History Parts I, II, and III.", ScrollText),
-  "political-science": makeSubjectMeta("political-science", "Political Science", "323", 45, "Official NTA CUET CBT shift papers covering Contemporary World Politics and Politics in India.", Landmark),
-  geography: makeSubjectMeta("geography", "Geography", "313", 45, "Official NTA CUET CBT shift papers covering Human Geography and India: People and Economy.", Globe),
-  psychology: makeSubjectMeta("psychology", "Psychology", "324", 45, "Official NTA CUET CBT shift papers covering Psychological Disorders, Personality, and Social Influence.", BrainCircuit),
-  sociology: makeSubjectMeta("sociology", "Sociology", "326", 45, "Official NTA CUET CBT shift papers covering Indian Society, Social Institutions, and Social Change.", Users),
-  "physical-education": makeSubjectMeta("physical-education", "Physical Education", "321", 45, "Official NTA CUET CBT shift papers covering Sports Events, Yoga, and Biomechanics.", Activity),
-  "computer-science": makeSubjectMeta("computer-science", "Computer Science / IP", "308", 60, "Official NTA CUET CBT shift papers covering Python, SQL Databases, and Computer Networks.", Laptop),
-  "home-science": makeSubjectMeta("home-science", "Home Science", "315", 45, "Official NTA CUET CBT shift papers covering Clinical Nutrition, Human Development, and Apparel.", Home),
-  "mass-media": makeSubjectMeta("mass-media", "Mass Media & Communication", "318", 45, "Official NTA CUET CBT shift papers covering Journalism, Cinema, Radio, and New Media.", Tv),
-  "environmental-studies": makeSubjectMeta("environmental-studies", "Environmental Science", "307", 45, "Official NTA CUET CBT shift papers covering Ecosystems, Pollution, and Sustainable Development.", Leaf),
-  "fine-arts": makeSubjectMeta("fine-arts", "Fine Arts / Visual Arts", "312", 45, "Official NTA CUET CBT shift papers covering Miniature Paintings, Bengal School, and Modern Art.", Palette),
-  agriculture: makeSubjectMeta("agriculture", "Agriculture", "302", 45, "Official NTA CUET CBT shift papers covering Agrometeorology, Genetics, Livestock, and Crop Production.", Sprout),
-  anthropology: makeSubjectMeta("anthropology", "Anthropology", "303", 45, "Official NTA CUET CBT shift papers covering Physical, Archaeological, and Social Anthropology.", Footprints),
-  english: makeSubjectMeta("english", "English Language", "101", 45, "Official NTA CUET CBT shift papers covering Reading Comprehension, Vocabulary, and Verbal Ability.", FileText),
-  "general-test": makeSubjectMeta("general-test", "General Aptitude Test", "501", 60, "Official NTA CUET CBT shift papers covering General Knowledge, Mental Ability, and Quantitative Aptitude.", Trophy),
-};
-
-const STREAM_GROUPS: {
-  name: string;
-  subjects: Array<Exclude<SubjectKey, "all">>;
-}[] = [
+const PYQ_SUBJECTS: SubjectMeta[] = [
   {
-    name: "Science Stream",
-    subjects: [
-      "physics",
-      "chemistry",
-      "mathematics",
-      "biology",
-      "computer-science",
-      "environmental-studies",
-      "agriculture",
-    ],
+    key: "physics",
+    name: "Physics",
+    code: "322",
+    stream: "science",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Electrostatics, Optics, Magnetism, Modern Physics & Semiconductor Devices",
+    icon: Atom,
   },
   {
-    name: "Commerce Stream",
-    subjects: [
-      "accountancy",
-      "business-studies",
-      "economics",
-      "mathematics",
-    ],
+    key: "chemistry",
+    name: "Chemistry",
+    code: "306",
+    stream: "science",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Physical Chemistry, Organic Mechanisms, Coordination Compounds & Biomolecules",
+    icon: FlaskConical,
   },
   {
-    name: "Humanities & Arts",
-    subjects: [
-      "history",
-      "political-science",
-      "geography",
-      "psychology",
-      "sociology",
-      "physical-education",
-      "home-science",
-      "mass-media",
-      "fine-arts",
-      "anthropology",
-    ],
+    key: "mathematics",
+    name: "Mathematics",
+    code: "319",
+    stream: "science",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Calculus, Linear Programming, Vectors, 3D Geometry & Probability",
+    icon: Binary,
   },
   {
-    name: "Languages & General Test",
-    subjects: ["english", "general-test"],
+    key: "biology",
+    name: "Biology",
+    code: "304",
+    stream: "science",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Genetics, Human Reproduction, Ecology, Evolution & Biotechnology",
+    icon: Dna,
+  },
+  {
+    key: "accountancy",
+    name: "Accountancy",
+    code: "301",
+    stream: "commerce",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Partnership Deeds, Share Capital, Cash Flow Statements & Debentures",
+    icon: Calculator,
+  },
+  {
+    key: "business-studies",
+    name: "Business Studies",
+    code: "305",
+    stream: "commerce",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Principles of Management, Marketing Mix, Financial Markets & Consumer Protection",
+    icon: Briefcase,
+  },
+  {
+    key: "economics",
+    name: "Economics",
+    code: "309",
+    stream: "commerce",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "Macroeconomic Identities, Government Budget, Inflation & Indian Economic Development",
+    icon: TrendingUp,
+  },
+  {
+    key: "history",
+    name: "History",
+    code: "314",
+    stream: "humanities",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Harappan Archaeology, Mughal Chronicles, Bhakti-Sufi & Indian National Movement",
+    icon: ScrollText,
+  },
+  {
+    key: "political-science",
+    name: "Political Science",
+    code: "323",
+    stream: "humanities",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Contemporary World Politics, Cold War Era, Democratic Resurgence & Globalisation",
+    icon: Landmark,
+  },
+  {
+    key: "geography",
+    name: "Geography",
+    code: "313",
+    stream: "humanities",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Human Geography, Population Growth, Resource Distribution & Indian Economy",
+    icon: Globe,
+  },
+  {
+    key: "psychology",
+    name: "Psychology",
+    code: "324",
+    stream: "humanities",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Variations in Psychological Attributes, Self and Personality & Therapeutic Approaches",
+    icon: BrainCircuit,
+  },
+  {
+    key: "sociology",
+    name: "Sociology",
+    code: "326",
+    stream: "humanities",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Indian Society Demographics, Social Institutions, Inequality & Social Movements",
+    icon: Users,
+  },
+  {
+    key: "english",
+    name: "English Language",
+    code: "101",
+    stream: "languages_general",
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Reading Comprehension Passages, Synonyms, Antonyms, Idioms & Verbal Aptitude",
+    icon: FileText,
+  },
+  {
+    key: "general-test",
+    name: "General Aptitude Test",
+    code: "501",
+    stream: "languages_general",
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "General Knowledge, Current Affairs, Numerical Ability, Reasoning & Analytical Skills",
+    icon: Trophy,
   },
 ];
 
-// AA-compliant badge color classes per subject
-const SUBJECT_BADGE_STYLES: Record<string, { bg: string; text: string; border: string }> = {
-  physics: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-  chemistry: { bg: "bg-teal-50", text: "text-teal-700", border: "border-teal-200" },
-  mathematics: { bg: "bg-indigo-50", text: "text-indigo-700", border: "border-indigo-200" },
-  biology: { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200" },
-  accountancy: { bg: "bg-amber-50", text: "text-amber-800", border: "border-amber-200" },
-  "business-studies": { bg: "bg-orange-50", text: "text-orange-800", border: "border-orange-200" },
-  economics: { bg: "bg-cyan-50", text: "text-cyan-800", border: "border-cyan-200" },
-  history: { bg: "bg-stone-100", text: "text-stone-800", border: "border-stone-300" },
-  "political-science": { bg: "bg-rose-50", text: "text-rose-700", border: "border-rose-200" },
-  geography: { bg: "bg-sky-50", text: "text-sky-700", border: "border-sky-200" },
-  psychology: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
-  sociology: { bg: "bg-pink-50", text: "text-pink-700", border: "border-pink-200" },
-  "physical-education": { bg: "bg-lime-50", text: "text-lime-800", border: "border-lime-200" },
-  "computer-science": { bg: "bg-violet-50", text: "text-violet-700", border: "border-violet-200" },
-  "home-science": { bg: "bg-rose-50", text: "text-rose-800", border: "border-rose-200" },
-  "mass-media": { bg: "bg-fuchsia-50", text: "text-fuchsia-700", border: "border-fuchsia-200" },
-  "environmental-studies": { bg: "bg-green-50", text: "text-green-800", border: "border-green-200" },
-  "fine-arts": { bg: "bg-yellow-50", text: "text-yellow-800", border: "border-yellow-200" },
-  agriculture: { bg: "bg-emerald-50", text: "text-emerald-800", border: "border-emerald-200" },
-  anthropology: { bg: "bg-zinc-100", text: "text-zinc-800", border: "border-zinc-300" },
-  english: { bg: "bg-blue-50", text: "text-blue-800", border: "border-blue-200" },
-  "general-test": { bg: "bg-purple-50", text: "text-purple-800", border: "border-purple-200" },
+const STREAM_CONFIGS: Record<
+  Exclude<StreamKey, "all">,
+  { name: string; subjects: string[] }
+> = {
+  science: {
+    name: "Science Stream",
+    subjects: ["physics", "chemistry", "mathematics", "biology"],
+  },
+  commerce: {
+    name: "Commerce Stream",
+    subjects: ["accountancy", "business-studies", "economics", "mathematics"],
+  },
+  humanities: {
+    name: "Humanities & Arts",
+    subjects: ["history", "political-science", "geography", "psychology", "sociology"],
+  },
+  languages_general: {
+    name: "Languages & General",
+    subjects: ["english", "general-test"],
+  },
 };
-
-function getSubjectBadge(subjectSlug?: string) {
-  const norm = subjectSlug?.toLowerCase().replace(/_/g, "-") || "";
-  return (
-    SUBJECT_BADGE_STYLES[norm] || {
-      bg: "bg-slate-100",
-      text: "text-slate-700",
-      border: "border-slate-200",
-    }
-  );
-}
-
-function getTestMonthLabel(test: PYQTestItem): string {
-  if (test.examDate && /^\d{4}-\d{2}-\d{2}$/.test(test.examDate)) {
-    const parts = test.examDate.split("-");
-    const yearStr = parts[0] || "";
-    const monthStr = parts[1] || "";
-    const monthIndex = parseInt(monthStr, 10) - 1;
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    if (monthIndex >= 0 && monthIndex < 12) {
-      return `${months[monthIndex]} ${yearStr}`;
-    }
-  }
-  if (test.dateDisplay) {
-    const match = test.dateDisplay.match(/([A-Za-z]+)\s+(\d{4})/);
-    if (match) {
-      return `${match[1]} ${match[2]}`;
-    }
-  }
-  if (test.year) {
-    return `CUET ${test.year}`;
-  }
-  return "Past Papers";
-}
 
 function formatShortPaperTitle(test: PYQTestItem): string {
   if (test.dateDisplay && test.shift) {
     return `${test.dateDisplay} · ${test.shift}`;
   }
-  if (test.dateDisplay) {
-    return test.dateDisplay;
-  }
+  if (test.dateDisplay) return test.dateDisplay;
   const match = test.label.match(
     /\((\d{1,2}\s+[A-Za-z]+\s+\d{4})\s+(Shift\s+\d+)\)/i
   );
@@ -280,49 +242,28 @@ interface InProgressSessionInfo {
 }
 
 export default function PYQsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
   const targetData = useTarget();
 
-  // Filter & Display State
-  const [selectedTab, setSelectedTab] = useState<SubjectKey>("all");
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [sortOption, setSortOption] = useState<SortOption>("newest");
-  const [visibleCount, setVisibleCount] = useState<number>(24);
+  // Backward compatibility redirect: /dashboard/pyqs?subject=physics -> /dashboard/pyqs/physics
+  useEffect(() => {
+    const subjParam = searchParams.get("subject");
+    if (subjParam) {
+      const normalizedKey = normalizeSubject(subjParam).key;
+      router.replace(`/dashboard/pyqs/${normalizedKey}`);
+    }
+  }, [searchParams, router]);
 
-  // In-progress test session state
+  const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
+  const [selectedSubjectTab, setSelectedSubjectTab] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+
+  // In-progress test session detection
   const [inProgressSession, setInProgressSession] = useState<InProgressSessionInfo | null>(null);
 
-  // Restore filter and loaded count from sessionStorage on mount
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const savedCount = sessionStorage.getItem("cuet_pyqs_visible_count");
-      if (savedCount) {
-        const parsed = parseInt(savedCount, 10);
-        if (!isNaN(parsed) && parsed >= 24) setVisibleCount(parsed);
-      }
-      const savedTab = sessionStorage.getItem("cuet_pyqs_tab");
-      if (savedTab) setSelectedTab(savedTab as SubjectKey);
-      const savedStatus = sessionStorage.getItem("cuet_pyqs_status");
-      if (savedStatus) setStatusFilter(savedStatus as StatusFilter);
-      const savedSort = sessionStorage.getItem("cuet_pyqs_sort");
-      if (savedSort) setSortOption(savedSort as SortOption);
-    } catch {}
-  }, []);
-
-  // Persist filter and loaded count to sessionStorage
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      sessionStorage.setItem("cuet_pyqs_visible_count", String(visibleCount));
-      sessionStorage.setItem("cuet_pyqs_tab", selectedTab);
-      sessionStorage.setItem("cuet_pyqs_status", statusFilter);
-      sessionStorage.setItem("cuet_pyqs_sort", sortOption);
-    } catch {}
-  }, [visibleCount, selectedTab, statusFilter, sortOption]);
-
-  // Check for in-progress unsubmitted CBT session from localStorage
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -356,289 +297,364 @@ export default function PYQsPage() {
         }
       }
     } catch (err) {
-      console.warn("[PYQsPage] Could not check in-progress sessions:", err);
+      console.warn("[PYQsPage] Error checking in-progress session:", err);
     }
   }, []);
 
-  const allPYQsList: PYQTestItem[] = useMemo(() => {
-    return getAllPYQTests();
-  }, []);
-
-  // Filter by subject
-  const subjectFilteredPapers = useMemo(() => {
-    if (selectedTab !== "all") {
-      return getPYQTestsForSubject(selectedTab);
-    }
-    return allPYQsList;
-  }, [allPYQsList, selectedTab]);
-
-  // Precompute stats map for fast filtering & sorting
-  const statsMap = useMemo(() => {
-    if (!isClient) return new Map<string, ReturnType<typeof getTestAttemptStats>>();
-    const map = new Map<string, ReturnType<typeof getTestAttemptStats>>();
-    for (const test of allPYQsList) {
-      map.set(test.id, getTestAttemptStats(testAttempts, test.id));
-    }
-    return map;
-  }, [isClient, allPYQsList, testAttempts]);
-
-  // Progress stats summary (follows current subject filters)
-  const progressStats = useMemo(() => {
-    if (!isClient) {
-      return { total: subjectFilteredPapers.length, attempted: 0 };
-    }
-    const total = subjectFilteredPapers.length;
-    const attemptedList = subjectFilteredPapers.filter((t) => {
-      const st = statsMap.get(t.id);
-      return st?.hasAttempted && st.bestAttempt !== null;
+  // Deduplicate test attempts strictly for PYQs
+  const cleanAttempts = useMemo(() => {
+    const deduped = deduplicateTestAttempts(testAttempts || []);
+    return deduped.filter((att) => {
+      const id = (att.testId || "").toLowerCase();
+      const title = (att.testTitle || "").toLowerCase();
+      return id.includes("-pyq") || id.includes("pyq") || title.includes("shift") || title.includes("pyq");
     });
-    return { total, attempted: attemptedList.length };
-  }, [subjectFilteredPapers, statsMap, isClient]);
+  }, [testAttempts]);
 
-  // Filter by attempt status (All / Attempted / Not attempted)
-  const statusFilteredPapers = useMemo(() => {
-    if (statusFilter === "all" || !isClient) return subjectFilteredPapers;
-    return subjectFilteredPapers.filter((test) => {
-      const stats = statsMap.get(test.id);
-      const hasAttempted = Boolean(stats?.hasAttempted && stats.bestAttempt !== null);
-      return statusFilter === "attempted" ? hasAttempted : !hasAttempted;
-    });
-  }, [subjectFilteredPapers, statusFilter, statsMap, isClient]);
-
-  // Sort papers according to sortOption
-  const sortedPapers = useMemo(() => {
-    const list = [...statusFilteredPapers];
-    return list.sort((a, b) => {
-      if (sortOption === "newest") {
-        const dateA = a.examDate || "";
-        const dateB = b.examDate || "";
-        if (dateB !== dateA) return dateB.localeCompare(dateA);
-        return (b.shift || "").localeCompare(a.shift || "");
+  // Precompute PYQ statistics for all 14 subjects
+  const subjectStatsMap = useMemo(() => {
+    const map = new Map<
+      string,
+      {
+        attemptedCount: number;
+        totalCount: number;
+        peakScore: number | null;
+        averageAccuracy: number;
+        nextUnattemptedPaper: PYQTestItem | null;
+        bestAttemptPaper: PYQTestItem | null;
+        isAllAttempted: boolean;
+        hasAttempts: boolean;
       }
-      if (sortOption === "oldest") {
-        const dateA = a.examDate || "";
-        const dateB = b.examDate || "";
-        if (dateA !== dateB) return dateA.localeCompare(dateB);
-        return (a.shift || "").localeCompare(b.shift || "");
-      }
-      if (sortOption === "best-score") {
-        const scoreA = statsMap.get(a.id)?.bestAttempt?.totalMarks ?? -99999;
-        const scoreB = statsMap.get(b.id)?.bestAttempt?.totalMarks ?? -99999;
-        if (scoreB !== scoreA) return scoreB - scoreA;
-        return (b.examDate || "").localeCompare(a.examDate || "");
-      }
-      if (sortOption === "lowest-score") {
-        const hasA = statsMap.get(a.id)?.hasAttempted;
-        const hasB = statsMap.get(b.id)?.hasAttempted;
-        if (hasA && !hasB) return -1;
-        if (!hasA && hasB) return 1;
-        if (hasA && hasB) {
-          const scoreA = statsMap.get(a.id)?.bestAttempt?.totalMarks ?? 0;
-          const scoreB = statsMap.get(b.id)?.bestAttempt?.totalMarks ?? 0;
-          if (scoreA !== scoreB) return scoreA - scoreB;
-        }
-        return (b.examDate || "").localeCompare(a.examDate || "");
-      }
-      return 0;
-    });
-  }, [statusFilteredPapers, sortOption, statsMap]);
+    >();
 
-  // Paginated visible subset
-  const visiblePapers = useMemo(() => {
-    return sortedPapers.slice(0, visibleCount);
-  }, [sortedPapers, visibleCount]);
-
-  // Always group visible papers by month
-  const groupedSections = useMemo(() => {
-    const groups: { key: string; label: string; count: number; tests: PYQTestItem[] }[] = [];
-    const map = new Map<string, PYQTestItem[]>();
-
-    for (const test of visiblePapers) {
-      const monthKey = getTestMonthLabel(test);
-      if (!map.has(monthKey)) {
-        map.set(monthKey, []);
-      }
-      map.get(monthKey)!.push(test);
-    }
-
-    for (const [key, tests] of map.entries()) {
-      groups.push({
-        key,
-        label: key,
-        count: tests.length,
-        tests,
-      });
-    }
-    return groups;
-  }, [visiblePapers]);
-
-  // Recommended subjects for user's target dream college & course
-  const recommendedSubjects = useMemo(() => {
-    if (
-      !targetData.hasTarget ||
-      !targetData.requiredSubjects ||
-      targetData.requiredSubjects.length === 0
-    ) {
-      return [];
-    }
-    const reqKeys = targetData.requiredSubjects.map(
-      (s) => normalizeSubject(s).key
-    );
-
-    const seen = new Set<string>();
-    const list: {
-      subKey: SubjectKey;
-      meta: SubjectMeta;
-      nextPaper: PYQTestItem | null;
-      attemptedCount: number;
-      totalCount: number;
-    }[] = [];
-
-    for (const key of reqKeys) {
-      if (seen.has(key)) continue;
-      seen.add(key);
-
-      const meta = PYQ_SUBJECT_CONFIGS[key as Exclude<SubjectKey, "all">];
-      if (!meta) continue;
-      const papers = getPYQTestsForSubject(key);
-      if (papers.length === 0) continue;
-
+    for (const sub of PYQ_SUBJECTS) {
+      const papers = getPYQTestsForSubject(sub.key);
       let attempted = 0;
       let nextUnattempted: PYQTestItem | null = null;
+      let peakScore: number | null = null;
+      let totalAcc = 0;
+      let bestScoreSoFar = -9999;
+      let bestAttemptPaper: PYQTestItem | null = null;
 
       for (const p of papers) {
-        const stats = statsMap.get(p.id);
-        if (stats?.hasAttempted) {
+        const matches = cleanAttempts.filter((a) => a.testId === p.id);
+        if (matches.length > 0) {
           attempted++;
+          const best = matches.reduce<RecordedTestAttempt>((b, curr) => {
+            const cScore = curr.totalMarks ?? 0;
+            const bScore = b.totalMarks ?? 0;
+            if (cScore > bScore) return curr;
+            if (cScore === bScore && (curr.accuracyPercentage ?? 0) > (b.accuracyPercentage ?? 0)) return curr;
+            return b;
+          }, matches[0]!);
+
+          const score = best.totalMarks ?? 0;
+          if (peakScore === null || score > peakScore) {
+            peakScore = score;
+          }
+          if (score > bestScoreSoFar) {
+            bestScoreSoFar = score;
+            bestAttemptPaper = p;
+          }
+          totalAcc += best.accuracyPercentage ?? 0;
         } else if (!nextUnattempted) {
           nextUnattempted = p;
         }
       }
 
-      list.push({
-        subKey: key as SubjectKey,
-        meta,
-        nextPaper: nextUnattempted || papers[0] || null,
+      const totalCount = papers.length;
+      const isAllAttempted = totalCount > 0 && attempted >= totalCount;
+      const avgAcc = attempted > 0 ? Math.round(totalAcc / attempted) : 0;
+
+      map.set(sub.key, {
         attemptedCount: attempted,
-        totalCount: papers.length,
+        totalCount,
+        peakScore,
+        averageAccuracy: avgAcc,
+        nextUnattemptedPaper: nextUnattempted || papers[0] || null,
+        bestAttemptPaper: bestAttemptPaper || papers[0] || null,
+        isAllAttempted,
+        hasAttempts: attempted > 0,
       });
     }
 
+    return map;
+  }, [cleanAttempts]);
+
+  // Overall paper count
+  const totalShiftPapers = useMemo(() => {
+    return PYQ_SUBJECTS.reduce((acc, sub) => acc + (subjectStatsMap.get(sub.key)?.totalCount || 0), 0);
+  }, [subjectStatsMap]);
+
+  // Overall attempted paper count
+  const totalAttemptedPapers = useMemo(() => {
+    return PYQ_SUBJECTS.reduce((acc, sub) => acc + (subjectStatsMap.get(sub.key)?.attemptedCount || 0), 0);
+  }, [subjectStatsMap]);
+
+  // Filter subjects by stream and individual tab
+  const streamFilteredSubjects = useMemo(() => {
+    if (selectedSubjectTab !== "all") {
+      const match = PYQ_SUBJECTS.find((s) => s.key === selectedSubjectTab);
+      return match ? [match] : PYQ_SUBJECTS;
+    }
+    if (selectedStream !== "all") {
+      const keys = STREAM_CONFIGS[selectedStream].subjects;
+      return PYQ_SUBJECTS.filter((s) => keys.includes(s.key));
+    }
+    return PYQ_SUBJECTS;
+  }, [selectedStream, selectedSubjectTab]);
+
+  // Filter by status (All / Started / Not started)
+  const displayedSubjects = useMemo(() => {
+    return streamFilteredSubjects.filter((sub) => {
+      if (statusFilter === "all") return true;
+      const stats = subjectStatsMap.get(sub.key);
+      if (statusFilter === "started") return Boolean(stats?.hasAttempts);
+      if (statusFilter === "not_started") return !stats?.hasAttempts;
+      return true;
+    });
+  }, [streamFilteredSubjects, statusFilter, subjectStatsMap]);
+
+  // Recommended subjects for user's target dream college & course
+  const recommendedSubjects = useMemo(() => {
+    if (!targetData.hasTarget || !targetData.requiredSubjects || targetData.requiredSubjects.length === 0) {
+      return [];
+    }
+    const reqKeys = new Set(
+      targetData.requiredSubjects.map((s) => normalizeSubject(s).key)
+    );
+    const seen = new Set<string>();
+    const list: SubjectMeta[] = [];
+    for (const sub of PYQ_SUBJECTS) {
+      if (reqKeys.has(sub.key) && !seen.has(sub.key)) {
+        seen.add(sub.key);
+        list.push(sub);
+      }
+    }
     return list;
-  }, [targetData, statsMap]);
+  }, [targetData]);
+
+  const isFilterActive = selectedSubjectTab !== "all" || selectedStream !== "all" || statusFilter !== "all";
+  const showRecommendedRow = Boolean(
+    targetData.hasTarget &&
+    recommendedSubjects.length > 0 &&
+    !isFilterActive
+  );
+
+  const recommendedKeys = useMemo(() => {
+    return new Set(recommendedSubjects.map((s) => s.key));
+  }, [recommendedSubjects]);
+
+  // Other subjects (excluding recommended) when recommended section is shown
+  const otherSubjects = useMemo(() => {
+    const baseList = showRecommendedRow
+      ? displayedSubjects.filter((s) => !recommendedKeys.has(s.key))
+      : displayedSubjects;
+
+    const seen = new Set<string>();
+    return baseList.filter((s) => {
+      if (seen.has(s.key)) return false;
+      seen.add(s.key);
+      return true;
+    });
+  }, [displayedSubjects, showRecommendedRow, recommendedKeys]);
+
+  // Options for Stream SearchableSelect
+  const streamSelectOptions: SearchableSelectOption[] = useMemo(() => {
+    return [
+      { value: "all", label: "All Streams (14 Subjects)" },
+      { value: "science", label: "Science Stream (4 Subjects)", badge: "4 Core" },
+      { value: "commerce", label: "Commerce Stream (4 Subjects)", badge: "4 Core" },
+      { value: "humanities", label: "Humanities & Arts (5 Subjects)", badge: "5 Core" },
+      { value: "languages_general", label: "Languages & General (2 Subjects)", badge: "2 Core" },
+    ];
+  }, []);
+
+  // Options for Subject SearchableSelect
+  const subjectSelectOptions: SearchableSelectOption[] = useMemo(() => {
+    const groups: SearchableSelectOption[] = [
+      { value: "all", label: "All Subjects (14 Subjects)" },
+    ];
+
+    const streams = [
+      { key: "science", label: "Science Stream" },
+      { key: "commerce", label: "Commerce Stream" },
+      { key: "humanities", label: "Humanities & Arts" },
+      { key: "languages_general", label: "Languages & General" },
+    ];
+
+    for (const st of streams) {
+      const subs = PYQ_SUBJECTS.filter((s) => s.stream === st.key);
+      if (subs.length > 0) {
+        groups.push({
+          heading: st.label,
+          options: subs.map((s) => ({
+            value: s.key,
+            label: `${s.name} (Code ${s.code})`,
+            sublabel: `${subjectStatsMap.get(s.key)?.totalCount || 0} Official Shift Papers`,
+            keywords: [s.code, s.name, s.key],
+            icon: s.icon,
+          })),
+        });
+      }
+    }
+
+    return groups;
+  }, [subjectStatsMap]);
 
   if (!isClient) {
     return <div className="min-h-screen bg-[#F8FAFC]" />;
   }
 
-  // Render a standard PYQ card
-  const renderCard = (test: PYQTestItem) => {
-    const stats = statsMap.get(test.id) || {
-      attemptsCount: 0,
-      bestAttempt: null,
-      latestAttempt: null,
-      hasAttempted: false,
+  // Render a standard PYQ Subject Card (identical layout to Domain Mock Card)
+  const renderSubjectCard = (sub: SubjectMeta, isRecommended: boolean = false) => {
+    const Icon = sub.icon;
+    const stats = subjectStatsMap.get(sub.key) || {
+      attemptedCount: 0,
+      totalCount: 0,
+      peakScore: null,
+      averageAccuracy: 0,
+      nextUnattemptedPaper: null,
+      bestAttemptPaper: null,
+      isAllAttempted: false,
+      hasAttempts: false,
     };
-    const hasAttempted = stats.hasAttempted && stats.bestAttempt !== null;
-    const best = stats.bestAttempt;
-    const shortTitle = formatShortPaperTitle(test);
-    const badgeStyle = getSubjectBadge(test.subjectSlug);
-    const isNegativeScore = (best?.totalMarks ?? 0) < 0;
+
+    const paperCount = stats.totalCount;
+    const progressPercent = paperCount > 0 ? Math.min(100, Math.round((stats.attemptedCount / paperCount) * 100)) : 0;
+    const nextPaper = stats.nextUnattemptedPaper;
+    const nextPaperTitle = nextPaper ? formatShortPaperTitle(nextPaper) : "Shift 1";
+    const nextPaperId = nextPaper ? nextPaper.id : `${sub.key}-pyq-1`;
+    const bestPaperId = stats.bestAttemptPaper ? stats.bestAttemptPaper.id : nextPaperId;
 
     return (
       <div
-        key={test.id}
-        className="bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-5 shadow-xs hover:border-slate-300 transition-all flex flex-col h-full min-w-0 justify-between"
+        key={sub.key}
+        className={`bg-white rounded-3xl border transition-all flex flex-col justify-between p-5 sm:p-6 min-w-0 ${
+          isRecommended
+            ? "border-blue-200/80 shadow-md ring-1 ring-blue-500/10"
+            : "border-slate-100 shadow-sm hover:shadow-md"
+        }`}
       >
-        <div className="space-y-2.5 min-w-0 flex-1">
-          {/* Subject Tag & Optional Verified Badge */}
-          <div className="flex items-center justify-between gap-2 min-w-0">
-            <span
-              className={`text-[12px] font-semibold px-2.5 py-0.5 rounded-md border tracking-tight truncate ${badgeStyle.bg} ${badgeStyle.text} ${badgeStyle.border}`}
+        <div className="space-y-3.5 flex-1 flex flex-col min-w-0">
+          {/* Header Row: Icon + Badges */}
+          <div className="flex items-start justify-between gap-3">
+            <div
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+                isRecommended
+                  ? "bg-blue-600 text-white shadow-sm shadow-blue-500/25"
+                  : "bg-blue-50 border border-blue-200/60 text-blue-600"
+              }`}
             >
-              {test.subjectName}
-            </span>
-            {((test as any).status === "verified" ||
-              (test as any).status === "official_verified") && (
-              <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200 shrink-0 flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                <span>Verified Key</span>
-              </span>
-            )}
-          </div>
+              <Icon className="w-6 h-6" />
+            </div>
 
-          {/* Paper Title */}
-          <div>
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-              {shortTitle}
-            </h3>
-          </div>
-
-          {/* Status Line */}
-          {hasAttempted && best ? (
-            <div className="text-[13px] font-semibold text-slate-800 flex items-center gap-1.5 flex-wrap">
-              <span>
-                Best{" "}
-                <span
-                  className={
-                    isNegativeScore
-                      ? "text-rose-600 font-bold inline-flex items-center gap-1"
-                      : "text-slate-900 font-bold"
-                  }
-                >
-                  {best.totalMarks} / {best.maxMarks}
-                  {isNegativeScore && (
-                    <span
-                      tabIndex={0}
-                      role="note"
-                      aria-label="Includes negative marking (+5 / -1). Wrong answers reduce score below 0."
-                      title="Includes negative marking (+5 / -1). Wrong answers reduce score below 0."
-                      className="cursor-help inline-flex items-center focus:outline-none focus:ring-1 focus:ring-rose-500 rounded-full"
-                    >
-                      <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                    </span>
-                  )}
+            <div className="flex items-center gap-1.5 flex-wrap justify-end">
+              {stats.attemptedCount > 0 ? (
+                <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                  <span>
+                    {stats.attemptedCount} of {paperCount} Attempted
+                  </span>
                 </span>
-              </span>
-              <span className="text-slate-400 font-normal">·</span>
-              <span className="text-slate-600 font-medium">
-                {best.accuracyPercentage}%
+              ) : (
+                <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                  0/{paperCount} Attempted
+                </span>
+              )}
+
+              <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-sans">
+                Code {sub.code}
               </span>
             </div>
-          ) : (
-            <p className="text-[13px] text-slate-400 font-normal">
-              Not attempted yet
+          </div>
+
+          {/* Title & Subtitle */}
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                {sub.name}
+              </h3>
+              {isRecommended && (
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200/70 inline-flex items-center gap-1 shrink-0">
+                  <Sparkles className="w-2.5 h-2.5 text-amber-600" />
+                  Target Required
+                </span>
+              )}
+            </div>
+            <p className="text-[13px] font-normal text-slate-500 line-clamp-2 h-10 leading-relaxed">
+              {sub.subtitle}
             </p>
-          )}
+          </div>
+
+          {/* Progress bar */}
+          <div className="space-y-1 pt-1">
+            <div className="flex items-center justify-between text-[12px] font-medium text-slate-500">
+              <span>Paper Progress</span>
+              <span className="font-semibold text-slate-700 tabular-nums">
+                {stats.attemptedCount} / {paperCount} ({progressPercent}%)
+              </span>
+            </div>
+            <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
+              <div
+                className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Meta specs row matching Mocks */}
+          <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2 text-[13px] text-slate-600 font-medium">
+            <div className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span>{sub.durationMinutes} Mins</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span>50 Questions</span>
+            </div>
+            <div className="flex items-center gap-1.5 col-span-2 text-slate-700">
+              <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+              <span>{paperCount} Official NTA Shift Papers (+5/−1)</span>
+            </div>
+          </div>
         </div>
 
         {/* Bottom Actions: Pinned with mt-auto */}
-        <div className="pt-3 border-t border-slate-100 mt-4 flex items-center gap-2 w-full">
-          {hasAttempted && best ? (
-            <>
-              <Link
-                href={`/dashboard/pyqs/analysis/${best.id || test.id}`}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-sm hover:shadow-md transition-all text-center"
-              >
-                <span>Analysis</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-              <Link
-                href={`/test/${test.id}?reattempt=true`}
-                className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-[13px] transition-all text-center shrink-0"
-              >
-                <span>Re-attempt</span>
-              </Link>
-            </>
-          ) : (
-            <Link
-              href={`/test/${test.id}`}
-              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-sm hover:shadow-md transition-all text-center"
-            >
-              <span>Start</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          )}
+        <div className="pt-3 border-t border-slate-100 mt-auto flex items-center gap-2 w-full">
+          <Link
+            href={`/dashboard/pyqs/${sub.key}`}
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-sm hover:shadow-md transition-all text-center"
+          >
+            <span>View all papers</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+
+          <Link
+            href={
+              stats.isAllAttempted
+                ? `/test/${bestPaperId}?reattempt=true`
+                : `/test/${nextPaperId}`
+            }
+            className="px-3.5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-[13px] transition-all text-center flex items-center gap-1.5 shrink-0 max-w-[50%]"
+            title={
+              stats.isAllAttempted
+                ? `Re-attempt best paper for ${sub.name}`
+                : `Next: ${nextPaperTitle}`
+            }
+          >
+            {stats.isAllAttempted ? (
+              <>
+                <RotateCw className="w-3.5 h-3.5 shrink-0" />
+                <span className="truncate">Re-attempt best</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-3 h-3 fill-current shrink-0" />
+                <span className="truncate">Next: {nextPaperTitle}</span>
+              </>
+            )}
+          </Link>
         </div>
       </div>
     );
@@ -646,21 +662,23 @@ export default function PYQsPage() {
 
   return (
     <div className="w-full min-w-0 max-w-7xl mx-auto space-y-6">
-      {/* 1. Header: title and one line */}
+      {/* 1. Header with Info Tooltip & Grey Subtitle */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2">
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               Previous Year Questions
             </h1>
-            <div className="relative group inline-flex items-center">
-              <button
-                type="button"
-                aria-label="Answer keys verification notice"
-                className="p-1 text-slate-400 hover:text-slate-600 focus:text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full transition-colors cursor-help"
+            <div className="relative group inline-block">
+              <span
+                tabIndex={0}
+                role="note"
+                aria-label="Answer keys are provisional and under verification against official NTA response sheets."
+                title="Answer keys are provisional and under verification against official NTA response sheets."
+                className="cursor-help inline-flex items-center text-slate-400 hover:text-slate-600 focus:text-blue-600 focus:outline-none"
               >
                 <Info className="w-4 h-4" />
-              </button>
+              </span>
               <div
                 role="tooltip"
                 className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block group-focus-within:block z-30 w-72 p-2.5 bg-slate-900 text-white text-[12px] font-normal rounded-xl shadow-lg leading-snug pointer-events-none"
@@ -671,7 +689,7 @@ export default function PYQsPage() {
             </div>
           </div>
           <p className="text-[13px] sm:text-[14px] text-slate-500 leading-relaxed max-w-3xl">
-            Official NTA CUET shift papers · 50 questions · 60 mins · +5 / -1 marking · {progressStats.attempted} of {progressStats.total} attempted
+            Official NTA CUET shift papers · 50 questions · 60 mins · +5 / -1 marking · {totalAttemptedPapers} of {totalShiftPapers} attempted
           </p>
         </div>
 
@@ -724,112 +742,83 @@ export default function PYQsPage() {
         </div>
       )}
 
-      {/* 2. One slim toolbar row (same style as Mocks) */}
+      {/* 2. Slim Toolbar matching Mocks: Stream, Subject, and Status Filter (56-64px tall) */}
       <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-4 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1 min-w-0">
-            {/* Subject Selector grouped by stream */}
-            <div className="relative flex-1 min-w-0 sm:min-w-[240px]">
-              <select
-                aria-label="Filter by Subject"
-                value={selectedTab}
-                onChange={(e) => {
-                  setSelectedTab(e.target.value as SubjectKey);
-                  setVisibleCount(24);
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
+            {/* Stream Selector */}
+            <div className="min-w-[180px] sm:min-w-[220px]">
+              <SearchableSelect
+                ariaLabel="Filter by Stream"
+                options={streamSelectOptions}
+                value={selectedStream}
+                onChange={(val) => {
+                  setSelectedStream(val as StreamKey);
+                  setSelectedSubjectTab("all");
                 }}
-                className="w-full bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold text-[13px] px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-8 transition-colors"
-              >
-                <option value="all">All Subjects (251 Papers)</option>
-                {STREAM_GROUPS.map((group) => (
-                  <optgroup key={group.name} label={group.name}>
-                    {group.subjects.map((subKey) => {
-                      const meta = PYQ_SUBJECT_CONFIGS[subKey];
-                      if (!meta) return null;
-                      return (
-                        <option
-                          key={`opt-${group.name}-${subKey}`}
-                          value={subKey}
-                        >
-                          {meta.name} (Code {meta.code})
-                        </option>
-                      );
-                    })}
-                  </optgroup>
-                ))}
-              </select>
-              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                searchPlaceholder="Search streams..."
+              />
             </div>
 
-            {/* Sort Selector */}
-            <div className="relative sm:w-[200px] shrink-0">
-              <select
-                aria-label="Sort papers"
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value as SortOption)}
-                className="w-full bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold text-[13px] px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none pr-8 transition-colors"
-              >
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="best-score">Best Score (High to Low)</option>
-                <option value="lowest-score">Lowest Score (Low to High)</option>
-              </select>
-              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            {/* Subject Selector */}
+            <div className="min-w-[180px] sm:min-w-[240px]">
+              <SearchableSelect
+                ariaLabel="Filter by Subject"
+                options={subjectSelectOptions}
+                value={selectedSubjectTab}
+                onChange={(val) => {
+                  setSelectedSubjectTab(val);
+                }}
+                searchPlaceholder="Search subjects or codes..."
+              />
             </div>
           </div>
 
           {/* Status Filter Segmented Control */}
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-[12px] font-semibold shrink-0 justify-center">
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-[12px] font-semibold shrink-0">
             <button
               type="button"
-              onClick={() => {
-                setStatusFilter("all");
-                setVisibleCount(24);
-              }}
+              onClick={() => setStatusFilter("all")}
               className={`px-3 py-1.5 rounded-lg transition-all ${
                 statusFilter === "all"
-                  ? "bg-white text-slate-900 shadow-xs"
+                  ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              All
+              All ({PYQ_SUBJECTS.length})
             </button>
             <button
               type="button"
-              onClick={() => {
-                setStatusFilter("attempted");
-                setVisibleCount(24);
-              }}
+              onClick={() => setStatusFilter("started")}
               className={`px-3 py-1.5 rounded-lg transition-all ${
-                statusFilter === "attempted"
-                  ? "bg-white text-slate-900 shadow-xs"
+                statusFilter === "started"
+                  ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              Attempted
+              Started (
+              {PYQ_SUBJECTS.filter((s) => subjectStatsMap.get(s.key)?.hasAttempts).length}
+              )
             </button>
             <button
               type="button"
-              onClick={() => {
-                setStatusFilter("not-attempted");
-                setVisibleCount(24);
-              }}
+              onClick={() => setStatusFilter("not_started")}
               className={`px-3 py-1.5 rounded-lg transition-all ${
-                statusFilter === "not-attempted"
-                  ? "bg-white text-slate-900 shadow-xs"
+                statusFilter === "not_started"
+                  ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              Not attempted
+              Not started (
+              {PYQ_SUBJECTS.filter((s) => !subjectStatsMap.get(s.key)?.hasAttempts).length}
+              )
             </button>
           </div>
         </div>
       </div>
 
-      {/* 3. Optional "Recommended for your target" row */}
-      {targetData.hasTarget &&
-        recommendedSubjects.length > 0 &&
-        selectedTab === "all" &&
-        statusFilter === "all" && (
+      {/* 3. Recommended for your target row */}
+      {showRecommendedRow ? (
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-2">
             <div className="flex items-center gap-2">
@@ -841,153 +830,74 @@ export default function PYQsPage() {
               </h2>
             </div>
             <p className="text-[12px] font-medium text-slate-500">
-              Required for <strong>{targetData.course}</strong> at{" "}
-              <strong>{targetData.college}</strong>
+              Required for <strong>{targetData.course}</strong> at <strong>{targetData.college}</strong>
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
-            {recommendedSubjects.map(
-              ({ subKey, meta, nextPaper, attemptedCount, totalCount }) => {
-                const Icon = meta.icon;
-                const shortPaperTitle = nextPaper
-                  ? formatShortPaperTitle(nextPaper)
-                  : `${meta.name} Shift Paper`;
-
-                return (
-                  <div
-                    key={subKey}
-                    className="bg-white rounded-2xl border border-blue-200/80 p-4 sm:p-5 shadow-xs hover:border-blue-400 transition-all flex flex-col h-full min-w-0 justify-between relative overflow-hidden"
-                  >
-                    <div className="space-y-2.5 min-w-0 flex-1">
-                      <div className="flex items-center gap-2.5 pt-0.5">
-                        <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                          <Icon className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <h3 className="text-base font-bold text-slate-900 leading-tight truncate">
-                            {meta.name}
-                          </h3>
-                          <span className="text-[12px] text-slate-500 font-medium">
-                            Code {meta.code} · {attemptedCount} of {totalCount} attempted
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="pt-1">
-                        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
-                          Next Paper
-                        </span>
-                        <p className="text-[13px] font-bold text-slate-800 truncate">
-                          {shortPaperTitle}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="pt-3 border-t border-slate-100 mt-3 flex items-center gap-2 w-full">
-                      {nextPaper ? (
-                        <Link
-                          href={`/test/${nextPaper.id}`}
-                          className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-sm hover:shadow-md transition-all text-center"
-                        >
-                          <Play className="w-3 h-3 fill-current" />
-                          <span>Start next paper</span>
-                        </Link>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedTab(subKey);
-                            setVisibleCount(24);
-                          }}
-                          className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-semibold text-[13px] hover:bg-slate-200 transition-all text-center"
-                        >
-                          <span>View All Papers</span>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              }
-            )}
+            {recommendedSubjects.map((sub) => renderSubjectCard(sub, true))}
           </div>
         </div>
-      )}
-
-      {/* 4. Papers Grid Grouped by Month */}
-      {groupedSections.length > 0 ? (
-        <div className="space-y-6">
-          {groupedSections.map((section) => (
-            <div key={section.key} className="space-y-3">
-              {/* Simple sticky month header with thin divider */}
-              <div className="sticky top-0 z-10 bg-slate-50/95 backdrop-blur-xs py-2 border-b border-slate-200/80 flex items-center justify-between">
-                <h2 className="text-sm sm:text-base font-bold text-slate-800">
-                  {section.label}{" "}
-                  <span className="text-slate-400 font-normal">
-                    · {section.count}{" "}
-                    {section.count === 1 ? "paper" : "papers"}
-                  </span>
-                </h2>
-              </div>
-
-              {/* 3 columns desktop, 2 on tablet, 1 on mobile */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
-                {section.tests.map(renderCard)}
-              </div>
-            </div>
-          ))}
-
-          {/* Load More Pagination Button */}
-          {visibleCount < sortedPapers.length && (
-            <div className="pt-4 pb-2 text-center">
-              <button
-                type="button"
-                onClick={() => setVisibleCount((prev) => prev + 24)}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs border border-slate-200 shadow-xs hover:shadow-sm transition-all cursor-pointer"
-              >
-                <span>Load More Official Papers</span>
-                <span className="text-slate-400 font-medium">
-                  (Showing {Math.min(visibleCount, sortedPapers.length)} of{" "}
-                  {sortedPapers.length})
-                </span>
-                <ChevronDown className="w-4 h-4 text-slate-500" />
-              </button>
-            </div>
-          )}
+      ) : !targetData.hasTarget && !isFilterActive ? (
+        <div className="bg-blue-50/50 border border-blue-200/60 rounded-2xl p-3 sm:p-4 flex items-center justify-between gap-3 text-[13px] text-blue-900">
+          <div className="flex items-center gap-2.5">
+            <Target className="w-4 h-4 text-blue-600 shrink-0" />
+            <span>Set your dream college & course to see priority PYQ recommendations.</span>
+          </div>
+          <Link
+            href="/dashboard/profile"
+            className="text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline shrink-0"
+          >
+            Set your dream college &rarr;
+          </Link>
         </div>
-      ) : (
-        /* Empty State */
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-8 sm:p-12 shadow-xs text-center space-y-4">
-          <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mx-auto text-slate-500">
-            <RotateCcw className="w-6 h-6 stroke-[2]" />
+      ) : null}
+
+      {/* 4. All Other Subjects Grid */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+            {showRecommendedRow
+              ? "All other admission subjects"
+              : selectedSubjectTab !== "all"
+              ? `${PYQ_SUBJECTS.find((s) => s.key === selectedSubjectTab)?.name || "Selected Subject"} Papers`
+              : selectedStream !== "all"
+              ? `${STREAM_CONFIGS[selectedStream].name}`
+              : "All CUET UG PYQ Subjects"}
+            <span className="text-xs font-normal text-slate-400 ml-2 font-mono">
+              ({otherSubjects.length})
+            </span>
+          </h2>
+        </div>
+
+        {otherSubjects.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
+            {otherSubjects.map((sub) => renderSubjectCard(sub, false))}
           </div>
-          <div className="space-y-1.5 max-w-md mx-auto">
-            <h3 className="text-base sm:text-lg font-bold text-slate-900">
-              No matching past year papers found
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Try adjusting your status filter or selected subject to view other official CUET shift papers.
-            </p>
-          </div>
-          <div className="pt-2">
+        ) : (
+          <div className="bg-white rounded-3xl border border-slate-100 p-8 text-center space-y-2">
+            <p className="text-sm font-semibold text-slate-700">No subjects match the selected filters.</p>
             <button
+              type="button"
               onClick={() => {
+                setSelectedStream("all");
+                setSelectedSubjectTab("all");
                 setStatusFilter("all");
-                setSelectedTab("all");
-                setVisibleCount(24);
               }}
-              className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
+              className="text-xs font-bold text-blue-600 hover:underline cursor-pointer"
             >
-              <span>Reset All Filters</span>
+              Reset filters
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Answer-key notice at bottom of the page */}
-      <p className="text-[13px] text-slate-400 text-center pt-4 pb-2">
-        Answer keys are provisional and under verification against official NTA response sheets.
-      </p>
+      <div className="pt-4 border-t border-slate-200/60 text-center">
+        <p className="text-[13px] text-slate-400">
+          Answer keys are provisional and under verification against official NTA response sheets.
+        </p>
+      </div>
     </div>
   );
 }

@@ -13,7 +13,6 @@ import {
 } from 'recharts';
 import { 
   TrendingUp, 
-  ChevronDown, 
   Layers, 
   Sparkles, 
   Calendar, 
@@ -25,6 +24,7 @@ import {
 import { useTestStore } from '@/lib/store/useTestStore';
 import { useIsClient } from '@/lib/hooks/useIsClient';
 import { GlowCard } from './GlowCard';
+import SearchableSelect from '@/components/ui/SearchableSelect';
 
 interface SubjectConfig {
   key: 'Physics' | 'Chemistry' | 'Maths' | 'English';
@@ -341,18 +341,17 @@ export const ScoreImprovementTrend: React.FC = () => {
           </div>
 
           {/* Time Filter Dropdown */}
-          <div className="relative">
-            <select
-              value={selectedRange}
-              onChange={(e) => setSelectedRange(e.target.value as any)}
-              className="appearance-none bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 text-xs font-semibold text-slate-700 pl-3 pr-8 py-1.5 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-500/20 action-glow"
-            >
-              <option value="12M">Full Cycle (12M)</option>
-              <option value="6M">Last 6 Mocks</option>
-              <option value="30D">Last 3 Mocks</option>
-            </select>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
+          <SearchableSelect
+            ariaLabel="Select time range"
+            value={selectedRange}
+            onChange={(val) => setSelectedRange(val as any)}
+            options={[
+              { value: "12M", label: "Full Cycle (12M)" },
+              { value: "6M", label: "Last 6 Mocks" },
+              { value: "30D", label: "Last 3 Mocks" },
+            ]}
+            buttonClassName="bg-slate-50 hover:bg-slate-100/80 border-slate-200/80 text-xs font-semibold text-slate-700 px-3 py-1.5 rounded-xl"
+          />
         </div>
       </div>
 

@@ -2,595 +2,549 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import {
   ArrowLeft,
-  ArrowRight,
-  FileText,
-  RotateCcw,
-  Trophy,
-  Timer,
-  CheckCircle2,
-  AlertTriangle,
-  Layers,
-  BookOpen,
-  ChevronDown,
-  ChevronUp,
+  Play,
+  RotateCw,
   BarChart2,
-  Sparkles,
+  Trophy,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
 } from "lucide-react";
-import MathRenderer from "@/components/cbt/MathRenderer";
-import { getSubjectMetadata } from "@/lib/config/subjectRegistry";
-import { getPYQTestsForSubject, CUET_SUBJECTS, PYQTestItem } from "@/lib/data/subjects";
+import {
+  getPYQTestsForSubject,
+  PYQTestItem,
+  SUBJECT_DURATION_MINUTES,
+} from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { getTestAttemptStats } from "@/lib/analytics";
 import { useIsClient } from "@/lib/hooks/useIsClient";
-import pyqChaptersData from "@/lib/data/pyq_chapters.json";
+import { deduplicateTestAttempts, normalizeSubject } from "@/lib/analytics";
+import SearchableSelect, { SearchableSelectOption } from "@/components/ui/SearchableSelect";
+import { RecordedTestAttempt } from "@/types";
 
-type SubjectPageProps = {
+interface SubjectPYQPageProps {
   params: {
     subject: string;
   };
-};
-
-interface ChapterQuestion {
-  id: string | number;
-  questionNumber: number;
-  paperNumber: string;
-  paperLabel: string;
-  questionText: string;
-  options: Array<{ id: string; text: string }>;
-  correctOption: string;
-  difficulty: "easy" | "medium" | "hard" | string;
-  difficultyLevel: number;
-  topic: string;
-  detailedSolution: string;
 }
 
-interface ChapterItem {
-  chapterName: string;
-  questionCount: number;
-  weightagePercent: number;
-  difficultyCounts: {
-    easy: number;
-    medium: number;
-    hard: number;
-  };
-  topics: string[];
-  questions: ChapterQuestion[];
+type StatusFilter = "all" | "attempted" | "not_attempted";
+type SortOption = "newest" | "oldest" | "best_score" | "lowest_score";
+
+function formatShortPaperTitle(test: PYQTestItem): string {
+  if (test.dateDisplay && test.shift) {
+    return `${test.dateDisplay} · ${test.shift}`;
+  }
+  if (test.dateDisplay) return test.dateDisplay;
+  const match = test.label.match(
+    /\((\d{1,2}\s+[A-Za-z]+\s+\d{4})\s+(Shift\s+\d+)\)/i
+  );
+  if (match && match[1] && match[2]) {
+    return `${match[1]} · ${match[2]}`;
+  }
+  if (test.shift && test.year) {
+    return `CUET ${test.year} · ${test.shift}`;
+  }
+  return test.label;
 }
 
-export default function SubjectPYQListPage({ params }: SubjectPageProps) {
+export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
+  const routeParams = useParams();
+  const rawSubject = (params?.subject || routeParams?.subject || "") as string;
+  const subjectKey = decodeURIComponent(rawSubject).toLowerCase().trim();
+
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
-  const subjectKey = params.subject.toLowerCase();
 
-  const [activeTab, setActiveTab] = useState<"papers" | "chapters">("papers");
-  const [difficultyFilter, setDifficultyFilter] = useState<"all" | "easy" | "medium" | "hard">("all");
-  const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
-  const [expandedSolutionId, setExpandedSolutionId] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [sortBy, setSortBy] = useState<SortOption>("newest");
 
-  const metadata = getSubjectMetadata(subjectKey);
-  const subjectConfig = CUET_SUBJECTS.find(
-    (s) => s.id === subjectKey || s.name.toLowerCase() === subjectKey
-  );
-
-  const pyqTests: PYQTestItem[] = getPYQTestsForSubject(subjectKey);
-  const isLive = metadata?.supportedStatus === "active" || pyqTests.length > 0;
-
-  const subjectName =
-    metadata?.name ??
-    subjectConfig?.name ??
-    (subjectKey.charAt(0).toUpperCase() + subjectKey.slice(1).replace(/[-_]/g, " "));
-
-  const code = metadata?.officialCode ?? subjectConfig?.code ?? "300";
-  const title = `${subjectName} Official CUET PYQ Papers`;
+  const normalized = normalizeSubject(subjectKey);
+  const subjectName = normalized.name;
 
   const durationMinutes =
-    code === "322" || code === "306" || code === "319" || code === "301" || code === "309" || code === "308" || code === "501"
-      ? 60
-      : 45;
+    SUBJECT_DURATION_MINUTES[subjectKey] ??
+    (["322", "306", "319", "301", "309", "308", "501"].includes(normalized.key) ? 60 : 45);
 
-  const subtitle = isLive
-    ? `${pyqTests.length} Official NTA CUET CBT Past Year Papers • 50 Compulsory Questions • ${durationMinutes} Minutes each with verified NCERT solutions`
-    : "50 Compulsory Questions per Paper • Official NTA CUET CBT Past Year Papers";
+  const pyqPapers: PYQTestItem[] = useMemo(() => {
+    return getPYQTestsForSubject(subjectKey);
+  }, [subjectKey]);
 
-  // Chapter-wise data from precomputed index
-  const subjectChaptersInfo = ((pyqChaptersData as unknown) as Record<string, {
-    subjectSlug: string;
-    subjectName: string;
-    totalPapers: number;
-    totalQuestions: number;
-    chaptersCount: number;
-    chapters: ChapterItem[];
-  }>)[subjectKey] || null;
+  // Clean deduplicated test attempts strictly matching PYQs
+  const cleanAttempts = useMemo(() => {
+    const deduped = deduplicateTestAttempts(testAttempts || []);
+    return deduped.filter((att) => {
+      const id = (att.testId || "").toLowerCase();
+      const title = (att.testTitle || "").toLowerCase();
+      return id.includes("-pyq") || id.includes("pyq") || title.includes("shift") || title.includes("pyq");
+    });
+  }, [testAttempts]);
 
-  const filteredChapters = useMemo(() => {
-    if (!subjectChaptersInfo?.chapters) return [];
-    if (difficultyFilter === "all") return subjectChaptersInfo.chapters;
-    return subjectChaptersInfo.chapters.filter(
-      (c) => (c.difficultyCounts[difficultyFilter] || 0) > 0
-    );
-  }, [subjectChaptersInfo, difficultyFilter]);
+  // Map each paper to its attempt history and authoritative best attempt
+  const paperCardsData = useMemo(() => {
+    return pyqPapers.map((test) => {
+      const matchingAttempts = cleanAttempts.filter((att) => att.testId === test.id);
 
-  const totalQuestionsInSubject = subjectChaptersInfo?.totalQuestions ?? pyqTests.length * 50;
+      const sortedChronological = [...matchingAttempts].sort(
+        (a, b) => new Date(a.submittedAt || 0).getTime() - new Date(b.submittedAt || 0).getTime()
+      );
+
+      let bestAttempt: RecordedTestAttempt | null = null;
+      let bestAttemptNumber = 1;
+
+      const firstAttempt = sortedChronological[0];
+      if (firstAttempt) {
+        bestAttempt = sortedChronological.reduce<RecordedTestAttempt>((best, curr, cIdx) => {
+          const currScore = curr.totalMarks ?? 0;
+          const bestScore = best.totalMarks ?? 0;
+          if (currScore > bestScore) {
+            bestAttemptNumber = cIdx + 1;
+            return curr;
+          }
+          if (currScore === bestScore) {
+            if ((curr.accuracyPercentage ?? 0) > (best.accuracyPercentage ?? 0)) {
+              bestAttemptNumber = cIdx + 1;
+              return curr;
+            }
+          }
+          return best;
+        }, firstAttempt);
+      }
+
+      let lastAttemptDate = "";
+      const latest = sortedChronological[sortedChronological.length - 1];
+      if (latest && latest.submittedAt) {
+        const d = new Date(latest.submittedAt);
+        if (!isNaN(d.getTime())) {
+          lastAttemptDate = d.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          });
+        }
+      }
+
+      return {
+        test,
+        shortTitle: formatShortPaperTitle(test),
+        attemptsCount: sortedChronological.length,
+        hasAttempted: Boolean(bestAttempt),
+        bestAttempt,
+        bestAttemptNumber,
+        lastAttemptDate,
+      };
+    });
+  }, [pyqPapers, cleanAttempts]);
+
+  // Precomputed subject stats
+  const subjectStats = useMemo(() => {
+    const attemptedCards = paperCardsData.filter((c) => c.hasAttempted);
+    const attemptedCount = attemptedCards.length;
+    const totalCount = paperCardsData.length;
+
+    let peakScore: number | null = null;
+    let totalAcc = 0;
+    for (const c of attemptedCards) {
+      if (c.bestAttempt) {
+        const score = c.bestAttempt.totalMarks ?? 0;
+        if (peakScore === null || score > peakScore) peakScore = score;
+        totalAcc += c.bestAttempt.accuracyPercentage ?? 0;
+      }
+    }
+
+    const firstUnattempted = paperCardsData.find((c) => !c.hasAttempted);
+    const nextPaper = firstUnattempted ? firstUnattempted.test : pyqPapers[0] || null;
+
+    return {
+      attemptedCount,
+      totalCount,
+      peakScore,
+      peakMaxMarks: 250,
+      averageAccuracy: attemptedCount > 0 ? Math.round(totalAcc / attemptedCount) : 0,
+      nextPaper,
+      isAllAttempted: totalCount > 0 && attemptedCount >= totalCount,
+    };
+  }, [paperCardsData, pyqPapers]);
+
+  // Available years from papers
+  const availableYears = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of pyqPapers) {
+      if (p.year) set.add(String(p.year));
+    }
+    return Array.from(set).sort().reverse();
+  }, [pyqPapers]);
+
+  const yearSelectOptions: SearchableSelectOption[] = useMemo(() => {
+    const list: SearchableSelectOption[] = [
+      { value: "all", label: `All Years (${pyqPapers.length} Papers)` },
+    ];
+    for (const yr of availableYears) {
+      const count = pyqPapers.filter((p) => String(p.year) === yr).length;
+      list.push({
+        value: yr,
+        label: `CUET ${yr} (${count} Papers)`,
+      });
+    }
+    return list;
+  }, [availableYears, pyqPapers]);
+
+  const sortSelectOptions: SearchableSelectOption[] = useMemo(() => {
+    return [
+      { value: "newest", label: "Newest First" },
+      { value: "oldest", label: "Oldest First" },
+      { value: "best_score", label: "Best Score (Highest)" },
+      { value: "lowest_score", label: "Lowest Score" },
+    ];
+  }, []);
+
+  // Filter & sort cards
+  const displayedCards = useMemo(() => {
+    let list = paperCardsData;
+
+    // Filter by year
+    if (selectedYear !== "all") {
+      list = list.filter((c) => String(c.test.year) === selectedYear);
+    }
+
+    // Filter by status
+    if (statusFilter === "attempted") {
+      list = list.filter((c) => c.hasAttempted);
+    } else if (statusFilter === "not_attempted") {
+      list = list.filter((c) => !c.hasAttempted);
+    }
+
+    // Sort cards
+    return [...list].sort((a, b) => {
+      if (sortBy === "newest") {
+        const dateA = a.test.examDate || "";
+        const dateB = b.test.examDate || "";
+        if (dateB !== dateA) return dateB.localeCompare(dateA);
+        return (b.test.shift || "").localeCompare(a.test.shift || "");
+      }
+      if (sortBy === "oldest") {
+        const dateA = a.test.examDate || "";
+        const dateB = b.test.examDate || "";
+        if (dateA !== dateB) return dateA.localeCompare(dateB);
+        return (a.test.shift || "").localeCompare(b.test.shift || "");
+      }
+      if (sortBy === "best_score") {
+        const scoreA = a.bestAttempt?.totalMarks ?? -9999;
+        const scoreB = b.bestAttempt?.totalMarks ?? -9999;
+        return scoreB - scoreA;
+      }
+      if (sortBy === "lowest_score") {
+        const hasA = a.hasAttempted;
+        const hasB = b.hasAttempted;
+        if (hasA && !hasB) return -1;
+        if (!hasA && hasB) return 1;
+        const scoreA = a.bestAttempt?.totalMarks ?? 9999;
+        const scoreB = b.bestAttempt?.totalMarks ?? 9999;
+        return scoreA - scoreB;
+      }
+      return 0;
+    });
+  }, [paperCardsData, selectedYear, statusFilter, sortBy]);
+
+  const progressPercent = Math.min(
+    100,
+    Math.round((subjectStats.attemptedCount / (pyqPapers.length || 1)) * 100)
+  );
+
+  if (!isClient) {
+    return <div className="min-h-screen bg-[#F8FAFC]" />;
+  }
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-4 md:p-6 lg:p-8 space-y-6">
-      {/* Navigation & Header */}
-      <div className="space-y-3">
+    <div className="w-full min-w-0 max-w-7xl mx-auto space-y-5 sm:space-y-6">
+      {/* 1. Breadcrumb navigation */}
+      <div>
         <Link
           href="/dashboard/pyqs"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+          className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-500 hover:text-slate-800 transition-colors"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Back to All PYQ Papers
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Previous Year Questions</span>
         </Link>
+      </div>
 
-        <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm space-y-3">
-          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/20 flex items-center justify-center shrink-0">
-              <FileText className="w-5 h-5 stroke-[2.2]" />
+      {/* 2. Header matching Mocks subject page */}
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="space-y-1 min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+              {subjectName} PYQ Papers
+            </h1>
+            <p className="text-[13px] sm:text-[14px] text-slate-500 font-medium truncate max-w-2xl">
+              Official NTA CUET CBT shift papers with complete step-by-step NCERT solutions.
+            </p>
+            <div className="flex items-center gap-2 text-[13px] text-slate-600 font-medium pt-0.5">
+              <span>{durationMinutes} min</span>
+              <span className="text-slate-300">·</span>
+              <span>50 questions</span>
+              <span className="text-slate-300">·</span>
+              <span className="font-semibold text-slate-700">+5 / −1 marking</span>
             </div>
-            {title}
-          </h1>
-          <p className="text-sm text-slate-500 font-medium">{subtitle}</p>
+          </div>
 
-          {/* View Mode Toggle: Official Shift Papers vs Chapter-Wise Division */}
-          <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-2xl">
-              <button
-                type="button"
-                onClick={() => setActiveTab("papers")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                  activeTab === "papers"
-                    ? "bg-white text-slate-900 shadow-xs"
-                    : "text-slate-500 hover:text-slate-900"
-                }`}
-              >
-                <FileText className="w-3.5 h-3.5" />
-                <span>Official Shift Papers ({pyqTests.length})</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("chapters")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                  activeTab === "chapters"
-                    ? "bg-white text-slate-900 shadow-xs"
-                    : "text-slate-500 hover:text-slate-900"
-                }`}
-              >
-                <Layers className="w-3.5 h-3.5 text-blue-600" />
-                <span>Chapter-Wise Division ({subjectChaptersInfo?.chaptersCount || 0})</span>
-              </button>
-            </div>
+          {/* Primary CTA button in header: opens first unattempted paper */}
+          <div className="shrink-0 flex items-center gap-2">
+            <Link
+              href={
+                subjectStats.isAllAttempted
+                  ? `/test/${pyqPapers[0]?.id || `${subjectKey}-pyq-1`}?reattempt=true`
+                  : `/test/${subjectStats.nextPaper?.id || `${subjectKey}-pyq-1`}`
+              }
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-sm hover:shadow-md transition-all cursor-pointer"
+            >
+              {subjectStats.isAllAttempted ? (
+                <>
+                  <RotateCw className="w-4 h-4" />
+                  <span>Re-attempt All Papers</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-4 h-4 fill-current" />
+                  <span>
+                    Start Next Paper (
+                    {subjectStats.nextPaper ? formatShortPaperTitle(subjectStats.nextPaper) : "Shift 1"}
+                    )
+                  </span>
+                </>
+              )}
+            </Link>
+          </div>
+        </div>
 
-            <div className="text-xs text-slate-500 font-medium flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>100% NCERT Solutions & Option Analysis</span>
+        {/* Stat Chips + Progress bar */}
+        <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold">
+            <span className="px-3 py-1 rounded-lg bg-blue-50 text-blue-800 border border-blue-200/60 tabular-nums">
+              {subjectStats.attemptedCount} of {pyqPapers.length} Attempted
+            </span>
+
+            <span className="px-3 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200/60 tabular-nums">
+              Peak Score: {subjectStats.peakScore !== null ? `${subjectStats.peakScore} / 250` : "—"}
+            </span>
+
+            <span className="px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200/60 tabular-nums">
+              Avg Accuracy: {subjectStats.attemptedCount > 0 ? `${subjectStats.averageAccuracy}%` : "—"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 text-[12px] text-slate-500 min-w-[180px]">
+            <span className="shrink-0 font-medium tabular-nums">{progressPercent}% Completed</span>
+            <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
+              <div
+                className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                style={{ width: `${progressPercent}%` }}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* VIEW 1: OFFICIAL SHIFT PAPERS */}
-      {activeTab === "papers" && (
-        <div className="space-y-6 animate-in fade-in duration-200">
-          {/* Phase A Verification Notice Banner */}
-          {pyqTests.length > 0 && (
-            <div className="bg-amber-50/90 border border-amber-200/90 rounded-3xl p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center gap-4 text-amber-900">
-              <div className="w-10 h-10 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0 text-amber-700">
-                <AlertTriangle className="w-5 h-5 stroke-[2.2]" />
-              </div>
-              <div className="space-y-0.5 flex-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-bold text-sm text-amber-950">
-                    Official NTA Past-Year Papers • Authentic CBT Simulation
-                  </h3>
-                  <span className="text-[10px] font-bold bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded-full border border-amber-300">
-                    100% Solved
-                  </span>
-                </div>
-                <p className="text-xs text-amber-800 leading-relaxed font-medium">
-                  Official CUET UG Computer-Based Tests with complete question telemetry, difficulty breakdown, chapter performance matrix, and verified NCERT step-by-step solutions.
-                </p>
-              </div>
-            </div>
-          )}
+      {/* 3. Toolbar: Year dropdown, Status segmented filter & Sort control */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-3.5 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
+          {/* Year Selector */}
+          <div className="min-w-[160px] sm:min-w-[190px]">
+            <SearchableSelect
+              ariaLabel="Filter by Year"
+              options={yearSelectOptions}
+              value={selectedYear}
+              onChange={(val) => setSelectedYear(val)}
+              searchPlaceholder="Search exam years..."
+            />
+          </div>
 
-          {/* PYQ Tests Grid */}
-          {isLive && pyqTests.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-              {pyqTests.map((test) => {
-                const stats = isClient
-                  ? getTestAttemptStats(testAttempts, test.id)
-                  : { attemptsCount: 0, bestAttempt: null, latestAttempt: null, hasAttempted: false };
-                const hasAttempted = stats.hasAttempted && stats.bestAttempt !== null;
-                const best = stats.bestAttempt;
+          {/* Status segmented control */}
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-[12px] font-semibold shrink-0">
+            <button
+              type="button"
+              onClick={() => setStatusFilter("all")}
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                statusFilter === "all"
+                  ? "bg-white text-slate-900 shadow-xs font-bold"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              All ({paperCardsData.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setStatusFilter("attempted")}
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                statusFilter === "attempted"
+                  ? "bg-white text-slate-900 shadow-xs font-bold"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Attempted ({subjectStats.attemptedCount})
+            </button>
+            <button
+              type="button"
+              onClick={() => setStatusFilter("not_attempted")}
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                statusFilter === "not_attempted"
+                  ? "bg-white text-slate-900 shadow-xs font-bold"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Not attempted ({paperCardsData.length - subjectStats.attemptedCount})
+            </button>
+          </div>
+        </div>
 
-                return (
-                  <div
-                    key={test.id}
-                    className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
-                  >
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-bold uppercase text-slate-400 tracking-wider">
-                          {subjectName} • Code {code}
-                        </span>
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
-                            {test.year} CBT
-                          </span>
-                          <span className="text-[10px] font-semibold bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200/60 flex items-center gap-1">
-                            <CheckCircle2 className="w-2.5 h-2.5 text-blue-600" />
-                            <span>Official Key</span>
-                          </span>
-                        </div>
-                      </div>
+        {/* Sort dropdown */}
+        <div className="flex items-center gap-2">
+          <span className="text-[12px] font-medium text-slate-500">Sort by:</span>
+          <div className="min-w-[170px]">
+            <SearchableSelect
+              ariaLabel="Sort papers"
+              options={sortSelectOptions}
+              value={sortBy}
+              onChange={(val) => setSortBy(val as SortOption)}
+              searchPlaceholder="Sort order..."
+            />
+          </div>
+        </div>
+      </div>
 
-                      <div>
-                        <h2 className="text-lg font-bold text-slate-900 leading-snug">{test.label}</h2>
-                        <p className="text-xs text-slate-500 font-medium mt-0.5">{test.yearLabel}</p>
-                      </div>
+      {/* 4. Paper Cards Grid (3 cols desktop, 2 cols tablet, 1 col mobile) */}
+      {displayedCards.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
+          {displayedCards.map((card) => {
+            const { test, shortTitle, attemptsCount, hasAttempted, bestAttempt, bestAttemptNumber, lastAttemptDate } =
+              card;
+            const isNegativeScore = (bestAttempt?.totalMarks ?? 0) < 0;
 
-                      {/* Best Score Badge if attempted */}
-                      {hasAttempted && best && (
-                        <div className="px-3.5 py-2 rounded-2xl bg-amber-50/70 border border-amber-200/60 flex items-center justify-between gap-2 text-xs font-semibold text-amber-900">
+            return (
+              <div
+                key={test.id}
+                className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4 min-w-0"
+              >
+                <div className="space-y-3 flex-1 flex flex-col min-w-0">
+                  {/* Title & Verified Badge */}
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                      {shortTitle}
+                    </h3>
+                    {((test as any).status === "verified" ||
+                      (test as any).status === "official_verified") && (
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <span>Verified</span>
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Status area: Fixed minimum height (~56px) on every card */}
+                  <div className="min-h-[56px] flex flex-col justify-center">
+                    {hasAttempted && bestAttempt ? (
+                      <div className="px-3.5 py-2.5 rounded-2xl bg-amber-50/70 border border-amber-200/60 text-slate-900 space-y-1 text-[13px]">
+                        <div className="flex items-center justify-between gap-1.5 font-bold">
                           <div className="flex items-center gap-1.5">
                             <Trophy className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                            <span>
-                              Best: {best.totalMarks} / {best.maxMarks}
-                            </span>
-                          </div>
-                          <span className="text-amber-700/80 text-[11px] font-mono">
-                            {best.accuracyPercentage}% Acc • {stats.attemptsCount}{" "}
-                            {stats.attemptsCount === 1 ? "attempt" : "attempts"}
-                          </span>
-                        </div>
-                      )}
-
-                      <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-                        <span className="flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                          {test.questions} Compulsory Qs
-                        </span>
-                        <span>•</span>
-                        <span className="flex items-center gap-1">
-                          <Timer className="w-3.5 h-3.5" />
-                          {test.duration}
-                        </span>
-                      </div>
-
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {test.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-[10px] font-medium bg-slate-50 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200/60"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
-                      {hasAttempted ? (
-                        <div className="flex items-center gap-2">
-                          <Link
-                            href={`/test/${test.id}?reattempt=true`}
-                            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-2xs hover:shadow-sm transition-all"
-                          >
-                            <RotateCcw className="w-3.5 h-3.5 stroke-[2.2]" />
-                            <span>Re-attempt CBT</span>
-                          </Link>
-                          <Link
-                            href={`/dashboard/pyqs/analysis/${best?.id || test.id}`}
-                            className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all flex items-center gap-1.5"
-                          >
-                            <BarChart2 className="w-3.5 h-3.5 text-blue-600" />
-                            <span>Result & Analysis</span>
-                          </Link>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <Link
-                            href={`/test/${test.id}`}
-                            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all"
-                          >
-                            <span>Start Official Paper</span>
-                            <ArrowRight className="w-4 h-4" />
-                          </Link>
-                          <Link
-                            href={`/dashboard/pyqs/analysis/${test.id}`}
-                            className="px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all flex items-center gap-1"
-                            title="View Solutions & Chapter Analysis"
-                          >
-                            <BookOpen className="w-3.5 h-3.5 text-slate-500" />
-                            <span>Solutions</span>
-                          </Link>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm text-center space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/60 flex items-center justify-center mx-auto text-amber-600">
-                <RotateCcw className="w-6 h-6 stroke-[2]" />
-              </div>
-              <div className="space-y-1.5 max-w-md mx-auto">
-                <h3 className="text-xl font-bold text-slate-900">{title} In Preparation</h3>
-                <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                  Official NTA past year papers for {subjectName} (Code {code}) will be published shortly.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* VIEW 2: CHAPTER-WISE DIVISION */}
-      {activeTab === "chapters" && (
-        <div className="space-y-6 animate-in fade-in duration-200">
-          {/* Chapter Division Summary Card */}
-          <div className="bg-gradient-to-br from-indigo-900 via-slate-900 to-slate-950 text-white rounded-3xl p-6 sm:p-8 shadow-lg space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-300 bg-indigo-950/80 px-3 py-1 rounded-full border border-indigo-800/60 inline-flex items-center gap-1.5 mb-2">
-                  <Layers className="w-3 h-3 text-indigo-400" />
-                  NCERT Syllabus Chapter Division
-                </span>
-                <h2 className="text-2xl font-bold tracking-tight">
-                  {subjectName} Chapter-Wise Past Year Questions
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-300 font-medium mt-1">
-                  All {totalQuestionsInSubject.toLocaleString()} authentic CUET UG questions cataloged by NCERT chapter, past exam weightage, and difficulty level.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 text-center min-w-[100px]">
-                  <p className="text-2xl font-extrabold font-mono text-white">
-                    {subjectChaptersInfo?.chaptersCount || 0}
-                  </p>
-                  <p className="text-[10px] uppercase font-bold text-slate-300 tracking-wider mt-0.5">Chapters</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 text-center min-w-[100px]">
-                  <p className="text-2xl font-extrabold font-mono text-indigo-300">
-                    {totalQuestionsInSubject}
-                  </p>
-                  <p className="text-[10px] uppercase font-bold text-slate-300 tracking-wider mt-0.5">Questions</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Filter by Difficulty */}
-            <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-              <span className="text-xs text-slate-300 font-medium">Filter chapters by difficulty:</span>
-              <div className="flex items-center gap-1.5 bg-black/30 p-1 rounded-xl border border-white/10">
-                {(["all", "easy", "medium", "hard"] as const).map((diff) => (
-                  <button
-                    key={diff}
-                    type="button"
-                    onClick={() => setDifficultyFilter(diff)}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold capitalize transition-all cursor-pointer ${
-                      difficultyFilter === diff
-                        ? "bg-white text-slate-900 shadow-xs"
-                        : "text-slate-300 hover:text-white"
-                    }`}
-                  >
-                    {diff === "all" ? "All Levels" : diff}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Chapters List */}
-          <div className="space-y-4">
-            {filteredChapters.map((chapter, idx) => {
-              const isExpanded = expandedChapter === chapter.chapterName;
-
-              return (
-                <div
-                  key={chapter.chapterName}
-                  className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden transition-all hover:border-slate-200"
-                >
-                  {/* Chapter Header / Summary Row */}
-                  <div className="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="space-y-2 flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full border border-slate-200">
-                          Chapter {idx + 1}
-                        </span>
-                        <span className="text-[10px] font-bold bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200/60">
-                          {chapter.weightagePercent}% Weightage
-                        </span>
-                        <span className="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
-                          {chapter.questionCount} Questions in PYQs
-                        </span>
-                      </div>
-
-                      <h3 className="text-lg font-bold text-slate-900">{chapter.chapterName}</h3>
-
-                      {/* Topics pills */}
-                      {chapter.topics.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 pt-0.5">
-                          {chapter.topics.slice(0, 5).map((t) => (
+                            <span className="text-amber-900">Best:</span>
                             <span
-                              key={t}
-                              className="text-[10px] font-medium bg-slate-50 text-slate-600 px-2 py-0.5 rounded-md border border-slate-100"
+                              className={`tabular-nums ${
+                                isNegativeScore ? "text-rose-600 font-extrabold" : "text-slate-900"
+                              }`}
                             >
-                              {t}
+                              {bestAttempt.totalMarks} / {bestAttempt.maxMarks || 250}
                             </span>
-                          ))}
-                          {chapter.topics.length > 5 && (
-                            <span className="text-[10px] text-slate-400 font-medium self-center">
-                              +{chapter.topics.length - 5} more topics
-                            </span>
+                            {isNegativeScore && (
+                              <span
+                                tabIndex={0}
+                                role="tooltip"
+                                aria-label="Includes negative marking (+5 / -1). Wrong answers reduce score below 0."
+                                title="Includes negative marking (+5 / -1). Wrong answers reduce score below 0."
+                                className="inline-flex items-center text-rose-600 cursor-help focus:outline-none"
+                              >
+                                <AlertCircle className="w-3.5 h-3.5" />
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[12px] font-normal text-amber-800">
+                            Attempt #{bestAttemptNumber}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-1 text-[12px] text-amber-900/80 font-normal truncate">
+                          <span>{bestAttempt.accuracyPercentage}% accuracy</span>
+                          <span>·</span>
+                          <span>
+                            {attemptsCount} {attemptsCount === 1 ? "attempt" : "attempts"}
+                          </span>
+                          {lastAttemptDate && (
+                            <>
+                              <span>·</span>
+                              <span>Last: {lastAttemptDate}</span>
+                            </>
                           )}
                         </div>
-                      )}
-                    </div>
-
-                    {/* Difficulty Pills & Action */}
-                    <div className="flex flex-wrap items-center gap-3 shrink-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md border border-emerald-200/60">
-                          {chapter.difficultyCounts.easy} Easy
-                        </span>
-                        <span className="text-[10px] font-semibold bg-amber-50 text-amber-700 px-2 py-0.5 rounded-md border border-amber-200/60">
-                          {chapter.difficultyCounts.medium} Medium
-                        </span>
-                        <span className="text-[10px] font-semibold bg-rose-50 text-rose-700 px-2 py-0.5 rounded-md border border-rose-200/60">
-                          {chapter.difficultyCounts.hard} Hard
-                        </span>
                       </div>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setExpandedChapter(isExpanded ? null : chapter.chapterName)
-                        }
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-all cursor-pointer"
-                      >
-                        <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-                        <span>{isExpanded ? "Hide Questions" : `Browse Questions (${chapter.questions.length})`}</span>
-                        {isExpanded ? (
-                          <ChevronUp className="w-3.5 h-3.5" />
-                        ) : (
-                          <ChevronDown className="w-3.5 h-3.5" />
-                        )}
-                      </button>
-                    </div>
+                    ) : (
+                      <div className="h-full min-h-[56px] flex items-center gap-2 text-slate-400 text-[13px] bg-slate-50/70 border border-slate-100 rounded-2xl px-3.5 py-2.5">
+                        <Clock className="w-4 h-4 text-slate-300 shrink-0" />
+                        <span className="font-normal">Not attempted yet</span>
+                      </div>
+                    )}
                   </div>
+                </div>
 
-                  {/* Expanded Questions List */}
-                  {isExpanded && (
-                    <div className="bg-slate-50/70 border-t border-slate-100 p-5 sm:p-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                          Authentic Questions from Official NTA Shift Papers
-                        </span>
-                        <span className="text-[11px] text-slate-500 font-medium">
-                          Showing top {chapter.questions.length} questions
-                        </span>
-                      </div>
+                {/* Footer buttons pinned to bottom with mt-auto */}
+                <div className="pt-3 border-t border-slate-100 mt-auto flex flex-col gap-2 w-full">
+                  {hasAttempted && bestAttempt ? (
+                    <>
+                      <Link
+                        href={`/dashboard/mocks/analysis/${bestAttempt.id || test.id}`}
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-xs hover:shadow transition-all"
+                      >
+                        <BarChart2 className="w-3.5 h-3.5" />
+                        <span>Analysis</span>
+                      </Link>
 
-                      <div className="space-y-4">
-                        {chapter.questions.map((q, qIndex) => {
-                          const isSolOpen = expandedSolutionId === String(q.id);
-
-                          return (
-                            <div
-                              key={String(q.id)}
-                              className="bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-5 shadow-xs space-y-3"
-                            >
-                              <div className="flex items-center justify-between gap-2 flex-wrap">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[11px] font-bold font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md border border-blue-200">
-                                    Q{qIndex + 1}
-                                  </span>
-                                  <span className="text-[10px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200">
-                                    {q.paperLabel}
-                                  </span>
-                                  <span className="text-[10px] font-medium text-slate-500">
-                                    Topic: {q.topic}
-                                  </span>
-                                </div>
-                                <span
-                                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize ${
-                                    q.difficulty === "easy"
-                                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                      : q.difficulty === "medium"
-                                      ? "bg-amber-50 text-amber-700 border border-amber-200"
-                                      : "bg-rose-50 text-rose-700 border border-rose-200"
-                                  }`}
-                                >
-                                  {q.difficulty} Level {q.difficultyLevel}
-                                </span>
-                              </div>
-
-                              <p className="text-sm font-semibold text-slate-900 leading-relaxed whitespace-pre-line">
-                                {q.questionText}
-                              </p>
-
-                              {/* Options */}
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                                {q.options.map((opt) => {
-                                  const isCorrect = opt.id === q.correctOption;
-                                  return (
-                                    <div
-                                      key={opt.id}
-                                      className={`p-2.5 rounded-xl text-xs font-medium border flex items-start gap-2 ${
-                                        isCorrect
-                                          ? "bg-emerald-50/70 border-emerald-300 text-emerald-950 font-semibold"
-                                          : "bg-white border-slate-200/70 text-slate-700"
-                                      }`}
-                                    >
-                                      <span
-                                        className={`w-5 h-5 rounded-lg flex items-center justify-center text-[10px] font-bold shrink-0 ${
-                                          isCorrect
-                                            ? "bg-emerald-600 text-white"
-                                            : "bg-slate-100 text-slate-600"
-                                        }`}
-                                      >
-                                        {opt.id}
-                                      </span>
-                                      <span className="leading-snug">{opt.text}</span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-
-                              {/* Solution Toggle */}
-                              <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                                <span className="text-[11px] font-semibold text-emerald-700 flex items-center gap-1">
-                                  <CheckCircle2 className="w-3.5 h-3.5" />
-                                  Correct Answer: Option {q.correctOption}
-                                </span>
-
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    setExpandedSolutionId(isSolOpen ? null : String(q.id))
-                                  }
-                                  className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 cursor-pointer"
-                                >
-                                  <span>{isSolOpen ? "Hide Solution" : "View Step-by-Step Solution"}</span>
-                                  {isSolOpen ? (
-                                    <ChevronUp className="w-3.5 h-3.5" />
-                                  ) : (
-                                    <ChevronDown className="w-3.5 h-3.5" />
-                                  )}
-                                </button>
-                              </div>
-
-                              {/* Step-by-Step Solution & Option Analysis */}
-                              {isSolOpen && (
-                                <div className="mt-2 p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-xs text-slate-800 space-y-2 animate-in fade-in duration-150">
-                                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                                    <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-                                    <span>NCERT Verified Detailed Solution:</span>
-                                  </div>
-                                  <div className="leading-relaxed text-slate-700 font-normal">
-                                    <MathRenderer text={q.detailedSolution} />
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
+                      <Link
+                        href={`/test/${test.id}?reattempt=true`}
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-[13px] transition-all"
+                      >
+                        <RotateCw className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Re-attempt</span>
+                      </Link>
+                    </>
+                  ) : (
+                    <Link
+                      href={`/test/${test.id}`}
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-xs hover:shadow transition-all"
+                    >
+                      <span>Start</span>
+                      <Play className="w-3.5 h-3.5 fill-current" />
+                    </Link>
                   )}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="bg-white rounded-3xl border border-slate-100 p-10 text-center space-y-3">
+          <p className="text-base font-semibold text-slate-800">No PYQ papers match the selected filters.</p>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedYear("all");
+              setStatusFilter("all");
+              setSortBy("newest");
+            }}
+            className="text-xs font-bold text-blue-600 hover:underline cursor-pointer"
+          >
+            Reset filters
+          </button>
         </div>
       )}
     </div>

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { StreamType, LeaderboardEntry } from "@/types";
 import { useTestStore } from "@/lib/store/useTestStore";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 type ViewMode = "overall" | "subject";
 type StreamFilter = "all" | StreamType;
@@ -494,17 +495,15 @@ export default function Leaderboard() {
 
           {/* If Subject Mode is active */}
           {viewMode === "subject" && (
-            <select
+            <SearchableSelect
+              ariaLabel="Select Subject for Leaderboard"
               value={selectedSubject}
-              onChange={(e) => setSelectedSubject(e.target.value)}
-              className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 shadow-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer"
-            >
-              {availableSubjects.map((sub) => (
-                <option key={sub} value={sub}>
-                  {sub}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setSelectedSubject(val)}
+              options={availableSubjects.map((sub) => ({ value: sub, label: sub }))}
+              buttonClassName="px-3 py-1.5 bg-white border-slate-200 rounded-xl text-xs font-semibold text-slate-700 shadow-xs"
+              placeholder="Select Subject"
+              searchPlaceholder="Search subjects..."
+            />
           )}
 
           {/* Time Filter Pills */}

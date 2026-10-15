@@ -16,6 +16,7 @@ import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { formatDateTimeIndian } from "@/lib/config/dashboardConfig";
 import { deduplicateTestAttempts } from "@/lib/analytics";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 type PerformanceTab = "trend" | "subjects";
 type MetricType = "score" | "accuracy";
@@ -202,19 +203,18 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
           <div className="flex flex-wrap items-center gap-2.5">
             {/* Subject Filter Dropdown */}
             {availableSubjects.length > 1 && (
-              <select
-                aria-label="Filter performance by subject"
+              <SearchableSelect
+                ariaLabel="Filter performance by subject"
                 value={selectedSubjectFilter}
-                onChange={(e) => setSelectedSubjectFilter(e.target.value)}
-                className="text-[13px] font-medium px-2.5 py-1 rounded-[6px] border border-[var(--border)] bg-white text-[var(--text)] shadow-xs hover:border-[var(--border-strong)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] cursor-pointer"
-              >
-                <option value="all">All Subjects</option>
-                {availableSubjects.map((sub) => (
-                  <option key={sub} value={sub}>
-                    {sub}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => setSelectedSubjectFilter(val)}
+                options={[
+                  { value: "all", label: "All Subjects" },
+                  ...availableSubjects.map((sub) => ({ value: sub, label: sub })),
+                ]}
+                buttonClassName="text-[13px] font-medium px-2.5 py-1 rounded-[6px] border-[var(--border)] bg-white text-[var(--text)] shadow-xs"
+                placeholder="All Subjects"
+                searchPlaceholder="Search subjects..."
+              />
             )}
 
             {/* Score vs Accuracy Toggle */}

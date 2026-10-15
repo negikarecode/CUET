@@ -79,6 +79,22 @@ export function resolveTargetRequiredSubjects(
       let needed = rule.count || 1;
       const candidates = rule.subjects.filter((s: string) => !picked.has(s));
 
+      // Priority 0: Course-specific subject match (e.g. computer_science for B.Sc. CS)
+      const courseIdLower = (courseObj.id || "").toLowerCase();
+      const courseNameLower = (courseObj.name || "").toLowerCase();
+      for (const cand of candidates) {
+        const cLower = cand.toLowerCase();
+        const candName = (CANONICAL_SUBJECTS_MAP[cand]?.name || "").toLowerCase();
+        const firstWord = candName ? candName.split(" ")[0] || "" : "";
+        const matchesCourse =
+          courseIdLower.includes(cLower) ||
+          (firstWord.length > 0 && courseNameLower.includes(firstWord.toLowerCase()));
+        if (matchesCourse && needed > 0 && picked.size < targetCount && !picked.has(cand)) {
+          picked.add(cand);
+          needed--;
+        }
+      }
+
       // Priority 1: user selected profile subjects
       for (const userSub of userSelectedSubs) {
         const uLower = userSub.toLowerCase().trim();
