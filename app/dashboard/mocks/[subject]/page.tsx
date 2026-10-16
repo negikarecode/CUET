@@ -109,17 +109,14 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
       const mockNum = test.mockNumber || idx + 1;
       const testId = test.id;
 
-      // Find all attempts matching this specific mock test
       const matchingAttempts = subjectMockAttempts.filter((att) =>
         matchesMockPaper(att, subjectKey, testId, mockNum)
       );
 
-      // Sort matching attempts chronologically to assign stable attempt numbers
       const sortedChronological = [...matchingAttempts].sort(
         (a, b) => new Date(a.submittedAt || 0).getTime() - new Date(b.submittedAt || 0).getTime()
       );
 
-      // Best attempt selection: highest totalMarks, tiebreak on accuracy then time
       let bestAttempt: RecordedTestAttempt | null = null;
       let bestAttemptNumber = 1;
 
@@ -142,7 +139,6 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
         }, firstAttempt);
       }
 
-      // Latest attempt date formatted Indian
       let lastAttemptDate = "";
       const latest = sortedChronological[sortedChronological.length - 1];
       if (latest && latest.submittedAt) {
@@ -191,7 +187,6 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
         const scoreB = b.bestAttempt?.totalMarks ?? 9999;
         return scoreA - scoreB;
       }
-      // default: mock_number
       return a.mockNum - b.mockNum;
     });
   }, [mockCardsData, statusFilter, sortBy]);
@@ -207,25 +202,24 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
       <div>
         <Link
           href="/dashboard/mocks"
-          className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Mock Exams</span>
         </Link>
       </div>
 
-      {/* 2. Compressed Header: Title, one-line subtitle, slim spec line, stat chips, progress, CTA */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4">
+      {/* 2. Compact Subject Header */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1 min-w-0">
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">
               {subjectName} Mock Exams
             </h1>
-            <p className="text-[13px] sm:text-[14px] text-slate-500 font-medium truncate max-w-2xl">
+            <p className="text-xs sm:text-sm text-slate-500 font-medium truncate max-w-2xl">
               Authentic 50-question compulsory full syllabus CBT simulation papers with instant solutions.
             </p>
-            {/* Slim spec line replacing old large tiles */}
-            <div className="flex items-center gap-2 text-[13px] text-slate-600 font-medium pt-0.5">
+            <div className="flex items-center gap-2 text-xs text-slate-600 font-medium pt-0.5">
               <span>{durationMinutes} min</span>
               <span className="text-slate-300">·</span>
               <span>50 questions</span>
@@ -238,7 +232,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
           <div className="shrink-0 flex items-center gap-2">
             <Link
               href={mockStats.isAllAttempted ? `/test/${mockTests[0]?.id || `${subjectKey}-mock-1`}?reattempt=true` : `/test/${nextMockId}`}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-sm hover:shadow-md transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
             >
               {mockStats.isAllAttempted ? (
                 <>
@@ -247,7 +241,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
                 </>
               ) : (
                 <>
-                  <Play className="w-4 h-4 fill-current" />
+                  <Play className="w-3.5 h-3.5 fill-current" />
                   <span>Start Next Mock (Mock {mockStats.nextUnattemptedMockIndex})</span>
                 </>
               )}
@@ -257,23 +251,27 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
 
         {/* Stat Chips + Progress bar */}
         <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
             <span className="px-3 py-1 rounded-lg bg-blue-50 text-blue-800 border border-blue-200/60 tabular-nums">
               {mockStats.attemptedMocksCount} of {mockTests.length} Attempted
             </span>
 
-            <span className="px-3 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200/60 tabular-nums">
-              Peak Score: {mockStats.peakScore !== null ? `${mockStats.peakScore} / ${mockStats.peakMaxMarks}` : "—"}
-            </span>
+            {mockStats.peakScore !== null && (
+              <span className="px-3 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200/60 tabular-nums">
+                Peak Score: {mockStats.peakScore} / {mockStats.peakMaxMarks}
+              </span>
+            )}
 
-            <span className="px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200/60 tabular-nums">
-              Avg Accuracy: {mockStats.attemptedMocksCount > 0 ? `${mockStats.averageAccuracy}%` : "—"}
-            </span>
+            {mockStats.attemptedMocksCount > 0 && (
+              <span className="px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200/60 tabular-nums">
+                Avg Accuracy: {mockStats.averageAccuracy}%
+              </span>
+            )}
           </div>
 
-          <div className="flex items-center gap-2 text-[12px] text-slate-500 min-w-[180px]">
+          <div className="flex items-center gap-2 text-xs text-slate-500 min-w-[180px]">
             <span className="shrink-0 font-medium tabular-nums">{progressPercent}% Completed</span>
-            <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
+            <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden border border-slate-200/50">
               <div
                 className="h-full bg-blue-600 rounded-full transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
@@ -283,16 +281,16 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
         </div>
       </div>
 
-      {/* 3. Toolbar: Status segmented filter & Sort control (slim 56px row) */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-3.5 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      {/* 3. Toolbar: Status segmented filter & Sort control */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-3.5 shadow-xs flex flex-wrap items-center justify-between gap-3">
         {/* Status segmented control */}
-        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-[12px] font-semibold">
+        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
           <button
             type="button"
             onClick={() => setStatusFilter("all")}
             className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               statusFilter === "all"
-                ? "bg-white text-slate-900 shadow-xs"
+                ? "bg-white text-slate-900 shadow-xs font-bold"
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
@@ -303,7 +301,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
             onClick={() => setStatusFilter("attempted")}
             className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               statusFilter === "attempted"
-                ? "bg-white text-slate-900 shadow-xs"
+                ? "bg-white text-slate-900 shadow-xs font-bold"
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
@@ -314,7 +312,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
             onClick={() => setStatusFilter("not_attempted")}
             className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               statusFilter === "not_attempted"
-                ? "bg-white text-slate-900 shadow-xs"
+                ? "bg-white text-slate-900 shadow-xs font-bold"
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
@@ -324,7 +322,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
 
         {/* Sort dropdown */}
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-medium text-slate-500">Sort by:</span>
+          <span className="text-xs font-medium text-slate-500">Sort:</span>
           <SearchableSelect
             ariaLabel="Sort mock tests"
             value={sortBy}
@@ -334,7 +332,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
               { value: "best_score", label: "Best Score (Highest)" },
               { value: "lowest_score", label: "Lowest Score" },
             ]}
-            buttonClassName="py-1.5 px-3 text-[13px] bg-slate-50 hover:bg-slate-100 font-semibold"
+            buttonClassName="py-1.5 px-3 text-xs bg-slate-50 hover:bg-slate-100 font-semibold rounded-lg border-slate-200"
           />
         </div>
       </div>
@@ -345,30 +343,28 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
           {displayedCards.map((card) => {
             const { test, mockNum, attemptsCount, hasAttempted, bestAttempt, bestAttemptNumber, lastAttemptDate } =
               card;
-
-            // TODO: If per-mock unit emphasis or difficulty metadata is added to data schema, render it here.
             const isNegativeScore = (bestAttempt?.totalMarks ?? 0) < 0;
 
             return (
               <div
                 key={test.id}
-                className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4 min-w-0"
+                className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between space-y-4 min-w-0"
               >
                 <div className="space-y-3 flex-1 flex flex-col min-w-0">
-                  {/* Title with mock number (no repeated badges or repeated tags) */}
+                  {/* Title with mock number */}
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
                       Full Syllabus Mock {mockNum}
                     </h3>
-                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 shrink-0">
+                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
                       Mock #{mockNum}
                     </span>
                   </div>
 
-                  {/* Status area: Fixed minimum height (~56px) on every card */}
+                  {/* Status area */}
                   <div className="min-h-[56px] flex flex-col justify-center">
                     {hasAttempted && bestAttempt ? (
-                      <div className="px-3.5 py-2.5 rounded-2xl bg-amber-50/70 border border-amber-200/60 text-slate-900 space-y-1 text-[13px]">
+                      <div className="px-3.5 py-2.5 rounded-xl bg-amber-50/70 border border-amber-200/60 text-slate-900 space-y-1 text-xs">
                         <div className="flex items-center justify-between gap-1.5 font-bold">
                           <div className="flex items-center gap-1.5">
                             <Trophy className="w-3.5 h-3.5 text-amber-500 shrink-0" />
@@ -386,19 +382,18 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
                                 role="tooltip"
                                 aria-label="Includes negative marking (+5 / -1)."
                                 title="Includes negative marking (+5 / -1)."
-                                className="inline-flex items-center text-rose-600 cursor-help focus:outline-none"
+                                className="inline-flex items-center text-rose-600 cursor-help focus:outline-hidden"
                               >
                                 <Info className="w-3.5 h-3.5" />
                               </span>
                             )}
                           </div>
-                          <span className="text-[12px] font-normal text-amber-800">
+                          <span className="text-[11px] font-normal text-amber-800">
                             Attempt #{bestAttemptNumber}
                           </span>
                         </div>
 
-                        {/* Accuracy, total attempts & last attempt date taken strictly from same attempt data */}
-                        <div className="flex items-center gap-1 text-[12px] text-amber-900/80 font-normal truncate">
+                        <div className="flex items-center gap-1 text-[11px] text-amber-900/80 font-normal truncate">
                           <span>{bestAttempt.accuracyPercentage}% accuracy</span>
                           <span>·</span>
                           <span>
@@ -407,13 +402,13 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
                           {lastAttemptDate && (
                             <>
                               <span>·</span>
-                              <span>Last: {lastAttemptDate}</span>
+                              <span>{lastAttemptDate}</span>
                             </>
                           )}
                         </div>
                       </div>
                     ) : (
-                      <div className="h-full min-h-[56px] flex items-center gap-2 text-slate-400 text-[13px] bg-slate-50/70 border border-slate-100 rounded-2xl px-3.5 py-2.5">
+                      <div className="h-full min-h-[56px] flex items-center gap-2 text-slate-400 text-xs bg-slate-50/70 border border-slate-100 rounded-xl px-3.5 py-2.5">
                         <Clock className="w-4 h-4 text-slate-300 shrink-0" />
                         <span className="font-normal">Not attempted yet</span>
                       </div>
@@ -427,7 +422,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
                     <>
                       <Link
                         href={`/dashboard/mocks/analysis/${bestAttempt.id || test.id}`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-xs hover:shadow transition-all"
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                       >
                         <BarChart2 className="w-3.5 h-3.5" />
                         <span>Analysis</span>
@@ -435,7 +430,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
 
                       <Link
                         href={`/test/${test.id}?reattempt=true`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-[13px] transition-all"
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all cursor-pointer"
                       >
                         <RotateCw className="w-3.5 h-3.5 text-slate-500" />
                         <span>Re-attempt</span>
@@ -444,7 +439,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
                   ) : (
                     <Link
                       href={`/test/${test.id}`}
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-xs hover:shadow transition-all"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                     >
                       <span>Start</span>
                       <Play className="w-3.5 h-3.5 fill-current" />
@@ -456,8 +451,8 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
           })}
         </div>
       ) : (
-        <div className="bg-white rounded-3xl border border-slate-100 p-10 text-center space-y-3">
-          <p className="text-base font-semibold text-slate-800">No mock tests match the selected status filter.</p>
+        <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center space-y-3">
+          <p className="text-sm font-semibold text-slate-800">No mock tests match the selected status filter.</p>
           <button
             type="button"
             onClick={() => setStatusFilter("all")}

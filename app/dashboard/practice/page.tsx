@@ -30,12 +30,16 @@ import {
   Sparkles,
   Info,
   Target,
+  Compass,
+  CheckCircle2,
+  RotateCw,
 } from "lucide-react";
 import practiceManifest from "@/lib/data/practice_test_manifest.json";
 import { useTarget } from "@/lib/hooks/useTarget";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { getPracticeStats, normalizePracticeFolder } from "@/lib/practice-stats";
+import SearchableSelect, { SearchableSelectOption } from "@/components/ui/SearchableSelect";
 
 type StreamKey = "all" | "science" | "commerce" | "humanities" | "applied";
 type StatusFilter = "all" | "started" | "not-started";
@@ -87,6 +91,7 @@ export default function PracticeTestsHubPage() {
   const target = useTarget();
 
   const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
+  const [selectedSubjectKey, setSelectedSubjectKey] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -144,7 +149,7 @@ export default function PracticeTestsHubPage() {
   }, [target, subjectsList]);
 
   const isSearchActive = Boolean(searchQuery.trim());
-  const isFilterActive = selectedStream !== "all" || statusFilter !== "all";
+  const isFilterActive = selectedStream !== "all" || selectedSubjectKey !== "all" || statusFilter !== "all";
   const showRecommendedRow = Boolean(
     target.hasTarget &&
     recommendedSubjects.length > 0 &&
@@ -156,7 +161,59 @@ export default function PracticeTestsHubPage() {
     return new Set(recommendedSubjects.map((s) => s.id));
   }, [recommendedSubjects]);
 
-  // Filter subjects by stream, search, and status (excludes recommended when recommended row is shown)
+  // Options for Quick Jump SearchableSelect
+  const subjectSelectOptions: SearchableSelectOption[] = useMemo(() => {
+    const scienceSubjects = subjectsList.filter((s) => s.stream === "science");
+    const commerceSubjects = subjectsList.filter((s) => s.stream === "commerce");
+    const humanitiesSubjects = subjectsList.filter((s) => s.stream === "humanities");
+    const appliedSubjects = subjectsList.filter((s) => s.stream === "applied");
+
+    return [
+      {
+        value: "all",
+        label: "All 22 Subjects",
+        keywords: ["all", "22 subjects", "practice"],
+      },
+      {
+        heading: "General Subjects (English & GAT)",
+        options: appliedSubjects.map((s) => ({
+          value: s.id,
+          label: s.name,
+          badge: `Code ${s.code}`,
+          keywords: [s.id, s.name, s.code, "general", "english", "gat"],
+        })),
+      },
+      {
+        heading: "Science Stream",
+        options: scienceSubjects.map((s) => ({
+          value: s.id,
+          label: s.name,
+          badge: `Code ${s.code}`,
+          keywords: [s.id, s.name, s.code, "science"],
+        })),
+      },
+      {
+        heading: "Commerce Stream",
+        options: commerceSubjects.map((s) => ({
+          value: s.id,
+          label: s.name,
+          badge: `Code ${s.code}`,
+          keywords: [s.id, s.name, s.code, "commerce"],
+        })),
+      },
+      {
+        heading: "Humanities Stream",
+        options: humanitiesSubjects.map((s) => ({
+          value: s.id,
+          label: s.name,
+          badge: `Code ${s.code}`,
+          keywords: [s.id, s.name, s.code, "humanities", "arts"],
+        })),
+      },
+    ];
+  }, [subjectsList]);
+
+  // Filter subjects by stream, dropdown, search, and status
   const filteredSubjects = useMemo(() => {
     const baseList = showRecommendedRow
       ? subjectsList.filter((s) => !recommendedIds.has(s.id))
@@ -167,7 +224,15 @@ export default function PracticeTestsHubPage() {
       if (seen.has(s.id)) return false;
       seen.add(s.id);
 
+      // Dropdown selection check
+      if (selectedSubjectKey !== "all" && s.id !== selectedSubjectKey) {
+        return false;
+      }
+
+      // Stream selection check
       const matchesStream = selectedStream === "all" || s.stream === selectedStream;
+
+      // Text search check
       const q = searchQuery.toLowerCase().trim();
       const isGeneralQ =
         "general subjects".includes(q) ||
@@ -183,6 +248,7 @@ export default function PracticeTestsHubPage() {
         s.id.toLowerCase().includes(q) ||
         (isGeneralQ && (s.id === "english" || s.id === "general-test" || s.stream === "applied"));
 
+      // Status check
       const stats = subjectStatsMap.get(s.id);
       const hasAttempts = Boolean(stats?.hasAttempts);
 
@@ -195,46 +261,62 @@ export default function PracticeTestsHubPage() {
 
       return matchesStream && matchesSearch && matchesStatus;
     });
-  }, [subjectsList, showRecommendedRow, recommendedIds, selectedStream, searchQuery, statusFilter, subjectStatsMap]);
+  }, [
+    subjectsList,
+    showRecommendedRow,
+    recommendedIds,
+    selectedSubjectKey,
+    selectedStream,
+    searchQuery,
+    statusFilter,
+    subjectStatsMap,
+  ]);
 
   if (!isClient) {
     return <div className="min-h-screen bg-[#F8FAFC]" />;
   }
 
   return (
-    <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-5">
-      {/* 1. Compressed Header with Slim Spec Line */}
-      <div className="space-y-1">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-xs shrink-0">
+    <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-6">
+      {/* 1. Header with Title & Spec Line */}
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 tracking-wide uppercase">
+          <Compass className="w-3.5 h-3.5" />
+          <span>CUET UG 2026 Curriculum · Unit-wise Practice</span>
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/60 text-blue-600 flex items-center justify-center shrink-0">
               <BookOpen className="w-5 h-5 stroke-[2.2]" />
             </div>
-            <span>CUET UG Practice Tests</span>
-          </h1>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                CUET Practice Tests
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                22 subjects · 155 syllabus units · 3,100 practice tests · 20 Qs each · 25 min · +5 / -1 marking
+              </p>
+            </div>
+          </div>
 
-          {/* Subject count clarification badge with tooltip */}
+          {/* Subject count clarification badge */}
           <div
             tabIndex={0}
             role="note"
             aria-label="Practice includes 22 subjects (20 domain subjects plus English Language & General Test). Domain Mocks focuses on 20 domain subjects, while PYQs covers the 14 core admission subjects."
             title="Practice includes 22 subjects (20 domain subjects plus English Language & General Test). Domain Mocks focuses on 20 domain subjects, while PYQs covers the 14 core admission subjects."
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200/80 text-xs font-semibold text-slate-600 cursor-help transition-all self-start sm:self-auto"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200/80 text-xs font-semibold text-slate-600 cursor-help transition-all self-start sm:self-auto"
           >
             <Info className="w-3.5 h-3.5 text-blue-600 shrink-0" />
             <span>22 Subjects Available</span>
           </div>
         </div>
-
-        {/* Slim Spec Line under title replacing the four bulky stat cards */}
-        <p className="text-xs sm:text-sm text-slate-500 font-medium">
-          22 subjects · 155 syllabus units · 3,100 practice tests · 20 questions each · 25 min duration · +5 / -1 marking
-        </p>
       </div>
 
-      {/* 2. Recommended for Your Target Row */}
+      {/* 2. Recommended for Your Target Section */}
       {showRecommendedRow ? (
-        <div className="bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-purple-50/40 rounded-2xl border border-blue-200/80 p-4 sm:p-5 shadow-2xs space-y-3.5">
+        <div className="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 rounded-2xl border border-blue-200/80 p-5 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
@@ -244,13 +326,17 @@ export default function PracticeTestsHubPage() {
             </div>
             <Link
               href="/profile"
-              className="text-xs font-semibold text-blue-600 hover:text-blue-700 underline self-start sm:self-auto"
+              className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline self-start sm:self-auto"
             >
               Change target in Profile
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+          <div
+            className={`grid grid-cols-1 md:grid-cols-2 ${
+              recommendedSubjects.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
+            } gap-4 sm:gap-5`}
+          >
             {recommendedSubjects.map((s) => {
               const IconComp = s.icon;
               const stats = subjectStatsMap.get(s.id);
@@ -258,30 +344,37 @@ export default function PracticeTestsHubPage() {
               const progressPct = stats?.totalCount
                 ? Math.round((stats.attemptedCount / stats.totalCount) * 100)
                 : 0;
+              const urlSlug = encodeURIComponent(s.id);
 
               return (
                 <div
                   key={`rec-${s.id}`}
-                  className="bg-white rounded-xl border border-blue-100 p-4 shadow-2xs flex flex-col justify-between space-y-3"
+                  className="bg-white rounded-2xl border border-blue-200/90 p-5 shadow-xs flex flex-col justify-between hover:border-blue-400 transition-all min-w-0"
                 >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-2">
                       <div
-                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                         style={{ backgroundColor: s.badgeBg, color: s.accentColor }}
                       >
-                        <IconComp className="w-4 h-4" />
+                        <IconComp className="w-5 h-5" />
                       </div>
-                      <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60 font-sans">
-                        Code {s.code}
-                      </span>
+                      <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200/70 inline-flex items-center gap-1">
+                          <Sparkles className="w-2.5 h-2.5 text-amber-600" />
+                          Target
+                        </span>
+                        <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60 font-sans">
+                          Code {s.code}
+                        </span>
+                      </div>
                     </div>
 
                     <div>
-                      <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
+                      <h3 className="text-base font-bold text-slate-900 leading-snug">
                         {s.name}
                       </h3>
-                      <p className="text-[13px] text-slate-500 font-medium">
+                      <p className="text-xs text-slate-500 font-medium mt-0.5">
                         {s.unitsCount} syllabus units · 20 tests/unit
                       </p>
                     </div>
@@ -290,7 +383,7 @@ export default function PracticeTestsHubPage() {
                     <div className="space-y-1.5 pt-1">
                       <div className="flex items-center justify-between text-xs font-semibold">
                         <span className={hasAttempts ? "text-slate-900 font-bold" : "text-slate-400"}>
-                          {hasAttempts ? `${stats?.attemptedCount} / ${s.totalTests} done` : "Not started"}
+                          {hasAttempts ? `${stats?.attemptedCount} / ${s.totalTests} completed` : "Not started"}
                         </span>
                         {hasAttempts && stats?.accuracy !== null && (
                           <span className="text-blue-700 font-bold">{stats?.accuracy}% acc</span>
@@ -298,28 +391,28 @@ export default function PracticeTestsHubPage() {
                       </div>
                       <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all"
+                          className="h-full bg-blue-600 rounded-full transition-all"
                           style={{ width: `${progressPct}%` }}
                         />
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-100 flex items-center gap-2">
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
                     <Link
                       href={
                         hasAttempts && stats?.nextUnattemptedTestId
                           ? `/test/${stats.nextUnattemptedTestId}`
-                          : `/dashboard/practice/${s.id}`
+                          : `/test/practice-${s.id}-unit1-test1`
                       }
-                      className="flex-1 py-1.5 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-2xs transition-all text-center flex items-center justify-center gap-1.5"
+                      className="flex-1 py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all text-center flex items-center justify-center gap-1.5"
                     >
                       <span>{hasAttempts ? "Continue" : "Start"}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                     <Link
-                      href={`/dashboard/practice/${s.id}`}
-                      className="py-1.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all text-center"
+                      href={`/dashboard/practice/${urlSlug}`}
+                      className="py-2 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all text-center"
                     >
                       <span>All Units</span>
                     </Link>
@@ -330,7 +423,7 @@ export default function PracticeTestsHubPage() {
           </div>
         </div>
       ) : !target.hasTarget && !isSearchActive ? (
-        <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 text-xs text-slate-600">
+        <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex items-center justify-between gap-3 text-xs text-slate-600">
           <div className="flex items-center gap-2">
             <Target className="w-4 h-4 text-blue-600 shrink-0" />
             <span>Target college not configured. Set your dream college to get prioritized subjects.</span>
@@ -344,23 +437,26 @@ export default function PracticeTestsHubPage() {
         </div>
       ) : null}
 
-      {/* 3. Slim Combined Toolbar (Stream, Search, Status) */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-2.5 sm:p-3 shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      {/* 3. Combined Filter & Search Toolbar */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs space-y-3">
         {/* Stream Pills */}
-        <div className="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0 scrollbar-none text-xs">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
           {[
-            { key: "all", label: "All Subjects" },
-            { key: "science", label: "Science" },
-            { key: "commerce", label: "Commerce" },
-            { key: "humanities", label: "Humanities" },
+            { key: "all", label: "All Subjects (22)" },
             { key: "applied", label: "General Subjects (English & GAT)" },
+            { key: "science", label: "Science Stream" },
+            { key: "commerce", label: "Commerce Stream" },
+            { key: "humanities", label: "Humanities Stream" },
           ].map((tab) => (
             <button
               key={tab.key}
-              onClick={() => setSelectedStream(tab.key as StreamKey)}
+              onClick={() => {
+                setSelectedStream(tab.key as StreamKey);
+                setSelectedSubjectKey("all");
+              }}
               className={`px-3 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap shrink-0 ${
                 selectedStream === tab.key
-                  ? "bg-slate-900 text-white shadow-2xs font-bold"
+                  ? "bg-slate-900 text-white shadow-xs font-bold"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
@@ -369,48 +465,63 @@ export default function PracticeTestsHubPage() {
           ))}
         </div>
 
-        {/* Right controls: Status filter + Search box */}
-        <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
-          {/* Status Filter Segmented Control */}
-          <div className="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200/60 shrink-0 text-xs">
-            <button
-              onClick={() => setStatusFilter("all")}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-                statusFilter === "all"
-                  ? "bg-white text-slate-900 shadow-2xs font-bold"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setStatusFilter("started")}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-                statusFilter === "started"
-                  ? "bg-white text-blue-700 shadow-2xs font-bold"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Started
-            </button>
-            <button
-              onClick={() => setStatusFilter("not-started")}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-                statusFilter === "not-started"
-                  ? "bg-white text-slate-900 shadow-2xs font-bold"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Not started
-            </button>
+        {/* Secondary Row: Quick Jump Dropdown + Status Filter + Search Box */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2 border-t border-slate-100">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1 min-w-0">
+            {/* Quick jump SearchableSelect */}
+            <div className="w-full sm:w-64 shrink-0">
+              <SearchableSelect
+                value={selectedSubjectKey}
+                onChange={(val) => setSelectedSubjectKey(val)}
+                options={subjectSelectOptions}
+                placeholder="Jump to subject..."
+                searchPlaceholder="Search 22 subjects..."
+                leadingIcon={BookOpen}
+                buttonClassName="py-1.5 px-3 rounded-xl border border-slate-200 text-xs text-slate-800 bg-slate-50 hover:bg-white"
+              />
+            </div>
+
+            {/* Status Filter Segmented Control */}
+            <div className="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200/60 shrink-0 text-xs">
+              <button
+                onClick={() => setStatusFilter("all")}
+                className={`px-3 py-1 rounded-lg font-semibold transition-all ${
+                  statusFilter === "all"
+                    ? "bg-white text-slate-900 shadow-xs font-bold"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                All Status
+              </button>
+              <button
+                onClick={() => setStatusFilter("started")}
+                className={`px-3 py-1 rounded-lg font-semibold transition-all ${
+                  statusFilter === "started"
+                    ? "bg-white text-blue-700 shadow-xs font-bold"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                Started
+              </button>
+              <button
+                onClick={() => setStatusFilter("not-started")}
+                className={`px-3 py-1 rounded-lg font-semibold transition-all ${
+                  statusFilter === "not-started"
+                    ? "bg-white text-slate-900 shadow-xs font-bold"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                Not started
+              </button>
+            </div>
           </div>
 
           {/* Search Box */}
-          <div className="relative min-w-[200px] flex-1 sm:flex-initial">
+          <div className="relative w-full sm:w-64 shrink-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
             <input
               type="text"
-              placeholder="Search subject or code..."
+              placeholder="Filter by name or code..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
@@ -424,10 +535,10 @@ export default function PracticeTestsHubPage() {
         <div className="flex items-center justify-between text-xs text-slate-500 font-semibold px-1">
           <span>
             {showRecommendedRow
-              ? `Other subjects (${filteredSubjects.length})`
+              ? `Other Subjects (${filteredSubjects.length})`
               : `All Practice Subjects (${filteredSubjects.length})`}
           </span>
-          <span>Click card to open full syllabus units</span>
+          <span className="hidden sm:inline">Select a subject to view syllabus units & 20 tests/unit</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
@@ -443,45 +554,61 @@ export default function PracticeTestsHubPage() {
             return (
               <div
                 key={s.id}
-                className="group bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-5 shadow-2xs hover:shadow-sm hover:border-slate-300 transition-all flex flex-col justify-between space-y-3 min-w-0"
+                className="group bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between min-w-0"
               >
-                <div className="space-y-2.5 min-w-0">
+                <div className="space-y-3 min-w-0">
                   <div className="flex items-center justify-between gap-2">
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 shrink-0"
+                      className="w-11 h-11 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 shrink-0"
                       style={{ backgroundColor: s.badgeBg, color: s.accentColor }}
                     >
                       <IconComp className="w-5 h-5" />
                     </div>
-                    {/* Normal font for code badge instead of monospace */}
-                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200/80 font-sans">
-                      Code {s.code}
-                    </span>
+
+                    <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                      {hasAttempts ? (
+                        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/70 flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          <span>{stats?.attemptedCount} / {s.totalTests}</span>
+                        </span>
+                      ) : (
+                        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                          0/{s.totalTests}
+                        </span>
+                      )}
+
+                      <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-sans">
+                        Code {s.code}
+                      </span>
+                    </div>
                   </div>
 
                   <div>
                     <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors truncate">
                       <Link href={`/dashboard/practice/${urlSlug}`}>{s.name}</Link>
                     </h3>
-                    {/* Meta text >= 13px */}
-                    <p className="text-[13px] text-slate-600 font-medium mt-0.5">
-                      {s.unitsCount} syllabus units • 20 practice tests per unit
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">
+                      {s.unitsCount} syllabus units · 20 practice tests per unit
                     </p>
                   </div>
 
-                  {/* Progress Line and Thin Bar */}
+                  {/* Progress Line and Bar */}
                   <div className="space-y-1.5 pt-1">
-                    <div className="flex items-center justify-between text-xs font-semibold">
-                      <span className={hasAttempts ? "text-slate-900 font-bold" : "text-slate-400"}>
-                        {hasAttempts ? `${stats?.attemptedCount} / ${s.totalTests} done` : "Not started"}
-                      </span>
+                    <div className="flex items-center justify-between text-xs font-medium text-slate-500">
+                      <span>{hasAttempts ? `${stats?.attemptedCount} / ${s.totalTests} completed` : "Not started"}</span>
                       {hasAttempts && stats?.accuracy !== null && (
-                        <span className="text-blue-700 font-bold">{stats?.accuracy}% acc</span>
+                        <span className="text-blue-600 font-semibold">{stats?.accuracy}% accuracy</span>
                       )}
                     </div>
                     <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all"
+                        className={`h-full rounded-full transition-all duration-300 ${
+                          progressPct >= 100
+                            ? "bg-emerald-600"
+                            : progressPct > 0
+                            ? "bg-blue-600"
+                            : "bg-transparent"
+                        }`}
                         style={{ width: `${progressPct}%` }}
                       />
                     </div>
@@ -489,21 +616,21 @@ export default function PracticeTestsHubPage() {
                 </div>
 
                 {/* Card Action Buttons */}
-                <div className="pt-2.5 border-t border-slate-100 flex items-center gap-2">
+                <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center gap-2">
                   <Link
                     href={
                       hasAttempts && stats?.nextUnattemptedTestId
                         ? `/test/${stats.nextUnattemptedTestId}`
                         : `/test/practice-${s.id}-unit1-test1`
                     }
-                    className="flex-1 py-1.5 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-2xs transition-all text-center flex items-center justify-center gap-1.5"
+                    className="flex-1 py-2 px-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all text-center flex items-center justify-center gap-1.5"
                   >
                     <span>{hasAttempts ? "Continue" : "Start"}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                   <Link
                     href={`/dashboard/practice/${urlSlug}`}
-                    className="py-1.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all text-center"
+                    className="py-2 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all text-center"
                   >
                     <span>Units</span>
                   </Link>
@@ -514,10 +641,22 @@ export default function PracticeTestsHubPage() {
         </div>
 
         {filteredSubjects.length === 0 && (
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-10 text-center space-y-3 shadow-2xs">
+          <div className="bg-white rounded-2xl border border-slate-200/90 p-10 text-center space-y-3 shadow-xs">
             <BookOpen className="w-8 h-8 text-slate-300 mx-auto" />
             <h3 className="text-sm sm:text-base font-bold text-slate-700">No matching subjects found</h3>
             <p className="text-xs text-slate-400">Try modifying your search query or switching streams.</p>
+            <button
+              onClick={() => {
+                setSelectedStream("all");
+                setSelectedSubjectKey("all");
+                setSearchQuery("");
+                setStatusFilter("all");
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold hover:bg-slate-200 transition-colors"
+            >
+              <RotateCw className="w-3 h-3" />
+              <span>Reset filters</span>
+            </button>
           </div>
         )}
       </div>

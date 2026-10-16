@@ -10,8 +10,7 @@ import {
   BarChart2,
   Trophy,
   Clock,
-  CheckCircle2,
-  AlertCircle,
+  Info,
 } from "lucide-react";
 import {
   getPYQTestsForSubject,
@@ -264,24 +263,24 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
       <div>
         <Link
           href="/dashboard/pyqs"
-          className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Previous Year Questions</span>
         </Link>
       </div>
 
-      {/* 2. Header matching Mocks subject page */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4">
+      {/* 2. Compact Subject Header */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1 min-w-0">
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">
               {subjectName} PYQ Papers
             </h1>
-            <p className="text-[13px] sm:text-[14px] text-slate-500 font-medium truncate max-w-2xl">
+            <p className="text-xs sm:text-sm text-slate-500 font-medium truncate max-w-2xl">
               Official NTA CUET CBT shift papers with complete step-by-step NCERT solutions.
             </p>
-            <div className="flex items-center gap-2 text-[13px] text-slate-600 font-medium pt-0.5">
+            <div className="flex items-center gap-2 text-xs text-slate-600 font-medium pt-0.5">
               <span>{durationMinutes} min</span>
               <span className="text-slate-300">·</span>
               <span>50 questions</span>
@@ -298,7 +297,7 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
                   ? `/test/${pyqPapers[0]?.id || `${subjectKey}-pyq-1`}?reattempt=true`
                   : `/test/${subjectStats.nextPaper?.id || `${subjectKey}-pyq-1`}`
               }
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-sm hover:shadow-md transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
             >
               {subjectStats.isAllAttempted ? (
                 <>
@@ -307,12 +306,8 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
                 </>
               ) : (
                 <>
-                  <Play className="w-4 h-4 fill-current" />
-                  <span>
-                    Start Next Paper (
-                    {subjectStats.nextPaper ? formatShortPaperTitle(subjectStats.nextPaper) : "Shift 1"}
-                    )
-                  </span>
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  <span>Start Next Paper ({formatShortPaperTitle(subjectStats.nextPaper || pyqPapers[0]!)})</span>
                 </>
               )}
             </Link>
@@ -321,23 +316,27 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
 
         {/* Stat Chips + Progress bar */}
         <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
             <span className="px-3 py-1 rounded-lg bg-blue-50 text-blue-800 border border-blue-200/60 tabular-nums">
               {subjectStats.attemptedCount} of {pyqPapers.length} Attempted
             </span>
 
-            <span className="px-3 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200/60 tabular-nums">
-              Peak Score: {subjectStats.peakScore !== null ? `${subjectStats.peakScore} / 250` : "—"}
-            </span>
+            {subjectStats.peakScore !== null && (
+              <span className="px-3 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200/60 tabular-nums">
+                Peak Score: {subjectStats.peakScore} / {subjectStats.peakMaxMarks}
+              </span>
+            )}
 
-            <span className="px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200/60 tabular-nums">
-              Avg Accuracy: {subjectStats.attemptedCount > 0 ? `${subjectStats.averageAccuracy}%` : "—"}
-            </span>
+            {subjectStats.attemptedCount > 0 && (
+              <span className="px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200/60 tabular-nums">
+                Avg Accuracy: {subjectStats.averageAccuracy}%
+              </span>
+            )}
           </div>
 
-          <div className="flex items-center gap-2 text-[12px] text-slate-500 min-w-[180px]">
+          <div className="flex items-center gap-2 text-xs text-slate-500 min-w-[180px]">
             <span className="shrink-0 font-medium tabular-nums">{progressPercent}% Completed</span>
-            <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
+            <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden border border-slate-200/50">
               <div
                 className="h-full bg-blue-600 rounded-full transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
@@ -347,22 +346,23 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
         </div>
       </div>
 
-      {/* 3. Toolbar: Year dropdown, Status segmented filter & Sort control */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-3.5 shadow-xs flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
-          {/* Year Selector */}
-          <div className="min-w-[160px] sm:min-w-[190px]">
+      {/* 3. Toolbar: Year filter, Status filter & Sort control */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-3.5 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Year Filter */}
+          <div className="min-w-[170px]">
             <SearchableSelect
               ariaLabel="Filter by Year"
-              options={yearSelectOptions}
               value={selectedYear}
               onChange={(val) => setSelectedYear(val)}
+              options={yearSelectOptions}
               searchPlaceholder="Search exam years..."
+              buttonClassName="text-xs font-semibold py-1.5 px-3 rounded-lg border-slate-200 bg-white"
             />
           </div>
 
           {/* Status segmented control */}
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-[12px] font-semibold shrink-0">
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
             <button
               type="button"
               onClick={() => setStatusFilter("all")}
@@ -401,20 +401,18 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
 
         {/* Sort dropdown */}
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-medium text-slate-500">Sort by:</span>
-          <div className="min-w-[170px]">
-            <SearchableSelect
-              ariaLabel="Sort papers"
-              options={sortSelectOptions}
-              value={sortBy}
-              onChange={(val) => setSortBy(val as SortOption)}
-              searchPlaceholder="Sort order..."
-            />
-          </div>
+          <span className="text-xs font-medium text-slate-500">Sort:</span>
+          <SearchableSelect
+            ariaLabel="Sort PYQ papers"
+            value={sortBy}
+            onChange={(val) => setSortBy(val as SortOption)}
+            options={sortSelectOptions}
+            buttonClassName="py-1.5 px-3 text-xs bg-slate-50 hover:bg-slate-100 font-semibold rounded-lg border-slate-200"
+          />
         </div>
       </div>
 
-      {/* 4. Paper Cards Grid (3 cols desktop, 2 cols tablet, 1 col mobile) */}
+      {/* 4. PYQ Paper Cards Grid (3 cols desktop, 2 cols tablet, 1 col mobile) */}
       {displayedCards.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full min-w-0">
           {displayedCards.map((card) => {
@@ -425,27 +423,31 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
             return (
               <div
                 key={test.id}
-                className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4 min-w-0"
+                className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between space-y-4 min-w-0"
               >
                 <div className="space-y-3 flex-1 flex flex-col min-w-0">
-                  {/* Title & Verified Badge */}
+                  {/* Title with exam date & shift as visual anchor */}
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-lg font-bold text-slate-900 leading-snug">
-                      {shortTitle}
-                    </h3>
-                    {((test as any).status === "verified" ||
-                      (test as any).status === "official_verified") && (
-                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                        <span>Verified</span>
-                      </span>
-                    )}
+                    <div>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                        {shortTitle}
+                      </h3>
+                      {test.year && (
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          CUET UG {test.year} Official NTA Paper
+                        </p>
+                      )}
+                    </div>
+
+                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
+                      {test.shift || `Shift 1`}
+                    </span>
                   </div>
 
-                  {/* Status area: Fixed minimum height (~56px) on every card */}
+                  {/* Status area */}
                   <div className="min-h-[56px] flex flex-col justify-center">
                     {hasAttempted && bestAttempt ? (
-                      <div className="px-3.5 py-2.5 rounded-2xl bg-amber-50/70 border border-amber-200/60 text-slate-900 space-y-1 text-[13px]">
+                      <div className="px-3.5 py-2.5 rounded-xl bg-amber-50/70 border border-amber-200/60 text-slate-900 space-y-1 text-xs">
                         <div className="flex items-center justify-between gap-1.5 font-bold">
                           <div className="flex items-center gap-1.5">
                             <Trophy className="w-3.5 h-3.5 text-amber-500 shrink-0" />
@@ -461,20 +463,20 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
                               <span
                                 tabIndex={0}
                                 role="tooltip"
-                                aria-label="Includes negative marking (+5 / -1). Wrong answers reduce score below 0."
-                                title="Includes negative marking (+5 / -1). Wrong answers reduce score below 0."
-                                className="inline-flex items-center text-rose-600 cursor-help focus:outline-none"
+                                aria-label="Includes negative marking (+5 / -1)."
+                                title="Includes negative marking (+5 / -1)."
+                                className="inline-flex items-center text-rose-600 cursor-help focus:outline-hidden"
                               >
-                                <AlertCircle className="w-3.5 h-3.5" />
+                                <Info className="w-3.5 h-3.5" />
                               </span>
                             )}
                           </div>
-                          <span className="text-[12px] font-normal text-amber-800">
+                          <span className="text-[11px] font-normal text-amber-800">
                             Attempt #{bestAttemptNumber}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-1 text-[12px] text-amber-900/80 font-normal truncate">
+                        <div className="flex items-center gap-1 text-[11px] text-amber-900/80 font-normal truncate">
                           <span>{bestAttempt.accuracyPercentage}% accuracy</span>
                           <span>·</span>
                           <span>
@@ -483,13 +485,13 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
                           {lastAttemptDate && (
                             <>
                               <span>·</span>
-                              <span>Last: {lastAttemptDate}</span>
+                              <span>{lastAttemptDate}</span>
                             </>
                           )}
                         </div>
                       </div>
                     ) : (
-                      <div className="h-full min-h-[56px] flex items-center gap-2 text-slate-400 text-[13px] bg-slate-50/70 border border-slate-100 rounded-2xl px-3.5 py-2.5">
+                      <div className="h-full min-h-[56px] flex items-center gap-2 text-slate-400 text-xs bg-slate-50/70 border border-slate-100 rounded-xl px-3.5 py-2.5">
                         <Clock className="w-4 h-4 text-slate-300 shrink-0" />
                         <span className="font-normal">Not attempted yet</span>
                       </div>
@@ -502,8 +504,8 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
                   {hasAttempted && bestAttempt ? (
                     <>
                       <Link
-                        href={`/dashboard/mocks/analysis/${bestAttempt.id || test.id}`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-xs hover:shadow transition-all"
+                        href={`/dashboard/pyqs/analysis/${bestAttempt.id || test.id}`}
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                       >
                         <BarChart2 className="w-3.5 h-3.5" />
                         <span>Analysis</span>
@@ -511,7 +513,7 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
 
                       <Link
                         href={`/test/${test.id}?reattempt=true`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-[13px] transition-all"
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all cursor-pointer"
                       >
                         <RotateCw className="w-3.5 h-3.5 text-slate-500" />
                         <span>Re-attempt</span>
@@ -520,9 +522,9 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
                   ) : (
                     <Link
                       href={`/test/${test.id}`}
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-xs hover:shadow transition-all"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                     >
-                      <span>Start</span>
+                      <span>Start Paper</span>
                       <Play className="w-3.5 h-3.5 fill-current" />
                     </Link>
                   )}
@@ -532,18 +534,17 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
           })}
         </div>
       ) : (
-        <div className="bg-white rounded-3xl border border-slate-100 p-10 text-center space-y-3">
-          <p className="text-base font-semibold text-slate-800">No PYQ papers match the selected filters.</p>
+        <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center space-y-3">
+          <p className="text-sm font-semibold text-slate-800">No shift papers match the selected filters.</p>
           <button
             type="button"
             onClick={() => {
               setSelectedYear("all");
               setStatusFilter("all");
-              setSortBy("newest");
             }}
             className="text-xs font-bold text-blue-600 hover:underline cursor-pointer"
           >
-            Reset filters
+            Show all papers
           </button>
         </div>
       )}

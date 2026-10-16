@@ -528,7 +528,7 @@ export default function PYQsPage() {
     return <div className="min-h-screen bg-[#F8FAFC]" />;
   }
 
-  // Render a standard PYQ Subject Card (identical layout to Domain Mock Card)
+  // Standard PYQ Subject Card (consistent, clean, balanced height)
   const renderSubjectCard = (sub: SubjectMeta, isRecommended: boolean = false) => {
     const Icon = sub.icon;
     const stats = subjectStatsMap.get(sub.key) || {
@@ -552,40 +552,40 @@ export default function PYQsPage() {
     return (
       <div
         key={sub.key}
-        className={`bg-white rounded-3xl border transition-all flex flex-col justify-between p-5 sm:p-6 min-w-0 ${
+        className={`bg-white rounded-2xl border transition-all flex flex-col justify-between p-5 sm:p-6 min-w-0 ${
           isRecommended
-            ? "border-blue-200/80 shadow-md ring-1 ring-blue-500/10"
-            : "border-slate-100 shadow-sm hover:shadow-md"
+            ? "border-blue-300 shadow-xs ring-1 ring-blue-500/15"
+            : "border-slate-200/90 shadow-xs hover:border-slate-300"
         }`}
       >
         <div className="space-y-3.5 flex-1 flex flex-col min-w-0">
           {/* Header Row: Icon + Badges */}
           <div className="flex items-start justify-between gap-3">
             <div
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+              className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
                 isRecommended
-                  ? "bg-blue-600 text-white shadow-sm shadow-blue-500/25"
+                  ? "bg-blue-600 text-white shadow-xs"
                   : "bg-blue-50 border border-blue-200/60 text-blue-600"
               }`}
             >
-              <Icon className="w-6 h-6" />
+              <Icon className="w-5 h-5" />
             </div>
 
             <div className="flex items-center gap-1.5 flex-wrap justify-end">
               {stats.attemptedCount > 0 ? (
-                <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/70 flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                   <span>
-                    {stats.attemptedCount} of {paperCount} Attempted
+                    {stats.attemptedCount} / {paperCount} Attempted
                   </span>
                 </span>
               ) : (
-                <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
                   0/{paperCount} Attempted
                 </span>
               )}
 
-              <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-sans">
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
                 Code {sub.code}
               </span>
             </div>
@@ -594,7 +594,7 @@ export default function PYQsPage() {
           {/* Title & Subtitle */}
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <h3 className="text-lg font-bold text-slate-900 leading-snug">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
                 {sub.name}
               </h3>
               {isRecommended && (
@@ -604,29 +604,35 @@ export default function PYQsPage() {
                 </span>
               )}
             </div>
-            <p className="text-[13px] font-normal text-slate-500 line-clamp-2 h-10 leading-relaxed">
+            <p className="text-xs text-slate-500 line-clamp-2 h-9 leading-relaxed">
               {sub.subtitle}
             </p>
           </div>
 
           {/* Progress bar */}
-          <div className="space-y-1 pt-1">
-            <div className="flex items-center justify-between text-[12px] font-medium text-slate-500">
+          <div className="space-y-1.5 pt-1">
+            <div className="flex items-center justify-between text-xs font-medium text-slate-500">
               <span>Paper Progress</span>
-              <span className="font-semibold text-slate-700 tabular-nums">
+              <span className="font-semibold text-slate-900 tabular-nums">
                 {stats.attemptedCount} / {paperCount} ({progressPercent}%)
               </span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
+            <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden border border-slate-200/50">
               <div
-                className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                className={`h-full rounded-full transition-all duration-300 ${
+                  progressPercent >= 100
+                    ? "bg-emerald-600"
+                    : progressPercent > 0
+                    ? "bg-blue-600"
+                    : "bg-transparent"
+                }`}
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
           </div>
 
-          {/* Meta specs row matching Mocks */}
-          <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2 text-[13px] text-slate-600 font-medium">
+          {/* Meta specs row */}
+          <div className="pt-2.5 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs text-slate-600 font-medium">
             <div className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <span>{sub.durationMinutes} Mins</span>
@@ -637,16 +643,16 @@ export default function PYQsPage() {
             </div>
             <div className="flex items-center gap-1.5 col-span-2 text-slate-700">
               <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-              <span>{paperCount} Official NTA Shift Papers (+5/−1)</span>
+              <span>{paperCount} Official NTA Papers (+5 / −1)</span>
             </div>
           </div>
         </div>
 
         {/* Bottom Actions: Pinned with mt-auto */}
-        <div className="pt-3 border-t border-slate-100 mt-auto flex items-center gap-2 w-full">
+        <div className="pt-3.5 border-t border-slate-100 mt-auto flex items-center gap-2 w-full">
           <Link
             href={`/dashboard/pyqs/${sub.key}`}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-sm hover:shadow-md transition-all text-center"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-xs transition-all shadow-xs text-center cursor-pointer"
           >
             <span>View all papers</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -658,7 +664,7 @@ export default function PYQsPage() {
                 ? `/test/${bestPaperId}?reattempt=true`
                 : `/test/${nextPaperId}`
             }
-            className="px-3.5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-[13px] transition-all text-center flex items-center gap-1.5 shrink-0 max-w-[50%]"
+            className="px-3 py-2.5 rounded-xl border border-blue-200 bg-blue-50/80 hover:bg-blue-100 text-blue-700 font-semibold text-xs transition-all text-center flex items-center gap-1.5 shrink-0 max-w-[48%] cursor-pointer"
             title={
               stats.isAllAttempted
                 ? `Re-attempt best paper for ${sub.name}`
@@ -668,7 +674,7 @@ export default function PYQsPage() {
             {stats.isAllAttempted ? (
               <>
                 <RotateCw className="w-3.5 h-3.5 shrink-0" />
-                <span className="truncate">Re-attempt best</span>
+                <span className="truncate">Re-attempt</span>
               </>
             ) : (
               <>
@@ -684,48 +690,48 @@ export default function PYQsPage() {
 
   return (
     <div className="w-full min-w-0 max-w-7xl mx-auto space-y-6">
-      {/* 1. Header with Info Tooltip & Grey Subtitle */}
+      {/* 1. Compact Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">
               Previous Year Questions
             </h1>
             <div className="relative group inline-block">
               <span
                 tabIndex={0}
                 role="note"
-                aria-label="Answer keys are provisional and under verification against official NTA response sheets."
-                title="Answer keys are provisional and under verification against official NTA response sheets."
-                className="cursor-help inline-flex items-center text-slate-400 hover:text-slate-600 focus:text-blue-600 focus:outline-none"
+                aria-label="Provisional official NTA answer keys under continuous verification."
+                title="Provisional official NTA answer keys under continuous verification."
+                className="cursor-help inline-flex items-center text-slate-400 hover:text-slate-600 focus:text-blue-600 focus:outline-hidden"
               >
                 <Info className="w-4 h-4" />
               </span>
               <div
                 role="tooltip"
-                className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block group-focus-within:block z-30 w-72 p-2.5 bg-slate-900 text-white text-[12px] font-normal rounded-xl shadow-lg leading-snug pointer-events-none"
+                className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block group-focus-within:block z-30 w-72 p-2.5 bg-slate-900 text-white text-xs font-normal rounded-xl shadow-lg leading-snug pointer-events-none"
               >
-                Answer keys are provisional and under verification against official NTA response sheets.
+                Official NTA CUET CBT shift papers with step-by-step NCERT solutions.
                 <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
               </div>
             </div>
           </div>
-          <p className="text-[13px] sm:text-[14px] text-slate-500 leading-relaxed max-w-3xl">
-            Official NTA CUET shift papers · 50 questions · 60 mins · +5 / -1 marking · {totalAttemptedPapers} of {totalShiftPapers} attempted
+          <p className="text-xs sm:text-sm text-slate-600 leading-normal max-w-3xl">
+            Official NTA CUET shift papers · 50 questions · 45-60 mins · +5 / -1 marking scheme · {totalAttemptedPapers} of {totalShiftPapers} attempted
           </p>
         </div>
 
-        {/* Sibling navigation matching Mocks page */}
+        {/* Sibling navigation */}
         <div className="flex items-center gap-2 flex-wrap shrink-0">
           <Link
             href="/dashboard/mocks"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-all"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all shadow-2xs"
           >
             <span>Domain Mock Exams</span>
           </Link>
           <Link
             href="/dashboard/practice"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-all"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all shadow-2xs"
           >
             <span>Unit Practice Tests</span>
           </Link>
@@ -734,29 +740,28 @@ export default function PYQsPage() {
 
       {/* In-Progress Unsubmitted Session Strip (if any) */}
       {inProgressSession && (
-        <div className="bg-gradient-to-r from-blue-50/90 to-indigo-50/90 border border-blue-200/80 rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+        <div className="bg-blue-50/80 border border-blue-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
               <Play className="w-4 h-4 fill-white translate-x-0.5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-md">
-                  Continue where you left off
+                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md">
+                  Resume active exam
                 </span>
                 <h4 className="text-xs sm:text-sm font-bold text-slate-900 truncate">
                   {inProgressSession.testTitle}
                 </h4>
               </div>
-              <p className="text-[11px] sm:text-xs text-slate-600 mt-0.5">
-                {inProgressSession.answeredCount} {inProgressSession.answeredCount === 1 ? "question" : "questions"} answered ·{" "}
-                {inProgressSession.remainingMinutes} {inProgressSession.remainingMinutes === 1 ? "min" : "mins"} remaining
+              <p className="text-xs text-slate-600 mt-0.5">
+                {inProgressSession.answeredCount} questions answered · {inProgressSession.remainingMinutes} mins remaining
               </p>
             </div>
           </div>
           <Link
             href={`/test/${inProgressSession.testId}`}
-            className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 shrink-0"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 shrink-0"
           >
             <span>Resume Test</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -764,8 +769,8 @@ export default function PYQsPage() {
         </div>
       )}
 
-      {/* 2. Slim Toolbar matching Mocks: Stream, Subject, and Status Filter (56-64px tall) */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-4 shadow-xs">
+      {/* 2. Filter Toolbar */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-4 shadow-xs">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
             {/* Stream Selector */}
@@ -797,11 +802,11 @@ export default function PYQsPage() {
           </div>
 
           {/* Status Filter Segmented Control */}
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-[12px] font-semibold shrink-0">
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold shrink-0">
             <button
               type="button"
               onClick={() => setStatusFilter("all")}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 statusFilter === "all"
                   ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
@@ -812,7 +817,7 @@ export default function PYQsPage() {
             <button
               type="button"
               onClick={() => setStatusFilter("started")}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 statusFilter === "started"
                   ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
@@ -825,7 +830,7 @@ export default function PYQsPage() {
             <button
               type="button"
               onClick={() => setStatusFilter("not_started")}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 statusFilter === "not_started"
                   ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
@@ -844,15 +849,15 @@ export default function PYQsPage() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-2">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
                 <Target className="w-4 h-4" />
               </div>
               <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                 Recommended for your target
               </h2>
             </div>
-            <p className="text-[12px] font-medium text-slate-500">
-              Required for <strong>{targetData.course}</strong> at <strong>{targetData.college}</strong>
+            <p className="text-xs font-medium text-slate-500">
+              Required for <strong className="text-slate-800">{targetData.course}</strong> at <strong className="text-slate-800">{targetData.college}</strong>
             </p>
           </div>
 
@@ -861,16 +866,16 @@ export default function PYQsPage() {
           </div>
         </div>
       ) : !targetData.hasTarget && !isFilterActive ? (
-        <div className="bg-blue-50/50 border border-blue-200/60 rounded-2xl p-3 sm:p-4 flex items-center justify-between gap-3 text-[13px] text-blue-900">
+        <div className="bg-blue-50/60 border border-blue-200/60 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-blue-900">
           <div className="flex items-center gap-2.5">
             <Target className="w-4 h-4 text-blue-600 shrink-0" />
-            <span>Set your dream college & course to see priority PYQ recommendations.</span>
+            <span>Set your target college & course to unlock personalized paper recommendations.</span>
           </div>
           <Link
             href="/dashboard/profile"
-            className="text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline shrink-0"
+            className="font-bold text-blue-700 hover:text-blue-900 hover:underline shrink-0"
           >
-            Set your dream college &rarr;
+            Set target goals &rarr;
           </Link>
         </div>
       ) : null}
@@ -897,7 +902,7 @@ export default function PYQsPage() {
             {otherSubjects.map((sub) => renderSubjectCard(sub, false))}
           </div>
         ) : (
-          <div className="bg-white rounded-3xl border border-slate-100 p-8 text-center space-y-2">
+          <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-2">
             <p className="text-sm font-semibold text-slate-700">No subjects match the selected filters.</p>
             <button
               type="button"
@@ -914,10 +919,10 @@ export default function PYQsPage() {
         )}
       </div>
 
-      {/* Answer-key notice at bottom of the page */}
-      <div className="pt-4 border-t border-slate-200/60 text-center">
-        <p className="text-[13px] text-slate-400">
-          Answer keys are provisional and under verification against official NTA response sheets.
+      {/* Provisional notice footnote */}
+      <div className="pt-4 border-t border-slate-100 text-center">
+        <p className="text-xs text-slate-400">
+          Official NTA CUET past year shift papers with complete verified answer keys and solutions.
         </p>
       </div>
     </div>

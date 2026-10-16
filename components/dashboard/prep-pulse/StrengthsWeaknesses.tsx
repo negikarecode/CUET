@@ -1,7 +1,8 @@
-import React from 'react';
-import Link from 'next/link';
-import { TopicMastery } from '@/types';
-import { normalizeSubject } from '@/lib/analytics';
+import React from "react";
+import Link from "next/link";
+import { ArrowRight, BookOpen, Target } from "lucide-react";
+import { TopicMastery } from "@/types";
+import { normalizeSubject } from "@/lib/analytics";
 
 interface StrengthsWeaknessesProps {
   weaknesses?: TopicMastery[];
@@ -11,6 +12,7 @@ interface StrengthsWeaknessesProps {
 export const StrengthsWeaknesses: React.FC<StrengthsWeaknessesProps> = ({
   weaknesses = [],
 }) => {
+  // Sort by priority: high data first, then lowest accuracy, then highest incorrect count
   const sortedWeaknesses = [...weaknesses].sort((a, b) => {
     const aHigh = (a.attemptsCount || 0) >= 10 ? 1 : 0;
     const bHigh = (b.attemptsCount || 0) >= 10 ? 1 : 0;
@@ -24,86 +26,110 @@ export const StrengthsWeaknesses: React.FC<StrengthsWeaknessesProps> = ({
   const displayWeaknesses = sortedWeaknesses.slice(0, 3);
 
   return (
-    <div className="app-card space-y-4 h-full flex flex-col justify-between">
+    <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs h-full flex flex-col justify-between space-y-4">
       {/* Section Header */}
       <div>
-        <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
-          <div>
-            <h2 className="text-[18px] sm:text-[20px] font-semibold text-[var(--text)] leading-[1.25]">
-              Topics to fix
-            </h2>
-            <p className="text-[13px] text-[var(--text-secondary)] mt-0.5">
-              Focus areas identified from your practice test errors.
-            </p>
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-700">
+              <Target className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+                Topics to Fix
+              </h2>
+            </div>
           </div>
 
           <Link
             href="/dashboard/radar"
-            className="text-[13px] font-medium text-[var(--accent)] hover:underline shrink-0 ml-2"
+            className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline shrink-0 flex items-center gap-1"
           >
-            View all
+            <span>View all</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
+
+        <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+          Priority focus areas identified from your practice test errors.
+        </p>
 
         {/* Main List */}
         <div className="space-y-3 pt-3">
           {displayWeaknesses.length === 0 ? (
-            <div className="py-8 text-center space-y-2">
-              <p className="text-[14px] font-medium text-[var(--text)]">
-                No topics need attention yet
-              </p>
-              <p className="text-[13px] text-[var(--text-secondary)] max-w-sm mx-auto">
-                Complete practice tests to identify specific topics for targeted review.
+            <div className="py-10 text-center space-y-2 bg-slate-50/60 rounded-xl border border-dashed border-slate-200 p-4">
+              <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+                <Target className="w-4 h-4" />
+              </div>
+              <h3 className="text-xs font-semibold text-slate-800">
+                No critical weaknesses detected
+              </h3>
+              <p className="text-[11px] text-slate-500 max-w-xs mx-auto">
+                Complete mock and practice tests to calibrate topic mastery.
               </p>
             </div>
           ) : (
             displayWeaknesses.map((w, idx) => {
               const subjectKey = normalizeSubject(w.subject).key;
-              const topicTitle = w.chapter || w.microTopic || 'Domain concept';
+              const topicTitle = w.chapter || w.microTopic || "Domain concept";
               const attempts = w.attemptsCount || 0;
-              const isLowData = attempts < 10;
+              const isStrongEvidence = attempts >= 20;
+              const isDeveloping = attempts >= 10 && attempts < 20;
 
               return (
                 <div
                   key={`weakness-${idx}`}
-                  className="p-3.5 rounded-[8px] border border-[var(--border)] flex flex-col gap-3"
+                  className="p-3.5 rounded-xl border border-slate-200/80 bg-slate-50/40 hover:bg-slate-50 transition-colors flex flex-col gap-2.5"
                 >
                   <div className="space-y-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[13px] font-medium text-[var(--text-muted)]">
+                    <div className="flex items-center gap-2 flex-wrap text-xs">
+                      <span className="font-semibold text-slate-700 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
                         {w.subject}
                       </span>
-                      <span className="text-[12px] font-medium text-[var(--danger)] bg-[var(--danger-subtle)] px-2 py-0.5 rounded-[6px]">
-                        Needs work
-                      </span>
-                      {isLowData && (
-                        <span className="text-[12px] font-medium text-slate-500 bg-slate-100 border border-slate-200/80 px-2 py-0.5 rounded-[6px]">
-                          Low data
+
+                      {isStrongEvidence ? (
+                        <span className="font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
+                          High confidence ({attempts} Qs)
+                        </span>
+                      ) : isDeveloping ? (
+                        <span className="font-medium text-amber-700 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-md">
+                          Developing ({attempts} Qs)
+                        </span>
+                      ) : (
+                        <span className="font-medium text-slate-500 bg-slate-100 border border-slate-200/60 px-2 py-0.5 rounded-md">
+                          Preliminary ({attempts} Qs)
                         </span>
                       )}
                     </div>
 
-                    <h3 className="text-[15px] font-semibold text-[var(--text)] line-clamp-2 leading-snug" title={topicTitle}>
+                    <h3
+                      className="text-sm font-bold text-slate-900 line-clamp-1 leading-snug mt-1"
+                      title={topicTitle}
+                    >
                       {topicTitle}
                     </h3>
 
-                    <p className="text-[13px] text-[var(--text-secondary)] tabular-nums">
-                      Based on {attempts} {attempts === 1 ? 'question' : 'questions'} • {w.accuracyPercentage}% accuracy
-                    </p>
+                    <div className="flex items-center justify-between text-xs text-slate-500 tabular-nums">
+                      <span>Accuracy: <strong className={w.accuracyPercentage < 50 ? "text-rose-600" : "text-amber-600"}>{w.accuracyPercentage}%</strong></span>
+                      <span>{w.incorrectCount || 0} mistakes recorded</span>
+                    </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-1 border-t border-[var(--border)] gap-2">
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-200/70 gap-2">
                     <Link
                       href={`/dashboard/notes/${subjectKey}`}
-                      className="text-[13px] font-medium text-[var(--text-secondary)] hover:text-[var(--accent)] hover:underline"
+                      className="text-xs font-medium text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1"
                     >
-                      Read notes
+                      <BookOpen className="w-3 h-3" />
+                      <span>Review notes</span>
                     </Link>
+
                     <Link
                       href={`/dashboard/radar?subject=${subjectKey}`}
-                      className="inline-flex items-center justify-center h-8 px-3.5 rounded-[6px] bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-[13px] font-medium transition-colors shadow-xs"
+                      className="inline-flex items-center justify-center gap-1 h-7 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors shadow-xs"
                     >
-                      Practice this topic
+                      <span>Practice</span>
+                      <ArrowRight className="w-3 h-3" />
                     </Link>
                   </div>
                 </div>

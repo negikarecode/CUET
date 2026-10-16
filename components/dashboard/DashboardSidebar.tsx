@@ -17,6 +17,7 @@ import {
   Menu,
   History,
   BookOpen,
+  Sparkles,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { createClient } from "@/lib/supabase/client";
@@ -158,29 +159,29 @@ export default function DashboardSidebar() {
   ];
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full justify-between bg-white text-[var(--text)]">
+    <div className="flex flex-col h-full justify-between bg-white text-slate-900">
       {/* Brand Header & Nav links */}
       <div className="space-y-6">
         {/* Brand Logo */}
         <Link
           href="/dashboard"
-          className="flex items-center gap-2.5 px-2 py-1.5 rounded-[8px] hover:bg-slate-50 transition-colors"
+          className="flex items-center gap-2.5 px-2 py-1.5 rounded-xl hover:bg-slate-50 transition-colors"
         >
-          <div className="w-8 h-8 rounded-[8px] bg-[var(--accent)] text-white flex items-center justify-center shrink-0">
-            <GraduationCap className="w-4 h-4" strokeWidth={1.75} />
+          <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs shrink-0">
+            <GraduationCap className="w-5 h-5" strokeWidth={1.75} />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-[14px] font-semibold text-[var(--text)]">
+            <span className="text-sm font-bold text-slate-900 tracking-tight">
               CUET AI-Prep
             </span>
-            <span className="text-[12px] text-[var(--text-muted)]">
-              UG Preparation
+            <span className="text-[11px] font-medium text-slate-400">
+              UG Exam Preparation
             </span>
           </div>
         </Link>
 
         {/* Nav Items */}
-        <nav className="space-y-1">
+        <nav className="space-y-1" aria-label="Main navigation">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -188,17 +189,17 @@ export default function DashboardSidebar() {
                 key={item.id}
                 href={item.href}
                 onClick={() => setMobileDrawerOpen(false)}
-                className={`flex items-center gap-3 px-3 h-10 rounded-[8px] text-[14px] font-medium transition-colors ${
+                className={`flex items-center gap-3 px-3 h-10 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                   item.active
-                    ? "bg-[var(--accent-subtle)] text-[var(--accent)] font-semibold"
-                    : "text-[var(--text-secondary)] hover:text-[var(--text)] hover:bg-slate-50"
+                    ? "bg-blue-50 text-blue-700 font-bold border border-blue-100 shadow-2xs"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                 }`}
               >
                 <Icon
-                  className={`w-4 h-4 shrink-0 ${
-                    item.active ? "text-[var(--accent)]" : "text-[var(--text-muted)]"
+                  className={`w-4 h-4 shrink-0 transition-colors ${
+                    item.active ? "text-blue-600" : "text-slate-400"
                   }`}
-                  strokeWidth={1.75}
+                  strokeWidth={item.active ? 2 : 1.75}
                 />
                 <span>{item.label}</span>
               </Link>
@@ -208,20 +209,21 @@ export default function DashboardSidebar() {
       </div>
 
       {/* Footer: Single text/outline upgrade link and Sign out */}
-      <div className="pt-4 border-t border-[var(--border)] space-y-2">
+      <div className="pt-4 border-t border-slate-100 space-y-2">
         <Link
           href="/pricing"
-          className="w-full flex items-center justify-center h-10 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white hover:bg-slate-50 text-[14px] font-medium text-[var(--text)] transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-xs font-semibold text-slate-800 transition-colors shadow-2xs"
         >
-          Upgrade plan
+          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+          <span>Upgrade plan</span>
         </Link>
 
         <button
           type="button"
           onClick={handleSignOut}
-          className="w-full flex items-center justify-center gap-2 h-10 px-3 rounded-[8px] text-[14px] text-[var(--text-secondary)] hover:text-[var(--danger)] hover:bg-[var(--danger-subtle)] transition-colors cursor-pointer"
+          className="w-full flex items-center justify-center gap-2 h-9 px-3 rounded-xl text-xs font-medium text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
         >
-          <LogOut className="w-4 h-4" strokeWidth={1.75} />
+          <LogOut className="w-3.5 h-3.5" strokeWidth={1.75} />
           <span>Sign out</span>
         </button>
       </div>
@@ -230,13 +232,13 @@ export default function DashboardSidebar() {
 
   return (
     <>
-      {/* 1. Mobile Header (Only on screens < 768px) */}
-      <div className="md:hidden sticky top-0 z-40 bg-white border-b border-[var(--border)] px-4 h-14 flex items-center justify-between w-full max-w-full">
+      {/* 1. Mobile Top Header (Only on screens < 768px) */}
+      <div className="md:hidden sticky top-0 z-40 bg-white border-b border-slate-200/80 px-4 h-14 flex items-center justify-between w-full max-w-full">
         <Link href="/dashboard" className="flex items-center gap-2 min-w-0">
-          <div className="w-7 h-7 rounded-[8px] bg-[var(--accent)] text-white flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
             <GraduationCap className="w-4 h-4" strokeWidth={1.75} />
           </div>
-          <span className="font-semibold text-[14px] text-[var(--text)]">
+          <span className="font-bold text-sm text-slate-900 tracking-tight">
             CUET AI-Prep
           </span>
         </Link>
@@ -244,7 +246,7 @@ export default function DashboardSidebar() {
         <button
           type="button"
           onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
-          className="w-9 h-9 flex items-center justify-center rounded-[8px] border border-[var(--border)] text-[var(--text-secondary)] hover:bg-slate-50 cursor-pointer"
+          className="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer"
           aria-label="Toggle navigation menu"
           aria-expanded={mobileDrawerOpen}
         >
@@ -264,12 +266,12 @@ export default function DashboardSidebar() {
           aria-label="Dashboard Navigation"
           className="md:hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex"
         >
-          <div className="w-64 max-w-[80vw] h-full bg-white border-r border-[var(--border)] p-4 flex flex-col shadow-[0_8px_24px_rgba(15,23,42,0.12)]">
+          <div className="w-64 max-w-[80vw] h-full bg-white border-r border-slate-200 p-4 flex flex-col shadow-lg">
             <div className="flex justify-end pb-2">
               <button
                 type="button"
                 onClick={() => setMobileDrawerOpen(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-[8px] border border-[var(--border)] text-[var(--text-secondary)] hover:bg-slate-50 cursor-pointer"
+                className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer"
                 aria-label="Close navigation menu"
               >
                 <X className="w-4 h-4" strokeWidth={1.75} />
@@ -287,14 +289,14 @@ export default function DashboardSidebar() {
       )}
 
       {/* 3. Desktop Left Sidebar (Fixed 240px width, white, 1px right border) */}
-      <aside className="hidden md:flex flex-col w-[240px] fixed inset-y-0 left-0 h-screen overflow-y-auto shrink-0 z-40 bg-white border-r border-[var(--border)] p-4">
+      <aside className="hidden md:flex flex-col w-[240px] fixed inset-y-0 left-0 h-screen overflow-y-auto shrink-0 z-40 bg-white border-r border-slate-200/80 p-4">
         <SidebarContent />
       </aside>
 
-      {/* 4. Mobile Bottom Tab Bar (5 items max, 12px labels, fixed bottom) */}
+      {/* 4. Mobile Bottom Tab Bar */}
       <nav
         aria-label="Mobile Navigation"
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[var(--border)] px-2 py-1 flex items-center justify-around"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200/80 px-2 py-1.5 flex items-center justify-around shadow-sm"
       >
         {bottomNavItems.map((item) => {
           const Icon = item.icon;
@@ -302,13 +304,13 @@ export default function DashboardSidebar() {
             <Link
               key={item.id}
               href={item.href}
-              className={`flex flex-col items-center py-1 px-2 rounded-[8px] text-[12px] font-medium transition-colors ${
+              className={`flex flex-col items-center py-1 px-2.5 rounded-lg text-[11px] font-semibold transition-colors ${
                 item.active
-                  ? "text-[var(--accent)]"
-                  : "text-[var(--text-secondary)] hover:text-[var(--text)]"
+                  ? "text-blue-600"
+                  : "text-slate-500 hover:text-slate-900"
               }`}
             >
-              <Icon className="w-4 h-4 mb-0.5" strokeWidth={1.75} />
+              <Icon className="w-4 h-4 mb-0.5" strokeWidth={item.active ? 2 : 1.75} />
               <span>{item.label}</span>
             </Link>
           );

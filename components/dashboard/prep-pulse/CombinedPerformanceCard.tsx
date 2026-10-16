@@ -11,6 +11,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import { TrendingUp, BarChart3, ArrowRight, BookOpen } from "lucide-react";
 import { SubjectCalibrationData, TopicMastery } from "@/types";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -68,7 +69,6 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
 
   const attemptsCount = filteredAttempts.length;
 
-
   // Construct chart data with sequential Mock labels and 5-mock rolling average
   const chartData = useMemo(() => {
     if (attemptsCount === 0) return [];
@@ -76,7 +76,6 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
     return filteredAttempts.map((att, idx) => {
       const rawScore = Math.round(att.totalMarks ?? 0);
       const accuracy = Math.round(att.accuracyPercentage ?? 0);
-      // Clamped score for plotting (Y-axis never goes negative)
       const plottedScore = Math.max(0, rawScore);
       const maxMarks = att.maxMarks || 250;
 
@@ -117,7 +116,7 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
     return calibrations.filter((c) => c.totalAttempted > 0);
   }, [calibrations]);
 
-  // Accessible custom tooltip showing full test name, subject, date & time, score, and accuracy
+  // Custom accessible tooltip
   const CustomChartTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const item = payload[0]?.payload;
@@ -126,35 +125,35 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
       return (
         <div
           role="tooltip"
-          className="bg-white rounded-[10px] p-3.5 border border-[var(--border)] shadow-[0_10px_25px_rgba(15,23,42,0.12)] text-[13px] min-w-[220px] max-w-[320px] space-y-1.5 z-30"
+          className="bg-white rounded-xl p-3.5 border border-slate-200 shadow-md text-xs min-w-[220px] max-w-[300px] space-y-2 z-30"
         >
-          <div className="font-semibold text-[var(--text)] line-clamp-2 leading-snug" title={item.testTitle}>
+          <div className="font-semibold text-slate-900 line-clamp-2 leading-snug" title={item.testTitle}>
             {item.testTitle}
           </div>
-          <div className="text-[12px] text-[var(--text-muted)] flex items-center justify-between">
-            <span>{item.subject}</span>
+          <div className="text-[11px] text-slate-500 flex items-center justify-between">
+            <span className="font-medium text-slate-600">{item.subject}</span>
             <span>{item.formattedDateTime}</span>
           </div>
 
-          <div className="pt-1.5 border-t border-[var(--border)] space-y-1">
-            <div className="flex items-center justify-between font-medium">
-              <span className="text-[var(--text-secondary)]">Score:</span>
-              <span className="text-[var(--text)] tabular-nums font-semibold">
+          <div className="pt-2 border-t border-slate-100 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-500">Score:</span>
+              <span className="text-slate-900 tabular-nums font-bold text-sm">
                 {item.rawScore} / {item.maxMarks}
                 {item.rawScore < 0 && (
-                  <span className="text-[11px] text-rose-500 ml-1 font-normal">(negative marking)</span>
+                  <span className="text-[10px] text-rose-500 ml-1 font-normal">(negative marking)</span>
                 )}
               </span>
             </div>
 
-            <div className="flex items-center justify-between font-medium">
-              <span className="text-[var(--text-secondary)]">Accuracy:</span>
-              <span className="text-[var(--text)] tabular-nums font-semibold">{item.accuracy}%</span>
+            <div className="flex items-center justify-between">
+              <span className="text-slate-500">Accuracy:</span>
+              <span className="text-slate-900 tabular-nums font-semibold">{item.accuracy}%</span>
             </div>
 
-            <div className="flex items-center justify-between text-[12px]">
-              <span className="text-[var(--text-muted)]">5-mock average:</span>
-              <span className="text-[var(--text-secondary)] tabular-nums font-medium">
+            <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-50">
+              <span className="text-slate-400">5-mock rolling avg:</span>
+              <span className="text-blue-700 tabular-nums font-semibold">
                 {metric === "score" ? `${item.rollingScore} marks` : `${item.rollingAccuracy}%`}
               </span>
             </div>
@@ -166,35 +165,44 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
   };
 
   return (
-    <div className="app-card flex flex-col justify-between space-y-4">
+    <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-5">
       {/* Card Header with Tabs, Metric Toggle & Subject Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[var(--border)] pb-3 gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3">
         <div className="flex items-center gap-4">
-          <h3 className="text-[18px] font-semibold text-[var(--text)]">Performance</h3>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600">
+              <TrendingUp className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+                Performance Analytics
+              </h2>
+            </div>
+          </div>
 
-          {/* Underline Tabs: Trend vs By Subject */}
-          <div className="flex items-center gap-4">
+          {/* Underline Tabs */}
+          <div className="flex items-center gap-2 bg-slate-100 p-0.5 rounded-lg border border-slate-200/60">
             <button
               type="button"
               onClick={() => setActiveTab("trend")}
-              className={`pb-1 text-[14px] font-medium border-b-2 transition-colors cursor-pointer ${
+              className={`px-3 py-1 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                 activeTab === "trend"
-                  ? "border-[var(--accent)] text-[var(--accent)]"
-                  : "border-transparent text-[var(--text-secondary)] hover:text-[var(--text)]"
+                  ? "bg-white text-blue-700 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              Trend
+              Trend View
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("subjects")}
-              className={`pb-1 text-[14px] font-medium border-b-2 transition-colors cursor-pointer ${
+              className={`px-3 py-1 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                 activeTab === "subjects"
-                  ? "border-[var(--accent)] text-[var(--accent)]"
-                  : "border-transparent text-[var(--text-secondary)] hover:text-[var(--text)]"
+                  ? "bg-white text-blue-700 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              By subject
+              By Subject
             </button>
           </div>
         </div>
@@ -212,7 +220,7 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                   { value: "all", label: "All Subjects" },
                   ...availableSubjects.map((sub) => ({ value: sub, label: sub })),
                 ]}
-                buttonClassName="text-[13px] font-medium px-2.5 py-1 rounded-[6px] border-[var(--border)] bg-white text-[var(--text)] shadow-xs"
+                buttonClassName="text-xs font-medium px-2.5 py-1.5 rounded-lg border-slate-200 bg-white text-slate-800 shadow-xs"
                 placeholder="All Subjects"
                 searchPlaceholder="Search subjects..."
               />
@@ -222,15 +230,15 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
             <div
               role="group"
               aria-label="Toggle metric: Score or Accuracy"
-              className="inline-flex items-center rounded-[6px] border border-[var(--border)] bg-slate-100/80 p-0.5"
+              className="inline-flex items-center rounded-lg border border-slate-200/80 bg-slate-100 p-0.5"
             >
               <button
                 type="button"
                 onClick={() => setMetric("score")}
-                className={`px-2.5 py-1 text-[12px] font-semibold rounded-[4px] transition-all cursor-pointer ${
+                className={`px-3 py-1 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                   metric === "score"
-                    ? "bg-white text-[var(--text)] shadow-xs"
-                    : "text-[var(--text-muted)] hover:text-[var(--text)]"
+                    ? "bg-white text-slate-900 shadow-xs"
+                    : "text-slate-500 hover:text-slate-900"
                 }`}
               >
                 Score
@@ -238,10 +246,10 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
               <button
                 type="button"
                 onClick={() => setMetric("accuracy")}
-                className={`px-2.5 py-1 text-[12px] font-semibold rounded-[4px] transition-all cursor-pointer ${
+                className={`px-3 py-1 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                   metric === "accuracy"
-                    ? "bg-white text-[var(--text)] shadow-xs"
-                    : "text-[var(--text-muted)] hover:text-[var(--text)]"
+                    ? "bg-white text-slate-900 shadow-xs"
+                    : "text-slate-500 hover:text-slate-900"
                 }`}
               >
                 Accuracy %
@@ -254,65 +262,68 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
       {/* Main Tab Content */}
       <div>
         {activeTab === "trend" && (
-          <div className="space-y-3">
-            <div className="sr-only">
-              Score trend chart showing historical test attempts.
-            </div>
-
+          <div className="space-y-4">
             {attemptsCount < 2 ? (
-              <div className="py-14 text-center space-y-3">
-                <p className="text-[15px] font-medium text-[var(--text)]">
-                  {attemptsCount === 0
-                    ? "No mock tests attempted yet"
-                    : "Take at least 2 mocks to see your trend."}
-                </p>
-                <p className="text-[13px] text-[var(--text-secondary)] max-w-sm mx-auto">
-                  {attemptsCount === 0
-                    ? "Complete your first diagnostic test to establish your baseline score and start tracking your performance trend."
-                    : "Complete one more mock exam to unlock your progress curve and rolling average."}
-                </p>
+              <div className="py-14 text-center space-y-3.5 bg-slate-50/60 rounded-xl border border-dashed border-slate-200 p-6">
+                <div className="w-12 h-12 rounded-full bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 mx-auto">
+                  <BarChart3 className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-900">
+                    {attemptsCount === 0
+                      ? "No mock tests attempted yet"
+                      : "Take at least 2 tests to unlock your trend"}
+                  </h3>
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1 leading-relaxed">
+                    {attemptsCount === 0
+                      ? "Complete your first diagnostic test to establish your baseline score and start tracking your progress curve."
+                      : "Complete one more mock exam to generate your score trajectory and rolling average curve."}
+                  </p>
+                </div>
                 <Link
                   href="/dashboard/mocks"
-                  className="inline-flex items-center justify-center h-9 px-4 rounded-[8px] bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-[13px] font-semibold transition-colors shadow-xs"
+                  className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors shadow-xs"
                 >
-                  Take a mock test
+                  <span>Take a mock test</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             ) : (
               <div className="space-y-3">
-                {/* Chart Header Indicator */}
-                <div className="flex flex-wrap items-center justify-between text-[12px] text-[var(--text-secondary)] gap-2">
+                {/* Chart Header Indicators */}
+                <div className="flex flex-wrap items-center justify-between text-xs text-slate-500 gap-2">
                   <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] inline-block" />
-                      <span className="font-medium text-[var(--text)]">
-                        {metric === "score" ? "Raw Score" : "Accuracy %"}
-                      </span>
+                    <span className="flex items-center gap-1.5 font-medium text-slate-800">
+                      <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block" />
+                      <span>{metric === "score" ? "Test Score (Marks)" : "Accuracy (%)"}</span>
                     </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-3 border-b-2 border-dashed border-[var(--accent)] inline-block opacity-70" />
+                    <span className="flex items-center gap-1.5 text-slate-500">
+                      <span className="w-3 border-b-2 border-dashed border-blue-500 inline-block opacity-70" />
                       <span>5-mock rolling average</span>
                     </span>
                   </div>
+                  <span className="text-[11px] text-slate-400">
+                    {filteredAttempts.length} tests plotted
+                  </span>
                 </div>
 
-                {/* Main Recharts Area: 320px Desktop, 240px Mobile */}
+                {/* Main Recharts Area */}
                 <div
                   role="region"
                   aria-label="Performance score and accuracy trend chart"
-                  className="h-[240px] sm:h-[320px] w-full"
+                  className="h-[250px] sm:h-[300px] w-full"
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart
                       data={chartData}
                       margin={{ top: 16, right: 16, left: -16, bottom: 8 }}
                     >
-                      <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
+                      <CartesianGrid stroke="#F1F5F9" strokeDasharray="3 3" vertical={false} />
                       <XAxis
                         dataKey="mockLabel"
                         stroke="transparent"
                         interval={xAxisInterval}
-                        tick={{ fontSize: 12, fill: "var(--text-muted)" }}
+                        tick={{ fontSize: 11, fill: "#94A3B8" }}
                         tickLine={false}
                       />
                       <YAxis
@@ -323,7 +334,7 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                             ? [0, 50, 100, 150, 200, 250]
                             : [0, 20, 40, 60, 80, 100]
                         }
-                        tick={{ fontSize: 12, fill: "var(--text-muted)" }}
+                        tick={{ fontSize: 11, fill: "#94A3B8" }}
                         tickLine={false}
                       />
                       <Tooltip content={<CustomChartTooltip />} />
@@ -332,7 +343,7 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                       <Line
                         type="monotone"
                         dataKey={metric === "score" ? "rollingScore" : "rollingAccuracy"}
-                        stroke="var(--accent)"
+                        stroke="#3B82F6"
                         strokeWidth={2}
                         strokeDasharray="4 4"
                         strokeOpacity={0.65}
@@ -345,18 +356,19 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                       <Line
                         type="monotone"
                         dataKey={metric === "score" ? "plottedScore" : "accuracy"}
-                        stroke="var(--accent)"
+                        stroke="#2563EB"
                         strokeWidth={2.5}
-                        dot={{ r: 4, fill: "var(--accent)", strokeWidth: 0 }}
-                        activeDot={{ r: 6, fill: "var(--accent)" }}
+                        dot={{ r: 4, fill: "#2563EB", strokeWidth: 0 }}
+                        activeDot={{ r: 6, fill: "#1D4ED8" }}
                       />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
 
-                {/* Small grey note under the chart */}
-                <p className="text-[13px] text-[var(--text-muted)] pt-1">
-                  Scores are out of 250 and include negative marking (+5 for correct, -1 for incorrect).
+                {/* Informative footer footnote */}
+                <p className="text-[12px] text-slate-400 pt-1 border-t border-slate-100 flex items-center justify-between">
+                  <span>Scores include negative marking: +5 for correct, -1 for incorrect.</span>
+                  <span className="hidden sm:inline">Hover over points for test details</span>
                 </p>
               </div>
             )}
@@ -366,11 +378,12 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
         {activeTab === "subjects" && (
           <div>
             {subjectsWithData.length === 0 ? (
-              <div className="py-12 text-center space-y-2">
-                <p className="text-[14px] font-medium text-[var(--text)]">
+              <div className="py-12 text-center space-y-2 bg-slate-50/60 rounded-xl border border-dashed border-slate-200 p-6">
+                <BookOpen className="w-8 h-8 text-slate-400 mx-auto" />
+                <h3 className="text-sm font-semibold text-slate-900">
                   No subject attempts recorded yet
-                </p>
-                <p className="text-[13px] text-[var(--text-secondary)] max-w-sm mx-auto">
+                </h3>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto">
                   Take domain-specific practice tests to calibrate performance by subject.
                 </p>
               </div>
@@ -380,29 +393,35 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                   return (
                     <div
                       key={sub.subjectKey}
-                      className="p-3.5 rounded-[8px] border border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                      className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-slate-50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                     >
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-[14px] font-semibold text-[var(--text)]">
+                          <span className="text-sm font-bold text-slate-900">
                             {sub.subject}
                           </span>
                         </div>
-                        <div className="text-[13px] text-[var(--text-secondary)] tabular-nums">
+                        <div className="text-xs text-slate-500 tabular-nums">
                           {sub.totalAttempted} {sub.totalAttempted === 1 ? "question" : "questions"} attempted • {sub.totalCorrect} correct
                         </div>
                       </div>
 
-                      <div className="w-full sm:w-48 space-y-1.5">
-                        <div className="flex justify-between text-[13px]">
-                          <span className="text-[var(--text-secondary)]">Accuracy</span>
-                          <span className="font-semibold text-[var(--text)] tabular-nums">
+                      <div className="w-full sm:w-56 space-y-1.5">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-slate-500 font-medium">Accuracy</span>
+                          <span className="font-bold text-slate-900 tabular-nums">
                             {sub.accuracyPercentage}%
                           </span>
                         </div>
-                        <div className="w-full h-2 bg-[var(--border)] rounded-full overflow-hidden">
+                        <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-[var(--accent)] rounded-full transition-all duration-300"
+                            className={`h-full rounded-full transition-all duration-300 ${
+                              sub.accuracyPercentage >= 75
+                                ? "bg-emerald-600"
+                                : sub.accuracyPercentage >= 50
+                                ? "bg-blue-600"
+                                : "bg-amber-600"
+                            }`}
                             style={{ width: `${sub.accuracyPercentage}%` }}
                           />
                         </div>

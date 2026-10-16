@@ -12,6 +12,28 @@ import {
   AlertTriangle,
   Sparkles,
   BookOpen,
+  Atom,
+  FlaskConical,
+  Calculator,
+  Dna,
+  Briefcase,
+  TrendingUp,
+  ScrollText,
+  Landmark,
+  Globe,
+  BrainCircuit,
+  Users,
+  Activity,
+  Laptop,
+  Home,
+  Tv,
+  Leaf,
+  Palette,
+  Sprout,
+  Footprints,
+  FileText,
+  Layers,
+  Compass,
 } from "lucide-react";
 import practiceManifest from "@/lib/data/practice_test_manifest.json";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -27,6 +49,34 @@ interface PageProps {
     subject: string;
   };
 }
+
+const SUBJECT_STREAM_MAP: Record<
+  string,
+  { icon: any; accentColor: string; badgeBg: string }
+> = {
+  physics: { icon: Atom, accentColor: "#0284C7", badgeBg: "#E0F2FE" },
+  chemistry: { icon: FlaskConical, accentColor: "#7C3AED", badgeBg: "#EDE9FE" },
+  maths: { icon: Calculator, accentColor: "#2563EB", badgeBg: "#DBEAFE" },
+  bio: { icon: Dna, accentColor: "#059669", badgeBg: "#D1FAE5" },
+  accountancy: { icon: Calculator, accentColor: "#D97706", badgeBg: "#FEF3C7" },
+  eco: { icon: TrendingUp, accentColor: "#0D9488", badgeBg: "#CCFBF1" },
+  bst: { icon: Briefcase, accentColor: "#4F46E5", badgeBg: "#E0E7FF" },
+  history: { icon: ScrollText, accentColor: "#B45309", badgeBg: "#FEF3C7" },
+  "pol science": { icon: Landmark, accentColor: "#DC2626", badgeBg: "#FEE2E2" },
+  geo: { icon: Globe, accentColor: "#0284C7", badgeBg: "#E0F2FE" },
+  psychology: { icon: BrainCircuit, accentColor: "#9333EA", badgeBg: "#F3E8FF" },
+  sociology: { icon: Users, accentColor: "#EA580C", badgeBg: "#FFEDD5" },
+  physical_education: { icon: Activity, accentColor: "#16A34A", badgeBg: "#DCFCE7" },
+  computer_science: { icon: Laptop, accentColor: "#0284C7", badgeBg: "#E0F2FE" },
+  home_science: { icon: Home, accentColor: "#DB2777", badgeBg: "#FCE7F3" },
+  mass_media: { icon: Tv, accentColor: "#6366F1", badgeBg: "#EEF2FF" },
+  environmental_studies: { icon: Leaf, accentColor: "#059669", badgeBg: "#D1FAE5" },
+  fine_arts: { icon: Palette, accentColor: "#CA8A04", badgeBg: "#FEF08A" },
+  agriculture: { icon: Sprout, accentColor: "#15803D", badgeBg: "#DCFCE7" },
+  anthropology: { icon: Footprints, accentColor: "#854D0E", badgeBg: "#FEF9C3" },
+  english: { icon: FileText, accentColor: "#2563EB", badgeBg: "#DBEAFE" },
+  "general-test": { icon: Layers, accentColor: "#7C3AED", badgeBg: "#EDE9FE" },
+};
 
 // In-memory module-level cache to remember expanded unit state per subject during session
 const subjectExpandedStateCache: Record<string, Record<number, boolean>> = {};
@@ -154,7 +204,14 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
     );
   }
 
-  const { name } = subjectEntry;
+  const { name, code } = subjectEntry;
+  const meta = SUBJECT_STREAM_MAP[folder] || {
+    icon: BookOpen,
+    accentColor: "#2563EB",
+    badgeBg: "#DBEAFE",
+  };
+  const IconComp = meta.icon;
+
   const progressPct = totalTests > 0 ? Math.round((subjectStats.attemptedCount / totalTests) * 100) : 0;
   const nextTestTarget = subjectStats.nextUnattemptedTestId || `practice-${folder}-unit1-test1`;
 
@@ -179,8 +236,8 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
-      {/* Navigation */}
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-6">
+      {/* 1. Breadcrumb navigation */}
       <div>
         <Link
           href="/dashboard/practice"
@@ -191,22 +248,37 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
         </Link>
       </div>
 
-      {/* Compressed Header Banner (Fits above fold at 1366px) */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs">
+      {/* 2. Subject Header Banner */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              {name} Practice Tests
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500 font-medium">
-              {units.length} units · {totalTests} tests · 25 min each · +5 / -1 marking
-            </p>
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 tracking-wide uppercase">
+              <Compass className="w-3.5 h-3.5" />
+              <span>CUET UG 2026 Curriculum · Code {code}</span>
+            </div>
+
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div
+                className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-xs"
+                style={{ backgroundColor: meta.badgeBg, color: meta.accentColor }}
+              >
+                <IconComp className="w-6 h-6" />
+              </div>
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                  {name} Practice Tests
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
+                  {units.length} syllabus units · {totalTests} practice tests · 20 questions each · 25 min · +5 / -1 marking
+                </p>
+              </div>
+            </div>
 
             {/* Progress summary bar */}
             <div className="pt-1 space-y-1.5 max-w-md">
               <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
                 <span>
-                  {subjectStats.attemptedCount} / {totalTests} done ({progressPct}%)
+                  {subjectStats.attemptedCount} / {totalTests} completed ({progressPct}%)
                 </span>
                 {subjectStats.accuracy !== null ? (
                   <span className="text-blue-600 font-bold">{subjectStats.accuracy}% accuracy</span>
@@ -214,9 +286,15 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                   <span className="text-slate-400 font-normal">Not started</span>
                 )}
               </div>
-              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200/50">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-300"
+                  className={`h-full rounded-full transition-all duration-300 ${
+                    progressPct >= 100
+                      ? "bg-emerald-600"
+                      : progressPct > 0
+                      ? "bg-blue-600"
+                      : "bg-transparent"
+                  }`}
                   style={{ width: `${progressPct}%` }}
                 />
               </div>
@@ -246,7 +324,7 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Accordion Controls Bar */}
+      {/* 3. Accordion Controls Bar */}
       <div className="flex items-center justify-between pt-1">
         <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
           Syllabus Units ({units.length})
@@ -268,20 +346,20 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Units Accordion List */}
+      {/* 4. Units Accordion List */}
       <div className="space-y-4">
         {units.map((unit: any) => {
           const isExpanded = !!expandedUnits[unit.unitNumber];
           const unitStat = unitStatsMap.get(unit.unitNumber);
           const attemptedInUnit = unitStat ? unitStat.attemptedCount : 0;
           const unitAccuracy = unitStat?.accuracy;
-          const unitPct = Math.round((attemptedInUnit / 20) * 100);
+          const unitPct = Math.min(100, Math.round((attemptedInUnit / 20) * 100));
 
           return (
             <div
               key={unit.unitNumber}
               id={`unit-card-${unit.unitNumber}`}
-              className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden transition-all"
+              className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden transition-all"
             >
               {/* Unit Header Bar */}
               <div className="p-4 sm:p-5 flex items-start sm:items-center justify-between gap-4">
@@ -293,12 +371,12 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                 >
                   <div className="space-y-1 min-w-0 pr-2">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 font-sans">
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 font-sans">
                         Unit {unit.unitNumber}
                       </span>
                       <span className="text-xs font-semibold text-slate-600">
-                        {attemptedInUnit} / 20 done
-                        {unitAccuracy !== null && (
+                        {attemptedInUnit} / 20 completed
+                        {unitAccuracy !== null && unitAccuracy !== undefined && (
                           <span className="ml-1 text-blue-600">· {unitAccuracy}% accuracy</span>
                         )}
                       </span>
@@ -308,23 +386,28 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                     </h3>
                   </div>
 
-                  {/* Thin Progress bar */}
+                  {/* Progress bar */}
                   <div className="flex items-center gap-3 shrink-0">
-                    <div className="w-24 sm:w-32 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="w-24 sm:w-32 h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200/40">
                       <div
-                        className="h-full bg-blue-600 rounded-full"
+                        className={`h-full rounded-full transition-all duration-300 ${
+                          unitPct >= 100
+                            ? "bg-emerald-600"
+                            : unitPct > 0
+                            ? "bg-blue-600"
+                            : "bg-transparent"
+                        }`}
                         style={{ width: `${unitPct}%` }}
                       />
                     </div>
                   </div>
                 </button>
 
-                <div className="flex items-center gap-3 shrink-0">
-                  {/* TODO: notes feature removed; will link to rich revision notes when re-enabled */}
+                <div className="flex items-center gap-2.5 shrink-0">
                   <Link
                     href={`/dashboard/notes/${folder}`}
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline px-2 py-1 rounded-md hover:bg-blue-50 transition-colors"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline px-2.5 py-1 rounded-lg hover:bg-blue-50 transition-colors"
                   >
                     <BookOpen className="w-3.5 h-3.5" />
                     <span>Read notes</span>
@@ -334,7 +417,7 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                     type="button"
                     onClick={() => toggleUnit(unit.unitNumber)}
                     aria-label={isExpanded ? "Collapse unit" : "Expand unit"}
-                    className="p-1.5 rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors"
+                    className="p-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
                   >
                     {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
@@ -343,7 +426,7 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
 
               {/* Sub-topics chips row */}
               {unit.topics && unit.topics.length > 0 && (
-                <div className="px-4 sm:px-5 pb-3 flex flex-wrap gap-1.5 items-center">
+                <div className="px-4 sm:px-5 pb-3.5 flex flex-wrap gap-1.5 items-center">
                   <span className="text-[11px] font-semibold text-slate-400 mr-1">Topics:</span>
                   {unit.topics.map((topic: string, tIdx: number) => {
                     const acc = getTopicMetrics(topic);
@@ -352,7 +435,7 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                       return (
                         <span
                           key={tIdx}
-                          className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200"
+                          className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200/70"
                         >
                           {topic}
                         </span>
@@ -389,6 +472,7 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                         key={tIdx}
                         className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200"
                       >
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
                         <span>{topic}</span>
                         <span className="text-[10px]">({acc}%)</span>
                       </span>
@@ -399,9 +483,8 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
 
               {/* Unit Tests Grid (Visible when expanded) */}
               {isExpanded && (
-                <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50/40">
-                  <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2.5 sm:gap-3">
-                    {/* TODO: practice_test_manifest.json currently generates tests 1-20 dynamically without per-test names or subtopic metadata. Displaying 'Test N' until per-test metadata is added. */}
+                <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50/50">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-2.5 sm:gap-3">
                     {Array.from({ length: 20 }, (_, i) => i + 1).map((testNum) => {
                       const testId = `practice-${folder}-unit${unit.unitNumber}-test${testNum}`;
                       const testStat = subjectStats.testsMap.get(testId);
@@ -414,10 +497,10 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                           <Link
                             key={testNum}
                             href={`/test/${testId}`}
-                            className={`group relative h-[78px] rounded-xl border p-2.5 flex flex-col justify-between transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                            className={`group relative h-[82px] rounded-xl border p-2.5 flex flex-col justify-between transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                               isNext
-                                ? "bg-blue-50/50 border-blue-300 ring-2 ring-blue-500 shadow-xs"
-                                : "bg-white border-slate-200 hover:border-blue-200 hover:bg-slate-50/60"
+                                ? "bg-blue-50/60 border-blue-400 ring-2 ring-blue-500/20 shadow-xs"
+                                : "bg-white border-slate-200/90 hover:border-blue-300 hover:bg-blue-50/20"
                             }`}
                           >
                             <div className="flex items-center justify-between">
@@ -425,7 +508,7 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                                 Test {testNum}
                               </span>
                               {isNext ? (
-                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white">
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white shadow-2xs">
                                   Next
                                 </span>
                               ) : (
@@ -448,10 +531,10 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                         <div
                           key={testNum}
                           tabIndex={0}
-                          className={`group relative h-[78px] rounded-xl border p-2.5 flex flex-col justify-between transition-all overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          className={`group relative h-[82px] rounded-xl border p-2.5 flex flex-col justify-between transition-all overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                             isNext
-                              ? "bg-blue-50/40 border-blue-300 ring-2 ring-blue-500"
-                              : "bg-slate-50/70 border-slate-200 hover:border-blue-300"
+                              ? "bg-blue-50/50 border-blue-400 ring-2 ring-blue-500/20"
+                              : "bg-slate-50/80 border-slate-200/90 hover:border-blue-300"
                           }`}
                         >
                           {/* Default content */}
@@ -485,11 +568,11 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                             <span className="text-[10px] text-slate-400">
                               {testStat.attemptsCount > 1
                                 ? `${testStat.attemptsCount} attempts`
-                                : "Attempted"}
+                                : "1 attempt"}
                             </span>
                           </div>
 
-                          {/* Reveal overlay on hover or focus-within: Analysis first, then Re-attempt */}
+                          {/* Reveal overlay on hover or focus-within */}
                           <div className="absolute inset-0 bg-white/95 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity flex items-center justify-center gap-1.5 p-2 z-10">
                             <Link
                               href={`/dashboard/pyqs/analysis/${testStat.bestAttempt?.id || ""}`}

@@ -391,27 +391,6 @@ export default function MocksPage() {
 
   const activeSubjectInfo = selectedTab !== "all" ? SUBJECT_CONFIGS[selectedTab] : null;
 
-  const handleSelectStream = (stream: StreamKey) => {
-    setSelectedStream(stream);
-    setSelectedTab("all");
-  };
-
-  const handleSelectSubject = (subjKey: SubjectKey, streamKey?: StreamKey) => {
-    setSelectedTab(subjKey);
-    if (streamKey) {
-      setSelectedStream(streamKey);
-    } else if (subjKey !== "all") {
-      for (const [stKey, stInfo] of Object.entries(STREAM_CONFIGS)) {
-        if (stInfo.subjects.includes(subjKey as any)) {
-          setSelectedStream(stKey as StreamKey);
-          break;
-        }
-      }
-    } else {
-      setSelectedStream("all");
-    }
-  };
-
   const allSubjects = useMemo(() => {
     if (selectedTab !== "all" && activeSubjectInfo) {
       return [activeSubjectInfo];
@@ -433,7 +412,7 @@ export default function MocksPage() {
     });
   }, [allSubjects, statusFilter, isClient, testAttempts]);
 
-  // Recommended subjects for user target dream college/course (3-4 subjects)
+  // Recommended subjects for user target dream college/course
   const recommendedSubjects = useMemo(() => {
     if (!targetData.hasTarget || !targetData.requiredSubjects || targetData.requiredSubjects.length === 0) {
       return [];
@@ -632,7 +611,7 @@ export default function MocksPage() {
     ];
   }, [selectedStream, availableSubjectsForDropdown]);
 
-  // Render a standard subject card
+  // Standard Subject Card matching design system
   const renderSubjectCard = (sub: SubjectMeta, isRecommended = false) => {
     const Icon = sub.icon;
     const mockCount = SUBJECT_MOCK_COUNTS[sub.key] ?? 20;
@@ -658,40 +637,40 @@ export default function MocksPage() {
     return (
       <div
         key={sub.key}
-        className={`bg-white rounded-3xl border transition-all flex flex-col justify-between p-5 sm:p-6 min-w-0 ${
+        className={`bg-white rounded-2xl border transition-all flex flex-col justify-between p-5 sm:p-6 min-w-0 ${
           isRecommended
-            ? "border-blue-200/80 shadow-md ring-1 ring-blue-500/10"
-            : "border-slate-100 shadow-sm hover:shadow-md"
+            ? "border-blue-300 shadow-xs ring-1 ring-blue-500/15"
+            : "border-slate-200/90 shadow-xs hover:border-slate-300"
         }`}
       >
         <div className="space-y-3.5 flex-1 flex flex-col min-w-0">
           {/* Top Header Row: Icon + Badges */}
           <div className="flex items-start justify-between gap-3">
             <div
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+              className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
                 isRecommended
-                  ? "bg-blue-600 text-white shadow-sm shadow-blue-500/25"
+                  ? "bg-blue-600 text-white shadow-xs"
                   : "bg-blue-50 border border-blue-200/60 text-blue-600"
               }`}
             >
-              <Icon className="w-6 h-6" />
+              <Icon className="w-5 h-5" />
             </div>
 
             <div className="flex items-center gap-1.5 flex-wrap justify-end">
               {stats.attemptedMocksCount > 0 ? (
-                <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/70 flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                   <span>
-                    {stats.attemptedMocksCount} of {mockCount} Attempted
+                    {stats.attemptedMocksCount} / {mockCount} Attempted
                   </span>
                 </span>
               ) : (
-                <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
                   0/{mockCount} Attempted
                 </span>
               )}
 
-              <span className="text-[12px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-mono">
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
                 Code {sub.code}
               </span>
             </div>
@@ -700,7 +679,7 @@ export default function MocksPage() {
           {/* Title & Description */}
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <h3 className="text-lg font-bold text-slate-900 leading-snug">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
                 {sub.name}
               </h3>
               {isRecommended && (
@@ -710,30 +689,35 @@ export default function MocksPage() {
                 </span>
               )}
             </div>
-            {/* Description clamped to exactly 2 lines with fixed height so cards align */}
-            <p className="text-[13px] font-normal text-slate-500 line-clamp-2 h-10 leading-relaxed">
+            <p className="text-xs text-slate-500 line-clamp-2 h-9 leading-relaxed">
               {sub.subtitle}
             </p>
           </div>
 
           {/* Progress bar */}
-          <div className="space-y-1 pt-1">
-            <div className="flex items-center justify-between text-[12px] font-medium text-slate-500">
+          <div className="space-y-1.5 pt-1">
+            <div className="flex items-center justify-between text-xs font-medium text-slate-500">
               <span>Mock Progress</span>
-              <span className="font-semibold text-slate-700 tabular-nums">
+              <span className="font-semibold text-slate-900 tabular-nums">
                 {stats.attemptedMocksCount} / {mockCount} ({progressPercent}%)
               </span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
+            <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden border border-slate-200/50">
               <div
-                className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                className={`h-full rounded-full transition-all duration-300 ${
+                  progressPercent >= 100
+                    ? "bg-emerald-600"
+                    : progressPercent > 0
+                    ? "bg-blue-600"
+                    : "bg-transparent"
+                }`}
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
           </div>
 
-          {/* Meta specs row: raised to at least 13px with darker text */}
-          <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2 text-[13px] text-slate-600 font-medium">
+          {/* Meta specs row */}
+          <div className="pt-2.5 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs text-slate-600 font-medium">
             <div className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <span>{sub.durationMinutes} Mins</span>
@@ -744,16 +728,16 @@ export default function MocksPage() {
             </div>
             <div className="flex items-center gap-1.5 col-span-2 text-slate-700">
               <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-              <span>{mockCount} Full Mock Papers (+5/−1)</span>
+              <span>{mockCount} Full Mock Papers (+5 / −1)</span>
             </div>
           </div>
         </div>
 
         {/* Bottom Actions: Pinned with mt-auto */}
-        <div className="pt-3 border-t border-slate-100 mt-auto flex items-center gap-2 w-full">
+        <div className="pt-3.5 border-t border-slate-100 mt-auto flex items-center gap-2 w-full">
           <Link
             href={`/dashboard/mocks/${sub.key}`}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-[13px] shadow-sm hover:shadow-md transition-all text-center"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-xs transition-all shadow-xs text-center cursor-pointer"
           >
             <span>View All Mocks</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -761,7 +745,7 @@ export default function MocksPage() {
 
           <Link
             href={stats.isAllAttempted ? `/dashboard/mocks/${sub.key}` : `/test/${nextMockId}`}
-            className="px-3.5 py-2.5 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-[13px] transition-all text-center flex items-center gap-1.5 shrink-0"
+            className="px-3 py-2.5 rounded-xl border border-blue-200 bg-blue-50/80 hover:bg-blue-100 text-blue-700 font-semibold text-xs transition-all text-center flex items-center gap-1.5 shrink-0 max-w-[48%] cursor-pointer"
             title={
               stats.isAllAttempted
                 ? `All mocks attempted for ${sub.name}`
@@ -770,13 +754,13 @@ export default function MocksPage() {
           >
             {stats.isAllAttempted ? (
               <>
-                <RotateCw className="w-3.5 h-3.5" />
-                <span>Analysis</span>
+                <RotateCw className="w-3.5 h-3.5 shrink-0" />
+                <span className="truncate">Analysis</span>
               </>
             ) : (
               <>
-                <Play className="w-3 h-3 fill-current" />
-                <span>Next: Mock {nextMockNum}</span>
+                <Play className="w-3 h-3 fill-current shrink-0" />
+                <span className="truncate">Next: Mock {nextMockNum}</span>
               </>
             )}
           </Link>
@@ -787,97 +771,111 @@ export default function MocksPage() {
 
   return (
     <div className="w-full min-w-0 max-w-7xl mx-auto space-y-6">
-      {/* 1. Header & Navigation */}
+      {/* 1. Header & Sibling Links */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">
             CUET UG Mock Exams
           </h1>
-          <p className="text-[13px] sm:text-[14px] text-slate-500 leading-relaxed max-w-3xl">
+          <p className="text-xs sm:text-sm text-slate-600 leading-normal max-w-3xl">
             Simulate 50-question full syllabus papers for Domain and General Subjects (English & GAT) under authentic NTA CUET CBT interface conditions with instant answer analysis.
           </p>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap shrink-0">
           <Link
-            href="/dashboard/practice"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-all"
-          >
-            <span>Unit Practice Tests</span>
-          </Link>
-          <Link
             href="/dashboard/pyqs"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-all"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all shadow-2xs"
           >
             <span>Official PYQ Papers</span>
+          </Link>
+          <Link
+            href="/dashboard/practice"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all shadow-2xs"
+          >
+            <span>Unit Practice Tests</span>
           </Link>
         </div>
       </div>
 
-      {/* 2. Slim Toolbar: Stream, Subject, and Status Filter (56-64px tall) */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-4 shadow-xs">
+      {/* 2. Filter Toolbar */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-4 shadow-xs">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
             {/* Stream Selector */}
-            <div className="min-w-[180px] sm:min-w-[200px]">
+            <div className="min-w-[180px] sm:min-w-[220px]">
               <SearchableSelect
                 ariaLabel="Filter by Stream"
-                value={selectedStream}
-                onChange={(val) => handleSelectStream(val as StreamKey)}
                 options={streamSelectOptions}
-                placeholder="All Streams"
-                className="w-full"
+                value={selectedStream}
+                onChange={(val) => {
+                  setSelectedStream(val as StreamKey);
+                  setSelectedTab("all");
+                }}
+                searchPlaceholder="Search streams..."
               />
             </div>
 
             {/* Subject Selector */}
-            <div className="min-w-[180px] sm:min-w-[220px]">
+            <div className="min-w-[180px] sm:min-w-[240px]">
               <SearchableSelect
                 ariaLabel="Filter by Subject"
-                value={selectedTab}
-                onChange={(val) => handleSelectSubject(val as SubjectKey)}
                 options={subjectSelectOptions}
-                placeholder="All Subjects"
-                searchPlaceholder="Search subjects by name, general subjects, or code..."
-                className="w-full"
+                value={selectedTab}
+                onChange={(val) => {
+                  setSelectedTab(val as SubjectKey);
+                }}
+                searchPlaceholder="Search subjects or codes..."
               />
             </div>
           </div>
 
           {/* Status Filter Segmented Control */}
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-[12px] font-semibold">
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold shrink-0">
             <button
               type="button"
               onClick={() => setStatusFilter("all")}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 statusFilter === "all"
-                  ? "bg-white text-slate-900 shadow-xs"
+                  ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              All
+              All ({allSubjects.length})
             </button>
             <button
               type="button"
               onClick={() => setStatusFilter("started")}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 statusFilter === "started"
-                  ? "bg-white text-slate-900 shadow-xs"
+                  ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              Started
+              Started (
+              {
+                allSubjects.filter(
+                  (s) => getMockStats(s.key, isClient ? testAttempts : []).attemptedMocksCount > 0
+                ).length
+              }
+              )
             </button>
             <button
               type="button"
               onClick={() => setStatusFilter("not_started")}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 statusFilter === "not_started"
-                  ? "bg-white text-slate-900 shadow-xs"
+                  ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              Not started
+              Not started (
+              {
+                allSubjects.filter(
+                  (s) => getMockStats(s.key, isClient ? testAttempts : []).attemptedMocksCount === 0
+                ).length
+              }
+              )
             </button>
           </div>
         </div>
@@ -888,15 +886,15 @@ export default function MocksPage() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-2">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
                 <Target className="w-4 h-4" />
               </div>
               <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                 Recommended for your target
               </h2>
             </div>
-            <p className="text-[12px] font-medium text-slate-500">
-              Required for <strong>{targetData.course}</strong> at <strong>{targetData.college}</strong>
+            <p className="text-xs font-medium text-slate-500">
+              Required for <strong className="text-slate-800">{targetData.course}</strong> at <strong className="text-slate-800">{targetData.college}</strong>
             </p>
           </div>
 
@@ -905,16 +903,16 @@ export default function MocksPage() {
           </div>
         </div>
       ) : !targetData.hasTarget && !isFilterActive ? (
-        <div className="bg-blue-50/50 border border-blue-200/60 rounded-2xl p-3 sm:p-4 flex items-center justify-between gap-3 text-[13px] text-blue-900">
+        <div className="bg-blue-50/60 border border-blue-200/60 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-blue-900">
           <div className="flex items-center gap-2.5">
             <Target className="w-4 h-4 text-blue-600 shrink-0" />
-            <span>Set your dream college & course to see priority mock recommendations.</span>
+            <span>Set your target college & course to unlock priority mock recommendations.</span>
           </div>
           <Link
             href="/dashboard/profile"
-            className="text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline shrink-0"
+            className="font-bold text-blue-700 hover:text-blue-900 hover:underline shrink-0"
           >
-            Set your dream college &rarr;
+            Set target goals &rarr;
           </Link>
         </div>
       ) : null}
@@ -924,12 +922,12 @@ export default function MocksPage() {
         <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
             {showRecommendedRow
-              ? "All other subjects"
-              : selectedTab !== "all" && activeSubjectInfo
-              ? `${activeSubjectInfo.name} Specification`
+              ? "All other admission subjects"
+              : selectedTab !== "all"
+              ? `${SUBJECT_CONFIGS[selectedTab]?.name || "Selected Subject"} Mock Papers`
               : selectedStream !== "all"
               ? `${STREAM_CONFIGS[selectedStream].name}`
-              : "All CUET UG Subjects"}
+              : "All CUET UG Mock Subjects"}
             <span className="text-xs font-normal text-slate-400 ml-2 font-mono">
               ({otherSubjects.length})
             </span>
@@ -941,7 +939,7 @@ export default function MocksPage() {
             {otherSubjects.map((sub) => renderSubjectCard(sub, false))}
           </div>
         ) : (
-          <div className="bg-white rounded-3xl border border-slate-100 p-8 text-center space-y-2">
+          <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-2">
             <p className="text-sm font-semibold text-slate-700">No subjects match the selected filters.</p>
             <button
               type="button"
@@ -956,6 +954,13 @@ export default function MocksPage() {
             </button>
           </div>
         )}
+      </div>
+
+      {/* Footnote */}
+      <div className="pt-4 border-t border-slate-100 text-center">
+        <p className="text-xs text-slate-400">
+          Authentic full-length CUET UG mock tests with real-time scoring, negative marking (+5 / −1), and instant solutions.
+        </p>
       </div>
     </div>
   );

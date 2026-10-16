@@ -336,6 +336,11 @@ export default function DashboardClient({
       <section aria-label="Greeting">
         <WelcomeBanner
           userName={fullName}
+          targetCollege={target.college || initialData.user?.targetCollege}
+          targetCourse={target.course || initialData.user?.targetCourse}
+          targetStream={targetStream}
+          isDiagnosticUnlocked={diagnosticProgress.isUnlocked}
+          cycleNumber={diagnosticProgress.currentCycleNumber}
         />
       </section>
 

@@ -1,7 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import { useTestStore } from '@/lib/store/useTestStore';
-import { generateHeatmapGrid, HeatmapDay } from '@/lib/heatmap-utils';
-import { deduplicateTestAttempts } from '@/lib/analytics';
+"use client";
+
+import React, { useState, useMemo } from "react";
+import { Activity, Info } from "lucide-react";
+import { useTestStore } from "@/lib/store/useTestStore";
+import { generateHeatmapGrid, HeatmapDay } from "@/lib/heatmap-utils";
+import { deduplicateTestAttempts } from "@/lib/analytics";
 
 export const DailyPracticeCalendar: React.FC = () => {
   const [hoveredDay, setHoveredDay] = useState<HeatmapDay | null>(null);
@@ -18,12 +21,12 @@ export const DailyPracticeCalendar: React.FC = () => {
   }, [attempts]);
 
   const getCellColor = (count: number, isInRange: boolean) => {
-    if (!isInRange) return 'bg-slate-50 opacity-40 border border-slate-100 cursor-default';
-    if (count === 0) return 'bg-slate-100 border border-slate-200/50';
-    if (count <= 1) return 'bg-[#BFDBFE] border border-[#93C5FD]'; // Step 1: Blue 200
-    if (count <= 3) return 'bg-[#60A5FA] border border-[#3B82F6]'; // Step 2: Blue 400
-    if (count <= 5) return 'bg-[var(--accent)] border border-[var(--accent)]'; // Step 3: var(--accent)
-    return 'bg-[var(--accent-hover)] border border-[var(--accent-hover)]'; // Step 4: var(--accent-hover)
+    if (!isInRange) return "bg-slate-50 opacity-40 border border-slate-100 cursor-default";
+    if (count === 0) return "bg-slate-100 border border-slate-200/50 hover:border-slate-300";
+    if (count <= 1) return "bg-blue-100 border border-blue-200 hover:border-blue-300";
+    if (count <= 3) return "bg-blue-300 border border-blue-400 hover:border-blue-500";
+    if (count <= 5) return "bg-blue-600 border border-blue-600 hover:bg-blue-700";
+    return "bg-indigo-700 border border-indigo-700 hover:bg-indigo-800";
   };
 
   const handleMouseEnter = (day: HeatmapDay | null, e: React.MouseEvent) => {
@@ -41,36 +44,40 @@ export const DailyPracticeCalendar: React.FC = () => {
     setTooltipPos(null);
   };
 
-  // 18px cell + 4px gap = 22px pitch
   const PITCH = 22;
 
   return (
-    <div className="app-card space-y-4 relative">
+    <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4 relative">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[var(--border)] pb-3 gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3.5 gap-2">
         <div>
-          <h2 className="text-[20px] font-semibold text-[var(--text)] leading-[1.25]">
-            Activity
-          </h2>
-          <p className="text-[14px] text-[var(--text-secondary)] mt-0.5">
-            Practice sessions over the last 60 days.
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600">
+              <Activity className="w-4 h-4" />
+            </div>
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+              Practice Activity
+            </h2>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            Daily study sessions, practice drills, and mock exams over the last 60 days.
           </p>
         </div>
 
-        <div className="text-[12px] text-[var(--text-muted)] tabular-nums self-start sm:self-auto font-medium">
-          {heatmapData.totalMocks} {heatmapData.totalMocks === 1 ? "test" : "tests"} completed • {heatmapData.totalQuestions} {heatmapData.totalQuestions === 1 ? "question" : "questions"}
+        <div className="text-xs text-slate-500 tabular-nums self-start sm:self-auto font-medium bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/60">
+          <strong className="text-slate-900">{heatmapData.totalMocks}</strong> {heatmapData.totalMocks === 1 ? "test" : "tests"} completed • <strong className="text-slate-900">{heatmapData.totalQuestions}</strong> questions answered
         </div>
       </div>
 
       {/* Heatmap Grid */}
-      <div className="overflow-x-auto pt-2 pb-2">
+      <div className="overflow-x-auto pt-1 pb-1">
         <div className="inline-block min-w-[340px]">
-          {/* Month labels aligned with week columns (18px square + 4px gap = 22px pitch) */}
-          <div className="relative h-5 mb-1 pl-8">
+          {/* Month labels aligned with week columns */}
+          <div className="relative h-4 mb-1 pl-8">
             {heatmapData.monthLabels.map((m, idx) => (
               <span
                 key={`${m.name}-${idx}`}
-                className="absolute text-[12px] font-medium text-[var(--text-muted)]"
+                className="absolute text-[11px] font-semibold text-slate-400"
                 style={{ left: `${32 + m.columnIndex * PITCH}px` }}
               >
                 {m.name}
@@ -81,7 +88,7 @@ export const DailyPracticeCalendar: React.FC = () => {
           {/* Grid: Day labels + Week columns */}
           <div className="flex gap-1 items-start">
             {/* Day of week labels */}
-            <div className="flex flex-col gap-1 text-[11px] sm:text-[12px] text-[var(--text-muted)] w-8 text-right pr-2 select-none">
+            <div className="flex flex-col gap-1 text-[10px] sm:text-[11px] font-medium text-slate-400 w-8 text-right pr-2 select-none">
               <span className="h-[18px] leading-[18px]">Mon</span>
               <span className="h-[18px] leading-[18px] opacity-0" aria-hidden="true">Tue</span>
               <span className="h-[18px] leading-[18px]">Wed</span>
@@ -100,7 +107,7 @@ export const DailyPracticeCalendar: React.FC = () => {
                       return (
                         <div
                           key={`empty-${rowIdx}`}
-                          className="w-[18px] h-[18px] rounded-[3px] bg-transparent"
+                          className="w-[18px] h-[18px] rounded-xs bg-transparent"
                           aria-hidden="true"
                         />
                       );
@@ -110,10 +117,13 @@ export const DailyPracticeCalendar: React.FC = () => {
                       <div
                         key={day.date}
                         role="gridcell"
+                        tabIndex={0}
                         aria-label={day.tooltipText}
                         onMouseEnter={(e) => handleMouseEnter(day, e)}
                         onMouseLeave={handleMouseLeave}
-                        className={`w-[18px] h-[18px] rounded-[3px] transition-colors cursor-pointer ${getCellColor(
+                        onFocus={(e) => handleMouseEnter(day, e as any)}
+                        onBlur={handleMouseLeave}
+                        className={`w-[18px] h-[18px] rounded-xs transition-colors cursor-pointer outline-hidden focus:ring-2 focus:ring-blue-500 ${getCellColor(
                           day.count,
                           day.isInRange
                         )}`}
@@ -126,16 +136,23 @@ export const DailyPracticeCalendar: React.FC = () => {
           </div>
 
           {/* Scale Legend */}
-          <div className="flex items-center justify-end gap-1.5 mt-4 text-[12px] text-[var(--text-muted)]">
-            <span>Less</span>
-            <div className="flex gap-1">
-              <div className="w-[18px] h-[18px] rounded-[3px] bg-slate-100 border border-slate-200/50" />
-              <div className="w-[18px] h-[18px] rounded-[3px] bg-[#BFDBFE] border border-[#93C5FD]" />
-              <div className="w-[18px] h-[18px] rounded-[3px] bg-[#60A5FA] border border-[#3B82F6]" />
-              <div className="w-[18px] h-[18px] rounded-[3px] bg-[var(--accent)] border border-[var(--accent)]" />
-              <div className="w-[18px] h-[18px] rounded-[3px] bg-[var(--accent-hover)] border border-[var(--accent-hover)]" />
+          <div className="flex items-center justify-between mt-3 text-xs text-slate-400">
+            <span className="text-[11px] flex items-center gap-1">
+              <Info className="w-3 h-3 text-slate-400" />
+              Hover or focus any square to inspect activity details.
+            </span>
+
+            <div className="flex items-center gap-1.5">
+              <span>Less</span>
+              <div className="flex gap-1">
+                <div className="w-[16px] h-[16px] rounded-xs bg-slate-100 border border-slate-200/50" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-blue-100 border border-blue-200" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-blue-300 border border-blue-400" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-blue-600 border border-blue-600" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-indigo-700 border border-indigo-700" />
+              </div>
+              <span>More</span>
             </div>
-            <span>More</span>
           </div>
         </div>
       </div>
@@ -143,17 +160,17 @@ export const DailyPracticeCalendar: React.FC = () => {
       {/* Floating Tooltip */}
       {hoveredDay && tooltipPos && (
         <div
-          className="fixed pointer-events-none z-50 bg-white border border-[var(--border)] text-[var(--text)] rounded-[8px] px-3 py-1.5 text-[12px] shadow-[0_8px_24px_rgba(15,23,42,0.12)] -translate-x-1/2 -translate-y-full"
+          className="fixed pointer-events-none z-50 bg-white border border-slate-200 text-slate-900 rounded-lg px-3 py-1.5 text-xs shadow-md -translate-x-1/2 -translate-y-full"
           style={{
             left: `${tooltipPos.x}px`,
             top: `${tooltipPos.y}px`,
           }}
         >
-          <div className="font-semibold">{hoveredDay.formattedDate}</div>
-          <div className="text-[var(--text-secondary)] tabular-nums">
+          <div className="font-bold text-slate-900">{hoveredDay.formattedDate}</div>
+          <div className="text-slate-600 tabular-nums">
             {hoveredDay.count === 0
-              ? 'No practice activity'
-              : `${hoveredDay.count} ${hoveredDay.count === 1 ? 'test' : 'tests'} (${hoveredDay.questionCount} ${hoveredDay.questionCount === 1 ? 'question' : 'questions'})`}
+              ? "No practice activity"
+              : `${hoveredDay.count} ${hoveredDay.count === 1 ? "test" : "tests"} (${hoveredDay.questionCount} questions)`}
           </div>
         </div>
       )}
