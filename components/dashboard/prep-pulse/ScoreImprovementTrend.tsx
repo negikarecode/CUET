@@ -411,7 +411,11 @@ export const ScoreImprovementTrend: React.FC = () => {
       </div>
 
       {/* Main Chart Canvas with subtle left accent line matching reference image */}
-      <div className="relative w-full h-72 sm:h-80 pt-2 pl-1 sm:pl-2">
+      <div
+        role="region"
+        aria-label="Score improvement trend chart"
+        className="relative w-full h-72 sm:h-80 pt-2 pl-1 sm:pl-2"
+      >
         {/* Left vertical amber accent line matching reference image */}
         <div 
           className="absolute left-0 top-12 bottom-9 w-0.5 bg-amber-400/30 rounded-full pointer-events-none"

@@ -212,7 +212,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
       </div>
 
       {/* Main Bar Chart Canvas */}
-      <div className="w-full h-60 pt-3">
+      <div role="region" aria-label="Detailed performance comparison bar chart" className="w-full h-60 pt-3">
         {viewType === 'topics' && topicBars.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center p-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
             <Sparkles className="w-8 h-8 text-blue-500/40 mb-2" />

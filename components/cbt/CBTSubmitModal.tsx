@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -23,6 +23,16 @@ export default function CBTSubmitModal() {
   const submitTest = useCBTStore((state) => state.submitTest);
   const getSummaryCounts = useCBTStore((state) => state.getSummaryCounts);
   const remainingSeconds = useCBTStore((state) => state.remainingSeconds);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isSubmitModalOpen && !isSubmitting) {
+        closeSubmitModal();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isSubmitModalOpen, isSubmitting, closeSubmitModal]);
 
   const handleSubmit = async () => {
     if (isSubmitting) return;

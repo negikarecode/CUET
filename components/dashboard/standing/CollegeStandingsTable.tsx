@@ -496,7 +496,11 @@ export default function CollegeStandingsTable({
             </div>
           </div>
 
-          <div className="h-64 sm:h-72 w-full">
+          <div
+            role="region"
+            aria-label={`Cutoff trend chart for ${selectedStandingItem.collegeName} ${selectedStandingItem.courseName}`}
+            className="h-64 sm:h-72 w-full"
+          >
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trendData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />

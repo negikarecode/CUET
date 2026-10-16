@@ -50,6 +50,16 @@ export function DoubtSolverDrawer({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleSend = async (textToSend?: string) => {
@@ -137,6 +147,7 @@ export function DoubtSolverDrawer({
 
         <button
           onClick={onClose}
+          aria-label="Close doubt solver"
           className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
         >
           <X className="w-4 h-4" />
@@ -235,11 +246,13 @@ export function DoubtSolverDrawer({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Ask a question on your weak topics..."
+            aria-label="Ask doubt question"
             className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"
             disabled={!inputValue.trim() || loading}
+            aria-label="Send question"
             className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white cursor-pointer transition-all shrink-0"
           >
             <Send className="w-4 h-4" />

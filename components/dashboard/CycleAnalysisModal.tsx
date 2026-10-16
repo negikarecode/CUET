@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   TrendingUp,
@@ -22,6 +22,16 @@ interface CycleAnalysisModalProps {
 
 export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) {
   const [activeTab, setActiveTab] = useState<"overview" | "comparison" | "ai" | "topics">("overview");
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
   const isBaseline = cycle.cycleNumber === 1 || !cycle.comparison;
   const comp = cycle.comparison;
   const ai = cycle.aiAnalysis;

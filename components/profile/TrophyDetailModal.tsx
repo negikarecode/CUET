@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Crosshair,
   Zap,
@@ -33,6 +33,16 @@ export default function TrophyDetailModal({
   trophy,
   onClose,
 }: TrophyDetailModalProps) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && trophy) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [trophy, onClose]);
+
   if (!trophy) return null;
 
   const IconComp = ICON_MAP[trophy.icon] || Award;
@@ -47,6 +57,7 @@ export default function TrophyDetailModal({
         <button
           type="button"
           onClick={onClose}
+          aria-label="Close modal"
           className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all cursor-pointer"
         >
           <X className="w-4 h-4" />

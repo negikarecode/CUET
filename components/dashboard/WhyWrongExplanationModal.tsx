@@ -95,6 +95,16 @@ export function WhyWrongExplanationModal({
     };
   }, [question]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   const handleFlagSubmit = async () => {
     if (!flagReason.trim()) return;
     try {
@@ -160,6 +170,7 @@ export function WhyWrongExplanationModal({
 
           <button
             onClick={onClose}
+            aria-label="Close modal"
             className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-all cursor-pointer"
           >
             <X className="w-4 h-4" />

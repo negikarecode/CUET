@@ -297,7 +297,11 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                 </div>
 
                 {/* Main Recharts Area: 320px Desktop, 240px Mobile */}
-                <div className="h-[240px] sm:h-[320px] w-full">
+                <div
+                  role="region"
+                  aria-label="Performance score and accuracy trend chart"
+                  className="h-[240px] sm:h-[320px] w-full"
+                >
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart
                       data={chartData}

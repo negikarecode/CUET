@@ -1118,6 +1118,8 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
   return (
     <div className="relative w-full">
       <svg
+        role="img"
+        aria-label="Score trend chart across test sessions"
         viewBox={`0 0 ${totalW} ${chartHeight}`}
         className="w-full h-auto overflow-visible select-none"
       >

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   TrendingUp,
@@ -22,6 +22,16 @@ interface WeeklyReportModalProps {
 export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
   const [copied, setCopied] = useState(false);
   const m = report.deterministicMetrics;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
   const handleCopyLink = () => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -80,6 +90,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
             </button>
             <button
               onClick={onClose}
+              aria-label="Close modal"
               className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-all cursor-pointer"
             >
               <X className="w-4 h-4" />

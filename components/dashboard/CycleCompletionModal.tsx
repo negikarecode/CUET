@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Sparkles,
   TrendingUp,
@@ -26,6 +26,16 @@ export function CycleCompletionModal({
 }: CycleCompletionModalProps) {
   const { cycleNumber, totalAnalyzed, isBaseline, comparisonSummary } = notification;
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-8 max-w-lg w-full shadow-xl relative space-y-6">
@@ -34,6 +44,7 @@ export function CycleCompletionModal({
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all cursor-pointer"
           title="Dismiss"
+          aria-label="Dismiss"
         >
           <X className="w-4 h-4" />
         </button>
