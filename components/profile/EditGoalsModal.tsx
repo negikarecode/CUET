@@ -46,6 +46,7 @@ export default function EditGoalsModal({
     initialCollege,
     initialCourse,
     initialStream,
+    filterCoursesByStream: false,
   });
 
   const [fullName, setFullName] = useState<string>(initialFullName || "");

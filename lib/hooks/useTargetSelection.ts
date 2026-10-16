@@ -176,12 +176,12 @@ export function useTargetSelection(options?: UseTargetSelectionOptions) {
       const newCourseId = prog.id;
       setCourseId(newCourseId);
 
-      // Check stream sync: if course belongs to another stream, switch stream with inline notice
+      // Check stream sync: if course belongs to another stream, switch stream with inline notice only if stream filtering is enabled
       const courseStream = prog.stream.toLowerCase();
       let streamChanged = false;
       let newStreamFormatted = stream;
 
-      if (courseStream !== stream.toLowerCase()) {
+      if (options?.filterCoursesByStream !== false && courseStream !== stream.toLowerCase()) {
         newStreamFormatted =
           courseStream === "commerce"
             ? "Commerce"
@@ -217,7 +217,7 @@ export function useTargetSelection(options?: UseTargetSelectionOptions) {
         setInlineNotice(null);
       }
     },
-    [collegeId, stream]
+    [collegeId, stream, options?.filterCoursesByStream]
   );
 
   // Selection Action: Select Stream
@@ -235,12 +235,12 @@ export function useTargetSelection(options?: UseTargetSelectionOptions) {
 
       setStreamState(formatted);
 
-      if (formatted === "All") {
+      if (formatted === "All" || options?.filterCoursesByStream === false) {
         setInlineNotice(null);
         return;
       }
 
-      // If existing course belongs to another stream, clear it with notice
+      // If existing course belongs to another stream, clear it with notice only when filtering is active
       if (courseId) {
         const currentCourse = resolveProgram(courseId);
         if (currentCourse && currentCourse.stream.toLowerCase() !== sLower) {
@@ -252,7 +252,7 @@ export function useTargetSelection(options?: UseTargetSelectionOptions) {
         }
       }
     },
-    [courseId]
+    [courseId, options?.filterCoursesByStream]
   );
 
   const clearCollege = useCallback(() => {

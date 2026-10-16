@@ -299,7 +299,7 @@ export default function StandingViewClient({
         <CascadingTargetSelector
           targetSelection={targetSelection}
           layout="grid"
-          showStreamButtons={true}
+          showStreamButtons={false}
           showDerivedUniversity={false}
           showUnavailableToggle={true}
           collegeLabelPrefix="Target College"
