@@ -71,7 +71,33 @@ export async function POST(req: NextRequest) {
       timeSpentSeconds,
     });
 
-    return NextResponse.json(result, {
+    // Also compute comprehensive Mistake Detective V2 10-category analysis
+    const { diagnoseMistakeDeterministically } = await import("@/lib/mistake-detective");
+    const v2Diagnostic = diagnoseMistakeDeterministically({
+      questionId,
+      selectedOption,
+      selectedOptionText,
+      correctOption: correctOption || "A",
+      correctOptionText,
+      questionText: questionText || "CUET Exam Question",
+      explanation,
+      chapter: body.chapter || microTopic,
+      microTopic,
+      subject: body.subject,
+      timeSpentSeconds,
+      questionType: body.questionType,
+      archetype: body.archetype,
+      distractorTrap: body.distractorTrap,
+      misconceptionDescription: body.misconceptionDescription,
+      recentMistakeCountOnTopic: body.recentMistakeCountOnTopic || 0,
+    });
+
+    const combinedResult = {
+      ...result,
+      v2: v2Diagnostic,
+    };
+
+    return NextResponse.json(combinedResult, {
       status: 200,
       headers: {
         "Content-Type": "application/json",
