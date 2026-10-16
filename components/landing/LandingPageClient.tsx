@@ -1935,6 +1935,8 @@ function CampusGallerySection() {
                 <img
                   src={c.src}
                   alt={c.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <span className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
@@ -2223,6 +2225,10 @@ function HallOfFameSection() {
                 <img
                   src={item.avatar}
                   alt={item.name}
+                  width={40}
+                  height={40}
+                  loading="lazy"
+                  decoding="async"
                   className="w-10 h-10 rounded-full object-cover border border-slate-200"
                 />
                 <div>

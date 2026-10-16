@@ -205,6 +205,10 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
                 <img
                   src={avatarUrl}
                   alt={userName}
+                  width={40}
+                  height={40}
+                  loading="lazy"
+                  decoding="async"
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-blue-500/20"
                 />
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></span>

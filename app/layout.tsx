@@ -6,6 +6,7 @@ import "./globals.css";
 import "katex/dist/katex.min.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://cuet-prep.in"),
   title: "CUET AI-Prep | NTA-Grade CBT Practice & AI Mistake Diagnosis",
   description:
     "India's practice-first test preparation platform for CUET UG entrance examination. Experience authentic NTA CBT interface, real 60-minute timers, and granular AI mistake diagnosis for Science, Commerce, and Humanities.",
@@ -20,6 +21,21 @@ export const metadata: Metadata = {
     "AI Mistake Diagnosis",
   ],
   authors: [{ name: "CUET AI-Prep Academic Team" }],
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "https://cuet-prep.in",
+    siteName: "CUET AI-Prep",
+    title: "CUET AI-Prep | NTA-Grade CBT Practice & AI Mistake Diagnosis",
+    description:
+      "India's practice-first test preparation platform for CUET UG entrance examination. Experience authentic NTA CBT interface, real 60-minute timers, and granular AI mistake diagnosis.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CUET AI-Prep | NTA-Grade CBT Practice & AI Mistake Diagnosis",
+    description:
+      "India's practice-first test preparation platform for CUET UG entrance examination. Experience authentic NTA CBT interface, real 60-minute timers, and granular AI mistake diagnosis.",
+  },
 };
 
 export const viewport: Viewport = {
