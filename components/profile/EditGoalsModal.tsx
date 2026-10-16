@@ -57,10 +57,12 @@ export default function EditGoalsModal({
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const { reset } = targetSelection;
+
   // Sync state when modal opens
   useEffect(() => {
     if (isOpen) {
-      targetSelection.reset(initialCollege, initialCourse, initialStream);
+      reset(initialCollege, initialCourse, initialStream);
       setFullName(initialFullName || "");
       setSelectedSubjects(
         initialSelectedSubjects && initialSelectedSubjects.length > 0
@@ -77,6 +79,7 @@ export default function EditGoalsModal({
     initialCourse,
     initialFullName,
     initialSelectedSubjects,
+    reset,
   ]);
 
   // Keep selected domain subjects synced with stream

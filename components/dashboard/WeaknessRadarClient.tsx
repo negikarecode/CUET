@@ -482,12 +482,13 @@ export default function WeaknessRadarClient({
       ? cleanTestAttempts.length
       : 1;
 
-  const subjectCalibrationMap =
-    isClient &&
-    clientAnalytics?.subjectCalibration &&
-    Object.keys(clientAnalytics.subjectCalibration).length > 0
-      ? clientAnalytics.subjectCalibration
-      : initialData.subjectCalibration || {};
+  const subjectCalibrationMap = React.useMemo(() => {
+    return isClient &&
+      clientAnalytics?.subjectCalibration &&
+      Object.keys(clientAnalytics.subjectCalibration).length > 0
+        ? clientAnalytics.subjectCalibration
+        : initialData.subjectCalibration || {};
+  }, [isClient, clientAnalytics?.subjectCalibration, initialData.subjectCalibration]);
 
   // Build full subjects list derived from actual test attempts + initial data + stream candidates
   const allSubjectsList = React.useMemo(() => {
@@ -859,7 +860,6 @@ export default function WeaknessRadarClient({
   }, [
     isCurrentCycleComplete,
     selectedRadarSubject,
-    candidateSubjects,
     candidateSubjectCalibrations,
     testAttempts,
     storeUser?.id,
@@ -868,6 +868,8 @@ export default function WeaknessRadarClient({
     currentCycleNumber,
     diagnosticCycles,
     aiAnalysis,
+    allSubjectsList,
+    attemptedSubjectNames,
   ]);
 
   // Abort in-flight requests on unmount

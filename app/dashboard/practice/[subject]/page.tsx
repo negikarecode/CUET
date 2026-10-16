@@ -58,7 +58,7 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
   }, [decodedSubject]);
 
   const folder = subjectEntry ? subjectEntry.folder : normalizePracticeFolder(decodedSubject);
-  const units: any[] = subjectEntry?.units || [];
+  const units: any[] = useMemo(() => subjectEntry?.units || [], [subjectEntry]);
   const totalTests = units.length * 20;
 
   // Single authoritative practice stats for this subject

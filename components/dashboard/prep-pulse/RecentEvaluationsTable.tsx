@@ -7,11 +7,12 @@ import { formatDateTimeIndian, MARKING_SCHEME } from '@/lib/config/dashboardConf
 import { deduplicateTestAttempts } from '@/lib/analytics';
 
 export const RecentEvaluationsTable: React.FC = () => {
-  const rawAttempts = useTestStore((s) => s.testAttempts) || [];
+  const rawAttempts = useTestStore((s) => s.testAttempts);
 
   // Deduplicate attempts strictly and sort newest first
   const sortedAttempts = useMemo(() => {
-    const deduped = deduplicateTestAttempts(rawAttempts);
+    const attempts = rawAttempts || [];
+    const deduped = deduplicateTestAttempts(attempts);
     return deduped.sort((a, b) => {
       const timeA = new Date(a.submittedAt || (a as any).date || 0).getTime();
       const timeB = new Date(b.submittedAt || (b as any).date || 0).getTime();

@@ -18,34 +18,34 @@ interface Props {
   subjects: TaxonomySubject[];
 }
 
+const STREAM_MAPPING: Record<string, string[]> = {
+  science: ["physics", "chemistry", "maths", "bio", "applied-maths"],
+  commerce: ["accountancy", "eco", "bst", "entrepreneurship"],
+  humanities: [
+    "history",
+    "pol science",
+    "geo",
+    "psychology",
+    "sociology",
+    "legal studies",
+    "anthropology",
+    "home-science",
+    "mass-comm",
+    "fine-arts",
+    "performing-arts",
+  ],
+  general: ["english", "hindi", "general-test"],
+};
+
 export function NotesHubClient({ subjects }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStream, setSelectedStream] = useState<string>("all");
-
-  const streamMapping: Record<string, string[]> = {
-    science: ["physics", "chemistry", "maths", "bio", "applied-maths"],
-    commerce: ["accountancy", "eco", "bst", "entrepreneurship"],
-    humanities: [
-      "history",
-      "pol science",
-      "geo",
-      "psychology",
-      "sociology",
-      "legal studies",
-      "anthropology",
-      "home-science",
-      "mass-comm",
-      "fine-arts",
-      "performing-arts",
-    ],
-    general: ["english", "hindi", "general-test"],
-  };
 
   const filteredSubjects = useMemo(() => {
     return subjects.filter((s) => {
       // 1. Stream filter
       if (selectedStream !== "all") {
-        const allowed = streamMapping[selectedStream] || [];
+        const allowed = STREAM_MAPPING[selectedStream] || [];
         if (!allowed.includes(s.folder.toLowerCase())) {
           return false;
         }

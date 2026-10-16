@@ -34,19 +34,20 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>("all");
 
   const isClient = useIsClient();
-  const testAttempts = useTestStore((state) => state.testAttempts) || [];
+  const rawAttempts = useTestStore((state) => state.testAttempts);
 
   // Deduplicate attempts strictly: same deduplication rules as Recent Sessions
   const cleanAttempts = useMemo(() => {
-    if (!isClient || !testAttempts || testAttempts.length === 0) return [];
-    const deduped = deduplicateTestAttempts(testAttempts);
+    const attempts = rawAttempts || [];
+    if (!isClient || attempts.length === 0) return [];
+    const deduped = deduplicateTestAttempts(attempts);
     // Sort oldest to newest for chronological trend plotting
     return [...deduped].sort((a, b) => {
       const ta = new Date(a.submittedAt || (a as any).date || 0).getTime();
       const tb = new Date(b.submittedAt || (b as any).date || 0).getTime();
       return ta - tb;
     });
-  }, [isClient, testAttempts]);
+  }, [isClient, rawAttempts]);
 
   // Available subjects for the subject filter dropdown
   const availableSubjects = useMemo(() => {
