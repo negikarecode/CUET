@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { useTarget } from "@/lib/hooks/useTarget";
+import InvalidTargetBanner from "@/components/profile/InvalidTargetBanner";
 import { TopicMastery, TimeSinkAlertData, SubjectCalibrationData, RecordedTestAttempt } from "@/types";
 import { normalizeSubject, deduplicateTestAttempts, getCanonicalTestKey } from "@/lib/analytics";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
@@ -64,7 +67,9 @@ export default function DashboardClient({
 }: {
   initialData: DashboardInitialData;
 }) {
+  const router = useRouter();
   const isClient = useIsClient();
+  const target = useTarget();
   const storeUser = useTestStore((state) => state.user);
   const clientAnalytics = useTestStore((state) => state.analytics);
   const testAttempts = useTestStore((state) => state.testAttempts);
@@ -320,6 +325,13 @@ export default function DashboardClient({
 
   return (
     <div className="space-y-6">
+      {/* Target combo validation warning if user has invalid pair */}
+      <InvalidTargetBanner
+        college={target.college || initialData.user?.targetCollege}
+        course={target.course || initialData.user?.targetCourse}
+        onOpenEditModal={() => router.push("/dashboard/profile?editGoals=true&clearCourse=true")}
+      />
+
       {/* 1. Greeting line plus one-line summary */}
       <section aria-label="Greeting">
         <WelcomeBanner

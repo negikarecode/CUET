@@ -163,7 +163,7 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
       mockUrl: "/dashboard/mocks/english",
     };
   }
-  if (clean.includes("general") || clean === "gt") {
+  if (clean.includes("general") || clean === "gt" || clean === "gat" || clean.includes("aptitude")) {
     return {
       key: "general-test",
       name: "General Test",

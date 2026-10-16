@@ -89,10 +89,20 @@ export function loadRawMockData(folder: string, mockNumber: number): RawQuestion
   const cached = mockRawDataCache.get(cacheKey);
   if (cached) return cached;
 
-  const basePath = path.join(process.cwd(), "mock", folder, `${mockNumber}.json`);
+  let basePath = path.join(process.cwd(), "mock", folder, `${mockNumber}.json`);
   if (!fs.existsSync(basePath)) {
-    console.warn(`[MockLoader] Mock file not found at ${basePath}. Returning empty bank pending rebuild.`);
-    return [];
+    const pyqFallback = path.join(process.cwd(), "pyq", folder, `${mockNumber}.json`);
+    if (fs.existsSync(pyqFallback)) {
+      basePath = pyqFallback;
+    } else {
+      const mock1Fallback = path.join(process.cwd(), "mock", folder, "1.json");
+      if (fs.existsSync(mock1Fallback)) {
+        basePath = mock1Fallback;
+      } else {
+        console.warn(`[MockLoader] Mock file not found at ${basePath}. Returning empty bank pending rebuild.`);
+        return [];
+      }
+    }
   }
 
   const content = fs.readFileSync(basePath, "utf-8");

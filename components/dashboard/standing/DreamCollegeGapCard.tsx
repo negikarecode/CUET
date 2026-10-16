@@ -101,10 +101,26 @@ export default function DreamCollegeGapCard({
 
   if (!analysis) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs text-center">
-        <p className="text-sm text-slate-500">
-          No cutoff data available for {targetCollege} in this course. Select a different college.
-        </p>
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-3">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-slate-100 text-slate-600 border border-slate-200">
+            <Target className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-base sm:text-lg font-bold text-slate-900">
+              Dream College Gap Analysis
+            </h3>
+            <p className="text-sm text-slate-500">
+              Target: {targetCollege}
+            </p>
+          </div>
+        </div>
+        <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/70 text-center space-y-1">
+          <p className="text-sm font-bold text-slate-800">No past cutoff data yet</p>
+          <p className="text-xs text-slate-500 max-w-md mx-auto">
+            This college offers the selected course, but historical admission cutoff benchmarks have not been recorded yet. Gap analysis is disabled for this target.
+          </p>
+        </div>
       </div>
     );
   }
@@ -127,7 +143,8 @@ export default function DreamCollegeGapCard({
     (analysis as any).courseId || "bsc_hons_physics",
     analysis.category
   );
-  const formattedExpected = formatScore(projection.projectedValue);
+  const hasNoCutoffHistory = projection.yearsCount === 0 || projection.basis === "No past cutoff data yet";
+  const formattedExpected = hasNoCutoffHistory ? "No past cutoff data yet" : formatScore(projection.projectedValue);
 
   const completedSubjects = (analysis.subjectImprovementBreakdown || []).filter((s) => s.hasData);
   const pendingCount = (analysis.subjectImprovementBreakdown || []).length - completedSubjects.length;
@@ -145,11 +162,13 @@ export default function DreamCollegeGapCard({
   const gap = Math.round(Math.abs(roundedTotal - projection.projectedValue) * 10) / 10;
   const formattedGap = formatScore(gap);
 
-  const isAboveCutoff = roundedTotal >= projection.projectedValue;
-  const isBelowCutoff = roundedTotal < projection.projectedValue;
+  const isAboveCutoff = !hasNoCutoffHistory && roundedTotal >= projection.projectedValue;
+  const isBelowCutoff = !hasNoCutoffHistory && roundedTotal < projection.projectedValue;
   const isIncomplete = analysis.status === "incomplete";
 
-  const gapDisplay = isAboveCutoff
+  const gapDisplay = hasNoCutoffHistory
+    ? "Disabled"
+    : isAboveCutoff
     ? gap === 0
       ? "Meets cutoff"
       : `+${formattedGap} marks above`
@@ -159,7 +178,9 @@ export default function DreamCollegeGapCard({
     .filter((s) => !s.hasData)
     .map((s) => s.subjectName);
 
-  const gapLabel = !analysis.isComplete
+  const gapLabel = hasNoCutoffHistory
+    ? "Gap Analysis"
+    : !analysis.isComplete
     ? "Overall Gap"
     : isBelowCutoff
     ? "Marks below cutoff"
@@ -169,10 +190,12 @@ export default function DreamCollegeGapCard({
     100,
     Math.max(0, Math.round((currentTotal / analysis.cutoffScale) * 100))
   );
-  const targetTickPercent = Math.min(
-    99,
-    Math.max(1, Math.round((projection.projectedValue / analysis.cutoffScale) * 100))
-  );
+  const targetTickPercent = hasNoCutoffHistory
+    ? null
+    : Math.min(
+        99,
+        Math.max(1, Math.round((projection.projectedValue / analysis.cutoffScale) * 100))
+      );
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
@@ -257,12 +280,14 @@ export default function DreamCollegeGapCard({
             </div>
             <div className="my-1.5 flex items-baseline gap-2 flex-wrap">
               <div className="flex items-baseline">
-                <span className="text-[28px] sm:text-[32px] font-bold text-slate-900 tracking-tight leading-none">
+                <span className={`font-bold text-slate-900 tracking-tight leading-none ${hasNoCutoffHistory ? "text-lg sm:text-xl" : "text-[28px] sm:text-[32px]"}`}>
                   {formattedExpected}
                 </span>
-                <span className="text-[15px] font-normal text-slate-500 ml-1">
-                  /{analysis.cutoffScale}
-                </span>
+                {!hasNoCutoffHistory && (
+                  <span className="text-[15px] font-normal text-slate-500 ml-1">
+                    /{analysis.cutoffScale}
+                  </span>
+                )}
               </div>
               <span className="text-[12px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
                 {projection.likelyRange.label}
@@ -295,11 +320,13 @@ export default function DreamCollegeGapCard({
                   className="h-full rounded-full bg-blue-600 transition-all"
                   style={{ width: `${userProgressPercent}%` }}
                 />
-                <div
-                  className="absolute top-[-2px] bottom-[-2px] w-[2px] bg-slate-900 z-10 rounded-full"
-                  style={{ left: `${targetTickPercent}%` }}
-                  title={`Expected Cutoff: ${formattedExpected}/${analysis.cutoffScale}`}
-                />
+                {targetTickPercent !== null && (
+                  <div
+                    className="absolute top-[-2px] bottom-[-2px] w-[2px] bg-slate-900 z-10 rounded-full"
+                    style={{ left: `${targetTickPercent}%` }}
+                    title={`Expected Cutoff: ${formattedExpected}/${analysis.cutoffScale}`}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -325,12 +352,14 @@ export default function DreamCollegeGapCard({
             </div>
             <div className="my-1.5 flex items-baseline gap-2 flex-wrap">
               <div className="flex items-baseline">
-                <span className="text-[28px] sm:text-[32px] font-bold text-slate-900 tracking-tight leading-none">
+                <span className={`font-bold text-slate-900 tracking-tight leading-none ${hasNoCutoffHistory ? "text-lg sm:text-xl" : "text-[28px] sm:text-[32px]"}`}>
                   {formattedExpected}
                 </span>
-                <span className="text-[15px] font-normal text-slate-500 ml-1">
-                  /{analysis.cutoffScale}
-                </span>
+                {!hasNoCutoffHistory && (
+                  <span className="text-[15px] font-normal text-slate-500 ml-1">
+                    /{analysis.cutoffScale}
+                  </span>
+                )}
               </div>
               <span className="text-[12px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
                 {projection.likelyRange.label}
@@ -384,7 +413,9 @@ export default function DreamCollegeGapCard({
             <div className="my-1.5">
               <span
                 className={`inline-flex px-3 py-1 rounded-xl text-sm font-bold border ${
-                  isAboveCutoff
+                  hasNoCutoffHistory
+                    ? "bg-slate-100 text-slate-700 border-slate-200"
+                    : isAboveCutoff
                     ? "bg-emerald-50 text-emerald-800 border-emerald-200"
                     : isBelowCutoff
                     ? "bg-amber-50 text-amber-900 border-amber-200"
@@ -393,7 +424,7 @@ export default function DreamCollegeGapCard({
                     : "bg-slate-100 text-slate-700 border-slate-200"
                 }`}
               >
-                {analysis.statusLabel}
+                {hasNoCutoffHistory ? "No past cutoff data yet" : analysis.statusLabel}
               </span>
             </div>
             <span className="text-sm text-slate-500 block">
@@ -403,8 +434,12 @@ export default function DreamCollegeGapCard({
         </div>
       )}
 
-      {/* 3. Composite Progress Line (Shown only when all subjects have data) */}
-      {analysis.isComplete && (
+      {/* 3. Composite Progress Line or No Data Notice */}
+      {hasNoCutoffHistory ? (
+        <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200/80 text-xs sm:text-sm text-slate-600">
+          <strong>Cutoff Data Notice:</strong> No past cutoff data yet for {analysis.targetCollege} in {analysis.targetCourse}. Gap analysis and comparisons against official cutoffs are disabled until admission benchmarks are recorded.
+        </div>
+      ) : analysis.isComplete && (
         <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-sm sm:text-base text-slate-700 font-medium">
             <span>

@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import ProfileClient from "@/components/profile/ProfileClient";
@@ -297,5 +298,9 @@ export default async function ProfilePage() {
     serverAttempts,
   };
 
-  return <ProfileClient initialData={initialData} />;
+  return (
+    <Suspense fallback={<div className="w-full max-w-7xl mx-auto px-4 py-8 text-center text-slate-400">Loading profile...</div>}>
+      <ProfileClient initialData={initialData} />
+    </Suspense>
+  );
 }

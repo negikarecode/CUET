@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { StreamOption } from "@/types/database";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
+import { validateTargetPair } from "@/lib/college-offerings";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,7 @@ interface ProfileUpdatePayload {
   targetStream?: StreamOption | string;
   targetUniversity?: string;
   targetCollege?: string;
+  targetCourse?: string;
   fullName?: string;
   selectedSubjects?: string[];
   selected_subjects?: string[];
@@ -19,7 +21,7 @@ interface ProfileUpdatePayload {
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json().catch(() => ({}))) as ProfileUpdatePayload;
-    const { targetStream, targetUniversity, targetCollege, fullName, selectedSubjects, selected_subjects } = body;
+    const { targetStream, targetUniversity, targetCollege, targetCourse, fullName, selectedSubjects, selected_subjects } = body;
 
     let authUser = null;
     try {
@@ -35,6 +37,16 @@ export async function POST(req: NextRequest) {
         { error: "Unauthorized: Active user session required." },
         { status: 401 }
       );
+    }
+
+    if (targetCollege && targetCourse) {
+      const validation = validateTargetPair(targetCollege, targetCourse);
+      if (!validation.isValid) {
+        return NextResponse.json(
+          { error: validation.error || `${targetCollege} does not offer ${targetCourse}.` },
+          { status: 400 }
+        );
+      }
     }
 
     const targetUserId = authUser.id;
@@ -70,6 +82,7 @@ export async function POST(req: NextRequest) {
     }
     if (targetUniversity !== undefined) updatePayload.target_university = targetUniversity;
     if (targetCollege !== undefined) updatePayload.target_college = targetCollege;
+    if (targetCourse !== undefined) updatePayload.target_course = targetCourse;
     if (fullName) updatePayload.full_name = fullName;
 
     // Execute update

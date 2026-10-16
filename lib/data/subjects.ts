@@ -163,6 +163,17 @@ export const SUBJECT_TO_MOCK: Record<string, string> = {
   "anthropology": "anthropology-mock",
   "Anthropology": "anthropology-mock",
   "ant": "anthropology-mock",
+  "english": "english-mock",
+  "English": "english-mock",
+  "eng": "english-mock",
+  "Eng": "english-mock",
+  "general-test": "general-test-mock",
+  "General Test": "general-test-mock",
+  "general_test": "general-test-mock",
+  "gat": "general-test-mock",
+  "GAT": "general-test-mock",
+  "general": "general-test-mock",
+  "general-aptitude-test": "general-test-mock",
 };
 
 export interface MockTestItem {
@@ -218,6 +229,13 @@ export const SUBJECT_MOCK_COUNTS: Record<string, number> = {
   agr: 20,
   anthropology: 20,
   ant: 20,
+  english: 20,
+  eng: 20,
+  "general-test": 20,
+  general_test: 20,
+  gat: 20,
+  general: 20,
+  "general-aptitude-test": 20,
 };
 
 export const SUBJECT_DURATION_MINUTES: Record<string, number> = {
@@ -263,6 +281,13 @@ export const SUBJECT_DURATION_MINUTES: Record<string, number> = {
   agr: 45,
   anthropology: 45,
   ant: 45,
+  english: 45,
+  eng: 45,
+  "general-test": 60,
+  general_test: 60,
+  gat: 60,
+  general: 60,
+  "general-aptitude-test": 60,
 };
 
 export function createMockTestList(
@@ -315,6 +340,8 @@ export const ENVIRONMENTAL_STUDIES_MOCK_TESTS: MockTestItem[] = createMockTestLi
 export const FINE_ARTS_MOCK_TESTS: MockTestItem[] = createMockTestList("fine-arts", "Fine Arts", 45, 20);
 export const AGRICULTURE_MOCK_TESTS: MockTestItem[] = createMockTestList("agriculture", "Agriculture", 45, 20);
 export const ANTHROPOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("anthropology", "Anthropology", 45, 20);
+export const ENGLISH_MOCK_TESTS: MockTestItem[] = createMockTestList("english", "English", 45, 20);
+export const GENERAL_TEST_MOCK_TESTS: MockTestItem[] = createMockTestList("general-test", "General Aptitude Test", 60, 20);
 
 export function getMockTestsForSubject(subjectKey: string): MockTestItem[] {
   if (!subjectKey) return [];

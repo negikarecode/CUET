@@ -166,7 +166,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
         lastAttemptDate,
       };
     });
-  }, [mockTests, cleanAttempts]);
+  }, [mockTests, subjectMockAttempts, subjectKey]);
 
   // Filtered & sorted cards
   const displayedCards = useMemo(() => {
@@ -210,7 +210,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
           className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-500 hover:text-slate-800 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Domain Mock Exams</span>
+          <span>Back to Mock Exams</span>
         </Link>
       </div>
 
@@ -219,7 +219,7 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1 min-w-0">
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              {subjectName} Domain Mock Exams
+              {subjectName} Mock Exams
             </h1>
             <p className="text-[13px] sm:text-[14px] text-slate-500 font-medium truncate max-w-2xl">
               Authentic 50-question compulsory full syllabus CBT simulation papers with instant solutions.

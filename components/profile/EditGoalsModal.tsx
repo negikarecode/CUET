@@ -1,27 +1,23 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   Target,
-  GraduationCap,
-  Building2,
-  BookOpen,
   User,
   Sparkles,
-  Check,
+  AlertCircle,
 } from "lucide-react";
 import { StreamOption } from "@/types/database";
-import CollegeSearchDropdown from "@/components/auth/CollegeSearchDropdown";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
-import { CANONICAL_COURSES_MAP, CanonicalCourse } from "@/lib/standing-engine";
-import SearchableSelect from "@/components/ui/SearchableSelect";
+import CascadingTargetSelector from "@/components/ui/CascadingTargetSelector";
+import { useTargetSelection } from "@/lib/hooks/useTargetSelection";
 
 interface EditGoalsModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialStream: StreamOption;
-  initialUniversity: string;
+  initialUniversity?: string;
   initialCollege: string;
   initialCourse?: string;
   initialFullName: string;
@@ -40,19 +36,18 @@ export default function EditGoalsModal({
   isOpen,
   onClose,
   initialStream,
-  initialUniversity,
   initialCollege,
   initialCourse,
   initialFullName,
   initialSelectedSubjects = [],
   onSave,
 }: EditGoalsModalProps) {
-  const [stream, setStream] = useState<StreamOption>(initialStream || "Science");
-  const [university, setUniversity] = useState<string>(initialUniversity || "Delhi University");
-  const [college, setCollege] = useState<string>(initialCollege || "Hindu College");
-  const [course, setCourse] = useState<string>(
-    initialCourse || "B.Sc. (Hons.) Physics"
-  );
+  const targetSelection = useTargetSelection({
+    initialCollege,
+    initialCourse,
+    initialStream,
+  });
+
   const [fullName, setFullName] = useState<string>(initialFullName || "");
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>(
     initialSelectedSubjects && initialSelectedSubjects.length > 0
@@ -65,10 +60,7 @@ export default function EditGoalsModal({
   // Sync state when modal opens
   useEffect(() => {
     if (isOpen) {
-      setStream(initialStream || "Science");
-      setUniversity(initialUniversity || "Delhi University");
-      setCollege(initialCollege || "Hindu College");
-      setCourse(initialCourse || "B.Sc. (Hons.) Physics");
+      targetSelection.reset(initialCollege, initialCourse, initialStream);
       setFullName(initialFullName || "");
       setSelectedSubjects(
         initialSelectedSubjects && initialSelectedSubjects.length > 0
@@ -81,12 +73,19 @@ export default function EditGoalsModal({
   }, [
     isOpen,
     initialStream,
-    initialUniversity,
     initialCollege,
     initialCourse,
     initialFullName,
     initialSelectedSubjects,
   ]);
+
+  // Keep selected domain subjects synced with stream
+  useEffect(() => {
+    if (isOpen) {
+      const newSubs = getSubjectsForStream(targetSelection.stream as StreamOption);
+      setSelectedSubjects(newSubs);
+    }
+  }, [targetSelection.stream, isOpen]);
 
   // Keyboard accessibility: Escape to close
   useEffect(() => {
@@ -99,32 +98,15 @@ export default function EditGoalsModal({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Available courses filtered by chosen stream
-  const availableCourses: CanonicalCourse[] = useMemo(() => {
-    const list = Object.values(CANONICAL_COURSES_MAP).filter(
-      (c) => c.stream.toLowerCase() === stream.toLowerCase()
-    );
-    return list.length > 0 ? list : Object.values(CANONICAL_COURSES_MAP);
-  }, [stream]);
-
-  // When stream changes, ensure selected course belongs to that stream
-  const handleStreamChange = (newStream: StreamOption) => {
-    setStream(newStream);
-    const newSubjects = getSubjectsForStream(newStream);
-    setSelectedSubjects(newSubjects);
-
-    const streamCourses = Object.values(CANONICAL_COURSES_MAP).filter(
-      (c) => c.stream.toLowerCase() === newStream.toLowerCase()
-    );
-    if (streamCourses.length > 0 && !streamCourses.some((c) => c.name === course)) {
-      setCourse(streamCourses[0]!.name);
-    }
-  };
-
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!targetSelection.isValidPair) {
+      setErrorMessage("Please choose a valid college and degree course combination.");
+      return;
+    }
+
     if (selectedSubjects.length === 0) {
       setErrorMessage("Please select at least 1 CUET domain subject.");
       return;
@@ -135,10 +117,10 @@ export default function EditGoalsModal({
 
     try {
       await onSave({
-        targetStream: stream,
-        targetUniversity: university.trim() || "Delhi University",
-        targetCollege: college.trim() || "Hindu College",
-        targetCourse: course.trim() || "B.Sc. (Hons.) Physics",
+        targetStream: targetSelection.stream as StreamOption,
+        targetUniversity: targetSelection.derivedUniversity || "University of Delhi",
+        targetCollege: targetSelection.collegeName,
+        targetCourse: targetSelection.courseName,
         fullName: fullName.trim() || initialFullName,
         selectedSubjects,
       });
@@ -149,27 +131,6 @@ export default function EditGoalsModal({
       setIsSaving(false);
     }
   };
-
-  const streamOptions: { id: StreamOption; label: string; desc: string; selectedColor: string }[] = [
-    {
-      id: "Science",
-      label: "Science",
-      desc: "Physics, Chem, Math, Bio",
-      selectedColor: "bg-blue-50/80 border-blue-500 text-blue-900",
-    },
-    {
-      id: "Commerce",
-      label: "Commerce",
-      desc: "Accountancy, Eco, BST",
-      selectedColor: "bg-amber-50/80 border-amber-500 text-amber-900",
-    },
-    {
-      id: "Humanities",
-      label: "Humanities",
-      desc: "Pol Sci, History, Psych, Soc",
-      selectedColor: "bg-purple-50/80 border-purple-500 text-purple-900",
-    },
-  ];
 
   return (
     <div
@@ -205,13 +166,17 @@ export default function EditGoalsModal({
         </div>
 
         {errorMessage && (
-          <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-800">
-            {errorMessage}
+          <div
+            role="alert"
+            className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-800 flex items-center gap-2"
+          >
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+            <span>{errorMessage}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-          {/* Full Name */}
+          {/* Aspirant Name */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
               <User className="w-3.5 h-3.5 text-slate-400" />
@@ -226,94 +191,15 @@ export default function EditGoalsModal({
             />
           </div>
 
-          {/* Target Stream Selector */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-              <GraduationCap className="w-3.5 h-3.5 text-blue-600" />
-              <span>Target Domain Stream</span>
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              {streamOptions.map((opt) => {
-                const isSelected = stream === opt.id;
-                return (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    onClick={() => handleStreamChange(opt.id)}
-                    className={`p-3 rounded-2xl border text-left transition-all relative cursor-pointer ${
-                      isSelected
-                        ? `${opt.selectedColor} shadow-xs font-bold`
-                        : "bg-white border-slate-200/80 hover:border-slate-300 text-slate-700 font-medium hover:bg-slate-50"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-bold">
-                        {opt.label}
-                      </span>
-                      {isSelected && (
-                        <div className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center">
-                          <Check className="w-2.5 h-2.5 stroke-[3]" />
-                        </div>
-                      )}
-                    </div>
-                    <span className="text-[10px] text-slate-500 line-clamp-1">
-                      {opt.desc}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Dream Target Course Dropdown */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-              <span>Dream Degree Course / Program</span>
-            </label>
-            <SearchableSelect
-              ariaLabel="Dream Degree Course / Program"
-              value={course}
-              onChange={(val) => setCourse(val)}
-              options={availableCourses.map((c) => ({
-                value: c.name,
-                label: c.name,
-                badge: c.degreeType,
-                keywords: [c.name, c.degreeType, c.stream, c.id],
-              }))}
-              buttonClassName="w-full px-3.5 py-2.5 rounded-xl border-slate-200 bg-white text-slate-800 font-semibold text-xs sm:text-sm"
-              placeholder="Select Dream Course"
-              searchPlaceholder="Search degree course (e.g. B.Sc. Computer Science)..."
-            />
-          </div>
-
-          {/* Dream Target College Dropdown */}
-          <div className="space-y-1.5">
-            <CollegeSearchDropdown
-              selectedCollege={college}
-              onSelectCollege={(collegeName, universityName) => {
-                setCollege(collegeName);
-                if (universityName) setUniversity(universityName);
-              }}
-              label="Dream Target College"
-              placeholder="Search or pick your target college..."
-            />
-          </div>
-
-          {/* Target University */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-slate-400" />
-              <span>Target University</span>
-            </label>
-            <input
-              type="text"
-              value={university}
-              onChange={(e) => setUniversity(e.target.value)}
-              placeholder="e.g. Delhi University, BHU, JNU"
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-slate-800 font-semibold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-            />
-          </div>
+          {/* Cascading Target Selector: Stream + College + Course + Derived University */}
+          <CascadingTargetSelector
+            targetSelection={targetSelection}
+            showStreamButtons={true}
+            showDerivedUniversity={true}
+            showUnavailableToggle={true}
+            collegeLabelPrefix="Dream Target College"
+            courseLabelPrefix="Dream Degree Course / Program"
+          />
 
           {/* Domain Subjects (Auto-Calibrated) */}
           <div className="p-3.5 rounded-2xl border border-slate-200/60 bg-slate-50 space-y-2">
@@ -337,7 +223,7 @@ export default function EditGoalsModal({
               ))}
             </div>
             <p className="text-xs font-medium text-slate-500 pt-0.5">
-              Domain subjects are calibrated automatically based on your {stream} stream.
+              Domain subjects are calibrated automatically based on your {targetSelection.stream} stream.
             </p>
           </div>
 
@@ -353,8 +239,12 @@ export default function EditGoalsModal({
             </button>
             <button
               type="submit"
-              disabled={isSaving}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+              disabled={isSaving || !targetSelection.isValidPair}
+              className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center gap-2 ${
+                targetSelection.isValidPair && !isSaving
+                  ? "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+                  : "bg-slate-200 text-slate-400 cursor-not-allowed opacity-70"
+              }`}
             >
               {isSaving ? (
                 <>

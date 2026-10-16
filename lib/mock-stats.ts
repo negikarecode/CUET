@@ -101,6 +101,10 @@ export function matchesMockPaper(
   if (subjectKey === "fine-arts") aliases.push("fine-arts", "fine_arts", "fa");
   if (subjectKey === "agriculture") aliases.push("agriculture", "agr");
   if (subjectKey === "anthropology") aliases.push("anthropology", "ant");
+  if (subjectKey === "english" || subjectKey === "eng") aliases.push("english", "eng");
+  if (subjectKey === "general-test" || subjectKey === "gat" || subjectKey === "general") {
+    aliases.push("general-test", "general_test", "gat", "general", "general-aptitude-test");
+  }
 
   for (const alias of aliases) {
     const aliasId = `${alias}-mock-${mockNum}`;

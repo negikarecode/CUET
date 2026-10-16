@@ -19,8 +19,8 @@ import { StreamType } from "@/types";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { createClient } from "@/lib/supabase/client";
 import { calculateActiveStreak } from "@/lib/gamification";
-import CollegeSearchDropdown from "./CollegeSearchDropdown";
-import CourseSearchDropdown from "./CourseSearchDropdown";
+import CascadingTargetSelector from "@/components/ui/CascadingTargetSelector";
+import { useTargetSelection } from "@/lib/hooks/useTargetSelection";
 import { DEFAULT_STREAM_SUBJECTS, getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 
 interface OnboardingModalProps {
@@ -47,14 +47,16 @@ export default function OnboardingModal({
   // Aspirant Profile Fields
   const [name, setName] = useState("");
   const [age, setAge] = useState("17");
-  const [dreamCollege, setDreamCollege] = useState("Shri Ram College of Commerce (SRCC)");
-  const [customCollege, setCustomCollege] = useState("");
-  const [targetCourse, setTargetCourse] = useState("B.Com (Hons)");
-  const [customCourse, setCustomCourse] = useState("");
-  const [stream, setStream] = useState<StreamType>("commerce");
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>(
-    DEFAULT_STREAM_SUBJECTS.commerce
-  );
+
+  // Cascading Target Selection
+  const targetSelection = useTargetSelection({
+    initialCollege: "Shri Ram College of Commerce (SRCC)",
+    initialCourse: "B.Com. (Hons.)",
+    initialStream: "Commerce",
+  });
+
+  const stream = (targetSelection.stream.toLowerCase() as StreamType) || "commerce";
+  const selectedSubjects = getSubjectsForStream(stream);
 
   // Loading & Error States
   const [isLoading, setIsLoading] = useState(false);
@@ -70,11 +72,6 @@ export default function OnboardingModal({
   }, [initialMode, isOpen]);
 
   if (!isOpen) return null;
-
-  const handleStreamChange = (newStream: StreamType) => {
-    setStream(newStream);
-    setSelectedSubjects(getSubjectsForStream(newStream));
-  };
 
   // Sign In with real Supabase Auth credentials
   const handleSignIn = async (e: React.FormEvent) => {
@@ -159,7 +156,7 @@ export default function OnboardingModal({
           name: userFullName,
           email: cleanEmail,
           age: data.user.user_metadata?.age || "18",
-          targetCollege: userCollege || dreamCollege,
+          targetCollege: userCollege,
           targetUniversity: userUniversity,
           targetCourse: userCourse,
           preferredStream: userStream,
@@ -187,16 +184,15 @@ export default function OnboardingModal({
 
     const cleanEmail = email.trim().toLowerCase();
     const cleanName = name.trim();
-    const finalCollege = customCollege.trim() || dreamCollege;
-    const finalCourse = customCourse.trim() || targetCourse;
-    const finalUniversity =
-      finalCollege.includes("DU") || finalCollege.includes("Delhi")
-        ? "Delhi University"
-        : finalCollege.includes("BHU")
-        ? "Banaras Hindu University"
-        : finalCollege.includes("JNU")
-        ? "Jawaharlal Nehru University"
-        : "Central University";
+    const finalCollege = targetSelection.collegeName;
+    const finalCourse = targetSelection.courseName;
+    const finalUniversity = targetSelection.derivedUniversity;
+
+    if (!targetSelection.isValidPair) {
+      setErrorMessage("Please select a valid college and degree program combination.");
+      setStep(2);
+      return;
+    }
 
     if (!cleanName) {
       setErrorMessage("Please enter your full name.");
@@ -448,16 +444,6 @@ export default function OnboardingModal({
                 </div>
               </div>
 
-              {/* Target DU College Search & Dropdown (For Sign In) */}
-              <CollegeSearchDropdown
-                selectedCollege={dreamCollege}
-                onSelectCollege={(collegeName) => {
-                  setDreamCollege(collegeName);
-                }}
-                label="Target DU College (Search & Select)"
-                placeholder="Search 90+ DU colleges (e.g. SRCC, Hindu, Venky)..."
-              />
-
               <div className="pt-3">
                 <button
                   type="submit"
@@ -600,119 +586,17 @@ export default function OnboardingModal({
                 </>
               ) : (
                 <>
-                  {/* Dream Target College (Official du.ac.in Search & Dropdown) */}
-                  <div className="space-y-1.5">
-                    <CollegeSearchDropdown
-                      selectedCollege={customCollege || dreamCollege}
-                      onSelectCollege={(collegeName) => {
-                        setDreamCollege(collegeName);
-                        setCustomCollege(collegeName);
-                      }}
-                      label="Dream Target College (Official DU Directory)"
-                      placeholder="Search 90+ DU colleges (e.g. SRCC, Hindu, Venky, Gargi)..."
-                    />
-
-                    {/* Quick-Pick Popular Flagships */}
-                    <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-                      <span className="text-[10px] font-semibold text-slate-400 uppercase">
-                        Popular:
-                      </span>
-                      {[
-                        "Shri Ram College of Commerce (SRCC)",
-                        "St. Stephen's College",
-                        "Hindu College",
-                        "Hans Raj College",
-                        "Lady Shri Ram College for Women (LSR)",
-                        "Miranda House",
-                        "Sri Venkateswara College (Venky)",
-                        "Gargi College",
-                      ].map((c) => (
-                        <button
-                          key={c}
-                          type="button"
-                          onClick={() => {
-                            setDreamCollege(c);
-                            setCustomCollege(c);
-                          }}
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium border transition-all shadow-xs ${
-                            (customCollege || dreamCollege) === c
-                              ? "bg-blue-600 text-white border-blue-600"
-                              : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                          }`}
-                        >
-                          {c.split(" (")[0]}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Target Degree / Program (Official DU Course Search & Dropdown) */}
-                  <div className="space-y-1.5">
-                    <CourseSearchDropdown
-                      selectedCourse={customCourse || targetCourse}
-                      onSelectCourse={(courseName) => {
-                        setTargetCourse(courseName);
-                        setCustomCourse(courseName);
-                      }}
-                      label="Target Degree / Program (Official DU Catalog)"
-                      placeholder="Search 75+ DU degrees (e.g. BCom Hons, Economics, Physics)..."
-                    />
-
-                    {/* Quick-Pick Popular Programs */}
-                    <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-                      <span className="text-[10px] font-semibold text-slate-400 uppercase">
-                        Popular:
-                      </span>
-                      {[
-                        "BCom (Hons)",
-                        "B.A. (Hons) Economics",
-                        "B.Sc. (Hons) Computer Science",
-                        "B.Sc. (Hons) Physics",
-                        "B.A. (Hons) Political Science",
-                        "B.A. (Hons) English",
-                        "Bachelor of Financial & Investment Analysis",
-                      ].map((crs) => (
-                        <button
-                          key={crs}
-                          type="button"
-                          onClick={() => {
-                            setTargetCourse(crs);
-                            setCustomCourse(crs);
-                          }}
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium border transition-all shadow-xs ${
-                            (customCourse || targetCourse) === crs
-                              ? "bg-blue-600 text-white border-blue-600"
-                              : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                          }`}
-                        >
-                          {crs}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Academic Stream */}
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-700">
-                      Academic Stream
-                    </label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {(["science", "commerce", "humanities"] as StreamType[]).map((st) => (
-                        <button
-                          key={st}
-                          type="button"
-                          onClick={() => handleStreamChange(st)}
-                          className={`p-2.5 rounded-xl border font-semibold text-xs capitalize transition-all shadow-xs cursor-pointer ${
-                            stream === st
-                              ? "bg-blue-50/70 border-blue-600 text-blue-700"
-                              : "bg-white border-slate-200 hover:bg-slate-50 text-slate-700"
-                          }`}
-                        >
-                          {st}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  {/* Cascading Target Selector: College + Degree Program + Stream + Derived University */}
+                  <CascadingTargetSelector
+                    targetSelection={targetSelection}
+                    showStreamButtons={true}
+                    showDerivedUniversity={true}
+                    showUnavailableToggle={false}
+                    collegeLabelPrefix="Dream Target College"
+                    courseLabelPrefix="Target Degree Program"
+                    collegePlaceholder="Search DU & Central colleges (e.g. SRCC, Hindu, Venky)..."
+                    coursePlaceholder="Search degree programs (e.g. B.Com. (Hons.), Economics)..."
+                  />
 
                   {/* Auto-Assigned Stream Domain Subjects */}
                   <div className="p-4 bg-slate-50/70 border border-slate-200/80 rounded-2xl space-y-2.5 shadow-xs">
@@ -751,8 +635,12 @@ export default function OnboardingModal({
                     </button>
                     <button
                       type="submit"
-                      disabled={isLoading}
-                      className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                      disabled={isLoading || !targetSelection.isValidPair}
+                      className={`flex-1 py-3 px-4 rounded-xl font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 ${
+                        targetSelection.isValidPair && !isLoading
+                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white cursor-pointer"
+                          : "bg-slate-200 text-slate-400 cursor-not-allowed opacity-70"
+                      }`}
                     >
                       {isLoading ? (
                         <>

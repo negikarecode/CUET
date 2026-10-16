@@ -31,6 +31,8 @@ import {
   ArrowRight,
   RotateCw,
   Sparkles,
+  BookOpen,
+  Compass,
 } from "lucide-react";
 import { SUBJECT_MOCK_COUNTS, SUBJECT_TO_MOCK } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -61,9 +63,11 @@ type SubjectKey =
   | "environmental-studies"
   | "fine-arts"
   | "agriculture"
-  | "anthropology";
+  | "anthropology"
+  | "english"
+  | "general-test";
 
-type StreamKey = "all" | "science" | "commerce" | "humanities";
+type StreamKey = "all" | "science" | "commerce" | "humanities" | "common";
 type StatusFilter = "all" | "started" | "not_started";
 
 interface SubjectMeta {
@@ -137,6 +141,18 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
       "mass-media",
       "fine-arts",
       "anthropology",
+    ],
+  },
+  common: {
+    key: "common",
+    name: "Languages & General Test",
+    shortName: "Languages & GAT",
+    badge: "2 Subjects",
+    accentBg: "#EEF2FF",
+    accentText: "#4F46E5",
+    subjects: [
+      "english",
+      "general-test",
     ],
   },
 };
@@ -342,6 +358,26 @@ const SUBJECT_CONFIGS: Record<Exclude<SubjectKey, "all">, SubjectMeta> = {
     subtitle: "Physical Evolution, Archaeological Foundations & Socio-Cultural Institutions",
     icon: Footprints,
   },
+  english: {
+    key: "english",
+    name: "English Language",
+    code: "101",
+    isLive: true,
+    durationMinutes: 45,
+    totalQuestions: 50,
+    subtitle: "Reading Comprehension, Vocabulary, Verbal Ability, Synonyms & Antonyms",
+    icon: BookOpen,
+  },
+  "general-test": {
+    key: "general-test",
+    name: "General Aptitude Test (GAT)",
+    code: "501",
+    isLive: true,
+    durationMinutes: 60,
+    totalQuestions: 50,
+    subtitle: "General Knowledge, Current Affairs, Mental Ability, Numerical & Logical Reasoning",
+    icon: Compass,
+  },
 };
 
 export default function MocksPage() {
@@ -450,7 +486,8 @@ export default function MocksPage() {
 
   const streamSelectOptions: SearchableSelectOption[] = useMemo(
     () => [
-      { value: "all", label: "All Streams (20 Subjects)" },
+      { value: "all", label: "All Streams (22 Subjects)" },
+      { value: "common", label: "Languages & General Test (2 Subjects)" },
       { value: "science", label: "Science Stream (7 Domains)" },
       { value: "commerce", label: "Commerce Stream (4 Domains)" },
       { value: "humanities", label: "Humanities Stream (10 Domains)" },
@@ -461,7 +498,16 @@ export default function MocksPage() {
   const subjectSelectOptions: SearchableSelectOption[] = useMemo(() => {
     if (selectedStream === "all") {
       return [
-        { value: "all", label: "All 20 Domain Subjects" },
+        { value: "all", label: "All 22 Subjects" },
+        {
+          heading: "Languages & General Test (Section IA & III)",
+          options: STREAM_CONFIGS.common.subjects.map((k) => ({
+            value: k,
+            label: SUBJECT_CONFIGS[k].name,
+            badge: `Code ${SUBJECT_CONFIGS[k].code}`,
+            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k, "gat", "english"],
+          })),
+        },
         {
           heading: "Science Stream",
           options: STREAM_CONFIGS.science.subjects.map((k) => ({
@@ -798,12 +844,12 @@ export default function MocksPage() {
         <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
             {showRecommendedRow
-              ? "All other domain subjects"
+              ? "All other subjects"
               : selectedTab !== "all" && activeSubjectInfo
               ? `${activeSubjectInfo.name} Specification`
               : selectedStream !== "all"
               ? `${STREAM_CONFIGS[selectedStream].name}`
-              : "All CUET UG Domain Subjects"}
+              : "All CUET UG Subjects"}
             <span className="text-xs font-normal text-slate-400 ml-2 font-mono">
               ({otherSubjects.length})
             </span>

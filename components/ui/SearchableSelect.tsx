@@ -40,6 +40,7 @@ interface SearchableSelectProps {
   options: SearchableSelectOption[];
   value: string;
   onChange: (value: string) => void;
+  onClear?: () => void;
   placeholder?: string;
   searchPlaceholder?: string;
   ariaLabel?: string;
@@ -99,6 +100,7 @@ export default function SearchableSelect({
   options,
   value,
   onChange,
+  onClear,
   placeholder = "Select...",
   searchPlaceholder = "Search...",
   ariaLabel,
@@ -335,11 +337,34 @@ export default function SearchableSelect({
             </span>
           )}
         </div>
-        <ChevronDown
-          className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
-            isOpen ? "rotate-180 text-blue-600" : ""
-          }`}
-        />
+        <div className="flex items-center gap-1 shrink-0">
+          {onClear && value && !disabled && (
+            <span
+              role="button"
+              tabIndex={0}
+              onClick={(e) => {
+                e.stopPropagation();
+                onClear();
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.stopPropagation();
+                  onClear();
+                }
+              }}
+              className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-200/70 transition-colors cursor-pointer"
+              title="Clear selection"
+              aria-label={`Clear ${ariaLabel || placeholder}`}
+            >
+              <X className="w-3.5 h-3.5" />
+            </span>
+          )}
+          <ChevronDown
+            className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
+              isOpen ? "rotate-180 text-blue-600" : ""
+            }`}
+          />
+        </div>
       </button>
 
       {/* Menu / Dropdown Popover */}

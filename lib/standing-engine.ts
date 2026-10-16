@@ -979,20 +979,19 @@ export function getProjectedCutoff(
     };
   }
 
-  // Fallback if no matching records
-  const fallbackVal = 574.5;
+  // Fallback if no matching records / no past cutoff data
   return {
-    projectedValue: fallbackVal,
+    projectedValue: 0,
     projectedYear: 2027,
-    basis: "Projected for 2027 · based on 2023-2026 trend",
+    basis: "No past cutoff data yet",
     likelyRange: {
-      low: 568,
-      high: 581,
-      label: "Likely range 568 - 581",
+      low: 0,
+      high: 0,
+      label: "No past cutoff data yet",
     },
-    perSubjectTarget: Math.round((fallbackVal / 3) * 10) / 10,
-    isProjected: true,
-    yearsCount: 4,
+    perSubjectTarget: 0,
+    isProjected: false,
+    yearsCount: 0,
     yearlyData: [],
   };
 }

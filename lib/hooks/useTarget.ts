@@ -14,6 +14,7 @@ import {
 } from "@/lib/standing-engine";
 import { normalizeSubject } from "@/lib/analytics";
 import { normalizePracticeFolder } from "@/lib/practice-stats";
+import { isValidPair } from "@/lib/college-offerings";
 
 export interface TargetData {
   college: string;
@@ -26,6 +27,10 @@ export interface TargetData {
   requiredSubjects: string[];
   targetAccuracy: number;
   hasTarget: boolean;
+  isValidPair: boolean;
+  needsReview: boolean;
+  isUnverified: boolean;
+  stream: string;
   label: string;
   projectedYear?: number;
   likelyRange?: {
@@ -206,14 +211,23 @@ export function useTarget(): TargetData {
       });
     }
 
+    const valid = isValidPair(resolvedCollege, canonicalCourseName);
+    const isUnverified = hasTarget && !valid;
+    const needsReview = isUnverified;
+
+    const basis = isUnverified
+      ? "Unverified target · College does not offer this degree program"
+      : projection.basis;
+
     const label = hasTarget
-      ? `Target: ${perSubjectTarget} · ${resolvedCollege}, ${canonicalCourseName}`
+      ? `Target: ${perSubjectTarget} · ${resolvedCollege}, ${canonicalCourseName}${isUnverified ? " (unverified)" : ""}`
       : "Target: None configured";
 
     return {
       college: resolvedCollege,
       course: canonicalCourseName,
       courseId: resolvedCourseId,
+      stream,
       cutoffScale,
       expectedCutoff,
       perSubjectTarget,
@@ -221,10 +235,13 @@ export function useTarget(): TargetData {
       requiredSubjects,
       targetAccuracy,
       hasTarget,
+      isValidPair: valid,
+      needsReview,
+      isUnverified,
       label,
       projectedYear: projection.projectedYear,
       likelyRange: projection.likelyRange,
-      basis: projection.basis,
+      basis,
     };
   }, [storeUser?.targetCollege, storeUser?.targetCourse, storeUser?.preferredStream, storeUser?.selectedSubjects]);
 }

@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { StreamOption } from "@/types/database";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
+import { validateTargetPair } from "@/lib/college-offerings";
 
 export interface UpdateProfileGoalsInput {
   targetStream?: StreamOption | string;
@@ -25,6 +26,17 @@ export async function updateProfileGoalsAction(input: UpdateProfileGoalsInput) {
 
     if (authError || !user) {
       return { success: false, error: "Authentication session expired. Please log in again." };
+    }
+
+    // Validate college-program combination
+    if (input.targetCollege && input.targetCourse) {
+      const validation = validateTargetPair(input.targetCollege, input.targetCourse);
+      if (!validation.isValid) {
+        return {
+          success: false,
+          error: validation.error || `${input.targetCollege} does not offer ${input.targetCourse}.`,
+        };
+      }
     }
 
     let formattedStream: StreamOption = "Science";

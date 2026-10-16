@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useTransition, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   User,
@@ -58,6 +58,7 @@ import { createClient } from "@/lib/supabase/client";
 import { safeStorage } from "@/lib/storage/safe-storage";
 import { updateProfileGoalsAction } from "@/app/dashboard/profile/actions";
 import EditGoalsModal from "@/components/profile/EditGoalsModal";
+import InvalidTargetBanner from "@/components/profile/InvalidTargetBanner";
 import SignOutModal from "@/components/profile/SignOutModal";
 import ResetConfirmModal from "@/components/profile/ResetConfirmModal";
 import UpgradeButton from "@/components/payments/UpgradeButton";
@@ -78,6 +79,7 @@ function getUpcomingCuetSeasons(): string[] {
 
 export default function ProfileClient({ initialData }: ProfileClientProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
 
   // Zustand stores & single source of truth for dream targets
@@ -106,8 +108,19 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
   // Modals state
   const [isEditGoalsOpen, setIsEditGoalsOpen] = useState(false);
+  const [clearCourseOnOpen, setClearCourseOnOpen] = useState(false);
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+
+  // Handle URL query parameters to open Edit Goals modal with course cleared if flagged
+  useEffect(() => {
+    if (searchParams?.get("editGoals") === "true") {
+      if (searchParams.get("clearCourse") === "true") {
+        setClearCourseOnOpen(true);
+      }
+      setIsEditGoalsOpen(true);
+    }
+  }, [searchParams]);
 
   // Status message toast
   const [statusMessage, setStatusMessage] = useState<{
@@ -420,6 +433,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         throw new Error(result.error || "Failed to update profile goals");
       }
 
+      setClearCourseOnOpen(false);
       setStatusMessage({
         type: "success",
         text: "Target updated. Your dashboard and recommendations are refreshed.",
@@ -608,13 +622,26 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
         <button
           type="button"
-          onClick={() => setIsEditGoalsOpen(true)}
+          onClick={() => {
+            setClearCourseOnOpen(false);
+            setIsEditGoalsOpen(true);
+          }}
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm border border-slate-200 shadow-xs hover:shadow transition-all cursor-pointer self-start sm:self-auto"
         >
           <Edit3 className="w-4 h-4 text-slate-500" />
           <span>Edit goals</span>
         </button>
       </div>
+
+      {/* Target combo validation warning if user has invalid pair */}
+      <InvalidTargetBanner
+        college={target.college || profile.targetCollege}
+        course={target.course}
+        onOpenEditModal={() => {
+          setClearCourseOnOpen(true);
+          setIsEditGoalsOpen(true);
+        }}
+      />
 
       {/* Global Status Message Toast */}
       {statusMessage && (
@@ -693,11 +720,19 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               </p>
               <p className="text-xs sm:text-sm font-bold text-slate-800 leading-snug break-words">
                 {target.college} — {target.course}
+                {target.isUnverified && (
+                  <span className="ml-1.5 px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[11px] font-semibold border border-amber-200">
+                    unverified
+                  </span>
+                )}
               </p>
             </div>
             <button
               type="button"
-              onClick={() => setIsEditGoalsOpen(true)}
+              onClick={() => {
+                setClearCourseOnOpen(false);
+                setIsEditGoalsOpen(true);
+              }}
               className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 transition-all cursor-pointer shrink-0"
               title="Change target goals"
             >
@@ -1341,11 +1376,14 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       {/* ──────────────────────────────────────────────────────────── */}
       <EditGoalsModal
         isOpen={isEditGoalsOpen}
-        onClose={() => setIsEditGoalsOpen(false)}
+        onClose={() => {
+          setIsEditGoalsOpen(false);
+          setClearCourseOnOpen(false);
+        }}
         initialStream={profile.targetStream}
         initialUniversity={profile.targetUniversity}
         initialCollege={target.college || profile.targetCollege}
-        initialCourse={target.course}
+        initialCourse={clearCourseOnOpen ? "" : target.course}
         initialFullName={profile.fullName}
         initialSelectedSubjects={profile.selectedSubjects || []}
         onSave={handleSaveGoals}
