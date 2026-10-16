@@ -128,7 +128,7 @@ export function RetentionLeaderboardCard({
           <div className="space-y-2">
             {userRankData.map((peer, idx) => (
               <div
-                key={idx}
+                key={peer.name || idx}
                 className={`p-2.5 rounded-xl border flex items-center justify-between text-xs ${
                   peer.isCurrentUser
                     ? "bg-blue-50/70 border-blue-200 font-bold text-blue-950"
@@ -142,7 +142,7 @@ export function RetentionLeaderboardCard({
                   <span>{peer.name} {peer.isCurrentUser && "(You)"}</span>
                 </div>
                 <div className="flex items-center gap-3 font-mono text-[11px]">
-                  <span>{peer.score} pts</span>
+                  <span>{peer.score} marks</span>
                   <span className="text-amber-600 font-semibold">{peer.streak}d streak</span>
                 </div>
               </div>

@@ -642,7 +642,7 @@ export default function DiagnosticReportModal({
               onClick={onClose}
               className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold text-xs hover:bg-slate-50 shadow-xs transition-all"
             >
-              Back to Scorecard
+              Back to Analysis
             </button>
 
             {/* Action Button: Generate 5-Question AI Repair Quiz */}

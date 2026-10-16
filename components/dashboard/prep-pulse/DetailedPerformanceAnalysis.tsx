@@ -65,7 +65,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
             yours: hasData ? Math.round(item.accuracyPercentage * 20) : 0,
             average: 1300,
             topper: 1900,
-            unit: ' pts',
+            unit: ' marks',
           };
       }
     });

@@ -771,7 +771,7 @@ export default function MocksPage() {
             {stats.isAllAttempted ? (
               <>
                 <RotateCw className="w-3.5 h-3.5" />
-                <span>Review</span>
+                <span>Analysis</span>
               </>
             ) : (
               <>

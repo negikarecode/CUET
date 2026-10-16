@@ -155,7 +155,7 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
             <div className="flex items-center justify-between text-[12px]">
               <span className="text-[var(--text-muted)]">5-mock average:</span>
               <span className="text-[var(--text-secondary)] tabular-nums font-medium">
-                {metric === "score" ? `${item.rollingScore} pts` : `${item.rollingAccuracy}%`}
+                {metric === "score" ? `${item.rollingScore} marks` : `${item.rollingAccuracy}%`}
               </span>
             </div>
           </div>

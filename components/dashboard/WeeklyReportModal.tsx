@@ -182,7 +182,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
               ) : (
                 <div className="space-y-1.5">
                   {m.weakestTopics.map((w, idx) => (
-                    <div key={idx} className="p-2.5 rounded-xl bg-white border border-rose-100 flex items-center justify-between">
+                    <div key={w.name || idx} className="p-2.5 rounded-xl bg-white border border-rose-100 flex items-center justify-between">
                       <span className="font-semibold text-slate-800">{w.name}</span>
                       <span className="font-mono font-bold text-rose-600">{w.accuracy}% Acc</span>
                     </div>
@@ -201,9 +201,9 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
               ) : (
                 <div className="space-y-1.5">
                   {m.improvedTopics.map((item, idx) => (
-                    <div key={idx} className="p-2.5 rounded-xl bg-white border border-emerald-100 flex items-center justify-between">
+                    <div key={item.name || idx} className="p-2.5 rounded-xl bg-white border border-emerald-100 flex items-center justify-between">
                       <span className="font-semibold text-slate-800">{item.name}</span>
-                      <span className="font-mono font-bold text-emerald-700">+{item.delta}% pts</span>
+                      <span className="font-mono font-bold text-emerald-700">+{item.delta}% marks</span>
                     </div>
                   ))}
                 </div>

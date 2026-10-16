@@ -243,7 +243,7 @@ export default function CBTResultView() {
           <Loader2 className="w-6 h-6 animate-spin stroke-[2.5]" />
         </div>
         <h3 className="text-base font-bold text-slate-900 tracking-tight">
-          Compiling Official CBT Scorecard...
+          Compiling Official CBT Analysis...
         </h3>
         <p className="text-xs text-slate-500 font-medium mt-1">
           Validating answer keys and generating NCERT performance diagnostics.
@@ -262,7 +262,7 @@ export default function CBTResultView() {
           Generating Unified Post-Mock Analysis...
         </h3>
         <p className="text-xs text-slate-500 font-medium mt-1">
-          Compiling official scorecard, chapter analytics, and grounded diagnostic verification.
+          Compiling official analysis, chapter analytics, and grounded diagnostic verification.
         </p>
       </div>
     );

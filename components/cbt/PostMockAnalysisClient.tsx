@@ -304,7 +304,7 @@ export default function PostMockAnalysisClient({
 
   const backLabel = isPractice ? "Back to Practice Tests" : isPYQ ? "Back to PYQ Papers" : "Mocks History";
   const badgeLabel = isPractice ? "UNIT PRACTICE CBT ANALYSIS" : isPYQ ? "OFFICIAL PYQ CBT ANALYSIS" : "POST-MOCK RESULTS";
-  const retakeLabel = isPractice ? "Retake Practice Test" : isPYQ ? "Retake PYQ Paper" : "Retake Mock";
+  const retakeLabel = isPractice ? "Re-attempt Practice Test" : isPYQ ? "Re-attempt PYQ Paper" : "Re-attempt Mock";
   const backButtonText = isPractice ? "Back to Practice Tests" : isPYQ ? "Back to PYQs" : "Back to Mocks";
 
   return (
@@ -369,7 +369,7 @@ export default function PostMockAnalysisClient({
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold uppercase tracking-wider mb-2 border border-blue-200/80 shadow-xs">
               <Award className="w-3.5 h-3.5 text-blue-600" />
-              Official NTA CUET CBT Scorecard
+              Official NTA CUET CBT Analysis
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               {report.testTitle}
@@ -391,7 +391,7 @@ export default function PostMockAnalysisClient({
             onClick={() => toggleSection("scorecard")}
             className="self-start md:self-center flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs shrink-0"
           >
-            <span>{collapsedSections.scorecard ? "Expand Scorecard" : "Collapse"}</span>
+            <span>{collapsedSections.scorecard ? "Expand Analysis" : "Collapse"}</span>
             <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${collapsedSections.scorecard ? "" : "rotate-180"}`} />
           </button>
         </div>

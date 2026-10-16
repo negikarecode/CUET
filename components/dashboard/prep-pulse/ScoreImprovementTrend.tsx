@@ -260,7 +260,7 @@ export const ScoreImprovementTrend: React.FC = () => {
               {pointData?.month || label}
             </span>
             <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-              Overall: {pointData?.score} pts
+              Overall: {pointData?.score} marks
             </span>
           </div>
 
@@ -365,7 +365,7 @@ export const ScoreImprovementTrend: React.FC = () => {
             </div>
             <div className="flex items-center gap-1.5 text-slate-600">
               <Flame className="w-3.5 h-3.5 text-orange-500" />
-              <span>Score Benchmark: <strong className="text-slate-900 font-bold">{currentFocusedPoint ? `${currentFocusedPoint.score} pts` : "--"}</strong></span>
+              <span>Score Benchmark: <strong className="text-slate-900 font-bold">{currentFocusedPoint ? `${currentFocusedPoint.score} marks` : "--"}</strong></span>
             </div>
             <div className="hidden md:flex items-center gap-1.5 text-emerald-600 font-medium">
               <CheckCircle2 className="w-3.5 h-3.5" />
@@ -406,7 +406,7 @@ export const ScoreImprovementTrend: React.FC = () => {
         )}
 
         <div className="flex items-center gap-1.5 text-[11px] text-slate-400 ml-auto">
-          <span>Target Cutoff: <strong className="text-slate-700 font-mono">250+ pts</strong></span>
+          <span>Target Cutoff: <strong className="text-slate-700 font-mono">250+ marks</strong></span>
         </div>
       </div>
 
@@ -624,10 +624,10 @@ export const ScoreImprovementTrend: React.FC = () => {
         </span>
         <div className="flex items-center gap-3 self-end sm:self-auto font-mono text-[11px]">
           <span className="px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 action-glow">
-            {rawAttempts.length > 0 ? `Latest: ${rawAttempts[rawAttempts.length - 1]?.totalMarks ?? 0} pts` : "0 Mocks"}
+            {rawAttempts.length > 0 ? `Latest: ${rawAttempts[rawAttempts.length - 1]?.totalMarks ?? 0} marks` : "0 Mocks"}
           </span>
           <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-semibold action-glow">
-            {rawAttempts.length > 0 ? `${rawAttempts.length} Completed` : "Target: 200+ pts"}
+            {rawAttempts.length > 0 ? `${rawAttempts.length} Completed` : "Target: 200+ marks"}
           </span>
         </div>
       </div>

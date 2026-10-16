@@ -854,9 +854,9 @@ export default function SessionsHistoryClient({
                             href={reviewHref}
                             onClick={(e) => e.stopPropagation()}
                             className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[6px] text-[12px] font-semibold bg-blue-50 text-[var(--accent)] hover:bg-blue-100 transition-colors"
-                            title="Review test report and solutions"
+                            title="View test analysis and solutions"
                           >
-                            <span>Review</span>
+                            <span>Analysis</span>
                             <ChevronRight className="w-3.5 h-3.5" />
                           </Link>
 
@@ -864,10 +864,10 @@ export default function SessionsHistoryClient({
                             href={retakeHref}
                             onClick={(e) => e.stopPropagation()}
                             className="inline-flex items-center gap-1 px-2 py-1.5 rounded-[6px] text-[12px] font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
-                            title="Retake this test"
+                            title="Re-attempt this test"
                           >
                             <RotateCw className="w-3.5 h-3.5" />
-                            <span className="hidden xl:inline">Retake</span>
+                            <span className="hidden xl:inline">Re-attempt</span>
                           </Link>
 
                           <button
@@ -1198,7 +1198,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
           const isHovered = hoveredIdx === idx;
           return (
             <g
-              key={idx}
+              key={pt.attempt?.id || idx}
               className="cursor-pointer"
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}

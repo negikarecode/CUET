@@ -241,7 +241,7 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">{item.subject}</span>
                           <span className="text-xs font-bold font-mono text-emerald-700 bg-white px-2 py-0.5 rounded-full border border-emerald-200">
-                            +{item.deltaPercentage} pts
+                            +{item.deltaPercentage} marks
                           </span>
                         </div>
                         <h4 className="text-sm font-bold text-slate-900">{item.topic}</h4>
@@ -371,7 +371,7 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-bold uppercase tracking-wider text-orange-800">{item.subject}</span>
                           <span className="text-xs font-bold font-mono text-rose-600 bg-white px-2 py-0.5 rounded-full border border-rose-200">
-                            ⚠️ {item.declinePercentage} pts
+                            ⚠️ {item.declinePercentage} marks
                           </span>
                         </div>
                         <h4 className="text-sm font-bold text-slate-900">{item.topic}</h4>

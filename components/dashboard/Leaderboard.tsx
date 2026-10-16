@@ -738,7 +738,7 @@ export default function Leaderboard() {
                     <td className="py-3.5 px-3 hidden lg:table-cell">
                       <div>
                         <span className={`font-mono font-bold text-xs tabular-nums ${entry.bestScore && entry.bestScore < 0 ? "text-rose-600" : "text-slate-900"}`}>
-                          {entry.bestScore !== undefined ? `${entry.bestScore} pts` : "—"}
+                          {entry.bestScore !== undefined ? `${entry.bestScore} marks` : "—"}
                         </span>
                         {entry.bestScoreTest && (
                           <p className="text-[10px] text-slate-400 truncate max-w-[130px]" title={entry.bestScoreTest}>

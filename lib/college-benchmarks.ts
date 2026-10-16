@@ -83,31 +83,31 @@ export function getCollegeCutoffInfo(collegeName: string): {
 
   // Check direct key matches or campus heuristics (CUET 250-point single-subject scale)
   if (clean.includes("srcc") || clean.includes("shri ram college")) {
-    return { campus: "North Campus", cutoff: 99.4, targetScore: "242 / 250 pts", targetScoreNumber: 242 };
+    return { campus: "North Campus", cutoff: 99.4, targetScore: "242 / 250 marks", targetScoreNumber: 242 };
   }
   if (clean.includes("stephen")) {
-    return { campus: "North Campus", cutoff: 99.3, targetScore: "240 / 250 pts", targetScoreNumber: 240 };
+    return { campus: "North Campus", cutoff: 99.3, targetScore: "240 / 250 marks", targetScoreNumber: 240 };
   }
   if (clean.includes("hindu")) {
-    return { campus: "North Campus", cutoff: 99.2, targetScore: "238 / 250 pts", targetScoreNumber: 238 };
+    return { campus: "North Campus", cutoff: 99.2, targetScore: "238 / 250 marks", targetScoreNumber: 238 };
   }
   if (clean.includes("lsr") || clean.includes("lady shri ram")) {
-    return { campus: "South Campus", cutoff: 99.1, targetScore: "236 / 250 pts", targetScoreNumber: 236 };
+    return { campus: "South Campus", cutoff: 99.1, targetScore: "236 / 250 marks", targetScoreNumber: 236 };
   }
   if (clean.includes("miranda")) {
-    return { campus: "North Campus", cutoff: 98.9, targetScore: "234 / 250 pts", targetScoreNumber: 234 };
+    return { campus: "North Campus", cutoff: 98.9, targetScore: "234 / 250 marks", targetScoreNumber: 234 };
   }
   if (clean.includes("hansraj") || clean.includes("hans raj")) {
-    return { campus: "North Campus", cutoff: 98.7, targetScore: "232 / 250 pts", targetScoreNumber: 232 };
+    return { campus: "North Campus", cutoff: 98.7, targetScore: "232 / 250 marks", targetScoreNumber: 232 };
   }
   if (clean.includes("venky") || clean.includes("venkateswara")) {
-    return { campus: "South Campus", cutoff: 97.4, targetScore: "222 / 250 pts", targetScoreNumber: 222 };
+    return { campus: "South Campus", cutoff: 97.4, targetScore: "222 / 250 marks", targetScoreNumber: 222 };
   }
   if (clean.includes("north campus")) {
-    return { campus: "North Campus", cutoff: 97.5, targetScore: "225 / 250 pts", targetScoreNumber: 225 };
+    return { campus: "North Campus", cutoff: 97.5, targetScore: "225 / 250 marks", targetScoreNumber: 225 };
   }
   if (clean.includes("south campus")) {
-    return { campus: "South Campus", cutoff: 95.0, targetScore: "210 / 250 pts", targetScoreNumber: 210 };
+    return { campus: "South Campus", cutoff: 95.0, targetScore: "210 / 250 marks", targetScoreNumber: 210 };
   }
   if (matched) {
     const campusBase =
@@ -120,7 +120,7 @@ export function getCollegeCutoffInfo(collegeName: string): {
     return {
       campus: matched.campus,
       cutoff: campusBase,
-      targetScore: `${scoreNum} / 250 pts`,
+      targetScore: `${scoreNum} / 250 marks`,
       targetScoreNumber: scoreNum,
     };
   }
@@ -129,7 +129,7 @@ export function getCollegeCutoffInfo(collegeName: string): {
   return {
     campus: "Central University",
     cutoff: 93.0,
-    targetScore: "200 / 250 pts",
+    targetScore: "200 / 250 marks",
     targetScoreNumber: 200,
   };
 }
