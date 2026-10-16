@@ -24,6 +24,7 @@
 11. `d4bb3b3a` - `chore: remove unused legacy components DreamCollegeCard and DiagnosticReportModal`
 12. `3b5da906` - `fix(admin): resolve hook dependency warnings and add lazy image loading in pyq review`
 13. `fa5c95d7` - `test(compliance): calibrate question bank scale, option distribution, and subject registry checks`
+14. `b9930b13` - `feat(standing): allow selecting any degree offered by college regardless of student stream`
 
 ---
 
