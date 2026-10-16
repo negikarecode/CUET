@@ -20,6 +20,7 @@ import {
   ChevronLeft,
   X,
   Loader2,
+  Compass,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { RecordedTestAttempt } from "@/types";
@@ -343,173 +344,188 @@ export default function SessionsHistoryClient({
   if (!isClient) {
     return (
       <div className="py-16 flex justify-center items-center">
-        <div className="w-9 h-9 border-3 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
+        <div className="w-9 h-9 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 pb-12">
-      {/* Top Header & Navigation */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mb-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Dashboard</span>
-          </Link>
-          <h1 className="text-[28px] font-bold text-[var(--text)] tracking-tight">
-            Session History
-          </h1>
-          <p className="text-[14px] text-[var(--text-secondary)] mt-1">
-            Complete chronological record of all your completed CUET CBT mocks, past papers, and practice tests.
-          </p>
+    <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-6">
+      {/* 1. Top Header & Navigation */}
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 tracking-wide uppercase">
+          <Compass className="w-3.5 h-3.5" />
+          <span>CUET UG 2026 · Past Performance Record</span>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
-          <Link
-            href="/dashboard/mocks"
-            className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-[8px] bg-[var(--accent)] hover:bg-blue-600 text-white text-[13px] font-semibold shadow-xs transition-all"
-          >
-            <ClipboardCheck className="w-4 h-4" />
-            <span>Take a Mock Test</span>
-          </Link>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors focus:outline-none focus:underline"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back to Dashboard</span>
+              </Link>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Session History
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">
+              Complete chronological record of all your completed CUET CBT mocks, past papers, and practice tests.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
+            <Link
+              href="/dashboard/mocks"
+              className="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition-all"
+            >
+              <ClipboardCheck className="w-4 h-4" />
+              <span>Take a Mock Test</span>
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Summary KPI Cards */}
-      {allAttempts.length > 0 && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-          <div className="app-card p-4 flex items-center gap-3.5 border border-[var(--border)] shadow-xs">
-            <div className="w-11 h-11 rounded-[10px] bg-blue-50 flex items-center justify-center text-[var(--accent)] shrink-0">
+      {/* 2. Summary KPI Cards */}
+      {allAttempts.length > 0 ? (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+          {/* Card 1: Completed Sessions */}
+          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
+            <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 shrink-0">
               <ClipboardCheck className="w-5 h-5 stroke-[2.2]" />
             </div>
-            <div>
-              <p className="text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">
                 Completed Sessions
               </p>
-              <p className="text-[22px] font-bold text-[var(--text)] tabular-nums mt-0.5">
+              <p className="text-xl sm:text-2xl font-extrabold text-slate-900 tabular-nums mt-0.5">
                 {stats.totalCount}
               </p>
             </div>
           </div>
 
-          <div className="app-card p-4 flex items-center gap-3.5 border border-[var(--border)] shadow-xs">
-            <div className="w-11 h-11 rounded-[10px] bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+          {/* Card 2: Average Score */}
+          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
+            <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-200/60 flex items-center justify-center text-emerald-600 shrink-0">
               <TrendingUp className="w-5 h-5 stroke-[2.2]" />
             </div>
-            <div>
-              <p className="text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">
                 Average Score
               </p>
-              <div className="flex items-baseline gap-1.5 mt-0.5">
-                <span className="text-[22px] font-bold text-[var(--text)] tabular-nums">
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className="text-xl sm:text-2xl font-extrabold text-slate-900 tabular-nums">
                   {stats.avgScore}
                 </span>
-                <span className="text-[13px] font-normal text-[var(--text-muted)] tabular-nums">
-                  / {stats.avgMaxMarks}
+                <span className="text-xs font-medium text-slate-400 tabular-nums">
+                  /{stats.avgMaxMarks}
                 </span>
-                <span className="text-[12px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded ml-1">
+                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200/60 ml-1">
                   {stats.avgScorePercentage}%
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="app-card p-4 flex items-center gap-3.5 border border-[var(--border)] shadow-xs">
-            <div className="w-11 h-11 rounded-[10px] bg-amber-50 flex items-center justify-center text-amber-600 shrink-0">
+          {/* Card 3: Average Accuracy */}
+          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
+            <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-600 shrink-0">
               <Target className="w-5 h-5 stroke-[2.2]" />
             </div>
-            <div>
-              <p className="text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">
                 Average Accuracy
               </p>
-              <p className="text-[22px] font-bold text-[var(--text)] tabular-nums mt-0.5">
+              <p className="text-xl sm:text-2xl font-extrabold text-slate-900 tabular-nums mt-0.5">
                 {stats.avgAccuracy}%
               </p>
             </div>
           </div>
 
-          <div className="app-card p-4 flex items-center gap-3.5 border border-[var(--border)] shadow-xs">
-            <div className="w-11 h-11 rounded-[10px] bg-purple-50 flex items-center justify-center text-purple-600 shrink-0">
+          {/* Card 4: Personal Best */}
+          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
+            <div className="w-11 h-11 rounded-xl bg-purple-50 border border-purple-200/60 flex items-center justify-center text-purple-600 shrink-0">
               <Award className="w-5 h-5 stroke-[2.2]" />
             </div>
-            <div>
-              <p className="text-[12px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">
                 Personal Best
               </p>
-              <div className="flex items-baseline gap-1.5 mt-0.5">
-                <span className="text-[22px] font-bold text-purple-700 tabular-nums">
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className="text-xl sm:text-2xl font-extrabold text-purple-700 tabular-nums">
                   {stats.bestScore}
                 </span>
-                <span className="text-[13px] font-normal text-[var(--text-muted)] tabular-nums">
-                  / {stats.bestMaxMarks}
+                <span className="text-xs font-medium text-slate-400 tabular-nums">
+                  /{stats.bestMaxMarks}
                 </span>
               </div>
             </div>
           </div>
         </div>
-      )}
+      ) : null}
 
-      {/* Score-over-Time Line Chart Card */}
+      {/* 3. Score Trajectory Line Chart */}
       {allAttempts.length > 0 && (
-        <div className="app-card p-5 border border-[var(--border)] shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-[var(--border)]">
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
-              <h2 className="text-[16px] font-bold text-[var(--text)] flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-[var(--accent)]" />
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-blue-600" />
                 <span>Score Trajectory Over Time</span>
               </h2>
-              <p className="text-[12px] text-[var(--text-secondary)] mt-0.5">
+              <p className="text-xs text-slate-500 font-medium mt-0.5">
                 Chronological marks scored across test sessions
               </p>
             </div>
 
             {/* Subject Selector for Line Chart */}
             <div className="flex items-center gap-2 shrink-0">
-              <span className="text-[12px] text-[var(--text-muted)] font-medium">Filter Chart:</span>
-              <SearchableSelect
-                ariaLabel="Filter chart by subject"
-                value={chartSubject}
-                onChange={(val) => setChartSubject(val)}
-                options={[
-                  { value: "all", label: `All Subjects (${allAttempts.length})` },
-                  ...availableSubjects.map((sub) => {
-                    const count = allAttempts.filter(
-                      (a) => a.subject?.toLowerCase() === sub.toLowerCase()
-                    ).length;
-                    return {
-                      value: sub,
-                      label: `${sub} (${count})`,
-                    };
-                  }),
-                ]}
-                buttonClassName="h-8 px-2.5 rounded-[6px] border-[var(--border)] bg-white text-[12px] font-semibold text-[var(--text)]"
-                searchPlaceholder="Search subjects..."
-              />
+              <span className="text-xs text-slate-400 font-medium">Filter Chart:</span>
+              <div className="w-48 sm:w-56">
+                <SearchableSelect
+                  ariaLabel="Filter chart by subject"
+                  value={chartSubject}
+                  onChange={(val) => setChartSubject(val)}
+                  options={[
+                    { value: "all", label: `All Subjects (${allAttempts.length})` },
+                    ...availableSubjects.map((sub) => {
+                      const count = allAttempts.filter(
+                        (a) => a.subject?.toLowerCase() === sub.toLowerCase()
+                      ).length;
+                      return {
+                        value: sub,
+                        label: `${sub} (${count})`,
+                      };
+                    }),
+                  ]}
+                  buttonClassName="py-1 px-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-700"
+                  searchPlaceholder="Search subjects..."
+                />
+              </div>
             </div>
           </div>
 
           {/* SVG Score Line Chart */}
           <div className="w-full">
             {chartPoints.length === 0 ? (
-              <div className="py-12 text-center text-[13px] text-[var(--text-muted)]">
+              <div className="py-12 text-center text-xs text-slate-400">
                 No attempts recorded for {chartSubject}.
               </div>
             ) : chartPoints.length === 1 && chartPoints[0] ? (
               (() => {
                 const sp = chartPoints[0];
                 return (
-                  <div className="py-8 px-4 text-center bg-slate-50 rounded-[10px] border border-slate-100 flex flex-col items-center justify-center gap-1.5">
-                    <p className="text-[13px] font-medium text-[var(--text-secondary)]">Single session recorded:</p>
-                    <p className="text-[18px] font-bold text-[var(--text)]">
+                  <div className="py-8 px-4 text-center bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center justify-center gap-1.5">
+                    <p className="text-xs font-medium text-slate-500">Single session recorded:</p>
+                    <p className="text-base sm:text-lg font-bold text-slate-900">
                       {sp.testTitle} —{" "}
-                      <span className="text-[var(--accent)]">{sp.totalMarks}</span> /{" "}
+                      <span className="text-blue-600">{sp.totalMarks}</span> /{" "}
                       {sp.maxMarks || 250} marks
                     </p>
-                    <p className="text-[12px] text-[var(--text-muted)]">
+                    <p className="text-xs text-slate-400 font-mono">
                       {formatDateTimeIndian(sp.submittedAt || new Date())}
                     </p>
                   </div>
@@ -522,24 +538,24 @@ export default function SessionsHistoryClient({
         </div>
       )}
 
-      {/* Filter and Search Bar */}
+      {/* 4. Filter and Search Toolbar */}
       {allAttempts.length > 0 && (
-        <div className="app-card p-4 space-y-3.5 border border-[var(--border)] shadow-xs">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs space-y-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
             {/* Search Input */}
-            <div className="relative md:col-span-5">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
+            <div className="relative sm:col-span-2 lg:col-span-5">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search by test title or subject..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-10 pl-9 pr-3 rounded-[8px] border border-[var(--border)] bg-white text-[13px] text-[var(--text)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)] transition-colors"
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
               />
             </div>
 
             {/* Type Filter */}
-            <div className="md:col-span-2">
+            <div className="lg:col-span-2">
               <SearchableSelect
                 ariaLabel="Filter by paper type"
                 value={selectedType}
@@ -551,12 +567,12 @@ export default function SessionsHistoryClient({
                   { value: "practice", label: "Chapter Practice" },
                 ]}
                 className="w-full"
-                buttonClassName="h-10 px-3 rounded-[8px] border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)]"
+                buttonClassName="py-2 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-800"
               />
             </div>
 
             {/* Date Range Filter */}
-            <div className="md:col-span-2">
+            <div className="lg:col-span-2">
               <SearchableSelect
                 ariaLabel="Filter by date range"
                 value={dateRange}
@@ -568,12 +584,12 @@ export default function SessionsHistoryClient({
                   { value: "30days", label: "Last 30 Days" },
                 ]}
                 className="w-full"
-                buttonClassName="h-10 px-3 rounded-[8px] border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)]"
+                buttonClassName="py-2 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-800"
               />
             </div>
 
             {/* Sort Selector */}
-            <div className="md:col-span-3">
+            <div className="lg:col-span-3">
               <SearchableSelect
                 ariaLabel="Sort sessions"
                 value={sortBy}
@@ -585,25 +601,25 @@ export default function SessionsHistoryClient({
                   { value: "highest_accuracy", label: "Sort: Highest accuracy" },
                 ]}
                 className="w-full"
-                buttonClassName="h-10 px-3 rounded-[8px] border-[var(--border)] bg-white text-[13px] font-medium text-[var(--text)]"
+                buttonClassName="py-2 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-800"
               />
             </div>
           </div>
 
           {/* Subject Pills */}
           {availableSubjects.length > 1 && (
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 text-[13px] border-t border-slate-100">
-              <span className="text-[var(--text-muted)] mr-1 flex items-center gap-1 shrink-0 font-medium">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 text-xs border-t border-slate-100 scrollbar-none">
+              <span className="text-slate-400 mr-1 flex items-center gap-1 shrink-0 font-semibold">
                 <Filter className="w-3.5 h-3.5" />
                 <span>Subject:</span>
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedSubject("all")}
-                className={`px-3 py-1 rounded-full font-medium transition-colors whitespace-nowrap cursor-pointer ${
+                className={`px-3 py-1 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
                   selectedSubject === "all"
-                    ? "bg-[var(--accent)] text-white shadow-xs"
-                    : "bg-slate-100 text-[var(--text-secondary)] hover:bg-slate-200"
+                    ? "bg-slate-900 text-white shadow-xs"
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
                 All Subjects ({allAttempts.length})
@@ -617,10 +633,10 @@ export default function SessionsHistoryClient({
                     key={sub}
                     type="button"
                     onClick={() => setSelectedSubject(sub)}
-                    className={`px-3 py-1 rounded-full font-medium transition-colors whitespace-nowrap cursor-pointer ${
+                    className={`px-3 py-1 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
                       selectedSubject.toLowerCase() === sub.toLowerCase()
-                        ? "bg-[var(--accent)] text-white shadow-xs"
-                        : "bg-slate-100 text-[var(--text-secondary)] hover:bg-slate-200"
+                        ? "bg-slate-900 text-white shadow-xs"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                     }`}
                   >
                     {sub} ({count})
@@ -632,23 +648,23 @@ export default function SessionsHistoryClient({
         </div>
       )}
 
-      {/* Sessions List */}
+      {/* 5. Sessions Results / Presentation */}
       {allAttempts.length === 0 ? (
         /* Zero State: User has not taken any tests */
-        <div className="app-card py-16 px-4 text-center space-y-4 border border-[var(--border)]">
-          <div className="w-14 h-14 rounded-full bg-blue-50 text-[var(--accent)] flex items-center justify-center mx-auto">
+        <div className="bg-white rounded-2xl py-16 px-4 text-center space-y-4 border border-slate-200/90 shadow-xs">
+          <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-200/60 shadow-xs">
             <ClipboardCheck className="w-7 h-7" />
           </div>
           <div className="max-w-md mx-auto space-y-1">
-            <h3 className="text-[18px] font-semibold text-[var(--text)]">No test sessions recorded yet</h3>
-            <p className="text-[14px] text-[var(--text-secondary)]">
+            <h3 className="text-lg font-bold text-slate-900">No test sessions recorded yet</h3>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">
               Complete a full-length CBT mock test or chapter practice drill to start tracking your performance history and admission standing.
             </p>
           </div>
           <div className="pt-2">
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[8px] bg-[var(--accent)] hover:bg-blue-600 text-white text-[14px] font-semibold transition-all shadow-xs"
+              className="inline-flex items-center justify-center gap-2 py-2 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold transition-all shadow-xs"
             >
               <ClipboardCheck className="w-4 h-4" />
               <span>Browse Mock Tests</span>
@@ -657,9 +673,9 @@ export default function SessionsHistoryClient({
         </div>
       ) : filteredAttempts.length === 0 ? (
         /* Filter Zero State: No tests match search/subject */
-        <div className="app-card py-12 px-4 text-center space-y-3 border border-[var(--border)]">
-          <p className="text-[15px] font-medium text-[var(--text)]">No sessions match your search or filters</p>
-          <p className="text-[13px] text-[var(--text-secondary)]">
+        <div className="bg-white rounded-2xl py-12 px-4 text-center space-y-3 border border-slate-200/90 shadow-xs">
+          <p className="text-base font-bold text-slate-900">No sessions match your search or filters</p>
+          <p className="text-xs text-slate-400">
             Try resetting the filters or entering different search keywords.
           </p>
           <button
@@ -670,23 +686,23 @@ export default function SessionsHistoryClient({
               setSelectedType("all");
               setDateRange("all");
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-white text-[13px] font-semibold text-[var(--text)] hover:bg-slate-50 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer shadow-xs"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset filters</span>
           </button>
         </div>
       ) : (
-        <div className="app-card overflow-hidden border border-[var(--border)] shadow-xs space-y-0">
+        <div className="space-y-4">
           {/* Header count info */}
-          <div className="p-4 border-b border-[var(--border)] flex items-center justify-between text-[13px] text-[var(--text-secondary)] bg-white">
+          <div className="bg-white rounded-2xl border border-slate-200/90 px-4 py-3 shadow-xs flex items-center justify-between text-xs text-slate-500 font-medium">
             <span>
-              Showing <strong>{(currentPage - 1) * pageSize + 1}</strong> –{" "}
-              <strong>{Math.min(currentPage * pageSize, filteredAttempts.length)}</strong> of{" "}
-              <strong>{filteredAttempts.length}</strong> session
+              Showing <strong className="text-slate-900 font-bold">{(currentPage - 1) * pageSize + 1}</strong> –{" "}
+              <strong className="text-slate-900 font-bold">{Math.min(currentPage * pageSize, filteredAttempts.length)}</strong> of{" "}
+              <strong className="text-slate-900 font-bold">{filteredAttempts.length}</strong> session
               {filteredAttempts.length === 1 ? "" : "s"}
             </span>
-            <span className="text-[12px] text-[var(--text-muted)] font-medium">
+            <span className="text-slate-400 font-mono text-[11px] hidden sm:inline">
               Sorted by{" "}
               {sortBy === "newest"
                 ? "latest date"
@@ -698,203 +714,319 @@ export default function SessionsHistoryClient({
             </span>
           </div>
 
-          {/* Desktop Table View - No nested vertical scroll, sticky thead, fits without horizontal scroll at 1280px */}
-          <div className="overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse table-auto">
-              <thead className="sticky top-0 z-10 bg-slate-50 shadow-2xs border-b border-[var(--border)]">
-                <tr className="text-[12px] font-semibold text-[var(--text-muted)] bg-slate-50">
-                  <th className="py-2.5 pl-3 pr-2 font-semibold">Test Title</th>
-                  <th className="py-2.5 px-2 font-semibold">Subject</th>
-                  <th className="py-2.5 px-2 font-semibold whitespace-nowrap">Date & Time</th>
-                  <th className="py-2.5 px-2 font-semibold text-right whitespace-nowrap">Marks Scored</th>
-                  <th className="py-2 px-2 font-semibold text-right" title="Calculated as correct / attempted questions">
-                    <span className="block leading-tight">Accuracy</span>
-                    <span className="block text-[10px] text-[var(--text-muted)] font-normal">(attempted)</span>
-                  </th>
-                  <th className="py-2.5 px-2 font-semibold text-right whitespace-nowrap">Breakdown</th>
-                  <th className="py-2.5 pr-3 pl-1 font-semibold text-right whitespace-nowrap">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--border)] bg-white">
-                {paginatedAttempts.map((att: RecordedTestAttempt, idx: number) => {
-                  const type = getSessionType(att);
-                  const subtitle = getSessionSubtitle(att, type);
-                  const totalQ = att.totalQuestions || (att.questions?.length) || (att.maxMarks ? Math.round(att.maxMarks / 5) : 50);
-                  const maxMarks = totalQ * 5;
-                  const title = att.testTitle || `${att.subject || "Domain"} CBT Mock Test`;
-                  const reviewHref = getReviewHref(att);
-                  const retakeHref = getRetakeHref(att);
-                  const isPersonalBest = stats.bestScore > 0 && att.totalMarks === stats.bestScore;
-                  const correct = att.correctCount || 0;
-                  const wrong = att.incorrectCount || 0;
-                  const skipped = Math.max(0, totalQ - (correct + wrong));
-                  const acc = att.attemptedCount && att.attemptedCount > 0
-                    ? Math.round(((att.correctCount || 0) / att.attemptedCount) * 100)
-                    : (att.accuracyPercentage || 0);
-                  const dt = splitDateTimeIndian(att.submittedAt);
+          {/* Desktop Table View (>= 768px) */}
+          <div className="hidden md:block bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto w-full">
+              <table className="w-full text-left border-collapse table-auto">
+                <thead className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <tr>
+                    <th className="py-3 pl-4 pr-2 font-bold">Test Title</th>
+                    <th className="py-3 px-3 font-bold">Subject</th>
+                    <th className="py-3 px-3 font-bold whitespace-nowrap">Date & Time</th>
+                    <th className="py-3 px-3 font-bold text-right whitespace-nowrap">Marks Scored</th>
+                    <th className="py-3 px-3 font-bold text-right" title="Calculated as correct / attempted questions">
+                      Accuracy
+                    </th>
+                    <th className="py-3 px-3 font-bold text-right whitespace-nowrap">Breakdown</th>
+                    <th className="py-3 pr-4 pl-2 font-bold text-right whitespace-nowrap">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-xs">
+                  {paginatedAttempts.map((att: RecordedTestAttempt, idx: number) => {
+                    const type = getSessionType(att);
+                    const subtitle = getSessionSubtitle(att, type);
+                    const totalQ = att.totalQuestions || (att.questions?.length) || (att.maxMarks ? Math.round(att.maxMarks / 5) : 50);
+                    const maxMarks = totalQ * 5;
+                    const title = att.testTitle || `${att.subject || "Domain"} CBT Mock Test`;
+                    const reviewHref = getReviewHref(att);
+                    const retakeHref = getRetakeHref(att);
+                    const isPersonalBest = stats.bestScore > 0 && att.totalMarks === stats.bestScore;
+                    const correct = att.correctCount || 0;
+                    const wrong = att.incorrectCount || 0;
+                    const skipped = Math.max(0, totalQ - (correct + wrong));
+                    const acc = att.attemptedCount && att.attemptedCount > 0
+                      ? Math.round(((att.correctCount || 0) / att.attemptedCount) * 100)
+                      : (att.accuracyPercentage || 0);
+                    const dt = splitDateTimeIndian(att.submittedAt);
 
-                  return (
-                    <tr
-                      key={att.id || `session-${idx}`}
-                      onClick={() => router.push(reviewHref)}
-                      className="hover:bg-slate-50/80 transition-colors text-[13px] group cursor-pointer"
-                    >
-                      {/* Test Title with Wrap to Two Lines and Subtitle */}
-                      <td className="py-2.5 pl-3 pr-2 font-medium max-w-[220px]">
-                        <div className="space-y-1">
-                          <p className="font-semibold text-slate-900 leading-snug whitespace-normal break-words">
-                            {title}
-                          </p>
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            {isPersonalBest && (
-                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 shrink-0">
-                                ★ Personal Best
+                    return (
+                      <tr
+                        key={att.id || `session-${idx}`}
+                        onClick={() => router.push(reviewHref)}
+                        className="hover:bg-slate-50/80 transition-colors group cursor-pointer"
+                      >
+                        {/* Test Title */}
+                        <td className="py-3.5 pl-4 pr-2 font-medium max-w-[240px]">
+                          <div className="space-y-1">
+                            <p className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug whitespace-normal break-words">
+                              {title}
+                            </p>
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              {isPersonalBest && (
+                                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 shrink-0">
+                                  ★ Personal Best
+                                </span>
+                              )}
+                              <span
+                                className={`inline-block px-1.5 py-0.5 rounded-md text-[10px] font-bold border ${
+                                  type === "Mock"
+                                    ? "bg-blue-50 text-blue-700 border-blue-200/80"
+                                    : type === "Past Paper"
+                                    ? "bg-purple-50 text-purple-700 border-purple-200/80"
+                                    : "bg-emerald-50 text-emerald-700 border-emerald-200/80"
+                                }`}
+                              >
+                                {type}
                               </span>
-                            )}
-                            <span
-                              className={`inline-block px-1.5 py-0.2 rounded text-[10px] font-semibold border ${
-                                type === "Mock"
-                                  ? "bg-blue-50 text-blue-700 border-blue-200"
-                                  : type === "Past Paper"
-                                  ? "bg-purple-50 text-purple-700 border-purple-200"
-                                  : "bg-emerald-50 text-emerald-700 border-emerald-200"
-                              }`}
-                            >
-                              {type}
-                            </span>
-                            <span className="text-[11px] text-[var(--text-muted)] whitespace-normal">
-                              {subtitle}
-                            </span>
+                              <span className="text-[11px] text-slate-400 whitespace-normal">
+                                {subtitle}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      </td>
+                        </td>
 
-                      {/* Subject */}
-                      <td className="py-2.5 px-2 whitespace-normal">
-                        <span className="inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200/80 whitespace-nowrap">
+                        {/* Subject */}
+                        <td className="py-3.5 px-3 whitespace-nowrap">
+                          <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200/70 font-sans">
+                            {att.subject || "Domain"}
+                          </span>
+                        </td>
+
+                        {/* Date & Time */}
+                        <td className="py-3.5 px-3 text-slate-500 font-medium whitespace-nowrap">
+                          <div className="flex flex-col gap-0.5">
+                            <div className="flex items-center gap-1.5 text-slate-800 font-medium">
+                              <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                              <span>{dt.date}</span>
+                            </div>
+                            <span className="text-[11px] text-slate-400 pl-5 font-mono">{dt.time}</span>
+                          </div>
+                        </td>
+
+                        {/* Marks Scored */}
+                        <td className="py-3.5 px-3 text-right tabular-nums whitespace-nowrap">
+                          <span
+                            className={`text-sm ${
+                              (att.totalMarks ?? 0) < 0
+                                ? "text-rose-600 font-extrabold"
+                                : "text-slate-900 font-bold"
+                            }`}
+                          >
+                            {att.totalMarks}
+                          </span>
+                          <span className="text-xs font-normal text-slate-400">
+                            {" "}/ {maxMarks}
+                          </span>
+                        </td>
+
+                        {/* Accuracy */}
+                        <td className="py-3.5 px-3 text-right tabular-nums whitespace-nowrap">
+                          <span
+                            className={`inline-block px-2 py-0.5 rounded-md text-xs font-bold border ${
+                              acc >= 70
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                : acc >= 40
+                                ? "bg-blue-50 text-blue-700 border-blue-200"
+                                : "bg-amber-50 text-amber-700 border-amber-200"
+                            }`}
+                          >
+                            {acc}%
+                          </span>
+                        </td>
+
+                        {/* Breakdown */}
+                        <td className="py-3.5 px-3 text-right tabular-nums whitespace-nowrap">
+                          <div className="flex flex-col items-end gap-1">
+                            <div className="text-[11px] font-medium whitespace-nowrap">
+                              <span className="text-emerald-600 font-bold">{correct} correct</span>
+                              <span className="text-slate-300 mx-1">·</span>
+                              <span className="text-rose-500 font-bold">{wrong} wrong</span>
+                              <span className="text-slate-300 mx-1">·</span>
+                              <span className="text-slate-400">{skipped} skipped</span>
+                            </div>
+                            <div className="w-20 h-1.5 rounded-full bg-slate-100 overflow-hidden flex border border-slate-200/50">
+                              <div
+                                style={{ width: `${totalQ > 0 ? Math.min(100, (correct / totalQ) * 100) : 0}%` }}
+                                className="bg-emerald-500 h-full"
+                              />
+                              <div
+                                style={{ width: `${totalQ > 0 ? Math.min(100, (wrong / totalQ) * 100) : 0}%` }}
+                                className="bg-rose-500 h-full"
+                              />
+                              <div
+                                style={{ width: `${totalQ > 0 ? Math.min(100, (skipped / totalQ) * 100) : 0}%` }}
+                                className="bg-slate-200 h-full"
+                              />
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* Action Buttons */}
+                        <td className="py-3.5 pr-4 pl-2 text-right whitespace-nowrap">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <Link
+                              href={reviewHref}
+                              onClick={(e) => e.stopPropagation()}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200/60 transition-colors shadow-2xs"
+                              title="View test analysis and solutions"
+                            >
+                              <span>Analysis</span>
+                              <ChevronRight className="w-3.5 h-3.5" />
+                            </Link>
+
+                            <Link
+                              href={retakeHref}
+                              onClick={(e) => e.stopPropagation()}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200/60 transition-colors"
+                              title="Re-attempt this test"
+                            >
+                              <RotateCw className="w-3.5 h-3.5" />
+                              <span className="hidden xl:inline">Re-attempt</span>
+                            </Link>
+
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSessionToDelete(att);
+                              }}
+                              className="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                              title="Delete this test session"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile Card-Based List (< 768px) */}
+          <div className="block md:hidden space-y-3.5">
+            {paginatedAttempts.map((att: RecordedTestAttempt, idx: number) => {
+              const type = getSessionType(att);
+              const subtitle = getSessionSubtitle(att, type);
+              const totalQ = att.totalQuestions || (att.questions?.length) || (att.maxMarks ? Math.round(att.maxMarks / 5) : 50);
+              const maxMarks = totalQ * 5;
+              const title = att.testTitle || `${att.subject || "Domain"} CBT Mock Test`;
+              const reviewHref = getReviewHref(att);
+              const retakeHref = getRetakeHref(att);
+              const isPersonalBest = stats.bestScore > 0 && att.totalMarks === stats.bestScore;
+              const correct = att.correctCount || 0;
+              const wrong = att.incorrectCount || 0;
+              const skipped = Math.max(0, totalQ - (correct + wrong));
+              const acc = att.attemptedCount && att.attemptedCount > 0
+                ? Math.round(((att.correctCount || 0) / att.attemptedCount) * 100)
+                : (att.accuracyPercentage || 0);
+              const dt = splitDateTimeIndian(att.submittedAt);
+
+              return (
+                <div
+                  key={att.id || `mobile-session-${idx}`}
+                  className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs space-y-3"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="space-y-1 min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {isPersonalBest && (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                            ★ PB
+                          </span>
+                        )}
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${
+                            type === "Mock"
+                              ? "bg-blue-50 text-blue-700 border-blue-200/80"
+                              : type === "Past Paper"
+                              ? "bg-purple-50 text-purple-700 border-purple-200/80"
+                              : "bg-emerald-50 text-emerald-700 border-emerald-200/80"
+                          }`}
+                        >
+                          {type}
+                        </span>
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-sans">
                           {att.subject || "Domain"}
                         </span>
-                      </td>
+                      </div>
+                      <h3 className="font-bold text-slate-900 text-sm leading-snug">
+                        {title}
+                      </h3>
+                      <p className="text-[11px] text-slate-400 font-medium">
+                        {subtitle} · {dt.date} at {dt.time}
+                      </p>
+                    </div>
 
-                      {/* Date & Time (Two lines) */}
-                      <td className="py-2.5 px-2 text-[var(--text-muted)] text-[12px] font-medium leading-tight whitespace-nowrap">
-                        <div className="flex flex-col gap-0.5">
-                          <div className="flex items-center gap-1.5 text-slate-800 font-medium">
-                            <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                            <span>{dt.date}</span>
-                          </div>
-                          <span className="text-[11px] text-slate-500 pl-5">{dt.time}</span>
-                        </div>
-                      </td>
+                    <div className="text-right shrink-0">
+                      <p
+                        className={`text-base font-extrabold tabular-nums ${
+                          (att.totalMarks ?? 0) < 0 ? "text-rose-600" : "text-slate-900"
+                        }`}
+                      >
+                        {att.totalMarks}
+                        <span className="text-xs font-normal text-slate-400">/{maxMarks}</span>
+                      </p>
+                      <span
+                        className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold border mt-0.5 ${
+                          acc >= 70
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            : acc >= 40
+                            ? "bg-blue-50 text-blue-700 border-blue-200"
+                            : "bg-amber-50 text-amber-700 border-amber-200"
+                        }`}
+                      >
+                        {acc}% acc
+                      </span>
+                    </div>
+                  </div>
 
-                      {/* Marks Scored (Negative in Red) */}
-                      <td className="py-2.5 px-2 text-right tabular-nums whitespace-nowrap">
-                        <span
-                          className={`text-[14px] ${
-                            (att.totalMarks ?? 0) < 0
-                              ? "text-rose-600 font-extrabold"
-                              : "text-[var(--text)] font-bold"
-                          }`}
-                        >
-                          {att.totalMarks}
-                        </span>
-                        <span className="text-[12px] font-normal text-[var(--text-muted)]">
-                          {" "}
-                          / {maxMarks}
-                        </span>
-                      </td>
+                  {/* Breakdown pill */}
+                  <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex items-center justify-between text-xs font-medium">
+                    <span className="text-emerald-700 font-bold">{correct} Correct</span>
+                    <span className="text-slate-300">•</span>
+                    <span className="text-rose-600 font-bold">{wrong} Wrong</span>
+                    <span className="text-slate-300">•</span>
+                    <span className="text-slate-500">{skipped} Skipped</span>
+                  </div>
 
-                      {/* Accuracy */}
-                      <td className="py-2.5 px-2 text-right tabular-nums whitespace-nowrap">
-                        <span
-                          className={`inline-block px-2 py-0.5 rounded-[6px] text-[12px] font-semibold border ${
-                            acc >= 70
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                              : acc >= 40
-                              ? "bg-blue-50 text-blue-700 border-blue-200"
-                              : "bg-amber-50 text-amber-700 border-amber-200"
-                          }`}
-                        >
-                          {acc}%
-                        </span>
-                      </td>
-
-                      {/* Breakdown: 7 correct · 6 wrong · 37 skipped */}
-                      <td className="py-2.5 px-2 text-right tabular-nums whitespace-nowrap">
-                        <div className="flex flex-col items-end gap-1">
-                          <div className="text-[11px] font-medium whitespace-nowrap">
-                            <span className="text-emerald-600 font-semibold">{correct} correct</span>
-                            <span className="text-slate-300 mx-1">·</span>
-                            <span className="text-rose-500 font-semibold">{wrong} wrong</span>
-                            <span className="text-slate-300 mx-1">·</span>
-                            <span className="text-slate-500">{skipped} skipped</span>
-                          </div>
-                          {/* Mini Progress Ratio */}
-                          <div className="w-20 h-1.5 rounded-full bg-slate-100 overflow-hidden flex">
-                            <div
-                              style={{ width: `${totalQ > 0 ? Math.min(100, (correct / totalQ) * 100) : 0}%` }}
-                              className="bg-emerald-500 h-full"
-                            />
-                            <div
-                              style={{ width: `${totalQ > 0 ? Math.min(100, (wrong / totalQ) * 100) : 0}%` }}
-                              className="bg-rose-500 h-full"
-                            />
-                            <div
-                              style={{ width: `${totalQ > 0 ? Math.min(100, (skipped / totalQ) * 100) : 0}%` }}
-                              className="bg-slate-200 h-full"
-                            />
-                          </div>
-                        </div>
-                      </td>
-
-                      {/* Action Buttons: Review, Retake, Delete */}
-                      <td className="py-2.5 pr-3 pl-1 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <Link
-                            href={reviewHref}
-                            onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[6px] text-[12px] font-semibold bg-blue-50 text-[var(--accent)] hover:bg-blue-100 transition-colors"
-                            title="View test analysis and solutions"
-                          >
-                            <span>Analysis</span>
-                            <ChevronRight className="w-3.5 h-3.5" />
-                          </Link>
-
-                          <Link
-                            href={retakeHref}
-                            onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center gap-1 px-2 py-1.5 rounded-[6px] text-[12px] font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
-                            title="Re-attempt this test"
-                          >
-                            <RotateCw className="w-3.5 h-3.5" />
-                            <span className="hidden xl:inline">Re-attempt</span>
-                          </Link>
-
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSessionToDelete(att);
-                            }}
-                            className="p-1.5 rounded-[6px] text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-                            title="Delete this test session"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                  {/* Actions */}
+                  <div className="flex items-center gap-2 pt-1 border-t border-slate-100">
+                    <Link
+                      href={reviewHref}
+                      className="flex-1 py-1.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs text-center shadow-xs transition-colors"
+                    >
+                      Analysis
+                    </Link>
+                    <Link
+                      href={retakeHref}
+                      className="py-1.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors flex items-center gap-1"
+                    >
+                      <RotateCw className="w-3 h-3" />
+                      <span>Retake</span>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setSessionToDelete(att)}
+                      className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                      title="Delete session"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="p-4 border-t border-[var(--border)] flex items-center justify-between bg-white text-[13px]">
-              <div className="text-[var(--text-secondary)]">
-                Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+            <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs flex items-center justify-between text-xs">
+              <div className="text-slate-500 font-medium">
+                Page <strong className="text-slate-900 font-bold">{currentPage}</strong> of{" "}
+                <strong className="text-slate-900 font-bold">{totalPages}</strong>
               </div>
 
               <div className="flex items-center gap-1.5">
@@ -902,9 +1034,9 @@ export default function SessionsHistoryClient({
                   type="button"
                   disabled={currentPage <= 1}
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  className="px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-white text-[var(--text)] font-medium hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-3.5 h-3.5" />
                   <span>Previous</span>
                 </button>
 
@@ -913,10 +1045,10 @@ export default function SessionsHistoryClient({
                     key={page}
                     type="button"
                     onClick={() => setCurrentPage(page)}
-                    className={`w-8 h-8 rounded-[6px] text-[13px] font-semibold transition-colors cursor-pointer ${
+                    className={`w-8 h-8 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                       currentPage === page
-                        ? "bg-[var(--accent)] text-white shadow-xs"
-                        : "bg-white border border-[var(--border)] text-[var(--text-secondary)] hover:bg-slate-50"
+                        ? "bg-slate-900 text-white shadow-xs"
+                        : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
                     }`}
                   >
                     {page}
@@ -927,10 +1059,10 @@ export default function SessionsHistoryClient({
                   type="button"
                   disabled={currentPage >= totalPages}
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  className="px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-white text-[var(--text)] font-medium hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
                 >
                   <span>Next</span>
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -938,7 +1070,7 @@ export default function SessionsHistoryClient({
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* 6. Delete Confirmation Modal */}
       {sessionToDelete && (
         <div
           role="dialog"
@@ -949,7 +1081,7 @@ export default function SessionsHistoryClient({
             <div className="flex items-center justify-between pb-2 border-b border-slate-100">
               <div className="flex items-center gap-2.5 text-rose-600">
                 <AlertTriangle className="w-5 h-5 stroke-[2.2]" />
-                <h3 className="text-[16px] font-bold text-slate-900">Delete Test Session</h3>
+                <h3 className="text-base font-bold text-slate-900">Delete Test Session</h3>
               </div>
               <button
                 type="button"
@@ -960,24 +1092,24 @@ export default function SessionsHistoryClient({
               </button>
             </div>
 
-            <div className="space-y-2 text-[13px] text-slate-600">
+            <div className="space-y-2 text-xs sm:text-sm text-slate-600">
               <p>
                 Are you sure you want to permanently delete your session for:
               </p>
-              <div className="p-3 bg-slate-50 rounded-[8px] border border-slate-200/70 space-y-1">
-                <p className="font-semibold text-slate-900">
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1">
+                <p className="font-bold text-slate-900">
                   {sessionToDelete.testTitle || `${sessionToDelete.subject} Mock Test`}
                 </p>
-                <p className="text-[12px] text-slate-500">
-                  Score: <strong>{sessionToDelete.totalMarks}</strong> /{" "}
+                <p className="text-xs text-slate-500 font-medium">
+                  Score: <strong className="text-slate-800">{sessionToDelete.totalMarks}</strong> /{" "}
                   {sessionToDelete.maxMarks || 250} marks · Accuracy:{" "}
-                  <strong>{sessionToDelete.accuracyPercentage}%</strong>
+                  <strong className="text-slate-800">{sessionToDelete.accuracyPercentage}%</strong>
                 </p>
-                <p className="text-[12px] text-slate-400">
+                <p className="text-[11px] text-slate-400 font-mono">
                   {formatDateTimeIndian(sessionToDelete.submittedAt || new Date())}
                 </p>
               </div>
-              <p className="text-rose-600 text-[12px] font-medium pt-1">
+              <p className="text-rose-600 text-xs font-semibold pt-1">
                 Warning: This will remove your attempt records and recalculate your dashboard stats. This action cannot be undone.
               </p>
             </div>
@@ -987,7 +1119,7 @@ export default function SessionsHistoryClient({
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setSessionToDelete(null)}
-                className="px-4 py-2 text-[13px] font-semibold rounded-[8px] border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -996,16 +1128,16 @@ export default function SessionsHistoryClient({
                 type="button"
                 disabled={isDeleting}
                 onClick={handleConfirmDelete}
-                className="px-4 py-2 text-[13px] font-semibold rounded-[8px] bg-rose-600 hover:bg-rose-700 text-white transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold rounded-xl bg-rose-600 hover:bg-rose-700 text-white transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
               >
                 {isDeleting ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
                     <span>Deleting...</span>
                   </>
                 ) : (
                   <>
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-3.5 h-3.5" />
                     <span>Confirm Delete</span>
                   </>
                 )}
@@ -1125,7 +1257,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
       >
         <defs>
           <linearGradient id="scoreAreaGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#2563EB" stopOpacity="0.22" />
+            <stop offset="0%" stopColor="#2563EB" stopOpacity="0.20" />
             <stop offset="100%" stopColor="#2563EB" stopOpacity="0.01" />
           </linearGradient>
         </defs>
@@ -1267,12 +1399,12 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
           const maxM = totalQ * 5;
           return (
             <div
-              className="absolute z-30 pointer-events-none bg-slate-900 text-white text-[12px] rounded-[8px] p-2.5 shadow-xl max-w-xs space-y-1 transition-all duration-150 -translate-x-1/2 bottom-[80%]"
+              className="absolute z-30 pointer-events-none bg-slate-900 text-white text-xs rounded-xl p-3 shadow-xl max-w-xs space-y-1 transition-all duration-150 -translate-x-1/2 bottom-[80%]"
               style={{
                 left: `${(hoveredCoord.x / totalW) * 100}%`,
               }}
             >
-              <p className="font-semibold text-white leading-tight">
+              <p className="font-bold text-white leading-tight">
                 {hoveredCoord.attempt.testTitle}
               </p>
               <div className="flex items-center gap-2 text-[11px] text-slate-300">
@@ -1288,7 +1420,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
                   Acc: <strong className="text-blue-400 font-bold">{hoveredCoord.attempt.accuracyPercentage}%</strong>
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[10px] text-slate-400 font-mono">
                 {formatDateTimeIndian(hoveredCoord.attempt.submittedAt || new Date())}
               </p>
             </div>

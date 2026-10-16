@@ -949,28 +949,28 @@ export default function WeaknessRadarClient({
   return (
     <div className="space-y-6">
       {/* 1. TOP HEADER & TOOLBAR ROW */}
-      <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-7 shadow-xs space-y-4">
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-7 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
               href="/dashboard"
-              className="p-2 rounded-[8px] border border-[var(--border)] bg-white hover:bg-slate-50 text-[var(--text-secondary)] transition-colors"
+              className="p-2 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 text-slate-600 transition-colors shadow-2xs"
               title="Return to Dashboard"
             >
               <ArrowLeft className="w-4 h-4" strokeWidth={1.75} />
             </Link>
             <div>
-              <h1 className="text-[26px] font-bold text-[var(--text)] tracking-tight whitespace-nowrap">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight whitespace-nowrap">
                 Weakness Report
               </h1>
-              <p className="text-[13px] text-[var(--text-secondary)]">
+              <p className="text-[13px] text-slate-500 font-medium">
                 Topic-level accuracy, error patterns, and targeted practice.
               </p>
             </div>
           </div>
 
           {/* Cycle Badge Indicator (Single source of truth) */}
-          <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[13px] font-semibold shrink-0">
+          <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold shrink-0">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Cycle {currentCycleNumber} · {effectiveCycleQuestionCount} / 150 Qs</span>
           </div>
@@ -982,7 +982,7 @@ export default function WeaknessRadarClient({
             <button
               type="button"
               onClick={() => setIsDoubtDrawerOpen(true)}
-              className="inline-flex items-center gap-1.5 h-9 px-3 rounded-[8px] bg-white hover:bg-slate-50 text-[var(--text)] border border-[var(--border)] text-[13px] font-medium transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs sm:text-[13px] font-semibold transition-colors cursor-pointer shadow-2xs"
             >
               <Brain className="w-4 h-4 text-indigo-600" />
               <span>Ask doubt solver</span>
@@ -991,7 +991,7 @@ export default function WeaknessRadarClient({
             <button
               type="button"
               onClick={() => setIsWeeklyReportOpen(true)}
-              className="inline-flex items-center gap-1.5 h-9 px-3 rounded-[8px] bg-white hover:bg-slate-50 text-[var(--text)] border border-[var(--border)] text-[13px] font-medium transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs sm:text-[13px] font-semibold transition-colors cursor-pointer shadow-2xs"
             >
               <Activity className="w-4 h-4 text-emerald-600" />
               <span>Weekly report</span>
@@ -1009,7 +1009,7 @@ export default function WeaknessRadarClient({
 
           <Link
             href="/dashboard/mocks"
-            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-[8px] bg-[var(--accent)] hover:bg-blue-600 text-white text-[13px] font-semibold shadow-xs transition-colors"
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-[13px] font-bold shadow-xs hover:shadow transition-all"
           >
             <Play className="w-3.5 h-3.5 fill-white" />
             <span>Take CBT Mock</span>
@@ -1380,10 +1380,10 @@ export default function WeaknessRadarClient({
       )}
 
       {/* 3. REAL DIAGNOSTIC SUMMARY DASHBOARD REPORT (SECTIONS 18 & 25) */}
-      <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-7 shadow-sm space-y-5">
-        <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-7 shadow-xs space-y-5">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-[20px] font-semibold text-[var(--text)] leading-[1.25]">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 leading-[1.25]">
               Diagnostic summary
             </h2>
             <div
@@ -1393,31 +1393,31 @@ export default function WeaknessRadarClient({
               <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600 transition-colors" />
             </div>
           </div>
-          <span className="text-[14px] text-[var(--text-muted)] tabular-nums pl-4">
+          <span className="text-xs sm:text-sm text-slate-500 tabular-nums pl-4 font-medium">
             {totalAttempted} questions analyzed
           </span>
         </div>
 
         {/* Summary Row */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="app-card space-y-1">
-            <span className="text-[14px] font-medium text-[var(--text-secondary)]">Accuracy</span>
-            <p className="text-[28px] font-semibold text-[var(--text)] tabular-nums">{summaryReport.overallAccuracy}%</p>
-            <p className="text-[12px] text-[var(--text-muted)]">Across all practice questions</p>
+          <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-1">
+            <span className="text-xs sm:text-sm font-semibold text-slate-600">Accuracy</span>
+            <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 tabular-nums">{summaryReport.overallAccuracy}%</p>
+            <p className="text-xs text-slate-500">Across all practice questions</p>
           </div>
 
-          <div className="app-card space-y-1">
-            <span className="text-[14px] font-medium text-[var(--text-secondary)]">Questions analyzed</span>
-            <p className="text-[28px] font-semibold text-[var(--text)] tabular-nums">{totalAttempted}</p>
-            <p className="text-[12px] text-[var(--text-muted)]">Valid test attempts</p>
+          <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-1">
+            <span className="text-xs sm:text-sm font-semibold text-slate-600">Questions analyzed</span>
+            <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 tabular-nums">{totalAttempted}</p>
+            <p className="text-xs text-slate-500">Valid test attempts</p>
           </div>
 
-          <div className="app-card space-y-1">
-            <span className="text-[14px] font-medium text-[var(--text-secondary)]">Main issue</span>
-            <p className="text-[15px] font-semibold text-[var(--text)] whitespace-normal break-words mt-1">
+          <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-1">
+            <span className="text-xs sm:text-sm font-semibold text-slate-600">Main issue</span>
+            <p className="text-sm sm:text-base font-bold text-slate-900 whitespace-normal break-words mt-1">
               {summaryReport.biggestWeakness?.topic || "None detected"}
             </p>
-            <p className="text-[12px] text-[var(--text-muted)]">
+            <p className="text-xs text-slate-500">
               {summaryReport.biggestWeakness ? `${summaryReport.biggestWeakness.accuracy}% accuracy` : "No critical weaknesses"}
             </p>
           </div>
@@ -1563,17 +1563,17 @@ export default function WeaknessRadarClient({
       />
 
       {/* 5. Topics Table & Visual Benchmark */}
-      <div className="app-card space-y-5">
-        <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-7 shadow-xs space-y-5">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div>
-            <h2 className="text-[20px] font-semibold text-[var(--text)] leading-[1.25]">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 leading-[1.25]">
               Topics to fix
             </h2>
-            <p className="text-[14px] text-[var(--text-secondary)] mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5 font-medium">
               Review topic accuracy, error patterns, and practice weak concepts.
             </p>
           </div>
-          <span className="text-[14px] text-[var(--text-muted)] tabular-nums">
+          <span className="text-xs sm:text-sm text-slate-500 tabular-nums font-medium">
             {sortedTopics.length} {sortedTopics.length === 1 ? "topic" : "topics"}
           </span>
         </div>
@@ -1657,12 +1657,12 @@ export default function WeaknessRadarClient({
 
         {sortedTopics.length === 0 ? (
           <div className="py-12 text-center space-y-3">
-            <p className="text-[14px] text-[var(--text-secondary)]">
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">
               No weak topics detected. Take more mock tests to calibrate your diagnosis.
             </p>
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center justify-center h-10 px-4 rounded-[8px] bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-[14px] font-medium transition-colors"
+              className="inline-flex items-center justify-center h-10 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow transition-all"
             >
               Take a mock test
             </Link>
@@ -1672,14 +1672,14 @@ export default function WeaknessRadarClient({
             {/* Desktop Table */}
             <table className="hidden sm:table w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[var(--border)] text-[12px] font-medium text-[var(--text-muted)]">
-                  <th className="py-3 pr-4 font-medium">Topic</th>
-                  <th className="py-3 px-4 font-medium">Subject</th>
-                  <th className="py-3 px-4 font-medium text-left">Accuracy</th>
-                  <th className="py-3 px-4 font-medium text-right">Questions</th>
-                  <th className="py-3 px-4 font-medium text-center">Trend</th>
-                  <th className="py-3 px-4 font-medium">Status</th>
-                  <th className="py-3 pl-4 font-medium text-right">Action</th>
+                <tr className="border-b border-slate-200/80 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  <th className="py-3 pr-4">Topic</th>
+                  <th className="py-3 px-4">Subject</th>
+                  <th className="py-3 px-4 text-left">Accuracy</th>
+                  <th className="py-3 px-4 text-right">Questions</th>
+                  <th className="py-3 px-4 text-center">Trend</th>
+                  <th className="py-3 px-4">Status</th>
+                  <th className="py-3 pl-4 text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -1696,26 +1696,26 @@ export default function WeaknessRadarClient({
                     <tr
                       key={topicItem.chapter}
                       onClick={() => setSelectedModalDiagnosis(diag)}
-                      className="h-12 border-b border-[var(--border)] text-[14px] hover:bg-slate-50 transition-colors cursor-pointer group"
+                      className="h-12 border-b border-slate-100 text-xs sm:text-sm hover:bg-slate-50/70 transition-colors cursor-pointer group"
                     >
-                      <td className="py-3 pr-4 font-medium text-[var(--text)]">
+                      <td className="py-3 pr-4 font-semibold text-slate-900">
                         <div className="flex items-center gap-2">
                           {isTopPriority && (
                             <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 whitespace-nowrap">
                               #{idx + 1} Priority
                             </span>
                           )}
-                          <span className="group-hover:text-[var(--accent)] transition-colors">
+                          <span className="group-hover:text-blue-600 transition-colors">
                             {diag.chapter}
                           </span>
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-[var(--text-secondary)]">
+                      <td className="py-3 px-4 text-slate-600 font-medium">
                         {diag.subject}
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-2">
-                          <span className="tabular-nums text-[var(--text)] font-medium w-8 text-right">
+                          <span className="tabular-nums text-slate-900 font-bold w-8 text-right">
                             {accuracy}%
                           </span>
                           <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden shrink-0">
@@ -1732,7 +1732,7 @@ export default function WeaknessRadarClient({
                           </div>
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-right tabular-nums text-[var(--text-secondary)]">
+                      <td className="py-3 px-4 text-right tabular-nums text-slate-600 font-medium">
                         {attempts}
                       </td>
                       <td className="py-3 px-4 text-center">
@@ -1756,7 +1756,7 @@ export default function WeaknessRadarClient({
                       </td>
                       <td className="py-3 px-4">
                         <span
-                          className={`text-[12px] font-medium px-2 py-0.5 rounded-[8px] ${statusInfo.badgeClass}`}
+                          className={`text-xs font-semibold px-2 py-0.5 rounded-lg border ${statusInfo.badgeClass}`}
                           title={statusInfo.ruleTooltip}
                         >
                           {statusInfo.label}
@@ -1766,7 +1766,7 @@ export default function WeaknessRadarClient({
                         <div className="flex items-center gap-1.5 justify-end">
                           <Link
                             href={`/dashboard/notes/${normalizeSubject(topicItem.subject).key}`}
-                            className="inline-flex items-center justify-center h-8 px-2.5 rounded-[8px] border border-slate-200 bg-white hover:bg-slate-50 text-[12px] font-medium text-slate-700 transition-colors cursor-pointer shadow-xs"
+                            className="inline-flex items-center justify-center h-8 px-2.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors cursor-pointer shadow-2xs"
                             title="Read high-yield NCERT revision notes"
                           >
                             <BookOpen className="w-3.5 h-3.5 mr-1 text-sky-600" />
@@ -1783,7 +1783,7 @@ export default function WeaknessRadarClient({
                                 diag.recommendedPracticeType
                               );
                             }}
-                            className="inline-flex items-center justify-center h-8 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white hover:bg-slate-50 text-[12px] font-medium text-[var(--text)] transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
+                            className="inline-flex items-center justify-center h-8 px-3 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-800 transition-colors cursor-pointer disabled:opacity-50 shadow-2xs"
                           >
                             {isRepairing ? "Building..." : "Practice"}
                           </button>
@@ -1810,7 +1810,7 @@ export default function WeaknessRadarClient({
                   <div
                     key={`mob-${topicItem.chapter}`}
                     onClick={() => setSelectedModalDiagnosis(diag)}
-                    className="p-3 rounded-[8px] border border-[var(--border)] space-y-2 cursor-pointer hover:bg-slate-50/50 transition-colors"
+                    className="p-3.5 rounded-xl border border-slate-200/80 bg-white shadow-2xs space-y-2.5 cursor-pointer hover:bg-slate-50/70 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
@@ -1820,22 +1820,22 @@ export default function WeaknessRadarClient({
                               #{idx + 1}
                             </span>
                           )}
-                          <h3 className="text-[14px] font-semibold text-[var(--text)] truncate">
+                          <h3 className="text-sm font-bold text-slate-900 truncate">
                             {diag.chapter}
                           </h3>
                         </div>
-                        <p className="text-[12px] text-[var(--text-muted)] mt-0.5">
+                        <p className="text-xs text-slate-500 mt-0.5 font-medium">
                           {diag.subject} • {attempts} questions
                         </p>
                       </div>
-                      <span className={`text-[12px] font-medium px-2 py-0.5 rounded-[8px] shrink-0 ${statusInfo.badgeClass}`}>
+                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-lg border shrink-0 ${statusInfo.badgeClass}`}>
                         {statusInfo.label}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between pt-2 border-t border-[var(--border)] text-[14px]">
+                    <div className="flex items-center justify-between pt-2.5 border-t border-slate-100 text-xs sm:text-sm">
                       <div className="flex items-center gap-2">
-                        <span className="tabular-nums text-[var(--text-secondary)] font-medium">Accuracy: {accuracy}%</span>
+                        <span className="tabular-nums text-slate-700 font-bold">Accuracy: {accuracy}%</span>
                         <div className="w-12 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full ${accuracy >= 80 ? "bg-emerald-500" : accuracy >= 50 ? "bg-amber-500" : "bg-rose-500"}`}
@@ -1854,7 +1854,7 @@ export default function WeaknessRadarClient({
                             diag.recommendedPracticeType
                           );
                         }}
-                        className="h-8 px-3 rounded-[8px] border border-[var(--border-strong)] bg-white text-[12px] font-medium text-[var(--text)] shadow-xs"
+                        className="h-8 px-3 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-800 shadow-2xs"
                       >
                         {isRepairing ? "..." : "Practice"}
                       </button>

@@ -199,6 +199,9 @@ export interface LeaderboardEntry {
   subjectTrophies?: Record<string, number>;
   completedTestsCount?: number;
   isCurrentUser?: boolean;
+  bestScore?: number;
+  bestScoreTest?: string;
+  lastActive?: string;
 }
 
 export interface RecordedQuestionAttempt {
