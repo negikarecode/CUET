@@ -627,7 +627,7 @@ export default function PostMockAnalysisClient({
                       <span className="text-sm font-medium text-slate-400">/ {item.attempted}</span>
                     </span>
                     <span className="text-xs font-medium text-slate-500">
-                      {item.totalQuestions} Questions
+                      {item.totalQuestions} {item.totalQuestions === 1 ? "Question" : "Questions"}
                     </span>
                   </div>
 
@@ -1089,7 +1089,7 @@ export default function PostMockAnalysisClient({
           {filterQuestionIds !== null && (
             <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-50 border border-amber-200 text-xs font-medium text-amber-900">
               <span>
-                Filtered by: <span className="font-bold text-amber-950">{activeEvidenceLabel || "Evidence Slice"}</span> ({filteredQuestions.length} Questions)
+                Filtered by: <span className="font-bold text-amber-950">{activeEvidenceLabel || "Evidence Slice"}</span> ({filteredQuestions.length} {filteredQuestions.length === 1 ? "Question" : "Questions"})
               </span>
               <button
                 type="button"

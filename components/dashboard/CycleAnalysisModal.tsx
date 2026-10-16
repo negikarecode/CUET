@@ -46,7 +46,7 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
               Diagnostic cycle {cycle.cycleNumber} report
             </h2>
             <p className="text-[14px] text-[var(--text-secondary)] mt-0.5">
-              {cycle.totalQuestionsAttempted} questions analyzed • {cycle.overallAccuracyPercentage}% overall accuracy
+              {cycle.totalQuestionsAttempted} {cycle.totalQuestionsAttempted === 1 ? "question" : "questions"} analyzed • {cycle.overallAccuracyPercentage}% overall accuracy
             </p>
           </div>
 

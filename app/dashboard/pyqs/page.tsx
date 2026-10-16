@@ -749,8 +749,8 @@ export default function PYQsPage() {
                 </h4>
               </div>
               <p className="text-[11px] sm:text-xs text-slate-600 mt-0.5">
-                {inProgressSession.answeredCount} questions answered ·{" "}
-                {inProgressSession.remainingMinutes} mins remaining
+                {inProgressSession.answeredCount} {inProgressSession.answeredCount === 1 ? "question" : "questions"} answered ·{" "}
+                {inProgressSession.remainingMinutes} {inProgressSession.remainingMinutes === 1 ? "min" : "mins"} remaining
               </p>
             </div>
           </div>

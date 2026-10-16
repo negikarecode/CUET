@@ -58,7 +58,7 @@ export const DailyPracticeCalendar: React.FC = () => {
         </div>
 
         <div className="text-[12px] text-[var(--text-muted)] tabular-nums self-start sm:self-auto font-medium">
-          {heatmapData.totalMocks} tests completed • {heatmapData.totalQuestions} questions
+          {heatmapData.totalMocks} {heatmapData.totalMocks === 1 ? "test" : "tests"} completed • {heatmapData.totalQuestions} {heatmapData.totalQuestions === 1 ? "question" : "questions"}
         </div>
       </div>
 
@@ -153,7 +153,7 @@ export const DailyPracticeCalendar: React.FC = () => {
           <div className="text-[var(--text-secondary)] tabular-nums">
             {hoveredDay.count === 0
               ? 'No practice activity'
-              : `${hoveredDay.count} ${hoveredDay.count === 1 ? 'test' : 'tests'} (${hoveredDay.questionCount} questions)`}
+              : `${hoveredDay.count} ${hoveredDay.count === 1 ? 'test' : 'tests'} (${hoveredDay.questionCount} ${hoveredDay.questionCount === 1 ? 'question' : 'questions'})`}
           </div>
         </div>
       )}

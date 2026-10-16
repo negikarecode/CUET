@@ -72,10 +72,10 @@ function getSessionSubtitle(att: RecordedTestAttempt, type: SessionType): string
   }
   if (type === "Practice") {
     const qCount = att.totalQuestions || (att.questions?.length) || 20;
-    return `Chapter Practice Drill · ${qCount} Questions`;
+    return `Chapter Practice Drill · ${qCount} ${qCount === 1 ? "Question" : "Questions"}`;
   }
   const qCount = att.totalQuestions || (att.questions?.length) || 50;
-  return `Full Syllabus CBT Mock · ${qCount} Questions`;
+  return `Full Syllabus CBT Mock · ${qCount} ${qCount === 1 ? "Question" : "Questions"}`;
 }
 
 function splitDateTimeIndian(dateStr?: string | Date): { date: string; time: string } {
@@ -832,15 +832,15 @@ export default function SessionsHistoryClient({
                           {/* Mini Progress Ratio */}
                           <div className="w-20 h-1.5 rounded-full bg-slate-100 overflow-hidden flex">
                             <div
-                              style={{ width: `${Math.min(100, (correct / totalQ) * 100)}%` }}
+                              style={{ width: `${totalQ > 0 ? Math.min(100, (correct / totalQ) * 100) : 0}%` }}
                               className="bg-emerald-500 h-full"
                             />
                             <div
-                              style={{ width: `${Math.min(100, (wrong / totalQ) * 100)}%` }}
+                              style={{ width: `${totalQ > 0 ? Math.min(100, (wrong / totalQ) * 100) : 0}%` }}
                               className="bg-rose-500 h-full"
                             />
                             <div
-                              style={{ width: `${Math.min(100, (skipped / totalQ) * 100)}%` }}
+                              style={{ width: `${totalQ > 0 ? Math.min(100, (skipped / totalQ) * 100) : 0}%` }}
                               className="bg-slate-200 h-full"
                             />
                           </div>

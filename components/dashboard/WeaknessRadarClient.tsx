@@ -1054,7 +1054,7 @@ export default function WeaknessRadarClient({
               </div>
               <div className="flex items-center justify-between text-xs font-mono font-medium text-slate-500 px-1">
                 <span>{calibrationProgressPct}% Calibrated</span>
-                <span>{remainingQuestions} questions remaining</span>
+                <span>{remainingQuestions} {remainingQuestions === 1 ? "question" : "questions"} remaining</span>
               </div>
             </div>
           </div>

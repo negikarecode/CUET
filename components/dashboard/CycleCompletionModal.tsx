@@ -58,7 +58,7 @@ export function CycleCompletionModal({
             Diagnostic Cycle {cycleNumber} Complete
           </h2>
           <p className="text-xs sm:text-sm font-semibold text-slate-500 font-mono">
-            {totalAnalyzed} questions analyzed. Your new diagnostic analysis is ready.
+            {totalAnalyzed} {totalAnalyzed === 1 ? "question" : "questions"} analyzed. Your new diagnostic analysis is ready.
           </p>
           <div className="pt-1">
             <span className="px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">

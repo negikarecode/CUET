@@ -67,7 +67,7 @@ export function RetentionLeaderboardCard({
           <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
             <span>Today&apos;s Progress</span>
             <span className="font-mono text-slate-900 font-bold">
-              {todayQuestionsAttempted} / {dailyGoal} Questions ({goalProgressPct}%)
+              {todayQuestionsAttempted} / {dailyGoal} {dailyGoal === 1 ? "Question" : "Questions"} ({goalProgressPct}%)
             </span>
           </div>
           <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">

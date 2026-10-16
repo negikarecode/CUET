@@ -389,7 +389,7 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
                           </span>
                         </div>
                         <div className="text-[13px] text-[var(--text-secondary)] tabular-nums">
-                          {sub.totalAttempted} questions attempted • {sub.totalCorrect} correct
+                          {sub.totalAttempted} {sub.totalAttempted === 1 ? "question" : "questions"} attempted • {sub.totalCorrect} correct
                         </div>
                       </div>
 
