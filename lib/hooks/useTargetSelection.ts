@@ -21,6 +21,7 @@ export interface UseTargetSelectionOptions {
   initialCourse?: string | null;
   initialStream?: string | null;
   showUnavailable?: boolean;
+  filterCoursesByStream?: boolean;
 }
 
 export function useTargetSelection(options?: UseTargetSelectionOptions) {
@@ -28,13 +29,15 @@ export function useTargetSelection(options?: UseTargetSelectionOptions) {
     options?.showUnavailable ?? false
   );
 
-  // Normalize initial stream ("Science", "Commerce", "Humanities")
+  // Normalize initial stream ("Science", "Commerce", "Humanities", "All")
   const initialStreamNorm = useMemo(() => {
     const s = (options?.initialStream || "").toLowerCase();
+    if (s === "all") return "All";
     if (s === "commerce") return "Commerce";
     if (s === "humanities") return "Humanities";
-    return "Science";
-  }, [options?.initialStream]);
+    if (s === "science") return "Science";
+    return options?.filterCoursesByStream === false ? "All" : "Science";
+  }, [options?.initialStream, options?.filterCoursesByStream]);
 
   const [stream, setStreamState] = useState<string>(initialStreamNorm);
 
@@ -80,18 +83,20 @@ export function useTargetSelection(options?: UseTargetSelectionOptions) {
   // Available Courses based on selected college and stream
   const availableCourses = useMemo(() => {
     const streamKey = stream.toLowerCase();
+    const isAll = streamKey === "all" || options?.filterCoursesByStream === false;
     if (selectedCollege) {
       return getProgramsForCollege(selectedCollege.id, {
-        stream: streamKey,
+        stream: isAll ? undefined : streamKey,
         showUnavailable,
       });
     }
-    // No college selected: show all canonical courses matching active stream
+    // No college selected: show all canonical courses matching active stream or all if isAll
     return CANONICAL_COURSES.filter((c) => {
       if (showUnavailable) return true;
+      if (isAll) return true;
       return c.stream.toLowerCase() === streamKey;
     });
-  }, [selectedCollege, stream, showUnavailable]);
+  }, [selectedCollege, stream, showUnavailable, options?.filterCoursesByStream]);
 
   // Course Count and Label for Dropdown
   const courseDropdownLabel = useMemo(() => {
@@ -220,13 +225,20 @@ export function useTargetSelection(options?: UseTargetSelectionOptions) {
     (newStreamInput: string) => {
       const sLower = newStreamInput.toLowerCase();
       const formatted =
-        sLower === "commerce"
+        sLower === "all"
+          ? "All"
+          : sLower === "commerce"
           ? "Commerce"
           : sLower === "humanities"
           ? "Humanities"
           : "Science";
 
       setStreamState(formatted);
+
+      if (formatted === "All") {
+        setInlineNotice(null);
+        return;
+      }
 
       // If existing course belongs to another stream, clear it with notice
       if (courseId) {
@@ -263,12 +275,18 @@ export function useTargetSelection(options?: UseTargetSelectionOptions) {
     ) => {
       const c = resolveCollege(newCollege);
       const p = resolveProgram(newCourse);
-      const s = (newStream || "Science").toLowerCase();
+      const s = (newStream || "").toLowerCase();
       const sFormatted =
-        s === "commerce"
+        s === "all"
+          ? "All"
+          : s === "commerce"
           ? "Commerce"
           : s === "humanities"
           ? "Humanities"
+          : s === "science"
+          ? "Science"
+          : options?.filterCoursesByStream === false
+          ? "All"
           : "Science";
 
       setCollegeId(c?.id || null);
@@ -276,7 +294,7 @@ export function useTargetSelection(options?: UseTargetSelectionOptions) {
       setStreamState(sFormatted);
       setInlineNotice(null);
     },
-    []
+    [options?.filterCoursesByStream]
   );
 
   return {

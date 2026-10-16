@@ -53,7 +53,6 @@ export default function StandingViewClient({
     };
   }, [storeUser, initialUser, profileTarget]);
 
-  const selectedStream = useTestStore((state) => state.selectedStream);
   const setSelectedStream = useTestStore((state) => state.setSelectedStream);
   const testAttemptsRaw = useTestStore((state) => state.testAttempts);
   const testAttempts = useMemo(() => {
@@ -114,7 +113,8 @@ export default function StandingViewClient({
   const targetSelection = useTargetSelection({
     initialCollege,
     initialCourse,
-    initialStream: profileTarget.stream || user?.preferredStream || selectedStream || "Science",
+    initialStream: "All",
+    filterCoursesByStream: false,
   });
 
   const [selectedCategory, setSelectedCategory] = useState<CategoryCode>("UR");
@@ -299,13 +299,13 @@ export default function StandingViewClient({
         <CascadingTargetSelector
           targetSelection={targetSelection}
           layout="grid"
-          showStreamButtons={false}
+          showStreamButtons={true}
           showDerivedUniversity={false}
           showUnavailableToggle={true}
           collegeLabelPrefix="Target College"
           courseLabelPrefix="Target Degree Program"
           collegePlaceholder="Search college (e.g. SRCC, Hansraj, Hindu)..."
-          coursePlaceholder="Search program (e.g. B.Sc. Computer Science)..."
+          coursePlaceholder="Search any program (e.g. B.Com, Physics, Economics)..."
         />
       </div>
 

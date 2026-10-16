@@ -145,8 +145,8 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
   },
   common: {
     key: "common",
-    name: "Languages & General Test",
-    shortName: "Languages & GAT",
+    name: "General Subjects (English & GAT)",
+    shortName: "General Subjects",
     badge: "2 Subjects",
     accentBg: "#EEF2FF",
     accentText: "#4F46E5",
@@ -486,11 +486,48 @@ export default function MocksPage() {
 
   const streamSelectOptions: SearchableSelectOption[] = useMemo(
     () => [
-      { value: "all", label: "All Streams (22 Subjects)" },
-      { value: "common", label: "Languages & General Test (2 Subjects)" },
-      { value: "science", label: "Science Stream (7 Domains)" },
-      { value: "commerce", label: "Commerce Stream (4 Domains)" },
-      { value: "humanities", label: "Humanities Stream (10 Domains)" },
+      {
+        value: "all",
+        label: "All Streams (22 Subjects)",
+        keywords: ["all", "streams", "22 subjects", "everything"],
+      },
+      {
+        value: "common",
+        label: "General Subjects (English & GAT)",
+        badge: "2 Subjects",
+        keywords: [
+          "general",
+          "general subjects",
+          "general subject",
+          "common",
+          "english",
+          "gat",
+          "general test",
+          "languages",
+          "language",
+          "section 1a",
+          "section 3",
+          "general aptitude test",
+        ],
+      },
+      {
+        value: "science",
+        label: "Science Stream (7 Domains)",
+        badge: "7 Domains",
+        keywords: ["science", "physics", "chemistry", "mathematics", "biology", "computer science", "agriculture", "environmental studies"],
+      },
+      {
+        value: "commerce",
+        label: "Commerce Stream (4 Domains)",
+        badge: "4 Domains",
+        keywords: ["commerce", "accountancy", "business studies", "economics", "mathematics"],
+      },
+      {
+        value: "humanities",
+        label: "Humanities Stream (10 Domains)",
+        badge: "10 Domains",
+        keywords: ["humanities", "arts", "history", "political science", "geography", "psychology", "sociology"],
+      },
     ],
     []
   );
@@ -498,14 +535,34 @@ export default function MocksPage() {
   const subjectSelectOptions: SearchableSelectOption[] = useMemo(() => {
     if (selectedStream === "all") {
       return [
-        { value: "all", label: "All 22 Subjects" },
         {
-          heading: "Languages & General Test (Section IA & III)",
+          value: "all",
+          label: "All 22 Subjects",
+          keywords: ["all", "22 subjects", "all subjects"],
+        },
+        {
+          heading: "General Subjects (English & GAT - Section IA & III)",
           options: STREAM_CONFIGS.common.subjects.map((k) => ({
             value: k,
             label: SUBJECT_CONFIGS[k].name,
             badge: `Code ${SUBJECT_CONFIGS[k].code}`,
-            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k, "gat", "english"],
+            keywords: [
+              SUBJECT_CONFIGS[k].code,
+              SUBJECT_CONFIGS[k].name,
+              k,
+              "general",
+              "general subjects",
+              "general subject",
+              "common",
+              "gat",
+              "english",
+              "language",
+              "section 1a",
+              "section 3",
+              k === "english" ? "verbal ability" : "reasoning",
+              k === "english" ? "reading comprehension" : "general aptitude test",
+              k === "english" ? "vocabulary" : "numerical ability",
+            ],
           })),
         },
         {
@@ -514,7 +571,7 @@ export default function MocksPage() {
             value: k,
             label: SUBJECT_CONFIGS[k].name,
             badge: `Code ${SUBJECT_CONFIGS[k].code}`,
-            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k],
+            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k, "science"],
           })),
         },
         {
@@ -523,7 +580,7 @@ export default function MocksPage() {
             value: k,
             label: SUBJECT_CONFIGS[k].name,
             badge: `Code ${SUBJECT_CONFIGS[k].code}`,
-            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k],
+            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k, "commerce"],
           })),
         },
         {
@@ -532,7 +589,7 @@ export default function MocksPage() {
             value: k,
             label: SUBJECT_CONFIGS[k].name,
             badge: `Code ${SUBJECT_CONFIGS[k].code}`,
-            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k],
+            keywords: [SUBJECT_CONFIGS[k].code, SUBJECT_CONFIGS[k].name, k, "humanities", "arts"],
           })),
         },
       ];
@@ -542,12 +599,35 @@ export default function MocksPage() {
       {
         value: "all",
         label: `All Subjects in ${STREAM_CONFIGS[selectedStream].name}`,
+        keywords: [
+          "all",
+          STREAM_CONFIGS[selectedStream].name,
+          ...(selectedStream === "common" ? ["general subjects", "general", "english", "gat"] : []),
+        ],
       },
       ...availableSubjectsForDropdown.map((sub) => ({
         value: sub.key,
         label: sub.name,
         badge: `Code ${sub.code}`,
-        keywords: [sub.code, sub.name, sub.key],
+        keywords: [
+          sub.code,
+          sub.name,
+          sub.key,
+          ...(sub.key === "english" || sub.key === "general-test"
+            ? [
+                "general",
+                "general subjects",
+                "general subject",
+                "common",
+                "english",
+                "gat",
+                "general test",
+                "language",
+                "section 1a",
+                "section 3",
+              ]
+            : []),
+        ],
       })),
     ];
   }, [selectedStream, availableSubjectsForDropdown]);
@@ -711,10 +791,10 @@ export default function MocksPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-            Domain Mock Exams
+            CUET UG Mock Exams
           </h1>
           <p className="text-[13px] sm:text-[14px] text-slate-500 leading-relaxed max-w-3xl">
-            Simulate 50-question full syllabus domain papers under authentic NTA CUET CBT interface conditions with instant answer analysis.
+            Simulate 50-question full syllabus papers for Domain and General Subjects (English & GAT) under authentic NTA CUET CBT interface conditions with instant answer analysis.
           </p>
         </div>
 
@@ -758,7 +838,7 @@ export default function MocksPage() {
                 onChange={(val) => handleSelectSubject(val as SubjectKey)}
                 options={subjectSelectOptions}
                 placeholder="All Subjects"
-                searchPlaceholder="Search subjects by name or code (e.g. 322)..."
+                searchPlaceholder="Search subjects by name, general subjects, or code..."
                 className="w-full"
               />
             </div>

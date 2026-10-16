@@ -30,11 +30,17 @@ export interface CascadingTargetSelectorProps {
 }
 
 const STREAM_OPTIONS: Array<{
-  id: StreamOption;
+  id: StreamOption | "All";
   label: string;
   desc: string;
   selectedColor: string;
 }> = [
+  {
+    id: "All",
+    label: "All Streams",
+    desc: "Any course across all streams",
+    selectedColor: "bg-slate-100 border-slate-700 text-slate-900",
+  },
   {
     id: "Science",
     label: "Science",
@@ -169,9 +175,9 @@ export default function CascadingTargetSelector({
               filters available courses
             </span>
           </label>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             {STREAM_OPTIONS.map((opt) => {
-              const isSelected = stream === opt.id;
+              const isSelected = stream === opt.id || (!stream && opt.id === "All");
               return (
                 <button
                   key={opt.id}

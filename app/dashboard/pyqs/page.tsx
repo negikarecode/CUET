@@ -212,7 +212,7 @@ const STREAM_CONFIGS: Record<
     subjects: ["history", "political-science", "geography", "psychology", "sociology"],
   },
   languages_general: {
-    name: "Languages & General",
+    name: "General Subjects (English & GAT)",
     subjects: ["english", "general-test"],
   },
 };
@@ -467,21 +467,35 @@ export default function PYQsPage() {
       { value: "science", label: "Science Stream (4 Subjects)", badge: "4 Core" },
       { value: "commerce", label: "Commerce Stream (4 Subjects)", badge: "4 Core" },
       { value: "humanities", label: "Humanities & Arts (5 Subjects)", badge: "5 Core" },
-      { value: "languages_general", label: "Languages & General (2 Subjects)", badge: "2 Core" },
+      {
+        value: "languages_general",
+        label: "General Subjects (English & GAT)",
+        badge: "2 Core",
+        keywords: [
+          "general",
+          "general subjects",
+          "general subject",
+          "common",
+          "english",
+          "gat",
+          "general test",
+          "languages",
+        ],
+      },
     ];
   }, []);
 
   // Options for Subject SearchableSelect
   const subjectSelectOptions: SearchableSelectOption[] = useMemo(() => {
     const groups: SearchableSelectOption[] = [
-      { value: "all", label: "All Subjects (14 Subjects)" },
+      { value: "all", label: "All Subjects (14 Subjects)", keywords: ["all", "14 subjects"] },
     ];
 
     const streams = [
       { key: "science", label: "Science Stream" },
       { key: "commerce", label: "Commerce Stream" },
       { key: "humanities", label: "Humanities & Arts" },
-      { key: "languages_general", label: "Languages & General" },
+      { key: "languages_general", label: "General Subjects (English & GAT)" },
     ];
 
     for (const st of streams) {
@@ -493,7 +507,14 @@ export default function PYQsPage() {
             value: s.key,
             label: `${s.name} (Code ${s.code})`,
             sublabel: `${subjectStatsMap.get(s.key)?.totalCount || 0} Official Shift Papers`,
-            keywords: [s.code, s.name, s.key],
+            keywords: [
+              s.code,
+              s.name,
+              s.key,
+              ...(s.stream === "languages_general"
+                ? ["general", "general subjects", "common", "english", "gat", "general test"]
+                : []),
+            ],
             icon: s.icon,
           })),
         });

@@ -168,11 +168,20 @@ export default function PracticeTestsHubPage() {
       seen.add(s.id);
 
       const matchesStream = selectedStream === "all" || s.stream === selectedStream;
+      const q = searchQuery.toLowerCase().trim();
+      const isGeneralQ =
+        "general subjects".includes(q) ||
+        "general test".includes(q) ||
+        q.includes("general") ||
+        q === "gat" ||
+        q === "language" ||
+        q === "english";
       const matchesSearch =
         !searchQuery ||
-        s.name.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
+        s.name.toLowerCase().includes(q) ||
         s.code.includes(searchQuery.trim()) ||
-        s.id.toLowerCase().includes(searchQuery.toLowerCase().trim());
+        s.id.toLowerCase().includes(q) ||
+        (isGeneralQ && (s.id === "english" || s.id === "general-test" || s.stream === "applied"));
 
       const stats = subjectStatsMap.get(s.id);
       const hasAttempts = Boolean(stats?.hasAttempts);
@@ -344,7 +353,7 @@ export default function PracticeTestsHubPage() {
             { key: "science", label: "Science" },
             { key: "commerce", label: "Commerce" },
             { key: "humanities", label: "Humanities" },
-            { key: "applied", label: "Languages & General" },
+            { key: "applied", label: "General Subjects (English & GAT)" },
           ].map((tab) => (
             <button
               key={tab.key}

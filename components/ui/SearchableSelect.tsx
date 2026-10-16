@@ -168,7 +168,10 @@ export default function SearchableSelect({
 
     for (const item of options) {
       if (isGroup(item)) {
-        const matchingSubs = item.options.filter(matchesOption);
+        const headingMatches = normalizeForSearch(item.heading).includes(normQ);
+        const matchingSubs = headingMatches
+          ? item.options
+          : item.options.filter(matchesOption);
         if (matchingSubs.length > 0) {
           result.push({
             heading: item.heading,
@@ -457,7 +460,7 @@ export default function SearchableSelect({
                       return (
                         <div key={`group-${gIdx}-${item.heading}`} className="pt-1.5 first:pt-0">
                           <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 select-none">
-                            {item.heading}
+                            <HighlightMatch text={item.heading} query={searchQuery} />
                           </div>
                           <div className="space-y-0.5">
                             {item.options.map((opt) => {
