@@ -1,5 +1,3 @@
-import React from "react";
-
 let passed = 0;
 let failed = 0;
 

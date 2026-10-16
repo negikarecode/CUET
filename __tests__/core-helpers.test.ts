@@ -50,7 +50,30 @@ assert(calculateAccuracy(2, 3) === 67, "2/3 yields 67% (properly rounded)");
 // 3. Mock-Only Filtering
 console.log("\n3. Mock-Only Filtering (isFullLengthMockAttempt):");
 
-const fullMockAttempt: RecordedTestAttempt = {
+function createTestAttempt(overrides: Partial<RecordedTestAttempt>): RecordedTestAttempt {
+  return {
+    id: "attempt_default",
+    userId: "user_test_1",
+    testId: "test_default",
+    testTitle: "Default Test",
+    subject: "Physics",
+    totalQuestions: 50,
+    attemptedCount: 50,
+    unattemptedCount: 0,
+    correctCount: 40,
+    incorrectCount: 10,
+    totalMarks: 190,
+    maxMarks: 250,
+    accuracyPercentage: 80,
+    timeTakenSeconds: 2400,
+    timeSinkCount: 0,
+    submittedAt: new Date().toISOString(),
+    questions: [],
+    ...overrides,
+  };
+}
+
+const fullMockAttempt: RecordedTestAttempt = createTestAttempt({
   id: "attempt_mock_01",
   attemptId: "att_mock_01",
   testId: "physics_mock_01",
@@ -61,9 +84,9 @@ const fullMockAttempt: RecordedTestAttempt = {
   totalMarks: 190,
   accuracyPercentage: 80,
   submittedAt: new Date().toISOString(),
-};
+});
 
-const pyqAttempt: RecordedTestAttempt = {
+const pyqAttempt: RecordedTestAttempt = createTestAttempt({
   id: "attempt_pyq_01",
   attemptId: "att_pyq_01",
   testId: "pyq_physics_2024_s1",
@@ -74,9 +97,9 @@ const pyqAttempt: RecordedTestAttempt = {
   totalMarks: 178,
   accuracyPercentage: 76,
   submittedAt: new Date().toISOString(),
-};
+});
 
-const practiceDrillAttempt: RecordedTestAttempt = {
+const practiceDrillAttempt: RecordedTestAttempt = createTestAttempt({
   id: "attempt_practice_01",
   attemptId: "att_practice_01",
   testId: "practice_optics_u1",
@@ -87,7 +110,7 @@ const practiceDrillAttempt: RecordedTestAttempt = {
   totalMarks: 88,
   accuracyPercentage: 90,
   submittedAt: new Date().toISOString(),
-};
+});
 
 assert(isFullLengthMockAttempt(fullMockAttempt) === true, "Identifies full-length CBT mock as valid mock attempt");
 assert(isFullLengthMockAttempt(pyqAttempt) === false, "Strictly excludes official PYQ past paper from mock attempts");
