@@ -121,7 +121,7 @@ export default function StandingViewClient({
   const [selectedYear, setSelectedYear] = useState<number | "all">("all");
 
   const targetCollege = targetSelection.selectedCollege?.name || targetSelection.collegeName || "Hindu College";
-  const selectedCourseId = targetSelection.selectedCourse?.id || targetSelection.courseId || "bsc_phys";
+  const selectedCourseId = targetSelection.selectedCourse?.id || targetSelection.courseId || "bsc_hons_physics";
   const [trendCollege, setTrendCollege] = useState<string>(targetCollege);
 
   // Sync stream when selected course changes
@@ -173,8 +173,9 @@ export default function StandingViewClient({
       courseId: selectedCourseId,
       category: selectedCategory,
       userAttempts: testAttempts,
+      filterYear: selectedYear,
     });
-  }, [targetCollege, selectedCourseId, selectedCategory, testAttempts]);
+  }, [targetCollege, selectedCourseId, selectedCategory, testAttempts, selectedYear]);
 
   // Compute exact mock averages per subject across all user test attempts
   const userSubjectAverages = useMemo(() => {
@@ -207,17 +208,24 @@ export default function StandingViewClient({
     return map;
   }, [standingsResult.resolution.resolvedSubjects, testAttempts]);
 
-  // Composite total: exact sum of subject averages
+  // Composite total: exact sum of subject averages for COUNTED subjects only
   const compositeTotal = useMemo(() => {
-    const vals = Object.values(userSubjectAverages).filter((v): v is number => v !== null);
-    if (vals.length === 0) return 0;
-    return Math.round(vals.reduce((a, b) => a + b, 0) * 10) / 10;
-  }, [userSubjectAverages]);
+    const countedSubjects = (standingsResult.resolution.resolvedSubjects || []).filter(
+      (s) => s.isCountedInCutoff !== false
+    );
+    const countedVals = countedSubjects
+      .map((s) => userSubjectAverages[s.subjectId])
+      .filter((v): v is number => v !== null && v !== undefined);
+    if (countedVals.length === 0) return 0;
+    return Math.round(countedVals.reduce((a, b) => a + b, 0) * 10) / 10;
+  }, [standingsResult.resolution.resolvedSubjects, userSubjectAverages]);
 
   const isAllSubjectsComplete = useMemo(() => {
-    const subjects = standingsResult.resolution.resolvedSubjects || [];
-    if (subjects.length === 0) return false;
-    return subjects.every((s) => userSubjectAverages[s.subjectId] !== null);
+    const countedSubjects = (standingsResult.resolution.resolvedSubjects || []).filter(
+      (s) => s.isCountedInCutoff !== false
+    );
+    if (countedSubjects.length === 0) return false;
+    return countedSubjects.every((s) => userSubjectAverages[s.subjectId] !== null && userSubjectAverages[s.subjectId] !== undefined);
   }, [standingsResult.resolution.resolvedSubjects, userSubjectAverages]);
 
   const hasZeroAttempts = testAttempts.length === 0;

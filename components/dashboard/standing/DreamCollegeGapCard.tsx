@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import {
   DreamCollegeGapAnalysis,
-  getProjectedCutoff,
 } from "@/lib/standing-engine";
 import { StandingExplanationResult } from "@/lib/ai/standing-explainer";
 
@@ -138,13 +137,11 @@ export default function DreamCollegeGapCard({
 
   const roundedTotal = Math.round(currentTotal * 10) / 10;
   const formattedTotal = formatScore(roundedTotal);
-  const projection = getProjectedCutoff(
-    analysis.targetCollege,
-    (analysis as any).courseId || "bsc_hons_physics",
-    analysis.category
-  );
-  const hasNoCutoffHistory = projection.yearsCount === 0 || projection.basis === "No past cutoff data yet";
-  const formattedExpected = hasNoCutoffHistory ? "No past cutoff data yet" : formatScore(projection.projectedValue);
+
+  const hasNoCutoffHistory = Boolean(analysis.hasNoCutoffHistory || analysis.expectedCutoffMarks <= 0);
+  const formattedExpected = hasNoCutoffHistory ? "No past cutoff data yet" : formatScore(analysis.expectedCutoffMarks);
+  const likelyRangeLabel = analysis.multiYearStats?.projectedRange?.label || "Projected range";
+  const cutoffBasisLabel = analysis.cutoffYearLabel || (analysis.multiYearStats?.projectedBasis ?? "Official Cutoff");
 
   const completedSubjects = (analysis.subjectImprovementBreakdown || []).filter((s) => s.hasData);
   const pendingCount = (analysis.subjectImprovementBreakdown || []).length - completedSubjects.length;
@@ -156,14 +153,14 @@ export default function DreamCollegeGapCard({
     const list = completedSubjects.map((s) => `${s.subjectName} (${s.currentMarks ?? 0})`).join(" + ");
     partialStatusText = `${list} · ${pendingCount} ${pendingCount === 1 ? "subject" : "subjects"} pending`;
   } else {
-    partialStatusText = "No mock tests attempted yet · 3 subjects pending";
+    partialStatusText = "No mock tests attempted yet · All subjects pending";
   }
 
-  const gap = Math.round(Math.abs(roundedTotal - projection.projectedValue) * 10) / 10;
+  const gap = Math.round(Math.abs(roundedTotal - analysis.expectedCutoffMarks) * 10) / 10;
   const formattedGap = formatScore(gap);
 
-  const isAboveCutoff = !hasNoCutoffHistory && roundedTotal >= projection.projectedValue;
-  const isBelowCutoff = !hasNoCutoffHistory && roundedTotal < projection.projectedValue;
+  const isAboveCutoff = !hasNoCutoffHistory && roundedTotal >= analysis.expectedCutoffMarks;
+  const isBelowCutoff = !hasNoCutoffHistory && roundedTotal < analysis.expectedCutoffMarks;
   const isIncomplete = analysis.status === "incomplete";
 
   const gapDisplay = hasNoCutoffHistory
@@ -188,13 +185,13 @@ export default function DreamCollegeGapCard({
 
   const userProgressPercent = Math.min(
     100,
-    Math.max(0, Math.round((currentTotal / analysis.cutoffScale) * 100))
+    Math.max(0, Math.round((currentTotal / (analysis.cutoffScale || 750)) * 100))
   );
   const targetTickPercent = hasNoCutoffHistory
     ? null
     : Math.min(
         99,
-        Math.max(1, Math.round((projection.projectedValue / analysis.cutoffScale) * 100))
+        Math.max(1, Math.round((analysis.expectedCutoffMarks / (analysis.cutoffScale || 750)) * 100))
       );
 
   return (
@@ -290,11 +287,11 @@ export default function DreamCollegeGapCard({
                 )}
               </div>
               <span className="text-[12px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
-                {projection.likelyRange.label}
+                {likelyRangeLabel}
               </span>
             </div>
             <span className="text-xs text-slate-500 block">
-              {projection.basis}
+              {cutoffBasisLabel}
             </span>
           </div>
 
@@ -362,11 +359,11 @@ export default function DreamCollegeGapCard({
                 )}
               </div>
               <span className="text-[12px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
-                {projection.likelyRange.label}
+                {likelyRangeLabel}
               </span>
             </div>
             <span className="text-xs text-slate-500 block">
-              {projection.basis}
+              {cutoffBasisLabel}
             </span>
           </div>
 

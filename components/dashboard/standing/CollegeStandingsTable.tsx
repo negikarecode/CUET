@@ -214,10 +214,16 @@ export default function CollegeStandingsTable({
   }, [sortedAndPinnedStandings, pageSize, safeCurrentPage]);
 
   // Trend data for selected college
-  const selectedStandingItem =
-    standings && standings.length > 0
-      ? standings.find((s) => s.collegeName === selectedCollegeForTrend) || standings[0]
-      : null;
+  const selectedStandingItem = useMemo(() => {
+    if (!standings || standings.length === 0) return null;
+    const directMatch = standings.find((s) => s.collegeName === selectedCollegeForTrend);
+    if (directMatch) return directMatch;
+    const cleanTrend = selectedCollegeForTrend.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const fuzzyMatch = standings.find(
+      (s) => s.collegeName.toLowerCase().replace(/[^a-z0-9]/g, "") === cleanTrend
+    );
+    return fuzzyMatch || standings[0] || null;
+  }, [standings, selectedCollegeForTrend]);
 
   // Trend data including 2027 projected point
   const trendData = useMemo(() => {

@@ -13,6 +13,7 @@ import {
 import canonicalCoursesData from "@/lib/data/standing/canonical_courses.json";
 import canonicalSubjectsData from "@/lib/data/standing/canonical_subjects.json";
 import normalizedCutoffsData from "@/lib/data/standing/normalized_cutoffs.json";
+import collegesData from "@/lib/data/standing/colleges.json";
 
 export interface CanonicalSubjectInfo {
   id: string;
@@ -22,10 +23,12 @@ export interface CanonicalSubjectInfo {
 }
 
 export interface CourseCombinationRule {
-  type: "required" | "one_of" | "best_of";
+  type: "required" | "one_of" | "best_of" | "qualifying";
   subjects: string[];
   count: number;
   label?: string;
+  isCountedInCutoff?: boolean;
+  qualifyingPercentage?: number;
 }
 
 export interface CourseCombination {
@@ -77,7 +80,9 @@ export interface UserSubjectPerformance {
 export interface ResolvedSubjectChoice {
   subjectId: string;
   subjectName: string;
-  ruleType: "required" | "one_of" | "best_of";
+  ruleType: "required" | "one_of" | "best_of" | "qualifying";
+  isCountedInCutoff: boolean;
+  roleLabel: string;
   hasData: boolean;
   averageMarks: number | null; // arithmetic mean marks out of maxMarks, e.g. 36.8
   maxMarks: number; // 250
@@ -86,6 +91,7 @@ export interface ResolvedSubjectChoice {
   answeredQuestions: number;
   isBestOptionChosen?: boolean;
   userPercentage?: number | null;
+  qualifyingPercentage?: number;
 }
 
 export interface CourseResolutionResult {
@@ -133,6 +139,10 @@ export interface MultiYearCutoffStats {
     cutoffMax: number;   // scale
     cutoffPct?: number;
   }>;
+  canonicalCollege?: string;
+  isFallbackYear?: boolean;
+  effectiveYear?: number;
+  requestedYear?: number;
   latestPercentage?: number;
   averagePercentage?: number;
   minPercentage?: number;
@@ -189,32 +199,44 @@ export interface CollegeStandingResult {
 
 export interface DreamCollegeGapAnalysis {
   targetCollege: string;
+  canonicalCollegeName: string;
   targetCourse: string;
+  courseId: string;
   category: CategoryCode;
   cutoffScale: number;
   expectedCutoffMarks: number; // e.g. 319.5
   cutoffDisplay: string; // e.g. "319.5/750 marks"
+  cutoffYearLabel: string; // e.g. "2026 Official Cutoff" or "Projected for 2027"
+  effectiveYear: number;
+  isProjectedYear: boolean;
+  isFallbackYear: boolean;
   isComplete: boolean;
   hasNoData: boolean;
+  hasNoCutoffHistory: boolean;
   status: "above_cutoff" | "below_cutoff" | "incomplete" | "no_data";
   statusLabel: string; // "Incomplete — awaiting remaining subjects", "10 marks above cutoff", "25 marks below cutoff"
-  combinedMarks: number | null; // sum of subject averages if complete, else null
+  combinedMarks: number | null; // sum of subject averages of counted subjects
   combinedMarksDisplay: string; // e.g. "300.0/750 marks" or "Incomplete"
   marksGap: number | null; // cutoffMarks - combinedMarks (null if incomplete)
   gapDisplay: string; // "10 marks above cutoff", "25 marks below cutoff", or "Awaiting all subjects"
   summaryMessage: string;
   actionGuidance: string[];
+  emptyStateReason?: string;
+  multiYearStats?: MultiYearCutoffStats;
   subjectImprovementBreakdown: Array<{
     subjectId: string;
     subjectName: string;
     hasData: boolean;
+    isCountedInCutoff: boolean;
+    roleLabel: string;
     currentMarks: number | null; // arithmetic mean, e.g. 36.8
     subjectMaxMarks: number; // 250
-    currentPerformanceDisplay: string; // "36.8/250 marks" or "No data yet"
+    currentPerformanceDisplay: string; // "36.8/250 marks" or "No score yet"
     targetMarks: number; // e.g. 106.5
     targetMarksDisplay: string; // "106.5/250 marks"
     marksNeeded: number; // max(0, targetMarks - (currentMarks ?? 0))
     marksNeededDisplay: string; // "70 marks" or "Target met"
+    progressPercent: number;
   }>;
   // Legacy compatibility fields
   expectedCutoffPct?: number;
@@ -281,76 +303,147 @@ export const KNOWN_COLLEGE_ACRONYMS: Record<string, string> = {
   kmc: "Kirori Mal College",
   dduc: "Deen Dayal Upadhyaya College",
   andc: "Acharya Narendra Dev College",
-  jmc: "Jesus and Mary College (W)",
+  jmc: "Jesus & Mary College (W)",
   ipcw: "Indraprastha College for Women (W)",
   stephens: "St. Stephen's College",
   venky: "Sri Venketeswara College",
   venkateswara: "Sri Venketeswara College",
   venketeswara: "Sri Venketeswara College",
+  sscbs: "Shaheed Sukhdev College Business Studies",
+  hansraj: "Hansraj College",
+  hindu: "Hindu College",
+  ramjas: "Ramjas College",
+  miranda: "Miranda House (W)",
   bhu: "Banaras Hindu University",
   jnu: "Jawaharlal Nehru University",
 };
+
+export function cleanCollegeString(s: string): string {
+  if (!s) return "";
+  return s
+    .toLowerCase()
+    .replace(/\(.*?\)/g, "")
+    .replace(/\b(of|for|the|and|in|at|w|women|college)\b/g, "")
+    .replace(/[^a-z0-9]/g, "");
+}
+
+/**
+ * Resolves any college name, acronym, or variant to canonical college in NORMALIZED_CUTOFFS.
+ */
+export function resolveCanonicalCutoffCollege(input: string): string | null {
+  if (!input) return null;
+  const raw = input.trim();
+  const lower = raw.toLowerCase();
+
+  const cutoffColleges = Array.from(new Set(NORMALIZED_CUTOFFS.map((r) => r.college)));
+
+  // 1. Exact match (case insensitive)
+  const exact = cutoffColleges.find((c) => c.toLowerCase() === lower);
+  if (exact) return exact;
+
+  // 2. Acronym lookup
+  const strippedAlpha = lower.replace(/[^a-z]/g, "");
+  if (KNOWN_COLLEGE_ACRONYMS[strippedAlpha]) {
+    const acrTarget = KNOWN_COLLEGE_ACRONYMS[strippedAlpha];
+    const m = cutoffColleges.find((c) => c.toLowerCase() === acrTarget.toLowerCase());
+    if (m) return m;
+  }
+  for (const [acr, target] of Object.entries(KNOWN_COLLEGE_ACRONYMS)) {
+    if (
+      lower === acr ||
+      lower.includes(`(${acr})`) ||
+      lower.startsWith(`${acr} `) ||
+      lower.endsWith(` ${acr}`)
+    ) {
+      const m = cutoffColleges.find((c) => c.toLowerCase() === target.toLowerCase());
+      if (m) return m;
+    }
+  }
+
+  // 3. Clean string match with stopwords removed
+  const cInput = cleanCollegeString(raw);
+  const cleanMatch = cutoffColleges.find((c) => cleanCollegeString(c) === cInput);
+  if (cleanMatch) return cleanMatch;
+
+  // 4. Match against collegesData catalog
+  const colCatalog = collegesData as Array<{ name: string; shortName?: string; aliases?: string[] }>;
+  const colObj = colCatalog.find(
+    (c) =>
+      c.name.toLowerCase() === lower ||
+      c.shortName?.toLowerCase() === lower ||
+      (c.aliases || []).some((a) => a.toLowerCase() === lower)
+  );
+  if (colObj) {
+    const colNameClean = cleanCollegeString(colObj.name);
+    const m = cutoffColleges.find((c) => cleanCollegeString(c) === colNameClean);
+    if (m) return m;
+    for (const a of colObj.aliases || []) {
+      const cA = cleanCollegeString(a);
+      const mA = cutoffColleges.find((c) => cleanCollegeString(c) === cA);
+      if (mA) return mA;
+    }
+  }
+
+  // 5. Substring inclusion
+  for (const c of cutoffColleges) {
+    const cClean = cleanCollegeString(c);
+    if (cClean.length > 5 && (cInput.includes(cClean) || cClean.includes(cInput))) {
+      return c;
+    }
+  }
+
+  return null;
+}
 
 /**
  * Resolves a user dream college string to the canonical college name in NORMALIZED_CUTOFFS.
  */
 export function resolveTargetCollegeMatch(userCollege: string): string | null {
   if (!userCollege) return null;
-  const raw = userCollege.toLowerCase().trim();
-
-  // 1. Direct acronym match or acronym in parenthetical
-  const stripped = raw.replace(/[^a-z]/g, "");
-  if (KNOWN_COLLEGE_ACRONYMS[stripped]) {
-    return KNOWN_COLLEGE_ACRONYMS[stripped];
-  }
-  for (const [acr, col] of Object.entries(KNOWN_COLLEGE_ACRONYMS)) {
-    if (raw.includes(acr) || raw.includes(`(${acr})`)) {
-      return col;
-    }
-  }
-
-  const allColleges = Array.from(new Set(NORMALIZED_CUTOFFS.map((r) => r.college)));
-
-  const cleanInput = userCollege
-    .toLowerCase()
-    .replace(/\(.*?\)/g, "")
-    .replace(/[-_]/g, " ")
-    .trim();
-
-  // 2. Exact match (case insensitive)
-  const exact = allColleges.find((c) => c.toLowerCase() === userCollege.toLowerCase().trim());
-  if (exact) return exact;
-
-  // 3. Exact match on cleaned name
-  const cleanExact = allColleges.find((c) => {
-    const cleanC = c.toLowerCase().replace(/\(.*?\)/g, "").replace(/[-_]/g, " ").trim();
-    return cleanC === cleanInput;
-  });
-  if (cleanExact) return cleanExact;
-
-  // 4. One includes the other
-  const includesMatch = allColleges.find((c) => {
-    const cleanC = c.toLowerCase().replace(/\(.*?\)/g, "").replace(/[-_]/g, " ").trim();
-    return cleanInput.includes(cleanC) || cleanC.includes(cleanInput);
-  });
-  if (includesMatch) return includesMatch;
-
-  // 5. Token overlap without stopwords
-  const stopWords = new Set(["college", "for", "women", "university", "institute", "department", "of", "the", "and"]);
-  const inputTokens = cleanInput.split(/\s+/).filter((t) => t.length > 2 && !stopWords.has(t));
-  let bestCandidate: string | null = null;
-  let maxMatchedTokens = 0;
-  for (const c of allColleges) {
-    const cTokens = c.toLowerCase().split(/\s+/).filter((t) => t.length > 2 && !stopWords.has(t));
-    const matchedCount = inputTokens.filter((t) => cTokens.some((ct) => ct.includes(t) || t.includes(ct))).length;
-    if (matchedCount > maxMatchedTokens && matchedCount >= 1) {
-      maxMatchedTokens = matchedCount;
-      bestCandidate = c;
-    }
-  }
-
-  return bestCandidate;
+  return resolveCanonicalCutoffCollege(userCollege);
 }
+
+export const COURSE_ALIASES_MAP: Record<string, string> = {
+  "b.sc. cs": "bsc_hons_computer_science",
+  "b.sc cs": "bsc_hons_computer_science",
+  "bsc cs": "bsc_hons_computer_science",
+  "bsc_cs": "bsc_hons_computer_science",
+  "b.sc. (hons) cs": "bsc_hons_computer_science",
+  "b.sc (hons) cs": "bsc_hons_computer_science",
+  "bsc (hons) cs": "bsc_hons_computer_science",
+  "computer science": "bsc_hons_computer_science",
+  "cs": "bsc_hons_computer_science",
+  "bsc_phys": "bsc_hons_physics",
+  "bsc phys": "bsc_hons_physics",
+  "b.sc phys": "bsc_hons_physics",
+  "b.sc. phys": "bsc_hons_physics",
+  "physics": "bsc_hons_physics",
+  "physics hons": "bsc_hons_physics",
+  "b.sc. (hons) physics": "bsc_hons_physics",
+  "b.sc. (hons.) physics": "bsc_hons_physics",
+  "bsc_chem": "bsc_hons_chemistry",
+  "bsc chem": "bsc_hons_chemistry",
+  "b.sc chem": "bsc_hons_chemistry",
+  "chemistry": "bsc_hons_chemistry",
+  "b.sc. (hons) chemistry": "bsc_hons_chemistry",
+  "bsc_maths": "bsc_hons_mathematics",
+  "bsc math": "bsc_hons_mathematics",
+  "b.sc math": "bsc_hons_mathematics",
+  "mathematics": "bsc_hons_mathematics",
+  "b.sc. (hons) mathematics": "bsc_hons_mathematics",
+  "bcom": "bcom_prog",
+  "b.com": "bcom_prog",
+  "bcom hons": "bcom_hons",
+  "b.com (hons)": "bcom_hons",
+  "b.com. (hons.)": "bcom_hons",
+  "economics": "ba_hons_economics",
+  "eco hons": "ba_hons_economics",
+  "b.a. (hons) economics": "ba_hons_economics",
+  "pol science": "ba_hons_pol_science",
+  "political science": "ba_hons_pol_science",
+  "history": "ba_hons_history",
+  "history hons": "ba_hons_history",
+};
 
 /**
  * Matches a user target course string to a canonical course ID.
@@ -370,13 +463,38 @@ export function matchCourseToId(
   const byName = courses.find((c) => c.name.toLowerCase() === raw);
   if (byName) return byName.id;
 
-  // 3. Clean alphanumeric substring match
+  // 3. Known Aliases Map
+  if (COURSE_ALIASES_MAP[raw]) {
+    const aliasId = COURSE_ALIASES_MAP[raw];
+    const found = courses.find((c) => c.id === aliasId);
+    if (found) return found.id;
+  }
+
+  // 4. Normalized clean match
   const clean = raw.replace(/[^a-z0-9]/g, "");
-  const byClean = courses.find((c) => {
+  for (const c of courses) {
     const cClean = c.name.toLowerCase().replace(/[^a-z0-9]/g, "");
-    return cClean.includes(clean) || clean.includes(cClean);
-  });
-  if (byClean) return byClean.id;
+    if (cClean === clean) return c.id;
+    const cIdClean = c.id.toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (cIdClean === clean) return c.id;
+  }
+
+  // 5. Clean alias lookup
+  for (const [aliasKey, cid] of Object.entries(COURSE_ALIASES_MAP)) {
+    const aClean = aliasKey.replace(/[^a-z0-9]/g, "");
+    if (aClean === clean) {
+      const found = courses.find((c) => c.id === cid);
+      if (found) return found.id;
+    }
+  }
+
+  // 6. Substring match
+  for (const c of courses) {
+    const cClean = c.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (cClean.length > 5 && (cClean.includes(clean) || clean.includes(cClean))) {
+      return c.id;
+    }
+  }
 
   return null;
 }
@@ -387,25 +505,28 @@ export function matchCourseToId(
 
 /**
  * Calculates equal-share or proportional target marks for a subject in a course combination.
- * For equal weighting (composite scale === totalCount * subjectMax), calculates cutoffMarks / totalCount.
+ * For equal weighting (composite scale === numberOfCountedSubjects * subjectMax), calculates cutoffMarks / numberOfCountedSubjects.
  * For unequal weighting, calculates cutoffMarks * (subjectMax / cutoffScale).
  */
 export function calculateSubjectTargetMarks(
   cutoffMarks: number,
   cutoffScale: number,
   subjectMaxMarks: number = STANDING_CONFIG.MAX_MARKS_PER_SUBJECT,
-  totalSubjectCount: number = 3
+  numberOfCountedSubjects: number = 3,
+  isEquallyWeighted: boolean = true
 ): number {
-  if (totalSubjectCount > 0 && cutoffScale === totalSubjectCount * subjectMaxMarks) {
-    // Standard equally weighted CUET papers: exact equal division
-    return Math.round((cutoffMarks / totalSubjectCount) * 10) / 10;
+  if (isEquallyWeighted && numberOfCountedSubjects > 0) {
+    // Standard equally weighted admission scheme: perSubjectTarget = totalCutoff / numberOfCountedSubjects
+    // E.g. 600/3 = 200, 480/3 = 160, 800/4 = 200
+    return Math.round((cutoffMarks / numberOfCountedSubjects) * 10) / 10;
   }
-  if (cutoffScale > 0) {
-    // Proportional weighting based on paper maximum
+  if (cutoffScale > 0 && subjectMaxMarks > 0) {
+    // Proportional / normalized weighting based on paper maximum
     return Math.round((cutoffMarks * (subjectMaxMarks / cutoffScale)) * 10) / 10;
   }
-  return totalSubjectCount > 0 ? Math.round((cutoffMarks / totalSubjectCount) * 10) / 10 : 0;
+  return numberOfCountedSubjects > 0 ? Math.round((cutoffMarks / numberOfCountedSubjects) * 10) / 10 : 0;
 }
+
 
 // ---------------------------------------------------------------------------
 // 3. User Subject Performance Evaluator
@@ -586,7 +707,47 @@ export function resolveCourseRequirements(
     const usedSubjectKeys = new Set<string>();
 
     for (const rule of comb.rules) {
-      if (rule.type === "required") {
+      const isQualifyingRule = rule.type === "qualifying" || rule.isCountedInCutoff === false;
+      const isCounted = !isQualifyingRule;
+      const qualifyingPct = rule.qualifyingPercentage ?? 30;
+
+      if (rule.type === "qualifying") {
+        const candidates = rule.subjects.filter((s) => !usedSubjectKeys.has(s));
+        const pickedSub = candidates.find((s) => (userPerformance[s]?.validSessionsCount ?? 0) > 0) || candidates[0];
+        if (pickedSub) {
+          usedSubjectKeys.add(pickedSub);
+          const perf = userPerformance[pickedSub];
+          const hasData = Boolean(perf && (perf.hasSufficientData || perf.validSessionsCount > 0));
+          const maxMarks = perf?.maxMarks || STANDING_CONFIG.MAX_MARKS_PER_SUBJECT;
+          const averageMarks = hasData && perf
+            ? (perf.averageMarks !== undefined
+                ? perf.averageMarks
+                : perf.rawAveragePercentage !== undefined
+                ? Math.round(((perf.rawAveragePercentage * maxMarks) / 100) * 10) / 10
+                : null)
+            : null;
+          const targetMarks = Math.round((maxMarks * qualifyingPct) / 100);
+          const marksNeeded = hasData && averageMarks !== null
+            ? Math.max(0, Math.round((targetMarks - averageMarks) * 10) / 10)
+            : targetMarks;
+
+          resolved.push({
+            subjectId: pickedSub,
+            subjectName: perf?.subjectName || CANONICAL_SUBJECTS_MAP[pickedSub]?.name || pickedSub,
+            ruleType: "qualifying",
+            isCountedInCutoff: false,
+            roleLabel: `Eligibility requirement (Qualifying · min ${qualifyingPct}%, not counted in cutoff score)`,
+            hasData,
+            averageMarks,
+            maxMarks,
+            targetMarks,
+            marksNeeded,
+            answeredQuestions: perf?.answeredQuestions || 0,
+            userPercentage: perf ? perf.rawAveragePercentage : null,
+            qualifyingPercentage: qualifyingPct,
+          });
+        }
+      } else if (rule.type === "required") {
         for (const subKey of rule.subjects) {
           if (!usedSubjectKeys.has(subKey)) {
             usedSubjectKeys.add(subKey);
@@ -605,6 +766,10 @@ export function resolveCourseRequirements(
               subjectId: subKey,
               subjectName: perf?.subjectName || CANONICAL_SUBJECTS_MAP[subKey]?.name || subKey,
               ruleType: "required",
+              isCountedInCutoff: isCounted,
+              roleLabel: isCounted
+                ? "Counted toward cutoff · Mandatory domain"
+                : `Eligibility requirement (Qualifying · min ${qualifyingPct}%, not counted in cutoff score)`,
               hasData,
               averageMarks,
               maxMarks,
@@ -612,6 +777,7 @@ export function resolveCourseRequirements(
               marksNeeded: 0,
               answeredQuestions: perf?.answeredQuestions || 0,
               userPercentage: perf ? perf.rawAveragePercentage : null,
+              qualifyingPercentage: isCounted ? undefined : qualifyingPct,
             });
           }
         }
@@ -656,6 +822,12 @@ export function resolveCourseRequirements(
             subjectId: item.subKey,
             subjectName: item.perf?.subjectName || CANONICAL_SUBJECTS_MAP[item.subKey]?.name || item.subKey,
             ruleType: rule.type,
+            isCountedInCutoff: isCounted,
+            roleLabel: isCounted
+              ? rule.type === "one_of"
+                ? "Counted toward cutoff · Language"
+                : "Counted toward cutoff · Best-of domain"
+              : `Eligibility requirement (Qualifying · min ${qualifyingPct}%, not counted in cutoff score)`,
             hasData: item.hasData,
             averageMarks: itemAverageMarks,
             maxMarks,
@@ -664,29 +836,40 @@ export function resolveCourseRequirements(
             answeredQuestions: item.perf?.answeredQuestions || 0,
             isBestOptionChosen: true,
             userPercentage: item.perf ? item.perf.rawAveragePercentage : null,
+            qualifyingPercentage: isCounted ? undefined : qualifyingPct,
           });
         }
       }
     }
 
-    const totalRequired = course.subjectCount || resolved.length || 4;
-    const subjectsWithData = resolved.filter((s) => s.hasData).length;
+    const countedResolved = resolved.filter((s) => s.isCountedInCutoff !== false);
+    const qualifyingResolved = resolved.filter((s) => s.isCountedInCutoff === false);
+    const totalCountedRequired = countedResolved.length || course.subjectCount || 3;
+    const totalRequired = totalCountedRequired;
+    const subjectsWithData = countedResolved.filter((s) => s.hasData).length;
     const coverage = totalRequired > 0 ? Math.round((subjectsWithData / totalRequired) * 100) / 100 : 0;
     const isComplete = subjectsWithData === totalRequired;
 
     // Calculate subject target marks and marks needed
     const effectiveCutoff = cutoffMarks ?? course.cutoffScale;
-    resolved.forEach((sub) => {
-      sub.targetMarks = calculateSubjectTargetMarks(effectiveCutoff, course.cutoffScale, sub.maxMarks, totalRequired);
+    countedResolved.forEach((sub) => {
+      sub.targetMarks = calculateSubjectTargetMarks(effectiveCutoff, course.cutoffScale, sub.maxMarks, totalCountedRequired);
       sub.marksNeeded = sub.hasData && sub.averageMarks !== null
         ? Math.max(0, Math.round((sub.targetMarks - sub.averageMarks) * 10) / 10)
         : sub.targetMarks;
     });
 
-    // Combined average marks is ONLY calculated when ALL required subjects have data!
+    qualifyingResolved.forEach((sub) => {
+      sub.targetMarks = Math.round((sub.maxMarks * (sub.qualifyingPercentage ?? 30)) / 100);
+      sub.marksNeeded = sub.hasData && sub.averageMarks !== null
+        ? Math.max(0, Math.round((sub.targetMarks - sub.averageMarks) * 10) / 10)
+        : sub.targetMarks;
+    });
+
+    // Combined average marks is ONLY calculated when ALL required counted subjects have data!
     // Never fabricate an overall score for incomplete subject data!
     const combinedAverageMarks = isComplete
-      ? Math.round(resolved.reduce((sum, s) => sum + (s.averageMarks || 0), 0) * 10) / 10
+      ? Math.round(countedResolved.reduce((sum, s) => sum + (s.averageMarks || 0), 0) * 10) / 10
       : null;
 
     return {
@@ -770,14 +953,17 @@ export function computeMultiYearCutoff(
   collegeName: string,
   courseId: string,
   category: CategoryCode = STANDING_CONFIG.DEFAULT_CATEGORY,
-  filterYear?: number
+  filterYear?: number | "all"
 ): MultiYearCutoffStats | null {
+  const canonicalCollege = resolveCanonicalCutoffCollege(collegeName) || collegeName;
+  const canonicalCourseId = matchCourseToId(courseId) || courseId;
+
   const records = NORMALIZED_CUTOFFS.filter(
     (r) =>
-      r.college.toLowerCase().trim() === collegeName.toLowerCase().trim() &&
-      r.canonical_course_id === courseId &&
-      r.category === category &&
-      (filterYear === undefined || r.year === filterYear)
+      (r.college.toLowerCase().trim() === canonicalCollege.toLowerCase().trim() ||
+        cleanCollegeString(r.college) === cleanCollegeString(canonicalCollege)) &&
+      r.canonical_course_id === canonicalCourseId &&
+      r.category === category
   );
 
   if (records.length === 0) {
@@ -797,9 +983,33 @@ export function computeMultiYearCutoff(
   }));
 
   const values = yearlyData.map((y) => y.cutoffValue);
-  const latestRecord = yearlyData[yearlyData.length - 1]!;
-  const latestYear = latestRecord.year;
-  const latestValue = latestRecord.cutoffValue;
+  const latestHistoricalRecord = yearlyData[yearlyData.length - 1]!;
+  const latestHistoricalYear = latestHistoricalRecord.year;
+
+  // Year selection & fallback logic:
+  // If a specific year is requested, check if historical data exists for it.
+  // If not, sensibly fallback to latest historical cutoff and flag as fallback.
+  let effectiveYear: number = latestHistoricalYear;
+  let isFallbackYear: boolean = false;
+  let requestedYear: number | undefined = undefined;
+  let activeValue: number = latestHistoricalRecord.cutoffValue;
+
+  if (filterYear !== undefined && filterYear !== "all") {
+    requestedYear = filterYear;
+    const yearMatch = yearlyData.find((d) => d.year === filterYear);
+    if (yearMatch) {
+      effectiveYear = yearMatch.year;
+      isFallbackYear = false;
+      activeValue = yearMatch.cutoffValue;
+    } else {
+      effectiveYear = latestHistoricalYear;
+      isFallbackYear = true;
+      activeValue = latestHistoricalRecord.cutoffValue;
+    }
+  }
+
+  const latestYear = effectiveYear;
+  const latestValue = activeValue;
 
   const minMarks = Math.min(...values);
   const maxMarks = Math.max(...values);
@@ -837,16 +1047,16 @@ export function computeMultiYearCutoff(
 
   // Linear trend extrapolation for next admission cycle (e.g. 2027)
   let projectedCutoffMarks: number;
-  const projectedYear: number = latestYear + 1;
+  const projectedYear: number = latestHistoricalYear + 1;
   let projectedBasis: string;
   let projectedRange: { low: number; high: number; label: string };
 
   if (yearlyData.length < 3) {
-    projectedCutoffMarks = latestValue;
-    projectedBasis = "Based on the latest cutoff";
+    projectedCutoffMarks = latestHistoricalRecord.cutoffValue;
+    projectedBasis = `Based on ${latestHistoricalYear} cutoff`;
     const delta = Math.max(6, cutoffScale * 0.02);
-    const low = Math.max(0, Math.round(latestValue - delta));
-    const high = Math.min(cutoffScale, Math.round(latestValue + delta));
+    const low = Math.max(0, Math.round(latestHistoricalRecord.cutoffValue - delta));
+    const high = Math.min(cutoffScale, Math.round(latestHistoricalRecord.cutoffValue + delta));
     projectedRange = {
       low,
       high,
@@ -871,8 +1081,8 @@ export function computeMultiYearCutoff(
     let rawProj = slope * projectedYear + intercept;
 
     // Never project below latest year if trend is rising
-    if (slope > 0 && rawProj < latestValue) {
-      rawProj = latestValue;
+    if (slope > 0 && rawProj < latestHistoricalRecord.cutoffValue) {
+      rawProj = latestHistoricalRecord.cutoffValue;
     }
 
     const clamped = Math.max(0, Math.min(cutoffScale, rawProj));
@@ -888,7 +1098,7 @@ export function computeMultiYearCutoff(
     const lowRange = Math.max(0, Math.round(projectedCutoffMarks - spreadMargin));
     const highRange = Math.min(cutoffScale, Math.round(projectedCutoffMarks + spreadMargin));
 
-    projectedBasis = `Projected for ${projectedYear} · based on ${years[0]}-${latestYear} trend`;
+    projectedBasis = `Projected for ${projectedYear} · based on ${years[0]}-${latestHistoricalYear} trend`;
     projectedRange = {
       low: lowRange,
       high: highRange,
@@ -907,13 +1117,17 @@ export function computeMultiYearCutoff(
   const trendDeltaPercentage = trendDeltaMarks !== null ? Math.round((trendDeltaMarks / cutoffScale) * 1000) / 10 : null;
 
   return {
-    college: collegeName,
-    courseId,
+    college: canonicalCollege,
+    canonicalCollege,
+    courseId: canonicalCourseId,
     category,
     cutoffScale,
     years,
     latestYear,
     latestValue,
+    effectiveYear,
+    isFallbackYear,
+    requestedYear,
     averageMarks,
     minMarks,
     maxMarks,
@@ -963,7 +1177,12 @@ export function getProjectedCutoff(
   courseId: string,
   category: CategoryCode = STANDING_CONFIG.DEFAULT_CATEGORY
 ): ProjectedCutoffResult {
-  const stats = computeMultiYearCutoff(collegeName, courseId, category);
+  const canonicalCollege = resolveCanonicalCutoffCollege(collegeName) || collegeName;
+  const canonicalCourseId = matchCourseToId(courseId) || courseId;
+  const stats = computeMultiYearCutoff(canonicalCollege, canonicalCourseId, category);
+
+  const course = CANONICAL_COURSES_MAP[canonicalCourseId];
+  const countedSubjectsCount = course?.subjectCount || 3;
 
   if (stats && stats.projectedCutoffMarks !== undefined && stats.projectedRange) {
     const proj = stats.projectedCutoffMarks;
@@ -972,7 +1191,7 @@ export function getProjectedCutoff(
       projectedYear: stats.projectedYear || 2027,
       basis: stats.projectedBasis || `Projected for 2027 · based on trend`,
       likelyRange: stats.projectedRange,
-      perSubjectTarget: Math.round((proj / 3) * 10) / 10,
+      perSubjectTarget: calculateSubjectTargetMarks(proj, stats.cutoffScale, 250, countedSubjectsCount),
       isProjected: (stats.years?.length || 0) >= 3,
       yearsCount: stats.years?.length || 0,
       yearlyData: stats.yearlyData || [],
@@ -1066,12 +1285,13 @@ export function computeCollegeStandings(params: {
     filterStatus,
   } = params;
 
+  const canonicalCourseId = matchCourseToId(courseId) || courseId;
   const userSubjectPerformance = computeUserSubjectPerformance(userAttempts);
-  const resolution = resolveCourseRequirements(courseId, userSubjectPerformance);
+  const resolution = resolveCourseRequirements(canonicalCourseId, userSubjectPerformance);
 
   const offeringColleges = Array.from(
     new Set(
-      NORMALIZED_CUTOFFS.filter((r) => r.canonical_course_id === courseId).map(
+      NORMALIZED_CUTOFFS.filter((r) => r.canonical_course_id === canonicalCourseId).map(
         (r) => r.college
       )
     )
@@ -1080,11 +1300,14 @@ export function computeCollegeStandings(params: {
   const standings: CollegeStandingResult[] = [];
 
   for (const college of offeringColleges) {
-    const multiYear = computeMultiYearCutoff(college, courseId, category, filterYear);
+    const multiYear = computeMultiYearCutoff(college, canonicalCourseId, category, filterYear);
     if (!multiYear) continue;
 
     const matchedRecord = NORMALIZED_CUTOFFS.find(
-      (r) => r.college.toLowerCase().trim() === college.toLowerCase().trim() && r.canonical_course_id === courseId
+      (r) =>
+        (r.college.toLowerCase().trim() === college.toLowerCase().trim() ||
+          cleanCollegeString(r.college) === cleanCollegeString(college)) &&
+        r.canonical_course_id === canonicalCourseId
     );
     const resolvedUniversity = matchedRecord?.university || "University of Delhi";
 
@@ -1093,7 +1316,7 @@ export function computeCollegeStandings(params: {
     }
 
     const cutoffScale = multiYear.cutoffScale;
-    const cutoffMarks = multiYear.projectedCutoffMarks ?? multiYear.expectedRange.midpointMarks;
+    const cutoffMarks = multiYear.latestValue;
     const projectedCutoffMarks = multiYear.projectedCutoffMarks ?? cutoffMarks;
     const projectedBasis = multiYear.projectedBasis;
     const projectedRangeDisplay = multiYear.projectedRange?.label;
@@ -1224,47 +1447,121 @@ export function computeDreamCollegeGap(params: {
   courseId: string;
   category?: CategoryCode;
   userAttempts: RecordedTestAttempt[];
+  filterYear?: number | "all";
 }): DreamCollegeGapAnalysis | null {
-  const { collegeName, courseId, category = STANDING_CONFIG.DEFAULT_CATEGORY, userAttempts } = params;
+  const {
+    collegeName,
+    courseId,
+    category = STANDING_CONFIG.DEFAULT_CATEGORY,
+    userAttempts,
+    filterYear,
+  } = params;
 
-  const multiYear = computeMultiYearCutoff(collegeName, courseId, category);
-  if (!multiYear) return null;
+  const canonicalCollege = resolveCanonicalCutoffCollege(collegeName) || collegeName;
+  const canonicalCourseId = matchCourseToId(courseId) || courseId;
+
+  const multiYear = computeMultiYearCutoff(canonicalCollege, canonicalCourseId, category, filterYear);
+  const course = CANONICAL_COURSES_MAP[canonicalCourseId] || CANONICAL_COURSES_MAP["bsc_hons_physics"]!;
+  const userSubjectPerformance = computeUserSubjectPerformance(userAttempts);
+
+  if (!multiYear) {
+    const resolution = resolveCourseRequirements(canonicalCourseId, userSubjectPerformance, undefined, undefined);
+    const subjectBreakdown = resolution.resolvedSubjects.map((sub) => {
+      const curMarks = sub.averageMarks;
+      const targetMarks = sub.targetMarks;
+      const marksNeeded = sub.marksNeeded;
+      return {
+        subjectId: sub.subjectId,
+        subjectName: sub.subjectName,
+        hasData: sub.hasData,
+        isCountedInCutoff: sub.isCountedInCutoff,
+        roleLabel: sub.roleLabel,
+        currentMarks: curMarks,
+        subjectMaxMarks: sub.maxMarks,
+        currentPerformanceDisplay: sub.hasData && curMarks !== null ? `${curMarks}/${sub.maxMarks} marks` : "No score yet",
+        targetMarks,
+        targetMarksDisplay: `${targetMarks}/${sub.maxMarks} marks`,
+        marksNeeded,
+        marksNeededDisplay: sub.hasData && curMarks !== null ? (marksNeeded === 0 ? "Target met" : `${marksNeeded} marks needed`) : "No score yet",
+        progressPercent: sub.hasData && curMarks !== null ? Math.min(100, Math.max(0, Math.round((curMarks / sub.maxMarks) * 100))) : 0,
+      };
+    });
+
+    return {
+      targetCollege: collegeName,
+      canonicalCollegeName: canonicalCollege,
+      targetCourse: course.name,
+      courseId: canonicalCourseId,
+      category,
+      cutoffScale: course.cutoffScale,
+      expectedCutoffMarks: 0,
+      cutoffDisplay: "No past cutoff data yet",
+      cutoffYearLabel: "No cutoff data",
+      effectiveYear: 2026,
+      isProjectedYear: false,
+      isFallbackYear: false,
+      isComplete: false,
+      hasNoData: resolution.hasNoData,
+      hasNoCutoffHistory: true,
+      status: "no_data",
+      statusLabel: "No past cutoff data recorded",
+      combinedMarks: null,
+      combinedMarksDisplay: "—",
+      marksGap: null,
+      gapDisplay: "No cutoff data",
+      summaryMessage: `No historical cutoff records have been published for ${collegeName} in ${course.name} (${category} category). As new official CUET seat allocation lists are released, benchmarks will update automatically.`,
+      actionGuidance: [
+        `Select another college or check the Course Standings table to see available historical cutoffs.`,
+      ],
+      emptyStateReason: `No cutoff records recorded for ${collegeName} - ${course.name} (${category}).`,
+      subjectImprovementBreakdown: subjectBreakdown,
+      coverage: resolution.coverage,
+    };
+  }
 
   const cutoffScale = multiYear.cutoffScale;
-  const expectedCutoffMarks = multiYear.projectedCutoffMarks ?? multiYear.expectedRange.midpointMarks;
+  const expectedCutoffMarks = multiYear.latestValue;
+  const effectiveYear = multiYear.effectiveYear ?? multiYear.latestYear;
+  const isFallbackYear = multiYear.isFallbackYear ?? false;
+  const isProjectedYear = Boolean(filterYear && typeof filterYear === "number" && filterYear > multiYear.latestYear);
+
+  let cutoffYearLabel = `${effectiveYear} Official Cutoff`;
+  if (isFallbackYear && multiYear.requestedYear) {
+    cutoffYearLabel = `${effectiveYear} Official Cutoff (Latest available for ${multiYear.requestedYear})`;
+  } else if (isProjectedYear) {
+    cutoffYearLabel = `Projected for ${filterYear} (Latest official: ${effectiveYear})`;
+  }
+
   const cutoffDisplay = `${expectedCutoffMarks}/${cutoffScale} marks`;
 
-  const userSubjectPerformance = computeUserSubjectPerformance(userAttempts);
-  const resolution = resolveCourseRequirements(courseId, userSubjectPerformance, undefined, expectedCutoffMarks);
-
+  const resolution = resolveCourseRequirements(canonicalCourseId, userSubjectPerformance, undefined, expectedCutoffMarks);
   const isComplete = resolution.isComplete;
   const hasNoData = resolution.hasNoData;
 
   // Calculate subject improvement breakdown in marks
   const subjectBreakdown = resolution.resolvedSubjects.map((sub) => {
-    const targetMarks = calculateSubjectTargetMarks(
-      expectedCutoffMarks,
-      cutoffScale,
-      sub.maxMarks,
-      resolution.totalRequiredCount
-    );
     const curMarks = sub.averageMarks;
-    const marksNeeded = sub.hasData && curMarks !== null
-      ? Math.max(0, Math.round((targetMarks - curMarks) * 10) / 10)
-      : targetMarks;
+    const targetMarks = sub.targetMarks;
+    const marksNeeded = sub.marksNeeded;
 
     const currentPerformanceDisplay = sub.hasData && curMarks !== null
       ? `${curMarks}/${sub.maxMarks} marks`
-      : "No data yet";
+      : "No score yet";
     const targetMarksDisplay = `${targetMarks}/${sub.maxMarks} marks`;
     const marksNeededDisplay = sub.hasData && curMarks !== null
-      ? marksNeeded > 0 ? `${marksNeeded} marks needed` : "Target met"
-      : "No data yet";
+      ? (marksNeeded === 0 ? "Target met" : `${marksNeeded} marks needed`)
+      : "No score yet";
+
+    const progressPercent = sub.hasData && curMarks !== null
+      ? Math.min(100, Math.max(0, Math.round((curMarks / sub.maxMarks) * 100)))
+      : 0;
 
     return {
       subjectId: sub.subjectId,
       subjectName: sub.subjectName,
       hasData: sub.hasData,
+      isCountedInCutoff: sub.isCountedInCutoff,
+      roleLabel: sub.roleLabel,
       currentMarks: curMarks,
       subjectMaxMarks: sub.maxMarks,
       currentPerformanceDisplay,
@@ -1272,6 +1569,7 @@ export function computeDreamCollegeGap(params: {
       targetMarksDisplay,
       marksNeeded,
       marksNeededDisplay,
+      progressPercent,
     };
   });
 
@@ -1284,15 +1582,18 @@ export function computeDreamCollegeGap(params: {
   let summaryMessage = "";
   const actionGuidance: string[] = [];
 
+  // Check scale compatibility:
+  const isScaleCompatible = resolution.course.cutoffScale === cutoffScale;
+
   if (hasNoData) {
     status = "no_data";
     statusLabel = "No attempts recorded";
     combinedMarks = null;
-    combinedMarksDisplay = "No data yet";
+    combinedMarksDisplay = "No score yet";
     marksGap = null;
-    gapDisplay = "No data yet";
-    summaryMessage = `To target ${collegeName} (${resolution.course.name}), complete mocks in ${resolution.resolvedSubjects.map((s) => s.subjectName).join(", ")} to calibrate your baseline standing against the expected cutoff of ${cutoffDisplay}.`;
-    actionGuidance.push(`Take an initial 50-question mock in ${resolution.resolvedSubjects[0]?.subjectName || "your core domain"}.`);
+    gapDisplay = "No score yet";
+    summaryMessage = `To target ${canonicalCollege} (${resolution.course.name}), complete mocks in ${resolution.resolvedSubjects.map((s) => s.subjectName).join(", ")} to calibrate your baseline standing against the cutoff of ${cutoffDisplay} (${cutoffYearLabel}).`;
+    actionGuidance.push(`Take an initial mock in ${resolution.resolvedSubjects[0]?.subjectName || "your core domain"}.`);
     actionGuidance.push(`Target at least ${subjectBreakdown[0]?.targetMarks || 100} / 250 marks (+5 / -1 marking scheme).`);
   } else if (!isComplete) {
     status = "incomplete";
@@ -1307,13 +1608,23 @@ export function computeDreamCollegeGap(params: {
       .map((s) => `${s.subjectName} is ${s.currentMarks}/${s.subjectMaxMarks} marks (target: ${s.targetMarks} marks, ${s.marksNeeded} marks needed)`)
       .join("; ");
 
-    summaryMessage = `Current performance on available subjects: ${availableSummary}. Complete mocks in remaining required subject(s): ${resolution.missingSubjectNames.join(", ")} to calculate your overall standing against the ${cutoffDisplay} cutoff.`;
+    summaryMessage = `Current performance on available subjects: ${availableSummary}. Complete mocks in remaining required subject(s): ${resolution.missingSubjectNames.join(", ")} to calculate your overall standing against the ${cutoffDisplay} cutoff (${cutoffYearLabel}).`;
     actionGuidance.push(`Take a mock in ${resolution.missingSubjectNames.join(", ")} to unlock your combined score.`);
     subjectBreakdown.filter((s) => s.hasData && s.marksNeeded > 0).forEach((s) => {
       actionGuidance.push(`Bridge the ${s.marksNeeded} marks gap in ${s.subjectName} to reach its target (${s.targetMarks} marks).`);
     });
+  } else if (!isScaleCompatible) {
+    // Scoring scales incompatible!
+    status = "incomplete";
+    statusLabel = "Scoring scale incompatible";
+    combinedMarks = resolution.combinedAverageMarks!;
+    combinedMarksDisplay = `${combinedMarks}/${resolution.course.cutoffScale} marks`;
+    marksGap = null;
+    gapDisplay = "Scale incompatible";
+    summaryMessage = `The student mock combination uses a ${resolution.course.cutoffScale}-mark scale while ${canonicalCollege} cutoff is on a ${cutoffScale}-mark scale. Direct marks subtraction cannot be performed safely.`;
+    actionGuidance.push(`Ensure the course subject combination matches the official admission scheme for this university.`);
   } else {
-    // All required subjects available!
+    // All required counted subjects available & scales compatible!
     combinedMarks = resolution.combinedAverageMarks!;
     combinedMarksDisplay = `${combinedMarks}/${cutoffScale} marks`;
     marksGap = Math.round((expectedCutoffMarks - combinedMarks) * 10) / 10;
@@ -1322,22 +1633,22 @@ export function computeDreamCollegeGap(params: {
       status = "below_cutoff";
       statusLabel = `${marksGap} marks below cutoff`;
       gapDisplay = `${marksGap} marks below cutoff`;
-      summaryMessage = `Your combined mock score is ${combinedMarksDisplay} against the expected cutoff of ${cutoffDisplay} (${marksGap} marks below cutoff). Increase your total score by ${marksGap} marks across your subjects to reach the admission threshold for ${collegeName}.`;
-      actionGuidance.push(`Bridge the ${marksGap} marks gap across your ${resolution.totalRequiredCount} required subjects.`);
+      summaryMessage = `Your combined mock score is ${combinedMarksDisplay} against the ${cutoffYearLabel} of ${cutoffDisplay} (${marksGap} marks below cutoff). Increase your total score by ${marksGap} marks across your subjects to reach the admission threshold for ${canonicalCollege}.`;
+      actionGuidance.push(`Bridge the ${marksGap} marks gap across your ${resolution.totalRequiredCount} counted subjects.`);
       actionGuidance.push("Target 3 to 4 additional correct questions per subject to eliminate negative deductions.");
     } else {
       status = "above_cutoff";
       const above = Math.abs(marksGap);
       statusLabel = above === 0 ? "Meets cutoff" : `${above} marks above cutoff`;
       gapDisplay = above === 0 ? "0 marks (meets cutoff)" : `${above} marks above cutoff`;
-      summaryMessage = `Your combined mock score is ${combinedMarksDisplay}, which ${above === 0 ? "matches" : `is ${above} marks above`} the historical cutoff (${cutoffDisplay}) for ${collegeName}! Maintain consistency and avoid negative marking traps.`;
+      summaryMessage = `Your combined mock score is ${combinedMarksDisplay}, which ${above === 0 ? "matches" : `is ${above} marks above`} the historical cutoff (${cutoffDisplay}, ${cutoffYearLabel}) for ${canonicalCollege}! Maintain consistency and avoid negative marking traps.`;
       actionGuidance.push("Focus on timed mock simulations to maintain accuracy under exam conditions.");
       actionGuidance.push("Review high-yield trap options to protect your score from negative marks.");
     }
   }
 
   // Legacy compatibility calculations
-  const legacyTargetPct = Math.round((expectedCutoffMarks / cutoffScale) * 1000) / 10;
+  const legacyTargetPct = cutoffScale > 0 ? Math.round((expectedCutoffMarks / cutoffScale) * 1000) / 10 : 0;
   const legacyUserPct = resolution.userPct ?? null;
   const legacyGapMarks = marksGap !== null ? Math.max(0, marksGap) : expectedCutoffMarks;
   const legacyGapPct = legacyUserPct !== null ? Math.max(0, Math.round((legacyTargetPct - legacyUserPct) * 10) / 10) : legacyTargetPct;
@@ -1347,13 +1658,20 @@ export function computeDreamCollegeGap(params: {
 
   return {
     targetCollege: collegeName,
+    canonicalCollegeName: canonicalCollege,
     targetCourse: resolution.course.name,
+    courseId: canonicalCourseId,
     category,
     cutoffScale,
     expectedCutoffMarks,
     cutoffDisplay,
+    cutoffYearLabel,
+    effectiveYear,
+    isProjectedYear,
+    isFallbackYear,
     isComplete,
     hasNoData,
+    hasNoCutoffHistory: false,
     status,
     statusLabel,
     combinedMarks,
@@ -1362,6 +1680,7 @@ export function computeDreamCollegeGap(params: {
     gapDisplay,
     summaryMessage,
     actionGuidance,
+    multiYearStats: multiYear,
     subjectImprovementBreakdown: subjectBreakdown,
     expectedCutoffPct: legacyTargetPct,
     userPct: legacyUserPct,

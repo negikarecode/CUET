@@ -83,9 +83,9 @@ function getSubjectMockStats(
   return {
     hasData: false,
     averageMarks: null,
-    formattedScore: "—",
+    formattedScore: "No score yet",
     mockCount: 0,
-    helperText: "No attempts recorded",
+    helperText: "No mock tests attempted",
   };
 }
 
@@ -163,13 +163,13 @@ export default function SubjectCombinationCard({
           const avgScore = stats.averageMarks ?? 0;
           const isTargetMet = hasData && avgScore >= collegeTarget;
 
-          // "X to go" gap: target minus average, never below 0
+          // Marks needed to reach target (never negative)
           const marksGap = Math.max(0, Math.round((collegeTarget - avgScore) * 10) / 10);
           const formattedMarksGap = formatScore(marksGap);
 
-          // Progress bar fill: uses the same average
+          // Progress bar fill: progress toward target (0 to 100%)
           const progressPercent = hasData
-            ? Math.min(100, Math.max(0, Math.round((avgScore / 250) * 100)))
+            ? Math.min(100, Math.max(0, Math.round((avgScore / (collegeTarget || 250)) * 100)))
             : 0;
           const targetTickPercent = Math.min(
             99,
@@ -178,6 +178,14 @@ export default function SubjectCombinationCard({
 
           const mockUrl = `/dashboard/mocks/${sub.subjectId}`;
           const { display: displayName, full: fullName } = cleanSubjectName(sub.subjectName);
+
+          const roleDisplay = sub.isCountedInCutoff === false
+            ? "Eligibility requirement (Qualifying · min 30%, not in cutoff score)"
+            : sub.roleLabel || (sub.ruleType === "best_of"
+              ? "Counted toward cutoff · Best-of domain"
+              : sub.ruleType === "one_of"
+              ? "Counted toward cutoff · Alternative option"
+              : "Counted toward cutoff · Mandatory domain");
 
           return (
             <div
@@ -191,7 +199,7 @@ export default function SubjectCombinationCard({
               }`}
             >
               <div className="space-y-3.5">
-                {/* Subject Name (18px semibold) & Mandatory Subject label (13px muted) */}
+                {/* Subject Name & Role Label */}
                 <div>
                   <h4
                     className="text-[18px] font-semibold text-slate-900 leading-snug truncate"
@@ -199,12 +207,15 @@ export default function SubjectCombinationCard({
                   >
                     {displayName}
                   </h4>
-                  <span className="text-[13px] text-slate-500 font-medium capitalize block mt-0.5">
-                    {sub.ruleType === "best_of"
-                      ? "Best-of domain"
-                      : sub.ruleType === "one_of"
-                      ? "Alternative option"
-                      : "Mandatory subject"}
+                  <span
+                    className={`text-[12px] font-medium block mt-0.5 truncate ${
+                      sub.isCountedInCutoff === false
+                        ? "text-amber-700 font-semibold"
+                        : "text-slate-500"
+                    }`}
+                    title={roleDisplay}
+                  >
+                    {sub.isCountedInCutoff === false ? "Qualifying only (min 30%)" : roleDisplay}
                   </span>
                 </div>
 
@@ -244,21 +255,18 @@ export default function SubjectCombinationCard({
                   ) : (
                     <div>
                       <div className="flex items-baseline">
-                        <span className="text-[34px] sm:text-[36px] font-bold text-slate-400 tracking-tight leading-none">
-                          —
-                        </span>
-                        <span className="text-[16px] font-normal text-slate-400 ml-1.5">
-                          /250
+                        <span className="text-xl sm:text-2xl font-bold text-slate-400 tracking-tight leading-none">
+                          No score yet
                         </span>
                       </div>
                       <span className="text-[13px] text-slate-400 font-medium mt-1 block">
-                        {stats.helperText}
+                        No mock tests attempted
                       </span>
                     </div>
                   )}
                 </div>
 
-                {/* Target (16-18px) & Marks Gap Pill (14px) */}
+                {/* Target & Marks Remaining Pill */}
                 <div className="flex items-center justify-between gap-2 pt-1 flex-wrap">
                   <span className="text-[15px] sm:text-[16px] text-slate-700 font-medium">
                     Target: <strong className="font-semibold text-slate-900">{formattedTarget}</strong>
@@ -272,19 +280,21 @@ export default function SubjectCombinationCard({
                       </span>
                     ) : (
                       <span className="px-3 py-1 rounded-full text-[13px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
-                        {formattedMarksGap} to go
+                        {formattedMarksGap} marks needed
                       </span>
                     )
                   ) : (
                     <span className="px-3 py-1 rounded-full text-[13px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-                      Not started
+                      No score yet
                     </span>
                   )}
                 </div>
 
                 {/* Small note near per-subject target */}
                 <p className="text-[11px] text-slate-400 font-normal">
-                  Target is split equally across the {totalRequiredCount} subjects.
+                  {sub.isCountedInCutoff === false
+                    ? "Eligibility requirement (min 30% · 75 marks) · Not counted in composite cutoff score."
+                    : `Calculated from course admission cutoff divided across the ${totalRequiredCount} counted subjects.`}
                 </p>
 
                 {/* Progress bar: 10-12px tall, rounded, with tick marker at target position */}
