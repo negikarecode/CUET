@@ -22,6 +22,9 @@ import { calculateActiveStreak } from "@/lib/gamification";
 import CascadingTargetSelector from "@/components/ui/CascadingTargetSelector";
 import { useTargetSelection } from "@/lib/hooks/useTargetSelection";
 import { DEFAULT_STREAM_SUBJECTS, getSubjectsForStream } from "@/lib/constants/cuetSubjects";
+import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
+import OtpVerificationView, { OtpVerificationType } from "./OtpVerificationView";
+import { validateEmail, isPasswordValid } from "@/lib/auth/validation";
 
 interface OnboardingModalProps {
   isOpen: boolean;
@@ -36,7 +39,9 @@ export default function OnboardingModal({
 }: OnboardingModalProps) {
   const loginUser = useTestStore((state) => state.loginUser);
 
-  const [mode, setMode] = useState<"signup" | "login">(initialMode);
+  const [mode, setMode] = useState<"signup" | "login" | "otp">(initialMode);
+  const [otpType, setOtpType] = useState<OtpVerificationType>("signup");
+  const [unconfirmedEmail, setUnconfirmedEmail] = useState<string | null>(null);
   const [step, setStep] = useState<1 | 2>(1);
 
   // Auth Credentials
@@ -95,7 +100,13 @@ export default function OnboardingModal({
       });
 
       if (error) {
-        setErrorMessage(error.message);
+        const errMsg = error.message.toLowerCase();
+        if (errMsg.includes("email not confirmed") || errMsg.includes("not confirmed")) {
+          setUnconfirmedEmail(cleanEmail);
+          setErrorMessage("Your email address has not been verified yet. Please enter your 6-digit verification code below.");
+        } else {
+          setErrorMessage(error.message);
+        }
         setIsLoading(false);
         return;
       }
@@ -195,17 +206,17 @@ export default function OnboardingModal({
     }
 
     if (!cleanName) {
-      setErrorMessage("Please enter your full name.");
+      setErrorMessage("Please enter your full legal name.");
       setStep(1);
       return;
     }
-    if (!cleanEmail) {
+    if (!validateEmail(cleanEmail)) {
       setErrorMessage("Please provide a valid email address.");
       setStep(1);
       return;
     }
-    if (password.length < 6) {
-      setErrorMessage("Password must be at least 6 characters long.");
+    if (!isPasswordValid(password)) {
+      setErrorMessage("Password must be at least 8 characters and include uppercase, lowercase, and a number.");
       setStep(1);
       return;
     }
@@ -245,16 +256,11 @@ export default function OnboardingModal({
       }
 
       if (data.user) {
-        // Guarantee cookies and session are active in the browser
         if (!data.session) {
-          try {
-            await supabase.auth.signInWithPassword({
-              email: cleanEmail,
-              password,
-            });
-          } catch (signInErr) {
-            console.warn("Auto-signin error:", signInErr);
-          }
+          setOtpType("signup");
+          setMode("otp");
+          setIsLoading(false);
+          return;
         }
 
         const createdUserId = data.user.id;
@@ -380,14 +386,31 @@ export default function OnboardingModal({
 
         {/* Error / Alert Banner */}
         {errorMessage && (
-          <div className="mx-6 mt-4 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-start gap-2 shadow-xs">
+          <div className="mx-6 mt-4 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-start gap-2 shadow-xs animate-in fade-in">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 stroke-[2]" />
-            <p className="flex-1">{errorMessage}</p>
+            <div className="flex-1 space-y-1.5">
+              <p>{errorMessage}</p>
+              {unconfirmedEmail && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail(unconfirmedEmail);
+                    setOtpType("signup");
+                    setMode("otp");
+                    setErrorMessage(null);
+                  }}
+                  className="inline-flex items-center gap-1 font-bold text-blue-700 hover:text-blue-800 hover:underline pt-0.5 cursor-pointer"
+                >
+                  <span>Click here to enter your 6-digit verification code</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
           </div>
         )}
 
         {infoMessage && (
-          <div className="mx-6 mt-4 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium flex items-start gap-2 shadow-xs">
+          <div className="mx-6 mt-4 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium flex items-start gap-2 shadow-xs animate-in fade-in">
             <Check className="w-4 h-4 shrink-0 mt-0.5 stroke-[2]" />
             <p className="flex-1">{infoMessage}</p>
           </div>
@@ -395,7 +418,19 @@ export default function OnboardingModal({
 
         {/* Modal Body / Scrollable Form */}
         <div className="p-6 overflow-y-auto space-y-6 text-slate-900">
-          {mode === "login" ? (
+          {mode === "otp" ? (
+            <OtpVerificationView
+              email={email.trim().toLowerCase()}
+              otpType={otpType}
+              onSuccess={async (data) => {
+                if (data.user) {
+                  onClose();
+                  window.location.href = "/dashboard";
+                }
+              }}
+              onBack={() => setMode("signup")}
+            />
+          ) : mode === "login" ? (
             /* ======================================================= */
             /* LOGIN FORM (Authentic Supabase Authentication)           */
             /* ======================================================= */
@@ -545,6 +580,7 @@ export default function OnboardingModal({
                         )}
                       </button>
                     </div>
+                    <PasswordStrengthIndicator password={password} />
                   </div>
 
                   {/* Candidate Status / Age */}

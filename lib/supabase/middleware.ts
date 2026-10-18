@@ -67,7 +67,11 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/test");
   const isDashboardRoute =
     pathname === "/dashboard" || pathname.startsWith("/dashboard/");
-  const isAuthRoute = pathname === "/signup" || pathname === "/login";
+  const isAuthRoute =
+    pathname === "/signup" ||
+    pathname === "/login" ||
+    pathname === "/verify-otp" ||
+    pathname === "/forgot-password";
 
   const isAuthenticated = Boolean(authUser);
 
