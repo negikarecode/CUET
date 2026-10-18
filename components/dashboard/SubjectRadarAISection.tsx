@@ -13,6 +13,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { SubjectRadarAIAnalysis } from "@/types/subject-ai";
+import { SubjectRadarV2Report } from "@/lib/subject-radar-v2";
 
 interface SubjectRadarAISectionProps {
   subject: string;
@@ -23,6 +24,7 @@ interface SubjectRadarAISectionProps {
   isUnlocked?: boolean;
   currentQuestionsCount?: number;
   requiredQuestionsCount?: number;
+  radarV2Report?: SubjectRadarV2Report;
   onRefresh: () => void;
   onLaunchRepairDrill: (topic: string, practiceType?: string) => void;
 }
@@ -36,6 +38,7 @@ export function SubjectRadarAISection({
   isUnlocked = true,
   currentQuestionsCount = 0,
   requiredQuestionsCount = 150,
+  radarV2Report,
   onRefresh,
   onLaunchRepairDrill,
 }: SubjectRadarAISectionProps) {
@@ -80,6 +83,39 @@ export function SubjectRadarAISection({
             AI telemetry analysis activates once you complete 150 questions to ensure statistically verified diagnostic recommendations without false positives.
           </p>
         </div>
+
+        {/* Deterministic Signals & Confidence Tiers from Radar V2 */}
+        {radarV2Report && radarV2Report.diagnosticCards.length > 0 && (
+          <div className="space-y-3 pt-1">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                <Target className="w-4 h-4 text-indigo-600" />
+                <span>Deterministic Diagnostic Signals ({radarV2Report.overallMetrics.distinctQuestionsAttempted} distinct Qs attempted)</span>
+              </span>
+              <span className="text-[10px] font-bold text-slate-500 font-mono">
+                {radarV2Report.overallMetrics.confidenceTier.label}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {radarV2Report.diagnosticCards.slice(0, 4).map((card) => (
+                <div key={card.id} className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-2 text-xs">
+                  <div className="flex items-center justify-between gap-1.5">
+                    <span className="font-bold text-slate-900 truncate">{card.title}</span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
+                      {card.dimensionLabel}
+                    </span>
+                  </div>
+                  <p className="text-slate-600 font-medium leading-relaxed">{card.finding}</p>
+                  <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-[11px] text-slate-500 font-mono">
+                    <span>{card.metrics.accuracyPercentage}% Acc ({card.metrics.attempted} Qs)</span>
+                    <span>{card.metrics.distinctQuestions} distinct</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -369,8 +405,9 @@ export function SubjectRadarAISection({
           {activeTab === "cross_chapter" && (
             <div className="space-y-3.5">
               {analysis.crossChapterPatterns.length === 0 ? (
-                <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-100 text-xs font-medium text-emerald-800">
-                  ✅ No recurring cross-chapter systemic issues detected. Mistakes remain isolated to individual chapters.
+                <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-100 text-xs font-medium text-emerald-800 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>No recurring cross-chapter systemic issues detected. Mistakes remain isolated to individual chapters.</span>
                 </div>
               ) : (
                 analysis.crossChapterPatterns.map((cp, idx) => (

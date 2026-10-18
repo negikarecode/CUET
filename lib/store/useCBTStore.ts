@@ -13,6 +13,8 @@ import {
 } from "@/lib/storage/cbt-session-storage";
 import { stringToUuid } from "@/lib/utils";
 import { normalizeSubject } from "@/lib/analytics";
+import { recordRepairEvent } from "@/lib/repair-plan";
+import { recordRepairPlanProgress } from "@/lib/repair-plan-v2";
 
 export interface QuestionSessionState {
   visited: boolean;
@@ -138,6 +140,8 @@ function saveSessionToStorage(state: CBTStoreState, immediate = false): void {
             code: state.testMeta.code,
             totalQuestions: state.testMeta.totalQuestions,
             durationMinutes: state.testMeta.durationMinutes,
+            practiceType: state.testMeta.practiceType,
+            targetChapter: state.testMeta.targetChapter,
           }
         : null,
       currentQuestionIndex: state.currentQuestionIndex,
@@ -911,6 +915,38 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
         };
 
         useTestStore.getState().recordTestAttempt(attemptRecord);
+
+        // Advance learning coach repair lifecycle if this was a targeted drill or retest
+        try {
+          const isDrill =
+            meta?.practiceType === "drill" ||
+            (effectiveTestId && typeof effectiveTestId === "string" && effectiveTestId.startsWith("repair_quiz") && !meta?.practiceType);
+          const isRetest = meta?.practiceType === "retest";
+
+          if (isDrill) {
+            const targetTopic = meta?.targetChapter || resolvedSubject;
+            recordRepairEvent(storeUser?.id || "guest", targetTopic, "drill_completed", { score: summary.accuracyPercentage });
+            recordRepairPlanProgress({
+              userId: storeUser?.id,
+              subject: resolvedSubject,
+              chapter: targetTopic,
+              completedStep: 2,
+              scoreOrAccuracy: summary.accuracyPercentage,
+            });
+          } else if (isRetest) {
+            const targetTopic = meta?.targetChapter || resolvedSubject;
+            recordRepairEvent(storeUser?.id || "guest", targetTopic, "retest_completed", { accuracy: summary.accuracyPercentage });
+            recordRepairPlanProgress({
+              userId: storeUser?.id,
+              subject: resolvedSubject,
+              chapter: targetTopic,
+              completedStep: 3,
+              scoreOrAccuracy: summary.accuracyPercentage,
+            });
+          }
+        } catch (repairErr) {
+          console.warn("Repair lifecycle update notice:", repairErr);
+        }
 
         if (typeof window !== "undefined" && window.location?.origin) {
           try {

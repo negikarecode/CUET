@@ -1,15 +1,24 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, Sparkles, AlertTriangle } from "lucide-react";
-import { TopicMastery } from "@/types";
+import {
+  CheckCircle2,
+  ArrowRight,
+  Sparkles,
+  AlertTriangle,
+  ChevronDown,
+  Clock,
+  TrendingUp,
+} from "lucide-react";
+import { TopicMastery, RecordedTestAttempt } from "@/types";
 import { normalizeSubject } from "@/lib/analytics";
 import {
   getTopicConfidence,
   formatPlainLanguageDiagnosis,
 } from "@/lib/config/dashboardConfig";
 import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
+import { buildPerformanceCommandCenter } from "@/lib/command-center";
 
 interface NextBestActionCardProps {
   prioritizedTopic?: TopicMastery;
@@ -17,6 +26,8 @@ interface NextBestActionCardProps {
   currentCycleNumber?: number;
   currentCycleQuestionCount?: number;
   isUnlocked?: boolean;
+  testAttempts?: RecordedTestAttempt[];
+  studentId?: string;
 }
 
 export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
@@ -25,7 +36,22 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
   currentCycleNumber,
   currentCycleQuestionCount,
   isUnlocked: isUnlockedProp,
+  testAttempts,
+  studentId,
 }) => {
+  const [isBriefingOpen, setIsBriefingOpen] = useState(false);
+  const [activeBriefingTab, setActiveBriefingTab] = useState<
+    "holding_back" | "performing_well" | "trajectory" | "session_plan"
+  >("holding_back");
+
+  const commandCenter = useMemo(() => {
+    return buildPerformanceCommandCenter({
+      studentId: studentId || "student",
+      testAttempts: testAttempts || [],
+      availableMinutes: 25,
+    });
+  }, [studentId, testAttempts]);
+
   const diagnostic = computeAuthoritativeDiagnosticProgress({
     totalAttempted,
     currentCycleNumber,
@@ -107,8 +133,11 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
   });
 
   const subjectKey = normalizeSubject(topic.subject).key;
-  const topicTitle = topic.chapter || topic.microTopic || "Domain Knowledge Practice";
-  const reasonText = plainDiagnosis.humanSentence || "Lowest accuracy in recent domain tests.";
+  const priorityTask = commandCenter.answers.q3_workOnNext.priorityTask;
+  const topicTitle = priorityTask?.chapter || topic.chapter || topic.microTopic || "Domain Knowledge Practice";
+  const reasonText = priorityTask?.reason || plainDiagnosis.humanSentence || "Lowest accuracy in recent domain tests.";
+  const priorityActionUrl = priorityTask?.actionUrl || `/dashboard/radar?subject=${subjectKey}`;
+  const priorityActionLabel = priorityTask?.actionLabel || "Start focused practice";
 
   return (
     <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs transition-all hover:shadow-sm">
@@ -224,10 +253,10 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
         {/* Clear Action Hierarchy: 1 prominent primary button + 1 subtle secondary link */}
         <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-2.5 shrink-0 self-stretch sm:self-auto lg:self-center">
           <Link
-            href={`/dashboard/radar?subject=${subjectKey}`}
+            href={priorityActionUrl}
             className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-sm font-semibold transition-all shadow-sm hover:shadow cursor-pointer text-center"
           >
-            <span>Start focused practice</span>
+            <span>{priorityActionLabel}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
 
@@ -241,6 +270,237 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
           )}
         </div>
       </div>
+
+      {/* 5-Question AI Performance Intelligence Briefing */}
+      {totalAttempted > 0 && (
+        <div className="border-t border-slate-100 pt-4 mt-2">
+          <button
+            type="button"
+            onClick={() => setIsBriefingOpen(!isBriefingOpen)}
+            className="w-full flex items-center justify-between py-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer"
+          >
+            <div className="flex items-center gap-2 flex-wrap">
+              <Sparkles className="w-4 h-4 text-indigo-600 shrink-0" />
+              <span className="font-bold text-slate-900">
+                AI Performance Intelligence Briefing (5 Core Answers)
+              </span>
+              <span
+                className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                  commandCenter.answers.q4_isImproving.trajectory === "IMPROVING"
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                    : commandCenter.answers.q4_isImproving.trajectory === "DECLINING"
+                    ? "bg-rose-50 text-rose-700 border-rose-200"
+                    : commandCenter.answers.q4_isImproving.trajectory === "STABLE"
+                    ? "bg-blue-50 text-blue-700 border-blue-200"
+                    : "bg-slate-100 text-slate-700 border-slate-200"
+                }`}
+              >
+                {commandCenter.answers.q4_isImproving.trajectory === "INSUFFICIENT_EVIDENCE"
+                  ? "Calibrating"
+                  : commandCenter.answers.q4_isImproving.trajectory}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 text-slate-500 hover:text-slate-800">
+              <span className="text-[11px] font-medium">{isBriefingOpen ? "Hide Briefing" : "Inspect 5 Core Answers"}</span>
+              <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isBriefingOpen ? "rotate-180" : ""}`} />
+            </div>
+          </button>
+
+          {isBriefingOpen && (
+            <div className="pt-3 space-y-3.5 animate-in fade-in duration-150">
+              {/* Tab Selector */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs border-b border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setActiveBriefingTab("holding_back")}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                    activeBriefingTab === "holding_back"
+                      ? "bg-rose-50 text-rose-800 border border-rose-200 shadow-2xs"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  Score Bottlenecks (Q2)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveBriefingTab("performing_well")}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                    activeBriefingTab === "performing_well"
+                      ? "bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  Strong Areas (Q1)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveBriefingTab("trajectory")}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                    activeBriefingTab === "trajectory"
+                      ? "bg-blue-50 text-blue-800 border border-blue-200 shadow-2xs"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  Improvement Trajectory (Q4)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveBriefingTab("session_plan")}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                    activeBriefingTab === "session_plan"
+                      ? "bg-indigo-50 text-indigo-800 border border-indigo-200 shadow-2xs"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  Next Session Plan (Q5)
+                </button>
+              </div>
+
+              {/* Tab 1: Holding Back (Q2) */}
+              {activeBriefingTab === "holding_back" && (
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 text-xs">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                    <span className="font-bold text-slate-900">What is holding your score back?</span>
+                  </div>
+                  <p className="text-slate-600 font-medium leading-relaxed">
+                    {commandCenter.answers.q2_holdingMeBack.summary}
+                  </p>
+                  {commandCenter.answers.q2_holdingMeBack.bottlenecks.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                      {commandCenter.answers.q2_holdingMeBack.bottlenecks.map((b, idx) => (
+                        <div key={idx} className="p-3 rounded-lg bg-white border border-slate-200 shadow-2xs space-y-1">
+                          <div className="flex items-center justify-between gap-1.5">
+                            <span className="font-bold text-slate-900 truncate">{b.title}</span>
+                            <span className="font-mono text-[11px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-100 shrink-0">
+                              {b.marksImpact}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-600 line-clamp-2">{b.description}</p>
+                          <span className="text-[10px] text-slate-400 font-mono block">
+                            Evidence: {b.evidenceQuestionIds.length} question attempts
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              )}
+
+              {/* Tab 2: Performing Well (Q1) */}
+              {activeBriefingTab === "performing_well" && (
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 text-xs">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span className="font-bold text-slate-900">Where are you currently performing well?</span>
+                  </div>
+                  <p className="text-slate-600 font-medium leading-relaxed">
+                    {commandCenter.answers.q1_performingWell.summary}
+                  </p>
+                  {commandCenter.answers.q1_performingWell.strongChapters.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                      {commandCenter.answers.q1_performingWell.strongChapters.map((sc, idx) => (
+                        <div key={idx} className="p-3 rounded-lg bg-white border border-slate-200 shadow-2xs space-y-1">
+                          <div className="flex items-center justify-between gap-1.5">
+                            <span className="font-bold text-slate-900 truncate">{sc.chapter}</span>
+                            <span className="font-mono text-[11px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 shrink-0">
+                              {sc.accuracyPercentage}% Acc
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                            <span>{sc.subject}</span>
+                            <span>{sc.distinctQuestions} distinct Qs</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                  {commandCenter.answers.q1_performingWell.speedStrengthsCount > 0 && (
+                    <p className="text-[11px] font-medium text-slate-500 pt-1">
+                      Speed mastery: {commandCenter.answers.q1_performingWell.speedStrengthsCount} questions answered accurately in under 45s.
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Tab 3: Trajectory (Q4) */}
+              {activeBriefingTab === "trajectory" && (
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 text-xs">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span className="font-bold text-slate-900">Is your preparation improving?</span>
+                  </div>
+                  <p className="text-slate-600 font-medium leading-relaxed">
+                    {commandCenter.answers.q4_isImproving.summary}
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                    <div className="p-3 rounded-lg bg-white border border-slate-200 space-y-0.5">
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Trajectory Status</span>
+                      <span className="text-xs font-bold text-slate-900 block">
+                        {commandCenter.answers.q4_isImproving.trajectory}
+                      </span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white border border-slate-200 space-y-0.5">
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Cycle Window</span>
+                      <span className="text-xs font-bold text-slate-900 block">
+                        Cycle {commandCenter.answers.q4_isImproving.diagnosticCycleStatus.cycleNumber} ({commandCenter.answers.q4_isImproving.diagnosticCycleStatus.questionCount}/150 Qs)
+                      </span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white border border-slate-200 space-y-0.5">
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">Resolved Topics</span>
+                      <span className="text-xs font-bold text-slate-900 block font-mono">
+                        {commandCenter.answers.q4_isImproving.resolvedTopicsCount} chapters
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Tab 4: Next Study Session Plan (Q5) */}
+              {activeBriefingTab === "session_plan" && (
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 text-xs">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-indigo-600 shrink-0" />
+                      <span className="font-bold text-slate-900">Recommended Next Study Session</span>
+                    </div>
+                    <span className="font-mono text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
+                      {commandCenter.answers.q5_nextSessionPlan.recommendedDurationMinutes} Minutes Total
+                    </span>
+                  </div>
+                  <p className="text-slate-600 font-medium leading-relaxed">
+                    {commandCenter.answers.q5_nextSessionPlan.summary}
+                  </p>
+                  <div className="space-y-2 pt-1">
+                    {commandCenter.answers.q5_nextSessionPlan.sessionSteps.map((s, idx) => (
+                      <div key={idx} className="p-3 rounded-lg bg-white border border-slate-200 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <span className="w-5 h-5 rounded-full bg-slate-900 text-white font-mono font-bold text-[10px] flex items-center justify-center shrink-0">
+                            {s.order}
+                          </span>
+                          <div className="min-w-0">
+                            <span className="font-bold text-slate-900 block truncate">{s.title}</span>
+                            <span className="text-[11px] text-slate-500 block truncate">{s.activity}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="font-mono text-[10px] text-slate-400">{s.durationMinutes}m</span>
+                          <Link
+                            href={s.actionUrl}
+                            className="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-[11px] transition-colors"
+                          >
+                            Open
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

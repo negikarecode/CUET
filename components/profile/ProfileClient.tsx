@@ -815,7 +815,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               </div>
             </div>
             <span className="text-xs font-bold px-2.5 py-1 bg-white text-amber-700 rounded-full border border-amber-100 shadow-xs">
-              {profile.currentStreak >= 7 ? "7d King 🔥" : "Active"}
+              {profile.currentStreak >= 7 ? "7d Streak Master" : "Active"}
             </span>
           </div>
 

@@ -31,6 +31,8 @@ export interface StoredCBTSession {
     code?: string;
     totalQuestions: number;
     durationMinutes: number;
+    practiceType?: "drill" | "retest" | string;
+    targetChapter?: string;
   } | null;
   currentQuestionIndex: number;
   durationSeconds: number;

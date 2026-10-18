@@ -217,12 +217,12 @@ export function WhyWrongExplanationModal({
                       <span className="flex-1 text-xs leading-normal">{opt.text}</span>
                       {isUserSelected && (
                         <span className="text-[10px] uppercase font-bold text-rose-700 shrink-0 font-mono px-1.5 py-0.5 rounded bg-rose-100">
-                          Your Answer ✗
+                          Your Selection
                         </span>
                       )}
                       {isCorrect && (
                         <span className="text-[10px] uppercase font-bold text-emerald-700 shrink-0 font-mono px-1.5 py-0.5 rounded bg-emerald-100">
-                          Correct ✓
+                          Correct Answer
                         </span>
                       )}
                     </div>
@@ -338,7 +338,7 @@ export function WhyWrongExplanationModal({
                     <div className="p-3 rounded-xl bg-white border border-purple-200 text-xs space-y-1">
                       <p className="font-bold text-slate-900">
                         {practiceAnswer === data.similarPracticeQuestion.correctOption
-                          ? "🎉 Correct!"
+                          ? "Correct answer."
                           : `Incorrect. The right option is ${data.similarPracticeQuestion.correctOption}.`}
                       </p>
                       <p className="text-slate-600 font-medium">

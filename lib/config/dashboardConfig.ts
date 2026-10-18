@@ -194,13 +194,16 @@ export function evaluateSessionQuality(params: {
   const isIndistinguishableFromChance =
     totalAttempted >= 15 && sampleProportion <= chanceAccuracy + 1.28 * seChance;
 
-  // Quick answers are accepted with no pacing penalties
-  const isLowEffort = isIndistinguishableFromChance;
+  const isFastClicking = medianTime < SESSION_VALIDITY_THRESHOLDS.MIN_VALID_MEDIAN_TIME_SECONDS;
+  const isLowEffort = isFastClicking || isIndistinguishableFromChance;
 
   let confidence: SessionConfidenceLevel = "Low";
   let message = "Session validated under timed practice conditions.";
 
-  if (isLowEffort) {
+  if (isFastClicking) {
+    confidence = "Low";
+    message = `Low-effort session, results not reliable. Median response time (${medianTime}s) is below the minimum threshold of ${SESSION_VALIDITY_THRESHOLDS.MIN_VALID_MEDIAN_TIME_SECONDS} seconds per question.`;
+  } else if (isIndistinguishableFromChance) {
     confidence = "Low";
     message = `Low-effort session, results not reliable. Accuracy (${accuracy}%) is statistically indistinguishable from random guessing.`;
   } else if (

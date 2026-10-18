@@ -352,6 +352,8 @@ export default function DashboardClient({
           currentCycleNumber={diagnosticProgress.currentCycleNumber}
           currentCycleQuestionCount={diagnosticProgress.currentCycleQuestionCount}
           isUnlocked={diagnosticProgress.isUnlocked}
+          testAttempts={deduplicatedAttempts}
+          studentId={storeUser?.id || initialData.user?.id}
         />
       </section>
 

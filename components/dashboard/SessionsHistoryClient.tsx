@@ -764,7 +764,7 @@ export default function SessionsHistoryClient({
                             <div className="flex items-center gap-1.5 flex-wrap">
                               {isPersonalBest && (
                                 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 shrink-0">
-                                  ★ Personal Best
+                                  <Award className="w-3 h-3 text-amber-700" /> Personal Best
                                 </span>
                               )}
                               <span
@@ -934,7 +934,7 @@ export default function SessionsHistoryClient({
                       <div className="flex items-center gap-1.5 flex-wrap">
                         {isPersonalBest && (
                           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
-                            ★ PB
+                            <Award className="w-3 h-3 text-amber-700" /> PB
                           </span>
                         )}
                         <span

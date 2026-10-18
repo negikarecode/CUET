@@ -26,18 +26,18 @@ export interface RepairQuizResponse {
   questions: Question[];
 }
 
-// In-memory response cache for rapid remedial quiz re-clicks
+// In-memory response cache for rapid remedial quiz re-clicks (5-minute TTL to prevent rapid duplicate clicks while allowing fresh questions on retests)
 const memoryQuizCache = new Map<
   string,
   { data: RepairQuizResponse; cachedAt: number }
 >();
-const QUIZ_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const QUIZ_CACHE_TTL_MS = 5 * 60 * 1000;
 
 export async function POST(req: NextRequest) {
   const startTime = Date.now();
   try {
     const body = (await req.json()) as RepairQuizRequestBody;
-    const { userId: bodyUserId, weakMicroTopics, subject } = body;
+    const { userId: bodyUserId, weakMicroTopics, subject, practiceType } = body;
 
     if (!Array.isArray(weakMicroTopics) || weakMicroTopics.length === 0) {
       return NextResponse.json(
@@ -60,8 +60,9 @@ export async function POST(req: NextRequest) {
     const primaryTopics = weakMicroTopics.slice(0, 3);
     const cacheKey = `${clientIdentifier}:${subject || "general"}:${primaryTopics.sort().join("_")}`;
 
-    // 2. Check Response Cache FIRST
-    const cachedQuiz = memoryQuizCache.get(cacheKey);
+    // 2. Check Response Cache FIRST (skip cache for explicit retests to ensure fresh questions)
+    const isRetest = practiceType === "retest";
+    const cachedQuiz = !isRetest ? memoryQuizCache.get(cacheKey) : null;
     if (cachedQuiz && Date.now() - cachedQuiz.cachedAt < QUIZ_CACHE_TTL_MS) {
       tokenLogger.logUsage({
         userId,
@@ -90,13 +91,13 @@ export async function POST(req: NextRequest) {
     }
 
     const selectedQuestions: Question[] = [];
+    let attemptedQuestionIds: string[] = [];
 
     // 1. Query Supabase for unattempted or previously failed questions
     try {
       const supabase = createClient();
 
       // Find question IDs already attempted by the user
-      let attemptedQuestionIds: string[] = [];
       if (userId) {
         const { data: userAttempts } = await supabase
           .from("user_attempts")
@@ -181,14 +182,25 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      const poolToTakeFrom = topicMatches.length >= neededCount ? topicMatches : [...topicMatches, ...otherMatches];
+      // Prioritize questions not yet solved correctly
+      const unattemptedTopicMatches = topicMatches.filter((q) => !attemptedQuestionIds.includes(q.id));
+      const unattemptedOtherMatches = otherMatches.filter((q) => !attemptedQuestionIds.includes(q.id));
+
+      const poolToTakeFrom =
+        unattemptedTopicMatches.length >= neededCount
+          ? unattemptedTopicMatches
+          : unattemptedTopicMatches.length + unattemptedOtherMatches.length >= neededCount
+          ? [...unattemptedTopicMatches, ...unattemptedOtherMatches]
+          : topicMatches.length >= neededCount
+          ? topicMatches
+          : [...topicMatches, ...otherMatches];
 
       for (let i = 0; i < neededCount && i < poolToTakeFrom.length; i++) {
         const sourceQ = poolToTakeFrom[i]!;
         const qNum = selectedQuestions.length + 1;
         selectedQuestions.push({
           ...sourceQ,
-          id: `repair_${Date.now()}_q${qNum}`,
+          id: sourceQ.id || (sourceQ as unknown as { questionId?: string }).questionId || `repair_q${qNum}`,
           questionNumber: qNum,
           aiDiagnosisNotes: `Targeted Concept Remediation: Reinforcing key principles from ${sourceQ.chapter} (${sourceQ.topic}).`,
           pyqSource: "Targeted CUET Diagnostic Repair Set",

@@ -478,16 +478,21 @@ export const useTestStore = create<TestStoreState>()(
         const currentAttempts = get().testAttempts || [];
         const isGenericTestKey =
           !testKey || testKey === "cbt_exam" || testKey === "default" || /^[0-9a-f-]{36}$/i.test(testKey);
-        // Strictly deduplicate by canonical testId, attemptId, or exact test paper reattempt
+        // Strictly deduplicate by canonical attemptId/id, or duplicate network submission within 60s
         const existingIdx = currentAttempts.findIndex((a) => {
           if (!a) return false;
           if (attempt.attemptId && a.attemptId && a.attemptId === attempt.attemptId) return true;
           if (attempt.id && a.id && a.id === attempt.id) return true;
 
           const aKey = (a.testId || "").trim();
+          const timeA = new Date(a.submittedAt || 0).getTime();
+          const timeB = new Date(attempt.submittedAt || 0).getTime();
+          const isWithin60s = timeA > 0 && timeB > 0 && Math.abs(timeA - timeB) <= 60000;
+
           if (!isGenericTestKey && aKey && aKey !== "cbt_exam" && !/^[0-9a-f-]{36}$/i.test(aKey)) {
-            if (aKey === testKey) return true;
-            if (stringToUuid(aKey) === testCanonicalUuid) return true;
+            if ((aKey === testKey || stringToUuid(aKey) === testCanonicalUuid) && isWithin60s) {
+              return true;
+            }
           }
 
           // Duplicate network submission within 60s
@@ -499,13 +504,10 @@ export const useTestStore = create<TestStoreState>()(
             a.testTitle.trim().toLowerCase() === attempt.testTitle.trim().toLowerCase() &&
             a.subject &&
             attempt.subject &&
-            a.subject.trim().toLowerCase() === attempt.subject.trim().toLowerCase()
+            a.subject.trim().toLowerCase() === attempt.subject.trim().toLowerCase() &&
+            isWithin60s
           ) {
-            const timeA = new Date(a.submittedAt || 0).getTime();
-            const timeB = new Date(attempt.submittedAt || 0).getTime();
-            if (timeA > 0 && timeB > 0 && Math.abs(timeA - timeB) <= 60000) {
-              return true;
-            }
+            return true;
           }
           return false;
         });

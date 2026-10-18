@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   Sparkles,
   Zap,
+  BarChart3,
 } from "lucide-react";
 import { WeeklyReportData } from "@/lib/weekly-report-engine";
 
@@ -54,7 +55,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
         <div className="p-4 sm:p-6 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-xs">
-              📊
+              <BarChart3 className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">

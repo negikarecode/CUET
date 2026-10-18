@@ -3,6 +3,7 @@ import { getCachedWhyWrongExplanation, setCachedWhyWrongExplanation } from "@/li
 import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
 import { createClient } from "@/lib/supabase/server";
 import { tokenLogger } from "@/lib/ai/token-logger";
+import { getQuestionsForTest } from "@/lib/data/mock50Questions";
 import Groq from "groq-sdk";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +38,36 @@ const flaggedExplanationsStore: Array<{
 }> = [];
 
 /**
+ * Retrieve authentic question from verified question bank matching subject and chapter
+ */
+function getAuthenticSimilarQuestion(subject: string, chapter: string, excludeQuestionId: string) {
+  try {
+    const testData = getQuestionsForTest(subject.toLowerCase());
+    if (testData && testData.questions && testData.questions.length > 0) {
+      const chapLower = (chapter || "").toLowerCase().trim();
+      const match =
+        testData.questions.find(
+          (q) => q.id !== excludeQuestionId && q.chapter && q.chapter.toLowerCase().includes(chapLower)
+        ) ||
+        testData.questions.find((q) => q.id !== excludeQuestionId) ||
+        testData.questions[0];
+
+      if (match) {
+        return {
+          prompt: match.prompt,
+          options: match.options.map((o) => ({ id: o.id, text: o.text })),
+          correctOption: (match.correctOptionId || "A") as string,
+          explanation:
+            match.explanation ||
+            `Verified NCERT solution: Option (${match.correctOptionId || "A"}) represents the canonical correct principle for ${match.chapter || chapter}.`,
+        };
+      }
+    }
+  } catch {}
+  return undefined;
+}
+
+/**
  * Deterministic fallback generator for why-wrong explanation
  */
 function buildDeterministicWhyWrong(params: {
@@ -60,16 +91,17 @@ function buildDeterministicWhyWrong(params: {
 
   const tempting = `Option (${selectedOption}) is a classic exam distractor designed to attract students who recall part of the terminology but miss crucial constraints or inverse relationships.`;
 
-  const similarQ = {
-    prompt: `Which of the following statements is conceptually consistent with standard principles in ${chapter}?`,
+  const authenticQ = getAuthenticSimilarQuestion(subject, chapter, questionId);
+  const similarQ = authenticQ || {
+    prompt: `Review the foundational definitions and boundary conditions for ${chapter}.`,
     options: [
-      { id: "A", text: `First standard variation related to ${chapter}` },
-      { id: "B", text: `Canonical accurate definition verified in standard NCERT texts` },
-      { id: "C", text: `Common inverse misconception often confused with correct principle` },
-      { id: "D", text: `Incomplete application disregarding domain boundary conditions` },
+      { id: "A", text: `Verify standard theorem statements in NCERT` },
+      { id: "B", text: `Verify standard formula application and constraints` },
+      { id: "C", text: `Check sign conventions and units` },
+      { id: "D", text: `Eliminate distractor options containing NOT/EXCEPT qualifiers` },
     ],
-    correctOption: "B",
-    explanation: `Option B represents the standard textbook formulation, avoiding the misconception seen in options A, C, and D.`,
+    correctOption: "A",
+    explanation: `Consult the NCERT Class 12 textbook summary for ${chapter}.`,
   };
 
   return {

@@ -13,6 +13,7 @@ import {
   Eye,
   EyeOff,
   HelpCircle,
+  Medal,
 } from "lucide-react";
 import { StreamType, LeaderboardEntry } from "@/types";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -601,20 +602,20 @@ export default function Leaderboard() {
 
                   if (isTop1) {
                     rankBadge = (
-                      <span className="w-7 h-7 rounded-xl bg-amber-100 text-amber-900 font-mono font-bold text-xs flex items-center justify-center shadow-xs mx-auto">
-                        🥇
+                      <span className="w-7 h-7 rounded-xl bg-amber-100 text-amber-800 font-mono font-bold text-xs flex items-center justify-center shadow-xs mx-auto">
+                        <Medal className="w-4 h-4 text-amber-600" />
                       </span>
                     );
                   } else if (isTop2) {
                     rankBadge = (
-                      <span className="w-7 h-7 rounded-xl bg-slate-200 text-slate-800 font-mono font-bold text-xs flex items-center justify-center shadow-xs mx-auto">
-                        🥈
+                      <span className="w-7 h-7 rounded-xl bg-slate-200 text-slate-700 font-mono font-bold text-xs flex items-center justify-center shadow-xs mx-auto">
+                        <Medal className="w-4 h-4 text-slate-500" />
                       </span>
                     );
                   } else if (isTop3) {
                     rankBadge = (
-                      <span className="w-7 h-7 rounded-xl bg-amber-50 text-amber-800 font-mono font-bold text-xs flex items-center justify-center shadow-xs mx-auto">
-                        🥉
+                      <span className="w-7 h-7 rounded-xl bg-amber-50 text-amber-900 font-mono font-bold text-xs flex items-center justify-center shadow-xs mx-auto">
+                        <Medal className="w-4 h-4 text-amber-700" />
                       </span>
                     );
                   }
@@ -721,9 +722,9 @@ export default function Leaderboard() {
 
                       {/* Trophies */}
                       <td className="py-3 px-3 text-right">
-                        <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-50/90 border border-amber-200/70 text-amber-900 shadow-2xs font-mono font-bold text-xs sm:text-sm tabular-nums whitespace-nowrap">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-50/90 border border-amber-200/70 text-amber-900 shadow-2xs font-mono font-bold text-xs sm:text-sm tabular-nums whitespace-nowrap">
                           <Trophy className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                          <span>{entry.totalTrophies.toLocaleString()} 🏆</span>
+                          <span>{entry.totalTrophies.toLocaleString()}</span>
                         </div>
                       </td>
                     </tr>
@@ -757,7 +758,15 @@ export default function Leaderboard() {
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5 min-w-0">
                       <span className="font-mono font-bold text-xs w-7 h-7 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
-                        {isTop1 ? "🥇" : isTop2 ? "🥈" : isTop3 ? "🥉" : `#${entry.rank}`}
+                        {isTop1 ? (
+                          <Medal className="w-4 h-4 text-amber-600" />
+                        ) : isTop2 ? (
+                          <Medal className="w-4 h-4 text-slate-500" />
+                        ) : isTop3 ? (
+                          <Medal className="w-4 h-4 text-amber-700" />
+                        ) : (
+                          `#${entry.rank}`
+                        )}
                       </span>
                       <div className="min-w-0">
                         <p className="font-bold text-slate-900 text-xs flex items-center gap-1 truncate">
@@ -775,9 +784,9 @@ export default function Leaderboard() {
                     </div>
 
                     {/* Trophies badge */}
-                    <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-50 border border-amber-200/70 text-amber-900 text-xs font-mono font-bold shrink-0">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-50 border border-amber-200/70 text-amber-900 text-xs font-mono font-bold shrink-0">
                       <Trophy className="w-3 h-3 text-amber-600" />
-                      <span>{entry.totalTrophies.toLocaleString()} 🏆</span>
+                      <span>{entry.totalTrophies.toLocaleString()}</span>
                     </div>
                   </div>
 
@@ -842,7 +851,7 @@ export default function Leaderboard() {
                 </p>
                 <p className="font-mono font-extrabold text-slate-900 text-base flex items-center gap-1 justify-end">
                   <Trophy className="w-4 h-4 text-amber-500" />
-                  {currentUserRanked.totalTrophies.toLocaleString()} 🏆
+                  {currentUserRanked.totalTrophies.toLocaleString()}
                 </p>
               </div>
             </div>

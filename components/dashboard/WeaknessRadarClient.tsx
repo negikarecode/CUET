@@ -29,11 +29,13 @@ import {
   GraduationCap,
   AlertTriangle,
   X,
+  XCircle,
   FileText,
   Activity,
   Check,
   Lock,
 } from "lucide-react";
+import { diagnoseMistakeDeterministically } from "@/lib/mistake-detective";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -57,6 +59,7 @@ import { CycleCompletionModal } from "@/components/dashboard/CycleCompletionModa
 import { CycleAnalysisModal } from "@/components/dashboard/CycleAnalysisModal";
 import { CycleHistorySelector } from "@/components/dashboard/CycleHistorySelector";
 import { SubjectRadarAISection } from "@/components/dashboard/SubjectRadarAISection";
+import { buildSubjectRadarV2Report } from "@/lib/subject-radar-v2";
 import { DiagnosticCycle } from "@/types/cycle";
 import { SubjectRadarAIAnalysis, SubjectRadarAIPayload } from "@/types/subject-ai";
 import { deriveTopicRepairPlan, recordRepairEvent, TopicRepairState } from "@/lib/repair-plan";
@@ -66,6 +69,7 @@ import { WhyWrongExplanationModal } from "@/components/dashboard/WhyWrongExplana
 import { DoubtSolverDrawer } from "@/components/dashboard/DoubtSolverDrawer";
 import { WeeklyReportModal } from "@/components/dashboard/WeeklyReportModal";
 import { DailyStudyPlanCard } from "@/components/dashboard/DailyStudyPlanCard";
+import { SpacedRepetitionModal } from "@/components/dashboard/SpacedRepetitionModal";
 import { RetentionLeaderboardCard } from "@/components/dashboard/RetentionLeaderboardCard";
 import { getDiagnosticProgress } from "@/lib/diagnostic-status";
 import { HelpCircle, ShieldCheck, TrendingDown, Minus } from "lucide-react";
@@ -199,14 +203,30 @@ function getOrGenerateDiagnosis(topic: TopicMastery): FullTopicDiagnosis {
 function renderProblemClassificationBadge(classification?: FullTopicDiagnosis["problemClassification"]) {
   switch (classification) {
     case "PERFORMANCE_PROBLEM":
-      return "⚡ Performance Issue";
+      return (
+        <span className="inline-flex items-center gap-1">
+          <Zap className="w-3 h-3 text-amber-500" /> Performance Issue
+        </span>
+      );
     case "QUESTION_INTERPRETATION":
-      return "🎯 Distractor Trap / Interpretation";
+      return (
+        <span className="inline-flex items-center gap-1">
+          <Target className="w-3 h-3 text-indigo-500" /> Distractor Trap / Interpretation
+        </span>
+      );
     case "LIMITED_DATA":
-      return "📊 Limited Telemetry";
+      return (
+        <span className="inline-flex items-center gap-1">
+          <BarChart3 className="w-3 h-3 text-slate-500" /> Limited Telemetry
+        </span>
+      );
     case "KNOWLEDGE_PROBLEM":
     default:
-      return "🧠 Knowledge Gap";
+      return (
+        <span className="inline-flex items-center gap-1">
+          <Brain className="w-3 h-3 text-rose-500" /> Knowledge Gap
+        </span>
+      );
   }
 }
 
@@ -223,7 +243,9 @@ function RenderMistakeItem({
     <div className="p-3.5 rounded-2xl border border-slate-200/80 bg-slate-50 space-y-2 text-xs">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-rose-600 text-[11px]">❌ Question #{idx + 1}</span>
+          <span className="font-bold text-rose-600 text-[11px] inline-flex items-center gap-1">
+            <XCircle className="w-3.5 h-3.5 text-rose-500 inline" /> Question #{idx + 1}
+          </span>
           {mistake.timeSpentSeconds !== undefined && mistake.timeSpentSeconds > 0 && (
             <span className="px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-mono text-[10px] font-medium">
               ~{mistake.timeSpentSeconds}s answered
@@ -286,12 +308,12 @@ function RenderMistakeItem({
                 <span className="flex-1 text-xs leading-normal">{opt.text}</span>
                 {isUser && (
                   <span className="text-[10px] uppercase font-bold text-rose-700 shrink-0 font-mono px-1.5 py-0.5 rounded bg-rose-100">
-                    Your Choice ✗
+                    Your Choice
                   </span>
                 )}
                 {isCorr && (
                   <span className="text-[10px] uppercase font-bold text-emerald-700 shrink-0 font-mono px-1.5 py-0.5 rounded bg-emerald-100">
-                    Correct ✓
+                    Correct Answer
                   </span>
                 )}
               </div>
@@ -362,6 +384,7 @@ export default function WeaknessRadarClient({
   const [selectedMistakeForExplanation, setSelectedMistakeForExplanation] = useState<any | null>(null);
   const [isDoubtDrawerOpen, setIsDoubtDrawerOpen] = useState(false);
   const [isWeeklyReportOpen, setIsWeeklyReportOpen] = useState(false);
+  const [isSpacedModalOpen, setIsSpacedModalOpen] = useState(false);
   const [topicRepairState, setTopicRepairState] = useState<TopicRepairState | null>(null);
 
   // In-flight request controller and fingerprint cache to avoid duplicate/stuck fetches
@@ -600,6 +623,30 @@ export default function WeaknessRadarClient({
   const isCurrentCycleComplete = authDiagnostic.isUnlocked;
   const isCalibrationLocked = !authDiagnostic.isUnlocked;
 
+  // Evidence-driven Subject Weakness Radar V2 Report (deterministic zero-token baseline)
+  const radarV2Report = useMemo(() => {
+    const activeSubjectName =
+      selectedRadarSubject === "all"
+        ? candidateSubjects[0] || "Physics"
+        : candidateSubjectCalibrations.find((c) => c.subjectKey === selectedRadarSubject)?.subject || "Physics";
+
+    const allAttempts = cleanTestAttempts.flatMap((t) => t.questions || []);
+
+    return buildSubjectRadarV2Report({
+      subject: activeSubjectName,
+      attempts: allAttempts,
+      currentCycleNumber,
+      currentCycleQuestionCount: effectiveCycleQuestionCount,
+    });
+  }, [
+    selectedRadarSubject,
+    candidateSubjects,
+    candidateSubjectCalibrations,
+    cleanTestAttempts,
+    currentCycleNumber,
+    effectiveCycleQuestionCount,
+  ]);
+
   // Verified Core Strengths require minimum 8+ questions and 80%+ accuracy
   const qualifiedStrengths = useMemo(() => {
     return strengthList.filter((s) => s.attemptsCount >= 8 && s.accuracyPercentage >= 80);
@@ -742,6 +789,69 @@ export default function WeaknessRadarClient({
     const subTime = subjectQuestions.reduce((s, q) => s + (q.timeSpentSeconds || 0), 0);
     const subAvgTime = subAttempted > 0 ? Math.round(subTime / subAttempted) : 0;
 
+    const taxonomyCounts = {
+      conceptualGapCount: 0,
+      factualRecallCount: 0,
+      formulaMethodCount: 0,
+      calculationCount: 0,
+      questionInterpretationCount: 0,
+      distractorTrapCount: 0,
+      carelessCount: 0,
+      multiStepReasoningCount: 0,
+      applicationGapCount: 0,
+      timePacingCount: 0,
+      guessingCount: 0,
+      memoryConfusionCount: 0,
+    };
+
+    const incorrectQuestions = subjectQuestions.filter((q) => q.selectedOption && q.isCorrect === false);
+    for (const q of incorrectQuestions) {
+      const diag = diagnoseMistakeDeterministically({
+        questionId: q.questionId,
+        selectedOption: q.selectedOption || "A",
+        correctOption: q.correctOption || "A",
+        questionText: q.prompt || "",
+        explanation: q.explanation || "",
+        chapter: q.chapter,
+        microTopic: q.microTopic,
+        subject: activeSubjectName,
+        timeSpentSeconds: q.timeSpentSeconds,
+      });
+
+      switch (diag.category) {
+        case "conceptual_misunderstanding":
+          taxonomyCounts.conceptualGapCount++;
+          break;
+        case "missing_prerequisite":
+          taxonomyCounts.factualRecallCount++;
+          break;
+        case "formula_method_error":
+          taxonomyCounts.formulaMethodCount++;
+          break;
+        case "calculation_execution_error":
+          taxonomyCounts.calculationCount++;
+          break;
+        case "question_misinterpretation":
+          taxonomyCounts.questionInterpretationCount++;
+          break;
+        case "incorrect_concept_application":
+          taxonomyCounts.applicationGapCount++;
+          break;
+        case "time_management_pacing":
+          taxonomyCounts.timePacingCount++;
+          break;
+        case "careless_error":
+          taxonomyCounts.carelessCount++;
+          break;
+        case "repeated_error_pattern":
+          taxonomyCounts.multiStepReasoningCount++;
+          break;
+        default:
+          taxonomyCounts.distractorTrapCount++;
+          break;
+      }
+    }
+
     const payload: SubjectRadarAIPayload = {
       subject: activeSubjectName,
       userId: storeUser?.id || initialData.user.id,
@@ -777,18 +887,7 @@ export default function WeaknessRadarClient({
         })),
         errorTaxonomy: {
           totalErrors: subIncorrect,
-          conceptualGapCount: Math.round(subIncorrect * 0.4),
-          applicationGapCount: Math.round(subIncorrect * 0.3),
-          calculationCount: Math.round(subIncorrect * 0.15),
-          distractorTrapCount: Math.round(subIncorrect * 0.1),
-          questionInterpretationCount: Math.round(subIncorrect * 0.05),
-          factualRecallCount: 0,
-          formulaMethodCount: 0,
-          carelessCount: 0,
-          multiStepReasoningCount: 0,
-          timePacingCount: 0,
-          guessingCount: 0,
-          memoryConfusionCount: 0,
+          ...taxonomyCounts,
         },
         diagnosticConfidence:
           subAttempted >= 20 ? "HIGH" : subAttempted >= 10 ? "MEDIUM" : subAttempted >= 5 ? "LOW" : "INSUFFICIENT_EVIDENCE",
@@ -797,14 +896,14 @@ export default function WeaknessRadarClient({
       },
       cycleInfo: {
         currentCycleNumber,
-        currentCycleQuestionCount: 150,
+        currentCycleQuestionCount: effectiveCycleQuestionCount,
         resolvedWeaknesses: diagnosticCycles.flatMap((c) => c.comparison?.resolved.map((r) => r.name) || []),
         recurringWeaknesses: diagnosticCycles.flatMap((c) => c.comparison?.recurringWeak.map((r) => r.name) || []),
       },
     };
 
     // Calculate a stable deterministic fingerprint to prevent duplicate in-flight requests
-    const currentFingerprint = `${selectedRadarSubject}:${subAttempted}:${subAccuracy}:${currentCycleNumber}:150:${weaknessRadar.length}`;
+    const currentFingerprint = `${selectedRadarSubject}:${subAttempted}:${subAccuracy}:${currentCycleNumber}:${effectiveCycleQuestionCount}:${weaknessRadar.length}`;
     if (!forceRefresh && lastFingerprintRef.current === currentFingerprint && aiAnalysis !== null) {
       setAiAnalysisStatus("complete");
       setAnalysisTriggered(true);
@@ -866,6 +965,7 @@ export default function WeaknessRadarClient({
     initialData.user.id,
     weaknessRadar,
     currentCycleNumber,
+    effectiveCycleQuestionCount,
     diagnosticCycles,
     aiAnalysis,
     allSubjectsList,
@@ -909,6 +1009,8 @@ export default function WeaknessRadarClient({
           code: quizData.code,
           totalQuestions: quizData.totalQuestions || 5,
           durationMinutes: quizData.durationMinutes || 6,
+          practiceType: (practiceType as "drill" | "retest") || "drill",
+          targetChapter: topic,
         },
         quizData.questions
       );
@@ -1134,6 +1236,7 @@ export default function WeaknessRadarClient({
             spacedDueCount={getSpacedRepetitionSummary(storeUser?.id || initialData.user.id).dueTodayCount}
             calibrationProgressPct={calibrationProgressPct}
             onLaunchDrill={(topic, subject) => handleLaunchTargetedPractice(topic, subject)}
+            onOpenSpacedRepetition={() => setIsSpacedModalOpen(true)}
           />
 
           {/* Retention & Daily Target Habit Tracker */}
@@ -1148,8 +1251,8 @@ export default function WeaknessRadarClient({
         /* CASE B: 150/150 REACHED, BUT ANALYSIS NOT TRIGGERED YET */
         <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-8 shadow-sm text-center space-y-6">
           <div className="space-y-2">
-            <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-[11px] font-bold uppercase tracking-wider inline-block">
-              🎯 DIAGNOSTIC CYCLE {authDiagnostic.completedCyclesCount || 1} COMPLETE
+            <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-[11px] font-bold uppercase tracking-wider inline-flex items-center gap-1.5">
+              <Target className="w-3.5 h-3.5 text-emerald-600" /> DIAGNOSTIC CYCLE {authDiagnostic.completedCyclesCount || 1} COMPLETE
             </span>
             <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               150 / 150 QUESTIONS
@@ -1261,7 +1364,7 @@ export default function WeaknessRadarClient({
             <div className="flex items-center gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
               <span className="text-xs font-bold text-emerald-900">
-                ✓ 150-QUESTION DIAGNOSTIC ANALYSIS COMPLETE
+                150-QUESTION DIAGNOSTIC ANALYSIS COMPLETE
               </span>
             </div>
             <button
@@ -1552,6 +1655,7 @@ export default function WeaknessRadarClient({
             : (candidateSubjectCalibrations.find((c) => c.subjectKey === selectedRadarSubject)?.totalAttempted || 0)
         }
         requiredQuestionsCount={150}
+        radarV2Report={radarV2Report}
         onRefresh={() => fetchSubjectAIAnalysis(true)}
         onLaunchRepairDrill={(topic, practiceType) => {
           const sub =
@@ -2254,13 +2358,13 @@ export default function WeaknessRadarClient({
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-bold text-slate-700">① CONCEPT REVIEW</span>
                             <span
-                              className={`text-xs font-bold font-mono ${
+                              className={`text-[10px] font-bold uppercase font-mono ${
                                 topicRepairState?.step1.status === "completed"
                                   ? "text-emerald-600"
                                   : "text-slate-400"
                               }`}
                             >
-                              {topicRepairState?.step1.status === "completed" ? "✓" : "○"}
+                              {topicRepairState?.step1.status === "completed" ? "Done" : "Pending"}
                             </span>
                           </div>
                           <p className="text-[10px] text-slate-500 font-medium leading-tight">
@@ -2290,7 +2394,7 @@ export default function WeaknessRadarClient({
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-bold text-slate-700">② GUIDED DRILL</span>
                             <span
-                              className={`text-xs font-bold font-mono ${
+                              className={`text-[10px] font-bold uppercase font-mono ${
                                 topicRepairState?.step2.status === "completed"
                                   ? "text-emerald-600"
                                   : topicRepairState?.step2.status === "active"
@@ -2299,10 +2403,10 @@ export default function WeaknessRadarClient({
                               }`}
                             >
                               {topicRepairState?.step2.status === "completed"
-                                ? "✓"
+                                ? "Done"
                                 : topicRepairState?.step2.status === "active"
-                                ? "→ Active"
-                                : "○"}
+                                ? "Active"
+                                : "Pending"}
                             </span>
                           </div>
                           <p className="text-[10px] text-slate-500 font-medium leading-tight">
@@ -2323,7 +2427,7 @@ export default function WeaknessRadarClient({
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-bold text-slate-700">③ TIMED RETEST</span>
                             <span
-                              className={`text-xs font-bold font-mono ${
+                              className={`text-[10px] font-bold uppercase font-mono ${
                                 topicRepairState?.step3.status === "completed"
                                   ? "text-emerald-600"
                                   : topicRepairState?.step3.status === "active"
@@ -2332,10 +2436,10 @@ export default function WeaknessRadarClient({
                               }`}
                             >
                               {topicRepairState?.step3.status === "completed"
-                                ? "✓"
+                                ? "Done"
                                 : topicRepairState?.step3.status === "active"
-                                ? "→ Active"
-                                : "○"}
+                                ? "Active"
+                                : "Pending"}
                             </span>
                           </div>
                           <p className="text-[10px] text-slate-500 font-medium leading-tight">
@@ -2354,13 +2458,13 @@ export default function WeaknessRadarClient({
                           <div className="flex items-center justify-between">
                             <span className="text-[10px] font-bold text-slate-700">④ RECOVERY CHECK</span>
                             <span
-                              className={`text-xs font-bold font-mono ${
+                              className={`text-[10px] font-bold uppercase font-mono ${
                                 topicRepairState?.step4.status === "completed"
                                   ? "text-emerald-600"
                                   : "text-slate-400"
                               }`}
                             >
-                              {topicRepairState?.step4.status === "completed" ? "✓" : "○"}
+                              {topicRepairState?.step4.status === "completed" ? "Done" : "Pending"}
                             </span>
                           </div>
                           <p className="text-[10px] text-slate-500 font-medium leading-tight">
@@ -2372,10 +2476,15 @@ export default function WeaknessRadarClient({
                       {/* Measurable Recovery Verdict */}
                       <div className="p-3 rounded-xl border border-slate-200/60 bg-slate-50 text-[11px] font-semibold text-slate-700 flex items-center justify-between gap-2">
                         <span>Recovery Status:</span>
-                        <span className="font-mono text-slate-900">
-                          {topicRepairState?.isRecovered
-                            ? "✅ RECOVERED (≥80% accuracy across 10+ attempts verified)"
-                            : "Validation incomplete — more evidence required"}
+                        <span className="font-mono text-slate-900 inline-flex items-center gap-1.5">
+                          {topicRepairState?.isRecovered ? (
+                            <>
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                              <span>RECOVERED (≥80% accuracy across 10+ attempts verified)</span>
+                            </>
+                          ) : (
+                            "Validation incomplete — more evidence required"
+                          )}
                         </span>
                       </div>
                     </div>
@@ -2502,6 +2611,53 @@ export default function WeaknessRadarClient({
               strengthList,
             })}
             onClose={() => setIsWeeklyReportOpen(false)}
+          />,
+          document.body
+        )}
+
+      {/* Spaced Repetition Review Modal (Portal) */}
+      {isClient &&
+        isSpacedModalOpen &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <SpacedRepetitionModal
+            isOpen={isSpacedModalOpen}
+            onClose={() => setIsSpacedModalOpen(false)}
+            userId={storeUser?.id || initialData.user.id}
+            onLaunchCBTDrill={(dueItems) => {
+              setIsSpacedModalOpen(false);
+              const formattedQuestions = dueItems.map((item, idx) => ({
+                id: item.questionId,
+                questionNumber: idx + 1,
+                subject: item.subject,
+                chapter: item.chapter,
+                topic: item.chapter,
+                microTopic: item.microTopic || item.chapter,
+                questionText: item.prompt,
+                prompt: item.prompt,
+                options: (item.options || []).map((o) => ({ id: o.id, text: o.text })),
+                correctOptionId: item.correctOption,
+                difficulty: "medium",
+                explanation: item.explanation,
+              }));
+
+              const testId = `spaced_repetition_${Date.now()}`;
+              initTest(
+                testId,
+                {
+                  id: testId,
+                  title: "Spaced Repetition Review Drill",
+                  subject: dueItems[0]?.subject || "Domain",
+                  code: "CUET-SR",
+                  totalQuestions: dueItems.length,
+                  durationMinutes: Math.max(3, Math.ceil(dueItems.length * 1.5)),
+                  practiceType: "drill",
+                  targetChapter: dueItems[0]?.chapter || "Spaced Review",
+                },
+                formattedQuestions as any
+              );
+              router.push(`/test/${testId}`);
+            }}
           />,
           document.body
         )}

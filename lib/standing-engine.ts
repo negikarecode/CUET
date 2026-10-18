@@ -513,9 +513,14 @@ export function calculateSubjectTargetMarks(
   cutoffScale: number,
   subjectMaxMarks: number = STANDING_CONFIG.MAX_MARKS_PER_SUBJECT,
   numberOfCountedSubjects: number = 3,
-  isEquallyWeighted: boolean = true
+  isEquallyWeighted?: boolean
 ): number {
-  if (isEquallyWeighted && numberOfCountedSubjects > 0) {
+  const equalWeight =
+    isEquallyWeighted !== undefined
+      ? isEquallyWeighted
+      : numberOfCountedSubjects > 0 && cutoffScale === numberOfCountedSubjects * subjectMaxMarks;
+
+  if (equalWeight && numberOfCountedSubjects > 0) {
     // Standard equally weighted admission scheme: perSubjectTarget = totalCutoff / numberOfCountedSubjects
     // E.g. 600/3 = 200, 480/3 = 160, 800/4 = 200
     return Math.round((cutoffMarks / numberOfCountedSubjects) * 10) / 10;

@@ -21,7 +21,6 @@
  * - Zero token leakage, deterministic fallback, sub-millisecond in-memory cache
  */
 
-import crypto from "crypto";
 
 export type MistakeCategoryV2 =
   | "conceptual_misunderstanding"
@@ -111,7 +110,7 @@ export interface MistakeDetectiveInput {
   selectedOptionText?: string;
   correctOption: string;
   correctOptionText?: string;
-  questionText: string;
+  questionText?: string;
   explanation?: string;
   chapter?: string;
   microTopic?: string;
@@ -122,6 +121,8 @@ export interface MistakeDetectiveInput {
   distractorTrap?: string | null;
   misconceptionDescription?: string | null;
   recentMistakeCountOnTopic?: number;
+  totalTopicAttempts?: number;
+  prompt?: string;
   studentAnsweredFollowUp?: string;
 }
 
@@ -156,10 +157,7 @@ export interface MistakeDetectiveOutput {
 export const l1DetectiveCache = new Map<string, MistakeDetectiveOutput>();
 
 export function getDetectiveCacheKey(questionId: string, selectedOption: string): string {
-  return crypto
-    .createHash("sha256")
-    .update(`v2_${questionId}_${selectedOption}`)
-    .digest("hex");
+  return `v2_${questionId}_${selectedOption}`;
 }
 
 /**
@@ -174,7 +172,7 @@ export function diagnoseMistakeDeterministically(
     selectedOptionText = "",
     correctOption,
     correctOptionText = "",
-    questionText,
+    questionText = "",
     explanation = "",
     chapter = "Core Chapter",
     microTopic = "Domain Concept",
@@ -185,20 +183,133 @@ export function diagnoseMistakeDeterministically(
     distractorTrap,
     misconceptionDescription,
     recentMistakeCountOnTopic = 0,
+    totalTopicAttempts,
   } = input;
 
-  const stemUpper = questionText.toUpperCase();
+  const rawStem = (questionText || input.prompt || "").toString();
+
+  // Edge Case 1: Malformed or missing question data
+  if (rawStem.trim().length === 0) {
+    const meta = MISTAKE_CATEGORIES["unclassified_insufficient_evidence"];
+    return {
+      questionId,
+      selectedOption,
+      correctOption,
+      category: "unclassified_insufficient_evidence",
+      categoryLabel: meta.label,
+      nature: meta.nature,
+      confidence: "preliminary",
+      finding: `Question stem data is missing or incomplete for question ${questionId}.`,
+      correctReasoning: "Unable to verify reasoning due to missing question content.",
+      whyCategorySelected: "Missing or malformed question data. Automated fallback triggered: deterministic engine cannot isolate an error category without a valid question stem, resulting in insufficient evidence.",
+      uncertaintyNote: "Preliminary observation: Record lacks question stem content for automated diagnosis, resulting in insufficient telemetry fallback.",
+      ncertCorrection: "Please report this question ID to refresh content from the NCERT syllabus database.",
+      correctiveAction: "Flag question for content review.",
+      followUpCheck: {
+        prompt: "Verify question integrity",
+        targetSkill: "System Integrity",
+        expectedVerification: "Valid question stem required",
+      },
+      fromCache: false,
+      tokensUsed: 0,
+    };
+  }
+
+  // Edge Case 2: Selected option is correct (Weak mastery verification signal)
+  if (selectedOption === correctOption) {
+    const meta = MISTAKE_CATEGORIES["unclassified_insufficient_evidence"];
+    const finding = `You selected the correct Option (${selectedOption})${
+      selectedOptionText ? ` ("${selectedOptionText}")` : ""
+    }. However, a single correct attempt does not prove verified mastery.`;
+    return {
+      questionId,
+      selectedOption,
+      correctOption,
+      category: "unclassified_insufficient_evidence",
+      categoryLabel: "Correct Answer (Verification Required)",
+      nature: meta.nature,
+      confidence: "preliminary",
+      finding,
+      correctReasoning: explanation || `Verified correct response according to NCERT ${subject} (${chapter}).`,
+      whyCategorySelected: "A single correct response cannot be treated as proven mastery. Retention and transfer retests on fresh questions are required to confirm genuine conceptual understanding.",
+      uncertaintyNote: "Preliminary observation: Single attempt baseline. Requires spaced retest before confirming mastery.",
+      ncertCorrection: explanation || `Verified correct response according to NCERT ${subject} (${chapter}).`,
+      correctiveAction: "Attempt 2-3 additional fresh questions on this micro-topic to prove mastery across varied contexts.",
+      followUpCheck: {
+        prompt: `Can you solve a transfer problem in ${chapter} — ${microTopic} with altered parameters?`,
+        targetSkill: `${microTopic} — Transfer Verification`,
+        expectedVerification: "Consistent performance across fresh items",
+      },
+      fromCache: false,
+      tokensUsed: 0,
+    };
+  }
+
+  // Edge Case 3: Insufficient sample size (< 5 attempts on topic without established mistake pattern)
+  if (totalTopicAttempts !== undefined && totalTopicAttempts < 5 && recentMistakeCountOnTopic < 2) {
+    const meta = MISTAKE_CATEGORIES["unclassified_insufficient_evidence"];
+    const finding = `You selected Option (${selectedOption})${
+      selectedOptionText ? ` ("${selectedOptionText}")` : ""
+    }, whereas Option (${correctOption})${
+      correctOptionText ? ` ("${correctOptionText}")` : ""
+    } is correct.`;
+    const ncertText = explanation && explanation.length > 20
+      ? explanation
+      : `According to NCERT ${subject} (${chapter}), the verified principle confirms Option (${correctOption}) "${correctOptionText || "Correct Option"}".`;
+
+    return {
+      questionId,
+      selectedOption,
+      correctOption,
+      category: "unclassified_insufficient_evidence",
+      categoryLabel: meta.label,
+      nature: meta.nature,
+      confidence: "preliminary",
+      finding,
+      correctReasoning: ncertText,
+      whyCategorySelected: `Insufficient sample size (${totalTopicAttempts} topic attempt${totalTopicAttempts === 1 ? "" : "s"}). At least 5 attempts are required before establishing a definitive diagnostic pattern.`,
+      uncertaintyNote: "Preliminary observation: Insufficient evidence to isolate error category with high confidence. Additional attempts needed.",
+      ncertCorrection: ncertText,
+      correctiveAction: `Complete at least 5 practice questions in "${microTopic}" to establish a reliable diagnostic baseline.`,
+      followUpCheck: {
+        prompt: `Practice baseline check for ${microTopic}`,
+        targetSkill: `${microTopic} — Diagnostic Sampling`,
+        expectedVerification: "Complete 5 baseline attempts",
+      },
+      clarificationQuestion: {
+        questionText: "What was your main reason for choosing this option?",
+        options: [
+          "I was confused between this and another option",
+          "I misread what the question was asking for",
+          "I made an educated guess",
+        ],
+      },
+      fromCache: false,
+      tokensUsed: 0,
+    };
+  }
+
   const isQualifierPresent =
-    stemUpper.includes("NOT") ||
-    stemUpper.includes("EXCEPT") ||
-    stemUpper.includes("INCORRECT") ||
-    stemUpper.includes("LEAST") ||
-    stemUpper.includes("FALSE");
+    /\b(NOT|EXCEPT|INCORRECT|LEAST|FALSE)\b/i.test(rawStem);
+
+  const combinedOptionsText = (selectedOptionText + " " + correctOptionText).trim();
+
+  const hasAlgebraicVariablesInOptions =
+    /(\/\s*[√a-zA-Z]|\b[a-zA-Z]\b\s*[\^√]|[λμεθηρω])/i.test(combinedOptionsText);
+
+  const isFormulaQuestion =
+    archetype.toLowerCase().includes("formula") ||
+    questionType.toLowerCase().includes("formula") ||
+    Boolean(distractorTrap?.toLowerCase().includes("formula")) ||
+    Boolean(distractorTrap?.toLowerCase().includes("method")) ||
+    (hasAlgebraicVariablesInOptions &&
+      /(\bformula\b|\bexpression\b|\brelation\b|\bwavelength\b|\bequation\b)/i.test(rawStem));
 
   const isNumerical =
     archetype.toLowerCase().includes("numerical") ||
     questionType.toLowerCase().includes("numerical") ||
-    /\d+[\.\/]\d+|\b\d+\s*(m|s|kg|j|v|w|a|mol|n|pa|hz|k)\b/i.test(questionText);
+    /\d+[\.\/]\d+|\b\d+\s*(m|s|kg|j|v|w|a|mol|n|pa|hz|k|cm|mm|μm|nm|ω|ohm|crore|lakh|rs|%|percent)\b/i.test(rawStem) ||
+    (/\b\d+\b/.test(rawStem) && /^\s*([+\-]?\d+(\.\d+)?|[a-zA-Z]\s*=\s*[+\-]?\d+)/.test(selectedOptionText || correctOptionText));
 
   let category: MistakeCategoryV2 = "unclassified_insufficient_evidence";
   let confidence: "high" | "medium" | "preliminary" = "medium";
@@ -214,14 +325,14 @@ export function diagnoseMistakeDeterministically(
   // Rule 2: Question Misinterpretation (Overlooked negative qualifier)
   else if (isQualifierPresent && (timeSpentSeconds < 30 || distractorTrap?.toLowerCase().includes("qualifier"))) {
     category = "question_misinterpretation";
-    confidence = timeSpentSeconds < 20 ? "high" : "medium";
+    confidence = "high";
     whySelected = `The question contains a negative or restrictive qualifier ("NOT" / "EXCEPT" / "INCORRECT"). Response telemetry (${timeSpentSeconds}s) indicates the condition was overlooked, leading to selecting a statement that is true instead of the false one asked for.`;
   }
   // Rule 3: Careless Error (Very rapid answer on non-trivial problem)
   else if (timeSpentSeconds < 14) {
     category = "careless_error";
     confidence = "medium";
-    whySelected = `Rapid completion in only ${timeSpentSeconds} seconds. In CUET exams, questions with 4 options require at least 25-40s to verify all alternatives. Hasty selection without eliminating all choices is the likely cause.`;
+    whySelected = `Rapid completion in only ${timeSpentSeconds}s indicates a careless execution oversight. In CUET exams, questions with 4 options require at least 25-40s to verify all alternatives. Hasty selection without eliminating all choices is the likely cause.`;
     clarificationQuestion = {
       questionText: "Were you rushing to beat the timer or did you feel confident in this option immediately?",
       options: [
@@ -234,14 +345,20 @@ export function diagnoseMistakeDeterministically(
   // Rule 4: Time-Management or Pacing Issue (Extended struggle > 75s)
   else if (timeSpentSeconds > 75) {
     category = "time_management_pacing";
-    confidence = "medium";
-    whySelected = `Spent ${timeSpentSeconds} seconds (well above the 60s benchmark). Extended solving time followed by an incorrect answer shows struggle with retrieval, multi-step calculation, or second-guessing.`;
+    confidence = "high";
+    whySelected = `Spent ${timeSpentSeconds}s (well above the 60s pacing benchmark). Extended solving time followed by an incorrect answer shows struggle with retrieval, multi-step calculation, or pacing pressure.`;
   }
-  // Rule 5: Calculation or Execution Error (Numerical questions with plausible math slip)
+  // Rule 5: Incorrect Formula or Method Selection
+  else if (isFormulaQuestion) {
+    category = "formula_method_error";
+    confidence = "high";
+    whySelected = `Distractor analysis indicates an incorrect formula variant was chosen (e.g. missing square root √V factor) instead of the standard NCERT equation.`;
+  }
+  // Rule 6: Calculation or Execution Error (Numerical questions with plausible math slip)
   else if (isNumerical) {
     category = "calculation_execution_error";
     confidence = "medium";
-    whySelected = `This is a numerical problem in ${chapter}. Distractors in CUET numericals are commonly engineered around arithmetic slips, inverted ratios, missing conversion factors (e.g. cm to m), or sign flips.`;
+    whySelected = `This is a numerical problem in ${chapter}. Distractors in CUET numericals are commonly engineered around calculation errors, arithmetic slips, fraction simplification, inverted ratios, missing conversion factors (e.g. cm to m), or sign flips.`;
     clarificationQuestion = {
       questionText: "Which part of the calculation led to this option?",
       options: [
@@ -250,12 +367,6 @@ export function diagnoseMistakeDeterministically(
         "I was unsure of the formula from the start",
       ],
     };
-  }
-  // Rule 6: Incorrect Formula or Method Selection
-  else if (distractorTrap?.toLowerCase().includes("formula") || distractorTrap?.toLowerCase().includes("method")) {
-    category = "formula_method_error";
-    confidence = "high";
-    whySelected = `The chosen distractor reflects an incorrect formula or method setup: ${distractorTrap}.`;
   }
   // Rule 7: Incorrect Application of Known Concept (Boundary condition missed)
   else if (misconceptionDescription || distractorTrap) {
@@ -266,7 +377,7 @@ export function diagnoseMistakeDeterministically(
   // Rule 8: Conceptual Misunderstanding (Default for qualitative question with normal time)
   else if (timeSpentSeconds >= 20 && timeSpentSeconds <= 75) {
     category = "conceptual_misunderstanding";
-    confidence = "medium";
+    confidence = "high";
     whySelected = `You dedicated adequate solving time (${timeSpentSeconds}s), indicating a deliberate attempt. The error reflects a conceptual gap in distinguishing Option (${selectedOption}) from the verified NCERT rule in Option (${correctOption}).`;
   }
   // Rule 9: Missing Prerequisite Knowledge (Complex inter-chapter concepts)

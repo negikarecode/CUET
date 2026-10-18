@@ -95,7 +95,7 @@ export function RetentionLeaderboardCard({
                 : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-100"
             }`}
           >
-            {notificationsEnabled ? "✓ Active" : "Opt-in"}
+            {notificationsEnabled ? "Active" : "Opt-in"}
           </button>
         </div>
 

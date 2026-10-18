@@ -27,7 +27,13 @@ export async function fetchServerTestAttempts(
           chapter,
           micro_topic,
           ncert_reference,
-          correct_option
+          correct_option,
+          question_text,
+          option_a,
+          option_b,
+          option_c,
+          option_d,
+          explanation
         ),
         tests (
           id,
@@ -92,12 +98,20 @@ export async function fetchServerTestAttempts(
       group.questions.push({
         questionId: ua.question_id || ua.id,
         questionNumber: group.questions.length + 1,
-        prompt: `Question ${group.questions.length + 1}`,
+        prompt: q?.question_text || `Question ${group.questions.length + 1}`,
         subject,
         chapter: q?.chapter || "Domain Core",
         microTopic: q?.micro_topic || "Key Concept",
+        options: [
+          { id: "A", text: q?.option_a || "Option A" },
+          { id: "B", text: q?.option_b || "Option B" },
+          { id: "C", text: q?.option_c || "Option C" },
+          { id: "D", text: q?.option_d || "Option D" },
+        ],
         selectedOption: ua.selected_option,
         correctOption: q?.correct_option || "A",
+        explanation: q?.explanation,
+        ncertReference: q?.ncert_reference,
         isCorrect: Boolean(isCorrect),
         timeSpentSeconds: ua.time_spent_seconds || 0,
         isTimeSink: Boolean(ua.is_time_sink || (ua.time_spent_seconds && ua.time_spent_seconds > 72)),

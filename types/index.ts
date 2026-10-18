@@ -20,6 +20,8 @@ export interface FullTestMeta {
   code: string;
   totalQuestions: number;
   durationMinutes: number;
+  practiceType?: "drill" | "retest" | string;
+  targetChapter?: string;
 }
 
 export type QuestionStatus =

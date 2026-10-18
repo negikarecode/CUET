@@ -12,6 +12,7 @@ import {
   Brain,
   Target,
   Check,
+  ArrowRight,
 } from "lucide-react";
 import { DiagnosticCycle } from "@/types/cycle";
 
@@ -194,8 +195,9 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
                   Diagnosed Weakness Clusters ({cycle.diagnosedWeaknesses.length})
                 </h3>
                 {cycle.diagnosedWeaknesses.length === 0 ? (
-                  <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 text-xs font-semibold text-emerald-800">
-                    ✅ Outstanding performance! No chronic weakness clusters diagnosed in this cycle.
+                  <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 text-xs font-semibold text-emerald-800 flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>Outstanding performance! No chronic weakness clusters diagnosed in this cycle.</span>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -290,8 +292,9 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
                           Status: <span className="text-rose-600">{item.status}</span>
                         </p>
                         {item.errorPatternShift ? (
-                          <div className="p-2.5 rounded-xl bg-white border border-rose-200/60 text-[11px] font-medium text-slate-800">
-                            🔄 <span className="font-bold">Error Pattern Shift:</span> {item.explanation}
+                          <div className="p-2.5 rounded-xl bg-white border border-rose-200/60 text-[11px] font-medium text-slate-800 flex items-center gap-1.5">
+                            <RefreshCw className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                            <span><span className="font-bold">Error Pattern Shift:</span> {item.explanation}</span>
                           </div>
                         ) : (
                           <p className="text-[11px] font-medium text-slate-600">{item.explanation}</p>
@@ -318,8 +321,8 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
                       <div key={idx} className="p-4 rounded-2xl bg-teal-50/60 border border-teal-100 shadow-xs space-y-1.5">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-bold uppercase tracking-wider text-teal-800">{item.subject}</span>
-                          <span className="text-xs font-bold font-mono text-teal-700 bg-white px-2 py-0.5 rounded-full border border-teal-200">
-                            ✅ Resolved ({item.currentAccuracy}%)
+                          <span className="text-xs font-bold font-mono text-teal-700 bg-white px-2 py-0.5 rounded-full border border-teal-200 inline-flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-teal-600 inline" /> Resolved ({item.currentAccuracy}%)
                           </span>
                         </div>
                         <h4 className="text-sm font-bold text-slate-900">{item.topic}</h4>
@@ -349,8 +352,8 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
                       <div key={idx} className="p-4 rounded-2xl bg-amber-50/60 border border-amber-100 shadow-xs space-y-1.5">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800">{item.subject}</span>
-                          <span className="text-xs font-bold font-mono text-amber-700 bg-white px-2 py-0.5 rounded-full border border-amber-200">
-                            🆕 New Pattern
+                          <span className="text-xs font-bold font-mono text-amber-700 bg-white px-2 py-0.5 rounded-full border border-amber-200 inline-flex items-center gap-1">
+                            <Sparkles className="w-3 h-3 text-amber-600 inline" /> New Pattern
                           </span>
                         </div>
                         <h4 className="text-sm font-bold text-slate-900">{item.topic}</h4>
@@ -380,8 +383,8 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
                       <div key={idx} className="p-4 rounded-2xl bg-orange-50/60 border border-orange-100 shadow-xs space-y-1.5">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-bold uppercase tracking-wider text-orange-800">{item.subject}</span>
-                          <span className="text-xs font-bold font-mono text-rose-600 bg-white px-2 py-0.5 rounded-full border border-rose-200">
-                            ⚠️ {item.declinePercentage} marks
+                          <span className="text-xs font-bold font-mono text-rose-600 bg-white px-2 py-0.5 rounded-full border border-rose-200 inline-flex items-center gap-1">
+                            <AlertTriangle className="w-3 h-3 text-rose-500 inline" /> {item.declinePercentage} marks
                           </span>
                         </div>
                         <h4 className="text-sm font-bold text-slate-900">{item.topic}</h4>
@@ -415,8 +418,9 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
                           <span className="text-[10px] font-semibold text-slate-400 font-mono">({focus.subject})</span>
                         </div>
                         <p className="text-xs font-medium text-slate-600">{focus.reason}</p>
-                        <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/60 text-[11px] font-semibold text-slate-800">
-                          👉 Action: {focus.recommendedDrill}
+                        <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/60 text-[11px] font-semibold text-slate-800 flex items-center gap-1.5">
+                          <ArrowRight className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                          <span>Action: {focus.recommendedDrill}</span>
                         </div>
                       </div>
                     </div>
