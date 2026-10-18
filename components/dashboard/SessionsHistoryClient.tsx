@@ -27,7 +27,7 @@ import { RecordedTestAttempt } from "@/types";
 import { formatDateTimeIndian } from "@/lib/config/dashboardConfig";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { stringToUuid } from "@/lib/utils";
-import { deduplicateTestAttempts } from "@/lib/analytics";
+import { deduplicateTestAttempts, getCanonicalTestKey } from "@/lib/analytics";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface SessionsHistoryClientProps {
@@ -125,27 +125,31 @@ export default function SessionsHistoryClient({
     if (initialAttempts.length > 0) {
       const state = useTestStore.getState();
       const localAttempts = state.testAttempts || [];
+      const localCanonicalKeys = new Set(localAttempts.map(getCanonicalTestKey));
       const localKeys = new Set(
         localAttempts.flatMap((a) => [
-          (a.testId || "").trim(),
-          (a.id || "").trim(),
+          (a.testId || "").trim().toLowerCase(),
+          (a.id || "").trim().toLowerCase(),
+          (a.attemptId || "").trim().toLowerCase(),
           stringToUuid((a.testId || "").trim()),
         ])
       );
 
       initialAttempts.forEach((att) => {
-        const k = (att.testId || att.id || "").trim();
+        const k = (att.testId || att.id || "").trim().toLowerCase();
         const uuidK = stringToUuid(k);
-        const isExactSameAttempt = localAttempts.some(
-          (la) =>
-            (att.attemptId && la.attemptId && la.attemptId === att.attemptId) ||
-            (att.id && la.id && la.id === att.id) ||
-            (att.testId &&
-              la.testId &&
-              la.testId === att.testId &&
-              Math.abs(new Date(la.submittedAt || 0).getTime() - new Date(att.submittedAt || 0).getTime()) < 60000)
-        );
-        if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !isExactSameAttempt) {
+        const attCanonicalKey = getCanonicalTestKey(att);
+        const matchesLocal =
+          localCanonicalKeys.has(attCanonicalKey) ||
+          localAttempts.some(
+            (la) =>
+              (att.attemptId && la.attemptId && la.attemptId.toLowerCase() === att.attemptId.toLowerCase()) ||
+              (att.id && la.id && la.id.toLowerCase() === att.id.toLowerCase()) ||
+              (att.testId && la.testId && la.testId.toLowerCase() === att.testId.toLowerCase()) ||
+              (la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
+                la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim())
+          );
+        if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !matchesLocal) {
           recordTestAttempt(att);
         }
       });

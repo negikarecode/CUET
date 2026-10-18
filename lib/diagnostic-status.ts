@@ -108,7 +108,12 @@ export function countQualifyingFromTestAttempts(
       for (const q of test.questions) {
         if (q.selectedOption === null || q.selectedOption === undefined) continue;
         if (q.isLowEffort) continue;
-        const qKey = (q.questionId || (q.questionNumber !== undefined ? `q_${q.questionNumber}` : "q")).toString().trim();
+        let qKey = (q.questionId || (q.questionNumber !== undefined ? `q_${q.questionNumber}` : "q")).toString().trim();
+        if (q.questionNumber) {
+          qKey = `q_${q.questionNumber}`;
+        } else if (qKey.includes("_q_")) {
+          qKey = `q_${qKey.split("_q_")[1]}`;
+        }
         const key = `${testKey}:::${qKey}`;
         if (seen.has(key)) continue;
         seen.add(key);

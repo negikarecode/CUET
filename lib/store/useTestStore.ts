@@ -13,6 +13,7 @@ import {
   computeAnalyticsFromAttempts,
   buildDefaultSubjectCalibration,
   deduplicateTestAttempts,
+  getCanonicalTestKey,
 } from "@/lib/analytics";
 import { evaluateSessionValidity } from "@/lib/session-validity";
 import { calculateStreakFromAttempts, calculateActiveStreak } from "@/lib/gamification";
@@ -476,29 +477,32 @@ export const useTestStore = create<TestStoreState>()(
         };
 
         const currentAttempts = get().testAttempts || [];
-        const isGenericTestKey =
-          !testKey || testKey === "cbt_exam" || testKey === "default" || /^[0-9a-f-]{36}$/i.test(testKey);
-        // Strictly deduplicate by canonical attemptId/id, or duplicate network submission within 60s
+        const testCanonicalKey = getCanonicalTestKey(enrichedAttempt);
+
+        // Strictly deduplicate by canonical attemptId/id, canonical test key, or duplicate network submission within 60s
         const existingIdx = currentAttempts.findIndex((a) => {
           if (!a) return false;
-          if (attempt.attemptId && a.attemptId && a.attemptId === attempt.attemptId) return true;
-          if (attempt.id && a.id && a.id === attempt.id) return true;
+          if (attempt.attemptId && a.attemptId && a.attemptId.trim().toLowerCase() === attempt.attemptId.trim().toLowerCase()) return true;
+          if (attempt.id && a.id && a.id.trim().toLowerCase() === attempt.id.trim().toLowerCase()) return true;
 
+          // 1. Match by canonical test key
+          const aCanonicalKey = getCanonicalTestKey(a);
+          if (aCanonicalKey !== "unknown" && testCanonicalKey !== "unknown" && aCanonicalKey === testCanonicalKey) {
+            return true;
+          }
+
+          // 2. Direct ID or UUID match
           const aKey = (a.testId || "").trim();
+          if (aKey && (aKey === testKey || stringToUuid(aKey) === testCanonicalUuid)) {
+            return true;
+          }
+
+          // 3. Duplicate network submission within 60s
           const timeA = new Date(a.submittedAt || 0).getTime();
           const timeB = new Date(attempt.submittedAt || 0).getTime();
           const isWithin60s = timeA > 0 && timeB > 0 && Math.abs(timeA - timeB) <= 60000;
 
-          if (!isGenericTestKey && aKey && aKey !== "cbt_exam" && !/^[0-9a-f-]{36}$/i.test(aKey)) {
-            if ((aKey === testKey || stringToUuid(aKey) === testCanonicalUuid) && isWithin60s) {
-              return true;
-            }
-          }
-
-          // Duplicate network submission within 60s
           if (
-            isGenericTestKey &&
-            (!aKey || aKey === "cbt_exam" || /^[0-9a-f-]{36}$/i.test(aKey)) &&
             a.testTitle &&
             attempt.testTitle &&
             a.testTitle.trim().toLowerCase() === attempt.testTitle.trim().toLowerCase() &&

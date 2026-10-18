@@ -115,26 +115,30 @@ export default function DashboardClient({
 
       if (initialData.serverAttempts && initialData.serverAttempts.length > 0) {
         const localAttempts = state.testAttempts || [];
+        const localCanonicalKeys = new Set(localAttempts.map(getCanonicalTestKey));
         const localKeys = new Set(
           localAttempts.flatMap((a) => [
-            (a.testId || "").trim(),
-            (a.id || "").trim(),
+            (a.testId || "").trim().toLowerCase(),
+            (a.id || "").trim().toLowerCase(),
+            (a.attemptId || "").trim().toLowerCase(),
             stringToUuid((a.testId || "").trim()),
           ])
         );
         initialData.serverAttempts.forEach((att) => {
-          const k = (att.testId || att.id || "").trim();
+          const k = (att.testId || att.id || "").trim().toLowerCase();
           const uuidK = stringToUuid(k);
-          const isExactSameAttempt = localAttempts.some(
-            (la) =>
-              (att.attemptId && la.attemptId && la.attemptId === att.attemptId) ||
-              (att.id && la.id && la.id === att.id) ||
-              (att.testId &&
-                la.testId &&
-                la.testId === att.testId &&
-                Math.abs(new Date(la.submittedAt || 0).getTime() - new Date(att.submittedAt || 0).getTime()) < 60000)
-          );
-          if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !isExactSameAttempt) {
+          const attCanonicalKey = getCanonicalTestKey(att);
+          const matchesLocal =
+            localCanonicalKeys.has(attCanonicalKey) ||
+            localAttempts.some(
+              (la) =>
+                (att.attemptId && la.attemptId && la.attemptId.toLowerCase() === att.attemptId.toLowerCase()) ||
+                (att.id && la.id && la.id.toLowerCase() === att.id.toLowerCase()) ||
+                (att.testId && la.testId && la.testId.toLowerCase() === att.testId.toLowerCase()) ||
+                (la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
+                  la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim())
+            );
+          if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !matchesLocal) {
             state.recordTestAttempt(att);
           }
         });
@@ -143,35 +147,9 @@ export default function DashboardClient({
   }, [isServerUser, initialData.user, initialData.serverAttempts]);
 
   // ---------------------------------------------------------------------------
-  // SINGLE SOURCE OF TRUTH FOR ALL NUMBERS (No fake defaults)
+  // SINGLE SOURCE OF TRUTH FOR ALL NUMBERS (Strict Deduplication & Invariants)
   // ---------------------------------------------------------------------------
-  const storeAttemptsSum =
-    isClient && testAttempts && testAttempts.length > 0
-      ? testAttempts.reduce((sum, a) => sum + (a.attemptedCount || 0), 0)
-      : 0;
-
-  const clientQuestionsAttempted =
-    isClient && clientAnalytics ? (clientAnalytics.totalQuestionsAttempted ?? 0) : 0;
-
-  const serverAttempted = initialData?.kpi?.totalAttempted ?? 0;
-  const serverCorrectCount = initialData?.kpi?.correctCount ?? 0;
-
-  // Single source for total attempted
-  const totalAttempted = isClient && testAttempts && testAttempts.length > 0
-    ? storeAttemptsSum
-    : (isServerUser ? serverAttempted : clientQuestionsAttempted);
-
-  // Single source for correct answers
-  const correctCount =
-    isClient && testAttempts && testAttempts.length > 0
-      ? testAttempts.reduce((sum, a) => sum + (a.correctCount || 0), 0)
-      : (isServerUser ? serverCorrectCount : (clientAnalytics?.totalCorrectAnswers ?? 0));
-
-  // Single source for accuracy: strictly correct / attempted
-  const accuracyPercentage =
-    totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0;
-
-  // Deduplicated attempts sorted newest first for authoritative latest session score
+  // Deduplicated attempts sorted newest first for authoritative latest session score & metrics
   const deduplicatedAttempts = useMemo(() => {
     const list = testAttempts || [];
     const clean = deduplicateTestAttempts(list);
@@ -188,6 +166,36 @@ export default function DashboardClient({
       (a, b) => new Date(b.submittedAt || 0).getTime() - new Date(a.submittedAt || 0).getTime()
     );
   }, [testAttempts]);
+
+  const deduplicatedAttemptedSum = useMemo(() => {
+    return deduplicatedAttempts.reduce((sum, a) => sum + (a.attemptedCount || 0), 0);
+  }, [deduplicatedAttempts]);
+
+  const deduplicatedCorrectSum = useMemo(() => {
+    return deduplicatedAttempts.reduce((sum, a) => sum + (a.correctCount || 0), 0);
+  }, [deduplicatedAttempts]);
+
+  const clientQuestionsAttempted =
+    isClient && clientAnalytics ? (clientAnalytics.totalQuestionsAttempted ?? 0) : 0;
+
+  const serverAttempted = initialData?.kpi?.totalAttempted ?? 0;
+  const serverCorrectCount = initialData?.kpi?.correctCount ?? 0;
+
+  // Single source for total attempted (strictly derived from deduplicated attempts)
+  const totalAttempted =
+    isClient && deduplicatedAttempts.length > 0
+      ? deduplicatedAttemptedSum
+      : (isServerUser ? serverAttempted : clientQuestionsAttempted);
+
+  // Single source for correct answers (strictly derived from deduplicated attempts)
+  const correctCount =
+    isClient && deduplicatedAttempts.length > 0
+      ? deduplicatedCorrectSum
+      : (isServerUser ? serverCorrectCount : (clientAnalytics?.totalCorrectAnswers ?? 0));
+
+  // Single source for accuracy: strictly correct / attempted
+  const accuracyPercentage =
+    totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0;
 
   const latestSession = deduplicatedAttempts.length > 0 ? deduplicatedAttempts[0] : null;
   const latestSessionScore = latestSession

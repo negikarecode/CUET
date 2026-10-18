@@ -230,39 +230,8 @@ export function buildDefaultSubjectCalibration(): Record<string, SubjectCalibrat
   return map;
 }
 
-/**
- * Deterministically creates an RFC 4122 compliant UUID from an arbitrary string.
- * Used for database foreign keys when tests or questions have string IDs like "physics-mock-1".
- */
-export function stringToUuid(str: string): string {
-  const uuidRegex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  if (uuidRegex.test(str)) {
-    return str;
-  }
-  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
-  for (let i = 0; i < str.length; i++) {
-    const ch = str.charCodeAt(i);
-    h1 = Math.imul(h1 ^ ch, 2654435761);
-    h2 = Math.imul(h2 ^ ch, 1597334677);
-  }
-  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-  const p1 = (h1 >>> 0).toString(16).padStart(8, "0");
-  const p2 = (h2 >>> 0).toString(16).padStart(8, "0");
-  const p3 = ((h1 ^ h2) >>> 0).toString(16).padStart(8, "0");
-  const p4 = ((h1 + h2) >>> 0).toString(16).padStart(8, "0");
-  const hex = (p1 + p2 + p3 + p4).padEnd(32, "0");
-
-  return [
-    hex.substring(0, 8),
-    hex.substring(8, 12),
-    "4" + hex.substring(13, 16),
-    ((parseInt(hex.substring(16, 18), 16) & 0x3f) | 0x80).toString(16) +
-      hex.substring(18, 20),
-    hex.substring(20, 32),
-  ].join("-");
-}
+import { stringToUuid } from "./utils";
+export { stringToUuid };
 
 /**
  * Generates a stable canonical attempt ID for question telemetry deduplication:
@@ -288,12 +257,7 @@ export function getCanonicalTestKey(att: RecordedTestAttempt): string {
   const tId = (att.testId || "").toLowerCase().trim();
   const title = (att.testTitle || "").toLowerCase().trim();
 
-  // If friendly testId exists (not generic and not raw UUID)
-  if (tId && tId !== "cbt_exam" && tId !== "default" && !/^[0-9a-f-]{36}$/i.test(tId)) {
-    return `${sub}:::${tId}`;
-  }
-
-  // If mock number exists in title or testId
+  // 1. Mock test matching (by number)
   const mockMatch =
     title.match(/\bmock(?:\s+paper|\s+test|\s+exam)?\s+(\d+)\b/i) ||
     title.match(/\bpaper\s+(\d+)\b/i) ||
@@ -303,18 +267,24 @@ export function getCanonicalTestKey(att: RecordedTestAttempt): string {
     return `${sub}:::mock-${mockMatch[1]}`;
   }
 
-  // If unit and test number exist
+  // 2. Unit and practice test matching
   const uMatch = title.match(/\bunit\s*(\d+)\b/i) || tId.match(/unit[-_]?(\d+)/i) || tId.match(/u[-_]?(\d+)/i);
   const tMatch = title.match(/\b(?:practice\s+test|test)\s*(\d+)\b/i) || tId.match(/test[-_]?(\d+)/i) || tId.match(/t[-_]?(\d+)/i);
   if (uMatch && tMatch) {
     return `${sub}:::unit-${uMatch[1]}-test-${tMatch[1]}`;
   }
 
-  if (tId) {
-    return `${sub}:::${tId}`;
+  // 3. Normalized friendly testId
+  if (tId && tId !== "cbt_exam" && tId !== "default" && !/^[0-9a-f-]{36}$/i.test(tId)) {
+    const cleanTId = tId.replace(new RegExp(`^${sub}[-_]?`, "i"), "");
+    return `${sub}:::${cleanTId || tId}`;
   }
 
-  return `${sub}:::${title}`;
+  if (title) {
+    return `${sub}:::${title}`;
+  }
+
+  return `${sub}:::${tId || "unknown"}`;
 }
 
 /**
@@ -351,18 +321,25 @@ export function deduplicateTestAttempts(attempts: RecordedTestAttempt[]): Record
       seenIds.add(rawId);
     }
 
-    const testCanonicalUuid = stringToUuid(rawTestId || rawId || att.testTitle || "mock");
+    const canonicalKey = getCanonicalTestKey(att);
     const subTime = new Date(att.submittedAt || (att as any).date || 0).getTime();
     const timeBucket = Math.round(subTime / 60000); // 60s window
+    const testCanonicalUuid = stringToUuid(rawTestId || rawId || att.testTitle || "mock");
     const fingerprint1 = `${testCanonicalUuid}_${att.totalMarks ?? 0}_${att.accuracyPercentage ?? 0}_${timeBucket}`;
     const fingerprint2 = `${(att.subject || "").toLowerCase().trim()}:::${(att.testTitle || "").toLowerCase().trim()}:::${att.totalMarks ?? 0}:::${att.accuracyPercentage ?? 0}:::${timeBucket}`;
+    const canonicalFingerprint = `${canonicalKey}:::${att.totalMarks ?? 0}:::${att.accuracyPercentage ?? 0}`;
 
-    if (seenFingerprints.has(fingerprint1) || seenFingerprints.has(fingerprint2)) {
+    if (
+      seenFingerprints.has(fingerprint1) ||
+      seenFingerprints.has(fingerprint2) ||
+      seenFingerprints.has(canonicalFingerprint)
+    ) {
       continue;
     }
 
     seenFingerprints.add(fingerprint1);
     seenFingerprints.add(fingerprint2);
+    seenFingerprints.add(canonicalFingerprint);
 
     clean.push(att);
   }
@@ -418,14 +395,19 @@ export function computeAnalyticsFromAttempts(
 
   cleanAttempts.forEach((attempt) => {
     totalTimeSpentSeconds += attempt.timeTakenSeconds ?? 0;
-    const testKey = (attempt.testId || attempt.id || "test").trim();
+    const canonicalTestKey = getCanonicalTestKey(attempt);
 
     (attempt.questions || []).forEach((q, idx) => {
       // Only count questions that the user actually answered
       if (q.selectedOption === null || q.selectedOption === undefined) return;
 
-      const qIdentifier = (q.questionId || (q.questionNumber ? `q_${q.questionNumber}` : `q_${idx + 1}`)).trim();
-      const canonicalKey = `${testKey}:::${qIdentifier}`;
+      let qIdentifier = (q.questionId || (q.questionNumber ? `q_${q.questionNumber}` : `q_${idx + 1}`)).trim();
+      if (q.questionNumber) {
+        qIdentifier = `q_${q.questionNumber}`;
+      } else if (qIdentifier.includes("_q_")) {
+        qIdentifier = `q_${qIdentifier.split("_q_")[1]}`;
+      }
+      const canonicalKey = `${canonicalTestKey}:::${qIdentifier}`;
 
       // Check correctness self-healing
       const trueOption =

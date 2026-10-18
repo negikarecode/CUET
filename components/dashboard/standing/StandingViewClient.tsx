@@ -28,7 +28,7 @@ import {
 import { CategoryCode } from "@/lib/config/standingConfig";
 import { StreamType } from "@/types";
 import { stringToUuid } from "@/lib/utils";
-import { deduplicateTestAttempts } from "@/lib/analytics";
+import { deduplicateTestAttempts, getCanonicalTestKey } from "@/lib/analytics";
 
 interface StandingViewClientProps {
   initialUser?: { targetCollege?: string; targetCourse?: string; targetStream?: string };
@@ -70,21 +70,29 @@ export default function StandingViewClient({
   useEffect(() => {
     if (initialAttempts && initialAttempts.length > 0) {
       const { testAttempts: localAttempts, recordTestAttempt } = useTestStore.getState();
+      const localCanonicalKeys = new Set((localAttempts || []).map(getCanonicalTestKey));
       const localKeys = new Set(
         (localAttempts || []).flatMap((a) => [
-          (a.testId || "").trim(),
-          (a.id || "").trim(),
+          (a.testId || "").trim().toLowerCase(),
+          (a.id || "").trim().toLowerCase(),
+          (a.attemptId || "").trim().toLowerCase(),
           stringToUuid((a.testId || "").trim()),
         ])
       );
       initialAttempts.forEach((att) => {
-        const k = (att.testId || att.id || "").trim();
+        const k = (att.testId || att.id || "").trim().toLowerCase();
         const uuidK = stringToUuid(k);
-        const matchesLocal = (localAttempts || []).some(
-          (la) =>
-            la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
-            la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim()
-        );
+        const attCanonicalKey = getCanonicalTestKey(att);
+        const matchesLocal =
+          localCanonicalKeys.has(attCanonicalKey) ||
+          (localAttempts || []).some(
+            (la) =>
+              (att.attemptId && la.attemptId && la.attemptId.toLowerCase() === att.attemptId.toLowerCase()) ||
+              (att.id && la.id && la.id.toLowerCase() === att.id.toLowerCase()) ||
+              (att.testId && la.testId && la.testId.toLowerCase() === att.testId.toLowerCase()) ||
+              (la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
+                la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim())
+          );
         if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !matchesLocal) {
           recordTestAttempt(att);
         }
