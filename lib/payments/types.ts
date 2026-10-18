@@ -6,9 +6,12 @@ export type SubscriptionTier = "free" | "ai_practice_pass" | "all_access_pass";
 
 export type SessionType = "mock" | "practice" | "pyq";
 
+export type AccessState = "UNVERIFIED" | "FREE" | "PREMIUM";
+
 export interface UserEntitlement {
   userId: string;
   isPremium: boolean;
+  accessState: AccessState;
   subscriptionTier: SubscriptionTier;
   subscriptionExpiresAt: string | null;
   isActive: boolean;
@@ -17,6 +20,7 @@ export interface UserEntitlement {
 export interface UserUsageSummary {
   userId: string;
   isPremium: boolean;
+  accessState: AccessState;
   mockSessionsCompleted: number;
   maxFreeMockSessions: number;
   practiceSessionsCompleted: number;

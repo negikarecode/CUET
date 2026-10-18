@@ -30,6 +30,7 @@ import MathRenderer from "@/components/cbt/MathRenderer";
 import CBTMatchTheFollowingView, { parseMatchTheFollowing } from "@/components/cbt/CBTMatchTheFollowingView";
 import { safeCapitalizeOptionText } from "@/lib/utils";
 import SearchableSelect from "@/components/ui/SearchableSelect";
+import UpgradeButton from "@/components/payments/UpgradeButton";
 
 function isGenericFiller(text: string | null | undefined): boolean {
   if (!text) return true;
@@ -165,6 +166,7 @@ export default function PostMockAnalysisClient({
   const [aiInsight, setAiInsight] = useState<AIPostMockInsight | null>(null);
   const [aiLoading, setAiLoading] = useState(true);
   const [aiError, setAiError] = useState(false);
+  const [isAiLocked, setIsAiLocked] = useState(false);
 
   // Ref to question review container for smooth scrolling
   const questionReviewRef = useRef<HTMLDivElement>(null);
@@ -174,13 +176,21 @@ export default function PostMockAnalysisClient({
     let isMounted = true;
     setAiLoading(true);
     setAiError(false);
+    setIsAiLocked(false);
 
-    fetch("/api/ai/post-mock", {
+    fetch("/api/ai/insights?type=post-mock", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ report, userId: report.userId }),
+      body: JSON.stringify({ action: "post-mock", report, userId: report.userId }),
     })
-      .then((res) => {
+      .then(async (res) => {
+        if (res.status === 403) {
+          if (isMounted) {
+            setIsAiLocked(true);
+            setAiLoading(false);
+          }
+          return null;
+        }
         if (!res.ok) throw new Error("AI insight service error");
         return res.json();
       })
@@ -1038,6 +1048,29 @@ export default function PostMockAnalysisClient({
                   </ul>
                 </div>
               )}
+            </div>
+          ) : isAiLocked ? (
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-50/70 via-blue-50/40 to-slate-50 border border-indigo-100 shadow-sm space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <Sparkles className="w-5 h-5 text-amber-300 fill-amber-300" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-sm font-bold text-slate-900 tracking-tight">
+                    AI Post-Mock Debrief is a Premium Feature
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed max-w-xl">
+                    Upgrade to CUETMate Premium to receive grounded AI telemetry analyzing your distractor trap choices, pacing bottlenecks, and personalized next steps calibrated to official NTA criteria.
+                  </p>
+                </div>
+              </div>
+              <div className="pt-1 flex items-center gap-3">
+                <UpgradeButton
+                  planId="all_access_pass_799"
+                  buttonText="Unlock AI Analysis — First 100 at ₹499"
+                  variant="primary"
+                />
+              </div>
             </div>
           ) : (
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">

@@ -337,15 +337,33 @@ export default function AuthPageContent({
       }
 
       if (data.user) {
-        // If email confirmation is enabled, transition to OTP verification view!
-        if (!data.session) {
-          setOtpType("signup");
-          setMode("otp");
+        // 1. Check if an account already exists with this email address
+        if (data.user.identities && data.user.identities.length === 0) {
+          setErrorMessage("An account with this email already exists. Please sign in instead.");
+          setMode("login");
+          setIsLoading(false);
           return;
         }
 
-        // If session was immediately provided (e.g. email confirmation disabled in local dev), log in
-        await syncProfileAndLogin(data.user);
+        // 2. If Supabase project settings auto-issued a session (email confirmation off in Supabase dashboard),
+        // sign out the unverified session and dispatch a genuine email verification code via signInWithOtp
+        if (data.session) {
+          await supabase.auth.signOut();
+          const otpDispatch = await supabase.auth.signInWithOtp({
+            email: cleanEmail,
+            options: { shouldCreateUser: false },
+          });
+          if (otpDispatch.error) {
+            console.warn("OTP dispatch notice:", otpDispatch.error);
+          }
+          setOtpType("email");
+        } else {
+          setOtpType("signup");
+        }
+
+        // 3. Always transition to the dedicated 6-digit OTP verification view! Zero bypass.
+        setMode("otp");
+        return;
       }
     } catch (err: any) {
       setErrorMessage(err?.message || "Registration failed. Please try again.");

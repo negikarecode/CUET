@@ -35,45 +35,63 @@ export default async function TestPage({ params, searchParams }: PageProps) {
       data: { user: authUser },
     } = await supabase.auth.getUser();
 
-    if (authUser?.id) {
-      const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
-      const eligibility = await checkTestSessionEligibility(authUser.id, params.testId);
+    if (!authUser?.id) {
+      return (
+        <div className="min-h-screen bg-[#F8FAFC] py-10 px-4">
+          <LockedFeaturePaywall
+            featureTitle="CBT Exam Environment"
+            featureSubtitle="Candidate Account Required"
+            featureDescription="Please sign in or create a candidate account to start your NTA CBT exam simulation and record your diagnostic analytics."
+            benefits={[
+              "3 Free full-length 50-question mock tests with official NTA timer",
+              "Instant accuracy, scoring (+5 / -1) and time-sink detection",
+              "Sync your answers and past sessions across devices",
+              "Access official CUET UG domain question papers",
+            ]}
+            returnUrl="/signup"
+            returnLabel="Sign In / Register"
+          />
+        </div>
+      );
+    }
 
-      if (!eligibility.allowed) {
-        return (
-          <div className="min-h-screen bg-[#F8FAFC] py-10 px-4">
-            <LockedFeaturePaywall
-              featureTitle={
-                eligibility.testType === "mock"
-                  ? "Full Mock Simulations"
-                  : eligibility.testType === "practice"
-                  ? "Unit Practice Tests"
-                  : "Official Past Year Papers"
-              }
-              featureSubtitle="Free Tier Limit Reached"
-              featureDescription={
-                eligibility.reason ||
-                "You have reached your Free plan allowance for this test type. Upgrade to CUETMate Premium for unlimited tests."
-              }
-              benefits={[
-                "Unlimited 50-Question NTA CBT Mock Simulations across all 20 subjects",
-                "Unlimited Unit-wise Chapter Practice Tests",
-                "Unlimited Authentic Past Year Question Papers (PYQs)",
-                "Where Do I Stand College Cutoff Gap Predictor",
-                "Subject Weakness Radar & NCERT Mistake Decrypter",
-              ]}
-              returnUrl={
-                eligibility.testType === "practice"
-                  ? "/dashboard/practice"
-                  : eligibility.testType === "pyq"
-                  ? "/dashboard/pyqs"
-                  : "/dashboard/mocks"
-              }
-              returnLabel="Return to Tests Hub"
-            />
-          </div>
-        );
-      }
+    const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
+    const eligibility = await checkTestSessionEligibility(authUser.id, params.testId);
+
+    if (!eligibility.allowed) {
+      return (
+        <div className="min-h-screen bg-[#F8FAFC] py-10 px-4">
+          <LockedFeaturePaywall
+            featureTitle={
+              eligibility.testType === "mock"
+                ? "Full Mock Simulations"
+                : eligibility.testType === "practice"
+                ? "Unit Practice Tests"
+                : "Official Past Year Papers"
+            }
+            featureSubtitle="Free Tier Limit Reached"
+            featureDescription={
+              eligibility.reason ||
+              "You have reached your Free plan allowance for this test type. Upgrade to CUETMate Premium for unlimited tests."
+            }
+            benefits={[
+              "Unlimited 50-Question NTA CBT Mock Simulations across all 20 subjects",
+              "Unlimited Unit-wise Chapter Practice Tests",
+              "Unlimited Authentic Past Year Question Papers (PYQs)",
+              "Where Do I Stand College Cutoff Gap Predictor",
+              "Subject Weakness Radar & NCERT Mistake Decrypter",
+            ]}
+            returnUrl={
+              eligibility.testType === "practice"
+                ? "/dashboard/practice"
+                : eligibility.testType === "pyq"
+                ? "/dashboard/pyqs"
+                : "/dashboard/mocks"
+            }
+            returnLabel="Return to Tests Hub"
+          />
+        </div>
+      );
     }
   } catch (err) {
     console.warn("TestPage eligibility check notice:", err);

@@ -149,7 +149,38 @@ export async function POST(req: NextRequest) {
       body.action === "verify" ||
       Boolean(body.razorpay_order_id && body.razorpay_payment_id && body.razorpay_signature);
 
-    // ─── CASE A: VERIFY PAYMENT ──────────────────────────────────────────────
+    // ─── CASE A: CHECK STATUS / RECOVERY ─────────────────────────────────────
+    if (body.action === "check-status") {
+      const orderId = body.orderId || body.provider_order_id;
+      const supabaseAdmin = createAdminClient();
+
+      let orderRecord = null;
+      if (orderId) {
+        const { data } = await supabaseAdmin
+          .from("payment_orders")
+          .select("*")
+          .eq("provider_order_id", orderId)
+          .eq("user_id", authUser.id)
+          .maybeSingle();
+        orderRecord = data;
+      }
+
+      const { data: profile } = await supabaseAdmin
+        .from("profiles")
+        .select("is_premium, subscription_tier, subscription_expires_at")
+        .eq("id", authUser.id)
+        .maybeSingle();
+
+      return NextResponse.json({
+        orderId: orderId || null,
+        orderStatus: orderRecord?.status || "unknown",
+        isPremium: Boolean(profile?.is_premium),
+        subscriptionTier: profile?.subscription_tier || "free",
+        subscriptionExpiresAt: profile?.subscription_expires_at || null,
+      });
+    }
+
+    // ─── CASE B: VERIFY PAYMENT ──────────────────────────────────────────────
     if (isVerification) {
       const {
         razorpay_order_id,
@@ -157,6 +188,30 @@ export async function POST(req: NextRequest) {
         razorpay_signature,
         tier = "all_access_pass",
       } = body;
+
+      const supabaseAdmin = createAdminClient();
+
+      // Verify order ownership if payment_orders table has this order
+      try {
+        const { data: existingOrder } = await supabaseAdmin
+          .from("payment_orders")
+          .select("user_id, status")
+          .eq("provider_order_id", razorpay_order_id)
+          .maybeSingle();
+
+        if (existingOrder && existingOrder.user_id !== authUser.id) {
+          console.error(
+            `[SECURITY] Cross-user payment verification attempt: order ${razorpay_order_id} belongs to ${existingOrder.user_id}, but claimed by ${authUser.id}`
+          );
+          return NextResponse.json(
+            {
+              error: "Forbidden: Order does not belong to the authenticated user.",
+              code: "CROSS_USER_FORBIDDEN",
+            },
+            { status: 403 }
+          );
+        }
+      } catch {}
 
       const verification = provider.verifySignature({
         orderId: razorpay_order_id,
@@ -175,7 +230,18 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const supabaseAdmin = createAdminClient();
+      // Verify payment status with gateway provider where available
+      const statusCheck = await provider.verifyPaymentStatus(razorpay_payment_id, razorpay_order_id);
+      if (!statusCheck.isPaid) {
+        return NextResponse.json(
+          {
+            error: statusCheck.error || "Payment has not been captured by the gateway.",
+            code: "PAYMENT_NOT_CAPTURED",
+          },
+          { status: 400 }
+        );
+      }
+
       const oneYearFromNow = new Date();
       oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
 

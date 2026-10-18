@@ -94,6 +94,20 @@ export default async function StandingPage() {
     }
   } catch (err) {
     console.warn("StandingPage server query notice:", err);
+    return (
+      <LockedFeaturePaywall
+        featureTitle="Where Do I Stand"
+        featureSubtitle="Dream College Cutoff Predictor"
+        featureDescription="Compare your authentic mock scores directly against previous years' official NTA cutoffs for Delhi University, BHU, JNU, and top Central Universities."
+        benefits={[
+          "Instant percentile & chance band estimation for SRCC, St. Stephen's, Hindu, and 50+ colleges",
+          "Subject-by-subject score gap calculation to reach your dream college cutoff",
+          "Official category-wise reservation calibration (UR, OBC, SC, ST, EWS)",
+          "Dynamic course & university recommendations based on your highest domain marks",
+        ]}
+        icon={Landmark}
+      />
+    );
   }
 
   return (

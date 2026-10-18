@@ -36,6 +36,7 @@ export async function getUserEntitlement(userId: string): Promise<UserEntitlemen
     return {
       userId: "guest",
       isPremium: false,
+      accessState: "UNVERIFIED",
       subscriptionTier: "free",
       subscriptionExpiresAt: null,
       isActive: false,
@@ -54,6 +55,7 @@ export async function getUserEntitlement(userId: string): Promise<UserEntitlemen
       return {
         userId,
         isPremium: false,
+        accessState: "UNVERIFIED",
         subscriptionTier: "free",
         subscriptionExpiresAt: null,
         isActive: false,
@@ -76,6 +78,7 @@ export async function getUserEntitlement(userId: string): Promise<UserEntitlemen
     return {
       userId,
       isPremium,
+      accessState: isPremium ? "PREMIUM" : "FREE",
       subscriptionTier: isPremium ? tier : "free",
       subscriptionExpiresAt: profile.subscription_expires_at || null,
       isActive: isPremium,
@@ -85,6 +88,7 @@ export async function getUserEntitlement(userId: string): Promise<UserEntitlemen
     return {
       userId,
       isPremium: false,
+      accessState: "UNVERIFIED",
       subscriptionTier: "free",
       subscriptionExpiresAt: null,
       isActive: false,
@@ -142,6 +146,7 @@ export async function getUserUsageSummary(userId: string): Promise<UserUsageSumm
   const defaultSummary: UserUsageSummary = {
     userId,
     isPremium: false,
+    accessState: "UNVERIFIED",
     mockSessionsCompleted: 0,
     maxFreeMockSessions: FREE_LIMITS.MAX_MOCK_SESSIONS,
     practiceSessionsCompleted: 0,
@@ -156,6 +161,7 @@ export async function getUserUsageSummary(userId: string): Promise<UserUsageSumm
 
   const entitlement = await getUserEntitlement(userId);
   defaultSummary.isPremium = entitlement.isPremium;
+  defaultSummary.accessState = entitlement.accessState;
 
   try {
     const admin = createAdminClient();

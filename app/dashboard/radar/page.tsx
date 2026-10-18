@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { cookies } from "next/headers";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import WeaknessRadarClient, {
@@ -22,9 +21,6 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function WeaknessRadarPage() {
-  const cookieStore = cookies();
-  const cuetAuth = cookieStore.get("cuet_auth")?.value === "1";
-
   let serverData: WeaknessRadarInitialData = {
     user: {
       id: "guest",
@@ -60,32 +56,43 @@ export default async function WeaknessRadarPage() {
       data: { user: authUser },
     } = await supabase.auth.getUser();
 
-    if (!authUser && !cuetAuth) {
-      // Allow guest candidate mode to proceed with serverData; client hydrates from local storage
+    if (!authUser) {
+      return (
+        <LockedFeaturePaywall
+          featureTitle="Subject Weakness Radar"
+          featureSubtitle="4D Diagnostic & Pacing Radar"
+          featureDescription="Analyze your topic-level accuracy, uncover hidden calculation traps, and detect whether mistakes stem from conceptual gaps or time-pressure panic."
+          benefits={[
+            "Full 4D diagnostic matrix across Subject → Chapter → Micro-Topic → NCERT Reference",
+            "Real-time detection of fatal time-sinks (>90s) and option traps on authentic NTA questions",
+            "Personalized AI mistake diagnosis with direct NCERT textbook page references",
+            "Automated generation of 5-question adaptive repair quizzes to fix detected weaknesses",
+          ]}
+        />
+      );
     }
 
-    if (authUser) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", authUser.id)
-        .single();
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", authUser.id)
+      .maybeSingle();
 
-      if (!profile?.is_premium) {
-        return (
-          <LockedFeaturePaywall
-            featureTitle="Subject Weakness Radar"
-            featureSubtitle="4D Diagnostic & Pacing Radar"
-            featureDescription="Analyze your topic-level accuracy, uncover hidden calculation traps, and detect whether mistakes stem from conceptual gaps or time-pressure panic."
-            benefits={[
-              "Full 4D diagnostic matrix across Subject → Chapter → Micro-Topic → NCERT Reference",
-              "Real-time detection of fatal time-sinks (>90s) and option traps on authentic NTA questions",
-              "Personalized AI mistake diagnosis with direct NCERT textbook page references",
-              "Automated generation of 5-question adaptive repair quizzes to fix detected weaknesses",
-            ]}
-          />
-        );
-      }
+    if (!profile?.is_premium) {
+      return (
+        <LockedFeaturePaywall
+          featureTitle="Subject Weakness Radar"
+          featureSubtitle="4D Diagnostic & Pacing Radar"
+          featureDescription="Analyze your topic-level accuracy, uncover hidden calculation traps, and detect whether mistakes stem from conceptual gaps or time-pressure panic."
+          benefits={[
+            "Full 4D diagnostic matrix across Subject → Chapter → Micro-Topic → NCERT Reference",
+            "Real-time detection of fatal time-sinks (>90s) and option traps on authentic NTA questions",
+            "Personalized AI mistake diagnosis with direct NCERT textbook page references",
+            "Automated generation of 5-question adaptive repair quizzes to fix detected weaknesses",
+          ]}
+        />
+      );
+    }
 
       if (profile) {
         const streamKey = (profile.target_stream?.toLowerCase() as StreamType) || "science";
@@ -380,9 +387,21 @@ export default async function WeaknessRadarPage() {
           };
         }
       }
-    }
-  } catch {
-    // Graceful fallback
+  } catch (err) {
+    console.warn("WeaknessRadarPage query error:", err);
+    return (
+      <LockedFeaturePaywall
+        featureTitle="Subject Weakness Radar"
+        featureSubtitle="4D Diagnostic & Pacing Radar"
+        featureDescription="Analyze your topic-level accuracy, uncover hidden calculation traps, and detect whether mistakes stem from conceptual gaps or time-pressure panic."
+        benefits={[
+          "Full 4D diagnostic matrix across Subject → Chapter → Micro-Topic → NCERT Reference",
+          "Real-time detection of fatal time-sinks (>90s) and option traps on authentic NTA questions",
+          "Personalized AI mistake diagnosis with direct NCERT textbook page references",
+          "Automated generation of 5-question adaptive repair quizzes to fix detected weaknesses",
+        ]}
+      />
+    );
   }
 
   return (
