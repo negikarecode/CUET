@@ -14,7 +14,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { QuestionOption } from "@/types";
-import { WhyWrongResponse } from "@/app/api/ai/why-wrong/route";
+import { WhyWrongResponse } from "@/app/api/ai/insights/route";
 
 interface WhyWrongExplanationModalProps {
   question: {

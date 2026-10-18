@@ -39,6 +39,54 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/admin/pyq/export",
+        destination: "/api/admin/pyq?export=1",
+      },
+      {
+        source: "/api/payments/create-order",
+        destination: "/api/payments",
+      },
+      {
+        source: "/api/payments/verify",
+        destination: "/api/payments",
+      },
+      {
+        source: "/api/payments/webhook",
+        destination: "/api/payments",
+      },
+      {
+        source: "/api/test/record-attempt",
+        destination: "/api/test/record-attempt",
+      },
+      {
+        source: "/api/tests/generate-adaptive-drill",
+        destination: "/api/ai/repair-quiz?type=adaptive",
+      },
+      {
+        source: "/api/ai/why-wrong",
+        destination: "/api/ai/insights?type=why-wrong",
+      },
+      {
+        source: "/api/ai/subject-radar",
+        destination: "/api/ai/insights?type=subject-radar",
+      },
+      {
+        source: "/api/ai/post-mock",
+        destination: "/api/ai/insights?type=post-mock",
+      },
+      {
+        source: "/api/standing/explain",
+        destination: "/api/ai/insights?type=standing",
+      },
+      {
+        source: "/api/ai/diagnose-mistake",
+        destination: "/api/ai/insights?type=diagnose-mistake",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

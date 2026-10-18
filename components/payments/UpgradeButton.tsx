@@ -79,10 +79,11 @@ export default function UpgradeButton({
       }
 
       // 2. Call Server Route Handler to generate Razorpay Order
-      const res = await fetch("/api/payments/create-order", {
+      const res = await fetch("/api/payments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          action: "create-order",
           planId,
           userId: user.id,
           email: user.email,
@@ -101,10 +102,11 @@ export default function UpgradeButton({
       if (isSimulated || !window.Razorpay) {
         setTimeout(async () => {
           // Verify simulation
-          await fetch("/api/payments/verify", {
+          await fetch("/api/payments", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              action: "verify",
               razorpay_order_id: orderId,
               razorpay_payment_id: `pay_sim_${Date.now()}`,
               userId: user.id,
@@ -136,10 +138,11 @@ export default function UpgradeButton({
         }) {
           try {
             // Verify payment on backend
-            const verifyRes = await fetch("/api/payments/verify", {
+            const verifyRes = await fetch("/api/payments", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
+                action: "verify",
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,

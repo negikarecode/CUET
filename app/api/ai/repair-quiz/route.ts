@@ -1,18 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { Question } from "@/types";
 import { getQuestionsForTest } from "@/lib/data/mock50Questions";
 import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
 import { tokenLogger } from "@/lib/ai/token-logger";
- 
+import { checkAIQualificationGate } from "@/lib/ai-gate";
+
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
+const CADENCE_LIMIT_HOURS = 12;
+const CADENCE_LIMIT_MS = CADENCE_LIMIT_HOURS * 60 * 60 * 1000;
+
 interface RepairQuizRequestBody {
-  userId: string;
-  weakMicroTopics: string[];
+  userId?: string;
+  weakMicroTopics?: string[];
   subject?: string;
   practiceType?: string;
+  drillType?: "remedial" | "adaptive";
+  questionCount?: number;
 }
 
 export interface RepairQuizResponse {
@@ -20,13 +27,12 @@ export interface RepairQuizResponse {
   title: string;
   subject: string;
   code: string;
-  totalQuestions: 5;
-  durationMinutes: 6;
+  totalQuestions: number;
+  durationMinutes: number;
   targetTopics: string[];
   questions: Question[];
 }
 
-// In-memory response cache for rapid remedial quiz re-clicks (5-minute TTL to prevent rapid duplicate clicks while allowing fresh questions on retests)
 const memoryQuizCache = new Map<
   string,
   { data: RepairQuizResponse; cachedAt: number }
@@ -36,7 +42,272 @@ const QUIZ_CACHE_TTL_MS = 5 * 60 * 1000;
 export async function POST(req: NextRequest) {
   const startTime = Date.now();
   try {
-    const body = (await req.json()) as RepairQuizRequestBody;
+    const body = (await req.json().catch(() => ({}))) as RepairQuizRequestBody;
+    const urlParams = req.nextUrl.searchParams;
+    const isAdaptiveDrill =
+      body.drillType === "adaptive" ||
+      body.questionCount === 15 ||
+      urlParams.get("type") === "adaptive";
+
+    // ─── CASE A: 15-QUESTION ADAPTIVE PRACTICE DRILL ─────────────────────────
+    if (isAdaptiveDrill) {
+      const supabase = createClient();
+      let authUser = null;
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        authUser = user;
+      } catch {
+        // Fallback
+      }
+
+      if (!authUser) {
+        return NextResponse.json(
+          { success: false, error: "Unauthorized: Active user session required." },
+          { status: 401 }
+        );
+      }
+
+      const userId = authUser.id;
+
+      // 1. Cold-start qualification gate (150 questions)
+      const gateStatus = await checkAIQualificationGate(userId);
+      if (!gateStatus.isUnlocked) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "QUALIFICATION_GATE_LOCKED",
+            message: `AI Adaptive Drills require at least 150 question attempts to calibrate. Current: ${gateStatus.totalAttempts}/150 questions attempted.`,
+            totalAttempts: gateStatus.totalAttempts,
+            requiredAttempts: gateStatus.requiredAttempts,
+            remainingAttempts: gateStatus.remainingAttempts,
+          },
+          { status: 403 }
+        );
+      }
+
+      // 2. Daily cadence limiter (1 per 12 hours)
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("last_adaptive_drill_at")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (profile?.last_adaptive_drill_at) {
+        const lastDrillTime = new Date(profile.last_adaptive_drill_at).getTime();
+        const elapsedMs = Date.now() - lastDrillTime;
+
+        if (elapsedMs < CADENCE_LIMIT_MS) {
+          const remainingMs = CADENCE_LIMIT_MS - elapsedMs;
+          const remainingHours = Math.ceil(remainingMs / (60 * 60 * 1000));
+          const nextAvailableAt = new Date(lastDrillTime + CADENCE_LIMIT_MS).toISOString();
+
+          return NextResponse.json(
+            {
+              success: false,
+              error: "CADENCE_LIMIT_EXCEEDED",
+              message: `Adaptive practice drills are limited to 1 every 12 hours (max 2/day) to allow concept consolidation. Next drill available in ~${remainingHours} hour(s).`,
+              nextAvailableAt,
+              elapsedHours: Math.round(elapsedMs / (60 * 60 * 1000)),
+            },
+            { status: 429 }
+          );
+        }
+      }
+
+      // 3. Query weak micro-topics
+      let weakMicroTopics: string[] = [];
+      try {
+        const { data: pacingRows } = await supabase
+          .from("pacing_analytics_summary")
+          .select("micro_topic, accuracy_percentage")
+          .eq("user_id", userId)
+          .order("accuracy_percentage", { ascending: true })
+          .limit(3);
+
+        if (pacingRows && pacingRows.length > 0) {
+          weakMicroTopics = pacingRows.map((r: any) => r.micro_topic).filter(Boolean);
+        }
+      } catch (pacingErr) {
+        console.warn("Failed to fetch from pacing_analytics_summary:", pacingErr);
+      }
+
+      if (weakMicroTopics.length < 3) {
+        try {
+          const { data: wrongAttempts } = await supabase
+            .from("user_attempts")
+            .select("question_id, questions(micro_topic)")
+            .eq("user_id", userId)
+            .eq("is_correct", false)
+            .limit(20);
+
+          if (wrongAttempts) {
+            wrongAttempts.forEach((wa: any) => {
+              const mt = wa.questions?.micro_topic;
+              if (mt && !weakMicroTopics.includes(mt)) {
+                weakMicroTopics.push(mt);
+              }
+            });
+          }
+        } catch {
+          // Fallback
+        }
+      }
+
+      if (weakMicroTopics.length === 0) {
+        weakMicroTopics = [
+          "Electromagnetic Induction & Lenz Law",
+          "Wave Optics & Youngs Double Slit",
+          "Thermodynamics & Carnot Cycle",
+        ];
+      }
+      const targetTopics = weakMicroTopics.slice(0, 3);
+
+      // 4. Fetch 5 unattempted questions per weak topic (0 tokens)
+      const { data: userAttempts } = await supabase
+        .from("user_attempts")
+        .select("question_id")
+        .eq("user_id", userId);
+
+      const attemptedIds = new Set<string>(
+        (userAttempts || []).map((ua: any) => ua.question_id)
+      );
+
+      const assembledQuestions: Question[] = [];
+      const usedQuestionIds = new Set<string>();
+
+      for (const topic of targetTopics) {
+        let topicQuestions: any[] = [];
+        try {
+          const { data: dbQuestions } = await supabase
+            .from("questions")
+            .select("*")
+            .eq("micro_topic", topic)
+            .limit(15);
+
+          if (dbQuestions && dbQuestions.length > 0) {
+            topicQuestions = dbQuestions.filter(
+              (q: any) => !attemptedIds.has(q.id) && !usedQuestionIds.has(q.id)
+            );
+          }
+        } catch {
+          // Ignore DB query errors
+        }
+
+        if (topicQuestions.length < 5) {
+          try {
+            const { data: similarQuestions } = await supabase
+              .from("questions")
+              .select("*")
+              .ilike("micro_topic", `%${topic.split(" ")[0]}%`)
+              .limit(10);
+
+            if (similarQuestions) {
+              similarQuestions.forEach((q: any) => {
+                if (
+                  topicQuestions.length < 5 &&
+                  !attemptedIds.has(q.id) &&
+                  !usedQuestionIds.has(q.id)
+                ) {
+                  topicQuestions.push(q);
+                }
+              });
+            }
+          } catch {
+            // Ignore
+          }
+        }
+
+        topicQuestions.slice(0, 5).forEach((q: any) => {
+          usedQuestionIds.add(q.id);
+          const qNum = assembledQuestions.length + 1;
+          assembledQuestions.push({
+            id: q.id,
+            subjectId: (q.subject || "physics").toLowerCase(),
+            questionNumber: qNum,
+            prompt: q.question_text,
+            options: [
+              { id: "A", text: q.option_a },
+              { id: "B", text: q.option_b },
+              { id: "C", text: q.option_c },
+              { id: "D", text: q.option_d },
+            ],
+            correctOptionId: q.correct_option as "A" | "B" | "C" | "D",
+            explanation: q.explanation,
+            aiDiagnosisNotes: `Zero-Token Adaptive Drill: Remediating weakness in ${topic}`,
+            pyqSource: q.ncert_reference || "NCERT Diagnostic Remediation",
+            topic: q.micro_topic || topic,
+            chapter: q.chapter,
+            difficulty: q.archetype === "Numerical" ? "hard" : "medium",
+          });
+        });
+      }
+
+      if (assembledQuestions.length < 15) {
+        const fallbackSet = getQuestionsForTest("physics");
+        const fallbackQuestions = fallbackSet.questions || [];
+
+        for (const fq of fallbackQuestions) {
+          if (assembledQuestions.length >= 15) break;
+          if (!usedQuestionIds.has(fq.id) && !attemptedIds.has(fq.id)) {
+            usedQuestionIds.add(fq.id);
+            const qNum = assembledQuestions.length + 1;
+            assembledQuestions.push({
+              ...fq,
+              questionNumber: qNum,
+              aiDiagnosisNotes: `Adaptive Practice Drill: Reinforcing core ${fq.topic}`,
+            });
+          }
+        }
+      }
+
+      const finalQuestions = assembledQuestions.slice(0, 15);
+      const drillTestId = `adaptive_drill_${userId.slice(0, 8)}_${Date.now()}`;
+      const subject = finalQuestions[0]?.subjectId || "Science";
+
+      try {
+        await supabaseAdmin
+          .from("profiles")
+          .update({ last_adaptive_drill_at: new Date().toISOString() })
+          .eq("id", userId);
+      } catch (updErr) {
+        console.warn("Failed to update last_adaptive_drill_at:", updErr);
+      }
+
+      try {
+        await supabaseAdmin.from("tests").upsert(
+          {
+            id: drillTestId,
+            title: `15-Question Adaptive Micro-Drill (${targetTopics.join(", ")})`,
+            subject,
+            total_questions: finalQuestions.length,
+            duration_minutes: 18,
+            is_active: true,
+          },
+          { onConflict: "id" }
+        );
+      } catch {
+        // Test registered or in-memory
+      }
+
+      return NextResponse.json({
+        success: true,
+        testId: drillTestId,
+        title: `15-Question Adaptive Micro-Drill: ${targetTopics.join(", ")}`,
+        subject,
+        code: "ADAPTIVE-15",
+        totalQuestions: finalQuestions.length,
+        durationMinutes: 18,
+        targetTopics,
+        questions: finalQuestions,
+        cadence: {
+          lastDrillAt: new Date().toISOString(),
+          nextAvailableAt: new Date(Date.now() + CADENCE_LIMIT_MS).toISOString(),
+          cooldownHours: CADENCE_LIMIT_HOURS,
+        },
+      });
+    }
+
+    // ─── CASE B: 5-QUESTION TARGETED REMEDIAL REPAIR QUIZ ────────────────────
     const { userId: bodyUserId, weakMicroTopics, subject, practiceType } = body;
 
     if (!Array.isArray(weakMicroTopics) || weakMicroTopics.length === 0) {
@@ -46,7 +317,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 1. Resolve Auth User & Identifier
     let authUserId: string | null = null;
     try {
       const supabase = createClient();
@@ -60,7 +330,6 @@ export async function POST(req: NextRequest) {
     const primaryTopics = weakMicroTopics.slice(0, 3);
     const cacheKey = `${clientIdentifier}:${subject || "general"}:${primaryTopics.sort().join("_")}`;
 
-    // 2. Check Response Cache FIRST (skip cache for explicit retests to ensure fresh questions)
     const isRetest = practiceType === "retest";
     const cachedQuiz = !isRetest ? memoryQuizCache.get(cacheKey) : null;
     if (cachedQuiz && Date.now() - cachedQuiz.cachedAt < QUIZ_CACHE_TTL_MS) {
@@ -78,7 +347,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 3. Check Daily Server Rate Limit
     const rateLimit = checkServerRateLimit("repair_drills", clientIdentifier, 30);
     if (!rateLimit.allowed) {
       return NextResponse.json(
@@ -93,11 +361,8 @@ export async function POST(req: NextRequest) {
     const selectedQuestions: Question[] = [];
     let attemptedQuestionIds: string[] = [];
 
-    // 1. Query Supabase for unattempted or previously failed questions
     try {
       const supabase = createClient();
-
-      // Find question IDs already attempted by the user
       if (userId) {
         const { data: userAttempts } = await supabase
           .from("user_attempts")
@@ -105,28 +370,22 @@ export async function POST(req: NextRequest) {
           .eq("user_id", userId);
 
         if (userAttempts) {
-          // Only exclude questions that were already solved correctly
           attemptedQuestionIds = userAttempts
             .filter((a) => a.is_correct === true)
             .map((a) => a.question_id);
         }
       }
 
-      // Query database questions matching the micro topics
       let query = supabase.from("questions").select("*");
-
       if (primaryTopics.length > 0) {
         query = query.in("micro_topic", primaryTopics);
       }
 
       const { data: dbQuestions } = await query.limit(10);
-
       if (dbQuestions && dbQuestions.length > 0) {
-        // Filter out mastered questions first
         const candidates = dbQuestions.filter(
           (q) => !attemptedQuestionIds.includes(q.id)
         );
-
         const poolToUse = candidates.length >= 5 ? candidates : dbQuestions;
 
         poolToUse.slice(0, 5).forEach((q, idx) => {
@@ -154,15 +413,12 @@ export async function POST(req: NextRequest) {
       // Offline fallback
     }
 
-    // 2. Curated Question Bank Selection (0-Token Programmatic Adaptive Retrieval)
-    // Ensures no LLM API calls are ever made to create question stems or options from scratch.
     if (selectedQuestions.length < 5) {
       const neededCount = 5 - selectedQuestions.length;
       const targetSubj = (subject || "physics").toLowerCase();
       const testFallback = getQuestionsForTest(targetSubj);
       const allSubjectQs = testFallback.questions || [];
 
-      // Find questions matching any of the primary weak topics or chapter
       const topicMatches: Question[] = [];
       const otherMatches: Question[] = [];
 
@@ -182,7 +438,6 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Prioritize questions not yet solved correctly
       const unattemptedTopicMatches = topicMatches.filter((q) => !attemptedQuestionIds.includes(q.id));
       const unattemptedOtherMatches = otherMatches.filter((q) => !attemptedQuestionIds.includes(q.id));
 
@@ -208,11 +463,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 3. Structure questions into progressive sequence:
-    // Q1-Q2: Core Foundation / Concept Reinforcement
-    // Q3: Concept Application
-    // Q4: CUET-Level Distractor Trap
-    // Q5: Timed Exam Validation
     const structuredDrillQuestions = selectedQuestions.slice(0, 5).map((q, idx) => {
       let stageTag = "Foundation & Core Concept";
       let targetDifficulty: "easy" | "medium" | "hard" = "easy";
@@ -253,7 +503,6 @@ export async function POST(req: NextRequest) {
       questions: structuredDrillQuestions,
     };
 
-    // 4. Save to in-memory quiz cache
     memoryQuizCache.set(cacheKey, {
       data: responsePayload,
       cachedAt: Date.now(),

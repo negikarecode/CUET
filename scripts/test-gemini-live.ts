@@ -43,7 +43,7 @@ const cuetSampleTelemetry = {
 };
 
 async function createTestServer(): Promise<http.Server> {
-  const { POST } = await import("../app/api/ai/diagnose-mistake/route");
+  const { POST } = await import("../app/api/ai/insights/route");
   return new Promise((resolve) => {
     const server = http.createServer(async (req, res) => {
       if (req.method === "POST" && req.url === "/api/ai/diagnose-mistake") {

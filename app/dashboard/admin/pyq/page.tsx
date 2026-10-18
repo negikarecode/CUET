@@ -31,7 +31,7 @@ export default function PYQAdminPage() {
     if (detail) await openQuestion(detail.id);
   };
   const openQuestion = async (id: string) => { const res = await request(`/api/admin/pyq?id=${encodeURIComponent(id)}`); const data = await res.json(); if (data.question) setDetail(data.question); };
-  const download = async (format: "json" | "jsonl") => { const res = await request(`/api/admin/pyq/export?format=${format}`); if (!res.ok) { setMessage((await res.json()).error || "Export failed"); return; } const url = URL.createObjectURL(await res.blob()); const a = document.createElement("a"); a.href=url; a.download=`cuet-pyq.${format}`; a.click(); URL.revokeObjectURL(url); };
+  const download = async (format: "json" | "jsonl") => { const res = await request(`/api/admin/pyq?export=1&format=${format}`); if (!res.ok) { setMessage((await res.json()).error || "Export failed"); return; } const url = URL.createObjectURL(await res.blob()); const a = document.createElement("a"); a.href=url; a.download=`cuet-pyq.${format}`; a.click(); URL.revokeObjectURL(url); };
   // Refresh table when credentials, status filter, or pagination changes
   useEffect(() => {
     if (ready && token) void refresh();

@@ -461,10 +461,10 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
     setStatusMessage(null);
 
     try {
-      const res = await fetch("/api/tests/generate-adaptive-drill", {
+      const res = await fetch("/api/ai/repair-quiz", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: profile.id }),
+        body: JSON.stringify({ userId: profile.id, drillType: "adaptive" }),
       });
 
       const data = await res.json();
