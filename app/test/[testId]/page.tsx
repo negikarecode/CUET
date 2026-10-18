@@ -22,9 +22,63 @@ export function generateMetadata({ params }: PageProps): Metadata {
 import Link from "next/link";
 import { RotateCcw } from "lucide-react";
 import { sanitizeQuestionForActiveExam } from "@/lib/store/useCBTStore";
+import { createClient } from "@/lib/supabase/server";
+import LockedFeaturePaywall from "@/components/payments/LockedFeaturePaywall";
 
-export default function TestPage({ params, searchParams }: PageProps) {
+export default async function TestPage({ params, searchParams }: PageProps) {
   const isReattempt = searchParams?.reattempt === "true";
+
+  // Check authenticated user eligibility before loading test
+  try {
+    const supabase = createClient();
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+
+    if (authUser?.id) {
+      const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
+      const eligibility = await checkTestSessionEligibility(authUser.id, params.testId);
+
+      if (!eligibility.allowed) {
+        return (
+          <div className="min-h-screen bg-[#F8FAFC] py-10 px-4">
+            <LockedFeaturePaywall
+              featureTitle={
+                eligibility.testType === "mock"
+                  ? "Full Mock Simulations"
+                  : eligibility.testType === "practice"
+                  ? "Unit Practice Tests"
+                  : "Official Past Year Papers"
+              }
+              featureSubtitle="Free Tier Limit Reached"
+              featureDescription={
+                eligibility.reason ||
+                "You have reached your Free plan allowance for this test type. Upgrade to CUETMate Premium for unlimited tests."
+              }
+              benefits={[
+                "Unlimited 50-Question NTA CBT Mock Simulations across all 20 subjects",
+                "Unlimited Unit-wise Chapter Practice Tests",
+                "Unlimited Authentic Past Year Question Papers (PYQs)",
+                "Where Do I Stand College Cutoff Gap Predictor",
+                "Subject Weakness Radar & NCERT Mistake Decrypter",
+              ]}
+              returnUrl={
+                eligibility.testType === "practice"
+                  ? "/dashboard/practice"
+                  : eligibility.testType === "pyq"
+                  ? "/dashboard/pyqs"
+                  : "/dashboard/mocks"
+              }
+              returnLabel="Return to Tests Hub"
+            />
+          </div>
+        );
+      }
+    }
+  } catch (err) {
+    console.warn("TestPage eligibility check notice:", err);
+  }
+
   const { testMeta, questions } = getQuestionsForTest(params.testId);
 
   if (questions.length === 0) {

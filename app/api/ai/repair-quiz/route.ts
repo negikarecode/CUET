@@ -49,16 +49,30 @@ export async function POST(req: NextRequest) {
       body.questionCount === 15 ||
       urlParams.get("type") === "adaptive";
 
+    const supabase = createClient();
+    let authUser = null;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      authUser = user;
+    } catch {
+      // Fallback
+    }
+
+    const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+    const entitlement = await getUserEntitlement(authUser?.id || body.userId || "");
+    if (!entitlement.isPremium) {
+      return NextResponse.json(
+        {
+          error: "Unlock this feature with CUETMate Premium.",
+          code: "PAYWALL_FEATURE_LOCKED",
+          feature: "repair_quiz",
+        },
+        { status: 403 }
+      );
+    }
+
     // ─── CASE A: 15-QUESTION ADAPTIVE PRACTICE DRILL ─────────────────────────
     if (isAdaptiveDrill) {
-      const supabase = createClient();
-      let authUser = null;
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        authUser = user;
-      } catch {
-        // Fallback
-      }
 
       if (!authUser) {
         return NextResponse.json(

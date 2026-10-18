@@ -57,6 +57,7 @@ export default function UpgradeButton({
   const router = useRouter();
   const user = useTestStore((state) => state.user);
   const addCoins = useTestStore((state) => state.addCoins);
+  const loginUser = useTestStore((state) => state.loginUser);
 
   const [loading, setLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -110,14 +111,17 @@ export default function UpgradeButton({
               razorpay_order_id: orderId,
               razorpay_payment_id: `pay_sim_${Date.now()}`,
               userId: user.id,
-              tier: "ai_practice_pass",
+              tier: "all_access_pass",
             }),
           });
 
-          // Award 500 bonus coins in client store
+          // Award 500 bonus coins & unlock Premium in client store
           addCoins(500);
+          loginUser({ isPremium: true, subscriptionTier: "all_access_pass" });
           setLoading(false);
           setShowSuccessModal(true);
+          if (onSuccess) onSuccess();
+          router.refresh();
         }, 1200);
         return;
       }
@@ -147,14 +151,16 @@ export default function UpgradeButton({
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
                 userId: user.id,
-                tier: isAllAccess ? "all_access_pass" : "ai_practice_pass",
+                tier: "all_access_pass",
               }),
             });
 
             if (verifyRes.ok) {
               addCoins(500);
+              loginUser({ isPremium: true, subscriptionTier: "all_access_pass" });
               setShowSuccessModal(true);
               if (onSuccess) onSuccess();
+              router.refresh();
             } else {
               alert("Payment verification issue. Please contact support.");
             }

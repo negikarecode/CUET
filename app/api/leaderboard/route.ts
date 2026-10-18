@@ -24,6 +24,19 @@ export async function GET(_req: NextRequest) {
       // Guest or SSR without auth cookies
     }
 
+    const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+    const entitlement = await getUserEntitlement(currentUserId || "");
+    if (!entitlement.isPremium) {
+      return NextResponse.json(
+        {
+          error: "Unlock this feature with CUETMate Premium.",
+          code: "PAYWALL_FEATURE_LOCKED",
+          feature: "leaderboard",
+        },
+        { status: 403 }
+      );
+    }
+
     // 2. Fetch real student profiles from Supabase
     const { data: profiles, error: pErr } = await supabaseAdmin
       .from("profiles")

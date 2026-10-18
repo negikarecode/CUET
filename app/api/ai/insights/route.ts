@@ -155,6 +155,29 @@ export async function POST(req: NextRequest) {
       queryType === "diagnose-mistake" ||
       body.action === "diagnose-mistake";
 
+    // Enforce Premium access on AI debrief, radar, post-mock, and standing features
+    if (isSubjectRadar || isPostMock || isStanding || isWhyWrong) {
+      const supabase = createClient();
+      let authUserId: string | null = null;
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) authUserId = user.id;
+      } catch {}
+
+      const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+      const entitlement = await getUserEntitlement(authUserId || body.userId || "");
+      if (!entitlement.isPremium) {
+        return NextResponse.json(
+          {
+            error: "Unlock this feature with CUETMate Premium.",
+            code: "PAYWALL_FEATURE_LOCKED",
+            feature: isSubjectRadar ? "radar" : isStanding ? "standing" : "ai_insights",
+          },
+          { status: 403 }
+        );
+      }
+    }
+
     // ─── 1. STANDING COLLEGE GAP EXPLANATION ────────────────────────────────
     if (isStanding) {
       const standingPayload = body as StandingExplanationRequest;

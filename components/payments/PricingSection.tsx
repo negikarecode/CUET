@@ -110,8 +110,12 @@ export default function PricingSection() {
 
               <div className="mt-5 flex items-baseline gap-2">
                 <span className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">₹499</span>
-                <span className="text-xs text-slate-500 font-medium">/ Exam Cycle (Single Payment)</span>
+                <span className="text-sm font-semibold text-slate-400 line-through">₹799</span>
+                <span className="text-xs text-slate-500 font-medium">/ 2026 Exam Cycle</span>
               </div>
+              <p className="mt-1 text-[11px] font-semibold text-amber-700">
+                Launch Offer: First 100 qualifying buyers only
+              </p>
               <p className="mt-2 text-xs text-slate-500 font-normal leading-relaxed">
                 Everything you need to eliminate trap options, debug time-sinks, and secure a top Central University seat.
               </p>
@@ -139,24 +143,30 @@ export default function PricingSection() {
                   <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
                     <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                   </span>
-                  <span><strong>Time-Sink Bottleneck Detection (&gt;72s)</strong> & pace radar</span>
+                  <span><strong>Where Do I Stand:</strong> College cutoff chance band predictor</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <span className="w-5 h-5 rounded-full bg-amber-50 border border-amber-200/60 flex items-center justify-center shrink-0 text-amber-600">
                     <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                   </span>
-                  <span className="text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/60">+1,000 Campus Coins Bonus</span>
+                  <span className="text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/60">+500 Campus Coins Bonus</span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-slate-100">
+            <div className="mt-8 pt-6 border-t border-slate-100 space-y-2">
               <UpgradeButton
-                planId="ai_practice_pass_499"
+                planId="all_access_pass_799"
                 variant="primary"
                 className="w-full text-center"
-                buttonText="Get Ranker Pass (₹499)"
+                buttonText="Get Premium (₹499)"
               />
+              <Link
+                href="/pricing"
+                className="block text-center text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 transition-colors pt-1"
+              >
+                View full feature comparison & FAQs →
+              </Link>
             </div>
           </div>
         </div>

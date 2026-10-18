@@ -33,6 +33,19 @@ export async function POST(req: NextRequest) {
       if (authUser) authUserId = authUser.id;
     } catch {}
 
+    const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+    const entitlement = await getUserEntitlement(authUserId || userId);
+    if (!entitlement.isPremium) {
+      return NextResponse.json(
+        {
+          error: "Unlock this feature with CUETMate Premium.",
+          code: "PAYWALL_FEATURE_LOCKED",
+          feature: "doubt_solver",
+        },
+        { status: 403 }
+      );
+    }
+
     const clientIdentifier = getClientIdentifier(req, authUserId || userId);
     const rateCheck = checkServerRateLimit("doubt_solver", clientIdentifier, 40);
     if (!rateCheck.allowed) {

@@ -17,6 +17,33 @@ export async function GET(
   { params }: { params: { testId: string } }
 ) {
   try {
+    // 1. Enforce usage eligibility for authenticated users
+    try {
+      const supabase = createClient();
+      const {
+        data: { user: authUser },
+      } = await supabase.auth.getUser();
+
+      if (authUser?.id) {
+        const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
+        const eligibility = await checkTestSessionEligibility(authUser.id, params.testId);
+
+        if (!eligibility.allowed) {
+          return NextResponse.json(
+            {
+              error: eligibility.reason || "Free tier usage limit reached. Unlock unlimited access with CUETMate Premium.",
+              code: "PAYWALL_LIMIT_REACHED",
+              testType: eligibility.testType,
+              currentUsage: eligibility.currentUsage,
+              maxAllowed: eligibility.maxAllowed,
+              canonicalSubject: eligibility.canonicalSubject,
+            },
+            { status: 403 }
+          );
+        }
+      }
+    } catch {}
+
     const { testMeta, questions } = getQuestionsForTest(params.testId);
     // Sanitize questions server-side before sending to client during active test
     const sanitizedQuestions = questions.map(sanitizeQuestionForActiveExam);
@@ -358,6 +385,19 @@ export async function POST(
                 total_questions_attempted: canonicalDbAttemptCount ?? attemptsToInsert.length,
               })
               .eq("id", targetUserId);
+          }
+
+          // Record session in usage ledger
+          try {
+            const { recordSessionCompletion } = await import("@/lib/payments/entitlements");
+            await recordSessionCompletion({
+              userId: targetUserId,
+              testId: attempt.testId,
+              sessionId: attemptUuid || attemptIdStr || `${targetUserId}_${attempt.testId}`,
+              subject: attempt.subject,
+            });
+          } catch (ledgerErr) {
+            console.warn("[Usage Ledger Record Warning]:", ledgerErr);
           }
         } catch (dbErr) {
           console.warn("[Record Attempt DB Warning]:", dbErr);

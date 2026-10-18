@@ -12,7 +12,7 @@ export function createAdminClient() {
   const serviceRoleKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    "";
+    "dummy-service-role-key-for-test-environments";
 
   return createClient(supabaseUrl, serviceRoleKey, {
     auth: {

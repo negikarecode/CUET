@@ -11,6 +11,7 @@ import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
 import { StreamType } from "@/types";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
 import { calculateActiveStreak } from "@/lib/gamification";
+import LockedFeaturePaywall from "@/components/payments/LockedFeaturePaywall";
 
 export const metadata: Metadata = {
   title: "Weakness report | CUET AI-Prep",
@@ -69,6 +70,22 @@ export default async function WeaknessRadarPage() {
         .select("*")
         .eq("id", authUser.id)
         .single();
+
+      if (!profile?.is_premium) {
+        return (
+          <LockedFeaturePaywall
+            featureTitle="Subject Weakness Radar"
+            featureSubtitle="4D Diagnostic & Pacing Radar"
+            featureDescription="Analyze your topic-level accuracy, uncover hidden calculation traps, and detect whether mistakes stem from conceptual gaps or time-pressure panic."
+            benefits={[
+              "Full 4D diagnostic matrix across Subject → Chapter → Micro-Topic → NCERT Reference",
+              "Real-time detection of fatal time-sinks (>90s) and option traps on authentic NTA questions",
+              "Personalized AI mistake diagnosis with direct NCERT textbook page references",
+              "Automated generation of 5-question adaptive repair quizzes to fix detected weaknesses",
+            ]}
+          />
+        );
+      }
 
       if (profile) {
         const streamKey = (profile.target_stream?.toLowerCase() as StreamType) || "science";
