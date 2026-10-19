@@ -20,7 +20,6 @@ dotenv.config({ path: ".env" });
 
 import { NextRequest } from "next/server";
 import { parseAuthError } from "../lib/auth/emailErrorHandler";
-import { RATE_LIMIT_POLICIES } from "../lib/security/rateLimitPolicy";
 import { POST as rateCheckHandler } from "../app/api/auth/rate-check/route";
 import { GET as confirmHandler } from "../app/auth/confirm/route";
 import { validateEmail } from "../lib/auth/validation";
@@ -93,56 +92,32 @@ async function runTestSuite() {
     const res = await rateCheckHandler(req);
     assert(res.status === 200, "First replacement confirmation request succeeds (HTTP 200)");
     const data = await res.json();
-    assert(data.allowed === true, "Request is allowed by rate checker");
-    assert(data.remaining === 2, "Rolling quota accurately decrements to 2 remaining");
+    assert(data.allowed === true, "Request is allowed without custom rate-limit throttling");
   }
 
-  // ─── SCENARIO 3: USER CLICKS RESEND REPEATEDLY (ROLLING WINDOW OF 3) ─────────
-  console.log("\n[SCENARIO 3] Repeated Resend Clicks & Humane 429 Response");
+  // ─── SCENARIO 3: REPEATED RESEND REQUESTS (NO CUSTOM APPLICATION THROTTLING) ───
+  console.log("\n[SCENARIO 3] Repeated Resend Requests (No Custom Application Throttling)");
   {
     const uniqueEmail = `spam_resend_${Date.now()}@example.com`;
     const clientIp = `192.168.20.${Math.floor(Math.random() * 200) + 1}`;
 
-    // 1st request -> allowed (remaining: 2)
-    const req1 = new NextRequest("https://cuetmate.vercel.app/api/auth/rate-check", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-forwarded-for": clientIp },
-      body: JSON.stringify({ action: "auth:resend_verification", identifier: uniqueEmail }),
-    });
-    const res1 = await rateCheckHandler(req1);
-    assert(res1.status === 200, "Attempt 1 allowed");
+    for (let i = 1; i <= 5; i++) {
+      const req = new NextRequest("https://cuetmate.vercel.app/api/auth/rate-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-forwarded-for": clientIp },
+        body: JSON.stringify({ action: "auth:resend_verification", identifier: uniqueEmail }),
+      });
+      const res = await rateCheckHandler(req);
+      assert(res.status === 200, `Resend request ${i} allowed without custom 429 block`);
+    }
 
-    // 2nd request -> allowed (remaining: 1)
-    const req2 = new NextRequest("https://cuetmate.vercel.app/api/auth/rate-check", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-forwarded-for": clientIp },
-      body: JSON.stringify({ action: "auth:resend_verification", identifier: uniqueEmail }),
-    });
-    const res2 = await rateCheckHandler(req2);
-    assert(res2.status === 200, "Attempt 2 allowed");
-
-    // 3rd request -> allowed (remaining: 0)
-    const req3 = new NextRequest("https://cuetmate.vercel.app/api/auth/rate-check", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-forwarded-for": clientIp },
-      body: JSON.stringify({ action: "auth:resend_verification", identifier: uniqueEmail }),
-    });
-    const res3 = await rateCheckHandler(req3);
-    assert(res3.status === 200, "Attempt 3 allowed (reaches limit)");
-
-    // 4th request -> blocked (HTTP 429)
-    const req4 = new NextRequest("https://cuetmate.vercel.app/api/auth/rate-check", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-forwarded-for": clientIp },
-      body: JSON.stringify({ action: "auth:resend_verification", identifier: uniqueEmail }),
-    });
-    const res4 = await rateCheckHandler(req4);
-    assert(res4.status === 429, "Attempt 4 returns HTTP 429 rate limit exceeded");
-    const data4 = await res4.json();
+    // Verify that when Supabase returns an email rate limit, parseAuthError formats it human-friendly
+    const mockProviderError = { message: "Email rate limit exceeded", status: 429 };
+    const parsed = parseAuthError(mockProviderError);
+    assert(parsed.isRateLimit === true, "Accurately detects provider-level quota");
     assert(
-      data4.error.includes("limit of 3 verification email requests") &&
-      data4.error.includes("Spam/Promotions"),
-      "429 message contains helpful advice and Spam/Promotions guidance"
+      parsed.message.includes("capacity") && parsed.message.includes("Spam"),
+      "Provides helpful advice regarding Spam/Promotions"
     );
   }
 
@@ -280,32 +255,24 @@ async function runTestSuite() {
     assert(resendsExecuted === 1, "Only 1 resend was dispatched over the wire");
   }
 
-  // ─── SCENARIO 9: AUTOMATED CLIENT ATTEMPTS TO ABUSE SIGNUP ───────────────────
-  console.log("\n[SCENARIO 9] Automated Client Signup Abuse Protection (IP Threshold)");
+  // ─── SCENARIO 9: SIGNUP FLOW WITHOUT CUSTOM APPLICATION IP THROTTLING ──────
+  console.log("\n[SCENARIO 9] Signup Flow Without Custom Application IP Throttling");
   {
-    const abusiveIp = `10.99.${Math.floor(Math.random() * 200) + 1}.${Math.floor(Math.random() * 200) + 1}`;
-    const policy = RATE_LIMIT_POLICIES["auth:signup"];
-    assert(policy?.max === 15, "Signup policy allows 15 legitimate attempts per 15-minute window");
+    const sharedIp = `10.99.${Math.floor(Math.random() * 200) + 1}.${Math.floor(Math.random() * 200) + 1}`;
 
-    let blockedAt: number | null = null;
-    for (let i = 1; i <= 16; i++) {
+    for (let i = 1; i <= 20; i++) {
       const req = new NextRequest("https://cuetmate.vercel.app/api/auth/rate-check", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-forwarded-for": abusiveIp,
+          "x-forwarded-for": sharedIp,
         },
         body: JSON.stringify({ action: "auth:signup" }),
       });
 
       const res = await rateCheckHandler(req);
-      if (res.status === 429) {
-        blockedAt = i;
-        break;
-      }
+      assert(res.status === 200, `Signup check ${i} succeeds without custom 429 throttling`);
     }
-
-    assert(blockedAt === 16, "Automated spammer blocked on the 16th request within 15 minutes");
   }
 
   // ─── SCENARIO 10: LEGITIMATE USER SUCCESSFULLY VERIFIES & REACHES DASHBOARD ──

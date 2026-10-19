@@ -107,34 +107,7 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // 2. Daily cadence limiter (1 per 12 hours)
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("last_adaptive_drill_at")
-        .eq("id", userId)
-        .maybeSingle();
-
-      if (profile?.last_adaptive_drill_at) {
-        const lastDrillTime = new Date(profile.last_adaptive_drill_at).getTime();
-        const elapsedMs = Date.now() - lastDrillTime;
-
-        if (elapsedMs < CADENCE_LIMIT_MS) {
-          const remainingMs = CADENCE_LIMIT_MS - elapsedMs;
-          const remainingHours = Math.ceil(remainingMs / (60 * 60 * 1000));
-          const nextAvailableAt = new Date(lastDrillTime + CADENCE_LIMIT_MS).toISOString();
-
-          return NextResponse.json(
-            {
-              success: false,
-              error: "CADENCE_LIMIT_EXCEEDED",
-              message: `Adaptive practice drills are limited to 1 every 12 hours (max 2/day) to allow concept consolidation. Next drill available in ~${remainingHours} hour(s).`,
-              nextAvailableAt,
-              elapsedHours: Math.round(elapsedMs / (60 * 60 * 1000)),
-            },
-            { status: 429 }
-          );
-        }
-      }
+      // 2. Daily cadence limiter (1 per 12 hours) is temporarily disabled
 
       // 3. Query weak micro-topics
       let weakMicroTopics: string[] = [];

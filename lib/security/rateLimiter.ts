@@ -232,6 +232,12 @@ function checkLocalSlidingWindow(
 }
 
 /**
+ * Master switch to temporarily disable all custom request rate-limiting across CUETMate.
+ * Set to true to permit all requests unconditionally without throttling.
+ */
+export const RATE_LIMITING_DISABLED = true;
+
+/**
  * Primary rate limit evaluation function.
  * Checks external shared store (Upstash/KV) if configured, with local sliding window fallback.
  */
@@ -240,9 +246,23 @@ export async function rateLimit(
   identifier: string,
   customPolicy?: Partial<RateLimitPolicy>
 ): Promise<RateLimitResult> {
+  const fullKey = `rl:${action}:${identifier}`;
+
+  // Custom rate-limiting is temporarily disabled across CUETMate
+  if (RATE_LIMITING_DISABLED) {
+    return {
+      success: true,
+      allowed: true,
+      limit: 999999,
+      remaining: 999999,
+      reset: Math.floor(Date.now() / 1000) + 3600,
+      retryAfter: 0,
+      key: fullKey,
+    };
+  }
+
   const basePolicy = getRateLimitPolicy(action);
   const policy: RateLimitPolicy = { ...basePolicy, ...(customPolicy || {}) };
-  const fullKey = `rl:${action}:${identifier}`;
   const nowMs = Date.now();
 
   // Try external multi-instance store first if configured

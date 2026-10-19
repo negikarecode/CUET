@@ -45,23 +45,6 @@ export default function ForgotPasswordView({
     setErrorMessage(null);
 
     try {
-      // Server-side password reset rate limit check (3 per hour per combined user/IP)
-      try {
-        const rcRes = await fetch("/api/auth/rate-check", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "auth:password_reset", identifier: cleanEmail }),
-        });
-        if (rcRes.status === 429) {
-          const rcData = await rcRes.json().catch(() => ({}));
-          setErrorMessage(rcData.error || "Too many password reset requests. Please wait an hour before requesting another reset.");
-          setIsLoading(false);
-          return;
-        }
-      } catch {
-        // Proceed gracefully if offline sandbox
-      }
-
       const supabase = createClient();
       const origin =
         typeof window !== "undefined" && window.location.origin

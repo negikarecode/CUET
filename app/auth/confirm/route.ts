@@ -3,7 +3,6 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
-import { rateLimit, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 export const dynamic = "force-dynamic";
 
@@ -55,16 +54,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(errorUrl);
   }
 
-  // 2. Check rate limit on email confirmation verification attempts (20 per 15 min per IP)
-  if (token_hash || code) {
-    const rateId = getClientRateLimitIdentifier(request, null, "auth:confirm");
-    const rateCheck = await rateLimit("auth:confirm", rateId);
-    if (!rateCheck.success) {
-      const errorUrl = new URL("/verify-email", origin);
-      errorUrl.searchParams.set("error", "Too many confirmation attempts. Please wait 15 minutes before trying again.");
-      return NextResponse.redirect(errorUrl);
-    }
-  }
+  // 2. Custom rate limiting on email confirmation is temporarily disabled
 
   const supabaseUrl =
     process.env.NEXT_PUBLIC_SUPABASE_URL ||

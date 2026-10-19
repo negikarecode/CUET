@@ -24,9 +24,6 @@ interface OtpVerificationViewProps {
   metadata?: Record<string, any>;
 }
 
-const RESEND_COOLDOWN_SECONDS = 60;
-const MAX_RESEND_ATTEMPTS = 5;
-
 export default function OtpVerificationView({
   email,
   otpType = "signup",
@@ -39,8 +36,7 @@ export default function OtpVerificationView({
   const [isResending, setIsResending] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [cooldown, setCooldown] = useState(RESEND_COOLDOWN_SECONDS);
-  const [resendCount, setResendCount] = useState(0);
+  const [cooldown, setCooldown] = useState(0);
 
   // Countdown timer for resend cooldown
   useEffect(() => {
@@ -117,11 +113,6 @@ export default function OtpVerificationView({
   const handleResend = async () => {
     if (cooldown > 0 || isResending) return;
 
-    if (resendCount >= MAX_RESEND_ATTEMPTS) {
-      setErrorMessage("Maximum resend attempts reached. Please wait a few minutes before trying again.");
-      return;
-    }
-
     setIsResending(true);
     setErrorMessage(null);
     setSuccessMessage(null);
@@ -159,8 +150,6 @@ export default function OtpVerificationView({
         return;
       }
 
-      setResendCount((prev) => prev + 1);
-      setCooldown(RESEND_COOLDOWN_SECONDS);
       setSuccessMessage("A fresh 6-digit verification code has been dispatched to your email.");
       setOtp("");
     } catch (err: any) {

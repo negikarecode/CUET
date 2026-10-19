@@ -194,23 +194,6 @@ export default function AuthPageContent({
     setIsLoading(true);
 
     try {
-      // Server-side login attempt rate limit check (5 per 15 min per combined user/IP)
-      try {
-        const rcRes = await fetch("/api/auth/rate-check", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "auth:login", identifier: cleanEmail }),
-        });
-        if (rcRes.status === 429) {
-          const rcData = await rcRes.json().catch(() => ({}));
-          setErrorMessage(rcData.error || "Too many login attempts. Please wait 15 minutes before trying again.");
-          setIsLoading(false);
-          return;
-        }
-      } catch {
-        // Proceed gracefully if rate check fetch encounters offline sandbox network error
-      }
-
       const supabase = createClient();
       const { data, error } = await supabase.auth.signInWithPassword({
         email: cleanEmail,
@@ -346,23 +329,6 @@ export default function AuthPageContent({
     setIsLoading(true);
 
     try {
-      // Server-side signup rate limit check (15 per 15 min per IP)
-      try {
-        const rcRes = await fetch("/api/auth/rate-check", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "auth:signup" }),
-        });
-        if (rcRes.status === 429) {
-          const rcData = await rcRes.json().catch(() => ({}));
-          setErrorMessage(rcData.error || "Account creation limit reached for this IP address. Please try again later.");
-          setIsLoading(false);
-          return;
-        }
-      } catch {
-        // Proceed gracefully if offline sandbox
-      }
-
       const supabase = createClient();
 
       try {

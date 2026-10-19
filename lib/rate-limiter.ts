@@ -34,51 +34,19 @@ export function getClientIdentifier(
 
 /**
  * Synchronous/async bridge for checking server rate limits with centralized policy.
+ * Custom rate limiting is temporarily disabled across CUETMate.
  */
 export function checkServerRateLimit(
-  feature: string,
-  identifier: string,
-  limit: number = 30
+  _feature: string,
+  _identifier: string,
+  _limit: number = 30
 ): RateLimitResult {
-  // Translate to policy key
-  const policyKey = feature.startsWith("ai:") ? feature : `ai:${feature}`;
-
-  // Synchronous check against local sliding window store for legacy callers
-  const now = Date.now();
-  const resetAt = getDailyResetTimestamp();
-
-  // Call the core rate limiter
-  // For synchronous compatibility, perform atomic sliding-window check
-  const windowSec = 60; // 1-minute default sliding window
-  const record = (globalThis as any).__legacyRateLimitStore ||= new Map<string, number[]>();
-  const fullKey = `${policyKey}:${identifier}`;
-
-  let timestamps: number[] = record.get(fullKey) || [];
-  const cutoff = now - windowSec * 1000;
-  timestamps = timestamps.filter((t: number) => t > cutoff);
-
-  if (timestamps.length >= limit) {
-    const oldest = timestamps[0] || now;
-    const retryAfter = Math.max(1, Math.ceil((oldest + windowSec * 1000 - now) / 1000));
-    return {
-      allowed: false,
-      limit,
-      remaining: 0,
-      resetAt: now + retryAfter * 1000,
-      retryAfter,
-      error: `Rate limit of ${limit} requests per minute reached for ${feature}. Please wait ${retryAfter}s.`,
-    };
-  }
-
-  timestamps.push(now);
-  record.set(fullKey, timestamps);
-
+  // Custom rate-limiting is temporarily disabled across CUETMate
   return {
     allowed: true,
-    limit,
-    remaining: Math.max(0, limit - timestamps.length),
-    resetAt,
-    retryAfter: 0,
+    limit: 999999,
+    remaining: 999999,
+    resetAt: Date.now() + 3600000,
   };
 }
 

@@ -28,8 +28,6 @@ interface VerifyEmailViewProps {
   initialMessage?: string | null;
 }
 
-const RESEND_COOLDOWN_SECONDS = 30;
-
 export default function VerifyEmailView({
   email,
   onBackToSignup,
@@ -38,7 +36,7 @@ export default function VerifyEmailView({
   initialMessage = null,
 }: VerifyEmailViewProps) {
   const [targetEmail, setTargetEmail] = useState(email.trim().toLowerCase());
-  const [cooldown, setCooldown] = useState(RESEND_COOLDOWN_SECONDS);
+  const [cooldown, setCooldown] = useState(0);
   const [isResending, setIsResending] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(initialError);
   const [successMessage, setSuccessMessage] = useState<string | null>(initialMessage);
@@ -55,7 +53,7 @@ export default function VerifyEmailView({
     setEditInput(clean);
   }, [email]);
 
-  // 30-second cooldown countdown
+  // Cooldown countdown (only active if provider throttling occurs)
   useEffect(() => {
     if (cooldown <= 0) return;
     const interval = setInterval(() => {
@@ -67,7 +65,7 @@ export default function VerifyEmailView({
   const cleanEmail = targetEmail.trim().toLowerCase();
 
   const handleResend = async () => {
-    // Drop rapid repeated clicks or requests during active cooldown
+    // Drop rapid repeated clicks or requests during active provider cooldown
     if (cooldown > 0 || isResending || isResendingRef.current) return;
 
     if (!cleanEmail) {
@@ -81,28 +79,9 @@ export default function VerifyEmailView({
     setSuccessMessage(null);
 
     try {
-      // 1. Server-side email resend rate limit check (3 per 15 min per account, 10 per IP)
-      try {
-        const rcRes = await fetch("/api/auth/rate-check", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "auth:resend_verification", identifier: cleanEmail }),
-        });
-        if (rcRes.status === 429) {
-          const rcData = await rcRes.json().catch(() => ({}));
-          setErrorMessage(
-            rcData.error ||
-              "You have reached the maximum of 3 replacement link requests for this 15-minute window. Please check your Spam/Promotions folder, or wait a short while before requesting another link."
-          );
-          setCooldown(60);
-          return;
-        }
-      } catch (rateCheckErr) {
-        // If client is completely offline, notify immediately without decrementing quota
-        if (!navigator.onLine) {
-          setErrorMessage("You appear to be offline. Please check your internet connection.");
-          return;
-        }
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        setErrorMessage("You appear to be offline. Please check your internet connection.");
+        return;
       }
 
       const supabase = createClient();
@@ -124,15 +103,14 @@ export default function VerifyEmailView({
         const parsed = parseAuthError(error);
         setErrorMessage(parsed.message);
 
-        // Apply realistic cooldown based on error nature
-        if (parsed.isRateLimit) {
-          setCooldown(parsed.recommendedCooldownSeconds || RESEND_COOLDOWN_SECONDS);
+        // Apply provider cooldown only if reported by Supabase Auth
+        if (parsed.isRateLimit && parsed.recommendedCooldownSeconds) {
+          setCooldown(parsed.recommendedCooldownSeconds);
         }
         return;
       }
 
       setSuccessMessage("A fresh confirmation link has been sent to your email address.");
-      setCooldown(RESEND_COOLDOWN_SECONDS);
     } catch (err: any) {
       const parsed = parseAuthError(err);
       setErrorMessage(parsed.message);
@@ -338,7 +316,7 @@ export default function VerifyEmailView({
 
         {cooldown > 0 && (
           <p className="text-[10px] text-slate-400">
-            A 30-second cooldown is enforced to prevent mailbox congestion.
+            Please wait for the timer to finish before requesting another link.
           </p>
         )}
       </div>

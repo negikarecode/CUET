@@ -9,7 +9,6 @@
  * - Standardized Indian date formatting
  */
 
-import { safeStorage } from "@/lib/storage/safe-storage";
 import { CUET_AUTHORITY } from "@/lib/constants/cuetAuthority";
 
 // -------------------------------------------------------------
@@ -1036,68 +1035,15 @@ export interface RateLimitCheckResult {
  * In server environment: permits action with full quota.
  */
 export function checkAndRecordRateLimit(
-  userId: string = "guest",
-  feature: RateLimitedFeature
+  _userId: string = "guest",
+  _feature?: RateLimitedFeature
 ): RateLimitCheckResult {
-  let canonicalFeature: keyof typeof DAILY_RATE_LIMITS = "AI_MISTAKE_EXPLANATION";
-  if (feature === "repair_drills" || feature === "ADAPTIVE_REPAIR_DRILL") {
-    canonicalFeature = "ADAPTIVE_REPAIR_DRILL";
-  } else if (feature === "why_wrong_explanations" || feature === "AI_MISTAKE_EXPLANATION") {
-    canonicalFeature = "AI_MISTAKE_EXPLANATION";
-  } else if (feature === "doubt_solver_messages" || feature === "DOUBT_SOLVER_MESSAGES") {
-    canonicalFeature = "DOUBT_SOLVER_MESSAGES";
-  } else if (feature === "daily_study_plan" || feature === "DAILY_STUDY_PLAN") {
-    canonicalFeature = "DAILY_STUDY_PLAN";
-  } else if (feature === "weekly_report" || feature === "WEEKLY_PROGRESS_REPORT") {
-    canonicalFeature = "WEEKLY_PROGRESS_REPORT";
-  }
-
-  const limit = DAILY_RATE_LIMITS[canonicalFeature] || 50;
-
-  if (typeof window === "undefined") {
-    return {
-      allowed: true,
-      usedToday: 0,
-      limit,
-      remainingToday: limit,
-      remaining: limit,
-    };
-  }
-
-  try {
-    const today = new Date().toISOString().split("T")[0];
-    const storageKey = `cuet_rate_limit:${userId}:${today}:${canonicalFeature}`;
-    const raw = safeStorage.getItem(storageKey);
-    const usedToday = raw ? parseInt(raw, 10) : 0;
-
-    if (usedToday >= limit) {
-      return {
-        allowed: false,
-        usedToday,
-        limit,
-        remainingToday: 0,
-        remaining: 0,
-        message: "Daily practice limit reached for today. Resets tomorrow.",
-      };
-    }
-
-    const newCount = usedToday + 1;
-    safeStorage.setItem(storageKey, newCount.toString());
-    const remaining = Math.max(0, limit - newCount);
-    return {
-      allowed: true,
-      usedToday: newCount,
-      limit,
-      remainingToday: remaining,
-      remaining,
-    };
-  } catch {
-    return {
-      allowed: true,
-      usedToday: 0,
-      limit,
-      remainingToday: limit,
-      remaining: limit,
-    };
-  }
+  // Custom rate-limiting is temporarily disabled across CUETMate
+  return {
+    allowed: true,
+    usedToday: 0,
+    limit: 999999,
+    remainingToday: 999999,
+    remaining: 999999,
+  };
 }
