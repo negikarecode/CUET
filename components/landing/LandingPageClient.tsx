@@ -28,6 +28,7 @@ import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import OnboardingModal from "@/components/auth/OnboardingModal";
 import { CUET_AUTHORITY } from "@/lib/constants/cuetAuthority";
+import { createClient } from "@/lib/supabase/client";
 
 /* ==========================================================================
    DATA DEFINITIONS (All original data preserved + enriched with official specs)
@@ -1067,9 +1068,9 @@ function Navigation({
               <button
                 type="button"
                 onClick={() => onAuth("signup")}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-sm shadow-xs hover:shadow transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm shadow-xs hover:shadow transition-all cursor-pointer"
               >
-                <span>Start Free</span>
+                <span>Join Now</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </>
@@ -1243,7 +1244,7 @@ function Hero({
                 }
               }}
             >
-              <span>{isLoggedIn ? "Open Dashboard" : "Start Practicing Free"}</span>
+              <span>{isLoggedIn ? "Open Dashboard" : "Join Now — Start Free"}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
@@ -2342,7 +2343,7 @@ function FinalCTA({
               }
             }}
           >
-            <span>{isLoggedIn ? "Open Dashboard" : "Start Practicing Free"}</span>
+            <span>{isLoggedIn ? "Open Dashboard" : "Join Now — Start Free"}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
@@ -2538,7 +2539,49 @@ export default function LandingPageClient() {
   const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null);
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
-  const isLoggedIn = isClient && Boolean(user?.isLoggedIn && user?.name && user?.id !== "guest");
+  const logout = useTestStore((state) => state.logout);
+  const [hasActiveSession, setHasActiveSession] = useState<boolean>(false);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const supabase = createClient();
+
+    // Check authoritative Supabase session to prevent stale localStorage from falsely showing logged-in state
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!isMounted) return;
+      if (session?.user) {
+        setHasActiveSession(true);
+      } else {
+        setHasActiveSession(false);
+        if (user?.isLoggedIn) {
+          logout();
+        }
+      }
+      setAuthChecked(true);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!isMounted) return;
+      if (session?.user) {
+        setHasActiveSession(true);
+      } else {
+        setHasActiveSession(false);
+        logout();
+      }
+      setAuthChecked(true);
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
+  }, [logout, user?.isLoggedIn]);
+
+  // Strictly false until Supabase explicitly confirms an active authenticated session
+  const isLoggedIn = isClient && authChecked && hasActiveSession;
 
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900">
