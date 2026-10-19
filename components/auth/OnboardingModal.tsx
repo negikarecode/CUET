@@ -24,6 +24,7 @@ import { useTargetSelection } from "@/lib/hooks/useTargetSelection";
 import { DEFAULT_STREAM_SUBJECTS, getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
 import OtpVerificationView, { OtpVerificationType } from "./OtpVerificationView";
+import VerifyEmailView from "./VerifyEmailView";
 import { validateEmail, isPasswordValid } from "@/lib/auth/validation";
 
 interface OnboardingModalProps {
@@ -39,8 +40,8 @@ export default function OnboardingModal({
 }: OnboardingModalProps) {
   const loginUser = useTestStore((state) => state.loginUser);
 
-  const [mode, setMode] = useState<"signup" | "login" | "otp">(initialMode);
-  const [otpType, setOtpType] = useState<OtpVerificationType>("signup");
+  const [mode, setMode] = useState<"signup" | "login" | "otp" | "verify_email">(initialMode);
+  const [otpType] = useState<OtpVerificationType>("signup");
   const [unconfirmedEmail, setUnconfirmedEmail] = useState<string | null>(null);
   const [step, setStep] = useState<1 | 2>(1);
 
@@ -101,9 +102,12 @@ export default function OnboardingModal({
 
       if (error) {
         const errMsg = error.message.toLowerCase();
-        if (errMsg.includes("email not confirmed") || errMsg.includes("not confirmed")) {
+        if (errMsg.includes("email not confirmed") || errMsg.includes("not confirmed") || errMsg.includes("not verified")) {
           setUnconfirmedEmail(cleanEmail);
-          setErrorMessage("Your email address has not been verified yet. Please enter your 6-digit verification code below.");
+          setEmail(cleanEmail);
+          setMode("verify_email");
+          setErrorMessage(null);
+          setInfoMessage("Your email address has not been verified yet. We have sent a confirmation email to your address.");
         } else {
           setErrorMessage(error.message);
         }
@@ -233,10 +237,14 @@ export default function OnboardingModal({
         // Ignore if already signed out
       }
 
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const emailRedirectTo = `${origin}/auth/confirm`;
+
       const { data, error } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
         options: {
+          emailRedirectTo,
           data: {
             full_name: cleanName,
             age,
@@ -256,9 +264,15 @@ export default function OnboardingModal({
       }
 
       if (data.user) {
-        if (!data.session) {
-          setOtpType("signup");
-          setMode("otp");
+        if (data.user.identities && data.user.identities.length === 0) {
+          setErrorMessage("An account with this email already exists. Please sign in instead.");
+          setMode("login");
+          setIsLoading(false);
+          return;
+        }
+
+        if (!data.user.email_confirmed_at && !data.session) {
+          setMode("verify_email");
           setIsLoading(false);
           return;
         }
@@ -395,13 +409,12 @@ export default function OnboardingModal({
                   type="button"
                   onClick={() => {
                     setEmail(unconfirmedEmail);
-                    setOtpType("signup");
-                    setMode("otp");
+                    setMode("verify_email");
                     setErrorMessage(null);
                   }}
                   className="inline-flex items-center gap-1 font-bold text-blue-700 hover:text-blue-800 hover:underline pt-0.5 cursor-pointer"
                 >
-                  <span>Click here to enter your 6-digit verification code</span>
+                  <span>Click here to verify your email address</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -418,7 +431,18 @@ export default function OnboardingModal({
 
         {/* Modal Body / Scrollable Form */}
         <div className="p-6 overflow-y-auto space-y-6 text-slate-900">
-          {mode === "otp" ? (
+          {mode === "verify_email" ? (
+            <VerifyEmailView
+              email={email.trim().toLowerCase()}
+              onBackToSignup={() => {
+                setMode("signup");
+                setStep(1);
+                setErrorMessage(null);
+              }}
+              initialError={errorMessage}
+              initialMessage={infoMessage}
+            />
+          ) : mode === "otp" ? (
             <OtpVerificationView
               email={email.trim().toLowerCase()}
               otpType={otpType}

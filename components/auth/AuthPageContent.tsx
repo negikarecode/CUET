@@ -28,6 +28,7 @@ import CollegeSearchDropdown from "./CollegeSearchDropdown";
 import CourseSearchDropdown from "./CourseSearchDropdown";
 import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
 import OtpVerificationView, { OtpVerificationType } from "./OtpVerificationView";
+import VerifyEmailView from "./VerifyEmailView";
 import ForgotPasswordView from "./ForgotPasswordView";
 import { DEFAULT_STREAM_SUBJECTS, getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { validateEmail, isPasswordValid } from "@/lib/auth/validation";
@@ -36,7 +37,7 @@ interface AuthPageContentProps {
   initialMode?: "signup" | "login";
 }
 
-type AuthViewMode = "signup" | "login" | "otp" | "forgot_password";
+type AuthViewMode = "signup" | "login" | "otp" | "forgot_password" | "verify_email";
 type LoginMethod = "password" | "otp";
 
 export default function AuthPageContent({
@@ -202,7 +203,10 @@ export default function AuthPageContent({
           errMsg.includes("not_verified")
         ) {
           setUnconfirmedEmailForVerification(cleanEmail);
-          setErrorMessage("Your email address has not been verified yet. Please enter your 6-digit verification code below.");
+          setEmail(cleanEmail);
+          setMode("verify_email");
+          setErrorMessage(null);
+          setInfoMessage("Your email address has not been verified yet. We have sent a confirmation email to your address.");
         } else if (errMsg.includes("invalid login credentials")) {
           setErrorMessage("Invalid email or password. Please check your credentials and try again.");
         } else {
@@ -314,10 +318,14 @@ export default function AuthPageContent({
         await supabase.auth.signOut();
       } catch {}
 
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const emailRedirectTo = `${origin}/auth/confirm?next=${encodeURIComponent(redirectUrl)}`;
+
       const { data, error } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
         options: {
+          emailRedirectTo,
           data: {
             full_name: cleanName,
             age,
@@ -345,24 +353,14 @@ export default function AuthPageContent({
           return;
         }
 
-        // 2. If Supabase project settings auto-issued a session (email confirmation off in Supabase dashboard),
-        // sign out the unverified session and dispatch a genuine email verification code via signInWithOtp
-        if (data.session) {
-          await supabase.auth.signOut();
-          const otpDispatch = await supabase.auth.signInWithOtp({
-            email: cleanEmail,
-            options: { shouldCreateUser: false },
-          });
-          if (otpDispatch.error) {
-            console.warn("OTP dispatch notice:", otpDispatch.error);
-          }
-          setOtpType("email");
-        } else {
-          setOtpType("signup");
+        // 2. If the user was already confirmed automatically (e.g. email confirmation disabled in project)
+        if (data.user.email_confirmed_at) {
+          await syncProfileAndLogin(data.user);
+          return;
         }
 
-        // 3. Always transition to the dedicated 6-digit OTP verification view! Zero bypass.
-        setMode("otp");
+        // 3. Transition to dedicated email verification screen
+        setMode("verify_email");
         return;
       }
     } catch (err: any) {
@@ -410,6 +408,8 @@ export default function AuthPageContent({
                       ? "Join CUET AI-Prep"
                       : mode === "forgot_password"
                       ? "Recover Account"
+                      : mode === "verify_email"
+                      ? "Verify Your Email"
                       : mode === "otp"
                       ? "Verify One-Time Code"
                       : "Candidate Sign In"}
@@ -425,6 +425,8 @@ export default function AuthPageContent({
                     ? "Create your candidate profile to access calibrated domain mocks"
                     : mode === "forgot_password"
                     ? "Reset your password via verified email"
+                    : mode === "verify_email"
+                    ? "Check your inbox to verify your email and activate your account"
                     : mode === "otp"
                     ? "Enter your 6-digit verification code to proceed"
                     : "Sign in with your email or passwordless code to open your dashboard"}
@@ -483,13 +485,12 @@ export default function AuthPageContent({
                     type="button"
                     onClick={() => {
                       setEmail(unconfirmedEmailForVerification);
-                      setOtpType("signup");
-                      setMode("otp");
+                      setMode("verify_email");
                       setErrorMessage(null);
                     }}
                     className="inline-flex items-center gap-1.5 font-bold text-blue-700 hover:text-blue-800 hover:underline pt-1 cursor-pointer"
                   >
-                    <span>Click here to enter your 6-digit verification code</span>
+                    <span>Click here to verify your email address</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 )}
@@ -506,7 +507,21 @@ export default function AuthPageContent({
 
           {/* Card Body */}
           <div className="p-6 sm:p-8 space-y-6 text-slate-800">
-            {mode === "otp" ? (
+            {mode === "verify_email" ? (
+              /* ======================================================= */
+              /* VERIFY EMAIL VIEW (Confirmation link screen)           */
+              /* ======================================================= */
+              <VerifyEmailView
+                email={email.trim().toLowerCase()}
+                onBackToSignup={() => {
+                  setMode("signup");
+                  setStep(1);
+                  setErrorMessage(null);
+                }}
+                initialError={errorMessage}
+                initialMessage={infoMessage}
+              />
+            ) : mode === "otp" ? (
               /* ======================================================= */
               /* OTP VERIFICATION VIEW                                   */
               /* ======================================================= */
@@ -869,11 +884,11 @@ export default function AuthPageContent({
                         {isLoading ? (
                           <>
                             <Loader2 className="w-4 h-4 animate-spin" />
-                            <span>Creating account & sending code...</span>
+                            <span>Creating account & sending confirmation...</span>
                           </>
                         ) : (
                           <>
-                            <span>Register & Verify with OTP</span>
+                            <span>Create Account & Verify Email</span>
                             <ArrowRight className="w-4 h-4 stroke-[2.2]" />
                           </>
                         )}

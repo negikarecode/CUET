@@ -61,6 +61,7 @@ export async function updateSession(request: NextRequest) {
   const isAuthRoute =
     pathname === "/signup" ||
     pathname === "/login" ||
+    pathname === "/verify-email" ||
     pathname === "/verify-otp" ||
     pathname === "/forgot-password";
 
@@ -87,10 +88,10 @@ export async function updateSession(request: NextRequest) {
     return redirectResponse;
   }
 
-  // 2. Authenticated but unverified users cannot enter dashboard or CBT test engine -> redirect to /verify-otp
+  // 2. Authenticated but unverified users cannot enter dashboard or CBT test engine -> redirect to /verify-email
   if ((isDashboardRoute || isTestRoute) && isAuthenticated && !isEmailVerified) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/verify-otp";
+    redirectUrl.pathname = "/verify-email";
     redirectUrl.search = "";
     if (authUser?.email) {
       redirectUrl.searchParams.set("email", authUser.email);
@@ -103,7 +104,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // 3. Authenticated candidates visiting auth routes:
-  // If fully verified, redirect /signup, /login, /verify-otp to dashboard
+  // If fully verified, redirect /signup, /login, /verify-email, /verify-otp to dashboard
   if (isAuthRoute && isAuthenticated && isEmailVerified) {
     const redirectParam = request.nextUrl.searchParams.get("redirect");
     const targetPath =
@@ -119,14 +120,14 @@ export async function updateSession(request: NextRequest) {
     return redirectResponse;
   }
 
-  // If authenticated but unverified, redirect /signup and /login to /verify-otp
+  // If authenticated but unverified, redirect /signup and /login to /verify-email
   if (
     (pathname === "/signup" || pathname === "/login") &&
     isAuthenticated &&
     !isEmailVerified
   ) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/verify-otp";
+    redirectUrl.pathname = "/verify-email";
     redirectUrl.search = "";
     if (authUser?.email) {
       redirectUrl.searchParams.set("email", authUser.email);

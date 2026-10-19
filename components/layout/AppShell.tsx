@@ -34,7 +34,12 @@ export default function AppShell({ children }: AppShellProps) {
   const isLandingRoute = pathname === "/";
 
   const isAuthRoute = Boolean(
-    pathname && (pathname.startsWith("/signup") || pathname.startsWith("/login"))
+    pathname &&
+      (pathname.startsWith("/signup") ||
+        pathname.startsWith("/login") ||
+        pathname.startsWith("/verify-email") ||
+        pathname.startsWith("/verify-otp") ||
+        pathname.startsWith("/forgot-password"))
   );
 
   // If on CBT simulator, full screen with no navbars or bottom navs

@@ -68,15 +68,15 @@ export default async function TestPage({ params, searchParams }: PageProps) {
           <LockedFeaturePaywall
             featureTitle="CBT Exam Environment"
             featureSubtitle="Email Verification Required"
-            featureDescription="Your email address must be verified before starting a CBT exam session. Please enter the 6-digit verification code sent to your email."
+            featureDescription="Your email address must be verified before starting a CBT exam session. Please check your inbox for the confirmation link."
             benefits={[
               "3 Free full-length 50-question mock tests with official NTA timer",
               "Instant accuracy, scoring (+5 / -1) and time-sink detection",
               "Sync your answers and past sessions across devices",
               "Access official CUET UG domain question papers",
             ]}
-            returnUrl={`/verify-otp?email=${encodeURIComponent(authUser.email || "")}`}
-            returnLabel="Verify Email Code"
+            returnUrl={`/verify-email?email=${encodeURIComponent(authUser.email || "")}`}
+            returnLabel="Verify Email"
           />
         </div>
       );
