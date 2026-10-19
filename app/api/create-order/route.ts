@@ -26,16 +26,6 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(req: NextRequest) {
   try {
-    const keyId = process.env.RAZORPAY_KEY_ID;
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
-
-    if (!keyId || !keySecret) {
-      return NextResponse.json(
-        { error: "Razorpay credentials are not configured on the server." },
-        { status: 500 }
-      );
-    }
-
     // Check Authorization header for explicit auth token validation
     const authHeader = req.headers.get("authorization");
     if (authHeader && authHeader.startsWith("Bearer ")) {
@@ -48,6 +38,18 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    const body = await req.json().catch(() => ({}));
+    const rawAmount = body.amount ?? body.amountPaise;
+    const parsedAmount = typeof rawAmount === "string" ? parseInt(rawAmount, 10) : Number(rawAmount);
+
+    // Validate amount >= 100 paise (Razorpay minimum transaction threshold)
+    if (rawAmount === undefined || rawAmount === null || isNaN(parsedAmount) || parsedAmount < 100) {
+      return NextResponse.json(
+        { error: "Invalid amount. Minimum amount is 100 paise (₹1.00)." },
+        { status: 400 }
+      );
+    }
+
     // Optional Supabase authenticated candidate resolution
     let authUser: { id: string; email?: string; user_metadata?: { full_name?: string } } | null = null;
     try {
@@ -58,15 +60,13 @@ export async function POST(req: NextRequest) {
       // Direct API test / guest invocation
     }
 
-    const body = await req.json().catch(() => ({}));
-    const rawAmount = body.amount ?? body.amountPaise;
-    const parsedAmount = typeof rawAmount === "string" ? parseInt(rawAmount, 10) : Number(rawAmount);
+    const keyId = process.env.RAZORPAY_KEY_ID;
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
 
-    // Validate amount >= 100 paise (Razorpay minimum transaction threshold)
-    if (rawAmount === undefined || rawAmount === null || isNaN(parsedAmount) || parsedAmount < 100) {
+    if (!keyId || !keySecret) {
       return NextResponse.json(
-        { error: "Invalid amount. Minimum amount is 100 paise (₹1.00)." },
-        { status: 400 }
+        { error: "Razorpay credentials are not configured on the server." },
+        { status: 500 }
       );
     }
 

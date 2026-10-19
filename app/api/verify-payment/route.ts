@@ -20,15 +20,6 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(req: NextRequest) {
   try {
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
-
-    if (!keySecret) {
-      return NextResponse.json(
-        { error: "Razorpay Key Secret is unconfigured on the server." },
-        { status: 500 }
-      );
-    }
-
     const body = await req.json().catch(() => ({}));
     const orderId = body.razorpay_order_id || body.order_id;
     const paymentId = body.razorpay_payment_id || body.payment_id;
@@ -42,6 +33,15 @@ export async function POST(req: NextRequest) {
           code: "MISSING_FIELDS",
         },
         { status: 400 }
+      );
+    }
+
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+
+    if (!keySecret) {
+      return NextResponse.json(
+        { error: "Razorpay Key Secret is unconfigured on the server." },
+        { status: 500 }
       );
     }
 
