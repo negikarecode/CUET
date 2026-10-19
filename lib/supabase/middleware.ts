@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 /**
  * Updates the user's Supabase session in Next.js middleware and guards protected routes.
@@ -63,7 +64,17 @@ export async function updateSession(request: NextRequest) {
     pathname === "/login" ||
     pathname === "/verify-email" ||
     pathname === "/verify-otp" ||
-    pathname === "/forgot-password";
+    pathname === "/forgot-password" ||
+    pathname === "/reset-password";
+
+  // Anti-flood rate limiting on public auth pages (60 requests per minute per IP)
+  if (isAuthRoute) {
+    const rateId = getClientRateLimitIdentifier(request, null, "default");
+    const rateCheck = await rateLimit("default", rateId, { max: 60, windowSeconds: 60 });
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
+    }
+  }
 
   const isAuthenticated = Boolean(authUser);
   const isEmailVerified = Boolean(

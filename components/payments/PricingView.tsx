@@ -13,7 +13,7 @@ import UpgradeButton from "./UpgradeButton";
 
 export default function PricingView() {
   const [pricing, setPricing] = useState({
-    currentPriceInr: 499,
+    currentPriceInr: 10,
     standardPriceInr: 799,
     isPromotionalActive: true,
     totalSlots: 100,
@@ -30,7 +30,7 @@ export default function PricingView() {
           const data = await res.json();
           if (data?.pricing && isMounted) {
             setPricing({
-              currentPriceInr: data.pricing.currentPriceInr ?? 499,
+              currentPriceInr: data.pricing.currentPriceInr ?? 10,
               standardPriceInr: data.pricing.standardPriceInr ?? 799,
               isPromotionalActive: data.pricing.isPromotionalActive ?? true,
               totalSlots: data.pricing.totalPromotionalSlots ?? 100,

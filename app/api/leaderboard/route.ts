@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { StreamType } from "@/types";
 import { calculateActiveStreak } from "@/lib/gamification";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,13 @@ export async function GET(_req: NextRequest) {
       }
     } catch {
       // Guest or SSR without auth cookies
+    }
+
+    // Rate limit: 30 requests per minute
+    const rateIdentifier = getClientRateLimitIdentifier(_req, currentUserId, "user:leaderboard");
+    const rateCheck = await rateLimit("user:leaderboard", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
     }
 
     const { getUserEntitlement } = await import("@/lib/payments/entitlements");

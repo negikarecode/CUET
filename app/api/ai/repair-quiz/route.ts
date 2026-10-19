@@ -4,6 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { Question } from "@/types";
 import { getQuestionsForTest } from "@/lib/data/mock50Questions";
 import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 import { tokenLogger } from "@/lib/ai/token-logger";
 import { checkAIQualificationGate } from "@/lib/ai-gate";
 
@@ -69,6 +70,13 @@ export async function POST(req: NextRequest) {
         },
         { status: 403 }
       );
+    }
+
+    // Server-side rate limit on adaptive quiz generation (5 per minute per user)
+    const rateIdentifier = getClientRateLimitIdentifier(req, authUser?.id || body.userId, "ai:repair_quiz");
+    const rateCheck = await rateLimit("ai:repair_quiz", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
     }
 
     // ─── CASE A: 15-QUESTION ADAPTIVE PRACTICE DRILL ─────────────────────────
@@ -338,11 +346,11 @@ export async function POST(req: NextRequest) {
       if (authUser?.id) authUserId = authUser.id;
     } catch {}
 
-    const clientIdentifier = getClientIdentifier(req, authUserId || bodyUserId);
-    const userId = authUserId || bodyUserId || clientIdentifier;
+    const legacyClientId = getClientIdentifier(req, authUserId || bodyUserId);
+    const userId = authUserId || bodyUserId || legacyClientId;
 
     const primaryTopics = weakMicroTopics.slice(0, 3);
-    const cacheKey = `${clientIdentifier}:${subject || "general"}:${primaryTopics.sort().join("_")}`;
+    const cacheKey = `${legacyClientId}:${subject || "general"}:${primaryTopics.sort().join("_")}`;
 
     const isRetest = practiceType === "retest";
     const cachedQuiz = !isRetest ? memoryQuizCache.get(cacheKey) : null;
@@ -361,14 +369,14 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const rateLimit = checkServerRateLimit("repair_drills", clientIdentifier, 30);
-    if (!rateLimit.allowed) {
+    const dailyDrillLimit = checkServerRateLimit("repair_drills", legacyClientId, 30);
+    if (!dailyDrillLimit.allowed) {
       return NextResponse.json(
         {
-          error: rateLimit.error || "Daily practice drill limit reached for today. Resets tomorrow.",
+          error: dailyDrillLimit.error || "Daily practice drill limit reached for today. Resets tomorrow.",
           remaining: 0,
         },
-        { status: 429, headers: getRateLimitHeaders(rateLimit) }
+        { status: 429, headers: getRateLimitHeaders(dailyDrillLimit) }
       );
     }
 

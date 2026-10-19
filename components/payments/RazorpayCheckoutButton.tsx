@@ -11,7 +11,7 @@ declare global {
 }
 
 export interface RazorpayCheckoutButtonProps {
-  amountPaise?: number; // amount in paise (default: 49900 = ₹499)
+  amountPaise?: number; // amount in paise (default: 1000 = ₹10)
   currency?: string;    // default: "INR"
   planTitle?: string;   // description in modal
   buttonText?: string;
@@ -51,7 +51,7 @@ function ensureRazorpayScript(): Promise<boolean> {
 }
 
 export default function RazorpayCheckoutButton({
-  amountPaise = 49900,
+  amountPaise = 1000,
   currency = "INR",
   planTitle = "CUETMate Premium (All-Access Pass)",
   buttonText,

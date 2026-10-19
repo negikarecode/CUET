@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { editQuestion, getIngestionStats, getQuestionDetail, getQuestionsList, updateQuestionReview, getPYQDB } from "@/lib/pyq/db";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 import crypto from "crypto";
 
@@ -16,6 +17,12 @@ function authorized(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  const rateId = getClientRateLimitIdentifier(req, null, "admin:pyq");
+  const rateCheck = await rateLimit("admin:pyq", rateId);
+  if (!rateCheck.success) {
+    return rateLimitResponse(rateCheck);
+  }
+
   if (!authorized(req)) return NextResponse.json({ error: "Admin access required. Configure PYQ_ADMIN_TOKEN." }, { status: 401 });
   try {
     const params = req.nextUrl.searchParams;
@@ -62,6 +69,12 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  const rateId = getClientRateLimitIdentifier(req, null, "admin:pyq");
+  const rateCheck = await rateLimit("admin:pyq", rateId);
+  if (!rateCheck.success) {
+    return rateLimitResponse(rateCheck);
+  }
+
   if (!authorized(req)) return NextResponse.json({ error: "Admin access required" }, { status: 401 });
   try {
     const body = await req.json();

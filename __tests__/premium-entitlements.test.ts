@@ -133,19 +133,19 @@ async function runPremiumEntitlementTests() {
   }
 
   const buyer1 = computePrice(0);
-  assert(buyer1.isPromotional && buyer1.priceInr === 499 && buyer1.remainingSlots === 100, "1st buyer receives ₹499 with 100 remaining slots");
+  assert(buyer1.isPromotional && buyer1.priceInr === PRICING_CONFIG.PROMOTIONAL_PRICE_INR && buyer1.remainingSlots === 100, `1st buyer receives ₹${PRICING_CONFIG.PROMOTIONAL_PRICE_INR} with 100 remaining slots`);
 
   const buyer50 = computePrice(49);
-  assert(buyer50.isPromotional && buyer50.priceInr === 499 && buyer50.remainingSlots === 51, "50th buyer receives ₹499 with 51 remaining slots");
+  assert(buyer50.isPromotional && buyer50.priceInr === PRICING_CONFIG.PROMOTIONAL_PRICE_INR && buyer50.remainingSlots === 51, `50th buyer receives ₹${PRICING_CONFIG.PROMOTIONAL_PRICE_INR} with 51 remaining slots`);
 
   const buyer100 = computePrice(99);
-  assert(buyer100.isPromotional && buyer100.priceInr === 499 && buyer100.remainingSlots === 1, "100th buyer receives ₹499 with 1 remaining slot");
+  assert(buyer100.isPromotional && buyer100.priceInr === PRICING_CONFIG.PROMOTIONAL_PRICE_INR && buyer100.remainingSlots === 1, `100th buyer receives ₹${PRICING_CONFIG.PROMOTIONAL_PRICE_INR} with 1 remaining slot`);
 
   const buyer101 = computePrice(100);
-  assert(!buyer101.isPromotional && buyer101.priceInr === 799 && buyer101.remainingSlots === 0, "101st buyer receives standard ₹799 price with 0 promotional slots");
+  assert(!buyer101.isPromotional && buyer101.priceInr === PRICING_CONFIG.STANDARD_PRICE_INR && buyer101.remainingSlots === 0, `101st buyer receives standard ₹${PRICING_CONFIG.STANDARD_PRICE_INR} price with 0 promotional slots`);
 
   const buyer200 = computePrice(200);
-  assert(!buyer200.isPromotional && buyer200.priceInr === 799, "Subsequent buyers receive standard ₹799 price");
+  assert(!buyer200.isPromotional && buyer200.priceInr === PRICING_CONFIG.STANDARD_PRICE_INR, `Subsequent buyers receive standard ₹${PRICING_CONFIG.STANDARD_PRICE_INR} price`);
 
   // ─── SUITE 4: CRYPTOGRAPHIC SIGNATURE & FAIL-CLOSED GATEWAY VERIFICATION ─
   console.log("\n[SUITE 4] Cryptographic Signature & Fail-Closed Protocols");

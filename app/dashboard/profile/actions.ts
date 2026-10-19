@@ -6,6 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { StreamOption } from "@/types/database";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { validateTargetPair } from "@/lib/college-offerings";
+import { rateLimit } from "@/lib/security/rateLimiter";
 
 export interface UpdateProfileGoalsInput {
   targetStream?: StreamOption | string;
@@ -26,6 +27,14 @@ export async function updateProfileGoalsAction(input: UpdateProfileGoalsInput) {
 
     if (authError || !user) {
       return { success: false, error: "Authentication session expired. Please log in again." };
+    }
+
+    const rateCheck = await rateLimit("user:profile_update", `usr:${user.id}`);
+    if (!rateCheck.success) {
+      return {
+        success: false,
+        error: rateCheck.error || "Profile update rate limit reached. Please wait a minute before updating again.",
+      };
     }
 
     // Validate college-program combination

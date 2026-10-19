@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
 import { stringToUuid } from "@/lib/utils";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 export const dynamic = "force-dynamic";
 
@@ -62,6 +63,12 @@ export async function DELETE(req: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const rateId = getClientRateLimitIdentifier(req, user.id, "student:attempts_delete");
+    const rateCheck = await rateLimit("student:attempts_delete", rateId);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
     }
 
     const { searchParams } = new URL(req.url);

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 import { tokenLogger } from "@/lib/ai/token-logger";
 import Groq from "groq-sdk";
 
@@ -46,17 +46,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const clientIdentifier = getClientIdentifier(req, authUserId || userId);
-    const rateCheck = checkServerRateLimit("doubt_solver", clientIdentifier, 40);
-    if (!rateCheck.allowed) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: rateCheck.error,
-          rateLimited: true,
-        },
-        { status: 429, headers: getRateLimitHeaders(rateCheck) }
-      );
+    const clientIdentifier = getClientRateLimitIdentifier(req, authUserId || userId, "ai:doubt_solver");
+    const rateCheck = await rateLimit("ai:doubt_solver", clientIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
     }
 
     // 2. Format grounding facts

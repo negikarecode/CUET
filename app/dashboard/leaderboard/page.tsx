@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import Leaderboard from "@/components/dashboard/Leaderboard";
 import LockedFeaturePaywall from "@/components/payments/LockedFeaturePaywall";
-import { Trophy } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "All-India Trophy Leaderboard | CUET AI-Prep",
@@ -46,7 +45,7 @@ export default async function LeaderboardPage() {
           "Filter competitors by dream university (Delhi University, BHU, JNU) and college targets",
           "Track consistency streaks and trophy unlocks across India",
         ]}
-        icon={Trophy}
+        iconName="trophy"
       />
     );
   }

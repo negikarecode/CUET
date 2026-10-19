@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +59,13 @@ export async function POST(req: NextRequest) {
       authUser = user;
     } catch {
       // Direct API test / guest invocation
+    }
+
+    // Enforce server-side rate limit for payment order creation (5 per 10 minutes per user/IP)
+    const rateIdentifier = getClientRateLimitIdentifier(req, authUser?.id, "payment:create_order");
+    const rateCheck = await rateLimit("payment:create_order", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
     }
 
     const keyId = process.env.RAZORPAY_KEY_ID;

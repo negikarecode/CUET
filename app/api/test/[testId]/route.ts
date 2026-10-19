@@ -7,9 +7,11 @@ import { getQuestionsForTest } from "@/lib/data/mock50Questions";
 import { CUET_UG_2026_CONFIG, calculateExamScore } from "@/lib/config/examConfig";
 import { calculateNextStreakOnPractice, getLocalDateString } from "@/lib/gamification";
 import { sanitizeQuestionForActiveExam } from "@/lib/store/useCBTStore";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 export const dynamic = "force-dynamic";
 
+// In-memory idempotency deduplication cache for test attempt submissions
 const recentAttemptSubmissions = new Map<string, number>();
 
 export async function GET(
@@ -41,6 +43,13 @@ export async function GET(
         { error: "Email verification required before accessing CBT test sessions.", code: "EMAIL_VERIFICATION_REQUIRED" },
         { status: 403 }
       );
+    }
+
+    // Server-side rate limit on starting test sessions (10 per minute per user/IP)
+    const rateIdentifier = getClientRateLimitIdentifier(_req, authUser.id, "exam:start");
+    const rateCheck = await rateLimit("exam:start", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
     }
 
     const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
@@ -108,6 +117,13 @@ export async function POST(
         { error: "Email verification required before recording test attempts.", code: "EMAIL_VERIFICATION_REQUIRED" },
         { status: 403 }
       );
+    }
+
+    // Server-side rate limit on exam submissions (30 per minute per user)
+    const rateIdentifier = getClientRateLimitIdentifier(req, authUser.id, "exam:submit");
+    const rateCheck = await rateLimit("exam:submit", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
     }
 
     const isRecordAttempt =

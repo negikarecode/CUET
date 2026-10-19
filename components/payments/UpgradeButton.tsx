@@ -64,7 +64,7 @@ export default function UpgradeButton({
 
   const is399 = planId === "ai_pass_399";
   const isAllAccess = planId === "all_access_pass_799";
-  const price = is399 ? "₹399" : isAllAccess ? "₹799" : "₹499";
+  const price = "₹10";
   const planTitle = is399 ? "CUET AI Pass" : isAllAccess ? "All-Access Pass" : "AI Practice Pass";
 
   const handleCheckout = async () => {
@@ -79,7 +79,7 @@ export default function UpgradeButton({
         return;
       }
 
-      const amountPaise = is399 ? 39900 : isAllAccess ? 49900 : 49900;
+      const amountPaise = 1000; // ₹10 in paise for testing
 
       // 2. Call Server Route Handler to generate Razorpay Order (POST /api/create-order)
       const res = await fetch("/api/create-order", {

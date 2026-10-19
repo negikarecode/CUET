@@ -68,6 +68,7 @@ export default async function WeaknessRadarPage() {
             "Personalized AI mistake diagnosis with direct NCERT textbook page references",
             "Automated generation of 5-question adaptive repair quizzes to fix detected weaknesses",
           ]}
+          iconName="radar"
         />
       );
     }
@@ -90,6 +91,7 @@ export default async function WeaknessRadarPage() {
             "Personalized AI mistake diagnosis with direct NCERT textbook page references",
             "Automated generation of 5-question adaptive repair quizzes to fix detected weaknesses",
           ]}
+          iconName="radar"
         />
       );
     }
@@ -400,6 +402,7 @@ export default async function WeaknessRadarPage() {
           "Personalized AI mistake diagnosis with direct NCERT textbook page references",
           "Automated generation of 5-question adaptive repair quizzes to fix detected weaknesses",
         ]}
+        iconName="radar"
       />
     );
   }

@@ -5,7 +5,6 @@ import StandingViewClient from "@/components/dashboard/standing/StandingViewClie
 import LockedFeaturePaywall from "@/components/payments/LockedFeaturePaywall";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
 import { RecordedTestAttempt } from "@/types";
-import { Landmark } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Where Do I Stand | CUET AI-Prep",
@@ -57,7 +56,7 @@ export default async function StandingPage() {
               "Official category-wise reservation calibration (UR, OBC, SC, ST, EWS)",
               "Dynamic course & university recommendations based on your highest domain marks",
             ]}
-            icon={Landmark}
+            iconName="landmark"
           />
         );
       }
@@ -88,7 +87,7 @@ export default async function StandingPage() {
             "Official category-wise reservation calibration (UR, OBC, SC, ST, EWS)",
             "Dynamic course & university recommendations based on your highest domain marks",
           ]}
-          icon={Landmark}
+          iconName="landmark"
         />
       );
     }
@@ -105,7 +104,7 @@ export default async function StandingPage() {
           "Official category-wise reservation calibration (UR, OBC, SC, ST, EWS)",
           "Dynamic course & university recommendations based on your highest domain marks",
         ]}
-        icon={Landmark}
+        iconName="landmark"
       />
     );
   }

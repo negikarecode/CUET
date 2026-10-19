@@ -7,6 +7,7 @@ import {
   getUserEntitlement,
   getUserUsageSummary,
 } from "@/lib/payments/entitlements";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 export const dynamic = "force-dynamic";
 
@@ -182,6 +183,12 @@ export async function POST(req: NextRequest) {
 
     // ─── CASE B: VERIFY PAYMENT ──────────────────────────────────────────────
     if (isVerification) {
+      const rateIdentifier = getClientRateLimitIdentifier(req, authUser.id, "payment:verify");
+      const rateCheck = await rateLimit("payment:verify", rateIdentifier);
+      if (!rateCheck.success) {
+        return rateLimitResponse(rateCheck);
+      }
+
       const {
         razorpay_order_id,
         razorpay_payment_id,
@@ -303,6 +310,12 @@ export async function POST(req: NextRequest) {
     }
 
     // ─── CASE B: CREATE ORDER ────────────────────────────────────────────────
+    const rateIdentifier = getClientRateLimitIdentifier(req, authUser.id, "payment:create_order");
+    const rateCheck = await rateLimit("payment:create_order", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
+    }
+
     const pricing = await getPricingOffer();
     const amountPaise = pricing.currentPricePaise;
     const isPromotional = pricing.isPromotionalActive;

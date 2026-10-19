@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,13 @@ export async function POST(req: Request) {
         { error: "Forbidden: Cannot update profile of another user." },
         { status: 403 }
       );
+    }
+
+    // Rate limit: 10 per minute per user
+    const rateIdentifier = getClientRateLimitIdentifier(req, authUser.id, "user:profile_update");
+    const rateCheck = await rateLimit("user:profile_update", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
     }
 
     // Capitalize target stream for database constraint: 'Science' | 'Commerce' | 'Humanities'

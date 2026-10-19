@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,21 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(req: NextRequest) {
   try {
+    // Resolve user ID if authenticated
+    let authUserId: string | null = null;
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) authUserId = user.id;
+    } catch {}
+
+    // Rate limit payment verification attempts (10 per 10 minutes per user/IP)
+    const rateIdentifier = getClientRateLimitIdentifier(req, authUserId, "payment:verify");
+    const rateCheck = await rateLimit("payment:verify", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
+    }
+
     const body = await req.json().catch(() => ({}));
     const orderId = body.razorpay_order_id || body.order_id;
     const paymentId = body.razorpay_payment_id || body.payment_id;

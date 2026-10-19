@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCachedWhyWrongExplanation, setCachedWhyWrongExplanation, getCachedSubjectRadarAI, setCachedSubjectRadarAI, getCachedPostMockAI, setCachedPostMockAI } from "@/lib/ai-cache";
 import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 import { createClient } from "@/lib/supabase/server";
 import { tokenLogger } from "@/lib/ai/token-logger";
 import { getQuestionsForTest } from "@/lib/data/mock50Questions";
@@ -135,6 +136,20 @@ export async function POST(req: NextRequest) {
         userId,
       });
       return NextResponse.json({ success: true, message: "Feedback recorded for review." });
+    }
+
+    // Server-side rate limit on AI insights (10 per minute per user)
+    let authUserId: string | null = null;
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.id) authUserId = user.id;
+    } catch {}
+
+    const rateIdentifier = getClientRateLimitIdentifier(req, authUserId || body.userId, "ai:insights");
+    const rateCheck = await rateLimit("ai:insights", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
     }
 
     // Determine target sub-service

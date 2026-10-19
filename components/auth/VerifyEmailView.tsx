@@ -59,6 +59,23 @@ export default function VerifyEmailView({
     setSuccessMessage(null);
 
     try {
+      // Server-side email resend rate limit check (3 per 15 min per combined user/IP)
+      try {
+        const rcRes = await fetch("/api/auth/rate-check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "auth:resend_verification", identifier: cleanEmail }),
+        });
+        if (rcRes.status === 429) {
+          const rcData = await rcRes.json().catch(() => ({}));
+          setErrorMessage(rcData.error || "Too many verification emails requested. Please wait 15 minutes before requesting a new link.");
+          setIsResending(false);
+          return;
+        }
+      } catch {
+        // Proceed gracefully if offline sandbox
+      }
+
       const supabase = createClient();
       const origin = typeof window !== "undefined" ? window.location.origin : "";
       const redirectTo = `${origin}/auth/confirm`;

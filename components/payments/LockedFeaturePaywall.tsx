@@ -10,15 +10,32 @@ import {
   ArrowLeft,
   Flame,
   Zap,
+  Landmark,
+  Trophy,
+  Radar,
+  GraduationCap,
 } from "lucide-react";
 import UpgradeButton from "./UpgradeButton";
+
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  lock: Lock,
+  landmark: Landmark,
+  trophy: Trophy,
+  radar: Radar,
+  cbt: GraduationCap,
+  graduation: GraduationCap,
+  sparkles: Sparkles,
+  shield: ShieldCheck,
+  flame: Flame,
+  zap: Zap,
+};
 
 export interface LockedFeaturePaywallProps {
   featureTitle: string;
   featureSubtitle?: string;
   featureDescription: string;
   benefits: string[];
-  icon?: React.ComponentType<{ className?: string }>;
+  iconName?: "lock" | "landmark" | "trophy" | "radar" | "cbt" | "sparkles" | string;
   returnUrl?: string;
   returnLabel?: string;
 }
@@ -28,17 +45,18 @@ export default function LockedFeaturePaywall({
   featureSubtitle = "Premium Diagnostic Capability",
   featureDescription,
   benefits,
-  icon: Icon = Lock,
+  iconName = "lock",
   returnUrl = "/dashboard",
   returnLabel = "Back to Aspirant Dashboard",
 }: LockedFeaturePaywallProps) {
+  const Icon = ICON_MAP[iconName?.toLowerCase() || "lock"] || Lock;
   const [pricing, setPricing] = useState<{
     currentPriceInr: number;
     standardPriceInr: number;
     isPromotionalActive: boolean;
     remainingPromotionalSlots: number;
   }>({
-    currentPriceInr: 499,
+    currentPriceInr: 10,
     standardPriceInr: 799,
     isPromotionalActive: true,
     remainingPromotionalSlots: 100,

@@ -26,7 +26,7 @@ export default function UsageLimitPaywallModal({
   canonicalSubject,
 }: UsageLimitPaywallModalProps) {
   const [pricing, setPricing] = useState({
-    currentPriceInr: 499,
+    currentPriceInr: 10,
     standardPriceInr: 799,
     remainingSlots: 100,
   });
@@ -41,7 +41,7 @@ export default function UsageLimitPaywallModal({
           const data = await res.json();
           if (data?.pricing && isMounted) {
             setPricing({
-              currentPriceInr: data.pricing.currentPriceInr ?? 499,
+              currentPriceInr: data.pricing.currentPriceInr ?? 10,
               standardPriceInr: data.pricing.standardPriceInr ?? 799,
               remainingSlots: data.pricing.remainingPromotionalSlots ?? 100,
             });

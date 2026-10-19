@@ -243,7 +243,7 @@ export class MockSandboxProvider implements PaymentProvider {
     _orderId: string
   ): Promise<{ isPaid: boolean; amount?: number; currency?: string; error?: string }> {
     if (paymentId.startsWith("pay_sim_")) {
-      return { isPaid: true, amount: 49900, currency: "INR" };
+      return { isPaid: true, amount: 1000, currency: "INR" };
     }
     return { isPaid: false, error: "Invalid sandbox payment reference." };
   }
