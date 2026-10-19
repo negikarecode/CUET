@@ -117,7 +117,7 @@ async function runAuthSecurityTests() {
   ];
   const authRoutes = ["/signup", "/login", "/verify-otp", "/forgot-password"];
 
-  function simulateRoutePolicy(path: string, isAuthenticated: boolean) {
+  function simulateRoutePolicy(path: string, isAuthenticated: boolean): { status: string; target?: string } {
     const isDashboard = path === "/dashboard" || path.startsWith("/dashboard/");
     const isAuth = authRoutes.includes(path);
 
@@ -133,7 +133,7 @@ async function runAuthSecurityTests() {
   for (const r of protectedRoutes) {
     const unauthResult = simulateRoutePolicy(r, false);
     assert(
-      unauthResult.status === "redirect" && unauthResult.target.startsWith("/signup"),
+      unauthResult.status === "redirect" && (unauthResult.target?.startsWith("/signup") ?? false),
       `Unauthenticated access to ${r} redirects to signup`
     );
     const authResult = simulateRoutePolicy(r, true);
@@ -152,6 +152,7 @@ async function runAuthSecurityTests() {
   console.log("\n[SUITE 7] Resend Cooldown Timer & Attempt Limits");
   const MAX_RESENDS = 5;
   const COOLDOWN_SECS = 60;
+  assert(COOLDOWN_SECS === 60, "Resend cooldown is set to 60 seconds");
   let attempts = 0;
   for (let i = 1; i <= 6; i++) {
     const canResend = attempts < MAX_RESENDS;

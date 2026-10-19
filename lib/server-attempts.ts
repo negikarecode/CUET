@@ -14,6 +14,7 @@ export async function fetchServerTestAttempts(
       .from("user_attempts")
       .select(`
         id,
+        attempt_id,
         selected_option,
         is_correct,
         time_spent_seconds,
@@ -42,53 +43,67 @@ export async function fetchServerTestAttempts(
           total_questions
         )
       `)
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
 
     if (error || !userAttempts || userAttempts.length === 0) {
       return [];
     }
 
-    // Deduplicate by test_id + question_id
-    const seenCanonical = new Set<string>();
-    const attemptedRows = userAttempts.filter((ua: any) => {
-      if (ua.selected_option === null || ua.selected_option === undefined) return false;
-      const key = `${ua.test_id || "default"}:::${ua.question_id || ua.id}`;
-      if (seenCanonical.has(key)) return false;
-      seenCanonical.add(key);
-      return true;
-    });
+    // Filter valid answered attempts
+    const validRows = userAttempts.filter(
+      (ua: any) => ua && (ua.selected_option !== null && ua.selected_option !== undefined)
+    );
 
     const testGroups = new Map<
       string,
       {
+        attemptId: string;
         testId: string;
         testTitle: string;
         subject: string;
         totalQuestions: number;
         questions: any[];
         submittedAt: string;
+        seenQuestionIds: Set<string>;
       }
     >();
 
-    attemptedRows.forEach((ua: any) => {
-      const tId = ua.test_id || "mock-1";
-      const q = ua.questions;
-      const subject = q?.subject || ua.tests?.subject || "Domain";
-      const testTitle = ua.tests?.title || `CUET ${subject} Mock`;
-      const testTotalQuestions = ua.tests?.total_questions || 50;
+    validRows.forEach((ua: any) => {
+      // Safely unbox relations whether returned as single object or array
+      const q = Array.isArray(ua.questions) ? ua.questions[0] : ua.questions;
+      const testObj = Array.isArray(ua.tests) ? ua.tests[0] : ua.tests;
 
-      if (!testGroups.has(tId)) {
-        testGroups.set(tId, {
-          testId: tId,
-          testTitle,
-          subject,
-          totalQuestions: testTotalQuestions,
+      const tId = ua.test_id || testObj?.id || "mock-1";
+      // Group by attempt_id if available, otherwise by test_id + submission timestamp bucket
+      const sessionAttemptId = ua.attempt_id
+        ? String(ua.attempt_id)
+        : `${tId}:::${ua.created_at ? new Date(ua.created_at).toISOString().slice(0, 16) : "default"}`;
+
+      const subject = q?.subject || testObj?.subject || "Domain";
+      const testTitle = testObj?.title || `CUET ${subject} Mock`;
+      const testTotalQuestions = testObj?.total_questions || 50;
+
+      if (!testGroups.has(sessionAttemptId)) {
+        testGroups.set(sessionAttemptId, {
+          attemptId: ua.attempt_id ? String(ua.attempt_id) : sessionAttemptId,
+          testId: String(tId),
+          testTitle: String(testTitle),
+          subject: String(subject),
+          totalQuestions: Number(testTotalQuestions) || 50,
           questions: [],
-          submittedAt: ua.created_at || new Date().toISOString(),
+          submittedAt: ua.created_at ? new Date(ua.created_at).toISOString() : new Date().toISOString(),
+          seenQuestionIds: new Set<string>(),
         });
       }
 
-      const group = testGroups.get(tId)!;
+      const group = testGroups.get(sessionAttemptId)!;
+      const qIdentifier = String(ua.question_id || ua.id);
+
+      // Deduplicate questions within the same attempt session
+      if (group.seenQuestionIds.has(qIdentifier)) return;
+      group.seenQuestionIds.add(qIdentifier);
+
       const isCorrect =
         ua.is_correct === true ||
         ua.is_correct === "true" ||
@@ -96,10 +111,10 @@ export async function fetchServerTestAttempts(
         (ua.selected_option && q?.correct_option && ua.selected_option === q.correct_option);
 
       group.questions.push({
-        questionId: ua.question_id || ua.id,
+        questionId: qIdentifier,
         questionNumber: group.questions.length + 1,
         prompt: q?.question_text || `Question ${group.questions.length + 1}`,
-        subject,
+        subject: group.subject,
         chapter: q?.chapter || "Domain Core",
         microTopic: q?.micro_topic || "Key Concept",
         options: [
@@ -110,10 +125,10 @@ export async function fetchServerTestAttempts(
         ],
         selectedOption: ua.selected_option,
         correctOption: q?.correct_option || "A",
-        explanation: q?.explanation,
-        ncertReference: q?.ncert_reference,
+        explanation: q?.explanation || "",
+        ncertReference: q?.ncert_reference || "",
         isCorrect: Boolean(isCorrect),
-        timeSpentSeconds: ua.time_spent_seconds || 0,
+        timeSpentSeconds: Number(ua.time_spent_seconds) || 0,
         isTimeSink: Boolean(ua.is_time_sink || (ua.time_spent_seconds && ua.time_spent_seconds > 72)),
       });
     });
@@ -121,14 +136,15 @@ export async function fetchServerTestAttempts(
     return Array.from(testGroups.values()).map((g) => {
       const correct = g.questions.filter((q) => q.isCorrect).length;
       const attempted = g.questions.length;
-      const incorrect = attempted - correct;
+      const incorrect = Math.max(0, attempted - correct);
       const totalMarks = correct * 5 - incorrect * 1;
       const totalQuestions = g.totalQuestions || Math.max(50, attempted);
       const maxMarks = totalQuestions * 5;
       const unattempted = Math.max(0, totalQuestions - attempted);
 
       return {
-        id: g.testId,
+        id: g.attemptId || g.testId,
+        attemptId: g.attemptId,
         userId,
         testId: g.testId,
         testTitle: g.testTitle,
@@ -148,7 +164,7 @@ export async function fetchServerTestAttempts(
       };
     });
   } catch (err) {
-    console.warn("fetchServerTestAttempts notice:", err);
+    console.error("[fetchServerTestAttempts Exception]:", err);
     return [];
   }
 }

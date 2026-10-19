@@ -65,6 +65,12 @@ export async function updateSession(request: NextRequest) {
     pathname === "/forgot-password";
 
   const isAuthenticated = Boolean(authUser);
+  const isEmailVerified = Boolean(
+    authUser?.email_confirmed_at ||
+      (authUser as any)?.confirmed_at ||
+      (authUser?.app_metadata?.provider &&
+        authUser.app_metadata.provider !== "email")
+  );
 
   // 1. Unauthenticated users cannot enter protected dashboard core routes or CBT test engine -> redirect to /signup
   if ((isDashboardRoute || isTestRoute) && !isAuthenticated) {
@@ -81,8 +87,24 @@ export async function updateSession(request: NextRequest) {
     return redirectResponse;
   }
 
-  // 2. Authenticated candidates visiting /signup or /login are redirected to dashboard
-  if (isAuthRoute && isAuthenticated) {
+  // 2. Authenticated but unverified users cannot enter dashboard or CBT test engine -> redirect to /verify-otp
+  if ((isDashboardRoute || isTestRoute) && isAuthenticated && !isEmailVerified) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/verify-otp";
+    redirectUrl.search = "";
+    if (authUser?.email) {
+      redirectUrl.searchParams.set("email", authUser.email);
+    }
+    const redirectResponse = NextResponse.redirect(redirectUrl);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
+  }
+
+  // 3. Authenticated candidates visiting auth routes:
+  // If fully verified, redirect /signup, /login, /verify-otp to dashboard
+  if (isAuthRoute && isAuthenticated && isEmailVerified) {
     const redirectParam = request.nextUrl.searchParams.get("redirect");
     const targetPath =
       redirectParam && redirectParam.startsWith("/")
@@ -90,6 +112,25 @@ export async function updateSession(request: NextRequest) {
         : "/dashboard";
 
     const redirectUrl = new URL(targetPath, request.nextUrl.origin);
+    const redirectResponse = NextResponse.redirect(redirectUrl);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
+  }
+
+  // If authenticated but unverified, redirect /signup and /login to /verify-otp
+  if (
+    (pathname === "/signup" || pathname === "/login") &&
+    isAuthenticated &&
+    !isEmailVerified
+  ) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/verify-otp";
+    redirectUrl.search = "";
+    if (authUser?.email) {
+      redirectUrl.searchParams.set("email", authUser.email);
+    }
     const redirectResponse = NextResponse.redirect(redirectUrl);
     supabaseResponse.cookies.getAll().forEach((cookie) => {
       redirectResponse.cookies.set(cookie.name, cookie.value, cookie);

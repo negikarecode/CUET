@@ -11,6 +11,8 @@ import {
   Trophy,
   Clock,
   Info,
+  Lock,
+  Sparkles,
 } from "lucide-react";
 import {
   getPYQTestsForSubject,
@@ -56,6 +58,29 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
 
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
+  const [isPremium, setIsPremium] = useState<boolean>(false);
+
+  React.useEffect(() => {
+    let isMounted = true;
+    async function checkEntitlement() {
+      try {
+        const { createClient } = await import("@/lib/supabase/client");
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.id) {
+          const res = await fetch(`/api/auth/profile?id=${user.id}`);
+          if (res.ok) {
+            const json = await res.json();
+            if (isMounted && json?.profile) {
+              setIsPremium(Boolean(json.profile.is_premium));
+            }
+          }
+        }
+      } catch {}
+    }
+    checkEntitlement();
+    return () => { isMounted = false; };
+  }, []);
 
   const [selectedYear, setSelectedYear] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
@@ -168,6 +193,20 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
     };
   }, [paperCardsData, pyqPapers]);
 
+  // Total PYQ attempts for this specific canonical subject
+  const subjectPYQAttempts = useMemo(() => {
+    const canonicalKey = normalizeSubject(subjectKey).key;
+    return cleanAttempts.filter((att) => {
+      const attSubj = normalizeSubject(att.subject || att.testTitle || "").key;
+      return attSubj === canonicalKey || (att.testId && att.testId.startsWith(subjectKey));
+    });
+  }, [cleanAttempts, subjectKey]);
+
+  const totalSubjectPYQAttempts = Math.max(
+    subjectPYQAttempts.length,
+    paperCardsData.filter((c) => c.hasAttempted).length
+  );
+
   // Available years from papers
   const availableYears = useMemo(() => {
     const set = new Set<string>();
@@ -270,6 +309,34 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
         </Link>
       </div>
 
+      {/* Free Plan Status Banner */}
+      {!isPremium && (
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider bg-amber-500 text-white rounded">
+                Free Plan
+              </span>
+              <h3 className="text-sm font-bold text-amber-900">
+                {totalSubjectPYQAttempts} of 1 Free PYQ Attempt Completed for {subjectName}
+              </h3>
+            </div>
+            <p className="text-xs text-amber-800/80">
+              Free plan allows 1 official past year paper attempt per subject. Upgrade to CUETMate Premium for unlimited access to all shift papers with complete NCERT solutions, national percentiles, and re-attempts.
+            </p>
+          </div>
+          <div className="shrink-0 flex items-center gap-2.5">
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Upgrade to Premium (₹499)</span>
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* 2. Compact Subject Header */}
       <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -289,28 +356,38 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
             </div>
           </div>
 
-          {/* Primary CTA button in header: opens first unattempted paper */}
+          {/* Primary CTA button in header: opens first unattempted paper or upgrade */}
           <div className="shrink-0 flex items-center gap-2">
-            <Link
-              href={
-                subjectStats.isAllAttempted
-                  ? `/test/${pyqPapers[0]?.id || `${subjectKey}-pyq-1`}?reattempt=true`
-                  : `/test/${subjectStats.nextPaper?.id || `${subjectKey}-pyq-1`}`
-              }
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
-            >
-              {subjectStats.isAllAttempted ? (
-                <>
-                  <RotateCw className="w-4 h-4" />
-                  <span>Re-attempt All Papers</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Start Next Paper ({formatShortPaperTitle(subjectStats.nextPaper || pyqPapers[0]!)})</span>
-                </>
-              )}
-            </Link>
+            {!isPremium && (totalSubjectPYQAttempts >= 1 || (subjectStats.nextPaper && pyqPapers[0]?.id !== subjectStats.nextPaper.id)) ? (
+              <Link
+                href="/pricing"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                <span>Unlock All PYQ Papers (₹499)</span>
+              </Link>
+            ) : (
+              <Link
+                href={
+                  subjectStats.isAllAttempted
+                    ? `/test/${pyqPapers[0]?.id || `${subjectKey}-pyq-1`}?reattempt=true`
+                    : `/test/${subjectStats.nextPaper?.id || `${subjectKey}-pyq-1`}`
+                }
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
+              >
+                {subjectStats.isAllAttempted ? (
+                  <>
+                    <RotateCw className="w-4 h-4" />
+                    <span>Re-attempt All Papers</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    <span>Start Next Paper ({formatShortPaperTitle(subjectStats.nextPaper || pyqPapers[0]!)})</span>
+                  </>
+                )}
+              </Link>
+            )}
           </div>
         </div>
 
@@ -419,6 +496,7 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
             const { test, shortTitle, attemptsCount, hasAttempted, bestAttempt, bestAttemptNumber, lastAttemptDate } =
               card;
             const isNegativeScore = (bestAttempt?.totalMarks ?? 0) < 0;
+            const isFirstPaper = pyqPapers[0]?.id === test.id;
 
             return (
               <div
@@ -439,9 +517,16 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
                       )}
                     </div>
 
-                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
-                      {test.shift || `Shift 1`}
-                    </span>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {!isPremium && isFirstPaper && !hasAttempted && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          1 Free Attempt
+                        </span>
+                      )}
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
+                        {test.shift || `Shift 1`}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Status area */}
@@ -501,7 +586,15 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
 
                 {/* Footer buttons pinned to bottom with mt-auto */}
                 <div className="pt-3 border-t border-slate-100 mt-auto flex flex-col gap-2 w-full">
-                  {hasAttempted && bestAttempt ? (
+                  {!isPremium && !isFirstPaper && !hasAttempted ? (
+                    <Link
+                      href="/pricing"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
+                    >
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>Upgrade to Unlock (₹499)</span>
+                    </Link>
+                  ) : hasAttempted && bestAttempt ? (
                     <>
                       <Link
                         href={`/dashboard/pyqs/analysis/${bestAttempt.id || test.id}`}
@@ -511,14 +604,32 @@ export default function SubjectPYQListPage({ params }: SubjectPYQPageProps) {
                         <span>Analysis</span>
                       </Link>
 
-                      <Link
-                        href={`/test/${test.id}?reattempt=true`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all cursor-pointer"
-                      >
-                        <RotateCw className="w-3.5 h-3.5 text-slate-500" />
-                        <span>Re-attempt</span>
-                      </Link>
+                      {!isPremium && totalSubjectPYQAttempts >= 1 ? (
+                        <Link
+                          href="/pricing"
+                          className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold text-xs transition-all cursor-pointer"
+                        >
+                          <Lock className="w-3.5 h-3.5 text-amber-600" />
+                          <span>Upgrade to Re-attempt (1/1 Used)</span>
+                        </Link>
+                      ) : (
+                        <Link
+                          href={`/test/${test.id}?reattempt=true`}
+                          className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all cursor-pointer"
+                        >
+                          <RotateCw className="w-3.5 h-3.5 text-slate-500" />
+                          <span>Re-attempt</span>
+                        </Link>
+                      )}
                     </>
+                  ) : !isPremium && totalSubjectPYQAttempts >= 1 ? (
+                    <Link
+                      href="/pricing"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-all cursor-pointer"
+                    >
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>Free Limit Reached · Upgrade</span>
+                    </Link>
                   ) : (
                     <Link
                       href={`/test/${test.id}`}

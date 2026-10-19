@@ -36,7 +36,8 @@ interface SessionsHistoryClientProps {
 
 export type SessionType = "Mock" | "Past Paper" | "Practice";
 
-function getSessionType(att: RecordedTestAttempt): SessionType {
+function getSessionType(att?: RecordedTestAttempt | null): SessionType {
+  if (!att) return "Mock";
   const str = `${att.testId || ""} ${att.testTitle || ""} ${att.subject || ""}`.toLowerCase();
   if (str.includes("pyq") || str.includes("past paper") || str.includes("official past")) {
     return "Past Paper";
@@ -53,7 +54,9 @@ function getSessionType(att: RecordedTestAttempt): SessionType {
   return "Mock";
 }
 
-function getSessionSubtitle(att: RecordedTestAttempt, type: SessionType): string {
+function getSessionSubtitle(att?: RecordedTestAttempt | null, type?: SessionType): string {
+  if (!att) return "CBT Test Session";
+  const actualType = type || getSessionType(att);
   const title = (att.testTitle || "").trim();
   const testId = (att.testId || "").trim();
   const combined = `${title} ${testId}`;
@@ -62,7 +65,7 @@ function getSessionSubtitle(att: RecordedTestAttempt, type: SessionType): string
   const shiftMatch = combined.match(/shift\s*([1-3]|i{1,3})/i);
   const dateMatch = combined.match(/(\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*)/i);
 
-  if (type === "Past Paper") {
+  if (actualType === "Past Paper") {
     const year = yearMatch ? yearMatch[0] : "2025";
     const datePart = dateMatch ? dateMatch[0] : "";
     const shiftPart = shiftMatch && shiftMatch[0]
@@ -71,7 +74,7 @@ function getSessionSubtitle(att: RecordedTestAttempt, type: SessionType): string
     const parts = [year, datePart, shiftPart].filter(Boolean);
     return parts.length > 0 ? parts.join(" · ") : "Official Past Paper";
   }
-  if (type === "Practice") {
+  if (actualType === "Practice") {
     const qCount = att.totalQuestions || (att.questions?.length) || 20;
     return `Chapter Practice Drill · ${qCount} ${qCount === 1 ? "Question" : "Questions"}`;
   }
@@ -96,7 +99,8 @@ function splitDateTimeIndian(dateStr?: string | Date): { date: string; time: str
   return { date, time };
 }
 
-function getReviewHref(att: RecordedTestAttempt): string {
+function getReviewHref(att?: RecordedTestAttempt | null): string {
+  if (!att) return "/dashboard/mocks";
   const id = att.id || att.testId || "";
   const testId = (att.testId || "").toLowerCase();
   if (testId.includes("pyq") || testId.includes("past")) {
@@ -105,7 +109,8 @@ function getReviewHref(att: RecordedTestAttempt): string {
   return `/dashboard/mocks/analysis/${id}`;
 }
 
-function getRetakeHref(att: RecordedTestAttempt): string {
+function getRetakeHref(att?: RecordedTestAttempt | null): string {
+  if (!att) return "/dashboard/mocks";
   const targetId = att.testId || att.id || "";
   return `/test/${targetId}?reattempt=true`;
 }

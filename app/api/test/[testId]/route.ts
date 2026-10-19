@@ -17,32 +17,48 @@ export async function GET(
   { params }: { params: { testId: string } }
 ) {
   try {
-    // 1. Enforce usage eligibility for authenticated users
-    try {
-      const supabase = createClient();
-      const {
-        data: { user: authUser },
-      } = await supabase.auth.getUser();
+    // 1. Authenticate candidate & enforce usage eligibility
+    const supabase = createClient();
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
 
-      if (authUser?.id) {
-        const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
-        const eligibility = await checkTestSessionEligibility(authUser.id, params.testId);
+    if (!authUser?.id) {
+      return NextResponse.json(
+        { error: "Unauthorized: Active candidate account required to access CBT exams.", code: "AUTH_REQUIRED" },
+        { status: 401 }
+      );
+    }
 
-        if (!eligibility.allowed) {
-          return NextResponse.json(
-            {
-              error: eligibility.reason || "Free tier usage limit reached. Unlock unlimited access with CUETMate Premium.",
-              code: "PAYWALL_LIMIT_REACHED",
-              testType: eligibility.testType,
-              currentUsage: eligibility.currentUsage,
-              maxAllowed: eligibility.maxAllowed,
-              canonicalSubject: eligibility.canonicalSubject,
-            },
-            { status: 403 }
-          );
-        }
-      }
-    } catch {}
+    const isEmailVerified = Boolean(
+      authUser.email_confirmed_at ||
+      authUser.confirmed_at ||
+      (authUser.app_metadata?.provider && authUser.app_metadata.provider !== "email")
+    );
+
+    if (!isEmailVerified) {
+      return NextResponse.json(
+        { error: "Email verification required before accessing CBT test sessions.", code: "EMAIL_VERIFICATION_REQUIRED" },
+        { status: 403 }
+      );
+    }
+
+    const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
+    const eligibility = await checkTestSessionEligibility(authUser.id, params.testId);
+
+    if (!eligibility.allowed) {
+      return NextResponse.json(
+        {
+          error: eligibility.reason || "Free tier usage limit reached. Unlock unlimited access with CUETMate Premium.",
+          code: "PAYWALL_LIMIT_REACHED",
+          testType: eligibility.testType,
+          currentUsage: eligibility.currentUsage,
+          maxAllowed: eligibility.maxAllowed,
+          canonicalSubject: eligibility.canonicalSubject,
+        },
+        { status: 403 }
+      );
+    }
 
     const { testMeta, questions } = getQuestionsForTest(params.testId);
     // Sanitize questions server-side before sending to client during active test
@@ -67,6 +83,33 @@ export async function POST(
 ) {
   try {
     const body = await req.json().catch(() => ({}));
+
+    // Authorize candidate identity
+    const supabase = createClient();
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+
+    if (!authUser?.id) {
+      return NextResponse.json(
+        { error: "Unauthorized: Active candidate account required to submit tests.", code: "AUTH_REQUIRED" },
+        { status: 401 }
+      );
+    }
+
+    const isEmailVerified = Boolean(
+      authUser.email_confirmed_at ||
+      authUser.confirmed_at ||
+      (authUser.app_metadata?.provider && authUser.app_metadata.provider !== "email")
+    );
+
+    if (!isEmailVerified) {
+      return NextResponse.json(
+        { error: "Email verification required before recording test attempts.", code: "EMAIL_VERIFICATION_REQUIRED" },
+        { status: 403 }
+      );
+    }
+
     const isRecordAttempt =
       params.testId === "record-attempt" ||
       body.action === "record" ||
@@ -80,6 +123,25 @@ export async function POST(
         return NextResponse.json(
           { error: "Invalid attempt payload. testId and questions are required." },
           { status: 400 }
+        );
+      }
+
+      // Authoritative Entitlement & Limit Verification
+      const targetTestId = attempt.testId || params.testId;
+      const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
+      const eligibility = await checkTestSessionEligibility(authUser.id, targetTestId);
+
+      if (!eligibility.allowed) {
+        return NextResponse.json(
+          {
+            error: eligibility.reason || "Free tier usage limit reached. Unlock unlimited access with CUETMate Premium.",
+            code: "PAYWALL_LIMIT_REACHED",
+            testType: eligibility.testType,
+            currentUsage: eligibility.currentUsage,
+            maxAllowed: eligibility.maxAllowed,
+            canonicalSubject: eligibility.canonicalSubject,
+          },
+          { status: 403 }
         );
       }
 
@@ -423,6 +485,20 @@ export async function POST(
       (body.answersSubmitted === true || (body.questionStates && typeof body.questionStates === "object"));
 
     if (isVerifiedSubmission) {
+      // Re-verify candidate eligibility before releasing authentic answer keys
+      const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
+      const eligibility = await checkTestSessionEligibility(authUser.id, params.testId);
+
+      if (!eligibility.allowed) {
+        return NextResponse.json(
+          {
+            error: eligibility.reason || "Usage limit reached for this test type. Unlock unlimited access with CUETMate Premium.",
+            code: "PAYWALL_LIMIT_REACHED",
+          },
+          { status: 403 }
+        );
+      }
+
       const { testMeta, questions } = getQuestionsForTest(params.testId);
       return NextResponse.json({
         success: true,

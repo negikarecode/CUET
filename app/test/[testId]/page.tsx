@@ -55,6 +55,33 @@ export default async function TestPage({ params, searchParams }: PageProps) {
       );
     }
 
+    // Require verified email address for email-based accounts
+    const isEmailVerified = Boolean(
+      authUser.email_confirmed_at ||
+      authUser.confirmed_at ||
+      (authUser.app_metadata?.provider && authUser.app_metadata.provider !== "email")
+    );
+
+    if (!isEmailVerified) {
+      return (
+        <div className="min-h-screen bg-[#F8FAFC] py-10 px-4">
+          <LockedFeaturePaywall
+            featureTitle="CBT Exam Environment"
+            featureSubtitle="Email Verification Required"
+            featureDescription="Your email address must be verified before starting a CBT exam session. Please enter the 6-digit verification code sent to your email."
+            benefits={[
+              "3 Free full-length 50-question mock tests with official NTA timer",
+              "Instant accuracy, scoring (+5 / -1) and time-sink detection",
+              "Sync your answers and past sessions across devices",
+              "Access official CUET UG domain question papers",
+            ]}
+            returnUrl={`/verify-otp?email=${encodeURIComponent(authUser.email || "")}`}
+            returnLabel="Verify Email Code"
+          />
+        </div>
+      );
+    }
+
     const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
     const eligibility = await checkTestSessionEligibility(authUser.id, params.testId);
 
@@ -94,7 +121,23 @@ export default async function TestPage({ params, searchParams }: PageProps) {
       );
     }
   } catch (err) {
-    console.warn("TestPage eligibility check notice:", err);
+    console.error("TestPage authorization verification error:", err);
+    return (
+      <div className="min-h-screen bg-[#F8FAFC] py-10 px-4">
+        <LockedFeaturePaywall
+          featureTitle="CBT Exam Environment"
+          featureSubtitle="Authorization Verification Failed"
+          featureDescription="We were unable to verify your session entitlement. Please refresh the page or return to the dashboard."
+          benefits={[
+            "Unlimited 50-Question NTA CBT Mock Simulations across all 20 subjects",
+            "Unlimited Unit-wise Chapter Practice Tests",
+            "Unlimited Authentic Past Year Question Papers (PYQs)",
+          ]}
+          returnUrl="/dashboard"
+          returnLabel="Return to Dashboard"
+        />
+      </div>
+    );
   }
 
   const { testMeta, questions } = getQuestionsForTest(params.testId);

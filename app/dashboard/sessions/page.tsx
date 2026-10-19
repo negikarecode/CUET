@@ -21,11 +21,14 @@ export default async function SessionsPage() {
       data: { user: authUser },
     } = await supabase.auth.getUser();
 
-    if (authUser) {
-      initialAttempts = await fetchServerTestAttempts(supabase, authUser.id);
+    if (authUser?.id) {
+      const serverAttempts = await fetchServerTestAttempts(supabase, authUser.id);
+      // Strictly guarantee plain JSON serializability across RSC boundary
+      initialAttempts = JSON.parse(JSON.stringify(serverAttempts || []));
     }
   } catch (err) {
-    console.warn("Failed to prefetch server test attempts for sessions page:", err);
+    console.error("[SessionsPage SSR Error]:", err);
+    initialAttempts = [];
   }
 
   return <SessionsHistoryClient initialAttempts={initialAttempts} />;

@@ -252,39 +252,44 @@ export function getCanonicalAttemptId(
 }
 
 export function getCanonicalTestKey(att: RecordedTestAttempt): string {
-  if (!att) return "unknown";
-  const sub = normalizeSubject(att.subject || att.testTitle || "domain").key;
-  const tId = (att.testId || "").toLowerCase().trim();
-  const title = (att.testTitle || "").toLowerCase().trim();
+  try {
+    if (!att || typeof att !== "object") return "unknown";
+    const sub = normalizeSubject(att.subject || att.testTitle || "domain").key;
+    const tId = (att.testId || "").toLowerCase().trim();
+    const title = (att.testTitle || "").toLowerCase().trim();
 
-  // 1. Mock test matching (by number)
-  const mockMatch =
-    title.match(/\bmock(?:\s+paper|\s+test|\s+exam)?\s+(\d+)\b/i) ||
-    title.match(/\bpaper\s+(\d+)\b/i) ||
-    tId.match(/(?:mock|paper)[-_]?(\d+)/i) ||
-    tId.match(/-(\d+)$/);
-  if (mockMatch) {
-    return `${sub}:::mock-${mockMatch[1]}`;
+    // 1. Mock test matching (by number)
+    const mockMatch =
+      title.match(/\bmock(?:\s+paper|\s+test|\s+exam)?\s+(\d+)\b/i) ||
+      title.match(/\bpaper\s+(\d+)\b/i) ||
+      tId.match(/(?:mock|paper)[-_]?(\d+)/i) ||
+      tId.match(/-(\d+)$/);
+    if (mockMatch) {
+      return `${sub}:::mock-${mockMatch[1]}`;
+    }
+
+    // 2. Unit and practice test matching
+    const uMatch = title.match(/\bunit\s*(\d+)\b/i) || tId.match(/unit[-_]?(\d+)/i) || tId.match(/u[-_]?(\d+)/i);
+    const tMatch = title.match(/\b(?:practice\s+test|test)\s*(\d+)\b/i) || tId.match(/test[-_]?(\d+)/i) || tId.match(/t[-_]?(\d+)/i);
+    if (uMatch && tMatch) {
+      return `${sub}:::unit-${uMatch[1]}-test-${tMatch[1]}`;
+    }
+
+    // 3. Normalized friendly testId
+    if (tId && tId !== "cbt_exam" && tId !== "default" && !/^[0-9a-f-]{36}$/i.test(tId)) {
+      const escapedSub = sub.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const cleanTId = tId.replace(new RegExp(`^${escapedSub}[-_]?`, "i"), "");
+      return `${sub}:::${cleanTId || tId}`;
+    }
+
+    if (title) {
+      return `${sub}:::${title}`;
+    }
+
+    return `${sub}:::${tId || "unknown"}`;
+  } catch {
+    return (att?.testId || att?.id || "unknown").toString().toLowerCase().trim();
   }
-
-  // 2. Unit and practice test matching
-  const uMatch = title.match(/\bunit\s*(\d+)\b/i) || tId.match(/unit[-_]?(\d+)/i) || tId.match(/u[-_]?(\d+)/i);
-  const tMatch = title.match(/\b(?:practice\s+test|test)\s*(\d+)\b/i) || tId.match(/test[-_]?(\d+)/i) || tId.match(/t[-_]?(\d+)/i);
-  if (uMatch && tMatch) {
-    return `${sub}:::unit-${uMatch[1]}-test-${tMatch[1]}`;
-  }
-
-  // 3. Normalized friendly testId
-  if (tId && tId !== "cbt_exam" && tId !== "default" && !/^[0-9a-f-]{36}$/i.test(tId)) {
-    const cleanTId = tId.replace(new RegExp(`^${sub}[-_]?`, "i"), "");
-    return `${sub}:::${cleanTId || tId}`;
-  }
-
-  if (title) {
-    return `${sub}:::${title}`;
-  }
-
-  return `${sub}:::${tId || "unknown"}`;
 }
 
 /**
@@ -299,10 +304,20 @@ export function deduplicateTestAttempts(attempts: RecordedTestAttempt[]): Record
   const seenFingerprints = new Set<string>();
   const clean: RecordedTestAttempt[] = [];
 
-  // Sort newest first
-  const sorted = [...attempts].sort((a, b) => {
-    const ta = new Date(a.submittedAt || (a as any).date || 0).getTime();
-    const tb = new Date(b.submittedAt || (b as any).date || 0).getTime();
+  // Filter out null or invalid attempt records
+  const validAttempts = attempts.filter(
+    (a) =>
+      Boolean(
+        a &&
+          typeof a === "object" &&
+          (a.id || a.testId || a.testTitle || (a as any).test_id || (a as any).attempt_id)
+      )
+  );
+
+  // Sort newest first safely
+  const sorted = [...validAttempts].sort((a, b) => {
+    const ta = new Date(a?.submittedAt || (a as any)?.date || 0).getTime() || 0;
+    const tb = new Date(b?.submittedAt || (b as any)?.date || 0).getTime() || 0;
     return tb - ta;
   });
 
@@ -322,24 +337,29 @@ export function deduplicateTestAttempts(attempts: RecordedTestAttempt[]): Record
     }
 
     const canonicalKey = getCanonicalTestKey(att);
-    const subTime = new Date(att.submittedAt || (att as any).date || 0).getTime();
+    const subTime = new Date(att.submittedAt || (att as any).date || 0).getTime() || 0;
     const timeBucket = Math.round(subTime / 60000); // 60s window
+    const hasSubOrTitle = Boolean((att.subject || "").trim() || (att.testTitle || "").trim());
     const testCanonicalUuid = stringToUuid(rawTestId || rawId || att.testTitle || "mock");
     const fingerprint1 = `${testCanonicalUuid}_${att.totalMarks ?? 0}_${att.accuracyPercentage ?? 0}_${timeBucket}`;
-    const fingerprint2 = `${(att.subject || "").toLowerCase().trim()}:::${(att.testTitle || "").toLowerCase().trim()}:::${att.totalMarks ?? 0}:::${att.accuracyPercentage ?? 0}:::${timeBucket}`;
-    const canonicalFingerprint = `${canonicalKey}:::${att.totalMarks ?? 0}:::${att.accuracyPercentage ?? 0}`;
+    const fingerprint2 = hasSubOrTitle && subTime > 0
+      ? `${(att.subject || "").toLowerCase().trim()}:::${(att.testTitle || "").toLowerCase().trim()}:::${att.totalMarks ?? 0}:::${att.accuracyPercentage ?? 0}:::${timeBucket}`
+      : null;
+    const canonicalFingerprint = canonicalKey && canonicalKey !== "unknown" && subTime > 0
+      ? `${canonicalKey}:::${att.totalMarks ?? 0}:::${att.accuracyPercentage ?? 0}:::${timeBucket}`
+      : null;
 
     if (
       seenFingerprints.has(fingerprint1) ||
-      seenFingerprints.has(fingerprint2) ||
-      seenFingerprints.has(canonicalFingerprint)
+      (fingerprint2 && seenFingerprints.has(fingerprint2)) ||
+      (canonicalFingerprint && seenFingerprints.has(canonicalFingerprint))
     ) {
       continue;
     }
 
     seenFingerprints.add(fingerprint1);
-    seenFingerprints.add(fingerprint2);
-    seenFingerprints.add(canonicalFingerprint);
+    if (fingerprint2) seenFingerprints.add(fingerprint2);
+    if (canonicalFingerprint) seenFingerprints.add(canonicalFingerprint);
 
     clean.push(att);
   }

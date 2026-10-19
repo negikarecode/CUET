@@ -10,10 +10,9 @@ import {
   PRICING_CONFIG,
   classifyTestType,
 } from "../lib/payments/entitlements";
-import { RazorpayProvider, MockSandboxProvider } from "../lib/payments/provider";
+import { RazorpayProvider } from "../lib/payments/provider";
 import {
   validateEmail,
-  isPasswordValid,
   sanitizeOtp,
 } from "../lib/auth/validation";
 
@@ -86,7 +85,7 @@ async function runPhase9RegressionSuite() {
     if (!validateEmail(email)) return { error: "INVALID_EMAIL" };
     return { success: true, otpDispatched: true };
   }
-  assert(requestPasswordRecovery("aryan@example.com").success, "7. Password recovery dispatches recovery OTP");
+  assert(Boolean(requestPasswordRecovery("aryan@example.com").success), "7. Password recovery dispatches recovery OTP");
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SECTION 2: FREE PLAN LIMITS (SCENARIOS 8–13)
@@ -214,7 +213,7 @@ async function runPhase9RegressionSuite() {
     processedPayments.add(paymentId);
     return { duplicate: false, granted: true };
   }
-  assert(recordVerification("pay_001").granted, "19a. Initial verification records payment");
+  assert(Boolean(recordVerification("pay_001").granted), "19a. Initial verification records payment");
   assert(recordVerification("pay_001").duplicate, "19b. Duplicate verification processed idempotently");
 
   // Scenario 20: Verified test-mode payment grants Premium only to its rightful user
@@ -264,9 +263,12 @@ async function runPhase9RegressionSuite() {
 
   // Scenario 25: Service-role credentials are never exposed to browser
   const clientEnvKeys = ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY", "NEXT_PUBLIC_RAZORPAY_KEY_ID"];
+  for (const k of clientEnvKeys) {
+    assert(k.startsWith("NEXT_PUBLIC_"), `25a. Public client key ${k} is marked NEXT_PUBLIC_`);
+  }
   const serverOnlyKeys = ["SUPABASE_SERVICE_ROLE_KEY", "RAZORPAY_KEY_SECRET", "RAZORPAY_WEBHOOK_SECRET"];
   for (const k of serverOnlyKeys) {
-    assert(!k.startsWith("NEXT_PUBLIC_"), `25. Secret ${k} is strictly server-only and not exposed to browser`);
+    assert(!k.startsWith("NEXT_PUBLIC_"), `25b. Secret ${k} is strictly server-only and not exposed to browser`);
   }
 
   // Scenario 26: Mock-test scoring and answer-key protection still work

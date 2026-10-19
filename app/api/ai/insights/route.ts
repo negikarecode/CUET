@@ -164,8 +164,18 @@ export async function POST(req: NextRequest) {
         if (user) authUserId = user.id;
       } catch {}
 
+      if (!authUserId) {
+        return NextResponse.json(
+          {
+            error: "Authentication required to access AI features.",
+            code: "AUTH_REQUIRED",
+          },
+          { status: 401 }
+        );
+      }
+
       const { getUserEntitlement } = await import("@/lib/payments/entitlements");
-      const entitlement = await getUserEntitlement(authUserId || body.userId || "");
+      const entitlement = await getUserEntitlement(authUserId);
       if (!entitlement.isPremium) {
         return NextResponse.json(
           {

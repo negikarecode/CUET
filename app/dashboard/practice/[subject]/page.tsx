@@ -34,6 +34,7 @@ import {
   FileText,
   Layers,
   Compass,
+  Lock,
 } from "lucide-react";
 import practiceManifest from "@/lib/data/practice_test_manifest.json";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -83,7 +84,46 @@ const subjectExpandedStateCache: Record<string, Record<number, boolean>> = {};
 
 export default function SubjectPracticeDetailPage({ params }: PageProps) {
   const decodedSubject = decodeURIComponent(params.subject).toLowerCase();
+  const storeUser = useTestStore((s) => s.user);
   const testAttempts = useTestStore((s) => s.testAttempts);
+  const [isPremium, setIsPremium] = useState<boolean>(Boolean(storeUser?.isPremium));
+
+  React.useEffect(() => {
+    let isMounted = true;
+    async function checkEntitlement() {
+      try {
+        const { createClient } = await import("@/lib/supabase/client");
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.id) {
+          const res = await fetch(`/api/auth/profile?id=${user.id}`);
+          if (res.ok) {
+            const json = await res.json();
+            if (isMounted && json?.profile) {
+              setIsPremium(Boolean(json.profile.is_premium));
+            }
+          }
+        }
+      } catch {}
+    }
+    checkEntitlement();
+    return () => { isMounted = false; };
+  }, []);
+
+  const totalCompletedPracticeSessions = useMemo(() => {
+    return (testAttempts || []).filter((att) => {
+      const id = (att.testId || "").toLowerCase();
+      const title = (att.testTitle || "").toLowerCase();
+      return (
+        id.includes("practice") ||
+        id.includes("unit") ||
+        title.includes("practice") ||
+        title.includes("drill") ||
+        (att.totalQuestions !== undefined && att.totalQuestions <= 25)
+      );
+    }).length;
+  }, [testAttempts]);
+
   const topicMastery: TopicMastery[] = useTestStore((s) => {
     const an = s.analytics;
     if (!an) return [];
@@ -248,6 +288,34 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
         </Link>
       </div>
 
+      {/* Free Plan Status & Limit Banner */}
+      {!isPremium && (
+        <div className="bg-gradient-to-r from-amber-50 via-white to-blue-50 rounded-2xl border border-amber-200/90 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
+                FREE PLAN STATUS
+              </span>
+              <span className="text-xs font-bold text-slate-700">
+                {Math.min(3, totalCompletedPracticeSessions)} of 3 Free Practice Sessions Completed
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-600 font-medium">
+              Free plan includes Unit 1 practice tests 1–3 (up to 3 completed sessions). Additional units and unlimited practice tests require CUETMate Premium.
+            </p>
+          </div>
+          <div className="shrink-0 flex items-center gap-2.5">
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Upgrade to Premium (₹499)</span>
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* 2. Subject Header Banner */}
       <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
@@ -303,15 +371,25 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
 
           {/* Action CTAs */}
           <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <Link
-              href={`/test/${nextTestTarget}`}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all"
-            >
-              <Play className="w-4 h-4 fill-current" />
-              <span>
-                {subjectStats.hasAttempts ? "Continue Practice" : "Start First Test"}
-              </span>
-            </Link>
+            {!isPremium && totalCompletedPracticeSessions >= 3 ? (
+              <Link
+                href="/pricing"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Unlock All Practice Tests (₹499)</span>
+              </Link>
+            ) : (
+              <Link
+                href={`/test/${nextTestTarget}`}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all"
+              >
+                <Play className="w-4 h-4 fill-current" />
+                <span>
+                  {subjectStats.hasAttempts ? "Continue Practice" : "Start First Test"}
+                </span>
+              </Link>
+            )}
 
             <button
               onClick={handlePracticeWeakTopics}
@@ -492,7 +570,35 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                       const isNext = testId === subjectStats.nextUnattemptedTestId;
                       const isNegative = isAttempted && testStat.bestScore !== null && testStat.bestScore < 0;
 
+                      const isLocked = !isPremium && (unit.unitNumber > 1 || testNum > 3 || totalCompletedPracticeSessions >= 3);
+
                       if (!isAttempted) {
+                        if (isLocked) {
+                          return (
+                            <Link
+                              key={testNum}
+                              href="/pricing"
+                              className="group relative h-[82px] rounded-xl border border-amber-200/90 bg-amber-50/50 p-2.5 flex flex-col justify-between transition-all hover:border-amber-300"
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-bold text-slate-800">
+                                  Test {testNum}
+                                </span>
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200 inline-flex items-center gap-0.5">
+                                  <Lock className="w-2.5 h-2.5 text-amber-600" />
+                                  Premium
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between text-xs font-semibold text-amber-800">
+                                <span className="text-[11px] font-medium text-amber-700">
+                                  Unlock
+                                </span>
+                                <Lock className="w-3 h-3 text-amber-600" />
+                              </div>
+                            </Link>
+                          );
+                        }
+
                         return (
                           <Link
                             key={testNum}
@@ -580,12 +686,22 @@ export default function SubjectPracticeDetailPage({ params }: PageProps) {
                             >
                               Analysis
                             </Link>
-                            <Link
-                              href={`/test/${testId}?reattempt=true`}
-                              className="flex-1 text-center py-1.5 px-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-semibold transition-colors"
-                            >
-                              Re-attempt
-                            </Link>
+                            {!isPremium && totalCompletedPracticeSessions >= 3 ? (
+                              <Link
+                                href="/pricing"
+                                className="flex-1 text-center py-1.5 px-1 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-lg text-[11px] font-semibold transition-colors inline-flex items-center justify-center gap-1"
+                              >
+                                <Lock className="w-3 h-3 text-amber-700" />
+                                <span>Upgrade</span>
+                              </Link>
+                            ) : (
+                              <Link
+                                href={`/test/${testId}?reattempt=true`}
+                                className="flex-1 text-center py-1.5 px-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-semibold transition-colors"
+                              >
+                                Re-attempt
+                              </Link>
+                            )}
                           </div>
                         </div>
                       );

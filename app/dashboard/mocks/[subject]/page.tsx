@@ -11,6 +11,8 @@ import {
   Trophy,
   Clock,
   Info,
+  Lock,
+  Sparkles,
 } from "lucide-react";
 import { getSubjectMetadata } from "@/lib/config/subjectRegistry";
 import {
@@ -41,7 +43,32 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
   const subjectKey = decodeURIComponent(rawSubject).toLowerCase().trim();
 
   const isClient = useIsClient();
+  const storeUser = useTestStore((state) => state.user);
   const testAttempts = useTestStore((state) => state.testAttempts);
+
+  const [isPremium, setIsPremium] = useState<boolean>(Boolean(storeUser?.isPremium));
+
+  React.useEffect(() => {
+    let isMounted = true;
+    async function checkEntitlement() {
+      try {
+        const { createClient } = await import("@/lib/supabase/client");
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.id) {
+          const res = await fetch(`/api/auth/profile?id=${user.id}`);
+          if (res.ok) {
+            const json = await res.json();
+            if (isMounted && json?.profile) {
+              setIsPremium(Boolean(json.profile.is_premium));
+            }
+          }
+        }
+      } catch {}
+    }
+    checkEntitlement();
+    return () => { isMounted = false; };
+  }, []);
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [sortBy, setSortBy] = useState<SortOption>("mock_number");
@@ -85,6 +112,11 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
   const cleanAttempts = useMemo(() => {
     return deduplicateTestAttempts(testAttempts || []);
   }, [testAttempts]);
+
+  // Total completed mock sessions across all subjects
+  const totalCompletedMockSessions = useMemo(() => {
+    return cleanAttempts.filter(isFullLengthMockAttempt).length;
+  }, [cleanAttempts]);
 
   // Subject-specific mock attempts
   const subjectMockAttempts = useMemo(() => {
@@ -209,6 +241,34 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
         </Link>
       </div>
 
+      {/* Free Plan Status & Limit Banner */}
+      {!isPremium && (
+        <div className="bg-gradient-to-r from-amber-50 via-white to-blue-50 rounded-2xl border border-amber-200/90 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
+                FREE PLAN STATUS
+              </span>
+              <span className="text-xs font-bold text-slate-700">
+                {Math.min(3, totalCompletedMockSessions)} of 3 Free Mock Sessions Completed
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-600 font-medium">
+              Free plan includes full CBT mocks 1, 2, and 3 (up to 3 completed sessions). Mock 4 through 20 and unlimited attempts require CUETMate Premium.
+            </p>
+          </div>
+          <div className="shrink-0 flex items-center gap-2.5">
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Upgrade to Premium (₹499)</span>
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* 2. Compact Subject Header */}
       <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -228,24 +288,34 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
             </div>
           </div>
 
-          {/* Primary CTA button in header: opens first unattempted mock */}
+          {/* Primary CTA button in header: opens first unattempted mock or upgrade if locked */}
           <div className="shrink-0 flex items-center gap-2">
-            <Link
-              href={mockStats.isAllAttempted ? `/test/${mockTests[0]?.id || `${subjectKey}-mock-1`}?reattempt=true` : `/test/${nextMockId}`}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
-            >
-              {mockStats.isAllAttempted ? (
-                <>
-                  <RotateCw className="w-4 h-4" />
-                  <span>Re-attempt All Mocks</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Start Next Mock (Mock {mockStats.nextUnattemptedMockIndex})</span>
-                </>
-              )}
-            </Link>
+            {!isPremium && (mockStats.nextUnattemptedMockIndex > 3 || totalCompletedMockSessions >= 3) ? (
+              <Link
+                href="/pricing"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                <span>Unlock All 20 Mocks (₹499)</span>
+              </Link>
+            ) : (
+              <Link
+                href={mockStats.isAllAttempted ? `/test/${mockTests[0]?.id || `${subjectKey}-mock-1`}?reattempt=true` : `/test/${nextMockId}`}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
+              >
+                {mockStats.isAllAttempted ? (
+                  <>
+                    <RotateCw className="w-4 h-4" />
+                    <span>Re-attempt All Mocks</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    <span>Start Next Mock (Mock {mockStats.nextUnattemptedMockIndex})</span>
+                  </>
+                )}
+              </Link>
+            )}
           </div>
         </div>
 
@@ -351,14 +421,22 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
                 className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between space-y-4 min-w-0"
               >
                 <div className="space-y-3 flex-1 flex flex-col min-w-0">
-                  {/* Title with mock number */}
+                  {/* Title with mock number & entitlement badge */}
                   <div className="flex items-start justify-between gap-2">
                     <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
                       Full Syllabus Mock {mockNum}
                     </h3>
-                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
-                      Mock #{mockNum}
-                    </span>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {!isPremium && mockNum > 3 && (
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200/60 inline-flex items-center gap-1">
+                          <Lock className="w-3 h-3 text-amber-600" />
+                          <span>Premium</span>
+                        </span>
+                      )}
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60">
+                        Mock #{mockNum}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Status area */}
@@ -418,7 +496,15 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
 
                 {/* Footer buttons pinned to bottom with mt-auto */}
                 <div className="pt-3 border-t border-slate-100 mt-auto flex flex-col gap-2 w-full">
-                  {hasAttempted && bestAttempt ? (
+                  {!isPremium && mockNum > 3 ? (
+                    <Link
+                      href="/pricing"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
+                    >
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>Upgrade to Unlock (₹499)</span>
+                    </Link>
+                  ) : hasAttempted && bestAttempt ? (
                     <>
                       <Link
                         href={`/dashboard/mocks/analysis/${bestAttempt.id || test.id}`}
@@ -428,14 +514,32 @@ export default function SubjectMocksListPage({ params }: SubjectPageProps) {
                         <span>Analysis</span>
                       </Link>
 
-                      <Link
-                        href={`/test/${test.id}?reattempt=true`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all cursor-pointer"
-                      >
-                        <RotateCw className="w-3.5 h-3.5 text-slate-500" />
-                        <span>Re-attempt</span>
-                      </Link>
+                      {!isPremium && totalCompletedMockSessions >= 3 ? (
+                        <Link
+                          href="/pricing"
+                          className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold text-xs transition-all cursor-pointer"
+                        >
+                          <Lock className="w-3.5 h-3.5 text-amber-600" />
+                          <span>Upgrade to Re-attempt (3/3 Used)</span>
+                        </Link>
+                      ) : (
+                        <Link
+                          href={`/test/${test.id}?reattempt=true`}
+                          className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all cursor-pointer"
+                        >
+                          <RotateCw className="w-3.5 h-3.5 text-slate-500" />
+                          <span>Re-attempt</span>
+                        </Link>
+                      )}
                     </>
+                  ) : !isPremium && totalCompletedMockSessions >= 3 ? (
+                    <Link
+                      href="/pricing"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-all cursor-pointer"
+                    >
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>Free Limit Reached · Upgrade</span>
+                    </Link>
                   ) : (
                     <Link
                       href={`/test/${test.id}`}
