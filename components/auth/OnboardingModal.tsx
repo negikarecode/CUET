@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   X,
   GraduationCap,
@@ -26,6 +26,7 @@ import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
 import OtpVerificationView, { OtpVerificationType } from "./OtpVerificationView";
 import VerifyEmailView from "./VerifyEmailView";
 import { validateEmail, isPasswordValid } from "@/lib/auth/validation";
+import { parseAuthError } from "@/lib/auth/emailErrorHandler";
 
 interface OnboardingModalProps {
   isOpen: boolean;
@@ -68,6 +69,7 @@ export default function OnboardingModal({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const isSubmittingRef = useRef(false);
 
   // Sync mode when initialMode prop changes
   useEffect(() => {
@@ -82,12 +84,15 @@ export default function OnboardingModal({
   // Sign In with real Supabase Auth credentials
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading || isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setErrorMessage(null);
     setInfoMessage(null);
 
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail || !password) {
       setErrorMessage("Please enter both email and password.");
+      isSubmittingRef.current = false;
       return;
     }
 
@@ -109,7 +114,7 @@ export default function OnboardingModal({
           setErrorMessage(null);
           setInfoMessage("Your email address has not been verified yet. We have sent a confirmation email to your address.");
         } else {
-          setErrorMessage(error.message);
+          setErrorMessage(parseAuthError(error).message);
         }
         setIsLoading(false);
         return;
@@ -185,15 +190,18 @@ export default function OnboardingModal({
         window.location.href = "/dashboard";
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || "Authentication error. Please try again.");
+      setErrorMessage(parseAuthError(err).message);
     } finally {
       setIsLoading(false);
+      isSubmittingRef.current = false;
     }
   };
 
   // Sign Up with real Supabase Auth credentials & store profile in Supabase
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading || isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setErrorMessage(null);
     setInfoMessage(null);
 
@@ -206,28 +214,49 @@ export default function OnboardingModal({
     if (!targetSelection.isValidPair) {
       setErrorMessage("Please select a valid college and degree program combination.");
       setStep(2);
+      isSubmittingRef.current = false;
       return;
     }
 
     if (!cleanName) {
       setErrorMessage("Please enter your full legal name.");
       setStep(1);
+      isSubmittingRef.current = false;
       return;
     }
     if (!validateEmail(cleanEmail)) {
       setErrorMessage("Please provide a valid email address.");
       setStep(1);
+      isSubmittingRef.current = false;
       return;
     }
     if (!isPasswordValid(password)) {
       setErrorMessage("Password must be at least 8 characters and include uppercase, lowercase, and a number.");
       setStep(1);
+      isSubmittingRef.current = false;
       return;
     }
 
     setIsLoading(true);
 
     try {
+      // Server-side signup rate limit check (15 per 15 min per IP)
+      try {
+        const rcRes = await fetch("/api/auth/rate-check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "auth:signup" }),
+        });
+        if (rcRes.status === 429) {
+          const rcData = await rcRes.json().catch(() => ({}));
+          setErrorMessage(rcData.error || "Account creation limit reached for this IP address. Please try again later.");
+          setIsLoading(false);
+          return;
+        }
+      } catch {
+        // Proceed gracefully if offline sandbox
+      }
+
       const supabase = createClient();
 
       // Ensure any previous session is cleared before new signup
@@ -237,8 +266,11 @@ export default function OnboardingModal({
         // Ignore if already signed out
       }
 
-      const origin = typeof window !== "undefined" ? window.location.origin : "";
-      const emailRedirectTo = `${origin}/auth/confirm`;
+      const origin =
+        typeof window !== "undefined" && window.location.origin
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_SITE_URL || "https://cuetmate.vercel.app";
+      const emailRedirectTo = `${origin}/auth/confirm?next=%2Fdashboard`;
 
       const { data, error } = await supabase.auth.signUp({
         email: cleanEmail,
@@ -258,7 +290,7 @@ export default function OnboardingModal({
       });
 
       if (error) {
-        setErrorMessage(error.message);
+        setErrorMessage(parseAuthError(error).message);
         setIsLoading(false);
         return;
       }
@@ -318,9 +350,10 @@ export default function OnboardingModal({
         window.location.href = "/dashboard";
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || "Sign up failed. Please try again.");
+      setErrorMessage(parseAuthError(err).message);
     } finally {
       setIsLoading(false);
+      isSubmittingRef.current = false;
     }
   };
 
@@ -438,6 +471,9 @@ export default function OnboardingModal({
                 setMode("signup");
                 setStep(1);
                 setErrorMessage(null);
+              }}
+              onEmailChange={(newEmail: string) => {
+                setEmail(newEmail);
               }}
               initialError={errorMessage}
               initialMessage={infoMessage}

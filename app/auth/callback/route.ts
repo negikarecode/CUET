@@ -13,6 +13,7 @@ function getSafeRedirectPath(target: string | null): string {
     target.startsWith("//") ||
     target.startsWith("/\\") ||
     target.includes("://") ||
+    target.includes("\\") ||
     target.includes("\r") ||
     target.includes("\n")
   ) {
@@ -30,8 +31,12 @@ function getSafeRedirectPath(target: string | null): string {
  * Handles token_hash verification, PKCE code exchange, and profile synchronization.
  */
 export async function GET(request: NextRequest) {
-  const { searchParams, origin } = new URL(request.url);
-  const token_hash = searchParams.get("token_hash");
+  const origin =
+    request.nextUrl.origin ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    "https://cuetmate.vercel.app";
+  const { searchParams } = new URL(request.url);
+  const token_hash = searchParams.get("token_hash") || searchParams.get("token");
   const type = (searchParams.get("type") as EmailOtpType | null) || "signup";
   const code = searchParams.get("code");
   const next = getSafeRedirectPath(searchParams.get("next"));
@@ -88,48 +93,97 @@ export async function GET(request: NextRequest) {
   });
 
   let verificationSuccess = false;
+  let verifiedUser: any = null;
 
   // 1. Token Hash Verification (Email Confirmation Link)
   if (token_hash && type) {
-    const { error: verifyError } = await supabase.auth.verifyOtp({
+    let { data: verifyData, error: verifyError } = await supabase.auth.verifyOtp({
       type,
       token_hash,
     });
 
-    if (!verifyError) {
+    if (verifyError && type === "signup") {
+      const retry = await supabase.auth.verifyOtp({
+        type: "email",
+        token_hash,
+      });
+      if (!retry.error && retry.data?.user) {
+        verifyData = retry.data;
+        verifyError = null;
+      }
+    }
+
+    if (!verifyError && verifyData?.user) {
       verificationSuccess = true;
+      verifiedUser = verifyData.user;
     } else {
-      console.warn("[Auth Callback VerifyOtp Notice]:", verifyError.message);
+      console.warn("[Auth Callback VerifyOtp Notice]:", verifyError?.message);
+
+      // Repeated Click Defense: If link already used, check if the browser has an active verified session
+      const {
+        data: { user: currentUser },
+      } = await supabase.auth.getUser();
+      if (
+        currentUser &&
+        (currentUser.email_confirmed_at ||
+          (currentUser as any).confirmed_at ||
+          (currentUser.app_metadata?.provider &&
+            currentUser.app_metadata.provider !== "email"))
+      ) {
+        console.log(`[Auth Callback] Repeated click detected. User ${currentUser.id} is already verified. Redirecting to ${next}`);
+        return response;
+      }
     }
   }
 
   // 2. PKCE Code Exchange
   if (!verificationSuccess && code) {
-    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-    if (!exchangeError) {
+    const { data: exchangeData, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+    if (!exchangeError && exchangeData?.user) {
       verificationSuccess = true;
+      verifiedUser = exchangeData.user;
     } else {
-      console.warn("[Auth Callback Code Exchange Notice]:", exchangeError.message);
+      console.warn("[Auth Callback Code Exchange Notice]:", exchangeError?.message);
     }
   }
 
-  // 3. Process Successful Verification
+  // 3. Repeated Click Handling if neither token_hash nor code is provided
+  if (!token_hash && !code) {
+    const {
+      data: { user: currentUser },
+    } = await supabase.auth.getUser();
+    if (
+      currentUser &&
+      (currentUser.email_confirmed_at ||
+        (currentUser as any).confirmed_at ||
+        (currentUser.app_metadata?.provider &&
+          currentUser.app_metadata.provider !== "email"))
+    ) {
+      console.log(`[Auth Callback] Active verified session detected without query params. Redirecting to ${next}`);
+      return response;
+    }
+  }
+
+  // 4. Process Successful Verification
   if (verificationSuccess) {
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      if (!verifiedUser) {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        verifiedUser = user;
+      }
 
-      if (user) {
+      if (verifiedUser) {
         const supabaseAdmin = createAdminClient();
         const { data: existingProfile } = await supabaseAdmin
           .from("profiles")
           .select("id")
-          .eq("id", user.id)
+          .eq("id", verifiedUser.id)
           .maybeSingle();
 
         if (!existingProfile) {
-          const metadata = user.user_metadata || {};
+          const metadata = verifiedUser.user_metadata || {};
           const streamRaw = (metadata.target_stream || "Commerce").toLowerCase();
           const formattedStream =
             streamRaw === "science"
@@ -145,8 +199,8 @@ export async function GET(request: NextRequest) {
 
           await supabaseAdmin.from("profiles").upsert(
             {
-              id: user.id,
-              full_name: metadata.full_name || user.email?.split("@")[0] || "CUET Aspirant",
+              id: verifiedUser.id,
+              full_name: metadata.full_name || verifiedUser.email?.split("@")[0] || "CUET Aspirant",
               target_stream: formattedStream,
               target_university: metadata.target_university || "Delhi University",
               target_college: metadata.target_college || "SRCC",
@@ -163,7 +217,7 @@ export async function GET(request: NextRequest) {
           );
         }
 
-        console.log(`[Auth Callback] User ${user.id} verified successfully. Redirecting to ${next}`);
+        console.log(`[Auth Callback] User ${verifiedUser.id} verified successfully. Redirecting to ${next}`);
         return response;
       }
     } catch (profileError) {
@@ -172,7 +226,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // 4. Verification Failed / Expired Link
+  // 5. Verification Failed / Expired Link
   const failureUrl = new URL("/verify-email", origin);
   failureUrl.searchParams.set(
     "error",

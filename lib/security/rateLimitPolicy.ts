@@ -23,32 +23,37 @@ export const RATE_LIMIT_POLICIES: Record<string, RateLimitPolicy> = {
     errorMessage: "Too many login attempts. For security, please wait 15 minutes before trying again.",
   },
   "auth:signup": {
-    max: 5,
-    windowSeconds: 60 * 60, // 5 per hour
-    blockDurationSeconds: 60 * 60,
-    failClosed: true,
+    max: 15,
+    windowSeconds: 15 * 60, // 15 per 15 minutes per IP (allows normal typo corrections and shared networks)
+    failClosed: false,
     scope: "ip",
-    errorMessage: "Account creation limit reached for this IP address. Please try again later.",
+    errorMessage: "Registration attempts from this network are temporarily paused. Please wait a few moments before trying again.",
   },
   "auth:password_reset": {
-    max: 3,
-    windowSeconds: 60 * 60, // 3 per hour
-    blockDurationSeconds: 60 * 60,
-    failClosed: true,
-    scope: "combined",
-    errorMessage: "Too many password reset requests. Please wait an hour before requesting another reset.",
-  },
-  "auth:resend_verification": {
     max: 3,
     windowSeconds: 15 * 60, // 3 per 15 minutes
     blockDurationSeconds: 15 * 60,
     failClosed: true,
     scope: "combined",
-    errorMessage: "Too many verification emails requested. Please wait 15 minutes before requesting a new link.",
+    errorMessage: "Too many password reset requests. Please wait 15 minutes before requesting another reset.",
+  },
+  "auth:resend_verification": {
+    max: 3,
+    windowSeconds: 15 * 60, // 3 per 15 minutes per account
+    failClosed: false,
+    scope: "combined",
+    errorMessage: "You have reached the limit of 3 verification email requests for this 15-minute window. Please check your Spam/Promotions folder, or wait a short while before requesting another link.",
+  },
+  "auth:resend_ip": {
+    max: 10,
+    windowSeconds: 15 * 60, // 10 per 15 minutes per IP across all accounts
+    failClosed: false,
+    scope: "ip",
+    errorMessage: "Too many verification requests from this network. Please wait a few moments before trying again.",
   },
   "auth:confirm": {
-    max: 20,
-    windowSeconds: 15 * 60, // 20 per 15 minutes
+    max: 30,
+    windowSeconds: 15 * 60, // 30 per 15 minutes
     failClosed: false,
     scope: "ip",
     errorMessage: "Too many confirmation attempts. Please wait a moment before trying again.",

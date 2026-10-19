@@ -72,6 +72,7 @@ function VerifyEmailContent() {
               email={email}
               initialError={queryError}
               initialMessage={queryMessage}
+              onEmailChange={(newEmail: string) => setEmail(newEmail)}
               onBackToSignup={() => router.push("/signup")}
             />
           ) : (

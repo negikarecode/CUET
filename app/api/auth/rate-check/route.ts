@@ -8,6 +8,7 @@ const ALLOWED_AUTH_ACTIONS = new Set([
   "auth:signup",
   "auth:password_reset",
   "auth:resend_verification",
+  "auth:resend_ip",
 ]);
 
 /**
@@ -33,6 +34,15 @@ export async function POST(req: NextRequest) {
 
     if (!rateCheck.success) {
       return rateLimitResponse(rateCheck);
+    }
+
+    // Dual-Layer Protection: If checking resend_verification, also enforce per-IP threshold
+    if (action === "auth:resend_verification") {
+      const ipRateId = getClientRateLimitIdentifier(req, null, "auth:resend_ip");
+      const ipRateCheck = await rateLimit("auth:resend_ip", ipRateId);
+      if (!ipRateCheck.success) {
+        return rateLimitResponse(ipRateCheck);
+      }
     }
 
     return NextResponse.json({

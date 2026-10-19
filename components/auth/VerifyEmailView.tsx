@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Mail,
@@ -12,30 +12,50 @@ import {
   ArrowLeft,
   Sparkles,
   Inbox,
+  Pencil,
+  Check,
+  X,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { parseAuthError } from "@/lib/auth/emailErrorHandler";
+import { validateEmail } from "@/lib/auth/validation";
 
 interface VerifyEmailViewProps {
   email: string;
   onBackToSignup?: () => void;
+  onEmailChange?: (newEmail: string) => void;
   initialError?: string | null;
   initialMessage?: string | null;
 }
 
-const RESEND_COOLDOWN_SECONDS = 60;
+const RESEND_COOLDOWN_SECONDS = 30;
 
 export default function VerifyEmailView({
   email,
   onBackToSignup,
+  onEmailChange,
   initialError = null,
   initialMessage = null,
 }: VerifyEmailViewProps) {
+  const [targetEmail, setTargetEmail] = useState(email.trim().toLowerCase());
   const [cooldown, setCooldown] = useState(RESEND_COOLDOWN_SECONDS);
   const [isResending, setIsResending] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(initialError);
   const [successMessage, setSuccessMessage] = useState<string | null>(initialMessage);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [editInput, setEditInput] = useState(email.trim().toLowerCase());
 
-  // Cooldown countdown
+  // Concurrency-safe in-flight lock to prevent double clicks
+  const isResendingRef = useRef(false);
+
+  // Sync prop changes
+  useEffect(() => {
+    const clean = email.trim().toLowerCase();
+    setTargetEmail(clean);
+    setEditInput(clean);
+  }, [email]);
+
+  // 30-second cooldown countdown
   useEffect(() => {
     if (cooldown <= 0) return;
     const interval = setInterval(() => {
@@ -44,22 +64,24 @@ export default function VerifyEmailView({
     return () => clearInterval(interval);
   }, [cooldown]);
 
-  const cleanEmail = email.trim().toLowerCase();
+  const cleanEmail = targetEmail.trim().toLowerCase();
 
   const handleResend = async () => {
-    if (cooldown > 0 || isResending) return;
+    // Drop rapid repeated clicks or requests during active cooldown
+    if (cooldown > 0 || isResending || isResendingRef.current) return;
 
     if (!cleanEmail) {
       setErrorMessage("No email address specified. Please return to signup and try again.");
       return;
     }
 
+    isResendingRef.current = true;
     setIsResending(true);
     setErrorMessage(null);
     setSuccessMessage(null);
 
     try {
-      // Server-side email resend rate limit check (3 per 15 min per combined user/IP)
+      // 1. Server-side email resend rate limit check (3 per 15 min per account, 10 per IP)
       try {
         const rcRes = await fetch("/api/auth/rate-check", {
           method: "POST",
@@ -68,17 +90,27 @@ export default function VerifyEmailView({
         });
         if (rcRes.status === 429) {
           const rcData = await rcRes.json().catch(() => ({}));
-          setErrorMessage(rcData.error || "Too many verification emails requested. Please wait 15 minutes before requesting a new link.");
-          setIsResending(false);
+          setErrorMessage(
+            rcData.error ||
+              "You have reached the maximum of 3 replacement link requests for this 15-minute window. Please check your Spam/Promotions folder, or wait a short while before requesting another link."
+          );
+          setCooldown(60);
           return;
         }
-      } catch {
-        // Proceed gracefully if offline sandbox
+      } catch (rateCheckErr) {
+        // If client is completely offline, notify immediately without decrementing quota
+        if (!navigator.onLine) {
+          setErrorMessage("You appear to be offline. Please check your internet connection.");
+          return;
+        }
       }
 
       const supabase = createClient();
-      const origin = typeof window !== "undefined" ? window.location.origin : "";
-      const redirectTo = `${origin}/auth/confirm`;
+      const origin =
+        typeof window !== "undefined" && window.location.origin
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_SITE_URL || "https://cuetmate.vercel.app";
+      const redirectTo = `${origin}/auth/confirm?next=%2Fdashboard`;
 
       const { error } = await supabase.auth.resend({
         type: "signup",
@@ -89,13 +121,12 @@ export default function VerifyEmailView({
       });
 
       if (error) {
-        const errMsg = error.message.toLowerCase();
-        if (errMsg.includes("rate limit") || (error as any).status === 429) {
-          setErrorMessage(
-            "Rate limit exceeded: Too many emails have been requested. Please wait a few minutes before trying again."
-          );
-        } else {
-          setErrorMessage(error.message || "Failed to resend confirmation link. Please try again.");
+        const parsed = parseAuthError(error);
+        setErrorMessage(parsed.message);
+
+        // Apply realistic cooldown based on error nature
+        if (parsed.isRateLimit) {
+          setCooldown(parsed.recommendedCooldownSeconds || RESEND_COOLDOWN_SECONDS);
         }
         return;
       }
@@ -103,9 +134,28 @@ export default function VerifyEmailView({
       setSuccessMessage("A fresh confirmation link has been sent to your email address.");
       setCooldown(RESEND_COOLDOWN_SECONDS);
     } catch (err: any) {
-      setErrorMessage(err?.message || "An unexpected error occurred while resending the link.");
+      const parsed = parseAuthError(err);
+      setErrorMessage(parsed.message);
     } finally {
+      isResendingRef.current = false;
       setIsResending(false);
+    }
+  };
+
+  const handleSaveEditedEmail = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = editInput.trim().toLowerCase();
+    if (!validateEmail(clean)) {
+      setErrorMessage("Please enter a valid, deliverable email address.");
+      return;
+    }
+    setTargetEmail(clean);
+    setIsEditingEmail(false);
+    setErrorMessage(null);
+    setSuccessMessage(`Email address updated to ${clean}. You can now send a confirmation link to this address.`);
+    setCooldown(0); // Allow immediate resend to the corrected address
+    if (onEmailChange) {
+      onEmailChange(clean);
     }
   };
 
@@ -127,41 +177,100 @@ export default function VerifyEmailView({
           Verify your email
         </h2>
         <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
-          We have sent a confirmation link to your registered email address. Click the link to activate your candidate account and open your dashboard.
+          We sent a verification link to your email. Click the link to activate your candidate account and unlock your dashboard.
         </p>
       </div>
 
-      {/* Target Email Box */}
-      <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 text-left">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-            <Inbox className="w-4 h-4" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Registered Email
+      {/* Target Email Box with Inline Edit Option */}
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-left transition-all">
+        {isEditingEmail ? (
+          <form onSubmit={handleSaveEditedEmail} className="space-y-2.5">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+              Correct Your Email Address
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="email"
+                value={editInput}
+                onChange={(e) => setEditInput(e.target.value)}
+                placeholder="name@example.com"
+                className="flex-1 px-3 py-1.5 rounded-xl border border-blue-500 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                autoFocus
+                required
+              />
+              <button
+                type="submit"
+                className="p-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white transition-all cursor-pointer"
+                title="Save corrected email"
+              >
+                <Check className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditInput(cleanEmail);
+                  setIsEditingEmail(false);
+                }}
+                className="p-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-600 transition-all cursor-pointer"
+                title="Cancel"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <p className="text-[11px] text-slate-500">
+              Need to fix your name, college, or stream instead?{" "}
+              {onBackToSignup && (
+                <button
+                  type="button"
+                  onClick={onBackToSignup}
+                  className="text-blue-600 hover:underline font-semibold"
+                >
+                  Return to registration
+                </button>
+              )}
             </p>
-            <p className="text-xs sm:text-sm font-semibold text-slate-800 truncate" title={cleanEmail}>
-              {cleanEmail || "Your registered email"}
-            </p>
-          </div>
-        </div>
-
-        {onBackToSignup ? (
-          <button
-            type="button"
-            onClick={onBackToSignup}
-            className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline shrink-0 cursor-pointer"
-          >
-            Change
-          </button>
+          </form>
         ) : (
-          <Link
-            href="/signup"
-            className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline shrink-0"
-          >
-            Change
-          </Link>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                <Inbox className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Registered Email
+                </p>
+                <p className="text-xs sm:text-sm font-semibold text-slate-800 truncate" title={cleanEmail}>
+                  {cleanEmail || "Your registered email"}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsEditingEmail(true)}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline cursor-pointer"
+                title="Fix a typo in your email"
+              >
+                <Pencil className="w-3 h-3" />
+                <span>Fix typo</span>
+              </button>
+              {onBackToSignup && (
+                <>
+                  <span className="text-slate-300">|</span>
+                  <button
+                    type="button"
+                    onClick={onBackToSignup}
+                    className="text-xs font-semibold text-slate-500 hover:text-slate-800 hover:underline cursor-pointer"
+                    title="Change all registration details"
+                  >
+                    Edit details
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
         )}
       </div>
 
@@ -169,14 +278,14 @@ export default function VerifyEmailView({
       {errorMessage && (
         <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200/60 text-rose-700 text-xs font-medium flex items-start gap-2.5 text-left animate-in fade-in">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
-          <p className="flex-1">{errorMessage}</p>
+          <p className="flex-1 leading-relaxed">{errorMessage}</p>
         </div>
       )}
 
       {successMessage && (
         <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200/60 text-emerald-800 text-xs font-medium flex items-start gap-2.5 text-left animate-in fade-in">
           <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" />
-          <p className="flex-1">{successMessage}</p>
+          <p className="flex-1 leading-relaxed">{successMessage}</p>
         </div>
       )}
 
@@ -193,14 +302,14 @@ export default function VerifyEmailView({
         </a>
 
         <p className="text-[11px] text-slate-500">
-          Using Outlook, Apple Mail, Yahoo, or another app? You can open your inbox in any email client you normally use.
+          Tip: Look for an email from <strong>CUET AI-Prep</strong> or <strong>Supabase</strong>. Be sure to check your <strong>Spam</strong> or <strong>Promotions</strong> folder.
         </p>
       </div>
 
       {/* Resend Section */}
       <div className="pt-2 border-t border-slate-100 space-y-3">
         <div className="text-xs text-slate-500">
-          Didn&apos;t receive the email? Check your Spam or Promotions folder, or request a new link.
+          Didn&apos;t receive the link after 1-2 minutes? You can request a fresh one below.
         </div>
 
         <button
@@ -226,28 +335,33 @@ export default function VerifyEmailView({
             </>
           )}
         </button>
+
+        {cooldown > 0 && (
+          <p className="text-[10px] text-slate-400">
+            A 30-second cooldown is enforced to prevent mailbox congestion.
+          </p>
+        )}
       </div>
 
-      {/* Back to sign in / signup link */}
-      <div className="pt-2">
-        {onBackToSignup ? (
+      {/* Return to signup / back to login links */}
+      <div className="pt-2 flex items-center justify-center gap-4 text-xs">
+        {onBackToSignup && (
           <button
             type="button"
             onClick={onBackToSignup}
-            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800 font-medium transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-800 font-medium transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Return to registration</span>
           </button>
-        ) : (
-          <Link
-            href="/login"
-            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800 font-medium transition-colors"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to sign in</span>
-          </Link>
         )}
+
+        <Link
+          href="/login"
+          className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-800 font-semibold transition-colors"
+        >
+          <span>Already verified? Sign in</span>
+        </Link>
       </div>
     </div>
   );

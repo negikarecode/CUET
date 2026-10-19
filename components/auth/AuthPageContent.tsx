@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -32,6 +32,7 @@ import VerifyEmailView from "./VerifyEmailView";
 import ForgotPasswordView from "./ForgotPasswordView";
 import { DEFAULT_STREAM_SUBJECTS, getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { validateEmail, isPasswordValid } from "@/lib/auth/validation";
+import { parseAuthError } from "@/lib/auth/emailErrorHandler";
 
 interface AuthPageContentProps {
   initialMode?: "signup" | "login";
@@ -81,6 +82,7 @@ export default function AuthPageContent({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const isSubmittingRef = useRef(false);
 
   // If already logged in, redirect to dashboard
   useEffect(() => {
@@ -170,6 +172,8 @@ export default function AuthPageContent({
   // Sign In with Email & Password
   const handlePasswordSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading || isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setErrorMessage(null);
     setInfoMessage(null);
     setUnconfirmedEmailForVerification(null);
@@ -177,11 +181,13 @@ export default function AuthPageContent({
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail || !password) {
       setErrorMessage("Please enter both your email address and password.");
+      isSubmittingRef.current = false;
       return;
     }
 
     if (!validateEmail(cleanEmail)) {
       setErrorMessage("Please enter a valid email address.");
+      isSubmittingRef.current = false;
       return;
     }
 
@@ -227,7 +233,7 @@ export default function AuthPageContent({
         } else if (errMsg.includes("invalid login credentials")) {
           setErrorMessage("Invalid email or password. Please check your credentials and try again.");
         } else {
-          setErrorMessage(error.message);
+          setErrorMessage(parseAuthError(error).message);
         }
         setIsLoading(false);
         return;
@@ -237,26 +243,31 @@ export default function AuthPageContent({
         await syncProfileAndLogin(data.user);
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || "Sign in failed. Please try again.");
+      setErrorMessage(parseAuthError(err).message);
     } finally {
       setIsLoading(false);
+      isSubmittingRef.current = false;
     }
   };
 
   // Sign In with One-Time Code (Passwordless OTP Login)
   const handleOtpSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading || isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setErrorMessage(null);
     setInfoMessage(null);
 
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail) {
       setErrorMessage("Please enter your registered email address.");
+      isSubmittingRef.current = false;
       return;
     }
 
     if (!validateEmail(cleanEmail)) {
       setErrorMessage("Please provide a valid email format.");
+      isSubmittingRef.current = false;
       return;
     }
 
@@ -275,7 +286,7 @@ export default function AuthPageContent({
         if (error.message.toLowerCase().includes("user not found") || error.message.toLowerCase().includes("not registered")) {
           setErrorMessage("No candidate account found with this email. Please register as a new candidate first.");
         } else {
-          setErrorMessage(error.message || "Failed to dispatch verification code.");
+          setErrorMessage(parseAuthError(error).message);
         }
         setIsLoading(false);
         return;
@@ -285,15 +296,18 @@ export default function AuthPageContent({
       setOtpType("email");
       setMode("otp");
     } catch (err: any) {
-      setErrorMessage(err?.message || "Failed to send code. Please try again.");
+      setErrorMessage(parseAuthError(err).message);
     } finally {
       setIsLoading(false);
+      isSubmittingRef.current = false;
     }
   };
 
   // Sign Up Initiation
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading || isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setErrorMessage(null);
     setInfoMessage(null);
 
@@ -313,23 +327,26 @@ export default function AuthPageContent({
     if (!cleanName) {
       setErrorMessage("Please enter your full legal name.");
       setStep(1);
+      isSubmittingRef.current = false;
       return;
     }
     if (!validateEmail(cleanEmail)) {
       setErrorMessage("Please provide a valid email address.");
       setStep(1);
+      isSubmittingRef.current = false;
       return;
     }
     if (!isPasswordValid(password)) {
       setErrorMessage("Please ensure your password meets all requirements (min. 8 characters, uppercase, lowercase, and number).");
       setStep(1);
+      isSubmittingRef.current = false;
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // Server-side signup rate limit check (5 per hour per IP)
+      // Server-side signup rate limit check (15 per 15 min per IP)
       try {
         const rcRes = await fetch("/api/auth/rate-check", {
           method: "POST",
@@ -352,7 +369,10 @@ export default function AuthPageContent({
         await supabase.auth.signOut();
       } catch {}
 
-      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const origin =
+        typeof window !== "undefined" && window.location.origin
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_SITE_URL || "https://cuetmate.vercel.app";
       const emailRedirectTo = `${origin}/auth/confirm?next=${encodeURIComponent(redirectUrl)}`;
 
       const { data, error } = await supabase.auth.signUp({
@@ -373,7 +393,7 @@ export default function AuthPageContent({
       });
 
       if (error) {
-        setErrorMessage(error.message);
+        setErrorMessage(parseAuthError(error).message);
         setIsLoading(false);
         return;
       }
@@ -398,9 +418,10 @@ export default function AuthPageContent({
         return;
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || "Registration failed. Please try again.");
+      setErrorMessage(parseAuthError(err).message);
     } finally {
       setIsLoading(false);
+      isSubmittingRef.current = false;
     }
   };
 
@@ -551,6 +572,9 @@ export default function AuthPageContent({
                   setMode("signup");
                   setStep(1);
                   setErrorMessage(null);
+                }}
+                onEmailChange={(newEmail: string) => {
+                  setEmail(newEmail);
                 }}
                 initialError={errorMessage}
                 initialMessage={infoMessage}

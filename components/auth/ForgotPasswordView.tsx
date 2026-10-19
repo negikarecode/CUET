@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Mail, ArrowRight, Loader2, AlertCircle, ArrowLeft, KeyRound } from "lucide-react";
 import { validateEmail } from "@/lib/auth/validation";
 import { createClient } from "@/lib/supabase/client";
+import { parseAuthError } from "@/lib/auth/emailErrorHandler";
 import OtpVerificationView from "./OtpVerificationView";
 
 interface ForgotPasswordViewProps {
@@ -19,18 +20,24 @@ export default function ForgotPasswordView({
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showOtpView, setShowOtpView] = useState(false);
+  const isSubmittingRef = useRef(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading || isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
+
     const cleanEmail = email.trim().toLowerCase();
 
     if (!cleanEmail) {
       setErrorMessage("Please enter your registered email address.");
+      isSubmittingRef.current = false;
       return;
     }
 
     if (!validateEmail(cleanEmail)) {
       setErrorMessage("Please provide a valid email format.");
+      isSubmittingRef.current = false;
       return;
     }
 
@@ -56,7 +63,10 @@ export default function ForgotPasswordView({
       }
 
       const supabase = createClient();
-      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const origin =
+        typeof window !== "undefined" && window.location.origin
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_SITE_URL || "https://cuetmate.vercel.app";
       const redirectTo = `${origin}/auth/callback?next=/reset-password`;
 
       const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
@@ -64,8 +74,9 @@ export default function ForgotPasswordView({
       });
 
       if (error) {
-        if (error.message.toLowerCase().includes("rate limit") || error.status === 429) {
-          setErrorMessage("Rate limit reached. Please wait a moment before trying again.");
+        const parsed = parseAuthError(error);
+        if (parsed.isRateLimit) {
+          setErrorMessage(parsed.message);
         } else {
           // Never reveal whether an arbitrary email exists for security
           setShowOtpView(true);
@@ -75,9 +86,10 @@ export default function ForgotPasswordView({
 
       setShowOtpView(true);
     } catch (err: any) {
-      setErrorMessage(err?.message || "An unexpected error occurred. Please try again.");
+      setErrorMessage(parseAuthError(err).message);
     } finally {
       setIsLoading(false);
+      isSubmittingRef.current = false;
     }
   };
 
