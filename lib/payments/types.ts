@@ -69,3 +69,20 @@ export interface VerifyPaymentRequest {
   razorpay_signature: string;
   tier?: string;
 }
+
+export interface RazorpayStandardOrderResponse {
+  order_id: string;
+  orderId?: string;
+  amount: number;
+  currency: string;
+  key_id?: string;
+}
+
+export interface RazorpayStandardVerificationPayload {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+  userId?: string;
+  tier?: string;
+}
+

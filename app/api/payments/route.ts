@@ -333,9 +333,11 @@ export async function POST(req: NextRequest) {
     } catch {}
 
     return NextResponse.json({
+      order_id: orderResult.orderId,
       orderId: orderResult.orderId,
       amount: orderResult.amount,
       currency: orderResult.currency,
+      key_id: orderResult.keyId,
       keyId: orderResult.keyId,
       isSimulated: orderResult.isSimulated,
       tier: "all_access_pass",

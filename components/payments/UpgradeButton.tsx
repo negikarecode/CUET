@@ -79,12 +79,15 @@ export default function UpgradeButton({
         return;
       }
 
-      // 2. Call Server Route Handler to generate Razorpay Order
-      const res = await fetch("/api/payments", {
+      const amountPaise = is399 ? 39900 : isAllAccess ? 49900 : 49900;
+
+      // 2. Call Server Route Handler to generate Razorpay Order (POST /api/create-order)
+      const res = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "create-order",
+          amount: amountPaise,
+          currency: "INR",
           planId,
           userId: user.id,
           email: user.email,
@@ -93,40 +96,17 @@ export default function UpgradeButton({
       });
 
       if (!res.ok) {
-        throw new Error("Failed to create Razorpay order.");
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to create Razorpay order.");
       }
 
       const orderData = await res.json();
-      const { orderId, amount, currency, keyId, isSimulated } = orderData;
+      const orderId = orderData.order_id || orderData.orderId;
+      const amount = orderData.amount || amountPaise;
+      const currency = orderData.currency || "INR";
+      const keyId = orderData.key_id || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
 
-      // 3. Simulated Checkout if running in local development with placeholder keys
-      if (isSimulated || !window.Razorpay) {
-        setTimeout(async () => {
-          // Verify simulation
-          await fetch("/api/payments", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              action: "verify",
-              razorpay_order_id: orderId,
-              razorpay_payment_id: `pay_sim_${Date.now()}`,
-              userId: user.id,
-              tier: "all_access_pass",
-            }),
-          });
-
-          // Award 500 bonus coins & unlock Premium in client store
-          addCoins(500);
-          loginUser({ isPremium: true, subscriptionTier: "all_access_pass" });
-          setLoading(false);
-          setShowSuccessModal(true);
-          if (onSuccess) onSuccess();
-          router.refresh();
-        }, 1200);
-        return;
-      }
-
-      // 4. Configure Razorpay Options
+      // 3. Configure Razorpay Standard Web Checkout Options
       const options = {
         key: keyId,
         amount,
@@ -141,12 +121,11 @@ export default function UpgradeButton({
           razorpay_signature: string;
         }) {
           try {
-            // Verify payment on backend
-            const verifyRes = await fetch("/api/payments", {
+            // Verify payment on authoritative backend (POST /api/verify-payment)
+            const verifyRes = await fetch("/api/verify-payment", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                action: "verify",
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
@@ -155,18 +134,22 @@ export default function UpgradeButton({
               }),
             });
 
-            if (verifyRes.ok) {
+            const verifyData = await verifyRes.json();
+
+            if (verifyRes.ok && verifyData.success) {
               addCoins(500);
               loginUser({ isPremium: true, subscriptionTier: "all_access_pass" });
               setShowSuccessModal(true);
               if (onSuccess) onSuccess();
               router.refresh();
             } else {
-              alert("Payment verification issue. Please contact support.");
+              alert(verifyData.error || "Payment verification issue. Please contact support.");
             }
-          } catch (err) {
+          } catch (err: any) {
             console.error("Verification failed:", err);
-            setShowSuccessModal(true);
+            alert(err.message || "Failed to verify payment with server.");
+          } finally {
+            setLoading(false);
           }
         },
         prefill: {
@@ -183,22 +166,24 @@ export default function UpgradeButton({
         },
         modal: {
           ondismiss: function () {
+            console.log("[Razorpay Checkout] Modal dismissed by user.");
             setLoading(false);
           },
         },
       };
 
-      // 5. Open Razorpay Modal
+      // 4. Open Razorpay Modal
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", function (response: any) {
-        alert(`Payment failed: ${response.error.description}`);
+        console.error("[Razorpay Payment Failed]:", response.error);
+        alert(`Payment failed: ${response.error?.description || "Transaction declined."}`);
         setLoading(false);
       });
 
       rzp.open();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Checkout launch error:", err);
-      alert("Error initiating checkout. Please retry.");
+      alert(err.message || "Error initiating checkout. Please retry.");
       setLoading(false);
     }
   };
