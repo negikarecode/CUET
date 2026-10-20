@@ -77,6 +77,9 @@ export default async function ProfilePage() {
         .maybeSingle();
 
       if (profileRow) {
+        const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+        const entitlement = await getUserEntitlement(authUser.id);
+
         initialProfile = {
           id: profileRow.id,
           fullName: profileRow.full_name || "CUET Aspirant",
@@ -90,9 +93,9 @@ export default async function ProfilePage() {
             profileRow.current_streak ?? 0,
             profileRow.last_practice_date
           ),
-          isPremium: Boolean(profileRow.is_premium),
-          subscriptionTier: profileRow.subscription_tier || "free",
-          subscriptionExpiresAt: profileRow.subscription_expires_at ?? null,
+          isPremium: entitlement.isPremium,
+          subscriptionTier: entitlement.subscriptionTier,
+          subscriptionExpiresAt: entitlement.subscriptionExpiresAt,
           selectedSubjects:
             profileRow.selected_subjects && profileRow.selected_subjects.length > 0
               ? profileRow.selected_subjects

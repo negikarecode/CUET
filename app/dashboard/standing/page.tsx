@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import StandingViewClient from "@/components/dashboard/standing/StandingViewClient";
-import LockedFeaturePaywall from "@/components/payments/LockedFeaturePaywall";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
 import { RecordedTestAttempt } from "@/types";
 
@@ -28,6 +28,8 @@ export default async function StandingPage() {
   let initialUser: { targetCollege?: string; targetCourse?: string; targetStream?: string } | undefined;
   let initialAttempts: RecordedTestAttempt[] = [];
   let isPremium = false;
+  let isVerified = false;
+  let userId: string | undefined;
 
   try {
     const supabase = createClient();
@@ -35,31 +37,20 @@ export default async function StandingPage() {
       data: { user: authUser },
     } = await supabase.auth.getUser();
 
-    if (authUser) {
-      const { data: profile } = await supabase
+    if (authUser?.id) {
+      userId = authUser.id;
+      // 1. Authoritative admin entitlement check
+      const admin = createAdminClient();
+      const { data: profile } = await admin
         .from("profiles")
         .select("target_college, target_course, target_stream, is_premium")
         .eq("id", authUser.id)
         .maybeSingle();
 
-      isPremium = Boolean(profile?.is_premium);
-
-      if (!isPremium) {
-        return (
-          <LockedFeaturePaywall
-            featureTitle="Where Do I Stand"
-            featureSubtitle="Dream College Cutoff Predictor"
-            featureDescription="Compare your authentic mock scores directly against previous years' official NTA cutoffs for Delhi University, BHU, JNU, and top Central Universities."
-            benefits={[
-              "Instant percentile & chance band estimation for SRCC, St. Stephen's, Hindu, and 50+ colleges",
-              "Subject-by-subject score gap calculation to reach your dream college cutoff",
-              "Official category-wise reservation calibration (UR, OBC, SC, ST, EWS)",
-              "Dynamic course & university recommendations based on your highest domain marks",
-            ]}
-            iconName="landmark"
-          />
-        );
-      }
+      const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+      const entitlement = await getUserEntitlement(authUser.id);
+      isPremium = entitlement.isPremium;
+      isVerified = true;
 
       const college = profile?.target_college || (authUser.user_metadata?.target_college as string | undefined);
       const course = profile?.target_course || (authUser.user_metadata?.target_course as string | undefined);
@@ -74,44 +65,20 @@ export default async function StandingPage() {
       }
 
       initialAttempts = await fetchServerTestAttempts(supabase, authUser.id);
-    } else {
-      // Unauthenticated visitor
-      return (
-        <LockedFeaturePaywall
-          featureTitle="Where Do I Stand"
-          featureSubtitle="Dream College Cutoff Predictor"
-          featureDescription="Compare your authentic mock scores directly against previous years' official NTA cutoffs for Delhi University, BHU, JNU, and top Central Universities."
-          benefits={[
-            "Instant percentile & chance band estimation for SRCC, St. Stephen's, Hindu, and 50+ colleges",
-            "Subject-by-subject score gap calculation to reach your dream college cutoff",
-            "Official category-wise reservation calibration (UR, OBC, SC, ST, EWS)",
-            "Dynamic course & university recommendations based on your highest domain marks",
-          ]}
-          iconName="landmark"
-        />
-      );
     }
   } catch (err) {
     console.warn("StandingPage server query notice:", err);
-    return (
-      <LockedFeaturePaywall
-        featureTitle="Where Do I Stand"
-        featureSubtitle="Dream College Cutoff Predictor"
-        featureDescription="Compare your authentic mock scores directly against previous years' official NTA cutoffs for Delhi University, BHU, JNU, and top Central Universities."
-        benefits={[
-          "Instant percentile & chance band estimation for SRCC, St. Stephen's, Hindu, and 50+ colleges",
-          "Subject-by-subject score gap calculation to reach your dream college cutoff",
-          "Official category-wise reservation calibration (UR, OBC, SC, ST, EWS)",
-          "Dynamic course & university recommendations based on your highest domain marks",
-        ]}
-        iconName="landmark"
-      />
-    );
   }
 
   return (
     <Suspense fallback={<StandingLoadingFallback />}>
-      <StandingViewClient initialUser={initialUser} initialAttempts={initialAttempts} />
+      <StandingViewClient
+        initialUser={initialUser}
+        initialAttempts={initialAttempts}
+        initialIsPremium={isPremium}
+        initialIsVerified={isVerified}
+        initialUserId={userId}
+      />
     </Suspense>
   );
 }

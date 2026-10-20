@@ -367,6 +367,7 @@ export interface PYQTestItem {
   verificationNotice?: string;
   examDate?: string;
   dateDisplay?: string;
+  paperNumber?: number;
 }
 
 export function loadPYQFromManifest(subjectSlug: string): PYQTestItem[] {
@@ -398,7 +399,12 @@ export function loadPYQFromManifest(subjectSlug: string): PYQTestItem[] {
   const manifestSub = (pyqManifest.subjects as Record<string, { papers: PYQTestItem[] }>)[folder];
   if (manifestSub && manifestSub.papers && manifestSub.papers.length > 0) {
     // Phase A: Exclude all duplicate_of_mock papers so they are NEVER listed under official PYQs
-    return manifestSub.papers.filter((p) => p.status !== "duplicate_of_mock");
+    const papers = manifestSub.papers.filter((p) => p.status !== "duplicate_of_mock");
+    return papers.sort((a, b) => {
+      const numA = a.paperNumber ?? parseInt(a.id.match(/pyq[-_]?(\d+)/i)?.[1] || "0", 10);
+      const numB = b.paperNumber ?? parseInt(b.id.match(/pyq[-_]?(\d+)/i)?.[1] || "0", 10);
+      return numA - numB;
+    });
   }
   return [];
 }

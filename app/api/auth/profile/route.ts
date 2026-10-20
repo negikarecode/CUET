@@ -178,6 +178,14 @@ export async function GET(req: Request) {
       );
     }
 
+    if (isSelf && profile) {
+      const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+      const entitlement = await getUserEntitlement(id);
+      profile.is_premium = entitlement.isPremium;
+      profile.subscription_tier = entitlement.subscriptionTier;
+      profile.subscription_expires_at = entitlement.subscriptionExpiresAt;
+    }
+
     return NextResponse.json({ success: true, profile });
   } catch (err: any) {
     return NextResponse.json(

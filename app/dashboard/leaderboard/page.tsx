@@ -20,14 +20,10 @@ export default async function LeaderboardPage() {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (user) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("is_premium")
-        .eq("id", user.id)
-        .maybeSingle();
-
-      isPremium = Boolean(profile?.is_premium);
+    if (user?.id) {
+      const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+      const entitlement = await getUserEntitlement(user.id);
+      isPremium = entitlement.isPremium;
     }
   } catch (err) {
     console.warn("LeaderboardPage auth query notice:", err);

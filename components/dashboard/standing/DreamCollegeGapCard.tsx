@@ -8,7 +8,6 @@ import {
   Bot,
   Loader2,
   ChevronRight,
-  Lock,
   Info,
 } from "lucide-react";
 import {
@@ -44,7 +43,7 @@ export default function DreamCollegeGapCard({
   const [aiError, setAiError] = useState<string | null>(null);
 
   const handleFetchAIExplanation = async () => {
-    if (!analysis || !analysis.isComplete) return;
+    if (!analysis || completedSubjects.length === 0) return;
     setIsLoadingAI(true);
     setAiError(null);
 
@@ -212,23 +211,23 @@ export default function DreamCollegeGapCard({
           </div>
         </div>
 
-        {/* Explain My Result Button: disabled until all required subjects have data */}
+        {/* Explain My Result Button */}
         <div
           className="relative inline-flex group self-start sm:self-auto"
-          tabIndex={!analysis.isComplete ? 0 : undefined}
-          role={!analysis.isComplete ? "region" : undefined}
+          tabIndex={completedSubjects.length === 0 ? 0 : undefined}
+          role={completedSubjects.length === 0 ? "region" : undefined}
           aria-label={
-            !analysis.isComplete
-              ? "Complete all 3 subjects to unlock"
+            completedSubjects.length === 0
+              ? "Attempt at least 1 mock test to generate AI cutoff diagnosis"
               : undefined
           }
         >
           <button
             type="button"
             onClick={handleFetchAIExplanation}
-            disabled={!analysis.isComplete || isLoadingAI}
+            disabled={completedSubjects.length === 0 || isLoadingAI}
             className={`inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all shadow-2xs ${
-              !analysis.isComplete
+              completedSubjects.length === 0
                 ? "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed opacity-80"
                 : "bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200/80 cursor-pointer"
             }`}
@@ -245,12 +244,12 @@ export default function DreamCollegeGapCard({
               </>
             )}
           </button>
-          {!analysis.isComplete && (
+          {completedSubjects.length === 0 && (
             <div
               role="tooltip"
               className="pointer-events-none absolute bottom-full right-0 mb-2 hidden group-hover:block group-focus:block w-60 p-2 bg-slate-900 text-white text-[12px] rounded-xl shadow-xl z-50 text-center font-medium"
             >
-              Complete all 3 subjects to unlock
+              Attempt at least 1 mock test to generate AI cutoff diagnosis
             </div>
           )}
         </div>
@@ -436,7 +435,7 @@ export default function DreamCollegeGapCard({
         <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200/80 text-xs sm:text-sm text-slate-600">
           <strong>Cutoff Data Notice:</strong> No past cutoff data yet for {analysis.targetCollege} in {analysis.targetCourse}. Gap analysis and comparisons against official cutoffs are disabled until admission benchmarks are recorded.
         </div>
-      ) : analysis.isComplete && (
+      ) : (
         <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-sm sm:text-base text-slate-700 font-medium">
             <span>
@@ -476,18 +475,20 @@ export default function DreamCollegeGapCard({
         </div>
       )}
 
-      {/* 4. One-line Inline Locked Banner (when incomplete) */}
+      {/* 4. Progress Guidance Banner (when incomplete) */}
       {!analysis.isComplete && (
-        <div className="flex items-center gap-2.5 px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-sm text-slate-600 font-medium">
-          <Lock className="w-4 h-4 text-slate-400 shrink-0" />
+        <div className="flex items-center gap-2.5 px-3.5 py-2.5 bg-blue-50/60 border border-blue-200/60 rounded-xl text-sm text-blue-900 font-medium">
+          <Target className="w-4 h-4 text-blue-600 shrink-0" />
           <span>
-            Complete {missingSubjects.length > 0 ? missingSubjects.join(" and ") : "all required subjects"} to unlock overall standing
+            {completedSubjects.length === 0
+              ? `Attempt a mock test in ${missingSubjects.length > 0 ? missingSubjects.join(" or ") : "your required subjects"} to compute your official standing against the cutoff.`
+              : `Attempt mock tests in ${missingSubjects.join(" and ")} to complete your composite standing.`}
           </span>
         </div>
       )}
 
-      {/* 5. Trajectory Narrative Banner (when complete) */}
-      {analysis.isComplete && (
+      {/* 5. Trajectory Narrative Banner */}
+      {Boolean(analysis.summaryMessage) && (
         <div className="p-4 bg-blue-50/60 border border-blue-200/70 rounded-xl flex items-start gap-3">
           <TrendingUp className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
           <div className="space-y-1">

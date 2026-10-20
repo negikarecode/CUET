@@ -12,6 +12,7 @@ import {
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useTarget } from "@/lib/hooks/useTarget";
+import { useEntitlement } from "@/lib/hooks/useEntitlement";
 import CascadingTargetSelector from "@/components/ui/CascadingTargetSelector";
 import { useTargetSelection } from "@/lib/hooks/useTargetSelection";
 import SubjectCombinationCard from "./SubjectCombinationCard";
@@ -29,19 +30,33 @@ import { CategoryCode } from "@/lib/config/standingConfig";
 import { StreamType } from "@/types";
 import { stringToUuid } from "@/lib/utils";
 import { deduplicateTestAttempts, getCanonicalTestKey } from "@/lib/analytics";
+import LockedFeaturePaywall from "@/components/payments/LockedFeaturePaywall";
 
 interface StandingViewClientProps {
   initialUser?: { targetCollege?: string; targetCourse?: string; targetStream?: string };
   initialAttempts?: import("@/types").RecordedTestAttempt[];
+  initialIsPremium?: boolean;
+  initialIsVerified?: boolean;
+  initialUserId?: string;
 }
 
 export default function StandingViewClient({
   initialUser,
   initialAttempts = [],
+  initialIsPremium = false,
+  initialIsVerified = false,
+  initialUserId,
 }: StandingViewClientProps = {}) {
   const isClient = useIsClient();
   const profileTarget = useTarget();
   const storeUser = useTestStore((state) => state.user);
+
+  const { isConfirmedFree, isLoading } = useEntitlement({
+    initialIsPremium,
+    initialIsVerified,
+    initialUserId,
+  });
+
   const user = useMemo(() => {
     return {
       ...(storeUser || {}),
@@ -248,13 +263,30 @@ export default function StandingViewClient({
     Boolean(profileTarget.college) &&
     targetCollege.toLowerCase() !== (profileTarget.college || "").toLowerCase();
 
-  if (!isClient) {
+  if (!isClient || isLoading) {
     return (
       <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 animate-pulse">
         <div className="h-14 bg-slate-200 rounded-2xl w-full" />
         <div className="h-44 bg-slate-200 rounded-2xl w-full" />
         <div className="h-64 bg-slate-200 rounded-2xl w-full" />
       </div>
+    );
+  }
+
+  if (isConfirmedFree) {
+    return (
+      <LockedFeaturePaywall
+        featureTitle="Where Do I Stand"
+        featureSubtitle="Dream College Cutoff Predictor"
+        featureDescription="Compare your authentic mock scores directly against previous years' official NTA cutoffs for Delhi University, BHU, JNU, and top Central Universities."
+        benefits={[
+          "Instant percentile & chance band estimation for SRCC, St. Stephen's, Hindu, and 50+ colleges",
+          "Subject-by-subject score gap calculation to reach your dream college cutoff",
+          "Official category-wise reservation calibration (UR, OBC, SC, ST, EWS)",
+          "Dynamic course & university recommendations based on your highest domain marks",
+        ]}
+        iconName="landmark"
+      />
     );
   }
 

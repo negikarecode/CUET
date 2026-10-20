@@ -217,21 +217,28 @@ const STREAM_CONFIGS: Record<
   },
 };
 
+function getPaperNumber(test: PYQTestItem): number {
+  if (test.paperNumber) return test.paperNumber;
+  const match = test.id.match(/pyq[-_]?(\d+)/i);
+  return match && match[1] ? parseInt(match[1], 10) : 1;
+}
+
 function formatShortPaperTitle(test: PYQTestItem): string {
+  const paperNum = getPaperNumber(test);
   if (test.dateDisplay && test.shift) {
-    return `${test.dateDisplay} · ${test.shift}`;
+    return `Paper ${paperNum} (${test.dateDisplay} · ${test.shift})`;
   }
-  if (test.dateDisplay) return test.dateDisplay;
+  if (test.dateDisplay) return `Paper ${paperNum} (${test.dateDisplay})`;
   const match = test.label.match(
     /\((\d{1,2}\s+[A-Za-z]+\s+\d{4})\s+(Shift\s+\d+)\)/i
   );
   if (match && match[1] && match[2]) {
-    return `${match[1]} · ${match[2]}`;
+    return `Paper ${paperNum} (${match[1]} · ${match[2]})`;
   }
   if (test.shift && test.year) {
-    return `CUET ${test.year} · ${test.shift}`;
+    return `Paper ${paperNum} (CUET ${test.year} · ${test.shift})`;
   }
-  return test.label;
+  return `Paper ${paperNum}`;
 }
 
 interface InProgressSessionInfo {
