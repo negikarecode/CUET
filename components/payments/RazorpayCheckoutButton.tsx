@@ -14,6 +14,7 @@ export interface RazorpayCheckoutButtonProps {
   amountPaise?: number; // amount in paise (default: 1000 = ₹10)
   currency?: string;    // default: "INR"
   planTitle?: string;   // description in modal
+  planId?: string;
   buttonText?: string;
   className?: string;
   prefillName?: string;
@@ -54,6 +55,7 @@ export default function RazorpayCheckoutButton({
   amountPaise = 1000,
   currency = "INR",
   planTitle = "CUETMate Premium (All-Access Pass)",
+  planId = "all_access_pass",
   buttonText,
   className = "",
   prefillName = "CUET Aspirant",
@@ -79,14 +81,13 @@ export default function RazorpayCheckoutButton({
         throw new Error("Unable to load Razorpay checkout gateway. Please check your network connection.");
       }
 
-      // Step 2: Call backend to create Razorpay Order (POST /api/create-order)
-      const orderRes = await fetch("/api/create-order", {
+      // Step 2: Call backend to create Razorpay Order (POST /api/payments)
+      const orderRes = await fetch("/api/payments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: amountPaise,
-          currency,
-          receipt: `rcpt_${Date.now()}`.slice(0, 40),
+          action: "create-order",
+          planId: planId || "all_access_pass",
         }),
       });
 
@@ -97,7 +98,7 @@ export default function RazorpayCheckoutButton({
 
       const orderData = await orderRes.json();
       const orderId = orderData.order_id || orderData.orderId;
-      const keyId = orderData.key_id || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+      const keyId = orderData.key_id || orderData.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
 
       if (!orderId) {
         throw new Error("Invalid order received from server.");
@@ -106,7 +107,7 @@ export default function RazorpayCheckoutButton({
       // Step 3: Configure Razorpay Checkout options
       const options = {
         key: keyId,
-        amount: orderData.amount || amountPaise,
+        amount: orderData.amount,
         currency: orderData.currency || currency,
         name: "CUETMate AI-Prep",
         description: planTitle,
@@ -118,14 +119,16 @@ export default function RazorpayCheckoutButton({
           razorpay_signature: string;
         }) {
           try {
-            // Step 4: Verify payment signature on backend (POST /api/verify-payment)
-            const verifyRes = await fetch("/api/verify-payment", {
+            // Step 4: Verify payment signature on backend (POST /api/payments)
+            const verifyRes = await fetch("/api/payments", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
+                action: "verify",
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
+                tier: "all_access_pass",
               }),
             });
 

@@ -170,16 +170,16 @@ export async function POST(req: NextRequest) {
       queryType === "diagnose-mistake" ||
       body.action === "diagnose-mistake";
 
-    // Enforce Premium access on AI debrief, radar, post-mock, and standing features
-    if (isSubjectRadar || isPostMock || isStanding || isWhyWrong) {
+    // Enforce Premium access on AI debrief, radar, post-mock, standing, and mistake diagnostic features
+    if (isSubjectRadar || isPostMock || isStanding || isWhyWrong || isDiagnoseMistake) {
       const supabase = createClient();
-      let authUserId: string | null = null;
+      let authUser = null;
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        if (user) authUserId = user.id;
+        authUser = user;
       } catch {}
 
-      if (!authUserId) {
+      if (!authUser?.id) {
         return NextResponse.json(
           {
             error: "Authentication required to access AI features.",
@@ -189,14 +189,33 @@ export async function POST(req: NextRequest) {
         );
       }
 
+      const isEmailVerified = Boolean(
+        authUser.email_confirmed_at ||
+        authUser.confirmed_at ||
+        (authUser.app_metadata?.provider && authUser.app_metadata.provider !== "email")
+      );
+
+      if (!isEmailVerified) {
+        return NextResponse.json(
+          { error: "Email verification required before accessing AI features.", code: "EMAIL_VERIFICATION_REQUIRED" },
+          { status: 403 }
+        );
+      }
+
       const { getUserEntitlement } = await import("@/lib/payments/entitlements");
-      const entitlement = await getUserEntitlement(authUserId);
+      const entitlement = await getUserEntitlement(authUser.id);
       if (!entitlement.isPremium) {
         return NextResponse.json(
           {
             error: "Unlock this feature with CUETMate Premium.",
             code: "PAYWALL_FEATURE_LOCKED",
-            feature: isSubjectRadar ? "radar" : isStanding ? "standing" : "ai_insights",
+            feature: isSubjectRadar
+              ? "radar"
+              : isStanding
+              ? "standing"
+              : isDiagnoseMistake
+              ? "diagnose_mistake"
+              : "ai_insights",
           },
           { status: 403 }
         );

@@ -55,12 +55,33 @@ export async function POST(req: NextRequest) {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       authUser = user;
-    } catch {
-      // Fallback
+    } catch {}
+
+    if (!authUser?.id) {
+      return NextResponse.json(
+        { error: "Unauthorized: Active candidate session required.", code: "AUTH_REQUIRED" },
+        { status: 401 }
+      );
     }
 
+    const isEmailVerified = Boolean(
+      authUser.email_confirmed_at ||
+      authUser.confirmed_at ||
+      (authUser.app_metadata?.provider && authUser.app_metadata.provider !== "email")
+    );
+
+    if (!isEmailVerified) {
+      return NextResponse.json(
+        { error: "Email verification required before accessing AI features.", code: "EMAIL_VERIFICATION_REQUIRED" },
+        { status: 403 }
+      );
+    }
+
+    const userId = authUser.id;
+
+    // Authoritative server-side entitlement check (Never trust body.userId)
     const { getUserEntitlement } = await import("@/lib/payments/entitlements");
-    const entitlement = await getUserEntitlement(authUser?.id || body.userId || "");
+    const entitlement = await getUserEntitlement(userId);
     if (!entitlement.isPremium) {
       return NextResponse.json(
         {
@@ -73,7 +94,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Server-side rate limit on adaptive quiz generation (5 per minute per user)
-    const rateIdentifier = getClientRateLimitIdentifier(req, authUser?.id || body.userId, "ai:repair_quiz");
+    const rateIdentifier = getClientRateLimitIdentifier(req, userId, "ai:repair_quiz");
     const rateCheck = await rateLimit("ai:repair_quiz", rateIdentifier);
     if (!rateCheck.success) {
       return rateLimitResponse(rateCheck);
@@ -81,16 +102,6 @@ export async function POST(req: NextRequest) {
 
     // ─── CASE A: 15-QUESTION ADAPTIVE PRACTICE DRILL ─────────────────────────
     if (isAdaptiveDrill) {
-
-      if (!authUser) {
-        return NextResponse.json(
-          { success: false, error: "Unauthorized: Active user session required." },
-          { status: 401 }
-        );
-      }
-
-      const userId = authUser.id;
-
       // 1. Cold-start qualification gate (150 questions)
       const gateStatus = await checkAIQualificationGate(userId);
       if (!gateStatus.isUnlocked) {
@@ -303,7 +314,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ─── CASE B: 5-QUESTION TARGETED REMEDIAL REPAIR QUIZ ────────────────────
-    const { userId: bodyUserId, weakMicroTopics, subject, practiceType } = body;
+    const { weakMicroTopics, subject, practiceType } = body;
 
     if (!Array.isArray(weakMicroTopics) || weakMicroTopics.length === 0) {
       return NextResponse.json(
@@ -312,15 +323,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let authUserId: string | null = null;
-    try {
-      const supabase = createClient();
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-      if (authUser?.id) authUserId = authUser.id;
-    } catch {}
+    if (weakMicroTopics.length > 20) {
+      return NextResponse.json(
+        { error: "Too many topics requested (maximum 20)." },
+        { status: 400 }
+      );
+    }
 
-    const legacyClientId = getClientIdentifier(req, authUserId || bodyUserId);
-    const userId = authUserId || bodyUserId || legacyClientId;
+    const legacyClientId = getClientIdentifier(req, userId);
 
     const primaryTopics = weakMicroTopics.slice(0, 3);
     const cacheKey = `${legacyClientId}:${subject || "general"}:${primaryTopics.sort().join("_")}`;

@@ -150,9 +150,12 @@ export class RazorpayProvider implements PaymentProvider {
         currency: String(payment.currency),
       };
     } catch (err: any) {
-      console.warn("[Razorpay Payment Status Query Notice]:", err?.message);
-      // If payment query fails due to network, cryptographic signature verification remains authoritative
-      return { isPaid: true };
+      console.error("[Razorpay Payment Status Query Error]:", err?.message);
+      // Strictly fail-closed if payment status query to gateway fails
+      return {
+        isPaid: false,
+        error: `Gateway payment verification failed: ${err?.message || "Unable to confirm payment status with Razorpay."}`,
+      };
     }
   }
 
@@ -204,7 +207,7 @@ export class RazorpayProvider implements PaymentProvider {
  * Sandboxed Mock Provider for Development and Pre-Onboarding environments
  */
 export class MockSandboxProvider implements PaymentProvider {
-  name = "mock_sandbox";
+  name = "mock";
   isLive = false;
 
   async createOrder(params: CreateOrderParams): Promise<OrderResult> {
@@ -243,7 +246,7 @@ export class MockSandboxProvider implements PaymentProvider {
     _orderId: string
   ): Promise<{ isPaid: boolean; amount?: number; currency?: string; error?: string }> {
     if (paymentId.startsWith("pay_sim_")) {
-      return { isPaid: true, amount: 1000, currency: "INR" };
+      return { isPaid: true, amount: 49900, currency: "INR" };
     }
     return { isPaid: false, error: "Invalid sandbox payment reference." };
   }
@@ -269,6 +272,12 @@ export function getPaymentProvider(): PaymentProvider {
 
   if (isConfigured && keyId && keySecret) {
     return new RazorpayProvider(keyId, keySecret, webhookSecret);
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "[CRITICAL SECURITY] Razorpay payment provider credentials unconfigured in production environment. Failing closed to prevent mock sandbox bypass."
+    );
   }
 
   return new MockSandboxProvider();

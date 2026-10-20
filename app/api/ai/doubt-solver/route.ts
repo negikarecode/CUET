@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const {
       message,
-      userId = "student",
       studentContext = {
         weakTopics: [],
         strongTopics: [],
@@ -21,20 +20,49 @@ export async function POST(req: NextRequest) {
       },
     } = body;
 
-    if (!message || typeof message !== "string") {
-      return NextResponse.json({ error: "Message is required." }, { status: 400 });
-    }
-
-    // 1. Authenticate & Check Server-Side Rate Limit
-    let authUserId: string | null = null;
+    // 1. Authenticate & Enforce Verified Session
+    const supabase = createClient();
+    let authUser = null;
     try {
-      const supabase = createClient();
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-      if (authUser) authUserId = authUser.id;
+      const { data: { user } } = await supabase.auth.getUser();
+      authUser = user;
     } catch {}
 
+    if (!authUser?.id) {
+      return NextResponse.json(
+        { error: "Unauthorized: Active candidate account required to access AI doubt solver.", code: "AUTH_REQUIRED" },
+        { status: 401 }
+      );
+    }
+
+    const isEmailVerified = Boolean(
+      authUser.email_confirmed_at ||
+      authUser.confirmed_at ||
+      (authUser.app_metadata?.provider && authUser.app_metadata.provider !== "email")
+    );
+
+    if (!isEmailVerified) {
+      return NextResponse.json(
+        { error: "Email verification required before accessing AI features.", code: "EMAIL_VERIFICATION_REQUIRED" },
+        { status: 403 }
+      );
+    }
+
+    // 2. Validate Input & Payload Boundaries
+    if (!message || typeof message !== "string" || message.trim().length === 0) {
+      return NextResponse.json({ error: "A valid doubt query message is required." }, { status: 400 });
+    }
+
+    if (message.length > 2000) {
+      return NextResponse.json(
+        { error: "Doubt query exceeds the maximum permitted length of 2,000 characters." },
+        { status: 400 }
+      );
+    }
+
+    // 3. Authoritative Premium Entitlement Check (Never trust body.userId)
     const { getUserEntitlement } = await import("@/lib/payments/entitlements");
-    const entitlement = await getUserEntitlement(authUserId || userId);
+    const entitlement = await getUserEntitlement(authUser.id);
     if (!entitlement.isPremium) {
       return NextResponse.json(
         {
@@ -46,7 +74,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const clientIdentifier = getClientRateLimitIdentifier(req, authUserId || userId, "ai:doubt_solver");
+    // 4. Rate Limiting bound to authenticated user ID
+    const clientIdentifier = getClientRateLimitIdentifier(req, authUser.id, "ai:doubt_solver");
     const rateCheck = await rateLimit("ai:doubt_solver", clientIdentifier);
     if (!rateCheck.success) {
       return rateLimitResponse(rateCheck);
@@ -105,7 +134,7 @@ ${recentErrors || "No recent mistakes logged"}`;
     const usage = completion.usage;
 
     tokenLogger.logUsage({
-      userId,
+      userId: authUser.id,
       feature: "doubt_solver",
       model: "llama-3.1-8b-instant",
       promptTokens: usage?.prompt_tokens || 180,

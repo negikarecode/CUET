@@ -85,7 +85,8 @@ export async function DELETE(req: NextRequest) {
     const testUuid = stringToUuid(testId);
     const supabaseAdmin = createAdminClient();
 
-    // Delete matching rows in user_attempts
+    // Delete matching rows in user_attempts (clears candidate review attempt history)
+    // NOTE: user_usage_ledger rows are intentionally NOT deleted to prevent free-tier quota reset bypass (P0-03)
     await supabaseAdmin
       .from("user_attempts")
       .delete()

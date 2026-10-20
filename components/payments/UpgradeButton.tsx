@@ -64,8 +64,8 @@ export default function UpgradeButton({
 
   const is399 = planId === "ai_pass_399";
   const isAllAccess = planId === "all_access_pass_799";
-  const price = "₹10";
-  const planTitle = is399 ? "CUET AI Pass" : isAllAccess ? "All-Access Pass" : "AI Practice Pass";
+  const price = "₹499";
+  const planTitle = is399 ? "CUET AI Pass" : isAllAccess ? "All-Access Pass" : "CUETMate Premium";
 
   const handleCheckout = async () => {
     setLoading(true);
@@ -79,19 +79,13 @@ export default function UpgradeButton({
         return;
       }
 
-      const amountPaise = 1000; // ₹10 in paise for testing
-
-      // 2. Call Server Route Handler to generate Razorpay Order (POST /api/create-order)
-      const res = await fetch("/api/create-order", {
+      // 2. Call Server Route Handler to generate Razorpay Order (POST /api/payments)
+      const res = await fetch("/api/payments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: amountPaise,
-          currency: "INR",
+          action: "create-order",
           planId,
-          userId: user.id,
-          email: user.email,
-          name: user.name,
         }),
       });
 
@@ -102,9 +96,9 @@ export default function UpgradeButton({
 
       const orderData = await res.json();
       const orderId = orderData.order_id || orderData.orderId;
-      const amount = orderData.amount || amountPaise;
+      const amount = orderData.amount;
       const currency = orderData.currency || "INR";
-      const keyId = orderData.key_id || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+      const keyId = orderData.key_id || orderData.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
 
       // 3. Configure Razorpay Standard Web Checkout Options
       const options = {
@@ -121,15 +115,15 @@ export default function UpgradeButton({
           razorpay_signature: string;
         }) {
           try {
-            // Verify payment on authoritative backend (POST /api/verify-payment)
-            const verifyRes = await fetch("/api/verify-payment", {
+            // Verify payment on authoritative backend (POST /api/payments)
+            const verifyRes = await fetch("/api/payments", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
+                action: "verify",
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
-                userId: user.id,
                 tier: "all_access_pass",
               }),
             });
@@ -137,7 +131,9 @@ export default function UpgradeButton({
             const verifyData = await verifyRes.json();
 
             if (verifyRes.ok && verifyData.success) {
-              addCoins(500);
+              if (verifyData.bonus_coins_awarded && verifyData.bonus_coins_awarded > 0) {
+                addCoins(verifyData.bonus_coins_awarded);
+              }
               loginUser({ isPremium: true, subscriptionTier: "all_access_pass" });
               setShowSuccessModal(true);
               if (onSuccess) onSuccess();

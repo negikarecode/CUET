@@ -25,10 +25,10 @@ export const FREE_LIMITS = {
 } as const;
 
 export const PRICING_CONFIG = {
-  STANDARD_PRICE_PAISE: 1000,
-  STANDARD_PRICE_INR: 10,
-  PROMOTIONAL_PRICE_PAISE: 1000,
-  PROMOTIONAL_PRICE_INR: 10,
+  STANDARD_PRICE_PAISE: 79900,
+  STANDARD_PRICE_INR: 799,
+  PROMOTIONAL_PRICE_PAISE: 49900,
+  PROMOTIONAL_PRICE_INR: 499,
   TOTAL_PROMOTIONAL_SLOTS: 100,
   CURRENCY: "INR",
   PLAN_ID: "all_access_pass_799",
@@ -175,13 +175,13 @@ export async function getUserUsageSummary(userId: string): Promise<UserUsageSumm
   try {
     const admin = createAdminClient();
 
-    // Strategy 1: Check user_usage_ledger table if available
+    // Strategy 1: Check user_usage_ledger table (immutable source of truth)
     const { data: ledgerRows, error: ledgerError } = await admin
       .from("user_usage_ledger")
       .select("session_type, canonical_subject, test_id")
       .eq("user_id", userId);
 
-    if (!ledgerError && ledgerRows) {
+    if (!ledgerError && ledgerRows && ledgerRows.length > 0) {
       let mocks = 0;
       let practices = 0;
       const pyqSubjects = new Set<string>();

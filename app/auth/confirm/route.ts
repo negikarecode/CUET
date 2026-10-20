@@ -3,30 +3,9 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
+import { getSafeRedirectPath } from "@/lib/security/redirects";
 
 export const dynamic = "force-dynamic";
-
-/**
- * Validates redirect paths to prevent open redirect vulnerabilities.
- * Disallows external schemes, protocol-relative paths (//), and backslashes (/\).
- */
-function getSafeRedirectPath(target: string | null): string {
-  if (!target) return "/dashboard";
-  if (
-    target.startsWith("//") ||
-    target.startsWith("/\\") ||
-    target.includes("://") ||
-    target.includes("\\") ||
-    target.includes("\r") ||
-    target.includes("\n")
-  ) {
-    return "/dashboard";
-  }
-  if (target.startsWith("/")) {
-    return target;
-  }
-  return "/dashboard";
-}
 
 /**
  * GET /auth/confirm

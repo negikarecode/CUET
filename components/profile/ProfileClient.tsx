@@ -1141,11 +1141,10 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
 
             {!profile.isPremium && (
               <div className="pt-2">
-                {/* TODO: AI Pass is ₹399 one-time payment for 1 full year access across the CUET UG admission cycle */}
                 <UpgradeButton
-                  planId="ai_pass_399"
+                  planId="all_access_pass_799"
                   variant="primary"
-                  buttonText="Upgrade to AI Pass (₹399 · 1-year access)"
+                  buttonText="Upgrade to Premium (₹499 · 1-Year Access)"
                   className="w-full py-3 rounded-xl font-bold text-xs sm:text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-xs hover:shadow"
                 />
               </div>

@@ -430,6 +430,19 @@ export async function POST(
             if (insertErr) {
               console.error("[Record Attempt Insert DB Error]:", insertErr);
             }
+
+            // Authoritatively record to immutable user_usage_ledger for free-tier paywall tracking
+            try {
+              const { recordSessionCompletion } = await import("@/lib/payments/entitlements");
+              await recordSessionCompletion({
+                userId: targetUserId,
+                testId: attempt.testId || params.testId,
+                sessionId: attempt.attemptId || attempt.testId || params.testId,
+                subject: attempt.subject,
+              });
+            } catch (ledgerErr) {
+              console.warn("[Usage Ledger Submission Notice]:", ledgerErr);
+            }
           }
 
           // 4. Update profile XP, practice streak, and canonical total_questions_attempted

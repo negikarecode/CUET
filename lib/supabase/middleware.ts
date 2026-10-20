@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getSafeRedirectPath } from "@/lib/security/redirects";
 
 /**
  * Updates the user's Supabase session in Next.js middleware and guards protected routes.
@@ -109,11 +110,8 @@ export async function updateSession(request: NextRequest) {
   // 3. Authenticated candidates visiting auth routes:
   // If fully verified, redirect /signup, /login, /verify-email, /verify-otp to dashboard
   if (isAuthRoute && isAuthenticated && isEmailVerified) {
-    const redirectParam = request.nextUrl.searchParams.get("redirect");
-    const targetPath =
-      redirectParam && redirectParam.startsWith("/")
-        ? redirectParam
-        : "/dashboard";
+    const redirectParam = request.nextUrl.searchParams.get("redirect") || request.nextUrl.searchParams.get("returnUrl");
+    const targetPath = getSafeRedirectPath(redirectParam, "/dashboard");
 
     const redirectUrl = new URL(targetPath, request.nextUrl.origin);
     const redirectResponse = NextResponse.redirect(redirectUrl);

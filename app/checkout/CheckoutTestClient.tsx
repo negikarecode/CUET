@@ -42,23 +42,25 @@ export default function CheckoutTestClient() {
               <p className="text-xs text-slate-500 mt-1">Full 2026 exam cycle with all 20 domain mocks & PYQs.</p>
             </button>
 
-            <button
-              type="button"
-              onClick={() => setSelectedPlan("test")}
-              className={`p-4 rounded-2xl border text-left transition-all ${
-                selectedPlan === "test"
-                  ? "border-indigo-600 bg-indigo-50/40 ring-2 ring-indigo-600/20"
-                  : "border-slate-200 hover:border-slate-300 bg-slate-50/50"
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-slate-900 text-sm">Micro Test Transaction</span>
-                <span className="text-xs font-bold text-slate-700 bg-slate-200 px-2.5 py-0.5 rounded-full">
-                  ₹1
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 mt-1">100 paise minimum amount to test standard modal popup.</p>
-            </button>
+            {process.env.NODE_ENV !== "production" && (
+              <button
+                type="button"
+                onClick={() => setSelectedPlan("test")}
+                className={`p-4 rounded-2xl border text-left transition-all ${
+                  selectedPlan === "test"
+                    ? "border-indigo-600 bg-indigo-50/40 ring-2 ring-indigo-600/20"
+                    : "border-slate-200 hover:border-slate-300 bg-slate-50/50"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-900 text-sm">Micro Test Transaction</span>
+                  <span className="text-xs font-bold text-slate-700 bg-slate-200 px-2.5 py-0.5 rounded-full">
+                    ₹1
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 mt-1">Sandbox only: 100 paise minimum amount to test modal popup.</p>
+              </button>
+            )}
           </div>
         </div>
 
@@ -66,7 +68,7 @@ export default function CheckoutTestClient() {
         <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2 text-xs text-slate-700">
           <div className="flex items-center gap-2">
             <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>Endpoint 1: <code>POST /api/create-order</code> validates amount &gt;= 100 paise</span>
+            <span>Endpoint: <code>POST /api/payments (action: create-order)</code> generates server-priced order</span>
           </div>
           <div className="flex items-center gap-2">
             <Check className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -74,7 +76,7 @@ export default function CheckoutTestClient() {
           </div>
           <div className="flex items-center gap-2">
             <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>Endpoint 2: <code>POST /api/verify-payment</code> validates HMAC-SHA256 signature</span>
+            <span>Endpoint: <code>POST /api/payments (action: verify)</code> validates HMAC-SHA256 signature &amp; amount</span>
           </div>
         </div>
 
@@ -116,8 +118,8 @@ export default function CheckoutTestClient() {
           <li>Click the <strong>Launch Razorpay Checkout</strong> button above.</li>
           <li>In the Razorpay checkout modal, select any test method (UPI, Netbanking, or Card).</li>
           <li>For Card: Use test card numbers or choose <strong>Success</strong> in the test simulation screen.</li>
-          <li>Upon approval, the modal sends the payment ID, order ID, and HMAC signature to <code>/api/verify-payment</code>.</li>
-          <li>The backend verifies the signature using the configured <code>RAZORPAY_KEY_SECRET</code> and unlocks access.</li>
+          <li>Upon approval, the modal sends the payment ID, order ID, and HMAC signature to <code>/api/payments</code>.</li>
+          <li>The backend verifies the signature using the configured <code>RAZORPAY_KEY_SECRET</code>, verifies order ownership and amount, and unlocks access.</li>
         </ol>
 
         <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
