@@ -103,19 +103,19 @@ export default function PricingView() {
                 <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
-                <span>3 Full Domain Mock Exams (50 Qs)</span>
+                <span>3 Distinct Domain Mock Exams (Unlimited Retries)</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
-                <span>3 Unit-wise Practice Tests</span>
+                <span>3 Distinct Unit Practice Tests (Unlimited Retries)</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
-                <span>1 Official PYQ Attempt per Subject</span>
+                <span>1 Distinct Official PYQ Paper (Unlimited Retries)</span>
               </div>
               <div className="flex items-center gap-2.5 text-slate-400">
                 <span className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-400">

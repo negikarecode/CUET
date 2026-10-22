@@ -652,11 +652,11 @@ describe("Test Route Authoritative Answer Key Hardening & Phoenix Lockdown", () 
     assert.equal(data.questions, undefined, "No questions or answers must be returned if ledger recording fails");
   });
 
-  // ─── TEST 8: PHYSICS MOCK 2 REJECTED FOR FREE USER ──────────────────────────
-  it("Physics mock 2 rejected for free user", async () => {
-    // 1. Verify registry designations: mock-1 is free, mock-2 is NOT free
+  // ─── TEST 8: PHYSICS MOCK 4 REJECTED FOR FREE USER ──────────────────────────
+  it("Physics mock 4 rejected for free user", async () => {
+    // 1. Verify registry designations: mock-1 is free, mock-4 is NOT free (since free allowance is first 3 mocks)
     assert.equal(isDesignatedFreeTest("physics-mock-1"), true, "Physics Mock 1 is in designated free tests");
-    assert.equal(isDesignatedFreeTest("physics-mock-2"), false, "Physics Mock 2 is NOT in designated free tests");
+    assert.equal(isDesignatedFreeTest("physics-mock-4"), false, "Physics Mock 4 is NOT in designated free tests");
 
     // 2. Configure eligibility check to enforce free user restriction against DESIGNATED_FREE_TEST_IDS
     mockEligibilityOverride = async (_userId: string, testId: string) => {
@@ -664,7 +664,7 @@ describe("Test Route Authoritative Answer Key Hardening & Phoenix Lockdown", () 
       return {
         allowed,
         limitReached: !allowed,
-        reason: allowed ? undefined : "This test is exclusive to CUETMate Premium. The Free plan includes designated sample tests (Mock 1, Unit 1 Test 1, and PYQ Paper 1). Upgrade to CUETMate Premium to unlock all tests.",
+        reason: allowed ? undefined : "This test is exclusive to CUETMate Premium. The Free plan includes up to 3 distinct mock exams. Upgrade to CUETMate Premium to unlock all tests.",
         testType: "mock",
         currentUsage: 0,
         maxAllowed: 3,
@@ -672,40 +672,40 @@ describe("Test Route Authoritative Answer Key Hardening & Phoenix Lockdown", () 
       };
     };
 
-    // 3. Test GET /api/test/physics-mock-2 returns HTTP 403
-    const getReq = new NextRequest("http://localhost:3000/api/test/physics-mock-2", {
+    // 3. Test GET /api/test/physics-mock-4 returns HTTP 403
+    const getReq = new NextRequest("http://localhost:3000/api/test/physics-mock-4", {
       method: "GET",
     });
-    const getRes = await GET(getReq, { params: { testId: "physics-mock-2" } });
-    assert.equal(getRes.status, 403, "Free user GET on physics-mock-2 must return HTTP 403");
+    const getRes = await GET(getReq, { params: { testId: "physics-mock-4" } });
+    assert.equal(getRes.status, 403, "Free user GET on physics-mock-4 must return HTTP 403");
     const getData = await getRes.json();
     assert.equal(getData.code, "PAYWALL_LIMIT_REACHED");
     assert.equal(getData.questions, undefined, "Sanitized questions must not be released to free user");
 
-    // 4. Test POST record on physics-mock-2 returns HTTP 403
+    // 4. Test POST record on physics-mock-4 returns HTTP 403
     const postPayload = {
-      testId: "physics-mock-2",
+      testId: "physics-mock-4",
       questions: [
         { questionNumber: 1, selectedOption: "A", timeSpentSeconds: 30 },
       ],
     };
-    const postReq = new NextRequest("http://localhost:3000/api/test/physics-mock-2", {
+    const postReq = new NextRequest("http://localhost:3000/api/test/physics-mock-4", {
       method: "POST",
       body: JSON.stringify(postPayload),
     });
-    const postRes = await POST(postReq, { params: { testId: "physics-mock-2" } });
-    assert.equal(postRes.status, 403, "Free user POST submission on physics-mock-2 must return HTTP 403");
+    const postRes = await POST(postReq, { params: { testId: "physics-mock-4" } });
+    assert.equal(postRes.status, 403, "Free user POST submission on physics-mock-4 must return HTTP 403");
     const postData = await postRes.json();
     assert.equal(postData.code, "PAYWALL_LIMIT_REACHED");
-    assert.equal(insertedAttempts.length, 0, "No attempts recorded for unauthorized free mock-2 attempt");
+    assert.equal(insertedAttempts.length, 0, "No attempts recorded for unauthorized free mock-4 attempt");
 
-    // 5. Test POST reveal branch on physics-mock-2 returns HTTP 403
-    const revealReq = new NextRequest("http://localhost:3000/api/test/physics-mock-2", {
+    // 5. Test POST reveal branch on physics-mock-4 returns HTTP 403
+    const revealReq = new NextRequest("http://localhost:3000/api/test/physics-mock-4", {
       method: "POST",
       body: JSON.stringify({ action: "submit", answersSubmitted: true }),
     });
-    const revealRes = await POST(revealReq, { params: { testId: "physics-mock-2" } });
-    assert.equal(revealRes.status, 403, "Reveal on physics-mock-2 must return HTTP 403");
+    const revealRes = await POST(revealReq, { params: { testId: "physics-mock-4" } });
+    assert.equal(revealRes.status, 403, "Reveal on physics-mock-4 must return HTTP 403");
   });
 
   // ─── TEST 9: ALIAS IDS RESOLVE TO THE SAME UUID ─────────────────────────────

@@ -96,6 +96,18 @@ export default function SubjectPYQClient({
     });
   }, [testAttempts]);
 
+  // Distinct unlocked PYQ paper IDs across the platform
+  const unlockedDistinctPyqIds = useMemo(() => {
+    const set = new Set<string>();
+    (cleanAttempts || []).forEach((att) => {
+      const id = (att.testId || "").toLowerCase().trim();
+      if (id) set.add(id);
+    });
+    return set;
+  }, [cleanAttempts]);
+
+  const totalUnlockedDistinctPyqs = unlockedDistinctPyqIds.size;
+
   // Map each paper to its attempt history and authoritative best attempt
   const paperCardsData = useMemo(() => {
     return pyqPapers.map((test) => {
@@ -281,11 +293,11 @@ export default function SubjectPYQClient({
                 Free Plan
               </span>
               <h3 className="text-sm font-bold text-amber-900">
-                {totalSubjectPYQAttempts} of 1 Free PYQ Attempt Completed for {subjectName}
+                {Math.min(1, totalUnlockedDistinctPyqs)} of 1 Free PYQ Paper Unlocked
               </h3>
             </div>
             <p className="text-xs text-amber-800/80">
-              Free plan allows 1 official past year paper attempt per subject. Upgrade to CUETMate Premium for unlimited access to all shift papers with complete NCERT solutions, national percentiles, and re-attempts.
+              Free plan includes 1 distinct official past year paper with unlimited retries. Upgrade to CUETMate Premium for unlimited access to all shift papers across all subjects with complete NCERT solutions.
             </p>
           </div>
           <div className="shrink-0 flex items-center gap-2.5">
@@ -514,16 +526,21 @@ export default function SubjectPYQClient({
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
-                      {!isPremium && isConfirmedFree && isFirstPaper && !hasAttempted && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          1 Free Attempt
-                        </span>
-                      )}
-                      {!isPremium && isConfirmedFree && !isFirstPaper && !hasAttempted && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200/60 inline-flex items-center gap-1">
-                          <Lock className="w-3 h-3 text-amber-600" />
-                          <span>Premium</span>
-                        </span>
+                      {!isPremium && isConfirmedFree && (
+                        hasAttempted ? (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200/60 inline-flex items-center gap-1">
+                            FREE — UNLIMITED RETRIES
+                          </span>
+                        ) : isFirstPaper && totalUnlockedDistinctPyqs < 1 ? (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            FREE
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200/60 inline-flex items-center gap-1">
+                            <Lock className="w-3 h-3 text-amber-600" />
+                            <span>Premium</span>
+                          </span>
+                        )
                       )}
                       <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
                         {test.shift || `Shift 1`}
@@ -606,25 +623,15 @@ export default function SubjectPYQClient({
                         <span>Analysis</span>
                       </Link>
 
-                      {!isPremium && isConfirmedFree && totalSubjectPYQAttempts >= 1 ? (
-                        <Link
-                          href="/pricing"
-                          className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold text-xs transition-all cursor-pointer"
-                        >
-                          <Lock className="w-3.5 h-3.5 text-amber-600" />
-                          <span>Upgrade to Re-attempt (1/1 Used)</span>
-                        </Link>
-                      ) : (
-                        <Link
-                          href={`/test/${test.id}?reattempt=true`}
-                          className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all cursor-pointer"
-                        >
-                          <RotateCw className="w-3.5 h-3.5 text-slate-500" />
-                          <span>Re-attempt</span>
-                        </Link>
-                      )}
+                      <Link
+                        href={`/test/${test.id}?reattempt=true`}
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all cursor-pointer"
+                      >
+                        <RotateCw className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Re-attempt</span>
+                      </Link>
                     </>
-                  ) : !isPremium && isConfirmedFree && totalSubjectPYQAttempts >= 1 ? (
+                  ) : !isPremium && isConfirmedFree && totalUnlockedDistinctPyqs >= 1 ? (
                     <Link
                       href="/pricing"
                       className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-all cursor-pointer"

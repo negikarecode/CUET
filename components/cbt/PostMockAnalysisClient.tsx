@@ -1264,6 +1264,7 @@ export default function PostMockAnalysisClient({
             filteredQuestions.map((q) => {
               const isCorrect = q.isCorrect === true;
               const isIncorrect = q.isAttempted && q.isCorrect === false;
+              const isPending = q.isAttempted && q.isCorrect === null;
 
               return (
                 <div key={q.questionId} className="pt-6 first:pt-0">
@@ -1303,6 +1304,10 @@ export default function PostMockAnalysisClient({
                         <span className="bg-rose-50 text-rose-700 font-semibold px-2.5 py-0.5 rounded-full border border-rose-200 shadow-xs">
                           -1 Mark (Penalty)
                         </span>
+                      ) : isPending ? (
+                        <span className="bg-slate-50 text-slate-600 font-semibold px-2.5 py-0.5 rounded-full border border-slate-200 shadow-xs">
+                          Evaluating...
+                        </span>
                       ) : (
                         <span className="bg-slate-50 text-slate-600 font-semibold px-2.5 py-0.5 rounded-full border border-slate-200 shadow-xs">
                           0 Marks (Skipped)
@@ -1324,13 +1329,16 @@ export default function PostMockAnalysisClient({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
                     {q.options.map((opt) => {
                       const isCandidatePick = q.selectedOption === opt.id;
-                      const isTrueCorrect = q.correctOption === opt.id;
+                      const hasVerifiedKey = Boolean(q.correctOption) || q.isCorrect !== null;
+                      const isTrueCorrect = Boolean(q.correctOption) && q.correctOption === opt.id;
 
                       let optClasses = "border border-slate-200/80 bg-white text-slate-800";
                       if (isTrueCorrect) {
                         optClasses = "border-2 border-emerald-500 bg-emerald-50/70 text-slate-900 font-medium";
-                      } else if (isCandidatePick && !isTrueCorrect) {
+                      } else if (isCandidatePick && !isTrueCorrect && hasVerifiedKey) {
                         optClasses = "border-2 border-rose-500 bg-rose-50/70 text-slate-900 font-medium";
+                      } else if (isCandidatePick && !hasVerifiedKey) {
+                        optClasses = "border-2 border-slate-400 bg-slate-50/70 text-slate-900 font-medium";
                       }
 
                       const rawAnalysis = opt.mistakeAnalysis || (q.solution as any)?.distractor_analysis?.[opt.id] || "";
@@ -1344,7 +1352,7 @@ export default function PostMockAnalysisClient({
                           <span className="font-mono font-bold shrink-0 text-slate-600">({opt.id})</span>
                           <div className="flex-1 space-y-1">
                             <MathRenderer text={safeCapitalizeOptionText(opt.text)} />
-                            {isCandidatePick && !isTrueCorrect && hasRealAnalysis && (
+                            {isCandidatePick && !isTrueCorrect && hasVerifiedKey && hasRealAnalysis && (
                               <div className="mt-1 pt-1 border-t border-rose-200/60 text-[11px] text-rose-800 font-normal">
                                 <span className="font-semibold uppercase text-[9px] text-rose-700 block">Trap / Misconception Note:</span>
                                 <MathRenderer text={rawAnalysis} />
@@ -1362,9 +1370,14 @@ export default function PostMockAnalysisClient({
                               Correct Key
                             </span>
                           )}
-                          {isCandidatePick && !isTrueCorrect && (
+                          {isCandidatePick && !isTrueCorrect && hasVerifiedKey && (
                             <span className="text-[10px] font-bold uppercase text-rose-700 shrink-0">
                               Your Pick
+                            </span>
+                          )}
+                          {isCandidatePick && !hasVerifiedKey && (
+                            <span className="text-[10px] font-bold uppercase text-slate-600 shrink-0">
+                              Your Pick (Evaluating)
                             </span>
                           )}
                         </div>

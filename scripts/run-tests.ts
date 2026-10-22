@@ -8,6 +8,8 @@ import { RecordedTestAttempt, Question } from "../types";
 import { calculateExamScore, getExamConfig } from "../lib/config/examConfig";
 import { SUPPORTED_SUBJECTS_REGISTRY, SUPPORTED_SUBJECT_KEYS } from "../lib/config/subjectRegistry";
 import { parsePassageFromPrompt } from "../components/cbt/CBTCaseStudyPanel";
+import { buildPostMockDeterministicReport } from "../lib/post-mock-engine";
+import { resolveQuestionCorrectOptionId } from "../lib/scoring";
 
 let totalTests = 0;
 let passedTests = 0;
@@ -658,6 +660,94 @@ What is the immediate impact on commercial banks when RBI increases the repo rat
   assert(
     authVisitingSignup.status === "redirect" && authVisitingSignup.redirectTarget === "/dashboard",
     "Route Guard: Authenticated candidate visiting /signup is redirected to /dashboard"
+  );
+
+  console.log();
+
+  // -------------------------------------------------------------
+  // SUITE V: Scorecard Instant Correctness & Flash Prevention
+  // -------------------------------------------------------------
+  console.log("SUITE V: Scorecard Instant Correctness & Flash Prevention");
+
+  // V1: Canonical Option Resolution across all variants
+  const mockVariants = [
+    { correctOptionId: "B", options: [{ id: "A" }, { id: "B" }, { id: "C" }, { id: "D" }] },
+    { correctOption: "b", options: [{ id: "A" }, { id: "B" }, { id: "C" }, { id: "D" }] },
+    { correct_option: "C", options: [{ id: "A" }, { id: "B" }, { id: "C" }, { id: "D" }] },
+    { options: [{ id: "A", isCorrect: false }, { id: "B", isCorrect: false }, { id: "C", isCorrect: false }, { id: "D", isCorrect: true }] },
+  ];
+  const resolvedKeys = mockVariants.map((q) => resolveQuestionCorrectOptionId(q as any));
+  assert(
+    resolvedKeys[0] === "B" && resolvedKeys[1] === "B" && resolvedKeys[2] === "C" && resolvedKeys[3] === "D",
+    "Flash Prevention: Universal key resolver correctly extracts answer keys across all 4 schema variants"
+  );
+
+  // V2: Missing / Sanitized Key Preserves null & Never Flags as Incorrect
+  const sanitizedMockAttempt: RecordedTestAttempt = {
+    id: "attempt-flash-test",
+    testId: "test-flash-test",
+    userId: "test-user-id",
+    date: new Date().toISOString(),
+    score: 0,
+    totalQuestions: 50,
+    timeSpent: 120,
+    questions: [
+      {
+        id: "q-pending",
+        text: "Question with pending keys",
+        options: [{ id: "A", text: "Option A" }, { id: "B", text: "Option B" }],
+        // No correctOptionId or isCorrect
+      } as any,
+    ],
+    questionAttempts: [
+      {
+        questionId: "q-pending",
+        selectedOption: "A",
+        timeSpent: 30,
+        // isCorrect omitted or null
+      },
+    ],
+  };
+
+  const pendingReport = buildPostMockDeterministicReport(sanitizedMockAttempt);
+  const pendingTelemetry = pendingReport.allQuestions[0];
+  assert(
+    pendingTelemetry.isCorrect === null,
+    "Flash Prevention: Pending/unknown answer keys maintain isCorrect === null (never coerced to false)"
+  );
+  assert(
+    pendingReport.overall.incorrectCount === 0 && pendingReport.overall.totalMarks === 0,
+    "Flash Prevention: Unverified answers are never penalized with negative marks or tallied as incorrect"
+  );
+
+  // V3: Immediate First Render Accuracy for Mixed Submissions
+  const verifiedMixedAttempt: RecordedTestAttempt = {
+    id: "attempt-mixed-test",
+    testId: "test-mixed-test",
+    userId: "test-user-id",
+    date: new Date().toISOString(),
+    score: 4,
+    totalQuestions: 50,
+    timeSpent: 300,
+    questions: [
+      { id: "q1", text: "Q1", options: [{ id: "A", text: "A", isCorrect: true }, { id: "B", text: "B" }] } as any,
+      { id: "q2", text: "Q2", options: [{ id: "A", text: "A" }, { id: "B", text: "B", isCorrect: true }] } as any,
+      { id: "q3", text: "Q3", options: [{ id: "A", text: "A", isCorrect: true }, { id: "B", text: "B" }] } as any,
+    ],
+    questionAttempts: [
+      { questionId: "q1", selectedOption: "A", timeSpent: 20 }, // Correct (+5)
+      { questionId: "q2", selectedOption: "A", timeSpent: 25 }, // Incorrect (-1)
+      { questionId: "q3", selectedOption: null, timeSpent: 0 },  // Unanswered (0)
+    ],
+  };
+
+  const mixedReport = buildPostMockDeterministicReport(verifiedMixedAttempt);
+  assert(
+    mixedReport.overall.correctCount === 1 &&
+    mixedReport.overall.incorrectCount === 1 &&
+    mixedReport.overall.skippedCount === 1 &&
+    mixedReport.overall.totalMarks === 4,
+    "Flash Prevention: First scorecard computation produces authoritative score (+4) with zero temporary penalties"
   );
 
   console.log();

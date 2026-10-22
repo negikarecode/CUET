@@ -22,6 +22,10 @@ export type {
 };
 
 export const FREE_LIMITS = {
+  MAX_DISTINCT_MOCKS: 3,
+  MAX_DISTINCT_PRACTICE: 3,
+  MAX_DISTINCT_PYQ: 1,
+  // Backwards-compatible session aliases
   MAX_MOCK_SESSIONS: 3,
   MAX_PRACTICE_SESSIONS: 3,
   MAX_PYQ_PER_SUBJECT: 1,
@@ -106,12 +110,36 @@ export const DESIGNATED_FREE_TEST_IDS = new Set<string>([
 ]);
 
 /**
- * Checks whether a testId (or its canonical resolved key) is within the designated free test set.
+ * Checks whether a testId (or its canonical resolved key) is within the designated free test set
+ * or matches an eligible free template (Mocks 1-3, Unit 1 Practice Tests 1-3, PYQ Paper 1).
  */
 export function isDesignatedFreeTest(testId: string): boolean {
   if (!testId) return false;
   const canonical = resolveCanonicalTestId(testId) || testId.toLowerCase().trim();
-  return DESIGNATED_FREE_TEST_IDS.has(canonical);
+  if (DESIGNATED_FREE_TEST_IDS.has(canonical)) return true;
+
+  const { sessionType } = classifyTestType(canonical);
+  if (sessionType === "mock") {
+    const mockMatch =
+      canonical.match(/\bmock(?:\s+paper|\s+test|\s+exam)?[-_]?\s*(\d+)\b/i) ||
+      canonical.match(/(?:mock|paper)[-_]?(\d+)/i) ||
+      canonical.match(/-(\d+)$/);
+    const mockNum = mockMatch && mockMatch[1] ? parseInt(mockMatch[1], 10) : 1;
+    return mockNum >= 1 && mockNum <= 3;
+  }
+  if (sessionType === "practice") {
+    const unitMatch = canonical.match(/unit[-_]?(\d+)/i);
+    const testMatch = canonical.match(/test[-_]?(\d+)/i);
+    const unitNum = unitMatch && unitMatch[1] ? parseInt(unitMatch[1], 10) : 1;
+    const testNum = testMatch && testMatch[1] ? parseInt(testMatch[1], 10) : 1;
+    return unitNum === 1 && testNum >= 1 && testNum <= 3;
+  }
+  if (sessionType === "pyq") {
+    const pyqMatch = canonical.match(/pyq[-_]?(\d+)/i);
+    const pyqNum = pyqMatch && pyqMatch[1] ? parseInt(pyqMatch[1], 10) : 1;
+    return pyqNum === 1;
+  }
+  return false;
 }
 
 export const PRICING_CONFIG = {
@@ -252,6 +280,12 @@ export async function getUserUsageSummary(userId: string): Promise<UserUsageSumm
     maxFreePracticeSessions: FREE_LIMITS.MAX_PRACTICE_SESSIONS,
     pyqSubjectsAttempted: [],
     maxFreePyqPerSubject: FREE_LIMITS.MAX_PYQ_PER_SUBJECT,
+    unlockedMockTestIds: [],
+    maxFreeDistinctMocks: FREE_LIMITS.MAX_DISTINCT_MOCKS,
+    unlockedPracticeTestIds: [],
+    maxFreeDistinctPractice: FREE_LIMITS.MAX_DISTINCT_PRACTICE,
+    unlockedPyqTestIds: [],
+    maxFreeDistinctPyq: FREE_LIMITS.MAX_DISTINCT_PYQ,
   };
 
   if (!userId || userId === "guest") {
@@ -265,6 +299,10 @@ export async function getUserUsageSummary(userId: string): Promise<UserUsageSumm
   try {
     const admin = createAdminClient();
 
+    const distinctMocks = new Set<string>();
+    const distinctPractice = new Set<string>();
+    const distinctPyqs = new Set<string>();
+
     // Strategy 1: Check user_usage_ledger table (immutable source of truth)
     const { data: ledgerRows, error: ledgerError } = await admin
       .from("user_usage_ledger")
@@ -277,10 +315,22 @@ export async function getUserUsageSummary(userId: string): Promise<UserUsageSumm
       const pyqSubjects = new Set<string>();
 
       ledgerRows.forEach((row: any) => {
-        if (row.session_type === "mock") mocks++;
-        else if (row.session_type === "practice") practices++;
-        else if (row.session_type === "pyq" && row.canonical_subject) {
-          pyqSubjects.add(row.canonical_subject);
+        const rawId = (row.test_id || "").toLowerCase().trim();
+        const canonical = resolveCanonicalTestId(rawId) || rawId;
+        const sType = row.session_type || classifyTestType(canonical).sessionType;
+
+        if (sType === "mock") {
+          mocks++;
+          if (canonical) distinctMocks.add(canonical);
+          if (rawId) distinctMocks.add(rawId);
+        } else if (sType === "practice") {
+          practices++;
+          if (canonical) distinctPractice.add(canonical);
+          if (rawId) distinctPractice.add(rawId);
+        } else if (sType === "pyq") {
+          if (row.canonical_subject) pyqSubjects.add(row.canonical_subject);
+          if (canonical) distinctPyqs.add(canonical);
+          if (rawId) distinctPyqs.add(rawId);
         }
       });
 
@@ -289,6 +339,9 @@ export async function getUserUsageSummary(userId: string): Promise<UserUsageSumm
         mockSessionsCompleted: mocks,
         practiceSessionsCompleted: practices,
         pyqSubjectsAttempted: Array.from(pyqSubjects),
+        unlockedMockTestIds: Array.from(distinctMocks),
+        unlockedPracticeTestIds: Array.from(distinctPractice),
+        unlockedPyqTestIds: Array.from(distinctPyqs),
       };
     }
 
@@ -299,27 +352,29 @@ export async function getUserUsageSummary(userId: string): Promise<UserUsageSumm
       .eq("user_id", userId);
 
     if (!attemptsError && userAttempts) {
-      // Group distinct test sessions by attempt_id if present, otherwise by test_id
-      const distinctSessions = new Map<string, string>(); // sessionId -> testIdentifier
-      userAttempts.forEach((ua: any) => {
-        const sessionId = ua.attempt_id ? String(ua.attempt_id) : (ua.test_id ? String(ua.test_id) : null);
-        if (sessionId && !distinctSessions.has(sessionId)) {
-          // Use tests.title or subject or test_id for classification
-          const testObj = Array.isArray(ua.tests) ? ua.tests[0] : ua.tests;
-          const identifier = testObj?.title || String(ua.test_id || "mock");
-          distinctSessions.set(sessionId, identifier);
-        }
-      });
-
       let mocks = 0;
       let practices = 0;
       const pyqSubjects = new Set<string>();
 
-      distinctSessions.forEach((identifier) => {
-        const { sessionType, canonicalSubject } = classifyTestType(identifier);
-        if (sessionType === "mock") mocks++;
-        else if (sessionType === "practice") practices++;
-        else if (sessionType === "pyq") pyqSubjects.add(canonicalSubject);
+      userAttempts.forEach((ua: any) => {
+        const testObj = Array.isArray(ua.tests) ? ua.tests[0] : ua.tests;
+        const rawId = (ua.test_id ? String(ua.test_id) : testObj?.title || "").toLowerCase().trim();
+        const canonical = resolveCanonicalTestId(rawId) || rawId;
+        const { sessionType, canonicalSubject } = classifyTestType(rawId);
+
+        if (sessionType === "mock") {
+          mocks++;
+          if (canonical) distinctMocks.add(canonical);
+          if (rawId) distinctMocks.add(rawId);
+        } else if (sessionType === "practice") {
+          practices++;
+          if (canonical) distinctPractice.add(canonical);
+          if (rawId) distinctPractice.add(rawId);
+        } else if (sessionType === "pyq") {
+          pyqSubjects.add(canonicalSubject);
+          if (canonical) distinctPyqs.add(canonical);
+          if (rawId) distinctPyqs.add(rawId);
+        }
       });
 
       return {
@@ -327,6 +382,9 @@ export async function getUserUsageSummary(userId: string): Promise<UserUsageSumm
         mockSessionsCompleted: mocks,
         practiceSessionsCompleted: practices,
         pyqSubjectsAttempted: Array.from(pyqSubjects),
+        unlockedMockTestIds: Array.from(distinctMocks),
+        unlockedPracticeTestIds: Array.from(distinctPractice),
+        unlockedPyqTestIds: Array.from(distinctPyqs),
       };
     }
   } catch (err) {
@@ -356,6 +414,7 @@ export async function checkTestSessionEligibility(
         currentUsage: 0,
         maxAllowed: Infinity,
         canonicalSubject,
+        isUnlockedContent: true,
       };
     }
 
@@ -374,134 +433,171 @@ export async function checkTestSessionEligibility(
 
     // Calculate current Free usage
     const usage = await getUserUsageSummary(userId);
-    const lowerId = (testId || "").toLowerCase();
+    const lowerId = (testId || "").toLowerCase().trim();
+    const canonicalId = resolveCanonicalTestId(testId) || lowerId;
 
-    // Free candidates are strictly restricted to DESIGNATED_FREE_TEST_IDS (Option A)
+    const unlockedMocks = new Set(usage.unlockedMockTestIds || []);
+    const unlockedPractice = new Set(usage.unlockedPracticeTestIds || []);
+    const unlockedPyq = new Set(usage.unlockedPyqTestIds || []);
+
+    // Free candidates are strictly restricted to eligible free templates
     if (!isDesignatedFreeTest(testId)) {
       return {
         allowed: false,
-        reason: "This test is exclusive to CUETMate Premium. The Free plan includes designated sample tests (Mock 1, Unit 1 Test 1, and PYQ Paper 1). Upgrade to CUETMate Premium to unlock all tests.",
+        reason: "This test is exclusive to CUETMate Premium. The Free plan includes up to 3 distinct mock exams (Mocks 1-3), 3 distinct practice tests (Unit 1 Tests 1-3), and 1 distinct PYQ paper with unlimited retries. Upgrade to CUETMate Premium to unlock all tests.",
         limitReached: true,
         testType: sessionType,
         currentUsage:
           sessionType === "mock"
-            ? usage.mockSessionsCompleted
+            ? unlockedMocks.size
             : sessionType === "practice"
-            ? usage.practiceSessionsCompleted
-            : usage.pyqSubjectsAttempted.length,
+            ? unlockedPractice.size
+            : unlockedPyq.size,
         maxAllowed:
           sessionType === "mock"
-            ? FREE_LIMITS.MAX_MOCK_SESSIONS
+            ? FREE_LIMITS.MAX_DISTINCT_MOCKS
             : sessionType === "practice"
-            ? FREE_LIMITS.MAX_PRACTICE_SESSIONS
-            : FREE_LIMITS.MAX_PYQ_PER_SUBJECT,
+            ? FREE_LIMITS.MAX_DISTINCT_PRACTICE
+            : FREE_LIMITS.MAX_DISTINCT_PYQ,
         canonicalSubject,
       };
     }
 
     if (sessionType === "mock") {
-      // Free users can only access Mock 1 to Mock 3 templates
       const mockMatch =
         lowerId.match(/\bmock(?:\s+paper|\s+test|\s+exam)?[-_]?\s*(\d+)\b/i) ||
         lowerId.match(/(?:mock|paper)[-_]?(\d+)/i) ||
         lowerId.match(/-(\d+)$/);
       const mockNum = mockMatch && mockMatch[1] ? parseInt(mockMatch[1], 10) : 1;
 
-      if (mockNum > FREE_LIMITS.MAX_MOCK_SESSIONS) {
+      if (mockNum > 3) {
         return {
           allowed: false,
           reason: `Mock ${mockNum} requires CUETMate Premium. The Free plan includes Mock 1 to Mock 3. Upgrade to unlock all 20 full-length mocks.`,
           limitReached: true,
           testType: sessionType,
-          currentUsage: usage.mockSessionsCompleted,
-          maxAllowed: FREE_LIMITS.MAX_MOCK_SESSIONS,
+          currentUsage: unlockedMocks.size,
+          maxAllowed: FREE_LIMITS.MAX_DISTINCT_MOCKS,
           canonicalSubject,
         };
       }
 
-      const isUnderLimit = usage.mockSessionsCompleted < FREE_LIMITS.MAX_MOCK_SESSIONS;
+      // If already unlocked, allow unlimited retries with zero restrictions
+      const isAlreadyUnlocked = unlockedMocks.has(canonicalId) || unlockedMocks.has(lowerId);
+      if (isAlreadyUnlocked) {
+        return {
+          allowed: true,
+          limitReached: false,
+          testType: sessionType,
+          currentUsage: unlockedMocks.size,
+          maxAllowed: FREE_LIMITS.MAX_DISTINCT_MOCKS,
+          canonicalSubject,
+          isUnlockedContent: true,
+        };
+      }
+
+      // New distinct mock item: check if user is under distinct allowance across platform
+      const isUnderLimit = unlockedMocks.size < FREE_LIMITS.MAX_DISTINCT_MOCKS;
       return {
         allowed: isUnderLimit,
         reason: isUnderLimit
           ? undefined
-          : `You have completed all ${FREE_LIMITS.MAX_MOCK_SESSIONS} free mock exams. Unlock unlimited full-length mocks across all subjects with CUETMate Premium.`,
+          : `You have reached your Free plan allowance of ${FREE_LIMITS.MAX_DISTINCT_MOCKS} distinct mock exams. Upgrade to CUETMate Premium for unlimited full-length mocks across all subjects.`,
         limitReached: !isUnderLimit,
         testType: sessionType,
-        currentUsage: usage.mockSessionsCompleted,
-        maxAllowed: FREE_LIMITS.MAX_MOCK_SESSIONS,
+        currentUsage: unlockedMocks.size,
+        maxAllowed: FREE_LIMITS.MAX_DISTINCT_MOCKS,
         canonicalSubject,
       };
     }
 
     if (sessionType === "practice") {
-      // Free plan allows up to 3 practice sessions, restricted to Unit 1 tests 1-3
       const unitMatch = lowerId.match(/unit[-_]?(\d+)/i);
       const testMatch = lowerId.match(/test[-_]?(\d+)/i);
       const unitNum = unitMatch && unitMatch[1] ? parseInt(unitMatch[1], 10) : 1;
       const testNum = testMatch && testMatch[1] ? parseInt(testMatch[1], 10) : 1;
 
-      if (unitNum > 1 || testNum > FREE_LIMITS.MAX_PRACTICE_SESSIONS) {
+      if (unitNum > 1 || testNum > 3) {
         return {
           allowed: false,
-          reason: "This unit practice test requires CUETMate Premium. The Free plan includes up to 3 practice sessions. Upgrade to unlock all practice tests across all chapters.",
+          reason: "This unit practice test requires CUETMate Premium. The Free plan includes up to 3 distinct practice tests from Unit 1. Upgrade to unlock all practice tests across all chapters.",
           limitReached: true,
           testType: sessionType,
-          currentUsage: usage.practiceSessionsCompleted,
-          maxAllowed: FREE_LIMITS.MAX_PRACTICE_SESSIONS,
+          currentUsage: unlockedPractice.size,
+          maxAllowed: FREE_LIMITS.MAX_DISTINCT_PRACTICE,
           canonicalSubject,
         };
       }
 
-      const isUnderLimit = usage.practiceSessionsCompleted < FREE_LIMITS.MAX_PRACTICE_SESSIONS;
+      // If already unlocked, allow unlimited retries with zero restrictions
+      const isAlreadyUnlocked = unlockedPractice.has(canonicalId) || unlockedPractice.has(lowerId);
+      if (isAlreadyUnlocked) {
+        return {
+          allowed: true,
+          limitReached: false,
+          testType: sessionType,
+          currentUsage: unlockedPractice.size,
+          maxAllowed: FREE_LIMITS.MAX_DISTINCT_PRACTICE,
+          canonicalSubject,
+          isUnlockedContent: true,
+        };
+      }
+
+      // New distinct practice item: check if user is under distinct allowance across platform
+      const isUnderLimit = unlockedPractice.size < FREE_LIMITS.MAX_DISTINCT_PRACTICE;
       return {
         allowed: isUnderLimit,
         reason: isUnderLimit
           ? undefined
-          : `You have completed all ${FREE_LIMITS.MAX_PRACTICE_SESSIONS} free unit practice tests. Unlock unlimited practice across all units with CUETMate Premium.`,
+          : `You have reached your Free plan allowance of ${FREE_LIMITS.MAX_DISTINCT_PRACTICE} distinct unit practice tests. Upgrade to CUETMate Premium for unlimited practice across all units.`,
         limitReached: !isUnderLimit,
         testType: sessionType,
-        currentUsage: usage.practiceSessionsCompleted,
-        maxAllowed: FREE_LIMITS.MAX_PRACTICE_SESSIONS,
+        currentUsage: unlockedPractice.size,
+        maxAllowed: FREE_LIMITS.MAX_DISTINCT_PRACTICE,
         canonicalSubject,
       };
     }
 
     if (sessionType === "pyq") {
-      const alreadyAttemptedSubject = usage.pyqSubjectsAttempted.includes(canonicalSubject);
-      if (alreadyAttemptedSubject) {
-        return {
-          allowed: false,
-          reason: `You have completed your 1 free PYQ attempt for ${canonicalSubject.toUpperCase()}. Unlock unlimited official past year papers across all subjects with CUETMate Premium.`,
-          limitReached: true,
-          testType: sessionType,
-          currentUsage: 1,
-          maxAllowed: FREE_LIMITS.MAX_PYQ_PER_SUBJECT,
-          canonicalSubject,
-        };
-      }
-
-      // Check if this PYQ is Paper 2 or beyond
       const pyqNumMatch = lowerId.match(/pyq[-_]?(\d+)/i);
       const pyqNum = pyqNumMatch && pyqNumMatch[1] ? parseInt(pyqNumMatch[1], 10) : 1;
       if (pyqNum > 1) {
         return {
           allowed: false,
-          reason: `PYQ Paper ${pyqNum} requires CUETMate Premium. The Free plan includes Paper 1 for each subject. Upgrade to unlock all official NTA shift papers.`,
+          reason: `PYQ Paper ${pyqNum} requires CUETMate Premium. The Free plan includes Paper 1 for 1 distinct subject. Upgrade to unlock all official NTA shift papers.`,
           limitReached: true,
           testType: sessionType,
-          currentUsage: 0,
-          maxAllowed: FREE_LIMITS.MAX_PYQ_PER_SUBJECT,
+          currentUsage: unlockedPyq.size,
+          maxAllowed: FREE_LIMITS.MAX_DISTINCT_PYQ,
           canonicalSubject,
         };
       }
 
+      // If already unlocked, allow unlimited retries with zero restrictions
+      const isAlreadyUnlocked = unlockedPyq.has(canonicalId) || unlockedPyq.has(lowerId);
+      if (isAlreadyUnlocked) {
+        return {
+          allowed: true,
+          limitReached: false,
+          testType: sessionType,
+          currentUsage: unlockedPyq.size,
+          maxAllowed: FREE_LIMITS.MAX_DISTINCT_PYQ,
+          canonicalSubject,
+          isUnlockedContent: true,
+        };
+      }
+
+      // New distinct PYQ item: check if user is under distinct allowance across platform
+      const isUnderLimit = unlockedPyq.size < FREE_LIMITS.MAX_DISTINCT_PYQ;
       return {
-        allowed: true,
-        reason: undefined,
-        limitReached: false,
+        allowed: isUnderLimit,
+        reason: isUnderLimit
+          ? undefined
+          : `You have reached your Free plan allowance of ${FREE_LIMITS.MAX_DISTINCT_PYQ} distinct PYQ paper. Upgrade to CUETMate Premium for unlimited official past year papers across all subjects.`,
+        limitReached: !isUnderLimit,
         testType: sessionType,
-        currentUsage: 0,
-        maxAllowed: FREE_LIMITS.MAX_PYQ_PER_SUBJECT,
+        currentUsage: unlockedPyq.size,
+        maxAllowed: FREE_LIMITS.MAX_DISTINCT_PYQ,
         canonicalSubject,
       };
     }

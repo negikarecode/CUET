@@ -43,7 +43,7 @@ export default async function TestPage({ params, searchParams }: PageProps) {
             featureSubtitle="Candidate Account Required"
             featureDescription="Please sign in or create a candidate account to start your NTA CBT exam simulation and record your diagnostic analytics."
             benefits={[
-              "3 Free full-length 50-question mock tests with official NTA timer",
+              "3 Free distinct mock exams (50 Qs) with unlimited retries",
               "Instant accuracy, scoring (+5 / -1) and time-sink detection",
               "Sync your answers and past sessions across devices",
               "Access official CUET UG domain question papers",
@@ -70,7 +70,7 @@ export default async function TestPage({ params, searchParams }: PageProps) {
             featureSubtitle="Email Verification Required"
             featureDescription="Your email address must be verified before starting a CBT exam session. Please check your inbox for the confirmation link."
             benefits={[
-              "3 Free full-length 50-question mock tests with official NTA timer",
+              "3 Free distinct mock exams (50 Qs) with unlimited retries",
               "Instant accuracy, scoring (+5 / -1) and time-sink detection",
               "Sync your answers and past sessions across devices",
               "Access official CUET UG domain question papers",

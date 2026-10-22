@@ -15,6 +15,7 @@ import { stringToUuid } from "@/lib/utils";
 import { normalizeSubject } from "@/lib/analytics";
 import { recordRepairEvent } from "@/lib/repair-plan";
 import { recordRepairPlanProgress } from "@/lib/repair-plan-v2";
+import { resolveQuestionCorrectOptionId } from "@/lib/scoring";
 
 export interface QuestionSessionState {
   visited: boolean;
@@ -774,11 +775,18 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
 
       // Check if we need to reveal authoritative questions from server first
       let authQuestions = secureExamVault.get(testId) || questions;
+
+      // Ensure all available question keys are resolved locally
+      authQuestions = authQuestions.map((q) => {
+        const resolvedKey = resolveQuestionCorrectOptionId(q);
+        if (resolvedKey && !q.correctOptionId) {
+          return { ...q, correctOptionId: resolvedKey };
+        }
+        return q;
+      });
+
       const hasRevealedKey = Boolean(
-        authQuestions[0]?.correctOptionId ||
-        (authQuestions[0] as any)?.correct_option ||
-        (authQuestions[0] as any)?.correctOption ||
-        authQuestions[0]?.options?.some((o: any) => o.isCorrect === true)
+        authQuestions.some((q) => Boolean(resolveQuestionCorrectOptionId(q)))
       );
       if (typeof window !== "undefined" && window.location?.origin && !hasRevealedKey) {
         try {
@@ -795,7 +803,13 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           if (res.ok) {
             const data = await res.json();
             if (data?.questions && Array.isArray(data.questions) && data.questions.length > 0) {
-              authQuestions = data.questions;
+              authQuestions = data.questions.map((q: any) => {
+                const resolvedKey = resolveQuestionCorrectOptionId(q);
+                if (resolvedKey && !q.correctOptionId) {
+                  return { ...q, correctOptionId: resolvedKey };
+                }
+                return q;
+              });
               secureExamVault.set(testId, authQuestions);
             }
           }
@@ -811,7 +825,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       let timeSinkCount = 0;
 
       authQuestions.forEach((q) => {
-        const qState = questionStates[q.id];
+        const qState = questionStates[q.id] || questionStates[q.questionId || ""];
         const status = deriveQuestionStatus(qState);
 
         if (status === "answered" || status === "answered_marked_review") {
@@ -825,12 +839,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           if (qState.timeSpentSeconds > 72) {
             timeSinkCount += 1;
           }
-          const rawCorrectKey =
-            q.correctOptionId ||
-            (q as any)?.correct_option ||
-            (q as any)?.correctOption ||
-            q.options?.find((o: any) => o.isCorrect === true)?.id;
-          const correctKey = rawCorrectKey ? String(rawCorrectKey).trim().toUpperCase() : null;
+          const correctKey = resolveQuestionCorrectOptionId(q);
           if (qState.selectedOption !== null && qState.selectedOption !== undefined) {
             if (correctKey && qState.selectedOption === correctKey) {
               correctCount += 1;
@@ -867,25 +876,17 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
         timeSinkCount,
       };
 
-      set({
-        questions: authQuestions,
-        isSubmitted: true,
-        isTimerRunning: false,
-        isSubmitModalOpen: false,
-        submittedScore: summary,
-      });
+      let finalScoreSummary: CBTScoreSummary = summary;
+      let finalQuestions: Question[] = authQuestions;
 
-      // Synchronously persist submitted scorecard so refresh displays results rather than resetting
-      saveSessionToStorage(get(), true);
-
-      // Immediately record completed attempt to useTestStore & background API so all solved questions are counted
+      // Build verified attempt record for store analytics and authoritative submission
       try {
         const storeUser = useTestStore.getState().user;
         const meta = get().testMeta;
         const questionAttempts: RecordedQuestionAttempt[] = authQuestions.map((q) => {
-          const qState = questionStates[q.id];
+          const qState = questionStates[q.id] || questionStates[q.questionId || ""];
           const selectedOption = qState?.selectedOption ?? null;
-          const correctKey = q.correctOptionId || (q as any)?.correct_option || "";
+          const correctKey = resolveQuestionCorrectOptionId(q) || "";
           const isCorrect =
             selectedOption !== null && selectedOption !== undefined && correctKey
               ? selectedOption === correctKey
@@ -902,7 +903,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             options: q.options,
             questionType: q.questionType,
             selectedOption,
-            correctOption: correctKey,
+            correctOption: (correctKey || "") as any,
             isCorrect,
             timeSpentSeconds: timeSpent,
             isTimeSink: timeSpent > 72,
@@ -953,8 +954,6 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           questions: questionAttempts,
         };
 
-        useTestStore.getState().recordTestAttempt(attemptRecord);
-
         // Advance learning coach repair lifecycle if this was a targeted drill or retest
         try {
           const isDrill =
@@ -987,6 +986,8 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           console.warn("Repair lifecycle update notice:", repairErr);
         }
 
+        // Authoritative Server Evaluation and Persistence before opening scorecard
+        let recordedOnServer = false;
         if (typeof window !== "undefined" && window.location?.origin) {
           try {
             const res = await fetch("/api/test/record-attempt", {
@@ -996,14 +997,19 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             });
             if (res.ok) {
               const data = await res.json();
-              // Authoritative answer keys & explanations revealed strictly after submit
               if (data?.questions && Array.isArray(data.questions) && data.questions.length > 0) {
-                set({ questions: data.questions });
-                secureExamVault.set(testId, data.questions);
+                finalQuestions = data.questions.map((q: any) => {
+                  const resolvedKey = resolveQuestionCorrectOptionId(q);
+                  if (resolvedKey && !q.correctOptionId) {
+                    return { ...q, correctOptionId: resolvedKey };
+                  }
+                  return q;
+                });
+                secureExamVault.set(testId, finalQuestions);
               }
               if (data?.attempt) {
-                // Update with server-computed authoritative scores
-                const authoritativeScore: CBTScoreSummary = {
+                recordedOnServer = true;
+                finalScoreSummary = {
                   attemptedCount: data.attempt.attemptedCount ?? summary.attemptedCount,
                   unattemptedCount: data.attempt.unattemptedCount ?? summary.unattemptedCount,
                   markedReviewCount: summary.markedReviewCount,
@@ -1015,19 +1021,40 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
                   timeTakenSeconds: summary.timeTakenSeconds,
                   timeSinkCount: summary.timeSinkCount,
                 };
-                set({ submittedScore: authoritativeScore });
+                useTestStore.getState().recordTestAttempt({
+                  ...attemptRecord,
+                  ...data.attempt,
+                  questions: (data.attempt.questions && data.attempt.questions.length > 0)
+                    ? data.attempt.questions
+                    : attemptRecord.questions,
+                });
               }
               if (typeof data?.streak === "number") {
                 useTestStore.getState().setStreak(data.streak);
               }
             }
           } catch (err) {
-            console.warn("Background API attempt record notice:", err);
+            console.warn("Server attempt record notice:", err);
           }
         }
+
+        if (!recordedOnServer) {
+          useTestStore.getState().recordTestAttempt(attemptRecord);
+        }
       } catch (err) {
-        console.warn("Failed to immediately record test attempt:", err);
+        console.warn("Failed to record test attempt:", err);
       }
+
+      set({
+        questions: finalQuestions,
+        isSubmitted: true,
+        isTimerRunning: false,
+        isSubmitModalOpen: false,
+        submittedScore: finalScoreSummary,
+      });
+
+      // Synchronously persist submitted scorecard so refresh displays results rather than resetting
+      saveSessionToStorage(get(), true);
     } finally {
       set({ isSubmitting: false });
     }

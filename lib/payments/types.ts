@@ -27,6 +27,13 @@ export interface UserUsageSummary {
   maxFreePracticeSessions: number;
   pyqSubjectsAttempted: string[];
   maxFreePyqPerSubject: number;
+  // Distinct content item tracking across platform
+  unlockedMockTestIds?: string[];
+  maxFreeDistinctMocks?: number;
+  unlockedPracticeTestIds?: string[];
+  maxFreeDistinctPractice?: number;
+  unlockedPyqTestIds?: string[];
+  maxFreeDistinctPyq?: number;
 }
 
 export interface TestSessionEligibility {
@@ -37,6 +44,7 @@ export interface TestSessionEligibility {
   currentUsage: number;
   maxAllowed: number;
   canonicalSubject?: string;
+  isUnlockedContent?: boolean;
 }
 
 export interface PricingOfferDetails {

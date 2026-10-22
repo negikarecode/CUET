@@ -1062,20 +1062,7 @@ async function handleInsights(req: NextRequest): Promise<NextResponse> {
     const body = await req.json().catch(() => ({}));
     const queryType = req.nextUrl.searchParams.get("type");
 
-    // ─── ACTION 0: FLAGGING INCORRECT EXPLANATION ────────────────────────────
-    if (body.action === "flag") {
-      const { questionId, selectedOption, reason, userId = "student" } = body;
-      flaggedExplanationsStore.push({
-        questionId: questionId || "unknown",
-        selectedOption: selectedOption || "unknown",
-        reason: reason || "User flagged as inaccurate",
-        flaggedAt: new Date().toISOString(),
-        userId,
-      });
-      return NextResponse.json({ success: true, message: "Feedback recorded for review." });
-    }
-
-    // Server-side rate limit on AI insights (10 per minute per user)
+    // Server-side rate limit on AI insights (10 per minute per user/IP)
     let authUserId: string | null = null;
     try {
       const supabase = createClient();
@@ -1089,6 +1076,28 @@ async function handleInsights(req: NextRequest): Promise<NextResponse> {
     const rateCheck = await rateLimit("ai:insights", rateIdentifier);
     if (!rateCheck.success) {
       return rateLimitResponse(rateCheck);
+    }
+
+    // ─── ACTION 0: FLAGGING INCORRECT EXPLANATION (Protected & Bounded) ──────
+    if (body.action === "flag") {
+      const { questionId, selectedOption, reason } = body;
+      const safeQId = typeof questionId === "string" ? questionId.slice(0, 128) : "unknown";
+      const safeOpt = typeof selectedOption === "string" ? selectedOption.slice(0, 10) : "unknown";
+      const safeReason = typeof reason === "string" ? reason.slice(0, 1000) : "User flagged as inaccurate";
+      const safeUserId = authUserId || (typeof body.userId === "string" ? body.userId.slice(0, 64) : "student");
+
+      if (flaggedExplanationsStore.length >= 200) {
+        flaggedExplanationsStore.shift();
+      }
+
+      flaggedExplanationsStore.push({
+        questionId: safeQId,
+        selectedOption: safeOpt,
+        reason: safeReason,
+        flaggedAt: new Date().toISOString(),
+        userId: safeUserId,
+      });
+      return NextResponse.json({ success: true, message: "Feedback recorded for review." });
     }
 
     // Determine target sub-service

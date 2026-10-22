@@ -921,7 +921,7 @@ export async function POST(
         .eq("user_id", authUser.id)
         .eq("test_id", testUuid);
 
-      if (!body.answersSubmitted && (countErr || !attemptCount || attemptCount === 0)) {
+      if (countErr || !attemptCount || attemptCount === 0) {
         return NextResponse.json(
           {
             error: "Forbidden: Test answers can only be revealed after user attempts have been recorded for this exact test.",

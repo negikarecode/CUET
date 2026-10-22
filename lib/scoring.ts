@@ -5,6 +5,36 @@
  * Never reads client correctOption or isCorrect.
  */
 
+/**
+ * Safely resolves the correct option key ("A" | "B" | "C" | "D") from any
+ * question representation (correctOptionId, correct_option, correctOption, or options.isCorrect).
+ */
+export function resolveQuestionCorrectOptionId(
+  q: any
+): "A" | "B" | "C" | "D" | null {
+  if (!q) return null;
+  const direct =
+    q.correctOptionId ||
+    q.correctOption ||
+    q.correct_option;
+  if (direct && typeof direct === "string" && direct.trim()) {
+    const upper = direct.trim().toUpperCase();
+    if (["A", "B", "C", "D"].includes(upper)) {
+      return upper as "A" | "B" | "C" | "D";
+    }
+  }
+  if (Array.isArray(q.options)) {
+    const correctOpt = q.options.find((o: any) => o?.isCorrect === true);
+    if (correctOpt?.id && typeof correctOpt.id === "string") {
+      const upper = correctOpt.id.trim().toUpperCase();
+      if (["A", "B", "C", "D"].includes(upper)) {
+        return upper as "A" | "B" | "C" | "D";
+      }
+    }
+  }
+  return null;
+}
+
 export interface ScoredQuestionResult {
   authQuestion: any;
   clientQuestion: any;
@@ -97,17 +127,7 @@ export function buildScoredSet(
 
     const authQ = authoritativeQuestions[aIdx];
     const clientQ = clientQuestions[matchedClientIdx];
-    const rawExpectedKey =
-      authQ.correctOptionId ||
-      authQ.correct_option ||
-      authQ.correctOption ||
-      authQ.options?.find((o: any) => o.isCorrect === true)?.id ||
-      "";
-
-    const authExpectedKey = rawExpectedKey
-      .toString()
-      .trim()
-      .toUpperCase() as "A" | "B" | "C" | "D";
+    const authExpectedKey = (resolveQuestionCorrectOptionId(authQ) || "") as "A" | "B" | "C" | "D";
 
     // Never read client correctOption or isCorrect - derive solely from selectedOption vs authoritative key
     const rawOpt =

@@ -11,6 +11,7 @@ import {
   OverallMockStats,
   PostMockDeterministicReport,
 } from "@/types/postMockAnalysis";
+import { resolveQuestionCorrectOptionId } from "@/lib/scoring";
 
 /**
  * Strictly normalizes difficulty without guessing or inventing metadata.
@@ -63,10 +64,24 @@ export function normalizeQuestionTelemetry(
     });
   }
 
-  return (attempt.questions || []).map((q, idx) => {
-    const fallbackQ = fallbackMap.get(q.questionId) || fallbackMap.get(String(q.questionNumber));
+  const attemptMap = new Map<string, any>();
+  if (Array.isArray((attempt as any)?.questionAttempts)) {
+    (attempt as any).questionAttempts.forEach((qa: any) => {
+      if (qa.questionId) attemptMap.set(qa.questionId, qa);
+      if (qa.id) attemptMap.set(qa.id, qa);
+    });
+  }
 
-    const selectedOption = q.selectedOption ?? null;
+  return (attempt.questions || []).map((q, idx) => {
+    const qKey = q.questionId || (q as any).id || String(q.questionNumber);
+    const fallbackQ =
+      fallbackMap.get(qKey) ||
+      (q.questionId ? fallbackMap.get(q.questionId) : undefined) ||
+      ((q as any).id ? fallbackMap.get((q as any).id) : undefined) ||
+      fallbackMap.get(String(q.questionNumber));
+
+    const matchedQA = attemptMap.get(qKey) || attemptMap.get(q.questionId) || attemptMap.get((q as any).id);
+    const selectedOption = q.selectedOption ?? matchedQA?.selectedOption ?? null;
     const isAttempted = selectedOption !== null && selectedOption !== undefined;
     const isSkipped = !isAttempted;
 
@@ -89,16 +104,31 @@ export function normalizeQuestionTelemetry(
     const ncertReference = q.ncertReference || fallbackQ?.pyqSource || "";
     const microTopic = q.microTopic || fallbackQ?.topic || "Core Concept";
 
-    const trueCorrectOption = q.correctOption || fallbackQ?.correctOptionId;
-    const computedIsCorrect =
-      isAttempted
-        ? (q.isCorrect !== undefined && q.isCorrect !== null
-            ? q.isCorrect
-            : Boolean(trueCorrectOption && selectedOption === trueCorrectOption))
-        : null;
+    const rawCorrectOption =
+      resolveQuestionCorrectOptionId(q) ||
+      resolveQuestionCorrectOptionId(fallbackQ) ||
+      (q.correctOption && q.correctOption.trim() ? q.correctOption.trim().toUpperCase() : null);
+
+    const trueCorrectOption = rawCorrectOption || q.correctOption || fallbackQ?.correctOptionId || "";
+
+    let computedIsCorrect: boolean | null = null;
+    if (isAttempted) {
+      if (q.isCorrect === true || q.isCorrect === false) {
+        computedIsCorrect = q.isCorrect;
+      } else if (matchedQA?.isCorrect === true || matchedQA?.isCorrect === false) {
+        computedIsCorrect = matchedQA.isCorrect;
+      } else if (rawCorrectOption && selectedOption) {
+        computedIsCorrect = selectedOption.trim().toUpperCase() === rawCorrectOption;
+      } else {
+        // Missing correctness data is preserved as null (unknown/loading), NOT coerced to false
+        computedIsCorrect = null;
+      }
+    }
+
+    const timeSpent = q.timeSpentSeconds || matchedQA?.timeSpentSeconds || matchedQA?.timeSpent || 0;
 
     return {
-      questionId: q.questionId || `q_${idx + 1}`,
+      questionId: q.questionId || (q as any).id || `q_${idx + 1}`,
       conceptId: q.conceptId || fallbackQ?.conceptId,
       questionNumber: q.questionNumber || idx + 1,
       subject: q.subject || attempt.subject || "Domain Examination",
@@ -107,12 +137,12 @@ export function normalizeQuestionTelemetry(
       prompt,
       options,
       selectedOption,
-      correctOption: trueCorrectOption || q.correctOption,
+      correctOption: (trueCorrectOption || "") as "A" | "B" | "C" | "D",
       isCorrect: computedIsCorrect,
       isAttempted,
       isSkipped,
-      timeSpentSeconds: q.timeSpentSeconds || 0,
-      isTimeSink: q.isTimeSink ?? (q.timeSpentSeconds > 72),
+      timeSpentSeconds: timeSpent,
+      isTimeSink: q.isTimeSink ?? (timeSpent > 72),
       difficulty: normalizedDiff,
       rawDifficulty: rawDiff,
       explanation,
@@ -151,7 +181,7 @@ export function buildPostMockDeterministicReport(
       attemptedCount += 1;
       if (q.isCorrect === true) {
         correctCount += 1;
-      } else {
+      } else if (q.isCorrect === false) {
         incorrectCount += 1;
       }
     } else {
@@ -205,7 +235,7 @@ export function buildPostMockDeterministicReport(
     if (q.isAttempted) {
       bucket.attempted += 1;
       if (q.isCorrect === true) bucket.correct += 1;
-      else bucket.incorrect += 1;
+      else if (q.isCorrect === false) bucket.incorrect += 1;
     } else {
       bucket.skipped += 1;
     }
@@ -272,7 +302,7 @@ export function buildPostMockDeterministicReport(
     if (q.isAttempted) {
       chapData.attempted += 1;
       if (q.isCorrect === true) chapData.correct += 1;
-      else chapData.incorrect += 1;
+      else if (q.isCorrect === false) chapData.incorrect += 1;
     } else {
       chapData.skipped += 1;
     }
@@ -359,7 +389,7 @@ export function buildPostMockDeterministicReport(
       if (q.isAttempted) {
         cell.attempted += 1;
         if (q.isCorrect === true) cell.correct += 1;
-        else cell.incorrect += 1;
+        else if (q.isCorrect === false) cell.incorrect += 1;
       } else {
         cell.skipped += 1;
       }

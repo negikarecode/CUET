@@ -116,6 +116,27 @@ export default function SubjectPracticeClient({
     }).length;
   }, [testAttempts]);
 
+  // Distinct unlocked practice test IDs across all subjects on the platform
+  const unlockedDistinctPracticeIds = useMemo(() => {
+    const set = new Set<string>();
+    (testAttempts || []).forEach((att) => {
+      const id = (att.testId || "").toLowerCase();
+      const title = (att.testTitle || "").toLowerCase();
+      if (
+        id.includes("practice") ||
+        id.includes("unit") ||
+        title.includes("practice") ||
+        title.includes("drill") ||
+        (att.totalQuestions !== undefined && att.totalQuestions <= 25)
+      ) {
+        if (att.testId) set.add(att.testId.toLowerCase().trim());
+      }
+    });
+    return set;
+  }, [testAttempts]);
+
+  const totalUnlockedDistinctPractice = unlockedDistinctPracticeIds.size;
+
   // Find canonical subject data from manifest
   const subjectEntry = useMemo(() => {
     const rawData = (practiceManifest as Record<string, any>)[decodedSubject];
@@ -263,11 +284,11 @@ export default function SubjectPracticeClient({
                 FREE PLAN STATUS
               </span>
               <span className="text-xs font-bold text-slate-700">
-                {Math.min(3, totalCompletedPracticeSessions)} of 3 Free Practice Sessions Completed
+                {Math.min(3, totalUnlockedDistinctPractice)} of 3 Free Practice Tests Unlocked
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-600 font-medium">
-              Free plan includes Unit 1 practice tests 1–3 (up to 3 completed sessions). Additional units and unlimited practice tests require CUETMate Premium.
+              Free plan includes 3 distinct unit practice tests with unlimited retries. Additional units and unlimited practice tests require CUETMate Premium.
             </p>
           </div>
           <div className="shrink-0 flex items-center gap-2.5">
@@ -515,7 +536,7 @@ export default function SubjectPracticeClient({
                       const isNext = testId === subjectStats.nextUnattemptedTestId;
                       const isNegative = isAttempted && testStat.bestScore !== null && testStat.bestScore < 0;
 
-                      const isLocked = !isPremium && isConfirmedFree && (unit.unitNumber > 1 || testNum > 3 || totalCompletedPracticeSessions >= 3);
+                      const isLocked = !isPremium && isConfirmedFree && !isAttempted && (unit.unitNumber > 1 || testNum > 3 || totalUnlockedDistinctPractice >= 3);
 
                       if (!isAttempted) {
                         if (isLocked) {
@@ -561,6 +582,10 @@ export default function SubjectPracticeClient({
                               {isNext ? (
                                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white shadow-2xs">
                                   Next
+                                </span>
+                              ) : !isPremium && isConfirmedFree && !isLocked ? (
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                  FREE
                                 </span>
                               ) : (
                                 <span className="text-[10px] font-medium text-slate-400">
@@ -636,22 +661,12 @@ export default function SubjectPracticeClient({
                             >
                               Analysis
                             </Link>
-                            {!isPremium && isConfirmedFree && totalCompletedPracticeSessions >= 3 ? (
-                              <Link
-                                href="/pricing"
-                                className="flex-1 text-center py-1.5 px-1 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-lg text-[11px] font-semibold transition-colors inline-flex items-center justify-center gap-1"
-                              >
-                                <Lock className="w-3 h-3 text-amber-700" />
-                                <span>Upgrade</span>
-                              </Link>
-                            ) : (
-                              <Link
-                                href={`/test/${testId}?reattempt=true`}
-                                className="flex-1 text-center py-1.5 px-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-semibold transition-colors"
-                              >
-                                Re-attempt
-                              </Link>
-                            )}
+                            <Link
+                              href={`/test/${testId}?reattempt=true`}
+                              className="flex-1 text-center py-1.5 px-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-semibold transition-colors"
+                            >
+                              Re-attempt
+                            </Link>
                           </div>
                         </div>
                       );

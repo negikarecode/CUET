@@ -30,6 +30,15 @@ interface Props {
   note: NoteDocument;
 }
 
+function sanitizeSvg(raw: string): string {
+  if (!raw || typeof raw !== "string") return "";
+  return raw
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/\bon\w+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, "")
+    .replace(/javascript:/gi, "")
+    .replace(/data:text\/html/gi, "");
+}
+
 export function NoteReader({ note }: Props) {
   const [activeSection, setActiveSection] = useState<string>("summary");
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
@@ -378,7 +387,7 @@ export function NoteReader({ note }: Props) {
                 <div className="bg-slate-900 rounded-2xl p-4 border border-slate-800 shadow-sm overflow-hidden flex flex-col items-center">
                   <div
                     className="w-full max-w-full overflow-x-auto flex justify-center py-2"
-                    dangerouslySetInnerHTML={{ __html: svgCode }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeSvg(svgCode) }}
                   />
                   {(note.diagram as any)?.caption && (
                     <p className="text-xs text-slate-400 mt-2 text-center italic">

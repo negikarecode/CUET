@@ -12,6 +12,7 @@ import PostMockAnalysisClient from "./PostMockAnalysisClient";
 import { buildPostMockDeterministicReport } from "@/lib/post-mock-engine";
 import { stringToUuid } from "@/lib/utils";
 import { resolveCanonicalTestId } from "@/lib/canonical-tests";
+import { resolveQuestionCorrectOptionId } from "@/lib/scoring";
 
 export default function CBTResultView() {
   const router = useRouter();
@@ -53,9 +54,9 @@ export default function CBTResultView() {
 
     // 1. Record the complete attempt for Weakness Radar, Accuracy, and Solved Questions analytics
     const questionAttempts = questions.map((q) => {
-      const ans = answers[q.id];
+      const ans = answers[q.id] || answers[q.questionId || ""];
       const selectedOption = ans?.selectedOption ?? null;
-      const trueCorrect = q.correctOptionId || (q as any).correct_option || (q as any).correctOption || null;
+      const trueCorrect = resolveQuestionCorrectOptionId(q);
       const isCorrect =
         selectedOption !== null && selectedOption !== undefined && trueCorrect
           ? selectedOption === trueCorrect
@@ -72,7 +73,7 @@ export default function CBTResultView() {
         options: q.options,
         questionType: q.questionType,
         selectedOption,
-        correctOption: trueCorrect || "",
+        correctOption: (trueCorrect || "") as any,
         isCorrect,
         timeSpentSeconds: timeSpent,
         isTimeSink: timeSpent > 72,
@@ -147,7 +148,16 @@ export default function CBTResultView() {
     }
 
     const currentTId = testMeta?.id ?? "cbt_exam";
-    const existingAttempt = (testAttempts || []).find((a) => a.testId === currentTId);
+    const currentUuid = stringToUuid(currentTId);
+    const existingAttempt = (testAttempts || []).find(
+      (a) =>
+        a.testId === currentTId ||
+        (a.testId && stringToUuid(a.testId) === currentUuid) ||
+        (testMeta?.title &&
+          a.testTitle?.toLowerCase().trim() === testMeta.title.toLowerCase().trim() &&
+          testMeta?.subject &&
+          a.subject?.toLowerCase().trim() === testMeta.subject.toLowerCase().trim())
+    );
     if (existingAttempt) {
       return buildPostMockDeterministicReport(existingAttempt, questions);
     }
@@ -171,14 +181,9 @@ export default function CBTResultView() {
       timeSinkCount: submittedScore.timeSinkCount,
       submittedAt: new Date().toISOString(),
       questions: questions.map((q) => {
-        const ans = answers[q.id];
+        const ans = answers[q.id] || answers[q.questionId || ""];
         const selectedOption = ans?.selectedOption ?? null;
-        const trueCorrect =
-          q.correctOptionId ||
-          (q as any).correct_option ||
-          (q as any).correctOption ||
-          q.options?.find((o: any) => o.isCorrect === true)?.id ||
-          null;
+        const trueCorrect = resolveQuestionCorrectOptionId(q);
         const isCorrect =
           selectedOption !== null && selectedOption !== undefined && trueCorrect
             ? selectedOption === trueCorrect
@@ -195,7 +200,7 @@ export default function CBTResultView() {
           options: q.options,
           questionType: q.questionType,
           selectedOption,
-          correctOption: trueCorrect || "",
+          correctOption: (trueCorrect || "") as any,
           isCorrect,
           timeSpentSeconds: timeSpent,
           isTimeSink: timeSpent > 72,
@@ -213,10 +218,7 @@ export default function CBTResultView() {
   }, [questions, answers, submittedScore, testMeta, user.id, testAttempts]);
 
   const hasRevealedKey = Boolean(
-    questions[0]?.correctOptionId ||
-    (questions[0] as any)?.correct_option ||
-    (questions[0] as any)?.correctOption ||
-    questions[0]?.options?.some((o: any) => o.isCorrect === true)
+    questions.some((q) => Boolean(resolveQuestionCorrectOptionId(q)))
   );
   if (!submittedScore || (questions.length > 0 && !hasRevealedKey)) {
     return (
