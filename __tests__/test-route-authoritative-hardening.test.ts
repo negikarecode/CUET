@@ -372,10 +372,12 @@ const { resolveCanonicalTestId } = require("../lib/canonical-tests");
 const { stringToUuid } = require("../lib/utils");
 const { isDesignatedFreeTest, DESIGNATED_FREE_TEST_IDS } = require("../lib/payments/entitlements");
 const { buildScoredSet } = require("../lib/scoring");
+const { resetRateLimitKey } = require("../lib/security/rateLimiter");
 
 describe("Test Route Authoritative Answer Key Hardening & Phoenix Lockdown", () => {
   beforeEach(() => {
     mockAuthUserId = "test-candidate-uuid-12345";
+    resetRateLimitKey("ai:repair_quiz", "usr:test-candidate-uuid-12345");
     mockDbAttemptsCount = 0;
     mockUsageLedgerThrows = false;
     insertedAttempts = [];

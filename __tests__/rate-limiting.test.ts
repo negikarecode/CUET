@@ -140,8 +140,8 @@ async function runRateLimitingTests() {
   const combinedKey = getClientRateLimitIdentifier(new NextRequest("https://c.app", { headers: { "x-vercel-ip": testIp } }), user1, "payment:create_order");
   assert(combinedKey.includes(user1) && combinedKey.includes(testIp), `Combined key encapsulates both user and IP: ${combinedKey}`);
 
-  // ─── SUITE 5: TEMPORARILY DISABLED THROTTLING VERIFICATION ─────────────────
-  console.log("\n[SUITE 5] Temporarily Disabled Rate Limiting Invariants");
+  // ─── SUITE 5: ACTIVE RATE LIMITING ENFORCEMENT VERIFICATION ───────────────
+  console.log("\n[SUITE 5] Active Rate Limiting Enforcement Invariants");
 
   const concurrencyTestKey = `test_concurrency_${Date.now()}`;
   resetRateLimitKey("exam:start", concurrencyTestKey);
@@ -156,7 +156,9 @@ async function runRateLimitingTests() {
   );
 
   const allowedCount = results.filter((r) => r.success).length;
-  assert(allowedCount === concurrentRequests, `All ${concurrentRequests} requests permitted while custom rate-limiting is disabled`);
+  const blockedCount = results.filter((r) => !r.success).length;
+  assert(allowedCount === 5, `Strictly 5 requests permitted matching max quota (got ${allowedCount})`);
+  assert(blockedCount === 10, `Remaining 10 excess requests strictly rate limited with 429 (got ${blockedCount})`);
 
   // ─── SUITE 6: AUTH RATE-CHECK ROUTE SMOKE TEST ─────────────────────────────
   console.log("\n[SUITE 6] /api/auth/rate-check Route Integration");

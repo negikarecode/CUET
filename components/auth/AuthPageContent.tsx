@@ -194,6 +194,23 @@ export default function AuthPageContent({
     setIsLoading(true);
 
     try {
+      // Preliminary rate limit verification before calling Supabase Auth API (5 failed attempts allowed)
+      const rateCheck = await fetch("/api/auth/rate-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "auth:login", identifier: cleanEmail }),
+      }).catch(() => null);
+
+      if (rateCheck && rateCheck.status === 429) {
+        const errJson = await rateCheck.json().catch(() => ({}));
+        setErrorMessage(
+          errJson.error || "Too many failed login attempts. Please wait a few minutes before trying again."
+        );
+        setIsLoading(false);
+        isSubmittingRef.current = false;
+        return;
+      }
+
       const supabase = createClient();
       const { data, error } = await supabase.auth.signInWithPassword({
         email: cleanEmail,
@@ -257,6 +274,23 @@ export default function AuthPageContent({
     setIsLoading(true);
 
     try {
+      // Preliminary rate limit verification before calling Supabase Auth API (5 failed attempts allowed)
+      const rateCheck = await fetch("/api/auth/rate-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "auth:login", identifier: cleanEmail }),
+      }).catch(() => null);
+
+      if (rateCheck && rateCheck.status === 429) {
+        const errJson = await rateCheck.json().catch(() => ({}));
+        setErrorMessage(
+          errJson.error || "Too many failed login attempts. Please wait a few minutes before trying again."
+        );
+        setIsLoading(false);
+        isSubmittingRef.current = false;
+        return;
+      }
+
       const supabase = createClient();
       const { error } = await supabase.auth.signInWithOtp({
         email: cleanEmail,
@@ -329,6 +363,23 @@ export default function AuthPageContent({
     setIsLoading(true);
 
     try {
+      // Preliminary rate limit verification before calling Supabase Auth API (15 signups per IP allowed)
+      const rateCheck = await fetch("/api/auth/rate-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "auth:signup", identifier: cleanEmail }),
+      }).catch(() => null);
+
+      if (rateCheck && rateCheck.status === 429) {
+        const errJson = await rateCheck.json().catch(() => ({}));
+        setErrorMessage(
+          errJson.error || "Too many signup requests. Please wait a few minutes before trying again."
+        );
+        setIsLoading(false);
+        isSubmittingRef.current = false;
+        return;
+      }
+
       const supabase = createClient();
 
       try {

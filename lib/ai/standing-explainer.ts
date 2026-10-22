@@ -127,9 +127,12 @@ export function generateDeterministicExplanation(
 }
 
 /**
- * Validates that LLM output does NOT contain percentages or contradict deterministic facts.
+ * Validates that LLM output does NOT contain percentages, forbidden claims, or malicious markup.
  */
-function validateLLMOutput(text: string): boolean {
+export function validateLLMOutput(text: string): boolean {
+  if (typeof text !== "string" || text.trim().length < 5 || text.length > 2000) {
+    return false;
+  }
   const lower = text.toLowerCase();
   // Strictly no percentages
   if (text.includes("%") || lower.includes("percent")) {
@@ -137,6 +140,16 @@ function validateLLMOutput(text: string): boolean {
   }
   // Forbidden phrases that create false guarantees
   if (lower.includes("guaranteed") || lower.includes("100% chance") || lower.includes("certain to get")) {
+    return false;
+  }
+  // Reject HTML scripts, iframes, and dangerous handlers
+  if (
+    lower.includes("<script") ||
+    lower.includes("<iframe") ||
+    lower.includes("javascript:") ||
+    lower.includes("onerror=") ||
+    lower.includes("onload=")
+  ) {
     return false;
   }
   return true;
@@ -216,7 +229,8 @@ RULES:
       parsed &&
       typeof parsed.summary === "string" &&
       Array.isArray(parsed.nextActions) &&
-      validateLLMOutput(parsed.summary)
+      validateLLMOutput(parsed.summary) &&
+      parsed.nextActions.every((act: any) => typeof act === "string" && validateLLMOutput(act))
     ) {
       // Increment user usage
       usage.count += 1;

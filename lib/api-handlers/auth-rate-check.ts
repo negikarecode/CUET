@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
 export const dynamic = "force-dynamic";
 
@@ -27,14 +28,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Custom rate-limiting is temporarily disabled across CUETMate
+    const identifier = getClientRateLimitIdentifier(req, body.identifier, action);
+    const result = await rateLimit(action, identifier);
+
+    if (!result.success) {
+      return rateLimitResponse(result);
+    }
+
     return NextResponse.json({
       allowed: true,
       success: true,
       action: action || "auth",
-      remaining: 999999,
-      limit: 999999,
-      reset: 0,
+      remaining: result.remaining,
+      limit: result.limit,
+      reset: result.reset,
     });
   } catch (err: any) {
     return NextResponse.json(

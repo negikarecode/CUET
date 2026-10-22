@@ -95,21 +95,32 @@ async function runTestSuite() {
     assert(data.allowed === true, "Request is allowed without custom rate-limit throttling");
   }
 
-  // ─── SCENARIO 3: REPEATED RESEND REQUESTS (NO CUSTOM APPLICATION THROTTLING) ───
-  console.log("\n[SCENARIO 3] Repeated Resend Requests (No Custom Application Throttling)");
+  // ─── SCENARIO 3: REPEATED RESEND REQUESTS (3 ALLOWED PER 15 MIN, 4TH BLOCKED) ───
+  console.log("\n[SCENARIO 3] Repeated Resend Requests (3 Allowed per 15 Min, 4th Gets 429)");
   {
     const uniqueEmail = `spam_resend_${Date.now()}@example.com`;
     const clientIp = `192.168.20.${Math.floor(Math.random() * 200) + 1}`;
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 3; i++) {
       const req = new NextRequest("https://cuetmate.vercel.app/api/auth/rate-check", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-forwarded-for": clientIp },
         body: JSON.stringify({ action: "auth:resend_verification", identifier: uniqueEmail }),
       });
       const res = await rateCheckHandler(req);
-      assert(res.status === 200, `Resend request ${i} allowed without custom 429 block`);
+      assert(res.status === 200, `Resend request ${i} allowed within quota (HTTP 200)`);
     }
+
+    // 4th request must trigger rate limit
+    const fourthReq = new NextRequest("https://cuetmate.vercel.app/api/auth/rate-check", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-forwarded-for": clientIp },
+      body: JSON.stringify({ action: "auth:resend_verification", identifier: uniqueEmail }),
+    });
+    const fourthRes = await rateCheckHandler(fourthReq);
+    assert(fourthRes.status === 429, "4th resend request is rate limited with human-friendly HTTP 429");
+    const fourthJson = await fourthRes.json();
+    assert(fourthJson.code === "RATE_LIMIT_EXCEEDED", "Error payload includes RATE_LIMIT_EXCEEDED code");
 
     // Verify that when Supabase returns an email rate limit, parseAuthError formats it human-friendly
     const mockProviderError = { message: "Email rate limit exceeded", status: 429 };
@@ -255,12 +266,12 @@ async function runTestSuite() {
     assert(resendsExecuted === 1, "Only 1 resend was dispatched over the wire");
   }
 
-  // ─── SCENARIO 9: SIGNUP FLOW WITHOUT CUSTOM APPLICATION IP THROTTLING ──────
-  console.log("\n[SCENARIO 9] Signup Flow Without Custom Application IP Throttling");
+  // ─── SCENARIO 9: SIGNUP FLOW ABUSE DEFENSE (15 ALLOWED PER 15M, 16TH BLOCKED) ──
+  console.log("\n[SCENARIO 9] Signup Flow Abuse Defense (15 Allowed, 16th Triggers 429)");
   {
     const sharedIp = `10.99.${Math.floor(Math.random() * 200) + 1}.${Math.floor(Math.random() * 200) + 1}`;
 
-    for (let i = 1; i <= 20; i++) {
+    for (let i = 1; i <= 15; i++) {
       const req = new NextRequest("https://cuetmate.vercel.app/api/auth/rate-check", {
         method: "POST",
         headers: {
@@ -271,8 +282,20 @@ async function runTestSuite() {
       });
 
       const res = await rateCheckHandler(req);
-      assert(res.status === 200, `Signup check ${i} succeeds without custom 429 throttling`);
+      assert(res.status === 200, `Signup check ${i} succeeds within 15-request quota`);
     }
+
+    // 16th request must trigger rate limit
+    const sixteenthReq = new NextRequest("https://cuetmate.vercel.app/api/auth/rate-check", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-forwarded-for": sharedIp,
+      },
+      body: JSON.stringify({ action: "auth:signup" }),
+    });
+    const sixteenthRes = await rateCheckHandler(sixteenthReq);
+    assert(sixteenthRes.status === 429, "16th signup request triggers IP abuse rate limit with HTTP 429");
   }
 
   // ─── SCENARIO 10: LEGITIMATE USER SUCCESSFULLY VERIFIES & REACHES DASHBOARD ──

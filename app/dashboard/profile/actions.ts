@@ -29,6 +29,19 @@ export async function updateProfileGoalsAction(input: UpdateProfileGoalsInput) {
       return { success: false, error: "Authentication session expired. Please log in again." };
     }
 
+    const isEmailVerified = Boolean(
+      user.email_confirmed_at ||
+      (user as any).confirmed_at ||
+      (user.app_metadata?.provider && user.app_metadata.provider !== "email")
+    );
+
+    if (!isEmailVerified) {
+      return {
+        success: false,
+        error: "Email verification required before updating candidate goals.",
+      };
+    }
+
     const rateCheck = await rateLimit("user:profile_update", `usr:${user.id}`);
     if (!rateCheck.success) {
       return {

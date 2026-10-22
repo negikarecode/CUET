@@ -59,13 +59,6 @@ export async function updateSession(request: NextRequest) {
     pathname === "/dashboard" || pathname.startsWith("/dashboard/");
   const isTestRoute =
     pathname === "/test" || pathname.startsWith("/test/");
-  const isAuthRoute =
-    pathname === "/signup" ||
-    pathname === "/login" ||
-    pathname === "/verify-email" ||
-    pathname === "/verify-otp" ||
-    pathname === "/forgot-password" ||
-    pathname === "/reset-password";
 
   // Anti-flood rate limiting on public auth pages is temporarily disabled
 
@@ -109,7 +102,14 @@ export async function updateSession(request: NextRequest) {
 
   // 3. Authenticated candidates visiting auth routes:
   // If fully verified, redirect /signup, /login, /verify-email, /verify-otp to dashboard
-  if (isAuthRoute && isAuthenticated && isEmailVerified) {
+  // NOTE: /reset-password and /forgot-password are intentionally excluded to allow password reset/recovery flows
+  const isGuestOnlyAuthRoute =
+    pathname === "/signup" ||
+    pathname === "/login" ||
+    pathname === "/verify-email" ||
+    pathname === "/verify-otp";
+
+  if (isGuestOnlyAuthRoute && isAuthenticated && isEmailVerified) {
     const redirectParam = request.nextUrl.searchParams.get("redirect") || request.nextUrl.searchParams.get("returnUrl");
     const targetPath = getSafeRedirectPath(redirectParam, "/dashboard");
 

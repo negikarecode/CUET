@@ -47,6 +47,22 @@ export async function POST(req: Request) {
       );
     }
 
+    const isEmailVerified = Boolean(
+      authUser.email_confirmed_at ||
+      (authUser as any).confirmed_at ||
+      (authUser.app_metadata?.provider && authUser.app_metadata.provider !== "email")
+    );
+
+    if (!isEmailVerified) {
+      return NextResponse.json(
+        {
+          error: "Email verification required before updating candidate profile.",
+          code: "EMAIL_VERIFICATION_REQUIRED",
+        },
+        { status: 403 }
+      );
+    }
+
     if (authUser.id !== id) {
       return NextResponse.json(
         { error: "Forbidden: Cannot update profile of another user." },
@@ -155,6 +171,13 @@ export async function GET(req: Request) {
         { error: "Unauthorized: Active session required." },
         { status: 401 }
       );
+    }
+
+    // Rate limit profile reads (60 per minute per user) to mitigate automated enumeration
+    const rateIdentifier = getClientRateLimitIdentifier(req, authUser.id, "user:profile_read");
+    const rateCheck = await rateLimit("user:profile_read", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
     }
 
     const isSelf = authUser.id === id;

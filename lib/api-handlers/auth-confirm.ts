@@ -21,7 +21,8 @@ export async function GET(request: NextRequest) {
   const token_hash = searchParams.get("token_hash") || searchParams.get("token");
   const type = (searchParams.get("type") as EmailOtpType | null) || "signup";
   const code = searchParams.get("code");
-  const next = getSafeRedirectPath(searchParams.get("next"));
+  const defaultNext = type === "recovery" ? "/reset-password" : "/dashboard";
+  const next = getSafeRedirectPath(searchParams.get("next"), defaultNext);
 
   // 1. Check for provider-level errors in query parameters
   const errorParam = searchParams.get("error");
@@ -95,18 +96,21 @@ export async function GET(request: NextRequest) {
       console.warn("[Auth VerifyOtp Notice]:", verifyError?.message);
 
       // Repeated Click Defense: If link already used, check if the browser has an active verified session
-      const {
-        data: { user: currentUser },
-      } = await supabase.auth.getUser();
-      if (
-        currentUser &&
-        (currentUser.email_confirmed_at ||
-          (currentUser as any).confirmed_at ||
-          (currentUser.app_metadata?.provider &&
-            currentUser.app_metadata.provider !== "email"))
-      ) {
-        console.log(`[Auth Confirm] Repeated click detected. User ${currentUser.id} is already verified. Redirecting to ${next}`);
-        return response;
+      // Strictly exclude 'recovery' type to ensure expired or invalid recovery tokens NEVER bypass verification
+      if (type !== "recovery") {
+        const {
+          data: { user: currentUser },
+        } = await supabase.auth.getUser();
+        if (
+          currentUser &&
+          (currentUser.email_confirmed_at ||
+            (currentUser as any).confirmed_at ||
+            (currentUser.app_metadata?.provider &&
+              currentUser.app_metadata.provider !== "email"))
+        ) {
+          console.log(`[Auth Confirm] Repeated click detected. User ${currentUser.id} is already verified. Redirecting to ${next}`);
+          return response;
+        }
       }
     }
   }
@@ -203,10 +207,13 @@ export async function GET(request: NextRequest) {
   }
 
   // 5. Verification Failed / Expired Link
-  const failureUrl = new URL("/verify-email", origin);
+  const failurePath = type === "recovery" ? "/forgot-password" : "/verify-email";
+  const failureUrl = new URL(failurePath, origin);
   failureUrl.searchParams.set(
     "error",
-    "The confirmation link is invalid, expired, or has already been used. Please request a new confirmation email."
+    type === "recovery"
+      ? "The password reset link is invalid or has expired. Please request a new reset link."
+      : "The confirmation link is invalid, expired, or has already been used. Please request a new confirmation email."
   );
   return NextResponse.redirect(failureUrl);
 }

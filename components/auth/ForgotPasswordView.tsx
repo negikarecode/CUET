@@ -45,6 +45,23 @@ export default function ForgotPasswordView({
     setErrorMessage(null);
 
     try {
+      // Preliminary rate limit check before dispatching recovery email
+      const rateCheck = await fetch("/api/auth/rate-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "auth:password_recovery", identifier: cleanEmail }),
+      }).catch(() => null);
+
+      if (rateCheck && rateCheck.status === 429) {
+        const errJson = await rateCheck.json().catch(() => ({}));
+        setErrorMessage(
+          errJson.error || "Too many password reset requests. Please wait a few minutes before trying again."
+        );
+        setIsLoading(false);
+        isSubmittingRef.current = false;
+        return;
+      }
+
       const supabase = createClient();
       const origin =
         typeof window !== "undefined" && window.location.origin

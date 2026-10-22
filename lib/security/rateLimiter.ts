@@ -232,10 +232,15 @@ function checkLocalSlidingWindow(
 }
 
 /**
- * Master switch to temporarily disable all custom request rate-limiting across CUETMate.
- * Set to true to permit all requests unconditionally without throttling.
+ * Central switch to control rate-limiting across CUETMate.
+ * Default is FALSE (production security rate limiting strictly active and enforced).
+ * Can be configured via setRateLimitingDisabled() for controlled test isolation.
  */
-export const RATE_LIMITING_DISABLED = true;
+export let RATE_LIMITING_DISABLED = false;
+
+export function setRateLimitingDisabled(disabled: boolean): void {
+  RATE_LIMITING_DISABLED = disabled;
+}
 
 /**
  * Primary rate limit evaluation function.
