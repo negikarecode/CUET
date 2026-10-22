@@ -7,6 +7,9 @@ import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "
 import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 import { tokenLogger } from "@/lib/ai/token-logger";
 import { checkAIQualificationGate } from "@/lib/ai-gate";
+import { getUserEntitlement } from "@/lib/payments/entitlements";
+import { stringToUuid } from "@/lib/utils";
+import { sanitizeQuestionForActiveExam } from "@/lib/store/useCBTStore";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -33,12 +36,6 @@ export interface RepairQuizResponse {
   targetTopics: string[];
   questions: Question[];
 }
-
-const memoryQuizCache = new Map<
-  string,
-  { data: RepairQuizResponse; cachedAt: number }
->();
-const QUIZ_CACHE_TTL_MS = 5 * 60 * 1000;
 
 export async function POST(req: NextRequest) {
   const startTime = Date.now();
@@ -80,7 +77,6 @@ export async function POST(req: NextRequest) {
     const userId = authUser.id;
 
     // Authoritative server-side entitlement check (Never trust body.userId)
-    const { getUserEntitlement } = await import("@/lib/payments/entitlements");
     const entitlement = await getUserEntitlement(userId);
     if (!entitlement.isPremium) {
       return NextResponse.json(
@@ -184,7 +180,7 @@ export async function POST(req: NextRequest) {
       for (const topic of targetTopics) {
         let topicQuestions: any[] = [];
         try {
-          const { data: dbQuestions } = await supabase
+          const { data: dbQuestions } = await supabaseAdmin
             .from("questions")
             .select("*")
             .eq("micro_topic", topic)
@@ -201,7 +197,7 @@ export async function POST(req: NextRequest) {
 
         if (topicQuestions.length < 5) {
           try {
-            const { data: similarQuestions } = await supabase
+            const { data: similarQuestions } = await supabaseAdmin
               .from("questions")
               .select("*")
               .ilike("micro_topic", `%${topic.split(" ")[0]}%`)
@@ -268,6 +264,7 @@ export async function POST(req: NextRequest) {
 
       const finalQuestions = assembledQuestions.slice(0, 15);
       const drillTestId = `adaptive_drill_${userId.slice(0, 8)}_${Date.now()}`;
+      const drillTestUuid = stringToUuid(drillTestId);
       const subject = finalQuestions[0]?.subjectId || "Science";
 
       try {
@@ -280,9 +277,10 @@ export async function POST(req: NextRequest) {
       }
 
       try {
-        await supabaseAdmin.from("tests").upsert(
+        // 1. Persist tests row
+        const { error: testErr } = await supabaseAdmin.from("tests").upsert(
           {
-            id: drillTestId,
+            id: drillTestUuid,
             title: `15-Question Adaptive Micro-Drill (${targetTopics.join(", ")})`,
             subject,
             total_questions: finalQuestions.length,
@@ -291,8 +289,25 @@ export async function POST(req: NextRequest) {
           },
           { onConflict: "id" }
         );
-      } catch {
-        // Test registered or in-memory
+        if (testErr) throw testErr;
+
+        // 2. Persist test_questions rows referencing existing bank question IDs
+        // NOTE: Never upsert questions that already exist in the bank; only link them via test_questions
+        const junctionRows = finalQuestions.map((q, idx) => ({
+          test_id: drillTestUuid,
+          question_id: stringToUuid(q.id),
+          order_index: idx + 1,
+        }));
+        const { error: tqErr } = await supabaseAdmin
+          .from("test_questions")
+          .upsert(junctionRows, { onConflict: "test_id,question_id" });
+        if (tqErr) throw tqErr;
+      } catch (dbErr) {
+        console.error("Adaptive drill DB persistence error:", dbErr);
+        return NextResponse.json(
+          { error: "Failed to persist adaptive drill to database.", code: "PERSISTENCE_FAILED" },
+          { status: 500 }
+        );
       }
 
       return NextResponse.json({
@@ -304,7 +319,7 @@ export async function POST(req: NextRequest) {
         totalQuestions: finalQuestions.length,
         durationMinutes: 18,
         targetTopics,
-        questions: finalQuestions,
+        questions: finalQuestions.map(sanitizeQuestionForActiveExam),
         cadence: {
           lastDrillAt: new Date().toISOString(),
           nextAvailableAt: new Date(Date.now() + CADENCE_LIMIT_MS).toISOString(),
@@ -314,7 +329,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ─── CASE B: 5-QUESTION TARGETED REMEDIAL REPAIR QUIZ ────────────────────
-    const { weakMicroTopics, subject, practiceType } = body;
+    const { weakMicroTopics, subject } = body;
 
     if (!Array.isArray(weakMicroTopics) || weakMicroTopics.length === 0) {
       return NextResponse.json(
@@ -331,26 +346,7 @@ export async function POST(req: NextRequest) {
     }
 
     const legacyClientId = getClientIdentifier(req, userId);
-
     const primaryTopics = weakMicroTopics.slice(0, 3);
-    const cacheKey = `${legacyClientId}:${subject || "general"}:${primaryTopics.sort().join("_")}`;
-
-    const isRetest = practiceType === "retest";
-    const cachedQuiz = !isRetest ? memoryQuizCache.get(cacheKey) : null;
-    if (cachedQuiz && Date.now() - cachedQuiz.cachedAt < QUIZ_CACHE_TTL_MS) {
-      tokenLogger.logUsage({
-        userId,
-        feature: "repair_quiz",
-        model: "cache",
-        promptTokens: 0,
-        completionTokens: 0,
-        latencyMs: Date.now() - startTime,
-        cached: true,
-      });
-      return NextResponse.json(cachedQuiz.data, {
-        headers: { "X-Cache": "HIT" },
-      });
-    }
 
     const dailyDrillLimit = checkServerRateLimit("repair_drills", legacyClientId, 30);
     if (!dailyDrillLimit.allowed) {
@@ -381,7 +377,7 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      let query = supabase.from("questions").select("*");
+      let query = supabaseAdmin.from("questions").select("*");
       if (primaryTopics.length > 0) {
         query = query.in("micro_topic", primaryTopics);
       }
@@ -468,7 +464,43 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const structuredDrillQuestions = selectedQuestions.slice(0, 5).map((q, idx) => {
+    // Filter questions: Never default correct_option to "A": skip question or fail if key is missing
+    const validCandidateQuestions: Question[] = [];
+    for (const q of selectedQuestions) {
+      const correctKey = (
+        q.correctOptionId ||
+        (q as any).correct_option ||
+        ""
+      )
+        .toString()
+        .trim()
+        .toUpperCase();
+
+      if (!["A", "B", "C", "D"].includes(correctKey)) {
+        // Skip question if answer key is missing or invalid
+        continue;
+      }
+
+      validCandidateQuestions.push({
+        ...q,
+        correctOptionId: correctKey as "A" | "B" | "C" | "D",
+      });
+      if (validCandidateQuestions.length === 5) break;
+    }
+
+    if (validCandidateQuestions.length === 0) {
+      return NextResponse.json(
+        { error: "No questions with valid authoritative keys available.", code: "MISSING_AUTHORITATIVE_KEYS" },
+        { status: 500 }
+      );
+    }
+
+    const testId = `repair_quiz_${userId.slice(0, 8)}_${(subject || "physics").toLowerCase().replace(/[^a-z0-9]/g, "_")}_${Date.now()}`;
+    const testUuid = stringToUuid(testId);
+
+    // AI-generated questions (Case B): derive IDs as `${testId}_q_${idx}`, never from q.id
+    const structuredDrillQuestions = validCandidateQuestions.map((q, idx) => {
+      const derivedQId = `${testId}_q_${idx}`;
       let stageTag = "Foundation & Core Concept";
       let targetDifficulty: "easy" | "medium" | "hard" = "easy";
       if (idx === 0) {
@@ -490,28 +522,86 @@ export async function POST(req: NextRequest) {
 
       return {
         ...q,
+        id: derivedQId,
+        questionId: derivedQId,
         questionNumber: idx + 1,
         difficulty: targetDifficulty,
         aiDiagnosisNotes: `${stageTag}: Addressing detected pattern in ${primaryTopics.join(", ")}.`,
       };
     });
 
-    const testId = `repair_quiz_${(subject || "physics").toLowerCase().replace(/[^a-z0-9]/g, "_")}_${Date.now()}`;
+    try {
+      // 1. Persist tests row
+      const { error: testErr } = await supabaseAdmin.from("tests").upsert(
+        {
+          id: testUuid,
+          title: `Adaptive Repair Drill • ${primaryTopics.join(", ")}`,
+          subject: subject || "Targeted Concept Remediation",
+          total_questions: structuredDrillQuestions.length,
+          duration_minutes: 6,
+          is_active: true,
+        },
+        { onConflict: "id" }
+      );
+      if (testErr) throw testErr;
+
+      // 2. Persist questions rows
+      // Derive IDs as `${testId}_q_${idx}`, never from q.id
+      const questionsToUpsert = structuredDrillQuestions.map((q, idx) => {
+        const derivedQId = `${testId}_q_${idx}`;
+        const qUuid = stringToUuid(derivedQId);
+        return {
+          id: qUuid,
+          subject: q.subjectId || subject || "General",
+          chapter: q.chapter || "Domain Core",
+          micro_topic: q.topic || (q as any).microTopic || primaryTopics[0] || "Core Concept",
+          ncert_reference: (q as any).ncertReference || (q as any).ncert_reference || `NCERT Class 12 (${q.chapter || "Core"})`,
+          archetype: (q as any).archetype || "Direct Fact",
+          question_text: q.prompt || (q as any).question_text || `Question ${idx + 1}`,
+          option_a: q.options?.find((o: any) => o.id === "A")?.text || (q as any).option_a || "Option A",
+          option_b: q.options?.find((o: any) => o.id === "B")?.text || (q as any).option_b || "Option B",
+          option_c: q.options?.find((o: any) => o.id === "C")?.text || (q as any).option_c || "Option C",
+          option_d: q.options?.find((o: any) => o.id === "D")?.text || (q as any).option_d || "Option D",
+          correct_option: q.correctOptionId,
+          explanation: q.explanation || "Official Solution",
+        };
+      });
+      const { error: qErr } = await supabaseAdmin
+        .from("questions")
+        .upsert(questionsToUpsert, { onConflict: "id" });
+      if (qErr) throw qErr;
+
+      // 3. Persist test_questions rows
+      const junctionRows = structuredDrillQuestions.map((_q, idx) => {
+        const derivedQId = `${testId}_q_${idx}`;
+        return {
+          test_id: testUuid,
+          question_id: stringToUuid(derivedQId),
+          order_index: idx + 1,
+        };
+      });
+      const { error: tqErr } = await supabaseAdmin
+        .from("test_questions")
+        .upsert(junctionRows, { onConflict: "test_id,question_id" });
+      if (tqErr) throw tqErr;
+    } catch (dbErr) {
+      console.error("Repair quiz DB persistence error:", dbErr);
+      return NextResponse.json(
+        { error: "Failed to persist repair quiz to database.", code: "PERSISTENCE_FAILED" },
+        { status: 500 }
+      );
+    }
+
     const responsePayload: RepairQuizResponse = {
       testId,
       title: `Adaptive Repair Drill • ${primaryTopics.join(", ")}`,
       subject: subject || "Targeted Concept Remediation",
       code: "AI-REPAIR-05",
-      totalQuestions: 5,
+      totalQuestions: structuredDrillQuestions.length,
       durationMinutes: 6,
       targetTopics: primaryTopics,
-      questions: structuredDrillQuestions,
+      questions: structuredDrillQuestions.map(sanitizeQuestionForActiveExam),
     };
-
-    memoryQuizCache.set(cacheKey, {
-      data: responsePayload,
-      cachedAt: Date.now(),
-    });
 
     tokenLogger.logUsage({
       userId,

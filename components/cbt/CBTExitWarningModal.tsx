@@ -98,7 +98,7 @@ export default function CBTExitWarningModal() {
             <p className="mt-1.5 text-xs font-medium text-rose-900/80 leading-relaxed">
               {t(
                 "noDataWarningDesc",
-                "If you close, refresh, or back out of this test now, no data will be recorded. Your responses, scores, accuracy, and test attempt will NOT be saved to your dashboard or leaderboard."
+                "If you close, refresh, or back out of this test now, no data will be recorded. Your responses, scores, accuracy, and test attempt will NOT be saved to your dashboard."
               )}
             </p>
           </div>

@@ -10,7 +10,6 @@ import {
   Award,
 } from "lucide-react";
 import { MOCK_SAMPLE_QUESTION } from "@/lib/data/subjects";
-import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 import LatexRenderer from "@/components/common/LatexRenderer";
@@ -23,7 +22,6 @@ export default function CBTMockPreview() {
   const [showAiDiagnosis, setShowAiDiagnosis] = useState(true);
   const [secondsRemaining, setSecondsRemaining] = useState(59 * 60 + 42); // 59m 42s
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
-  const addXP = useTestStore((state) => state.addXP);
 
   // Countdown timer simulation
   useEffect(() => {
@@ -202,9 +200,6 @@ export default function CBTMockPreview() {
                   <button
                     type="button"
                     onClick={() => {
-                      if (selectedOption) {
-                        addXP(15);
-                      }
                       setShowAiDiagnosis(true);
                     }}
                     className="px-5 py-2.5 text-xs font-semibold rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xs hover:shadow flex items-center gap-2 transition-all cursor-pointer"

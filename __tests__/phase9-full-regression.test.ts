@@ -160,7 +160,7 @@ async function runPhase9RegressionSuite() {
   console.log("\n[SECTION 3: PREMIUM ACCESS & RAZORPAY TEST GATEWAY]");
 
   // Scenario 14: Every Premium-only page is locked for Free users
-  const premiumPages = ["/dashboard/standing", "/dashboard/radar", "/dashboard/leaderboard"];
+  const premiumPages = ["/dashboard/standing", "/dashboard/radar"];
   function checkPageGuard(page: string, isPremium: boolean) {
     if (!isPremium && premiumPages.includes(page)) {
       return { status: "locked", render: "LockedFeaturePaywall" };
@@ -173,14 +173,13 @@ async function runPhase9RegressionSuite() {
 
   // Scenario 15: Every corresponding protected API rejects unauthorized requests
   function simulateApiAccess(endpoint: string, isPremium: boolean) {
-    const protectedApis = ["/api/ai/insights", "/api/ai/doubt-solver", "/api/ai/repair-quiz", "/api/leaderboard"];
+    const protectedApis = ["/api/ai/insights", "/api/ai/doubt-solver", "/api/ai/repair-quiz"];
     if (protectedApis.includes(endpoint) && !isPremium) {
       return { status: 403, code: "PAYWALL_FEATURE_LOCKED" };
     }
     return { status: 200 };
   }
   assert(simulateApiAccess("/api/ai/insights", false).status === 403, "15a. /api/ai/insights returns 403 for free candidate");
-  assert(simulateApiAccess("/api/leaderboard", false).status === 403, "15b. /api/leaderboard returns 403 for free candidate");
 
   // Scenario 16: Editing client state cannot grant Premium
   function resolveServerEntitlement(serverProfile: { is_premium: boolean }, _clientStoreState: { isPremium: boolean }) {

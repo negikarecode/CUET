@@ -10,7 +10,6 @@ import {
   ClipboardCheck,
   Compass,
   Target,
-  Award,
   User,
   LogOut,
   X,
@@ -103,13 +102,6 @@ export default function DashboardSidebar() {
       href: "/dashboard/radar",
       icon: Target,
       active: pathname.startsWith("/dashboard/radar"),
-    },
-    {
-      id: "leaderboard",
-      label: "Leaderboard",
-      href: "/dashboard/leaderboard",
-      icon: Award,
-      active: pathname === "/dashboard/leaderboard",
     },
     {
       id: "profile",

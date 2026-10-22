@@ -10,7 +10,7 @@
  * 6. A fourth eligible practice session is blocked.
  * 7. Only one eligible PYQ attempt per subject is allowed.
  * 8. Free users cannot bypass restrictions through direct URLs or API requests.
- * 9. Premium-only AI, college predictor and leaderboard APIs reject Free users.
+ * 9. Premium-only AI and college predictor APIs reject Free users.
  * 10. Verified Premium users can access entitled features.
  * 11. Unverified users cannot access protected functionality.
  * 12. Duplicate submissions do not consume additional usage (idempotency).
@@ -343,11 +343,11 @@ async function runAll20RegressionScenarios() {
   assert(directApiExceeded.status === 403, "8b. Direct API request exceeding quota returns 403");
 
   // ─────────────────────────────────────────────────────────────────────────
-  // SCENARIO 9: Premium-only AI, college predictor and leaderboard APIs reject Free users
+  // SCENARIO 9: Premium-only AI and college predictor APIs reject Free users
   // ─────────────────────────────────────────────────────────────────────────
-  console.log("\n[SCENARIO 9] Premium-only AI, predictor, and leaderboard APIs reject Free users");
+  console.log("\n[SCENARIO 9] Premium-only AI and predictor APIs reject Free users");
   function simulateFeatureGate(feature: string, isPremium: boolean) {
-    const premiumFeatures = ["ai_insights", "college_predictor", "radar_full", "leaderboard"];
+    const premiumFeatures = ["ai_insights", "college_predictor", "radar_full"];
     if (premiumFeatures.includes(feature) && !isPremium) {
       return { status: 403, error: "PREMIUM_REQUIRED" };
     }
@@ -355,7 +355,6 @@ async function runAll20RegressionScenarios() {
   }
   assert(simulateFeatureGate("ai_insights", false).status === 403, "9a. AI insights API rejects Free user with 403");
   assert(simulateFeatureGate("college_predictor", false).status === 403, "9b. College predictor API rejects Free user with 403");
-  assert(simulateFeatureGate("leaderboard", false).status === 403, "9c. Leaderboard API rejects Free user with 403");
 
   // ─────────────────────────────────────────────────────────────────────────
   // SCENARIO 10: Verified Premium users can access entitled features

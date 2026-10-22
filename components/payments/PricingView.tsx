@@ -129,12 +129,6 @@ export default function PricingView() {
                 </span>
                 <span>Subject Weakness Radar & AI Diagnosis</span>
               </div>
-              <div className="flex items-center gap-2.5 text-slate-400">
-                <span className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-400">
-                  <X className="w-3 h-3 stroke-[2]" />
-                </span>
-                <span>All-India Trophy Leaderboard</span>
-              </div>
             </div>
           </div>
 
@@ -213,7 +207,7 @@ export default function PricingView() {
                 <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
-                <span><strong>All-India Leaderboard:</strong> Live national ranking</span>
+                <span><strong>Target College Standing:</strong> Real-time cutoff prediction</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-amber-50 border border-amber-200/60 flex items-center justify-center shrink-0 text-amber-600">
@@ -285,7 +279,7 @@ export default function PricingView() {
                   <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-indigo-50/20"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
-                  <td className="py-3.5 px-6">All-India Trophy Leaderboard</td>
+                  <td className="py-3.5 px-6">Target College Cutoff Standing & Gaps</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
                   <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-indigo-50/20"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>

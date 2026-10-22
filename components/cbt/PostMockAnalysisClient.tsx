@@ -23,7 +23,6 @@ import {
   AIPostMockInsight,
   NormalizedDifficulty,
 } from "@/types/postMockAnalysis";
-import { Trophy } from "@/types";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { getTestAttemptStats } from "@/lib/analytics";
 import MathRenderer from "@/components/cbt/MathRenderer";
@@ -72,8 +71,6 @@ interface PostMockAnalysisClientProps {
   onRetake?: () => void;
   initialSelectedChapter?: string;
   initialSelectedDifficulty?: NormalizedDifficulty;
-  earnedXP?: number;
-  unlockedTrophies?: Trophy[];
   attemptsCount?: number;
   bestMarks?: number;
   bestAccuracy?: number;
@@ -86,8 +83,6 @@ export default function PostMockAnalysisClient({
   onRetake,
   initialSelectedChapter,
   initialSelectedDifficulty,
-  earnedXP: propEarnedXP,
-  unlockedTrophies: propUnlockedTrophies,
   attemptsCount: propAttemptsCount,
   bestMarks: propBestMarks,
   bestAccuracy: propBestAccuracy,
@@ -413,11 +408,6 @@ export default function PostMockAnalysisClient({
             <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Score</span>
-                {propEarnedXP && propEarnedXP > 0 ? (
-                  <span className="text-[9px] font-semibold font-mono bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded-full border border-amber-200">
-                    +{propEarnedXP} XP
-                  </span>
-                ) : null}
               </div>
               <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
                 {overall.totalMarks}{" "}
@@ -546,17 +536,6 @@ export default function PostMockAnalysisClient({
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          {/* Trophies celebration if unlocked */}
-          {propUnlockedTrophies && propUnlockedTrophies.length > 0 && (
-            <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-center gap-3 shrink-0 shadow-xs">
-              <Award className="w-5 h-5 text-amber-600" />
-              <div className="text-xs font-semibold text-amber-900">
-                <span className="font-bold">Unlocked: </span>
-                {propUnlockedTrophies.map((t) => t.title).join(", ")}
-              </div>
-            </div>
-          )}
-
           <button
             type="button"
             onClick={() => toggleSection("benchmark")}

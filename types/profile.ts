@@ -40,23 +40,9 @@ export interface WeakMicroTopicItem {
   avgTimeSeconds: number;
 }
 
-export interface ProfileTrophyItem {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  xpReward: number;
-  coinReward: number;
-  isUnlocked: boolean;
-  unlockedAt: string | null;
-  criteria: string;
-  progressPercentage: number;
-}
-
 export interface ProfileInitialData {
   profile: StudentProfileData;
   diagnostic: DiagnosticReadiness;
   weakTopics: WeakMicroTopicItem[];
-  trophies: ProfileTrophyItem[];
   serverAttempts?: import("@/types").RecordedTestAttempt[];
 }

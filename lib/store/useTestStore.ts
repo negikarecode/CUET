@@ -28,7 +28,6 @@ interface TestStoreState {
   setSelectedStream: (stream: StreamType) => void;
   incrementStreak: () => void;
   setStreak: (streak: number) => void;
-  addXP: (amount: number) => void;
   addCoins: (amount: number) => void;
   setTargetCollege: (college: string) => void;
   loginUser: (profile: Partial<UserStats>) => void;
@@ -272,15 +271,6 @@ export const useTestStore = create<TestStoreState>()(
           user: {
             ...state.user,
             dailyStreak: Math.max(0, streak),
-          },
-        }));
-      },
-
-      addXP: (amount: number) => {
-        set((state) => ({
-          user: {
-            ...state.user,
-            xpPoints: state.user.xpPoints + amount,
           },
         }));
       },
@@ -538,9 +528,6 @@ export const useTestStore = create<TestStoreState>()(
         // Canonical analytics computation (guarantees 1 question = 1 attempt)
         const analytics = computeAnalyticsFromAttempts(updatedAttempts);
 
-        // Calculate XP delta: low effort gets 5 XP, normal gets full 50 XP
-        const xpAward = validity.isLowEffort ? 5 : 50;
-
         // Synchronously update testAttempts and analytics IMMEDIATELY so any concurrent read sees the recorded attempt
         const dynamicStreak = calculateStreakFromAttempts(updatedAttempts);
         set((state) => ({
@@ -551,7 +538,6 @@ export const useTestStore = create<TestStoreState>()(
             dailyStreak: dynamicStreak,
             accuracyPercentage: analytics.overallAccuracyPercentage,
             completedTestsCount: analytics.completedTestsCount,
-            xpPoints: (state.user.xpPoints || 0) + xpAward,
           },
         }));
 
@@ -634,6 +620,7 @@ export const useTestStore = create<TestStoreState>()(
                       const trueOpt =
                         q.correctOptionId ||
                         q.correctOption ||
+                        q.correct_option ||
                         q.options?.find((o: any) => o.isCorrect === true)?.id;
                       if (trueOpt && st.selectedOption === trueOpt) {
                         derivedCorrect++;
@@ -701,6 +688,7 @@ export const useTestStore = create<TestStoreState>()(
                       const trueOpt =
                         q.correctOptionId ||
                         q.correctOption ||
+                        q.correct_option ||
                         q.options?.find((o: any) => o.isCorrect === true)?.id;
                       const isCorrect =
                         selectedOption !== null && selectedOption !== undefined

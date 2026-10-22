@@ -2,7 +2,6 @@ import { GoogleGenAI, Type } from "@google/genai";
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
-import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { stringToUuid } from "@/lib/utils";
 
@@ -275,8 +274,7 @@ export async function diagnoseMistake(
 
   // ─── 2. CHECK SUPABASE ai_diagnosis_cache TABLE (0 TOKENS) ────────────────
   try {
-    const supabase = createClient();
-    const { data: cachedRow } = await supabase
+    const { data: cachedRow } = await supabaseAdmin
       .from("ai_diagnosis_cache")
       .select("error_classification, diagnosis_message, ncert_correction")
       .eq("cache_key", cacheKey)

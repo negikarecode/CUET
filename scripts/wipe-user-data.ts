@@ -55,9 +55,6 @@ async function main() {
   const { error: smrErr } = await supabase.from('sunday_mentor_reports').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   if (smrErr) console.warn('Warning deleting sunday_mentor_reports:', smrErr.message);
 
-  const { error: utErr } = await supabase.from('user_trophies').delete().neq('user_id', '00000000-0000-0000-0000-000000000000');
-  if (utErr) console.warn('Warning deleting user_trophies:', utErr.message);
-
   const { error: uaErr } = await supabase.from('user_attempts').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   if (uaErr) console.warn('Warning deleting user_attempts:', uaErr.message);
 
@@ -81,7 +78,6 @@ async function main() {
   console.log('\n--- Verification ---');
   const { count: remainingProfiles } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
   const { count: remainingAttempts } = await supabase.from('user_attempts').select('*', { count: 'exact', head: true });
-  const { count: remainingTrophies } = await supabase.from('user_trophies').select('*', { count: 'exact', head: true });
   const { count: remainingReports } = await supabase.from('sunday_mentor_reports').select('*', { count: 'exact', head: true });
   const { data: remainingAuth } = await supabase.auth.admin.listUsers({ page: 1, perPage: 10 });
   const { count: finalQuestions } = await supabase.from('questions').select('*', { count: 'exact', head: true });
@@ -90,7 +86,6 @@ async function main() {
   console.log(`Remaining auth.users: ${remainingAuth?.users?.length ?? 0}`);
   console.log(`Remaining profiles: ${remainingProfiles ?? 0}`);
   console.log(`Remaining user_attempts: ${remainingAttempts ?? 0}`);
-  console.log(`Remaining user_trophies: ${remainingTrophies ?? 0}`);
   console.log(`Remaining sunday_mentor_reports: ${remainingReports ?? 0}`);
   console.log(`Questions intact: ${finalQuestions ?? 0}`);
   console.log(`Tests intact: ${finalTests ?? 0}`);

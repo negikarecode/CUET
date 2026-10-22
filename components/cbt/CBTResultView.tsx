@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import { Loader2 } from "lucide-react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { calculateXP, updateStreak, evaluateTrophies } from "@/lib/gamification";
+import { updateStreak } from "@/lib/gamification";
 import { getTestAttemptStats } from "@/lib/analytics";
-import { Trophy, RecordedTestAttempt } from "@/types";
+import { RecordedTestAttempt } from "@/types";
 import PostMockAnalysisClient from "./PostMockAnalysisClient";
 import { buildPostMockDeterministicReport } from "@/lib/post-mock-engine";
 import { stringToUuid } from "@/lib/utils";
@@ -20,13 +20,9 @@ export default function CBTResultView() {
 
   const user = useTestStore((state) => state.user);
   const testAttempts = useTestStore((state) => state.testAttempts);
-  const addXP = useTestStore((state) => state.addXP);
-  const addCoins = useTestStore((state) => state.addCoins);
   const recordTestAttempt = useTestStore((state) => state.recordTestAttempt);
   const setStreak = useTestStore((state) => state.setStreak);
 
-  const [earnedXP, setEarnedXP] = useState(0);
-  const [unlockedTrophies, setUnlockedTrophies] = useState<Trophy[]>([]);
   const hasProcessedRef = useRef(false);
   const currentAttemptRecordRef = useRef<RecordedTestAttempt | null>(null);
 
@@ -57,9 +53,10 @@ export default function CBTResultView() {
     const questionAttempts = questions.map((q) => {
       const ans = answers[q.id];
       const selectedOption = ans?.selectedOption ?? null;
+      const trueCorrect = q.correctOptionId || (q as any).correct_option || (q as any).correctOption || null;
       const isCorrect =
-        selectedOption !== null && selectedOption !== undefined
-          ? selectedOption === q.correctOptionId
+        selectedOption !== null && selectedOption !== undefined && trueCorrect
+          ? selectedOption === trueCorrect
           : null;
       const timeSpent = ans?.timeSpentSeconds ?? 0;
       return {
@@ -73,7 +70,7 @@ export default function CBTResultView() {
         options: q.options,
         questionType: q.questionType,
         selectedOption,
-        correctOption: q.correctOptionId,
+        correctOption: trueCorrect || "",
         isCorrect,
         timeSpentSeconds: timeSpent,
         isTimeSink: timeSpent > 72,
@@ -122,15 +119,6 @@ export default function CBTResultView() {
 
     currentAttemptRecordRef.current = attemptRecord;
 
-    const xp = calculateXP(
-      submittedScore.correctCount,
-      submittedScore.accuracyPercentage,
-      submittedScore.timeTakenSeconds,
-      questions.length
-    );
-    setEarnedXP(xp);
-    addXP(xp);
-
     // Update practice streak
     updateStreak(user.id).then(({ newStreak }) => {
       if (typeof newStreak === "number") {
@@ -138,23 +126,6 @@ export default function CBTResultView() {
       }
     });
 
-    // Evaluate trophy achievements
-    evaluateTrophies(user.id, {
-      totalQuestions: questions.length,
-      correctAnswers: submittedScore.correctCount,
-      accuracyPercentage: submittedScore.accuracyPercentage,
-      totalTimeSpentSeconds: submittedScore.timeTakenSeconds,
-      isRepairQuiz: questions.length <= 5,
-      currentStreak: user.dailyStreak,
-    }).then((newlyUnlocked) => {
-      if (newlyUnlocked.length > 0) {
-        setUnlockedTrophies(newlyUnlocked);
-        newlyUnlocked.forEach((t) => {
-          addXP(t.xp_reward);
-          addCoins(t.coin_reward);
-        });
-      }
-    });
   }, [
     submittedScore,
     questions,
@@ -163,9 +134,6 @@ export default function CBTResultView() {
     recordTestAttempt,
     setStreak,
     user.id,
-    user.dailyStreak,
-    addXP,
-    addCoins,
     testAttempts,
   ]);
 
@@ -203,9 +171,10 @@ export default function CBTResultView() {
       questions: questions.map((q) => {
         const ans = answers[q.id];
         const selectedOption = ans?.selectedOption ?? null;
+        const trueCorrect = q.correctOptionId || (q as any).correct_option || (q as any).correctOption || null;
         const isCorrect =
-          selectedOption !== null && selectedOption !== undefined
-            ? selectedOption === q.correctOptionId
+          selectedOption !== null && selectedOption !== undefined && trueCorrect
+            ? selectedOption === trueCorrect
             : null;
         const timeSpent = ans?.timeSpentSeconds ?? 0;
         return {
@@ -219,7 +188,7 @@ export default function CBTResultView() {
           options: q.options,
           questionType: q.questionType,
           selectedOption,
-          correctOption: q.correctOptionId,
+          correctOption: trueCorrect || "",
           isCorrect,
           timeSpentSeconds: timeSpent,
           isTimeSink: timeSpent > 72,
@@ -236,7 +205,8 @@ export default function CBTResultView() {
     return buildPostMockDeterministicReport(syntheticAttempt, questions);
   }, [questions, answers, submittedScore, testMeta, user.id, testAttempts]);
 
-  if (!submittedScore || (questions.length > 0 && !questions[0]?.correctOptionId)) {
+  const hasRevealedKey = Boolean(questions[0]?.correctOptionId || (questions[0] as any)?.correct_option || (questions[0] as any)?.correctOption);
+  if (!submittedScore || (questions.length > 0 && !hasRevealedKey)) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
         <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center mb-4 shadow-xs">
@@ -273,8 +243,6 @@ export default function CBTResultView() {
       <PostMockAnalysisClient
         report={deterministicReport}
         onRetake={resetSession}
-        earnedXP={earnedXP}
-        unlockedTrophies={unlockedTrophies}
         attemptsCount={attemptsCount}
         bestMarks={bestMarks}
         bestAccuracy={bestAccuracy}

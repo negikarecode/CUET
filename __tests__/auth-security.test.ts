@@ -113,7 +113,6 @@ async function runAuthSecurityTests() {
     "/dashboard/sessions",
     "/dashboard/radar",
     "/dashboard/standing",
-    "/dashboard/leaderboard",
   ];
   const authRoutes = ["/signup", "/login", "/verify-otp", "/forgot-password"];
 

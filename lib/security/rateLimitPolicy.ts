@@ -124,13 +124,6 @@ export const RATE_LIMIT_POLICIES: Record<string, RateLimitPolicy> = {
     scope: "user",
     errorMessage: "Profile update rate limit reached. Please wait a moment before saving changes again.",
   },
-  "user:leaderboard": {
-    max: 30,
-    windowSeconds: 60, // 30 per minute
-    failClosed: false,
-    scope: "combined",
-    errorMessage: "Leaderboard request limit reached. Please wait a moment before refreshing.",
-  },
   "student:attempts_delete": {
     max: 5,
     windowSeconds: 10 * 60, // 5 per 10 minutes per user

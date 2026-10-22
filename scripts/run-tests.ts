@@ -347,7 +347,7 @@ async function runTestSuite() {
   const sanitized = sanitizeQuestionForActiveExam(mockQuestion);
 
   assert(
-    (sanitized.correctOptionId as string) === "",
+    !sanitized.correctOptionId || sanitized.correctOptionId === "",
     "Security Sanitizer: correctOptionId is cleared during active test"
   );
   assert(
@@ -620,7 +620,6 @@ What is the immediate impact on commercial banks when RBI increases the repo rat
     "/dashboard",
     "/dashboard/mocks",
     "/dashboard/pyqs",
-    "/dashboard/leaderboard",
     "/dashboard/standing",
     "/dashboard/mocks/physics",
   ];

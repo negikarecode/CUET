@@ -3,6 +3,7 @@ import { getCachedWhyWrongExplanation, setCachedWhyWrongExplanation, getCachedSu
 import { checkServerRateLimit, getClientIdentifier, getRateLimitHeaders } from "@/lib/rate-limiter";
 import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { tokenLogger } from "@/lib/ai/token-logger";
 import { getQuestionsForTest } from "@/lib/data/mock50Questions";
 import { getStandingExplanation, StandingExplanationRequest } from "@/lib/ai/standing-explainer";
@@ -378,54 +379,93 @@ export async function POST(req: NextRequest) {
       const { diagnoseMistakeDeterministically } = await import("@/lib/mistake-detective");
       const { diagnoseMistake } = await import("@/lib/ai/gemini-diagnostics");
 
-      const {
-        questionId,
-        selectedOption,
-        questionText,
-        selectedOptionText,
-        correctOption,
-        correctOptionText,
-        explanation,
-        microTopic,
-        timeSpentSeconds,
-      } = body;
+      const rawQuestionId = body.questionId;
+      const rawSelectedOption =
+        typeof body.selectedOption === "string" ? body.selectedOption.trim().toUpperCase() : "";
 
-      if (!questionId || !selectedOption) {
+      // Validate questionId: must be a valid UUID string
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!rawQuestionId || typeof rawQuestionId !== "string" || !uuidRegex.test(rawQuestionId)) {
         return NextResponse.json(
-          { error: "questionId and selectedOption are required." },
+          { error: "Invalid questionId. A valid question UUID is required." },
           { status: 400 }
         );
       }
 
+      // Validate selectedOption: must be in ['A', 'B', 'C', 'D']
+      if (!["A", "B", "C", "D"].includes(rawSelectedOption)) {
+        return NextResponse.json(
+          { error: "Invalid selectedOption. Must be one of 'A', 'B', 'C', or 'D'." },
+          { status: 400 }
+        );
+      }
+
+      const selectedOption = rawSelectedOption as "A" | "B" | "C" | "D";
+
+      // Load authoritative canonical question from public.questions using admin client
+      // Client-supplied texts (questionText, explanation, option texts, topics) are discarded
+      const supabaseAdmin = createAdminClient();
+      const { data: qData, error: qErr } = await supabaseAdmin
+        .from("questions")
+        .select("*")
+        .eq("id", rawQuestionId)
+        .maybeSingle();
+
+      if (qErr || !qData) {
+        return NextResponse.json(
+          { error: "Question not found." },
+          { status: 404 }
+        );
+      }
+
+      const canonicalQuestionText = qData.question_text || "CUET Exam Question";
+      const canonicalExplanation = qData.explanation || "Official NCERT Solution";
+      const canonicalCorrectOption = (qData.correct_option?.trim().toUpperCase() || "A") as "A" | "B" | "C" | "D";
+      const canonicalMicroTopic = qData.micro_topic || qData.chapter || "Domain Core";
+      const canonicalChapter = qData.chapter || "Domain Core";
+      const canonicalSubject = qData.subject || "Domain";
+      const canonicalArchetype = qData.archetype || "Direct Fact";
+
+      const optionMap: Record<string, string> = {
+        A: qData.option_a || "",
+        B: qData.option_b || "",
+        C: qData.option_c || "",
+        D: qData.option_d || "",
+      };
+
+      const canonicalSelectedOptionText = optionMap[selectedOption] || "";
+      const canonicalCorrectOptionText = optionMap[canonicalCorrectOption] || "";
+      const timeSpentSeconds = Math.max(0, Math.min(3600, Number(body.timeSpentSeconds) || 30));
+
       const result = await diagnoseMistake({
-        questionId,
+        questionId: rawQuestionId,
         selectedOption,
-        questionText: questionText || "CUET Exam Question",
-        selectedOptionText,
-        correctOption: correctOption || "A",
-        correctOptionText,
-        explanation,
-        microTopic,
+        questionText: canonicalQuestionText,
+        selectedOptionText: canonicalSelectedOptionText,
+        correctOption: canonicalCorrectOption,
+        correctOptionText: canonicalCorrectOptionText,
+        explanation: canonicalExplanation,
+        microTopic: canonicalMicroTopic,
         timeSpentSeconds,
       });
 
       const v2Diagnostic = diagnoseMistakeDeterministically({
-        questionId,
+        questionId: rawQuestionId,
         selectedOption,
-        selectedOptionText,
-        correctOption: correctOption || "A",
-        correctOptionText,
-        questionText: questionText || "CUET Exam Question",
-        explanation,
-        chapter: body.chapter || microTopic,
-        microTopic,
-        subject: body.subject,
+        selectedOptionText: canonicalSelectedOptionText,
+        correctOption: canonicalCorrectOption,
+        correctOptionText: canonicalCorrectOptionText,
+        questionText: canonicalQuestionText,
+        explanation: canonicalExplanation,
+        chapter: canonicalChapter,
+        microTopic: canonicalMicroTopic,
+        subject: canonicalSubject,
         timeSpentSeconds,
-        questionType: body.questionType,
-        archetype: body.archetype,
+        questionType: qData.archetype || "MCQ",
+        archetype: canonicalArchetype,
         distractorTrap: body.distractorTrap,
         misconceptionDescription: body.misconceptionDescription,
-        recentMistakeCountOnTopic: body.recentMistakeCountOnTopic || 0,
+        recentMistakeCountOnTopic: Math.max(0, Number(body.recentMistakeCountOnTopic) || 0),
       });
 
       return NextResponse.json({ ...result, v2: v2Diagnostic }, { status: 200 });

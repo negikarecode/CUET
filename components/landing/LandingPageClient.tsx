@@ -805,7 +805,7 @@ const pricingCards = [
       "All 251 official shift PYQ papers (2022–2025)",
       "Full-length NTA CBT timed mock tests",
       "Granular AI Trap & Mistake Diagnosis",
-      "Weekly All-India Percentile & Rank Leaderboard",
+      "Target College Cutoffs & Realistic Admission Standing",
       "Unlimited test attempts with forensic answer logs",
     ],
     cta: "Get Gold Pass",
@@ -2435,8 +2435,8 @@ function LandingFooter({ onAuth }: { onAuth: (mode: "login" | "signup") => void 
               </a>
             </div>
             <div>
-              <Link href="/dashboard/leaderboard" className="hover:text-white transition-colors">
-                All-India Leaderboard
+              <Link href="/dashboard/standing" className="hover:text-white transition-colors">
+                Target College Standings
               </Link>
             </div>
           </div>

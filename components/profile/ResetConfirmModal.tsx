@@ -95,7 +95,6 @@ export default function ResetConfirmModal({
               <li>Mock test averages, subject scores, and accuracy history</li>
               <li>Active daily practice streak (resets to 0)</li>
               <li>Diagnostic calibration progress (resets to 0 / 150 questions)</li>
-              <li>Leaderboard ranking cache and unverified mock badges</li>
             </ul>
           </div>
 
@@ -103,9 +102,9 @@ export default function ResetConfirmModal({
           <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-100 flex items-start gap-2.5 text-emerald-900">
             <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
             <div className="text-xs sm:text-sm">
-              <p className="font-bold text-emerald-950">XP and Coins are preserved:</p>
+              <p className="font-bold text-emerald-950">Academic targets preserved:</p>
               <p className="text-emerald-800 text-xs mt-0.5">
-                Your earned Experience Points (XP) and Campus Coins will <strong>NOT</strong> be deleted. Your saved dream college and academic goals also remain intact.
+                Your saved dream college, course preferences, and target parameters will <strong>NOT</strong> be deleted.
               </p>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { stringToUuid } from "@/lib/utils";
+export { stringToUuid };
 import { getQuestionsForTest } from "@/lib/data/mock50Questions";
 import { Question } from "@/types";
 
@@ -272,7 +273,7 @@ export async function compileSundayRedemptionMock(
   // ─── 1. 40% (20 Questions): High-Error Micro-Topics from Last 7 Days ──────
   const weakTopics = stats.persistentWeakSpots;
   try {
-    const { data: weakQs } = await supabase
+    const { data: weakQs } = await supabaseAdmin
       .from("questions")
       .select("*")
       .in("micro_topic", weakTopics)
@@ -297,7 +298,7 @@ export async function compileSundayRedemptionMock(
 
   // ─── 2. 40% (20 Questions): Fresh Unattempted High-Weightage Questions ────
   try {
-    const { data: freshQs } = await supabase
+    const { data: freshQs } = await supabaseAdmin
       .from("questions")
       .select("*")
       .limit(60);
@@ -326,7 +327,7 @@ export async function compileSundayRedemptionMock(
   // ─── 3. 20% (10 Questions): Question Archetypes with Frequent Traps ───────
   const trapArchetypes = stats.trapArchetypes;
   try {
-    const { data: trapQs } = await supabase
+    const { data: trapQs } = await supabaseAdmin
       .from("questions")
       .select("*")
       .in("archetype", trapArchetypes)
@@ -375,7 +376,7 @@ export async function compileSundayRedemptionMock(
   try {
     await supabaseAdmin.from("tests").upsert(
       {
-        id: redemptionTestId,
+        id: stringToUuid(redemptionTestId),
         title: `Sunday 50-Question Redemption Mock (${dateStr})`,
         subject: "CUET Comprehensive Domain",
         total_questions: 50,

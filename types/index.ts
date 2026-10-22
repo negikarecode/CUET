@@ -175,37 +175,6 @@ export interface UserStats {
   subscriptionExpiresAt?: string | null;
 }
 
-export interface Trophy {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  xp_reward: number;
-  coin_reward: number;
-  isUnlocked?: boolean;
-  unlockedAt?: string | null;
-  progressPercentage?: number;
-  criteria?: string;
-}
-
-export interface LeaderboardEntry {
-  rank: number;
-  userId: string;
-  name: string;
-  stream: StreamType;
-  targetCollege: string;
-  streak: number;
-  accuracyPercentage: number;
-  totalXp: number;
-  totalTrophies: number;
-  subjectTrophies?: Record<string, number>;
-  completedTestsCount?: number;
-  isCurrentUser?: boolean;
-  bestScore?: number;
-  bestScoreTest?: string;
-  lastActive?: string;
-}
-
 export interface RecordedQuestionAttempt {
   questionId: string;
   conceptId?: string;

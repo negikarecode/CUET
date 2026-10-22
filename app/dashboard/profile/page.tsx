@@ -2,16 +2,16 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import ProfileClient from "@/components/profile/ProfileClient";
 import {
   ProfileInitialData,
   StudentProfileData,
   DiagnosticReadiness,
   WeakMicroTopicItem,
-  ProfileTrophyItem,
 } from "@/types/profile";
 import { calculateCollegeReadiness } from "@/lib/college-benchmarks";
-import { MASTER_TROPHIES, calculateActiveStreak } from "@/lib/gamification";
+import { calculateActiveStreak } from "@/lib/gamification";
 import { StreamOption } from "@/types/database";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
 import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
@@ -19,7 +19,7 @@ import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status"
 export const metadata: Metadata = {
   title: "Aspirant Profile & Readiness | CUET AI-Prep",
   description:
-    "Student academic identity, 150-question AI diagnostic calibration meter, target college cutoff comparison, and achievement trophies.",
+    "Student academic identity, 150-question AI diagnostic calibration meter, and target college cutoff comparison.",
 };
 
 export const dynamic = "force-dynamic";
@@ -51,7 +51,6 @@ export default async function ProfilePage() {
   let correctAttempts = 0;
   let accuracyPercentage = 0;
   let weakTopics: WeakMicroTopicItem[] = [];
-  let userUnlockedTrophyMap: Record<string, string> = {};
   let serverAttempts: import("@/types").RecordedTestAttempt[] = [];
 
   // 2. Fetch authenticated Supabase session & real-time data
@@ -113,7 +112,8 @@ export default async function ProfilePage() {
       serverAttempts = await fetchServerTestAttempts(supabase, authUser.id);
 
       // 2b. Query attempts count & accuracy from public.user_attempts
-      const { data: attemptsRows } = await supabase
+      const supabaseAdmin = createAdminClient();
+      const { data: attemptsRows } = await supabaseAdmin
         .from("user_attempts")
         .select("id, test_id, question_id, is_correct, selected_option, questions(correct_option)")
         .eq("user_id", authUser.id);
@@ -209,22 +209,6 @@ export default async function ProfilePage() {
           // Non-blocking fallback
         }
       }
-
-      // 2d. Query public.user_trophies
-      try {
-        const { data: userTrophies } = await supabase
-          .from("user_trophies")
-          .select("trophy_id, unlocked_at")
-          .eq("user_id", authUser.id);
-
-        if (userTrophies) {
-          userTrophies.forEach((ut: any) => {
-            userUnlockedTrophyMap[ut.trophy_id] = ut.unlocked_at;
-          });
-        }
-      } catch (trophyErr) {
-        console.warn("User trophies query notice:", trophyErr);
-      }
     }
   } catch (err) {
     console.warn("Supabase profile page data resolution warning:", err);
@@ -261,43 +245,10 @@ export default async function ProfilePage() {
     collegeCutoff,
   };
 
-  // 4. Build Trophies Shelf List
-  const trophies: ProfileTrophyItem[] = MASTER_TROPHIES.map((mt) => {
-    const isUnlocked = Boolean(userUnlockedTrophyMap[mt.id]);
-    const unlockedAt = userUnlockedTrophyMap[mt.id] ?? null;
-
-    let progressPercentage = isUnlocked ? 100 : 0;
-    if (!isUnlocked) {
-      if (mt.id === "consistency-king") {
-        progressPercentage = Math.min(100, Math.round((initialProfile.currentStreak / 7) * 100));
-      } else if (mt.id === "ncert-sharpshooter") {
-        progressPercentage = Math.min(100, Math.round((accuracyPercentage / 90) * 100));
-      } else if (mt.id === "speed-demon") {
-        progressPercentage = Math.min(100, Math.round((totalAttempts / 50) * 100));
-      } else if (mt.id === "the-phoenix") {
-        progressPercentage = totalAttempts > 0 ? 50 : 0;
-      }
-    }
-
-    return {
-      id: mt.id,
-      title: mt.title,
-      description: mt.description,
-      icon: mt.icon,
-      xpReward: mt.xp_reward,
-      coinReward: mt.coin_reward ?? 25,
-      isUnlocked,
-      unlockedAt,
-      criteria: mt.criteria || "Complete CBT requirements to unlock",
-      progressPercentage,
-    };
-  });
-
   const initialData: ProfileInitialData = {
     profile: initialProfile,
     diagnostic,
     weakTopics,
-    trophies,
     serverAttempts,
   };
 

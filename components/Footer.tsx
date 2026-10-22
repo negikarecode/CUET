@@ -160,14 +160,6 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/dashboard"
-                  className="hover:text-indigo-600 transition-colors"
-                >
-                  Weekly All-India Leaderboard
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/dashboard/radar"
                   className="hover:text-indigo-600 transition-colors"
                 >

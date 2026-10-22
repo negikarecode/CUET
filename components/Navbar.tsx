@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Flame,
-  Zap,
   GraduationCap,
   Sparkles,
   Menu,
@@ -69,7 +68,6 @@ export default function Navbar() {
 
   // Safe defaults
   const streak = isClient && isLoggedIn ? user.dailyStreak : 0;
-  const xp = isClient && isLoggedIn ? user.xpPoints : 0;
   const userName = isClient && isLoggedIn && user.name ? user.name : "Aspirant";
   const userInitials = userName
     .split(" ")
@@ -182,20 +180,6 @@ export default function Navbar() {
                         </span>
                         <span className="text-slate-500 text-[11px] font-medium hidden md:inline">
                           {streak === 1 ? "day streak" : "days streak"}
-                        </span>
-                      </div>
-
-                      {/* User XP Points Badge */}
-                      <div
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100/70 border border-indigo-200/80 rounded-full text-slate-800 text-xs font-semibold transition-all shadow-xs cursor-pointer group"
-                        title={`${xp} Total Experience Points earned across mock tests and mistake diagnoses.`}
-                      >
-                        <Zap className="w-3.5 h-3.5 text-indigo-600 fill-indigo-600 group-hover:scale-110 transition-transform" />
-                        <span className="text-slate-900 font-bold tracking-tight text-xs">
-                          {xp.toLocaleString()}
-                        </span>
-                        <span className="text-slate-500 text-[11px] font-medium hidden md:inline">
-                          XP
                         </span>
                       </div>
 
@@ -378,12 +362,6 @@ export default function Navbar() {
                     </p>
                   </div>
                 </div>
-                {!isHomepage && (
-                  <div className="flex items-center gap-1 px-2.5 py-1 bg-indigo-50 border border-indigo-200/80 rounded-full text-slate-800 text-xs font-semibold shadow-xs">
-                    <Zap className="w-3.5 h-3.5 text-indigo-600 fill-indigo-600" />
-                    <span>{xp} XP</span>
-                  </div>
-                )}
               </div>
             ) : (
               <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5">
@@ -439,13 +417,6 @@ export default function Navbar() {
                     className="block px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-50 transition-colors"
                   >
                     {t("radar", "Weakness Radar")}
-                  </Link>
-                  <Link
-                    href="/dashboard#leaderboard"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-50 transition-colors"
-                  >
-                    {t("leaderboard", "Leaderboard")}
                   </Link>
                 </>
               ) : (

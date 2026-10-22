@@ -1,24 +1,216 @@
+import fs from "fs";
+import path from "path";
+import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { RecordedTestAttempt } from "@/types";
-import { stringToUuid, computeAnalyticsFromAttempts } from "@/lib/analytics";
-import { getQuestionsForTest } from "@/lib/data/mock50Questions";
+import { stringToUuid } from "@/lib/utils";
+import { computeAnalyticsFromAttempts } from "@/lib/analytics";
+import {
+  getQuestionsForTest,
+  SUBJECT_MOCK_DEFINITIONS,
+  SubjectMockDefinition,
+} from "@/lib/data/mock50Questions";
 import { CUET_UG_2026_CONFIG, calculateExamScore } from "@/lib/config/examConfig";
 import { calculateNextStreakOnPractice, getLocalDateString } from "@/lib/gamification";
 import { sanitizeQuestionForActiveExam } from "@/lib/store/useCBTStore";
 import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
+import { checkTestSessionEligibility, recordSessionCompletion } from "@/lib/payments/entitlements";
+import { resolveCanonicalTestId } from "@/lib/canonical-tests";
+import { buildScoredSet } from "@/lib/scoring";
 
 export const dynamic = "force-dynamic";
 
 // In-memory idempotency deduplication cache for test attempt submissions
 const recentAttemptSubmissions = new Map<string, number>();
 
+/**
+ * Resolves a subject definition strictly if one of its known aliases matches the testId.
+ * Never silently defaults to Physics if no alias matches.
+ */
+function findMatchingSubjectDef(testId: string): SubjectMockDefinition | null {
+  const cleanId = (testId || "").toLowerCase();
+  const sortedAliases: Array<{ alias: string; def: SubjectMockDefinition }> = [];
+  for (const def of SUBJECT_MOCK_DEFINITIONS) {
+    for (const alias of def.aliases) {
+      sortedAliases.push({ alias, def });
+    }
+  }
+  sortedAliases.sort((a, b) => b.alias.length - a.alias.length);
+
+  for (const item of sortedAliases) {
+    const regex = new RegExp("(^|[\\-_\\s])" + item.alias.replace(/[-\s]/g, "[-_\\s]?") + "([\\-_\\s]|$)", "i");
+    if (regex.test(cleanId) || cleanId.startsWith(item.alias)) {
+      return item.def;
+    }
+  }
+  return null;
+}
+
+/**
+ * Loads the authoritative question set and test metadata.
+ * Looks up:
+ * 1. DB-generated tests (via public.tests & public.test_questions junction table).
+ * 2. Authentic static file bank (practice, pyq, or mock files on disk).
+ * Returns null if no authoritative question set exists.
+ */
+async function getAuthoritativeTest(targetTestId: string): Promise<{
+  authoritativeMeta: any;
+  authoritativeQuestions: any[];
+  isRepairQuiz: boolean;
+  fromDatabase: boolean;
+} | null> {
+  const cleanId = (targetTestId || "").trim().toLowerCase();
+  if (!cleanId) return null;
+
+  // 1. Check DB-generated tests first (e.g. Sunday ritual, DB-persisted repair quizzes)
+  try {
+    const supabaseAdmin = createAdminClient();
+    const testUuid = stringToUuid(targetTestId);
+
+    const { data: dbTest } = await supabaseAdmin
+      .from("tests")
+      .select("*")
+      .eq("id", testUuid)
+      .maybeSingle();
+
+    const { data: dbTestQuestions } = await supabaseAdmin
+      .from("test_questions")
+      .select("order_index, question_id, questions(id, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, subject, chapter, micro_topic, ncert_reference)")
+      .eq("test_id", testUuid)
+      .order("order_index", { ascending: true });
+
+    if (dbTestQuestions && dbTestQuestions.length > 0) {
+      const authoritativeQuestions = dbTestQuestions.map((row: any) => {
+        const q = row.questions || {};
+        return {
+          id: q.id || row.question_id,
+          questionId: q.id || row.question_id,
+          questionNumber: row.order_index,
+          prompt: q.question_text || "",
+          options: [
+            { id: "A", text: q.option_a || "Option A" },
+            { id: "B", text: q.option_b || "Option B" },
+            { id: "C", text: q.option_c || "Option C" },
+            { id: "D", text: q.option_d || "Option D" },
+          ],
+          correctOptionId: q.correct_option as "A" | "B" | "C" | "D",
+          explanation: q.explanation || "",
+          subjectId: q.subject || dbTest?.subject || "general",
+          chapter: q.chapter || "",
+          topic: q.micro_topic || "",
+          ncertReference: q.ncert_reference,
+        };
+      });
+
+      const isRepairQuiz = Boolean(
+        dbTest?.is_repair_quiz === true ||
+        dbTest?.test_type === "repair_quiz" ||
+        dbTest?.test_type === "repair" ||
+        dbTest?.practice_type === "repair" ||
+        (dbTest?.title && (dbTest.title.toLowerCase().includes("repair") || dbTest.title.toLowerCase().includes("adaptive micro-drill")))
+      );
+
+      return {
+        authoritativeMeta: dbTest,
+        authoritativeQuestions,
+        isRepairQuiz,
+        fromDatabase: true,
+      };
+    }
+  } catch (dbErr) {
+    console.warn("[Authoritative DB Test Lookup Notice]:", dbErr);
+  }
+
+  // 2. Check File Bank
+  const subjectDef = findMatchingSubjectDef(targetTestId);
+  if (!subjectDef) {
+    return null;
+  }
+
+  const isPractice =
+    cleanId.includes("practice") ||
+    (cleanId.includes("unit") && (cleanId.includes("test") || /unit[-_]?\d+/.test(cleanId)));
+  const isPYQ = cleanId.includes("pyq");
+
+  if (isPractice) {
+    const unitMatch = cleanId.match(/unit[-_]?(\d+)/) || cleanId.match(/u[-_]?(\d+)/);
+    const testMatch = cleanId.match(/test[-_]?(\d+)/) || cleanId.match(/t[-_]?(\d+)/) || cleanId.match(/-(\d+)$/);
+    const unitNum = unitMatch && unitMatch[1] ? parseInt(unitMatch[1], 10) : 1;
+    const testNum = testMatch && testMatch[1] ? parseInt(testMatch[1], 10) : 1;
+    const filePath = path.join(process.cwd(), "practice", subjectDef.folder, `unit${unitNum}`, `${testNum}.json`);
+    if (!fs.existsSync(filePath)) return null;
+  } else if (isPYQ) {
+    const pyqMatch = cleanId.match(/pyq[^\d]*(\d+)/) || cleanId.match(/-(\d+)$/) || cleanId.match(/(\d+)$/);
+    const paperNum = pyqMatch && pyqMatch[1] ? parseInt(pyqMatch[1], 10) : 1;
+    const pyqPath = path.join(process.cwd(), "pyq", subjectDef.folder, `${paperNum}.json`);
+    const mockPath = path.join(process.cwd(), "mock", subjectDef.folder, `${paperNum}.json`);
+    if (!fs.existsSync(pyqPath) && !fs.existsSync(mockPath)) return null;
+  } else {
+    // If testId includes "repair" or "drill" without DB persistence, reject as not a static file bank
+    if (cleanId.includes("repair") || cleanId.includes("drill")) {
+      return null;
+    }
+    const match = cleanId.match(/(\d+)/);
+    const mockNum = match && match[1] ? parseInt(match[1], 10) : 1;
+    const mockPath = path.join(process.cwd(), "mock", subjectDef.folder, `${mockNum}.json`);
+    if (!fs.existsSync(mockPath)) return null;
+  }
+
+  try {
+    const { questions, testMeta } = getQuestionsForTest(targetTestId);
+    if (!questions || questions.length === 0) return null;
+
+    const isRepairQuiz = Boolean(
+      (testMeta as any)?.isRepairQuiz === true ||
+      (testMeta as any)?.testType === "repair_quiz" ||
+      (testMeta as any)?.practiceType === "repair"
+    );
+
+    return {
+      authoritativeMeta: testMeta,
+      authoritativeQuestions: questions,
+      isRepairQuiz,
+      fromDatabase: false,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * For personalized drills and rituals (sunday_redemption_*, adaptive_drill_*, repair_quiz_*),
+ * verifies that the embedded user ID prefix matches the authenticated candidate's user ID prefix (slice(0, 8)).
+ */
+function checkTestOwnership(testId: string, authUserId: string): boolean {
+  if (!testId) return true;
+  const lower = testId.toLowerCase();
+  const prefixes = ["sunday_redemption_", "adaptive_drill_", "repair_quiz_"];
+  const matchedPrefix = prefixes.find((p) => lower.startsWith(p));
+  if (!matchedPrefix) {
+    // Standard mock, PYQ, and practice tests have no per-user ownership restriction
+    return true;
+  }
+  const remainder = lower.slice(matchedPrefix.length);
+  const embeddedOwnerPrefix = remainder.split("_")[0];
+  const expectedPrefix = (authUserId || "").slice(0, 8).toLowerCase();
+  return Boolean(expectedPrefix && embeddedOwnerPrefix === expectedPrefix);
+}
+
 export async function GET(
   _req: NextRequest,
   { params }: { params: { testId: string } }
 ) {
   try {
+    const canonicalTestId = resolveCanonicalTestId(params?.testId);
+    if (!canonicalTestId) {
+      return NextResponse.json(
+        { error: `Test "${params?.testId}" not found or has no authoritative questions.`, code: "INVALID_TEST" },
+        { status: 400 }
+      );
+    }
+
     // 1. Authenticate candidate & enforce usage eligibility
     const supabase = createClient();
     const {
@@ -45,6 +237,17 @@ export async function GET(
       );
     }
 
+    // Verify candidate ownership on personalized drills and rituals
+    if (!checkTestOwnership(canonicalTestId, authUser.id)) {
+      return NextResponse.json(
+        {
+          error: "Forbidden: You do not have permission to access or take this personalized test.",
+          code: "FORBIDDEN_TEST_OWNERSHIP",
+        },
+        { status: 403 }
+      );
+    }
+
     // Server-side rate limit on starting test sessions (10 per minute per user/IP)
     const rateIdentifier = getClientRateLimitIdentifier(_req, authUser.id, "exam:start");
     const rateCheck = await rateLimit("exam:start", rateIdentifier);
@@ -52,8 +255,15 @@ export async function GET(
       return rateLimitResponse(rateCheck);
     }
 
-    const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
-    const eligibility = await checkTestSessionEligibility(authUser.id, params.testId);
+    const testResult = await getAuthoritativeTest(canonicalTestId);
+    if (!testResult || !testResult.authoritativeQuestions || testResult.authoritativeQuestions.length === 0) {
+      return NextResponse.json(
+        { error: `Test "${canonicalTestId}" not found or has no authoritative questions.`, code: "INVALID_TEST" },
+        { status: 400 }
+      );
+    }
+
+    const eligibility = await checkTestSessionEligibility(authUser.id, canonicalTestId);
 
     if (!eligibility.allowed) {
       return NextResponse.json(
@@ -69,12 +279,11 @@ export async function GET(
       );
     }
 
-    const { testMeta, questions } = getQuestionsForTest(params.testId);
     // Sanitize questions server-side before sending to client during active test
-    const sanitizedQuestions = questions.map(sanitizeQuestionForActiveExam);
+    const sanitizedQuestions = testResult.authoritativeQuestions.map(sanitizeQuestionForActiveExam);
 
     return NextResponse.json({
-      testMeta,
+      testMeta: testResult.authoritativeMeta,
       questions: sanitizedQuestions,
     });
   } catch (err: any) {
@@ -129,22 +338,63 @@ export async function POST(
     const isRecordAttempt =
       params.testId === "record-attempt" ||
       body.action === "record" ||
-      (Array.isArray(body.questions) && body.testId);
+      (Array.isArray(body.questions) && (Boolean(body.testId) || (Boolean(params.testId) && params.testId !== "record-attempt")));
 
     // ─── 1. RECORD TEST ATTEMPT & AUTHORITATIVE SERVER SCORING ───────────────
     if (isRecordAttempt) {
       const attempt = body as RecordedTestAttempt;
 
-      if (!attempt || !attempt.testId || !Array.isArray(attempt.questions)) {
+      const candidateTestId =
+        params.testId && params.testId !== "record-attempt"
+          ? params.testId
+          : attempt?.testId;
+
+      if (!candidateTestId || typeof candidateTestId !== "string" || !candidateTestId.trim() || !attempt || !Array.isArray(attempt.questions)) {
         return NextResponse.json(
-          { error: "Invalid attempt payload. testId and questions are required." },
+          { error: "Invalid attempt payload. Valid testId and questions are required." },
+          { status: 400 }
+        );
+      }
+
+      const canonicalTestId = resolveCanonicalTestId(candidateTestId);
+      if (!canonicalTestId) {
+        return NextResponse.json(
+          {
+            error: `Invalid test: No authoritative question set found for testId "${candidateTestId}".`,
+            code: "INVALID_TEST",
+          },
+          { status: 400 }
+        );
+      }
+
+      // Verify candidate ownership on personalized drills and rituals
+      if (!checkTestOwnership(canonicalTestId, authUser.id)) {
+        return NextResponse.json(
+          {
+            error: "Forbidden: You do not have permission to submit attempts for this personalized test.",
+            code: "FORBIDDEN_TEST_OWNERSHIP",
+          },
+          { status: 403 }
+        );
+      }
+
+      // Canonical testId used identically across entitlement, answer-key lookup, scoring, and storage
+      const targetTestId = canonicalTestId;
+      attempt.testId = canonicalTestId;
+
+      // Authoritative Server-Side Question Set Verification (File Bank OR DB-generated tests)
+      const testResult = await getAuthoritativeTest(targetTestId);
+      if (!testResult || !testResult.authoritativeQuestions || testResult.authoritativeQuestions.length === 0) {
+        return NextResponse.json(
+          {
+            error: `Invalid test: No authoritative question set found for testId "${targetTestId}".`,
+            code: "INVALID_TEST",
+          },
           { status: 400 }
         );
       }
 
       // Authoritative Entitlement & Limit Verification
-      const targetTestId = attempt.testId || params.testId;
-      const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
       const eligibility = await checkTestSessionEligibility(authUser.id, targetTestId);
 
       if (!eligibility.allowed) {
@@ -161,63 +411,137 @@ export async function POST(
         );
       }
 
-      // Authoritative Server-Side Answer Key Verification
-      let authMap = new Map<string, string>();
-      let authoritativeQuestions: any[] = [];
-      try {
-        const { questions: trueQuestions } = getQuestionsForTest(attempt.testId);
-        if (trueQuestions && trueQuestions.length > 0) {
-          authoritativeQuestions = trueQuestions;
-          trueQuestions.forEach((tq) => {
-            if (tq.correctOptionId) {
-              authMap.set(tq.id, tq.correctOptionId);
-              if (tq.questionId) authMap.set(tq.questionId, tq.correctOptionId);
-              authMap.set(String(tq.questionNumber), tq.correctOptionId);
-              authMap.set(`q_${tq.questionNumber}`, tq.correctOptionId);
-              authMap.set(tq.questionNumber.toString().padStart(2, "0"), tq.correctOptionId);
-            }
-          });
+      const authoritativeQuestions = testResult.authoritativeQuestions;
+      const authoritativeMeta = testResult.authoritativeMeta;
+
+      // Build authoritative answer key map
+      const authMap = new Map<string, string>();
+      authoritativeQuestions.forEach((tq) => {
+        const key = tq.correctOptionId || tq.correct_option;
+        if (key) {
+          if (tq.id) authMap.set(tq.id, key);
+          if (tq.questionId) authMap.set(tq.questionId, key);
+          if (tq.questionNumber !== undefined) {
+            authMap.set(String(tq.questionNumber), key);
+            authMap.set(`q_${tq.questionNumber}`, key);
+            authMap.set(tq.questionNumber.toString().padStart(2, "0"), key);
+          }
         }
-      } catch {
-        // Fallback for ad-hoc custom tests
+      });
+
+      // Reject payloads with more entries than the authoritative test has questions
+      if (attempt.questions.length > authoritativeQuestions.length) {
+        return NextResponse.json(
+          {
+            error: `Payload contains ${attempt.questions.length} entries, exceeding authoritative test size (${authoritativeQuestions.length}).`,
+            code: "EXCESSIVE_QUESTION_ENTRIES",
+          },
+          { status: 400 }
+        );
       }
 
+      // Reject payloads with duplicate question IDs or duplicate question numbers
+      const seenSubmittedIds = new Set<string>();
+      const seenSubmittedNumbers = new Set<number>();
+      for (let idx = 0; idx < attempt.questions.length; idx++) {
+        const q = attempt.questions[idx];
+        if (!q) {
+          return NextResponse.json(
+            {
+              error: `Submitted question at index ${idx} is invalid or undefined.`,
+              code: "MISSING_AUTHORITATIVE_KEY",
+            },
+            { status: 400 }
+          );
+        }
+
+        const idKey = q.questionId || (q as any).id;
+        if (idKey) {
+          const lowerId = String(idKey).trim().toLowerCase();
+          if (seenSubmittedIds.has(lowerId)) {
+            return NextResponse.json(
+              {
+                error: `Duplicate question entry detected for question ID "${idKey}".`,
+                code: "DUPLICATE_QUESTION_ENTRY",
+              },
+              { status: 400 }
+            );
+          }
+          seenSubmittedIds.add(lowerId);
+        }
+
+        if (q.questionNumber !== undefined && q.questionNumber !== null) {
+          const qNum = Number(q.questionNumber);
+          if (seenSubmittedNumbers.has(qNum)) {
+            return NextResponse.json(
+              {
+                error: `Duplicate question entry detected for question number ${qNum}.`,
+                code: "DUPLICATE_QUESTION_ENTRY",
+              },
+              { status: 400 }
+            );
+          }
+          seenSubmittedNumbers.add(qNum);
+        }
+
+        const expectedOption =
+          (q.questionId && authMap.get(q.questionId)) ||
+          ((q as any).id && authMap.get((q as any).id)) ||
+          (q.questionNumber !== undefined && authMap.get(String(q.questionNumber))) ||
+          (q.questionNumber === undefined && authMap.get(String(idx + 1)));
+
+        if (!expectedOption) {
+          return NextResponse.json(
+            {
+              error: `Submitted question at index ${idx} has no authoritative answer key.`,
+              code: "MISSING_AUTHORITATIVE_KEY",
+            },
+            { status: 400 }
+          );
+        }
+      }
+
+      // Build the scored set by iterating the AUTHORITATIVE questions, matching at most one client entry per question (first wins), ignoring extras
+      const scoredSet = buildScoredSet(authoritativeQuestions, attempt.questions);
+
+      // Compute correct/incorrect/attempted counts, marks, and accuracy from that deduped set only
       let verifiedCorrectCount = 0;
       let verifiedIncorrectCount = 0;
       let verifiedAttemptedCount = 0;
 
-      attempt.questions.forEach((q, idx) => {
-        if (q.selectedOption !== null && q.selectedOption !== undefined) {
+      for (const entry of scoredSet) {
+        if (entry.clientQuestion) {
+          entry.clientQuestion.correctOption = entry.expectedOption;
+          entry.clientQuestion.isCorrect = entry.isCorrect;
+        }
+        if (entry.selectedOption) {
           verifiedAttemptedCount += 1;
-          const expectedOption =
-            authMap.get(q.questionId) ||
-            authMap.get(String(q.questionNumber)) ||
-            authMap.get(String(idx + 1)) ||
-            authMap.get((idx + 1).toString().padStart(2, "0")) ||
-            authMap.get((q as any).id || "") ||
-            q.correctOption;
-
-          const isMatch = Boolean(expectedOption && q.selectedOption === expectedOption);
-          q.isCorrect = isMatch;
-          if (expectedOption) {
-            q.correctOption = expectedOption as "A" | "B" | "C" | "D";
-          }
-
-          if (isMatch) {
+          if (entry.isCorrect) {
             verifiedCorrectCount += 1;
           } else {
             verifiedIncorrectCount += 1;
           }
         }
-      });
+      }
+
+      // Reject submissions with zero answered questions (fail closed, write nothing)
+      if (verifiedAttemptedCount === 0) {
+        return NextResponse.json(
+          {
+            error: "Submissions with zero answered questions are not permitted.",
+            code: "EMPTY_SUBMISSION",
+          },
+          { status: 400 }
+        );
+      }
 
       attempt.correctCount = verifiedCorrectCount;
       attempt.incorrectCount = verifiedIncorrectCount;
       attempt.attemptedCount = verifiedAttemptedCount;
-      const unattemptedCount = Math.max(0, (attempt.totalQuestions || attempt.questions.length) - verifiedAttemptedCount);
+      const unattemptedCount = Math.max(0, authoritativeQuestions.length - verifiedAttemptedCount);
       attempt.unattemptedCount = unattemptedCount;
 
-      const totalQ = attempt.totalQuestions || attempt.questions.length || 50;
+      const totalQ = authoritativeQuestions.length || 50;
       const { totalMarks, maxMarks } = calculateExamScore(
         verifiedCorrectCount,
         verifiedIncorrectCount,
@@ -234,28 +558,28 @@ export async function POST(
           : 0;
 
       // Determine target User ID securely
-      let targetUserId = "guest";
-      let isSupabaseAuthenticated = false;
+      const targetUserId = authUser.id;
+      const isSupabaseAuthenticated = true;
 
-      try {
-        const supabase = createClient();
-        const {
-          data: { user: authUser },
-        } = await supabase.auth.getUser();
+      // 1. Resolve and enforce attempt UUID (server-derived UUID if missing or invalid)
+      const rawAttemptId = typeof attempt.attemptId === "string" && attempt.attemptId.trim()
+        ? attempt.attemptId.trim()
+        : (typeof attempt.id === "string" && attempt.id.trim() ? attempt.id.trim() : "");
 
-        if (authUser?.id) {
-          targetUserId = authUser.id;
-          isSupabaseAuthenticated = true;
-        }
-      } catch {
-        // Offline / client-only fallback
+      const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      let attemptUuid: string;
+      if (rawAttemptId && UUID_REGEX.test(rawAttemptId)) {
+        attemptUuid = rawAttemptId.toLowerCase();
+      } else if (rawAttemptId) {
+        attemptUuid = stringToUuid(rawAttemptId);
+      } else {
+        // Missing attemptId: generate cryptographically secure unique server-side UUID so submission cannot share ledger or bypass dedup
+        attemptUuid = crypto.randomUUID();
       }
+      attempt.attemptId = attemptUuid;
 
-      // Server Idempotency Guard: prevent duplicate submissions within 60 seconds
-      const attemptIdStr = (attempt.attemptId || attempt.id || "").trim();
-      const idempotencyKey = attemptIdStr
-        ? `${targetUserId}_${attemptIdStr}`
-        : `${targetUserId}_${stringToUuid(attempt.testId)}_${attempt.id || ""}`;
+      // Server Idempotency Guard: prevent duplicate submissions within 60 seconds (strictly bound to user, test, and attemptId)
+      const idempotencyKey = `${targetUserId}_${canonicalTestId}_${attemptUuid}`;
       const nowMs = Date.now();
       const lastSeen = recentAttemptSubmissions.get(idempotencyKey);
       if (lastSeen && nowMs - lastSeen < 60000) {
@@ -264,6 +588,7 @@ export async function POST(
           deduplicated: true,
           persistedToDatabase: isSupabaseAuthenticated,
           attempt,
+          questions: authoritativeQuestions,
         });
       }
       recentAttemptSubmissions.set(idempotencyKey, nowMs);
@@ -275,180 +600,235 @@ export async function POST(
 
       const canPersistToDatabase = isSupabaseAuthenticated;
       let updatedStreak: number | undefined;
+      let computedAnalytics: any = null;
 
       if (canPersistToDatabase) {
+        const supabaseAdmin = createAdminClient();
+
+        // 1. Ensure test record exists in tests table so foreign key constraint is satisfied
+        // Authoritative server-side bank metadata only: client-supplied testTitle, subject, totalQuestions are discarded
+        const testUuid = stringToUuid(targetTestId);
+        await supabaseAdmin.from("tests").upsert(
+          {
+            id: testUuid,
+            title: authoritativeMeta?.title || `CUET ${authoritativeMeta?.subject || "Practice"} Mock Test`,
+            subject: authoritativeMeta?.subject || "General",
+            total_questions: authoritativeMeta?.totalQuestions || (authoritativeQuestions.length > 0 ? authoritativeQuestions.length : 50),
+            duration_minutes: authoritativeMeta?.durationMinutes || 60,
+            is_active: true,
+          },
+          { onConflict: "id" }
+        );
+
+        // 2. Ensure question records exist in questions table with metadata
+        // Authoritative server-side bank questions only: client-supplied question texts, options, explanations are discarded
+        const questionsToUpsert = authoritativeQuestions.map((tq, idx) => {
+          const qUuid = stringToUuid(tq.questionId || tq.id || `${targetTestId}_q_${idx + 1}`);
+          const optA =
+            tq.options?.find((o: any) => o.id === "A")?.text || "Option A";
+          const optB =
+            tq.options?.find((o: any) => o.id === "B")?.text || "Option B";
+          const optC =
+            tq.options?.find((o: any) => o.id === "C")?.text || "Option C";
+          const optD =
+            tq.options?.find((o: any) => o.id === "D")?.text || "Option D";
+          const expectedOption =
+            tq.correctOptionId ||
+            authMap.get(tq.questionId) ||
+            authMap.get(tq.id) ||
+            authMap.get(String(tq.questionNumber));
+
+          return {
+            id: qUuid,
+            subject: authoritativeMeta?.subject || tq.subjectId || "General",
+            chapter: tq.chapter || "Domain Core",
+            micro_topic: tq.microTopic || tq.chapter || "Core Concept",
+            ncert_reference: tq.ncertReference || `NCERT Class 12 (${tq.chapter || "Core"})`,
+            archetype: "Direct Fact",
+            question_text: tq.prompt || `Question ${tq.questionNumber || idx + 1}`,
+            option_a: optA,
+            option_b: optB,
+            option_c: optC,
+            option_d: optD,
+            correct_option: expectedOption,
+            explanation: tq.explanation || "Official Solution",
+          };
+        });
+
+        if (questionsToUpsert.length > 0) {
+          await supabaseAdmin.from("questions").upsert(questionsToUpsert, { onConflict: "id" });
+        }
+
+        // 3. Database Idempotency Check & user_attempts insertion
+        // Derive the ledger session_id server-side as `${canonicalTestId}:${attemptUuid}`, never the raw client string and never null
+        const ledgerSessionId = `${canonicalTestId}:${attemptUuid}`;
+
+        let hasAttemptIdCol = false;
         try {
-          const supabaseAdmin = createAdminClient();
+          // The dedup lookup must filter by user_id, test_id and attempt_id
+          const { data: existingSessionRows, error: colCheckError } = await supabaseAdmin
+            .from("user_attempts")
+            .select("id, test_id")
+            .eq("user_id", targetUserId)
+            .eq("test_id", testUuid)
+            .eq("attempt_id", attemptUuid)
+            .limit(1);
 
-          // 1. Ensure test record exists in tests table so foreign key constraint is satisfied
-          const testUuid = stringToUuid(attempt.testId);
-          await supabaseAdmin.from("tests").upsert(
-            {
-              id: testUuid,
-              title: attempt.testTitle || `CUET ${attempt.subject || "Domain"} Mock Test`,
-              subject: attempt.subject || "Physics",
-              total_questions: attempt.totalQuestions || attempt.questions.length || 50,
-              duration_minutes: 60,
-              is_active: true,
-            },
-            { onConflict: "id" }
-          );
+          if (!colCheckError) {
+            hasAttemptIdCol = true;
+            // A dedup hit must only return data for the same test
+            if (existingSessionRows && existingSessionRows.length > 0 && existingSessionRows[0]?.test_id === testUuid) {
+              return NextResponse.json({
+                success: true,
+                deduplicated: true,
+                persistedToDatabase: true,
+                attempt,
+                questions: authoritativeQuestions,
+              });
+            }
+          }
+        } catch {
+          hasAttemptIdCol = false;
+        }
 
-          // 2. Ensure question records exist in questions table with metadata
-          const questionsToUpsert = attempt.questions.map((q, idx) => {
-            const qUuid = stringToUuid(q.questionId || `${attempt.testId}_q_${idx + 1}`);
-            const optA =
-              q.options?.find((o: any) => o.id === "A")?.text || (q as any).optionA || "Option A";
-            const optB =
-              q.options?.find((o: any) => o.id === "B")?.text || (q as any).optionB || "Option B";
-            const optC =
-              q.options?.find((o: any) => o.id === "C")?.text || (q as any).optionC || "Option C";
-            const optD =
-              q.options?.find((o: any) => o.id === "D")?.text || (q as any).optionD || "Option D";
-            const expectedOption =
-              authMap.get(q.questionId) ||
-              authMap.get(String(q.questionNumber)) ||
-              authMap.get(String(idx + 1)) ||
-              authMap.get((idx + 1).toString().padStart(2, "0")) ||
-              q.correctOption ||
-              "A";
+        const seenQuestionUuids = new Set<string>();
+        const attemptsToInsert: any[] = [];
 
-            return {
-              id: qUuid,
-              subject: q.subject || attempt.subject || "Physics",
-              chapter: q.chapter || "Domain Core",
-              micro_topic: q.microTopic || q.chapter || "Core Concept",
-              ncert_reference: q.ncertReference || `NCERT Class 12 (${q.chapter || "Core"})`,
-              archetype: "Direct Fact",
-              question_text: q.prompt || `Question ${q.questionNumber || idx + 1}`,
-              option_a: optA,
-              option_b: optB,
-              option_c: optC,
-              option_d: optD,
-              correct_option: expectedOption,
-              explanation: q.explanation || "Official Solution",
+        scoredSet
+          .filter((entry) => entry.selectedOption !== null && entry.selectedOption !== undefined)
+          .forEach((entry) => {
+            const authQ = entry.authQuestion;
+            const canonicalQId = authQ.questionId || authQ.id || `${targetTestId}_q_${authQ.questionNumber}`;
+            const qUuid = stringToUuid(canonicalQId);
+            if (seenQuestionUuids.has(qUuid)) return;
+            seenQuestionUuids.add(qUuid);
+
+            const rowData: any = {
+              user_id: targetUserId,
+              test_id: testUuid,
+              question_id: qUuid,
+              selected_option: entry.selectedOption,
+              is_correct: entry.isCorrect,
+              time_spent_seconds: entry.timeSpentSeconds,
             };
+
+            if (hasAttemptIdCol && attemptUuid) {
+              rowData.attempt_id = attemptUuid;
+            }
+
+            attemptsToInsert.push(rowData);
           });
 
-          if (questionsToUpsert.length > 0) {
-            await supabaseAdmin.from("questions").upsert(questionsToUpsert, { onConflict: "id" });
-          }
+        // Check if ledger row already existed before this request attempted completion
+        let ledgerRowExistedBefore = false;
+        try {
+          const { data: existingLedger } = await supabaseAdmin
+            .from("user_usage_ledger")
+            .select("id")
+            .eq("user_id", targetUserId)
+            .eq("session_id", ledgerSessionId)
+            .maybeSingle();
+          ledgerRowExistedBefore = Boolean(existingLedger);
+        } catch {
+          ledgerRowExistedBefore = false;
+        }
 
-          // 3. Database Idempotency Check & user_attempts insertion
-          let attemptUuid: string | null = null;
-          if (attempt.attemptId) {
-            attemptUuid = /^[0-9a-f-]{36}$/i.test(attempt.attemptId)
-              ? attempt.attemptId
-              : stringToUuid(attempt.attemptId);
-          }
+        // 3. Authoritatively record to immutable user_usage_ledger for free-tier paywall tracking
+        // MUST be called BEFORE inserting user_attempts and returning questions/answers, and fail closed if it errors
+        try {
+          await recordSessionCompletion({
+            userId: targetUserId,
+            testId: targetTestId,
+            sessionId: ledgerSessionId,
+            subject: attempt.subject || authoritativeMeta?.subject,
+          });
+        } catch (ledgerErr) {
+          recentAttemptSubmissions.delete(idempotencyKey);
+          console.error("[Usage Ledger Recording Error]:", ledgerErr);
+          return NextResponse.json(
+            {
+              error: "Failed to record session completion in authoritative usage ledger.",
+              code: "USAGE_RECORDING_FAILED",
+            },
+            { status: 500 }
+          );
+        }
 
-          let hasAttemptIdCol = false;
-          if (attemptUuid) {
-            try {
-              const { data: existingSessionRows, error: colCheckError } = await supabaseAdmin
-                .from("user_attempts")
-                .select("id")
-                .eq("user_id", targetUserId)
-                .eq("attempt_id", attemptUuid)
-                .limit(1);
-
-              if (!colCheckError) {
-                hasAttemptIdCol = true;
-                if (existingSessionRows && existingSessionRows.length > 0) {
-                  return NextResponse.json({
-                    success: true,
-                    deduplicated: true,
-                    persistedToDatabase: true,
-                    attempt,
-                  });
-                }
-              }
-            } catch {
-              hasAttemptIdCol = false;
-            }
-          }
-
-          const seenQuestionUuids = new Set<string>();
-          const attemptsToInsert: any[] = [];
-
-          attempt.questions
-            .filter((q) => q.selectedOption !== null && q.selectedOption !== undefined)
-            .forEach((q, idx) => {
-              const qUuid = stringToUuid(q.questionId || `${attempt.testId}_q_${idx + 1}`);
-              if (seenQuestionUuids.has(qUuid)) return;
-              seenQuestionUuids.add(qUuid);
-
-              const expectedOption =
-                authMap.get(q.questionId) ||
-                authMap.get(String(q.questionNumber)) ||
-                authMap.get(String(idx + 1)) ||
-                authMap.get((idx + 1).toString().padStart(2, "0")) ||
-                q.correctOption;
-              const isCorrect = Boolean(
-                (expectedOption && q.selectedOption === expectedOption) || q.isCorrect === true
-              );
-
-              const rawOpt =
-                typeof q.selectedOption === "string" ? q.selectedOption.trim().toUpperCase() : null;
-              const validOption =
-                rawOpt && ["A", "B", "C", "D"].includes(rawOpt) ? rawOpt : null;
-
-              const rowData: any = {
-                user_id: targetUserId,
-                test_id: testUuid,
-                question_id: qUuid,
-                selected_option: validOption,
-                is_correct: isCorrect,
-                time_spent_seconds: Math.max(0, q.timeSpentSeconds || 0),
-              };
-
-              if (hasAttemptIdCol && attemptUuid) {
-                rowData.attempt_id = attemptUuid;
-              }
-
-              attemptsToInsert.push(rowData);
-            });
-
-          if (attemptsToInsert.length > 0) {
-            if (hasAttemptIdCol && attemptUuid) {
-              await supabaseAdmin
-                .from("user_attempts")
-                .delete()
-                .eq("user_id", targetUserId)
-                .eq("attempt_id", attemptUuid);
-            } else {
-              await supabaseAdmin
-                .from("user_attempts")
-                .delete()
-                .eq("user_id", targetUserId)
-                .eq("test_id", testUuid);
-            }
-
-            const { error: insertErr } = await supabaseAdmin
+        // 4. Database Idempotency Check & user_attempts insertion
+        if (attemptsToInsert.length > 0) {
+          let previousRows: any[] | null = null;
+          try {
+            const query = supabaseAdmin
               .from("user_attempts")
-              .insert(attemptsToInsert);
-            if (insertErr) {
-              console.error("[Record Attempt Insert DB Error]:", insertErr);
-            }
-
-            // Authoritatively record to immutable user_usage_ledger for free-tier paywall tracking
-            try {
-              const { recordSessionCompletion } = await import("@/lib/payments/entitlements");
-              await recordSessionCompletion({
-                userId: targetUserId,
-                testId: attempt.testId || params.testId,
-                sessionId: attempt.attemptId || attempt.testId || params.testId,
-                subject: attempt.subject,
-              });
-            } catch (ledgerErr) {
-              console.warn("[Usage Ledger Submission Notice]:", ledgerErr);
-            }
+              .select("*")
+              .eq("user_id", targetUserId);
+            const { data } = hasAttemptIdCol && attemptUuid
+              ? await query.eq("attempt_id", attemptUuid)
+              : await query.eq("test_id", testUuid);
+            previousRows = data;
+          } catch {
+            previousRows = null;
           }
 
-          // 4. Update profile XP, practice streak, and canonical total_questions_attempted
+          if (hasAttemptIdCol && attemptUuid) {
+            await supabaseAdmin
+              .from("user_attempts")
+              .delete()
+              .eq("user_id", targetUserId)
+              .eq("attempt_id", attemptUuid);
+          } else {
+            await supabaseAdmin
+              .from("user_attempts")
+              .delete()
+              .eq("user_id", targetUserId)
+              .eq("test_id", testUuid);
+          }
+
+          const { error: insertErr } = await supabaseAdmin
+            .from("user_attempts")
+            .insert(attemptsToInsert);
+
+          if (insertErr) {
+            console.error("[Record Attempt Insert DB Error]:", insertErr);
+
+            // Roll back delete if there were previous rows
+            if (previousRows && previousRows.length > 0) {
+              try {
+                await supabaseAdmin.from("user_attempts").insert(previousRows);
+              } catch (rollbackErr) {
+                console.error("[Rollback Previous Rows Error]:", rollbackErr);
+              }
+            }
+
+            // Remove the ledger row ONLY if this request inserted it
+            if (!ledgerRowExistedBefore) {
+              try {
+                await supabaseAdmin
+                  .from("user_usage_ledger")
+                  .delete()
+                  .eq("user_id", targetUserId)
+                  .eq("session_id", ledgerSessionId);
+              } catch (ledgerRollbackErr) {
+                console.error("[Ledger Rollback Error]:", ledgerRollbackErr);
+              }
+            }
+
+            recentAttemptSubmissions.delete(idempotencyKey);
+            return NextResponse.json(
+              {
+                error: "Failed to record user attempt rows in database.",
+                code: "ATTEMPTS_INSERTION_FAILED",
+              },
+              { status: 500 }
+            );
+          }
+        }
+
+        // Update profile streak and canonical total_questions_attempted
+        try {
           const { data: profile } = await supabaseAdmin
             .from("profiles")
-            .select("xp, current_streak, last_practice_date")
+            .select("current_streak, last_practice_date")
             .eq("id", targetUserId)
             .maybeSingle();
 
@@ -458,7 +838,6 @@ export async function POST(
             .eq("user_id", targetUserId);
 
           if (profile) {
-            const earnedXP = (attempt.correctCount || 0) * 10;
             const todayStr = getLocalDateString();
 
             updatedStreak = calculateNextStreakOnPractice(
@@ -470,37 +849,28 @@ export async function POST(
             await supabaseAdmin
               .from("profiles")
               .update({
-                xp: (profile.xp || 0) + earnedXP,
                 current_streak: updatedStreak,
                 last_practice_date: todayStr,
                 total_questions_attempted: canonicalDbAttemptCount ?? attemptsToInsert.length,
               })
               .eq("id", targetUserId);
           }
-
-          // Record session in usage ledger
-          try {
-            const { recordSessionCompletion } = await import("@/lib/payments/entitlements");
-            await recordSessionCompletion({
-              userId: targetUserId,
-              testId: attempt.testId,
-              sessionId: attemptUuid || attemptIdStr || `${targetUserId}_${attempt.testId}`,
-              subject: attempt.subject,
-            });
-          } catch (ledgerErr) {
-            console.warn("[Usage Ledger Record Warning]:", ledgerErr);
-          }
-        } catch (dbErr) {
-          console.warn("[Record Attempt DB Warning]:", dbErr);
+        } catch (profileErr) {
+          console.error("[Profile Update Post-Submission Error]:", profileErr);
         }
       }
 
-      const analytics = computeAnalyticsFromAttempts([attempt]);
+      try {
+        computedAnalytics = computeAnalyticsFromAttempts([attempt]);
+      } catch (analyticsErr) {
+        console.error("[computeAnalyticsFromAttempts Error]:", analyticsErr);
+        computedAnalytics = null;
+      }
 
       return NextResponse.json({
         success: true,
         persistedToDatabase: canPersistToDatabase,
-        analytics,
+        analytics: computedAnalytics,
         attempt,
         questions: authoritativeQuestions,
         streak: updatedStreak,
@@ -514,25 +884,58 @@ export async function POST(
       (body.answersSubmitted === true || (body.questionStates && typeof body.questionStates === "object"));
 
     if (isVerifiedSubmission) {
-      // Re-verify candidate eligibility before releasing authentic answer keys
-      const { checkTestSessionEligibility } = await import("@/lib/payments/entitlements");
-      const eligibility = await checkTestSessionEligibility(authUser.id, params.testId);
+      const rawRevealId = (params.testId && params.testId !== "record-attempt" ? params.testId : body.testId || "").trim();
+      const canonicalTestId = resolveCanonicalTestId(rawRevealId);
+      if (!canonicalTestId) {
+        return NextResponse.json(
+          { error: "Valid testId is required to reveal answers.", code: "INVALID_TEST" },
+          { status: 400 }
+        );
+      }
+      const targetTestId = canonicalTestId;
+      const testUuid = stringToUuid(targetTestId);
 
-      if (!eligibility.allowed) {
+      // Verify candidate ownership on personalized drills and rituals
+      if (!checkTestOwnership(targetTestId, authUser.id)) {
         return NextResponse.json(
           {
-            error: eligibility.reason || "Usage limit reached for this test type. Unlock unlimited access with CUETMate Premium.",
-            code: "PAYWALL_LIMIT_REACHED",
+            error: "Forbidden: You do not have permission to reveal answers for this personalized test.",
+            code: "FORBIDDEN_TEST_OWNERSHIP",
           },
           { status: 403 }
         );
       }
 
-      const { testMeta, questions } = getQuestionsForTest(params.testId);
+      // Verify that candidate has already recorded user_attempts for this exact test
+      const supabaseAdmin = createAdminClient();
+      const { count: attemptCount, error: countErr } = await supabaseAdmin
+        .from("user_attempts")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", authUser.id)
+        .eq("test_id", testUuid);
+
+      if (countErr || !attemptCount || attemptCount === 0) {
+        return NextResponse.json(
+          {
+            error: "Forbidden: Test answers can only be revealed after user attempts have been recorded for this exact test.",
+            code: "NO_ATTEMPTS_FOUND",
+          },
+          { status: 403 }
+        );
+      }
+
+      const testResult = await getAuthoritativeTest(targetTestId);
+      if (!testResult || !testResult.authoritativeQuestions || testResult.authoritativeQuestions.length === 0) {
+        return NextResponse.json(
+          { error: "Invalid test: No authoritative question set found.", code: "INVALID_TEST" },
+          { status: 400 }
+        );
+      }
+
       return NextResponse.json({
         success: true,
-        testMeta,
-        questions,
+        testMeta: testResult.authoritativeMeta,
+        questions: testResult.authoritativeQuestions,
       });
     }
 

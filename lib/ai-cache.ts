@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 // Fast in-memory LRU-like response cache
 // Map key: `${userId}:${testId}`
@@ -73,8 +74,8 @@ export async function setCachedDiagnosticReport(
 
   // 2. Persist to Supabase public.user_attempts.diagnostic_report
   try {
-    const supabase = createClient();
-    await supabase
+    const supabaseAdmin = createAdminClient();
+    await supabaseAdmin
       .from("user_attempts")
       .update({ diagnostic_report: report })
       .eq("user_id", userId)

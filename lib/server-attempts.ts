@@ -1,16 +1,24 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { RecordedTestAttempt } from "@/types";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
  * Reconstructs authentic RecordedTestAttempt[] from public.user_attempts in Supabase.
  * Authoritative single source of truth for student test history directly synced to database.
+ * Requires an authenticated, non-empty userId and queries via privileged admin client
+ * to join authoritative question metadata while strictly enforcing user ownership.
  */
 export async function fetchServerTestAttempts(
-  supabase: SupabaseClient,
+  _supabase: SupabaseClient | null,
   userId: string
 ): Promise<RecordedTestAttempt[]> {
+  if (!userId || typeof userId !== "string" || userId.trim() === "") {
+    throw new Error("[SECURITY FATAL] fetchServerTestAttempts requires a non-empty authenticated userId.");
+  }
+
   try {
-    const { data: userAttempts, error } = await supabase
+    const supabaseAdmin = createAdminClient();
+    const { data: userAttempts, error } = await supabaseAdmin
       .from("user_attempts")
       .select(`
         id,
@@ -43,7 +51,7 @@ export async function fetchServerTestAttempts(
           total_questions
         )
       `)
-      .eq("user_id", userId)
+      .eq("user_id", userId.trim())
       .order("created_at", { ascending: false });
 
     if (error || !userAttempts || userAttempts.length === 0) {

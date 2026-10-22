@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import DashboardClient, { DashboardInitialData } from "@/components/dashboard/DashboardClient";
 import { buildDefaultSubjectCalibration, normalizeSubject } from "@/lib/analytics";
 import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
@@ -103,7 +104,8 @@ export default async function DashboardPage() {
       }
 
       // Query real attempts count and attempt history with question metadata
-      const { data: userAttempts } = await supabase
+      const supabaseAdmin = createAdminClient();
+      const { data: userAttempts } = await supabaseAdmin
         .from("user_attempts")
         .select(`
           id,

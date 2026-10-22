@@ -209,49 +209,6 @@ export interface Database {
           created_at?: string;
         };
       };
-      trophies: {
-        Row: {
-          id: string;
-          title: string;
-          description: string;
-          icon: string;
-          xp_reward: number;
-          created_at: string;
-        };
-        Insert: {
-          id: string;
-          title: string;
-          description: string;
-          icon: string;
-          xp_reward?: number;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          title?: string;
-          description?: string;
-          icon?: string;
-          xp_reward?: number;
-          created_at?: string;
-        };
-      };
-      user_trophies: {
-        Row: {
-          user_id: string;
-          trophy_id: string;
-          unlocked_at: string;
-        };
-        Insert: {
-          user_id: string;
-          trophy_id: string;
-          unlocked_at?: string;
-        };
-        Update: {
-          user_id?: string;
-          trophy_id?: string;
-          unlocked_at?: string;
-        };
-      };
     };
     Views: {
       pacing_analytics_summary: {

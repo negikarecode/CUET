@@ -1,5 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeSubject } from "@/lib/analytics";
+import { resolveCanonicalTestId } from "@/lib/canonical-tests";
+import { stringToUuid } from "@/lib/utils";
+export { stringToUuid };
 import {
   UserEntitlement,
   UserUsageSummary,
@@ -23,6 +26,93 @@ export const FREE_LIMITS = {
   MAX_PRACTICE_SESSIONS: 3,
   MAX_PYQ_PER_SUBJECT: 1,
 } as const;
+
+/**
+ * Option A Authoritative Registry: Designated tests accessible to free-tier candidates.
+ * Restricted strictly to Mock 1, Unit 1 Test 1, and PYQ Paper 1 across all 22 domain subjects.
+ */
+export const DESIGNATED_FREE_TEST_IDS = new Set<string>([
+  // Full-Length Mocks: Paper 1 only across all canonical domain subjects
+  "physics-mock-1",
+  "chemistry-mock-1",
+  "maths-mock-1",
+  "bio-mock-1",
+  "accountancy-mock-1",
+  "eco-mock-1",
+  "bst-mock-1",
+  "history-mock-1",
+  "pol-science-mock-1",
+  "geo-mock-1",
+  "psychology-mock-1",
+  "sociology-mock-1",
+  "physical-education-mock-1",
+  "computer-science-mock-1",
+  "home-science-mock-1",
+  "mass-media-mock-1",
+  "environmental-studies-mock-1",
+  "fine-arts-mock-1",
+  "agriculture-mock-1",
+  "anthropology-mock-1",
+  "english-mock-1",
+  "general-test-mock-1",
+
+  // Unit Practice Tests: Unit 1 Test 1 across all canonical domain subjects
+  "practice-physics-unit1-test1",
+  "practice-chemistry-unit1-test1",
+  "practice-maths-unit1-test1",
+  "practice-bio-unit1-test1",
+  "practice-accountancy-unit1-test1",
+  "practice-eco-unit1-test1",
+  "practice-bst-unit1-test1",
+  "practice-history-unit1-test1",
+  "practice-pol-science-unit1-test1",
+  "practice-geo-unit1-test1",
+  "practice-psychology-unit1-test1",
+  "practice-sociology-unit1-test1",
+  "practice-physical-education-unit1-test1",
+  "practice-computer-science-unit1-test1",
+  "practice-home-science-unit1-test1",
+  "practice-mass-media-unit1-test1",
+  "practice-environmental-studies-unit1-test1",
+  "practice-fine-arts-unit1-test1",
+  "practice-agriculture-unit1-test1",
+  "practice-anthropology-unit1-test1",
+  "practice-english-unit1-test1",
+  "practice-general-test-unit1-test1",
+
+  // Official Past Year Papers: Paper 1 across all canonical domain subjects
+  "physics-pyq-1",
+  "chemistry-pyq-1",
+  "maths-pyq-1",
+  "bio-pyq-1",
+  "accountancy-pyq-1",
+  "eco-pyq-1",
+  "bst-pyq-1",
+  "history-pyq-1",
+  "pol-science-pyq-1",
+  "geo-pyq-1",
+  "psychology-pyq-1",
+  "sociology-pyq-1",
+  "physical-education-pyq-1",
+  "computer-science-pyq-1",
+  "home-science-pyq-1",
+  "mass-media-pyq-1",
+  "environmental-studies-pyq-1",
+  "fine-arts-pyq-1",
+  "agriculture-pyq-1",
+  "anthropology-pyq-1",
+  "english-pyq-1",
+  "general-test-pyq-1",
+]);
+
+/**
+ * Checks whether a testId (or its canonical resolved key) is within the designated free test set.
+ */
+export function isDesignatedFreeTest(testId: string): boolean {
+  if (!testId) return false;
+  const canonical = resolveCanonicalTestId(testId) || testId.toLowerCase().trim();
+  return DESIGNATED_FREE_TEST_IDS.has(canonical);
+}
 
 export const PRICING_CONFIG = {
   STANDARD_PRICE_PAISE: 79900,
@@ -286,6 +376,29 @@ export async function checkTestSessionEligibility(
     const usage = await getUserUsageSummary(userId);
     const lowerId = (testId || "").toLowerCase();
 
+    // Free candidates are strictly restricted to DESIGNATED_FREE_TEST_IDS (Option A)
+    if (!isDesignatedFreeTest(testId)) {
+      return {
+        allowed: false,
+        reason: "This test is exclusive to CUETMate Premium. The Free plan includes designated sample tests (Mock 1, Unit 1 Test 1, and PYQ Paper 1). Upgrade to CUETMate Premium to unlock all tests.",
+        limitReached: true,
+        testType: sessionType,
+        currentUsage:
+          sessionType === "mock"
+            ? usage.mockSessionsCompleted
+            : sessionType === "practice"
+            ? usage.practiceSessionsCompleted
+            : usage.pyqSubjectsAttempted.length,
+        maxAllowed:
+          sessionType === "mock"
+            ? FREE_LIMITS.MAX_MOCK_SESSIONS
+            : sessionType === "practice"
+            ? FREE_LIMITS.MAX_PRACTICE_SESSIONS
+            : FREE_LIMITS.MAX_PYQ_PER_SUBJECT,
+        canonicalSubject,
+      };
+    }
+
     if (sessionType === "mock") {
       // Free users can only access Mock 1 to Mock 3 templates
       const mockMatch =
@@ -431,21 +544,21 @@ export async function recordSessionCompletion(params: {
   const { sessionType, canonicalSubject } = classifyTestType(testId);
   const finalSubject = subject ? normalizeSubject(subject).key : canonicalSubject;
 
-  try {
-    const admin = createAdminClient();
-    await admin.from("user_usage_ledger").upsert(
-      {
-        user_id: userId,
-        session_type: sessionType === "adaptive_drill" ? "practice" : sessionType,
-        test_id: testId,
-        canonical_subject: finalSubject,
-        session_id: sessionId,
-      },
-      { onConflict: "user_id, session_id" }
-    );
-  } catch (err) {
-    // Graceful fallback if table does not exist
-    console.warn("[Usage Ledger Record Notice]:", err);
+  const admin = createAdminClient();
+  const { error } = await admin.from("user_usage_ledger").upsert(
+    {
+      user_id: userId,
+      session_type: sessionType === "adaptive_drill" ? "practice" : sessionType,
+      test_id: testId,
+      canonical_subject: finalSubject,
+      session_id: sessionId,
+    },
+    { onConflict: "user_id, session_id" }
+  );
+
+  if (error) {
+    console.error("[Usage Ledger Record Error]:", error);
+    throw error;
   }
 }
 

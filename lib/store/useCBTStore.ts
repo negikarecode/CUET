@@ -180,14 +180,15 @@ export function clearSessionFromStorage(testId: string): void {
 const secureExamVault = new Map<string, Question[]>();
 
 export function sanitizeQuestionForActiveExam(q: Question): Question {
-  return {
+  const sanitized = {
     ...q,
     // Withhold answer key, explanation, solutions, and misconception hints during active exam
-    correctOptionId: "" as "A",
     explanation: "",
     solution: undefined,
     misconception: undefined,
   };
+  delete (sanitized as any).correctOptionId;
+  return sanitized as Question;
 }
 
 export const useCBTStore = create<CBTStoreState>()((set, get) => ({
@@ -224,6 +225,14 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       current.questions.length === questionsList.length &&
       !current.isSubmitted
     ) {
+      if (!current.attemptId) {
+        set({
+          attemptId:
+            typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+              ? crypto.randomUUID()
+              : stringToUuid(`${testId}_${Date.now()}`),
+        });
+      }
       return;
     }
 
@@ -743,19 +752,31 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     if (isSubmitted || isSubmitting) return;
     set({ isSubmitting: true, isTimerRunning: false });
 
+    // Generate or retrieve one consistent attemptId UUID for this test submission
+    let currentAttemptId = get().attemptId;
+    if (!currentAttemptId) {
+      currentAttemptId =
+        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : stringToUuid(`${testId || "cbt_exam"}_${Date.now()}`);
+      set({ attemptId: currentAttemptId });
+    }
+
     try {
       // Immediately flush any debounced state saves before computing final score
       cbtAutosave.flush();
 
       // Check if we need to reveal authoritative questions from server first
       let authQuestions = secureExamVault.get(testId) || questions;
-      if (typeof window !== "undefined" && window.location?.origin && (!authQuestions[0]?.correctOptionId)) {
+      const hasRevealedKey = Boolean(authQuestions[0]?.correctOptionId || (authQuestions[0] as any)?.correct_option);
+      if (typeof window !== "undefined" && window.location?.origin && !hasRevealedKey) {
         try {
           const res = await fetch(`/api/test/${testId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               action: "submit",
+              attemptId: currentAttemptId,
               questionStates,
               answersSubmitted: true,
             }),
@@ -793,10 +814,11 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           if (qState.timeSpentSeconds > 72) {
             timeSinkCount += 1;
           }
+          const correctKey = q.correctOptionId || (q as any)?.correct_option;
           if (qState.selectedOption !== null && qState.selectedOption !== undefined) {
-            if (qState.selectedOption === q.correctOptionId) {
+            if (correctKey && qState.selectedOption === correctKey) {
               correctCount += 1;
-            } else {
+            } else if (correctKey) {
               incorrectCount += 1;
             }
           }
@@ -847,9 +869,10 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
         const questionAttempts: RecordedQuestionAttempt[] = authQuestions.map((q) => {
           const qState = questionStates[q.id];
           const selectedOption = qState?.selectedOption ?? null;
+          const correctKey = q.correctOptionId || (q as any)?.correct_option || "";
           const isCorrect =
-            selectedOption !== null && selectedOption !== undefined
-              ? selectedOption === q.correctOptionId
+            selectedOption !== null && selectedOption !== undefined && correctKey
+              ? selectedOption === correctKey
               : null;
           const timeSpent = qState?.timeSpentSeconds ?? 0;
           return {
@@ -863,7 +886,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             options: q.options,
             questionType: q.questionType,
             selectedOption,
-            correctOption: q.correctOptionId,
+            correctOption: correctKey,
             isCorrect,
             timeSpentSeconds: timeSpent,
             isTimeSink: timeSpent > 72,
@@ -957,6 +980,27 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             });
             if (res.ok) {
               const data = await res.json();
+              // Authoritative answer keys & explanations revealed strictly after submit
+              if (data?.questions && Array.isArray(data.questions) && data.questions.length > 0) {
+                set({ questions: data.questions });
+                secureExamVault.set(testId, data.questions);
+              }
+              if (data?.attempt) {
+                // Update with server-computed authoritative scores
+                const authoritativeScore: CBTScoreSummary = {
+                  attemptedCount: data.attempt.attemptedCount ?? summary.attemptedCount,
+                  unattemptedCount: data.attempt.unattemptedCount ?? summary.unattemptedCount,
+                  markedReviewCount: summary.markedReviewCount,
+                  correctCount: data.attempt.correctCount ?? summary.correctCount,
+                  incorrectCount: data.attempt.incorrectCount ?? summary.incorrectCount,
+                  totalMarks: data.attempt.totalMarks ?? summary.totalMarks,
+                  maxMarks: data.attempt.maxMarks ?? summary.maxMarks,
+                  accuracyPercentage: data.attempt.accuracyPercentage ?? summary.accuracyPercentage,
+                  timeTakenSeconds: summary.timeTakenSeconds,
+                  timeSinkCount: summary.timeSinkCount,
+                };
+                set({ submittedScore: authoritativeScore });
+              }
               if (typeof data?.streak === "number") {
                 useTestStore.getState().setStreak(data.streak);
               }

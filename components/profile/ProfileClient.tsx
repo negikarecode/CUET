@@ -8,7 +8,6 @@ import {
   GraduationCap,
   Building2,
   Flame,
-  Zap,
   Edit3,
   Sparkles,
   Target,
@@ -26,9 +25,6 @@ import {
   Calendar,
   Download,
   Trash2,
-  Eye,
-  EyeOff,
-  HelpCircle,
   Info,
 } from "lucide-react";
 import {
@@ -138,18 +134,6 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
   const upcomingSeasons = useMemo(() => getUpcomingCuetSeasons(), []);
   const [examDate, setExamDate] = useState<string>(upcomingSeasons[0] || "May 2027");
 
-  // Leaderboard Privacy: default for new users is anonymous (privacy-safe) unless user previously consented
-  const [isAnonymous, setIsAnonymous] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
-    try {
-      const saved = localStorage.getItem("cuet_leaderboard_anonymous");
-      if (saved === null) return true; // Default anonymous for new users
-      return saved === "true";
-    } catch {
-      return true;
-    }
-  });
-
   // Load push preference, reminder time & exam season from storage
   useEffect(() => {
     setPushEnabled(isPushPreferenceEnabled());
@@ -161,11 +145,6 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       const savedDate = localStorage.getItem("cuet_target_exam_date");
       if (savedDate) setExamDate(savedDate);
       else setExamDate(upcomingSeasons[0] || "May 2027");
-
-      const savedAnon = localStorage.getItem("cuet_leaderboard_anonymous");
-      if (savedAnon !== null) {
-        setIsAnonymous(savedAnon === "true");
-      }
     } catch {
       // Safe fallback
     }
@@ -182,16 +161,14 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
     }
 
     if (zustandUser && zustandUser.id === profile.id) {
-      if (zustandUser.dailyStreak !== profile.currentStreak || zustandUser.xpPoints > profile.xp) {
+      if (zustandUser.dailyStreak !== profile.currentStreak) {
         setProfile((prev) => ({
           ...prev,
           currentStreak: zustandUser.dailyStreak,
-          xp: Math.max(prev.xp, zustandUser.xpPoints),
-          campusCoins: Math.max(prev.campusCoins, zustandUser.campusCoins ?? 0),
         }));
       }
     }
-  }, [profile.id, zustandUser, profile.currentStreak, profile.xp, upcomingSeasons]);
+  }, [profile.id, zustandUser, profile.currentStreak, upcomingSeasons]);
 
   // Hydrate store if empty and server provided real attempts
   useEffect(() => {
@@ -326,22 +303,6 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
     }
   };
 
-  const handleToggleLeaderboardPrivacy = () => {
-    const nextVal = !isAnonymous;
-    setIsAnonymous(nextVal);
-    try {
-      localStorage.setItem("cuet_leaderboard_anonymous", String(nextVal));
-      setStatusMessage({
-        type: "success",
-        text: nextVal
-          ? "You will appear as Anonymous on the leaderboard."
-          : "Your name and college will be visible on the leaderboard.",
-      });
-      setTimeout(() => setStatusMessage(null), 3000);
-    } catch {
-      // Safe fallback
-    }
-  };
 
   const handleReminderTimeChange = (timeVal: string) => {
     setReminderTime(timeVal);
@@ -507,7 +468,6 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         attempts: testAttempts || [],
         settings: {
           examDate,
-          isAnonymous,
           pushEnabled,
           reminderTime,
         },
@@ -769,36 +729,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
         </div>
 
-        {/* Quick Stats: Total Experience with tooltip & Practice Streak Flame */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* XP Pill with Info Tooltip */}
-          <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-xs">
-                <Zap className="w-5 h-5 fill-indigo-500 text-indigo-500" />
-              </div>
-              <div>
-                <div className="flex items-center gap-1">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-indigo-900/60">
-                    Total Experience
-                  </p>
-                  <span
-                    className="cursor-help text-indigo-400 hover:text-indigo-600 inline-flex items-center"
-                    title="Earn XP by attempting tests (+10 XP per correct answer, +50 XP per completed mock). Level 1 (<500 XP), Level 2 (500-1499 XP), Level 3 (1500+ XP)."
-                  >
-                    <HelpCircle className="w-3.5 h-3.5" />
-                  </span>
-                </div>
-                <p className="text-lg font-extrabold text-slate-900 font-sans leading-none mt-0.5">
-                  {profile.xp.toLocaleString()} XP
-                </p>
-              </div>
-            </div>
-            <span className="text-xs font-bold px-2.5 py-1 bg-white text-indigo-700 rounded-full border border-indigo-100 shadow-xs">
-              {profile.xp >= 1500 ? "Level 3" : profile.xp >= 500 ? "Level 2" : "Level 1"}
-            </span>
-          </div>
-
+        {/* Quick Stats: Practice Streak Flame */}
+        <div className="grid grid-cols-1 gap-4">
           {/* Streak Flame Pill */}
           <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -818,8 +750,6 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               {profile.currentStreak >= 7 ? "7d Streak Master" : "Active"}
             </span>
           </div>
-
-          {/* TODO: Campus Coins currently have no redemption store or spending mechanism in the app. Hiding coins tile until redemption catalog is implemented. */}
         </div>
       </section>
 
@@ -1174,53 +1104,6 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             />
           </div>
 
-          {/* Leaderboard Privacy Explicit Toggle */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
-                  {isAnonymous ? <EyeOff className="w-4 h-4 text-amber-600" /> : <Eye className="w-4 h-4 text-slate-600" />}
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-slate-900">
-                    Show my name on the leaderboard
-                  </h4>
-                  <p className="text-[13px] text-slate-500 font-medium">
-                    {isAnonymous
-                      ? "You appear as Anonymous on the leaderboard"
-                      : "Your name and college are visible"}
-                  </p>
-                </div>
-              </div>
-
-              {/* On = visible (!isAnonymous), Off = hidden (isAnonymous) */}
-              <button
-                type="button"
-                onClick={handleToggleLeaderboardPrivacy}
-                className={`w-11 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${
-                  !isAnonymous ? "bg-blue-600" : "bg-slate-200"
-                }`}
-                aria-label="Toggle show name on leaderboard"
-              >
-                <div
-                  className={`w-5 h-5 rounded-full bg-white shadow-xs transition-transform ${
-                    !isAnonymous ? "translate-x-5" : "translate-x-0"
-                  }`}
-                />
-              </button>
-            </div>
-
-            <div className="pt-1 pl-10.5">
-              <Link
-                href="/dashboard/leaderboard"
-                className="text-xs font-semibold text-blue-600 hover:underline inline-flex items-center gap-1"
-              >
-                <span>See how I appear</span>
-                <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-          </div>
-
           {/* Daily Revision Push Alerts with Time Picker */}
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
@@ -1330,7 +1213,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               Reset practice data
             </p>
             <p className="text-[13px] text-slate-500">
-              Clear mock test sessions, averages, streak, and diagnostic progress. Keeps your XP and saved target.
+              Clear mock test sessions, averages, streak, and diagnostic progress. Keeps your saved dream college target.
             </p>
           </div>
           <button

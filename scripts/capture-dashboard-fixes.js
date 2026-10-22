@@ -111,7 +111,6 @@ async function capture() {
   const pagesToTest = [
     { url: 'http://localhost:3000/dashboard/sessions', name: 'sessions', selector: 'table' },
     { url: 'http://localhost:3000/dashboard/radar', name: 'radar', selector: 'h1' },
-    { url: 'http://localhost:3000/dashboard/leaderboard', name: 'leaderboard', selector: 'table' },
     { url: 'http://localhost:3000/dashboard/profile', name: 'profile', selector: 'h1' }
   ];
 

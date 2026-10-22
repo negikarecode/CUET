@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import WeaknessRadarClient, {
   WeaknessRadarInitialData,
 } from "@/components/dashboard/WeaknessRadarClient";
@@ -125,7 +126,8 @@ export default async function WeaknessRadarPage() {
       serverData.serverAttempts = await fetchServerTestAttempts(supabase, authUser.id);
 
       // Query authentic attempt history
-      const { data: userAttempts } = await supabase
+      const supabaseAdmin = createAdminClient();
+      const { data: userAttempts } = await supabaseAdmin
         .from("user_attempts")
         .select(`
           id,
