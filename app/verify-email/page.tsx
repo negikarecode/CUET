@@ -21,15 +21,64 @@ function VerifyEmailContent() {
   const [inputError, setInputError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!email) {
-      // Check if user session has an email
-      const supabase = createClient();
-      supabase.auth.getUser().then(({ data }) => {
-        if (data.user?.email) {
-          setEmail(data.user.email);
-        }
-      });
+    const supabase = createClient();
+
+    // 1. Detect if URL hash has authentication tokens (implicit confirmation link)
+    if (typeof window !== "undefined" && window.location.hash) {
+      const hashClean = window.location.hash.replace(/^#/, "");
+      const hashParams = new URLSearchParams(hashClean);
+      const accessToken = hashParams.get("access_token");
+      const refreshToken = hashParams.get("refresh_token");
+
+      if (accessToken && refreshToken) {
+        supabase.auth
+          .setSession({ access_token: accessToken, refresh_token: refreshToken })
+          .then(({ data, error }) => {
+            if (!error && data?.session) {
+              fetch("/api/auth/session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ access_token: accessToken, refresh_token: refreshToken }),
+              }).finally(() => {
+                window.location.replace("/dashboard");
+              });
+            }
+          });
+        return;
+      }
     }
+
+    // 2. If user is already authenticated and verified, navigate to dashboard immediately
+    supabase.auth.getUser().then(({ data }) => {
+      const u = data?.user;
+      if (u) {
+        const isVerified = Boolean(
+          u.email_confirmed_at ||
+            (u as any).confirmed_at ||
+            (u.app_metadata?.provider && u.app_metadata.provider !== "email")
+        );
+        if (isVerified) {
+          window.location.replace("/dashboard");
+          return;
+        }
+        if (u.email && !email) {
+          setEmail(u.email);
+        }
+      }
+    });
+
+    // 3. Listen for auth state changes (e.g. user confirmed in another tab or window)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user?.email_confirmed_at) {
+        window.location.replace("/dashboard");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [email]);
 
   const handleManualEmailSubmit = (e: React.FormEvent) => {

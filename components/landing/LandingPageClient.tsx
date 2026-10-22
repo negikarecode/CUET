@@ -2547,6 +2547,37 @@ export default function LandingPageClient() {
     let isMounted = true;
     const supabase = createClient();
 
+    // Detect implicit hash tokens if redirected to root by Supabase default Site URL
+    if (typeof window !== "undefined" && window.location.hash) {
+      const hashClean = window.location.hash.replace(/^#/, "");
+      const hashParams = new URLSearchParams(hashClean);
+      const hashType = hashParams.get("type");
+      const accessToken = hashParams.get("access_token");
+      const refreshToken = hashParams.get("refresh_token");
+
+      if (hashType === "recovery") {
+        window.location.replace("/reset-password" + window.location.hash);
+        return;
+      }
+
+      if (accessToken && refreshToken) {
+        supabase.auth
+          .setSession({ access_token: accessToken, refresh_token: refreshToken })
+          .then(({ data, error }) => {
+            if (!error && data?.session) {
+              fetch("/api/auth/session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ access_token: accessToken, refresh_token: refreshToken }),
+              }).finally(() => {
+                window.location.replace("/dashboard");
+              });
+            }
+          });
+        return;
+      }
+    }
+
     // Check authoritative Supabase session to prevent stale localStorage from falsely showing logged-in state
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!isMounted) return;

@@ -1,16 +1,16 @@
 import { type EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { getSafeRedirectPath } from "@/lib/security/redirects";
+import { syncUserProfile, renderAuthHandoffHtml, handleAuthSessionPost } from "./auth-session";
 
 export const dynamic = "force-dynamic";
 
 /**
  * GET /auth/callback
  * Universal authentication redirection callback for Supabase SSR.
- * Handles token_hash verification, PKCE code exchange, and profile synchronization.
+ * Handles token_hash verification, PKCE code exchange, implicit URL fragment tokens (#access_token=...),
+ * and graceful repeated clicks.
  */
 export async function GET(request: NextRequest) {
   const origin =
@@ -29,12 +29,10 @@ export async function GET(request: NextRequest) {
   const errorDescription = searchParams.get("error_description");
   if (errorParam) {
     console.error("[Auth Callback Error]:", errorParam, errorDescription);
-    const errorUrl = new URL("/verify-email", origin);
+    const errorUrl = new URL(type === "recovery" ? "/forgot-password" : "/verify-email", origin);
     errorUrl.searchParams.set("error", errorDescription || errorParam);
     return NextResponse.redirect(errorUrl);
   }
-
-  // 2. Custom rate limiting on auth callback is temporarily disabled
 
   const supabaseUrl =
     process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -124,11 +122,13 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // 3. Repeated Click Handling if neither token_hash nor code is provided
+  // 3. Handshake Flow: If neither token_hash nor code is provided in query params
   if (!token_hash && !code) {
     const {
       data: { user: currentUser },
     } = await supabase.auth.getUser();
+
+    // If candidate browser already has an active verified session, route directly to destination
     if (
       currentUser &&
       (currentUser.email_confirmed_at ||
@@ -139,6 +139,24 @@ export async function GET(request: NextRequest) {
       console.log(`[Auth Callback] Active verified session detected without query params. Redirecting to ${next}`);
       return response;
     }
+
+    // If client requested JSON (API client), return 400 Bad Request
+    if (request.headers.get("accept")?.includes("application/json")) {
+      return NextResponse.json(
+        { error: "Missing token_hash or authorization code parameter", code: "MISSING_AUTH_PARAMS" },
+        { status: 400 }
+      );
+    }
+
+    // Otherwise, render client handoff HTML.
+    // Handles implicit hash fragment redirects (#access_token=...&refresh_token=...) sent by Supabase email verify
+    return new NextResponse(renderAuthHandoffHtml(next, type), {
+      status: 200,
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store, max-age=0",
+      },
+    });
   }
 
   // 4. Process Successful Verification
@@ -152,48 +170,7 @@ export async function GET(request: NextRequest) {
       }
 
       if (verifiedUser) {
-        const supabaseAdmin = createAdminClient();
-        const { data: existingProfile } = await supabaseAdmin
-          .from("profiles")
-          .select("id")
-          .eq("id", verifiedUser.id)
-          .maybeSingle();
-
-        if (!existingProfile) {
-          const metadata = verifiedUser.user_metadata || {};
-          const streamRaw = (metadata.target_stream || "Commerce").toLowerCase();
-          const formattedStream =
-            streamRaw === "science"
-              ? "Science"
-              : streamRaw === "humanities"
-              ? "Humanities"
-              : "Commerce";
-
-          const subjectsToPersist =
-            Array.isArray(metadata.selected_subjects) && metadata.selected_subjects.length > 0
-              ? metadata.selected_subjects
-              : getSubjectsForStream(formattedStream);
-
-          await supabaseAdmin.from("profiles").upsert(
-            {
-              id: verifiedUser.id,
-              full_name: metadata.full_name || verifiedUser.email?.split("@")[0] || "CUET Aspirant",
-              target_stream: formattedStream,
-              target_university: metadata.target_university || "Delhi University",
-              target_college: metadata.target_college || "SRCC",
-              target_course: metadata.target_course || "B.Com (Hons)",
-              selected_subjects: subjectsToPersist,
-              xp: 0,
-              campus_coins: 50,
-              current_streak: 0,
-              is_premium: false,
-              subscription_tier: "free",
-              updated_at: new Date().toISOString(),
-            },
-            { onConflict: "id" }
-          );
-        }
-
+        await syncUserProfile(verifiedUser);
         console.log(`[Auth Callback] User ${verifiedUser.id} verified successfully. Redirecting to ${next}`);
         return response;
       }
@@ -213,6 +190,14 @@ export async function GET(request: NextRequest) {
       : "The confirmation link is invalid, expired, or has already been used. Please request a new confirmation email."
   );
   return NextResponse.redirect(failureUrl);
+}
+
+/**
+ * POST /auth/callback
+ * Session synchronization handler for client-side tokens.
+ */
+export async function POST(request: NextRequest) {
+  return handleAuthSessionPost(request);
 }
 
 export { GET as handleAuthCallback };

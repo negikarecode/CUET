@@ -1,13 +1,36 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import ResetPasswordView from "@/components/auth/ResetPasswordView";
+import { createClient } from "@/lib/supabase/client";
 
 function ResetPasswordContent() {
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      const hashClean = window.location.hash.replace(/^#/, "");
+      const hashParams = new URLSearchParams(hashClean);
+      const accessToken = hashParams.get("access_token");
+      const refreshToken = hashParams.get("refresh_token");
+
+      if (accessToken && refreshToken) {
+        const supabase = createClient();
+        supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken }).then(({ data, error }) => {
+          if (!error && data?.session) {
+            fetch("/api/auth/session?next=/reset-password", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ access_token: accessToken, refresh_token: refreshToken }),
+            });
+          }
+        });
+      }
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-center py-10 sm:py-16 px-4 sm:px-6 lg:px-8">

@@ -7,6 +7,7 @@ import { getAdminPYQ, patchAdminPYQ } from "@/lib/api-handlers/admin-pyq";
 import { handleSundayRitual } from "@/lib/api-handlers/cron-sunday-ritual";
 import { handleAuthCallback } from "@/lib/api-handlers/auth-callback";
 import { handleAuthConfirm } from "@/lib/api-handlers/auth-confirm";
+import { handleAuthSessionPost } from "@/lib/api-handlers/auth-session";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -99,6 +100,11 @@ export async function POST(req: NextRequest, context?: RouteContext): Promise<Re
   // 3. /api/auth/rate-check
   if (path === "auth/rate-check") {
     return handleRateCheck(req);
+  }
+
+  // 4. /api/auth/session, /api/auth/callback, /api/auth/confirm
+  if (path === "auth/session" || path === "auth/callback" || path === "auth/confirm") {
+    return handleAuthSessionPost(req);
   }
 
   return NextResponse.json(
