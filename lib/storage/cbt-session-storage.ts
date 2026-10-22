@@ -463,6 +463,9 @@ export function loadCBTSessionSync(
 export function clearCBTSessionSync(testId: string, userId?: string): void {
   if (typeof window === "undefined" || !testId) return;
 
+  // Cancel any pending debounced autosave for this test immediately
+  cbtAutosave.cancel(testId);
+
   const targetUid = userId || getActiveUserId();
   const key = getCBTSessionKey(testId, targetUid);
 
@@ -535,6 +538,24 @@ class CBTAutosaveManager {
     }
 
     return success;
+  }
+
+  /**
+   * Cancels any pending debounced autosave.
+   * If a testId is specified, cancels only if the pending session matches that testId.
+   */
+  public cancel(testId?: string): void {
+    if (this.pendingTimer) {
+      if (!testId || this.pendingSession?.testId === testId) {
+        clearTimeout(this.pendingTimer);
+        this.pendingTimer = null;
+        this.pendingSession = null;
+        this.saveStatus = "idle";
+      }
+    } else if (!testId || this.pendingSession?.testId === testId) {
+      this.pendingSession = null;
+      this.saveStatus = "idle";
+    }
   }
 
   public getStatus(): "idle" | "saving" | "saved" | "error" {

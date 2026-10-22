@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { useCBTStore } from "@/lib/store/useCBTStore";
 import { buildPostMockDeterministicReport } from "@/lib/post-mock-engine";
+import { resolveCanonicalTestId } from "@/lib/canonical-tests";
 import PostMockAnalysisClient from "@/components/cbt/PostMockAnalysisClient";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 
@@ -15,7 +15,6 @@ export default function MockAnalysisPage({ attemptId: propAttemptId }: { attempt
   const router = useRouter();
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
-  const resetSession = useCBTStore((state) => state.resetSession);
 
   const slug = (params?.slug as string[]) || [];
   const slugAttemptId = slug[0] === "mocks" && slug[1] === "analysis" ? slug[2] : "";
@@ -87,8 +86,10 @@ export default function MockAnalysisPage({ attemptId: propAttemptId }: { attempt
       <PostMockAnalysisClient
         report={report}
         onRetake={() => {
-          resetSession();
-          router.push(`/test/${matchingAttempt.testId}?reattempt=true`);
+          const canonicalSlug =
+            resolveCanonicalTestId(matchingAttempt.testId, matchingAttempt.testTitle, matchingAttempt.subject) ||
+            matchingAttempt.testId;
+          router.push(`/test/${canonicalSlug}?reattempt=true`);
         }}
       />
     </div>

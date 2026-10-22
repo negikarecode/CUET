@@ -97,11 +97,14 @@ export function buildScoredSet(
 
     const authQ = authoritativeQuestions[aIdx];
     const clientQ = clientQuestions[matchedClientIdx];
-    const authExpectedKey = (
+    const rawExpectedKey =
       authQ.correctOptionId ||
       authQ.correct_option ||
-      ""
-    )
+      authQ.correctOption ||
+      authQ.options?.find((o: any) => o.isCorrect === true)?.id ||
+      "";
+
+    const authExpectedKey = rawExpectedKey
       .toString()
       .trim()
       .toUpperCase() as "A" | "B" | "C" | "D";

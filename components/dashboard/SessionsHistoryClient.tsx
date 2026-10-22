@@ -27,6 +27,7 @@ import { RecordedTestAttempt } from "@/types";
 import { formatDateTimeIndian } from "@/lib/config/dashboardConfig";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { stringToUuid } from "@/lib/utils";
+import { resolveCanonicalTestId } from "@/lib/canonical-tests";
 import { deduplicateTestAttempts, getCanonicalTestKey } from "@/lib/analytics";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 
@@ -111,7 +112,11 @@ function getReviewHref(att?: RecordedTestAttempt | null): string {
 
 function getRetakeHref(att?: RecordedTestAttempt | null): string {
   if (!att) return "/dashboard/mocks";
-  const targetId = att.testId || att.id || "";
+  const targetId =
+    resolveCanonicalTestId(att.testId || att.id, att.testTitle, att.subject) ||
+    att.testId ||
+    att.id ||
+    "";
   return `/test/${targetId}?reattempt=true`;
 }
 

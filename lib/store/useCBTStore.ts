@@ -211,6 +211,11 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
   submittedScore: null,
 
   initTest: (testId, meta, questionsList, forceFresh = false) => {
+    if (!questionsList || questionsList.length === 0) {
+      console.warn(`[useCBTStore] Cannot initialize test "${testId}": questions list is empty.`);
+      return;
+    }
+
     // Store full question payload in private vault
     if (questionsList && questionsList.length > 0) {
       secureExamVault.set(testId, questionsList);
@@ -355,6 +360,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     }
 
     // Initialize a completely FRESH test session
+    cbtAutosave.cancel(testId);
     clearSessionFromStorage(testId);
 
     const initialStates: Record<string, QuestionSessionState> = {};
@@ -768,7 +774,12 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
 
       // Check if we need to reveal authoritative questions from server first
       let authQuestions = secureExamVault.get(testId) || questions;
-      const hasRevealedKey = Boolean(authQuestions[0]?.correctOptionId || (authQuestions[0] as any)?.correct_option);
+      const hasRevealedKey = Boolean(
+        authQuestions[0]?.correctOptionId ||
+        (authQuestions[0] as any)?.correct_option ||
+        (authQuestions[0] as any)?.correctOption ||
+        authQuestions[0]?.options?.some((o: any) => o.isCorrect === true)
+      );
       if (typeof window !== "undefined" && window.location?.origin && !hasRevealedKey) {
         try {
           const res = await fetch(`/api/test/${testId}`, {
@@ -814,7 +825,12 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           if (qState.timeSpentSeconds > 72) {
             timeSinkCount += 1;
           }
-          const correctKey = q.correctOptionId || (q as any)?.correct_option;
+          const rawCorrectKey =
+            q.correctOptionId ||
+            (q as any)?.correct_option ||
+            (q as any)?.correctOption ||
+            q.options?.find((o: any) => o.isCorrect === true)?.id;
+          const correctKey = rawCorrectKey ? String(rawCorrectKey).trim().toUpperCase() : null;
           if (qState.selectedOption !== null && qState.selectedOption !== undefined) {
             if (correctKey && qState.selectedOption === correctKey) {
               correctCount += 1;

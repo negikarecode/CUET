@@ -1,6 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { RecordedTestAttempt } from "@/types";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { resolveCanonicalTestId } from "@/lib/canonical-tests";
 
 /**
  * Reconstructs authentic RecordedTestAttempt[] from public.user_attempts in Supabase.
@@ -93,9 +94,10 @@ export async function fetchServerTestAttempts(
       const testTotalQuestions = testObj?.total_questions || 50;
 
       if (!testGroups.has(sessionAttemptId)) {
+        const canonicalSlug = resolveCanonicalTestId(String(tId), String(testTitle), String(subject));
         testGroups.set(sessionAttemptId, {
           attemptId: ua.attempt_id ? String(ua.attempt_id) : sessionAttemptId,
-          testId: String(tId),
+          testId: canonicalSlug || String(tId),
           testTitle: String(testTitle),
           subject: String(subject),
           totalQuestions: Number(testTotalQuestions) || 50,

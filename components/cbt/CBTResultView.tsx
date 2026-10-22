@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
@@ -10,13 +11,14 @@ import { RecordedTestAttempt } from "@/types";
 import PostMockAnalysisClient from "./PostMockAnalysisClient";
 import { buildPostMockDeterministicReport } from "@/lib/post-mock-engine";
 import { stringToUuid } from "@/lib/utils";
+import { resolveCanonicalTestId } from "@/lib/canonical-tests";
 
 export default function CBTResultView() {
+  const router = useRouter();
   const testMeta = useCBTStore((state) => state.testMeta);
   const questions = useCBTStore((state) => state.questions);
   const answers = useCBTStore((state) => state.answers);
   const submittedScore = useCBTStore((state) => state.submittedScore);
-  const resetSession = useCBTStore((state) => state.resetSession);
 
   const user = useTestStore((state) => state.user);
   const testAttempts = useTestStore((state) => state.testAttempts);
@@ -171,7 +173,12 @@ export default function CBTResultView() {
       questions: questions.map((q) => {
         const ans = answers[q.id];
         const selectedOption = ans?.selectedOption ?? null;
-        const trueCorrect = q.correctOptionId || (q as any).correct_option || (q as any).correctOption || null;
+        const trueCorrect =
+          q.correctOptionId ||
+          (q as any).correct_option ||
+          (q as any).correctOption ||
+          q.options?.find((o: any) => o.isCorrect === true)?.id ||
+          null;
         const isCorrect =
           selectedOption !== null && selectedOption !== undefined && trueCorrect
             ? selectedOption === trueCorrect
@@ -205,7 +212,12 @@ export default function CBTResultView() {
     return buildPostMockDeterministicReport(syntheticAttempt, questions);
   }, [questions, answers, submittedScore, testMeta, user.id, testAttempts]);
 
-  const hasRevealedKey = Boolean(questions[0]?.correctOptionId || (questions[0] as any)?.correct_option || (questions[0] as any)?.correctOption);
+  const hasRevealedKey = Boolean(
+    questions[0]?.correctOptionId ||
+    (questions[0] as any)?.correct_option ||
+    (questions[0] as any)?.correctOption ||
+    questions[0]?.options?.some((o: any) => o.isCorrect === true)
+  );
   if (!submittedScore || (questions.length > 0 && !hasRevealedKey)) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
@@ -242,7 +254,13 @@ export default function CBTResultView() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-300">
       <PostMockAnalysisClient
         report={deterministicReport}
-        onRetake={resetSession}
+        onRetake={() => {
+          const canonicalSlug =
+            resolveCanonicalTestId(testMeta?.id, testMeta?.title, testMeta?.subject) ||
+            testMeta?.id ||
+            "cbt_exam";
+          router.push(`/test/${canonicalSlug}?reattempt=true`);
+        }}
         attemptsCount={attemptsCount}
         bestMarks={bestMarks}
         bestAccuracy={bestAccuracy}

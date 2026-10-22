@@ -28,6 +28,7 @@ import { getTestAttemptStats } from "@/lib/analytics";
 import MathRenderer from "@/components/cbt/MathRenderer";
 import CBTMatchTheFollowingView, { parseMatchTheFollowing } from "@/components/cbt/CBTMatchTheFollowingView";
 import { safeCapitalizeOptionText } from "@/lib/utils";
+import { resolveCanonicalTestId } from "@/lib/canonical-tests";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 import UpgradeButton from "@/components/payments/UpgradeButton";
 
@@ -352,7 +353,10 @@ export default function PostMockAnalysisClient({
           ) : (
             <button
               type="button"
-              onClick={() => router.push(`/test/${report.testId}?reattempt=true`)}
+              onClick={() => {
+                const targetId = resolveCanonicalTestId(report.testId, report.testTitle, report.subject) || report.testId;
+                router.push(`/test/${targetId}?reattempt=true`);
+              }}
               className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center gap-2 cursor-pointer shrink-0 whitespace-nowrap"
             >
               <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
@@ -1493,7 +1497,10 @@ export default function PostMockAnalysisClient({
           ) : (
             <button
               type="button"
-              onClick={() => router.push(`/test/${report.testId}?reattempt=true`)}
+              onClick={() => {
+                const targetId = resolveCanonicalTestId(report.testId, report.testTitle, report.subject) || report.testId;
+                router.push(`/test/${targetId}?reattempt=true`);
+              }}
               className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap"
             >
               <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />

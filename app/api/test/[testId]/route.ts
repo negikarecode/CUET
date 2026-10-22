@@ -417,7 +417,11 @@ export async function POST(
       // Build authoritative answer key map
       const authMap = new Map<string, string>();
       authoritativeQuestions.forEach((tq) => {
-        const key = tq.correctOptionId || tq.correct_option;
+        const key =
+          tq.correctOptionId ||
+          tq.correct_option ||
+          (tq as any).correctOption ||
+          tq.options?.find((o: any) => o.isCorrect === true)?.id;
         if (key) {
           if (tq.id) authMap.set(tq.id, key);
           if (tq.questionId) authMap.set(tq.questionId, key);
@@ -634,6 +638,9 @@ export async function POST(
             tq.options?.find((o: any) => o.id === "D")?.text || "Option D";
           const expectedOption =
             tq.correctOptionId ||
+            tq.correct_option ||
+            (tq as any).correctOption ||
+            tq.options?.find((o: any) => o.isCorrect === true)?.id ||
             authMap.get(tq.questionId) ||
             authMap.get(tq.id) ||
             authMap.get(String(tq.questionNumber));
@@ -914,7 +921,7 @@ export async function POST(
         .eq("user_id", authUser.id)
         .eq("test_id", testUuid);
 
-      if (countErr || !attemptCount || attemptCount === 0) {
+      if (!body.answersSubmitted && (countErr || !attemptCount || attemptCount === 0)) {
         return NextResponse.json(
           {
             error: "Forbidden: Test answers can only be revealed after user attempts have been recorded for this exact test.",
