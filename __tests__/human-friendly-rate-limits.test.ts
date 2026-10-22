@@ -20,8 +20,8 @@ dotenv.config({ path: ".env" });
 
 import { NextRequest } from "next/server";
 import { parseAuthError } from "../lib/auth/emailErrorHandler";
-import { POST as rateCheckHandler } from "../app/api/auth/rate-check/route";
-import { GET as confirmHandler } from "../app/auth/confirm/route";
+import { handleRateCheck as rateCheckHandler } from "../lib/api-handlers/auth-rate-check";
+import { handleAuthConfirm as confirmHandler } from "../lib/api-handlers/auth-confirm";
 import { validateEmail } from "../lib/auth/validation";
 import { createClient } from "@supabase/supabase-js";
 

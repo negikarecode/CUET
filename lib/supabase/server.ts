@@ -6,7 +6,16 @@ import { cookies } from "next/headers";
  * Safely accesses and forwards cookies during SSR.
  */
 export function createClient() {
-  const cookieStore = cookies();
+  let cookieStore: any;
+  try {
+    cookieStore = cookies();
+  } catch {
+    cookieStore = {
+      getAll: () => [],
+      set: () => {},
+      get: () => undefined,
+    };
+  }
   const supabaseUrl =
     process.env.NEXT_PUBLIC_SUPABASE_URL ||
     "https://djqgpcbjcszczcfrirri.supabase.co";
@@ -18,7 +27,7 @@ export function createClient() {
   return createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
-        return cookieStore.getAll();
+        return typeof cookieStore?.getAll === "function" ? cookieStore.getAll() : [];
       },
       setAll(
         cookiesToSet: {
@@ -29,7 +38,7 @@ export function createClient() {
       ) {
         try {
           cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
+            cookieStore?.set?.(name, value, options)
           );
         } catch {
           // The `setAll` method was called from a Server Component.

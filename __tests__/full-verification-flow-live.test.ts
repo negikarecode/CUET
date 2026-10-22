@@ -18,7 +18,7 @@ dotenv.config({ path: ".env" });
 
 import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { GET as confirmHandler } from "../app/auth/confirm/route";
+import { handleAuthConfirm as confirmHandler } from "../lib/api-handlers/auth-confirm";
 import { updateSession } from "../lib/supabase/middleware";
 
 function assert(condition: boolean, message: string) {

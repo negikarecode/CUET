@@ -46,8 +46,8 @@ async function runRouteSmokeTests() {
     assert(typeof pyqPage.default === "function", "app/dashboard/pyqs/page exports default component");
 
     // 5. Standing Page
-    const standingPage = await import("../app/dashboard/standing/page");
-    assert(typeof standingPage.default === "function", "app/dashboard/standing/page exports default component");
+    const standingPage = await import("../lib/dashboard-views/standing");
+    assert(typeof standingPage.default === "function", "lib/dashboard-views/standing exports default component");
 
     // 6. Notes Page & Metadata
     const notesPage = await import("../app/dashboard/notes/page");
@@ -55,16 +55,20 @@ async function runRouteSmokeTests() {
     assert(typeof notesPage.default === "function", "app/dashboard/notes/page exports default component");
 
     // 7. Radar Page
-    const radarPage = await import("../app/dashboard/radar/page");
-    assert(typeof radarPage.default === "function", "app/dashboard/radar/page exports default component");
+    const radarPage = await import("../lib/dashboard-views/radar");
+    assert(typeof radarPage.default === "function", "lib/dashboard-views/radar exports default component");
 
-    // 8. Dashboard Page
-    const dashboardPage = await import("../app/dashboard/page");
-    assert(typeof dashboardPage.default === "function", "app/dashboard/page exports default component");
+    // 8. Dashboard Catch-All Page & Home
+    const dashboardCatchAllPage = await import("../app/dashboard/[[...slug]]/page");
+    assert(typeof dashboardCatchAllPage.default === "function", "app/dashboard/[[...slug]]/page exports default component");
+    assert(typeof dashboardCatchAllPage.generateMetadata === "function", "app/dashboard/[[...slug]]/page exports generateMetadata");
+
+    const dashboardHomePage = await import("../lib/dashboard-views/dashboard-home");
+    assert(typeof dashboardHomePage.default === "function", "lib/dashboard-views/dashboard-home exports default component");
 
     // 9. Profile Page
-    const profilePage = await import("../app/dashboard/profile/page");
-    assert(typeof profilePage.default === "function", "app/dashboard/profile/page exports default component");
+    const profilePage = await import("../lib/dashboard-views/profile");
+    assert(typeof profilePage.default === "function", "lib/dashboard-views/profile exports default component");
 
   } catch (err: any) {
     failed++;

@@ -282,7 +282,7 @@ describe("Part C: Payment Fulfillment Invariants & Failure Boundary Tests", () =
     const entitlementsPath = path.join(__dirname, "../lib/payments/entitlements.ts");
     const entitlementsContent = fs.readFileSync(entitlementsPath, "utf-8");
 
-    const attemptsRoutePath = path.join(__dirname, "../app/api/student/attempts/route.ts");
+    const attemptsRoutePath = path.join(__dirname, "../lib/api-handlers/student-attempts.ts");
     const attemptsRouteContent = fs.readFileSync(attemptsRoutePath, "utf-8");
 
     const testRoutePath = path.join(__dirname, "../app/api/test/[testId]/route.ts");

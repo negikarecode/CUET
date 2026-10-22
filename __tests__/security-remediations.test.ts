@@ -392,7 +392,7 @@ describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", ()
     });
 
     it("should verify profile server route uses service-role and never mutates privileged fields from client input", () => {
-      const profileRoutePath = path.join(__dirname, "../app/api/auth/profile/route.ts");
+      const profileRoutePath = path.join(__dirname, "../lib/api-handlers/auth-profile.ts");
       const profileContent = fs.readFileSync(profileRoutePath, "utf-8");
 
       assert.ok(
@@ -423,7 +423,7 @@ describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", ()
   // ─── 4. SEC-03 & SEC-04: AI AUTHORIZATION & PAYWALL ────────────────────────
   describe("SEC-03 & SEC-04: AI Route Authentication & Paywall Protection", () => {
     it("should verify doubt-solver enforces verified session and paywall", () => {
-      const doubtSolverPath = path.join(__dirname, "../app/api/ai/[action]/route.ts");
+      const doubtSolverPath = path.join(__dirname, "../lib/api-handlers/ai.ts");
       const content = fs.readFileSync(doubtSolverPath, "utf-8");
 
       assert.ok(
@@ -457,7 +457,7 @@ describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", ()
     });
 
     it("should verify repair-quiz enforces verified session and paywall", () => {
-      const repairQuizPath = path.join(__dirname, "../app/api/ai/[action]/route.ts");
+      const repairQuizPath = path.join(__dirname, "../lib/api-handlers/ai.ts");
       const content = fs.readFileSync(repairQuizPath, "utf-8");
 
       assert.ok(
@@ -479,7 +479,7 @@ describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", ()
     });
 
     it("should verify standing/explain enforces authentication, email verification, and Premium", () => {
-      const standingPath = path.join(__dirname, "../app/api/ai/[action]/route.ts");
+      const standingPath = path.join(__dirname, "../lib/api-handlers/ai.ts");
       const content = fs.readFileSync(standingPath, "utf-8");
 
       assert.ok(
@@ -501,7 +501,7 @@ describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", ()
     });
 
     it("should verify ai/insights enforces authentication and email verification", () => {
-      const insightsPath = path.join(__dirname, "../app/api/ai/[action]/route.ts");
+      const insightsPath = path.join(__dirname, "../lib/api-handlers/ai.ts");
       const content = fs.readFileSync(insightsPath, "utf-8");
 
       assert.ok(

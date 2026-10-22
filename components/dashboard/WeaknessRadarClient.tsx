@@ -39,7 +39,7 @@ import { diagnoseMistakeDeterministically } from "@/lib/mistake-detective";
 import { useCBTStore } from "@/lib/store/useCBTStore";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
-import { RepairQuizResponse } from "@/app/api/ai/[action]/route";
+import { RepairQuizResponse } from "@/lib/api-handlers/ai";
 import { stringToUuid } from "@/lib/utils";
 import {
   TopicMastery,

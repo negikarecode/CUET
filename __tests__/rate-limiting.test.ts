@@ -23,7 +23,7 @@ import {
   resetRateLimitKey,
 } from "../lib/security/rateLimiter";
 import { getRateLimitPolicy } from "../lib/security/rateLimitPolicy";
-import { POST as rateCheckHandler } from "../app/api/auth/rate-check/route";
+import { handleRateCheck as rateCheckHandler } from "../lib/api-handlers/auth-rate-check";
 
 function assert(condition: boolean, message: string) {
   if (!condition) {

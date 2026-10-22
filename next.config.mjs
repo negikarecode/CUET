@@ -42,6 +42,14 @@ const nextConfig = {
   async rewrites() {
     return [
       {
+        source: "/auth/callback",
+        destination: "/api/auth/callback",
+      },
+      {
+        source: "/auth/confirm",
+        destination: "/api/auth/confirm",
+      },
+      {
         source: "/api/admin/pyq/export",
         destination: "/api/admin/pyq?export=1",
       },

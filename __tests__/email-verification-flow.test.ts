@@ -14,8 +14,8 @@ dotenv.config({ path: ".env.local" });
 dotenv.config({ path: ".env" });
 
 import { NextRequest } from "next/server";
-import { GET as confirmHandler } from "../app/auth/confirm/route";
-import { GET as callbackHandler } from "../app/auth/callback/route";
+import { handleAuthConfirm as confirmHandler } from "../lib/api-handlers/auth-confirm";
+import { handleAuthCallback as callbackHandler } from "../lib/api-handlers/auth-callback";
 import { updateSession } from "../lib/supabase/middleware";
 import { getSubjectsForStream } from "../lib/constants/cuetSubjects";
 

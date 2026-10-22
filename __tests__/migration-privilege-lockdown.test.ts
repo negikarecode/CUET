@@ -249,7 +249,7 @@ describe("SEC-08 Migration & Privilege Lockdown Test Suite", () => {
     });
 
     it("app/api/ai/insights/route.ts diagnose-mistake must validate questionId format, selectedOption, and load from DB", () => {
-      const insightsPath = path.join(__dirname, "../app/api/ai/[action]/route.ts");
+      const insightsPath = path.join(__dirname, "../lib/api-handlers/ai.ts");
       const insightsCode = fs.readFileSync(insightsPath, "utf-8");
 
       assert.ok(
