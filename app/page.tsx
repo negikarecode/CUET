@@ -42,6 +42,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://cuet-prep.in",
   },
+  other: {
+    "strix-verification": "strix-verify-325cf40f42b8e96a8bad6c7e99ea5e67",
+  },
 };
 
 export default function HomePage() {

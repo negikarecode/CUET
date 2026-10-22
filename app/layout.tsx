@@ -36,6 +36,9 @@ export const metadata: Metadata = {
     description:
       "India's practice-first test preparation platform for CUET UG entrance examination. Experience authentic NTA CBT interface, real 60-minute timers, and granular AI mistake diagnosis.",
   },
+  other: {
+    "strix-verification": "strix-verify-325cf40f42b8e96a8bad6c7e99ea5e67",
+  },
 };
 
 export const viewport: Viewport = {
@@ -51,6 +54,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full scroll-smooth overflow-x-hidden">
+      <head>
+        <meta name="strix-verification" content="strix-verify-325cf40f42b8e96a8bad6c7e99ea5e67" />
+      </head>
       <body className="flex min-h-full flex-col bg-white font-sans text-slate-900 antialiased selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden w-full max-w-full">
         <LanguageProvider>
           <GoogleTranslateSync />
