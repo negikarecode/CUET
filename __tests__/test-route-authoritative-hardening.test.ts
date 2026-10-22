@@ -367,7 +367,7 @@ require.cache[entitlementsPath]!.exports = {
 };
 
 const { GET, POST } = require("../app/api/test/[testId]/route");
-const { POST: postRepairQuiz } = require("../app/api/ai/repair-quiz/route");
+const { POST: postRepairQuiz } = require("../app/api/ai/[action]/route");
 const { resolveCanonicalTestId } = require("../lib/canonical-tests");
 const { stringToUuid } = require("../lib/utils");
 const { isDesignatedFreeTest, DESIGNATED_FREE_TEST_IDS } = require("../lib/payments/entitlements");
@@ -1140,10 +1140,10 @@ describe("Test Route Authoritative Answer Key Hardening & Phoenix Lockdown", () 
       testRouteSource.includes('from "@/lib/utils"') && testRouteSource.includes("stringToUuid"),
       "app/api/test/[testId]/route.ts must import stringToUuid directly from @/lib/utils"
     );
-    const repairQuizSource = fs.readFileSync(path.join(process.cwd(), "app/api/ai/repair-quiz/route.ts"), "utf-8");
+    const repairQuizSource = fs.readFileSync(path.join(process.cwd(), "app/api/ai/[action]/route.ts"), "utf-8");
     assert.ok(
       repairQuizSource.includes('from "@/lib/utils"') && repairQuizSource.includes("stringToUuid"),
-      "app/api/ai/repair-quiz/route.ts must import stringToUuid directly from @/lib/utils"
+      "app/api/ai/[action]/route.ts must import stringToUuid directly from @/lib/utils"
     );
 
     // 3. Assert determinism on arbitrary string keys

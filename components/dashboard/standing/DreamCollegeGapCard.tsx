@@ -77,7 +77,7 @@ export default function DreamCollegeGapCard({
         userId,
       };
 
-      const res = await fetch("/api/standing/explain", {
+      const res = await fetch("/api/ai/standing-explain", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

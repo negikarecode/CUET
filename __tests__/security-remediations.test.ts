@@ -5,8 +5,6 @@ import fs from "fs";
 import path from "path";
 import { getSafeRedirectPath, DEFAULT_SAFE_REDIRECT } from "../lib/security/redirects";
 import { RazorpayProvider } from "../lib/payments/provider";
-import { POST as decommissionedCreateOrder } from "../app/api/create-order/route";
-import { POST as decommissionedVerifyPayment } from "../app/api/verify-payment/route";
 
 describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", () => {
   // ─── 1. SEC-05: OPEN REDIRECT DEFENSE ──────────────────────────────────────
@@ -130,18 +128,11 @@ describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", ()
       assert.ok(check.error?.includes("unconfigured"));
     });
 
-    it("should verify that legacy create-order endpoint is decommissioned (HTTP 410)", async () => {
-      const response = await decommissionedCreateOrder();
-      assert.equal(response.status, 410, "Legacy /api/create-order must return HTTP 410 Gone");
-      const data = await response.json();
-      assert.equal(data.code, "ENDPOINT_DECOMMISSIONED");
-    });
-
-    it("should verify that legacy verify-payment endpoint is decommissioned (HTTP 410)", async () => {
-      const response = await decommissionedVerifyPayment();
-      assert.equal(response.status, 410, "Legacy /api/verify-payment must return HTTP 410 Gone");
-      const data = await response.json();
-      assert.equal(data.code, "ENDPOINT_DECOMMISSIONED");
+    it("should verify that legacy create-order and verify-payment endpoints are removed from codebase", () => {
+      const createOrderPath = path.resolve(__dirname, "../app/api/create-order/route.ts");
+      const verifyPaymentPath = path.resolve(__dirname, "../app/api/verify-payment/route.ts");
+      assert.equal(fs.existsSync(createOrderPath), false, "Legacy create-order route file must be removed");
+      assert.equal(fs.existsSync(verifyPaymentPath), false, "Legacy verify-payment route file must be removed");
     });
 
     it("should reject price tampering when received amount < expected amount", () => {
@@ -432,7 +423,7 @@ describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", ()
   // ─── 4. SEC-03 & SEC-04: AI AUTHORIZATION & PAYWALL ────────────────────────
   describe("SEC-03 & SEC-04: AI Route Authentication & Paywall Protection", () => {
     it("should verify doubt-solver enforces verified session and paywall", () => {
-      const doubtSolverPath = path.join(__dirname, "../app/api/ai/doubt-solver/route.ts");
+      const doubtSolverPath = path.join(__dirname, "../app/api/ai/[action]/route.ts");
       const content = fs.readFileSync(doubtSolverPath, "utf-8");
 
       assert.ok(
@@ -466,7 +457,7 @@ describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", ()
     });
 
     it("should verify repair-quiz enforces verified session and paywall", () => {
-      const repairQuizPath = path.join(__dirname, "../app/api/ai/repair-quiz/route.ts");
+      const repairQuizPath = path.join(__dirname, "../app/api/ai/[action]/route.ts");
       const content = fs.readFileSync(repairQuizPath, "utf-8");
 
       assert.ok(
@@ -488,7 +479,7 @@ describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", ()
     });
 
     it("should verify standing/explain enforces authentication, email verification, and Premium", () => {
-      const standingPath = path.join(__dirname, "../app/api/standing/explain/route.ts");
+      const standingPath = path.join(__dirname, "../app/api/ai/[action]/route.ts");
       const content = fs.readFileSync(standingPath, "utf-8");
 
       assert.ok(
@@ -510,7 +501,7 @@ describe("CUETMate Security Remediations Test Suite (SEC-01 through SEC-05)", ()
     });
 
     it("should verify ai/insights enforces authentication and email verification", () => {
-      const insightsPath = path.join(__dirname, "../app/api/ai/insights/route.ts");
+      const insightsPath = path.join(__dirname, "../app/api/ai/[action]/route.ts");
       const content = fs.readFileSync(insightsPath, "utf-8");
 
       assert.ok(

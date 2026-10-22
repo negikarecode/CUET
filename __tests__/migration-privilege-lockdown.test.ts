@@ -100,34 +100,10 @@ describe("SEC-08 Migration & Privilege Lockdown Test Suite", () => {
       );
     });
 
-    it("should define award_trophies as SECURITY DEFINER with empty search_path and grant exclusively to service_role", () => {
+    it("should ensure award_trophies is NOT in lockdown migration (gamification removed)", () => {
       assert.ok(
-        migrationSql.includes("CREATE OR REPLACE FUNCTION public.award_trophies"),
-        "Must create award_trophies function"
-      );
-      assert.ok(
-        migrationSql.includes("SECURITY DEFINER"),
-        "award_trophies must be SECURITY DEFINER"
-      );
-      assert.ok(
-        migrationSql.includes("SET search_path = ''"),
-        "award_trophies must have SET search_path = ''"
-      );
-      assert.ok(
-        migrationSql.includes("REVOKE ALL ON FUNCTION public.award_trophies(UUID, TEXT[]) FROM PUBLIC;"),
-        "Must revoke execute from PUBLIC"
-      );
-      assert.ok(
-        migrationSql.includes("REVOKE ALL ON FUNCTION public.award_trophies(UUID, TEXT[]) FROM anon, authenticated;"),
-        "Must revoke execute from anon and authenticated"
-      );
-      assert.ok(
-        migrationSql.includes("GRANT EXECUTE ON FUNCTION public.award_trophies(UUID, TEXT[]) TO service_role;"),
-        "Must grant execute to service_role only"
-      );
-      assert.ok(
-        migrationSql.includes("ON CONFLICT (user_id, trophy_id) DO NOTHING"),
-        "award_trophies must be idempotent using ON CONFLICT DO NOTHING"
+        !migrationSql.includes("CREATE OR REPLACE FUNCTION public.award_trophies"),
+        "Lockdown migration must not contain award_trophies function"
       );
     });
 
@@ -152,8 +128,8 @@ describe("SEC-08 Migration & Privilege Lockdown Test Suite", () => {
         "Must contain emergency rollback script"
       );
       assert.ok(
-        migrationSql.includes("DROP FUNCTION IF EXISTS public.award_trophies(UUID, TEXT[]);"),
-        "Rollback must drop award_trophies"
+        migrationSql.includes("GRANT EXECUTE ON FUNCTION public.handle_new_user() TO anon, authenticated;"),
+        "Rollback must restore handle_new_user grants"
       );
     });
   });
@@ -265,27 +241,15 @@ describe("SEC-08 Migration & Privilege Lockdown Test Suite", () => {
         "Must not map over attempt.questions for questions upsert"
       );
 
-      // Verify trophy evaluation is server-side and calls award_trophies RPC
+      // Verify gamification / award_trophies is NOT called
       assert.ok(
-        routeCode.includes('supabaseAdmin.rpc("award_trophies"'),
-        "Must call award_trophies RPC via supabaseAdmin"
-      );
-      assert.ok(
-        routeCode.includes("isRepairQuiz"),
-        "Must derive isRepairQuiz on the server"
-      );
-      assert.ok(
-        routeCode.includes("speed-demon"),
-        "Must evaluate speed-demon"
-      );
-      assert.ok(
-        routeCode.includes("unverified against wall-clock time"),
-        "Must comment on speed-demon unverified time without server timer"
+        !routeCode.includes('supabaseAdmin.rpc("award_trophies"'),
+        "Must not call award_trophies RPC via supabaseAdmin"
       );
     });
 
     it("app/api/ai/insights/route.ts diagnose-mistake must validate questionId format, selectedOption, and load from DB", () => {
-      const insightsPath = path.join(__dirname, "../app/api/ai/insights/route.ts");
+      const insightsPath = path.join(__dirname, "../app/api/ai/[action]/route.ts");
       const insightsCode = fs.readFileSync(insightsPath, "utf-8");
 
       assert.ok(

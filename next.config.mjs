@@ -79,7 +79,7 @@ const nextConfig = {
       },
       {
         source: "/api/standing/explain",
-        destination: "/api/ai/insights?type=standing",
+        destination: "/api/ai/standing-explain",
       },
       {
         source: "/api/ai/diagnose-mistake",
