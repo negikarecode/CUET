@@ -385,6 +385,24 @@ export default function MocksPage() {
   const testAttempts = useTestStore((state) => state.testAttempts);
   const targetData = useTarget();
 
+  // Synchronize authenticated server attempts if local Zustand store is empty
+  React.useEffect(() => {
+    if (!isClient) return;
+    const current = useTestStore.getState().testAttempts || [];
+    if (current.length === 0) {
+      fetch("/api/student/attempts")
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.attempts && Array.isArray(data.attempts) && data.attempts.length > 0) {
+            data.attempts.forEach((att: any) => {
+              useTestStore.getState().recordTestAttempt(att);
+            });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [isClient]);
+
   const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
   const [selectedTab, setSelectedTab] = useState<SubjectKey>("all");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");

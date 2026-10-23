@@ -22,7 +22,6 @@ import {
   SUBJECT_DURATION_MINUTES,
 } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useEntitlement } from "@/lib/hooks/useEntitlement";
 import { getMockStats, matchesMockPaper, isFullLengthMockAttempt } from "@/lib/mock-stats";
 import { deduplicateTestAttempts, normalizeSubject } from "@/lib/analytics";
@@ -34,6 +33,7 @@ export interface SubjectMocksClientProps {
   initialIsPremium?: boolean;
   initialIsVerified?: boolean;
   initialUserId?: string;
+  initialServerAttempts?: RecordedTestAttempt[];
 }
 
 type StatusFilter = "all" | "attempted" | "not_attempted";
@@ -44,13 +44,33 @@ export default function SubjectMocksClient({
   initialIsPremium = false,
   initialIsVerified = false,
   initialUserId,
+  initialServerAttempts,
 }: SubjectMocksClientProps) {
   const routeParams = useParams();
   const rawSubject = (propSubject || routeParams?.subject || "") as string;
   const subjectKey = decodeURIComponent(rawSubject).toLowerCase().trim();
 
-  const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
+
+  // Sync initial server attempts into local Zustand store if store is empty
+  React.useEffect(() => {
+    if (initialServerAttempts && initialServerAttempts.length > 0) {
+      const store = useTestStore.getState();
+      const current = store.testAttempts || [];
+      const currentIds = new Set(current.flatMap((a) => [a.id, a.attemptId, a.testId]));
+      initialServerAttempts.forEach((att) => {
+        if (!currentIds.has(att.id) && (!att.attemptId || !currentIds.has(att.attemptId))) {
+          store.recordTestAttempt(att);
+        }
+      });
+    }
+  }, [initialServerAttempts]);
+
+  // Fallback to initialServerAttempts if client store is not yet hydrated
+  const effectiveAttempts = useMemo(() => {
+    if (testAttempts && testAttempts.length > 0) return testAttempts;
+    return initialServerAttempts || [];
+  }, [testAttempts, initialServerAttempts]);
 
   // Authoritative entitlement hook
   const { isPremium, isConfirmedFree } = useEntitlement({
@@ -82,25 +102,13 @@ export default function SubjectMocksClient({
 
   // Authoritative subject mock statistics (single source of truth)
   const mockStats = useMemo(() => {
-    if (!isClient) {
-      return {
-        attemptedMocksCount: 0,
-        totalMocksCount: mockTests.length || 20,
-        peakScore: null as number | null,
-        peakMaxMarks: 250,
-        averageAccuracy: 0,
-        nextUnattemptedMockIndex: 1,
-        isAllAttempted: false,
-        hasAttempts: false,
-      };
-    }
-    return getMockStats(subjectKey, testAttempts || []);
-  }, [isClient, subjectKey, testAttempts, mockTests.length]);
+    return getMockStats(subjectKey, effectiveAttempts || []);
+  }, [subjectKey, effectiveAttempts]);
 
   // Clean deduplicated attempts list
   const cleanAttempts = useMemo(() => {
-    return deduplicateTestAttempts(testAttempts || []);
-  }, [testAttempts]);
+    return deduplicateTestAttempts(effectiveAttempts || []);
+  }, [effectiveAttempts]);
 
   // Distinct unlocked mock IDs across all subjects on the platform
   const unlockedDistinctMockIds = useMemo(() => {

@@ -4,6 +4,8 @@ import { getUserEntitlement } from "@/lib/payments/entitlements";
 import SubjectMocksClient from "@/components/dashboard/mocks/SubjectMocksClient";
 import { getSubjectMetadata } from "@/lib/config/subjectRegistry";
 import { CUET_SUBJECTS } from "@/lib/data/subjects";
+import { getUserProgress } from "@/lib/user-progress";
+import { RecordedTestAttempt } from "@/types";
 
 
 interface SubjectPageProps {
@@ -33,6 +35,7 @@ export default async function SubjectMocksListPage({ params }: SubjectPageProps)
   let isPremium = false;
   let isVerified = false;
   let userId: string | undefined;
+  let initialServerAttempts: RecordedTestAttempt[] = [];
 
   try {
     const supabase = createClient();
@@ -45,6 +48,9 @@ export default async function SubjectMocksListPage({ params }: SubjectPageProps)
       const entitlement = await getUserEntitlement(user.id);
       isPremium = entitlement.isPremium;
       isVerified = true;
+
+      const progress = await getUserProgress(user.id, params.subject);
+      initialServerAttempts = progress.serverAttempts;
     }
   } catch (err) {
     console.warn("[SubjectMocksListPage] Server entitlement check notice:", err);
@@ -56,6 +62,7 @@ export default async function SubjectMocksListPage({ params }: SubjectPageProps)
       initialIsPremium={isPremium}
       initialIsVerified={isVerified}
       initialUserId={userId}
+      initialServerAttempts={initialServerAttempts}
     />
   );
 }

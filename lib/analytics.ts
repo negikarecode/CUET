@@ -331,7 +331,7 @@ export function deduplicateTestAttempts(attempts: RecordedTestAttempt[]): Record
       if (seenIds.has(attemptId)) continue;
       seenIds.add(attemptId);
     }
-    if (rawId && rawId !== rawTestId) {
+    if (rawId && rawId !== rawTestId && rawId !== attemptId) {
       if (seenIds.has(rawId)) continue;
       seenIds.add(rawId);
     }

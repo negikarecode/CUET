@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import DashboardClient, { DashboardInitialData } from "@/components/dashboard/DashboardClient";
 import { buildDefaultSubjectCalibration, normalizeSubject } from "@/lib/analytics";
 import { DEFAULT_STREAM_SUBJECTS } from "@/lib/constants/cuetSubjects";
@@ -8,6 +7,7 @@ import { StreamType } from "@/types";
 import { fetchServerTestAttempts } from "@/lib/server-attempts";
 import { calculateActiveStreak } from "@/lib/gamification";
 import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
+import { getUserProgress } from "@/lib/user-progress";
 
 export const metadata: Metadata = {
   title: "Dashboard | CUET AI-Prep",
@@ -108,156 +108,96 @@ export default async function DashboardPage() {
         serverData.kpi.dailyStreak = activeStreak;
       }
 
-      // Query real attempts count and attempt history with question metadata
-      const supabaseAdmin = createAdminClient();
-      const { data: userAttempts } = await supabaseAdmin
-        .from("user_attempts")
-        .select(`
-          id,
-          selected_option,
-          is_correct,
-          time_spent_seconds,
-          is_time_sink,
-          test_id,
-          question_id,
-          questions (
-            id,
+      // Authoritative user progress from single source of truth
+      const userProgress = await getUserProgress(authUser.id);
+
+      serverData.kpi.totalAttempted = userProgress.totalAttempts;
+      serverData.kpi.correctCount = userProgress.totalCorrect;
+      serverData.kpi.accuracyPercentage = userProgress.overallAccuracyPercentage;
+      serverData.kpi.dailyStreak = userProgress.activeStreak;
+      serverData.serverAttempts = userProgress.serverAttempts;
+
+      const diagProgress = computeAuthoritativeDiagnosticProgress({ totalAttempted: userProgress.totalAttempts });
+      serverData.currentCycleNumber = diagProgress.currentCycleNumber;
+      serverData.currentCycleQuestionCount = diagProgress.currentCycleQuestionCount;
+      serverData.isDiagnosticUnlocked = diagProgress.isUnlocked;
+
+      const subMap = serverData.subjectCalibration || buildDefaultSubjectCalibration();
+      Object.keys(userProgress.subjectProgress).forEach((subKey) => {
+        const prog = userProgress.subjectProgress[subKey];
+        if (!prog) return;
+        const info = normalizeSubject(prog.subject);
+        subMap[info.key] = {
+          subject: info.name,
+          subjectKey: info.key,
+          icon: info.icon,
+          category: info.category,
+          totalAttempted: prog.totalAttempts,
+          totalCorrect: prog.correctCount,
+          totalIncorrect: prog.incorrectCount,
+          accuracyPercentage: prog.accuracyPercentage,
+          testsCount: prog.completedTests.length,
+          isUnlocked: prog.isUnlocked,
+          attemptsToUnlock: prog.questionsRemainingToUnlock,
+          unlockProgress: Math.min(100, Math.round((prog.uniqueQuestionsAttempted / 150) * 100)),
+          mockUrl: info.mockUrl,
+        };
+      });
+      serverData.subjectCalibration = subMap;
+
+      // Group by micro_topic & chapter for Weakness Radar & Time Sinks
+      const topicMap = new Map<
+        string,
+        {
+          subject: string;
+          chapter: string;
+          microTopic: string;
+          ncertReference: string;
+          attemptsCount: number;
+          correctCount: number;
+          incorrectCount: number;
+          timeSinksCount: number;
+          totalTimeSpent: number;
+        }
+      >();
+
+      const allQuestions = userProgress.serverAttempts.flatMap((a) => a.questions || []);
+      allQuestions.forEach((q: any) => {
+        const subject = q.subject || "Physics";
+        const chapter = q.chapter || "Domain Knowledge Calibration";
+        const microTopic = q.microTopic || "Key Concept";
+        const ncertRef = q.ncertReference || `NCERT Class 12 (${chapter})`;
+        const key = `${subject.toLowerCase()}:::${chapter.toLowerCase()}:::${microTopic.toLowerCase()}`;
+
+        let item = topicMap.get(key);
+        if (!item) {
+          item = {
             subject,
             chapter,
-            micro_topic,
-            ncert_reference,
-            correct_option
-          )
-        `)
-        .eq("user_id", authUser.id);
+            microTopic,
+            ncertReference: ncertRef,
+            attemptsCount: 0,
+            correctCount: 0,
+            incorrectCount: 0,
+            timeSinksCount: 0,
+            totalTimeSpent: 0,
+          };
+          topicMap.set(key, item);
+        }
 
-      if (userAttempts && userAttempts.length > 0) {
-        // Filter answered questions and deduplicate by (test_id, question_id) to prevent duplicate counting
-        const seenKeys = new Set<string>();
-        const attemptedRows = userAttempts.filter((ua) => {
-          if (ua.selected_option === null || ua.selected_option === undefined) return false;
-          const key = `${ua.test_id || "default"}_${ua.question_id || ua.id}`;
-          if (seenKeys.has(key)) return false;
-          seenKeys.add(key);
-          return true;
-        });
+        item.attemptsCount += 1;
+        if (q.isCorrect === true) {
+          item.correctCount += 1;
+        } else if (q.isCorrect === false) {
+          item.incorrectCount += 1;
+        }
 
-        const totalAttempted = attemptedRows.length;
-        const correctCount = attemptedRows.filter((ua: any) => {
-          if (ua.is_correct === true || ua.is_correct === "true" || ua.is_correct === 1) return true;
-          if (ua.selected_option && ua.questions?.correct_option && ua.selected_option === ua.questions.correct_option) return true;
-          return false;
-        }).length;
-        const overallAccuracy =
-          totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0;
-
-        serverData.kpi.totalAttempted = totalAttempted;
-        serverData.kpi.correctCount = correctCount;
-        serverData.kpi.accuracyPercentage = overallAccuracy;
-
-        const diagProgress = computeAuthoritativeDiagnosticProgress({ totalAttempted });
-        serverData.currentCycleNumber = diagProgress.currentCycleNumber;
-        serverData.currentCycleQuestionCount = diagProgress.currentCycleQuestionCount;
-        serverData.isDiagnosticUnlocked = diagProgress.isUnlocked;
-
-        const subMap = serverData.subjectCalibration || buildDefaultSubjectCalibration();
-        attemptedRows.forEach((ua: any) => {
-          const rawSub = ua.questions?.subject || "Physics";
-          const info = normalizeSubject(rawSub);
-          if (!subMap[info.key]) {
-            subMap[info.key] = {
-              subject: info.name,
-              subjectKey: info.key,
-              icon: info.icon,
-              category: info.category,
-              totalAttempted: 0,
-              totalCorrect: 0,
-              totalIncorrect: 0,
-              accuracyPercentage: 0,
-              testsCount: 0,
-              isUnlocked: false,
-              attemptsToUnlock: 150,
-              unlockProgress: 0,
-              mockUrl: info.mockUrl,
-            };
-          }
-          const entry = subMap[info.key];
-          if (entry) {
-            entry.totalAttempted += 1;
-            const isMatch =
-              ua.is_correct === true ||
-              ua.is_correct === "true" ||
-              ua.is_correct === 1 ||
-              (ua.selected_option && ua.questions?.correct_option && ua.selected_option === ua.questions.correct_option);
-            if (isMatch) entry.totalCorrect += 1;
-            else entry.totalIncorrect += 1;
-          }
-        });
-        Object.keys(subMap).forEach((k) => {
-          const item = subMap[k];
-          if (item) {
-            item.accuracyPercentage =
-              item.totalAttempted > 0 ? Math.round((item.totalCorrect / item.totalAttempted) * 100) : 0;
-            item.isUnlocked = item.totalAttempted >= 150;
-            item.attemptsToUnlock = Math.max(0, 150 - item.totalAttempted);
-            item.unlockProgress = Math.min(100, Math.round((item.totalAttempted / 150) * 100));
-          }
-        });
-        serverData.subjectCalibration = subMap;
-
-        // Group by micro_topic & chapter
-        const topicMap = new Map<
-          string,
-          {
-            subject: string;
-            chapter: string;
-            microTopic: string;
-            ncertReference: string;
-            attemptsCount: number;
-            correctCount: number;
-            incorrectCount: number;
-            timeSinksCount: number;
-            totalTimeSpent: number;
-          }
-        >();
-
-        attemptedRows.forEach((ua: any) => {
-          const q = ua.questions;
-          const subject = q?.subject || "Physics";
-          const chapter = q?.chapter || "Domain Knowledge Calibration";
-          const microTopic = q?.micro_topic || "Key Concept";
-          const ncertRef = q?.ncert_reference || `NCERT Class 12 (${chapter})`;
-          const key = `${subject.toLowerCase()}:::${chapter.toLowerCase()}:::${microTopic.toLowerCase()}`;
-
-          let item = topicMap.get(key);
-          if (!item) {
-            item = {
-              subject,
-              chapter,
-              microTopic,
-              ncertReference: ncertRef,
-              attemptsCount: 0,
-              correctCount: 0,
-              incorrectCount: 0,
-              timeSinksCount: 0,
-              totalTimeSpent: 0,
-            };
-            topicMap.set(key, item);
-          }
-
-          item.attemptsCount += 1;
-          if (ua.is_correct === true) {
-            item.correctCount += 1;
-          } else if (ua.is_correct === false) {
-            item.incorrectCount += 1;
-          }
-
-          const timeSpent = ua.time_spent_seconds || 0;
-          item.totalTimeSpent += timeSpent;
-          if (ua.is_time_sink || timeSpent > 72) {
-            item.timeSinksCount += 1;
-          }
-        });
+        const timeSpent = q.timeSpentSeconds || 0;
+        item.totalTimeSpent += timeSpent;
+        if (q.isTimeSink || timeSpent > 72) {
+          item.timeSinksCount += 1;
+        }
+      });
 
         const computedRadar = Array.from(topicMap.values()).map((item) => {
           const acc = Math.round((item.correctCount / item.attemptsCount) * 100);
@@ -325,7 +265,6 @@ export default async function DashboardPage() {
                 : `Targeted Polish (${topWeak.accuracyPercentage}% accuracy). Fast 5-minute drill to achieve mastery.`,
           };
         }
-      }
 
       // Reconstruct authentic test attempts directly synced from Supabase
       serverData.serverAttempts = await fetchServerTestAttempts(supabase, authUser.id);
