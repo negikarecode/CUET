@@ -86,44 +86,6 @@ export async function setCachedDiagnosticReport(
 }
 
 /**
- * Subject Radar AI Analysis cache
- * Key: `${userId}:${subjectKey}:${evidenceHash}`
- */
-const subjectRadarMemoryCache = new Map<
-  string,
-  {
-    data: any;
-    cachedAt: number;
-  }
->();
-
-export function getCachedSubjectRadarAI(
-  userId: string,
-  subjectKey: string,
-  fingerprint: string
-): any | null {
-  const cacheKey = `${userId}:${subjectKey.toLowerCase()}:${fingerprint}`;
-  const hit = subjectRadarMemoryCache.get(cacheKey);
-  if (hit && Date.now() - hit.cachedAt < CACHE_TTL_MS) {
-    return hit.data;
-  }
-  return null;
-}
-
-export function setCachedSubjectRadarAI(
-  userId: string,
-  subjectKey: string,
-  fingerprint: string,
-  data: any
-): void {
-  const cacheKey = `${userId}:${subjectKey.toLowerCase()}:${fingerprint}`;
-  subjectRadarMemoryCache.set(cacheKey, {
-    data,
-    cachedAt: Date.now(),
-  });
-}
-
-/**
  * Post-Mock AI Analysis cache
  * Key: `${userId}:${attemptId}:${fingerprint}`
  */
@@ -206,11 +168,6 @@ export function clearUserAICache(userId: string): void {
   for (const key of memoryResponseCache.keys()) {
     if (key.startsWith(prefix)) {
       memoryResponseCache.delete(key);
-    }
-  }
-  for (const key of subjectRadarMemoryCache.keys()) {
-    if (key.startsWith(prefix)) {
-      subjectRadarMemoryCache.delete(key);
     }
   }
   for (const key of postMockAIMemoryCache.keys()) {

@@ -39,6 +39,15 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/dashboard/radar",
+        destination: "/dashboard/reports",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
@@ -76,10 +85,6 @@ const nextConfig = {
       {
         source: "/api/ai/why-wrong",
         destination: "/api/ai/insights?type=why-wrong",
-      },
-      {
-        source: "/api/ai/subject-radar",
-        destination: "/api/ai/insights?type=subject-radar",
       },
       {
         source: "/api/ai/post-mock",

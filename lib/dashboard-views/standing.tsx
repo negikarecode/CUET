@@ -40,11 +40,27 @@ export default async function StandingPage() {
       userId = authUser.id;
       // 1. Authoritative admin entitlement check
       const admin = createAdminClient();
-      const { data: profile } = await admin
-        .from("profiles")
-        .select("target_college, target_course, target_stream, is_premium")
-        .eq("id", authUser.id)
-        .maybeSingle();
+      let profile: any = null;
+      try {
+        const { data, error } = await admin
+          .from("profiles")
+          .select("target_college, target_course, target_stream, is_premium")
+          .eq("id", authUser.id)
+          .maybeSingle();
+
+        if (error && (error.code === "42703" || error.message?.includes("target_course"))) {
+          const fallback = await admin
+            .from("profiles")
+            .select("target_college, target_stream, is_premium")
+            .eq("id", authUser.id)
+            .maybeSingle();
+          profile = fallback.data;
+        } else {
+          profile = data;
+        }
+      } catch (err) {
+        console.warn("Profile query notice in standing:", err);
+      }
 
       const { getUserEntitlement } = await import("@/lib/payments/entitlements");
       const entitlement = await getUserEntitlement(authUser.id);

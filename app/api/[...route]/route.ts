@@ -8,6 +8,13 @@ import { handleSundayRitual } from "@/lib/api-handlers/cron-sunday-ritual";
 import { handleAuthCallback } from "@/lib/api-handlers/auth-callback";
 import { handleAuthConfirm } from "@/lib/api-handlers/auth-confirm";
 import { handleAuthSessionPost } from "@/lib/api-handlers/auth-session";
+import { handleAICoachGet, handleAICoachPost } from "@/lib/api-handlers/ai-coach";
+import {
+  handleProgressCardsGet,
+  handleProgressCardsPost,
+  handleProgressCardsPatch,
+  handleProgressCardsDelete,
+} from "@/lib/api-handlers/progress-cards";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -73,6 +80,18 @@ export async function GET(req: NextRequest, context?: RouteContext): Promise<Res
     return handleAuthConfirm(req);
   }
 
+  // 7. /api/ai-coach/* (e.g. status, reports)
+  if (segments[0] === "ai-coach") {
+    const action = segments.slice(1).join("/") || "";
+    return handleAICoachGet(req, action);
+  }
+
+  // 8. /api/progress-cards/* (e.g. list, public/:id)
+  if (segments[0] === "progress-cards") {
+    const action = segments.slice(1).join("/") || "";
+    return handleProgressCardsGet(req, action);
+  }
+
   return NextResponse.json(
     { error: `GET not supported for route /api/${path}` },
     { status: 404 }
@@ -107,6 +126,18 @@ export async function POST(req: NextRequest, context?: RouteContext): Promise<Re
     return handleAuthSessionPost(req);
   }
 
+  // 5. /api/ai-coach/* (e.g. generate, feedback)
+  if (segments[0] === "ai-coach") {
+    const action = segments.slice(1).join("/") || "";
+    return handleAICoachPost(req, action);
+  }
+
+  // 6. /api/progress-cards/* (e.g. create)
+  if (segments[0] === "progress-cards") {
+    const action = segments.slice(1).join("/") || "";
+    return handleProgressCardsPost(req, action);
+  }
+
   return NextResponse.json(
     { error: `POST not supported for route /api/${path}` },
     { status: 404 }
@@ -125,6 +156,12 @@ export async function PATCH(req: NextRequest, context?: RouteContext): Promise<N
     return patchAdminPYQ(req);
   }
 
+  // /api/progress-cards/*
+  if (segments[0] === "progress-cards") {
+    const action = segments.slice(1).join("/") || "";
+    return handleProgressCardsPatch(req, action);
+  }
+
   return NextResponse.json(
     { error: `PATCH not supported for route /api/${path}` },
     { status: 404 }
@@ -141,6 +178,12 @@ export async function DELETE(req: NextRequest, context?: RouteContext): Promise<
   // /api/student/attempts
   if (path === "student/attempts") {
     return deleteStudentAttempts(req);
+  }
+
+  // /api/progress-cards/*
+  if (segments[0] === "progress-cards") {
+    const action = segments.slice(1).join("/") || "";
+    return handleProgressCardsDelete(req, action);
   }
 
   return NextResponse.json(

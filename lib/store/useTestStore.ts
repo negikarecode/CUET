@@ -102,6 +102,9 @@ const DEFAULT_USER: UserStats = {
   accuracyPercentage: 0,
   completedTestsCount: 0,
   isLoggedIn: false,
+  isPremium: false,
+  subscriptionTier: "free",
+  subscriptionExpiresAt: null,
 };
 
 function compactQuestionAttempt(q: import("@/types").RecordedQuestionAttempt): import("@/types").RecordedQuestionAttempt {
@@ -369,6 +372,9 @@ export const useTestStore = create<TestStoreState>()(
             accuracyPercentage: profile.accuracyPercentage ?? 0,
             completedTestsCount: profile.completedTestsCount ?? 0,
             isLoggedIn: true,
+            isPremium: profile.isPremium ?? false,
+            subscriptionTier: profile.subscriptionTier || "free",
+            subscriptionExpiresAt: profile.subscriptionExpiresAt || null,
             lastActiveDate: new Date().toISOString(),
           },
           selectedStream: stream,

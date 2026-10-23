@@ -99,6 +99,8 @@ export async function POST(req: Request) {
         ? selectedSubjects
         : getSubjectsForStream(formattedStream);
 
+    const targetCourse = body.targetCourse || body.target_course;
+
     const profilePayload: Record<string, any> = {
       id,
       full_name: fullName,
@@ -108,6 +110,10 @@ export async function POST(req: Request) {
       selected_subjects: subjectsToPersist,
       updated_at: new Date().toISOString(),
     };
+
+    if (targetCourse) {
+      profilePayload.target_course = targetCourse;
+    }
 
     if (!existingProfile) {
       // First-time initialization
@@ -119,11 +125,27 @@ export async function POST(req: Request) {
       profilePayload.subscription_tier = "free";
     }
 
-    const { data, error } = await supabaseAdmin
+    let { data, error } = await supabaseAdmin
       .from("profiles")
       .upsert(profilePayload, { onConflict: "id" })
       .select()
       .single();
+
+    if (
+      error &&
+      (error.message?.includes("target_course") ||
+        (error as any).code === "42703" ||
+        (error as any).code === "PGRST204")
+    ) {
+      delete profilePayload.target_course;
+      const retryResult = await supabaseAdmin
+        .from("profiles")
+        .upsert(profilePayload, { onConflict: "id" })
+        .select()
+        .single();
+      data = retryResult.data;
+      error = retryResult.error;
+    }
 
     if (error) {
       console.error("[Auth Profile Upsert Error]:", error);

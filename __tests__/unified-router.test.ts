@@ -161,9 +161,12 @@ describe("Unified Router Invariants (Vercel Hobby Serverless Limit Consolidation
       assert.ok(meta.title?.toString().includes("Session History"), "Sessions title must include Session History");
     });
 
-    it("generates /dashboard/radar metadata accurately", async () => {
-      const meta = await generateMetadata({ params: { slug: ["radar"] } });
-      assert.ok(meta.title?.toString().includes("Weakness"), "Radar title must include Weakness");
+    it("generates /dashboard/ai-coach and /dashboard/reports metadata accurately", async () => {
+      const coachMeta = await generateMetadata({ params: { slug: ["ai-coach"] } });
+      assert.ok(coachMeta.title?.toString().includes("AI Coach"), "AI Coach title must include AI Coach");
+
+      const reportsMeta = await generateMetadata({ params: { slug: ["reports"] } });
+      assert.ok(reportsMeta.title?.toString().includes("Reports"), "Reports title must include Reports");
     });
 
     it("generates /dashboard/mocks/physics metadata accurately", async () => {

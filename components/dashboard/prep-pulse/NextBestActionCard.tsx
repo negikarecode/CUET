@@ -104,7 +104,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                 />
               </div>
               <p className="text-[12px] text-slate-500">
-                150 qualifying questions needed to unlock full multi-subject radar & error taxonomy.
+                150 qualifying questions needed to unlock full AI Coach analysis.
               </p>
             </div>
           </div>
@@ -136,7 +136,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
   const priorityTask = commandCenter.answers.q3_workOnNext.priorityTask;
   const topicTitle = priorityTask?.chapter || topic.chapter || topic.microTopic || "Domain Knowledge Practice";
   const reasonText = priorityTask?.reason || plainDiagnosis.humanSentence || "Lowest accuracy in recent domain tests.";
-  const priorityActionUrl = priorityTask?.actionUrl || `/dashboard/radar?subject=${subjectKey}`;
+  const priorityActionUrl = priorityTask?.actionUrl || `/dashboard/ai-coach?subject=${subjectKey}`;
   const priorityActionLabel = priorityTask?.actionLabel || "Start focused practice";
 
   return (
@@ -262,10 +262,10 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
 
           {isUnlocked && (
             <Link
-              href="/dashboard/radar"
+              href="/dashboard/ai-coach"
               className="inline-flex items-center justify-center h-9 px-4 rounded-lg text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 transition-colors cursor-pointer text-center"
             >
-              View diagnosis report
+              View AI Coach
             </Link>
           )}
         </div>

@@ -202,7 +202,7 @@ export function getOrCreateTopicRepairPlanV2(params: {
     description: `Review fundamental rules, formula conditions, and named distinctions for ${chapter}.`,
     estimatedMinutes: 5,
     status: "available",
-    actionUrl: `/dashboard/radar?subject=${canonical.key}`,
+    actionUrl: `/dashboard/ai-coach?subject=${canonical.key}`,
     actionLabel: "Read Concept Summary",
   };
 
@@ -232,7 +232,7 @@ export function getOrCreateTopicRepairPlanV2(params: {
     description: `Achieve ≥80% accuracy on retest to verify skill recovery and retire this weakness.`,
     estimatedMinutes: 3,
     status: "locked",
-    actionUrl: `/dashboard/radar?subject=${canonical.key}`,
+    actionUrl: `/dashboard/ai-coach?subject=${canonical.key}`,
     actionLabel: "Verify Recovery",
   };
 

@@ -35,6 +35,7 @@ export default async function ProfilePage() {
     targetStream: "Science",
     targetUniversity: "Delhi University",
     targetCollege: "SRCC",
+    targetCourse: "B.Com (Hons)",
     xp: 0,
     campusCoins: 50,
     currentStreak: 0,
@@ -85,6 +86,10 @@ export default async function ProfilePage() {
           targetStream: (profileRow.target_stream || "Science") as StreamOption,
           targetUniversity: profileRow.target_university || "Delhi University",
           targetCollege: profileRow.target_college || "SRCC",
+          targetCourse:
+            profileRow.target_course ||
+            (authUser.user_metadata?.target_course as string | undefined) ||
+            "B.Com (Hons)",
           xp: profileRow.xp ?? 0,
           campusCoins: profileRow.campus_coins ?? 50,
           currentStreak: calculateActiveStreak(

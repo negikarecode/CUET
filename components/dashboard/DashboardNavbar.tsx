@@ -7,10 +7,11 @@ import {
   Search,
   LogOut,
   User,
-  ClipboardCheck,
   Compass,
-  Target,
   ChevronDown,
+  Settings,
+  History,
+  Sparkles,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -139,34 +140,42 @@ export default function DashboardNavbar() {
                 <Link
                   href="/dashboard/profile"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-medium"
                 >
                   <User className="w-4 h-4 text-slate-400" strokeWidth={1.75} />
-                  <span>Profile & Goals</span>
+                  <span>Profile</span>
                 </Link>
                 <Link
-                  href="/dashboard/radar"
+                  href="/dashboard/profile"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-medium"
                 >
-                  <Target className="w-4 h-4 text-slate-400" strokeWidth={1.75} />
-                  <span>Weakness Report</span>
+                  <Settings className="w-4 h-4 text-slate-400" strokeWidth={1.75} />
+                  <span>Settings</span>
+                </Link>
+                <Link
+                  href="/dashboard/sessions"
+                  onClick={() => setProfileDropdownOpen(false)}
+                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-medium"
+                >
+                  <History className="w-4 h-4 text-slate-400" strokeWidth={1.75} />
+                  <span>Past Sessions</span>
+                </Link>
+                <Link
+                  href="/dashboard/ai-coach"
+                  onClick={() => setProfileDropdownOpen(false)}
+                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-medium"
+                >
+                  <Sparkles className="w-4 h-4 text-blue-600" strokeWidth={1.75} />
+                  <span>AI Coach</span>
                 </Link>
                 <Link
                   href="/dashboard/standing"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-medium"
                 >
                   <Compass className="w-4 h-4 text-slate-400" strokeWidth={1.75} />
                   <span>Where Do I Stand</span>
-                </Link>
-                <Link
-                  href="/dashboard/mocks"
-                  onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
-                >
-                  <ClipboardCheck className="w-4 h-4 text-slate-400" strokeWidth={1.75} />
-                  <span>Mock Tests</span>
                 </Link>
               </div>
 

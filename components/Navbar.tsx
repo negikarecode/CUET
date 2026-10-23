@@ -15,7 +15,6 @@ import {
   FileText,
   LogOut,
   ArrowRight,
-  Target,
   LayoutDashboard,
   User,
 } from "lucide-react";
@@ -183,13 +182,20 @@ export default function Navbar() {
                         </span>
                       </div>
 
-                      {/* Quick Upgrade CTA */}
-                      <UpgradeButton
-                        planId="ai_practice_pass_499"
-                        variant="amber"
-                        className="py-1.5 px-3.5 text-xs rounded-xl hidden sm:flex font-semibold shadow-xs"
-                        buttonText={t("upgrade", "Upgrade")}
-                      />
+                      {/* Premium Status Badge or Quick Upgrade CTA */}
+                      {user?.isPremium ? (
+                        <div className="py-1.5 px-3 text-xs rounded-xl hidden sm:flex items-center gap-1.5 font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-xs">
+                          <Sparkles className="w-3.5 h-3.5 text-emerald-600 fill-emerald-500" />
+                          <span>Premium</span>
+                        </div>
+                      ) : (
+                        <UpgradeButton
+                          planId="ai_practice_pass_499"
+                          variant="amber"
+                          className="py-1.5 px-3.5 text-xs rounded-xl hidden sm:flex font-semibold shadow-xs"
+                          buttonText={t("upgrade", "Upgrade")}
+                        />
+                      )}
                     </>
                   )}
 
@@ -258,12 +264,12 @@ export default function Navbar() {
                             <span>Aspirant Profile</span>
                           </Link>
                           <Link
-                            href="/dashboard/radar"
+                            href="/dashboard/ai-coach"
                             onClick={() => setProfileDropdownOpen(false)}
                             className="flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 transition-colors"
                           >
-                            <Target className="w-4 h-4 text-rose-500" />
-                            <span>Weakness Radar</span>
+                            <Sparkles className="w-4 h-4 text-blue-600" />
+                            <span>AI Coach</span>
                           </Link>
                           <Link
                             href="/dashboard/pyqs"
@@ -412,11 +418,11 @@ export default function Navbar() {
                     {t("mocks", "Mock Tests")}
                   </Link>
                   <Link
-                    href="/dashboard/radar"
+                    href="/dashboard/ai-coach"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-50 transition-colors"
                   >
-                    {t("radar", "Weakness Radar")}
+                    AI Coach
                   </Link>
                 </>
               ) : (

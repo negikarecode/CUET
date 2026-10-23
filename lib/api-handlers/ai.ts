@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getCachedWhyWrongExplanation,
   setCachedWhyWrongExplanation,
-  getCachedSubjectRadarAI,
-  setCachedSubjectRadarAI,
   getCachedPostMockAI,
   setCachedPostMockAI,
 } from "@/lib/ai-cache";
@@ -25,8 +23,6 @@ import {
   getStandingExplanation,
   StandingExplanationRequest,
 } from "@/lib/ai/standing-explainer";
-import { generateSubjectRadarAIAnalysis } from "@/lib/subject-ai-engine";
-import { SubjectRadarAIPayload } from "@/types/subject-ai";
 import { PostMockDeterministicReport } from "@/types/postMockAnalysis";
 import { generatePostMockAIInsight } from "@/lib/post-mock-ai-engine";
 import { checkAIQualificationGate } from "@/lib/ai-gate";
@@ -1172,9 +1168,6 @@ async function handleInsights(req: NextRequest): Promise<NextResponse> {
     const isWhyWrong =
       queryType === "why-wrong" ||
       Boolean(body.questionId && (body.selectedOption || body.prompt));
-    const isSubjectRadar =
-      queryType === "subject-radar" ||
-      Boolean(body.deterministicStats && body.subject);
     const isPostMock =
       queryType === "post-mock" ||
       Boolean(body.report && body.report.attemptId);
@@ -1186,8 +1179,8 @@ async function handleInsights(req: NextRequest): Promise<NextResponse> {
       queryType === "diagnose-mistake" ||
       body.action === "diagnose-mistake";
 
-    // Enforce Premium access on AI debrief, radar, post-mock, standing, and mistake diagnostic features
-    if (isSubjectRadar || isPostMock || isStanding || isWhyWrong || isDiagnoseMistake) {
+    // Enforce Premium access on AI debrief, post-mock, standing, and mistake diagnostic features
+    if (isPostMock || isStanding || isWhyWrong || isDiagnoseMistake) {
       const supabase = createClient();
       let authUser = null;
       try {
@@ -1226,9 +1219,7 @@ async function handleInsights(req: NextRequest): Promise<NextResponse> {
           {
             error: "Unlock this feature with CUETMate Premium.",
             code: "PAYWALL_FEATURE_LOCKED",
-            feature: isSubjectRadar
-              ? "radar"
-              : isStanding
+            feature: isStanding
               ? "standing"
               : isDiagnoseMistake
               ? "diagnose_mistake"
@@ -1277,89 +1268,7 @@ async function handleInsights(req: NextRequest): Promise<NextResponse> {
       });
     }
 
-    // ─── 2. SUBJECT RADAR AI DEBRIEF ─────────────────────────────────────────
-    if (isSubjectRadar) {
-      const radarPayload: SubjectRadarAIPayload = body;
-      const { subject, deterministicStats, cycleInfo } = radarPayload;
-
-      if (!subject || !deterministicStats) {
-        return NextResponse.json(
-          { error: "Invalid payload: subject and deterministicStats required" },
-          { status: 400 }
-        );
-      }
-
-      let activeUserId: string | null = null;
-      try {
-        const supabase = createClient();
-        const {
-          data: { user: authUser },
-        } = await supabase.auth.getUser();
-        if (authUser?.id) activeUserId = authUser.id;
-      } catch {}
-
-      if (!activeUserId) {
-        return NextResponse.json(
-          { error: "Authentication required to access Subject Weakness Radar analysis.", code: "AUTH_REQUIRED" },
-          { status: 401 }
-        );
-      }
-
-      // Authoritatively verify the 150-question qualification gate for the authenticated user ONLY
-      // Strictly ignore client-supplied radarPayload.userId to prevent cross-account IDOR qualification bypass
-      const userId = activeUserId;
-      const gateStatus = await checkAIQualificationGate(userId);
-      const isCompletedCycle = gateStatus.isUnlocked;
-
-      if (!isCompletedCycle) {
-        return NextResponse.json(
-          {
-            error: "Calibration Incomplete: Minimum 150 qualifying questions required for Subject Weakness Radar analysis.",
-            currentCycleQuestionCount: gateStatus.totalAttempts,
-            required: 150,
-          },
-          { status: 400 }
-        );
-      }
-
-      if (Array.isArray(radarPayload.questions)) {
-        radarPayload.questions = radarPayload.questions.slice(0, 50);
-      }
-
-      const cycleQuestionCount = gateStatus.totalAttempts;
-
-      const fingerprint = `${deterministicStats.totalAttempted}_${deterministicStats.accuracyPercentage}_${
-        cycleInfo?.currentCycleNumber || 1
-      }_${cycleQuestionCount}`;
-
-      const cached = getCachedSubjectRadarAI(userId, subject, fingerprint);
-      if (cached) {
-        return NextResponse.json({
-          success: true,
-          source: "cache",
-          aiAnalysis: cached,
-        });
-      }
-
-      const clientIdentifier = getClientIdentifier(req, activeUserId || userId);
-      const rateCheckRadar = checkServerRateLimit("subject_radar", clientIdentifier, 15);
-      if (!rateCheckRadar.allowed) {
-        return NextResponse.json(
-          { error: "Daily limit for Subject Weakness Radar AI analysis reached.", remaining: 0 },
-          { status: 429, headers: getRateLimitHeaders(rateCheckRadar) }
-        );
-      }
-
-      const aiAnalysis = await generateSubjectRadarAIAnalysis(radarPayload);
-      setCachedSubjectRadarAI(userId, subject, fingerprint, aiAnalysis);
-
-      return NextResponse.json(
-        { success: true, source: "generated", aiAnalysis },
-        { headers: getRateLimitHeaders(rateCheckRadar) }
-      );
-    }
-
-    // ─── 3. POST-MOCK DEBRIEF INSIGHT ────────────────────────────────────────
+    // ─── 2. POST-MOCK DEBRIEF INSIGHT ────────────────────────────────────────
     if (isPostMock) {
       const { report, userId: clientUserId } = body as {
         report: PostMockDeterministicReport;

@@ -160,10 +160,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/dashboard/radar"
+                  href="/dashboard/ai-coach"
                   className="hover:text-indigo-600 transition-colors"
                 >
-                  Subject Weakness Radar
+                  AI Coach
                 </Link>
               </li>
               <li>

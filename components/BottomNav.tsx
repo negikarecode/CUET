@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   Home,
   BookOpen,
+  Sparkles,
   Target,
   Zap,
   Trophy,
@@ -52,11 +53,11 @@ export default function BottomNav() {
       isActive: pathname.startsWith("/dashboard/mocks"),
     },
     {
-      id: "radar",
-      label: t("radar", "Radar"),
-      href: "/dashboard/radar",
-      icon: Target,
-      isActive: pathname.startsWith("/dashboard/radar"),
+      id: "ai-coach",
+      label: "AI Coach",
+      href: "/dashboard/ai-coach",
+      icon: Sparkles,
+      isActive: pathname.startsWith("/dashboard/ai-coach"),
     },
     {
       id: "pyqs",

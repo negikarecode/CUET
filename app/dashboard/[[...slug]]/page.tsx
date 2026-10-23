@@ -1,11 +1,12 @@
 import React from "react";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import DashboardHomePage, { metadata as dashboardHomeMetadata } from "@/lib/dashboard-views/dashboard-home";
 import StandingPage, { metadata as standingMetadata } from "@/lib/dashboard-views/standing";
 import ProfilePage, { metadata as profileMetadata } from "@/lib/dashboard-views/profile";
 import SessionsPage, { metadata as sessionsMetadata } from "@/lib/dashboard-views/sessions";
-import WeaknessRadarPage, { metadata as radarMetadata } from "@/lib/dashboard-views/radar";
+import AICoachPage, { metadata as aiCoachMetadata } from "@/lib/dashboard-views/ai-coach";
+import ReportsPage, { metadata as reportsMetadata } from "@/lib/dashboard-views/reports";
 import SubjectMocksListPage, { generateMetadata as generateMocksSubjectMetadata } from "@/lib/dashboard-views/mocks-subject";
 import MockAnalysisPage from "@/lib/dashboard-views/mock-analysis";
 import SubjectPYQListPage, { generateMetadata as generatePYQSubjectMetadata } from "@/lib/dashboard-views/pyqs-subject";
@@ -43,8 +44,12 @@ export async function generateMetadata({ params }: DashboardPageProps): Promise<
     return sessionsMetadata;
   }
 
-  if (first === "radar") {
-    return radarMetadata;
+  if (first === "ai-coach") {
+    return aiCoachMetadata;
+  }
+
+  if (first === "reports" || first === "radar") {
+    return reportsMetadata;
   }
 
   if (first === "mocks") {
@@ -111,9 +116,19 @@ export default async function DashboardCatchAllPage({ params }: DashboardPagePro
     return <SessionsPage />;
   }
 
-  // /dashboard/radar
+  // /dashboard/radar -> Permanent redirect to /dashboard/reports
   if (first === "radar") {
-    return <WeaknessRadarPage />;
+    redirect("/dashboard/reports");
+  }
+
+  // /dashboard/ai-coach
+  if (first === "ai-coach") {
+    return <AICoachPage />;
+  }
+
+  // /dashboard/reports
+  if (first === "reports") {
+    return <ReportsPage />;
   }
 
   // /dashboard/mocks/analysis/[attemptId]

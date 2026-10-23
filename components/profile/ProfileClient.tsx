@@ -940,7 +940,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                 </h3>
               </div>
               <Link
-                href="/dashboard/radar"
+                href="/dashboard/ai-coach"
                 className="text-xs font-semibold text-blue-600 hover:underline"
               >
                 View all

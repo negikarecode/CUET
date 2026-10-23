@@ -30,11 +30,11 @@ export const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({
     },
     {
       id: 3,
-      title: 'Unlock adaptive drills',
-      description: 'Complete 150 questions to activate AI Mistake Diagnostics and Radar.',
+      title: 'Unlock AI Coach reports',
+      description: 'Complete 150 questions to activate personalized AI Coach debriefs.',
       isDone: totalAttempted >= 150,
-      href: '/dashboard/radar',
-      ctaText: 'View diagnostics',
+      href: '/dashboard/ai-coach',
+      ctaText: 'View AI Coach',
     },
   ];
 

@@ -14,9 +14,9 @@ import {
   diagnoseMistakeDeterministically,
 } from "../lib/mistake-detective";
 import {
-  buildSubjectRadarV2Report,
-  getConfidenceTier,
-} from "../lib/subject-radar-v2";
+  AI_COACH_CONFIG,
+  getConfidenceLabel,
+} from "../lib/ai-coach/config";
 import {
   getOrCreateTopicRepairPlanV2,
   recordRepairPlanProgress,
@@ -187,41 +187,20 @@ assert(
   `Correctly flags conceptual misunderstanding for standard duration (got: ${conceptMistake.category})`
 );
 
-// ─── 2. SUBJECT WEAKNESS RADAR V2 ─────────────────────────────────────────────
-console.log("\n2. Subject Weakness Radar V2 (4 Confidence Tiers & Dimensions):");
+// ─── 2. AI COACH CONFIGURATION & CONFIDENCE THRESHOLDS ─────────────────────────
+console.log("\n2. AI Coach Configuration & Confidence Thresholds:");
 
-assert(getConfidenceTier(3).tier === "insufficient_evidence", "< 5 attempts = insufficient_evidence");
-assert(getConfidenceTier(7).tier === "preliminary_signal", "5-9 attempts = preliminary_signal");
-assert(getConfidenceTier(14).tier === "developing_evidence", "10-19 attempts = developing_evidence");
-assert(getConfidenceTier(25).tier === "strong_evidence", ">= 20 attempts = strong_evidence");
-
-// Mock question attempts spanning 2 chapters with qualifier and numerical errors
-const mockAttempts: any[] = [
-  // Electrochemistry (Low accuracy, 4 attempts)
-  { questionId: "q_ec_1", subject: "Chemistry", chapter: "Electrochemistry", isCorrect: false, timeSpentSeconds: 85, selectedOption: "A", prompt: "Calculate cell EMF with Nernst equation..." },
-  { questionId: "q_ec_2", subject: "Chemistry", chapter: "Electrochemistry", isCorrect: false, timeSpentSeconds: 80, selectedOption: "B", prompt: "Find standard reduction potential..." },
-  { questionId: "q_ec_3", subject: "Chemistry", chapter: "Electrochemistry", isCorrect: true, timeSpentSeconds: 50, selectedOption: "C", prompt: "Faraday first law..." },
-  { questionId: "q_ec_4", subject: "Chemistry", chapter: "Electrochemistry", isCorrect: false, timeSpentSeconds: 90, selectedOption: "D", prompt: "Conductivity calculation..." },
-
-  // Solutions (Cross-chapter numerical errors, 4 attempts)
-  { questionId: "q_sol_1", subject: "Chemistry", chapter: "Solutions", isCorrect: false, timeSpentSeconds: 82, selectedOption: "B", prompt: "Calculate elevation in boiling point with 2.5 mol/kg..." },
-  { questionId: "q_sol_2", subject: "Chemistry", chapter: "Solutions", isCorrect: false, timeSpentSeconds: 78, selectedOption: "C", prompt: "Which is NOT an ideal solution?" },
-  { questionId: "q_sol_3", subject: "Chemistry", chapter: "Solutions", isCorrect: true, timeSpentSeconds: 40, selectedOption: "A", prompt: "Henry law constants..." },
-  { questionId: "q_sol_4", subject: "Chemistry", chapter: "Solutions", isCorrect: false, timeSpentSeconds: 88, selectedOption: "D", prompt: "Osmotic pressure calculation with van 't Hoff factor..." },
-];
-
-const radarReport = buildSubjectRadarV2Report({
-  subject: "Chemistry",
-  attempts: mockAttempts,
-});
-
-assert(radarReport.overallMetrics.totalAttempted === 8, `Reports exact total attempts (8, got ${radarReport.overallMetrics.totalAttempted})`);
-assert(radarReport.diagnosticCards.length >= 1, `Generated diagnostic cards (got ${radarReport.diagnosticCards.length})`);
-assert(radarReport.crossChapterPatterns.length >= 1, `Detected valid cross-chapter numerical pattern (got ${radarReport.crossChapterPatterns.length})`);
-assert(
-  radarReport.diagnosticCards.some((c) => c.dimension === "KNOWLEDGE" && c.metrics.accuracyPercentage <= 65),
-  "Identified Knowledge Problem card with accurate metrics"
-);
+assert(AI_COACH_CONFIG.FRESH_QUESTIONS_THRESHOLD === 150, "Fresh questions unlock threshold is 150");
+assert(AI_COACH_CONFIG.MIN_TIME_SPENT_SECONDS === 3, "Anti-gaming minimum time spent is 3 seconds");
+assert(AI_COACH_CONFIG.DAILY_REPORT_LIMIT === 3, "Daily report limit is 3 per candidate");
+assert(AI_COACH_CONFIG.RESET_TIMEZONE === "Asia/Kolkata", "Reset timezone is Asia/Kolkata (midnight IST)");
+assert(AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS === 5, "Topic confidence threshold is 5 attempts");
+assert(getConfidenceLabel(2) === "insufficient data", "< 5 attempts labeled 'insufficient data'");
+assert(getConfidenceLabel(4) === "insufficient data", "4 attempts labeled 'insufficient data'");
+assert(getConfidenceLabel(5) === "sufficient", ">= 5 attempts labeled 'sufficient'");
+assert(AI_COACH_CONFIG.MODEL === "gemini-2.0-flash", "Model is gemini-2.0-flash");
+assert(AI_COACH_CONFIG.MARKING_SCHEME.CORRECT === 5, "CUET correct mark is +5");
+assert(AI_COACH_CONFIG.MARKING_SCHEME.INCORRECT === -1, "CUET incorrect mark is -1");
 
 // ─── 3. PERSONALIZED REPAIR PLAN ENGINE V2 ────────────────────────────────────
 console.log("\n3. Personalized Repair Plan Engine V2:");

@@ -35,24 +35,36 @@ export async function syncUserProfile(user: any): Promise<void> {
           ? metadata.selected_subjects
           : getSubjectsForStream(formattedStream);
 
-      await supabaseAdmin.from("profiles").upsert(
-        {
-          id: user.id,
-          full_name: metadata.full_name || user.email?.split("@")[0] || "CUET Aspirant",
-          target_stream: formattedStream,
-          target_university: metadata.target_university || "Delhi University",
-          target_college: metadata.target_college || "SRCC",
-          target_course: metadata.target_course || "B.Com (Hons)",
-          selected_subjects: subjectsToPersist,
-          xp: 0,
-          campus_coins: 50,
-          current_streak: 0,
-          is_premium: false,
-          subscription_tier: "free",
-          updated_at: new Date().toISOString(),
-        },
+      const profilePayload: Record<string, any> = {
+        id: user.id,
+        full_name: metadata.full_name || user.email?.split("@")[0] || "CUET Aspirant",
+        target_stream: formattedStream,
+        target_university: metadata.target_university || "Delhi University",
+        target_college: metadata.target_college || "SRCC",
+        target_course: metadata.target_course || "B.Com (Hons)",
+        selected_subjects: subjectsToPersist,
+        xp: 0,
+        campus_coins: 50,
+        current_streak: 0,
+        is_premium: false,
+        subscription_tier: "free",
+        updated_at: new Date().toISOString(),
+      };
+
+      let { error: upsertErr } = await supabaseAdmin.from("profiles").upsert(
+        profilePayload,
         { onConflict: "id" }
       );
+
+      if (
+        upsertErr &&
+        (upsertErr.message?.includes("target_course") ||
+          (upsertErr as any).code === "42703" ||
+          (upsertErr as any).code === "PGRST204")
+      ) {
+        delete profilePayload.target_course;
+        await supabaseAdmin.from("profiles").upsert(profilePayload, { onConflict: "id" });
+      }
     }
   } catch (err) {
     console.error("[Profile Sync Error]:", err);

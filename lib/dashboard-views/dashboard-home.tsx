@@ -87,17 +87,23 @@ export default async function DashboardPage() {
           profile.last_practice_date
         );
 
+        const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+        const entitlement = await getUserEntitlement(authUser.id);
+
         serverData.user = {
           id: profile.id,
           fullName: profile.full_name,
           targetStream: profile.target_stream,
           targetUniversity: profile.target_university ?? "Delhi University",
           targetCollege: profile.target_college ?? "SRCC",
-          targetCourse: profile.target_course ?? "Undergraduate Program",
+          targetCourse: profile.target_course ?? authUser.user_metadata?.target_course ?? "Undergraduate Program",
           selectedSubjects: profileSubjects,
           xp: profile.xp,
           campusCoins: profile.campus_coins,
           currentStreak: activeStreak,
+          isPremium: entitlement.isPremium,
+          subscriptionTier: entitlement.subscriptionTier,
+          subscriptionExpiresAt: entitlement.subscriptionExpiresAt,
         };
         serverData.kpi.dailyStreak = activeStreak;
       }

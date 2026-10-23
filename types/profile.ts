@@ -8,6 +8,7 @@ export interface StudentProfileData {
   targetStream: StreamOption;
   targetUniversity: string;
   targetCollege: string;
+  targetCourse?: string;
   xp: number;
   campusCoins: number;
   currentStreak: number;

@@ -88,16 +88,60 @@ export async function updateProfileGoalsAction(input: UpdateProfileGoalsInput) {
     if (input.targetCourse !== undefined) updatePayload.target_course = input.targetCourse;
     if (input.fullName) updatePayload.full_name = input.fullName;
 
-    const { data: updatedProfile, error: dbError } = await supabaseAdmin
+    // 1. Authoritative synchronization of user_metadata
+    try {
+      await supabaseAdmin.auth.admin.updateUserById(user.id, {
+        user_metadata: {
+          ...(user.user_metadata || {}),
+          ...(input.fullName ? { full_name: input.fullName } : {}),
+          ...(input.targetStream ? { target_stream: formattedStream } : {}),
+          ...(input.targetUniversity !== undefined ? { target_university: input.targetUniversity } : {}),
+          ...(input.targetCollege !== undefined ? { target_college: input.targetCollege } : {}),
+          ...(input.targetCourse !== undefined ? { target_course: input.targetCourse } : {}),
+          ...(updatePayload.selected_subjects ? { selected_subjects: updatePayload.selected_subjects } : {}),
+        },
+      });
+    } catch (metaErr) {
+      console.warn("[Action Metadata Sync Notice]:", metaErr);
+    }
+
+    // 2. Update public.profiles in database
+    let { data: updatedProfile, error: dbError } = await supabaseAdmin
       .from("profiles")
       .update(updatePayload)
       .eq("id", user.id)
       .select()
       .single();
 
+    // Resilient fallback: If target_course does not exist in profiles schema cache,
+    // strip target_course from the update payload and retry so candidate updates succeed.
+    if (
+      dbError &&
+      (dbError.message?.includes("target_course") ||
+        (dbError as any).code === "42703" ||
+        (dbError as any).code === "PGRST204")
+    ) {
+      const fallbackPayload = { ...updatePayload };
+      delete fallbackPayload.target_course;
+
+      const fallbackResult = await supabaseAdmin
+        .from("profiles")
+        .update(fallbackPayload)
+        .eq("id", user.id)
+        .select()
+        .single();
+
+      updatedProfile = fallbackResult.data;
+      dbError = fallbackResult.error;
+    }
+
     if (dbError) {
       console.error("[Action Update Error]:", dbError);
       return { success: false, error: dbError.message || "Failed to update profile in database." };
+    }
+
+    if (updatedProfile && input.targetCourse !== undefined && !updatedProfile.target_course) {
+      updatedProfile.target_course = input.targetCourse;
     }
 
     revalidatePath("/dashboard/profile");

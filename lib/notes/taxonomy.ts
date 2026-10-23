@@ -65,7 +65,7 @@ export function getAllTaxonomySubjects(): TaxonomySubject[] {
           isFreePreview,
           practiceTestId,
           practiceTestUrl: `/test/${practiceTestId}`,
-          weaknessReportUrl: `/dashboard/radar?subject=${folder}`,
+          weaknessReportUrl: `/dashboard/ai-coach?subject=${folder}`,
         };
       });
 

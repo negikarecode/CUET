@@ -49,22 +49,23 @@ export const RecentEvaluationsTable: React.FC = () => {
           </p>
         </div>
 
-        {hasMoreThan5 ? (
+        {hasRealAttempts ? (
           <Link
             href="/dashboard/sessions"
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
           >
-            <span>Full test history ({sortedAttempts.length})</span>
+            <span>View all past sessions ({sortedAttempts.length})</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-        ) : hasRealAttempts ? (
+        ) : (
           <Link
-            href="/dashboard/mocks"
-            className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+            href="/dashboard/sessions"
+            className="inline-flex items-center gap-1 text-xs font-medium text-slate-400 hover:text-blue-600 hover:underline"
           >
-            Explore all tests
+            <span>View past sessions</span>
+            <ArrowRight className="w-3 h-3" />
           </Link>
-        ) : null}
+        )}
       </div>
 
       {!hasRealAttempts ? (

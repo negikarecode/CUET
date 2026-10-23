@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -9,7 +9,6 @@ import {
   FileText,
   ClipboardCheck,
   Compass,
-  Target,
   User,
   LogOut,
   X,
@@ -17,14 +16,40 @@ import {
   History,
   BookOpen,
   Sparkles,
+  Settings,
+  ChevronDown,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { createClient } from "@/lib/supabase/client";
+import { useEntitlement } from "@/lib/hooks/useEntitlement";
+import Avatar from "@/components/ui/Avatar";
+import { useIsClient } from "@/lib/hooks/useIsClient";
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
+  const isClient = useIsClient();
+  const user = useTestStore((state) => state.user);
   const logout = useTestStore((state) => state.logout);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
+  const mobileDropdownRef = useRef<HTMLDivElement>(null);
+  const { isPremium } = useEntitlement();
+
+  const userName = isClient && user?.name ? user.name : "Aspirant";
+  const userEmail = isClient && user?.email ? user.email : "";
+
+  // Close mobile dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (mobileDropdownRef.current && !mobileDropdownRef.current.contains(event.target as Node)) {
+        setMobileProfileOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Lock body scroll and listen for Escape key when mobile drawer is open
   useEffect(() => {
@@ -83,13 +108,6 @@ export default function DashboardSidebar() {
       active: pathname.startsWith("/dashboard/practice"),
     },
     {
-      id: "sessions",
-      label: "Past sessions",
-      href: "/dashboard/sessions",
-      icon: History,
-      active: pathname.startsWith("/dashboard/sessions"),
-    },
-    {
       id: "standing",
       label: "Where Do I Stand",
       href: "/dashboard/standing",
@@ -97,18 +115,18 @@ export default function DashboardSidebar() {
       active: pathname.startsWith("/dashboard/standing"),
     },
     {
-      id: "radar",
-      label: "Weakness report",
-      href: "/dashboard/radar",
-      icon: Target,
-      active: pathname.startsWith("/dashboard/radar"),
+      id: "ai-coach",
+      label: "AI Coach",
+      href: "/dashboard/ai-coach",
+      icon: Sparkles,
+      active: pathname.startsWith("/dashboard/ai-coach"),
     },
     {
-      id: "profile",
-      label: "Profile",
-      href: "/dashboard/profile",
-      icon: User,
-      active: pathname === "/dashboard/profile",
+      id: "reports",
+      label: "My Reports",
+      href: "/dashboard/reports",
+      icon: FileText,
+      active: pathname.startsWith("/dashboard/reports"),
     },
   ];
 
@@ -135,18 +153,18 @@ export default function DashboardSidebar() {
       active: pathname.startsWith("/dashboard/standing"),
     },
     {
-      id: "radar",
-      label: "Weakness",
-      href: "/dashboard/radar",
-      icon: Target,
-      active: pathname.startsWith("/dashboard/radar"),
+      id: "ai-coach",
+      label: "AI Coach",
+      href: "/dashboard/ai-coach",
+      icon: Sparkles,
+      active: pathname.startsWith("/dashboard/ai-coach"),
     },
     {
-      id: "profile",
-      label: "Profile",
-      href: "/dashboard/profile",
-      icon: User,
-      active: pathname === "/dashboard/profile",
+      id: "reports",
+      label: "Reports",
+      href: "/dashboard/reports",
+      icon: FileText,
+      active: pathname.startsWith("/dashboard/reports"),
     },
   ];
 
@@ -200,15 +218,25 @@ export default function DashboardSidebar() {
         </nav>
       </div>
 
-      {/* Footer: Single text/outline upgrade link and Sign out */}
+      {/* Footer: Upgrade plan (if free) / Active Plan indicator (if premium) and Sign out */}
       <div className="pt-4 border-t border-slate-100 space-y-2">
-        <Link
-          href="/pricing"
-          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-xs font-semibold text-slate-800 transition-colors shadow-2xs"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-          <span>Upgrade plan</span>
-        </Link>
+        {isPremium ? (
+          <Link
+            href="/pricing"
+            className="w-full flex items-center justify-center gap-1.5 h-10 px-3 rounded-xl border border-emerald-200 bg-emerald-50/80 hover:bg-emerald-100/70 text-xs font-semibold text-emerald-800 transition-colors shadow-2xs"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600 fill-emerald-500" />
+            <span>Premium Plan Active</span>
+          </Link>
+        ) : (
+          <Link
+            href="/pricing"
+            className="w-full flex items-center justify-center gap-1.5 h-10 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-xs font-semibold text-slate-800 transition-colors shadow-2xs"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            <span>Upgrade plan</span>
+          </Link>
+        )}
 
         <button
           type="button"
@@ -235,19 +263,84 @@ export default function DashboardSidebar() {
           </span>
         </Link>
 
-        <button
-          type="button"
-          onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
-          className="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer"
-          aria-label="Toggle navigation menu"
-          aria-expanded={mobileDrawerOpen}
-        >
-          {mobileDrawerOpen ? (
-            <X className="w-4 h-4" strokeWidth={1.75} />
-          ) : (
-            <Menu className="w-4 h-4" strokeWidth={1.75} />
-          )}
-        </button>
+        <div className="flex items-center gap-2" ref={mobileDropdownRef}>
+          {/* Mobile Avatar & Profile Dropdown */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setMobileProfileOpen(!mobileProfileOpen)}
+              className="flex items-center gap-1 p-1 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="User profile menu"
+              aria-expanded={mobileProfileOpen}
+            >
+              <Avatar name={userName} size="sm" />
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-slate-400 transition-transform ${
+                  mobileProfileOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {mobileProfileOpen && (
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl border border-slate-200 py-1.5 text-xs z-50 shadow-xl">
+                <div className="px-4 py-2.5 border-b border-slate-100">
+                  <p className="font-bold text-xs text-slate-900 truncate">{userName}</p>
+                  <p className="text-[11px] text-slate-400 truncate mt-0.5">{userEmail || "Aspirant Account"}</p>
+                </div>
+                <div className="py-1">
+                  <Link
+                    href="/dashboard/profile"
+                    onClick={() => setMobileProfileOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:bg-slate-50 font-medium"
+                  >
+                    <User className="w-4 h-4 text-slate-400" />
+                    <span>Profile</span>
+                  </Link>
+                  <Link
+                    href="/dashboard/profile"
+                    onClick={() => setMobileProfileOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:bg-slate-50 font-medium"
+                  >
+                    <Settings className="w-4 h-4 text-slate-400" />
+                    <span>Settings</span>
+                  </Link>
+                  <Link
+                    href="/dashboard/sessions"
+                    onClick={() => setMobileProfileOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:bg-slate-50 font-medium"
+                  >
+                    <History className="w-4 h-4 text-slate-400" />
+                    <span>Past Sessions</span>
+                  </Link>
+                </div>
+                <div className="border-t border-slate-100 pt-1">
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-2 px-4 py-2 text-rose-600 hover:bg-rose-50 font-semibold"
+                  >
+                    <LogOut className="w-4 h-4 text-rose-500" />
+                    <span>Sign out</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
+            className="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer"
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileDrawerOpen}
+          >
+            {mobileDrawerOpen ? (
+              <X className="w-4 h-4" strokeWidth={1.75} />
+            ) : (
+              <Menu className="w-4 h-4" strokeWidth={1.75} />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* 2. Mobile Drawer Overlay */}

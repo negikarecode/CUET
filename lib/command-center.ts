@@ -343,7 +343,7 @@ export function buildPerformanceCommandCenter(params: {
             title: "5-Min Concept & Trap Review",
             durationMinutes: 5,
             activity: `Review NCERT rules and distinction boundaries for ${primaryWeak.chapter}.`,
-            actionUrl: `/dashboard/radar?subject=${canonicalSub.key}`,
+            actionUrl: `/dashboard/ai-coach?subject=${canonicalSub.key}`,
           },
           {
             order: 2,
@@ -357,7 +357,7 @@ export function buildPerformanceCommandCenter(params: {
             title: "3-Min Solution Debrief",
             durationMinutes: 3,
             activity: "Review detailed solutions for any questions missed in the drill.",
-            actionUrl: `/dashboard/radar?subject=${canonicalSub.key}`,
+            actionUrl: `/dashboard/ai-coach?subject=${canonicalSub.key}`,
           },
         ]
       : [
@@ -366,7 +366,7 @@ export function buildPerformanceCommandCenter(params: {
             title: "8-Min NCERT Concept Deep Dive",
             durationMinutes: 8,
             activity: `Study key formulas, named reactions, and qualifier traps in ${primaryWeak.chapter}.`,
-            actionUrl: `/dashboard/radar?subject=${canonicalSub.key}`,
+            actionUrl: `/dashboard/ai-coach?subject=${canonicalSub.key}`,
           },
           {
             order: 2,

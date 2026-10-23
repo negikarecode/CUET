@@ -68,7 +68,7 @@ export function generateDailyStudyPlan(params: {
       topic: primaryWeak.chapter,
       subject: primaryWeak.subject,
       description: `Review NCERT definitions, core distinctions, and common qualifying traps for ${primaryWeak.chapter}.`,
-      actionUrl: `/dashboard/radar?subject=${primaryWeak.subject.toLowerCase()}`,
+      actionUrl: `/dashboard/ai-coach?subject=${primaryWeak.subject.toLowerCase()}`,
       actionLabel: "View Concept Guide",
     });
     remainingMinutes -= conceptTime;

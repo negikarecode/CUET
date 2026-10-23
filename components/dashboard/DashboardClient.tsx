@@ -34,6 +34,9 @@ export interface DashboardInitialData {
     xp: number;
     campusCoins: number;
     currentStreak: number;
+    isPremium?: boolean;
+    subscriptionTier?: string;
+    subscriptionExpiresAt?: string | null;
   };
   kpi: {
     totalAttempted: number;
@@ -110,6 +113,9 @@ export default function DashboardClient({
           xpPoints: initialData.user.xp,
           campusCoins: initialData.user.campusCoins,
           dailyStreak: initialData.user.currentStreak,
+          isPremium: initialData.user.isPremium,
+          subscriptionTier: initialData.user.subscriptionTier,
+          subscriptionExpiresAt: initialData.user.subscriptionExpiresAt,
         });
       }
 

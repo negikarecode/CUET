@@ -10,8 +10,10 @@ import {
   ArrowRight,
 } from "lucide-react";
 import UpgradeButton from "./UpgradeButton";
+import { useEntitlement } from "@/lib/hooks/useEntitlement";
 
 export default function PricingView() {
+  const { isPremium } = useEntitlement();
   const [pricing, setPricing] = useState({
     currentPriceInr: 10,
     standardPriceInr: 799,
@@ -221,12 +223,19 @@ export default function PricingView() {
           </div>
 
           <div className="mt-8 pt-6 border-t border-slate-100">
-            <UpgradeButton
-              planId="all_access_pass_799"
-              variant="primary"
-              className="w-full text-center py-3.5 shadow-md shadow-blue-500/10"
-              buttonText={`Get CUETMate Premium (₹${pricing.currentPriceInr})`}
-            />
+            {isPremium ? (
+              <div className="w-full text-center py-3.5 px-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-sm flex items-center justify-center gap-2">
+                <Check className="w-4 h-4 text-emerald-600 stroke-[3]" />
+                <span>You are on CUETMate Premium (Active)</span>
+              </div>
+            ) : (
+              <UpgradeButton
+                planId="all_access_pass_799"
+                variant="primary"
+                className="w-full text-center py-3.5 shadow-md shadow-blue-500/10"
+                buttonText={`Get CUETMate Premium (₹${pricing.currentPriceInr})`}
+              />
+            )}
           </div>
         </div>
       </div>

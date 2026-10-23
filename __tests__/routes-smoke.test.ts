@@ -54,9 +54,12 @@ async function runRouteSmokeTests() {
     assert(typeof notesPage.metadata === "object", "app/dashboard/notes/page exports valid metadata");
     assert(typeof notesPage.default === "function", "app/dashboard/notes/page exports default component");
 
-    // 7. Radar Page
-    const radarPage = await import("../lib/dashboard-views/radar");
-    assert(typeof radarPage.default === "function", "lib/dashboard-views/radar exports default component");
+    // 7. AI Coach & Reports Pages
+    const aiCoachPage = await import("../lib/dashboard-views/ai-coach");
+    assert(typeof aiCoachPage.default === "function", "lib/dashboard-views/ai-coach exports default component");
+
+    const reportsPage = await import("../lib/dashboard-views/reports");
+    assert(typeof reportsPage.default === "function", "lib/dashboard-views/reports exports default component");
 
     // 8. Dashboard Catch-All Page & Home
     const dashboardCatchAllPage = await import("../app/dashboard/[[...slug]]/page");

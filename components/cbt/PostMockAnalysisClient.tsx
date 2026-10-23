@@ -1491,7 +1491,7 @@ export default function PostMockAnalysisClient({
           )}
 
           <Link
-            href="/dashboard/radar"
+            href="/dashboard/ai-coach"
             className="px-4 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100/80 text-amber-900 font-semibold text-xs border border-amber-200 shadow-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap"
           >
             <Zap className="w-3.5 h-3.5 text-amber-600" />

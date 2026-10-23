@@ -25,6 +25,7 @@ export interface Database {
           target_stream: StreamOption;
           target_university: string;
           target_college: string;
+          target_course?: string | null;
           xp: number;
           campus_coins: number;
           current_streak: number;
@@ -42,6 +43,7 @@ export interface Database {
           target_stream: StreamOption;
           target_university?: string;
           target_college?: string;
+          target_course?: string | null;
           xp?: number;
           campus_coins?: number;
           current_streak?: number;
@@ -59,6 +61,7 @@ export interface Database {
           target_stream?: StreamOption;
           target_university?: string;
           target_college?: string;
+          target_course?: string | null;
           xp?: number;
           campus_coins?: number;
           current_streak?: number;
@@ -206,6 +209,97 @@ export interface Database {
           is_correct?: boolean | null;
           time_spent_seconds?: number;
           diagnostic_report?: Json | null;
+          created_at?: string;
+        };
+      };
+      ai_reports: {
+        Row: {
+          id: string;
+          user_id: string;
+          subject: string;
+          stats_json: Json;
+          report_json: Json;
+          questions_analyzed: number;
+          score_snapshot: Json | null;
+          feedback?: "up" | "down" | null;
+          model: string;
+          prompt_version: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          subject: string;
+          stats_json: Json;
+          report_json: Json;
+          questions_analyzed?: number;
+          score_snapshot?: Json | null;
+          model?: string;
+          prompt_version?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          subject?: string;
+          stats_json?: Json;
+          report_json?: Json;
+          questions_analyzed?: number;
+          score_snapshot?: Json | null;
+          model?: string;
+          prompt_version?: string;
+          created_at?: string;
+        };
+      };
+      ai_usage: {
+        Row: {
+          user_id: string;
+          usage_date: string;
+          count: number;
+        };
+        Insert: {
+          user_id: string;
+          usage_date: string;
+          count?: number;
+        };
+        Update: {
+          user_id?: string;
+          usage_date?: string;
+          count?: number;
+        };
+      };
+      progress_cards: {
+        Row: {
+          id: string;
+          user_id: string;
+          subject: string;
+          from_report_id: string | null;
+          to_report_id: string | null;
+          card_json: Json;
+          display_name: string | null;
+          is_public: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id: string;
+          user_id: string;
+          subject: string;
+          from_report_id?: string | null;
+          to_report_id?: string | null;
+          card_json: Json;
+          display_name?: string | null;
+          is_public?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          subject?: string;
+          from_report_id?: string | null;
+          to_report_id?: string | null;
+          card_json?: Json;
+          display_name?: string | null;
+          is_public?: boolean;
           created_at?: string;
         };
       };

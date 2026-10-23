@@ -751,11 +751,11 @@ export function NoteReader({ note }: Props) {
                 </Link>
 
                 <Link
-                  href={note.links?.weaknessRadarUrl || note.links?.weaknessReportUrl || `/dashboard/radar?subject=${note.subject}`}
+                  href={note.links?.weaknessRadarUrl || note.links?.weaknessReportUrl || `/dashboard/ai-coach?subject=${note.subject}`}
                   className="inline-flex items-center px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-sm border border-slate-200 dark:border-slate-700 transition"
                 >
                   <BarChart3 className="w-4 h-4 mr-2 text-indigo-500" />
-                  Weakness Radar Report
+                  AI Coach Report
                 </Link>
               </div>
             </section>

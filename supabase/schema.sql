@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     target_stream TEXT NOT NULL DEFAULT 'Commerce' CHECK (target_stream IN ('Science', 'Commerce', 'Humanities')),
     target_university TEXT DEFAULT 'Delhi University',
     target_college TEXT DEFAULT 'SRCC',
+    target_course TEXT DEFAULT 'B.Com (Hons)',
     exam_date DATE DEFAULT '2026-05-15',
     daily_study_hours INTEGER DEFAULT 4,
     selected_subjects TEXT[] DEFAULT '{}',
