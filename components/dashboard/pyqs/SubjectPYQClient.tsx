@@ -13,6 +13,8 @@ import {
   Info,
   Lock,
   Sparkles,
+  BookOpen,
+  CalendarDays,
 } from "lucide-react";
 import {
   getPYQTestsForSubject,
@@ -25,6 +27,7 @@ import { useEntitlement } from "@/lib/hooks/useEntitlement";
 import { deduplicateTestAttempts, normalizeSubject } from "@/lib/analytics";
 import { RecordedTestAttempt } from "@/types";
 import SearchableSelect from "@/components/ui/SearchableSelect";
+import ChapterWisePYQView from "@/components/dashboard/pyqs/ChapterWisePYQView";
 
 export interface SubjectPYQClientProps {
   subject?: string;
@@ -69,6 +72,9 @@ export default function SubjectPYQClient({
     initialIsVerified,
     initialUserId,
   });
+
+  // Tab state: year-wise (default) or chapter-wise
+  const [activeTab, setActiveTab] = useState<"year" | "chapter">("year");
 
   const [selectedYear, setSelectedYear] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
@@ -412,7 +418,56 @@ export default function SubjectPYQClient({
         </div>
       </div>
 
-      {/* 3. Filter and Sorting Controls */}
+      {/* 3. Tab Switcher: Year-wise | Chapter-wise */}
+      <div className="flex items-center gap-1 bg-white p-1 rounded-2xl border border-slate-200/90 shadow-xs w-full sm:w-fit">
+        <button
+          type="button"
+          onClick={() => setActiveTab("year")}
+          className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            activeTab === "year"
+              ? "bg-slate-900 text-white shadow-xs"
+              : "text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <CalendarDays className="w-3.5 h-3.5" />
+          <span>Year-wise Papers</span>
+          <span
+            className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
+              activeTab === "year" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
+            }`}
+          >
+            {pyqPapers.length}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("chapter")}
+          className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            activeTab === "chapter"
+              ? "bg-slate-900 text-white shadow-xs"
+              : "text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <BookOpen className="w-3.5 h-3.5" />
+          <span>Chapter-wise</span>
+          <span
+            className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
+              activeTab === "chapter" ? "bg-white/20 text-white" : "bg-emerald-100 text-emerald-700"
+            }`}
+          >
+            NEW
+          </span>
+        </button>
+      </div>
+
+      {/* ── Chapter-wise view ── */}
+      {activeTab === "chapter" && (
+        <ChapterWisePYQView subjectKey={subjectKey} />
+      )}
+
+      {/* ── Year-wise view ── */}
+      {activeTab === "year" && (
+        <>
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
           {/* Year Filter Buttons */}
@@ -668,6 +723,8 @@ export default function SubjectPYQClient({
           </button>
         </div>
       )}
+      {/* Close year-wise conditional */}
+      </>)}
     </div>
   );
 }

@@ -33,6 +33,7 @@ import ForgotPasswordView from "./ForgotPasswordView";
 import { DEFAULT_STREAM_SUBJECTS, getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { validateEmail, isPasswordValid } from "@/lib/auth/validation";
 import { parseAuthError } from "@/lib/auth/emailErrorHandler";
+import { getAuthCallbackUrl } from "@/lib/auth/urls";
 
 interface AuthPageContentProps {
   initialMode?: "signup" | "login";
@@ -386,11 +387,7 @@ export default function AuthPageContent({
         await supabase.auth.signOut();
       } catch {}
 
-      const origin =
-        typeof window !== "undefined" && window.location.origin
-          ? window.location.origin
-          : process.env.NEXT_PUBLIC_SITE_URL || "https://cuetmate.vercel.app";
-      const emailRedirectTo = `${origin}/auth/confirm?next=${encodeURIComponent(redirectUrl)}`;
+      const emailRedirectTo = getAuthCallbackUrl(redirectUrl);
 
       const { data, error } = await supabase.auth.signUp({
         email: cleanEmail,

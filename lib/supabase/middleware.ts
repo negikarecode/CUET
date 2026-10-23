@@ -55,6 +55,24 @@ export async function updateSession(request: NextRequest) {
   }
 
   const pathname = request.nextUrl.pathname;
+
+  // 0. Intercept email confirmation links landing on application root (e.g. from Supabase fallback)
+  // and route them immediately to the dedicated callback route preserving cookies
+  if (
+    pathname === "/" &&
+    (request.nextUrl.searchParams.has("code") ||
+      request.nextUrl.searchParams.has("token_hash") ||
+      request.nextUrl.searchParams.has("token"))
+  ) {
+    const callbackUrl = request.nextUrl.clone();
+    callbackUrl.pathname = "/auth/callback";
+    const redirectResponse = NextResponse.redirect(callbackUrl);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
+  }
+
   const isDashboardRoute =
     pathname === "/dashboard" || pathname.startsWith("/dashboard/");
   const isTestRoute =

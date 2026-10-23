@@ -23,6 +23,17 @@ function VerifyEmailContent() {
   useEffect(() => {
     const supabase = createClient();
 
+    // 0. Detect code or token_hash if redirected to /verify-email directly
+    if (typeof window !== "undefined" && window.location.search) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get("code");
+      const tokenHash = searchParams.get("token_hash") || searchParams.get("token");
+      if (code || tokenHash) {
+        window.location.replace(`/auth/callback${window.location.search}${window.location.hash || ""}`);
+        return;
+      }
+    }
+
     // 1. Detect if URL hash has authentication tokens (implicit confirmation link)
     if (typeof window !== "undefined" && window.location.hash) {
       const hashClean = window.location.hash.replace(/^#/, "");

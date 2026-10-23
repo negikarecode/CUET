@@ -19,6 +19,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { parseAuthError } from "@/lib/auth/emailErrorHandler";
 import { validateEmail } from "@/lib/auth/validation";
+import { getAuthCallbackUrl } from "@/lib/auth/urls";
 
 interface VerifyEmailViewProps {
   email: string;
@@ -85,11 +86,7 @@ export default function VerifyEmailView({
       }
 
       const supabase = createClient();
-      const origin =
-        typeof window !== "undefined" && window.location.origin
-          ? window.location.origin
-          : process.env.NEXT_PUBLIC_SITE_URL || "https://cuetmate.vercel.app";
-      const redirectTo = `${origin}/auth/confirm?next=%2Fdashboard`;
+      const redirectTo = getAuthCallbackUrl("/dashboard");
 
       const { error } = await supabase.auth.resend({
         type: "signup",

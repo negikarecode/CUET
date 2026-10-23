@@ -2547,6 +2547,17 @@ export default function LandingPageClient() {
     let isMounted = true;
     const supabase = createClient();
 
+    // Detect code or token_hash if redirected to root by Supabase default Site URL
+    if (typeof window !== "undefined" && window.location.search) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get("code");
+      const tokenHash = searchParams.get("token_hash") || searchParams.get("token");
+      if (code || tokenHash) {
+        window.location.replace(`/auth/callback${window.location.search}${window.location.hash || ""}`);
+        return;
+      }
+    }
+
     // Detect implicit hash tokens if redirected to root by Supabase default Site URL
     if (typeof window !== "undefined" && window.location.hash) {
       const hashClean = window.location.hash.replace(/^#/, "");

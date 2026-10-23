@@ -225,6 +225,12 @@ export function renderAuthHandoffHtml(targetNext: string, type: string): string 
         return;
       }
 
+      var code = params.get('code');
+      if (code) {
+        window.location.replace('/auth/callback' + (window.location.search || ''));
+        return;
+      }
+
       var accessToken = params.get('access_token');
       var refreshToken = params.get('refresh_token');
 

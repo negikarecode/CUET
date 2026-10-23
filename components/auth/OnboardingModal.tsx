@@ -27,6 +27,7 @@ import OtpVerificationView, { OtpVerificationType } from "./OtpVerificationView"
 import VerifyEmailView from "./VerifyEmailView";
 import { validateEmail, isPasswordValid } from "@/lib/auth/validation";
 import { parseAuthError } from "@/lib/auth/emailErrorHandler";
+import { getAuthCallbackUrl } from "@/lib/auth/urls";
 
 interface OnboardingModalProps {
   isOpen: boolean;
@@ -249,11 +250,7 @@ export default function OnboardingModal({
         // Ignore if already signed out
       }
 
-      const origin =
-        typeof window !== "undefined" && window.location.origin
-          ? window.location.origin
-          : process.env.NEXT_PUBLIC_SITE_URL || "https://cuetmate.vercel.app";
-      const emailRedirectTo = `${origin}/auth/confirm?next=%2Fdashboard`;
+      const emailRedirectTo = getAuthCallbackUrl("/dashboard");
 
       const { data, error } = await supabase.auth.signUp({
         email: cleanEmail,

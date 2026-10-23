@@ -247,4 +247,49 @@ describe("🔐 Supabase Email Authentication & Auto-Login Flow Test Suite", () =
 
     assert.strictEqual(res.status, 200, "Reset password route must allow visitor");
   });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // SCENARIO 9: Root URL Fallback Interception (/?code=... -> /auth/callback)
+  // ─────────────────────────────────────────────────────────────────────────────
+  it("Scenario 9A: Middleware intercepts root request with code (?code=...) and redirects to /auth/callback", async () => {
+    const req = new NextRequest("https://cuetmate-negihikehde.vercel.app/?code=mock_auth_code_123&next=/dashboard");
+    const res = await updateSession(req);
+
+    assert.strictEqual(res.status, 307, "Expected 307 redirect from root to callback route");
+    const location = res.headers.get("location") || "";
+    const url = new URL(location);
+    assert.strictEqual(url.pathname, "/auth/callback", "Must redirect to /auth/callback");
+    assert.strictEqual(url.searchParams.get("code"), "mock_auth_code_123", "Preserves authorization code");
+    assert.strictEqual(url.searchParams.get("next"), "/dashboard", "Preserves destination next parameter");
+  });
+
+  it("Scenario 9B: Middleware intercepts root request with token_hash and redirects to /auth/callback", async () => {
+    const req = new NextRequest("https://cuetmate-negihikehde.vercel.app/?token_hash=mock_hash_xyz&type=signup");
+    const res = await updateSession(req);
+
+    assert.strictEqual(res.status, 307, "Expected 307 redirect from root to callback route");
+    const location = res.headers.get("location") || "";
+    const url = new URL(location);
+    assert.strictEqual(url.pathname, "/auth/callback", "Must redirect to /auth/callback");
+    assert.strictEqual(url.searchParams.get("token_hash"), "mock_hash_xyz", "Preserves token_hash");
+    assert.strictEqual(url.searchParams.get("type"), "signup", "Preserves type");
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // SCENARIO 10: Cross-Browser Missing PKCE Verifier Defense
+  // ─────────────────────────────────────────────────────────────────────────────
+  it("Scenario 10: Missing PKCE code_verifier gracefully redirects to /verify-email with cross-browser explanation", async () => {
+    const req = new NextRequest("https://cuetmate-negihikehde.vercel.app/auth/callback?code=mock_foreign_code_xyz");
+    const res = await handleAuthCallback(req);
+
+    assert.strictEqual(res.status, 307, "Expected redirect on PKCE exchange failure");
+    const location = res.headers.get("location") || "";
+    const url = new URL(location, "https://cuetmate-negihikehde.vercel.app");
+    assert.strictEqual(url.pathname, "/verify-email");
+    const errorMsg = url.searchParams.get("error") || "";
+    assert(
+      errorMsg.includes("different browser") || errorMsg.includes("confirmation link"),
+      "Error must inform user about cross-browser or confirmation issue"
+    );
+  });
 });

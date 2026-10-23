@@ -5,6 +5,7 @@ import { Mail, ArrowRight, Loader2, AlertCircle, ArrowLeft, KeyRound } from "luc
 import { validateEmail } from "@/lib/auth/validation";
 import { createClient } from "@/lib/supabase/client";
 import { parseAuthError } from "@/lib/auth/emailErrorHandler";
+import { getAuthRecoveryUrl } from "@/lib/auth/urls";
 import OtpVerificationView from "./OtpVerificationView";
 
 interface ForgotPasswordViewProps {
@@ -63,11 +64,7 @@ export default function ForgotPasswordView({
       }
 
       const supabase = createClient();
-      const origin =
-        typeof window !== "undefined" && window.location.origin
-          ? window.location.origin
-          : process.env.NEXT_PUBLIC_SITE_URL || "https://cuetmate.vercel.app";
-      const redirectTo = `${origin}/auth/callback?next=/reset-password`;
+      const redirectTo = getAuthRecoveryUrl("/reset-password");
 
       const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
         redirectTo,

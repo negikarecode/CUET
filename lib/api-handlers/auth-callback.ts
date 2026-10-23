@@ -2,6 +2,7 @@ import { type EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { getSafeRedirectPath } from "@/lib/security/redirects";
+import { getAuthSiteUrl } from "@/lib/auth/urls";
 import { syncUserProfile, renderAuthHandoffHtml, handleAuthSessionPost } from "./auth-session";
 
 export const dynamic = "force-dynamic";
@@ -15,8 +16,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   const origin =
     request.nextUrl.origin ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://cuetmate.vercel.app";
+    getAuthSiteUrl();
   const { searchParams } = new URL(request.url);
   const token_hash = searchParams.get("token_hash") || searchParams.get("token");
   const type = (searchParams.get("type") as EmailOtpType | null) || "signup";
@@ -66,6 +66,7 @@ export async function GET(request: NextRequest) {
 
   let verificationSuccess = false;
   let verifiedUser: any = null;
+  let isCrossBrowserPkce = false;
 
   // 1. Token Hash Verification (Email Confirmation Link)
   if (token_hash && type) {
@@ -74,7 +75,14 @@ export async function GET(request: NextRequest) {
       token_hash,
     });
 
-    if (verifyError && type === "signup") {
+    // Only retry with 'email' type if failure wasn't due to expiration, invalid token, or rate limit
+    if (
+      verifyError &&
+      type === "signup" &&
+      !verifyError.message.toLowerCase().includes("expired") &&
+      !verifyError.message.toLowerCase().includes("invalid") &&
+      !verifyError.message.toLowerCase().includes("rate limit")
+    ) {
       const retry = await supabase.auth.verifyOtp({
         type: "email",
         token_hash,
@@ -111,7 +119,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // 2. PKCE Code Exchange
+  // 2. PKCE Code Exchange (if authorization code was provided)
   if (!verificationSuccess && code) {
     const { data: exchangeData, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
     if (!exchangeError && exchangeData?.user) {
@@ -119,6 +127,29 @@ export async function GET(request: NextRequest) {
       verifiedUser = exchangeData.user;
     } else {
       console.warn("[Auth Callback Code Exchange Notice]:", exchangeError?.message);
+
+      // Check if code was already exchanged/consumed, but user has an active session
+      if (type !== "recovery") {
+        const {
+          data: { user: currentUser },
+        } = await supabase.auth.getUser();
+        if (
+          currentUser &&
+          (currentUser.email_confirmed_at ||
+            (currentUser as any).confirmed_at ||
+            (currentUser.app_metadata?.provider &&
+              currentUser.app_metadata.provider !== "email"))
+        ) {
+          console.log(`[Auth Callback] Code already consumed but active verified session exists. Redirecting to ${next}`);
+          return response;
+        }
+      }
+
+      // Check if failure is due to missing PKCE code verifier (e.g. opened in different browser)
+      const errLower = (exchangeError?.message || "").toLowerCase();
+      if (errLower.includes("code verifier") || errLower.includes("pkce") || errLower.includes("flow state")) {
+        isCrossBrowserPkce = true;
+      }
     }
   }
 
@@ -183,12 +214,17 @@ export async function GET(request: NextRequest) {
   // 5. Verification Failed / Expired Link
   const failurePath = type === "recovery" ? "/forgot-password" : "/verify-email";
   const failureUrl = new URL(failurePath, origin);
-  failureUrl.searchParams.set(
-    "error",
+  let errorMsg =
     type === "recovery"
       ? "The password reset link is invalid or has expired. Please request a new reset link."
-      : "The confirmation link is invalid, expired, or has already been used. Please request a new confirmation email."
-  );
+      : "The confirmation link is invalid, expired, or has already been used. Please request a new confirmation email.";
+
+  if (isCrossBrowserPkce) {
+    errorMsg =
+      "The confirmation link was opened in a different browser. If you already verified your email, please sign in with your password, or request a fresh confirmation link in this browser.";
+  }
+
+  failureUrl.searchParams.set("error", errorMsg);
   return NextResponse.redirect(failureUrl);
 }
 

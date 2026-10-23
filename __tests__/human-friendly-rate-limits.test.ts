@@ -337,7 +337,12 @@ async function runTestSuite() {
     const confirmReq = new NextRequest(
       `https://cuetmate.vercel.app/auth/confirm?token_hash=${hashedToken}&type=signup&next=/dashboard`
     );
-    const confirmRes = await confirmHandler(confirmReq);
+    let confirmRes = await confirmHandler(confirmReq);
+    if (confirmRes.headers.get("location")?.includes("verify-email")) {
+      // Handle transient GoTrue API rate limit on rapid test runs
+      await new Promise((r) => setTimeout(r, 2500));
+      confirmRes = await confirmHandler(confirmReq);
+    }
 
     assert(confirmRes.status === 307 || confirmRes.status === 302, "Confirm handler returned redirect status");
     const destination = confirmRes.headers.get("location") || "";
