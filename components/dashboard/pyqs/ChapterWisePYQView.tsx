@@ -66,8 +66,7 @@ interface QuestionState {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const pyqChapters = pyqChaptersRaw as Record<string, any>;
+const pyqChapters = pyqChaptersRaw as Record<string, unknown>;
 
 function getChapterData(subjectKey: string): SubjectChapterData | null {
   const cleanKey = subjectKey.toLowerCase().replace(/[-_\s]/g, "");
