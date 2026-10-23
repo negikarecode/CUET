@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeSubject } from "@/lib/analytics";
 import { AI_COACH_CONFIG } from "./config";
+import { getUserProgress } from "@/lib/user-progress";
 import {
   AICoachComputedStats,
   SubjectEligibility,
@@ -30,7 +31,7 @@ export function calculateDaysToExam(): number {
 /**
  * Check eligibility for a specific subject:
  * - Count UNIQUE questions attempted since last report for this subject
- * - Only count attempts with time_spent_seconds >= 3 (anti-gaming threshold)
+ * - Every submitted answer counts regardless of time spent
  * - Unlock when fresh >= 150
  */
 export async function checkSubjectEligibility(
@@ -38,10 +39,10 @@ export async function checkSubjectEligibility(
   subject: string
 ): Promise<SubjectEligibility> {
   const normalized = normalizeSubject(subject);
-  const supabaseAdmin = createAdminClient();
+  const progress = await getUserProgress(userId, subject);
+  const subProg = progress.subjectProgress[normalized.key];
 
-  // 1. Fetch most recent AI report for this subject
-  let lastReportCutoff: string | null = null;
+  const supabaseAdmin = createAdminClient();
   let lastReportId: string | undefined;
   let lastReportDate: string | undefined;
 
@@ -56,7 +57,6 @@ export async function checkSubjectEligibility(
       .maybeSingle();
 
     if (latestReport) {
-      lastReportCutoff = latestReport.created_at;
       lastReportId = latestReport.id;
       lastReportDate = latestReport.created_at;
     }
@@ -64,46 +64,7 @@ export async function checkSubjectEligibility(
     console.warn("Failed to check last AI report timestamp:", err);
   }
 
-  // 2. Fetch attempts since cutoff with time_spent_seconds >= 3
-  let query = supabaseAdmin
-    .from("user_attempts")
-    .select(`
-      question_id,
-      time_spent_seconds,
-      created_at,
-      questions (
-        subject
-      )
-    `)
-    .eq("user_id", userId)
-    .gte("time_spent_seconds", AI_COACH_CONFIG.MIN_TIME_SPENT_SECONDS)
-    .not("selected_option", "is", null);
-
-  if (lastReportCutoff) {
-    query = query.gt("created_at", lastReportCutoff);
-  }
-
-  const { data: attemptsRows } = await query;
-
-  // Filter to subject questions and count unique question IDs
-  const uniqueQuestionIds = new Set<string>();
-  if (attemptsRows && attemptsRows.length > 0) {
-    attemptsRows.forEach((row: any) => {
-      const q = Array.isArray(row.questions) ? row.questions[0] : row.questions;
-      const qSub = q?.subject || "";
-      if (
-        qSub.toLowerCase() === normalized.key ||
-        qSub.toLowerCase() === normalized.name.toLowerCase() ||
-        qSub.toLowerCase().includes(normalized.key)
-      ) {
-        if (row.question_id) {
-          uniqueQuestionIds.add(String(row.question_id));
-        }
-      }
-    });
-  }
-
-  const freshQuestionsCount = uniqueQuestionIds.size;
+  const freshQuestionsCount = subProg?.freshQuestionsCount ?? 0;
   const isUnlocked = freshQuestionsCount >= AI_COACH_CONFIG.FRESH_QUESTIONS_THRESHOLD;
   const questionsRemaining = Math.max(
     0,
@@ -199,7 +160,7 @@ export async function computeAICoachStats(
       )
     `)
     .eq("user_id", userId)
-    .gte("time_spent_seconds", AI_COACH_CONFIG.MIN_TIME_SPENT_SECONDS)
+    .not("selected_option", "is", null)
     .order("created_at", { ascending: true });
 
   if (sinceDate) {

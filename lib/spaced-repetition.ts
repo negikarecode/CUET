@@ -127,10 +127,6 @@ export function enrollMissedQuestion(
   },
   nowIso: string = new Date().toISOString()
 ): SpacedRepetitionItem | null {
-  if (question.isLowEffort) {
-    return null;
-  }
-
   const items = loadSpacedRepetitionItems(userId);
   const existingIdx = items.findIndex((i) => i.questionId === question.questionId);
 

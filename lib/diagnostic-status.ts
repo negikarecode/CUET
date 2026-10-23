@@ -77,7 +77,6 @@ export function countQualifyingQuestions(
 
   for (const q of attempts) {
     if (q.selectedOption === null || q.selectedOption === undefined) continue;
-    if (q.isLowEffort) continue;
     const testKey = (q.testId || q.mockId || q.sessionId || "test").toString().trim();
     const qKey = (q.questionId || (q.questionNumber !== undefined ? `q_${q.questionNumber}` : q.id || "q")).toString().trim();
     const canonicalKey = `${testKey}:::${qKey}`;
@@ -102,12 +101,10 @@ export function countQualifyingFromTestAttempts(
   let count = 0;
 
   for (const test of clean) {
-    if ((test as any).isLowEffort) continue;
     const testKey = getCanonicalTestKey(test);
     if (Array.isArray(test.questions) && test.questions.length > 0) {
       for (const q of test.questions) {
         if (q.selectedOption === null || q.selectedOption === undefined) continue;
-        if (q.isLowEffort) continue;
         let qKey = (q.questionId || (q.questionNumber !== undefined ? `q_${q.questionNumber}` : "q")).toString().trim();
         if (q.questionNumber) {
           qKey = `q_${q.questionNumber}`;
@@ -165,12 +162,10 @@ export function getDiagnosticProgress(
   const qualifyingQuestions: RecordedQuestionAttempt[] = [];
 
   for (const test of sortedTests) {
-    if ((test as any).isLowEffort) continue;
     const testKey = getCanonicalTestKey(test);
     const questions = test.questions || [];
     for (const q of questions) {
       if (q.selectedOption === null || q.selectedOption === undefined) continue;
-      if (q.isLowEffort) continue;
       const qKey = (q.questionId || (q.questionNumber !== undefined ? `q_${q.questionNumber}` : "q")).toString().trim();
       const canonicalKey = `${testKey}:::${qKey}`;
       if (seenQuestionKeys.has(canonicalKey)) continue;

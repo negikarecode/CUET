@@ -191,7 +191,7 @@ assert(
 console.log("\n2. AI Coach Configuration & Confidence Thresholds:");
 
 assert(AI_COACH_CONFIG.FRESH_QUESTIONS_THRESHOLD === 150, "Fresh questions unlock threshold is 150");
-assert(AI_COACH_CONFIG.MIN_TIME_SPENT_SECONDS === 3, "Anti-gaming minimum time spent is 3 seconds");
+assert((AI_COACH_CONFIG as any).MIN_TIME_SPENT_SECONDS === undefined, "Zero time-based exclusion filter exists");
 assert(AI_COACH_CONFIG.DAILY_REPORT_LIMIT === 3, "Daily report limit is 3 per candidate");
 assert(AI_COACH_CONFIG.RESET_TIMEZONE === "Asia/Kolkata", "Reset timezone is Asia/Kolkata (midnight IST)");
 assert(AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS === 5, "Topic confidence threshold is 5 attempts");

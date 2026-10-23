@@ -693,7 +693,6 @@ export async function processQuestionsIntoCycles(
 
   for (const q of allAttempts) {
     if (q.selectedOption === null || q.selectedOption === undefined) continue;
-    if (q.isLowEffort) continue;
     const testKey = ((q as any).testId || (q as any).mockId || (q as any).sessionId || "mock").trim();
     const qKey = (q.questionId || (q.questionNumber !== undefined ? `q_${q.questionNumber}` : "q")).trim();
     const canonicalKey = `${testKey}:::${qKey}`;

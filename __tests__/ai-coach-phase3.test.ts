@@ -66,8 +66,8 @@ async function main() {
   runTest("Fresh questions threshold is exactly 150", () => {
     assert.strictEqual(AI_COACH_CONFIG.FRESH_QUESTIONS_THRESHOLD, 150);
   });
-  runTest("Anti-gaming time threshold is 3 seconds", () => {
-    assert.strictEqual(AI_COACH_CONFIG.MIN_TIME_SPENT_SECONDS, 3);
+  runTest("Zero time-based exclusion filter exists (all submitted answers count)", () => {
+    assert.strictEqual((AI_COACH_CONFIG as any).MIN_TIME_SPENT_SECONDS, undefined);
   });
   runTest("Daily report limit is 3 per user", () => {
     assert.strictEqual(AI_COACH_CONFIG.DAILY_REPORT_LIMIT, 3);
