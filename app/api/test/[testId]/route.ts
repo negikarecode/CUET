@@ -417,10 +417,17 @@ export async function POST(
       // Build authoritative answer key map
       const authMap = new Map<string, string>();
       authoritativeQuestions.forEach((tq) => {
+        const isDroppedQ = Boolean(
+          tq.isDropped === true ||
+          (tq as any).official_answer_status === "officially_dropped" ||
+          (tq as any).status === "dropped" ||
+          String(tq.correctOption || tq.correctOptionId || tq.correct_option || "").toUpperCase() === "DROPPED"
+        );
         const key =
           tq.correctOptionId ||
           tq.correct_option ||
           (tq as any).correctOption ||
+          (isDroppedQ ? "DROPPED" : null) ||
           tq.options?.find((o: any) => o.isCorrect === true)?.id;
         if (key) {
           if (tq.id) authMap.set(tq.id, key);
@@ -517,6 +524,14 @@ export async function POST(
         if (entry.clientQuestion) {
           entry.clientQuestion.correctOption = entry.expectedOption;
           entry.clientQuestion.isCorrect = entry.isCorrect;
+          if (entry.isDropped) {
+            entry.clientQuestion.isDropped = true;
+            entry.clientQuestion.official_answer_status = "officially_dropped";
+          }
+          if (entry.isMultipleCorrect) {
+            entry.clientQuestion.isMultipleCorrect = true;
+            entry.clientQuestion.acceptedOptions = entry.acceptedOptions;
+          }
         }
         if (entry.selectedOption) {
           verifiedAttemptedCount += 1;
@@ -666,38 +681,34 @@ export async function POST(
           await supabaseAdmin.from("questions").upsert(questionsToUpsert, { onConflict: "id" });
         }
 
-        // 3. Database Idempotency Check & user_attempts insertion
-        // Derive the ledger session_id server-side as `${canonicalTestId}:${attemptUuid}`, never the raw client string and never null
+        // 3. Database Idempotency Check & Atomic Submission Flow
+        // Derive the ledger session_id server-side as `${canonicalTestId}:${attemptUuid}`
         const ledgerSessionId = `${canonicalTestId}:${attemptUuid}`;
 
-        let hasAttemptIdCol = false;
+        // 3a. Idempotency check: if session is already recorded in authoritative user_usage_ledger, return immediately
         try {
-          // The dedup lookup must filter by user_id, test_id and attempt_id
-          const { data: existingSessionRows, error: colCheckError } = await supabaseAdmin
-            .from("user_attempts")
-            .select("id, test_id")
+          const { data: existingLedger } = await supabaseAdmin
+            .from("user_usage_ledger")
+            .select("id, completed_at")
             .eq("user_id", targetUserId)
-            .eq("test_id", testUuid)
-            .eq("attempt_id", attemptUuid)
-            .limit(1);
+            .eq("session_id", ledgerSessionId)
+            .maybeSingle();
 
-          if (!colCheckError) {
-            hasAttemptIdCol = true;
-            // A dedup hit must only return data for the same test
-            if (existingSessionRows && existingSessionRows.length > 0 && existingSessionRows[0]?.test_id === testUuid) {
-              return NextResponse.json({
-                success: true,
-                deduplicated: true,
-                persistedToDatabase: true,
-                attempt,
-                questions: authoritativeQuestions,
-              });
-            }
+          if (existingLedger) {
+            recentAttemptSubmissions.delete(idempotencyKey);
+            return NextResponse.json({
+              success: true,
+              deduplicated: true,
+              persistedToDatabase: true,
+              attempt,
+              questions: authoritativeQuestions,
+            });
           }
-        } catch {
-          hasAttemptIdCol = false;
+        } catch (idempErr) {
+          console.warn("[Submit Idempotency Check Warning]:", idempErr);
         }
 
+        // 3b. Prepare per-question attempt rows (All answered questions count regardless of speed)
         const seenQuestionUuids = new Set<string>();
         const attemptsToInsert: any[] = [];
 
@@ -716,32 +727,16 @@ export async function POST(
               question_id: qUuid,
               selected_option: entry.selectedOption,
               is_correct: entry.isCorrect,
-              time_spent_seconds: entry.timeSpentSeconds,
+              time_spent_seconds: entry.timeSpentSeconds !== undefined && entry.timeSpentSeconds !== null
+                ? Number(entry.timeSpentSeconds)
+                : 0,
             };
-
-            if (hasAttemptIdCol && attemptUuid) {
-              rowData.attempt_id = attemptUuid;
-            }
 
             attemptsToInsert.push(rowData);
           });
 
-        // Check if ledger row already existed before this request attempted completion
-        let ledgerRowExistedBefore = false;
-        try {
-          const { data: existingLedger } = await supabaseAdmin
-            .from("user_usage_ledger")
-            .select("id")
-            .eq("user_id", targetUserId)
-            .eq("session_id", ledgerSessionId)
-            .maybeSingle();
-          ledgerRowExistedBefore = Boolean(existingLedger);
-        } catch {
-          ledgerRowExistedBefore = false;
-        }
-
-        // 3. Authoritatively record to immutable user_usage_ledger for free-tier paywall tracking
-        // MUST be called BEFORE inserting user_attempts and returning questions/answers, and fail closed if it errors
+        // 3c. Record session completion to immutable user_usage_ledger first
+        let ledgerInserted = false;
         try {
           await recordSessionCompletion({
             userId: targetUserId,
@@ -749,48 +744,21 @@ export async function POST(
             sessionId: ledgerSessionId,
             subject: attempt.subject || authoritativeMeta?.subject,
           });
+          ledgerInserted = true;
         } catch (ledgerErr) {
           recentAttemptSubmissions.delete(idempotencyKey);
           console.error("[Usage Ledger Recording Error]:", ledgerErr);
           return NextResponse.json(
             {
-              error: "Failed to record session completion in authoritative usage ledger.",
+              error: "Failed to record session completion in authoritative usage ledger. Please retry.",
               code: "USAGE_RECORDING_FAILED",
             },
             { status: 500 }
           );
         }
 
-        // 4. Database Idempotency Check & user_attempts insertion
+        // 3d. Insert per-question attempts into public.user_attempts with rollback on failure
         if (attemptsToInsert.length > 0) {
-          let previousRows: any[] | null = null;
-          try {
-            const query = supabaseAdmin
-              .from("user_attempts")
-              .select("*")
-              .eq("user_id", targetUserId);
-            const { data } = hasAttemptIdCol && attemptUuid
-              ? await query.eq("attempt_id", attemptUuid)
-              : await query.eq("test_id", testUuid);
-            previousRows = data;
-          } catch {
-            previousRows = null;
-          }
-
-          if (hasAttemptIdCol && attemptUuid) {
-            await supabaseAdmin
-              .from("user_attempts")
-              .delete()
-              .eq("user_id", targetUserId)
-              .eq("attempt_id", attemptUuid);
-          } else {
-            await supabaseAdmin
-              .from("user_attempts")
-              .delete()
-              .eq("user_id", targetUserId)
-              .eq("test_id", testUuid);
-          }
-
           const { error: insertErr } = await supabaseAdmin
             .from("user_attempts")
             .insert(attemptsToInsert);
@@ -798,17 +766,8 @@ export async function POST(
           if (insertErr) {
             console.error("[Record Attempt Insert DB Error]:", insertErr);
 
-            // Roll back delete if there were previous rows
-            if (previousRows && previousRows.length > 0) {
-              try {
-                await supabaseAdmin.from("user_attempts").insert(previousRows);
-              } catch (rollbackErr) {
-                console.error("[Rollback Previous Rows Error]:", rollbackErr);
-              }
-            }
-
-            // Remove the ledger row ONLY if this request inserted it
-            if (!ledgerRowExistedBefore) {
+            // Roll back the ledger record to maintain atomic consistency (no half-saved sessions)
+            if (ledgerInserted) {
               try {
                 await supabaseAdmin
                   .from("user_usage_ledger")
@@ -823,7 +782,7 @@ export async function POST(
             recentAttemptSubmissions.delete(idempotencyKey);
             return NextResponse.json(
               {
-                error: "Failed to record user attempt rows in database.",
+                error: "Failed to record user attempt rows in database. Session was rolled back. Please retry.",
                 code: "ATTEMPTS_INSERTION_FAILED",
               },
               { status: 500 }
