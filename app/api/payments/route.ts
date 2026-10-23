@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
             p_provider_order_id: orderId || "",
             p_provider_payment_id: paymentId || `wh_${Date.now()}`,
             p_provider_signature: webhookSignature,
-            p_amount_paise: amount || 49900,
+            p_amount_paise: amount || 200,
             p_currency: "INR",
             p_tier: tier || "all_access_pass",
             p_expires_at: oneYearFromNow.toISOString(),

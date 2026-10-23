@@ -171,7 +171,7 @@ export default function Footer() {
                   href="/#pricing"
                   className="hover:text-indigo-600 transition-colors"
                 >
-                  Ranker Pass (₹499 Lifetime)
+                  Ranker Pass (₹2 Lifetime)
                 </Link>
               </li>
             </ul>

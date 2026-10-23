@@ -312,7 +312,7 @@ export default function SubjectPYQClient({
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Upgrade to Premium (₹499)</span>
+              <span>Upgrade to Premium (₹2)</span>
             </Link>
           </div>
         </div>
@@ -345,7 +345,7 @@ export default function SubjectPYQClient({
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
               >
                 <Lock className="w-3.5 h-3.5" />
-                <span>Unlock All PYQ Papers (₹499)</span>
+                <span>Unlock All PYQ Papers (₹2)</span>
               </Link>
             ) : (
               <Link
@@ -666,7 +666,7 @@ export default function SubjectPYQClient({
                       className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                     >
                       <Lock className="w-3.5 h-3.5" />
-                      <span>Upgrade to Unlock (₹499)</span>
+                      <span>Upgrade to Unlock (₹2)</span>
                     </Link>
                   ) : hasAttempted && bestAttempt ? (
                     <>

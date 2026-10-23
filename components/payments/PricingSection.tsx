@@ -94,7 +94,7 @@ export default function PricingSection() {
             </div>
           </div>
 
-          {/* Plan 2: Ranker Pass (₹499) */}
+          {/* Plan 2: Ranker Pass (₹2) */}
           <div className="p-7 sm:p-8 rounded-3xl bg-white border-2 border-indigo-600 shadow-sm flex flex-col justify-between relative ring-4 ring-indigo-50/50 hover:shadow-md transition-all">
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[11px] font-semibold uppercase tracking-wider px-4 py-1 rounded-full shadow-xs">
               Complete Ranker Pass
@@ -109,7 +109,7 @@ export default function PricingSection() {
               </div>
 
               <div className="mt-5 flex items-baseline gap-2">
-                <span className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">₹499</span>
+                <span className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">₹2</span>
                 <span className="text-sm font-semibold text-slate-400 line-through">₹799</span>
                 <span className="text-xs text-slate-500 font-medium">/ 2026 Exam Cycle</span>
               </div>
@@ -159,7 +159,7 @@ export default function PricingSection() {
                 planId="all_access_pass_799"
                 variant="primary"
                 className="w-full text-center"
-                buttonText="Get Premium (₹499)"
+                buttonText="Get Premium (₹2)"
               />
               <Link
                 href="/pricing"

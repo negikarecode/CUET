@@ -1050,7 +1050,7 @@ export default function PostMockAnalysisClient({
               <div className="pt-1 flex items-center gap-3">
                 <UpgradeButton
                   planId="all_access_pass_799"
-                  buttonText="Unlock AI Analysis — First 100 at ₹499"
+                  buttonText="Unlock AI Analysis — First 100 at ₹2"
                   variant="primary"
                 />
               </div>

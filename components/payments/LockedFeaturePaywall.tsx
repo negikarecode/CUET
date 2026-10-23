@@ -71,7 +71,7 @@ export default function LockedFeaturePaywall({
           const data = await res.json();
           if (data?.pricing && isMounted) {
             setPricing({
-              currentPriceInr: data.pricing.currentPriceInr ?? 499,
+              currentPriceInr: data.pricing.currentPriceInr ?? 2,
               standardPriceInr: data.pricing.standardPriceInr ?? 799,
               isPromotionalActive: data.pricing.isPromotionalActive ?? true,
               remainingPromotionalSlots: data.pricing.remainingPromotionalSlots ?? 100,

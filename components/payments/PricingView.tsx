@@ -331,7 +331,7 @@ export default function PricingView() {
               Is this a recurring subscription that will charge my card again?
             </h4>
             <p className="mt-1.5 text-slate-500 font-normal leading-relaxed">
-              <strong>No.</strong> There are no auto-debit traps or recurring charges. You pay once (₹499 on launch offer / ₹799 standard) and receive full access for the entire 2026 examination cycle (365 days).
+              <strong>No.</strong> There are no auto-debit traps or recurring charges. You pay once (₹2 on promotional offer / ₹799 standard) and receive full access for the entire 2026 examination cycle (365 days).
             </p>
           </div>
 

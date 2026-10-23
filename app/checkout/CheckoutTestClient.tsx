@@ -9,7 +9,7 @@ export default function CheckoutTestClient() {
   const [selectedPlan, setSelectedPlan] = useState<"standard" | "test">("standard");
   const [lastVerification, setLastVerification] = useState<any>(null);
 
-  const amountPaise = selectedPlan === "standard" ? 49900 : 100;
+  const amountPaise = selectedPlan === "standard" ? 200 : 100;
   const planTitle =
     selectedPlan === "standard"
       ? "CUETMate Premium All-Access Pass (2026 Cycle)"
@@ -36,7 +36,7 @@ export default function CheckoutTestClient() {
               <div className="flex items-center justify-between">
                 <span className="font-bold text-slate-900 text-sm">CUETMate Premium</span>
                 <span className="text-xs font-extrabold text-indigo-700 bg-indigo-100 px-2.5 py-0.5 rounded-full">
-                  ₹499
+                  ₹2
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-1">Full 2026 exam cycle with all 20 domain mocks & PYQs.</p>
@@ -86,7 +86,7 @@ export default function CheckoutTestClient() {
             amountPaise={amountPaise}
             currency="INR"
             planTitle={planTitle}
-            buttonText={`Launch Razorpay Checkout (${selectedPlan === "standard" ? "₹499" : "₹1"})`}
+            buttonText={`Launch Razorpay Checkout (${selectedPlan === "standard" ? "₹2" : "₹1"})`}
             className="w-full sm:w-auto px-8 py-3.5 text-sm"
             onSuccess={(result) => {
               setLastVerification(result);

@@ -297,7 +297,7 @@ export default function SubjectPracticeClient({
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Upgrade to Premium (₹499)</span>
+              <span>Upgrade to Premium (₹2)</span>
             </Link>
           </div>
         </div>
@@ -364,7 +364,7 @@ export default function SubjectPracticeClient({
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all"
               >
                 <Lock className="w-4 h-4" />
-                <span>Unlock All Practice Tests (₹499)</span>
+                <span>Unlock All Practice Tests (₹2)</span>
               </Link>
             ) : (
               <Link

@@ -64,7 +64,7 @@ export default function UpgradeButton({
 
   const is399 = planId === "ai_pass_399";
   const isAllAccess = planId === "all_access_pass_799";
-  const price = "₹499";
+  const price = "₹2";
   const planTitle = is399 ? "CUET AI Pass" : isAllAccess ? "All-Access Pass" : "CUETMate Premium";
 
   const handleCheckout = async () => {
