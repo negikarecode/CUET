@@ -119,10 +119,56 @@ export async function POST(req: NextRequest) {
 
       // ─── 1B. HANDLE REFUNDS & CHARGEBACKS ──────────────────────────────────
       if (
-        (event === "refund.created" || event === "refund.processed" || event === "payment.dispute.created") &&
-        userId
+        event === "refund.created" ||
+        event === "refund.processed" ||
+        event === "payment.dispute.created"
       ) {
         const supabaseAdmin = createAdminClient();
+        let targetUserId = userId;
+
+        // If userId was not passed in webhook notes, resolve it via payment_transactions or payment_orders
+        if (!targetUserId && paymentId) {
+          try {
+            const { data: tx } = await supabaseAdmin
+              .from("payment_transactions")
+              .select("user_id, provider_order_id")
+              .eq("provider_payment_id", paymentId)
+              .maybeSingle();
+
+            if (tx?.user_id) {
+              targetUserId = tx.user_id;
+            }
+          } catch (lookupErr) {
+            console.warn("[Webhook Refund Lookup Warning]:", lookupErr);
+          }
+        }
+
+        if (!targetUserId && orderId) {
+          try {
+            const { data: ord } = await supabaseAdmin
+              .from("payment_orders")
+              .select("user_id")
+              .eq("provider_order_id", orderId)
+              .maybeSingle();
+
+            if (ord?.user_id) {
+              targetUserId = ord.user_id;
+            }
+          } catch (lookupErr) {
+            console.warn("[Webhook Refund Order Lookup Warning]:", lookupErr);
+          }
+        }
+
+        if (!targetUserId) {
+          console.error(
+            `[Webhook Refund/Dispute Error] Could not resolve user for event ${event}, paymentId=${paymentId}, orderId=${orderId}`
+          );
+          return NextResponse.json(
+            { error: "Unable to resolve target user for refund/dispute event.", code: "USER_RESOLUTION_FAILED" },
+            { status: 422 }
+          );
+        }
+
         try {
           await supabaseAdmin
             .from("profiles")
@@ -131,7 +177,7 @@ export async function POST(req: NextRequest) {
               subscription_tier: "free",
               updated_at: new Date().toISOString(),
             })
-            .eq("id", userId);
+            .eq("id", targetUserId);
 
           if (paymentId) {
             await supabaseAdmin
@@ -147,7 +193,7 @@ export async function POST(req: NextRequest) {
               .eq("provider_order_id", orderId);
           }
 
-          console.log(`[Webhook Refund Processed] Entitlement revoked for user ${userId}.`);
+          console.log(`[Webhook Refund Processed] Entitlement revoked for user ${targetUserId}.`);
           return NextResponse.json({ status: "ok", refunded: true });
         } catch (refundErr) {
           console.error("[Webhook Refund Error]:", refundErr);

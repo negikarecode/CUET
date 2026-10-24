@@ -15,7 +15,7 @@ import { stringToUuid } from "@/lib/utils";
 import { normalizeSubject } from "@/lib/analytics";
 import { recordRepairEvent } from "@/lib/repair-plan";
 import { recordRepairPlanProgress } from "@/lib/repair-plan-v2";
-import { resolveQuestionCorrectOptionId } from "@/lib/scoring";
+import { resolveQuestionCorrectOptionId, isQuestionDropped, isQuestionUnresolved, isQuestionEligibleForActiveCBT } from "@/lib/scoring";
 
 export interface QuestionSessionState {
   visited: boolean;
@@ -186,9 +186,27 @@ export function sanitizeQuestionForActiveExam(q: Question): Question {
     // Withhold answer key, explanation, solutions, and misconception hints during active exam
     explanation: "",
     solution: undefined,
+    detailedSolution: undefined,
     misconception: undefined,
+    official_answer: undefined,
+    solved_answer: undefined,
+    wrong_option_analysis: undefined,
+    aiDiagnosisNotes: undefined,
+    answer_note: undefined,
+    options: (q.options || []).map((opt) => ({
+      id: opt.id,
+      text: opt.text,
+    })),
   };
   delete (sanitized as any).correctOptionId;
+  delete (sanitized as any).correctOption;
+  delete (sanitized as any).correct_option;
+  delete (sanitized as any).isCorrect;
+  delete (sanitized as any).detailedSolution;
+  delete (sanitized as any).acceptedAnswers;
+  delete (sanitized as any).acceptedOptions;
+  delete (sanitized as any).accepted_answers;
+  delete (sanitized as any).accepted_options;
   return sanitized as Question;
 }
 
@@ -364,8 +382,11 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     cbtAutosave.cancel(testId);
     clearSessionFromStorage(testId);
 
+    // Defense-in-depth: Ensure quarantined/ineligible questions never enter candidate session
+    const activeQuestions = questionsList.filter(isQuestionEligibleForActiveCBT);
+
     const initialStates: Record<string, QuestionSessionState> = {};
-    questionsList.forEach((q, idx) => {
+    activeQuestions.forEach((q, idx) => {
       initialStates[q.id] = {
         // ONLY Question 1 is initially visited! Questions 2-50 are NOT visited.
         visited: idx === 0,
@@ -387,7 +408,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
       testId,
       attemptId: freshAttemptId,
       testMeta: meta,
-      questions: questionsList.map(sanitizeQuestionForActiveExam),
+      questions: activeQuestions.map(sanitizeQuestionForActiveExam),
       currentQuestionIndex: 0,
       durationSeconds: durationSec,
       remainingSeconds: durationSec,
@@ -839,9 +860,15 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
           if (qState.timeSpentSeconds > 72) {
             timeSinkCount += 1;
           }
+          const isDrop = isQuestionDropped(q);
+          const isUnres = isQuestionUnresolved(q);
           const correctKey = resolveQuestionCorrectOptionId(q);
           if (qState.selectedOption !== null && qState.selectedOption !== undefined) {
-            if (correctKey && qState.selectedOption === correctKey) {
+            if (isDrop) {
+              correctCount += 1;
+            } else if (isUnres) {
+              // Unresolved question: candidate receives NO mark and NO penalty
+            } else if (correctKey && qState.selectedOption === correctKey) {
               correctCount += 1;
             } else if (correctKey) {
               incorrectCount += 1;
@@ -850,17 +877,23 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
         }
       });
 
-      const unattemptedCount = authQuestions.length - attemptedCount;
+      const isMathExam =
+        authQuestions.length === 85 ||
+        (get().testMeta?.subject && get().testMeta!.subject.toLowerCase().includes("math")) ||
+        authQuestions.some((q) => q.section === "B1" || q.section === "B2");
+      const targetTotalQuestions = isMathExam ? 40 : authQuestions.length;
+      const unattemptedCount = Math.max(0, targetTotalQuestions - attemptedCount);
       // Official CUET NTA 2026 Scoring: +5 per correct, -1 per incorrect, 0 for unattempted
       const { totalMarks, maxMarks } = calculateExamScore(
         correctCount,
         incorrectCount,
         unattemptedCount,
         CUET_UG_2026_CONFIG,
-        authQuestions.length
+        targetTotalQuestions
       );
+      const scorableAttempted = correctCount + incorrectCount;
       const accuracyPercentage =
-        attemptedCount > 0 ? Math.round((correctCount / attemptedCount) * 100) : 0;
+        scorableAttempted > 0 ? Math.round((correctCount / scorableAttempted) * 100) : 0;
       const timeTakenSeconds = Math.max(0, durationSeconds - remainingSeconds);
 
       const summary: CBTScoreSummary = {
@@ -886,11 +919,16 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
         const questionAttempts: RecordedQuestionAttempt[] = authQuestions.map((q) => {
           const qState = questionStates[q.id] || questionStates[q.questionId || ""];
           const selectedOption = qState?.selectedOption ?? null;
-          const correctKey = resolveQuestionCorrectOptionId(q) || "";
-          const isCorrect =
-            selectedOption !== null && selectedOption !== undefined && correctKey
-              ? selectedOption === correctKey
-              : null;
+          const isDrop = isQuestionDropped(q);
+          const isUnres = isQuestionUnresolved(q);
+          const correctKey = isDrop ? "DROPPED" : isUnres ? "" : (resolveQuestionCorrectOptionId(q) || "");
+          const isCorrect = isDrop
+            ? true
+            : isUnres
+            ? null
+            : selectedOption !== null && selectedOption !== undefined && correctKey
+            ? selectedOption === correctKey
+            : null;
           const timeSpent = qState?.timeSpentSeconds ?? 0;
           return {
             questionId: q.id,
@@ -909,8 +947,8 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             isTimeSink: timeSpent > 72,
             difficulty: String(q.difficulty),
             ncertReference: q.pyqSource || `NCERT Class 12 (${q.chapter || q.topic})`,
-            explanation: q.explanation,
-            solution: q.solution,
+            explanation: isUnres ? "Pending expert verification." : q.explanation,
+            solution: isUnres ? undefined : q.solution,
             formula: q.formula,
             keyConcept: q.keyConcept,
             misconception: q.misconception,

@@ -185,16 +185,34 @@ export class RazorpayProvider implements PaymentProvider {
     try {
       const payload = JSON.parse(rawBody);
       const event = payload.event;
-      const entity = payload.payload?.payment?.entity || payload.payload?.order?.entity;
-      const notes = entity?.notes || {};
+      const entity =
+        payload.payload?.payment?.entity ||
+        payload.payload?.order?.entity ||
+        payload.payload?.refund?.entity ||
+        payload.payload?.dispute?.entity;
+      const notes =
+        entity?.notes ||
+        payload.payload?.payment?.entity?.notes ||
+        payload.payload?.order?.entity?.notes ||
+        {};
+      const paymentId =
+        payload.payload?.payment?.entity?.id ||
+        payload.payload?.refund?.entity?.payment_id ||
+        payload.payload?.dispute?.entity?.payment_id ||
+        entity?.payment_id ||
+        entity?.id;
+      const orderId =
+        payload.payload?.order?.entity?.id ||
+        payload.payload?.payment?.entity?.order_id ||
+        entity?.order_id;
 
       return {
         isValid: true,
         event,
         userId: notes.userId,
         tier: notes.planId || "all_access_pass",
-        orderId: entity?.order_id || entity?.id,
-        paymentId: entity?.id,
+        orderId,
+        paymentId,
         amount: entity?.amount,
       };
     } catch {

@@ -32,6 +32,7 @@ export default function CBTPlayer() {
   const { t, translateStem } = useTranslation();
   const isClient = useIsClient();
   const [mobilePaletteOpen, setMobilePaletteOpen] = useState(false);
+  const [sectionWarning, setSectionWarning] = useState<string | null>(null);
   const examConfig = getActiveExamConfig();
 
   // Lock body scroll and listen for Escape key when mobile palette is open
@@ -197,6 +198,68 @@ export default function CBTPlayer() {
   const selectedOption = currentAnswer?.selectedOption ?? null;
   const counts = getSummaryCounts();
 
+  const isMathExam =
+    questions.length === 85 ||
+    (testMeta?.subject && testMeta.subject.toLowerCase().includes("math")) ||
+    questions.some((q) => q.section === "B1" || q.section === "B2");
+
+  const secAAnswered = isMathExam
+    ? questions.slice(0, 15).filter((q) => {
+        const s = questionStates[q.id]?.selectedOption;
+        return s !== null && s !== undefined;
+      }).length
+    : 0;
+
+  const secB1Answered = isMathExam
+    ? questions.slice(15, 50).filter((q) => {
+        const s = questionStates[q.id]?.selectedOption;
+        return s !== null && s !== undefined;
+      }).length
+    : 0;
+
+  const secB2Answered = isMathExam
+    ? questions.slice(50, 85).filter((q) => {
+        const s = questionStates[q.id]?.selectedOption;
+        return s !== null && s !== undefined;
+      }).length
+    : 0;
+
+  const currentSection = !isMathExam
+    ? null
+    : currentQuestionIndex < 15
+    ? "A"
+    : currentQuestionIndex < 50
+    ? "B1"
+    : "B2";
+
+  const handleSelectOption = (optId: "A" | "B" | "C" | "D") => {
+    setSectionWarning(null);
+    if (isMathExam) {
+      if (currentSection === "B1" && secB2Answered > 0) {
+        setSectionWarning("Section Locked: You have active attempts in Section B2 (Applied Mathematics). Clear Section B2 responses before attempting Section B1.");
+        return;
+      }
+      if (currentSection === "B2" && secB1Answered > 0) {
+        setSectionWarning("Section Locked: You have active attempts in Section B1 (Core Mathematics). Clear Section B1 responses before attempting Section B2.");
+        return;
+      }
+      if (currentSection === "B1" && secB1Answered >= 25 && selectedOption === null) {
+        setSectionWarning("Section B1 Attempt Limit: You have reached the maximum 25 attempts for Section B1. Clear an existing answer to attempt this question.");
+        return;
+      }
+      if (currentSection === "B2" && secB2Answered >= 25 && selectedOption === null) {
+        setSectionWarning("Section B2 Attempt Limit: You have reached the maximum 25 attempts for Section B2. Clear an existing answer to attempt this question.");
+        return;
+      }
+      const totalAttempted = secAAnswered + secB1Answered + secB2Answered;
+      if (totalAttempted >= 40 && selectedOption === null) {
+        setSectionWarning("Maximum Attempts Reached: You have reached the maximum 40 questions allowed for CUET Mathematics.");
+        return;
+      }
+    }
+    selectOption(optId);
+  };
+
   return (
     <CBTErrorBoundary>
       <div className="min-h-screen flex flex-col bg-[#F8FAFC] select-none text-slate-900">
@@ -227,13 +290,19 @@ export default function CBTPlayer() {
                     {testMeta?.title ?? examConfig.name}
                   </h1>
                   <span className="hidden md:inline rounded-full bg-blue-50 text-blue-700 border border-blue-200/80 px-2.5 py-0.5 text-[10px] font-semibold uppercase">
-                    {questions.length <= 15 || testMeta?.title?.toLowerCase().includes("repair")
+                    {isMathExam
+                      ? "CUET Mathematics • 40 Qs Allowed (15 Sec A + 25 Sec B)"
+                      : questions.length <= 15 || testMeta?.title?.toLowerCase().includes("repair")
                       ? `Adaptive Repair Drill • ${questions.length} Questions`
                       : t("compulsoryBadge", `${examConfig.totalQuestions} Compulsory Qs`)}
                   </span>
                 </div>
                 <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium truncate hidden sm:block">
-                  {questions.length <= 15 || testMeta?.title?.toLowerCase().includes("repair") ? (
+                  {isMathExam ? (
+                    <>
+                      {t("subjectLabel", "Subject:")} <span className="font-semibold text-slate-700">Mathematics</span> • Total: <span className="font-semibold text-slate-700">85 Questions</span> • Attempt: <span className="font-semibold text-emerald-600">40 Max</span> (Sec A: 15 + Sec B1/B2: 25) • Max Marks: <span className="font-semibold text-emerald-600">200</span>
+                    </>
+                  ) : questions.length <= 15 || testMeta?.title?.toLowerCase().includes("repair") ? (
                     <>
                       {t("subjectLabel", "Subject:")} <span className="font-semibold text-slate-700">{testMeta?.subject}</span> • Target: <span className="font-semibold text-emerald-600">80%+ Mastery</span> • ~{Math.ceil(remainingSeconds / 60)} mins
                     </>
@@ -303,6 +372,107 @@ export default function CBTPlayer() {
         </header>
 
         {/* =================================================================== */}
+        {/* NTA MATHEMATICS SECTION TABS BAR (SEC A compulsory, SEC B1/B2 choice) */}
+        {/* =================================================================== */}
+        {isMathExam && (
+          <div className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-14 sm:top-16 z-30 shadow-xs">
+            <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mr-1 hidden sm:inline">
+                  Mathematics Sections:
+                </span>
+
+                {/* Section A Tab */}
+                <button
+                  type="button"
+                  onClick={() => jumpToQuestion(0)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    currentSection === "A"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-700"
+                  }`}
+                >
+                  <span>Sec A (Compulsory)</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                      currentSection === "A"
+                        ? "bg-white/20 text-white"
+                        : "bg-white text-slate-700 border border-slate-200"
+                    }`}
+                  >
+                    {secAAnswered}/15
+                  </span>
+                </button>
+
+                {/* Section B1 Tab */}
+                <button
+                  type="button"
+                  onClick={() => jumpToQuestion(15)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    currentSection === "B1"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : secB2Answered > 0
+                      ? "bg-slate-50 text-slate-400 opacity-60 cursor-not-allowed"
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-700"
+                  }`}
+                  title={secB2Answered > 0 ? "Locked: Section B2 (Applied) is currently active" : "Section B1 (Core Mathematics - Attempt 25 of 35)"}
+                >
+                  <span>Sec B1 (Core Math)</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                      currentSection === "B1"
+                        ? "bg-white/20 text-white"
+                        : "bg-white text-slate-700 border border-slate-200"
+                    }`}
+                  >
+                    {secB1Answered}/25
+                  </span>
+                  {secB2Answered > 0 && (
+                    <span className="text-[9px] uppercase tracking-wide text-rose-500 font-bold">Locked</span>
+                  )}
+                </button>
+
+                {/* Section B2 Tab */}
+                <button
+                  type="button"
+                  onClick={() => jumpToQuestion(50)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    currentSection === "B2"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : secB1Answered > 0
+                      ? "bg-slate-50 text-slate-400 opacity-60 cursor-not-allowed"
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-700"
+                  }`}
+                  title={secB1Answered > 0 ? "Locked: Section B1 (Core) is currently active" : "Section B2 (Applied Mathematics - Attempt 25 of 35)"}
+                >
+                  <span>Sec B2 (Applied Math)</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                      currentSection === "B2"
+                        ? "bg-white/20 text-white"
+                        : "bg-white text-slate-700 border border-slate-200"
+                    }`}
+                  >
+                    {secB2Answered}/25
+                  </span>
+                  {secB1Answered > 0 && (
+                    <span className="text-[9px] uppercase tracking-wide text-rose-500 font-bold">Locked</span>
+                  )}
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-medium text-slate-600">
+                <span className="font-semibold text-slate-900">Total Attempts:</span>
+                <span className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-blue-700 font-bold font-mono">
+                  {secAAnswered + secB1Answered + secB2Answered} / 40 Allowed
+                </span>
+                <span className="hidden md:inline text-[11px] text-slate-500">(Max 200 Marks)</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* =================================================================== */}
         {/* MAIN BODY: 70% Workspace (Left) + 30% Question Palette (Right) */}
         {/* =================================================================== */}
         <main className="flex-1 max-w-[1600px] w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -314,7 +484,9 @@ export default function CBTPlayer() {
             <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3.5 bg-slate-50/70 border-b border-slate-200/80 text-xs">
               <div className="flex items-center gap-2.5">
                 <span className="font-mono font-semibold text-blue-700 text-xs bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-lg">
-                  {t("question", "Question")} {currentQuestionIndex + 1} {t("of", "of")} {questions.length}
+                  {isMathExam
+                    ? `[Sec ${currentSection}] Q${currentQuestionIndex + 1} of ${questions.length}`
+                    : `${t("question", "Question")} ${currentQuestionIndex + 1} ${t("of", "of")} ${questions.length}`}
                 </span>
                 <div className="text-slate-700 font-medium hidden sm:inline">
                   <MathRenderer text={currentQ.topic} inline />
@@ -341,6 +513,22 @@ export default function CBTPlayer() {
 
             {/* Question Text, Case Study Reading Panel, and Visual Diagram */}
             <div className="p-6 sm:p-8 flex-1">
+              {sectionWarning && (
+                <div className="mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-medium flex items-center justify-between gap-3 shadow-xs animate-in fade-in">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-amber-200 text-amber-800 font-bold flex items-center justify-center shrink-0">!</span>
+                    <span>{sectionWarning}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSectionWarning(null)}
+                    className="text-amber-700 hover:text-amber-900 font-bold text-xs shrink-0 px-2 py-1 rounded-lg hover:bg-amber-100"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              )}
+
               <CBTCaseStudyPanel
                 prompt={translateStem(currentQ.prompt)}
                 questionNumber={currentQuestionIndex + 1}
@@ -357,7 +545,7 @@ export default function CBTPlayer() {
                     <button
                       key={opt.id}
                       type="button"
-                      onClick={() => selectOption(opt.id)}
+                      onClick={() => handleSelectOption(opt.id)}
                       className={`w-full flex items-start gap-3.5 p-4 rounded-2xl border text-left cursor-pointer transition-all ${
                         isChecked
                           ? "bg-blue-50/70 border-blue-600 text-slate-900 shadow-xs"
@@ -478,6 +666,7 @@ export default function CBTPlayer() {
               getStatus={getQuestionStatus}
               onSelectQuestion={jumpToQuestion}
               counts={counts}
+              isMathExam={isMathExam}
             />
           </aside>
         </main>
@@ -516,6 +705,7 @@ export default function CBTPlayer() {
                   setMobilePaletteOpen(false);
                 }}
                 counts={counts}
+                isMathExam={isMathExam}
               />
             </div>
           </div>
@@ -549,6 +739,7 @@ interface PaletteProps {
     answeredMarkedReview: number;
     total: number;
   };
+  isMathExam?: boolean;
 }
 
 function PaletteCard({
@@ -557,8 +748,20 @@ function PaletteCard({
   getStatus,
   onSelectQuestion,
   counts,
+  isMathExam = false,
 }: PaletteProps) {
   const { t } = useTranslation();
+  const [paletteFilter, setPaletteFilter] = useState<"ALL" | "A" | "B1" | "B2">("ALL");
+
+  const displayedQuestions = React.useMemo(() => {
+    return questions.map((q, idx) => ({ q, idx })).filter(({ idx }) => {
+      if (!isMathExam || paletteFilter === "ALL") return true;
+      if (paletteFilter === "A") return idx < 15;
+      if (paletteFilter === "B1") return idx >= 15 && idx < 50;
+      if (paletteFilter === "B2") return idx >= 50;
+      return true;
+    });
+  }, [questions, isMathExam, paletteFilter]);
 
   return (
     <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5">
@@ -568,9 +771,51 @@ function PaletteCard({
           {t("questionPalette", "Question Palette")}
         </h2>
         <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/80">
-          {questions.length} {t("questionsCount", "Questions")}
+          {isMathExam ? "85 Qs (40 Allowed)" : `${questions.length} ${t("questionsCount", "Questions")}`}
         </span>
       </div>
+
+      {/* Mathematics Section Filter Tabs */}
+      {isMathExam && (
+        <div className="grid grid-cols-4 gap-1 mt-3 p-1 bg-slate-100 rounded-xl text-[10px] font-semibold">
+          <button
+            type="button"
+            onClick={() => setPaletteFilter("ALL")}
+            className={`py-1 rounded-lg transition-all ${
+              paletteFilter === "ALL" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            All (85)
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaletteFilter("A")}
+            className={`py-1 rounded-lg transition-all ${
+              paletteFilter === "A" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            Sec A (15)
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaletteFilter("B1")}
+            className={`py-1 rounded-lg transition-all ${
+              paletteFilter === "B1" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            B1 (35)
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaletteFilter("B2")}
+            className={`py-1 rounded-lg transition-all ${
+              paletteFilter === "B2" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            B2 (35)
+          </button>
+        </div>
+      )}
 
       {/* Official NTA 5-State Summary Count Legend */}
       <div className="grid grid-cols-2 gap-2.5 my-4 text-[11px] font-semibold text-slate-700">
@@ -618,7 +863,7 @@ function PaletteCard({
 
       {/* Numbered Grid (1 to N) */}
       <div className="grid grid-cols-5 gap-2 max-h-[340px] overflow-y-auto p-2.5 bg-slate-50/70 rounded-2xl border border-slate-200/60">
-        {questions.map((q, idx) => {
+        {displayedQuestions.map(({ q, idx }) => {
           const status = getStatus(q.id);
           const isCurrent = idx === currentIndex;
 

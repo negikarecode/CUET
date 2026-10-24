@@ -11,7 +11,7 @@ import {
   OverallMockStats,
   PostMockDeterministicReport,
 } from "@/types/postMockAnalysis";
-import { resolveQuestionCorrectOptionId } from "@/lib/scoring";
+import { resolveQuestionCorrectOptionId, isQuestionDropped, isQuestionUnresolved } from "@/lib/scoring";
 
 /**
  * Strictly normalizes difficulty without guessing or inventing metadata.
@@ -104,16 +104,27 @@ export function normalizeQuestionTelemetry(
     const ncertReference = q.ncertReference || fallbackQ?.pyqSource || "";
     const microTopic = q.microTopic || fallbackQ?.topic || "Core Concept";
 
-    const rawCorrectOption =
-      resolveQuestionCorrectOptionId(q) ||
-      resolveQuestionCorrectOptionId(fallbackQ) ||
-      (q.correctOption && q.correctOption.trim() ? q.correctOption.trim().toUpperCase() : null);
+    const isDrop = isQuestionDropped(q) || isQuestionDropped(fallbackQ);
+    const isUnres = isQuestionUnresolved(q) || isQuestionUnresolved(fallbackQ);
 
-    const trueCorrectOption = rawCorrectOption || q.correctOption || fallbackQ?.correctOptionId || "";
+    const rawCorrectOption =
+      isUnres
+        ? null
+        : resolveQuestionCorrectOptionId(q) ||
+          resolveQuestionCorrectOptionId(fallbackQ) ||
+          (q.correctOption && q.correctOption.trim() && q.correctOption.trim().toUpperCase() !== "UNRESOLVED"
+            ? q.correctOption.trim().toUpperCase()
+            : null);
+
+    const trueCorrectOption = isDrop ? "DROPPED" : isUnres ? "" : (rawCorrectOption || q.correctOption || fallbackQ?.correctOptionId || "");
 
     let computedIsCorrect: boolean | null = null;
     if (isAttempted) {
-      if (q.isCorrect === true || q.isCorrect === false) {
+      if (isDrop) {
+        computedIsCorrect = true;
+      } else if (isUnres) {
+        computedIsCorrect = null;
+      } else if (q.isCorrect === true || q.isCorrect === false) {
         computedIsCorrect = q.isCorrect;
       } else if (matchedQA?.isCorrect === true || matchedQA?.isCorrect === false) {
         computedIsCorrect = matchedQA.isCorrect;
@@ -189,14 +200,20 @@ export function buildPostMockDeterministicReport(
     }
   });
 
+  const scorableAttempted = correctCount + incorrectCount;
   const accuracyPercentage =
-    attemptedCount > 0 ? Math.round((correctCount / attemptedCount) * 100) : 0;
+    scorableAttempted > 0 ? Math.round((correctCount / scorableAttempted) * 100) : 0;
   const avgTimePerQuestionSeconds =
     totalQuestions > 0 ? Math.round(totalTimeSeconds / totalQuestions) : 0;
 
   // NTA standard marking scheme: +5 correct, -1 incorrect, 0 skipped
   const totalMarks = correctCount * 5 - incorrectCount;
-  const maxMarks = totalQuestions * 5;
+  const isMathPaper =
+    telemetry.length === 85 ||
+    (attempt.subject && attempt.subject.toLowerCase().includes("math")) ||
+    telemetry.some((q: any) => q.section === "B1" || q.section === "B2");
+  const maxAllowedQuestions = isMathPaper ? 40 : totalQuestions;
+  const maxMarks = maxAllowedQuestions * 5;
 
   const overall: OverallMockStats = {
     totalQuestions,

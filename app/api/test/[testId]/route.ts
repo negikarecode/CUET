@@ -145,8 +145,7 @@ async function getAuthoritativeTest(targetTestId: string): Promise<{
     const pyqMatch = cleanId.match(/pyq[^\d]*(\d+)/) || cleanId.match(/-(\d+)$/) || cleanId.match(/(\d+)$/);
     const paperNum = pyqMatch && pyqMatch[1] ? parseInt(pyqMatch[1], 10) : 1;
     const pyqPath = path.join(process.cwd(), "pyq", subjectDef.folder, `${paperNum}.json`);
-    const mockPath = path.join(process.cwd(), "mock", subjectDef.folder, `${paperNum}.json`);
-    if (!fs.existsSync(pyqPath) && !fs.existsSync(mockPath)) return null;
+    if (!fs.existsSync(pyqPath)) return null;
   } else {
     // If testId includes "repair" or "drill" without DB persistence, reject as not a static file bank
     if (cleanId.includes("repair") || cleanId.includes("drill")) {
@@ -537,7 +536,7 @@ export async function POST(
           verifiedAttemptedCount += 1;
           if (entry.isCorrect) {
             verifiedCorrectCount += 1;
-          } else {
+          } else if (!entry.isUnresolved) {
             verifiedIncorrectCount += 1;
           }
         }
@@ -554,26 +553,79 @@ export async function POST(
         );
       }
 
+      const isMathExam =
+        authoritativeQuestions.length === 85 ||
+        (testResult.authoritativeMeta?.subject &&
+          testResult.authoritativeMeta.subject.toLowerCase().includes("math")) ||
+        authoritativeQuestions.some((q: any) => q.section === "B1" || q.section === "B2");
+
+      if (isMathExam) {
+        // Enforce NTA Mathematics section attempt rules: Sec A (1-15, max 15), Sec B1 (16-50, max 25), Sec B2 (51-85, max 25)
+        let secAAttempts = 0;
+        let secB1Attempts = 0;
+        let secB2Attempts = 0;
+
+        for (const entry of scoredSet) {
+          if (!entry.selectedOption) continue;
+          const authQ = entry.authQuestion;
+          const sec = authQ?.section || (authQ?.questionNumber <= 15 ? "A" : authQ?.questionNumber <= 50 ? "B1" : "B2");
+          if (sec === "A") secAAttempts += 1;
+          else if (sec === "B1") secB1Attempts += 1;
+          else if (sec === "B2") secB2Attempts += 1;
+        }
+
+        if (secB1Attempts > 0 && secB2Attempts > 0) {
+          return NextResponse.json(
+            {
+              error: "NTA Mathematics Policy Violation: Candidates must choose either Section B1 (Core Mathematics) or Section B2 (Applied Mathematics), not both.",
+              code: "MATH_DUAL_SECTION_ATTEMPT",
+            },
+            { status: 400 }
+          );
+        }
+
+        if (secB1Attempts > 25 || secB2Attempts > 25) {
+          return NextResponse.json(
+            {
+              error: `NTA Mathematics Policy Violation: Exceeded Section B attempt limit of 25 questions (Attempted: ${Math.max(secB1Attempts, secB2Attempts)}).`,
+              code: "MATH_EXCESSIVE_SECTION_ATTEMPTS",
+            },
+            { status: 400 }
+          );
+        }
+
+        if (verifiedAttemptedCount > 40) {
+          return NextResponse.json(
+            {
+              error: `NTA Mathematics Policy Violation: Maximum 40 questions can be attempted (Attempted: ${verifiedAttemptedCount}).`,
+              code: "MATH_TOTAL_ATTEMPT_EXCEEDED",
+            },
+            { status: 400 }
+          );
+        }
+      }
+
       attempt.correctCount = verifiedCorrectCount;
       attempt.incorrectCount = verifiedIncorrectCount;
       attempt.attemptedCount = verifiedAttemptedCount;
-      const unattemptedCount = Math.max(0, authoritativeQuestions.length - verifiedAttemptedCount);
+      const targetTotalQuestions = isMathExam ? 40 : (authoritativeQuestions.length || 50);
+      const unattemptedCount = Math.max(0, targetTotalQuestions - verifiedAttemptedCount);
       attempt.unattemptedCount = unattemptedCount;
 
-      const totalQ = authoritativeQuestions.length || 50;
       const { totalMarks, maxMarks } = calculateExamScore(
         verifiedCorrectCount,
         verifiedIncorrectCount,
         unattemptedCount,
         CUET_UG_2026_CONFIG,
-        totalQ
+        targetTotalQuestions
       );
 
       attempt.totalMarks = totalMarks;
       attempt.maxMarks = maxMarks;
+      const scorableAttempted = verifiedCorrectCount + verifiedIncorrectCount;
       attempt.accuracyPercentage =
-        verifiedAttemptedCount > 0
-          ? Math.round((verifiedCorrectCount / verifiedAttemptedCount) * 100)
+        scorableAttempted > 0
+          ? Math.round((verifiedCorrectCount / scorableAttempted) * 100)
           : 0;
 
       // Determine target User ID securely

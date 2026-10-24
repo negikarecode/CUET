@@ -108,6 +108,11 @@ export interface Question {
   pyqSource?: string;
   topic: string;
   chapter?: string;
+  section?: "A" | "B1" | "B2" | string;
+  sectionTitle?: string;
+  isCompulsory?: boolean;
+  attemptRequired?: number;
+  attemptMax?: number;
   answer_source?: AnswerSource | null;
   answer_status?: AnswerStatus | null;
   official_answer?: string | null;

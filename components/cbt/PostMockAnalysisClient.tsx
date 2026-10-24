@@ -1329,8 +1329,9 @@ export default function PostMockAnalysisClient({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
                     {q.options.map((opt) => {
                       const isCandidatePick = q.selectedOption === opt.id;
-                      const hasVerifiedKey = Boolean(q.correctOption) || q.isCorrect !== null;
-                      const isTrueCorrect = Boolean(q.correctOption) && q.correctOption === opt.id;
+                      const isKeyValid = Boolean(q.correctOption && ["A", "B", "C", "D"].includes(q.correctOption));
+                      const hasVerifiedKey = isKeyValid && q.isCorrect !== null;
+                      const isTrueCorrect = isKeyValid && q.correctOption === opt.id;
 
                       let optClasses = "border border-slate-200/80 bg-white text-slate-800";
                       if (isTrueCorrect) {

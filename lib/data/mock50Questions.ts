@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { Question, FullTestMeta } from "@/types";
+import { resolveCanonicalTestId } from "@/lib/canonical-tests";
+import { isQuestionEligibleForActiveCBT } from "@/lib/scoring";
 
 export type { FullTestMeta };
 
@@ -91,13 +93,6 @@ export function loadRawPYQData(folder: string, paperNumber: number): RawQuestion
 
   const basePath = path.join(process.cwd(), "pyq", folder, `${paperNumber}.json`);
   if (!fs.existsSync(basePath)) {
-    const fallbackPath = path.join(process.cwd(), "mock", folder, `${paperNumber}.json`);
-    if (fs.existsSync(fallbackPath)) {
-      const content = fs.readFileSync(fallbackPath, "utf-8");
-      const parsed = JSON.parse(content) as RawQuestion[];
-      mockRawDataCache.set(cacheKey, parsed);
-      return parsed;
-    }
     console.warn(`[PYQLoader] Paper not found at ${basePath}. Returning empty bank.`);
     return [];
   }
@@ -219,6 +214,11 @@ export function mapQuestionsFromDataset(
       aiDiagnosisNotes: `${notesPrefix} - ${q.topic} (Question ${q.questionNumber})`,
       pyqSource: sourceLabel,
       topic: q.topic,
+      section: (q as any).section,
+      sectionTitle: (q as any).sectionTitle,
+      isPublishable: (q as any).isPublishable,
+      needs_human_review: (q as any).needs_human_review,
+      official_answer_status: (q as any).official_answer_status,
     };
   });
 }
@@ -249,7 +249,6 @@ export function resolveSubjectDefinition(testId: string): SubjectMockDefinition 
 
   // Check if testId is a UUID or alias resolvable via canonical lookup
   try {
-    const { resolveCanonicalTestId } = require("@/lib/canonical-tests");
     const canonicalSlug = resolveCanonicalTestId(testId);
     if (canonicalSlug && canonicalSlug !== testId) {
       return resolveSubjectDefinition(canonicalSlug);
@@ -268,7 +267,6 @@ export function getQuestionsForTest(testId: string): {
 } {
   let resolvedId = testId;
   try {
-    const { resolveCanonicalTestId } = require("@/lib/canonical-tests");
     resolvedId = resolveCanonicalTestId(testId) || testId;
   } catch {}
 
@@ -373,12 +371,79 @@ export function getQuestionsForTest(testId: string): {
     if (validMockNumber < 1) validMockNumber = 1;
 
     const rawQuestions = loadRawPYQData(subjectDef.folder, validMockNumber);
-    const firstQ = rawQuestions[0];
+    if (!rawQuestions || rawQuestions.length === 0) {
+      return {
+        testMeta: {
+          id: testId,
+          title: `CUET UG ${subjectDef.name} Official Past Paper ${validMockNumber} (Under Reconstruction)`,
+          subject: subjectDef.name,
+          code: subjectDef.code,
+          totalQuestions: 0,
+          durationMinutes: subjectDef.durationMinutes,
+        },
+        questions: [],
+      };
+    }
+
+    // Phase 1 Containment: Filter out any question failing publication eligibility
+    const eligibleRaw = rawQuestions.filter(isQuestionEligibleForActiveCBT);
+
+    // Verify paper completeness per official CUET UG rules:
+    // If filtering leaves an incomplete paper, do not silently serve a smaller or broken exam.
+    const isMaths = subjectDef.folder === "maths";
+    let isPaperComplete = false;
+
+    if (isMaths) {
+      const secAValid = eligibleRaw.filter((q: any) => q.section === "A").length;
+      const secB1Valid = eligibleRaw.filter((q: any) => q.section === "B1").length;
+      // Authoritative NTA Maths: Section A has 15 compulsory, Section B1 has at least 25 attemptable
+      isPaperComplete = secAValid === 15 && secB1Valid >= 25 && eligibleRaw.length >= 75;
+    } else if (subjectDef.folder === "general-test") {
+      isPaperComplete = eligibleRaw.length >= 50;
+    } else {
+      isPaperComplete = eligibleRaw.length >= 50;
+    }
+
+    if (!isPaperComplete) {
+      return {
+        testMeta: {
+          id: testId,
+          title: `CUET UG ${subjectDef.name} Official Past Paper ${validMockNumber} (Under Reconstruction)`,
+          subject: subjectDef.name,
+          code: subjectDef.code,
+          totalQuestions: 0,
+          durationMinutes: subjectDef.durationMinutes,
+        },
+        questions: [],
+      };
+    }
+
+    const firstQ = eligibleRaw[0];
     const pyqSource = firstQ?.pyqSource || `CUET UG Official CBT Paper ${validMockNumber}`;
 
     title = `CUET UG ${subjectDef.name} Official Past Paper ${validMockNumber}`;
     sourceLabel = pyqSource;
     notesPrefix = `CUET UG Official Paper (${subjectDef.name} Shift ${validMockNumber})`;
+
+    const questions = mapQuestionsFromDataset(
+      testId,
+      subjectDef.name,
+      sourceLabel,
+      notesPrefix,
+      eligibleRaw
+    );
+
+    return {
+      testMeta: {
+        id: testId,
+        title,
+        subject: subjectDef.name,
+        code: subjectDef.code,
+        totalQuestions: questions.length,
+        durationMinutes: subjectDef.durationMinutes,
+      },
+      questions,
+    };
   } else {
     const match = lowerId.match(/(\d+)/);
     const rawMockNumber = match && match[1] ? parseInt(match[1], 10) : 1;
@@ -390,31 +455,29 @@ export function getQuestionsForTest(testId: string): {
       : `CUET UG ${subjectDef.name} Official Practice Paper ${validMockNumber} (50 Compulsory Qs)`;
     sourceLabel = title;
     notesPrefix = `CUET UG 2026 NTA Practice (${subjectDef.name} Mock ${validMockNumber})`;
+
+    const rawQuestions = loadRawMockData(subjectDef.folder, validMockNumber);
+
+    const questions = mapQuestionsFromDataset(
+      testId,
+      subjectDef.name,
+      sourceLabel,
+      notesPrefix,
+      rawQuestions
+    );
+
+    return {
+      testMeta: {
+        id: testId,
+        title,
+        subject: subjectDef.name,
+        code: subjectDef.code,
+        totalQuestions: questions.length,
+        durationMinutes: subjectDef.durationMinutes,
+      },
+      questions,
+    };
   }
-
-  const rawQuestions = isPYQ
-    ? loadRawPYQData(subjectDef.folder, validMockNumber)
-    : loadRawMockData(subjectDef.folder, validMockNumber);
-
-  const questions = mapQuestionsFromDataset(
-    testId,
-    subjectDef.name,
-    sourceLabel,
-    notesPrefix,
-    rawQuestions
-  );
-
-  return {
-    testMeta: {
-      id: testId,
-      title,
-      subject: subjectDef.name,
-      code: subjectDef.code,
-      totalQuestions: questions.length,
-      durationMinutes: subjectDef.durationMinutes,
-    },
-    questions,
-  };
 }
 
 // Convenience backward-compatible helper functions

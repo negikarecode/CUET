@@ -760,7 +760,23 @@ What is the immediate impact on commercial banks when RBI increases the repo rat
   }
 }
 
-runTestSuite().catch((err) => {
-  console.error("Test Suite execution error:", err);
-  process.exit(1);
-});
+const userArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+
+if (userArgs.length > 0) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { spawnSync } = require("child_process");
+  console.log(`Running targeted test suites: ${userArgs.join(", ")}\n`);
+  let totalExitCode = 0;
+  for (const testFile of userArgs) {
+    const res = spawnSync("npx", ["tsx", testFile], { stdio: "inherit" });
+    if (res.status !== 0) {
+      totalExitCode = res.status || 1;
+    }
+  }
+  process.exit(totalExitCode);
+} else {
+  runTestSuite().catch((err) => {
+    console.error("Test Suite execution error:", err);
+    process.exit(1);
+  });
+}

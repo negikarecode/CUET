@@ -12,7 +12,7 @@ import PostMockAnalysisClient from "./PostMockAnalysisClient";
 import { buildPostMockDeterministicReport } from "@/lib/post-mock-engine";
 import { stringToUuid } from "@/lib/utils";
 import { resolveCanonicalTestId } from "@/lib/canonical-tests";
-import { resolveQuestionCorrectOptionId } from "@/lib/scoring";
+import { resolveQuestionCorrectOptionId, isQuestionDropped, isQuestionUnresolved } from "@/lib/scoring";
 
 export default function CBTResultView() {
   const router = useRouter();
@@ -56,11 +56,16 @@ export default function CBTResultView() {
     const questionAttempts = questions.map((q) => {
       const ans = answers[q.id] || answers[q.questionId || ""];
       const selectedOption = ans?.selectedOption ?? null;
-      const trueCorrect = resolveQuestionCorrectOptionId(q);
-      const isCorrect =
-        selectedOption !== null && selectedOption !== undefined && trueCorrect
-          ? selectedOption === trueCorrect
-          : null;
+      const isDrop = isQuestionDropped(q);
+      const isUnres = isQuestionUnresolved(q);
+      const trueCorrect = isDrop ? "DROPPED" : isUnres ? "" : (resolveQuestionCorrectOptionId(q) || "");
+      const isCorrect = isDrop
+        ? true
+        : isUnres
+        ? null
+        : selectedOption !== null && selectedOption !== undefined && trueCorrect
+        ? selectedOption === trueCorrect
+        : null;
       const timeSpent = ans?.timeSpentSeconds ?? 0;
       return {
         questionId: q.id,
@@ -183,11 +188,16 @@ export default function CBTResultView() {
       questions: questions.map((q) => {
         const ans = answers[q.id] || answers[q.questionId || ""];
         const selectedOption = ans?.selectedOption ?? null;
-        const trueCorrect = resolveQuestionCorrectOptionId(q);
-        const isCorrect =
-          selectedOption !== null && selectedOption !== undefined && trueCorrect
-            ? selectedOption === trueCorrect
-            : null;
+        const isDrop = isQuestionDropped(q);
+        const isUnres = isQuestionUnresolved(q);
+        const trueCorrect = isDrop ? "DROPPED" : isUnres ? "" : (resolveQuestionCorrectOptionId(q) || "");
+        const isCorrect = isDrop
+          ? true
+          : isUnres
+          ? null
+          : selectedOption !== null && selectedOption !== undefined && trueCorrect
+          ? selectedOption === trueCorrect
+          : null;
         const timeSpent = ans?.timeSpentSeconds ?? 0;
         return {
           questionId: q.id,
@@ -218,7 +228,7 @@ export default function CBTResultView() {
   }, [questions, answers, submittedScore, testMeta, user.id, testAttempts]);
 
   const hasRevealedKey = Boolean(
-    questions.some((q) => Boolean(resolveQuestionCorrectOptionId(q)))
+    questions.some((q) => Boolean(resolveQuestionCorrectOptionId(q)) || isQuestionDropped(q) || isQuestionUnresolved(q))
   );
   if (!submittedScore || (questions.length > 0 && !hasRevealedKey)) {
     return (

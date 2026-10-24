@@ -15,6 +15,7 @@ import {
   Sparkles,
   BookOpen,
   CalendarDays,
+  CheckCircle2,
 } from "lucide-react";
 import {
   getPYQTestsForSubject,
@@ -573,11 +574,48 @@ export default function SubjectPYQClient({
                       <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
                         {shortTitle}
                       </h3>
-                      {test.year && (
-                        <p className="text-xs text-slate-500 mt-0.5">
-                          CUET UG {test.year} Official NTA Paper
-                        </p>
-                      )}
+                      <p className="text-xs text-slate-500 mt-0.5 flex flex-wrap items-center gap-1.5">
+                        <span>CUET UG {test.year || 2025}</span>
+                        {test.dateDisplay && (
+                          <>
+                            <span>·</span>
+                            <span>{test.dateDisplay}</span>
+                          </>
+                        )}
+                      </p>
+                      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                        {test.isExpanded || test.completenessStatus === "expanded" || (test.questions && test.questions > 50) ? (
+                          <span
+                            title={test.structureNote || "Includes authentic optional sections"}
+                            className="text-[10px] font-semibold px-2 py-0.5 rounded-md border bg-purple-50 text-purple-700 border-purple-200"
+                          >
+                            {test.questions} Questions (Optional Sections)
+                          </span>
+                        ) : test.isPartial || test.completenessStatus === "partial" || (test.questions && test.questions < 50) ? (
+                          <span
+                            title={test.structureNote || "Partial reconstruction from authentic session"}
+                            className="text-[10px] font-semibold px-2 py-0.5 rounded-md border bg-amber-50 text-amber-700 border-amber-200"
+                          >
+                            {test.questions}/50 Questions (Partial)
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md border bg-emerald-50 text-emerald-700 border-emerald-200">
+                            50/50 Questions
+                          </span>
+                        )}
+                        {test.verificationStatus === "official_final_key_verified" && (
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200 inline-flex items-center gap-1">
+                            <CheckCircle2 className="w-2.5 h-2.5 text-blue-600" />
+                            Official NTA Key
+                          </span>
+                        )}
+                        {test.verificationStatus === "independently_verified" && (
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-50 text-slate-700 border border-slate-200 inline-flex items-center gap-1">
+                            <CheckCircle2 className="w-2.5 h-2.5 text-slate-500" />
+                            Verified Solution
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">

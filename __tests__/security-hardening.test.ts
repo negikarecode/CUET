@@ -119,10 +119,10 @@ describe("Security Hardening & Regression Test Suite", () => {
         difficulty: "medium",
         prompt: "What is Faraday's law of induction?",
         options: [
-          { id: "A", text: "Option A" },
-          { id: "B", text: "Option B" },
-          { id: "C", text: "Option C" },
-          { id: "D", text: "Option D" },
+          { id: "A", text: "Option A", isCorrect: false, mistakeAnalysis: "Misconception" } as any,
+          { id: "B", text: "Option B", isCorrect: true, mistakeAnalysis: "Authentic solution" } as any,
+          { id: "C", text: "Option C", isCorrect: false } as any,
+          { id: "D", text: "Option D", isCorrect: false } as any,
         ],
         correctOptionId: "B",
         explanation: "Faraday's law states that EMF is induced by changing magnetic flux.",
@@ -143,6 +143,16 @@ describe("Security Hardening & Regression Test Suite", () => {
       assert.equal(sanitized.correctOptionId, undefined);
       assert.equal(sanitized.explanation, "");
       assert.equal(sanitized.solution, undefined);
+
+      // OPTION-LEVEL ANTI-CHEAT ASSERTIONS:
+      for (const opt of sanitized.options as any[]) {
+        assert.equal(opt.isCorrect, undefined);
+        assert.equal(opt.mistakeAnalysis, undefined);
+        assert.equal(opt.studentSelectionTrap, undefined);
+        assert.equal(opt.misconception, undefined);
+        assert.ok(opt.id);
+        assert.ok(opt.text);
+      }
     });
   });
 });

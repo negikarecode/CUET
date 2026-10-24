@@ -360,14 +360,27 @@ export interface PYQTestItem {
   shift: string;
   label: string;
   yearLabel: string;
-  duration: string;
+  duration?: string;
+  durationMinutes?: number;
   questions: number;
-  tags: string[];
+  tags?: string[];
   status?: "unverified" | "verified" | "duplicate_of_mock";
   verificationNotice?: string;
   examDate?: string;
   dateDisplay?: string;
   paperNumber?: number;
+  isComplete?: boolean;
+  isPartial?: boolean;
+  isExpanded?: boolean;
+  completenessStatus?: "complete" | "partial" | "expanded";
+  completeness?: string;
+  completenessLabel?: string;
+  actualQuestions?: number;
+  expectedQuestions?: number;
+  structureNote?: string;
+  verifiedAnswerCount?: number;
+  verificationStatus?: string;
+  sourceDocument?: string;
 }
 
 export function loadPYQFromManifest(subjectSlug: string): PYQTestItem[] {
@@ -396,7 +409,7 @@ export function loadPYQFromManifest(subjectSlug: string): PYQTestItem[] {
   else if (normKey === "english" || normKey === "eng") folder = "english";
   else if (normKey === "generaltest" || normKey === "gat" || normKey === "general" || normKey === "generalaptitudetest") folder = "general-test";
 
-  const manifestSub = (pyqManifest.subjects as Record<string, { papers: PYQTestItem[] }>)[folder];
+  const manifestSub = (pyqManifest.subjects as unknown as Record<string, { papers: PYQTestItem[] }>)[folder];
   if (manifestSub && manifestSub.papers && manifestSub.papers.length > 0) {
     // Phase A: Exclude all duplicate_of_mock papers so they are NEVER listed under official PYQs
     const papers = manifestSub.papers.filter((p) => p.status !== "duplicate_of_mock");
