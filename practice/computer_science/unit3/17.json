@@ -11,9 +11,9 @@
       {
         "id": "A",
         "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Validates both statements and confirms causal explanation."
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Confusion Trap",
+        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
       },
       {
         "id": "B",
@@ -25,9 +25,9 @@
       {
         "id": "C",
         "text": "(A) is true but (R) is false",
-        "isCorrect": false,
-        "studentSelectionTrap": "Reason Acceptance Trap",
-        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Assertion is true but Reason contains a factual error."
       },
       {
         "id": "D",
@@ -37,12 +37,12 @@
         "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Passing a list of colors applies them cyclically/sequentially across bars.\nHence, Option C is correct.\nHence, option (A) is the correct choice.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Passing a list of colors applies them cyclically/sequentially across bars.\nHence Option C is correct.\nHence, option (C) is the correct choice.",
     "solution": {
-      "quick": "Correct answer is option (A).",
+      "quick": "Correct answer is option (C).",
       "concept": "Section B2: Informatics Practices Core: Per-bar Color Customization.",
-      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Passing a list of colors applies them cyclically/sequentially across bars.\nHence, Option C is correct.\nHence, option (A) is the correct choice."
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Passing a list of colors applies them cyclically/sequentially across bars.\nHence Option C is correct.\nHence, option (C) is the correct choice."
     },
     "questionType": "assertion-reasoning",
     "difficulty": 1,
@@ -62,57 +62,57 @@
     "questionNumber": 2,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q02",
     "chapter": "Section B2: Informatics Practices Core",
-    "topic": "s.map() for Dictionary Substitution",
-    "questionText": "Given s = pd.Series(['M', 'F', 'M']), what does s.map({'M': 'Male', 'F': 'Female'}) produce?",
+    "topic": "Setting Values via Slicing",
+    "questionText": "What is the effect of executing s.iloc[1:3] = 0 on a Pandas Series?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "pd.Series(['Male', 'Female', 'Male'])",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for s.map() for Dictionary Substitution."
-      },
-      {
-        "id": "B",
-        "text": "Throws a KeyError",
+        "text": "Only element 3 is set to 0",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
-        "id": "C",
-        "text": "A dictionary",
+        "id": "B",
+        "text": "The entire series is deleted",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
-        "id": "D",
-        "text": "pd.Series(['M', 'F', 'M'])",
+        "id": "C",
+        "text": "Raises a ReadOnlyError",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      },
+      {
+        "id": "D",
+        "text": "Elements at index positions 1 and 2 are updated to 0 in place",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Setting Values via Slicing."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (s.map() for Dictionary Substitution):\npd.Series(['Male', 'Female', 'Male'])\n\nDetailed Analysis:\ns.map(dict) maps each value to its corresponding dictionary replacement value.\nTherefore, option (A) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nFor Setting Values via Slicing (Section B2: Informatics Practices Core):\nPositional slicing with assignment updates the selected slice range in place.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Section B2: Informatics Practices Core: s.map() for Dictionary Substitution.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (s.map() for Dictionary Substitution):\npd.Series(['Male', 'Female', 'Male'])\n\nDetailed Analysis:\ns.map(dict) maps each value to its corresponding dictionary replacement value.\nTherefore, option (A) is the correct answer."
+      "quick": "Correct answer is option (D).",
+      "concept": "Section B2: Informatics Practices Core: Setting Values via Slicing.",
+      "detailed": "Detailed Solution:\nFor Setting Values via Slicing (Section B2: Informatics Practices Core):\nPositional slicing with assignment updates the selected slice range in place.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer."
     },
-    "questionType": "conceptual",
+    "questionType": "application",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section B2: Informatics Practices Core: s.map() for Dictionary Substitution",
+    "keyConcept": "Section B2: Informatics Practices Core: Setting Values via Slicing",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section B2: Informatics Practices Core",
-      "s.map() for Dictionary Substitution",
+      "Setting Values via Slicing",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
@@ -121,57 +121,57 @@
     "questionNumber": 3,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q03",
     "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Digital Divide and Netiquette Concepts",
-    "questionText": "Given below are two statements:\nStatement I: The Digital Divide refers to socioeconomic and geographic inequality in access to information and communications technology.\nStatement II: Netiquette refers to informal codes of ethical, polite, and respectful communication conduct in online digital interactions.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "topic": "Bar Chart vs Histogram Difference",
+    "questionText": "Which of the following statements is NOT correct regarding Bar Chart vs Histogram Difference (Section B2: Informatics Practices Core)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both Statement I and Statement II are correct",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dual Acceptance Trap",
-        "mistakeAnalysis": "Erroneously assumed both statements were valid."
+        "text": "Bar charts display qualitative categories with gaps between bars, whereas histograms display quantitative frequency distributions using contiguous bars.",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the incorrect statement regarding Bar Chart vs Histogram Difference."
       },
       {
         "id": "B",
-        "text": "Both Statement I and Statement II are incorrect",
+        "text": "Bar charts require the x-axis to be a continuous numeric scale, while histograms mandate a categorical discrete axis for classification.",
         "isCorrect": false,
-        "studentSelectionTrap": "Dual Rejection Error",
-        "mistakeAnalysis": "Rejected valid scientific statements erroneously."
+        "studentSelectionTrap": "True Statement Selection Error",
+        "mistakeAnalysis": "Incorrect option. Selected a factually correct statement instead of identifying the exception."
       },
       {
         "id": "C",
-        "text": "Statement I is correct but Statement II is incorrect",
+        "text": "Bar charts are exclusively used for temporal data sequences, whereas histograms are reserved for spatial geographic data mapping.",
         "isCorrect": false,
-        "studentSelectionTrap": "Statement II Blindspot",
-        "mistakeAnalysis": "Failed to recognize the fallacy in Statement II."
+        "studentSelectionTrap": "Partial Knowledge Trap",
+        "mistakeAnalysis": "Incorrect option. Failed to distinguish valid properties from the invalid exception."
       },
       {
         "id": "D",
-        "text": "Statement I is incorrect but Statement II is correct",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Statement I is false while Statement II is factually sound."
+        "text": "Bar charts use proportional bar lengths to represent values, while histograms use bar heights to represent non-linear mathematical trends.",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overlooked Negative Constraint",
+        "mistakeAnalysis": "Incorrect option. Overlooked the 'NOT' constraint in the question stem."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. Digital divide describes ICT access disparity, and netiquette encompasses online behavioral norms.\nHence, Option D is correct.\nHence, option (D) is correct.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nIn Section B2: Informatics Practices Core (Bar Chart vs Histogram Difference):\nThe statement 'Bar charts display qualitative categories with gaps between bars, whereas histograms display quantitative frequency distributions using contiguous bars.' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.",
     "solution": {
-      "quick": "Correct answer is option (D).",
-      "concept": "Section B2: Informatics Practices Core: Digital Divide and Netiquette Concepts.",
-      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. Digital divide describes ICT access disparity, and netiquette encompasses online behavioral norms.\nHence, Option D is correct.\nHence, option (D) is correct."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section B2: Informatics Practices Core: Bar Chart vs Histogram Difference.",
+      "detailed": "Detailed Solution:\nIn Section B2: Informatics Practices Core (Bar Chart vs Histogram Difference):\nThe statement 'Bar charts display qualitative categories with gaps between bars, whereas histograms display quantitative frequency distributions using contiguous bars.' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice."
     },
-    "questionType": "statement-evaluation",
+    "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section B2: Informatics Practices Core: Digital Divide and Netiquette Concepts",
+    "keyConcept": "Section B2: Informatics Practices Core: Bar Chart vs Histogram Difference",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section B2: Informatics Practices Core",
-      "Digital Divide and Netiquette Concepts",
+      "Bar Chart vs Histogram Difference",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
@@ -180,57 +180,57 @@
     "questionNumber": 4,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q04",
     "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Cyber Crimes and Modus Operandi",
-    "questionText": "Match the cyber crime in List I with its operational technique in List II:\n\nList I:\n(A) Phishing\n(B) Man-in-the-Middle (MitM)\n(C) Cyber Bullying\n(D) Denial of Service (DoS)\n\nList II:\n(I) Deceptive emails directing victims to cloned spoofed banking portals to steal passwords\n(II) Secretly intercepting and altering communication between two parties on an insecure public Wi-Fi network\n(III) Posting cruel, derogatory, or defamatory messages on social media targeting adolescents\n(IV) Flooding web servers with bogus requests to exhaust server bandwidth and crash service\n\nChoose the correct answer from the options given below:",
+    "topic": "Slice Inclusion in loc and iloc",
+    "questionText": "Given below are two statements:\nStatement I: In df.loc['RowA':'RowC'], the row labeled 'RowC' is included in the sliced result.\nStatement II: In df.iloc[0:2], the row at integer index position 2 is excluded from the sliced result.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A-II, B-I, C-III, D-IV",
+        "text": "Both Statement I and Statement II are correct",
         "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+        "studentSelectionTrap": "Dual Acceptance Trap",
+        "mistakeAnalysis": "Assumed both statements were correct."
       },
       {
         "id": "B",
-        "text": "A-I, B-II, C-III, D-IV",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Cyber Crimes and Modus Operandi."
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dual Rejection Error",
+        "mistakeAnalysis": "Rejected valid NCERT facts erroneously."
       },
       {
         "id": "C",
-        "text": "A-I, B-III, C-IV, D-II",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Statement I is true while Statement II contains an error."
       },
       {
         "id": "D",
-        "text": "A-IV, B-II, C-I, D-III",
+        "text": "Statement I is incorrect but Statement II is correct",
         "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+        "studentSelectionTrap": "Statement I Blindspot",
+        "mistakeAnalysis": "Failed to recognize error in Statement I."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Cyber Crimes and Modus Operandi):\nA-I, B-II, C-III, D-IV\n\nDetailed Analysis:\nPhishing uses cloned sites; MitM intercepts unencrypted traffic; Cyber Bullying is social harassment; DoS exhausts server bandwidth.\nTherefore, option (B) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. Label slicing with loc includes endpoints; integer slicing with iloc excludes endpoints.\nHence Option A is correct.\nHence, option (C) is correct.",
     "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Section B2: Informatics Practices Core: Cyber Crimes and Modus Operandi.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Cyber Crimes and Modus Operandi):\nA-I, B-II, C-III, D-IV\n\nDetailed Analysis:\nPhishing uses cloned sites; MitM intercepts unencrypted traffic; Cyber Bullying is social harassment; DoS exhausts server bandwidth.\nTherefore, option (B) is the correct answer."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section B2: Informatics Practices Core: Slice Inclusion in loc and iloc.",
+      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. Label slicing with loc includes endpoints; integer slicing with iloc excludes endpoints.\nHence Option A is correct.\nHence, option (C) is correct."
     },
-    "questionType": "conceptual",
+    "questionType": "statement-evaluation",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section B2: Informatics Practices Core: Cyber Crimes and Modus Operandi",
+    "keyConcept": "Section B2: Informatics Practices Core: Slice Inclusion in loc and iloc",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section B2: Informatics Practices Core",
-      "Cyber Crimes and Modus Operandi",
+      "Slice Inclusion in loc and iloc",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
@@ -274,11 +274,11 @@
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nFor s.round(decimals) Method (Section B2: Informatics Practices Core):\ns.round(n) rounds each floating-point element to n decimal places.\nTherefore, option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nFor s.round(decimals) Method (Section B2: Informatics Practices Core):\ns.round(n) rounds each floating-point element to n decimal places.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer.",
     "solution": {
       "quick": "Correct answer is option (D).",
       "concept": "Section B2: Informatics Practices Core: s.round(decimals) Method.",
-      "detailed": "Detailed Solution:\nFor s.round(decimals) Method (Section B2: Informatics Practices Core):\ns.round(n) rounds each floating-point element to n decimal places.\nTherefore, option (D) is the correct answer."
+      "detailed": "Detailed Solution:\nFor s.round(decimals) Method (Section B2: Informatics Practices Core):\ns.round(n) rounds each floating-point element to n decimal places.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer."
     },
     "questionType": "application",
     "difficulty": 1,
@@ -298,57 +298,57 @@
     "questionNumber": 6,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q06",
     "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Software Licensing Models and Examples",
-    "questionText": "Match the software licensing model in List I with its iconic real-world example in List II:\n\nList I:\n(A) Copyleft Open Source (GNU GPL)\n(B) Permissive Open Source (Apache / MIT)\n(C) Proprietary Commercial Software\n(D) Freeware (Closed Source)\n\nList II:\n(I) Linux Operating System Kernel and GNU Utilities\n(II) Apache Web Server and Python Programming Language\n(III) Microsoft Windows and Apple macOS\n(IV) Adobe Acrobat Reader (free to use, but proprietary closed source)\n\nChoose the correct answer from the options given below:",
+    "topic": "Spyware and Keylogger Dangers",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Keyloggers and Spyware pose severe threats to personal banking and password security.\nReason (R): They covertly record every keystroke entered by the user, transmitting confidential credentials and credit card numbers to remote cyber criminals.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A-IV, B-II, C-I, D-III",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Validates both statements and confirms causal explanation."
       },
       {
         "id": "B",
-        "text": "A-I, B-II, C-III, D-IV",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Blindspot",
+        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
       },
       {
         "id": "C",
-        "text": "A-I, B-III, C-IV, D-II",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+        "studentSelectionTrap": "Reason Acceptance Trap",
+        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
       },
       {
         "id": "D",
-        "text": "A-II, B-I, C-III, D-IV",
+        "text": "(A) is false but (R) is true",
         "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+        "studentSelectionTrap": "Assertion Acceptance Trap",
+        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nLinux is copyleft GPL; Apache/Python is permissive; Windows is proprietary commercial; Adobe Reader is closed freeware.\nHence, Option C is correct.\nHence, option (B) is the correct match.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Keystroke logging intercepts plaintext credentials before encryption takes place.\nHence Option B is correct.\nHence, option (A) is the correct choice.",
     "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Section B2: Informatics Practices Core: Software Licensing Models and Examples.",
-      "detailed": "Detailed Solution:\nLinux is copyleft GPL; Apache/Python is permissive; Windows is proprietary commercial; Adobe Reader is closed freeware.\nHence, Option C is correct.\nHence, option (B) is the correct match."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section B2: Informatics Practices Core: Spyware and Keylogger Dangers.",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Keystroke logging intercepts plaintext credentials before encryption takes place.\nHence Option B is correct.\nHence, option (A) is the correct choice."
     },
-    "questionType": "match-the-following",
+    "questionType": "assertion-reasoning",
     "difficulty": 1,
     "difficultyLevel": 1,
     "estimatedTimeSeconds": 45,
-    "keyConcept": "Section B2: Informatics Practices Core: Software Licensing Models and Examples",
+    "keyConcept": "Section B2: Informatics Practices Core: Spyware and Keylogger Dangers",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section B2: Informatics Practices Core",
-      "Software Licensing Models and Examples",
+      "Spyware and Keylogger Dangers",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
@@ -371,32 +371,32 @@
       },
       {
         "id": "B",
+        "text": "Index 'b' has value 2.0; Index 'c' has value NaN",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Series from Dictionary with Extra Index."
+      },
+      {
+        "id": "C",
         "text": "Index 'b' is 2, index 'c' is 0",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "Raises a KeyError: 'c'",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      },
-      {
-        "id": "D",
-        "text": "Index 'b' has value 2.0; Index 'c' has value NaN",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Series from Dictionary with Extra Index."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nFor Series from Dictionary with Extra Index (Section B2: Informatics Practices Core):\nWhen constructing from a dict with an explicit index, missing keys are filled with NaN; omitted dict keys are dropped.\nTherefore, option (D) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Series from Dictionary with Extra Index (Section B2: Informatics Practices Core):\nWhen constructing from a dict with an explicit index, missing keys are filled with NaN; omitted dict keys are dropped.\nHence Option D is correct.\n\nTherefore, option (B) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (D).",
+      "quick": "Correct answer is option (B).",
       "concept": "Section B2: Informatics Practices Core: Series from Dictionary with Extra Index.",
-      "detailed": "Detailed Solution:\nFor Series from Dictionary with Extra Index (Section B2: Informatics Practices Core):\nWhen constructing from a dict with an explicit index, missing keys are filled with NaN; omitted dict keys are dropped.\nTherefore, option (D) is the correct answer."
+      "detailed": "Detailed Solution:\nFor Series from Dictionary with Extra Index (Section B2: Informatics Practices Core):\nWhen constructing from a dict with an explicit index, missing keys are filled with NaN; omitted dict keys are dropped.\nHence Option D is correct.\n\nTherefore, option (B) is the correct answer."
     },
     "questionType": "application",
     "difficulty": 2,
@@ -416,8 +416,67 @@
     "questionNumber": 8,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q08",
     "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Series Creation Methods and Default Indices",
-    "questionText": "Match the Pandas Series creation expression in List I with its resulting index in List II:\n\nList I:\n(A) pd.Series([10, 20, 30])\n(B) pd.Series([10, 20, 30], index=['x', 'y', 'z'])\n(C) pd.Series({'Roll': 101, 'Age': 18})\n(D) pd.Series(50, index=range(4))\n\nList II:\n(I) RangeIndex(0, 3) (default integer indices 0, 1, 2)\n(II) Index(['x', 'y', 'z'], dtype='object')\n(III) Index(['Roll', 'Age'], dtype='object')\n(IV) RangeIndex(0, 4) with all values equal to scalar 50\n\nChoose the correct answer from the options given below:",
+    "topic": "Phishing Fraud Victimization Pathway",
+    "questionText": "Arrange the sequential deception steps of a credential-harvesting Phishing scam from initiation to account compromise:\n(A) Attacker sends an urgent spoofed email impersonating the victim's bank, alleging account suspension\n(B) Victim clicks the embedded hyperlink and is redirected to a cloned, fraudulent look-alike banking portal\n(C) Victim enters login username, password, and OTP on the fraudulent website form\n(D) Attacker captures the plaintext credentials from the phishing server and executes unauthorized financial transfers\n\nChoose the correct chronological/logical sequence from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "B, A, C, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "A, C, B, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "D, B, C, A",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      },
+      {
+        "id": "D",
+        "text": "A, B, C, D",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nPhishing pathway: urgent deceptive email -> redirection to cloned portal -> victim inputs credentials -> attacker exfiltrates funds.\nHence Option A is correct.\nHence, option (D) is correct.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Section B2: Informatics Practices Core: Phishing Fraud Victimization Pathway.",
+      "detailed": "Detailed Solution:\nPhishing pathway: urgent deceptive email -> redirection to cloned portal -> victim inputs credentials -> attacker exfiltrates funds.\nHence Option A is correct.\nHence, option (D) is correct."
+    },
+    "questionType": "chronological-sequence",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B2: Informatics Practices Core: Phishing Fraud Victimization Pathway",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "Phishing Fraud Victimization Pathway",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 9,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q09",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "DataFrame Fundamental Attributes",
+    "questionText": "Match the DataFrame attribute in List I with its description in List II:\n\nList I:\n(A) df.index\n(B) df.columns\n(C) df.dtypes\n(D) df.empty\n\nList II:\n(I) Returns the row index / labels of the DataFrame\n(II) Returns the column labels of the DataFrame\n(III) Returns a Series containing the data types of each column\n(IV) Returns a boolean indicating True if DataFrame has zero elements\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -430,10 +489,600 @@
       },
       {
         "id": "B",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
         "text": "A-I, B-II, C-III, D-IV",
         "isCorrect": true,
         "studentSelectionTrap": null,
         "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
+      },
+      {
+        "id": "D",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\ndf.index provides row descriptors, df.columns provides column descriptors, df.dtypes gives per-column data types, and df.empty checks for zero elements.\nHence Option B is correct.\nHence, option (C) is the correct match.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Section B2: Informatics Practices Core: DataFrame Fundamental Attributes.",
+      "detailed": "Detailed Solution:\ndf.index provides row descriptors, df.columns provides column descriptors, df.dtypes gives per-column data types, and df.empty checks for zero elements.\nHence Option B is correct.\nHence, option (C) is the correct match."
+    },
+    "questionType": "match-the-following",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B2: Informatics Practices Core: DataFrame Fundamental Attributes",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "DataFrame Fundamental Attributes",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 10,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q10",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Inplace Renaming Mechanics",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): df.rename(columns={'old_name': 'new_name'}, inplace=True) modifies the column header in the existing DataFrame without reassignment.\nReason (R): The parameter inplace=True instructs Pandas methods to mutate the underlying object directly rather than returning a modified copy.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Inplace Renaming Mechanics."
+      },
+      {
+        "id": "C",
+        "text": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Inplace Renaming Mechanics):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Context:\nBoth (A) and (R) are true, and (R) correctly explains (A). inplace=True modifies the caller object in place.\nHence Option D is correct.\n\nTherefore, option (B) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section B2: Informatics Practices Core: Inplace Renaming Mechanics.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Inplace Renaming Mechanics):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Context:\nBoth (A) and (R) are true, and (R) correctly explains (A). inplace=True modifies the caller object in place.\nHence Option D is correct.\n\nTherefore, option (B) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B2: Informatics Practices Core: Inplace Renaming Mechanics",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "Inplace Renaming Mechanics",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 11,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q11",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Row-wise Aggregations and describe() Output",
+    "questionText": "Given below are two statements:\nStatement I: df.mean(axis=1) computes the arithmetic average across columns for each individual row.\nStatement II: df.describe() computes summary statistics including count, mean, std, min, 25%, 50%, 75%, and max for numerical columns.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dual Acceptance Trap",
+        "mistakeAnalysis": "Assumed both statements were correct."
+      },
+      {
+        "id": "B",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dual Rejection Error",
+        "mistakeAnalysis": "Rejected valid NCERT facts erroneously."
+      },
+      {
+        "id": "C",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Statement I is true while Statement II contains an error."
+      },
+      {
+        "id": "D",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Statement I Blindspot",
+        "mistakeAnalysis": "Failed to recognize error in Statement I."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. axis=1 executes row-wise reductions, and describe() outputs the standard 8-statistic summary.\nHence Option A is correct.\nHence, option (C) is correct.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Section B2: Informatics Practices Core: Row-wise Aggregations and describe() Output.",
+      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. axis=1 executes row-wise reductions, and describe() outputs the standard 8-statistic summary.\nHence Option A is correct.\nHence, option (C) is correct."
+    },
+    "questionType": "statement-evaluation",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B2: Informatics Practices Core: Row-wise Aggregations and describe() Output",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "Row-wise Aggregations and describe() Output",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 12,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q12",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "s.ndim and s.size Attributes",
+    "questionText": "Given below are two statements:\nStatement I: The s.ndim attribute of any Pandas Series always evaluates to 1 because a Series is inherently a one-dimensional data structure.\nStatement II: The s.size attribute returns the total count of elements present in the Series, including missing (NaN) values.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      },
+      {
+        "id": "D",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for s.ndim and s.size Attributes."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (s.ndim and s.size Attributes):\nBoth Statement I and Statement II are correct\n\nDetailed Context:\nBoth Statement I and Statement II are correct. Series dimensionality is always 1; s.size counts all elements including NaNs.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Section B2: Informatics Practices Core: s.ndim and s.size Attributes.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (s.ndim and s.size Attributes):\nBoth Statement I and Statement II are correct\n\nDetailed Context:\nBoth Statement I and Statement II are correct. Series dimensionality is always 1; s.size counts all elements including NaNs.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B2: Informatics Practices Core: s.ndim and s.size Attributes",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "s.ndim and s.size Attributes",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 13,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q13",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Copyright Infringement",
+    "questionText": "What constitutes Copyright Infringement in software and digital content?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Unauthorized copying, modification, distribution, or commercial piracy of protected creative works without the copyright owner's consent",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Copyright Infringement."
+      },
+      {
+        "id": "B",
+        "text": "Writing original code that performs a common mathematical operation",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "C",
+        "text": "Purchasing a legitimate single-user license",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "Reading public documentation",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Copyright Infringement):\nUnauthorized copying, modification, distribution, or commercial piracy of protected creative works without the copyright owner's consent\n\nDetailed Context:\nCopyright infringement violates the exclusive statutory rights granted to the creator of an intellectual property.\nHence Option D is correct.\n\nTherefore, option (A) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Section B2: Informatics Practices Core: Copyright Infringement.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Copyright Infringement):\nUnauthorized copying, modification, distribution, or commercial piracy of protected creative works without the copyright owner's consent\n\nDetailed Context:\nCopyright infringement violates the exclusive statutory rights granted to the creator of an intellectual property.\nHence Option D is correct.\n\nTherefore, option (A) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B2: Informatics Practices Core: Copyright Infringement",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "Copyright Infringement",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 14,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q14",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Targeted Column Imputation",
+    "questionText": "Read the following case study on survey data cleaning using Pandas and answer the questions that follow:\n\nAn educational research group conducts an online learning survey across 500 high school students. The survey responses are imported into a DataFrame survey_df containing columns: ['StudentID', 'StudyHours', 'DeviceType', 'InternetSpeed', 'ExamScore'].\n\nThe lead analyst identifies several data quality issues:\n1. Incomplete records: Some students abandoned the survey halfway, leaving multiple columns null.\n2. Duplicate submissions: Some students accidentally clicked 'Submit' twice, generating identical duplicate rows.\n3. Missing numerical values: ExamScore has 15 missing values (NaN).\n\nThe analyst executes a structured data cleaning pipeline:\n- Drops duplicate rows: survey_df.drop_duplicates(inplace=True)\n- Drops rows that have fewer than 3 valid non-null answers: survey_df.dropna(thresh=3, inplace=True)\n- Imputes missing ExamScore with the mean exam score: survey_df['ExamScore'].fillna(survey_df['ExamScore'].mean(), inplace=True)\n- Resets the index: survey_df.reset_index(drop=True, inplace=True)\n\nQuestion: How does survey_df['ExamScore'].fillna(survey_df['ExamScore'].mean(), inplace=True) affect other columns with missing values?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "It replaces missing values across the entire DataFrame with the ExamScore mean",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "It converts other columns to float",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "It deletes all other columns",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      },
+      {
+        "id": "D",
+        "text": "It leaves all other columns completely untouched, imputing mean values only into 'ExamScore'",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Targeted Column Imputation."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Targeted Column Imputation):\nIt leaves all other columns completely untouched, imputing mean values only into 'ExamScore'\n\nDetailed Context:\nApplying fillna directly to a specific Series (survey_df['ExamScore']) restricts imputation exclusively to that column.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Section B2: Informatics Practices Core: Targeted Column Imputation.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Targeted Column Imputation):\nIt leaves all other columns completely untouched, imputing mean values only into 'ExamScore'\n\nDetailed Context:\nApplying fillna directly to a specific Series (survey_df['ExamScore']) restricts imputation exclusively to that column.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B2: Informatics Practices Core: Targeted Column Imputation",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "Targeted Column Imputation",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 15,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q15",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Sorting DataFrame by Row Index",
+    "questionText": "How do you sort DataFrame df by its row index labels in ascending order?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "df.arrange_index()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "df.sort_index(ascending=True)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Sorting DataFrame by Row Index."
+      },
+      {
+        "id": "C",
+        "text": "df.sort_rows()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "df.order_index()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Sorting DataFrame by Row Index):\ndf.sort_index(ascending=True)\n\nDetailed Context:\ndf.sort_index() sorts the DataFrame along the index axis.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section B2: Informatics Practices Core: Sorting DataFrame by Row Index.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Sorting DataFrame by Row Index):\ndf.sort_index(ascending=True)\n\nDetailed Context:\ndf.sort_index() sorts the DataFrame along the index axis.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section B2: Informatics Practices Core: Sorting DataFrame by Row Index",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "Sorting DataFrame by Row Index",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 16,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q16",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Total Market Value Aggregation",
+    "questionText": "Read the following case study on financial data manipulation using Pandas DataFrames and answer the questions that follow:\n\nA quantitative financial analyst tracks portfolio holdings using a Pandas DataFrame named portfolio:\nportfolio = pd.DataFrame({\n    'Ticker': ['INFY', 'TCS', 'RELIANCE', 'HDFCBANK'],\n    'Shares': [150, 80, 100, 200],\n    'BuyPrice': [1450.0, 3200.0, 2400.0, 1600.0],\n    'CurrentPrice': [1620.0, 3450.0, 2350.0, 1720.0]\n}, index=['Stock1', 'Stock2', 'Stock3', 'Stock4'])\n\nThe analyst performs several operations:\n1. Vectorized calculation of current market value: portfolio['MarketVal'] = portfolio['Shares'] * portfolio['CurrentPrice']\n2. Vectorized calculation of profit/loss: portfolio['GainLoss'] = portfolio['MarketVal'] - (portfolio['Shares'] * portfolio['BuyPrice'])\n3. Slicing profitable stocks using boolean masking: profitable = portfolio[portfolio['GainLoss'] > 0]\n4. Extracting specific cells using df.loc['Stock2', 'BuyPrice'] and df.iloc[1, 2].\n\nQuestion: Which expression calculates the grand total market value of the entire portfolio as a scalar float?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "portfolio['MarketVal'].count()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "portfolio['MarketVal'].sum()",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Total Market Value Aggregation."
+      },
+      {
+        "id": "C",
+        "text": "portfolio.sum()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "portfolio['MarketVal'].mean()",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Total Market Value Aggregation (Section B2: Informatics Practices Core):\nSeries.sum() computes the arithmetic sum of values in the 'MarketVal' column.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section B2: Informatics Practices Core: Total Market Value Aggregation.",
+      "detailed": "Detailed Solution:\nFor Total Market Value Aggregation (Section B2: Informatics Practices Core):\nSeries.sum() computes the arithmetic sum of values in the 'MarketVal' column.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer."
+    },
+    "questionType": "application",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section B2: Informatics Practices Core: Total Market Value Aggregation",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "Total Market Value Aggregation",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 17,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q17",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Partial Missing Row Evaluation",
+    "questionText": "If a row has values [10, np.nan, 30, np.nan], does df.dropna(how='any') drop this row?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Yes, because at least one cell contains NaN",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Partial Missing Row Evaluation."
+      },
+      {
+        "id": "B",
+        "text": "No, because how='any' requires all values to be NaN",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "C",
+        "text": "Only if axis=1 is specified",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "No, because more than half the values are valid",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Partial Missing Row Evaluation):\nYes, because at least one cell contains NaN\n\nDetailed Context:\nhow='any' drops the entry if any null value is encountered.\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Section B2: Informatics Practices Core: Partial Missing Row Evaluation.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Partial Missing Row Evaluation):\nYes, because at least one cell contains NaN\n\nDetailed Context:\nhow='any' drops the entry if any null value is encountered.\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section B2: Informatics Practices Core: Partial Missing Row Evaluation",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "Partial Missing Row Evaluation",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 18,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q18",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Multiple Lines on Same Figure",
+    "questionText": "Read the following case study on an end-to-end data pipeline in Pandas and Pyplot and answer the questions that follow:\n\nA retail business analyst builds an automated reporting pipeline in Python to analyze monthly store revenue from 'sales_data.csv'.\nThe script executes the following stages:\n1. Ingestion: df = pd.read_csv('sales_data.csv') loads 12 monthly records into a DataFrame with columns ['Month', 'Sales', 'Expenses'].\n2. Data Cleaning: Incomplete records with NaN values are filled using df.fillna(df.mean(numeric_only=True), inplace=True).\n3. Derived Metrics: A new column 'Profit' is calculated: df['Profit'] = df['Sales'] - df['Expenses'].\n4. Statistical Aggregation: Total annual revenue is computed via total_sales = df['Sales'].sum(), and the best performing month is identified using best_month = df.loc[df['Profit'].idxmax(), 'Month'].\n5. Visualization: A line plot compares monthly Sales and Expenses over time with grid lines and custom styling: plt.plot(df['Month'], df['Sales'], label='Sales', color='blue', marker='o')\nplt.plot(df['Month'], df['Expenses'], label='Expenses', color='red', linestyle='--')\nplt.legend(); plt.savefig('annual_report.png'); plt.show()\n\nQuestion: How did the script plot both Sales and Expenses lines onto the same chart axes?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "By running the Python script twice",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "By invoking plt.plot() twice with different data and labels before calling plt.show()",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Multiple Lines on Same Figure."
+      },
+      {
+        "id": "C",
+        "text": "By opening two separate browser tabs",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "By merging the two columns into a single string",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Multiple Lines on Same Figure (Section B2: Informatics Practices Core):\nCalling plt.plot() multiple times before calling plt.show() layers multiple data series onto the current active axes.\nHence Option D is correct.\n\nTherefore, option (B) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section B2: Informatics Practices Core: Multiple Lines on Same Figure.",
+      "detailed": "Detailed Solution:\nFor Multiple Lines on Same Figure (Section B2: Informatics Practices Core):\nCalling plt.plot() multiple times before calling plt.show() layers multiple data series onto the current active axes.\nHence Option D is correct.\n\nTherefore, option (B) is the correct answer."
+    },
+    "questionType": "application",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section B2: Informatics Practices Core: Multiple Lines on Same Figure",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B2: Informatics Practices Core",
+      "Multiple Lines on Same Figure",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
+  },
+  {
+    "questionNumber": 19,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q19",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Series Arithmetic and Output Alignments",
+    "questionText": "Given s1 = pd.Series([10, 20], index=['a', 'b']) and s2 = pd.Series([5, 15], index=['b', 'c']), match the index label with its value in s1 + s2:\n\nList I:\n(A) Index 'a'\n(B) Index 'b'\n(C) Index 'c'\n(D) s1.add(s2, fill_value=0)['a']\n\nList II:\n(I) NaN (since 'a' is absent in s2)\n(II) 35.0 (sum of matching label: 20 + 15)\n(III) NaN (since 'c' is absent in s1)\n(IV) 10.0 (substitutes 0 for missing s2 value: 10 + 0)\n\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
+      },
+      {
+        "id": "B",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "C",
@@ -450,672 +1099,23 @@
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nDefault list index is 0,1,2; explicit index assigns ['x','y','z']; dict keys become index; scalar replicates across index.\nHence, Option C is correct.\nHence, option (B) is the correct match.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\n'a' + NaN is NaN; 'b' matches: 20+15=35; 'c' is NaN; add with fill_value=0 treats missing 'a' as 0, yielding 10.\nHence Option D is correct.\nHence, option (A) is the correct match.",
     "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Section B2: Informatics Practices Core: Series Creation Methods and Default Indices.",
-      "detailed": "Detailed Solution:\nDefault list index is 0,1,2; explicit index assigns ['x','y','z']; dict keys become index; scalar replicates across index.\nHence, Option C is correct.\nHence, option (B) is the correct match."
+      "quick": "Correct answer is option (A).",
+      "concept": "Section B2: Informatics Practices Core: Series Arithmetic and Output Alignments.",
+      "detailed": "Detailed Solution:\n'a' + NaN is NaN; 'b' matches: 20+15=35; 'c' is NaN; add with fill_value=0 treats missing 'a' as 0, yielding 10.\nHence Option D is correct.\nHence, option (A) is the correct match."
     },
     "questionType": "match-the-following",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section B2: Informatics Practices Core: Series Creation Methods and Default Indices",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "Series Creation Methods and Default Indices",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 9,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q09",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Malware Infection and Defense Lifecycle",
-    "questionText": "Arrange the sequential phases of an enterprise malware intrusion and incident response cycle:\n(A) Delivery Phase: Malware is delivered via a phishing email attachment or compromised link\n(B) Execution Phase: User executes payload, allowing malware to install and establish persistence\n(C) Detection Phase: Endpoint antivirus and intrusion detection systems (IDS) identify anomaly signatures\n(D) Remediation Phase: Infected nodes are isolated from network, malware is purged, and clean backups are restored\n\nChoose the correct chronological/logical sequence from the options given below:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "D, B, C, A",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "A, C, B, D",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
-        "text": "A, B, C, D",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
-      },
-      {
-        "id": "D",
-        "text": "B, A, C, D",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nInfection cycle: delivery -> execution/persistence -> signature detection -> network isolation and backup restoration.\nHence, Option C is correct.\nHence, option (C) is correct.",
-    "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Section B2: Informatics Practices Core: Malware Infection and Defense Lifecycle.",
-      "detailed": "Detailed Solution:\nInfection cycle: delivery -> execution/persistence -> signature detection -> network isolation and backup restoration.\nHence, Option C is correct.\nHence, option (C) is correct."
-    },
-    "questionType": "chronological-sequence",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section B2: Informatics Practices Core: Malware Infection and Defense Lifecycle",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "Malware Infection and Defense Lifecycle",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 10,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q10",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Missing Value Detection",
-    "questionText": "Read the following case study on healthcare data analytics using Pandas and answer the questions that follow:\n\nDr. Mehra, a public health researcher, is analyzing healthcare trends across various administrative districts during an epidemic. She imports a dataset 'district_health.csv' into a Pandas DataFrame named df using df = pd.read_csv('district_health.csv'). The DataFrame contains columns: ['District', 'ActiveCases', 'Recovered', 'VaccineDoses', 'Hospitals']. Upon initial inspection via df.info(), she notices missing values (NaN) in the 'VaccineDoses' column. Dr. Mehra filters for critical districts where ActiveCases exceed 10,000 using boolean indexing: critical_df = df[df['ActiveCases'] > 10000]. To handle missing data in the general dataset, she imputes the missing 'VaccineDoses' with the district-wide median using df['VaccineDoses'].fillna(df['VaccineDoses'].median(), inplace=True). Finally, she computes the recovery rate as a new column: df['RecoveryRate'] = (df['Recovered'] / (df['ActiveCases'] + df['Recovered'])) * 100.\n\nQuestion: Which command allows Dr. Mehra to count the exact number of missing NaN entries in each column?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "df.isna().sum()",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Missing Value Detection."
-      },
-      {
-        "id": "B",
-        "text": "df.count_null()",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "C",
-        "text": "df.isna().all()",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "D",
-        "text": "df.empty()",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nFor Missing Value Detection (Section B2: Informatics Practices Core):\ndf.isna().sum() computes the sum of True boolean values (null count) for each column.\nTherefore, option (A) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Section B2: Informatics Practices Core: Missing Value Detection.",
-      "detailed": "Detailed Solution:\nFor Missing Value Detection (Section B2: Informatics Practices Core):\ndf.isna().sum() computes the sum of True boolean values (null count) for each column.\nTherefore, option (A) is the correct answer."
-    },
-    "questionType": "application",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section B2: Informatics Practices Core: Missing Value Detection",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "Missing Value Detection",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 11,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q11",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Transparent Figure Export",
-    "questionText": "Which parameter in plt.savefig() produces an image with a transparent canvas background?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "transparent=True",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Transparent Figure Export."
-      },
-      {
-        "id": "B",
-        "text": "clear_canvas=True",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "C",
-        "text": "alpha=0",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "D",
-        "text": "no_bg=True",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Transparent Figure Export):\ntransparent=True\n\nDetailed Analysis:\nSetting transparent=True saves the figure with an alpha transparent background.\nTherefore, option (A) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Section B2: Informatics Practices Core: Transparent Figure Export.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Transparent Figure Export):\ntransparent=True\n\nDetailed Analysis:\nSetting transparent=True saves the figure with an alpha transparent background.\nTherefore, option (A) is the correct answer."
-    },
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section B2: Informatics Practices Core: Transparent Figure Export",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "Transparent Figure Export",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 12,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q12",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Boolean Mask Filtering on Series",
-    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Executing s[s > 50] extracts a subset Series containing only elements whose values exceed 50.\nReason (R): The expression s > 50 generates an element-wise boolean Series of True and False values, which acts as a boolean filtering mask.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Causality Confusion Trap",
-        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
-      },
-      {
-        "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Causality Blindspot",
-        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
-      },
-      {
-        "id": "C",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Assertion is true but Reason contains a factual error."
-      },
-      {
-        "id": "D",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false,
-        "studentSelectionTrap": "Assertion Acceptance Trap",
-        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Relational operators generate boolean mask Series, filtering rows where the mask is True.\nHence, Option A is correct.\nHence, option (C) is the correct choice.",
-    "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Section B2: Informatics Practices Core: Boolean Mask Filtering on Series.",
-      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Relational operators generate boolean mask Series, filtering rows where the mask is True.\nHence, Option A is correct.\nHence, option (C) is the correct choice."
-    },
-    "questionType": "assertion-reasoning",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section B2: Informatics Practices Core: Boolean Mask Filtering on Series",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "Boolean Mask Filtering on Series",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 13,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q13",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "GNU Project and Free Software Foundation",
-    "questionText": "Who founded the GNU Project in 1983 and formulated the GNU General Public License (GPL)?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Richard Matthew Stallman (RMS)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for GNU Project and Free Software Foundation."
-      },
-      {
-        "id": "B",
-        "text": "Bill Gates",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "C",
-        "text": "Linus Torvalds",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "D",
-        "text": "Steve Jobs",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (GNU Project and Free Software Foundation):\nRichard Matthew Stallman (RMS)\n\nDetailed Analysis:\nRichard Stallman launched the GNU project in 1983 and founded the Free Software Foundation to champion computational freedom.\nTherefore, option (A) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Section B2: Informatics Practices Core: GNU Project and Free Software Foundation.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (GNU Project and Free Software Foundation):\nRichard Matthew Stallman (RMS)\n\nDetailed Analysis:\nRichard Stallman launched the GNU project in 1983 and founded the Free Software Foundation to champion computational freedom.\nTherefore, option (A) is the correct answer."
-    },
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section B2: Informatics Practices Core: GNU Project and Free Software Foundation",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "GNU Project and Free Software Foundation",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 14,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q14",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "plt.show() Functional Role",
-    "questionText": "What is the primary function of plt.show() in a Python visualization script?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Saves the figure as a PNG file to the working directory",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "Exports data coordinates to a CSV file",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
-        "text": "Renders the active figure window on screen and blocks execution until closed",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for plt.show() Functional Role."
-      },
-      {
-        "id": "D",
-        "text": "Clears all plotted data from memory",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (plt.show() Functional Role):\nRenders the active figure window on screen and blocks execution until closed\n\nDetailed Analysis:\nplt.show() displays all active figure windows and starts the GUI event loop.\nTherefore, option (C) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Section B2: Informatics Practices Core: plt.show() Functional Role.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (plt.show() Functional Role):\nRenders the active figure window on screen and blocks execution until closed\n\nDetailed Analysis:\nplt.show() displays all active figure windows and starts the GUI event loop.\nTherefore, option (C) is the correct answer."
-    },
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section B2: Informatics Practices Core: plt.show() Functional Role",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "plt.show() Functional Role",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 15,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q15",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Vectorized Derived Column Creation",
-    "questionText": "Read the following case study on healthcare data analytics using Pandas and answer the questions that follow:\n\nDr. Mehra, a public health researcher, is analyzing healthcare trends across various administrative districts during an epidemic. She imports a dataset 'district_health.csv' into a Pandas DataFrame named df using df = pd.read_csv('district_health.csv'). The DataFrame contains columns: ['District', 'ActiveCases', 'Recovered', 'VaccineDoses', 'Hospitals']. Upon initial inspection via df.info(), she notices missing values (NaN) in the 'VaccineDoses' column. Dr. Mehra filters for critical districts where ActiveCases exceed 10,000 using boolean indexing: critical_df = df[df['ActiveCases'] > 10000]. To handle missing data in the general dataset, she imputes the missing 'VaccineDoses' with the district-wide median using df['VaccineDoses'].fillna(df['VaccineDoses'].median(), inplace=True). Finally, she computes the recovery rate as a new column: df['RecoveryRate'] = (df['Recovered'] / (df['ActiveCases'] + df['Recovered'])) * 100.\n\nQuestion: How does Pandas evaluate df['RecoveryRate'] = (df['Recovered'] / (df['ActiveCases'] + df['Recovered'])) * 100?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "By iterating through a slow Python for-loop under the hood",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "Element-wise across all corresponding rows simultaneously in a vectorized manner",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Vectorized Derived Column Creation."
-      },
-      {
-        "id": "C",
-        "text": "By executing an external SQL query",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "D",
-        "text": "By computing only the first row and copying it",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nFor Vectorized Derived Column Creation (Section B2: Informatics Practices Core):\nPandas evaluates arithmetic expressions between Series in an element-wise, vectorized manner.\nTherefore, option (B) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Section B2: Informatics Practices Core: Vectorized Derived Column Creation.",
-      "detailed": "Detailed Solution:\nFor Vectorized Derived Column Creation (Section B2: Informatics Practices Core):\nPandas evaluates arithmetic expressions between Series in an element-wise, vectorized manner.\nTherefore, option (B) is the correct answer."
-    },
-    "questionType": "application",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section B2: Informatics Practices Core: Vectorized Derived Column Creation",
+    "keyConcept": "Section B2: Informatics Practices Core: Series Arithmetic and Output Alignments",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section B2: Informatics Practices Core",
-      "Vectorized Derived Column Creation",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 16,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q16",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Interquartile Range Calculation",
-    "questionText": "How is the Interquartile Range (IQR) calculated from Pandas quantile evaluations?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "df['Col'].quantile(0.50) - df['Col'].quantile(0.25)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "df['Col'].quantile(0.75) - df['Col'].quantile(0.25)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Interquartile Range Calculation."
-      },
-      {
-        "id": "C",
-        "text": "df['Col'].max() - df['Col'].min()",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "D",
-        "text": "df['Col'].std() / 2",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Interquartile Range Calculation):\ndf['Col'].quantile(0.75) - df['Col'].quantile(0.25)\n\nDetailed Analysis:\nIQR is defined mathematically as Q3 - Q1 (75th percentile minus 25th percentile).\nTherefore, option (B) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Section B2: Informatics Practices Core: Interquartile Range Calculation.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Interquartile Range Calculation):\ndf['Col'].quantile(0.75) - df['Col'].quantile(0.25)\n\nDetailed Analysis:\nIQR is defined mathematically as Q3 - Q1 (75th percentile minus 25th percentile).\nTherefore, option (B) is the correct answer."
-    },
-    "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section B2: Informatics Practices Core: Interquartile Range Calculation",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "Interquartile Range Calculation",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 17,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q17",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Identity Theft Provisions",
-    "questionText": "Read the following case study on cyber law and security and answer the questions that follow:\n\nAn employee at an engineering firm received an urgent email purportedly from the company's Human Resources department, directing employees to verify their corporate credentials on a linked portal 'www.hrms-portal-verify.com'. The employee entered their username and domain password. The website was a fraudulent clone engineered by cybercriminals. Using the exfiltrated credentials, the attackers breached the internal corporate database, extracting proprietary patent drafts. The corporate forensic team traced the breach by examining the web server's IP access logs (passive digital footprints). The corporate legal team filed a formal complaint under the Indian Information Technology Act, 2000, citing Section 66 (Hacking and Computer Related Offences) and Section 66C (Identity Theft and Impersonation).\n\nQuestion: Which section of the IT Act 2000 specifically penalizes identity theft and fraudulent use of another person's password?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Section 50",
-        "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
-      },
-      {
-        "id": "B",
-        "text": "Section 80",
-        "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
-      },
-      {
-        "id": "C",
-        "text": "Section 66C",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT principle for Identity Theft Provisions."
-      },
-      {
-        "id": "D",
-        "text": "Section 1",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Identity Theft Provisions):\nSection 66C\n\nDetailed Analysis:\nSection 66C of the IT Act 2000 provides punishment for identity theft, including fraudulent use of passwords.\nTherefore, option (C) is the correct answer.",
-    "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Section B2: Informatics Practices Core: Identity Theft Provisions.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Identity Theft Provisions):\nSection 66C\n\nDetailed Analysis:\nSection 66C of the IT Act 2000 provides punishment for identity theft, including fraudulent use of passwords.\nTherefore, option (C) is the correct answer."
-    },
-    "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section B2: Informatics Practices Core: Identity Theft Provisions",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "Identity Theft Provisions",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 18,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q18",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "isna() and notna() Behavior",
-    "questionText": "Given below are two statements:\nStatement I: df.isna() and df.isnull() are exact functional aliases in Pandas returning identical boolean masks.\nStatement II: df.notna() returns True for valid observations and False for NaN or missing entries.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Both Statement I and Statement II are correct",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dual Acceptance Trap",
-        "mistakeAnalysis": "Erroneously assumed both statements were valid."
-      },
-      {
-        "id": "B",
-        "text": "Both Statement I and Statement II are incorrect",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dual Rejection Error",
-        "mistakeAnalysis": "Rejected valid scientific statements erroneously."
-      },
-      {
-        "id": "C",
-        "text": "Statement I is correct but Statement II is incorrect",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Statement I is true while Statement II contains a factual error."
-      },
-      {
-        "id": "D",
-        "text": "Statement I is incorrect but Statement II is correct",
-        "isCorrect": false,
-        "studentSelectionTrap": "Statement I Blindspot",
-        "mistakeAnalysis": "Failed to recognize the fallacy in Statement I."
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. isna() and isnull() are identical aliases, and notna() is the logical inverse.\nHence, Option A is correct.\nHence, option (C) is correct.",
-    "solution": {
-      "quick": "Correct answer is option (C).",
-      "concept": "Section B2: Informatics Practices Core: isna() and notna() Behavior.",
-      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. isna() and isnull() are identical aliases, and notna() is the logical inverse.\nHence, Option A is correct.\nHence, option (C) is correct."
-    },
-    "questionType": "statement-evaluation",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section B2: Informatics Practices Core: isna() and notna() Behavior",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "isna() and notna() Behavior",
-      "NTA Practice Bank"
-    ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
-  },
-  {
-    "questionNumber": 19,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q19",
-    "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Trojan Horse and Ransomware Mechanics",
-    "questionText": "Which of the following statements regarding Trojan Horse and Ransomware Mechanics in Section B2: Informatics Practices Core is INCORRECT / NOT true?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "It conforms strictly to the standard equilibrium conditions defined in NCERT Section B2: Informatics Practices Core.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Accepting Valid Fact as Exception",
-        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
-      },
-      {
-        "id": "B",
-        "text": "It exhibits consistent and reproducible behavior across verified experimental measurements.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Accepting Valid Fact as Exception",
-        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
-      },
-      {
-        "id": "C",
-        "text": "Its magnitude depends directly on the governing physical or analytical constants of Trojan Horse and Ransomware Mechanics.",
-        "isCorrect": false,
-        "studentSelectionTrap": "Accepting Valid Fact as Exception",
-        "mistakeAnalysis": "This is a factually correct principle of NCERT and cannot be chosen as an incorrect statement."
-      },
-      {
-        "id": "D",
-        "text": "It operates in direct violation of the fundamental conservation laws of Section B2: Informatics Practices Core.",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Identifies the statement that contains a scientific falsehood."
-      }
-    ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to standard NCERT Section B2: Informatics Practices Core specifications, Trojan Horse and Ransomware Mechanics is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (D) is false, making it the correct answer to this negative constraint question.",
-    "solution": {
-      "quick": "Correct answer is option (D).",
-      "concept": "Section B2: Informatics Practices Core: Trojan Horse and Ransomware Mechanics.",
-      "detailed": "Detailed Solution:\nAccording to standard NCERT Section B2: Informatics Practices Core specifications, Trojan Horse and Ransomware Mechanics is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (D) is false, making it the correct answer to this negative constraint question."
-    },
-    "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section B2: Informatics Practices Core: Trojan Horse and Ransomware Mechanics",
-    "tags": [
-      "CUET UG 2026",
-      "Computer Science",
-      "Section B2: Informatics Practices Core",
-      "Trojan Horse and Ransomware Mechanics",
+      "Series Arithmetic and Output Alignments",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"
@@ -1124,57 +1124,57 @@
     "questionNumber": 20,
     "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T17-Q20",
     "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Label-based Series Slicing",
-    "questionText": "Read the following case study on meteorological data processing using Pandas Series and answer the questions that follow:\n\nThe State Meteorological Department analyzes daily maximum temperatures recorded in New Delhi over a week in June. A data scientist creates a Pandas Series named temps using:\ndays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']\nreadings = [41.2, 43.5, 45.0, 44.2, 46.8, 42.1, 40.5]\ntemps = pd.Series(data=readings, index=days)\n\nThe scientist performs exploratory operations on temps:\n1. Vectorized temperature conversion to Fahrenheit: fahrenheit = (temps * 9/5) + 32\n2. Filtering extreme heatwave days: heatwave = temps[temps >= 44.0]\n3. Slicing weekday readings using label slicing: weekdays = temps['Mon':'Fri']\n4. Descriptive aggregation: mean_temp = temps.mean() and peak_day = temps.idxmax()\n\nQuestion: Which days are included in the slice weekdays = temps['Mon':'Fri']?",
+    "topic": "Line Plot Styling Arguments",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Invoking plt.plot(x, y, color='red', linestyle='--', marker='o') renders a red dashed line with circular marker points.\nReason (R): Pyplot provides explicit keyword arguments including color, linestyle, and marker to customize visual rendering of line graphs.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "All 7 days",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Only Mon and Fri",
+        "text": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "Mon, Tue, Wed, and Thu (Fri is excluded)",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Line Plot Styling Arguments."
       },
       {
         "id": "D",
-        "text": "Mon, Tue, Wed, Thu, and Fri (both endpoints included)",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Label-based Series Slicing."
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nFor Label-based Series Slicing (Section B2: Informatics Practices Core):\nLabel-based slicing in Pandas (unlike integer positional slicing) includes both start and stop label endpoints.\nTherefore, option (D) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Line Plot Styling Arguments):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Context:\nBoth (A) and (R) are true, and (R) correctly explains (A). Keyword arguments color, linestyle, and marker customize line aesthetics.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (D).",
-      "concept": "Section B2: Informatics Practices Core: Label-based Series Slicing.",
-      "detailed": "Detailed Solution:\nFor Label-based Series Slicing (Section B2: Informatics Practices Core):\nLabel-based slicing in Pandas (unlike integer positional slicing) includes both start and stop label endpoints.\nTherefore, option (D) is the correct answer."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section B2: Informatics Practices Core: Line Plot Styling Arguments.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Line Plot Styling Arguments):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Context:\nBoth (A) and (R) are true, and (R) correctly explains (A). Keyword arguments color, linestyle, and marker customize line aesthetics.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer."
     },
-    "questionType": "application",
+    "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
-    "keyConcept": "Section B2: Informatics Practices Core: Label-based Series Slicing",
+    "keyConcept": "Section B2: Informatics Practices Core: Line Plot Styling Arguments",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section B2: Informatics Practices Core",
-      "Label-based Series Slicing",
+      "Line Plot Styling Arguments",
       "NTA Practice Bank"
     ],
     "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 17)"

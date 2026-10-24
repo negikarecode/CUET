@@ -156,7 +156,7 @@ export default function SubjectPracticeClient({
 
   const folder = subjectEntry ? subjectEntry.folder : normalizePracticeFolder(decodedSubject);
   const units: any[] = useMemo(() => subjectEntry?.units || [], [subjectEntry]);
-  const totalTests = units.length * 20;
+  const totalTests = units.length * 50;
 
   // Single authoritative practice stats for this subject
   const subjectStats = useMemo(() => {
@@ -529,7 +529,7 @@ export default function SubjectPracticeClient({
               {isExpanded && (
                 <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50/50">
                   <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-2.5 sm:gap-3">
-                    {Array.from({ length: 20 }, (_, i) => i + 1).map((testNum) => {
+                    {Array.from({ length: 50 }, (_, i) => i + 1).map((testNum) => {
                       const testId = `practice-${folder}-unit${unit.unitNumber}-test${testNum}`;
                       const testStat = subjectStats.testsMap.get(testId);
                       const isAttempted = !!testStat?.hasAttempted;

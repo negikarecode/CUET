@@ -110,8 +110,8 @@ export default function PracticeTestsHubPage() {
         code: data.code,
         stream: meta.stream,
         unitsCount,
-        totalTests: unitsCount * 20,
-        totalQuestions: unitsCount * 400,
+        totalTests: unitsCount * 50,
+        totalQuestions: unitsCount * 1000,
         icon: meta.icon,
         accentColor: meta.accentColor,
         badgeBg: meta.badgeBg,
@@ -295,7 +295,7 @@ export default function PracticeTestsHubPage() {
                 CUET Practice Tests
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 font-medium">
-                22 subjects · 155 syllabus units · 3,100 practice tests · 20 Qs each · 25 min · +5 / -1 marking
+                22 subjects · 155 syllabus units · 7,750 practice tests · 20 Qs each · 25 min · +5 / -1 marking
               </p>
             </div>
           </div>
@@ -588,7 +588,7 @@ export default function PracticeTestsHubPage() {
                       <Link href={`/dashboard/practice/${urlSlug}`}>{s.name}</Link>
                     </h3>
                     <p className="text-xs text-slate-500 font-medium mt-0.5">
-                      {s.unitsCount} syllabus units · 20 practice tests per unit
+                      {s.unitsCount} syllabus units · 50 practice tests per unit
                     </p>
                   </div>
 

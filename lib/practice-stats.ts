@@ -254,7 +254,7 @@ export function getPracticeStats(
 
   for (const u of targetUnits) {
     const uNum = u.unitNumber;
-    for (let tNum = 1; tNum <= 20; tNum++) {
+    for (let tNum = 1; tNum <= 50; tNum++) {
       totalCount++;
       const testId = `practice-${folder}-unit${uNum}-test${tNum}`;
 
@@ -355,7 +355,7 @@ export function getPracticeStats(
     for (const unassigned of unmatchedPractice) {
       let foundSlot = false;
       for (const u of targetUnits) {
-        for (let tNum = 1; tNum <= 20; tNum++) {
+        for (let tNum = 1; tNum <= 50; tNum++) {
           const testId = `practice-${folder}-unit${u.unitNumber}-test${tNum}`;
           const currentStat = testsMap.get(testId);
           if (!currentStat || !currentStat.hasAttempted) {

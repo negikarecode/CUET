@@ -1,0 +1,1182 @@
+[
+  {
+    "questionNumber": 1,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q01",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Iterative Alternative using Queues/Stacks",
+    "questionText": "Read the following case study on recursive algorithms in Python and answer the questions that follow:\n\nAn operating systems developer writes a Python script to calculate the total storage footprint of nested directory trees. Because folders can contain files as well as nested subfolders to arbitrary depths, the developer uses recursion:\n\ndef get_dir_size(path):\n    total_size = 0\n    for entry in os.scandir(path):\n        if entry.is_file():\n            total_size += entry.stat().st_size\n        elif entry.is_dir():\n            total_size += get_dir_size(entry.path)  # Recursive Call\n    return total_size\n\nThe function computes leaf file sizes directly (base condition) and recursively invokes get_dir_size() for nested directories. Each recursive invocation pushes a new stack frame onto the Python call stack, maintaining independent local variables for total_size.\n\nQuestion: How can the developer rewrite the directory traversal without recursion to avoid stack overflow completely?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "By maintaining an explicit queue or stack data structure in heap memory inside an iterative loop",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Iterative Alternative using Queues/Stacks."
+      },
+      {
+        "id": "B",
+        "text": "By deleting all files in the directory tree before performing the size calculation",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "C",
+        "text": "By setting file sizes to negative values during the accumulation process",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "By replacing the recursive call with a higher-order lambda function for folding operations",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nFor Iterative Alternative using Queues/Stacks (Section B1: Computer Science Core):\nAn iterative loop using an explicit stack or queue in heap memory can traverse trees of arbitrary depth without call stack limits.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Section B1: Computer Science Core: Iterative Alternative using Queues/Stacks.",
+      "detailed": "Detailed Solution:\nFor Iterative Alternative using Queues/Stacks (Section B1: Computer Science Core):\nAn iterative loop using an explicit stack or queue in heap memory can traverse trees of arbitrary depth without call stack limits.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer."
+    },
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section B1: Computer Science Core: Iterative Alternative using Queues/Stacks",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Iterative Alternative using Queues/Stacks",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 2,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q02",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Midpoint Calculation in Binary Search",
+    "questionText": "For a sorted list of length 15 (indices 0 to 14), what is the first midpoint index examined by mid = (low + high) // 2?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Index 7 ((0 + 14) // 2 = 7)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Midpoint Calculation in Binary Search."
+      },
+      {
+        "id": "B",
+        "text": "Index 14",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "C",
+        "text": "Index 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "Index 8",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nFor Midpoint Calculation in Binary Search (Section B1: Computer Science Core):\nMid = (0 + 14) // 2 = 7; the element at index 7 is examined first.\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Section B1: Computer Science Core: Midpoint Calculation in Binary Search.",
+      "detailed": "Detailed Solution:\nFor Midpoint Calculation in Binary Search (Section B1: Computer Science Core):\nMid = (0 + 14) // 2 = 7; the element at index 7 is examined first.\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer."
+    },
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section B1: Computer Science Core: Midpoint Calculation in Binary Search",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Midpoint Calculation in Binary Search",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 3,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q03",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Final Placement Statement",
+    "questionText": "Which of the following statements regarding Final Placement Statement in Section B1: Computer Science Core is INCORRECT / NOT true?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dual Acceptance Trap",
+        "mistakeAnalysis": "Assumed both statements were correct."
+      },
+      {
+        "id": "B",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies that both statements contain factual errors."
+      },
+      {
+        "id": "C",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Statement II Blindspot",
+        "mistakeAnalysis": "Failed to recognize error in Statement II."
+      },
+      {
+        "id": "D",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Statement I Blindspot",
+        "mistakeAnalysis": "Failed to recognize error in Statement I."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nDetailed Solution:\nAccording to standard NCERT Section B1: Computer Science Core specifications, Final Placement Statement is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (D) is false, making it the correct answer to this negative constraint question.\nHence, option (B) is correct.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section B1: Computer Science Core: Final Placement Statement.",
+      "detailed": "Detailed Solution:\nDetailed Solution:\nAccording to standard NCERT Section B1: Computer Science Core specifications, Final Placement Statement is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (D) is false, making it the correct answer to this negative constraint question.\nHence, option (B) is correct."
+    },
+    "questionType": "statement-evaluation",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section B1: Computer Science Core: Final Placement Statement",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Final Placement Statement",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 4,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q04",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Optimized Bubble Sort Early Termination",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Bubble Sort can be optimized to achieve O(n) linear time complexity when the input array is already sorted.\nReason (R): By utilizing a boolean flag ('swapped = False') that tracks whether any swap occurred during a pass, the algorithm terminates immediately if a pass completes with zero swaps.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Confusion Trap",
+        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Blindspot",
+        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
+      },
+      {
+        "id": "C",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reason Acceptance Trap",
+        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
+      },
+      {
+        "id": "D",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Assertion is false while Reason represents an accurate principle."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). If no swaps occur in a pass, the list is already sorted, allowing immediate early exit in O(n) time.\nHence Option C is correct.\nHence, option (D) is the correct choice.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Section B1: Computer Science Core: Optimized Bubble Sort Early Termination.",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). If no swaps occur in a pass, the list is already sorted, allowing immediate early exit in O(n) time.\nHence Option C is correct.\nHence, option (D) is the correct choice."
+    },
+    "questionType": "assertion-reasoning",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section B1: Computer Science Core: Optimized Bubble Sort Early Termination",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Optimized Bubble Sort Early Termination",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 5,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q05",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Infix to Postfix Conversion",
+    "questionText": "Which of the following statements is NOT correct regarding Infix to Postfix Conversion (Section B1: Computer Science Core)?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "A B C + *",
+        "isCorrect": false,
+        "studentSelectionTrap": "True Statement Selection Error",
+        "mistakeAnalysis": "Incorrect option. Selected a factually correct statement instead of identifying the exception."
+      },
+      {
+        "id": "B",
+        "text": "* + A B C",
+        "isCorrect": false,
+        "studentSelectionTrap": "Partial Knowledge Trap",
+        "mistakeAnalysis": "Incorrect option. Failed to distinguish valid properties from the invalid exception."
+      },
+      {
+        "id": "C",
+        "text": "A B + C *",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the incorrect statement regarding Infix to Postfix Conversion."
+      },
+      {
+        "id": "D",
+        "text": "A + B C *",
+        "isCorrect": false,
+        "studentSelectionTrap": "Overlooked Negative Constraint",
+        "mistakeAnalysis": "Incorrect option. Overlooked the 'NOT' constraint in the question stem."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nIn Section B1: Computer Science Core (Infix to Postfix Conversion):\nThe statement 'A B + C *' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Section B1: Computer Science Core: Infix to Postfix Conversion.",
+      "detailed": "Detailed Solution:\nIn Section B1: Computer Science Core (Infix to Postfix Conversion):\nThe statement 'A B + C *' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice."
+    },
+    "questionType": "conceptual",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section B1: Computer Science Core: Infix to Postfix Conversion",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Infix to Postfix Conversion",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 6,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q06",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Displaying Stack Elements from Top to Bottom",
+    "questionText": "Given stack S = [10, 20, 30], how can elements be printed from Top to Bottom without modifying S?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "for i in range(len(S) - 1, -1, -1): print(S[i])",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Displaying Stack Elements from Top to Bottom."
+      },
+      {
+        "id": "B",
+        "text": "print(S[0])",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "C",
+        "text": "for i in range(len(S)): print(S[i])",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "for x in S: print(x)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nFor Displaying Stack Elements from Top to Bottom (Section B1: Computer Science Core):\nIterating in reverse index order (from len-1 down to 0) accesses elements from the topmost to the bottom-most.\nHence Option A is correct.\n\nTherefore, option (A) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Section B1: Computer Science Core: Displaying Stack Elements from Top to Bottom.",
+      "detailed": "Detailed Solution:\nFor Displaying Stack Elements from Top to Bottom (Section B1: Computer Science Core):\nIterating in reverse index order (from len-1 down to 0) accesses elements from the topmost to the bottom-most.\nHence Option A is correct.\n\nTherefore, option (A) is the correct answer."
+    },
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section B1: Computer Science Core: Displaying Stack Elements from Top to Bottom",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Displaying Stack Elements from Top to Bottom",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 7,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q07",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Insertion Sort Operational Metrics",
+    "questionText": "Match the Insertion Sort complexity scenario in List I with its metric in List II for an array of n elements:\n\nList I:\n(A) Worst-case Time Complexity\n(B) Best-case Time Complexity\n(C) Number of Passes (Outer Loop)\n(D) Auxiliary Space Complexity\n\nList II:\n(I) O(n²) (reverse sorted array requiring maximum element shifts)\n(II) O(n) (already sorted array requiring 1 comparison per item)\n(III) n - 1 passes (outer loop runs from index 1 to n - 1)\n(IV) O(1) (in-place sorting requiring no extra array allocation)\n\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      },
+      {
+        "id": "D",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nWorst is O(n²); Best is O(n); Passes is n-1; Auxiliary space is O(1) in-place.\nHence Option C is correct.\nHence, option (D) is the correct match.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Section B1: Computer Science Core: Insertion Sort Operational Metrics.",
+      "detailed": "Detailed Solution:\nWorst is O(n²); Best is O(n); Passes is n-1; Auxiliary space is O(1) in-place.\nHence Option C is correct.\nHence, option (D) is the correct match."
+    },
+    "questionType": "match-the-following",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B1: Computer Science Core: Insertion Sort Operational Metrics",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Insertion Sort Operational Metrics",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 8,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q08",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Python Push Implementation",
+    "questionText": "Read the following case study on data structures in Python and answer the questions that follow:\n\nRohan is designing a document editing application in Python. To implement the 'Undo' and 'Redo' operations, he utilizes a Stack data structure based on the Last-In-First-Out (LIFO) principle. He implements the stack using a standard Python list named undo_stack = []. Whenever the user performs an edit action (such as typing text or deleting a character), a descriptor of that action is pushed onto undo_stack using the append() method. When the user clicks 'Undo', the application checks if the stack is empty. If undo_stack is empty (i.e., len(undo_stack) == 0), the function outputs 'Underflow: Nothing to Undo'. Otherwise, it removes and retrieves the topmost operation using undo_stack.pop(), reversing the action and pushing it onto redo_stack.\n\nQuestion: Which Python list method corresponds directly to the Stack 'push' operation in Rohan's implementation?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "undo_stack.extend(item)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "undo_stack.append(item)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Python Push Implementation."
+      },
+      {
+        "id": "C",
+        "text": "undo_stack.add(item)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "undo_stack.insert(0, item)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Python Push Implementation (Section B1: Computer Science Core):\nappend() appends an element to the end (top) of the list in O(1) amortized time, modeling stack push.\nHence Option B is correct.\n\nTherefore, option (B) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section B1: Computer Science Core: Python Push Implementation.",
+      "detailed": "Detailed Solution:\nFor Python Push Implementation (Section B1: Computer Science Core):\nappend() appends an element to the end (top) of the list in O(1) amortized time, modeling stack push.\nHence Option B is correct.\n\nTherefore, option (B) is the correct answer."
+    },
+    "questionType": "application",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B1: Computer Science Core: Python Push Implementation",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Python Push Implementation",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 9,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q09",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Final Placement Statement",
+    "questionText": "Which of the following statements regarding Final Placement Statement in Section B1: Computer Science Core is INCORRECT / NOT true?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dual Acceptance Trap",
+        "mistakeAnalysis": "Assumed both statements were correct."
+      },
+      {
+        "id": "B",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false,
+        "studentSelectionTrap": "Dual Rejection Error",
+        "mistakeAnalysis": "Rejected valid NCERT facts erroneously."
+      },
+      {
+        "id": "C",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Statement I is true while Statement II contains an error."
+      },
+      {
+        "id": "D",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false,
+        "studentSelectionTrap": "Statement I Blindspot",
+        "mistakeAnalysis": "Failed to recognize error in Statement I."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nDetailed Solution:\nAccording to standard NCERT Section B1: Computer Science Core specifications, Final Placement Statement is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (D) is false, making it the correct answer to this negative constraint question.\nHence, option (C) is correct.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Section B1: Computer Science Core: Final Placement Statement.",
+      "detailed": "Detailed Solution:\nDetailed Solution:\nAccording to standard NCERT Section B1: Computer Science Core specifications, Final Placement Statement is fully consistent with established principles and does not violate conservation laws.\nTherefore, statement (D) is false, making it the correct answer to this negative constraint question.\nHence, option (C) is correct."
+    },
+    "questionType": "statement-evaluation",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B1: Computer Science Core: Final Placement Statement",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Final Placement Statement",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 10,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q10",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Parentheses Elimination in Postfix Notation",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Postfix expressions do not require parentheses to dictate operator evaluation precedence.\nReason (R): The order of operators and operands in Postfix notation inherently specifies unambiguous evaluation order strictly from left to right.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Confusion Trap",
+        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Blindspot",
+        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
+      },
+      {
+        "id": "C",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Reason Acceptance Trap",
+        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
+      },
+      {
+        "id": "D",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Assertion is false while Reason represents an accurate principle."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Postfix notation is unambiguous and eliminates parentheses and precedence rules.\nHence Option D is correct.\nHence, option (D) is the correct choice.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Section B1: Computer Science Core: Parentheses Elimination in Postfix Notation.",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Postfix notation is unambiguous and eliminates parentheses and precedence rules.\nHence Option D is correct.\nHence, option (D) is the correct choice."
+    },
+    "questionType": "assertion-reasoning",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B1: Computer Science Core: Parentheses Elimination in Postfix Notation",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Parentheses Elimination in Postfix Notation",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 11,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q11",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Midpoint Calculation in Binary Search",
+    "questionText": "For a sorted list of length 15 (indices 0 to 14), what is the first midpoint index examined by mid = (low + high) // 2?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Index 14",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "Index 0",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "Index 7 ((0 + 14) // 2 = 7)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for Midpoint Calculation in Binary Search."
+      },
+      {
+        "id": "D",
+        "text": "Index 8",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nFor Midpoint Calculation in Binary Search (Section B1: Computer Science Core):\nMid = (0 + 14) // 2 = 7; the element at index 7 is examined first.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Section B1: Computer Science Core: Midpoint Calculation in Binary Search.",
+      "detailed": "Detailed Solution:\nFor Midpoint Calculation in Binary Search (Section B1: Computer Science Core):\nMid = (0 + 14) // 2 = 7; the element at index 7 is examined first.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer."
+    },
+    "questionType": "application",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B1: Computer Science Core: Midpoint Calculation in Binary Search",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Midpoint Calculation in Binary Search",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 12,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q12",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Insertion Sort Operational Metrics",
+    "questionText": "Match the Insertion Sort complexity scenario in List I with its metric in List II for an array of n elements:\n\nList I:\n(A) Worst-case Time Complexity\n(B) Best-case Time Complexity\n(C) Number of Passes (Outer Loop)\n(D) Auxiliary Space Complexity\n\nList II:\n(I) O(n²) (reverse sorted array requiring maximum element shifts)\n(II) O(n) (already sorted array requiring 1 comparison per item)\n(III) n - 1 passes (outer loop runs from index 1 to n - 1)\n(IV) O(1) (in-place sorting requiring no extra array allocation)\n\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
+      },
+      {
+        "id": "B",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "C",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nWorst is O(n²); Best is O(n); Passes is n-1; Auxiliary space is O(1) in-place.\nHence Option C is correct.\nHence, option (A) is the correct match.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Section B1: Computer Science Core: Insertion Sort Operational Metrics.",
+      "detailed": "Detailed Solution:\nWorst is O(n²); Best is O(n); Passes is n-1; Auxiliary space is O(1) in-place.\nHence Option C is correct.\nHence, option (A) is the correct match."
+    },
+    "questionType": "match-the-following",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B1: Computer Science Core: Insertion Sort Operational Metrics",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Insertion Sort Operational Metrics",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 13,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q13",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Bubble Sort Pass 1 Execution Trace",
+    "questionText": "Trace the step-by-step swaps during Pass 1 of Bubble Sort on the array: [50, 20, 40, 10, 30]:\n(A) Compare 50 and 20: 50 > 20 -> Swap -> Array: [20, 50, 40, 10, 30]\n(B) Compare 50 and 40: 50 > 40 -> Swap -> Array: [20, 40, 50, 10, 30]\n(C) Compare 50 and 10: 50 > 10 -> Swap -> Array: [20, 40, 10, 50, 30]\n(D) Compare 50 and 30: 50 > 30 -> Swap -> Array: [20, 40, 10, 30, 50] (50 is now in its final sorted position)\n\nChoose the correct chronological/logical sequence from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "B, A, C, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "A, C, B, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "A, B, C, D",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Bubble Sort Pass 1 Execution Trace."
+      },
+      {
+        "id": "D",
+        "text": "D, B, C, A",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Bubble Sort Pass 1 Execution Trace):\nA, B, C, D\n\nDetailed Context:\nPass 1 pushes largest element (50) to the end: [50,20] swap -> [50,40] swap -> [50,10] swap -> [50,30] swap -> 50 fixed at end.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Section B1: Computer Science Core: Bubble Sort Pass 1 Execution Trace.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Bubble Sort Pass 1 Execution Trace):\nA, B, C, D\n\nDetailed Context:\nPass 1 pushes largest element (50) to the end: [50,20] swap -> [50,40] swap -> [50,10] swap -> [50,30] swap -> 50 fixed at end.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B1: Computer Science Core: Bubble Sort Pass 1 Execution Trace",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Bubble Sort Pass 1 Execution Trace",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 14,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q14",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Space Complexity of Recursion",
+    "questionText": "Why does a recursive function of depth n require O(n) auxiliary space even without creating new data structures?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Because Python duplicates the entire operating system in RAM",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "Because integers grow larger during recursion",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "Each of the n active recursive invocations retains its own stack frame in memory until the base case returns",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Space Complexity of Recursion."
+      },
+      {
+        "id": "D",
+        "text": "Recursion requires zero space",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Space Complexity of Recursion):\nEach of the n active recursive invocations retains its own stack frame in memory until the base case returns\n\nDetailed Context:\nThe call stack simultaneously retains n activation frames during maximum recursion depth, consuming O(n) memory.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (C).",
+      "concept": "Section B1: Computer Science Core: Space Complexity of Recursion.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Space Complexity of Recursion):\nEach of the n active recursive invocations retains its own stack frame in memory until the base case returns\n\nDetailed Context:\nThe call stack simultaneously retains n activation frames during maximum recursion depth, consuming O(n) memory.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "keyConcept": "Section B1: Computer Science Core: Space Complexity of Recursion",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Space Complexity of Recursion",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 15,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q15",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Prefix to Infix Scanning Direction",
+    "questionText": "When evaluating a Prefix expression (+ A B) using a stack, in which direction is the expression scanned?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "From right to left (from end to beginning)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Prefix to Infix Scanning Direction."
+      },
+      {
+        "id": "B",
+        "text": "From left to right",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "C",
+        "text": "From the center outwards",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "In random order",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Prefix to Infix Scanning Direction):\nFrom right to left (from end to beginning)\n\nDetailed Context:\nPrefix expressions are scanned from right to left; operands are pushed, and operators pop the required operands.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (A).",
+      "concept": "Section B1: Computer Science Core: Prefix to Infix Scanning Direction.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Prefix to Infix Scanning Direction):\nFrom right to left (from end to beginning)\n\nDetailed Context:\nPrefix expressions are scanned from right to left; operands are pushed, and operators pop the required operands.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section B1: Computer Science Core: Prefix to Infix Scanning Direction",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Prefix to Infix Scanning Direction",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 16,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q16",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stack Fundamental Operating Principle",
+    "questionText": "What foundational access principle defines a 'Stack' data structure?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "FIFO (First-In, First-Out)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "LIFO (Last-In, First-Out)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Stack Fundamental Operating Principle."
+      },
+      {
+        "id": "C",
+        "text": "Hierarchical Tree Traversal",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "Random Access",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stack Fundamental Operating Principle):\nLIFO (Last-In, First-Out)\n\nDetailed Context:\nA stack is a linear data structure operating under the LIFO (Last-In, First-Out) principle where insertion and deletion occur at the top.\nHence Option B is correct.\n\nTherefore, option (B) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section B1: Computer Science Core: Stack Fundamental Operating Principle.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stack Fundamental Operating Principle):\nLIFO (Last-In, First-Out)\n\nDetailed Context:\nA stack is a linear data structure operating under the LIFO (Last-In, First-Out) principle where insertion and deletion occur at the top.\nHence Option B is correct.\n\nTherefore, option (B) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section B1: Computer Science Core: Stack Fundamental Operating Principle",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Stack Fundamental Operating Principle",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 17,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q17",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Evaluating Postfix Expression Step-by-Step",
+    "questionText": "Trace the sequential stack evaluation steps for the postfix expression: '6 3 2 + * 5 -':\n(A) Push 6, push 3, push 2 onto stack -> Stack: [6, 3, 2]\n(B) Encounter '+': Pop 2 and 3, compute 3 + 2 = 5, push 5 -> Stack: [6, 5]\n(C) Encounter '*': Pop 5 and 6, compute 6 * 5 = 30, push 30 -> Stack: [30]\n(D) Push 5, encounter '-': Pop 5 and 30, compute 30 - 5 = 25, push 25 -> Final Result: 25\n\nChoose the correct chronological/logical sequence from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "B, A, C, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "A, B, C, D",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
+      },
+      {
+        "id": "C",
+        "text": "D, B, C, A",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "A, C, B, D",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nPostfix evaluation: push 6,3,2 -> 3+2=5 -> push 5 -> 6*5=30 -> push 30 -> push 5 -> 30-5=25.\nHence Option A is correct.\nHence, option (B) is correct.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section B1: Computer Science Core: Evaluating Postfix Expression Step-by-Step.",
+      "detailed": "Detailed Solution:\nPostfix evaluation: push 6,3,2 -> 3+2=5 -> push 5 -> 6*5=30 -> push 30 -> push 5 -> 30-5=25.\nHence Option A is correct.\nHence, option (B) is correct."
+    },
+    "questionType": "chronological-sequence",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section B1: Computer Science Core: Evaluating Postfix Expression Step-by-Step",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Evaluating Postfix Expression Step-by-Step",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 18,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q18",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Postfix Evaluation Operand Order Hazard",
+    "questionText": "For non-commutative operators like '-' and '/', why is preserving the exact pop order critical in postfix evaluation?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Because computers cannot divide numbers backwards",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "Because popping top as b and next as a computes a - b or a / b; reversing them yields incorrect arithmetic results",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Postfix Evaluation Operand Order Hazard."
+      },
+      {
+        "id": "C",
+        "text": "Because negative numbers are illegal",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "D",
+        "text": "Because the stack will overflow",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Postfix Evaluation Operand Order Hazard):\nBecause popping top as b and next as a computes a - b or a / b; reversing them yields incorrect arithmetic results\n\nDetailed Context:\nFirst popped is the right operand (op2); second popped is the left operand (op1). Computing op1 - op2 is mandatory.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (B).",
+      "concept": "Section B1: Computer Science Core: Postfix Evaluation Operand Order Hazard.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Postfix Evaluation Operand Order Hazard):\nBecause popping top as b and next as a computes a - b or a / b; reversing them yields incorrect arithmetic results\n\nDetailed Context:\nFirst popped is the right operand (op2); second popped is the left operand (op1). Computing op1 - op2 is mandatory.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section B1: Computer Science Core: Postfix Evaluation Operand Order Hazard",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Postfix Evaluation Operand Order Hazard",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 19,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q19",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Insertion Sort Best-Case Efficiency",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Insertion Sort achieves an optimal best-case time complexity of O(n) when applied to an already sorted array.\nReason (R): When the array is already sorted, the while loop condition (L[j] > key) fails immediately on the first check for every element, performing exactly n - 1 comparisons and 0 shifts.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      },
+      {
+        "id": "D",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Insertion Sort Best-Case Efficiency."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Insertion Sort Best-Case Efficiency):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Context:\nBoth (A) and (R) are true, and (R) correctly explains (A). On presorted data, each key is compared once against its immediate left neighbor and immediately placed.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Section B1: Computer Science Core: Insertion Sort Best-Case Efficiency.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Insertion Sort Best-Case Efficiency):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Context:\nBoth (A) and (R) are true, and (R) correctly explains (A). On presorted data, each key is compared once against its immediate left neighbor and immediately placed.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section B1: Computer Science Core: Insertion Sort Best-Case Efficiency",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Insertion Sort Best-Case Efficiency",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  },
+  {
+    "questionNumber": 20,
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T44-Q20",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stack Overflow Exception in Python",
+    "questionText": "In Python, what exception is raised when unbounded recursive calls consume all available stack frames?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "ArithmeticError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+      },
+      {
+        "id": "B",
+        "text": "StackUnderflowError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+      },
+      {
+        "id": "C",
+        "text": "MemoryLeakError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+      },
+      {
+        "id": "D",
+        "text": "RecursionError",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Stack Overflow Exception in Python."
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stack Overflow Exception in Python):\nRecursionError\n\nDetailed Context:\nExcessive recursion exhausts Python's call stack limit, raising RecursionError: maximum recursion depth exceeded.\nHence Option C is correct.\n\nTherefore, option (D) is the correct answer.",
+    "solution": {
+      "quick": "Correct answer is option (D).",
+      "concept": "Section B1: Computer Science Core: Stack Overflow Exception in Python.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stack Overflow Exception in Python):\nRecursionError\n\nDetailed Context:\nExcessive recursion exhausts Python's call stack limit, raising RecursionError: maximum recursion depth exceeded.\nHence Option C is correct.\n\nTherefore, option (D) is the correct answer."
+    },
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "keyConcept": "Section B1: Computer Science Core: Stack Overflow Exception in Python",
+    "tags": [
+      "CUET UG 2026",
+      "Computer Science",
+      "Section B1: Computer Science Core",
+      "Stack Overflow Exception in Python",
+      "NTA Practice Bank"
+    ],
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 44)"
+  }
+]
