@@ -383,7 +383,7 @@ export async function getUserProgress(
         }
       });
       const completedMockNumbers = Array.from(mockNumbersSet).sort((a, b) => a - b);
-      const totalMocksCount = SUBJECT_MOCK_COUNTS[subKey] ?? 20;
+      const totalMocksCount = SUBJECT_MOCK_COUNTS[subKey] ?? 50;
 
       const mockScores = subjectTests
         .filter((t) => t.testType === "mock")

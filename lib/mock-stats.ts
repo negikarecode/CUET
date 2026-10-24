@@ -148,7 +148,7 @@ export function getMockStats(
   const subjectKey = norm.key;
   const subjectName = norm.name;
 
-  const totalMocksCount = SUBJECT_MOCK_COUNTS[subjectKey] ?? 20;
+  const totalMocksCount = SUBJECT_MOCK_COUNTS[subjectKey] ?? 50;
   const mockTestsList = getMockTestsForSubject(subjectKey);
 
   // 1. Deduplicate test attempts first (same as Dashboard)

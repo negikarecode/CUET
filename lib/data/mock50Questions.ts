@@ -447,7 +447,7 @@ export function getQuestionsForTest(testId: string): {
   } else {
     const match = lowerId.match(/(\d+)/);
     const rawMockNumber = match && match[1] ? parseInt(match[1], 10) : 1;
-    validMockNumber = rawMockNumber >= 1 && rawMockNumber <= 20 ? rawMockNumber : 1;
+    validMockNumber = rawMockNumber >= 1 && rawMockNumber <= 50 ? rawMockNumber : 1;
 
     const isMockTest = lowerId.includes("mock");
     title = isMockTest

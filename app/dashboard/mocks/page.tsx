@@ -632,7 +632,7 @@ export default function MocksPage() {
   // Standard Subject Card matching design system
   const renderSubjectCard = (sub: SubjectMeta, isRecommended = false) => {
     const Icon = sub.icon;
-    const mockCount = SUBJECT_MOCK_COUNTS[sub.key] ?? 20;
+    const mockCount = SUBJECT_MOCK_COUNTS[sub.key] ?? 50;
     const baseMockId = SUBJECT_TO_MOCK[sub.key] || `${sub.key}-mock`;
 
     const stats = isClient

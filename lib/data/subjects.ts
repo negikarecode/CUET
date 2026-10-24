@@ -187,55 +187,61 @@ export interface MockTestItem {
 }
 
 export const SUBJECT_MOCK_COUNTS: Record<string, number> = {
-  physics: 20,
-  chemistry: 20,
-  mathematics: 20,
-  "mathematics-sci": 20,
-  "mathematics-com": 20,
-  maths: 20,
-  biology: 12,
-  bio: 12,
-  accountancy: 18,
-  accounts: 18,
-  accs: 18,
-  economics: 20,
-  eco: 20,
-  "business-studies": 20,
-  business: 20,
-  bst: 20,
-  history: 20,
-  "political-science": 20,
-  polscience: 20,
-  pol: 20,
-  "pol science": 20,
-  geography: 20,
-  geo: 20,
-  psychology: 20,
-  psy: 20,
-  sociology: 20,
-  "physical-education": 20,
-  ped: 20,
-  "computer-science": 20,
-  cs: 20,
-  "home-science": 20,
-  hsc: 20,
-  "mass-media": 20,
-  mmc: 20,
-  "environmental-studies": 20,
-  evs: 20,
-  "fine-arts": 20,
-  fa: 20,
-  agriculture: 20,
-  agr: 20,
-  anthropology: 20,
-  ant: 20,
-  english: 20,
-  eng: 20,
-  "general-test": 20,
-  general_test: 20,
-  gat: 20,
-  general: 20,
-  "general-aptitude-test": 20,
+  physics: 50,
+  chemistry: 50,
+  mathematics: 50,
+  "mathematics-sci": 50,
+  "mathematics-com": 50,
+  maths: 50,
+  biology: 50,
+  bio: 50,
+  accountancy: 50,
+  accounts: 50,
+  accs: 50,
+  economics: 50,
+  eco: 50,
+  "business-studies": 50,
+  business: 50,
+  bst: 50,
+  history: 50,
+  "political-science": 50,
+  polscience: 50,
+  pol: 50,
+  "pol science": 50,
+  geography: 50,
+  geo: 50,
+  psychology: 50,
+  psy: 50,
+  sociology: 50,
+  "physical-education": 50,
+  physical_education: 50,
+  ped: 50,
+  "computer-science": 50,
+  computer_science: 50,
+  cs: 50,
+  "home-science": 50,
+  home_science: 50,
+  hsc: 50,
+  "mass-media": 50,
+  mass_media: 50,
+  mmc: 50,
+  "environmental-studies": 50,
+  environmental_studies: 50,
+  evs: 50,
+  "fine-arts": 50,
+  fine_arts: 50,
+  fa: 50,
+  agriculture: 50,
+  agr: 50,
+  anthropology: 50,
+  ant: 50,
+  english: 50,
+  eng: 50,
+  "general-test": 50,
+  general_test: 50,
+  gat: 50,
+  general: 50,
+  "general-aptitude-test": 50,
 };
 
 export const SUBJECT_DURATION_MINUTES: Record<string, number> = {
@@ -300,7 +306,7 @@ export function createMockTestList(
     count ??
     SUBJECT_MOCK_COUNTS[subjectSlug] ??
     SUBJECT_MOCK_COUNTS[subjectSlug.toLowerCase()] ??
-    20;
+    50;
   const baseMockId =
     SUBJECT_TO_MOCK[subjectSlug] ||
     SUBJECT_TO_MOCK[subjectSlug.toLowerCase()] ||
@@ -320,33 +326,33 @@ export function createMockTestList(
   return list;
 }
 
-export const PHYSICS_MOCK_TESTS: MockTestItem[] = createMockTestList("physics", "Physics", 60, 20);
-export const CHEMISTRY_MOCK_TESTS: MockTestItem[] = createMockTestList("chemistry", "Chemistry", 60, 20);
-export const MATHS_MOCK_TESTS: MockTestItem[] = createMockTestList("maths", "Mathematics", 60, 20);
-export const BIOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("biology", "Biology", 45, 12);
-export const ACCOUNTANCY_MOCK_TESTS: MockTestItem[] = createMockTestList("accountancy", "Accountancy", 60, 18);
-export const ECONOMICS_MOCK_TESTS: MockTestItem[] = createMockTestList("economics", "Economics", 60, 20);
-export const BUSINESS_STUDIES_MOCK_TESTS: MockTestItem[] = createMockTestList("business-studies", "Business Studies", 45, 20);
-export const HISTORY_MOCK_TESTS: MockTestItem[] = createMockTestList("history", "History", 45, 20);
-export const POLITICAL_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("political-science", "Political Science", 45, 20);
-export const GEOGRAPHY_MOCK_TESTS: MockTestItem[] = createMockTestList("geography", "Geography", 45, 20);
-export const PSYCHOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("psychology", "Psychology", 45, 20);
-export const SOCIOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("sociology", "Sociology", 45, 20);
-export const PHYSICAL_EDUCATION_MOCK_TESTS: MockTestItem[] = createMockTestList("physical-education", "Physical Education", 45, 20);
-export const COMPUTER_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("computer-science", "Computer Science", 60, 20);
-export const HOME_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("home-science", "Home Science", 45, 20);
-export const MASS_MEDIA_MOCK_TESTS: MockTestItem[] = createMockTestList("mass-media", "Mass Media", 45, 20);
-export const ENVIRONMENTAL_STUDIES_MOCK_TESTS: MockTestItem[] = createMockTestList("environmental-studies", "Environmental Studies", 45, 20);
-export const FINE_ARTS_MOCK_TESTS: MockTestItem[] = createMockTestList("fine-arts", "Fine Arts", 45, 20);
-export const AGRICULTURE_MOCK_TESTS: MockTestItem[] = createMockTestList("agriculture", "Agriculture", 45, 20);
-export const ANTHROPOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("anthropology", "Anthropology", 45, 20);
-export const ENGLISH_MOCK_TESTS: MockTestItem[] = createMockTestList("english", "English", 45, 20);
-export const GENERAL_TEST_MOCK_TESTS: MockTestItem[] = createMockTestList("general-test", "General Aptitude Test", 60, 20);
+export const PHYSICS_MOCK_TESTS: MockTestItem[] = createMockTestList("physics", "Physics", 60, 50);
+export const CHEMISTRY_MOCK_TESTS: MockTestItem[] = createMockTestList("chemistry", "Chemistry", 60, 50);
+export const MATHS_MOCK_TESTS: MockTestItem[] = createMockTestList("maths", "Mathematics", 60, 50);
+export const BIOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("biology", "Biology", 45, 50);
+export const ACCOUNTANCY_MOCK_TESTS: MockTestItem[] = createMockTestList("accountancy", "Accountancy", 60, 50);
+export const ECONOMICS_MOCK_TESTS: MockTestItem[] = createMockTestList("economics", "Economics", 60, 50);
+export const BUSINESS_STUDIES_MOCK_TESTS: MockTestItem[] = createMockTestList("business-studies", "Business Studies", 45, 50);
+export const HISTORY_MOCK_TESTS: MockTestItem[] = createMockTestList("history", "History", 45, 50);
+export const POLITICAL_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("political-science", "Political Science", 45, 50);
+export const GEOGRAPHY_MOCK_TESTS: MockTestItem[] = createMockTestList("geography", "Geography", 45, 50);
+export const PSYCHOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("psychology", "Psychology", 45, 50);
+export const SOCIOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("sociology", "Sociology", 45, 50);
+export const PHYSICAL_EDUCATION_MOCK_TESTS: MockTestItem[] = createMockTestList("physical-education", "Physical Education", 45, 50);
+export const COMPUTER_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("computer-science", "Computer Science", 60, 50);
+export const HOME_SCIENCE_MOCK_TESTS: MockTestItem[] = createMockTestList("home-science", "Home Science", 45, 50);
+export const MASS_MEDIA_MOCK_TESTS: MockTestItem[] = createMockTestList("mass-media", "Mass Media", 45, 50);
+export const ENVIRONMENTAL_STUDIES_MOCK_TESTS: MockTestItem[] = createMockTestList("environmental-studies", "Environmental Studies", 45, 50);
+export const FINE_ARTS_MOCK_TESTS: MockTestItem[] = createMockTestList("fine-arts", "Fine Arts", 45, 50);
+export const AGRICULTURE_MOCK_TESTS: MockTestItem[] = createMockTestList("agriculture", "Agriculture", 45, 50);
+export const ANTHROPOLOGY_MOCK_TESTS: MockTestItem[] = createMockTestList("anthropology", "Anthropology", 45, 50);
+export const ENGLISH_MOCK_TESTS: MockTestItem[] = createMockTestList("english", "English", 45, 50);
+export const GENERAL_TEST_MOCK_TESTS: MockTestItem[] = createMockTestList("general-test", "General Aptitude Test", 60, 50);
 
 export function getMockTestsForSubject(subjectKey: string): MockTestItem[] {
   if (!subjectKey) return [];
   const key = subjectKey.toLowerCase().trim();
-  const count = SUBJECT_MOCK_COUNTS[key] ?? 20;
+  const count = SUBJECT_MOCK_COUNTS[key] ?? 50;
   const duration = SUBJECT_DURATION_MINUTES[key] ?? 45;
   return createMockTestList(key, subjectKey, duration, count);
 }
@@ -560,7 +566,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "chemistry",
@@ -572,7 +578,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "mathematics-sci",
@@ -584,7 +590,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "biology",
@@ -596,7 +602,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 12,
+    popularMockCount: 50,
   },
 
   // Commerce Stream
@@ -610,7 +616,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 18,
+    popularMockCount: 50,
   },
   {
     id: "business-studies",
@@ -622,7 +628,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "economics",
@@ -634,7 +640,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "mathematics-com",
@@ -646,7 +652,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
 
   // Humanities Stream
@@ -660,7 +666,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "history",
@@ -672,7 +678,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "geography",
@@ -684,7 +690,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "psychology",
@@ -696,7 +702,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "sociology",
@@ -708,7 +714,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "physical-education",
@@ -720,7 +726,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "computer-science",
@@ -732,7 +738,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "home-science",
@@ -744,7 +750,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "mass-media",
@@ -756,7 +762,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "environmental-studies",
@@ -768,7 +774,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "fine-arts",
@@ -780,7 +786,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "agriculture",
@@ -792,7 +798,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "anthropology",
@@ -804,7 +810,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
 
   // Common Stream (General Aptitude Test)
@@ -818,7 +824,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 60,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
   {
     id: "english",
@@ -830,7 +836,7 @@ export const CUET_SUBJECTS: SubjectConfig[] = [
     totalQuestions: 50,
     maxToAttempt: 50,
     durationMinutes: 45,
-    popularMockCount: 20,
+    popularMockCount: 50,
   },
 ];
 
