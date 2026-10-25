@@ -573,2030 +573,2030 @@
   },
   {
     "questionNumber": 12,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Search Algorithms and Operational Characteristics",
+    "questionText": "Match the search concept in List I with its algorithmic property in List II:\n\nList I:\n(A) Linear Search Best Case\n(B) Linear Search Worst Case\n(C) Binary Search Best Case\n(D) Binary Search Worst Case\n\nList II:\n(I) O(1) (target element found at the very first index position 0)\n(II) O(n) (target element at the last index or absent entirely)\n(III) O(1) (target element located at the exact initial midpoint)\n(IV) O(log n) (search space repeatedly halved until low > high)\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A single shared linear backbone coaxial bus cable",
+        "text": "A-I, B-III, C-IV, D-II",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Each other in a closed unidirectional circular ring",
+        "text": "A-II, B-I, C-III, D-IV",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A central network hub, switch, or router",
+        "text": "A-I, B-II, C-III, D-IV",
         "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
+        "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (C) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nLinear best is O(1) at index 0, worst O(n); Binary best is O(1) at mid, worst O(log n).\nHence Option D is correct.\nHence, option (C) is the correct match.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q12",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b1-computer-science-core-search-algorithms-and-operational-characteristics",
+    "questionType": "match-the-following",
     "difficulty": 1,
     "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "estimatedTimeSeconds": 45,
     "solution": {
       "quick": "Option (C) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (C) is the correct answer."
+      "concept": "Section B1: Computer Science Core: Search Algorithms and Operational Characteristics",
+      "detailed": "Detailed Solution:\nLinear best is O(1) at index 0, worst O(n); Binary best is O(1) at mid, worst O(log n).\nHence Option D is correct.\nHence, option (C) is the correct match.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section B1: Computer Science Core: Search Algorithms and Operational Characteristics",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 13,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stack LIFO Operational Principle",
+    "questionText": "Read the following case study on data structures in Python and answer the questions that follow:\n\nRohan is designing a document editing application in Python. To implement the 'Undo' and 'Redo' operations, he utilizes a Stack data structure based on the Last-In-First-Out (LIFO) principle. He implements the stack using a standard Python list named undo_stack = []. Whenever the user performs an edit action (such as typing text or deleting a character), a descriptor of that action is pushed onto undo_stack using the append() method. When the user clicks 'Undo', the application checks if the stack is empty. If undo_stack is empty (i.e., len(undo_stack) == 0), the function outputs 'Underflow: Nothing to Undo'. Otherwise, it removes and retrieves the topmost operation using undo_stack.pop(), reversing the action and pushing it onto redo_stack.\n\nQuestion: Why is a Stack data structure appropriate for implementing an Undo operation?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Network Layer (Layer 3)",
-        "isCorrect": true
+        "text": "Because actions must be reversed in the exact order they were originally typed (FIFO)",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "Because Stacks execute actions in parallel",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Transport Layer (Layer 4)",
+        "text": "Because Stacks sort user actions alphabetically",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Physical Layer (Layer 1)",
-        "isCorrect": false
+        "text": "Because the most recently executed user action must be the first one to be reversed (LIFO)",
+        "isCorrect": true
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nFor Stack LIFO Operational Principle (Section B1: Computer Science Core):\nUndo requires reversing the most recent operation first, which matches the Last-In-First-Out (LIFO) semantics of a stack.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q13",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "conceptId": "computer-science-section-b1-computer-science-core-stack-lifo-operational-principle",
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section B1: Computer Science Core: Stack LIFO Operational Principle",
+      "detailed": "Detailed Solution:\nFor Stack LIFO Operational Principle (Section B1: Computer Science Core):\nUndo requires reversing the most recent operation first, which matches the Last-In-First-Out (LIFO) semantics of a stack.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section B1: Computer Science Core: Stack LIFO Operational Principle",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 14,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Binary Search Algorithm Execution Steps",
+    "questionText": "Arrange the sequential execution steps of Binary Search searching for target 'key' in sorted list L with bounds low and high:\n(A) Initialize low = 0 and high = len(L) - 1\n(B) While low <= high, compute midpoint index mid = (low + high) // 2\n(C) If L[mid] == key, return mid (successful search termination)\n(D) If L[mid] < key set low = mid + 1; else set high = mid - 1; if loop ends return -1\n\nChoose the correct chronological/logical sequence from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "FIFO (First In First Out)",
+        "text": "B, A, C, D",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Priority Queue order",
+        "text": "A, C, B, D",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "LIFO (Last In First Out)",
+        "text": "A, B, C, D",
         "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Random Access File order",
+        "text": "D, B, C, A",
         "isCorrect": false
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (C) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nBinary search: set bounds -> compute mid -> test equality -> adjust bounds based on magnitude -> return -1 if exhausted.\nHence Option A is correct.\nHence, option (B) is correct.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q14",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b1-computer-science-core-binary-search-algorithm-execution-steps",
+    "questionType": "chronological-sequence",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (C) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (C) is the correct answer."
+      "concept": "Section B1: Computer Science Core: Binary Search Algorithm Execution Steps",
+      "detailed": "Detailed Solution:\nBinary search: set bounds -> compute mid -> test equality -> adjust bounds based on magnitude -> return -1 if exhausted.\nHence Option A is correct.\nHence, option (B) is correct.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
+    "keyConcept": "Section B1: Computer Science Core: Binary Search Algorithm Execution Steps",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 15,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Search on Unsorted Data Trade-off",
+    "questionText": "When searching an unsorted list of 1,000 elements only once, why is Linear Search preferred over sorting followed by Binary Search?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A B + C *",
-        "isCorrect": true
+        "text": "Linear search is always faster than binary search in all situations",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A B C + *",
+        "text": "Binary search cannot run on modern computers",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "* + A B C",
+        "text": "Sorting deletes all elements",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A + B C *",
-        "isCorrect": false
+        "text": "Linear search takes O(n) ~ 1000 ops, whereas sorting first takes O(n log n) ~ 10,000 ops, making sorting for a single search wasteful",
+        "isCorrect": true
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Search on Unsorted Data Trade-off):\nLinear search takes O(n) ~ 1000 ops, whereas sorting first takes O(n log n) ~ 10,000 ops, making sorting for a single search wasteful\n\nDetailed Context:\nSorting overhead (O(n log n)) is justified only if multiple amortized searches will be performed on the same dataset.\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q15",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "conceptId": "computer-science-section-b1-computer-science-core-search-on-unsorted-data-trade-off",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section B1: Computer Science Core: Search on Unsorted Data Trade-off",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Search on Unsorted Data Trade-off):\nLinear search takes O(n) ~ 1000 ops, whereas sorting first takes O(n log n) ~ 10,000 ops, making sorting for a single search wasteful\n\nDetailed Context:\nSorting overhead (O(n log n)) is justified only if multiple amortized searches will be performed on the same dataset.\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
+    "keyConcept": "Section B1: Computer Science Core: Search on Unsorted Data Trade-off",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 16,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Displaying Stack Elements from Top to Bottom",
+    "questionText": "Which of the following statements is NOT correct regarding Displaying Stack Elements from Top to Bottom (Section B1: Computer Science Core)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
+        "text": "for i in range(len(S) - 1, -1, -1): print(S[i])",
         "isCorrect": true
       },
       {
+        "id": "B",
+        "text": "print(S[0])",
+        "isCorrect": false
+      },
+      {
         "id": "C",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
+        "text": "for i in range(len(S)): print(S[i])",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
+        "text": "for x in S: print(x)",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nIn Section B1: Computer Science Core (Displaying Stack Elements from Top to Bottom):\nThe statement 'for i in range(len(S) - 1, -1, -1): print(S[i])' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q16",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
+    "conceptId": "computer-science-section-b1-computer-science-core-displaying-stack-elements-from-top-to-bottom",
     "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B1: Computer Science Core: Displaying Stack Elements from Top to Bottom",
+      "detailed": "Detailed Solution:\nIn Section B1: Computer Science Core (Displaying Stack Elements from Top to Bottom):\nThe statement 'for i in range(len(S) - 1, -1, -1): print(S[i])' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
+    "keyConcept": "Section B1: Computer Science Core: Displaying Stack Elements from Top to Bottom",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 17,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Hacking Penalties under IT Act",
+    "questionText": "Which section of the Indian IT Act 2000 specifically penalizes computer system hacking, unauthorized access, and tampering?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Publishing obscenity in electronic form",
+        "text": "Section 2",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Identity theft without financial damage",
+        "text": "Section 10",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Cheating by personation through using any computer resource",
+        "text": "Section 66 (along with Section 43)",
         "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Hacking critical infrastructure systems",
+        "text": "Section 100",
         "isCorrect": false
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (C) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Hacking Penalties under IT Act):\nSection 66 (along with Section 43)\n\nDetailed Context:\nSection 66 of the IT Act 2000 covers hacking and fraudulent computing offenses with imprisonment and fines.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q17",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
+    "conceptId": "computer-science-section-b1-computer-science-core-hacking-penalties-under-it-act",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
       "quick": "Option (C) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (C) is the correct answer."
+      "concept": "Section B1: Computer Science Core: Hacking Penalties under IT Act",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Hacking Penalties under IT Act):\nSection 66 (along with Section 43)\n\nDetailed Context:\nSection 66 of the IT Act 2000 covers hacking and fraudulent computing offenses with imprisonment and fines.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
+    "keyConcept": "Section B1: Computer Science Core: Hacking Penalties under IT Act",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 18,
-    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
-    "topic": "Pandas DataFrame Indexing with loc vs iloc",
-    "questionText": "In Python Pandas library, the fundamental operational difference between `df.loc[]` and `df.iloc[]` is that:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Why Bubble Sort is Inefficient for Large Data",
+    "questionText": "Why is Bubble Sort considered impractical for enterprise production systems sorting millions of records?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "`df.loc[]` can only modify integer columns, while `df.iloc[]` only modifies string columns",
+        "text": "Bubble sort can only run on 8-bit computers",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "`df.loc[]` is label-based indexing, whereas `df.iloc[]` is integer position-based indexing",
-        "isCorrect": true
+        "text": "Bubble sort cannot sort floating point numbers",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "`df.loc[]` deletes rows permanently, while `df.iloc[]` creates a shallow copy",
+        "text": "Bubble sort is strictly illegal under international software patents",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "`df.loc[]` operates on NumPy arrays exclusively, while `df.iloc[]` operates on dictionaries",
-        "isCorrect": false
+        "text": "Its quadratic O(n²) time complexity requires trillions of operations for large n, whereas O(n log n) algorithms like Merge Sort run in seconds",
+        "isCorrect": true
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Why Bubble Sort is Inefficient for Large Data):\nIts quadratic O(n²) time complexity requires trillions of operations for large n, whereas O(n log n) algorithms like Merge Sort run in seconds\n\nDetailed Context:\nFor n = 1,000,000, n² is 10^12 operations, making O(n²) algorithms prohibitively slow compared to O(n log n).\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q18",
-    "conceptId": "computer-science-data-handling-using-pandas-i-series-and-dataframe-architecture-pandas-dataframe-indexing-with-loc-vs-iloc",
+    "conceptId": "computer-science-section-b1-computer-science-core-why-bubble-sort-is-inefficient-for-large-data",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section B1: Computer Science Core: Why Bubble Sort is Inefficient for Large Data",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Why Bubble Sort is Inefficient for Large Data):\nIts quadratic O(n²) time complexity requires trillions of operations for large n, whereas O(n log n) algorithms like Merge Sort run in seconds\n\nDetailed Context:\nFor n = 1,000,000, n² is 10^12 operations, making O(n²) algorithms prohibitively slow compared to O(n log n).\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
+    "keyConcept": "Section B1: Computer Science Core: Why Bubble Sort is Inefficient for Large Data",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - I (Series and DataFrame Architecture)"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 19,
-    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
-    "topic": "SQL vs Pandas Query Equivalence",
-    "questionText": "In Pandas, the operation equivalent to the SQL query `SELECT * FROM students WHERE marks >= 90;` is:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Evaluating 20 4 / 2 3 * +",
+    "questionText": "Evaluate the postfix expression: '20 4 / 2 3 * +':",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "students.select('marks >= 90')",
-        "isCorrect": false
+        "text": "11 (20 / 4 = 5, 2 * 3 = 6, 5 + 6 = 11)",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "students.filter(where='marks >= 90')",
+        "text": "15",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "students[students['marks'] >= 90]",
-        "isCorrect": true
+        "text": "10",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "students.where(marks >= 90)",
+        "text": "26",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Evaluating 20 4 / 2 3 * +):\n11 (20 / 4 = 5, 2 * 3 = 6, 5 + 6 = 11)\n\nDetailed Context:\n20 / 4 = 5; 2 * 3 = 6; 5 + 6 = 11.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q19",
-    "conceptId": "computer-science-data-handling-using-pandas-ii-dataframes-operations-and-analysis-sql-vs-pandas-query-equivalence",
+    "conceptId": "computer-science-section-b1-computer-science-core-evaluating-20-4-2-3",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B1: Computer Science Core: Evaluating 20 4 / 2 3 * +",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Evaluating 20 4 / 2 3 * +):\n11 (20 / 4 = 5, 2 * 3 = 6, 5 + 6 = 11)\n\nDetailed Context:\n20 / 4 = 5; 2 * 3 = 6; 5 + 6 = 11.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
+    "keyConcept": "Section B1: Computer Science Core: Evaluating 20 4 / 2 3 * +",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - II (DataFrames, Operations and Analysis)"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 20,
-    "chapter": "Database Concepts",
-    "topic": "Relational Model: Candidate Key vs Primary Key",
-    "questionText": "In the Relational Database Model, a 'Candidate Key' is defined as:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Parentheses Elimination in Postfix Notation",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Postfix expressions do not require parentheses to dictate operator evaluation precedence.\nReason (R): The order of operators and operands in Postfix notation inherently specifies unambiguous evaluation order strictly from left to right.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Any column that allows NULL values throughout the table",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A minimal superkey that has the potential to uniquely identify each tuple in a relation",
-        "isCorrect": true
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A foreign key pointing to an external non-relational database",
-        "isCorrect": false
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "A composite attribute containing only floating-point values",
+        "text": "(A) is false but (R) is true",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Postfix notation is unambiguous and eliminates parentheses and precedence rules.\nHence Option D is correct.\nHence, option (B) is the correct choice.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q20",
-    "conceptId": "computer-science-database-concepts-relational-model-candidate-key-vs-primary-key",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b1-computer-science-core-parentheses-elimination-in-postfix-notation",
+    "questionType": "assertion-reasoning",
     "difficulty": 1,
     "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section B1: Computer Science Core: Parentheses Elimination in Postfix Notation",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Postfix notation is unambiguous and eliminates parentheses and precedence rules.\nHence Option D is correct.\nHence, option (B) is the correct choice.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
+    "keyConcept": "Section B1: Computer Science Core: Parentheses Elimination in Postfix Notation",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Database Concepts"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 21,
-    "chapter": "Structured Query Language (SQL)",
-    "topic": "SQL Aggregate Functions and GROUP BY",
-    "questionText": "In SQL, to filter and restrict groups of records created by the `GROUP BY` clause, one must use the:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Postfix Expression Evaluation Rules",
+    "questionText": "Given below are two statements:\nStatement I: When evaluating a Postfix expression using a stack, encountering an operand causes it to be pushed onto the stack.\nStatement II: When an operator is encountered, two operands are popped: the first popped operand is the left operand and the second popped operand is the right operand.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "WHERE clause",
+        "text": "Both Statement I and Statement II are correct",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "ORDER BY clause",
+        "text": "Statement I is correct but Statement II is incorrect",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "HAVING clause",
-        "isCorrect": true
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "DISTINCT clause",
-        "isCorrect": false
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": true
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nStatement I is correct: operands are pushed. Statement II is incorrect: the FIRST popped operand is the RIGHT operand (op2), and the SECOND popped operand is the LEFT operand (op1), computing: op1 <operator> op2.\nHence Option C is correct.\nHence, option (B) is correct.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q21",
-    "conceptId": "computer-science-structured-query-language-sql-sql-aggregate-functions-and-group-by",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b1-computer-science-core-postfix-expression-evaluation-rules",
+    "questionType": "statement-evaluation",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section B1: Computer Science Core: Postfix Expression Evaluation Rules",
+      "detailed": "Detailed Solution:\nStatement I is correct: operands are pushed. Statement II is incorrect: the FIRST popped operand is the RIGHT operand (op2), and the SECOND popped operand is the LEFT operand (op1), computing: op1 <operator> op2.\nHence Option C is correct.\nHence, option (B) is correct.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
+    "keyConcept": "Section B1: Computer Science Core: Postfix Expression Evaluation Rules",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Structured Query Language (SQL)"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 22,
-    "chapter": "File Handling in Python",
-    "topic": "File Modes: 'w' vs 'a'",
-    "questionText": "When opening a text file in Python using `open('data.txt', 'a')`, the mode `'a'` specifies that:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Number of Outer Loop Iterations for N=50",
+    "questionText": "How many times does the outer for loop execute when sorting an array of 50 elements using Insertion Sort?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "The file is overwritten and all existing content is permanently erased immediately",
-        "isCorrect": false
+        "text": "49 times (from index 1 to index 49)",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "The file is opened for read-only access with binary decoding",
+        "text": "2500 times",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "The file is locked in memory preventing other users from reading it",
+        "text": "25 times",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "The file is opened for appending, and new data will be written at the end of the file without truncating existing content",
-        "isCorrect": true
+        "text": "50 times",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Number of Outer Loop Iterations for N=50):\n49 times (from index 1 to index 49)\n\nDetailed Context:\nThe outer loop iterates across indices 1 through n-1, executing exactly n - 1 = 49 times.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q22",
-    "conceptId": "computer-science-file-handling-in-python-file-modes-w-vs-a",
+    "conceptId": "computer-science-section-b1-computer-science-core-number-of-outer-loop-iterations-for-n-50",
     "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "File Handling in Python: File Modes: 'w' vs 'a'",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B1: Computer Science Core: Number of Outer Loop Iterations for N=50",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Number of Outer Loop Iterations for N=50):\n49 times (from index 1 to index 49)\n\nDetailed Context:\nThe outer loop iterates across indices 1 through n-1, executing exactly n - 1 = 49 times.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "File Handling in Python: File Modes: 'w' vs 'a'",
+    "keyConcept": "Section B1: Computer Science Core: Number of Outer Loop Iterations for N=50",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "File Handling in Python"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 23,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Hacking Penalties under IT Act",
+    "questionText": "Which of the following statements is NOT correct regarding Hacking Penalties under IT Act (Section B1: Computer Science Core)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A single shared linear backbone coaxial bus cable",
+        "text": "Section 2",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Each other in a closed unidirectional circular ring",
+        "text": "Section 10",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
-        "isCorrect": false
+        "text": "Section 66 (along with Section 43)",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "A central network hub, switch, or router",
-        "isCorrect": true
+        "text": "Section 100",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nIn Section B1: Computer Science Core (Hacking Penalties under IT Act):\nThe statement 'Section 66 (along with Section 43)' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q23",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
+    "conceptId": "computer-science-section-b1-computer-science-core-hacking-penalties-under-it-act",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section B1: Computer Science Core: Hacking Penalties under IT Act",
+      "detailed": "Detailed Solution:\nIn Section B1: Computer Science Core (Hacking Penalties under IT Act):\nThe statement 'Section 66 (along with Section 43)' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section B1: Computer Science Core: Hacking Penalties under IT Act",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 24,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Exponentiation Operator Associativity",
+    "questionText": "How does the exponentiation operator (^) differ in associativity from addition and multiplication during infix conversion?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Network Layer (Layer 3)",
-        "isCorrect": true
+        "text": "Exponentiation has zero precedence",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "Exponentiation is left-to-right associative",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Transport Layer (Layer 4)",
+        "text": "Exponentiation cannot be converted to postfix",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Physical Layer (Layer 1)",
-        "isCorrect": false
+        "text": "Exponentiation is right-to-left associative (e.g., 2 ^ 3 ^ 2 = 2 ^ 9 = 512)",
+        "isCorrect": true
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Exponentiation Operator Associativity):\nExponentiation is right-to-left associative (e.g., 2 ^ 3 ^ 2 = 2 ^ 9 = 512)\n\nDetailed Context:\nExponentiation (**) evaluates right-to-left; an incoming '^' does not pop an existing '^' of equal precedence.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q24",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
+    "conceptId": "computer-science-section-b1-computer-science-core-exponentiation-operator-associativity",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section B1: Computer Science Core: Exponentiation Operator Associativity",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Exponentiation Operator Associativity):\nExponentiation is right-to-left associative (e.g., 2 ^ 3 ^ 2 = 2 ^ 9 = 512)\n\nDetailed Context:\nExponentiation (**) evaluates right-to-left; an incoming '^' does not pop an existing '^' of equal precedence.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section B1: Computer Science Core: Exponentiation Operator Associativity",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 25,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Insertion Sort Operation",
+    "questionText": "Which of the following statements is NOT correct regarding Insertion Sort Operation (Section B1: Computer Science Core)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "FIFO (First In First Out)",
-        "isCorrect": false
+        "text": "By shifting elements greater than the key to the right and placing the key in the gap",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "Priority Queue order",
+        "text": "By reversing the sorted sublist",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Random Access File order",
+        "text": "By comparing the key with the last element and swapping if out of order",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "LIFO (Last In First Out)",
-        "isCorrect": true
+        "text": "By partitioning the array around the key and recursively sorting sublists",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nIn Section B1: Computer Science Core (Insertion Sort Operation):\nThe statement 'By shifting elements greater than the key to the right and placing the key in the gap' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (B) is the correct choice.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q25",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
+    "conceptId": "computer-science-section-b1-computer-science-core-insertion-sort-operation",
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B1: Computer Science Core: Insertion Sort Operation",
+      "detailed": "Detailed Solution:\nIn Section B1: Computer Science Core (Insertion Sort Operation):\nThe statement 'By shifting elements greater than the key to the right and placing the key in the gap' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (B) is the correct choice.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
+    "keyConcept": "Section B1: Computer Science Core: Insertion Sort Operation",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 26,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stack Underflow Condition",
+    "questionText": "Read the following case study on data structures in Python and answer the questions that follow:\n\nRohan is designing a document editing application in Python. To implement the 'Undo' and 'Redo' operations, he utilizes a Stack data structure based on the Last-In-First-Out (LIFO) principle. He implements the stack using a standard Python list named undo_stack = []. Whenever the user performs an edit action (such as typing text or deleting a character), a descriptor of that action is pushed onto undo_stack using the append() method. When the user clicks 'Undo', the application checks if the stack is empty. If undo_stack is empty (i.e., len(undo_stack) == 0), the function outputs 'Underflow: Nothing to Undo'. Otherwise, it removes and retrieves the topmost operation using undo_stack.pop(), reversing the action and pushing it onto redo_stack.\n\nQuestion: What condition triggers a 'Stack Underflow' state in Rohan's Undo mechanism?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A B + C *",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "A B C + *",
+        "text": "Closing the document editor",
         "isCorrect": false
       },
       {
+        "id": "B",
+        "text": "Attempting to pop an element when the stack is completely empty",
+        "isCorrect": true
+      },
+      {
         "id": "C",
-        "text": "* + A B C",
+        "text": "Typing numbers instead of letters",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A + B C *",
+        "text": "Pushing more than 1000 operations",
         "isCorrect": false
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Stack Underflow Condition (Section B1: Computer Science Core):\nUnderflow occurs when a pop or peek operation is attempted on an empty stack.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q26",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
+    "conceptId": "computer-science-section-b1-computer-science-core-stack-underflow-condition",
+    "questionType": "application",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section B1: Computer Science Core: Stack Underflow Condition",
+      "detailed": "Detailed Solution:\nFor Stack Underflow Condition (Section B1: Computer Science Core):\nUnderflow occurs when a pop or peek operation is attempted on an empty stack.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
+    "keyConcept": "Section B1: Computer Science Core: Stack Underflow Condition",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 27,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Infix A + B * C Postfix",
+    "questionText": "What is the postfix representation of the unparenthesized infix expression: A + B * C?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
+        "text": "A B C + *",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
+        "text": "+ A * B C",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
-        "isCorrect": false
+        "text": "A B C * +",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
-        "isCorrect": true
+        "text": "A B + C *",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Infix A + B * C Postfix):\nA B C * +\n\nDetailed Context:\nDue to operator precedence (* before +), B * C forms BC*, which is added to A, producing ABC*+.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q27",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
+    "conceptId": "computer-science-section-b1-computer-science-core-infix-a-b-c-postfix",
     "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section B1: Computer Science Core: Infix A + B * C Postfix",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Infix A + B * C Postfix):\nA B C * +\n\nDetailed Context:\nDue to operator precedence (* before +), B * C forms BC*, which is added to A, producing ABC*+.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
+    "keyConcept": "Section B1: Computer Science Core: Infix A + B * C Postfix",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 28,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stack Underflow Definition",
+    "questionText": "What error condition occurs when a program attempts to perform a Pop or Peek operation on an empty stack?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Publishing obscenity in electronic form",
+        "text": "Memory Leak",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Identity theft without financial damage",
+        "text": "Buffer Saturation",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Hacking critical infrastructure systems",
+        "text": "Stack Overflow",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Cheating by personation through using any computer resource",
+        "text": "Stack Underflow",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stack Underflow Definition):\nStack Underflow\n\nDetailed Context:\nStack Underflow is the error condition where deletion or inspection is attempted on a stack containing zero elements.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q28",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
+    "conceptId": "computer-science-section-b1-computer-science-core-stack-underflow-definition",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section B1: Computer Science Core: Stack Underflow Definition",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stack Underflow Definition):\nStack Underflow\n\nDetailed Context:\nStack Underflow is the error condition where deletion or inspection is attempted on a stack containing zero elements.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
+    "keyConcept": "Section B1: Computer Science Core: Stack Underflow Definition",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 29,
-    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
-    "topic": "Pandas DataFrame Indexing with loc vs iloc",
-    "questionText": "In Python Pandas library, the fundamental operational difference between `df.loc[]` and `df.iloc[]` is that:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Bubble Sort Complexities and Metrics",
+    "questionText": "Match the Bubble Sort complexity scenario in List I with its metric in List II for an array of n elements:\n\nList I:\n(A) Worst-case Time Complexity\n(B) Best-case Time Complexity (Optimized)\n(C) Average-case Time Complexity\n(D) Auxiliary Space Complexity\n\nList II:\n(I) O(n²) (reverse sorted array requiring n(n-1)/2 swaps)\n(II) O(n) (already sorted array terminating after 1 pass)\n(III) O(n²)\n(IV) O(1) (in-place sorting requiring no extra memory)\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "`df.loc[]` can only modify integer columns, while `df.iloc[]` only modifies string columns",
-        "isCorrect": false
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "`df.loc[]` deletes rows permanently, while `df.iloc[]` creates a shallow copy",
+        "text": "A-I, B-III, C-IV, D-II",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "`df.loc[]` is label-based indexing, whereas `df.iloc[]` is integer position-based indexing",
-        "isCorrect": true
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "`df.loc[]` operates on NumPy arrays exclusively, while `df.iloc[]` operates on dictionaries",
+        "text": "A-II, B-I, C-III, D-IV",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nWorst is O(n²); Optimized best is O(n); Average is O(n²); Auxiliary space is O(1) in-place.\nHence Option B is correct.\nHence, option (B) is the correct match.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q29",
-    "conceptId": "computer-science-data-handling-using-pandas-i-series-and-dataframe-architecture-pandas-dataframe-indexing-with-loc-vs-iloc",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "conceptId": "computer-science-section-b1-computer-science-core-bubble-sort-complexities-and-metrics",
+    "questionType": "match-the-following",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B1: Computer Science Core: Bubble Sort Complexities and Metrics",
+      "detailed": "Detailed Solution:\nWorst is O(n²); Optimized best is O(n); Average is O(n²); Auxiliary space is O(1) in-place.\nHence Option B is correct.\nHence, option (B) is the correct match.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
+    "keyConcept": "Section B1: Computer Science Core: Bubble Sort Complexities and Metrics",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - I (Series and DataFrame Architecture)"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 30,
-    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
-    "topic": "SQL vs Pandas Query Equivalence",
-    "questionText": "In Pandas, the operation equivalent to the SQL query `SELECT * FROM students WHERE marks >= 90;` is:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Search Algorithms and Operational Characteristics",
+    "questionText": "Which of the following statements is NOT correct regarding Search Algorithms and Operational Characteristics (Section B1: Computer Science Core)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "students[students['marks'] >= 90]",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "students.select('marks >= 90')",
+        "text": "A-I, B-III, C-IV, D-II",
         "isCorrect": false
       },
       {
+        "id": "B",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true
+      },
+      {
         "id": "C",
-        "text": "students.filter(where='marks >= 90')",
+        "text": "A-II, B-I, C-III, D-IV",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "students.where(marks >= 90)",
+        "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nIn Section B1: Computer Science Core (Search Algorithms and Operational Characteristics):\nThe statement 'A-I, B-II, C-III, D-IV' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (D) is the correct choice.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q30",
-    "conceptId": "computer-science-data-handling-using-pandas-ii-dataframes-operations-and-analysis-sql-vs-pandas-query-equivalence",
+    "conceptId": "computer-science-section-b1-computer-science-core-search-algorithms-and-operational-characteristics",
     "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section B1: Computer Science Core: Search Algorithms and Operational Characteristics",
+      "detailed": "Detailed Solution:\nIn Section B1: Computer Science Core (Search Algorithms and Operational Characteristics):\nThe statement 'A-I, B-II, C-III, D-IV' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (D) is the correct choice.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
+    "keyConcept": "Section B1: Computer Science Core: Search Algorithms and Operational Characteristics",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - II (DataFrames, Operations and Analysis)"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 31,
-    "chapter": "Database Concepts",
-    "topic": "Relational Model: Candidate Key vs Primary Key",
-    "questionText": "In the Relational Database Model, a 'Candidate Key' is defined as:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Infix to Postfix Conversion",
+    "questionText": "Which of the following statements is NOT correct regarding Infix to Postfix Conversion (Section B1: Computer Science Core)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Any column that allows NULL values throughout the table",
+        "text": "A B C + *",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A foreign key pointing to an external non-relational database",
+        "text": "* + A B C",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A minimal superkey that has the potential to uniquely identify each tuple in a relation",
+        "text": "A B + C *",
         "isCorrect": true
       },
       {
         "id": "D",
-        "text": "A composite attribute containing only floating-point values",
+        "text": "A + B C *",
         "isCorrect": false
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (C) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nIn Section B1: Computer Science Core (Infix to Postfix Conversion):\nThe statement 'A B + C *' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q31",
-    "conceptId": "computer-science-database-concepts-relational-model-candidate-key-vs-primary-key",
+    "conceptId": "computer-science-section-b1-computer-science-core-infix-to-postfix-conversion",
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "estimatedTimeSeconds": 45,
     "solution": {
       "quick": "Option (C) is correct.",
-      "concept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (C) is the correct answer."
+      "concept": "Section B1: Computer Science Core: Infix to Postfix Conversion",
+      "detailed": "Detailed Solution:\nIn Section B1: Computer Science Core (Infix to Postfix Conversion):\nThe statement 'A B + C *' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
+    "keyConcept": "Section B1: Computer Science Core: Infix to Postfix Conversion",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Database Concepts"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 32,
-    "chapter": "Structured Query Language (SQL)",
-    "topic": "SQL Aggregate Functions and GROUP BY",
-    "questionText": "In SQL, to filter and restrict groups of records created by the `GROUP BY` clause, one must use the:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Checking Empty Stack in Python",
+    "questionText": "Which expression idiomatically evaluates to True if a Python list stack S is completely empty?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "HAVING clause",
-        "isCorrect": true
+        "text": "S.empty() == 0",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "WHERE clause",
+        "text": "S == -1",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "ORDER BY clause",
+        "text": "S is None",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "DISTINCT clause",
-        "isCorrect": false
+        "text": "len(S) == 0 or not S",
+        "isCorrect": true
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Checking Empty Stack in Python):\nlen(S) == 0 or not S\n\nDetailed Context:\nIn Python, an empty list evaluates to False in boolean context (not S) or can be checked via len(S) == 0.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q32",
-    "conceptId": "computer-science-structured-query-language-sql-sql-aggregate-functions-and-group-by",
+    "conceptId": "computer-science-section-b1-computer-science-core-checking-empty-stack-in-python",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section B1: Computer Science Core: Checking Empty Stack in Python",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Checking Empty Stack in Python):\nlen(S) == 0 or not S\n\nDetailed Context:\nIn Python, an empty list evaluates to False in boolean context (not S) or can be checked via len(S) == 0.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
+    "keyConcept": "Section B1: Computer Science Core: Checking Empty Stack in Python",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Structured Query Language (SQL)"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 33,
-    "chapter": "File Handling in Python",
-    "topic": "File Modes: 'w' vs 'a'",
-    "questionText": "When opening a text file in Python using `open('data.txt', 'a')`, the mode `'a'` specifies that:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Insertion Sort Best-Case Efficiency",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Insertion Sort achieves an optimal best-case time complexity of O(n) when applied to an already sorted array.\nReason (R): When the array is already sorted, the while loop condition (L[j] > key) fails immediately on the first check for every element, performing exactly n - 1 comparisons and 0 shifts.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "The file is overwritten and all existing content is permanently erased immediately",
-        "isCorrect": false
+        "text": "(A) is false but (R) is true",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "The file is opened for read-only access with binary decoding",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "The file is opened for appending, and new data will be written at the end of the file without truncating existing content",
-        "isCorrect": true
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "The file is locked in memory preventing other users from reading it",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). On presorted data, each key is compared once against its immediate left neighbor and immediately placed.\nHence Option D is correct.\nHence, option (D) is the correct choice.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q33",
-    "conceptId": "computer-science-file-handling-in-python-file-modes-w-vs-a",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b1-computer-science-core-insertion-sort-best-case-efficiency",
+    "questionType": "assertion-reasoning",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "File Handling in Python: File Modes: 'w' vs 'a'",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B1: Computer Science Core: Insertion Sort Best-Case Efficiency",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). On presorted data, each key is compared once against its immediate left neighbor and immediately placed.\nHence Option D is correct.\nHence, option (D) is the correct choice.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "File Handling in Python: File Modes: 'w' vs 'a'",
+    "keyConcept": "Section B1: Computer Science Core: Insertion Sort Best-Case Efficiency",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "File Handling in Python"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 34,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stability of Insertion Sort",
+    "questionText": "Is Insertion Sort a 'Stable' sorting algorithm?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A single shared linear backbone coaxial bus cable",
+        "text": "No, stability applies only to binary search",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Each other in a closed unidirectional circular ring",
-        "isCorrect": false
+        "text": "Yes, it is stable because elements with equal keys are not shifted past one another",
+        "isCorrect": true
       },
       {
         "id": "C",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
+        "text": "No, insertion sort always reverses equal keys",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A central network hub, switch, or router",
-        "isCorrect": true
+        "text": "Only when sorting floating point numbers",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stability of Insertion Sort):\nYes, it is stable because elements with equal keys are not shifted past one another\n\nDetailed Context:\nThe strict inequality L[j] > key halts shifting when an identical element is reached, preserving original relative order.\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q34",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
+    "conceptId": "computer-science-section-b1-computer-science-core-stability-of-insertion-sort",
     "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section B1: Computer Science Core: Stability of Insertion Sort",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stability of Insertion Sort):\nYes, it is stable because elements with equal keys are not shifted past one another\n\nDetailed Context:\nThe strict inequality L[j] > key halts shifting when an identical element is reached, preserving original relative order.\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section B1: Computer Science Core: Stability of Insertion Sort",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 35,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Linear Search Comparisons on Absent Key",
+    "questionText": "In an unsorted list of 500 items, how many comparisons does Linear Search perform to confirm an element is absent?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "250 comparisons",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Network Layer (Layer 3)",
-        "isCorrect": true
+        "text": "1 comparison",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Transport Layer (Layer 4)",
-        "isCorrect": false
+        "text": "500 comparisons",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Physical Layer (Layer 1)",
+        "text": "9 comparisons",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Linear Search Comparisons on Absent Key):\n500 comparisons\n\nDetailed Context:\nIn an unsorted list, confirming absence requires an exhaustive search of all n elements (500 comparisons).\nHence Option B is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q35",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
+    "conceptId": "computer-science-section-b1-computer-science-core-linear-search-comparisons-on-absent-key",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section B1: Computer Science Core: Linear Search Comparisons on Absent Key",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Linear Search Comparisons on Absent Key):\n500 comparisons\n\nDetailed Context:\nIn an unsorted list, confirming absence requires an exhaustive search of all n elements (500 comparisons).\nHence Option B is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section B1: Computer Science Core: Linear Search Comparisons on Absent Key",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 36,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Python Pop Implementation",
+    "questionText": "Read the following case study on data structures in Python and answer the questions that follow:\n\nRohan is designing a document editing application in Python. To implement the 'Undo' and 'Redo' operations, he utilizes a Stack data structure based on the Last-In-First-Out (LIFO) principle. He implements the stack using a standard Python list named undo_stack = []. Whenever the user performs an edit action (such as typing text or deleting a character), a descriptor of that action is pushed onto undo_stack using the append() method. When the user clicks 'Undo', the application checks if the stack is empty. If undo_stack is empty (i.e., len(undo_stack) == 0), the function outputs 'Underflow: Nothing to Undo'. Otherwise, it removes and retrieves the topmost operation using undo_stack.pop(), reversing the action and pushing it onto redo_stack.\n\nQuestion: What does undo_stack.pop() return and do when invoked on a non-empty stack?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "FIFO (First In First Out)",
+        "text": "Deletes the entire stack from memory",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Priority Queue order",
+        "text": "Creates a duplicate copy of the stack",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Random Access File order",
+        "text": "Returns the bottom-most element at index 0 without removing it",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "LIFO (Last In First Out)",
+        "text": "Removes and returns the topmost (most recently appended) element of the list",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nFor Python Pop Implementation (Section B1: Computer Science Core):\nlist.pop() without arguments removes and returns the last element of the list (top of stack).\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q36",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "conceptId": "computer-science-section-b1-computer-science-core-python-pop-implementation",
+    "questionType": "application",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section B1: Computer Science Core: Python Pop Implementation",
+      "detailed": "Detailed Solution:\nFor Python Pop Implementation (Section B1: Computer Science Core):\nlist.pop() without arguments removes and returns the last element of the list (top of stack).\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
+    "keyConcept": "Section B1: Computer Science Core: Python Pop Implementation",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 37,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Evaluating 10 5 - 2 *",
+    "questionText": "What is the evaluated result of the postfix expression: '10 5 - 2 *'?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A B C + *",
-        "isCorrect": false
+        "text": "10 (10 - 5 = 5, followed by 5 * 2 = 10)",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "* + A B C",
+        "text": "25",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A B + C *",
-        "isCorrect": true
+        "text": "0",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A + B C *",
+        "text": "20",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Evaluating 10 5 - 2 *):\n10 (10 - 5 = 5, followed by 5 * 2 = 10)\n\nDetailed Context:\n10 and 5 pushed; '-' pops 5 and 10, computing 10 - 5 = 5; 2 pushed; '*' computes 5 * 2 = 10.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q37",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "conceptId": "computer-science-section-b1-computer-science-core-evaluating-10-5-2",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B1: Computer Science Core: Evaluating 10 5 - 2 *",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Evaluating 10 5 - 2 *):\n10 (10 - 5 = 5, followed by 5 * 2 = 10)\n\nDetailed Context:\n10 and 5 pushed; '-' pops 5 and 10, computing 10 - 5 = 5; 2 pushed; '*' computes 5 * 2 = 10.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
+    "keyConcept": "Section B1: Computer Science Core: Evaluating 10 5 - 2 *",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 38,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Evaluating Postfix Expression Step-by-Step",
+    "questionText": "Trace the sequential stack evaluation steps for the postfix expression: '6 3 2 + * 5 -':\n(A) Push 6, push 3, push 2 onto stack -> Stack: [6, 3, 2]\n(B) Encounter '+': Pop 2 and 3, compute 3 + 2 = 5, push 5 -> Stack: [6, 5]\n(C) Encounter '*': Pop 5 and 6, compute 6 * 5 = 30, push 30 -> Stack: [30]\n(D) Push 5, encounter '-': Pop 5 and 30, compute 30 - 5 = 25, push 25 -> Final Result: 25\n\nChoose the correct chronological/logical sequence from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
+        "text": "B, A, C, D",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
+        "text": "A, B, C, D",
         "isCorrect": true
       },
       {
+        "id": "C",
+        "text": "D, B, C, A",
+        "isCorrect": false
+      },
+      {
         "id": "D",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
+        "text": "A, C, B, D",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nPostfix evaluation: push 6,3,2 -> 3+2=5 -> push 5 -> 6*5=30 -> push 30 -> push 5 -> 30-5=25.\nHence Option A is correct.\nHence, option (C) is correct.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M31-Q38",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b1-computer-science-core-evaluating-postfix-expression-step-by-step",
+    "questionType": "chronological-sequence",
     "difficulty": 1,
     "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section B1: Computer Science Core: Evaluating Postfix Expression Step-by-Step",
+      "detailed": "Detailed Solution:\nPostfix evaluation: push 6,3,2 -> 3+2=5 -> push 5 -> 6*5=30 -> push 30 -> push 5 -> 30-5=25.\nHence Option A is correct.\nHence, option (C) is correct.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
+    "keyConcept": "Section B1: Computer Science Core: Evaluating Postfix Expression Step-by-Step",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 39,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Insertion Sort Operational Metrics",
+    "questionText": "Match the Insertion Sort complexity scenario in List I with its metric in List II for an array of n elements:\n\nList I:\n(A) Worst-case Time Complexity\n(B) Best-case Time Complexity\n(C) Number of Passes (Outer Loop)\n(D) Auxiliary Space Complexity\n\nList II:\n(I) O(n²) (reverse sorted array requiring maximum element shifts)\n(II) O(n) (already sorted array requiring 1 comparison per item)\n(III) n - 1 passes (outer loop runs from index 1 to n - 1)\n(IV) O(1) (in-place sorting requiring no extra array allocation)\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Cheating by personation through using any computer resource",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "Publishing obscenity in electronic form",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Identity theft without financial damage",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Hacking critical infrastructure systems",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q39",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
-    "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
-    ],
-    "testNumber": 31,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 40,
-    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
-    "topic": "Pandas DataFrame Indexing with loc vs iloc",
-    "questionText": "In Python Pandas library, the fundamental operational difference between `df.loc[]` and `df.iloc[]` is that:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "`df.loc[]` can only modify integer columns, while `df.iloc[]` only modifies string columns",
+        "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "`df.loc[]` deletes rows permanently, while `df.iloc[]` creates a shallow copy",
+        "text": "A-II, B-I, C-III, D-IV",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "`df.loc[]` operates on NumPy arrays exclusively, while `df.iloc[]` operates on dictionaries",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "`df.loc[]` is label-based indexing, whereas `df.iloc[]` is integer position-based indexing",
-        "isCorrect": true
-      }
-    ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (D) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q40",
-    "conceptId": "computer-science-data-handling-using-pandas-i-series-and-dataframe-architecture-pandas-dataframe-indexing-with-loc-vs-iloc",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
-    "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (D) is the correct answer."
-    },
-    "keyConcept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Handling using Pandas - I (Series and DataFrame Architecture)"
-    ],
-    "testNumber": 31,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 41,
-    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
-    "topic": "SQL vs Pandas Query Equivalence",
-    "questionText": "In Pandas, the operation equivalent to the SQL query `SELECT * FROM students WHERE marks >= 90;` is:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "students.select('marks >= 90')",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "students.filter(where='marks >= 90')",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "students[students['marks'] >= 90]",
+        "text": "A-I, B-II, C-III, D-IV",
         "isCorrect": true
       },
       {
         "id": "D",
-        "text": "students.where(marks >= 90)",
+        "text": "A-I, B-III, C-IV, D-II",
         "isCorrect": false
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (C) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q41",
-    "conceptId": "computer-science-data-handling-using-pandas-ii-dataframes-operations-and-analysis-sql-vs-pandas-query-equivalence",
-    "questionType": "conceptual",
+    "detailedSolution": "Detailed Solution:\nWorst is O(n²); Best is O(n); Passes is n-1; Auxiliary space is O(1) in-place.\nHence Option C is correct.\nHence, option (A) is the correct match.\n\nHence, Option (C) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q39",
+    "conceptId": "computer-science-section-b1-computer-science-core-insertion-sort-operational-metrics",
+    "questionType": "match-the-following",
     "difficulty": 1,
     "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "estimatedTimeSeconds": 45,
     "solution": {
       "quick": "Option (C) is correct.",
-      "concept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (C) is the correct answer."
+      "concept": "Section B1: Computer Science Core: Insertion Sort Operational Metrics",
+      "detailed": "Detailed Solution:\nWorst is O(n²); Best is O(n); Passes is n-1; Auxiliary space is O(1) in-place.\nHence Option C is correct.\nHence, option (A) is the correct match.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
+    "keyConcept": "Section B1: Computer Science Core: Insertion Sort Operational Metrics",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - II (DataFrames, Operations and Analysis)"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
-    "questionNumber": 42,
-    "chapter": "Database Concepts",
-    "topic": "Relational Model: Candidate Key vs Primary Key",
-    "questionText": "In the Relational Database Model, a 'Candidate Key' is defined as:",
+    "questionNumber": 40,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stack Space Complexity",
+    "questionText": "What is the auxiliary space complexity of a stack storing n elements?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Any column that allows NULL values throughout the table",
+        "text": "O(n^2) quadratic space",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A minimal superkey that has the potential to uniquely identify each tuple in a relation",
-        "isCorrect": true
-      },
-      {
-        "id": "C",
-        "text": "A foreign key pointing to an external non-relational database",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "A composite attribute containing only floating-point values",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (B) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q42",
-    "conceptId": "computer-science-database-concepts-relational-model-candidate-key-vs-primary-key",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (B) is the correct answer."
-    },
-    "keyConcept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Database Concepts"
-    ],
-    "testNumber": 31,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 43,
-    "chapter": "Structured Query Language (SQL)",
-    "topic": "SQL Aggregate Functions and GROUP BY",
-    "questionText": "In SQL, to filter and restrict groups of records created by the `GROUP BY` clause, one must use the:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "WHERE clause",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "HAVING clause",
-        "isCorrect": true
-      },
-      {
-        "id": "C",
-        "text": "ORDER BY clause",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "DISTINCT clause",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (B) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q43",
-    "conceptId": "computer-science-structured-query-language-sql-sql-aggregate-functions-and-group-by",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
-    "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (B) is the correct answer."
-    },
-    "keyConcept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Structured Query Language (SQL)"
-    ],
-    "testNumber": 31,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 44,
-    "chapter": "File Handling in Python",
-    "topic": "File Modes: 'w' vs 'a'",
-    "questionText": "When opening a text file in Python using `open('data.txt', 'a')`, the mode `'a'` specifies that:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "The file is opened for appending, and new data will be written at the end of the file without truncating existing content",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "The file is overwritten and all existing content is permanently erased immediately",
+        "text": "O(log n) logarithmic space",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "The file is opened for read-only access with binary decoding",
+        "text": "O(1) constant space",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "The file is locked in memory preventing other users from reading it",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q44",
-    "conceptId": "computer-science-file-handling-in-python-file-modes-w-vs-a",
-    "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "File Handling in Python: File Modes: 'w' vs 'a'",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "File Handling in Python: File Modes: 'w' vs 'a'",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "File Handling in Python"
-    ],
-    "testNumber": 31,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 45,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "A central network hub, switch, or router",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "A single shared linear backbone coaxial bus cable",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Each other in a closed unidirectional circular ring",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q45",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Computer Networks"
-    ],
-    "testNumber": 31,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 46,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Data Link Layer (Layer 2)",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "Transport Layer (Layer 4)",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Physical Layer (Layer 1)",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Network Layer (Layer 3)",
+        "text": "O(n) linear space",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (D) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q46",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stack Space Complexity):\nO(n) linear space\n\nDetailed Context:\nA stack storing n items requires memory directly proportional to the number of stored elements, O(n).\nHence Option D is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q40",
+    "conceptId": "computer-science-section-b1-computer-science-core-stack-space-complexity",
     "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section B1: Computer Science Core: Stack Space Complexity",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stack Space Complexity):\nO(n) linear space\n\nDetailed Context:\nA stack storing n items requires memory directly proportional to the number of stored elements, O(n).\nHence Option D is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section B1: Computer Science Core: Stack Space Complexity",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
-    "questionNumber": 47,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
+    "questionNumber": 41,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stack Role in Infix Parsing",
+    "questionText": "Which of the following statements is NOT correct regarding Stack Role in Infix Parsing (Section B1: Computer Science Core)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
+        "text": "Operators and left parentheses awaiting precedence resolution",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Operands (numbers and variables)",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Function names only",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Final evaluated numeric results",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nIn Section B1: Computer Science Core (Stack Role in Infix Parsing):\nThe statement 'Operators and left parentheses awaiting precedence resolution' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.\n\nHence, Option (A) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q41",
+    "conceptId": "computer-science-section-b1-computer-science-core-stack-role-in-infix-parsing",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (A) is correct.",
+      "concept": "Section B1: Computer Science Core: Stack Role in Infix Parsing",
+      "detailed": "Detailed Solution:\nIn Section B1: Computer Science Core (Stack Role in Infix Parsing):\nThe statement 'Operators and left parentheses awaiting precedence resolution' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.\n\nHence, Option (A) is the correct answer."
+    },
+    "keyConcept": "Section B1: Computer Science Core: Stack Role in Infix Parsing",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B1: Computer Science Core"
+    ],
+    "testNumber": 31,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 42,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Binary Search Trace Next Interval",
+    "questionText": "Searching for key=45 in sorted list [10, 20, 30, 40, 50, 60, 70] (low=0, high=6, mid=3 with L[3]=40). What are the next low and high values?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "low = 4, high = 4",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "low = 4, high = 6",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "low = 3, high = 6",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "low = 0, high = 2",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Binary Search Trace Next Interval):\nlow = 4, high = 6\n\nDetailed Context:\nBecause target 45 > L[mid] (40), the target must reside in the right half; low is updated to mid + 1 = 4.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (B) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q42",
+    "conceptId": "computer-science-section-b1-computer-science-core-binary-search-trace-next-interval",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (B) is correct.",
+      "concept": "Section B1: Computer Science Core: Binary Search Trace Next Interval",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Binary Search Trace Next Interval):\nlow = 4, high = 6\n\nDetailed Context:\nBecause target 45 > L[mid] (40), the target must reside in the right half; low is updated to mid + 1 = 4.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (B) is the correct answer."
+    },
+    "keyConcept": "Section B1: Computer Science Core: Binary Search Trace Next Interval",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B1: Computer Science Core"
+    ],
+    "testNumber": 31,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 43,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Balanced Parentheses Checking Algorithm",
+    "questionText": "How does a compiler use a stack to check whether parentheses in an expression are balanced (e.g., '{[()]}')?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Classify each bracket as a node in a graph and search for the shortest path from start to end to verify structural integrity",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Partition the input string at each closing bracket and recursively rearrange the segments to sort them alphabetically",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Push opening brackets onto the stack; when a closing bracket is encountered, pop the top and verify matching type; confirm the stack is empty at the end",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "Translate each bracket type into an integer value and perform a bitwise XOR operation on the entire sequence to calculate a checksum",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Balanced Parentheses Checking Algorithm):\nPush opening brackets onto the stack; when a closing bracket is encountered, pop the top and verify matching type; confirm the stack is empty at the end\n\nDetailed Context:\nOpening brackets are pushed; closing brackets pop the top element to verify matched pairing; empty stack at end confirms balance.\nHence Option C is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (C) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q43",
+    "conceptId": "computer-science-section-b1-computer-science-core-balanced-parentheses-checking-algorithm",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Option (C) is correct.",
+      "concept": "Section B1: Computer Science Core: Balanced Parentheses Checking Algorithm",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Balanced Parentheses Checking Algorithm):\nPush opening brackets onto the stack; when a closing bracket is encountered, pop the top and verify matching type; confirm the stack is empty at the end\n\nDetailed Context:\nOpening brackets are pushed; closing brackets pop the top element to verify matched pairing; empty stack at end confirms balance.\nHence Option C is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (C) is the correct answer."
+    },
+    "keyConcept": "Section B1: Computer Science Core: Balanced Parentheses Checking Algorithm",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B1: Computer Science Core"
+    ],
+    "testNumber": 31,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 44,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stability of Bubble Sort",
+    "questionText": "Is Bubble Sort a 'Stable' sorting algorithm, and why?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "No, it is unstable because elements with equal values are randomly reordered during the sorting process",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "No, it is unstable because equal elements are always swapped whenever they come adjacent to each other",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Yes, it is stable because larger elements move to the end, which inherently preserves the order of equal elements",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Yes, it is stable because equal elements are never swapped (comparison uses strict inequality >), preserving their relative initial order",
+        "isCorrect": true
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stability of Bubble Sort):\nYes, it is stable because equal elements are never swapped (comparison uses strict inequality >), preserving their relative initial order\n\nDetailed Context:\nBubble sort preserves relative order of duplicate keys because adjacent swaps occur only when left > right.\nHence Option B is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q44",
+    "conceptId": "computer-science-section-b1-computer-science-core-stability-of-bubble-sort",
+    "questionType": "conceptual",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Option (D) is correct.",
+      "concept": "Section B1: Computer Science Core: Stability of Bubble Sort",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stability of Bubble Sort):\nYes, it is stable because equal elements are never swapped (comparison uses strict inequality >), preserving their relative initial order\n\nDetailed Context:\nBubble sort preserves relative order of duplicate keys because adjacent swaps occur only when left > right.\nHence Option B is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer."
+    },
+    "keyConcept": "Section B1: Computer Science Core: Stability of Bubble Sort",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B1: Computer Science Core"
+    ],
+    "testNumber": 31,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 45,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stack Push and Pop Implementation via List",
+    "questionText": "Given below are two statements:\nStatement I: In Python, a stack can be implemented using a list where append() performs the Push operation and pop() performs the Pop operation at O(1) amortized time.\nStatement II: Executing stack.pop() on an empty list raises a built-in IndexError representing a 'Stack Underflow' condition.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. List append and pop at the tail operate in O(1) time, and popping an empty list raises IndexError (underflow).\nHence Option C is correct.\nHence, option (A) is correct.\n\nHence, Option (A) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q45",
+    "conceptId": "computer-science-section-b1-computer-science-core-stack-push-and-pop-implementation-via-list",
+    "questionType": "statement-evaluation",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Option (A) is correct.",
+      "concept": "Section B1: Computer Science Core: Stack Push and Pop Implementation via List",
+      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. List append and pop at the tail operate in O(1) time, and popping an empty list raises IndexError (underflow).\nHence Option C is correct.\nHence, option (A) is correct.\n\nHence, Option (A) is the correct answer."
+    },
+    "keyConcept": "Section B1: Computer Science Core: Stack Push and Pop Implementation via List",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B1: Computer Science Core"
+    ],
+    "testNumber": 31,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 46,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Final Placement Statement",
+    "questionText": "After the inner while loop terminates in Insertion Sort, what statement places the key in its correct position?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "L[i] = key",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "L[j + 1] = key",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "L[j] = key",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "L[0] = key",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Final Placement Statement):\nL[j + 1] = key\n\nDetailed Context:\nWhen the loop exits, j points to the element smaller than key (or -1); the key belongs immediately to the right at index j + 1.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (B) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q46",
+    "conceptId": "computer-science-section-b1-computer-science-core-final-placement-statement",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (B) is correct.",
+      "concept": "Section B1: Computer Science Core: Final Placement Statement",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Final Placement Statement):\nL[j + 1] = key\n\nDetailed Context:\nWhen the loop exits, j points to the element smaller than key (or -1); the key belongs immediately to the right at index j + 1.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (B) is the correct answer."
+    },
+    "keyConcept": "Section B1: Computer Science Core: Final Placement Statement",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B1: Computer Science Core"
+    ],
+    "testNumber": 31,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 47,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Comparisons in Pass k of Bubble Sort",
+    "questionText": "In pass i (where i ranges from 0 to n-2) of Bubble Sort on an array of length n, how many adjacent comparisons are performed?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "i comparisons",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "n / 2 comparisons",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "n - 1 - i comparisons",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "n comparisons",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Comparisons in Pass k of Bubble Sort):\nn - 1 - i comparisons\n\nDetailed Context:\nBecause each pass i permanently fixes the largest remaining element at the end, the inner loop only needs n - 1 - i comparisons.\nHence Option B is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (C) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q47",
+    "conceptId": "computer-science-section-b1-computer-science-core-comparisons-in-pass-k-of-bubble-sort",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (C) is correct.",
+      "concept": "Section B1: Computer Science Core: Comparisons in Pass k of Bubble Sort",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Comparisons in Pass k of Bubble Sort):\nn - 1 - i comparisons\n\nDetailed Context:\nBecause each pass i permanently fixes the largest remaining element at the end, the inner loop only needs n - 1 - i comparisons.\nHence Option B is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (C) is the correct answer."
+    },
+    "keyConcept": "Section B1: Computer Science Core: Comparisons in Pass k of Bubble Sort",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B1: Computer Science Core"
+    ],
+    "testNumber": 31,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 48,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "While Loop Shift Condition in Insertion Sort",
+    "questionText": "What dual conditions govern the inner while loop during Insertion Sort: while j >= 0 and L[j] > key:?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Ensures index j remains a positive even number while shifting larger elements right until a smaller value is found",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Ensures the loop terminates only when the array is fully sorted and all temporary variables have been released",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Ensures that no duplicate values exist in the subarray L[0..j] before executing the next iteration of the shift",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Ensures index j remains non-negative to prevent negative array indexing while shifting larger elements right",
+        "isCorrect": true
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (While Loop Shift Condition in Insertion Sort):\nEnsures index j remains non-negative to prevent negative array indexing while shifting larger elements right\n\nDetailed Context:\nThe inner loop decrements j while checking j >= 0 to prevent index errors and L[j] > key to shift elements greater than key.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q48",
+    "conceptId": "computer-science-section-b1-computer-science-core-while-loop-shift-condition-in-insertion-sort",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (D) is correct.",
+      "concept": "Section B1: Computer Science Core: While Loop Shift Condition in Insertion Sort",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (While Loop Shift Condition in Insertion Sort):\nEnsures index j remains non-negative to prevent negative array indexing while shifting larger elements right\n\nDetailed Context:\nThe inner loop decrements j while checking j >= 0 to prevent index errors and L[j] > key to shift elements greater than key.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer."
+    },
+    "keyConcept": "Section B1: Computer Science Core: While Loop Shift Condition in Insertion Sort",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B1: Computer Science Core"
+    ],
+    "testNumber": 31,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 49,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Stack LIFO Principle and Operations",
+    "questionText": "Which of the following statements is NOT correct regarding Stack LIFO Principle and Operations (Section B1: Computer Science Core)?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "LIFO (Last In First Out)",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
         "text": "FIFO (First In First Out)",
         "isCorrect": false
       },
       {
-        "id": "B",
+        "id": "C",
         "text": "Priority Queue order",
         "isCorrect": false
       },
       {
-        "id": "C",
+        "id": "D",
         "text": "Random Access File order",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "LIFO (Last In First Out)",
-        "isCorrect": true
-      }
-    ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (D) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q47",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
-    "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (D) is the correct answer."
-    },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Structures: Stacks"
-    ],
-    "testNumber": 31,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 48,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "A B C + *",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "* + A B C",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "A + B C *",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "A B + C *",
-        "isCorrect": true
-      }
-    ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (D) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q48",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (D) is the correct answer."
-    },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Structures: Stacks"
-    ],
-    "testNumber": 31,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 49,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
-        "isCorrect": true
-      },
-      {
-        "id": "C",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (B) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q49",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (B) is the correct answer."
-    },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
-    ],
-    "testNumber": 31,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 50,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Cheating by personation through using any computer resource",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "Publishing obscenity in electronic form",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Identity theft without financial damage",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Hacking critical infrastructure systems",
         "isCorrect": false
       }
     ],
     "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M31-Q50",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
+    "detailedSolution": "Detailed Solution:\nIn Section B1: Computer Science Core (Stack LIFO Principle and Operations):\nThe statement 'LIFO (Last In First Out)' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (A) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q49",
+    "conceptId": "computer-science-section-b1-computer-science-core-stack-lifo-principle-and-operations",
     "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "estimatedTimeSeconds": 75,
     "solution": {
       "quick": "Option (A) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (A) is the correct answer."
+      "concept": "Section B1: Computer Science Core: Stack LIFO Principle and Operations",
+      "detailed": "Detailed Solution:\nIn Section B1: Computer Science Core (Stack LIFO Principle and Operations):\nThe statement 'LIFO (Last In First Out)' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
+    "keyConcept": "Section B1: Computer Science Core: Stack LIFO Principle and Operations",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B1: Computer Science Core"
     ],
     "testNumber": 31,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 50,
+    "chapter": "Section B1: Computer Science Core",
+    "topic": "Bubble Sort Pass 1 Execution Trace",
+    "questionText": "Trace the step-by-step swaps during Pass 1 of Bubble Sort on the array: [50, 20, 40, 10, 30]:\n(A) Compare 50 and 20: 50 > 20 -> Swap -> Array: [20, 50, 40, 10, 30]\n(B) Compare 50 and 40: 50 > 40 -> Swap -> Array: [20, 40, 50, 10, 30]\n(C) Compare 50 and 10: 50 > 10 -> Swap -> Array: [20, 40, 10, 50, 30]\n(D) Compare 50 and 30: 50 > 30 -> Swap -> Array: [20, 40, 10, 30, 50] (50 is now in its final sorted position)\n\nChoose the correct chronological/logical sequence from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "B, A, C, D",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "A, B, C, D",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "A, C, B, D",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "D, B, C, A",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nPass 1 pushes largest element (50) to the end: [50,20] swap -> [50,40] swap -> [50,10] swap -> [50,30] swap -> 50 fixed at end.\nHence Option D is correct.\nHence, option (A) is correct.\n\nHence, Option (B) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M31-Q50",
+    "conceptId": "computer-science-section-b1-computer-science-core-bubble-sort-pass-1-execution-trace",
+    "questionType": "chronological-sequence",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Option (B) is correct.",
+      "concept": "Section B1: Computer Science Core: Bubble Sort Pass 1 Execution Trace",
+      "detailed": "Detailed Solution:\nPass 1 pushes largest element (50) to the end: [50,20] swap -> [50,40] swap -> [50,10] swap -> [50,30] swap -> 50 fixed at end.\nHence Option D is correct.\nHence, option (A) is correct.\n\nHence, Option (B) is the correct answer."
+    },
+    "keyConcept": "Section B1: Computer Science Core: Bubble Sort Pass 1 Execution Trace",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B1: Computer Science Core"
+    ],
+    "testNumber": 31,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
   }
 ]

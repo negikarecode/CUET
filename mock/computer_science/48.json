@@ -573,1621 +573,1361 @@
   },
   {
     "questionNumber": 12,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "ACID Durability Principle",
+    "questionText": "Read the following relational database and transaction processing case study and answer the questions that follow:\n\nA core banking engine processes fund transfers between checking accounts in a MySQL database. A balance transfer of 10,000 from Account 101 to Account 102 involves two distinct database operations:\n1. UPDATE ACCOUNT SET Balance = Balance - 10000 WHERE AccNo = 101;\n2. UPDATE ACCOUNT SET Balance = Balance + 10000 WHERE AccNo = 102;\n\nTo guarantee data consistency, the transaction is managed according to ACID properties:\n- Atomicity: Either both updates succeed completely or neither update takes effect (all-or-nothing).\n- Consistency: Account balances must satisfy domain rules (e.g. Balance >= MinBalance) before and after execution.\n- Isolation: Concurrent transactions operating simultaneously do not read intermediate uncommitted balances.\n- Durability: Once con.commit() executes, balance changes persist permanently on non-volatile disk storage even if a power failure occurs.\n\nQuestion: Which SQL command makes transactions permanent on disk, guaranteeing 'Durability'?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A single shared linear backbone coaxial bus cable",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "A central network hub, switch, or router",
+        "text": "COMMIT",
         "isCorrect": true
       },
       {
+        "id": "B",
+        "text": "SAVEPOINT",
+        "isCorrect": false
+      },
+      {
         "id": "C",
-        "text": "Each other in a closed unidirectional circular ring",
+        "text": "ROLLBACK",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
+        "text": "CHECKPOINT",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nFor ACID Durability Principle (Section A: Common Computing Concepts):\nCOMMIT finalizes changes permanently on storage, fulfilling the durability requirement of ACID.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q12",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "conceptId": "computer-science-section-a-common-computing-concepts-acid-durability-principle",
+    "questionType": "application",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section A: Common Computing Concepts: ACID Durability Principle",
+      "detailed": "Detailed Solution:\nFor ACID Durability Principle (Section A: Common Computing Concepts):\nCOMMIT finalizes changes permanently on storage, fulfilling the durability requirement of ACID.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section A: Common Computing Concepts: ACID Durability Principle",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 13,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Referential Integrity Enforcement",
+    "questionText": "Read the following database design case study and answer the questions that follow:\n\nThe Apex Public School database administrator created two relational tables in MySQL to track student enrollments and fee payments:\n1. Table STUDENT (AdmNo INT PRIMARY KEY, SName VARCHAR(30), Stream VARCHAR(15), Class INT);\n2. Table FEES (RcptNo INT PRIMARY KEY, AdmNo INT, FeeAmount DECIMAL(8,2), FeeDate DATE, FOREIGN KEY (AdmNo) REFERENCES STUDENT(AdmNo));\n\nThe administrator enforces Referential Integrity through the Foreign Key on AdmNo. A query is written to display the student name, stream, and fee amount paid by joining STUDENT and FEES on STUDENT.AdmNo = FEES.AdmNo. Furthermore, the school principal requests an executive summary displaying the total fee collected per stream, filtering for streams where total collections exceed 100,000, sorted in descending order of total collection.\n\nQuestion: What constraint in table FEES enforces that fee records can only be created for existing students?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Network Layer (Layer 3)",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "NOT NULL on Stream",
         "isCorrect": false
       },
       {
+        "id": "B",
+        "text": "FOREIGN KEY (AdmNo) REFERENCES STUDENT(AdmNo)",
+        "isCorrect": true
+      },
+      {
         "id": "C",
-        "text": "Transport Layer (Layer 4)",
+        "text": "PRIMARY KEY (RcptNo)",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Physical Layer (Layer 1)",
+        "text": "CHECK (FeeAmount > 0)",
         "isCorrect": false
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Referential Integrity Enforcement (Section A: Common Computing Concepts):\nThe FOREIGN KEY constraint links AdmNo in FEES to the primary key AdmNo in STUDENT, preserving referential integrity.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q13",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "conceptId": "computer-science-section-a-common-computing-concepts-referential-integrity-enforcement",
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section A: Common Computing Concepts: Referential Integrity Enforcement",
+      "detailed": "Detailed Solution:\nFor Referential Integrity Enforcement (Section A: Common Computing Concepts):\nThe FOREIGN KEY constraint links AdmNo in FEES to the primary key AdmNo in STUDENT, preserving referential integrity.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section A: Common Computing Concepts: Referential Integrity Enforcement",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 14,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Binary File Open Mode for Appending",
+    "questionText": "Read the following case study on binary file handling in Python and answer the questions that follow:\n\nAniket is tasked with creating a customer banking module in Python that writes and reads customer account records using binary files. Each record is represented as a dictionary: {'AccNo': 101, 'Name': 'Kavita', 'Balance': 45000.0}. Because dictionaries cannot be written directly to plain text files without converting to strings, Aniket imports the pickle module. To add records to 'bank.dat', he opens the file in 'ab' (append binary) mode and uses pickle.dump(record, file). To search for an account, he opens 'bank.dat' in 'rb' (read binary) mode and loads records sequentially inside a while True loop using pickle.load(file). He catches the EOFError exception to cleanly detect when the end of the binary file has been reached.\n\nQuestion: Which file access mode must Aniket use to append new binary records without overwriting existing data?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "LIFO (Last In First Out)",
-        "isCorrect": true
+        "text": "'w' (write text)",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "FIFO (First In First Out)",
+        "text": "'wb' (write binary)",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Priority Queue order",
+        "text": "'rb' (read binary)",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Random Access File order",
-        "isCorrect": false
+        "text": "'ab' (append binary)",
+        "isCorrect": true
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Binary File Open Mode for Appending):\n'ab' (append binary)\n\nDetailed Context:\n'ab' opens binary files in append mode, placing the file pointer at the end of the file.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q14",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
+    "conceptId": "computer-science-section-a-common-computing-concepts-binary-file-open-mode-for-appending",
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section A: Common Computing Concepts: Binary File Open Mode for Appending",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Binary File Open Mode for Appending):\n'ab' (append binary)\n\nDetailed Context:\n'ab' opens binary files in append mode, placing the file pointer at the end of the file.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
+    "keyConcept": "Section A: Common Computing Concepts: Binary File Open Mode for Appending",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 15,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Eliminating Duplicate Output",
+    "questionText": "Which SQL keyword eliminates redundant duplicate rows from the output of a SELECT query?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A B C + *",
-        "isCorrect": false
+        "text": "DISTINCT",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "* + A B C",
+        "text": "NO_DUPLICATE",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A B + C *",
-        "isCorrect": true
+        "text": "DIFFERENT",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A + B C *",
+        "text": "UNIQUE",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Eliminating Duplicate Output):\nDISTINCT\n\nDetailed Context:\nSELECT DISTINCT column FROM table removes duplicate tuples from the query output.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q15",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
+    "conceptId": "computer-science-section-a-common-computing-concepts-eliminating-duplicate-output",
+    "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section A: Common Computing Concepts: Eliminating Duplicate Output",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Eliminating Duplicate Output):\nDISTINCT\n\nDetailed Context:\nSELECT DISTINCT column FROM table removes duplicate tuples from the query output.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
+    "keyConcept": "Section A: Common Computing Concepts: Eliminating Duplicate Output",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 16,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "ACID Properties: Durability",
+    "questionText": "Which ACID property guarantees that once a transaction is finalized with connection.commit(), changes survive power failures?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
+        "text": "Isolation",
         "isCorrect": false
       },
       {
+        "id": "B",
+        "text": "Durability",
+        "isCorrect": true
+      },
+      {
         "id": "C",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
+        "text": "Atomicity",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
+        "text": "Consistency",
         "isCorrect": false
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (ACID Properties: Durability):\nDurability\n\nDetailed Context:\nDurability guarantees that committed transactions are written to non-volatile storage and persist across system crashes.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q16",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
+    "conceptId": "computer-science-section-a-common-computing-concepts-acid-properties-durability",
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section A: Common Computing Concepts: ACID Properties: Durability",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (ACID Properties: Durability):\nDurability\n\nDetailed Context:\nDurability guarantees that committed transactions are written to non-volatile storage and persist across system crashes.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
+    "keyConcept": "Section A: Common Computing Concepts: ACID Properties: Durability",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 17,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Twisting Mechanism in UTP",
+    "questionText": "Read the following transmission media case study and answer the questions that follow:\n\nHighSpeed Rail Corporation is deploying a communication network along a new 300-kilometer railway corridor. The engineering team evaluates different transmission media for signaling, automated train control, and passenger Wi-Fi:\n1. Unshielded Twisted Pair (UTP): Cost-effective for short connections inside stations (up to 100 meters), but susceptible to electromagnetic interference (EMI) generated by high-voltage electric train locomotives.\n2. Coaxial Cable: Better shielding than UTP, but bulky and high attenuation over long distances.\n3. Optical Fiber Cable: Transmits data as pulses of light through glass/plastic core via Total Internal Reflection. It provides massive bandwidth (gigabits to terabits per second), minimal signal attenuation over tens of kilometers, and total immunity to electromagnetic interference from electric traction lines.\n4. Wireless Radio (GSM-R / LTE-R): Provides continuous wireless train-to-ground telemetry while in transit.\n\nQuestion: Why are insulated copper wire pairs tightly twisted around each other inside UTP cables?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Publishing obscenity in electronic form",
+        "text": "To make the cable look thicker",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Identity theft without financial damage",
+        "text": "To increase the physical weight of the wire",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Cheating by personation through using any computer resource",
-        "isCorrect": true
+        "text": "To trap heat inside",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Hacking critical infrastructure systems",
-        "isCorrect": false
+        "text": "To cancel out electromagnetic crosstalk and reduce external signal noise interference",
+        "isCorrect": true
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Twisting Mechanism in UTP):\nTo cancel out electromagnetic crosstalk and reduce external signal noise interference\n\nDetailed Context:\nTwisting wire pairs balances electromagnetic interference, canceling out crosstalk between adjacent pairs.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q17",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
+    "conceptId": "computer-science-section-a-common-computing-concepts-twisting-mechanism-in-utp",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section A: Common Computing Concepts: Twisting Mechanism in UTP",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Twisting Mechanism in UTP):\nTo cancel out electromagnetic crosstalk and reduce external signal noise interference\n\nDetailed Context:\nTwisting wire pairs balances electromagnetic interference, canceling out crosstalk between adjacent pairs.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
+    "keyConcept": "Section A: Common Computing Concepts: Twisting Mechanism in UTP",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 18,
-    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
-    "topic": "Pandas DataFrame Indexing with loc vs iloc",
-    "questionText": "In Python Pandas library, the fundamental operational difference between `df.loc[]` and `df.iloc[]` is that:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "ON DELETE SET NULL Effect",
+    "questionText": "In a foreign key defined with 'ON DELETE SET NULL', what occurs when a referenced parent record is deleted?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "`df.loc[]` can only modify integer columns, while `df.iloc[]` only modifies string columns",
-        "isCorrect": false
+        "text": "The foreign key attribute in all referencing child records is automatically updated to NULL",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "`df.loc[]` deletes rows permanently, while `df.iloc[]` creates a shallow copy",
+        "text": "The child records turn into primary keys",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "`df.loc[]` is label-based indexing, whereas `df.iloc[]` is integer position-based indexing",
-        "isCorrect": true
+        "text": "All referencing child records are deleted permanently",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "`df.loc[]` operates on NumPy arrays exclusively, while `df.iloc[]` operates on dictionaries",
+        "text": "The parent deletion is aborted",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (ON DELETE SET NULL Effect):\nThe foreign key attribute in all referencing child records is automatically updated to NULL\n\nDetailed Context:\nON DELETE SET NULL sets the child foreign key column to NULL when the referenced parent tuple is deleted.\nHence Option D is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q18",
-    "conceptId": "computer-science-data-handling-using-pandas-i-series-and-dataframe-architecture-pandas-dataframe-indexing-with-loc-vs-iloc",
+    "conceptId": "computer-science-section-a-common-computing-concepts-on-delete-set-null-effect",
     "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section A: Common Computing Concepts: ON DELETE SET NULL Effect",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (ON DELETE SET NULL Effect):\nThe foreign key attribute in all referencing child records is automatically updated to NULL\n\nDetailed Context:\nON DELETE SET NULL sets the child foreign key column to NULL when the referenced parent tuple is deleted.\nHence Option D is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
+    "keyConcept": "Section A: Common Computing Concepts: ON DELETE SET NULL Effect",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - I (Series and DataFrame Architecture)"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 19,
-    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
-    "topic": "SQL vs Pandas Query Equivalence",
-    "questionText": "In Pandas, the operation equivalent to the SQL query `SELECT * FROM students WHERE marks >= 90;` is:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Quotechar Parameter Function",
+    "questionText": "What is the purpose of the quotechar parameter in csv.writer(f, quotechar='\"')?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "students.select('marks >= 90')",
+        "text": "It defines the font used to print the text",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "students[students['marks'] >= 90]",
+        "text": "It defines the character used to enclose fields containing special characters like delimiters, newlines, or quotes",
         "isCorrect": true
       },
       {
         "id": "C",
-        "text": "students.filter(where='marks >= 90')",
+        "text": "It sets the password for file protection",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "students.where(marks >= 90)",
+        "text": "It translates text into French quotes",
         "isCorrect": false
       }
     ],
     "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (B) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Quotechar Parameter Function):\nIt defines the character used to enclose fields containing special characters like delimiters, newlines, or quotes\n\nDetailed Context:\nquotechar specifies the quoting character (default double quote) used to wrap fields that contain delimiters or spaces.\nHence Option D is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q19",
-    "conceptId": "computer-science-data-handling-using-pandas-ii-dataframes-operations-and-analysis-sql-vs-pandas-query-equivalence",
+    "conceptId": "computer-science-section-a-common-computing-concepts-quotechar-parameter-function",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (B) is correct.",
-      "concept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (B) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: Quotechar Parameter Function",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Quotechar Parameter Function):\nIt defines the character used to enclose fields containing special characters like delimiters, newlines, or quotes\n\nDetailed Context:\nquotechar specifies the quoting character (default double quote) used to wrap fields that contain delimiters or spaces.\nHence Option D is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
+    "keyConcept": "Section A: Common Computing Concepts: Quotechar Parameter Function",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - II (DataFrames, Operations and Analysis)"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 20,
-    "chapter": "Database Concepts",
-    "topic": "Relational Model: Candidate Key vs Primary Key",
-    "questionText": "In the Relational Database Model, a 'Candidate Key' is defined as:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "DDL vs DML Command Classification",
+    "questionText": "Which of the following lists contains EXCLUSIVELY Data Definition Language (DDL) SQL commands?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A minimal superkey that has the potential to uniquely identify each tuple in a relation",
-        "isCorrect": true
+        "text": "GRANT, REVOKE, COMMIT",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Any column that allows NULL values throughout the table",
+        "text": "INSERT, UPDATE, DELETE",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A foreign key pointing to an external non-relational database",
+        "text": "SELECT, WHERE, HAVING",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A composite attribute containing only floating-point values",
-        "isCorrect": false
+        "text": "CREATE, ALTER, DROP",
+        "isCorrect": true
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (DDL vs DML Command Classification):\nCREATE, ALTER, DROP\n\nDetailed Context:\nDDL commands define and modify database schema structure: CREATE, ALTER, DROP, TRUNCATE; DML manages data: INSERT, UPDATE, DELETE.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q20",
-    "conceptId": "computer-science-database-concepts-relational-model-candidate-key-vs-primary-key",
+    "conceptId": "computer-science-section-a-common-computing-concepts-ddl-vs-dml-command-classification",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section A: Common Computing Concepts: DDL vs DML Command Classification",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (DDL vs DML Command Classification):\nCREATE, ALTER, DROP\n\nDetailed Context:\nDDL commands define and modify database schema structure: CREATE, ALTER, DROP, TRUNCATE; DML manages data: INSERT, UPDATE, DELETE.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
+    "keyConcept": "Section A: Common Computing Concepts: DDL vs DML Command Classification",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Database Concepts"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 21,
-    "chapter": "Structured Query Language (SQL)",
-    "topic": "SQL Aggregate Functions and GROUP BY",
-    "questionText": "In SQL, to filter and restrict groups of records created by the `GROUP BY` clause, one must use the:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Hub vs Switch Intelligence in LAN",
+    "questionText": "Given below are two statements:\nStatement I: A Network Hub is a broadcast device (operates at Physical Layer) that retransmits incoming packets to all connected ports indiscriminately.\nStatement II: A Network Switch is an intelligent unicast device (operates at Data Link Layer) that inspects MAC addresses to direct frames specifically to the destination port.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "WHERE clause",
-        "isCorrect": false
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "ORDER BY clause",
+        "text": "Both Statement I and Statement II are correct",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "DISTINCT clause",
+        "text": "Both Statement I and Statement II are incorrect",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "HAVING clause",
-        "isCorrect": true
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. Hubs broadcast to all ports causing collisions; switches learn MAC addresses and forward unicast frames.\nHence Option D is correct.\nHence, option (D) is correct.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q21",
-    "conceptId": "computer-science-structured-query-language-sql-sql-aggregate-functions-and-group-by",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "conceptId": "computer-science-section-a-common-computing-concepts-hub-vs-switch-intelligence-in-lan",
+    "questionType": "statement-evaluation",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section A: Common Computing Concepts: Hub vs Switch Intelligence in LAN",
+      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. Hubs broadcast to all ports causing collisions; switches learn MAC addresses and forward unicast frames.\nHence Option D is correct.\nHence, option (D) is correct.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
+    "keyConcept": "Section A: Common Computing Concepts: Hub vs Switch Intelligence in LAN",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Structured Query Language (SQL)"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 22,
-    "chapter": "File Handling in Python",
-    "topic": "File Modes: 'w' vs 'a'",
-    "questionText": "When opening a text file in Python using `open('data.txt', 'a')`, the mode `'a'` specifies that:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "SQL SELECT Query Clause Execution Order",
+    "questionText": "Arrange the conceptual execution order of clauses in an SQL query from first evaluated to last evaluated:\n(A) FROM clause: Identify the target table and execute joins\n(B) WHERE clause: Filter individual tuples based on boolean conditions\n(C) SELECT clause: Project requested attribute columns or expressions\n(D) ORDER BY clause: Sort the resulting projected output rows\n\nChoose the correct chronological/logical sequence from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "The file is overwritten and all existing content is permanently erased immediately",
+        "text": "B, A, C, D",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "The file is opened for read-only access with binary decoding",
-        "isCorrect": false
+        "text": "A, B, C, D",
+        "isCorrect": true
       },
       {
         "id": "C",
-        "text": "The file is locked in memory preventing other users from reading it",
+        "text": "A, C, B, D",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "The file is opened for appending, and new data will be written at the end of the file without truncating existing content",
-        "isCorrect": true
+        "text": "D, B, C, A",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nLogical query processing executes: FROM -> WHERE -> SELECT -> ORDER BY.\nHence Option C is correct.\nHence, option (B) is correct.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q22",
-    "conceptId": "computer-science-file-handling-in-python-file-modes-w-vs-a",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "conceptId": "computer-science-section-a-common-computing-concepts-sql-select-query-clause-execution-order",
+    "questionType": "chronological-sequence",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "File Handling in Python: File Modes: 'w' vs 'a'",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section A: Common Computing Concepts: SQL SELECT Query Clause Execution Order",
+      "detailed": "Detailed Solution:\nLogical query processing executes: FROM -> WHERE -> SELECT -> ORDER BY.\nHence Option C is correct.\nHence, option (B) is correct.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "File Handling in Python: File Modes: 'w' vs 'a'",
+    "keyConcept": "Section A: Common Computing Concepts: SQL SELECT Query Clause Execution Order",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "File Handling in Python"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 23,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Arbitrary Keyword Arguments",
+    "questionText": "Which of the following statements is NOT correct regarding Arbitrary Keyword Arguments (Section A: Common Computing Concepts)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A single shared linear backbone coaxial bus cable",
+        "text": "A generator",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A central network hub, switch, or router",
-        "isCorrect": true
+        "text": "A tuple",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Each other in a closed unidirectional circular ring",
-        "isCorrect": false
+        "text": "A dictionary",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
+        "text": "A list",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nIn Section A: Common Computing Concepts (Arbitrary Keyword Arguments):\nThe statement 'A dictionary' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q23",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
+    "conceptId": "computer-science-section-a-common-computing-concepts-arbitrary-keyword-arguments",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section A: Common Computing Concepts: Arbitrary Keyword Arguments",
+      "detailed": "Detailed Solution:\nIn Section A: Common Computing Concepts (Arbitrary Keyword Arguments):\nThe statement 'A dictionary' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section A: Common Computing Concepts: Arbitrary Keyword Arguments",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 24,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "HAVING Threshold Evaluation",
+    "questionText": "Read the following database case study on joins and group aggregations and answer the questions that follow:\n\nA grand resort hotel manages guest reservations using two relational tables in MySQL:\n1. Table ROOMS (RoomNo INT PRIMARY KEY, RoomType VARCHAR(20), PricePerNight DECIMAL(8,2), Floor INT);\n2. Table BOOKINGS (BookingId INT PRIMARY KEY, RoomNo INT, GuestName VARCHAR(40), CheckIn DATE, CheckOut DATE, FOREIGN KEY (RoomNo) REFERENCES ROOMS(RoomNo));\n\nThe resort manager requests a report showing the RoomType, total number of bookings per RoomType, and average revenue generated. The report must only include RoomTypes that have received at least 5 bookings, arranged in descending order of total bookings. The senior database developer constructs an SQL query utilizing an inner equi-join, GROUP BY ROOMS.RoomType, HAVING COUNT(BOOKINGS.BookingId) >= 5, and ORDER BY COUNT(BOOKINGS.BookingId) DESC.\n\nQuestion: Why must HAVING COUNT(B.BookingId) >= 5 be placed in the HAVING clause rather than WHERE?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "Because HAVING executes before WHERE",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Transport Layer (Layer 4)",
+        "text": "Because COUNT is a string function",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Physical Layer (Layer 1)",
+        "text": "Because MySQL forbids WHERE in joins",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Network Layer (Layer 3)",
+        "text": "Because WHERE cannot evaluate aggregate functions (like COUNT); group-level conditions require HAVING",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (HAVING Threshold Evaluation):\nBecause WHERE cannot evaluate aggregate functions (like COUNT); group-level conditions require HAVING\n\nDetailed Context:\nThe WHERE clause filters individual rows before grouping; aggregate conditions must be evaluated in HAVING.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q24",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
+    "conceptId": "computer-science-section-a-common-computing-concepts-having-threshold-evaluation",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: HAVING Threshold Evaluation",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (HAVING Threshold Evaluation):\nBecause WHERE cannot evaluate aggregate functions (like COUNT); group-level conditions require HAVING\n\nDetailed Context:\nThe WHERE clause filters individual rows before grouping; aggregate conditions must be evaluated in HAVING.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section A: Common Computing Concepts: HAVING Threshold Evaluation",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 25,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "BETWEEN Operator Inclusivity",
+    "questionText": "Is the range in WHERE Marks BETWEEN 80 AND 90 inclusive of the boundary values 80 and 90?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "LIFO (Last In First Out)",
+        "text": "Yes, BETWEEN is fully inclusive of both endpoints (Marks >= 80 AND Marks <= 90)",
         "isCorrect": true
       },
       {
         "id": "B",
-        "text": "FIFO (First In First Out)",
+        "text": "It depends on the operating system",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Priority Queue order",
+        "text": "No, it excludes both 80 and 90",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Random Access File order",
+        "text": "No, it includes 80 but excludes 90",
         "isCorrect": false
       }
     ],
     "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (A) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (BETWEEN Operator Inclusivity):\nYes, BETWEEN is fully inclusive of both endpoints (Marks >= 80 AND Marks <= 90)\n\nDetailed Context:\nIn SQL, the BETWEEN operator is inclusive: val BETWEEN low AND high is equivalent to val >= low AND val <= high.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q25",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
+    "conceptId": "computer-science-section-a-common-computing-concepts-between-operator-inclusivity",
     "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (A) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (A) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: BETWEEN Operator Inclusivity",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (BETWEEN Operator Inclusivity):\nYes, BETWEEN is fully inclusive of both endpoints (Marks >= 80 AND Marks <= 90)\n\nDetailed Context:\nIn SQL, the BETWEEN operator is inclusive: val BETWEEN low AND high is equivalent to val >= low AND val <= high.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
+    "keyConcept": "Section A: Common Computing Concepts: BETWEEN Operator Inclusivity",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 26,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Pickle Protocol Versions",
+    "questionText": "What is the default pickle protocol in modern Python 3.8+?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A B C + *",
+        "text": "Protocol 10",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "* + A B C",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "A B + C *",
+        "text": "Protocol version 4 (or Protocol 5)",
         "isCorrect": true
       },
       {
+        "id": "C",
+        "text": "Protocol 0 (ASCII only)",
+        "isCorrect": false
+      },
+      {
         "id": "D",
-        "text": "A + B C *",
+        "text": "Protocol -50",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Pickle Protocol Versions):\nProtocol version 4 (or Protocol 5)\n\nDetailed Context:\nPython 3.8+ uses pickle protocol 4 by default (protocol 5 adds out-of-band data buffers), optimizing serialization speed and size.\nHence Option C is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q26",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
+    "conceptId": "computer-science-section-a-common-computing-concepts-pickle-protocol-versions",
+    "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section A: Common Computing Concepts: Pickle Protocol Versions",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Pickle Protocol Versions):\nProtocol version 4 (or Protocol 5)\n\nDetailed Context:\nPython 3.8+ uses pickle protocol 4 by default (protocol 5 adds out-of-band data buffers), optimizing serialization speed and size.\nHence Option C is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
+    "keyConcept": "Section A: Common Computing Concepts: Pickle Protocol Versions",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 27,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Multiple Cursors on Single Connection",
+    "questionText": "Can a single active MySQL database connection have multiple distinct cursor objects open simultaneously?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
+        "text": "No, only one cursor is permitted per database server worldwide",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
-        "isCorrect": true
+        "text": "Only on Sundays",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
-        "isCorrect": false
+        "text": "Yes, multiple cursors can be instantiated on a single connection to manage separate query streams",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
+        "text": "Only if the database is in read-only mode",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Multiple Cursors on Single Connection):\nYes, multiple cursors can be instantiated on a single connection to manage separate query streams\n\nDetailed Context:\nA single database connection can spawn multiple cursors, though managing concurrent unbuffered queries requires care.\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q27",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
+    "conceptId": "computer-science-section-a-common-computing-concepts-multiple-cursors-on-single-connection",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section A: Common Computing Concepts: Multiple Cursors on Single Connection",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Multiple Cursors on Single Connection):\nYes, multiple cursors can be instantiated on a single connection to manage separate query streams\n\nDetailed Context:\nA single database connection can spawn multiple cursors, though managing concurrent unbuffered queries requires care.\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
+    "keyConcept": "Section A: Common Computing Concepts: Multiple Cursors on Single Connection",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 28,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Deleting Records from Binary File",
+    "questionText": "What is the standard procedure to delete a record with id=102 from a binary file?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Publishing obscenity in electronic form",
+        "text": "Delete the hard disk partition to permanently remove the data",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Cheating by personation through using any computer resource",
-        "isCorrect": true
+        "text": "Overwrite the specific record location with whitespace characters to hide it",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Identity theft without financial damage",
+        "text": "Execute the built-in method file.delete(102) to remove the entry",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Hacking critical infrastructure systems",
-        "isCorrect": false
+        "text": "Read all records into a list, filter out the record where id==102, and re-write the filtered list back to the file using 'wb' mode",
+        "isCorrect": true
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Deleting Records from Binary File):\nRead all records into a list, filter out the record where id==102, and re-write the filtered list back to the file using 'wb' mode\n\nDetailed Context:\nRecord deletion in binary files involves loading records, removing matching elements in memory, and overwriting the file with remaining records.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q28",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
+    "conceptId": "computer-science-section-a-common-computing-concepts-deleting-records-from-binary-file",
     "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section A: Common Computing Concepts: Deleting Records from Binary File",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Deleting Records from Binary File):\nRead all records into a list, filter out the record where id==102, and re-write the filtered list back to the file using 'wb' mode\n\nDetailed Context:\nRecord deletion in binary files involves loading records, removing matching elements in memory, and overwriting the file with remaining records.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
+    "keyConcept": "Section A: Common Computing Concepts: Deleting Records from Binary File",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 29,
-    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
-    "topic": "Pandas DataFrame Indexing with loc vs iloc",
-    "questionText": "In Python Pandas library, the fundamental operational difference between `df.loc[]` and `df.iloc[]` is that:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Non-Equi Join Definition",
+    "questionText": "What is a 'Non-Equi Join' in SQL?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "`df.loc[]` can only modify integer columns, while `df.iloc[]` only modifies string columns",
-        "isCorrect": false
+        "text": "A join where the join condition utilizes comparison operators other than equality",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "`df.loc[]` deletes rows permanently, while `df.iloc[]` creates a shallow copy",
+        "text": "A join between tables stored in different databases",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "`df.loc[]` operates on NumPy arrays exclusively, while `df.iloc[]` operates on dictionaries",
+        "text": "A join using foreign languages",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "`df.loc[]` is label-based indexing, whereas `df.iloc[]` is integer position-based indexing",
-        "isCorrect": true
+        "text": "A join that does not return any rows",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Non-Equi Join Definition):\nA join where the join condition utilizes comparison operators other than equality\n\nDetailed Context:\nNon-equi joins match tuples using inequality predicates (e.g., salary BETWEEN grade.low AND grade.high).\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q29",
-    "conceptId": "computer-science-data-handling-using-pandas-i-series-and-dataframe-architecture-pandas-dataframe-indexing-with-loc-vs-iloc",
+    "conceptId": "computer-science-section-a-common-computing-concepts-non-equi-join-definition",
     "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section A: Common Computing Concepts: Non-Equi Join Definition",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Non-Equi Join Definition):\nA join where the join condition utilizes comparison operators other than equality\n\nDetailed Context:\nNon-equi joins match tuples using inequality predicates (e.g., salary BETWEEN grade.low AND grade.high).\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
+    "keyConcept": "Section A: Common Computing Concepts: Non-Equi Join Definition",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - I (Series and DataFrame Architecture)"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 30,
-    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
-    "topic": "SQL vs Pandas Query Equivalence",
-    "questionText": "In Pandas, the operation equivalent to the SQL query `SELECT * FROM students WHERE marks >= 90;` is:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Filtering CSV Records",
+    "questionText": "To print all students with marks > 90 from a CSV file, what line conversion is needed inside the reader loop?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "students.select('marks >= 90')",
+        "text": "if row[2] > 90: print(row)",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "students.filter(where='marks >= 90')",
-        "isCorrect": false
+        "text": "if float(row[2]) > 90.0: print(row)",
+        "isCorrect": true
       },
       {
         "id": "C",
-        "text": "students.where(marks >= 90)",
+        "text": "if row > 90: print(row)",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "students[students['marks'] >= 90]",
-        "isCorrect": true
+        "text": "if row['marks'] > 90: print(row)",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Filtering CSV Records):\nif float(row[2]) > 90.0: print(row)\n\nDetailed Context:\nBecause CSV fields are strings, row[2] must be cast to float or int before performing numerical comparisons.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q30",
-    "conceptId": "computer-science-data-handling-using-pandas-ii-dataframes-operations-and-analysis-sql-vs-pandas-query-equivalence",
+    "conceptId": "computer-science-section-a-common-computing-concepts-filtering-csv-records",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section A: Common Computing Concepts: Filtering CSV Records",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Filtering CSV Records):\nif float(row[2]) > 90.0: print(row)\n\nDetailed Context:\nBecause CSV fields are strings, row[2] must be cast to float or int before performing numerical comparisons.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
+    "keyConcept": "Section A: Common Computing Concepts: Filtering CSV Records",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - II (DataFrames, Operations and Analysis)"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 31,
-    "chapter": "Database Concepts",
-    "topic": "Relational Model: Candidate Key vs Primary Key",
-    "questionText": "In the Relational Database Model, a 'Candidate Key' is defined as:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Re-executing Query on Same Cursor",
+    "questionText": "Which of the following statements is NOT correct regarding Re-executing Query on Same Cursor (Section A: Common Computing Concepts)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Any column that allows NULL values throughout the table",
+        "text": "The server restarts",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A foreign key pointing to an external non-relational database",
+        "text": "The database deletes both tables",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A composite attribute containing only floating-point values",
-        "isCorrect": false
+        "text": "It raises an 'InternalError: Unread result found' unless buffered=True was used",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "A minimal superkey that has the potential to uniquely identify each tuple in a relation",
-        "isCorrect": true
+        "text": "The previous results are automatically printed to the screen",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nIn Section A: Common Computing Concepts (Re-executing Query on Same Cursor):\nThe statement 'It raises an 'InternalError: Unread result found' unless buffered=True was used' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (B) is the correct choice.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q31",
-    "conceptId": "computer-science-database-concepts-relational-model-candidate-key-vs-primary-key",
+    "conceptId": "computer-science-section-a-common-computing-concepts-re-executing-query-on-same-cursor",
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section A: Common Computing Concepts: Re-executing Query on Same Cursor",
+      "detailed": "Detailed Solution:\nIn Section A: Common Computing Concepts (Re-executing Query on Same Cursor):\nThe statement 'It raises an 'InternalError: Unread result found' unless buffered=True was used' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (B) is the correct choice.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
+    "keyConcept": "Section A: Common Computing Concepts: Re-executing Query on Same Cursor",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Database Concepts"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 32,
-    "chapter": "Structured Query Language (SQL)",
-    "topic": "SQL Aggregate Functions and GROUP BY",
-    "questionText": "In SQL, to filter and restrict groups of records created by the `GROUP BY` clause, one must use the:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Sum of Digits Recursive Function",
+    "questionText": "In def sum_digits(n): return n if n < 10 else (n % 10) + sum_digits(n // 10), what does sum_digits(125) return?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "HAVING clause",
-        "isCorrect": true
+        "text": "125",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "WHERE clause",
+        "text": "15",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "ORDER BY clause",
+        "text": "10",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "DISTINCT clause",
-        "isCorrect": false
+        "text": "8 (5 + 2 + 1 = 8)",
+        "isCorrect": true
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Sum of Digits Recursive Function):\n8 (5 + 2 + 1 = 8)\n\nDetailed Context:\n125 % 10 = 5 + sum_digits(12); 12 % 10 = 2 + sum_digits(1); base case 1 returns 1. Total: 5 + 2 + 1 = 8.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q32",
-    "conceptId": "computer-science-structured-query-language-sql-sql-aggregate-functions-and-group-by",
+    "conceptId": "computer-science-section-a-common-computing-concepts-sum-of-digits-recursive-function",
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section A: Common Computing Concepts: Sum of Digits Recursive Function",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Sum of Digits Recursive Function):\n8 (5 + 2 + 1 = 8)\n\nDetailed Context:\n125 % 10 = 5 + sum_digits(12); 12 % 10 = 2 + sum_digits(1); base case 1 returns 1. Total: 5 + 2 + 1 = 8.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
+    "keyConcept": "Section A: Common Computing Concepts: Sum of Digits Recursive Function",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Structured Query Language (SQL)"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 33,
-    "chapter": "File Handling in Python",
-    "topic": "File Modes: 'w' vs 'a'",
-    "questionText": "When opening a text file in Python using `open('data.txt', 'a')`, the mode `'a'` specifies that:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Degree vs Cardinality of a Relation",
+    "questionText": "In relational database management systems (RDBMS), how are the 'Degree' and 'Cardinality' of a table (relation) defined?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "The file is overwritten and all existing content is permanently erased immediately",
-        "isCorrect": false
+        "text": "Degree is the total number of attributes (columns); Cardinality is the total number of tuples (rows)",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "The file is opened for read-only access with binary decoding",
+        "text": "Degree is the number of primary keys; Cardinality is the number of foreign keys",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "The file is locked in memory preventing other users from reading it",
+        "text": "Degree is the file size in megabytes; Cardinality is the number of keys",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "The file is opened for appending, and new data will be written at the end of the file without truncating existing content",
-        "isCorrect": true
+        "text": "Degree is the number of rows; Cardinality is the number of columns",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Degree vs Cardinality of a Relation):\nDegree is the total number of attributes (columns); Cardinality is the total number of tuples (rows)\n\nDetailed Context:\nIn relational algebra, Degree = count of attributes (columns); Cardinality = count of tuples (rows).\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q33",
-    "conceptId": "computer-science-file-handling-in-python-file-modes-w-vs-a",
+    "conceptId": "computer-science-section-a-common-computing-concepts-degree-vs-cardinality-of-a-relation",
     "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "File Handling in Python: File Modes: 'w' vs 'a'",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section A: Common Computing Concepts: Degree vs Cardinality of a Relation",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Degree vs Cardinality of a Relation):\nDegree is the total number of attributes (columns); Cardinality is the total number of tuples (rows)\n\nDetailed Context:\nIn relational algebra, Degree = count of attributes (columns); Cardinality = count of tuples (rows).\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "File Handling in Python: File Modes: 'w' vs 'a'",
+    "keyConcept": "Section A: Common Computing Concepts: Degree vs Cardinality of a Relation",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "File Handling in Python"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 34,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Altering Table to Add Foreign Key",
+    "questionText": "Read the following database integrity constraints case study and answer the questions that follow:\n\nA retail inventory database manager designs a relational table PRODUCT in MySQL to enforce data integrity:\nCREATE TABLE PRODUCT (\n    PCode INT PRIMARY KEY,\n    PName VARCHAR(40) NOT NULL UNIQUE,\n    Category VARCHAR(20) DEFAULT 'General',\n    Price DECIMAL(8,2) CHECK (Price > 0),\n    StockQty INT CHECK (StockQty >= 0)\n);\n\nDuring daily operations, several transactions are tested:\n- Insertion 1: Inserting a duplicate PCode raises an integrity violation error.\n- Insertion 2: Inserting a record without specifying Category automatically assigns 'General'.\n- Insertion 3: Inserting a negative Price (-15.00) is rejected by the CHECK constraint.\n- Insertion 4: Inserting NULL for PName is rejected by the NOT NULL constraint.\n\nQuestion: Which SQL DDL command adds a foreign key referencing table SUPPLIER(SuppId) to PRODUCT?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A single shared linear backbone coaxial bus cable",
+        "text": "INSERT INTO PRODUCT FOREIGN KEY (SuppId);",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A central network hub, switch, or router",
+        "text": "ALTER TABLE PRODUCT ADD FOREIGN KEY (SuppId) REFERENCES SUPPLIER(SuppId);",
         "isCorrect": true
       },
       {
         "id": "C",
-        "text": "Each other in a closed unidirectional circular ring",
+        "text": "UPDATE TABLE PRODUCT ADD FOREIGN KEY SuppId;",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
+        "text": "MODIFY TABLE PRODUCT FOREIGN KEY (SuppId);",
         "isCorrect": false
       }
     ],
     "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (B) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Altering Table to Add Foreign Key):\nALTER TABLE PRODUCT ADD FOREIGN KEY (SuppId) REFERENCES SUPPLIER(SuppId);\n\nDetailed Context:\nALTER TABLE ... ADD FOREIGN KEY (col) REFERENCES parent_table(parent_col) adds referential constraints to existing tables.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M48-Q34",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
+    "conceptId": "computer-science-section-a-common-computing-concepts-altering-table-to-add-foreign-key",
     "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (B) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (B) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: Altering Table to Add Foreign Key",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Altering Table to Add Foreign Key):\nALTER TABLE PRODUCT ADD FOREIGN KEY (SuppId) REFERENCES SUPPLIER(SuppId);\n\nDetailed Context:\nALTER TABLE ... ADD FOREIGN KEY (col) REFERENCES parent_table(parent_col) adds referential constraints to existing tables.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section A: Common Computing Concepts: Altering Table to Add Foreign Key",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 35,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Try-Except-Rollback Pattern",
+    "questionText": "In professional banking software, why is conn.rollback() placed inside the 'except Exception:' block?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "To immediately delete the customer's bank account record from the database tables.",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Network Layer (Layer 3)",
-        "isCorrect": true
-      },
-      {
-        "id": "C",
-        "text": "Transport Layer (Layer 4)",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Physical Layer (Layer 1)",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (B) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q35",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
-    "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (B) is the correct answer."
-    },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Computer Networks"
-    ],
-    "testNumber": 48,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 36,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "LIFO (Last In First Out)",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "FIFO (First In First Out)",
+        "text": "To transfer the remaining balance of the failed transaction to an audit retention account.",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Priority Queue order",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Random Access File order",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q36",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Structures: Stacks"
-    ],
-    "testNumber": 48,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 37,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "A B + C *",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "A B C + *",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "* + A B C",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "A + B C *",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q37",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Structures: Stacks"
-    ],
-    "testNumber": 48,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 38,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
-        "isCorrect": true
-      },
-      {
-        "id": "C",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (B) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q38",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (B) is the correct answer."
-    },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
-    ],
-    "testNumber": 48,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 39,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Publishing obscenity in electronic form",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "Cheating by personation through using any computer resource",
-        "isCorrect": true
-      },
-      {
-        "id": "C",
-        "text": "Identity theft without financial damage",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Hacking critical infrastructure systems",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (B) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q39",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
-    "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
-    "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (B) is the correct answer."
-    },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
-    ],
-    "testNumber": 48,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 40,
-    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
-    "topic": "Pandas DataFrame Indexing with loc vs iloc",
-    "questionText": "In Python Pandas library, the fundamental operational difference between `df.loc[]` and `df.iloc[]` is that:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "`df.loc[]` can only modify integer columns, while `df.iloc[]` only modifies string columns",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "`df.loc[]` deletes rows permanently, while `df.iloc[]` creates a shallow copy",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "`df.loc[]` operates on NumPy arrays exclusively, while `df.iloc[]` operates on dictionaries",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "`df.loc[]` is label-based indexing, whereas `df.iloc[]` is integer position-based indexing",
-        "isCorrect": true
-      }
-    ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (D) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q40",
-    "conceptId": "computer-science-data-handling-using-pandas-i-series-and-dataframe-architecture-pandas-dataframe-indexing-with-loc-vs-iloc",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
-    "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (D) is the correct answer."
-    },
-    "keyConcept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Handling using Pandas - I (Series and DataFrame Architecture)"
-    ],
-    "testNumber": 48,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 41,
-    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
-    "topic": "SQL vs Pandas Query Equivalence",
-    "questionText": "In Pandas, the operation equivalent to the SQL query `SELECT * FROM students WHERE marks >= 90;` is:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "students.select('marks >= 90')",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "students.filter(where='marks >= 90')",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "students[students['marks'] >= 90]",
+        "text": "To revert any partially applied updates so the database returns to its prior consistent state.",
         "isCorrect": true
       },
       {
         "id": "D",
-        "text": "students.where(marks >= 90)",
+        "text": "To copy the current state of the transaction logs to a physical printer for compliance.",
         "isCorrect": false
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (C) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q41",
-    "conceptId": "computer-science-data-handling-using-pandas-ii-dataframes-operations-and-analysis-sql-vs-pandas-query-equivalence",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Try-Except-Rollback Pattern):\nTo revert any partially applied updates so the database returns to its prior consistent state.\n\nDetailed Context:\nRolling back on exception prevents half-completed transactional states (e.g., money debited from account A but not credited to account B).\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q35",
+    "conceptId": "computer-science-section-a-common-computing-concepts-try-except-rollback-pattern",
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (C) is correct.",
-      "concept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (C) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: Try-Except-Rollback Pattern",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Try-Except-Rollback Pattern):\nTo revert any partially applied updates so the database returns to its prior consistent state.\n\nDetailed Context:\nRolling back on exception prevents half-completed transactional states (e.g., money debited from account A but not credited to account B).\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
+    "keyConcept": "Section A: Common Computing Concepts: Try-Except-Rollback Pattern",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - II (DataFrames, Operations and Analysis)"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
-    "questionNumber": 42,
-    "chapter": "Database Concepts",
-    "topic": "Relational Model: Candidate Key vs Primary Key",
-    "questionText": "In the Relational Database Model, a 'Candidate Key' is defined as:",
+    "questionNumber": 36,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Skipping Header in csv.reader",
+    "questionText": "How do programmers standardly skip the header row when iterating through a csv.reader object?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Any column that allows NULL values throughout the table",
+        "text": "reader.pop(0)",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A foreign key pointing to an external non-relational database",
+        "text": "reader.skip(1)",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A composite attribute containing only floating-point values",
+        "text": "reader.ignore_header()",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A minimal superkey that has the potential to uniquely identify each tuple in a relation",
+        "text": "next(reader)",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (D) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q42",
-    "conceptId": "computer-science-database-concepts-relational-model-candidate-key-vs-primary-key",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Skipping Header in csv.reader):\nnext(reader)\n\nDetailed Context:\nCalling the built-in next(reader) advances the reader iterator by one step, consuming and discarding the header row.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q36",
+    "conceptId": "computer-science-section-a-common-computing-concepts-skipping-header-in-csv-reader",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: Skipping Header in csv.reader",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Skipping Header in csv.reader):\nnext(reader)\n\nDetailed Context:\nCalling the built-in next(reader) advances the reader iterator by one step, consuming and discarding the header row.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
+    "keyConcept": "Section A: Common Computing Concepts: Skipping Header in csv.reader",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Database Concepts"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
-    "questionNumber": 43,
-    "chapter": "Structured Query Language (SQL)",
+    "questionNumber": 37,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Aggregation and Non-Aggregated Columns in SELECT",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): In an SQL query using GROUP BY DeptId, writing SELECT DeptId, EmpName, AVG(Salary) FROM Emp GROUP BY DeptId; is invalid under strict SQL standards.\nReason (R): Any column in the SELECT list that is not enclosed in an aggregate function must appear in the GROUP BY clause.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Under SQL-92 standards, non-aggregated attributes in SELECT must be listed in GROUP BY to ensure single group value mapping.\nHence Option B is correct.\nHence, option (A) is the correct choice.\n\nHence, Option (A) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q37",
+    "conceptId": "computer-science-section-a-common-computing-concepts-aggregation-and-non-aggregated-columns-in-select",
+    "questionType": "assertion-reasoning",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Option (A) is correct.",
+      "concept": "Section A: Common Computing Concepts: Aggregation and Non-Aggregated Columns in SELECT",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Under SQL-92 standards, non-aggregated attributes in SELECT must be listed in GROUP BY to ensure single group value mapping.\nHence Option B is correct.\nHence, option (A) is the correct choice.\n\nHence, Option (A) is the correct answer."
+    },
+    "keyConcept": "Section A: Common Computing Concepts: Aggregation and Non-Aggregated Columns in SELECT",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section A: Common Computing Concepts"
+    ],
+    "testNumber": 48,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 38,
+    "chapter": "Section A: Common Computing Concepts",
     "topic": "SQL Aggregate Functions and GROUP BY",
-    "questionText": "In SQL, to filter and restrict groups of records created by the `GROUP BY` clause, one must use the:",
+    "questionText": "Which of the following statements is NOT correct regarding SQL Aggregate Functions and GROUP BY (Section A: Common Computing Concepts)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -2198,13 +1938,13 @@
       },
       {
         "id": "B",
-        "text": "ORDER BY clause",
-        "isCorrect": false
+        "text": "HAVING clause",
+        "isCorrect": true
       },
       {
         "id": "C",
-        "text": "HAVING clause",
-        "isCorrect": true
+        "text": "ORDER BY clause",
+        "isCorrect": false
       },
       {
         "id": "D",
@@ -2212,391 +1952,651 @@
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (C) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q43",
-    "conceptId": "computer-science-structured-query-language-sql-sql-aggregate-functions-and-group-by",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (C) is the correct answer."
-    },
-    "keyConcept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Structured Query Language (SQL)"
-    ],
-    "testNumber": 48,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 44,
-    "chapter": "File Handling in Python",
-    "topic": "File Modes: 'w' vs 'a'",
-    "questionText": "When opening a text file in Python using `open('data.txt', 'a')`, the mode `'a'` specifies that:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "The file is opened for appending, and new data will be written at the end of the file without truncating existing content",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "The file is overwritten and all existing content is permanently erased immediately",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "The file is opened for read-only access with binary decoding",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "The file is locked in memory preventing other users from reading it",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q44",
-    "conceptId": "computer-science-file-handling-in-python-file-modes-w-vs-a",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "File Handling in Python: File Modes: 'w' vs 'a'",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "File Handling in Python: File Modes: 'w' vs 'a'",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "File Handling in Python"
-    ],
-    "testNumber": 48,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 45,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "A single shared linear backbone coaxial bus cable",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "A central network hub, switch, or router",
-        "isCorrect": true
-      },
-      {
-        "id": "C",
-        "text": "Each other in a closed unidirectional circular ring",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
-        "isCorrect": false
-      }
-    ],
     "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (B) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q45",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
+    "detailedSolution": "Detailed Solution:\nIn Section A: Common Computing Concepts (SQL Aggregate Functions and GROUP BY):\nThe statement 'HAVING clause' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (B) is the correct choice.\n\nHence, Option (B) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q38",
+    "conceptId": "computer-science-section-a-common-computing-concepts-sql-aggregate-functions-and-group-by",
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
       "quick": "Option (B) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (B) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: SQL Aggregate Functions and GROUP BY",
+      "detailed": "Detailed Solution:\nIn Section A: Common Computing Concepts (SQL Aggregate Functions and GROUP BY):\nThe statement 'HAVING clause' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (B) is the correct choice.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section A: Common Computing Concepts: SQL Aggregate Functions and GROUP BY",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
-    "questionNumber": 46,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "questionNumber": 39,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Arbitrary Positional Arguments",
+    "questionText": "What data structure collects excess positional arguments passed into a function defined with *args?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "A list",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Transport Layer (Layer 4)",
+        "text": "A set",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Physical Layer (Layer 1)",
+        "text": "A tuple",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "A dictionary",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Arbitrary Positional Arguments):\nA tuple\n\nDetailed Context:\nThe *args syntax bundles arbitrary variable-length positional arguments into an immutable tuple.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q39",
+    "conceptId": "computer-science-section-a-common-computing-concepts-arbitrary-positional-arguments",
+    "questionType": "conceptual",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Option (C) is correct.",
+      "concept": "Section A: Common Computing Concepts: Arbitrary Positional Arguments",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Arbitrary Positional Arguments):\nA tuple\n\nDetailed Context:\nThe *args syntax bundles arbitrary variable-length positional arguments into an immutable tuple.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer."
+    },
+    "keyConcept": "Section A: Common Computing Concepts: Arbitrary Positional Arguments",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section A: Common Computing Concepts"
+    ],
+    "testNumber": 48,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 40,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Ordering by Aggregate Calculation",
+    "questionText": "Read the following database administration case study and answer the questions that follow:\n\nAn online retail store manages transactions via an enterprise MySQL database with tables CUSTOMER and ORDERS:\n1. Table CUSTOMER (CustId INT PRIMARY KEY, CustName VARCHAR(40), City VARCHAR(25), Rating INT);\n2. Table ORDERS (OrderId INT PRIMARY KEY, OrderDate DATE, CustId INT, Amount DECIMAL(10,2), FOREIGN KEY (CustId) REFERENCES CUSTOMER(CustId));\n\nThe marketing team wants to analyze purchasing patterns. They require a query that lists each customer's name, their city, and the total value of orders placed. The output must include only customers whose cumulative purchase amount exceeds 50,000, sorted in descending order of total expenditure. The database administrator writes a query utilizing an equi-join, GROUP BY, and HAVING clauses.\n\nQuestion: Which clause orders the resulting customer report by highest spending first?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "ORDER BY SUM(O.Amount) ASC",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "SORT BY Amount DESC",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "ORDER BY C.CustName ASC",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Network Layer (Layer 3)",
+        "text": "ORDER BY SUM(O.Amount) DESC",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (D) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q46",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Ordering by Aggregate Calculation):\nORDER BY SUM(O.Amount) DESC\n\nDetailed Context:\nORDER BY SUM(O.Amount) DESC sorts the output records in descending order of total purchase value.\nHence Option B is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q40",
+    "conceptId": "computer-science-section-a-common-computing-concepts-ordering-by-aggregate-calculation",
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: Ordering by Aggregate Calculation",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Ordering by Aggregate Calculation):\nORDER BY SUM(O.Amount) DESC\n\nDetailed Context:\nORDER BY SUM(O.Amount) DESC sorts the output records in descending order of total purchase value.\nHence Option B is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section A: Common Computing Concepts: Ordering by Aggregate Calculation",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
-    "questionNumber": 47,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
+    "questionNumber": 41,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "File Open newline Argument Role",
+    "questionText": "Read the following case excerpt on school file handling and answer the questions that follow:\n\nSunita, a Class 12 Computer Science student, is developing an automated Student Record Management system for her school. She stores student attendance logs and academic marks in two distinct files: 'attendance.txt' (a plain text file) and 'marks.csv' (a comma-separated values file). In 'attendance.txt', each line contains a student's roll number, name, and status separated by spaces. Sunita writes a Python function that uses the with open('attendance.txt', 'r') statement to safely read the file line-by-line using readline() inside a loop, stripping the trailing newline character with strip(). For 'marks.csv', Sunita utilizes Python's built-in csv module. She opens the file in read mode ('r', newline='') and creates a csv.reader object to iterate through records, where each record is returned as a Python list of strings. She discovers that numeric marks must be explicitly converted to integers using int() before computing aggregate sums and class averages.\n\nQuestion: Why is newline='' specified when opening CSV files for reading/writing in Python 3?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "FIFO (First In First Out)",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "Priority Queue order",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "LIFO (Last In First Out)",
-        "isCorrect": true
-      },
-      {
-        "id": "D",
-        "text": "Random Access File order",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (C) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q47",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (C) is the correct answer."
-    },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Structures: Stacks"
-    ],
-    "testNumber": 48,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 48,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "A B + C *",
+        "text": "To bypass universal newline handling and preserve exact line terminators",
         "isCorrect": true
       },
       {
         "id": "B",
-        "text": "A B C + *",
+        "text": "To compress the CSV file size during I/O operations",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "* + A B C",
+        "text": "To ignore comma delimiters in the csv.reader object parsing loop",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A + B C *",
+        "text": "To enforce a read-only access mode for the file handle instance",
         "isCorrect": false
       }
     ],
     "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q48",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Structures: Stacks"
-    ],
-    "testNumber": 48,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 49,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q49",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (File Open newline Argument Role):\nTo bypass universal newline handling and preserve exact line terminators\n\nDetailed Context:\nSpecifying newline='' allows the csv module to handle end-of-line terminators correctly without producing extra blank lines.\nHence Option B is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (A) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q41",
+    "conceptId": "computer-science-section-a-common-computing-concepts-file-open-newline-argument-role",
     "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (A) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (A) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: File Open newline Argument Role",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (File Open newline Argument Role):\nTo bypass universal newline handling and preserve exact line terminators\n\nDetailed Context:\nSpecifying newline='' allows the csv module to handle end-of-line terminators correctly without producing extra blank lines.\nHence Option B is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
+    "keyConcept": "Section A: Common Computing Concepts: File Open newline Argument Role",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
-    "questionNumber": 50,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
+    "questionNumber": 42,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Unpickling Security Warning",
+    "questionText": "Why should pickle.load() NEVER be executed on untrusted or unverified binary files from the internet?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Publishing obscenity in electronic form",
+        "text": "It will delete the monitor display drivers",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Cheating by personation through using any computer resource",
+        "text": "Pickle byte streams can execute arbitrary malicious code on the host machine during deserialization",
         "isCorrect": true
       },
       {
         "id": "C",
-        "text": "Identity theft without financial damage",
+        "text": "Pickle files can physically melt the hard drive",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Hacking critical infrastructure systems",
+        "text": "Pickle files always cause high fever",
         "isCorrect": false
       }
     ],
     "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (B) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M48-Q50",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Unpickling Security Warning):\nPickle byte streams can execute arbitrary malicious code on the host machine during deserialization\n\nDetailed Context:\nPickle is not secure against erroneous or maliciously constructed data; deserialization can instantiate arbitrary objects and execute system commands.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (B) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q42",
+    "conceptId": "computer-science-section-a-common-computing-concepts-unpickling-security-warning",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
       "quick": "Option (B) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (B) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: Unpickling Security Warning",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Unpickling Security Warning):\nPickle byte streams can execute arbitrary malicious code on the host machine during deserialization\n\nDetailed Context:\nPickle is not secure against erroneous or maliciously constructed data; deserialization can instantiate arbitrary objects and execute system commands.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
+    "keyConcept": "Section A: Common Computing Concepts: Unpickling Security Warning",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section A: Common Computing Concepts"
     ],
     "testNumber": 48,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 43,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "MySQL Connector Installation Tool",
+    "questionText": "Which command-line package manager is used to install the official MySQL connector for Python?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "npm install mysql",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "python install database",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "pip install mysql-connector-python",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "apt install python-sql",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (MySQL Connector Installation Tool):\npip install mysql-connector-python\n\nDetailed Context:\nThe official Oracle MySQL connector package is installed into Python environments using 'pip install mysql-connector-python'.\nHence Option D is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (C) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q43",
+    "conceptId": "computer-science-section-a-common-computing-concepts-mysql-connector-installation-tool",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Option (C) is correct.",
+      "concept": "Section A: Common Computing Concepts: MySQL Connector Installation Tool",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (MySQL Connector Installation Tool):\npip install mysql-connector-python\n\nDetailed Context:\nThe official Oracle MySQL connector package is installed into Python environments using 'pip install mysql-connector-python'.\nHence Option D is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (C) is the correct answer."
+    },
+    "keyConcept": "Section A: Common Computing Concepts: MySQL Connector Installation Tool",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section A: Common Computing Concepts"
+    ],
+    "testNumber": 48,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 44,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Email Retrieval Protocol Distinction",
+    "questionText": "Read the following networking protocols case study and answer the questions that follow:\n\nAn e-commerce enterprise maintains a web application deployed across cloud servers. When a consumer accesses the store, several network protocols cooperate across the TCP/IP protocol suite:\n1. The consumer types 'www.shopfast.co.in' into their browser, prompting the Domain Name System (DNS) to resolve the human-readable domain name into an IP address (e.g., 203.0.113.45).\n2. The client establishes a secure, encrypted communication channel using HTTPS, which runs HTTP over Transport Layer Security (TLS/SSL), securing payment card transactions on port 443.\n3. Below the application layer, Transmission Control Protocol (TCP) breaks messages into packets, manages sequence numbers, and guarantees reliable, connection-oriented data delivery via a three-way handshake.\n4. Transactional confirmation emails are dispatched using Simple Mail Transfer Protocol (SMTP), while consumers retrieve order emails using POP3 or IMAP.\n\nQuestion: What is the operational difference between IMAP and POP3 for email retrieval?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "IMAP stores emails locally on the client device, whereas POP3 retains a persistent copy on the remote mail server",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "IMAP is exclusively designed for incoming mail transmission, while POP3 handles both sending and receiving messages",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "IMAP requires an encrypted TLS connection to function, whereas POP3 operates exclusively over unencrypted plain-text channels",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "IMAP supports synchronization of mail state across multiple devices on the server, while POP3 typically downloads and removes messages locally",
+        "isCorrect": true
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nIMAP keeps mail on the server and synchronizes state across multiple clients; POP3 downloads messages locally to a single device.\nHence Option C is correct.\nHence, option (C) is correct.\n\nHence, Option (D) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q44",
+    "conceptId": "computer-science-section-a-common-computing-concepts-email-retrieval-protocol-distinction",
+    "questionType": "chronological-sequence",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Option (D) is correct.",
+      "concept": "Section A: Common Computing Concepts: Email Retrieval Protocol Distinction",
+      "detailed": "Detailed Solution:\nIMAP keeps mail on the server and synchronizes state across multiple clients; POP3 downloads messages locally to a single device.\nHence Option C is correct.\nHence, option (C) is correct.\n\nHence, Option (D) is the correct answer."
+    },
+    "keyConcept": "Section A: Common Computing Concepts: Email Retrieval Protocol Distinction",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section A: Common Computing Concepts"
+    ],
+    "testNumber": 48,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 45,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "MAC Address vs IP Address Characteristics",
+    "questionText": "Which of the following statements is NOT correct regarding MAC Address vs IP Address Characteristics (Section A: Common Computing Concepts)?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Statement I is correct but Statement II is incorrect",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Both Statement I and Statement II are incorrect",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nIn Section A: Common Computing Concepts (MAC Address vs IP Address Characteristics):\nThe statement 'Both Statement I and Statement II are correct' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (B) is the correct choice.\n\nHence, Option (A) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q45",
+    "conceptId": "computer-science-section-a-common-computing-concepts-mac-address-vs-ip-address-characteristics",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (A) is correct.",
+      "concept": "Section A: Common Computing Concepts: MAC Address vs IP Address Characteristics",
+      "detailed": "Detailed Solution:\nIn Section A: Common Computing Concepts (MAC Address vs IP Address Characteristics):\nThe statement 'Both Statement I and Statement II are correct' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (B) is the correct choice.\n\nHence, Option (A) is the correct answer."
+    },
+    "keyConcept": "Section A: Common Computing Concepts: MAC Address vs IP Address Characteristics",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section A: Common Computing Concepts"
+    ],
+    "testNumber": 48,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 46,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Savepoint Concept in Transactions",
+    "questionText": "What is a 'SAVEPOINT' in relational database transactions?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "A temporary buffer zone that stores uncommitted changes in memory to optimize write performance.",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "A designated marker within a transaction allowing partial rollback to that specific point without discarding earlier operations.",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "An immutable snapshot of the entire database schema captured at the start of the session duration.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "A security token that prevents other sessions from reading or modifying data during active processing.",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Savepoint Concept in Transactions):\nA designated marker within a transaction allowing partial rollback to that specific point without discarding earlier operations.\n\nDetailed Context:\nSAVEPOINT creates an intermediate bookmark inside a transaction, permitting granular rollbacks (ROLLBACK TO savepoint_name).\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q46",
+    "conceptId": "computer-science-section-a-common-computing-concepts-savepoint-concept-in-transactions",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (B) is correct.",
+      "concept": "Section A: Common Computing Concepts: Savepoint Concept in Transactions",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Savepoint Concept in Transactions):\nA designated marker within a transaction allowing partial rollback to that specific point without discarding earlier operations.\n\nDetailed Context:\nSAVEPOINT creates an intermediate bookmark inside a transaction, permitting granular rollbacks (ROLLBACK TO savepoint_name).\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer."
+    },
+    "keyConcept": "Section A: Common Computing Concepts: Savepoint Concept in Transactions",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section A: Common Computing Concepts"
+    ],
+    "testNumber": 48,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 47,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Natural Join Prerequisite",
+    "questionText": "What prerequisite must be met for NATURAL JOIN to correctly link two tables automatically?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both tables must be stored on different hard drives",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Both tables must have zero NULL values",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "The tables must have at least one attribute with the identical column name and compatible data type",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "Both tables must have exactly the same number of rows",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Natural Join Prerequisite):\nThe tables must have at least one attribute with the identical column name and compatible data type\n\nDetailed Context:\nNATURAL JOIN automatically matches columns sharing identical attribute names across both relations.\nHence Option B is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q47",
+    "conceptId": "computer-science-section-a-common-computing-concepts-natural-join-prerequisite",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Option (C) is correct.",
+      "concept": "Section A: Common Computing Concepts: Natural Join Prerequisite",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Natural Join Prerequisite):\nThe tables must have at least one attribute with the identical column name and compatible data type\n\nDetailed Context:\nNATURAL JOIN automatically matches columns sharing identical attribute names across both relations.\nHence Option B is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer."
+    },
+    "keyConcept": "Section A: Common Computing Concepts: Natural Join Prerequisite",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section A: Common Computing Concepts"
+    ],
+    "testNumber": 48,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 48,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Foreign Key Deletion Restriction",
+    "questionText": "Read the following database design case study and answer the questions that follow:\n\nThe Apex Public School database administrator created two relational tables in MySQL to track student enrollments and fee payments:\n1. Table STUDENT (AdmNo INT PRIMARY KEY, SName VARCHAR(30), Stream VARCHAR(15), Class INT);\n2. Table FEES (RcptNo INT PRIMARY KEY, AdmNo INT, FeeAmount DECIMAL(8,2), FeeDate DATE, FOREIGN KEY (AdmNo) REFERENCES STUDENT(AdmNo));\n\nThe administrator enforces Referential Integrity through the Foreign Key on AdmNo. A query is written to display the student name, stream, and fee amount paid by joining STUDENT and FEES on STUDENT.AdmNo = FEES.AdmNo. Furthermore, the school principal requests an executive summary displaying the total fee collected per stream, filtering for streams where total collections exceed 100,000, sorted in descending order of total collection.\n\nQuestion: What happens by default if the administrator attempts to DELETE a row from STUDENT whose AdmNo is present in FEES?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "All corresponding fee records in FEES are silently deleted",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "The FEES table is permanently dropped",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "The student record is deleted and FEES remains unaffected",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "MySQL rejects the deletion and raises a foreign key constraint violation error",
+        "isCorrect": true
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nFor Foreign Key Deletion Restriction (Section A: Common Computing Concepts):\nBy default (RESTRICT / NO ACTION), a parent table row referenced by a foreign key in a child table cannot be deleted.\nHence Option D is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q48",
+    "conceptId": "computer-science-section-a-common-computing-concepts-foreign-key-deletion-restriction",
+    "questionType": "application",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Option (D) is correct.",
+      "concept": "Section A: Common Computing Concepts: Foreign Key Deletion Restriction",
+      "detailed": "Detailed Solution:\nFor Foreign Key Deletion Restriction (Section A: Common Computing Concepts):\nBy default (RESTRICT / NO ACTION), a parent table row referenced by a foreign key in a child table cannot be deleted.\nHence Option D is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer."
+    },
+    "keyConcept": "Section A: Common Computing Concepts: Foreign Key Deletion Restriction",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section A: Common Computing Concepts"
+    ],
+    "testNumber": 48,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 49,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Purpose of Finally Block in File Handling",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Placing file closing statements (file.close()) inside a 'finally' block is considered standard programming practice.\nReason (R): The 'finally' clause guarantees execution even if an unexpected exception occurs inside the 'try' block, preventing file handle leaks.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "(A) is true but (R) is false",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). 'finally' guarantees clean teardown of external resources like files and network sockets.\nHence Option D is correct.\nHence, option (B) is the correct choice.\n\nHence, Option (A) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q49",
+    "conceptId": "computer-science-section-a-common-computing-concepts-purpose-of-finally-block-in-file-handling",
+    "questionType": "assertion-reasoning",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Option (A) is correct.",
+      "concept": "Section A: Common Computing Concepts: Purpose of Finally Block in File Handling",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). 'finally' guarantees clean teardown of external resources like files and network sockets.\nHence Option D is correct.\nHence, option (B) is the correct choice.\n\nHence, Option (A) is the correct answer."
+    },
+    "keyConcept": "Section A: Common Computing Concepts: Purpose of Finally Block in File Handling",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section A: Common Computing Concepts"
+    ],
+    "testNumber": 48,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 50,
+    "chapter": "Section A: Common Computing Concepts",
+    "topic": "Data Frame Switching Flow Across Network",
+    "questionText": "Arrange the sequential operational stages of a network frame traveling from a source workstation through a Switch to a destination:\n(A) Source host encapsulates IP packet into a Data Link frame containing source and destination MAC addresses\n(B) Frame enters incoming physical switch port; switch reads source MAC and updates its internal MAC address lookup table\n(C) Switch inspects destination MAC address and looks up the corresponding outbound port in its MAC table\n(D) Switch forwards the frame exclusively out of the designated target port to reach the recipient workstation\n\nChoose the correct chronological/logical sequence from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "A, C, B, D",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "A, B, C, D",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "B, A, C, D",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "D, B, C, A",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nSwitching sequence: encapsulation -> arrival and source learning -> destination lookup -> unicast forwarding.\nHence Option D is correct.\nHence, option (A) is correct.\n\nHence, Option (B) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M48-Q50",
+    "conceptId": "computer-science-section-a-common-computing-concepts-data-frame-switching-flow-across-network",
+    "questionType": "chronological-sequence",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (B) is correct.",
+      "concept": "Section A: Common Computing Concepts: Data Frame Switching Flow Across Network",
+      "detailed": "Detailed Solution:\nSwitching sequence: encapsulation -> arrival and source learning -> destination lookup -> unicast forwarding.\nHence Option D is correct.\nHence, option (A) is correct.\n\nHence, Option (B) is the correct answer."
+    },
+    "keyConcept": "Section A: Common Computing Concepts: Data Frame Switching Flow Across Network",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section A: Common Computing Concepts"
+    ],
+    "testNumber": 48,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
   }
 ]

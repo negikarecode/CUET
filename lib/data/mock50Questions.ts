@@ -3,6 +3,7 @@ import path from "path";
 import { Question, FullTestMeta } from "@/types";
 import { resolveCanonicalTestId } from "@/lib/canonical-tests";
 import { isQuestionEligibleForActiveCBT } from "@/lib/scoring";
+import { getStructuralFingerprint } from "@/lib/duplicate-detection";
 
 export type { FullTestMeta };
 
@@ -133,7 +134,26 @@ export function mapQuestionsFromDataset(
   notesPrefix: string,
   data: RawQuestion[]
 ): Question[] {
-  return data.map((q) => {
+  // Runtime intra-test duplicate prevention safeguard (Level B structural fingerprint)
+  const seenFingerprints = new Set<string>();
+  const sanitizedData: RawQuestion[] = [];
+
+  for (const q of data) {
+    const sfp = getStructuralFingerprint({
+      questionText: q.questionText || (q as any).prompt,
+      options: q.options,
+    });
+    if (sfp && seenFingerprints.has(sfp)) {
+      // Intra-test duplicate detected: drop redundant instance to protect CBT integrity
+      continue;
+    }
+    if (sfp) {
+      seenFingerprints.add(sfp);
+    }
+    sanitizedData.push(q);
+  }
+
+  return sanitizedData.map((q) => {
     let difficultyStr: "easy" | "medium" | "hard" = "medium";
     let difficultyLvl: 1 | 2 | 3 = 2;
 

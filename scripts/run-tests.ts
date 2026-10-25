@@ -10,6 +10,8 @@ import { SUPPORTED_SUBJECTS_REGISTRY, SUPPORTED_SUBJECT_KEYS } from "../lib/conf
 import { parsePassageFromPrompt } from "../components/cbt/CBTCaseStudyPanel";
 import { buildPostMockDeterministicReport } from "../lib/post-mock-engine";
 import { resolveQuestionCorrectOptionId } from "../lib/scoring";
+import { compareQuestions, getStructuralFingerprint } from "../lib/duplicate-detection";
+import { getQuestionsForTest } from "../lib/data/mock50Questions";
 
 let totalTests = 0;
 let passedTests = 0;
@@ -748,6 +750,44 @@ What is the immediate impact on commercial banks when RBI increases the repo rat
     mixedReport.overall.skippedCount === 1 &&
     mixedReport.overall.totalMarks === 4,
     "Flash Prevention: First scorecard computation produces authoritative score (+4) with zero temporary penalties"
+  );
+
+  console.log("\nSUITE W: Global Duplicate Question Elimination & Intra-Mock Uniqueness");
+  // Regression Check: CS Mock 35 Q9 vs Q20
+  const cs35 = getQuestionsForTest("computer-science-mock-35");
+  assert(
+    cs35.questions.length === 50,
+    "Candidate Key Regression: Computer Science Mock 35 contains exactly 50 questions"
+  );
+  const q9 = cs35.questions[8];
+  const q20 = cs35.questions[19];
+  const cs35Comp = compareQuestions(
+    { questionText: q9.prompt, options: q9.options },
+    { questionText: q20.prompt, options: q20.options }
+  );
+  assert(
+    !cs35Comp.isDuplicate,
+    "Candidate Key Regression: Q9 and Q20 in Computer Science Mock 35 are distinct (0 duplicate Candidate Key)"
+  );
+
+  // Assert zero intra-mock duplicates across subject mock samples
+  let sampleDups = 0;
+  for (const s of ["physics", "chemistry", "maths", "bio", "computer_science", "accountancy", "history", "pol science"]) {
+    for (const m of [1, 20, 35, 45, 50]) {
+      const p = path.join(process.cwd(), "mock", s, `${m}.json`);
+      if (!fs.existsSync(p)) continue;
+      const qs = JSON.parse(fs.readFileSync(p, "utf8"));
+      const seenFp = new Set<string>();
+      for (const q of qs) {
+        const fp = getStructuralFingerprint(q);
+        if (seenFp.has(fp)) sampleDups++;
+        seenFp.add(fp);
+      }
+    }
+  }
+  assert(
+    sampleDups === 0,
+    "Mock Generation Invariant: Zero intra-mock duplicates detected across subject mock sample audit"
   );
 
   console.log();

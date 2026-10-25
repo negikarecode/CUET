@@ -573,2030 +573,2030 @@
   },
   {
     "questionNumber": 12,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Inplace Renaming Mechanics",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): df.rename(columns={'old_name': 'new_name'}, inplace=True) modifies the column header in the existing DataFrame without reassignment.\nReason (R): The parameter inplace=True instructs Pandas methods to mutate the underlying object directly rather than returning a modified copy.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A single shared linear backbone coaxial bus cable",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A central network hub, switch, or router",
-        "isCorrect": true
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Each other in a closed unidirectional circular ring",
-        "isCorrect": false
+        "text": "(A) is true but (R) is false",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
+        "text": "(A) is false but (R) is true",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). inplace=True modifies the caller object in place.\nHence Option D is correct.\nHence, option (C) is the correct choice.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q12",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-inplace-renaming-mechanics",
+    "questionType": "assertion-reasoning",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Inplace Renaming Mechanics",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). inplace=True modifies the caller object in place.\nHence Option D is correct.\nHence, option (C) is the correct choice.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section B2: Informatics Practices Core: Inplace Renaming Mechanics",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 13,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Index Error on iloc vs None on get",
+    "questionText": "What occurs when accessing an out-of-range position with s.iloc[100] versus s.get(100)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "s.iloc[100] returns None by default; s.get(100) raises an IndexError due to invalid key.",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Network Layer (Layer 3)",
-        "isCorrect": true
+        "text": "Both s.iloc[100] and s.get(100) raise an IndexError when accessing the out-of-range position.",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Transport Layer (Layer 4)",
+        "text": "Both s.iloc[100] and s.get(100) return None by default when accessing the out-of-range position.",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Physical Layer (Layer 1)",
-        "isCorrect": false
+        "text": "s.iloc[100] raises an IndexError; s.get(100) returns None by default, avoiding an exception.",
+        "isCorrect": true
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Index Error on iloc vs None on get):\ns.iloc[100] raises an IndexError; s.get(100) returns None by default, avoiding an exception.\n\nDetailed Context:\n.iloc raises IndexError on out-of-bounds access; the get() method safely returns None or a specified default.\nHence Option A is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q13",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-index-error-on-iloc-vs-none-on-get",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Index Error on iloc vs None on get",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Index Error on iloc vs None on get):\ns.iloc[100] raises an IndexError; s.get(100) returns None by default, avoiding an exception.\n\nDetailed Context:\n.iloc raises IndexError on out-of-bounds access; the get() method safely returns None or a specified default.\nHence Option A is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section B2: Informatics Practices Core: Index Error on iloc vs None on get",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 14,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Reverse Engineering Legal Status",
+    "questionText": "When is 'Reverse Engineering' of software legally permitted under intellectual property frameworks?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "FIFO (First In First Out)",
-        "isCorrect": false
+        "text": "For achieving software interoperability, security vulnerability auditing, and competitive analysis without copying actual proprietary source code",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "Priority Queue order",
+        "text": "Only when stealing trade secrets to sell to competitors",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Random Access File order",
+        "text": "It is always strictly illegal under all circumstances",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "LIFO (Last In First Out)",
-        "isCorrect": true
+        "text": "Only by teenagers playing video games",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Reverse Engineering Legal Status):\nFor achieving software interoperability, security vulnerability auditing, and competitive analysis without copying actual proprietary source code\n\nDetailed Context:\nReverse engineering for interoperability and security testing is protected under fair dealing exceptions provided code is not plagiarized.\nHence Option B is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q14",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-reverse-engineering-legal-status",
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Reverse Engineering Legal Status",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Reverse Engineering Legal Status):\nFor achieving software interoperability, security vulnerability auditing, and competitive analysis without copying actual proprietary source code\n\nDetailed Context:\nReverse engineering for interoperability and security testing is protected under fair dealing exceptions provided code is not plagiarized.\nHence Option B is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
+    "keyConcept": "Section B2: Informatics Practices Core: Reverse Engineering Legal Status",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 15,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Histogram Bins and rwidth Parameters",
+    "questionText": "Which of the following statements is NOT correct regarding Histogram Bins and rwidth Parameters (Section B2: Informatics Practices Core)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A B C + *",
+        "text": "Statement I is correct but Statement II is incorrect",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "* + A B C",
+        "text": "Statement I is incorrect but Statement II is correct",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A B + C *",
+        "text": "Both Statement I and Statement II are correct",
         "isCorrect": true
       },
       {
         "id": "D",
-        "text": "A + B C *",
+        "text": "Both Statement I and Statement II are incorrect",
         "isCorrect": false
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nIn Section B2: Informatics Practices Core (Histogram Bins and rwidth Parameters):\nThe statement 'Both Statement I and Statement II are correct' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q15",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-histogram-bins-and-rwidth-parameters",
+    "questionType": "conceptual",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (C) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: Histogram Bins and rwidth Parameters",
+      "detailed": "Detailed Solution:\nIn Section B2: Informatics Practices Core (Histogram Bins and rwidth Parameters):\nThe statement 'Both Statement I and Statement II are correct' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
+    "keyConcept": "Section B2: Informatics Practices Core: Histogram Bins and rwidth Parameters",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 16,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Cyber Crimes and Modus Operandi",
+    "questionText": "Match the cyber crime in List I with its operational technique in List II:\n\nList I:\n(A) Phishing\n(B) Man-in-the-Middle (MitM)\n(C) Cyber Bullying\n(D) Denial of Service (DoS)\n\nList II:\n(I) Deceptive emails directing victims to cloned spoofed banking portals to steal passwords\n(II) Secretly intercepting and altering communication between two parties on an insecure public Wi-Fi network\n(III) Posting cruel, derogatory, or defamatory messages on social media targeting adolescents\n(IV) Flooding web servers with bogus requests to exhaust server bandwidth and crash service\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
-        "isCorrect": true
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
+        "text": "A-I, B-III, C-IV, D-II",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
+        "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
-        "isCorrect": false
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nPhishing uses cloned sites; MitM intercepts unencrypted traffic; Cyber Bullying is social harassment; DoS exhausts server bandwidth.\nHence Option D is correct.\nHence, option (D) is the correct match.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q16",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "conceptId": "computer-science-section-b2-informatics-practices-core-cyber-crimes-and-modus-operandi",
+    "questionType": "match-the-following",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Cyber Crimes and Modus Operandi",
+      "detailed": "Detailed Solution:\nPhishing uses cloned sites; MitM intercepts unencrypted traffic; Cyber Bullying is social harassment; DoS exhausts server bandwidth.\nHence Option D is correct.\nHence, option (D) is the correct match.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
+    "keyConcept": "Section B2: Informatics Practices Core: Cyber Crimes and Modus Operandi",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 17,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Software Patent Controversy",
+    "questionText": "Why do many jurisdictions (including India under Section 3(k) of Patents Act) restrict patenting pure software algorithms?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Publishing obscenity in electronic form",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "Cheating by personation through using any computer resource",
+        "text": "To prevent the monopolization of basic mathematical methods and abstract logic that form the foundation of digital processing",
         "isCorrect": true
       },
       {
+        "id": "B",
+        "text": "To ensure that software remains accessible to end-users for free modification due to open-source licensing requirements",
+        "isCorrect": false
+      },
+      {
         "id": "C",
-        "text": "Identity theft without financial damage",
+        "text": "Because statutory law mandates that only inventions involving tangible physical machinery are eligible for patent protection",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Hacking critical infrastructure systems",
+        "text": "To reduce the administrative burden on patent offices by excluding applications that require intensive code examination",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Software Patent Controversy):\nTo prevent the monopolization of basic mathematical methods and abstract logic that form the foundation of digital processing\n\nDetailed Context:\nSection 3(k) excludes computer programs per se to safeguard basic algorithmic and mathematical building blocks from monopolization.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q17",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-software-patent-controversy",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Software Patent Controversy",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Software Patent Controversy):\nTo prevent the monopolization of basic mathematical methods and abstract logic that form the foundation of digital processing\n\nDetailed Context:\nSection 3(k) excludes computer programs per se to safeguard basic algorithmic and mathematical building blocks from monopolization.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
+    "keyConcept": "Section B2: Informatics Practices Core: Software Patent Controversy",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 18,
-    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
-    "topic": "Pandas DataFrame Indexing with loc vs iloc",
-    "questionText": "In Python Pandas library, the fundamental operational difference between `df.loc[]` and `df.iloc[]` is that:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Passive Digital Footprint Utility",
+    "questionText": "Read the following case study on cyber law and security and answer the questions that follow:\n\nAn employee at an engineering firm received an urgent email purportedly from the company's Human Resources department, directing employees to verify their corporate credentials on a linked portal 'www.hrms-portal-verify.com'. The employee entered their username and domain password. The website was a fraudulent clone engineered by cybercriminals. Using the exfiltrated credentials, the attackers breached the internal corporate database, extracting proprietary patent drafts. The corporate forensic team traced the breach by examining the web server's IP access logs (passive digital footprints). The corporate legal team filed a formal complaint under the Indian Information Technology Act, 2000, citing Section 66 (Hacking and Computer Related Offences) and Section 66C (Identity Theft and Impersonation).\n\nQuestion: How did the forensic investigation team discover evidence of the unauthorized entry?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "`df.loc[]` is label-based indexing, whereas `df.iloc[]` is integer position-based indexing",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "`df.loc[]` can only modify integer columns, while `df.iloc[]` only modifies string columns",
+        "text": "By calling the employee on the telephone",
         "isCorrect": false
       },
       {
+        "id": "B",
+        "text": "By analyzing web server IP access logs and connection timestamps",
+        "isCorrect": true
+      },
+      {
         "id": "C",
-        "text": "`df.loc[]` deletes rows permanently, while `df.iloc[]` creates a shallow copy",
+        "text": "By reading printed newspapers",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "`df.loc[]` operates on NumPy arrays exclusively, while `df.iloc[]` operates on dictionaries",
+        "text": "By inspecting social media photos",
         "isCorrect": false
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Passive Digital Footprint Utility):\nBy analyzing web server IP access logs and connection timestamps\n\nDetailed Context:\nPassive digital footprints like server connection logs and IP records track network access history.\nHence Option B is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q18",
-    "conceptId": "computer-science-data-handling-using-pandas-i-series-and-dataframe-architecture-pandas-dataframe-indexing-with-loc-vs-iloc",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-passive-digital-footprint-utility",
     "questionType": "conceptual",
     "difficulty": 3,
     "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Passive Digital Footprint Utility",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Passive Digital Footprint Utility):\nBy analyzing web server IP access logs and connection timestamps\n\nDetailed Context:\nPassive digital footprints like server connection logs and IP records track network access history.\nHence Option B is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
+    "keyConcept": "Section B2: Informatics Practices Core: Passive Digital Footprint Utility",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - I (Series and DataFrame Architecture)"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 19,
-    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
-    "topic": "SQL vs Pandas Query Equivalence",
-    "questionText": "In Pandas, the operation equivalent to the SQL query `SELECT * FROM students WHERE marks >= 90;` is:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Histogram Bins and rwidth Parameters",
+    "questionText": "Given below are two statements:\nStatement I: In plt.hist(data, bins=10), the bins argument partitions the data range into 10 equal-width class intervals.\nStatement II: The rwidth parameter specifies the relative width of the histogram bars as a fraction of the bin width (e.g. 0.8 leaves gaps).\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "students.select('marks >= 90')",
+        "text": "Statement I is correct but Statement II is incorrect",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "students[students['marks'] >= 90]",
-        "isCorrect": true
+        "text": "Statement I is incorrect but Statement II is correct",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "students.filter(where='marks >= 90')",
-        "isCorrect": false
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "students.where(marks >= 90)",
+        "text": "Both Statement I and Statement II are incorrect",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Histogram Bins and rwidth Parameters):\nBoth Statement I and Statement II are correct\n\nDetailed Context:\nBoth Statement I and Statement II are correct. bins defines partition count, and rwidth controls bar width relative to bin space.\nHence Option A is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q19",
-    "conceptId": "computer-science-data-handling-using-pandas-ii-dataframes-operations-and-analysis-sql-vs-pandas-query-equivalence",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-histogram-bins-and-rwidth-parameters",
     "questionType": "conceptual",
     "difficulty": 1,
     "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Histogram Bins and rwidth Parameters",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Histogram Bins and rwidth Parameters):\nBoth Statement I and Statement II are correct\n\nDetailed Context:\nBoth Statement I and Statement II are correct. bins defines partition count, and rwidth controls bar width relative to bin space.\nHence Option A is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
+    "keyConcept": "Section B2: Informatics Practices Core: Histogram Bins and rwidth Parameters",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - II (DataFrames, Operations and Analysis)"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 20,
-    "chapter": "Database Concepts",
-    "topic": "Relational Model: Candidate Key vs Primary Key",
-    "questionText": "In the Relational Database Model, a 'Candidate Key' is defined as:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "s.loc vs s.iloc Access Rules",
+    "questionText": "Given below are two statements:\nStatement I: s.loc accesses Series elements strictly using index labels (e.g., s.loc['Math']).\nStatement II: s.iloc accesses Series elements strictly using integer positional offsets from 0 to n-1 (e.g., s.iloc[0]).\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Any column that allows NULL values throughout the table",
+        "text": "Both Statement I and Statement II are correct",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A foreign key pointing to an external non-relational database",
+        "text": "Statement I is correct but Statement II is incorrect",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A composite attribute containing only floating-point values",
+        "text": "Statement I is incorrect but Statement II is correct",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A minimal superkey that has the potential to uniquely identify each tuple in a relation",
+        "text": "Both Statement I and Statement II are incorrect",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. .loc is purely label-based; .iloc is purely integer position-based.\nHence Option A is correct.\nHence, option (B) is correct.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q20",
-    "conceptId": "computer-science-database-concepts-relational-model-candidate-key-vs-primary-key",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-s-loc-vs-s-iloc-access-rules",
+    "questionType": "statement-evaluation",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: s.loc vs s.iloc Access Rules",
+      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. .loc is purely label-based; .iloc is purely integer position-based.\nHence Option A is correct.\nHence, option (B) is correct.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
+    "keyConcept": "Section B2: Informatics Practices Core: s.loc vs s.iloc Access Rules",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Database Concepts"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 21,
-    "chapter": "Structured Query Language (SQL)",
-    "topic": "SQL Aggregate Functions and GROUP BY",
-    "questionText": "In SQL, to filter and restrict groups of records created by the `GROUP BY` clause, one must use the:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Row-wise Aggregations and describe() Output",
+    "questionText": "Given below are two statements:\nStatement I: df.mean(axis=1) computes the arithmetic average across columns for each individual row.\nStatement II: df.describe() computes summary statistics including count, mean, std, min, 25%, 50%, 75%, and max for numerical columns.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "WHERE clause",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "HAVING clause",
+        "text": "Statement I is incorrect but Statement II is correct",
         "isCorrect": true
       },
       {
+        "id": "B",
+        "text": "Both Statement I and Statement II are correct",
+        "isCorrect": false
+      },
+      {
         "id": "C",
-        "text": "ORDER BY clause",
+        "text": "Both Statement I and Statement II are incorrect",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "DISTINCT clause",
+        "text": "Statement I is correct but Statement II is incorrect",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. axis=1 executes row-wise reductions, and describe() outputs the standard 8-statistic summary.\nHence Option A is correct.\nHence, option (D) is correct.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q21",
-    "conceptId": "computer-science-structured-query-language-sql-sql-aggregate-functions-and-group-by",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-row-wise-aggregations-and-describe-output",
+    "questionType": "statement-evaluation",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Row-wise Aggregations and describe() Output",
+      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. axis=1 executes row-wise reductions, and describe() outputs the standard 8-statistic summary.\nHence Option A is correct.\nHence, option (D) is correct.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
+    "keyConcept": "Section B2: Informatics Practices Core: Row-wise Aggregations and describe() Output",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Structured Query Language (SQL)"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 22,
-    "chapter": "File Handling in Python",
-    "topic": "File Modes: 'w' vs 'a'",
-    "questionText": "When opening a text file in Python using `open('data.txt', 'a')`, the mode `'a'` specifies that:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Series Slicing Expressions and Selected Subsets",
+    "questionText": "Given s = pd.Series([10, 20, 30, 40, 50], index=['p', 'q', 'r', 's', 't']), match the slicing expression in List I with its output in List II:\n\nList I:\n(A) s['p':'r']\n(B) s[0:2]\n(C) s[-2:]\n(D) s[::2]\n\nList II:\n(I) Values [10, 20, 30] at labels ['p', 'q', 'r'] (inclusive endpoint)\n(II) Values [10, 20] at integer positions 0 and 1 (exclusive endpoint)\n(III) Values [40, 50] representing the last 2 elements\n(IV) Values [10, 30, 50] sampled with step 2\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "The file is overwritten and all existing content is permanently erased immediately",
+        "text": "A-I, B-III, C-IV, D-II",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "The file is opened for appending, and new data will be written at the end of the file without truncating existing content",
+        "text": "A-I, B-II, C-III, D-IV",
         "isCorrect": true
       },
       {
         "id": "C",
-        "text": "The file is opened for read-only access with binary decoding",
+        "text": "A-II, B-I, C-III, D-IV",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "The file is locked in memory preventing other users from reading it",
+        "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false
       }
     ],
     "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (B) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\n'p':'r' includes 'r'; 0:2 selects 0,1; -2: selects last two; ::2 steps every other element.\nHence Option C is correct.\nHence, option (A) is the correct match.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q22",
-    "conceptId": "computer-science-file-handling-in-python-file-modes-w-vs-a",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-series-slicing-expressions-and-selected-subsets",
+    "questionType": "match-the-following",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (B) is correct.",
-      "concept": "File Handling in Python: File Modes: 'w' vs 'a'",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (B) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: Series Slicing Expressions and Selected Subsets",
+      "detailed": "Detailed Solution:\n'p':'r' includes 'r'; 0:2 selects 0,1; -2: selects last two; ::2 steps every other element.\nHence Option C is correct.\nHence, option (A) is the correct match.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "File Handling in Python: File Modes: 'w' vs 'a'",
+    "keyConcept": "Section B2: Informatics Practices Core: Series Slicing Expressions and Selected Subsets",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "File Handling in Python"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 23,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Universal NumPy Functions on Series",
+    "questionText": "What happens when a NumPy universal function like np.sqrt(s) or np.log(s) is applied to a Pandas Series?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A central network hub, switch, or router",
-        "isCorrect": true
+        "text": "It turns the Series into a 2D matrix",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A single shared linear backbone coaxial bus cable",
+        "text": "It crashes with a TypeMismatchError",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Each other in a closed unidirectional circular ring",
-        "isCorrect": false
+        "text": "It operates element-wise and returns a new Pandas Series preserving the original index labels",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
+        "text": "It strips the index and returns a plain list",
         "isCorrect": false
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Universal NumPy Functions on Series):\nIt operates element-wise and returns a new Pandas Series preserving the original index labels\n\nDetailed Context:\nNumPy ufuncs preserve Pandas Series metadata, returning an indexed Series holding mathematical outputs.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q23",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-universal-numpy-functions-on-series",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Universal NumPy Functions on Series",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Universal NumPy Functions on Series):\nIt operates element-wise and returns a new Pandas Series preserving the original index labels\n\nDetailed Context:\nNumPy ufuncs preserve Pandas Series metadata, returning an indexed Series holding mathematical outputs.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section B2: Informatics Practices Core: Universal NumPy Functions on Series",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 24,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Zero-Day Vulnerability Definition",
+    "questionText": "Which of the following statements is NOT correct regarding Zero-Day Vulnerability Definition (Section B2: Informatics Practices Core)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Network Layer (Layer 3)",
-        "isCorrect": true
+        "text": "A computer that has zero days of battery life",
+        "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "A bug that only occurs on the first day of the year",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Transport Layer (Layer 4)",
+        "text": "A software program that costs zero dollars",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Physical Layer (Layer 1)",
-        "isCorrect": false
+        "text": "A software security flaw that is unknown to the vendor, meaning zero days have passed since discovery and no official patch exists",
+        "isCorrect": true
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (A) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nIn Section B2: Informatics Practices Core (Zero-Day Vulnerability Definition):\nThe statement 'A software security flaw that is unknown to the vendor, meaning zero days have passed since discovery and no official patch exists' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q24",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-zero-day-vulnerability-definition",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (A) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Zero-Day Vulnerability Definition",
+      "detailed": "Detailed Solution:\nIn Section B2: Informatics Practices Core (Zero-Day Vulnerability Definition):\nThe statement 'A software security flaw that is unknown to the vendor, meaning zero days have passed since discovery and no official patch exists' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section B2: Informatics Practices Core: Zero-Day Vulnerability Definition",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 25,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "dropna how='all' vs how='any'",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Executing df.dropna(how='all') only drops rows where every single column entry is NaN.\nReason (R): The default setting in dropna() is how='any', which eliminates a row if even one column contains NaN.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "FIFO (First In First Out)",
-        "isCorrect": false
+        "text": "(A) is false but (R) is true",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "Priority Queue order",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "LIFO (Last In First Out)",
-        "isCorrect": true
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Random Access File order",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). how='all' requires 100% null entries along the axis, whereas how='any' requires only one null entry.\nHence Option A is correct.\nHence, option (D) is the correct choice.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q25",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "conceptId": "computer-science-section-b2-informatics-practices-core-dropna-how-all-vs-how-any",
+    "questionType": "assertion-reasoning",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B2: Informatics Practices Core: dropna how='all' vs how='any'",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). how='all' requires 100% null entries along the axis, whereas how='any' requires only one null entry.\nHence Option A is correct.\nHence, option (D) is the correct choice.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
+    "keyConcept": "Section B2: Informatics Practices Core: dropna how='all' vs how='any'",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 26,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Boolean Indexing Syntax",
+    "questionText": "Read the following case study on healthcare data analytics using Pandas and answer the questions that follow:\n\nDr. Mehra, a public health researcher, is analyzing healthcare trends across various administrative districts during an epidemic. She imports a dataset 'district_health.csv' into a Pandas DataFrame named df using df = pd.read_csv('district_health.csv'). The DataFrame contains columns: ['District', 'ActiveCases', 'Recovered', 'VaccineDoses', 'Hospitals']. Upon initial inspection via df.info(), she notices missing values (NaN) in the 'VaccineDoses' column. Dr. Mehra filters for critical districts where ActiveCases exceed 10,000 using boolean indexing: critical_df = df[df['ActiveCases'] > 10000]. To handle missing data in the general dataset, she imputes the missing 'VaccineDoses' with the district-wide median using df['VaccineDoses'].fillna(df['VaccineDoses'].median(), inplace=True). Finally, she computes the recovery rate as a new column: df['RecoveryRate'] = (df['Recovered'] / (df['ActiveCases'] + df['Recovered'])) * 100.\n\nQuestion: Which statement correctly creates critical_df containing districts with ActiveCases > 10000?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A B C + *",
+        "text": "critical_df = df.where('ActiveCases' > 10000)",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "* + A B C",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "A B + C *",
+        "text": "critical_df = df[df['ActiveCases'] > 10000]",
         "isCorrect": true
       },
       {
+        "id": "C",
+        "text": "critical_df = df.filter(ActiveCases > 10000)",
+        "isCorrect": false
+      },
+      {
         "id": "D",
-        "text": "A + B C *",
+        "text": "critical_df = df['ActiveCases' > 10000]",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Boolean Indexing Syntax (Section B2: Informatics Practices Core):\nBoolean indexing in Pandas passes the relational condition inside square brackets: df[df['Col'] > value].\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q26",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "conceptId": "computer-science-section-b2-informatics-practices-core-boolean-indexing-syntax",
+    "questionType": "application",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Boolean Indexing Syntax",
+      "detailed": "Detailed Solution:\nFor Boolean Indexing Syntax (Section B2: Informatics Practices Core):\nBoolean indexing in Pandas passes the relational condition inside square brackets: df[df['Col'] > value].\nHence Option C is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
+    "keyConcept": "Section B2: Informatics Practices Core: Boolean Indexing Syntax",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Structures: Stacks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 27,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Multiple Lines on Same Figure",
+    "questionText": "Read the following case study on an end-to-end data pipeline in Pandas and Pyplot and answer the questions that follow:\n\nA retail business analyst builds an automated reporting pipeline in Python to analyze monthly store revenue from 'sales_data.csv'.\nThe script executes the following stages:\n1. Ingestion: df = pd.read_csv('sales_data.csv') loads 12 monthly records into a DataFrame with columns ['Month', 'Sales', 'Expenses'].\n2. Data Cleaning: Incomplete records with NaN values are filled using df.fillna(df.mean(numeric_only=True), inplace=True).\n3. Derived Metrics: A new column 'Profit' is calculated: df['Profit'] = df['Sales'] - df['Expenses'].\n4. Statistical Aggregation: Total annual revenue is computed via total_sales = df['Sales'].sum(), and the best performing month is identified using best_month = df.loc[df['Profit'].idxmax(), 'Month'].\n5. Visualization: A line plot compares monthly Sales and Expenses over time with grid lines and custom styling: plt.plot(df['Month'], df['Sales'], label='Sales', color='blue', marker='o')\nplt.plot(df['Month'], df['Expenses'], label='Expenses', color='red', linestyle='--')\nplt.legend(); plt.savefig('annual_report.png'); plt.show()\n\nQuestion: How did the script plot both Sales and Expenses lines onto the same chart axes?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
+        "text": "By running the Python script twice",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
+        "text": "By opening two separate browser tabs",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
-        "isCorrect": false
+        "text": "By invoking plt.plot() twice with different data and labels before calling plt.show()",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
-        "isCorrect": true
+        "text": "By merging the two columns into a single string",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nFor Multiple Lines on Same Figure (Section B2: Informatics Practices Core):\nCalling plt.plot() multiple times before calling plt.show() layers multiple data series onto the current active axes.\nHence Option D is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q27",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "conceptId": "computer-science-section-b2-informatics-practices-core-multiple-lines-on-same-figure",
+    "questionType": "application",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Multiple Lines on Same Figure",
+      "detailed": "Detailed Solution:\nFor Multiple Lines on Same Figure (Section B2: Informatics Practices Core):\nCalling plt.plot() multiple times before calling plt.show() layers multiple data series onto the current active axes.\nHence Option D is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
+    "keyConcept": "Section B2: Informatics Practices Core: Multiple Lines on Same Figure",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 28,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Patent Application and Examination Workflow",
+    "questionText": "Arrange the sequential operational steps for legally securing a Patent for an innovative software-hardware invention:\n(A) Conduct comprehensive prior-art search to verify novelty and non-obviousness of the invention\n(B) Draft and submit formal patent application detailing claims, architecture diagrams, and best mode of operation\n(C) Patent office examiner conducts substantive examination against global patent databases\n(D) Address official examination objections; upon satisfying statutory requirements, patent is granted and published\n\nChoose the correct chronological/logical sequence from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Publishing obscenity in electronic form",
+        "text": "D, B, C, A",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Identity theft without financial damage",
+        "text": "A, C, B, D",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Hacking critical infrastructure systems",
+        "text": "B, A, C, D",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Cheating by personation through using any computer resource",
+        "text": "A, B, C, D",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nPatent workflow: prior-art search -> application filing -> substantive examination -> objection response and grant.\nHence Option D is correct.\nHence, option (D) is correct.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q28",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "conceptId": "computer-science-section-b2-informatics-practices-core-patent-application-and-examination-workflow",
+    "questionType": "chronological-sequence",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: Patent Application and Examination Workflow",
+      "detailed": "Detailed Solution:\nPatent workflow: prior-art search -> application filing -> substantive examination -> objection response and grant.\nHence Option D is correct.\nHence, option (D) is correct.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
+    "keyConcept": "Section B2: Informatics Practices Core: Patent Application and Examination Workflow",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 29,
-    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
-    "topic": "Pandas DataFrame Indexing with loc vs iloc",
-    "questionText": "In Python Pandas library, the fundamental operational difference between `df.loc[]` and `df.iloc[]` is that:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Label-based Series Slicing",
+    "questionText": "Read the following case study on meteorological data processing using Pandas Series and answer the questions that follow:\n\nThe State Meteorological Department analyzes daily maximum temperatures recorded in New Delhi over a week in June. A data scientist creates a Pandas Series named temps using:\ndays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']\nreadings = [41.2, 43.5, 45.0, 44.2, 46.8, 42.1, 40.5]\ntemps = pd.Series(data=readings, index=days)\n\nThe scientist performs exploratory operations on temps:\n1. Vectorized temperature conversion to Fahrenheit: fahrenheit = (temps * 9/5) + 32\n2. Filtering extreme heatwave days: heatwave = temps[temps >= 44.0]\n3. Slicing weekday readings using label slicing: weekdays = temps['Mon':'Fri']\n4. Descriptive aggregation: mean_temp = temps.mean() and peak_day = temps.idxmax()\n\nQuestion: Which days are included in the slice weekdays = temps['Mon':'Fri']?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "`df.loc[]` can only modify integer columns, while `df.iloc[]` only modifies string columns",
-        "isCorrect": false
+        "text": "Mon, Tue, Wed, Thu, and Fri (both endpoints included)",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "`df.loc[]` deletes rows permanently, while `df.iloc[]` creates a shallow copy",
+        "text": "All 7 days",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "`df.loc[]` operates on NumPy arrays exclusively, while `df.iloc[]` operates on dictionaries",
+        "text": "Only Mon and Fri",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "`df.loc[]` is label-based indexing, whereas `df.iloc[]` is integer position-based indexing",
-        "isCorrect": true
+        "text": "Mon, Tue, Wed, and Thu (Fri is excluded)",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nFor Label-based Series Slicing (Section B2: Informatics Practices Core):\nLabel-based slicing in Pandas (unlike integer positional slicing) includes both start and stop label endpoints.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q29",
-    "conceptId": "computer-science-data-handling-using-pandas-i-series-and-dataframe-architecture-pandas-dataframe-indexing-with-loc-vs-iloc",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "conceptId": "computer-science-section-b2-informatics-practices-core-label-based-series-slicing",
+    "questionType": "application",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Label-based Series Slicing",
+      "detailed": "Detailed Solution:\nFor Label-based Series Slicing (Section B2: Informatics Practices Core):\nLabel-based slicing in Pandas (unlike integer positional slicing) includes both start and stop label endpoints.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
+    "keyConcept": "Section B2: Informatics Practices Core: Label-based Series Slicing",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - I (Series and DataFrame Architecture)"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 30,
-    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
-    "topic": "SQL vs Pandas Query Equivalence",
-    "questionText": "In Pandas, the operation equivalent to the SQL query `SELECT * FROM students WHERE marks >= 90;` is:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Color Shorthand 'c'",
+    "questionText": "In Matplotlib color specifications, which color is designated by the single character 'c'?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "students.select('marks >= 90')",
+        "text": "Crimson",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "students.filter(where='marks >= 90')",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "students[students['marks'] >= 90]",
+        "text": "Cyan",
         "isCorrect": true
       },
       {
+        "id": "C",
+        "text": "Charcoal",
+        "isCorrect": false
+      },
+      {
         "id": "D",
-        "text": "students.where(marks >= 90)",
+        "text": "Cream",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Color Shorthand 'c'):\nCyan\n\nDetailed Context:\n'c' represents Cyan in Matplotlib color abbreviations.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q30",
-    "conceptId": "computer-science-data-handling-using-pandas-ii-dataframes-operations-and-analysis-sql-vs-pandas-query-equivalence",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-color-shorthand-c",
     "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Color Shorthand 'c'",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Color Shorthand 'c'):\nCyan\n\nDetailed Context:\n'c' represents Cyan in Matplotlib color abbreviations.\nHence Option D is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
+    "keyConcept": "Section B2: Informatics Practices Core: Color Shorthand 'c'",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Data Handling using Pandas - II (DataFrames, Operations and Analysis)"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 31,
-    "chapter": "Database Concepts",
-    "topic": "Relational Model: Candidate Key vs Primary Key",
-    "questionText": "In the Relational Database Model, a 'Candidate Key' is defined as:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Adjusting Figure Dimensions",
+    "questionText": "Read the following climate data visualization case study and answer the questions that follow:\n\nA climatologist is analyzing annual rainfall across five meteorological zones: ['Coastal', 'Plains', 'Desert', 'Hills', 'Plateau']. Rainfall measurements (in cm) are [240, 110, 25, 180, 85]. Because the zone names are long and readable horizontally, the climatologist chooses a Horizontal Bar Chart using plt.barh().\n\nShe writes the visualization script:\nzones = ['Coastal', 'Plains', 'Desert', 'Hills', 'Plateau']\nrainfall = [240, 110, 25, 180, 85]\ncolors = ['navy', 'blue', 'gold', 'darkgreen', 'teal']\nplt.barh(zones, rainfall, height=0.6, color=colors)\nplt.xlabel('Annual Rainfall (cm)')\nplt.ylabel('Geographic Zones')\nplt.title('Regional Annual Rainfall Distribution')\nplt.grid(axis='x', linestyle='--', alpha=0.7)\nplt.show()\n\nQuestion: How can the climatologist enlarge the figure size to 10 inches wide by 5 inches tall before plotting?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Any column that allows NULL values throughout the table",
+        "text": "plt.size(10, 5)",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "A foreign key pointing to an external non-relational database",
+        "text": "plt.resize(10, 5)",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A minimal superkey that has the potential to uniquely identify each tuple in a relation",
+        "text": "plt.figure(figsize=(10, 5))",
         "isCorrect": true
       },
       {
         "id": "D",
-        "text": "A composite attribute containing only floating-point values",
+        "text": "plt.set_window(10, 5)",
         "isCorrect": false
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (C) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nFor Adjusting Figure Dimensions (Section B2: Informatics Practices Core):\nplt.figure(figsize=(width, height)) initializes figure canvas dimensions in inches.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q31",
-    "conceptId": "computer-science-database-concepts-relational-model-candidate-key-vs-primary-key",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "conceptId": "computer-science-section-b2-informatics-practices-core-adjusting-figure-dimensions",
+    "questionType": "application",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
       "quick": "Option (C) is correct.",
-      "concept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (C) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: Adjusting Figure Dimensions",
+      "detailed": "Detailed Solution:\nFor Adjusting Figure Dimensions (Section B2: Informatics Practices Core):\nplt.figure(figsize=(width, height)) initializes figure canvas dimensions in inches.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
+    "keyConcept": "Section B2: Informatics Practices Core: Adjusting Figure Dimensions",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Database Concepts"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 32,
-    "chapter": "Structured Query Language (SQL)",
-    "topic": "SQL Aggregate Functions and GROUP BY",
-    "questionText": "In SQL, to filter and restrict groups of records created by the `GROUP BY` clause, one must use the:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Line Plot Styling Arguments",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Invoking plt.plot(x, y, color='red', linestyle='--', marker='o') renders a red dashed line with circular marker points.\nReason (R): Pyplot provides explicit keyword arguments including color, linestyle, and marker to customize visual rendering of line graphs.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "WHERE clause",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "ORDER BY clause",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "HAVING clause",
-        "isCorrect": true
+        "text": "(A) is false but (R) is true",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "DISTINCT clause",
-        "isCorrect": false
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "isCorrect": true
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Keyword arguments color, linestyle, and marker customize line aesthetics.\nHence Option C is correct.\nHence, option (A) is the correct choice.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q32",
-    "conceptId": "computer-science-structured-query-language-sql-sql-aggregate-functions-and-group-by",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-line-plot-styling-arguments",
+    "questionType": "assertion-reasoning",
     "difficulty": 1,
     "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (D) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Line Plot Styling Arguments",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Keyword arguments color, linestyle, and marker customize line aesthetics.\nHence Option C is correct.\nHence, option (A) is the correct choice.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
+    "keyConcept": "Section B2: Informatics Practices Core: Line Plot Styling Arguments",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Structured Query Language (SQL)"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 33,
-    "chapter": "File Handling in Python",
-    "topic": "File Modes: 'w' vs 'a'",
-    "questionText": "When opening a text file in Python using `open('data.txt', 'a')`, the mode `'a'` specifies that:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Cumulative Sum Function s.cumsum()",
+    "questionText": "Given s = pd.Series([1, 2, 3, 4]), what does s.cumsum() return?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "The file is overwritten and all existing content is permanently erased immediately",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "The file is opened for appending, and new data will be written at the end of the file without truncating existing content",
+        "text": "pd.Series([1, 3, 6, 10]) (running cumulative sum)",
         "isCorrect": true
       },
       {
+        "id": "B",
+        "text": "pd.Series([1, 2, 6, 24])",
+        "isCorrect": false
+      },
+      {
         "id": "C",
-        "text": "The file is opened for read-only access with binary decoding",
+        "text": "10 (scalar sum)",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "The file is locked in memory preventing other users from reading it",
+        "text": "pd.Series([4, 3, 2, 1])",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nFor Cumulative Sum Function s.cumsum() (Section B2: Informatics Practices Core):\ncumsum() returns the cumulative running sum across elements: [1, 1+2, 1+2+3, 1+2+3+4] = [1, 3, 6, 10].\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q33",
-    "conceptId": "computer-science-file-handling-in-python-file-modes-w-vs-a",
-    "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "conceptId": "computer-science-section-b2-informatics-practices-core-cumulative-sum-function-s-cumsum",
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "File Handling in Python: File Modes: 'w' vs 'a'",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Cumulative Sum Function s.cumsum()",
+      "detailed": "Detailed Solution:\nFor Cumulative Sum Function s.cumsum() (Section B2: Informatics Practices Core):\ncumsum() returns the cumulative running sum across elements: [1, 1+2, 1+2+3, 1+2+3+4] = [1, 3, 6, 10].\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "File Handling in Python: File Modes: 'w' vs 'a'",
+    "keyConcept": "Section B2: Informatics Practices Core: Cumulative Sum Function s.cumsum()",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "File Handling in Python"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 34,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Series from Python Tuple",
+    "questionText": "What happens when a Series is created from a Python tuple: s = pd.Series((5, 10, 15))?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A single shared linear backbone coaxial bus cable",
+        "text": "It creates a 0-dimensional scalar",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Each other in a closed unidirectional circular ring",
-        "isCorrect": false
+        "text": "It creates a standard 1D Series of length 3 with default integer index [0, 1, 2]",
+        "isCorrect": true
       },
       {
         "id": "C",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
+        "text": "It raises a TypeError because tuples are immutable",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A central network hub, switch, or router",
-        "isCorrect": true
+        "text": "It creates an empty Series",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Series from Python Tuple (Section B2: Informatics Practices Core):\nPandas accepts any 1D iterable sequence, including lists and tuples, constructing a standard 1D Series.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q34",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-series-from-python-tuple",
+    "questionType": "application",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Series from Python Tuple",
+      "detailed": "Detailed Solution:\nFor Series from Python Tuple (Section B2: Informatics Practices Core):\nPandas accepts any 1D iterable sequence, including lists and tuples, constructing a standard 1D Series.\nHence Option A is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section B2: Informatics Practices Core: Series from Python Tuple",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 35,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "GPL Incompatibility with Closed Source",
+    "questionText": "Read the following case study on software licensing and cyber law in a tech startup and answer the questions that follow:\n\nA technology startup, AI-Vidyarthi, develops an educational chatbot. During development, the team incorporates software components governed by different licenses:\n1. Module A uses an open source Python web library under the permissive MIT License, which allows commercial use, modification, and closed-source distribution as long as the original copyright notice is retained.\n2. Module B incorporates a speech-recognition library distributed under the GNU General Public License (GPL v3), which contains a 'copyleft' clause requiring any distributed derivative software to be open-sourced under GPL v3.\n3. An unauthorized former contractor steals the startup's customer database and sells customer identities on the dark web. The startup files a criminal complaint under the Indian Information Technology Act, 2000, charging the offender under Section 66C (Identity Theft) and Section 43 (Damage to Computer Systems and Data Theft).\n\nQuestion: What legal consequence arises if AI-Vidyarthi embeds GPL v3 code into a proprietary closed-source product and distributes it?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "Nothing, because all open source code is in the public domain",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Network Layer (Layer 3)",
-        "isCorrect": true
+        "text": "The software runs 50% slower",
+        "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Transport Layer (Layer 4)",
-        "isCorrect": false
+        "text": "It violates the GPL copyleft terms and commits copyright infringement unless the derivative source code is made public",
+        "isCorrect": true
       },
       {
         "id": "D",
-        "text": "Physical Layer (Layer 1)",
+        "text": "The government seizes the computers",
         "isCorrect": false
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nDistributing a derivative work containing GPL code obligates the distributor to release the complete source code under GPL.\nHence Option B is correct.\nHence, option (B) is correct.\n\nHence, Option (C) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q35",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-gpl-incompatibility-with-closed-source",
+    "questionType": "chronological-sequence",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (B) is the correct answer."
+      "quick": "Option (C) is correct.",
+      "concept": "Section B2: Informatics Practices Core: GPL Incompatibility with Closed Source",
+      "detailed": "Detailed Solution:\nDistributing a derivative work containing GPL code obligates the distributor to release the complete source code under GPL.\nHence Option B is correct.\nHence, option (B) is correct.\n\nHence, Option (C) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section B2: Informatics Practices Core: GPL Incompatibility with Closed Source",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 36,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Color Mapping to Categories",
+    "questionText": "Read the following climate data visualization case study and answer the questions that follow:\n\nA climatologist is analyzing annual rainfall across five meteorological zones: ['Coastal', 'Plains', 'Desert', 'Hills', 'Plateau']. Rainfall measurements (in cm) are [240, 110, 25, 180, 85]. Because the zone names are long and readable horizontally, the climatologist chooses a Horizontal Bar Chart using plt.barh().\n\nShe writes the visualization script:\nzones = ['Coastal', 'Plains', 'Desert', 'Hills', 'Plateau']\nrainfall = [240, 110, 25, 180, 85]\ncolors = ['navy', 'blue', 'gold', 'darkgreen', 'teal']\nplt.barh(zones, rainfall, height=0.6, color=colors)\nplt.xlabel('Annual Rainfall (cm)')\nplt.ylabel('Geographic Zones')\nplt.title('Regional Annual Rainfall Distribution')\nplt.grid(axis='x', linestyle='--', alpha=0.7)\nplt.show()\n\nQuestion: How does Pyplot apply the list colors = ['navy', 'blue', 'gold', 'darkgreen', 'teal'] to the bars?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "LIFO (Last In First Out)",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "FIFO (First In First Out)",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Priority Queue order",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Random Access File order",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q36",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
-    "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Structures: Stacks"
-    ],
-    "testNumber": 36,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 37,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "A B C + *",
+        "text": "Randomly picks one color for all bars",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "* + A B C",
+        "text": "Ignores the color list",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "A B + C *",
-        "isCorrect": true
-      },
-      {
-        "id": "D",
-        "text": "A + B C *",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q37",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer."
-    },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Structures: Stacks"
-    ],
-    "testNumber": 36,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 38,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
+        "text": "Blends all colors into a single mixed shade",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q38",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
-    ],
-    "testNumber": 36,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 39,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Publishing obscenity in electronic form",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "Identity theft without financial damage",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Cheating by personation through using any computer resource",
-        "isCorrect": true
-      },
-      {
-        "id": "D",
-        "text": "Hacking critical infrastructure systems",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (C) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q39",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (C) is the correct answer."
-    },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
-    ],
-    "testNumber": 36,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 40,
-    "chapter": "Data Handling using Pandas - I (Series and DataFrame Architecture)",
-    "topic": "Pandas DataFrame Indexing with loc vs iloc",
-    "questionText": "In Python Pandas library, the fundamental operational difference between `df.loc[]` and `df.iloc[]` is that:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "`df.loc[]` is label-based indexing, whereas `df.iloc[]` is integer position-based indexing",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "`df.loc[]` can only modify integer columns, while `df.iloc[]` only modifies string columns",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "`df.loc[]` deletes rows permanently, while `df.iloc[]` creates a shallow copy",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "`df.loc[]` operates on NumPy arrays exclusively, while `df.iloc[]` operates on dictionaries",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q40",
-    "conceptId": "computer-science-data-handling-using-pandas-i-series-and-dataframe-architecture-pandas-dataframe-indexing-with-loc-vs-iloc",
-    "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - I (Series and DataFrame Architecture) - Pandas DataFrame Indexing with loc vs iloc):\nIn Pandas: `.loc[]` selects data using row and column labels/names (e.g., `df.loc['row1', 'ColA']`). `.iloc[]` selects data based on integer zero-based positional coordinates (e.g., `df.iloc[0, 1]`).\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "Data Handling using Pandas - I (Series and DataFrame Architecture): Pandas DataFrame Indexing with loc vs iloc",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Handling using Pandas - I (Series and DataFrame Architecture)"
-    ],
-    "testNumber": 36,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 41,
-    "chapter": "Data Handling using Pandas - II (DataFrames, Operations and Analysis)",
-    "topic": "SQL vs Pandas Query Equivalence",
-    "questionText": "In Pandas, the operation equivalent to the SQL query `SELECT * FROM students WHERE marks >= 90;` is:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "students[students['marks'] >= 90]",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "students.select('marks >= 90')",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "students.filter(where='marks >= 90')",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "students.where(marks >= 90)",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q41",
-    "conceptId": "computer-science-data-handling-using-pandas-ii-dataframes-operations-and-analysis-sql-vs-pandas-query-equivalence",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Handling using Pandas - II (DataFrames, Operations and Analysis) - SQL vs Pandas Query Equivalence):\nBoolean indexing in Pandas allows filtering DataFrames using conditional statements on Series columns: `df[df['column_name'] >= value]`.\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "Data Handling using Pandas - II (DataFrames, Operations and Analysis): SQL vs Pandas Query Equivalence",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Handling using Pandas - II (DataFrames, Operations and Analysis)"
-    ],
-    "testNumber": 36,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 42,
-    "chapter": "Database Concepts",
-    "topic": "Relational Model: Candidate Key vs Primary Key",
-    "questionText": "In the Relational Database Model, a 'Candidate Key' is defined as:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "Any column that allows NULL values throughout the table",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "A foreign key pointing to an external non-relational database",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "A composite attribute containing only floating-point values",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "A minimal superkey that has the potential to uniquely identify each tuple in a relation",
+        "text": "Applies each color sequentially to the corresponding bar category in order",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (D) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q42",
-    "conceptId": "computer-science-database-concepts-relational-model-candidate-key-vs-primary-key",
-    "questionType": "conceptual",
+    "detailedSolution": "Detailed Solution:\nFor Color Mapping to Categories (Section B2: Informatics Practices Core):\nPassing a list of colors applies them one-to-one to consecutive bars in the chart.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q36",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-color-mapping-to-categories",
+    "questionType": "application",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Database Concepts - Relational Model: Candidate Key vs Primary Key):\nA candidate key is a minimal set of attributes that uniquely identifies tuples in a relation. The database designer selects one candidate key as the Primary Key, and the remaining candidate keys become Alternate Keys.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: Color Mapping to Categories",
+      "detailed": "Detailed Solution:\nFor Color Mapping to Categories (Section B2: Informatics Practices Core):\nPassing a list of colors applies them one-to-one to consecutive bars in the chart.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Database Concepts: Relational Model: Candidate Key vs Primary Key",
+    "keyConcept": "Section B2: Informatics Practices Core: Color Mapping to Categories",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Database Concepts"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
-    "questionNumber": 43,
-    "chapter": "Structured Query Language (SQL)",
-    "topic": "SQL Aggregate Functions and GROUP BY",
-    "questionText": "In SQL, to filter and restrict groups of records created by the `GROUP BY` clause, one must use the:",
+    "questionNumber": 37,
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Default Row Index Type",
+    "questionText": "When a DataFrame is created without supplying custom index labels, what type of Index is assigned?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "WHERE clause",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "HAVING clause",
+        "text": "RangeIndex(start=0, stop=n, step=1)",
         "isCorrect": true
       },
       {
+        "id": "B",
+        "text": "StringIndex",
+        "isCorrect": false
+      },
+      {
         "id": "C",
-        "text": "ORDER BY clause",
+        "text": "CategoricalIndex",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "DISTINCT clause",
+        "text": "MultiIndex",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Default Row Index Type):\nRangeIndex(start=0, stop=n, step=1)\n\nDetailed Context:\nBy default, Pandas assigns a RangeIndex starting at 0 up to n-1.\nHence Option B is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (A) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q37",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-default-row-index-type",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (A) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Default Row Index Type",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Default Row Index Type):\nRangeIndex(start=0, stop=n, step=1)\n\nDetailed Context:\nBy default, Pandas assigns a RangeIndex starting at 0 up to n-1.\nHence Option B is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (A) is the correct answer."
+    },
+    "keyConcept": "Section B2: Informatics Practices Core: Default Row Index Type",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B2: Informatics Practices Core"
+    ],
+    "testNumber": 36,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 38,
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Citizen Role in E-waste Management",
+    "questionText": "Read the following case study on e-waste policies and circular electronics economy and answer the questions that follow:\n\nThe Ministry of Environment, Forest and Climate Change (MoEFCC) notified revised E-Waste Management Rules in India. The regulatory framework seeks to transition from a linear 'take-make-dispose' model to a Circular Electronics Economy:\n1. Restriction of Hazardous Substances (RoHS): Manufacturers must phase out hazardous materials including lead (Pb), mercury (Hg), cadmium (Cd), and hexavalent chromium in manufacturing consumer electronics.\n2. Extended Producer Responsibility (EPR) Portals: Producers must register on an online national portal, meet annual e-waste recycling targets, and purchase EPR Certificates from authorized recyclers.\n3. Scientific Material Recovery: Formal recycling plants utilize state-of-the-art smelting and automated separation to recover precious metals (gold, silver, palladium) and base metals (copper, aluminum), reintroducing them into industrial supply chains.\n\nQuestion: What is the responsible protocol for individual consumers when disposing of obsolete mobile phones and laptops?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Disposing of them in designated municipal wet waste or composting bins",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Surrendering them to authorized collection centers or participating in brand buyback programs",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "Discarding them in general solid waste streams accessible to informal sector workers",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Retaining them for long-term personal storage to defer disposal obligations",
         "isCorrect": false
       }
     ],
     "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (B) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q43",
-    "conceptId": "computer-science-structured-query-language-sql-sql-aggregate-functions-and-group-by",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Citizen Role in E-waste Management):\nSurrendering them to authorized collection centers or participating in brand buyback programs\n\nDetailed Context:\nConsumers must channel end-of-life electronics to designated authorized e-waste collection points.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q38",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-citizen-role-in-e-waste-management",
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (B) is correct.",
-      "concept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Structured Query Language (SQL) - SQL Aggregate Functions and GROUP BY):\nThe WHERE clause filters individual rows before grouping, whereas the HAVING clause filters groups formed by the GROUP BY clause based on aggregate function criteria.\n\nHence, Option (B) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: Citizen Role in E-waste Management",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Citizen Role in E-waste Management):\nSurrendering them to authorized collection centers or participating in brand buyback programs\n\nDetailed Context:\nConsumers must channel end-of-life electronics to designated authorized e-waste collection points.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Structured Query Language (SQL): SQL Aggregate Functions and GROUP BY",
+    "keyConcept": "Section B2: Informatics Practices Core: Citizen Role in E-waste Management",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Structured Query Language (SQL)"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 39,
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "dropna Thresh Parameter",
+    "questionText": "Which of the following statements is NOT correct regarding dropna Thresh Parameter (Section B2: Informatics Practices Core)?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Drops rows with exactly 3 non-null values",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Drops rows that have 3 or more null values",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Retains only rows that have at least 3 non-null (valid) observations",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "Drops the first 3 rows",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nIn Section B2: Informatics Practices Core (dropna Thresh Parameter):\nThe statement 'Retains only rows that have at least 3 non-null (valid) observations' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.\n\nHence, Option (C) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q39",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-dropna-thresh-parameter",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (C) is correct.",
+      "concept": "Section B2: Informatics Practices Core: dropna Thresh Parameter",
+      "detailed": "Detailed Solution:\nIn Section B2: Informatics Practices Core (dropna Thresh Parameter):\nThe statement 'Retains only rows that have at least 3 non-null (valid) observations' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (C) is the correct choice.\n\nHence, Option (C) is the correct answer."
+    },
+    "keyConcept": "Section B2: Informatics Practices Core: dropna Thresh Parameter",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B2: Informatics Practices Core"
+    ],
+    "testNumber": 36,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 40,
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Logical OR Filtering Operator",
+    "questionText": "Which operator represents element-wise logical OR in Pandas boolean indexing?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "||",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "or",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "and",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "| (pipe symbol)",
+        "isCorrect": true
+      }
+    ],
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Logical OR Filtering Operator):\n| (pipe symbol)\n\nDetailed Context:\nThe bitwise pipe symbol '|' is used for element-wise logical OR evaluation in Pandas.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q40",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-logical-or-filtering-operator",
+    "questionType": "conceptual",
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
+    "solution": {
+      "quick": "Option (D) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Logical OR Filtering Operator",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Logical OR Filtering Operator):\n| (pipe symbol)\n\nDetailed Context:\nThe bitwise pipe symbol '|' is used for element-wise logical OR evaluation in Pandas.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer."
+    },
+    "keyConcept": "Section B2: Informatics Practices Core: Logical OR Filtering Operator",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B2: Informatics Practices Core"
+    ],
+    "testNumber": 36,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 41,
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Series Index-Data Alignment",
+    "questionText": "Read the following case study on meteorological data processing using Pandas Series and answer the questions that follow:\n\nThe State Meteorological Department analyzes daily maximum temperatures recorded in New Delhi over a week in June. A data scientist creates a Pandas Series named temps using:\ndays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']\nreadings = [41.2, 43.5, 45.0, 44.2, 46.8, 42.1, 40.5]\ntemps = pd.Series(data=readings, index=days)\n\nThe scientist performs exploratory operations on temps:\n1. Vectorized temperature conversion to Fahrenheit: fahrenheit = (temps * 9/5) + 32\n2. Filtering extreme heatwave days: heatwave = temps[temps >= 44.0]\n3. Slicing weekday readings using label slicing: weekdays = temps['Mon':'Fri']\n4. Descriptive aggregation: mean_temp = temps.mean() and peak_day = temps.idxmax()\n\nQuestion: What is the label index associated with the temperature reading 46.8 in the temps Series?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "'Fri'",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "'Thu'",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "'Mon'",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "4",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nFor Series Index-Data Alignment (Section B2: Informatics Practices Core):\nreadings[4] = 46.8 aligns with days[4] = 'Fri'.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (A) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q41",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-series-index-data-alignment",
+    "questionType": "application",
+    "difficulty": 3,
+    "difficultyLevel": 3,
+    "estimatedTimeSeconds": 75,
+    "solution": {
+      "quick": "Option (A) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Series Index-Data Alignment",
+      "detailed": "Detailed Solution:\nFor Series Index-Data Alignment (Section B2: Informatics Practices Core):\nreadings[4] = 46.8 aligns with days[4] = 'Fri'.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (A) is the correct answer."
+    },
+    "keyConcept": "Section B2: Informatics Practices Core: Series Index-Data Alignment",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B2: Informatics Practices Core"
+    ],
+    "testNumber": 36,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 42,
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Custom Bin Boundaries Definition",
+    "questionText": "Read the following case study on histogram data visualization and answer the questions that follow:\n\nA demographic analyst at a market research firm is visualizing the age distribution of 1,000 retail consumers. The dataset contains consumer ages ranging from 18 to 78 years. The analyst uses matplotlib.pyplot to construct a frequency histogram using plt.hist().\n\nTo create meaningful age brackets, she defines custom bin boundaries:\nage_bins = [18, 25, 35, 50, 65, 80]\nShe executes the command:\nn, bins, patches = plt.hist(ages, bins=age_bins, edgecolor='black', color='skyblue', rwidth=0.9)\nShe adds axis labels plt.xlabel('Age Brackets (Years)'), plt.ylabel('Number of Consumers'), and configures the chart title plt.title('Consumer Age Demographics'). She exports the visual figure using plt.savefig('age_distribution.png', dpi=300) before displaying it.\n\nQuestion: How many class interval bins are generated by the bin list age_bins = [18, 25, 35, 50, 65, 80]?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "10 bins",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "5 bins (18-25, 25-35, 35-50, 50-65, 65-80)",
+        "isCorrect": true
+      },
+      {
+        "id": "C",
+        "text": "4 bins",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "6 bins",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nFor Custom Bin Boundaries Definition (Section B2: Informatics Practices Core):\nA list of k boundary values partitions the data into k - 1 contiguous intervals: 6 values yield 5 bins.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (B) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q42",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-custom-bin-boundaries-definition",
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Option (B) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Custom Bin Boundaries Definition",
+      "detailed": "Detailed Solution:\nFor Custom Bin Boundaries Definition (Section B2: Informatics Practices Core):\nA list of k boundary values partitions the data into k - 1 contiguous intervals: 6 values yield 5 bins.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (B) is the correct answer."
+    },
+    "keyConcept": "Section B2: Informatics Practices Core: Custom Bin Boundaries Definition",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B2: Informatics Practices Core"
+    ],
+    "testNumber": 36,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 43,
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Statistical Functions and Mathematical Definitions",
+    "questionText": "Match the statistical method in List I with its definition in List II:\n\nList I:\n(A) df.median()\n(B) df.mean()\n(C) df.std()\n(D) df.var()\n\nList II:\n(I) The 50th percentile / middle value separating lower and upper halves\n(II) The arithmetic mean (sum of valid elements divided by count)\n(III) Sample standard deviation (square root of sample variance, ddof=1)\n(IV) Sample variance (mean squared deviation from the mean)\n\nChoose the correct answer from the options given below:",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "A-IV, B-II, C-I, D-III",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "A-I, B-III, C-IV, D-II",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "A-I, B-II, C-III, D-IV",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "A-II, B-I, C-III, D-IV",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nmedian() is 50th percentile, mean() is arithmetic average, std() is sample standard deviation, and var() is sample variance.\nHence Option A is correct.\nHence, option (A) is the correct match.\n\nHence, Option (C) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q43",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-statistical-functions-and-mathematical-definitions",
+    "questionType": "match-the-following",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Option (C) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Statistical Functions and Mathematical Definitions",
+      "detailed": "Detailed Solution:\nmedian() is 50th percentile, mean() is arithmetic average, std() is sample standard deviation, and var() is sample variance.\nHence Option A is correct.\nHence, option (A) is the correct match.\n\nHence, Option (C) is the correct answer."
+    },
+    "keyConcept": "Section B2: Informatics Practices Core: Statistical Functions and Mathematical Definitions",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B2: Informatics Practices Core"
+    ],
+    "testNumber": 36,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 44,
-    "chapter": "File Handling in Python",
-    "topic": "File Modes: 'w' vs 'a'",
-    "questionText": "When opening a text file in Python using `open('data.txt', 'a')`, the mode `'a'` specifies that:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Boolean Mask Filtering on Series",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Executing s[s > 50] extracts a subset Series containing only elements whose values exceed 50.\nReason (R): The expression s > 50 generates an element-wise boolean Series of True and False values, which acts as a boolean filtering mask.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "The file is overwritten and all existing content is permanently erased immediately",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "The file is opened for read-only access with binary decoding",
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "The file is locked in memory preventing other users from reading it",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "The file is opened for appending, and new data will be written at the end of the file without truncating existing content",
+        "text": "(A) is false but (R) is true",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Relational operators generate boolean mask Series, filtering rows where the mask is True.\nHence Option A is correct.\nHence, option (D) is the correct choice.\n\nHence, Option (D) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q44",
-    "conceptId": "computer-science-file-handling-in-python-file-modes-w-vs-a",
-    "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "conceptId": "computer-science-section-b2-informatics-practices-core-boolean-mask-filtering-on-series",
+    "questionType": "assertion-reasoning",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "File Handling in Python: File Modes: 'w' vs 'a'",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (File Handling in Python - File Modes: 'w' vs 'a'):\nIn Python: mode `'w'` truncates (erases) existing file contents before writing, while mode `'a'` (append) places the file pointer at the end of the file, preserving existing data.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: Boolean Mask Filtering on Series",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). Relational operators generate boolean mask Series, filtering rows where the mask is True.\nHence Option A is correct.\nHence, option (D) is the correct choice.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "File Handling in Python: File Modes: 'w' vs 'a'",
+    "keyConcept": "Section B2: Informatics Practices Core: Boolean Mask Filtering on Series",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "File Handling in Python"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 45,
-    "chapter": "Computer Networks",
-    "topic": "Network Topologies: Star Topology",
-    "questionText": "In a Star network topology, all client workstation nodes are connected directly to:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Vectorized Scalar Math",
+    "questionText": "Read the following case study on meteorological data processing using Pandas Series and answer the questions that follow:\n\nThe State Meteorological Department analyzes daily maximum temperatures recorded in New Delhi over a week in June. A data scientist creates a Pandas Series named temps using:\ndays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']\nreadings = [41.2, 43.5, 45.0, 44.2, 46.8, 42.1, 40.5]\ntemps = pd.Series(data=readings, index=days)\n\nThe scientist performs exploratory operations on temps:\n1. Vectorized temperature conversion to Fahrenheit: fahrenheit = (temps * 9/5) + 32\n2. Filtering extreme heatwave days: heatwave = temps[temps >= 44.0]\n3. Slicing weekday readings using label slicing: weekdays = temps['Mon':'Fri']\n4. Descriptive aggregation: mean_temp = temps.mean() and peak_day = temps.idxmax()\n\nQuestion: How does Python evaluate fahrenheit = (temps * 9/5) + 32?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A single shared linear backbone coaxial bus cable",
-        "isCorrect": false
+        "text": "Multiplies every element in the Series by 9/5 and adds 32 simultaneously without explicit loops",
+        "isCorrect": true
       },
       {
         "id": "B",
-        "text": "Each other in a closed unidirectional circular ring",
+        "text": "Raises an error because arithmetic on Series requires a loop",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Every single other node via dedicated point-to-point links (full mesh)",
+        "text": "Concatenates 32 to the end of the Series",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "A central network hub, switch, or router",
-        "isCorrect": true
+        "text": "Applies the formula only to the first element",
+        "isCorrect": false
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (D) is the correct answer.",
+    "correctOption": "A",
+    "detailedSolution": "Detailed Solution:\nFor Vectorized Scalar Math (Section B2: Informatics Practices Core):\nPandas Series operations are vectorized, applying scalar arithmetic element-wise across all values.\nHence Option B is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q45",
-    "conceptId": "computer-science-computer-networks-network-topologies-star-topology",
-    "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "conceptId": "computer-science-section-b2-informatics-practices-core-vectorized-scalar-math",
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
     "solution": {
-      "quick": "Option (D) is correct.",
-      "concept": "Computer Networks: Network Topologies: Star Topology",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - Network Topologies: Star Topology):\nIn star topology, all devices are connected to a central device (hub/switch) via point-to-point cables. Failure of one cable affects only that node; failure of the central switch disables the entire network.\n\nHence, Option (D) is the correct answer."
+      "quick": "Option (A) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Vectorized Scalar Math",
+      "detailed": "Detailed Solution:\nFor Vectorized Scalar Math (Section B2: Informatics Practices Core):\nPandas Series operations are vectorized, applying scalar arithmetic element-wise across all values.\nHence Option B is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Computer Networks: Network Topologies: Star Topology",
+    "keyConcept": "Section B2: Informatics Practices Core: Vectorized Scalar Math",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 46,
-    "chapter": "Computer Networks",
-    "topic": "TCP/IP vs OSI Protocol Stack",
-    "questionText": "Which layer of the OSI 7-layer reference model is responsible for logical IP addressing and end-to-end routing of data packets across heterogeneous networks?",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "s.T (Transpose) on a Series",
+    "questionText": "What is returned when calling the transpose attribute s.T on a 1D Pandas Series?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Data Link Layer (Layer 2)",
+        "text": "Raises a NotImplementedError",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Transport Layer (Layer 4)",
-        "isCorrect": false
+        "text": "The original Series unchanged",
+        "isCorrect": true
       },
       {
         "id": "C",
-        "text": "Physical Layer (Layer 1)",
+        "text": "A list reversed backwards",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Network Layer (Layer 3)",
+        "text": "A 2D DataFrame",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (s.T (Transpose) on a Series):\nThe original Series unchanged\n\nDetailed Context:\nBecause a Series is one-dimensional, transposing it via s.T has no effect and returns the identical Series.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (B) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q46",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-s-t-transpose-on-a-series",
+    "questionType": "conceptual",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Option (B) is correct.",
+      "concept": "Section B2: Informatics Practices Core: s.T (Transpose) on a Series",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (s.T (Transpose) on a Series):\nThe original Series unchanged\n\nDetailed Context:\nBecause a Series is one-dimensional, transposing it via s.T has no effect and returns the identical Series.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.\n\nHence, Option (B) is the correct answer."
+    },
+    "keyConcept": "Section B2: Informatics Practices Core: s.T (Transpose) on a Series",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B2: Informatics Practices Core"
+    ],
+    "testNumber": 36,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 47,
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Locating Max Index via idxmax()",
+    "questionText": "Read the following case study on weather station data analytics and answer the questions that follow:\n\nThe Central Weather Monitoring Station collects hourly environmental readings from automated sensors across five monitoring posts. The dataset is stored in a Pandas DataFrame weather_df:\nColumns: ['PostID', 'Temperature', 'Humidity', 'WindSpeed', 'Rainfall']\nThe station analyst conducts exploratory data analysis:\n1. Descriptive summary: weather_df.describe() computes count, mean, std, min, 25%, 50%, 75%, and max for all numeric columns.\n2. Identifying extreme temperature station: hottest_post = weather_df.loc[weather_df['Temperature'].idxmax(), 'PostID']\n3. Correlation analysis: weather_df[['Temperature', 'Humidity', 'Rainfall']].corr() computes pairwise Pearson correlation coefficients.\n4. Handling missing sensor values: Sensors occasionally drop out, recording NaN; the analyst drops records where Rainfall is null using weather_df.dropna(subset=['Rainfall'], inplace=True).\n\nQuestion: What does weather_df['Temperature'].idxmax() return?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "The count of maximum temperatures",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "The column name 'Temperature'",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "The row index label where the highest temperature reading occurs",
+        "isCorrect": true
+      },
+      {
+        "id": "D",
+        "text": "The maximum temperature value itself as a float",
+        "isCorrect": false
+      }
+    ],
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nFor Locating Max Index via idxmax() (Section B2: Informatics Practices Core):\nidxmax() returns the index label associated with the maximum value in the Series.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (C) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q47",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-locating-max-index-via-idxmax",
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "solution": {
+      "quick": "Option (C) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Locating Max Index via idxmax()",
+      "detailed": "Detailed Solution:\nFor Locating Max Index via idxmax() (Section B2: Informatics Practices Core):\nidxmax() returns the index label associated with the maximum value in the Series.\nHence Option C is correct.\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (C) is the correct answer."
+    },
+    "keyConcept": "Section B2: Informatics Practices Core: Locating Max Index via idxmax()",
+    "tags": [
+      "CUET UG 2026",
+      "computer_science",
+      "Section B2: Informatics Practices Core"
+    ],
+    "testNumber": 36,
+    "subjectFolder": "computer_science",
+    "provenance": "ncert_practice_bank_remediation"
+  },
+  {
+    "questionNumber": 48,
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "dropna Thresh Parameter",
+    "questionText": "What does df.dropna(thresh=3) do for a DataFrame?",
+    "hasDiagram": false,
+    "diagramDescription": null,
+    "options": [
+      {
+        "id": "A",
+        "text": "Drops rows with exactly 3 non-null values",
+        "isCorrect": false
+      },
+      {
+        "id": "B",
+        "text": "Drops rows that have 3 or more null values",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Drops the first 3 rows",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Retains only rows that have at least 3 non-null (valid) observations",
         "isCorrect": true
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (D) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q46",
-    "conceptId": "computer-science-computer-networks-tcp-ip-vs-osi-protocol-stack",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (dropna Thresh Parameter):\nRetains only rows that have at least 3 non-null (valid) observations\n\nDetailed Context:\nThe thresh=n argument requires that a row/column must contain at least n non-null values to be kept.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "questionId": "COMPUTER_SCI-M36-Q48",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-dropna-thresh-parameter",
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 95,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (D) is correct.",
-      "concept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Computer Networks - TCP/IP vs OSI Protocol Stack):\nThe Network layer (Layer 3) handles host-to-host logical addressing (IP addresses), packetization, path determination, and routing across multiple intermediate networks.\n\nHence, Option (D) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: dropna Thresh Parameter",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (dropna Thresh Parameter):\nRetains only rows that have at least 3 non-null (valid) observations\n\nDetailed Context:\nThe thresh=n argument requires that a row/column must contain at least n non-null values to be kept.\nHence Option B is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
-    "keyConcept": "Computer Networks: TCP/IP vs OSI Protocol Stack",
+    "keyConcept": "Section B2: Informatics Practices Core: dropna Thresh Parameter",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Computer Networks"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 47,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Stack LIFO Principle and Operations",
-    "questionText": "A Stack data structure operates on which fundamental sequencing principle?",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "LIFO (Last In First Out)",
-        "isCorrect": true
-      },
-      {
-        "id": "B",
-        "text": "FIFO (First In First Out)",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Priority Queue order",
-        "isCorrect": false
-      },
-      {
-        "id": "D",
-        "text": "Random Access File order",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (A) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q47",
-    "conceptId": "computer-science-data-structures-stacks-stack-lifo-principle-and-operations",
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Stack LIFO Principle and Operations):\nA Stack is a linear data structure following the LIFO (Last In, First Out) principle, where insertions (Push) and deletions (Pop) take place at the same end called the Top of the stack.\n\nHence, Option (A) is the correct answer."
-    },
-    "keyConcept": "Data Structures: Stacks: Stack LIFO Principle and Operations",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Structures: Stacks"
-    ],
-    "testNumber": 36,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
-  },
-  {
-    "questionNumber": 48,
-    "chapter": "Data Structures: Stacks",
-    "topic": "Infix to Postfix Conversion",
-    "questionText": "The postfix (Reverse Polish Notation) equivalent of the infix arithmetic expression `(A + B) * C` is:",
-    "hasDiagram": false,
-    "diagramDescription": null,
-    "options": [
-      {
-        "id": "A",
-        "text": "A B C + *",
-        "isCorrect": false
-      },
-      {
-        "id": "B",
-        "text": "* + A B C",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "A B + C *",
-        "isCorrect": true
-      },
-      {
-        "id": "D",
-        "text": "A + B C *",
-        "isCorrect": false
-      }
-    ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer.",
-    "questionId": "COMPUTER_SCI-M36-Q48",
-    "conceptId": "computer-science-data-structures-stacks-infix-to-postfix-conversion",
-    "questionType": "direct-numerical",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
-    "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Data Structures: Stacks: Infix to Postfix Conversion",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Data Structures: Stacks - Infix to Postfix Conversion):\nEvaluating with operator precedence: inner parentheses `(A + B)` becomes `AB+`. Multiplying by `C` yields `AB+ C *`.\n\nHence, Option (C) is the correct answer."
-    },
-    "keyConcept": "Data Structures: Stacks: Infix to Postfix Conversion",
-    "tags": [
-      "CUET UG 2026",
-      "computer_science",
-      "Data Structures: Stacks"
-    ],
-    "testNumber": 36,
-    "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 49,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Phishing Attack Mechanism",
-    "questionText": "In cybersecurity, 'Phishing' is defined as a fraudulent social engineering technique where an attacker:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Cyber Crimes and Unethical Digital Behaviors",
+    "questionText": "Match the cyber offense in List I with its description in List II:\n\nList I:\n(A) Phishing\n(B) Cyberbullying\n(C) Identity Theft\n(D) Plagiarism\n\nList II:\n(I) Fraudulent communications masquerading as trustworthy institutions to steal credentials\n(II) Harassing, humiliating, or intimidating individuals using digital communication channels\n(III) Unauthorized acquisition and misuse of someone's personal identity data for fraud\n(IV) Presenting someone else's work, creative ideas, or code as one's own without attribution\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Masquerades as a reputable entity (like a bank) via deceptive emails to steal confidential passwords and credentials",
+        "text": "A-I, B-II, C-III, D-IV",
         "isCorrect": true
       },
       {
         "id": "B",
-        "text": "Floods a network server with millions of illegitimate requests to exhaust bandwidth (DoS)",
+        "text": "A-I, B-III, C-IV, D-II",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Infects a physical USB drive with self-replicating boot sector viruses",
+        "text": "A-IV, B-II, C-I, D-III",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Intercepts encrypted radio satellite telemetry signals",
+        "text": "A-II, B-I, C-III, D-IV",
         "isCorrect": false
       }
     ],
     "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (A) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nPhishing steals credentials via spoofing, cyberbullying is online harassment, identity theft is credential impersonation, and plagiarism is unattributed copying.\nHence Option B is correct.\nHence, option (C) is the correct match.\n\nHence, Option (A) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q49",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-phishing-attack-mechanism",
-    "questionType": "conceptual",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-cyber-crimes-and-unethical-digital-behaviors",
+    "questionType": "match-the-following",
     "difficulty": 2,
     "difficultyLevel": 2,
-    "estimatedTimeSeconds": 80,
+    "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (A) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Phishing Attack Mechanism):\nPhishing is a cyber attack that uses deceptive emails, websites, or messages masquerading as trusted institutions to trick individuals into disclosing sensitive personal information (usernames, passwords, credit card numbers).\n\nHence, Option (A) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: Cyber Crimes and Unethical Digital Behaviors",
+      "detailed": "Detailed Solution:\nPhishing steals credentials via spoofing, cyberbullying is online harassment, identity theft is credential impersonation, and plagiarism is unattributed copying.\nHence Option B is correct.\nHence, option (C) is the correct match.\n\nHence, Option (A) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Phishing Attack Mechanism",
+    "keyConcept": "Section B2: Informatics Practices Core: Cyber Crimes and Unethical Digital Behaviors",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   },
   {
     "questionNumber": 50,
-    "chapter": "Cyber Security, Cyber Crime and IT Law",
-    "topic": "Information Technology Act 2000 Section 66D",
-    "questionText": "Under the Information Technology (IT) Act, 2000 of India, Section 66D prescribes punishment for:",
+    "chapter": "Section B2: Informatics Practices Core",
+    "topic": "Range Outlier Exclusion",
+    "questionText": "Which parameter in plt.hist() restricts binning to values between a minimum and maximum threshold, ignoring outliers?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Publishing obscenity in electronic form",
+        "text": "clip=(min_val, max_val)",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Identity theft without financial damage",
-        "isCorrect": false
-      },
-      {
-        "id": "C",
-        "text": "Cheating by personation through using any computer resource",
+        "text": "range=(min_val, max_val)",
         "isCorrect": true
       },
       {
+        "id": "C",
+        "text": "bounds=(min_val, max_val)",
+        "isCorrect": false
+      },
+      {
         "id": "D",
-        "text": "Hacking critical infrastructure systems",
+        "text": "limits=(min_val, max_val)",
         "isCorrect": false
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "B",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Range Outlier Exclusion):\nrange=(min_val, max_val)\n\nDetailed Context:\nThe range parameter defines the lower and upper binning boundaries; values outside are omitted.\nHence Option A is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "COMPUTER_SCI-M36-Q50",
-    "conceptId": "computer-science-cyber-security-cyber-crime-and-it-law-information-technology-act-2000-section-66d",
+    "conceptId": "computer-science-section-b2-informatics-practices-core-range-outlier-exclusion",
     "questionType": "conceptual",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 65,
+    "difficulty": 2,
+    "difficultyLevel": 2,
+    "estimatedTimeSeconds": 60,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
-      "detailed": "Detailed Solution:\nAccording to NCERT Class 12 Computer_Science (Cyber Security, Cyber Crime and IT Law - Information Technology Act 2000 Section 66D):\nSection 66D of the IT Act penalizes cheating by personation using computer resources or communication devices, with imprisonment for up to 3 years and a fine of up to Rs. 1 lakh.\n\nHence, Option (C) is the correct answer."
+      "quick": "Option (B) is correct.",
+      "concept": "Section B2: Informatics Practices Core: Range Outlier Exclusion",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Range Outlier Exclusion):\nrange=(min_val, max_val)\n\nDetailed Context:\nThe range parameter defines the lower and upper binning boundaries; values outside are omitted.\nHence Option A is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Cyber Security, Cyber Crime and IT Law: Information Technology Act 2000 Section 66D",
+    "keyConcept": "Section B2: Informatics Practices Core: Range Outlier Exclusion",
     "tags": [
       "CUET UG 2026",
       "computer_science",
-      "Cyber Security, Cyber Crime and IT Law"
+      "Section B2: Informatics Practices Core"
     ],
     "testNumber": 36,
     "subjectFolder": "computer_science",
-    "provenance": "ai_ncert_synthesis"
+    "provenance": "ncert_practice_bank_remediation"
   }
 ]

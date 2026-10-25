@@ -2,6 +2,7 @@ import os
 import json
 import re
 import random
+from scripts.duplicate_detection import get_structural_fingerprint, get_exact_fingerprint
 
 def slugify(text):
     if not text:
@@ -125,6 +126,7 @@ def validate_and_save_mock(sub_id, folder, prefix, mock_num, questions):
     keys_count = {'A': 0, 'B': 0, 'C': 0, 'D': 0}
     chapters = set()
     seen_ids = set()
+    seen_struct_fps = {}
     
     for idx, q in enumerate(questions, 1):
         assert q['questionNumber'] == idx, f"Mismatch questionNumber at {idx}: {q['questionNumber']}"
@@ -132,6 +134,14 @@ def validate_and_save_mock(sub_id, folder, prefix, mock_num, questions):
         assert q['questionId'] == expected_qid, f"Expected QID {expected_qid}, got {q['questionId']}"
         assert q['questionId'] not in seen_ids, f"Duplicate QID: {q['questionId']}"
         seen_ids.add(q['questionId'])
+        
+        # Enforce intra-mock duplicate prevention (Level A & Level B)
+        fp = get_structural_fingerprint(q)
+        assert fp not in seen_struct_fps, (
+            f"Intra-mock duplicate detected in {sub_id} mock {mock_num}: "
+            f"Q{idx} duplicates Q{seen_struct_fps[fp]}! Stem: {q.get('questionText')}"
+        )
+        seen_struct_fps[fp] = idx
         
         # Check options
         opts = q['options']
