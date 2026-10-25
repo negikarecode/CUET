@@ -14,8 +14,9 @@
 
 import fs from "fs";
 import path from "path";
-import { sanitizeQuestionForActiveExam } from "../lib/store/useCBTStore";
+import { useCBTStore, sanitizeQuestionForActiveExam } from "../lib/store/useCBTStore";
 import { buildScoredSet } from "../lib/scoring";
+import { getQuestionsForTest } from "../lib/data/mock50Questions";
 import { Question } from "../types";
 
 let passed = 0;
@@ -230,6 +231,28 @@ async function runSecurityTestSuite() {
   assert(
     scoreB[0]?.isCorrect === false && scoreB[0]?.selectedOption === null,
     "Dropped Question: Unanswered dropped question does not award marks and does not penalize"
+  );
+
+  // TEST 5: Active CBT Client Store Integration
+  console.log("\n[TEST 5] Verifying Active CBT Store Initializes Sanitized Mock Questions (Non-Empty)...");
+  const sampleTestId = "physics-mock-1";
+  const { testMeta: sampleMeta, questions: rawSampleQs } = getQuestionsForTest(sampleTestId);
+  const sanitizedSampleQs = rawSampleQs.map(sanitizeQuestionForActiveExam);
+
+  useCBTStore.getState().initTest(sampleTestId, sampleMeta, sanitizedSampleQs, true);
+  const activeQs = useCBTStore.getState().questions;
+
+  assert(
+    activeQs.length === 50,
+    `CBT Client Store: Loaded all ${activeQs.length}/50 sanitized questions (defense-in-depth passed)`
+  );
+  assert(
+    activeQs[0]?.options?.length === 4,
+    "CBT Client Store: Question 1 contains exactly 4 choices"
+  );
+  assert(
+    (activeQs[0] as any)?.correctOptionId === undefined && (activeQs[0] as any)?.correctOption === undefined,
+    "CBT Client Store: Active session has zero exposed answer keys"
   );
 
   console.log("\n===============================================================");

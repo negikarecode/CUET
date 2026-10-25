@@ -386,7 +386,7 @@ export function getQuestionsForTest(testId: string): {
     }
 
     // Phase 1 Containment: Filter out any question failing publication eligibility
-    const eligibleRaw = rawQuestions.filter(isQuestionEligibleForActiveCBT);
+    const eligibleRaw = rawQuestions.filter((q) => isQuestionEligibleForActiveCBT(q));
 
     // Verify paper completeness per official CUET UG rules:
     // If filtering leaves an incomplete paper, do not silently serve a smaller or broken exam.
@@ -445,7 +445,7 @@ export function getQuestionsForTest(testId: string): {
       questions,
     };
   } else {
-    const match = lowerId.match(/(\d+)/);
+    const match = lowerId.match(/(?:mock|paper)[-_]?(\d+)/i) || lowerId.match(/[-_](\d+)$/) || lowerId.match(/(\d+)/);
     const rawMockNumber = match && match[1] ? parseInt(match[1], 10) : 1;
     validMockNumber = rawMockNumber >= 1 && rawMockNumber <= 50 ? rawMockNumber : 1;
 

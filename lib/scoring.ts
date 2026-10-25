@@ -48,7 +48,10 @@ export function isQuestionUnresolved(q: any): boolean {
  * unresolved, duplicate-option, corrupted stem, or synthetic boilerplate
  * questions can enter candidate-facing CBT tests.
  */
-export function isQuestionEligibleForActiveCBT(q: any): boolean {
+export function isQuestionEligibleForActiveCBT(
+  q: any,
+  options?: { allowSanitized?: boolean } | number
+): boolean {
   if (!q) return false;
   if (isQuestionUnresolved(q)) return false;
 
@@ -68,16 +71,25 @@ export function isQuestionEligibleForActiveCBT(q: any): boolean {
 
   if (!q.is_authentic_paper_duplicate && new Set(optTexts).size !== 4) return false;
 
+  const isSanitized = Boolean(
+    (typeof options === "object" && options?.allowSanitized) ||
+    q.isSanitizedForActiveExam ||
+    q.__isSanitizedForActiveExam
+  );
+
   const correctKey = resolveQuestionCorrectOptionId(q);
   const isDropped = isQuestionDropped(q);
-  if (!correctKey && !isDropped) return false;
 
-  const sol = String(q.detailedSolution || q.solution?.detailed || q.explanation || "");
-  if (
-    sol.includes("Option A is consistent with the canonical curriculum") ||
-    sol.includes("Analyze the stem and evaluate the criteria established in")
-  ) {
-    return false;
+  if (!isSanitized) {
+    if (!correctKey && !isDropped) return false;
+
+    const sol = String(q.detailedSolution || q.solution?.detailed || q.explanation || "");
+    if (
+      sol.includes("Option A is consistent with the canonical curriculum") ||
+      sol.includes("Analyze the stem and evaluate the criteria established in")
+    ) {
+      return false;
+    }
   }
 
   return true;

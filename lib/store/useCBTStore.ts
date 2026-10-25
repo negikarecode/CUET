@@ -197,6 +197,7 @@ export function sanitizeQuestionForActiveExam(q: Question): Question {
       id: opt.id,
       text: opt.text,
     })),
+    isSanitizedForActiveExam: true,
   };
   delete (sanitized as any).correctOptionId;
   delete (sanitized as any).correctOption;
@@ -383,7 +384,9 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     clearSessionFromStorage(testId);
 
     // Defense-in-depth: Ensure quarantined/ineligible questions never enter candidate session
-    const activeQuestions = questionsList.filter(isQuestionEligibleForActiveCBT);
+    const activeQuestions = questionsList.filter((q) =>
+      isQuestionEligibleForActiveCBT(q, { allowSanitized: true })
+    );
 
     const initialStates: Record<string, QuestionSessionState> = {};
     activeQuestions.forEach((q, idx) => {

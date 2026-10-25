@@ -47,8 +47,8 @@ function getUuidToCanonicalMap(): Map<string, string> {
   for (const def of SUBJECT_MOCK_DEFINITIONS) {
     const canonicalSubj = def.folder.replace(/[\s_]+/g, "-");
 
-    // Full Mocks 1 to 20
-    for (let m = 1; m <= 20; m++) {
+    // Full Mocks 1 to 50
+    for (let m = 1; m <= 50; m++) {
       const canonicalSlug = `${canonicalSubj}-mock-${m}`;
       map.set(stringToUuid(canonicalSlug), canonicalSlug);
 
@@ -62,8 +62,8 @@ function getUuidToCanonicalMap(): Map<string, string> {
       }
     }
 
-    // PYQs 1 to 10
-    for (let p = 1; p <= 10; p++) {
+    // PYQs 1 to 30
+    for (let p = 1; p <= 30; p++) {
       const canonicalSlug = `${canonicalSubj}-pyq-${p}`;
       map.set(stringToUuid(canonicalSlug), canonicalSlug);
       map.set(stringToUuid(`${def.id}-pyq-${p}`), canonicalSlug);
@@ -71,9 +71,9 @@ function getUuidToCanonicalMap(): Map<string, string> {
       map.set(stringToUuid(`pyq-${def.folder}-${p}`), canonicalSlug);
     }
 
-    // Practice tests (Units 1 to 15, Tests 1 to 20)
+    // Practice tests (Units 1 to 15, Tests 1 to 50)
     for (let u = 1; u <= 15; u++) {
-      for (let t = 1; t <= 20; t++) {
+      for (let t = 1; t <= 50; t++) {
         const canonicalSlug = `practice-${canonicalSubj}-unit${u}-test${t}`;
         map.set(stringToUuid(canonicalSlug), canonicalSlug);
         map.set(stringToUuid(`practice-${def.id}-unit${u}-test${t}`), canonicalSlug);
