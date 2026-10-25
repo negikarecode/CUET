@@ -991,7 +991,7 @@
     "questionNumber": 20,
     "chapter": "Chemical Kinetics",
     "topic": "Rate Law and Order of Reaction",
-    "questionText": "ee |\nQ.42 Read the passage carefully and answer the questions based on the passage:\nThe number of reacting species (atoms, ions or molecules) taking part in an elementary reaction, which must collide\nsimultaneously in order to bring about a chemical reaction is called molecularity of a reaction. In the rate equation\nRate = A(Al*[B)’\n« and y indicate how sensitive the rate is to the change in concentration of A and B, respectively. Sum of these exponents, i.e., ©\n+y gives the overall order of a reaction where x and y represent the order with respect to the reactants A and B\nrespectively. Hence, the sum of powers of the concentration of the reactants in the rate law expression is called the order of that\nchemical reaction. For a first order reaction, the concentration of the reactant varies as [R] = [Roe\nThe conversion of molecules X to ¥ follows second order kinetics. If the concentration of X is increased to four times,\nhow does it affect the rate of formation of ¥?",
+    "questionText": "ee |\nQ.42 Read the passage carefully and answer the questions based on the passage:\nThe number of reacting species (atoms, ions or molecules) taking part in an elementary reaction, which must collide\nsimultaneously in order to bring about a chemical reaction is called molecularity of a reaction. In the rate equation\nRate = A(Al*[B)\u2019\n\u00ab and y indicate how sensitive the rate is to the change in concentration of A and B, respectively. Sum of these exponents, i.e., \u00a9\n+y gives the overall order of a reaction where x and y represent the order with respect to the reactants A and B\nrespectively. Hence, the sum of powers of the concentration of the reactants in the rate law expression is called the order of that\nchemical reaction. For a first order reaction, the concentration of the reactant varies as [R] = [Roe\nThe conversion of molecules X to \u00a5 follows second order kinetics. If the concentration of X is increased to four times,\nhow does it affect the rate of formation of \u00a5?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -1301,55 +1301,84 @@
   },
   {
     "questionNumber": 26,
-    "chapter": "Aldehydes, Ketones and Carboxylic Acids",
-    "topic": "Addition of Hydrogen Cyanide (HCN)",
-    "questionText": "Which of the following statements is NOT correct regarding Addition of Hydrogen Cyanide (HCN) (Aldehydes, Ketones and Carboxylic Acids)?",
+    "chapter": "Electrochemistry",
+    "topic": "Equilibrium Constant from Standard Cell Potential",
+    "questionText": "Consider the following hypothetical redox reaction:\n$$A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s) \\quad ; \\quad E_{\\text{cell}}^\\circ = 0.295\\text{ V}$$\nThe equilibrium constant of the reaction at $298\\text{ K}$ will be:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "(A)-(I), (B)-(II), (C)-(III), (D)-(IV)",
-        "isCorrect": false
+        "text": "10^{-10}",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Slip",
+        "mistakeAnalysis": "Aspirants assign a negative sign to standard potential or invert the Nernst equilibrium relationship.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion Slip"
+        }
       },
       {
         "id": "B",
-        "text": "(A)-(IV), (B)-(III), (C)-(II), (D)-(I)",
-        "isCorrect": true
+        "text": "10^5",
+        "isCorrect": false,
+        "studentSelectionTrap": "n-Factor Omission Error",
+        "mistakeAnalysis": "Aspirants omit multiplying by $n = 2$, calculating $\\log K_c = 0.295 / 0.059 = 5 \\implies K_c = 10^5$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "n-Factor Omission Error"
+        }
       },
       {
         "id": "C",
-        "text": "(A)-(II), (B)-(I), (C)-(IV), (D)-(III)",
-        "isCorrect": false
+        "text": "10^{20}",
+        "isCorrect": false,
+        "studentSelectionTrap": "Double-Electron Double Counting",
+        "mistakeAnalysis": "Aspirants multiply $n$ by 2 a second time.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Double-Electron Double Counting"
+        }
       },
       {
         "id": "D",
-        "text": "(A)-(III), (B)-(IV), (C)-(I), (D)-(II)",
-        "isCorrect": false
+        "text": "10^{10}",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately calculates $\\log K_c = \\frac{n E^\\circ}{0.0591} = \\frac{2 \\times 0.295}{0.059} = \\frac{0.590}{0.059} = 10 \\implies K_c = 10^{10}$.",
+        "misconception": null
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nIn Aldehydes, Ketones and Carboxylic Acids (Addition of Hydrogen Cyanide (HCN)):\nThe statement '(A)-(IV), (B)-(III), (C)-(II), (D)-(I)' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (B) is the correct choice.\n\nHence, Option (B) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "1. At equilibrium at $298\\text{ K}$, the cell potential is zero ($E_{\\text{cell}} = 0$). The Nernst equation gives:\n   $$E_{\\text{cell}}^\\circ = \\frac{0.059}{n} \\log K_c$$\n   $$\\log K_c = \\frac{n \\cdot E_{\\text{cell}}^\\circ}{0.059}$$\n2. From the reaction $A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s)$, the number of electrons transferred is $n = 2$.\n3. Substitute the given parameters:\n   $$\\log K_c = \\frac{2 \\times 0.295\\text{ V}}{0.059\\text{ V}} = \\frac{0.590}{0.059} = 10$$\n4. Taking the antilogarithm:\n   $$K_c = 10^{10}$$\nHence Option D is correct.",
     "questionId": "CHEMISTRY-M47-Q26",
-    "conceptId": "chemistry-aldehydes-ketones-and-carboxylic-acids-addition-of-hydrogen-cyanide-hcn",
+    "conceptId": "CHEM-electrochemistry-equilibrium-constant-from-standard-cell-potential",
     "questionType": "conceptual",
     "difficulty": 3,
-    "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Aldehydes, Ketones and Carboxylic Acids: Addition of Hydrogen Cyanide (HCN)",
-      "detailed": "Detailed Solution:\nIn Aldehydes, Ketones and Carboxylic Acids (Addition of Hydrogen Cyanide (HCN)):\nThe statement '(A)-(IV), (B)-(III), (C)-(II), (D)-(I)' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (B) is the correct choice.\n\nHence, Option (B) is the correct answer."
+      "quick": "Correct answer is 10^{10}.",
+      "concept": "1. At equilibrium at $298\\text{ K}$, the cell potential is zero ($E_{\\text{cell}} = 0$).",
+      "detailed": "1. At equilibrium at $298\\text{ K}$, the cell potential is zero ($E_{\\text{cell}} = 0$). The Nernst equation gives:\n   $$E_{\\text{cell}}^\\circ = \\frac{0.059}{n} \\log K_c$$\n   $$\\log K_c = \\frac{n \\cdot E_{\\text{cell}}^\\circ}{0.059}$$\n2. From the reaction $A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s)$, the number of electrons transferred is $n = 2$.\n3. Substitute the given parameters:\n   $$\\log K_c = \\frac{2 \\times 0.295\\text{ V}}{0.059\\text{ V}} = \\frac{0.590}{0.059} = 10$$\n4. Taking the antilogarithm:\n   $$K_c = 10^{10}$$\nHence Option D is correct."
     },
-    "keyConcept": "Aldehydes, Ketones and Carboxylic Acids: Addition of Hydrogen Cyanide (HCN)",
+    "keyConcept": "Electrochemistry: Equilibrium Constant from Standard Cell Potential",
+    "formula": "$A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s) \\quad ; \\quad E_{\\text{cell}}^\\circ = 0.295\\text{ V}$",
     "tags": [
-      "CUET UG 2026",
-      "chemistry",
-      "Aldehydes, Ketones and Carboxylic Acids"
+      "Chemistry",
+      "Electrochemistry",
+      "Equilibrium Constant from Standard Cell Potential",
+      "conceptual"
     ],
-    "testNumber": 47,
+    "difficultyLevel": 3,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "CHEM-M03-Q36",
+    "testNumber": 1,
     "subjectFolder": "chemistry",
-    "provenance": "ncert_practice_bank_remediation"
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
   },
   {
     "questionNumber": 27,
@@ -1459,7 +1488,7 @@
     "questionNumber": 29,
     "chapter": "Solutions",
     "topic": "Colligative Properties",
-    "questionText": "On the basis of following observations arrange the following compounds in increasing order of mol of AgCI\nprecipitated per mol of the compound with excess of AgNO3\n \nFormula\nSecondary valences Solution conductivity\n(A) PdCl2.4NH3 4\n1:2 electrolyte\n(B) NiCl4.2K\n4\n2:1 electrolyte\n(C) CoCl3.4NH3 6\n1:1 electrolyte\n(D) CrCl3.6H2O 6\n1:3 electrolyte\nChoose the correct answer from the options given below:",
+    "questionText": "On the basis of following observations arrange the following compounds in increasing order of mol of AgCI\nprecipitated per mol of the compound with excess of AgNO3\n\u00a0\nFormula\nSecondary valences Solution conductivity\n(A) PdCl2.4NH3 4\n1:2 electrolyte\n(B) NiCl4.2K\n4\n2:1 electrolyte\n(C) CoCl3.4NH3 6\n1:1 electrolyte\n(D) CrCl3.6H2O 6\n1:3 electrolyte\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -1510,8 +1539,8 @@
   {
     "questionNumber": 30,
     "chapter": "Solutions",
-    "topic": "Alkenes – Vinylic Halides",
-    "questionText": "Which of the following statements is NOT correct regarding Alkenes – Vinylic Halides (Solutions)?",
+    "topic": "Alkenes \u2013 Vinylic Halides",
+    "questionText": "Which of the following statements is NOT correct regarding Alkenes \u2013 Vinylic Halides (Solutions)?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -1537,7 +1566,7 @@
       }
     ],
     "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nIn Solutions (Alkenes – Vinylic Halides):\nThe statement 'CoHsX\nBr' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (B) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nIn Solutions (Alkenes \u2013 Vinylic Halides):\nThe statement 'CoHsX\nBr' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (B) is the correct answer.",
     "questionId": "CHEMISTRY-M47-Q30",
     "conceptId": "chemistry-solutions-alkenes-vinylic-halides",
     "questionType": "conceptual",
@@ -1546,10 +1575,10 @@
     "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (B) is correct.",
-      "concept": "Solutions: Alkenes – Vinylic Halides",
-      "detailed": "Detailed Solution:\nIn Solutions (Alkenes – Vinylic Halides):\nThe statement 'CoHsX\nBr' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (B) is the correct answer."
+      "concept": "Solutions: Alkenes \u2013 Vinylic Halides",
+      "detailed": "Detailed Solution:\nIn Solutions (Alkenes \u2013 Vinylic Halides):\nThe statement 'CoHsX\nBr' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Solutions: Alkenes – Vinylic Halides",
+    "keyConcept": "Solutions: Alkenes \u2013 Vinylic Halides",
     "tags": [
       "CUET UG 2026",
       "chemistry",
@@ -1667,7 +1696,7 @@
     "questionNumber": 33,
     "chapter": "Chemical Kinetics",
     "topic": "Factors Influencing Rate of a Reaction",
-    "questionText": "Read the passage carefully and answer the questions\nThe speed at which a chemical reaction takes place is called the rate of reaction. The rate of reaction depends on various fact\nlike concentration of the reactants, temperature, etc. The relation between the rate of reaction and the concentration of reacti\nspecies is represented by the equation r = k[A]*[B]”, where » and y are the order of the reaction with respect to the reactants\nand B, respectively. The overall order of the reaction is + y. The rate of reaction can also be increased by the use of a catal:\nwhich provides an alternate pathway of lower activation energy. It increases the rate of forward and backward reaction to an\nequal extent. It does not alter the Gibbs energy of the reaction.\n‘The rate of a gaseous reaction is given by r = k[A][B]. If the volume of the reaction vessel is suddenly reduced to (1/4)th\nof its initial value, the reaction rate relating to the initial rate will become",
+    "questionText": "Read the passage carefully and answer the questions\nThe speed at which a chemical reaction takes place is called the rate of reaction. The rate of reaction depends on various fact\nlike concentration of the reactants, temperature, etc. The relation between the rate of reaction and the concentration of reacti\nspecies is represented by the equation r = k[A]*[B]\u201d, where \u00bb and y are the order of the reaction with respect to the reactants\nand B, respectively. The overall order of the reaction is + y. The rate of reaction can also be increased by the use of a catal:\nwhich provides an alternate pathway of lower activation energy. It increases the rate of forward and backward reaction to an\nequal extent. It does not alter the Gibbs energy of the reaction.\n\u2018The rate of a gaseous reaction is given by r = k[A][B]. If the volume of the reaction vessel is suddenly reduced to (1/4)th\nof its initial value, the reaction rate relating to the initial rate will become",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -1797,7 +1826,7 @@
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Haloalkanes and Haloarenes (Electrophilic substitution reactions of aromatic compounds):\nElectrophilic substitution reaction\n\nDetailed Context:\nStep 1: FeCl₃ coordinates with the halogen (Cl₂ or Br₂) to form the electrophile X⁺ (Cl⁺/Br⁺). Step 2: The aromatic ring (toluene) donates electron density from its π‑system to X⁺, forming a σ‑complex (arenium ion). Step 3: Deprotonation of the σ‑complex restores aromaticity, yielding ortho‑ and para‑halotoluene.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Haloalkanes and Haloarenes (Electrophilic substitution reactions of aromatic compounds):\nElectrophilic substitution reaction\n\nDetailed Context:\nStep 1: FeCl\u2083 coordinates with the halogen (Cl\u2082 or Br\u2082) to form the electrophile X\u207a (Cl\u207a/Br\u207a). Step 2: The aromatic ring (toluene) donates electron density from its \u03c0\u2011system to X\u207a, forming a \u03c3\u2011complex (arenium ion). Step 3: Deprotonation of the \u03c3\u2011complex restores aromaticity, yielding ortho\u2011 and para\u2011halotoluene.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer.",
     "questionId": "CHEMISTRY-M47-Q35",
     "conceptId": "chemistry-haloalkanes-and-haloarenes-electrophilic-substitution-reactions-of-aromatic-compounds",
     "questionType": "conceptual",
@@ -1807,7 +1836,7 @@
     "solution": {
       "quick": "Option (C) is correct.",
       "concept": "Haloalkanes and Haloarenes: Electrophilic substitution reactions of aromatic compounds",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Haloalkanes and Haloarenes (Electrophilic substitution reactions of aromatic compounds):\nElectrophilic substitution reaction\n\nDetailed Context:\nStep 1: FeCl₃ coordinates with the halogen (Cl₂ or Br₂) to form the electrophile X⁺ (Cl⁺/Br⁺). Step 2: The aromatic ring (toluene) donates electron density from its π‑system to X⁺, forming a σ‑complex (arenium ion). Step 3: Deprotonation of the σ‑complex restores aromaticity, yielding ortho‑ and para‑halotoluene.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer."
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Haloalkanes and Haloarenes (Electrophilic substitution reactions of aromatic compounds):\nElectrophilic substitution reaction\n\nDetailed Context:\nStep 1: FeCl\u2083 coordinates with the halogen (Cl\u2082 or Br\u2082) to form the electrophile X\u207a (Cl\u207a/Br\u207a). Step 2: The aromatic ring (toluene) donates electron density from its \u03c0\u2011system to X\u207a, forming a \u03c3\u2011complex (arenium ion). Step 3: Deprotonation of the \u03c3\u2011complex restores aromaticity, yielding ortho\u2011 and para\u2011halotoluene.\n\nTherefore, option (C) is the correct answer.\n\nHence, Option (C) is the correct answer."
     },
     "keyConcept": "Haloalkanes and Haloarenes: Electrophilic substitution reactions of aromatic compounds",
     "tags": [
@@ -2250,7 +2279,7 @@
       },
       {
         "id": "B",
-        "text": "1.0 mol kg“!",
+        "text": "1.0 mol kg\u201c!",
         "isCorrect": false
       },
       {
@@ -2473,7 +2502,7 @@
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Chemical Kinetics (Catalysis):\nRemains unchanged\n\nDetailed Context:\nDetailed Solution:\nAccording to NCERT principles for Chemical Kinetics (Catalysis):\nRemains unchanged\n\nDetailed Analysis:\nStep 1: Identify that the question concerns the effect of a catalyst on thermodynamic quantities. Step 2: Recall that a catalyst changes only the kinetic parameter (rate) by lowering E_a. Step 3: Recognize that ΔH depends solely on the energies of reactants and products, which \n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Chemical Kinetics (Catalysis):\nRemains unchanged\n\nDetailed Context:\nDetailed Solution:\nAccording to NCERT principles for Chemical Kinetics (Catalysis):\nRemains unchanged\n\nDetailed Analysis:\nStep 1: Identify that the question concerns the effect of a catalyst on thermodynamic quantities. Step 2: Recall that a catalyst changes only the kinetic parameter (rate) by lowering E_a. Step 3: Recognize that \u0394H depends solely on the energies of reactants and products, which \n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "CHEMISTRY-M47-Q48",
     "conceptId": "chemistry-chemical-kinetics-catalysis",
     "questionType": "conceptual",
@@ -2483,7 +2512,7 @@
     "solution": {
       "quick": "Option (D) is correct.",
       "concept": "Chemical Kinetics: Catalysis",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Chemical Kinetics (Catalysis):\nRemains unchanged\n\nDetailed Context:\nDetailed Solution:\nAccording to NCERT principles for Chemical Kinetics (Catalysis):\nRemains unchanged\n\nDetailed Analysis:\nStep 1: Identify that the question concerns the effect of a catalyst on thermodynamic quantities. Step 2: Recall that a catalyst changes only the kinetic parameter (rate) by lowering E_a. Step 3: Recognize that ΔH depends solely on the energies of reactants and products, which \n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer."
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Chemical Kinetics (Catalysis):\nRemains unchanged\n\nDetailed Context:\nDetailed Solution:\nAccording to NCERT principles for Chemical Kinetics (Catalysis):\nRemains unchanged\n\nDetailed Analysis:\nStep 1: Identify that the question concerns the effect of a catalyst on thermodynamic quantities. Step 2: Recall that a catalyst changes only the kinetic parameter (rate) by lowering E_a. Step 3: Recognize that \u0394H depends solely on the energies of reactants and products, which \n\nTherefore, option (C) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
     "keyConcept": "Chemical Kinetics: Catalysis",
     "tags": [

@@ -469,55 +469,84 @@
   },
   {
     "questionNumber": 10,
-    "chapter": "Biomolecules",
-    "topic": "Vitamins and Deficiency Diseases",
-    "questionText": "Given below are two statements: one is labelled as Assertion (A) and the other is labelled as Reason (R).\n\nAssertion (A): In Biomolecules, (A) - (IV), (B) - (I), (C) - (II), (D) - (III).\nReason (R): Vitamins and Deficiency Diseases is a foundational concept established in NCERT Biomolecules.\n\nIn light of the above statements, choose the correct answer from the options given below:",
+    "chapter": "Electrochemistry",
+    "topic": "Equilibrium Constant from Standard Cell Potential",
+    "questionText": "Consider the following hypothetical redox reaction:\n$$A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s) \\quad ; \\quad E_{\\text{cell}}^\\circ = 0.295\\text{ V}$$\nThe equilibrium constant of the reaction at $298\\text{ K}$ will be:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": false
+        "text": "10^{-10}",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Slip",
+        "mistakeAnalysis": "Aspirants assign a negative sign to standard potential or invert the Nernst equilibrium relationship.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion Slip"
+        }
       },
       {
         "id": "B",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": false
+        "text": "10^5",
+        "isCorrect": false,
+        "studentSelectionTrap": "n-Factor Omission Error",
+        "mistakeAnalysis": "Aspirants omit multiplying by $n = 2$, calculating $\\log K_c = 0.295 / 0.059 = 5 \\implies K_c = 10^5$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "n-Factor Omission Error"
+        }
       },
       {
         "id": "C",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": true
+        "text": "10^{20}",
+        "isCorrect": false,
+        "studentSelectionTrap": "Double-Electron Double Counting",
+        "mistakeAnalysis": "Aspirants multiply $n$ by 2 a second time.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Double-Electron Double Counting"
+        }
       },
       {
         "id": "D",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false
+        "text": "10^{10}",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately calculates $\\log K_c = \\frac{n E^\\circ}{0.0591} = \\frac{2 \\times 0.295}{0.059} = \\frac{0.590}{0.059} = 10 \\implies K_c = 10^{10}$.",
+        "misconception": null
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\n- Assertion (A): In Biomolecules, (A) - (IV), (B) - (I), (C) - (II), (D) - (III). (True).\n- Reason (R): Vitamins and Deficiency Diseases is a foundational concept established in NCERT Biomolecules. (True).\n\nBoth (A) and (R) are true, but Reason (R) does not explain Assertion (A). Hence, option (B) is correct.",
+    "correctOption": "D",
+    "detailedSolution": "1. At equilibrium at $298\\text{ K}$, the cell potential is zero ($E_{\\text{cell}} = 0$). The Nernst equation gives:\n   $$E_{\\text{cell}}^\\circ = \\frac{0.059}{n} \\log K_c$$\n   $$\\log K_c = \\frac{n \\cdot E_{\\text{cell}}^\\circ}{0.059}$$\n2. From the reaction $A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s)$, the number of electrons transferred is $n = 2$.\n3. Substitute the given parameters:\n   $$\\log K_c = \\frac{2 \\times 0.295\\text{ V}}{0.059\\text{ V}} = \\frac{0.590}{0.059} = 10$$\n4. Taking the antilogarithm:\n   $$K_c = 10^{10}$$\nHence Option D is correct.",
     "questionId": "CHEMISTRY-M30-Q10",
-    "conceptId": "chemistry-biomolecules-vitamins-and-deficiency-diseases",
-    "questionType": "assertion-reasoning",
+    "conceptId": "CHEM-electrochemistry-equilibrium-constant-from-standard-cell-potential",
+    "questionType": "conceptual",
     "difficulty": 3,
-    "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Biomolecules: Vitamins and Deficiency Diseases",
-      "detailed": "Detailed Solution:\n- Assertion (A): In Biomolecules, (A) - (IV), (B) - (I), (C) - (II), (D) - (III). (True).\n- Reason (R): Vitamins and Deficiency Diseases is a foundational concept established in NCERT Biomolecules. (True).\n\nBoth (A) and (R) are true, but Reason (R) does not explain Assertion (A). Hence, option (B) is correct."
+      "quick": "Correct answer is 10^{10}.",
+      "concept": "1. At equilibrium at $298\\text{ K}$, the cell potential is zero ($E_{\\text{cell}} = 0$).",
+      "detailed": "1. At equilibrium at $298\\text{ K}$, the cell potential is zero ($E_{\\text{cell}} = 0$). The Nernst equation gives:\n   $$E_{\\text{cell}}^\\circ = \\frac{0.059}{n} \\log K_c$$\n   $$\\log K_c = \\frac{n \\cdot E_{\\text{cell}}^\\circ}{0.059}$$\n2. From the reaction $A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s)$, the number of electrons transferred is $n = 2$.\n3. Substitute the given parameters:\n   $$\\log K_c = \\frac{2 \\times 0.295\\text{ V}}{0.059\\text{ V}} = \\frac{0.590}{0.059} = 10$$\n4. Taking the antilogarithm:\n   $$K_c = 10^{10}$$\nHence Option D is correct."
     },
-    "keyConcept": "Biomolecules: Vitamins and Deficiency Diseases",
+    "keyConcept": "Electrochemistry: Equilibrium Constant from Standard Cell Potential",
+    "formula": "$A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s) \\quad ; \\quad E_{\\text{cell}}^\\circ = 0.295\\text{ V}$",
     "tags": [
-      "CUET UG 2026",
-      "chemistry",
-      "Biomolecules"
+      "Chemistry",
+      "Electrochemistry",
+      "Equilibrium Constant from Standard Cell Potential",
+      "conceptual"
     ],
-    "testNumber": 30,
+    "difficultyLevel": 3,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "CHEM-M03-Q36",
+    "testNumber": 1,
     "subjectFolder": "chemistry",
-    "originalCanonicalId": "CANONICAL-CHEMISTRY-01983"
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
   },
   {
     "questionNumber": 11,

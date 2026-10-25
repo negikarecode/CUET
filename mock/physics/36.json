@@ -2133,55 +2133,84 @@
   },
   {
     "questionNumber": 42,
-    "chapter": "Electromagnetic Waves",
-    "topic": "Applications of Waves",
-    "questionText": "Given below are two statements: one is labelled as Assertion (A) and the other is labelled as Reason (R).\n\nAssertion (A): In Electromagnetic Waves, (A) - (II), (B) - (III), (C) - (IV), (D) - (I).\nReason (R): (A) Remote control of a TV: Uses Infrared radiation -> matches (II)\n\nIn light of the above statements, choose the correct answer from the options given below:",
+    "chapter": "Electric Charges and Fields",
+    "topic": "Electric Field on the Axis of a Uniformly Charged Ring",
+    "questionText": "A thin circular ring of radius $R$ carries a uniformly distributed total positive charge $+Q$. At what distance $x$ along the central perpendicular axis from the center of the ring does the electric field intensity attain its maximum value?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": true
+        "text": "$x = \\sqrt{2}R$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverted Radical Multiplier",
+        "mistakeAnalysis": "Aspirants place $\\sqrt{2}$ in the numerator rather than the denominator.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Inverted Radical Multiplier"
+        }
       },
       {
         "id": "B",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false
+        "text": "$x = \\frac{R}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Geometric Midpoint Assumption",
+        "mistakeAnalysis": "Aspirants guess half the radius based on simple fraction heuristics.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Geometric Midpoint Assumption"
+        }
       },
       {
         "id": "C",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": false
+        "text": "$x = \\frac{R}{\\sqrt{2}}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Obtained by differentiating the axial field $E(x) = \\frac{k Q x}{(x^2 + R^2)^{3/2}}$ with respect to $x$ and setting $\\frac{dE}{dx} = 0$, yielding $x = R/\\sqrt{2}$.",
+        "misconception": null
       },
       {
         "id": "D",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": false
+        "text": "$x = R$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Radius Equating Fallacy",
+        "mistakeAnalysis": "Aspirants assume the field reaches its peak at an axial distance equal to the radius of the ring.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Direct Radius Equating Fallacy"
+        }
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\n- Assertion (A): In Electromagnetic Waves, (A) - (II), (B) - (III), (C) - (IV), (D) - (I). (True).\n- Reason (R): (A) Remote control of a TV: Uses Infrared radiation -> matches (II) (True).\n\nBoth (A) and (R) are true, and Reason (R) provides the accurate causal explanation for Assertion (A). Hence, option (A) is correct.",
+    "correctOption": "C",
+    "detailedSolution": "1. The electric field at an axial point distance $x$ from the center of a charged ring of radius $R$ is:\n$$E(x) = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Q x}{(x^2 + R^2)^{3/2}}$$\n2. To find the extremum, differentiate with respect to $x$:\n$$\\frac{dE}{dx} = \\frac{Q}{4\\pi\\varepsilon_0} \\left[ \\frac{(x^2 + R^2)^{3/2}(1) - x \\cdot \\frac{3}{2}(x^2 + R^2)^{1/2}(2x)}{(x^2 + R^2)^3} \\right] = 0$$\n$$(x^2 + R^2) - 3x^2 = 0 \\implies R^2 - 2x^2 = 0 \\implies x = \\frac{R}{\\sqrt{2}}$$",
     "questionId": "PHYSICS-M36-Q42",
-    "conceptId": "physics-electromagnetic-waves-applications-of-waves",
-    "questionType": "assertion-reasoning",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
+    "conceptId": "PHY-electric-charges-and-fields-electric-field-on-the-axis-of-a-uniformly-charged-ring",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (A) is correct.",
-      "concept": "Electromagnetic Waves: Applications of Waves",
-      "detailed": "Detailed Solution:\n- Assertion (A): In Electromagnetic Waves, (A) - (II), (B) - (III), (C) - (IV), (D) - (I). (True).\n- Reason (R): (A) Remote control of a TV: Uses Infrared radiation -> matches (II) (True).\n\nBoth (A) and (R) are true, and Reason (R) provides the accurate causal explanation for Assertion (A). Hence, option (A) is correct."
+      "quick": "Correct answer is $x = \\frac{R}{\\sqrt{2}}$.",
+      "concept": "1. The electric field at an axial point distance $x$ from the center of a charged ring of radius $R$ is:\n$$E(x) = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Q x}{(x^2 + R^2)^{3/2}}$$\n2.",
+      "detailed": "1. The electric field at an axial point distance $x$ from the center of a charged ring of radius $R$ is:\n$$E(x) = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Q x}{(x^2 + R^2)^{3/2}}$$\n2. To find the extremum, differentiate with respect to $x$:\n$$\\frac{dE}{dx} = \\frac{Q}{4\\pi\\varepsilon_0} \\left[ \\frac{(x^2 + R^2)^{3/2}(1) - x \\cdot \\frac{3}{2}(x^2 + R^2)^{1/2}(2x)}{(x^2 + R^2)^3} \\right] = 0$$\n$$(x^2 + R^2) - 3x^2 = 0 \\implies R^2 - 2x^2 = 0 \\implies x = \\frac{R}{\\sqrt{2}}$$"
     },
-    "keyConcept": "Electromagnetic Waves: Applications of Waves",
+    "keyConcept": "Electric Charges and Fields: Electric Field on the Axis of a Uniformly Charged Ring",
+    "formula": "$E(x) = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Q x}{(x^2 + R^2)^{3/2}}$",
     "tags": [
-      "CUET UG 2026",
-      "physics",
-      "Electromagnetic Waves"
+      "Physics",
+      "Electric Charges and Fields",
+      "Electric Field on the Axis of a Uniformly Charged Ring",
+      "conceptual"
     ],
-    "testNumber": 36,
+    "difficultyLevel": 3,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "PHY-M19-Q01",
+    "testNumber": 1,
     "subjectFolder": "physics",
-    "originalCanonicalId": "CANONICAL-PHYSICS-01793"
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
   },
   {
     "questionNumber": 43,
@@ -2497,55 +2526,84 @@
   },
   {
     "questionNumber": 49,
-    "chapter": "Electromagnetic Waves",
-    "topic": "Practical Applications Across the EM Spectrum",
-    "questionText": "Given below are two statements: one is labelled as Assertion (A) and the other is labelled as Reason (R).\n\nAssertion (A): In Electromagnetic Waves, (A)-(II), (B)-(I), (C)-(IV), (D)-(III).\nReason (R): It operates in violation of the fundamental conservation laws of Electromagnetic Waves.\n\nIn light of the above statements, choose the correct answer from the options given below:",
+    "chapter": "Ray Optics and Optical Instruments",
+    "topic": "Experimental Physics: Optical Bench Index Correction",
+    "questionText": "Arrange the following procedural steps (A, B, C, D) in the correct chronological sequence to determine the index correction for distance measurement on an optical bench:\n(A) Calculate the difference between the actual length of the index needle and the observed distance to find the index correction ($e = x - y$).\n(B) Read the positions of the uprights supporting the object pin and the spherical mirror/lens on the optical bench scale and record their difference ($y$).\n(C) Measure the actual distance ($x$) by placing the index needle against a meter scale.\n(D) Place the index needle horizontally such that its one tip touches the object pin and the other tip touches the pole of the mirror (or optical center of the lens).\n\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false
+        "text": "(A), (B), (C), (D)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Premature Calculation Placement",
+        "mistakeAnalysis": "Places the final mathematical subtraction (A) before the physical measurements are made.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Premature Calculation Placement"
+        }
       },
       {
         "id": "B",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": false
+        "text": "(C), (A), (D), (B)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Scrambled Laboratory Protocol",
+        "mistakeAnalysis": "Attempts to calculate the index correction before measuring observed bench distances.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "Scrambled Laboratory Protocol"
+        }
       },
       {
         "id": "C",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": true
+        "text": "(D), (B), (C), (A)",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. The standard NCERT lab sequence: first align the needle between pin and mirror (D), read uprights to get observed distance $y$ (B), measure the needle's physical length $x$ (C), and finally compute index correction $e = x - y$ (A).",
+        "misconception": null
       },
       {
         "id": "D",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": false
+        "text": "(B), (D), (A), (C)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Disjointed Alignment Sequence",
+        "mistakeAnalysis": "Reads upright positions before the needle is physically positioned between the optical elements.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Disjointed Alignment Sequence"
+        }
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\n- Assertion (A): In Electromagnetic Waves, (A)-(II), (B)-(I), (C)-(IV), (D)-(III). (True).\n- Reason (R): It operates in violation of the fundamental conservation laws of Electromagnetic Waves. (False).\n\nAssertion (A) is true, but Reason (R) is false. Hence, option (C) is correct.",
+    "detailedSolution": "In laboratory optics experiments:\n1. Step (D): Place the straight index needle horizontally with one end touching the tip of the object needle and the other end touching the pole of the mirror.\n2. Step (B): Record the positions of the uprights on the optical bench scale; their difference gives the observed distance $y$.\n3. Step (C): Remove the index needle and measure its actual physical length $x$ using a standard meter scale.\n4. Step (A): Compute the index correction: $\\text{Index Correction} = \\text{Actual Distance } (x) - \\text{Observed Distance } (y)$.\nTherefore, the proper sequence is (D), (B), (C), (A).",
     "questionId": "PHYSICS-M36-Q49",
-    "conceptId": "physics-electromagnetic-waves-practical-applications-across-the-em-spectrum",
-    "questionType": "assertion-reasoning",
+    "conceptId": "PHY-ray-optics-and-optical-instruments-experimental-physics-optical-bench-index-correction",
+    "questionType": "direct-numerical",
     "difficulty": 3,
-    "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Electromagnetic Waves: Practical Applications Across the EM Spectrum",
-      "detailed": "Detailed Solution:\n- Assertion (A): In Electromagnetic Waves, (A)-(II), (B)-(I), (C)-(IV), (D)-(III). (True).\n- Reason (R): It operates in violation of the fundamental conservation laws of Electromagnetic Waves. (False).\n\nAssertion (A) is true, but Reason (R) is false. Hence, option (C) is correct."
+      "quick": "Correct answer is (D), (B), (C), (A).",
+      "concept": "In laboratory optics experiments:\n1. Step (D): Place the straight index needle horizontally with one end touching the tip of the object needle and the other end touching the pole of the mirror.",
+      "detailed": "In laboratory optics experiments:\n1. Step (D): Place the straight index needle horizontally with one end touching the tip of the object needle and the other end touching the pole of the mirror.\n2. Step (B): Record the positions of the uprights on the optical bench scale; their difference gives the observed distance $y$.\n3. Step (C): Remove the index needle and measure its actual physical length $x$ using a standard meter scale.\n4. Step (A): Compute the index correction: $\\text{Index Correction} = \\text{Actual Distance } (x) - \\text{Observed Distance } (y)$.\nTherefore, the proper sequence is (D), (B), (C), (A)."
     },
-    "keyConcept": "Electromagnetic Waves: Practical Applications Across the EM Spectrum",
+    "keyConcept": "Ray Optics and Optical Instruments: Experimental Physics: Optical Bench Index Correction",
+    "formula": "$e = x - y$",
     "tags": [
-      "CUET UG 2026",
-      "physics",
-      "Electromagnetic Waves"
+      "Physics",
+      "Ray Optics and Optical Instruments",
+      "Experimental Physics: Optical Bench Index Correction",
+      "direct-numerical"
     ],
-    "testNumber": 36,
+    "difficultyLevel": 3,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "PHY-M03-Q37",
+    "testNumber": 1,
     "subjectFolder": "physics",
-    "originalCanonicalId": "CANONICAL-PHYSICS-01806"
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
   },
   {
     "questionNumber": 50,

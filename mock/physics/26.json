@@ -2029,55 +2029,84 @@
   },
   {
     "questionNumber": 40,
-    "chapter": "Dual Nature of Matter and Radiation",
-    "topic": "Formulas of Photoelectric Effect and Matter Waves",
-    "questionText": "Given below are two statements: one is labelled as Assertion (A) and the other is labelled as Reason (R).\n\nAssertion (A): In Dual Nature of Matter and Radiation, (A) - (II), (B) - (IV), (C) - (I), (D) - (III).\nReason (R): Stopping Potential vs Frequency Slope and Intercept is a foundational concept established in NCERT Dual Nature of Matter and Radiation.\n\nIn light of the above statements, choose the correct answer from the options given below:",
+    "chapter": "Electric Charges and Fields",
+    "topic": "Electric Field on the Axis of a Uniformly Charged Ring",
+    "questionText": "A thin circular ring of radius $R$ carries a uniformly distributed total positive charge $+Q$. At what distance $x$ along the central perpendicular axis from the center of the ring does the electric field intensity attain its maximum value?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
-        "isCorrect": false
+        "text": "$x = \\sqrt{2}R$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Inverted Radical Multiplier",
+        "mistakeAnalysis": "Aspirants place $\\sqrt{2}$ in the numerator rather than the denominator.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Inverted Radical Multiplier"
+        }
       },
       {
         "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
-        "isCorrect": true
+        "text": "$x = \\frac{R}{2}$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Geometric Midpoint Assumption",
+        "mistakeAnalysis": "Aspirants guess half the radius based on simple fraction heuristics.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Geometric Midpoint Assumption"
+        }
       },
       {
         "id": "C",
-        "text": "(A) is false but (R) is true",
-        "isCorrect": false
+        "text": "$x = \\frac{R}{\\sqrt{2}}$",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Obtained by differentiating the axial field $E(x) = \\frac{k Q x}{(x^2 + R^2)^{3/2}}$ with respect to $x$ and setting $\\frac{dE}{dx} = 0$, yielding $x = R/\\sqrt{2}$.",
+        "misconception": null
       },
       {
         "id": "D",
-        "text": "(A) is true but (R) is false",
-        "isCorrect": false
+        "text": "$x = R$",
+        "isCorrect": false,
+        "studentSelectionTrap": "Direct Radius Equating Fallacy",
+        "mistakeAnalysis": "Aspirants assume the field reaches its peak at an axial distance equal to the radius of the ring.",
+        "misconception": {
+          "type": "logical_reasoning_error",
+          "description": "Direct Radius Equating Fallacy"
+        }
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\n- Assertion (A): In Dual Nature of Matter and Radiation, (A) - (II), (B) - (IV), (C) - (I), (D) - (III). (True).\n- Reason (R): Stopping Potential vs Frequency Slope and Intercept is a foundational concept established in NCERT Dual Nature of Matter and Radiation. (True).\n\nBoth (A) and (R) are true, but Reason (R) does not explain Assertion (A). Hence, option (B) is correct.",
+    "correctOption": "C",
+    "detailedSolution": "1. The electric field at an axial point distance $x$ from the center of a charged ring of radius $R$ is:\n$$E(x) = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Q x}{(x^2 + R^2)^{3/2}}$$\n2. To find the extremum, differentiate with respect to $x$:\n$$\\frac{dE}{dx} = \\frac{Q}{4\\pi\\varepsilon_0} \\left[ \\frac{(x^2 + R^2)^{3/2}(1) - x \\cdot \\frac{3}{2}(x^2 + R^2)^{1/2}(2x)}{(x^2 + R^2)^3} \\right] = 0$$\n$$(x^2 + R^2) - 3x^2 = 0 \\implies R^2 - 2x^2 = 0 \\implies x = \\frac{R}{\\sqrt{2}}$$",
     "questionId": "PHYSICS-M26-Q40",
-    "conceptId": "physics-dual-nature-of-matter-and-radiation-formulas-of-photoelectric-effect-and-matter-waves",
-    "questionType": "assertion-reasoning",
-    "difficulty": 1,
-    "difficultyLevel": 1,
-    "estimatedTimeSeconds": 45,
+    "conceptId": "PHY-electric-charges-and-fields-electric-field-on-the-axis-of-a-uniformly-charged-ring",
+    "questionType": "conceptual",
+    "difficulty": 3,
+    "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (B) is correct.",
-      "concept": "Dual Nature of Matter and Radiation: Formulas of Photoelectric Effect and Matter Waves",
-      "detailed": "Detailed Solution:\n- Assertion (A): In Dual Nature of Matter and Radiation, (A) - (II), (B) - (IV), (C) - (I), (D) - (III). (True).\n- Reason (R): Stopping Potential vs Frequency Slope and Intercept is a foundational concept established in NCERT Dual Nature of Matter and Radiation. (True).\n\nBoth (A) and (R) are true, but Reason (R) does not explain Assertion (A). Hence, option (B) is correct."
+      "quick": "Correct answer is $x = \\frac{R}{\\sqrt{2}}$.",
+      "concept": "1. The electric field at an axial point distance $x$ from the center of a charged ring of radius $R$ is:\n$$E(x) = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Q x}{(x^2 + R^2)^{3/2}}$$\n2.",
+      "detailed": "1. The electric field at an axial point distance $x$ from the center of a charged ring of radius $R$ is:\n$$E(x) = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Q x}{(x^2 + R^2)^{3/2}}$$\n2. To find the extremum, differentiate with respect to $x$:\n$$\\frac{dE}{dx} = \\frac{Q}{4\\pi\\varepsilon_0} \\left[ \\frac{(x^2 + R^2)^{3/2}(1) - x \\cdot \\frac{3}{2}(x^2 + R^2)^{1/2}(2x)}{(x^2 + R^2)^3} \\right] = 0$$\n$$(x^2 + R^2) - 3x^2 = 0 \\implies R^2 - 2x^2 = 0 \\implies x = \\frac{R}{\\sqrt{2}}$$"
     },
-    "keyConcept": "Dual Nature of Matter and Radiation: Formulas of Photoelectric Effect and Matter Waves",
+    "keyConcept": "Electric Charges and Fields: Electric Field on the Axis of a Uniformly Charged Ring",
+    "formula": "$E(x) = \\frac{1}{4\\pi\\varepsilon_0} \\frac{Q x}{(x^2 + R^2)^{3/2}}$",
     "tags": [
-      "CUET UG 2026",
-      "physics",
-      "Dual Nature of Matter and Radiation"
+      "Physics",
+      "Electric Charges and Fields",
+      "Electric Field on the Axis of a Uniformly Charged Ring",
+      "conceptual"
     ],
-    "testNumber": 26,
+    "difficultyLevel": 3,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "PHY-M19-Q01",
+    "testNumber": 1,
     "subjectFolder": "physics",
-    "originalCanonicalId": "CANONICAL-PHYSICS-01104"
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
   },
   {
     "questionNumber": 41,

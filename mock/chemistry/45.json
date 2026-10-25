@@ -834,54 +834,83 @@
   {
     "questionNumber": 17,
     "chapter": "Electrochemistry",
-    "topic": "Conductance and Electrochemical Cells",
-    "questionText": "Which of the following statements is NOT correct regarding Conductance and Electrochemical Cells (Electrochemistry)?",
+    "topic": "Equilibrium Constant from Standard Cell Potential",
+    "questionText": "Consider the following hypothetical redox reaction:\n$$A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s) \\quad ; \\quad E_{\\text{cell}}^\\circ = 0.295\\text{ V}$$\nThe equilibrium constant of the reaction at $298\\text{ K}$ will be:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "(A)-(I), (B)-(II), (C)-(III), (D)-(IV)",
-        "isCorrect": false
+        "text": "10^{-10}",
+        "isCorrect": false,
+        "studentSelectionTrap": "Sign Inversion Slip",
+        "mistakeAnalysis": "Aspirants assign a negative sign to standard potential or invert the Nernst equilibrium relationship.",
+        "misconception": {
+          "type": "sign_error",
+          "description": "Sign Inversion Slip"
+        }
       },
       {
         "id": "B",
-        "text": "(A)-(II), (B)-(I), (C)-(IV), (D)-(III)",
-        "isCorrect": false
+        "text": "10^5",
+        "isCorrect": false,
+        "studentSelectionTrap": "n-Factor Omission Error",
+        "mistakeAnalysis": "Aspirants omit multiplying by $n = 2$, calculating $\\log K_c = 0.295 / 0.059 = 5 \\implies K_c = 10^5$.",
+        "misconception": {
+          "type": "calculation_error",
+          "description": "n-Factor Omission Error"
+        }
       },
       {
         "id": "C",
-        "text": "(A)-(III), (B)-(IV), (C)-(I), (D)-(II)",
-        "isCorrect": true
+        "text": "10^{20}",
+        "isCorrect": false,
+        "studentSelectionTrap": "Double-Electron Double Counting",
+        "mistakeAnalysis": "Aspirants multiply $n$ by 2 a second time.",
+        "misconception": {
+          "type": "conceptual_misunderstanding",
+          "description": "Double-Electron Double Counting"
+        }
       },
       {
         "id": "D",
-        "text": "(A)-(IV), (B)-(III), (C)-(II), (D)-(I)",
-        "isCorrect": false
+        "text": "10^{10}",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately calculates $\\log K_c = \\frac{n E^\\circ}{0.0591} = \\frac{2 \\times 0.295}{0.059} = \\frac{0.590}{0.059} = 10 \\implies K_c = 10^{10}$.",
+        "misconception": null
       }
     ],
-    "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nIn Electrochemistry (Conductance and Electrochemical Cells):\nThe statement '(A)-(III), (B)-(IV), (C)-(I), (D)-(II)' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (C) is the correct answer.",
+    "correctOption": "D",
+    "detailedSolution": "1. At equilibrium at $298\\text{ K}$, the cell potential is zero ($E_{\\text{cell}} = 0$). The Nernst equation gives:\n   $$E_{\\text{cell}}^\\circ = \\frac{0.059}{n} \\log K_c$$\n   $$\\log K_c = \\frac{n \\cdot E_{\\text{cell}}^\\circ}{0.059}$$\n2. From the reaction $A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s)$, the number of electrons transferred is $n = 2$.\n3. Substitute the given parameters:\n   $$\\log K_c = \\frac{2 \\times 0.295\\text{ V}}{0.059\\text{ V}} = \\frac{0.590}{0.059} = 10$$\n4. Taking the antilogarithm:\n   $$K_c = 10^{10}$$\nHence Option D is correct.",
     "questionId": "CHEMISTRY-M45-Q17",
-    "conceptId": "chemistry-electrochemistry-conductance-and-electrochemical-cells",
+    "conceptId": "CHEM-electrochemistry-equilibrium-constant-from-standard-cell-potential",
     "questionType": "conceptual",
     "difficulty": 3,
-    "difficultyLevel": 3,
     "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Option (C) is correct.",
-      "concept": "Electrochemistry: Conductance and Electrochemical Cells",
-      "detailed": "Detailed Solution:\nIn Electrochemistry (Conductance and Electrochemical Cells):\nThe statement '(A)-(III), (B)-(IV), (C)-(I), (D)-(II)' is incorrect (and hence the correct answer to the exception question).\nAll other statements represent valid NCERT characteristics.\n\nTherefore, option (A) is the correct choice.\n\nHence, Option (C) is the correct answer."
+      "quick": "Correct answer is 10^{10}.",
+      "concept": "1. At equilibrium at $298\\text{ K}$, the cell potential is zero ($E_{\\text{cell}} = 0$).",
+      "detailed": "1. At equilibrium at $298\\text{ K}$, the cell potential is zero ($E_{\\text{cell}} = 0$). The Nernst equation gives:\n   $$E_{\\text{cell}}^\\circ = \\frac{0.059}{n} \\log K_c$$\n   $$\\log K_c = \\frac{n \\cdot E_{\\text{cell}}^\\circ}{0.059}$$\n2. From the reaction $A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s)$, the number of electrons transferred is $n = 2$.\n3. Substitute the given parameters:\n   $$\\log K_c = \\frac{2 \\times 0.295\\text{ V}}{0.059\\text{ V}} = \\frac{0.590}{0.059} = 10$$\n4. Taking the antilogarithm:\n   $$K_c = 10^{10}$$\nHence Option D is correct."
     },
-    "keyConcept": "Electrochemistry: Conductance and Electrochemical Cells",
+    "keyConcept": "Electrochemistry: Equilibrium Constant from Standard Cell Potential",
+    "formula": "$A(s) + 2B^+(aq) \\rightarrow A^{2+}(aq) + 2B(s) \\quad ; \\quad E_{\\text{cell}}^\\circ = 0.295\\text{ V}$",
     "tags": [
-      "CUET UG 2026",
-      "chemistry",
-      "Electrochemistry"
+      "Chemistry",
+      "Electrochemistry",
+      "Equilibrium Constant from Standard Cell Potential",
+      "conceptual"
     ],
-    "testNumber": 45,
+    "difficultyLevel": 3,
+    "confidenceStatus": "not_psychometrically_calibrated",
+    "validationFlags": [],
+    "qaStatus": "automated_structurally_valid",
+    "originalQuestionId": "CHEM-M03-Q36",
+    "testNumber": 1,
     "subjectFolder": "chemistry",
-    "provenance": "ncert_practice_bank_remediation"
+    "dataIntegrityScore": 100,
+    "contentReviewStatus": "requires_subject_matter_review",
+    "psychometricStatus": "not_psychometrically_calibrated"
   },
   {
     "questionNumber": 18,
@@ -1043,7 +1072,7 @@
     "questionNumber": 21,
     "chapter": "Coordination Compounds",
     "topic": "Isomerism in Coordination Compounds",
-    "questionText": "‘The complex [Co(NHs)4(NO2)2|CI will show.",
+    "questionText": "\u2018The complex [Co(NHs)4(NO2)2|CI will show.",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -1433,7 +1462,7 @@
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nFor Hydrolysis of sugars (disaccharides vs monosaccharides) (Biomolecules):\nStep 1: Identify the nature of each sugar – glucose (monosaccharide), fructose (monosaccharide), cane sugar/sucrose (disaccharide), lactose (disaccharide). Step 2: Recognise that only disaccharides can be hydrolysed. Step 3: Select the set that contains only the monosaccharides (A and B).\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nFor Hydrolysis of sugars (disaccharides vs monosaccharides) (Biomolecules):\nStep 1: Identify the nature of each sugar \u2013 glucose (monosaccharide), fructose (monosaccharide), cane sugar/sucrose (disaccharide), lactose (disaccharide). Step 2: Recognise that only disaccharides can be hydrolysed. Step 3: Select the set that contains only the monosaccharides (A and B).\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer.",
     "questionId": "CHEMISTRY-M45-Q28",
     "conceptId": "chemistry-biomolecules-hydrolysis-of-sugars-disaccharides-vs-monosaccharides",
     "questionType": "direct-numerical",
@@ -1443,7 +1472,7 @@
     "solution": {
       "quick": "Option (D) is correct.",
       "concept": "Biomolecules: Hydrolysis of sugars (disaccharides vs monosaccharides)",
-      "detailed": "Detailed Solution:\nFor Hydrolysis of sugars (disaccharides vs monosaccharides) (Biomolecules):\nStep 1: Identify the nature of each sugar – glucose (monosaccharide), fructose (monosaccharide), cane sugar/sucrose (disaccharide), lactose (disaccharide). Step 2: Recognise that only disaccharides can be hydrolysed. Step 3: Select the set that contains only the monosaccharides (A and B).\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer."
+      "detailed": "Detailed Solution:\nFor Hydrolysis of sugars (disaccharides vs monosaccharides) (Biomolecules):\nStep 1: Identify the nature of each sugar \u2013 glucose (monosaccharide), fructose (monosaccharide), cane sugar/sucrose (disaccharide), lactose (disaccharide). Step 2: Recognise that only disaccharides can be hydrolysed. Step 3: Select the set that contains only the monosaccharides (A and B).\n\nTherefore, option (B) is the correct answer.\n\nHence, Option (D) is the correct answer."
     },
     "keyConcept": "Biomolecules: Hydrolysis of sugars (disaccharides vs monosaccharides)",
     "tags": [
@@ -1875,7 +1904,7 @@
     "questionNumber": 37,
     "chapter": "Coordination Compounds",
     "topic": "Optical Isomerism in Coordination Compounds",
-    "questionText": "See eee eee\nQ.33 \\[\\text{Identify\nIdentify the optically active compounds from the following:\n(A) [Co(en)s]**\n(B) trans-[Co(en)2C]*\n(©) cis-[Co(en),Cl,]*\n(D) [Cx(NH)sCy]\nChoose the correct answer from the options given below:",
+    "questionText": "See eee eee\nQ.33 \\[\\text{Identify\nIdentify the optically active compounds from the following:\n(A) [Co(en)s]**\n(B) trans-[Co(en)2C]*\n(\u00a9) cis-[Co(en),Cl,]*\n(D) [Cx(NH)sCy]\nChoose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -2134,7 +2163,7 @@
   {
     "questionNumber": 42,
     "chapter": "Biomolecules",
-    "topic": "Proteins – solubility",
+    "topic": "Proteins \u2013 solubility",
     "questionText": "Given below are two statements: one is labelled as Assertion (A) and the other is labelled as Reason (R).\n\nAssertion (A): Which one is a water-soluble protein is Albumin.\nReason (R): Alpha-Amino Acids General Formula is a foundational concept established in NCERT Biomolecules.\n\nIn light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
@@ -2161,7 +2190,7 @@
       }
     ],
     "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Biomolecules (Proteins – solubility):\nBoth (A) and (R) are true but (R) is NOT the correct explanation of (A)\n\nDetailed Context:\nDetailed Solution:\n- Assertion (A): Which one is a water-soluble protein is Albumin. (True).\n- Reason (R): Alpha-Amino Acids General Formula is a foundational concept established in NCERT Biomolecules. (True).\n\nBoth (A) and (R) are true, but Reason (R) does not explain Assertion (A). Hence, option (B) is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Biomolecules (Proteins \u2013 solubility):\nBoth (A) and (R) are true but (R) is NOT the correct explanation of (A)\n\nDetailed Context:\nDetailed Solution:\n- Assertion (A): Which one is a water-soluble protein is Albumin. (True).\n- Reason (R): Alpha-Amino Acids General Formula is a foundational concept established in NCERT Biomolecules. (True).\n\nBoth (A) and (R) are true, but Reason (R) does not explain Assertion (A). Hence, option (B) is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer.",
     "questionId": "CHEMISTRY-M45-Q42",
     "conceptId": "chemistry-biomolecules-proteins-solubility",
     "questionType": "conceptual",
@@ -2170,10 +2199,10 @@
     "estimatedTimeSeconds": 60,
     "solution": {
       "quick": "Option (B) is correct.",
-      "concept": "Biomolecules: Proteins – solubility",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Biomolecules (Proteins – solubility):\nBoth (A) and (R) are true but (R) is NOT the correct explanation of (A)\n\nDetailed Context:\nDetailed Solution:\n- Assertion (A): Which one is a water-soluble protein is Albumin. (True).\n- Reason (R): Alpha-Amino Acids General Formula is a foundational concept established in NCERT Biomolecules. (True).\n\nBoth (A) and (R) are true, but Reason (R) does not explain Assertion (A). Hence, option (B) is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer."
+      "concept": "Biomolecules: Proteins \u2013 solubility",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Biomolecules (Proteins \u2013 solubility):\nBoth (A) and (R) are true but (R) is NOT the correct explanation of (A)\n\nDetailed Context:\nDetailed Solution:\n- Assertion (A): Which one is a water-soluble protein is Albumin. (True).\n- Reason (R): Alpha-Amino Acids General Formula is a foundational concept established in NCERT Biomolecules. (True).\n\nBoth (A) and (R) are true, but Reason (R) does not explain Assertion (A). Hence, option (B) is correct.\n\nTherefore, option (A) is the correct answer.\n\nHence, Option (B) is the correct answer."
     },
-    "keyConcept": "Biomolecules: Proteins – solubility",
+    "keyConcept": "Biomolecules: Proteins \u2013 solubility",
     "tags": [
       "CUET UG 2026",
       "chemistry",
@@ -2395,7 +2424,7 @@
     "questionNumber": 47,
     "chapter": "Chemical Kinetics",
     "topic": "Reaction Rates",
-    "questionText": "Read the passage carefully and answer the Questions\nIn the formation of coordination complexes, if the inner d orbital (n — 1)d is used in hybridisation, the complex, is called an inner\norbital or low spin or spin paired complex. And if it uses outer d orbital (nd) in hybridisation (like sp*d), it is called outer orbital\nor high spin or spin free complex. The degeneracy of the d orbitals has been removed due to ligand electron-metal electron\nrepulsions in the complex. This splitting of the degenerate levels due to the presence of ligands in a definite geometry is termed\nas crystal field splitting. For coordination complexes, the magnetic moment is determined by the number of unpaired electrons\nand is calculated by using the ’spin-only’ formula, ys = 4/n(n +2) where nis the number of unpaired electrons and jis the\nmagnetic moment in units of Bohr magneton (BM). The coordination compounds are of great importance. These compounds\nare widely present in the mineral, plant and animal worlds and are known to play many important functions in the area of\nanalytical chemistry, metallurgy, biological systems, industry and medicine.\n‘Which of the following metals belongs to Wilkinson catalyst?\nLRh\n2.Pt\n3.Pd\n4.T1+ Al\nl",
+    "questionText": "Read the passage carefully and answer the Questions\nIn the formation of coordination complexes, if the inner d orbital (n \u2014 1)d is used in hybridisation, the complex, is called an inner\norbital or low spin or spin paired complex. And if it uses outer d orbital (nd) in hybridisation (like sp*d), it is called outer orbital\nor high spin or spin free complex. The degeneracy of the d orbitals has been removed due to ligand electron-metal electron\nrepulsions in the complex. This splitting of the degenerate levels due to the presence of ligands in a definite geometry is termed\nas crystal field splitting. For coordination complexes, the magnetic moment is determined by the number of unpaired electrons\nand is calculated by using the \u2019spin-only\u2019 formula, ys = 4/n(n +2) where nis the number of unpaired electrons and jis the\nmagnetic moment in units of Bohr magneton (BM). The coordination compounds are of great importance. These compounds\nare widely present in the mineral, plant and animal worlds and are known to play many important functions in the area of\nanalytical chemistry, metallurgy, biological systems, industry and medicine.\n\u2018Which of the following metals belongs to Wilkinson catalyst?\nLRh\n2.Pt\n3.Pd\n4.T1+ Al\nl",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
@@ -2406,7 +2435,7 @@
       },
       {
         "id": "B",
-        "text": "3555.2 em—*",
+        "text": "3555.2 em\u2014*",
         "isCorrect": false
       },
       {
