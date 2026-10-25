@@ -177,7 +177,7 @@ export function mapQuestionsFromDataset(
       conceptId: q.conceptId,
       subjectId,
       questionNumber: q.questionNumber,
-      prompt: q.questionText,
+      prompt: (q.questionText || "").replace(/^\[Set\s+\d+\.\d+\]\s*/i, "").trim(),
       chapter: q.chapter,
       options: (q.options || []).map((opt) => ({
         id: opt.id,

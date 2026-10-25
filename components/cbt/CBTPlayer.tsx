@@ -485,7 +485,7 @@ export default function CBTPlayer() {
               <div className="flex items-center gap-2.5">
                 <span className="font-mono font-semibold text-blue-700 text-xs bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-lg">
                   {isMathExam
-                    ? `[Sec ${currentSection}] Q${currentQuestionIndex + 1} of ${questions.length}`
+                    ? `[Section ${currentSection}] Q${currentQuestionIndex + 1} of ${questions.length}`
                     : `${t("question", "Question")} ${currentQuestionIndex + 1} ${t("of", "of")} ${questions.length}`}
                 </span>
                 <div className="text-slate-700 font-medium hidden sm:inline">
