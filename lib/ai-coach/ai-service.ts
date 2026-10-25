@@ -1,4 +1,3 @@
-import { GoogleGenAI } from "@google/genai";
 import Groq from "groq-sdk";
 import { AICoachComputedStats, AICoachReportContent } from "@/types/ai-coach";
 import { AI_COACH_CONFIG } from "./config";
@@ -153,56 +152,6 @@ export function buildDeterministicAICoachReport(
 }
 
 /**
- * Call Gemini 2.0 Flash via @google/genai
- */
-async function callGemini(
-  stats: AICoachComputedStats,
-  prevStats: AICoachComputedStats | null
-): Promise<AICoachReportContent | null> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey || apiKey.includes("placeholder")) {
-    return null;
-  }
-
-  const ai = new GoogleGenAI({ apiKey });
-  const userPayload = {
-    currentStats: stats,
-    previousReportStats: prevStats,
-  };
-
-  const response = await ai.models.generateContent({
-    model: AI_COACH_CONFIG.MODEL,
-    contents: `SYSTEM INSTRUCTIONS:\n${SYSTEM_PROMPT}\n\nSTUDENT PERFORMANCE TELEMETRY (JSON):\n${JSON.stringify(
-      userPayload,
-      null,
-      2
-    )}\n\nGenerate the complete JSON response with keys: summary, biggest_leaks, strengths, weekly_plan, test_taking_strategy, next_test_goal, comparison_with_previous.`,
-    config: {
-      responseMimeType: "application/json",
-      temperature: 0.2,
-      maxOutputTokens: 1800,
-      thinkingConfig: {
-        thinkingBudget: 0,
-      },
-    },
-  });
-
-  const text = response.text?.trim();
-  if (!text) return null;
-
-  let cleaned = text;
-  const match = text.match(/\{[\s\S]*\}/);
-  if (match) cleaned = match[0];
-
-  const parsed = JSON.parse(cleaned);
-  const validation = validateAICoachReport(parsed);
-  if (validation.valid && validation.data) {
-    return validation.data;
-  }
-  throw new Error(`Gemini output failed schema validation: ${validation.error}`);
-}
-
-/**
  * Call Groq LPU via groq-sdk
  */
 async function callGroq(
@@ -251,7 +200,7 @@ async function callGroq(
 
 /**
  * Main AI generation orchestrator:
- * - Tries Gemini first (active key), falls back to Groq
+ * - Uses Groq LPU exclusively
  * - Enforces retry-once policy on validation failure
  * - Falls back to deterministic report or surfaces error cleanly
  */
@@ -261,22 +210,8 @@ export async function generateAICoachReport(
 ): Promise<{ report: AICoachReportContent; model: string }> {
   let lastError: Error | null = null;
 
-  // Try up to 2 attempts (initial + 1 retry on failure)
+  // Try up to 2 attempts with Groq (initial + 1 retry on failure)
   for (let attempt = 1; attempt <= 2; attempt++) {
-    // 1. Try Gemini
-    if (process.env.GEMINI_API_KEY && !process.env.GEMINI_API_KEY.includes("placeholder")) {
-      try {
-        const geminiResult = await callGemini(stats, prevStats);
-        if (geminiResult) {
-          return { report: geminiResult, model: AI_COACH_CONFIG.MODEL };
-        }
-      } catch (err: any) {
-        lastError = err;
-        console.warn(`[AI Coach] Gemini attempt ${attempt} failed:`, err?.message || err);
-      }
-    }
-
-    // 2. Try Groq fallback
     if (process.env.GROQ_API_KEY && !process.env.GROQ_API_KEY.includes("placeholder")) {
       try {
         const groqResult = await callGroq(stats, prevStats);
@@ -290,7 +225,7 @@ export async function generateAICoachReport(
     }
   }
 
-  // If both external providers failed or were not configured, use deterministic generation
+  // If Groq failed or was not configured, use deterministic generation
   console.warn(
     "[AI Coach] Using verified deterministic stats engine fallback:",
     lastError?.message || "No external AI keys responding"

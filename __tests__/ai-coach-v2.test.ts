@@ -198,7 +198,7 @@ assert(AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS === 5, "Topic confidence threshold is 
 assert(getConfidenceLabel(2) === "insufficient data", "< 5 attempts labeled 'insufficient data'");
 assert(getConfidenceLabel(4) === "insufficient data", "4 attempts labeled 'insufficient data'");
 assert(getConfidenceLabel(5) === "sufficient", ">= 5 attempts labeled 'sufficient'");
-assert(AI_COACH_CONFIG.MODEL === "gemini-2.0-flash", "Model is gemini-2.0-flash");
+assert(AI_COACH_CONFIG.MODEL === "llama-3.3-70b-versatile", "Model is llama-3.3-70b-versatile");
 assert(AI_COACH_CONFIG.MARKING_SCHEME.CORRECT === 5, "CUET correct mark is +5");
 assert(AI_COACH_CONFIG.MARKING_SCHEME.INCORRECT === -1, "CUET incorrect mark is -1");
 

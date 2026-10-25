@@ -17,7 +17,7 @@ export const AI_COACH_CONFIG = {
   DAILY_REPORT_LIMIT: 3,
   RESET_TIMEZONE: "Asia/Kolkata",
   MIN_TOPIC_ATTEMPTS: 5,
-  MODEL: "gemini-2.0-flash",
+  MODEL: "llama-3.3-70b-versatile",
   GROQ_MODEL: "llama-3.3-70b-versatile",
   PROMPT_VERSION: "v1.0",
   MARKING_SCHEME: {
