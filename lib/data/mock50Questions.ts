@@ -197,7 +197,11 @@ export function mapQuestionsFromDataset(
       conceptId: q.conceptId,
       subjectId,
       questionNumber: q.questionNumber,
-      prompt: (q.questionText || "").replace(/^\[Set\s+\d+\.\d+\]\s*/i, "").trim(),
+      prompt: (q.questionText || "")
+        .replace(/^\[Set\s+\d+\.\d+\]\s*/i, "")
+        .replace(/\n+\s*(?:Options|Options:)?\s*1\.\s*1\s*[\n\s]*2\.\s*2\s*[\n\s]*3\.\s*3\s*[\n\s]*4\.\s*4\s*$/i, "")
+        .replace(/\n+\s*Options:\s*$/i, "")
+        .trim(),
       chapter: q.chapter,
       options: (q.options || []).map((opt) => ({
         id: opt.id,

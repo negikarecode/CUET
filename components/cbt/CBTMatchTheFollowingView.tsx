@@ -133,6 +133,7 @@ export function parseMatchTheFollowing(raw: string): MatchTheFollowingResult | n
           singleItemRegex.test(nextLine) ||
           combinedRegex.test(nextLine) ||
           isHeaderLine(nextLine) ||
+          /^(?:Choose the correct|Options:?)/i.test(nextLine.trim()) ||
           /^[\-\s|—–=]{3,}$/.test(nextLine.trim())
         ) {
           break;
