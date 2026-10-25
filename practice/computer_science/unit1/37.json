@@ -1004,62 +1004,62 @@
   },
   {
     "questionNumber": 18,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T37-Q18",
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T1-Q18",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "SQL Aggregate Functions and Behaviors with NULLs",
-    "questionText": "Match the aggregate function in List I with its operational computation in List II (assuming column values: [10, 20, NULL, 30]):\n\nList I:\n(A) SUM(Marks)\n(B) AVG(Marks)\n(C) COUNT(Marks)\n(D) COUNT(*)\n\nList II:\n(I) Calculates 60 (ignores NULL: 10 + 20 + 30)\n(II) Calculates 20.0 (divides by non-null count: 60 / 3)\n(III) Returns 3 (counts only the 3 non-null entries)\n(IV) Returns 4 (counts all 4 total rows in the relation)\n\nChoose the correct answer from the options given below:",
+    "topic": "writerow vs writerows Distinction",
+    "questionText": "Read the following case study on CSV inventory management in Python and answer the questions that follow:\n\nRajesh operates a warehouse distribution center and manages inventory items using Python's csv module. He creates a script 'inventory_manager.py' to record incoming inventory shipments into 'warehouse.csv'.\n\nTo record data, he opens the file using with open('warehouse.csv', 'w', newline='') as f: and instantiates a writer object using writer = csv.writer(f, delimiter=','). He writes the column headers using writer.writerow(['ItemId', 'ItemName', 'Quantity', 'UnitPrice']). To insert multiple inventory shipment rows at once from a nested list of records, he uses writer.writerows(shipment_data).\nLater, to search for low-stock items, he reads the file using csv.reader, checks if int(row[2]) < 20, and prints alerts for restock.\n\nQuestion: What is the difference between writer.writerow() and writer.writerows() in Python's csv module?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "A-I, B-II, C-III, D-IV",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Correctly maps each entity across columns."
-      },
-      {
-        "id": "B",
-        "text": "A-II, B-I, C-III, D-IV",
+        "text": "writerow() is used exclusively for writing header rows, while writerows() is restricted to running total calculations on existing data",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
-        "id": "C",
-        "text": "A-IV, B-II, C-I, D-III",
+        "id": "B",
+        "text": "writerow() handles string data types only, whereas writerows() uniquely processes integer-based inventory quantities for the file",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
+        "id": "C",
+        "text": "writerow() accepts a single 1D sequence to write one line, while writerows() accepts a 2D iterable to write multiple lines in a single call",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for writerow vs writerows Distinction."
+      },
+      {
         "id": "D",
-        "text": "A-I, B-III, C-IV, D-II",
+        "text": "writerow() overwrites the entire CSV file with a new record, while writerows() appends data to the end of the current file",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "A",
-    "detailedSolution": "Detailed Solution:\nSUM ignores nulls (60); AVG divides by non-null count (60/3=20); COUNT(col) counts non-nulls (3); COUNT(*) counts all rows (4).\nHence Option B is correct.\nHence, option (A) is the correct match.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (A).",
-      "concept": "Section A: Common Computing Concepts: SQL Aggregate Functions and Behaviors with NULLs.",
-      "detailed": "Detailed Solution:\nSUM ignores nulls (60); AVG divides by non-null count (60/3=20); COUNT(col) counts non-nulls (3); COUNT(*) counts all rows (4).\nHence Option B is correct.\nHence, option (A) is the correct match."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section A: Common Computing Concepts: writerow vs writerows Distinction.",
+      "detailed": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer."
     },
-    "questionType": "match-the-following",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: SQL Aggregate Functions and Behaviors with NULLs",
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section A: Common Computing Concepts: writerow vs writerows Distinction",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "SQL Aggregate Functions and Behaviors with NULLs",
+      "writerow vs writerows Distinction",
       "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 37)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 1)"
   },
   {
     "questionNumber": 19,

@@ -912,21 +912,21 @@
       {
         "id": "B",
         "text": "$0.0286\\text{ nm}$",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. For a proton, $\\lambda = \\frac{0.286}{\\sqrt{V}}\\text{ nm} = \\frac{0.286}{\\sqrt{100}} = \\frac{0.286}{10} = 0.0286\\text{ nm}$.",
-        "misconception": null
+        "isCorrect": false,
+        "studentSelectionTrap": "Conflating Angstroms and Nanometers",
+        "mistakeAnalysis": "Aspirants conflate the formula in Angstroms (0.286/sqrt(V) AA) with nanometers, yielding 0.0286 AA and erroneously writing 0.0286 nm (off by a factor of 10).",
+        "misconception": {
+          "type": "unit_confusion",
+          "description": "Conflating Angstroms with Nanometers"
+        }
       },
       {
         "id": "C",
         "text": "$0.00286\\text{ nm}$",
-        "isCorrect": false,
-        "studentSelectionTrap": "Dividing by Voltage Directly",
-        "mistakeAnalysis": "Aspirants divide $0.286$ by $100$ directly instead of dividing by $\\sqrt{100} = 10$.",
-        "misconception": {
-          "type": "conceptual_misunderstanding",
-          "description": "Dividing by Voltage Directly"
-        }
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. For a proton accelerated through potential difference V, lambda = \frac{0.286}{sqrt{V}}\text{ AA} = \frac{0.0286}{sqrt{V}}\text{ nm}. For V = 100\text{ V}, lambda = \frac{0.0286}{10} = 0.00286\text{ nm}.",
+        "misconception": null
       },
       {
         "id": "D",
@@ -940,17 +940,17 @@
         }
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "The de Broglie wavelength of a particle of mass $m$ and charge $q$ accelerated through potential $V$ is:\n$$\\lambda = \\frac{h}{\\sqrt{2 m q V}}$$\nFor a proton:\n$$2 m_p q = 2 \\times (1.67 \\times 10^{-27}\\text{ kg}) \\times (1.60 \\times 10^{-19}\\text{ C}) = 5.344 \\times 10^{-46}\\text{ kg C}$$\n$$\\sqrt{2 m_p q} = 2.312 \\times 10^{-23}$$\n$$\\lambda = \\frac{6.63 \\times 10^{-34}\\text{ J s}}{2.312 \\times 10^{-23} \\sqrt{V}} = \\frac{0.286 \\times 10^{-9}}{\\sqrt{V}}\\text{ m} = \\frac{0.286}{\\sqrt{V}}\\text{ nm}$$\nFor $V = 100\\text{ V}$:\n$$\\lambda = \\frac{0.286}{\\sqrt{100}}\\text{ nm} = \\frac{0.286}{10}\\text{ nm} = 0.0286\\text{ nm}$$",
+    "correctOption": "C",
+    "detailedSolution": "The de Broglie wavelength of a proton accelerated through potential V is given by:\n8857lambda = \frac{h}{sqrt{2 m_p q V}}8857\nUsing  = 1.67 \times 10^{-27}\text{ kg}$ and  = 1.60 \times 10^{-19}\text{ C}$:\n8857lambda = \frac{0.286}{sqrt{V}}\text{ AA} = \frac{0.0286}{sqrt{V}}\text{ nm}8857\nFor  = 100\text{ V}$ ($sqrt{V} = 10$):\n8857lambda = \frac{0.0286}{10}\text{ nm} = 0.00286\text{ nm} = 0.0286\text{ AA}8857\nHence Option C is correct.",
     "questionId": "PHYSICS-M06-Q12",
     "conceptId": "PHY-dual-nature-of-radiation-and-matter-de-broglie-wavelength-of-an-accelerated-proton",
     "questionType": "conceptual",
     "difficulty": 3,
     "estimatedTimeSeconds": 75,
     "solution": {
-      "quick": "Correct answer is $0.0286\\text{ nm}$.",
-      "concept": "The de Broglie wavelength of a particle of mass $m$ and charge $q$ accelerated through potential $V$ is:\n$$\\lambda = \\frac{h}{\\sqrt{2 m q V}}$$\nFor a proton:\n$$2 m_p q = 2 \\times (1.67 \\times 10^{-27}\\text{ kg}) \\times (1.60 \\times 10^{-19}\\text{ C}) = 5.344 \\times 10^{-46}\\text{ kg C}$$\n$$\\sqrt{2 m_p q} = 2.312 \\times 10^{-23}$$\n$$\\lambda = \\frac{6.63 \\times 10^{-34}\\text{ J s}}{2.312 \\times 10^{-23} \\sqrt{V}} = \\frac{0.286 \\times 10^{-9}}{\\sqrt{V}}\\text{ m} = \\frac{0.286}{\\sqrt{V}}\\text{ nm}$$\nFor $V = 100\\text{ V}$:\n$$\\lambda = \\frac{0.286}{\\sqrt{100}}\\text{ nm} = \\frac{0.286}{10}\\text{ nm} = 0.0286\\text{ nm}$$",
-      "detailed": "The de Broglie wavelength of a particle of mass $m$ and charge $q$ accelerated through potential $V$ is:\n$$\\lambda = \\frac{h}{\\sqrt{2 m q V}}$$\nFor a proton:\n$$2 m_p q = 2 \\times (1.67 \\times 10^{-27}\\text{ kg}) \\times (1.60 \\times 10^{-19}\\text{ C}) = 5.344 \\times 10^{-46}\\text{ kg C}$$\n$$\\sqrt{2 m_p q} = 2.312 \\times 10^{-23}$$\n$$\\lambda = \\frac{6.63 \\times 10^{-34}\\text{ J s}}{2.312 \\times 10^{-23} \\sqrt{V}} = \\frac{0.286 \\times 10^{-9}}{\\sqrt{V}}\\text{ m} = \\frac{0.286}{\\sqrt{V}}\\text{ nm}$$\nFor $V = 100\\text{ V}$:\n$$\\lambda = \\frac{0.286}{\\sqrt{100}}\\text{ nm} = \\frac{0.286}{10}\\text{ nm} = 0.0286\\text{ nm}$$"
+      "quick": "Correct answer is bash.00286\text{ nm}$.",
+      "concept": "The de Broglie wavelength of a proton accelerated through potential V is given by:\n8857lambda = \frac{h}{sqrt{2 m_p q V}}8857\nUsing  = 1.67 \times 10^{-27}\text{ kg}$ and  = 1.60 \times 10^{-19}\text{ C}$:\n8857lambda = \frac{0.286}{sqrt{V}}\text{ AA} = \frac{0.0286}{sqrt{V}}\text{ nm}8857\nFor  = 100\text{ V}$ ($sqrt{V} = 10$):\n8857lambda = \frac{0.0286}{10}\text{ nm} = 0.00286\text{ nm} = 0.0286\text{ AA}8857\nHence Option C is correct.",
+      "detailed": "The de Broglie wavelength of a proton accelerated through potential V is given by:\n8857lambda = \frac{h}{sqrt{2 m_p q V}}8857\nUsing  = 1.67 \times 10^{-27}\text{ kg}$ and  = 1.60 \times 10^{-19}\text{ C}$:\n8857lambda = \frac{0.286}{sqrt{V}}\text{ AA} = \frac{0.0286}{sqrt{V}}\text{ nm}8857\nFor  = 100\text{ V}$ ($sqrt{V} = 10$):\n8857lambda = \frac{0.0286}{10}\text{ nm} = 0.00286\text{ nm} = 0.0286\text{ AA}8857\nHence Option C is correct."
     },
     "keyConcept": "Dual Nature of Radiation and Matter: de Broglie Wavelength of an Accelerated Proton",
     "formula": "$V = 100\\text{ V}$",

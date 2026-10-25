@@ -945,62 +945,62 @@
   },
   {
     "questionNumber": 17,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T31-Q17",
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U2-T1-Q17",
     "chapter": "Section B1: Computer Science Core",
-    "topic": "Iterative Alternative using Queues/Stacks",
-    "questionText": "Read the following case study on recursive algorithms in Python and answer the questions that follow:\n\nAn operating systems developer writes a Python script to calculate the total storage footprint of nested directory trees. Because folders can contain files as well as nested subfolders to arbitrary depths, the developer uses recursion:\n\ndef get_dir_size(path):\n    total_size = 0\n    for entry in os.scandir(path):\n        if entry.is_file():\n            total_size += entry.stat().st_size\n        elif entry.is_dir():\n            total_size += get_dir_size(entry.path)  # Recursive Call\n    return total_size\n\nThe function computes leaf file sizes directly (base condition) and recursively invokes get_dir_size() for nested directories. Each recursive invocation pushes a new stack frame onto the Python call stack, maintaining independent local variables for total_size.\n\nQuestion: How can the developer rewrite the directory traversal without recursion to avoid stack overflow completely?",
+    "topic": "Stack Overflow Exception in Python",
+    "questionText": "In Python, what exception is raised when unbounded recursive calls consume all available stack frames?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "By deleting all files in the directory tree before performing the size calculation",
+        "text": "ArithmeticError",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "By setting file sizes to negative values during the accumulation process",
+        "text": "StackUnderflowError",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "By replacing the recursive call with a higher-order lambda function for folding operations",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+        "text": "RecursionError",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Stack Overflow Exception in Python."
       },
       {
         "id": "D",
-        "text": "By maintaining an explicit queue or stack data structure in heap memory inside an iterative loop",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Iterative Alternative using Queues/Stacks."
+        "text": "MemoryLeakError",
+        "isCorrect": false,
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
-    "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Iterative Alternative using Queues/Stacks):\nBy maintaining an explicit queue or stack data structure in heap memory inside an iterative loop\n\nDetailed Context:\nAn iterative loop using an explicit stack or queue in heap memory can traverse trees of arbitrary depth without call stack limits.\nHence Option B is correct.\n\nTherefore, option (D) is the correct answer.",
+    "correctOption": "C",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stack Overflow Exception in Python):\nRecursionError\n\nDetailed Context:\nExcessive recursion exhausts Python's call stack limit, raising RecursionError: maximum recursion depth exceeded.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
-      "quick": "Correct answer is option (D).",
-      "concept": "Section B1: Computer Science Core: Iterative Alternative using Queues/Stacks.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Iterative Alternative using Queues/Stacks):\nBy maintaining an explicit queue or stack data structure in heap memory inside an iterative loop\n\nDetailed Context:\nAn iterative loop using an explicit stack or queue in heap memory can traverse trees of arbitrary depth without call stack limits.\nHence Option B is correct.\n\nTherefore, option (D) is the correct answer."
+      "quick": "Correct answer is option (C).",
+      "concept": "Section B1: Computer Science Core: Stack Overflow Exception in Python.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B1: Computer Science Core (Stack Overflow Exception in Python):\nRecursionError\n\nDetailed Context:\nExcessive recursion exhausts Python's call stack limit, raising RecursionError: maximum recursion depth exceeded.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer."
     },
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section B1: Computer Science Core: Iterative Alternative using Queues/Stacks",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section B1: Computer Science Core: Stack Overflow Exception in Python",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section B1: Computer Science Core",
-      "Iterative Alternative using Queues/Stacks",
+      "Stack Overflow Exception in Python",
       "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 31)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 2 Test 1)"
   },
   {
     "questionNumber": 18,

@@ -209,7 +209,7 @@
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Instantiating an empty Series without specifying dtype triggers a deprecation warning regarding float64 default typing.\nHence Option C is correct.\n\nNote: The default dtype is deprecated and will change from float64 to object in a future release; use pd.Series(dtype=float64)",
+    "detailedSolution": "Instantiating an empty Series without specifying dtype triggers a deprecation warning regarding float64 default typing (use pd.Series(dtype=float64)).\nHence Option C is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M08-Q04",
@@ -221,7 +221,7 @@
     "solution": {
       "quick": "Correct answer is FutureWarning: The default dtype is deprecated and will change from float64 to object in a future release; use pd.Series(dtype=float64).",
       "concept": "Instantiating an empty Series without specifying dtype triggers a deprecation warning regarding float64 default typing.\nHence Option C is correct.",
-      "detailed": "Instantiating an empty Series without specifying dtype triggers a deprecation warning regarding float64 default typing.\nHence Option C is correct."
+      "detailed": "Instantiating an empty Series without specifying dtype triggers a deprecation warning regarding float64 default typing (use pd.Series(dtype=float64)).\nHence Option C is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock8-q26",
@@ -2075,7 +2075,7 @@
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "The name attribute labels the Series and provides the default column label when joined or merged into a DataFrame.\nHence Option D is correct.\n\nNote: This is because it becomes the column header when the Series is converted into a DataFrame",
+    "detailedSolution": "The name attribute labels the Series and provides the default column header when the Series is joined, merged, or converted into a DataFrame.\nHence Option D is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M08-Q37",
@@ -2087,7 +2087,7 @@
     "solution": {
       "quick": "Correct answer is It assigns a name label to the Series, which becomes the column header when the Series is converted into a DataFrame.",
       "concept": "The name attribute labels the Series and provides the default column label when joined or merged into a DataFrame.\nHence Option D is correct.",
-      "detailed": "The name attribute labels the Series and provides the default column label when joined or merged into a DataFrame.\nHence Option D is correct."
+      "detailed": "The name attribute labels the Series and provides the default column header when the Series is joined, merged, or converted into a DataFrame.\nHence Option D is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock15-q26",
@@ -2249,7 +2249,7 @@
       }
     ],
     "correctOption": "A",
-    "detailedSolution": "In Matplotlib scripts, plt.show() flushes the figure canvas; savefig() should precede show() to ensure content is saved.\nHence Option A is correct.\n\nNote: This is because it could result in saving a blank image if called afterwards",
+    "detailedSolution": "In Matplotlib scripts, plt.show() flushes the figure canvas; savefig() must precede show() to prevent saving a blank image canvas.\nHence Option A is correct.",
     "questionType": "case-based",
     "difficulty": 4,
     "questionId": "COMPUTER_SCI-M08-Q40",
@@ -2261,7 +2261,7 @@
     "solution": {
       "quick": "Correct answer is Because plt.show() may clear the figure canvas after display, which could result in saving a blank image if called afterwards.",
       "concept": "In Matplotlib scripts, plt.show() flushes the figure canvas; savefig() should precede show() to ensure content is saved.\nHence Option A is correct.",
-      "detailed": "In Matplotlib scripts, plt.show() flushes the figure canvas; savefig() should precede show() to ensure content is saved.\nHence Option A is correct."
+      "detailed": "In Matplotlib scripts, plt.show() flushes the figure canvas; savefig() must precede show() to prevent saving a blank image canvas.\nHence Option A is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock20-q50",
@@ -2307,7 +2307,7 @@
       }
     ],
     "correctOption": "B",
-    "detailedSolution": "In-place sorting modifies the input array directly using a constant amount O(1) of extra memory.\nHence Option B is correct.\n\nNote: auxiliary space O(1)",
+    "detailedSolution": "In-place sorting modifies the input array directly using a constant amount O(1) of extra auxiliary memory.\nHence Option B is correct.",
     "questionType": "conceptual",
     "difficulty": 2,
     "questionId": "COMPUTER_SCI-M08-Q41",
@@ -2319,7 +2319,7 @@
     "solution": {
       "quick": "Correct answer is It sorts the elements within the original array without requiring significant additional auxiliary memory (auxiliary space O(1)).",
       "concept": "In-place sorting modifies the input array directly using a constant amount O(1) of extra memory.\nHence Option B is correct.",
-      "detailed": "In-place sorting modifies the input array directly using a constant amount O(1) of extra memory.\nHence Option B is correct."
+      "detailed": "In-place sorting modifies the input array directly using a constant amount O(1) of extra auxiliary memory.\nHence Option B is correct."
     },
     "qaStatus": "automated_structurally_valid",
     "originalQuestionId": "cs-mock10-q14",

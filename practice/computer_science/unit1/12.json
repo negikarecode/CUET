@@ -1122,61 +1122,61 @@
   },
   {
     "questionNumber": 20,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T12-Q20",
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T1-Q20",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Seek and Tell Methods in File Navigation",
-    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): The tell() method returns the current byte position of the file pointer within an open file.\nReason (R): The seek(offset, whence) method alters the position of the file pointer, where whence=0 indicates positioning relative to the beginning of the file.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "topic": "writerow vs writerows Distinction",
+    "questionText": "Read the following case study on CSV inventory management in Python and answer the questions that follow:\n\nRajesh operates a warehouse distribution center and manages inventory items using Python's csv module. He creates a script 'inventory_manager.py' to record incoming inventory shipments into 'warehouse.csv'.\n\nTo record data, he opens the file using with open('warehouse.csv', 'w', newline='') as f: and instantiates a writer object using writer = csv.writer(f, delimiter=','). He writes the column headers using writer.writerow(['ItemId', 'ItemName', 'Quantity', 'UnitPrice']). To insert multiple inventory shipment rows at once from a nested list of records, he uses writer.writerows(shipment_data).\nLater, to search for low-stock items, he reads the file using csv.reader, checks if int(row[2]) < 20, and prints alerts for restock.\n\nQuestion: What is the difference between writer.writerow() and writer.writerows() in Python's csv module?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "text": "writerow() is used exclusively for writing header rows, while writerows() is restricted to running total calculations on existing data",
         "isCorrect": false,
-        "studentSelectionTrap": "Causality Confusion Trap",
-        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "text": "writerow() handles string data types only, whereas writerows() uniquely processes integer-based inventory quantities for the file",
         "isCorrect": false,
-        "studentSelectionTrap": "Causality Blindspot",
-        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "(A) is true but (R) is false",
+        "text": "writerow() accepts a single 1D sequence to write one line, while writerows() accepts a 2D iterable to write multiple lines in a single call",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Assertion is true but Reason contains a factual error."
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for writerow vs writerows Distinction."
       },
       {
         "id": "D",
-        "text": "(A) is false but (R) is true",
+        "text": "writerow() overwrites the entire CSV file with a new record, while writerows() appends data to the end of the current file",
         "isCorrect": false,
-        "studentSelectionTrap": "Assertion Acceptance Trap",
-        "mistakeAnalysis": "Failed to identify the scientific fallacy in the Assertion."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). tell() queries the byte offset; seek() repositions the file pointer relative to reference points.\nHence Option B is correct.\nHence, option (C) is the correct choice.",
+    "detailedSolution": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
       "quick": "Correct answer is option (C).",
-      "concept": "Section A: Common Computing Concepts: Seek and Tell Methods in File Navigation.",
-      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). tell() queries the byte offset; seek() repositions the file pointer relative to reference points.\nHence Option B is correct.\nHence, option (C) is the correct choice."
+      "concept": "Section A: Common Computing Concepts: writerow vs writerows Distinction.",
+      "detailed": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer."
     },
-    "questionType": "assertion-reasoning",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Seek and Tell Methods in File Navigation",
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section A: Common Computing Concepts: writerow vs writerows Distinction",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Seek and Tell Methods in File Navigation",
+      "writerow vs writerows Distinction",
       "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 12)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 1)"
   }
 ]

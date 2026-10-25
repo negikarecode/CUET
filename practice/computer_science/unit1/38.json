@@ -1122,61 +1122,61 @@
   },
   {
     "questionNumber": 20,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T38-Q20",
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T1-Q20",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "EOFError Exception Handling",
-    "questionText": "Read the following case study on binary file operations in a library system and answer the questions that follow:\n\nAn automated library management system maintains catalog records in a binary file 'books.dat'. Each book entry is stored as a list: [BookId, Title, Author, Price, Status], where Status is 'Available' or 'Issued'. The software developer writes two primary routines:\n1. issue_book(target_id): Opens 'books.dat' in 'rb+' mode. Inside a while True loop, it reads records using pickle.load(f). Upon finding a record where record[0] == target_id and record[4] == 'Available', it updates record[4] = 'Issued'. To overwrite the updated record in place, the developer calculates the byte offset using f.tell(), rewinds the pointer using f.seek(), and overwrites the record using pickle.dump(record, f).\n2. Exception Handling: The routine wraps the read loop inside a try block and intercepts EOFError when all records have been inspected.\n\nQuestion: Why is EOFError expected and caught during binary file traversal in Python?",
+    "topic": "writerow vs writerows Distinction",
+    "questionText": "Read the following case study on CSV inventory management in Python and answer the questions that follow:\n\nRajesh operates a warehouse distribution center and manages inventory items using Python's csv module. He creates a script 'inventory_manager.py' to record incoming inventory shipments into 'warehouse.csv'.\n\nTo record data, he opens the file using with open('warehouse.csv', 'w', newline='') as f: and instantiates a writer object using writer = csv.writer(f, delimiter=','). He writes the column headers using writer.writerow(['ItemId', 'ItemName', 'Quantity', 'UnitPrice']). To insert multiple inventory shipment rows at once from a nested list of records, he uses writer.writerows(shipment_data).\nLater, to search for low-stock items, he reads the file using csv.reader, checks if int(row[2]) < 20, and prints alerts for restock.\n\nQuestion: What is the difference between writer.writerow() and writer.writerows() in Python's csv module?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Because pickle cannot read numbers",
+        "text": "writerow() is used exclusively for writing header rows, while writerows() is restricted to running total calculations on existing data",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Because the operating system ran out of disk space",
+        "text": "writerow() handles string data types only, whereas writerows() uniquely processes integer-based inventory quantities for the file",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "Because pickle.load() raises EOFError as the standard mechanism when no more bytes remain to be read",
+        "text": "writerow() accepts a single 1D sequence to write one line, while writerows() accepts a 2D iterable to write multiple lines in a single call",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately solves the problem for EOFError Exception Handling."
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for writerow vs writerows Distinction."
       },
       {
         "id": "D",
-        "text": "Because the file is corrupted",
+        "text": "writerow() overwrites the entire CSV file with a new record, while writerows() appends data to the end of the current file",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nFor EOFError Exception Handling (Section A: Common Computing Concepts):\nIn Python, reaching the end of file during pickle.load() naturally raises EOFError, signaling traversal completion.\nHence Option B is correct.\n\nTherefore, option (C) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
       "quick": "Correct answer is option (C).",
-      "concept": "Section A: Common Computing Concepts: EOFError Exception Handling.",
-      "detailed": "Detailed Solution:\nFor EOFError Exception Handling (Section A: Common Computing Concepts):\nIn Python, reaching the end of file during pickle.load() naturally raises EOFError, signaling traversal completion.\nHence Option B is correct.\n\nTherefore, option (C) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: writerow vs writerows Distinction.",
+      "detailed": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer."
     },
     "questionType": "application",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: EOFError Exception Handling",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section A: Common Computing Concepts: writerow vs writerows Distinction",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "EOFError Exception Handling",
+      "writerow vs writerows Distinction",
       "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 38)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 1)"
   }
 ]

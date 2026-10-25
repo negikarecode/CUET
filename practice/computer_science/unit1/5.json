@@ -473,62 +473,62 @@
   },
   {
     "questionNumber": 9,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T5-Q09",
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T1-Q09",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Difference Between Cursor and Connection Commit",
-    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): Invoking cur.commit() will result in an AttributeError in Python.\nReason (R): The commit() and rollback() methods belong to the database Connection object, not to individual Cursor objects.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "topic": "writerow vs writerows Distinction",
+    "questionText": "Read the following case study on CSV inventory management in Python and answer the questions that follow:\n\nRajesh operates a warehouse distribution center and manages inventory items using Python's csv module. He creates a script 'inventory_manager.py' to record incoming inventory shipments into 'warehouse.csv'.\n\nTo record data, he opens the file using with open('warehouse.csv', 'w', newline='') as f: and instantiates a writer object using writer = csv.writer(f, delimiter=','). He writes the column headers using writer.writerow(['ItemId', 'ItemName', 'Quantity', 'UnitPrice']). To insert multiple inventory shipment rows at once from a nested list of records, he uses writer.writerows(shipment_data).\nLater, to search for low-stock items, he reads the file using csv.reader, checks if int(row[2]) < 20, and prints alerts for restock.\n\nQuestion: What is the difference between writer.writerow() and writer.writerows() in Python's csv module?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "(A) is true but (R) is false",
+        "text": "writerow() is used exclusively for writing header rows, while writerows() is restricted to running total calculations on existing data",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Both (A) and (R) are true but (R) is not the correct explanation of (A)",
+        "text": "writerow() handles string data types only, whereas writerows() uniquely processes integer-based inventory quantities for the file",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
+        "text": "writerow() accepts a single 1D sequence to write one line, while writerows() accepts a 2D iterable to write multiple lines in a single call",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Difference Between Cursor and Connection Commit."
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for writerow vs writerows Distinction."
       },
       {
         "id": "D",
-        "text": "(A) is false but (R) is true",
+        "text": "writerow() overwrites the entire CSV file with a new record, while writerows() appends data to the end of the current file",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Difference Between Cursor and Connection Commit):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Context:\nBoth (A) and (R) are true, and (R) correctly explains (A). Transactions span entire database connections, so commit() is a method of the connection.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
       "quick": "Correct answer is option (C).",
-      "concept": "Section A: Common Computing Concepts: Difference Between Cursor and Connection Commit.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section A: Common Computing Concepts (Difference Between Cursor and Connection Commit):\nBoth (A) and (R) are true and (R) is the correct explanation of (A)\n\nDetailed Context:\nBoth (A) and (R) are true, and (R) correctly explains (A). Transactions span entire database connections, so commit() is a method of the connection.\nHence Option C is correct.\n\nTherefore, option (C) is the correct answer."
+      "concept": "Section A: Common Computing Concepts: writerow vs writerows Distinction.",
+      "detailed": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer."
     },
-    "questionType": "conceptual",
-    "difficulty": 2,
-    "difficultyLevel": 2,
-    "estimatedTimeSeconds": 60,
-    "keyConcept": "Section A: Common Computing Concepts: Difference Between Cursor and Connection Commit",
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section A: Common Computing Concepts: writerow vs writerows Distinction",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Difference Between Cursor and Connection Commit",
+      "writerow vs writerows Distinction",
       "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 5)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 1)"
   },
   {
     "questionNumber": 10,
@@ -945,62 +945,62 @@
   },
   {
     "questionNumber": 17,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T5-Q17",
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T1-Q17",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "Sequential Deserialization Protocol from Binary File",
-    "questionText": "Arrange the correct sequence of steps for reading all serialized records from a binary file using pickle:\n(A) Open the target binary file in read-binary mode ('rb') within a try block\n(B) Initialize an infinite 'while True:' loop to sequentially consume stored objects\n(C) Execute record = pickle.load(file) and process or display the extracted object\n(D) Catch the EOFError exception to cleanly terminate the loop when all records have been read, and close the file\n\nChoose the correct chronological/logical sequence from the options given below:",
+    "topic": "Seek and Tell Methods in File Navigation",
+    "questionText": "Given below are two statements, one is labelled as Assertion (A) and the other is labelled as Reason (R):\nAssertion (A): The tell() method returns the current byte position of the file pointer within an open file.\nReason (R): The seek(offset, whence) method alters the position of the file pointer, where whence=0 indicates positioning relative to the beginning of the file.\n\nIn the light of the above statements, choose the correct answer from the options given below:",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "B, A, C, D",
+        "text": "Both (A) and (R) are true and (R) is the correct explanation of (A)",
         "isCorrect": false,
-        "studentSelectionTrap": "Conceptual Inversion Trap",
-        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
+        "studentSelectionTrap": "Causality Confusion Trap",
+        "mistakeAnalysis": "Assumed Reason explains Assertion without establishing causal mechanism."
       },
       {
         "id": "B",
-        "text": "A, B, C, D",
-        "isCorrect": true,
-        "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the chronological/logical progression."
+        "text": "Both (A) and (R) are true but (R) is NOT the correct explanation of (A)",
+        "isCorrect": false,
+        "studentSelectionTrap": "Causality Blindspot",
+        "mistakeAnalysis": "Failed to notice that Reason does not causally explain the Assertion."
       },
       {
         "id": "C",
-        "text": "D, B, C, A",
+        "text": "(A) is true but (R) is false",
         "isCorrect": false,
-        "studentSelectionTrap": "Formula Manipulation Error",
-        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
+        "studentSelectionTrap": "Reason Acceptance Trap",
+        "mistakeAnalysis": "Accepted an inaccurate Reason as factually true."
       },
       {
         "id": "D",
-        "text": "A, C, B, D",
-        "isCorrect": false,
-        "studentSelectionTrap": "Terminology Confusion Trap",
-        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
+        "text": "(A) is false but (R) is true",
+        "isCorrect": true,
+        "studentSelectionTrap": null,
+        "mistakeAnalysis": "Correct answer. Assertion is false while Reason represents an accurate principle."
       }
     ],
-    "correctOption": "B",
-    "detailedSolution": "Detailed Solution:\nPickle reading protocol: open 'rb' -> while True -> pickle.load -> catch EOFError to exit loop.\nHence Option D is correct.\nHence, option (B) is correct.",
+    "correctOption": "D",
+    "detailedSolution": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). tell() queries the byte offset; seek() repositions the file pointer relative to reference points.\nHence Option B is correct.\nHence, option (D) is the correct choice.",
     "solution": {
-      "quick": "Correct answer is option (B).",
-      "concept": "Section A: Common Computing Concepts: Sequential Deserialization Protocol from Binary File.",
-      "detailed": "Detailed Solution:\nPickle reading protocol: open 'rb' -> while True -> pickle.load -> catch EOFError to exit loop.\nHence Option D is correct.\nHence, option (B) is correct."
+      "quick": "Correct answer is option (D).",
+      "concept": "Section A: Common Computing Concepts: Seek and Tell Methods in File Navigation.",
+      "detailed": "Detailed Solution:\nBoth (A) and (R) are true, and (R) correctly explains (A). tell() queries the byte offset; seek() repositions the file pointer relative to reference points.\nHence Option B is correct.\nHence, option (D) is the correct choice."
     },
-    "questionType": "chronological-sequence",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: Sequential Deserialization Protocol from Binary File",
+    "questionType": "assertion-reasoning",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section A: Common Computing Concepts: Seek and Tell Methods in File Navigation",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "Sequential Deserialization Protocol from Binary File",
+      "Seek and Tell Methods in File Navigation",
       "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 5)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 1)"
   },
   {
     "questionNumber": 18,

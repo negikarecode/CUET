@@ -1063,62 +1063,62 @@
   },
   {
     "questionNumber": 19,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T33-Q19",
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U1-T1-Q19",
     "chapter": "Section A: Common Computing Concepts",
-    "topic": "MAC Address vs IP Address Characteristics",
-    "questionText": "Given below are two statements:\nStatement I: A MAC address is a 48-bit (6-byte) physical hardware identifier permanently burned into the Network Interface Card by the manufacturer.\nStatement II: An IP address (IPv4: 32 bits, IPv6: 128 bits) is a logical network address dynamically or statically assigned to identify a host on a network.\n\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "topic": "writerow vs writerows Distinction",
+    "questionText": "Read the following case study on CSV inventory management in Python and answer the questions that follow:\n\nRajesh operates a warehouse distribution center and manages inventory items using Python's csv module. He creates a script 'inventory_manager.py' to record incoming inventory shipments into 'warehouse.csv'.\n\nTo record data, he opens the file using with open('warehouse.csv', 'w', newline='') as f: and instantiates a writer object using writer = csv.writer(f, delimiter=','). He writes the column headers using writer.writerow(['ItemId', 'ItemName', 'Quantity', 'UnitPrice']). To insert multiple inventory shipment rows at once from a nested list of records, he uses writer.writerows(shipment_data).\nLater, to search for low-stock items, he reads the file using csv.reader, checks if int(row[2]) < 20, and prints alerts for restock.\n\nQuestion: What is the difference between writer.writerow() and writer.writerows() in Python's csv module?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "Both Statement I and Statement II are correct",
+        "text": "writerow() is used exclusively for writing header rows, while writerows() is restricted to running total calculations on existing data",
         "isCorrect": false,
-        "studentSelectionTrap": "Dual Acceptance Trap",
-        "mistakeAnalysis": "Assumed both statements were correct."
+        "studentSelectionTrap": "Conceptual Inversion Trap",
+        "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "Both Statement I and Statement II are incorrect",
+        "text": "writerow() handles string data types only, whereas writerows() uniquely processes integer-based inventory quantities for the file",
         "isCorrect": false,
-        "studentSelectionTrap": "Dual Rejection Error",
-        "mistakeAnalysis": "Rejected valid NCERT facts erroneously."
+        "studentSelectionTrap": "Formula Manipulation Error",
+        "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "Statement I is correct but Statement II is incorrect",
+        "text": "writerow() accepts a single 1D sequence to write one line, while writerows() accepts a 2D iterable to write multiple lines in a single call",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Statement I is true while Statement II contains an error."
+        "mistakeAnalysis": "Correct answer. Accurately solves the problem for writerow vs writerows Distinction."
       },
       {
         "id": "D",
-        "text": "Statement I is incorrect but Statement II is correct",
+        "text": "writerow() overwrites the entire CSV file with a new record, while writerows() appends data to the end of the current file",
         "isCorrect": false,
-        "studentSelectionTrap": "Statement I Blindspot",
-        "mistakeAnalysis": "Failed to recognize error in Statement I."
+        "studentSelectionTrap": "Terminology Confusion Trap",
+        "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       }
     ],
     "correctOption": "C",
-    "detailedSolution": "Detailed Solution:\nBoth Statement I and Statement II are correct. MAC is the permanent physical layer 2 identifier; IP is the logical network layer 3 identifier.\nHence Option B is correct.\nHence, option (C) is correct.",
+    "detailedSolution": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer.",
     "solution": {
       "quick": "Correct answer is option (C).",
-      "concept": "Section A: Common Computing Concepts: MAC Address vs IP Address Characteristics.",
-      "detailed": "Detailed Solution:\nBoth Statement I and Statement II are correct. MAC is the permanent physical layer 2 identifier; IP is the logical network layer 3 identifier.\nHence Option B is correct.\nHence, option (C) is correct."
+      "concept": "Section A: Common Computing Concepts: writerow vs writerows Distinction.",
+      "detailed": "Detailed Solution:\nFor writerow vs writerows Distinction (Section A: Common Computing Concepts):\nwriterow(seq) writes one row; writerows(nested_seq) writes multiple rows in a single call.\nHence Option A is correct.\n\nTherefore, option (C) is the correct answer."
     },
-    "questionType": "statement-evaluation",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section A: Common Computing Concepts: MAC Address vs IP Address Characteristics",
+    "questionType": "application",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section A: Common Computing Concepts: writerow vs writerows Distinction",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section A: Common Computing Concepts",
-      "MAC Address vs IP Address Characteristics",
+      "writerow vs writerows Distinction",
       "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 33)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 1 Test 1)"
   },
   {
     "questionNumber": 20,

@@ -1004,62 +1004,62 @@
   },
   {
     "questionNumber": 18,
-    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T33-Q18",
+    "questionId": "PRACTICE-COMPUTER_SCIENCE-U3-T1-Q18",
     "chapter": "Section B2: Informatics Practices Core",
-    "topic": "Multiple Lines on Same Figure",
-    "questionText": "Read the following case study on an end-to-end data pipeline in Pandas and Pyplot and answer the questions that follow:\n\nA retail business analyst builds an automated reporting pipeline in Python to analyze monthly store revenue from 'sales_data.csv'.\nThe script executes the following stages:\n1. Ingestion: df = pd.read_csv('sales_data.csv') loads 12 monthly records into a DataFrame with columns ['Month', 'Sales', 'Expenses'].\n2. Data Cleaning: Incomplete records with NaN values are filled using df.fillna(df.mean(numeric_only=True), inplace=True).\n3. Derived Metrics: A new column 'Profit' is calculated: df['Profit'] = df['Sales'] - df['Expenses'].\n4. Statistical Aggregation: Total annual revenue is computed via total_sales = df['Sales'].sum(), and the best performing month is identified using best_month = df.loc[df['Profit'].idxmax(), 'Month'].\n5. Visualization: A line plot compares monthly Sales and Expenses over time with grid lines and custom styling: plt.plot(df['Month'], df['Sales'], label='Sales', color='blue', marker='o')\nplt.plot(df['Month'], df['Expenses'], label='Expenses', color='red', linestyle='--')\nplt.legend(); plt.savefig('annual_report.png'); plt.show()\n\nQuestion: How did the script plot both Sales and Expenses lines onto the same chart axes?",
+    "topic": "Default Histogram Bin Count",
+    "questionText": "What is the default number of equal-width bins created by plt.hist() when bins is not specified?",
     "hasDiagram": false,
     "diagramDescription": null,
     "options": [
       {
         "id": "A",
-        "text": "By running the Python script twice",
+        "text": "20 bins",
         "isCorrect": false,
         "studentSelectionTrap": "Conceptual Inversion Trap",
         "mistakeAnalysis": "Incorrect option. Inverts the governing property or boundary condition."
       },
       {
         "id": "B",
-        "text": "By opening two separate browser tabs",
+        "text": "50 bins",
         "isCorrect": false,
         "studentSelectionTrap": "Formula Manipulation Error",
         "mistakeAnalysis": "Incorrect option. Applies an adjacent or reciprocal mathematical relation."
       },
       {
         "id": "C",
-        "text": "By merging the two columns into a single string",
+        "text": "5 bins",
         "isCorrect": false,
         "studentSelectionTrap": "Terminology Confusion Trap",
         "mistakeAnalysis": "Incorrect option. Confuses related NCERT concepts or attributes."
       },
       {
         "id": "D",
-        "text": "By invoking plt.plot() twice with different data and labels before calling plt.show()",
+        "text": "10 bins",
         "isCorrect": true,
         "studentSelectionTrap": null,
-        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Multiple Lines on Same Figure."
+        "mistakeAnalysis": "Correct answer. Accurately identifies the verified NCERT concept for Default Histogram Bin Count."
       }
     ],
     "correctOption": "D",
-    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Multiple Lines on Same Figure):\nBy invoking plt.plot() twice with different data and labels before calling plt.show()\n\nDetailed Context:\nCalling plt.plot() multiple times before calling plt.show() layers multiple data series onto the current active axes.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer.",
+    "detailedSolution": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Default Histogram Bin Count):\n10 bins\n\nDetailed Context:\nBy default, plt.hist() divides the range of data into 10 equal-width bins.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer.",
     "solution": {
       "quick": "Correct answer is option (D).",
-      "concept": "Section B2: Informatics Practices Core: Multiple Lines on Same Figure.",
-      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Multiple Lines on Same Figure):\nBy invoking plt.plot() twice with different data and labels before calling plt.show()\n\nDetailed Context:\nCalling plt.plot() multiple times before calling plt.show() layers multiple data series onto the current active axes.\nHence Option D is correct.\n\nTherefore, option (D) is the correct answer."
+      "concept": "Section B2: Informatics Practices Core: Default Histogram Bin Count.",
+      "detailed": "Detailed Solution:\nAccording to NCERT principles for Section B2: Informatics Practices Core (Default Histogram Bin Count):\n10 bins\n\nDetailed Context:\nBy default, plt.hist() divides the range of data into 10 equal-width bins.\nHence Option A is correct.\n\nTherefore, option (D) is the correct answer."
     },
     "questionType": "conceptual",
-    "difficulty": 3,
-    "difficultyLevel": 3,
-    "estimatedTimeSeconds": 75,
-    "keyConcept": "Section B2: Informatics Practices Core: Multiple Lines on Same Figure",
+    "difficulty": 1,
+    "difficultyLevel": 1,
+    "estimatedTimeSeconds": 45,
+    "keyConcept": "Section B2: Informatics Practices Core: Default Histogram Bin Count",
     "tags": [
       "CUET UG 2026",
       "Computer Science",
       "Section B2: Informatics Practices Core",
-      "Multiple Lines on Same Figure",
+      "Default Histogram Bin Count",
       "NTA Practice Bank"
     ],
-    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 33)"
+    "pyqSource": "CUET UG Practice Test (Computer Science Unit 3 Test 1)"
   },
   {
     "questionNumber": 19,
