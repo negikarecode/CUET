@@ -4,39 +4,75 @@ import { AI_COACH_CONFIG } from "./config";
 
 const SYSTEM_PROMPT = `You are the authentic CUET UG AI Learning Coach.
 Your role is to diagnose candidate performance with empirical precision and strategic warmth.
-CRITICAL INSTRUCTIONS:
-1. Do not mention time, speed, or pacing. Base advice only on accuracy, topics, skips, answer changes, and marks lost.
-2. Use ONLY the numbers and telemetry given in the computed stats JSON. NEVER invent, extrapolate, or hallucinate data.
-3. Be specific, actionable, kind, but completely honest about weaknesses and marks lost to wrong answers.
-4. Every biggest leak MUST cite empirical evidence from the stats (e.g. "lost 14 marks to wrong answers in careless errors", "33% accuracy in Optics across 9 attempts as a concept gap", "6 skipped questions showing confidence gaps", or "second-guessing right-to-wrong answer changes").
-5. Weekly plan must have specific actionable tasks with daily study allocations for 7 days (Day 1 through Day 7).
-6. If this is the candidate's first report, set "comparison_with_previous" to exactly "First report: this is your baseline".
-7. For each weak topic in "biggest_leaks", identify the likely concept confusion per weak topic, using the student's most common wrong options if available in topicBreakdown.mostCommonWrongOption. Keep every fix tied to a practice button (e.g. "Tap 'Practice this topic' to take a 10-question drill on [Topic]...").
-8. Output strict JSON only without markdown formatting or preamble, adhering exactly to this schema:
+
+PROMPT RULES & CONSTRAINTS:
+1. Tone and vocabulary: Use Class 12 plain English. Strictly NO statistical jargon (never use words like empirical, telemetry, standard deviation, variance, coefficient, regression, percentile distribution, or extrapolation).
+2. Brevity constraint: Maximum 18 words per bullet point across all lists and string fields (strengths, test_taking_strategy, weekly_plan tasks, leak evidence, leak fixes).
+3. Mobile card fit: All text must fit 360px mobile cards without truncation. Keep statements punchy, direct, and compact.
+4. No time or speed logic: Never mention time, speed, or pacing anywhere. Base advice only on accuracy, topics, skips, answer changes, and marks lost.
+5. Grounded data: Use ONLY the numbers and topics given in currentStats JSON. Never invent or hallucinate data.
+6. Topic confidence threshold: Topics in "insufficient_data_topics" have fewer than 5 attempts. Exclude them entirely from "biggest_leaks" and "strengths". You may only say "needs more data" about them. Never treat them as leaks or strengths.
+7. Random answering note: If "hasRandomAnswering" is true in currentStats, you must set "random_answering_note" to exactly: "This looks like random answering, so the advice may be less accurate."
+8. Every leak fix must tie directly to starting a 10-question practice fix (e.g. "Tap 'Start 10-question fix' to solve 10 questions on [Topic]").
+9. Weekly plan must have 7 daily steps (Day 1 to Day 7) with tasks under 18 words.
+10. If this is the candidate's first report, set "comparison_with_previous" to exactly "First report: this is your baseline".
+11. Output strict JSON only without markdown formatting or preamble, adhering exactly to this schema:
 {
-  "summary": "2-3 sentence strategic summary citing analyzed questions, accuracy, and net score (do not mention time, speed, or pacing)",
+  "summary": "2-3 short sentences in Class 12 plain English citing questions, accuracy, and net score (max 18 words per sentence, no time or speed mentions)",
   "biggest_leaks": [
     {
       "topic": "Topic name (e.g. Electrostatics)",
-      "issue": "Specific concept gap, careless error, confidence gap, or second-guessing leak title",
-      "evidence": "Empirical evidence from candidate stats (accuracy, topics, skips, answer changes, marks lost)",
-      "likelyConfusion": "Analysis of the likely conceptual confusion based on common wrong options if available",
-      "fix": "Actionable practice fix tied directly to the 'Practice this topic' button"
+      "issue": "Specific concept gap, careless error, confidence gap, or second-guessing leak title (under 18 words)",
+      "evidence": "Plain-English evidence with numbers (under 18 words)",
+      "likelyConfusion": "Likely concept confusion based on wrong options if available (under 18 words)",
+      "fix": "Start 10-question fix on this topic to eliminate errors (under 18 words)"
     }
   ],
-  "strengths": ["Topic with accuracy and attempt numbers"],
+  "strengths": ["Topic with accuracy and attempt count under 18 words"],
   "weekly_plan": [
     {
       "day": "Day 1",
       "focus": "Focus topic",
-      "task": "Specific task",
+      "task": "Specific task under 18 words",
       "minutes": 25
     }
   ],
-  "test_taking_strategy": ["Actionable test taking tips focusing on accuracy, question selection, eliminating distractors, and containing marks lost to wrong answers"],
-  "next_test_goal": "A single clear measurable objective for the student's next practice test (e.g. 'Target 75%+ accuracy in Kinematics while containing marks lost to wrong answers to under 5')",
-  "comparison_with_previous": "First report: this is your baseline (or delta note compared to previous report)"
+  "test_taking_strategy": ["Test tip focusing on accuracy and negative marking under 18 words"],
+  "next_test_goal": "A single measurable goal under 18 words",
+  "comparison_with_previous": "First report: this is your baseline (or delta note under 18 words)",
+  "random_answering_note": "This looks like random answering, so the advice may be less accurate. (only if hasRandomAnswering is true)"
 }`;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function parseRetryAfterMs(err: any): number | null {
+  const retryHeader =
+    err?.headers?.get?.("retry-after") ??
+    err?.headers?.["retry-after"] ??
+    err?.response?.headers?.get?.("retry-after") ??
+    err?.response?.headers?.["retry-after"];
+
+  if (retryHeader) {
+    const sec = Number(retryHeader);
+    if (!isNaN(sec) && sec > 0) return Math.min(sec * 1000, 10000);
+    const dateMs = Date.parse(retryHeader);
+    if (!isNaN(dateMs)) {
+      const diff = dateMs - Date.now();
+      if (diff > 0) return Math.min(diff, 10000);
+    }
+  }
+
+  const msg = err?.message || "";
+  const match = msg.match(/try again in ([\d\.]+)s/i);
+  if (match && match[1]) {
+    const sec = parseFloat(match[1]);
+    if (!isNaN(sec) && sec > 0) return Math.min(Math.ceil(sec * 1000), 10000);
+  }
+
+  return null;
+}
 
 /**
  * Validates AI Coach JSON structure strictly
@@ -103,85 +139,154 @@ export function validateAICoachReport(
 }
 
 /**
- * Recursively strips all time, speed, and pacing telemetry before sending to AI
+ * Recursively strips all time, speed, pacing and personal information.
+ * Uses strict server-side allowlisting so no PII (name, email, phone, tokens, IDs)
+ * can ever be forwarded to the AI provider.
+ * Moves topics with fewer than 5 attempts into insufficient_data_topics and excludes them
+ * from leaks and strengths.
  */
 function sanitizeStatsForAI(statsObj: any): any {
-  if (!statsObj || typeof statsObj !== "object") return statsObj;
-  const clone = JSON.parse(JSON.stringify(statsObj));
-  delete clone.averageTimePerQuestionSeconds;
-  if (Array.isArray(clone.topicBreakdown)) {
-    clone.topicBreakdown.forEach((t: any) => {
-      delete t.averageTimeSeconds;
+  if (!statsObj || typeof statsObj !== "object") return null;
+
+  const sufficientTopics: any[] = [];
+  const insufficientTopics: any[] = [];
+
+  if (Array.isArray(statsObj.topicBreakdown)) {
+    statsObj.topicBreakdown.forEach((t: any) => {
+      const sanitizedTopic = {
+        topic: String(t.topic || ""),
+        chapter: t.chapter ? String(t.chapter) : undefined,
+        attempted: Number(t.attempted) || 0,
+        correct: Number(t.correct) || 0,
+        accuracyPercentage: Number(t.accuracyPercentage) || 0,
+        classification: String(t.classification || "sufficient"),
+        mostCommonWrongOption: t.mostCommonWrongOption ? String(t.mostCommonWrongOption) : undefined,
+      };
+      if ((sanitizedTopic.attempted || 0) < AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS) {
+        insufficientTopics.push({
+          ...sanitizedTopic,
+          classification: "insufficient data",
+          note: "needs more data",
+        });
+      } else {
+        sufficientTopics.push(sanitizedTopic);
+      }
     });
   }
-  return clone;
+
+  // Strictly allowlisted non-PII telemetry payload
+  return {
+    subject: String(statsObj.subject || "Subject"),
+    totalAttempts: Number(statsObj.totalAttempts) || 0,
+    uniqueQuestionsAnalyzed: Number(statsObj.uniqueQuestionsAnalyzed) || 0,
+    overallAccuracyPercentage: Number(statsObj.overallAccuracyPercentage) || 0,
+    attemptRate: Number(statsObj.attemptRate) || 0,
+    netScore: Number(statsObj.netScore) || 0,
+    potentialScore: Number(statsObj.potentialScore) || 250,
+    negativeMarksLost: Number(statsObj.negativeMarksLost) || 0,
+    errorTypes: {
+      carelessErrors: Number(statsObj.errorTypes?.carelessErrors) || 0,
+      conceptGaps: Number(statsObj.errorTypes?.conceptGaps) || 0,
+      confidenceGaps: Number(statsObj.errorTypes?.confidenceGaps) || 0,
+      secondGuessing: Number(statsObj.errorTypes?.secondGuessing) || 0,
+    },
+    mistakeTags: statsObj.mistakeTags ? {
+      didntKnowConcept: Number(statsObj.mistakeTags.didntKnowConcept) || 0,
+      misread: Number(statsObj.mistakeTags.misread) || 0,
+      guessed: Number(statsObj.mistakeTags.guessed) || 0,
+      changedAnswer: Number(statsObj.mistakeTags.changedAnswer) || 0,
+    } : undefined,
+    rightToWrongChanges: Number(statsObj.rightToWrongChanges) || 0,
+    mockVsPyqGap: statsObj.mockVsPyqGap ? {
+      mockAccuracy: Number(statsObj.mockVsPyqGap.mockAccuracy) || 0,
+      mockAttempts: Number(statsObj.mockVsPyqGap.mockAttempts) || 0,
+      pyqAccuracy: Number(statsObj.mockVsPyqGap.pyqAccuracy) || 0,
+      pyqAttempts: Number(statsObj.mockVsPyqGap.pyqAttempts) || 0,
+      accuracyDelta: Number(statsObj.mockVsPyqGap.accuracyDelta) || 0,
+    } : undefined,
+    recentTrend: statsObj.recentTrend ? {
+      recentAccuracies: Array.isArray(statsObj.recentTrend.recentAccuracies)
+        ? statsObj.recentTrend.recentAccuracies.map((n: any) => Number(n) || 0)
+        : [],
+      trajectory: String(statsObj.recentTrend.trajectory || "steady"),
+    } : undefined,
+    topicBreakdown: sufficientTopics,
+    insufficient_data_topics: insufficientTopics,
+    hasRandomAnswering: Boolean(statsObj.hasRandomAnswering),
+    hasLowSignalAttempt: Boolean(statsObj.hasLowSignalAttempt),
+    daysToExam: Number(statsObj.daysToExam) || 200,
+  };
 }
 
 /**
- * Builds deterministic fallback AI report from computed stats if upstream calls fail
+ * Builds deterministic fallback AI report from computed stats if upstream calls fail.
+ * Obey prompt rules: Class 12 plain English, max 18 words per bullet, no statistical jargon,
+ * text fits 360px mobile cards without truncation.
  */
 export function buildDeterministicAICoachReport(
   stats: AICoachComputedStats,
   prevStats: AICoachComputedStats | null
 ): AICoachReportContent {
-  const conceptGapTopics = stats.topicBreakdown.filter(
-    (t) => t.attempted >= AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS && t.accuracyPercentage < 40
+  // Only topics with 5+ attempts qualify for leaks and strengths
+  const qualifyingTopics = (stats.topicBreakdown || []).filter(
+    (t) => t.attempted >= AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS
   );
-  const weakTopics = stats.topicBreakdown.filter((t) => t.classification === "weak");
-  const strongTopics = stats.topicBreakdown.filter((t) => t.classification === "strong");
+  const conceptGapTopics = qualifyingTopics.filter((t) => t.accuracyPercentage < 40);
+  const weakTopics = qualifyingTopics.filter((t) => t.classification === "weak");
+  const strongTopics = qualifyingTopics.filter((t) => t.classification === "strong");
 
   const biggest_leaks: BiggestLeak[] = [];
 
   // 1. Concept gap: Topic accuracy < 40% with 5+ attempts
   conceptGapTopics.slice(0, 2).forEach((cg) => {
     const wrongDistractorNote = cg.mostCommonWrongOption
-      ? ` (frequently picking distractor Option ${cg.mostCommonWrongOption})`
+      ? ` Trap option: Option ${cg.mostCommonWrongOption}.`
       : "";
     biggest_leaks.push({
       topic: cg.topic,
       issue: `Concept gap in ${cg.topic}`,
-      evidence: `${cg.accuracyPercentage}% accuracy across ${cg.attempted} attempts (${cg.attempted - cg.correct} marks lost to wrong answers)${wrongDistractorNote}.`,
+      evidence: `${cg.accuracyPercentage}% accuracy over ${cg.attempted} questions, losing ${cg.attempted - cg.correct} marks to wrong choices.${wrongDistractorNote}`,
       likelyConfusion: cg.mostCommonWrongOption
-        ? `Likely confusing core NCERT principles with trap Option ${cg.mostCommonWrongOption} due to blurred definition boundaries.`
-        : `Difficulty isolating core formulas and boundary conditions under NCERT criteria.`,
-      fix: `Tap "Practice this topic" to launch a 10-question quiz on ${cg.topic}, prioritizing questions you got wrong before to eliminate distractor traps.`,
+        ? `Confusing core definitions with trap Option ${cg.mostCommonWrongOption}.`
+        : `Difficulty with core formulas and definition boundaries.`,
+      fix: `Tap "Start 10-question fix" to solve 10 questions on ${cg.topic}.`,
     });
   });
 
   // 2. Careless: Wrong answers on questions tagged easy
   if (stats.errorTypes.carelessErrors > 0 && biggest_leaks.length < 3) {
-    const focusTopic = weakTopics[0]?.topic || stats.topicBreakdown[0]?.topic || stats.subject;
+    const focusTopic = weakTopics[0]?.topic || qualifyingTopics[0]?.topic || stats.subject;
     biggest_leaks.push({
       topic: focusTopic,
       issue: "Careless errors on easy questions",
-      evidence: `Recorded ${stats.errorTypes.carelessErrors} wrong answers on questions tagged easy.`,
-      likelyConfusion: "Misreading negative or qualifying stems (such as NOT, EXCEPT, or FALSE) rather than fundamental conceptual gaps.",
-      fix: `Tap "Practice this topic" to take a 10-question practice quiz on ${focusTopic} while enforcing stem verification before locking your choice.`,
+      evidence: `Recorded ${stats.errorTypes.carelessErrors} wrong answers on easy questions.`,
+      likelyConfusion: "Misreading negative words like NOT or EXCEPT in the question stem.",
+      fix: `Tap "Start 10-question fix" to practice 10 questions on ${focusTopic}.`,
     });
   }
 
   // 3. Confidence gap: Skipped questions
   if (stats.errorTypes.confidenceGaps > 0 && biggest_leaks.length < 3) {
-    const focusTopic = weakTopics[0]?.topic || stats.topicBreakdown[0]?.topic || stats.subject;
+    const focusTopic = weakTopics[0]?.topic || qualifyingTopics[0]?.topic || stats.subject;
     biggest_leaks.push({
       topic: focusTopic,
       issue: "Confidence gap from skipped questions",
-      evidence: `Left ${stats.errorTypes.confidenceGaps} questions unattempted across tests.`,
-      likelyConfusion: "Hesitation when evaluating options with two plausible candidates, leading to unnecessary skips on solvable questions.",
-      fix: `Tap "Practice this topic" to drill 10 questions on ${focusTopic} using deliberate two-option elimination to build confidence.`,
+      evidence: `Skipped ${stats.errorTypes.confidenceGaps} questions without attempting an answer.`,
+      likelyConfusion: "Hesitating between two close options on solvable questions.",
+      fix: `Tap "Start 10-question fix" to solve 10 questions on ${focusTopic}.`,
     });
   }
 
   // 4. Second-guessing: Right-to-wrong answer changes
   const changes = stats.errorTypes.secondGuessing || stats.rightToWrongChanges || 0;
   if (changes > 0 && biggest_leaks.length < 3) {
-    const focusTopic = weakTopics[0]?.topic || stats.topicBreakdown[0]?.topic || stats.subject;
+    const focusTopic = weakTopics[0]?.topic || qualifyingTopics[0]?.topic || stats.subject;
     biggest_leaks.push({
       topic: focusTopic,
       issue: "Second-guessing answer changes",
-      evidence: `Recorded ${changes} instances of changing an answer from correct to wrong.`,
-      likelyConfusion: "Over-analyzing straightforward questions and switching away from correct intuitive solutions to tempting distractors.",
-      fix: `Tap "Practice this topic" to solve 10 targeted questions on ${focusTopic}, locking your primary answer unless you detect a factual contradiction.`,
+      evidence: `Changed answer from right to wrong ${changes} times across tests.`,
+      likelyConfusion: "Second-guessing correct first choices and switching to distractors.",
+      fix: `Tap "Start 10-question fix" to practice 10 questions on ${focusTopic}.`,
     });
   }
 
@@ -191,65 +296,79 @@ export function buildDeterministicAICoachReport(
       biggest_leaks.push({
         topic: w.topic,
         issue: `Knowledge gap in ${w.topic}`,
-        evidence: `${w.accuracyPercentage}% accuracy across ${w.attempted} attempts.`,
-        likelyConfusion: `Uncertainty with advanced NCERT applications and calculation steps in ${w.topic}.`,
-        fix: `Tap "Practice this topic" to run a 10-question practice quiz on ${w.topic} prioritizing past mistakes.`,
+        evidence: `${w.accuracyPercentage}% accuracy over ${w.attempted} questions.`,
+        likelyConfusion: `Needs review of NCERT chapter summary and definitions.`,
+        fix: `Tap "Start 10-question fix" to practice 10 questions on ${w.topic}.`,
       });
     });
   }
 
   if (biggest_leaks.length === 0) {
-    const defaultTopic = stats.topicBreakdown[0]?.topic || stats.subject;
+    const defaultTopic = qualifyingTopics[0]?.topic || stats.subject;
     biggest_leaks.push({
       topic: defaultTopic,
       issue: "Marks lost to wrong answers",
-      evidence: `Lost ${stats.negativeMarksLost} marks due to wrong answers on uncertain options.`,
-      likelyConfusion: "Selecting options without definitive elimination of distractors.",
-      fix: `Tap "Practice this topic" to complete a 10-question accuracy quiz on ${defaultTopic}.`,
+      evidence: `Lost ${stats.negativeMarksLost} marks due to wrong answers.`,
+      likelyConfusion: "Guessing answers without ruling out wrong choices.",
+      fix: `Tap "Start 10-question fix" to practice 10 questions on ${defaultTopic}.`,
     });
   }
 
   const strengths = strongTopics.slice(0, 3).map(
-    (s) => `${s.topic} (${s.accuracyPercentage}% accuracy over ${s.attempted} questions)`
+    (s) => `${s.topic}: ${s.accuracyPercentage}% accuracy over ${s.attempted} questions.`
   );
   if (strengths.length === 0) {
-    strengths.push(`Solid accuracy foundation with ${stats.overallAccuracyPercentage}% overall accuracy across ${stats.uniqueQuestionsAnalyzed} questions`);
+    strengths.push(`Overall accuracy is ${stats.overallAccuracyPercentage}% across ${stats.uniqueQuestionsAnalyzed} questions.`);
   }
 
-  const primaryLeakTopic = conceptGapTopics[0]?.topic || weakTopics[0]?.topic || stats.subject;
+  const primaryLeakTopic = conceptGapTopics[0]?.topic || weakTopics[0]?.topic || qualifyingTopics[0]?.topic || stats.subject;
   const weekly_plan = [
-    { day: "Day 1", focus: "Foundation Audit", task: `Review core NCERT formulas & summary notes for ${primaryLeakTopic}`, minutes: 25 },
-    { day: "Day 2", focus: "Targeted Drill", task: `Solve 10 curated questions focusing on ${primaryLeakTopic}`, minutes: 20 },
-    { day: "Day 3", focus: "Error Log Analysis", task: "Review error logs and analyze wrong answers from Day 2", minutes: 15 },
-    { day: "Day 4", focus: "PYQ Provenance", task: `Solve 15 past year questions from ${stats.subject}`, minutes: 30 },
-    { day: "Day 5", focus: "Sectional Practice", task: "Attempt a 25-question sectional mock to solidify accuracy", minutes: 30 },
-    { day: "Day 6", focus: "Option Elimination", task: "Practice 10 Assertion-Reasoning and Match-the-Following questions", minutes: 20 },
-    { day: "Day 7", focus: "Milestone Assessment", task: "Take a full 50-question mock exam and analyze net score", minutes: 60 },
+    { day: "Day 1", focus: "Formula Audit", task: `Review NCERT formulas and notes for ${primaryLeakTopic}.`, minutes: 25 },
+    { day: "Day 2", focus: "Targeted Drill", task: `Solve 10 questions on ${primaryLeakTopic} to fix errors.`, minutes: 20 },
+    { day: "Day 3", focus: "Mistake Review", task: "Check wrong answers and note formulas in mistake book.", minutes: 15 },
+    { day: "Day 4", focus: "Past Questions", task: `Solve 15 past year questions for ${stats.subject}.`, minutes: 30 },
+    { day: "Day 5", focus: "Sectional Mock", task: "Take a 25-question sectional test to build accuracy.", minutes: 30 },
+    { day: "Day 6", focus: "Option Elimination", task: "Solve 10 matching and statement questions carefully.", minutes: 20 },
+    { day: "Day 7", focus: "Full Test Review", task: "Take a full 50-question mock test.", minutes: 60 },
   ];
 
   const test_taking_strategy = [
-    `Preserve positive momentum: net score is currently ${stats.netScore} marks out of ${stats.potentialScore} potential.`,
-    `Contain marks lost to wrong answers: you have lost ${stats.negativeMarksLost} marks to -1 penalties. Skip low-confidence guesses.`,
-    `Focus on high-accuracy topics first and eliminate distractors systematically.`,
+    `Current net score is ${stats.netScore} marks out of ${stats.potentialScore} potential.`,
+    `Skip doubtful questions to avoid losing marks to -1 penalties.`,
+    `Solve your strongest topics first and eliminate wrong options.`,
   ];
 
   let comparison_with_previous = "First report: this is your baseline";
   if (prevStats) {
     const accuracyDelta = stats.overallAccuracyPercentage - prevStats.overallAccuracyPercentage;
     const netDelta = stats.netScore - prevStats.netScore;
-    comparison_with_previous = `Compared to your previous evaluation, overall accuracy changed by ${
+    comparison_with_previous = `Accuracy changed by ${
       accuracyDelta >= 0 ? "+" : ""
     }${accuracyDelta}% and net score shifted by ${netDelta >= 0 ? "+" : ""}${netDelta} marks.`;
   }
 
+  let summary = `In ${stats.subject}, you solved ${stats.uniqueQuestionsAnalyzed} questions with ${stats.overallAccuracyPercentage}% accuracy and net score of ${stats.netScore}/${stats.potentialScore}. Focus on your top leaks to improve.`;
+  let random_answering_note: string | undefined;
+  if (stats.hasRandomAnswering) {
+    random_answering_note = "This looks like random answering, so the advice may be less accurate.";
+    summary += " Note: This looks like random answering, so the advice may be less accurate.";
+  } else if (stats.hasLowSignalAttempt) {
+    random_answering_note =
+      "Low-signal attempt detected. This assessment may not be suitable for measuring your current mastery. Complete another assessment to strengthen your AI Coach analysis.";
+    summary +=
+      " Note: Low-signal attempt detected. This assessment may not be suitable for measuring your current mastery. Complete another assessment to strengthen your AI Coach analysis.";
+  }
+
   return {
-    summary: `In ${stats.subject}, you have analyzed ${stats.uniqueQuestionsAnalyzed} questions with an overall accuracy of ${stats.overallAccuracyPercentage}%. Your net score is ${stats.netScore}/${stats.potentialScore} marks with ${stats.negativeMarksLost} marks lost to wrong answers. With ${stats.daysToExam} days remaining until CUET, focused correction of your top error patterns will accelerate your rank.`,
+    summary,
     biggest_leaks,
     strengths,
     weekly_plan,
     test_taking_strategy,
-    next_test_goal: `Aim for ${Math.min(95, stats.overallAccuracyPercentage + 8)}% accuracy and reduce marks lost to wrong answers below ${Math.max(2, Math.floor(stats.negativeMarksLost * 0.5))} on your next 50-question mock.`,
+    next_test_goal: `Aim for ${Math.min(95, stats.overallAccuracyPercentage + 8)}% accuracy on your next test.`,
     comparison_with_previous,
+    random_answering_note,
+    is_fallback: true,
   };
 }
 
@@ -318,35 +437,54 @@ async function callGroq(
 /**
  * Main AI generation orchestrator:
  * - Uses Groq LPU exclusively
- * - Enforces retry-once policy on validation failure
- * - Falls back to deterministic report or surfaces error cleanly
+ * - Enforces up to 3 backoff retries respecting retry-after
+ * - Falls back to deterministic computed stats, Topics to Fix, and rule-based 7-day plan
  */
 export async function generateAICoachReport(
   stats: AICoachComputedStats,
   prevStats: AICoachComputedStats | null
-): Promise<{ report: AICoachReportContent; model: string }> {
+): Promise<{ report: AICoachReportContent; model: string; isFallback: boolean }> {
   let lastError: Error | null = null;
+  const apiKey = process.env.GROQ_API_KEY;
 
-  // Try up to 2 attempts with Groq (initial + 1 retry on failure)
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    if (process.env.GROQ_API_KEY && !process.env.GROQ_API_KEY.includes("placeholder")) {
+  if (apiKey && !apiKey.includes("placeholder")) {
+    const maxRetries = 3;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         const groqResult = await callGroq(stats, prevStats);
         if (groqResult) {
-          return { report: groqResult, model: process.env.GROQ_MODEL || "qwen/qwen3.8-27b" };
+          if (stats.hasRandomAnswering && !groqResult.random_answering_note) {
+            groqResult.random_answering_note = "This looks like random answering, so the advice may be less accurate.";
+          } else if (stats.hasLowSignalAttempt && !groqResult.random_answering_note) {
+            groqResult.random_answering_note =
+              "Low-signal attempt detected. This assessment may not be suitable for measuring your current mastery. Complete another assessment to strengthen your AI Coach analysis.";
+          }
+          return {
+            report: groqResult,
+            model: process.env.GROQ_MODEL || "qwen/qwen3.8-27b",
+            isFallback: false,
+          };
         }
       } catch (err: any) {
         lastError = err;
-        console.warn(`[AI Coach] Groq attempt ${attempt} failed:`, err?.message || err);
+        console.warn(`[AI Coach] Groq attempt ${attempt + 1} failed:`, err?.message || err);
+        if (attempt < maxRetries) {
+          const baseWait = parseRetryAfterMs(err) ?? Math.min(1000 * Math.pow(2, attempt), 8000);
+          const jitter = Math.floor(Math.random() * 300);
+          const waitMs = baseWait + jitter;
+          console.warn(`[AI Coach] Retrying in ${waitMs}ms (retry ${attempt + 1} of ${maxRetries})...`);
+          await sleep(waitMs);
+        }
       }
     }
   }
 
-  // If Groq failed or was not configured, use deterministic generation
+  // If Groq failed after 3 backoff retries or was not configured, use deterministic generation
   console.warn(
-    "[AI Coach] Using verified deterministic stats engine fallback:",
+    "[AI Coach] Groq call failed after 3 backoff retries. Showing computed stats, Topics to Fix, and rule-based 7-day plan fallback:",
     lastError?.message || "No external AI keys responding"
   );
   const fallback = buildDeterministicAICoachReport(stats, prevStats);
-  return { report: fallback, model: "deterministic-coach-v1" };
+  fallback.is_fallback = true;
+  return { report: fallback, model: "rule-based-fallback", isFallback: true };
 }

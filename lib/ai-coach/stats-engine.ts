@@ -183,6 +183,7 @@ export async function computeAICoachStats(
       tests (
         id,
         title,
+        subject,
         total_questions
       )
     `)
@@ -199,10 +200,11 @@ export async function computeAICoachStats(
     console.error("[Stats Engine] Error fetching user_attempts:", queryErr.message);
   }
 
-  // Filter to subject rows
+  // Filter to subject rows (using question subject or fallback test subject)
   const subjectRows = (rows || []).filter((r: any) => {
     const q = Array.isArray(r.questions) ? r.questions[0] : r.questions;
-    const qSub = q?.subject || "";
+    const testObj = Array.isArray(r.tests) ? r.tests[0] : r.tests;
+    const qSub = q?.subject || testObj?.subject || "";
     return (
       qSub.toLowerCase() === normalized.key ||
       qSub.toLowerCase() === normalized.name.toLowerCase() ||
@@ -257,6 +259,7 @@ export async function computeAICoachStats(
       totalTestQuestions: number;
       attempted: number;
       correct: number;
+      optionCounts: Record<string, number>;
       date: string;
     }
   >();
@@ -274,14 +277,24 @@ export async function computeAICoachStats(
       correctCount += 1;
     } else {
       incorrectCount += 1;
-      // Rule 2: Wrong answers on questions tagged easy: "careless"
+      // Wrong answers on questions tagged easy: "careless"
       if (isQuestionTaggedEasy(q, row)) {
         carelessErrors += 1;
       }
     }
 
-    // Rule 2: Right-to-wrong answer changes: "second-guessing"
-    if (
+    // Answer changes: count only when the final submitted answer differs from the first saved answer for that question
+    const diag = row?.diagnostic_report;
+    const firstSaved = diag?.first_saved_option || diag?.firstSavedOption || row?.first_saved_option;
+    const finalSaved = row?.selected_option || diag?.final_option || diag?.finalOption;
+
+    if (firstSaved && finalSaved) {
+      if (String(firstSaved).trim().toUpperCase() !== String(finalSaved).trim().toUpperCase()) {
+        secondGuessing += 1;
+      }
+    } else if (
+      row?.diagnostic_report?.answer_changed === true ||
+      row?.diagnostic_report?.answerChanged === true ||
       row?.diagnostic_report?.right_to_wrong ||
       row?.diagnostic_report?.rightToWrongChange ||
       row?.diagnostic_report?.second_guessing ||
@@ -345,11 +358,40 @@ export async function computeAICoachStats(
       totalTestQuestions: testObj?.total_questions || 50,
       attempted: 0,
       correct: 0,
+      optionCounts: {} as Record<string, number>,
       date: row.created_at || new Date().toISOString(),
     };
     sess.attempted += 1;
     if (isCorrect) sess.correct += 1;
+    if (row.selected_option) {
+      const opt = String(row.selected_option).trim().toUpperCase();
+      sess.optionCounts[opt] = (sess.optionCounts[opt] || 0) + 1;
+    }
     testSessions.set(sessionKey, sess);
+  });
+
+  // Check for random answering (one option chosen for >80% of answers, with no skips)
+  // or low-signal assessment (accuracy < 12% across completed 50-question mock with zero skips)
+  // NEVER exclude attempts from counting - every submitted answer counts toward the 150 unlock and all stats.
+  let hasRandomAnswering = false;
+  let hasLowSignalAttempt = false;
+  testSessions.forEach((s) => {
+    if (s.totalTestQuestions > 0 && s.attempted >= s.totalTestQuestions) {
+      for (const opt in s.optionCounts) {
+        const cnt = s.optionCounts[opt] || 0;
+        if (cnt / s.attempted > 0.8) {
+          hasRandomAnswering = true;
+          hasLowSignalAttempt = true;
+          break;
+        }
+      }
+      if (s.totalTestQuestions >= 50 && s.attempted >= 50) {
+        const sessionAcc = (s.correct / s.attempted) * 100;
+        if (sessionAcc < 12) {
+          hasLowSignalAttempt = true;
+        }
+      }
+    }
   });
 
   const totalAttempts = subjectRows.length;
@@ -472,6 +514,10 @@ export async function computeAICoachStats(
     changedAnswer: Math.max(dbMistakeTagCounts.changedAnswer, localTagCounts.changedAnswer),
   };
 
+  const insufficientDataTopics = topicBreakdown.filter(
+    (t) => t.attempted < AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS
+  );
+
   const computed: AICoachComputedStats = {
     subject: normalized.name,
     totalAttempts,
@@ -490,6 +536,9 @@ export async function computeAICoachStats(
       trajectory,
     },
     topicBreakdown,
+    insufficient_data_topics: insufficientDataTopics,
+    hasRandomAnswering,
+    hasLowSignalAttempt,
     daysToExam: calculateDaysToExam(),
   };
 

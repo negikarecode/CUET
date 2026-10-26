@@ -19,6 +19,7 @@ import {
   Play,
   Tag,
   BookmarkCheck,
+  Info,
 } from "lucide-react";
 import { SubjectEligibility, AICoachStoredReport, TopicPracticeDelta } from "@/types/ai-coach";
 import { loadTopicPracticeDeltas } from "@/lib/ai-coach/practice-engine";
@@ -48,11 +49,19 @@ export default function AICoachClient({
     initialSubjects[0]?.subject || "Physics"
   );
   const [activeReport, setActiveReport] = useState<AICoachStoredReport | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<{
+  // Per-subject loading and error states
+  const [loadingBySubject, setLoadingBySubject] = useState<Record<string, boolean>>({});
+  const [errorBySubject, setErrorBySubject] = useState<Record<string, string | null>>({});
+  const [statusBySubject, setStatusBySubject] = useState<Record<string, {
     type: "error" | "info" | "success";
     text: string;
-  } | null>(null);
+  } | null>>({});
+
+  const isGenerating = Boolean(loadingBySubject[selectedSubjectName]);
+  const statusMessage = statusBySubject[selectedSubjectName] || (errorBySubject[selectedSubjectName] ? {
+    type: "error" as const,
+    text: errorBySubject[selectedSubjectName]!,
+  } : null);
   const [feedbackState, setFeedbackState] = useState<"up" | "down" | null>(null);
 
   // Topic Practice Quiz & Mistake Notebook State
@@ -101,6 +110,29 @@ export default function AICoachClient({
     return defaultSubject;
   };
 
+  const extractTopicFromPlanItem = (
+    item: { focus?: string; task?: string },
+    defaultSubject: string,
+    report: AICoachStoredReport | null
+  ): string => {
+    const text = `${item.focus || ""} ${item.task || ""}`;
+    if (report?.report_json?.biggest_leaks && report.report_json.biggest_leaks.length > 0) {
+      for (const leak of report.report_json.biggest_leaks) {
+        if (leak.topic && text.toLowerCase().includes(leak.topic.toLowerCase())) {
+          return leak.topic;
+        }
+      }
+    }
+    if (report?.stats_json?.topicBreakdown) {
+      for (const t of report.stats_json.topicBreakdown) {
+        if (t.topic && text.toLowerCase().includes(t.topic.toLowerCase())) {
+          return t.topic;
+        }
+      }
+    }
+    return item.focus || report?.report_json?.biggest_leaks?.[0]?.topic || defaultSubject;
+  };
+
   const getBaselineAccuracyForTopic = (
     report: AICoachStoredReport | null,
     topicName: string
@@ -128,10 +160,13 @@ export default function AICoachClient({
 
   const handleQuizCompleted = (delta: TopicPracticeDelta) => {
     reloadDeltasAndNotebook();
-    setStatusMessage({
-      type: "success",
-      text: `Practice completed for ${delta.topic}! Immediate progress: ${delta.beforeAccuracy}% → ${delta.afterAccuracy}%.`,
-    });
+    setStatusBySubject((prev) => ({
+      ...prev,
+      [selectedSubjectName]: {
+        type: "success",
+        text: `Practice completed for ${delta.topic}! Immediate progress: ${delta.beforeAccuracy}% → ${delta.afterAccuracy}%.`,
+      },
+    }));
   };
 
   const activeSubject = subjects.find(
@@ -181,47 +216,80 @@ export default function AICoachClient({
     };
   }, [selectedSubjectName]);
 
-  // Handle generation
-  const handleGenerateReport = async () => {
-    if (!activeSubject || !activeSubject.isUnlocked || dailyLimitReached) return;
+  // Handle generation (per-subject loading and error states)
+  const handleGenerateReport = async (targetSubject?: string) => {
+    const subToGen = targetSubject || selectedSubjectName;
+    const targetSubObj =
+      subjects.find((s) => s.subject.toLowerCase() === subToGen.toLowerCase()) || activeSubject;
 
-    setIsGenerating(true);
-    setStatusMessage({
-      type: "info",
-      text: "Analyzing your practice data, identifying error patterns, and preparing your report...",
-    });
+    if (!targetSubObj || !targetSubObj.isUnlocked || dailyLimitReached) return;
+
+    setLoadingBySubject((prev) => ({ ...prev, [subToGen]: true }));
+    setErrorBySubject((prev) => ({ ...prev, [subToGen]: null }));
+    setStatusBySubject((prev) => ({
+      ...prev,
+      [subToGen]: {
+        type: "info",
+        text: `Analyzing your practice data in ${subToGen}, identifying error patterns, and preparing your report...`,
+      },
+    }));
 
     try {
       const res = await fetch("/api/ai-coach/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subject: activeSubject.subject }),
+        body: JSON.stringify({ subject: targetSubObj.subject }),
       });
 
       const data = await res.json();
 
       if (res.ok && data.success && data.report) {
-        setActiveReport(data.report);
-        setFeedbackState(null);
-        setStatusMessage({
-          type: "success",
-          text: `AI Coach evaluation for ${activeSubject.subject} generated successfully!`,
-        });
+        if (subToGen.toLowerCase() === selectedSubjectName.toLowerCase()) {
+          setActiveReport(data.report);
+          setFeedbackState(null);
+        }
+        if (data.isFallback) {
+          setStatusBySubject((prev) => ({
+            ...prev,
+            [subToGen]: {
+              type: "info",
+              text: "Groq call failed after 3 retries. Showing computed stats, Topics to Fix, and rule-based 7-day plan.",
+            },
+          }));
+        } else {
+          setStatusBySubject((prev) => ({
+            ...prev,
+            [subToGen]: {
+              type: "success",
+              text: `AI Coach evaluation for ${targetSubObj.subject} generated successfully!`,
+            },
+          }));
+        }
         refreshStatus();
       } else {
-        setStatusMessage({
-          type: "error",
-          text: data.error || "Generation failed. Your daily report credit was not used.",
-        });
+        const errMsg = data.error || "Generation failed. Your daily report credit was not used.";
+        setErrorBySubject((prev) => ({ ...prev, [subToGen]: errMsg }));
+        setStatusBySubject((prev) => ({
+          ...prev,
+          [subToGen]: {
+            type: "error",
+            text: errMsg,
+          },
+        }));
         refreshStatus();
       }
     } catch {
-      setStatusMessage({
-        type: "error",
-        text: "Network connection interrupted. Your daily report credit was not deducted.",
-      });
+      const netErr = "Network connection interrupted. Your daily report credit was not deducted.";
+      setErrorBySubject((prev) => ({ ...prev, [subToGen]: netErr }));
+      setStatusBySubject((prev) => ({
+        ...prev,
+        [subToGen]: {
+          type: "error",
+          text: netErr,
+        },
+      }));
     } finally {
-      setIsGenerating(false);
+      setLoadingBySubject((prev) => ({ ...prev, [subToGen]: false }));
     }
   };
 
@@ -271,6 +339,9 @@ export default function AICoachClient({
             </h1>
             <p className="text-sm sm:text-base text-slate-300 max-w-2xl">
               Subject-level diagnostic evaluation calibrated every 150 unique questions. Uncover careless errors, concept gaps, second-guessing patterns, and score-accelerating weekly plans.
+            </p>
+            <p className="text-xs text-indigo-300/90 font-medium pt-1">
+              Your name, phone and email are never sent to the AI
             </p>
           </div>
 
@@ -335,7 +406,10 @@ export default function AICoachClient({
           </div>
           <button
             type="button"
-            onClick={() => setStatusMessage(null)}
+            onClick={() => {
+              setStatusBySubject((prev) => ({ ...prev, [selectedSubjectName]: null }));
+              setErrorBySubject((prev) => ({ ...prev, [selectedSubjectName]: null }));
+            }}
             className="text-xs font-bold hover:underline shrink-0"
           >
             Dismiss
@@ -381,7 +455,7 @@ export default function AICoachClient({
               className="px-5 py-3 rounded-2xl bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xs sm:text-sm shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer active:scale-98 relative z-10"
             >
               <Play className="w-4 h-4 fill-white" />
-              <span>Practice This Topic (10 Qs)</span>
+              <span>Start 10-question fix</span>
             </button>
           </div>
         );
@@ -525,7 +599,7 @@ export default function AICoachClient({
           <button
             type="button"
             disabled={!activeSubject?.isUnlocked || isGenerating || dailyLimitReached}
-            onClick={handleGenerateReport}
+            onClick={() => handleGenerateReport(selectedSubjectName)}
             className={`px-5 py-3 rounded-2xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
               !activeSubject?.isUnlocked || dailyLimitReached
                 ? "bg-slate-100 text-slate-400 cursor-not-allowed shadow-none"
@@ -573,6 +647,42 @@ export default function AICoachClient({
                   : `${activeSubject?.questionsRemaining || 0} questions remaining until next unlock`}
               </span>
             </div>
+
+            {/* Fallback Mode Banner */}
+            {(activeReport.is_fallback || activeReport.model === "rule-based-fallback") && (
+              <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-amber-800">
+                      Rule-Based Fallback Mode
+                    </span>
+                  </div>
+                  <p className="text-xs text-amber-700">
+                    AI service was temporarily unavailable after 3 retries. Computed stats, Topics to Fix, and rule-based 7-day plan are displayed below. Your daily report credit was not used.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  disabled={isGenerating}
+                  onClick={() => handleGenerateReport(selectedSubjectName)}
+                  className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 disabled:bg-amber-300 text-white font-bold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 shrink-0 cursor-pointer"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isGenerating ? "animate-spin" : ""}`} />
+                  <span>{isGenerating ? "Retrying..." : "Refresh AI narrative"}</span>
+                </button>
+              </div>
+            )}
+
+            {/* Random Answering Flag */}
+            {(activeReport.report_json?.random_answering_note || activeReport.stats_json?.hasRandomAnswering) && (
+              <div className="p-4 rounded-2xl bg-amber-50/90 border border-amber-300/80 text-amber-950 flex items-center gap-2.5 shadow-2xs">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span className="text-xs sm:text-sm font-semibold">
+                  This looks like random answering, so the advice may be less accurate.
+                </span>
+              </div>
+            )}
 
             {/* Score Snapshot Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
@@ -691,13 +801,95 @@ export default function AICoachClient({
                         className="w-full py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-98"
                       >
                         <Play className="w-3.5 h-3.5 fill-white" />
-                        <span>Practice this topic</span>
+                        <span>Start 10-question fix</span>
                       </button>
                     </div>
                   );
                 })}
               </div>
             </div>
+
+            {/* Topics to Fix & Insufficient Data Breakdown */}
+            {(() => {
+              const breakdown = activeReport.stats_json.topicBreakdown || [];
+              const weakTopics = breakdown
+                .filter((t) => (t.attempted ?? 0) >= 5 && (t.accuracyPercentage ?? 0) < 65)
+                .slice(0, 6);
+              const insufficientTopics = activeReport.stats_json.insufficient_data_topics || [];
+
+              if (weakTopics.length === 0 && insufficientTopics.length === 0) return null;
+
+              return (
+                <div className="space-y-4">
+                  {weakTopics.length > 0 && (
+                    <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-rose-700 font-bold text-sm">
+                          <Target className="w-4 h-4 text-rose-600" />
+                          <span>Topics to Fix</span>
+                        </div>
+                        <span className="text-xs text-slate-500 font-medium">
+                          Topics with &ge;5 attempts needing improvement
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {weakTopics.map((top, idx) => (
+                          <div
+                            key={idx}
+                            className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex flex-col justify-between gap-2.5"
+                          >
+                            <div className="space-y-1">
+                              <div className="text-xs font-bold text-slate-800 line-clamp-1">
+                                {top.topic}
+                              </div>
+                              <div className="flex items-center justify-between text-[11px] text-slate-600">
+                                <span>{top.attempted} attempts</span>
+                                <span className={`font-bold ${top.accuracyPercentage < 50 ? "text-rose-600" : "text-amber-600"}`}>
+                                  {top.accuracyPercentage}% accuracy
+                                </span>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handlePracticeTopic(top.topic, top.accuracyPercentage)}
+                              className="w-full py-1.5 px-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer"
+                            >
+                              <Play className="w-3 h-3 fill-white" />
+                              <span>Start 10-question fix</span>
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {insufficientTopics.length > 0 && (
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                      <div className="flex items-center gap-2 text-slate-700 font-bold text-xs uppercase tracking-wider">
+                        <Info className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Topics needing more data (&lt; 5 attempts)</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {insufficientTopics.map((t, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs text-slate-700 font-medium inline-flex items-center gap-1.5"
+                          >
+                            <span>{t.topic}</span>
+                            <span className="text-[10px] text-slate-400 font-normal">
+                              ({t.attempted} {t.attempted === 1 ? "attempt" : "attempts"})
+                            </span>
+                            <span className="text-[11px] font-semibold text-amber-700">
+                              needs more data
+                            </span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Strengths & Test Strategy */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -739,23 +931,37 @@ export default function AICoachClient({
                 <span>Personalized 7-Day Score Accelerator Plan</span>
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2.5">
-                {activeReport.report_json.weekly_plan.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between text-xs font-bold">
-                      <span className="text-indigo-600">{item.day}</span>
-                      <span className="text-slate-500 text-[10px]">{item.minutes}m</span>
+                {activeReport.report_json.weekly_plan.map((item, idx) => {
+                  const planTopic = extractTopicFromPlanItem(item, selectedSubjectName, activeReport);
+                  return (
+                    <div
+                      key={idx}
+                      className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 flex flex-col justify-between"
+                    >
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between text-xs font-bold">
+                          <span className="text-indigo-600">{item.day}</span>
+                          <span className="text-slate-500 text-[10px]">{item.minutes}m</span>
+                        </div>
+                        <div className="text-[11px] font-bold text-slate-800">
+                          {item.focus}
+                        </div>
+                        <p className="text-[11px] text-slate-600 leading-snug">
+                          {item.task}
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handlePracticeTopic(planTopic)}
+                        className="w-full mt-1.5 py-1.5 px-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 hover:text-indigo-800 text-[11px] font-bold flex items-center justify-center gap-1 transition-colors border border-indigo-200/80 cursor-pointer"
+                      >
+                        <Play className="w-3 h-3 fill-indigo-700" />
+                        <span>Start 10-question fix</span>
+                      </button>
                     </div>
-                    <div className="text-[11px] font-bold text-slate-800">
-                      {item.focus}
-                    </div>
-                    <p className="text-[11px] text-slate-600 leading-snug">
-                      {item.task}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 

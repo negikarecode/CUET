@@ -773,6 +773,14 @@ export async function POST(
             if (seenQuestionUuids.has(qUuid)) return;
             seenQuestionUuids.add(qUuid);
 
+            const clientQ = entry.clientQuestion;
+            const firstSaved = clientQ?.firstSavedOption ?? entry.selectedOption;
+            const answerChanged = Boolean(
+              firstSaved &&
+              entry.selectedOption &&
+              String(firstSaved).trim().toUpperCase() !== String(entry.selectedOption).trim().toUpperCase()
+            );
+
             const rowData: any = {
               user_id: targetUserId,
               test_id: testUuid,
@@ -782,6 +790,11 @@ export async function POST(
               time_spent_seconds: entry.timeSpentSeconds !== undefined && entry.timeSpentSeconds !== null
                 ? Number(entry.timeSpentSeconds)
                 : 0,
+              diagnostic_report: {
+                first_saved_option: firstSaved,
+                final_option: entry.selectedOption,
+                answer_changed: answerChanged,
+              },
             };
 
             attemptsToInsert.push(rowData);

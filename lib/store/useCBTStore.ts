@@ -21,6 +21,7 @@ import { enrollMissedQuestion } from "@/lib/spaced-repetition";
 export interface QuestionSessionState {
   visited: boolean;
   selectedOption: "A" | "B" | "C" | "D" | null;
+  firstSavedOption?: "A" | "B" | "C" | "D" | null;
   isMarkedForReview: boolean;
   timeSpentSeconds: number;
 }
@@ -438,9 +439,12 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
     const existing = questionStates[currentQ.id] || {
       visited: true,
       selectedOption: null,
+      firstSavedOption: null,
       isMarkedForReview: false,
       timeSpentSeconds: 0,
     };
+
+    const firstSavedOption = existing.firstSavedOption ?? opt;
 
     const updatedStates = {
       ...questionStates,
@@ -448,6 +452,7 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
         ...existing,
         visited: true,
         selectedOption: opt,
+        firstSavedOption,
       },
     };
 
@@ -952,6 +957,8 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             }
           }
           const timeSpent = qState?.timeSpentSeconds ?? 0;
+          const firstSaved = qState?.firstSavedOption ?? selectedOption;
+          const hasAnswerChanged = Boolean(firstSaved && selectedOption && firstSaved !== selectedOption);
           return {
             questionId: q.id,
             conceptId: q.conceptId,
@@ -963,6 +970,8 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             options: q.options,
             questionType: q.questionType,
             selectedOption,
+            firstSavedOption: firstSaved,
+            hasAnswerChanged,
             correctOption: (correctKey || "") as any,
             isCorrect,
             timeSpentSeconds: timeSpent,

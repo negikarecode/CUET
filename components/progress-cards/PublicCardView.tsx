@@ -72,6 +72,26 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
     document.body.removeChild(a);
   };
 
+  // Safeguard: Do not show cards that fail the check (accuracy >= 15%)
+  if (cardData.fromAccuracy < 15 || cardData.toAccuracy < 15) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-6 text-center">
+        <div className="max-w-md w-full p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+          <h2 className="text-lg font-bold text-slate-200">Progress Card Unavailable</h2>
+          <p className="text-xs text-slate-400">
+            This card does not meet the minimum accuracy safeguards.
+          </p>
+          <Link
+            href="/"
+            className="inline-block px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold"
+          >
+            Return to Dashboard
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-white flex flex-col justify-between py-8 px-4 sm:px-6 lg:px-8">
       {/* Top Bar */}
@@ -165,9 +185,9 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
           )}
 
           {/* Card Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-800 text-xs text-slate-500">
+          <div className="flex items-center justify-between pt-4 border-t border-slate-800 text-xs text-slate-400">
+            <span>Based on {cardData.totalQuestionsAnalyzed} unique questions</span>
             <span>cuetmate.com</span>
-            <span>AI Coach Certified</span>
           </div>
         </div>
 

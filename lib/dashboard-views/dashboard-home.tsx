@@ -139,7 +139,9 @@ export default async function DashboardPage() {
           testsCount: prog.completedTests.length,
           isUnlocked: prog.isUnlocked,
           attemptsToUnlock: prog.questionsRemainingToUnlock,
-          unlockProgress: Math.min(100, Math.round((prog.uniqueQuestionsAttempted / 150) * 100)),
+          unlockProgress: Math.min(100, Math.round((prog.freshQuestionsCount / 150) * 100)),
+          freshQuestionsCount: prog.freshQuestionsCount,
+          uniqueQuestionsAttempted: prog.uniqueQuestionsAttempted,
           mockUrl: info.mockUrl,
         };
       });

@@ -231,7 +231,7 @@ export default function SubjectMocksClient({
 
   const progressPercent = Math.min(
     100,
-    Math.round((mockStats.attemptedMocksCount / (mockTests.length || 20)) * 100)
+    Math.round((mockStats.attemptedMocksCount / (mockTests.length || 50)) * 100)
   );
 
   return (
@@ -260,7 +260,7 @@ export default function SubjectMocksClient({
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-600 font-medium">
-              Free plan includes 3 distinct full CBT mock exams with unlimited retries. Mock 4 through 20 and unlimited subject mocks require CUETMate Premium.
+              Free plan includes 3 distinct full CBT mock exams with unlimited retries. Mock 4 through {mockTests.length || 50} and unlimited subject mocks require CUETMate Premium.
             </p>
           </div>
           <div className="shrink-0 flex items-center gap-2.5">
@@ -302,7 +302,7 @@ export default function SubjectMocksClient({
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
               >
                 <Lock className="w-3.5 h-3.5" />
-                <span>Unlock All 20 Mocks (₹2)</span>
+                <span>Unlock All {mockTests.length || 50} Mocks (₹2)</span>
               </Link>
             ) : (
               <Link
@@ -329,7 +329,7 @@ export default function SubjectMocksClient({
         <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
             <span className="px-3 py-1 rounded-lg bg-blue-50 text-blue-800 border border-blue-200/60 tabular-nums">
-              {mockStats.attemptedMocksCount} of {mockTests.length || 20} Attempted
+              {mockStats.attemptedMocksCount} of {mockTests.length || 50} Attempted
             </span>
 
             {mockStats.peakScore !== null && (
@@ -405,14 +405,14 @@ export default function SubjectMocksClient({
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
-            Unattempted ({Math.max(0, (mockTests.length || 20) - mockStats.attemptedMocksCount)})
+            Unattempted ({Math.max(0, (mockTests.length || 50) - mockStats.attemptedMocksCount)})
           </button>
         </div>
 
         <div className="w-full sm:w-48">
           <SearchableSelect
             options={[
-              { value: "mock_number", label: "Sort: Mock Number (1-20)" },
+              { value: "mock_number", label: `Sort: Mock Number (1-${mockTests.length || 50})` },
               { value: "best_score", label: "Sort: Highest Score" },
               { value: "lowest_score", label: "Sort: Lowest Score" },
             ]}

@@ -19,7 +19,6 @@ export interface TopicStat {
   attempted: number;
   correct: number;
   accuracyPercentage: number;
-  averageTimeSeconds?: number;
   classification: TopicClassification;
   mostCommonWrongOption?: string;
 }
@@ -60,6 +59,9 @@ export interface AICoachComputedStats {
   mockVsPyqGap: MockVsPyqStats;
   recentTrend: RecentTrendStats;
   topicBreakdown: TopicStat[];
+  insufficient_data_topics?: TopicStat[]; // Topics with < 5 attempts excluded from leaks & strengths
+  hasRandomAnswering?: boolean;           // One option chosen for >80% of answers with no skips
+  hasLowSignalAttempt?: boolean;          // Low signal / suspicious assessment (e.g. >80% same option or <12% accuracy on 50 Qs)
   daysToExam: number;
 }
 
@@ -95,6 +97,8 @@ export interface AICoachReportContent {
   test_taking_strategy: string[];
   next_test_goal: string;
   comparison_with_previous: string;
+  random_answering_note?: string;
+  is_fallback?: boolean;
 }
 
 export interface AICoachStoredReport {
@@ -112,6 +116,7 @@ export interface AICoachStoredReport {
   };
   feedback?: "up" | "down" | null;
   model: string;
+  is_fallback?: boolean;
   prompt_version: string;
   created_at: string;
 }

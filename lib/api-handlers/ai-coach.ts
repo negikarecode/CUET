@@ -11,7 +11,6 @@ import {
   acquireGenerationLock,
   releaseGenerationLock,
   reserveDailyReportSlot,
-  refundDailyReportSlot,
   getDailyUsageCount,
   getNextMidnightIST,
 } from "@/lib/ai-coach/quota-engine";
@@ -209,42 +208,46 @@ export async function handleAICoachPost(
       );
     }
 
-    // Step C: Atomically reserve 1 daily report quota slot
-    const slotReservation = await reserveDailyReportSlot(userId);
-    if (!slotReservation.success) {
-      releaseGenerationLock(userId, norm.name);
-      if (slotReservation.count >= AI_COACH_CONFIG.DAILY_REPORT_LIMIT) {
-        return NextResponse.json(
-          {
-            error: "Daily report generation limit (3/3) reached. Limit resets at midnight IST.",
-            code: "DAILY_LIMIT_REACHED",
-            nextResetIso: eligibility.nextResetIso,
-          },
-          { status: 429 }
-        );
-      }
-      return NextResponse.json(
-        {
-          error: "Quota reservation encountered a system error. Please try again.",
-          code: "QUOTA_ERROR",
-        },
-        { status: 500 }
-      );
-    }
-
     try {
-      // Step D: Compute ALL deterministic stats in code
+      // Step C: Compute ALL deterministic stats in code
       const { stats, previousReportStats } = await computeAICoachStats(
         userId,
         norm.name,
         eligibility.lastReportDate
       );
 
-      // Step E: Call AI with strict JSON schema
-      const { report, model } = await generateAICoachReport(
+      // Step D: Call Groq AI with 3 backoff retries respecting retry-after
+      const { report, model, isFallback } = await generateAICoachReport(
         stats,
         previousReportStats
       );
+
+      // Step E: Quota check and reservation
+      // Rule: A daily credit is ONLY used when a full AI report is saved!
+      let quotaConsumed = false;
+      if (!isFallback) {
+        const slotReservation = await reserveDailyReportSlot(userId);
+        if (!slotReservation.success) {
+          if (slotReservation.count >= AI_COACH_CONFIG.DAILY_REPORT_LIMIT) {
+            return NextResponse.json(
+              {
+                error: "Daily report generation limit (3/3) reached. Limit resets at midnight IST.",
+                code: "DAILY_LIMIT_REACHED",
+                nextResetIso: eligibility.nextResetIso,
+              },
+              { status: 429 }
+            );
+          }
+          return NextResponse.json(
+            {
+              error: "Quota reservation encountered a system error. Please try again.",
+              code: "QUOTA_ERROR",
+            },
+            { status: 500 }
+          );
+        }
+        quotaConsumed = true;
+      }
 
       // Step F: Persist report to public.ai_reports (with resilient fallback)
       const supabaseAdmin = createAdminClient();
@@ -292,6 +295,7 @@ export async function handleAICoachPost(
           questions_analyzed: stats.uniqueQuestionsAnalyzed,
           score_snapshot: scoreSnapshot,
           model,
+          is_fallback: isFallback,
           prompt_version: AI_COACH_CONFIG.PROMPT_VERSION,
           created_at: new Date().toISOString(),
           feedback: null,
@@ -301,14 +305,19 @@ export async function handleAICoachPost(
         fallbackReports.set(userId, userCached);
       }
 
+      // Ensure is_fallback flag matches result on returned object
+      if (finalReport) {
+        finalReport.is_fallback = isFallback;
+      }
+
       return NextResponse.json({
         success: true,
         report: finalReport,
+        isFallback,
+        quotaConsumed,
       });
     } catch (err: any) {
-      // Step G: REFUND QUOTA SLOT IF CALL OR VALIDATION FAILS
-      console.error("[AI Coach] Generation failure, refunding quota slot:", err);
-      await refundDailyReportSlot(userId);
+      console.error("[AI Coach] Generation failure:", err);
 
       return NextResponse.json(
         {

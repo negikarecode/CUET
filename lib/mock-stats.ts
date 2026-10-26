@@ -6,8 +6,8 @@ import { getMockTestsForSubject, SUBJECT_MOCK_COUNTS } from "@/lib/data/subjects
 export interface MockStatsResult {
   subject: string;
   subjectKey: string;
-  attemptedMocksCount: number; // distinct mocks attempted out of total (e.g. 1 out of 20)
-  totalMocksCount: number; // usually 20
+  attemptedMocksCount: number; // distinct mocks attempted out of total (e.g. 1 out of 50)
+  totalMocksCount: number; // usually 50
   totalAttemptsCount: number; // total valid mock attempts
   peakScore: number | null; // peak score on any mock for this subject
   peakMaxMarks: number; // 250
@@ -15,7 +15,7 @@ export interface MockStatsResult {
   averageAccuracy: number; // average accuracy percentage
   bestAttempt: RecordedTestAttempt | null;
   attemptedMockIds: Set<string>;
-  nextUnattemptedMockIndex: number; // 1-based index (e.g. 1..20), or 1 if none
+  nextUnattemptedMockIndex: number; // 1-based index (e.g. 1..50), or 1 if none
   isAllAttempted: boolean;
   hasAttempts: boolean;
   formattedScore: string;
@@ -137,7 +137,7 @@ export function matchesMockPaper(
  * Authoritative single selector for mock test statistics per subject.
  * Used consistently across:
  * - /dashboard/mocks (Subject list badges and progress)
- * - /dashboard/mocks/[subject] (X of 20 attempted, Peak Score, Avg Accuracy)
+ * - /dashboard/mocks/[subject] (X of 50 attempted, Peak Score, Avg Accuracy)
  * - /dashboard/standing (Where Do I Stand subject averages and "from N mock tests" text)
  */
 export function getMockStats(
@@ -161,7 +161,7 @@ export function getMockStats(
     return attSubj === subjectKey;
   });
 
-  // 3. Map attempts to distinct mock papers (1..20)
+  // 3. Map attempts to distinct mock papers (1..50)
   const attemptedMockIds = new Set<string>();
   const bestAttemptByMock = new Map<string, RecordedTestAttempt>();
 

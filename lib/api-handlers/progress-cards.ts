@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import {
   calculateProgressCardData,
   generateShortCardId,
+  isProgressCardSafeguardPassed,
 } from "@/lib/progress-cards/logic";
 import { filterStudentNote } from "@/lib/progress-cards/profanity";
 import { AICoachStoredReport } from "@/types/ai-coach";
@@ -34,9 +35,9 @@ export async function handleProgressCardsGet(
       .eq("is_public", true)
       .maybeSingle();
 
-    if (error || !card) {
+    if (error || !card || !isProgressCardSafeguardPassed(card)) {
       return NextResponse.json(
-        { error: "Progress card not found or has been made private." },
+        { error: "Progress card not found or does not meet calibration safeguards." },
         { status: 404 }
       );
     }
@@ -72,7 +73,8 @@ export async function handleProgressCardsGet(
     return NextResponse.json({ error: "Failed to load progress cards" }, { status: 500 });
   }
 
-  return NextResponse.json({ success: true, cards: cards || [] });
+  const validCards = (cards || []).filter((c) => isProgressCardSafeguardPassed(c));
+  return NextResponse.json({ success: true, cards: validCards });
 }
 
 /**

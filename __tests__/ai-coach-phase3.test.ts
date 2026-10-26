@@ -29,7 +29,7 @@ import {
   buildDeterministicAICoachReport,
 } from "../lib/ai-coach/ai-service";
 import { GET, POST } from "../app/api/[...route]/route";
-import { AICoachComputedStats, MistakeTag } from "../types/ai-coach";
+import { AICoachComputedStats } from "../types/ai-coach";
 import {
   generateTopicPracticeQuiz,
   recordTopicPracticeDelta,
@@ -40,7 +40,6 @@ import {
   recordSpacedReviewAttempt,
   setMistakeTag,
   getMistakeTagCounts,
-  loadSpacedRepetitionItems,
   SPACED_INTERVALS_DAYS,
 } from "../lib/spaced-repetition";
 
@@ -333,7 +332,7 @@ async function main() {
     const quiz = generateTopicPracticeQuiz("Physics", "Electric Charges and Fields", userId);
     assert.strictEqual(quiz.questions.length, 10);
     // Verified that quiz was successfully generated and contains valid question ids
-    assert.ok(quiz.questions[0].id);
+    assert.ok(quiz.questions[0]?.id);
   });
 
   // 8. Spaced Repetition Mistake Notebook (2d/7d intervals & 2-streak mastery)
@@ -420,6 +419,7 @@ async function main() {
     const deltas = loadTopicPracticeDeltas(userId);
     assert.ok(deltas.length >= 1);
     const delta = deltas[0];
+    assert.ok(delta);
     assert.strictEqual(delta.topic, "Electrostatics");
     assert.strictEqual(delta.beforeAccuracy, 0);
     assert.strictEqual(delta.afterAccuracy, 50);
@@ -432,9 +432,14 @@ async function main() {
     const report = buildDeterministicAICoachReport(mockStats, null);
     assert.ok(report.biggest_leaks.length >= 1);
     const firstLeak = report.biggest_leaks[0];
+    assert.ok(firstLeak);
     assert.ok(firstLeak.topic);
     assert.ok(firstLeak.likelyConfusion);
-    assert.ok(firstLeak.fix.toLowerCase().includes("practice this topic") || firstLeak.fix.toLowerCase().includes("drill"));
+    assert.ok(
+      firstLeak.fix.toLowerCase().includes("10-question fix") ||
+      firstLeak.fix.toLowerCase().includes("practice this topic") ||
+      firstLeak.fix.toLowerCase().includes("drill")
+    );
   });
 
   console.log("\n============================================================");

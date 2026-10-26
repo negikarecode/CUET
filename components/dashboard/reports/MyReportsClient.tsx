@@ -879,6 +879,11 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                   </select>
                 </div>
 
+                {/* Privacy Guarantee */}
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] text-slate-500 text-center">
+                  Your name, phone and email are never sent to the AI
+                </div>
+
                 <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                   <button
                     type="button"

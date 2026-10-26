@@ -58,6 +58,71 @@ export function calculateProgressCardData(params: {
   const toAccuracy = newerReport.stats_json.overallAccuracyPercentage;
   const accuracyDelta = toAccuracy - fromAccuracy;
 
+  // Safeguard 1 (cards only, never counting): Require both reports to have accuracy >= 15%
+  if (fromAccuracy < 15 || toAccuracy < 15) {
+    return {
+      eligible: false,
+      reason: `Both evaluations must have accuracy ≥15% (Found: ${fromAccuracy}% and ${toAccuracy}%).`,
+    };
+  }
+
+  // Safeguard 2 (cards only, never counting): Require at least 150 unique questions per window & 300 total
+  const olderQCount =
+    olderReport.questions_analyzed || olderReport.stats_json?.uniqueQuestionsAnalyzed || 0;
+  const newerQCount =
+    newerReport.questions_analyzed || newerReport.stats_json?.uniqueQuestionsAnalyzed || 0;
+  const totalCombinedQuestions = olderQCount + newerQCount;
+
+  if (olderQCount < 150 || newerQCount < 150) {
+    return {
+      eligible: false,
+      reason: `Each evaluation window must represent at least 150 eligible unique questions (Found: ${olderQCount} and ${newerQCount}).`,
+    };
+  }
+
+  if (totalCombinedQuestions < 300) {
+    return {
+      eligible: false,
+      reason: `Comparison requires at least 300 total questions represented across both windows (Found: ${totalCombinedQuestions}).`,
+    };
+  }
+
+  // Safeguard 3 (cards only, never counting): Reject low-signal or random answering windows
+  if (
+    olderReport.stats_json?.hasRandomAnswering ||
+    olderReport.stats_json?.hasLowSignalAttempt ||
+    newerReport.stats_json?.hasRandomAnswering ||
+    newerReport.stats_json?.hasLowSignalAttempt
+  ) {
+    return {
+      eligible: false,
+      reason:
+        "Progress cards cannot be generated from low-signal or random answering assessment windows. Complete an authentic assessment to unlock your card.",
+    };
+  }
+
+  // Safeguard 4 (cards only, never counting): Require attempts across at least 3 different units
+  const countAttemptedUnits = (report: AICoachStoredReport): number => {
+    const units = new Set<string>();
+    (report.stats_json?.topicBreakdown || []).forEach((t) => {
+      if ((t.attempted || 0) > 0) {
+        const u = (t.chapter || t.topic || "").trim().toLowerCase();
+        if (u) units.add(u);
+      }
+    });
+    return units.size;
+  };
+
+  const olderUnitsCount = countAttemptedUnits(olderReport);
+  const newerUnitsCount = countAttemptedUnits(newerReport);
+
+  if (olderUnitsCount < 3 || newerUnitsCount < 3) {
+    return {
+      eligible: false,
+      reason: `Both evaluations must have attempts across at least 3 different units (Found: ${olderUnitsCount} and ${newerUnitsCount}).`,
+    };
+  }
+
   const fromNet = olderReport.stats_json.netScore;
   const toNet = newerReport.stats_json.netScore;
   const netScoreDelta = toNet - fromNet;
@@ -184,7 +249,7 @@ export function calculateProgressCardData(params: {
     milestoneBadge: milestoneBadge || null,
     studentNote: sanitizedNote,
     displayName: cleanDisplayName,
-    totalQuestionsAnalyzed: newerReport.questions_analyzed,
+    totalQuestionsAnalyzed: totalCombinedQuestions,
     examTarget: "CUET UG 2027",
   };
 
@@ -192,4 +257,18 @@ export function calculateProgressCardData(params: {
     eligible: true,
     cardData: frozenData,
   };
+}
+
+/**
+ * Safeguard check for progress cards (cards only, never counting).
+ * Cards failing the check must not be shown.
+ */
+export function isProgressCardSafeguardPassed(card: any): boolean {
+  if (!card) return false;
+  const data = card.card_json || card;
+  const fromAcc = data.fromAccuracy ?? data.stats_from?.accuracyPercentage;
+  const toAcc = data.toAccuracy ?? data.stats_to?.accuracyPercentage;
+  if (typeof fromAcc === "number" && fromAcc < 15) return false;
+  if (typeof toAcc === "number" && toAcc < 15) return false;
+  return true;
 }

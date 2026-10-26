@@ -36,6 +36,13 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
   }
 
   const cardData = cardRow.card_json as ProgressCardFrozenData;
+
+  // Safeguard: Do not generate images for cards failing accuracy safeguards
+  if (cardData.fromAccuracy < 15 || cardData.toAccuracy < 15) {
+    return new Response("Progress card does not meet calibration safeguards.", {
+      status: 404,
+    });
+  }
   const displayName = cardRow.display_name || cardData.displayName || "CUET Aspirant";
   const accuracyDelta = cardData.accuracyDelta;
   const showGain = cardData.showAccuracyGain;
@@ -335,7 +342,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
           }}
         >
           <span style={{ fontSize: isOg ? "13px" : "16px", color: "#94a3b8", fontWeight: 500 }}>
-            Calibrated over {cardData.totalQuestionsAnalyzed} questions
+            Based on {cardData.totalQuestionsAnalyzed} unique questions
           </span>
           <span
             style={{

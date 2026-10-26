@@ -15,6 +15,7 @@ interface DailyStudyPlanCardProps {
   topWeakTopics: Array<{ chapter: string; subject: string; accuracy: number }>;
   spacedDueCount: number;
   calibrationProgressPct: number;
+  latestReport?: any;
   onLaunchDrill?: (topic: string, subject: string) => void;
   onOpenSpacedRepetition?: () => void;
 }
@@ -23,6 +24,7 @@ export function DailyStudyPlanCard({
   topWeakTopics,
   spacedDueCount,
   calibrationProgressPct,
+  latestReport,
   onLaunchDrill,
   onOpenSpacedRepetition,
 }: DailyStudyPlanCardProps) {
@@ -34,6 +36,7 @@ export function DailyStudyPlanCard({
       topWeakTopics,
       spacedDueCount,
       calibrationProgressPct,
+      latestReport,
     })
   );
 
@@ -44,9 +47,10 @@ export function DailyStudyPlanCard({
         topWeakTopics,
         spacedDueCount,
         calibrationProgressPct,
+        latestReport,
       })
     );
-  }, [selectedMinutes, topWeakTopics, spacedDueCount, calibrationProgressPct]);
+  }, [selectedMinutes, topWeakTopics, spacedDueCount, calibrationProgressPct, latestReport]);
 
   const toggleTask = (id: string) => {
     setCompletedTaskIds((prev) => {
@@ -175,7 +179,7 @@ export function DailyStudyPlanCard({
                     className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs transition-all"
                   >
                     <Play className="w-3 h-3 fill-white" />
-                    <span>Start Drill</span>
+                    <span>Start 10-question fix</span>
                   </button>
                 ) : task.taskType === "spaced_review" && onOpenSpacedRepetition ? (
                   <button

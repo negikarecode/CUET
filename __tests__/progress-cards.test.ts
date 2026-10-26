@@ -18,6 +18,7 @@ import { NextRequest } from "next/server";
 import {
   calculateProgressCardData,
   generateShortCardId,
+  isProgressCardSafeguardPassed,
 } from "../lib/progress-cards/logic";
 import { filterStudentNote } from "../lib/progress-cards/profanity";
 import { GET, POST, PATCH, DELETE } from "../app/api/[...route]/route";
@@ -72,7 +73,6 @@ function createMockReport(overrides: Partial<AICoachStoredReport> = {}): AICoach
       netScore: overrides.stats_json?.netScore ?? 180,
       potentialScore: 250,
       negativeMarksLost: overrides.stats_json?.negativeMarksLost ?? 14,
-      averageTimePerQuestionSeconds: 52,
       errorTypes: {
         carelessErrors: 10,
         conceptGaps: 12,
@@ -96,7 +96,6 @@ function createMockReport(overrides: Partial<AICoachStoredReport> = {}): AICoach
           attempted: 8,
           correct: 3,
           accuracyPercentage: 38,
-          averageTimeSeconds: 60,
           classification: "weak",
         },
         {
@@ -104,7 +103,6 @@ function createMockReport(overrides: Partial<AICoachStoredReport> = {}): AICoach
           attempted: 10,
           correct: 6,
           accuracyPercentage: 60,
-          averageTimeSeconds: 50,
           classification: "weak",
         },
         {
@@ -112,7 +110,6 @@ function createMockReport(overrides: Partial<AICoachStoredReport> = {}): AICoach
           attempted: 3, // < 5 attempts
           correct: 1,
           accuracyPercentage: 33,
-          averageTimeSeconds: 45,
           classification: "insufficient data",
         },
       ],
@@ -176,9 +173,9 @@ async function main() {
       netScore: 180,
       negativeMarksLost: 14,
       topicBreakdown: [
-        { topic: "Optics", attempted: 10, correct: 4, accuracyPercentage: 40, averageTimeSeconds: 65, classification: "weak" },
-        { topic: "Electrostatics", attempted: 12, correct: 6, accuracyPercentage: 50, averageTimeSeconds: 55, classification: "weak" },
-        { topic: "Modern Physics", attempted: 3, correct: 1, accuracyPercentage: 33, averageTimeSeconds: 50, classification: "insufficient data" }, // < 5 Qs
+        { topic: "Optics", attempted: 10, correct: 4, accuracyPercentage: 40, classification: "weak" },
+        { topic: "Electrostatics", attempted: 12, correct: 6, accuracyPercentage: 50, classification: "weak" },
+        { topic: "Modern Physics", attempted: 3, correct: 1, accuracyPercentage: 33, classification: "insufficient data" }, // < 5 Qs
       ],
     } as any,
   });
@@ -191,9 +188,9 @@ async function main() {
       netScore: 235,                // +55
       negativeMarksLost: 5,         // 14 -> 5 (9 marks saved)
       topicBreakdown: [
-        { topic: "Optics", attempted: 15, correct: 12, accuracyPercentage: 80, averageTimeSeconds: 45, classification: "strong" }, // +40% (eligible)
-        { topic: "Electrostatics", attempted: 14, correct: 10, accuracyPercentage: 71, averageTimeSeconds: 42, classification: "strong" }, // +21% (eligible)
-        { topic: "Modern Physics", attempted: 8, correct: 6, accuracyPercentage: 75, averageTimeSeconds: 40, classification: "strong" }, // older was < 5!
+        { topic: "Optics", attempted: 15, correct: 12, accuracyPercentage: 80, classification: "strong" }, // +40% (eligible)
+        { topic: "Electrostatics", attempted: 14, correct: 10, accuracyPercentage: 71, classification: "strong" }, // +21% (eligible)
+        { topic: "Modern Physics", attempted: 8, correct: 6, accuracyPercentage: 75, classification: "strong" }, // older was < 5!
       ],
     } as any,
   });
@@ -248,7 +245,9 @@ async function main() {
       netScore: 140,
       negativeMarksLost: 20,         // Penalties increased
       topicBreakdown: [
-        { topic: "Optics", attempted: 10, correct: 3, accuracyPercentage: 30, averageTimeSeconds: 65, classification: "weak" },
+        { topic: "Optics", attempted: 10, correct: 3, accuracyPercentage: 30, classification: "weak" },
+        { topic: "Electrostatics", attempted: 10, correct: 4, accuracyPercentage: 40, classification: "weak" },
+        { topic: "Magnetism", attempted: 10, correct: 4, accuracyPercentage: 40, classification: "weak" },
       ],
     } as any,
   });
@@ -272,7 +271,9 @@ async function main() {
       netScore: 185,
       negativeMarksLost: 8,          // Reduced from 14 (Saved 6 marks!)
       topicBreakdown: [
-        { topic: "Optics", attempted: 10, correct: 8, accuracyPercentage: 80, averageTimeSeconds: 40, classification: "strong" }, // +40%
+        { topic: "Optics", attempted: 10, correct: 8, accuracyPercentage: 80, classification: "strong" }, // +40%
+        { topic: "Electrostatics", attempted: 10, correct: 5, accuracyPercentage: 50, classification: "weak" },
+        { topic: "Magnetism", attempted: 10, correct: 4, accuracyPercentage: 40, classification: "weak" },
       ],
     } as any,
   });
@@ -341,6 +342,90 @@ async function main() {
     const req = new NextRequest("https://cuetmate.vercel.app/api/progress-cards/public/non_existent_card");
     const res = await GET(req, { params: { route: ["progress-cards", "public", "non_existent_card"] } });
     assert.strictEqual(res.status, 404);
+  });
+
+  // 7. Safeguards (cards only, never counting)
+  console.log("\n7. Progress Card Safeguards (Accuracy >= 15%, >= 3 units, unique questions footer):");
+  runTest("Rejects card creation if older report has accuracy < 15%", () => {
+    const lowAccReport = createMockReport({
+      id: "low-acc",
+      stats_json: {
+        overallAccuracyPercentage: 12,
+        netScore: 30,
+        negativeMarksLost: 40,
+        topicBreakdown: [
+          { topic: "Optics", attempted: 10, correct: 1, accuracyPercentage: 10, classification: "weak" },
+          { topic: "Electrostatics", attempted: 10, correct: 1, accuracyPercentage: 10, classification: "weak" },
+          { topic: "Magnetism", attempted: 10, correct: 1, accuracyPercentage: 10, classification: "weak" },
+        ],
+      } as any,
+    });
+    const result = calculateProgressCardData({
+      olderReport: lowAccReport,
+      newerReport: report2,
+    });
+    assert.strictEqual(result.eligible, false);
+    assert.ok(result.reason?.includes("accuracy ≥15%"));
+  });
+
+  runTest("Rejects card creation if reports have attempts across fewer than 3 units", () => {
+    const fewUnitsReport = createMockReport({
+      id: "few-units",
+      stats_json: {
+        overallAccuracyPercentage: 60,
+        netScore: 180,
+        negativeMarksLost: 10,
+        topicBreakdown: [
+          { topic: "Optics", attempted: 20, correct: 12, accuracyPercentage: 60, classification: "strong" },
+          { topic: "Electrostatics", attempted: 20, correct: 12, accuracyPercentage: 60, classification: "strong" },
+        ],
+      } as any,
+    });
+    const result = calculateProgressCardData({
+      olderReport: fewUnitsReport,
+      newerReport: report2,
+    });
+    assert.strictEqual(result.eligible, false);
+    assert.ok(result.reason?.includes("at least 3 different units"));
+  });
+
+  runTest("isProgressCardSafeguardPassed blocks cards with accuracy < 15%", () => {
+    assert.strictEqual(isProgressCardSafeguardPassed({ fromAccuracy: 10, toAccuracy: 50 }), false);
+    assert.strictEqual(isProgressCardSafeguardPassed({ fromAccuracy: 50, toAccuracy: 14 }), false);
+    assert.strictEqual(isProgressCardSafeguardPassed({ fromAccuracy: 25, toAccuracy: 60 }), true);
+  });
+
+  runTest("Card data preserves totalQuestionsAnalyzed (300 across both windows) for footer", () => {
+    assert.strictEqual(calc.cardData?.totalQuestionsAnalyzed, 300);
+  });
+
+  runTest("Rejects card creation if either window has fewer than 150 questions", () => {
+    const smallWindowReport = createMockReport({
+      id: "small-win",
+      questions_analyzed: 120,
+    });
+    const result = calculateProgressCardData({
+      olderReport: smallWindowReport,
+      newerReport: report2,
+    });
+    assert.strictEqual(result.eligible, false);
+    assert.ok(result.reason?.includes("at least 150 eligible unique questions"));
+  });
+
+  runTest("Rejects card creation if assessment window is flagged as low-signal or random answering", () => {
+    const randomReport = createMockReport({
+      id: "random-report",
+      stats_json: {
+        ...report1.stats_json,
+        hasRandomAnswering: true,
+      },
+    });
+    const result = calculateProgressCardData({
+      olderReport: randomReport,
+      newerReport: report2,
+    });
+    assert.strictEqual(result.eligible, false);
+    assert.ok(result.reason?.includes("low-signal or random answering"));
   });
 
   console.log("\n============================================================");

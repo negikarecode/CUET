@@ -26,25 +26,92 @@ export interface DailyStudyPlan {
   spacedRepetitionDueCount: number;
 }
 
+/**
+ * Feeds the latest AI Coach report's leaks into Today's Plan's weak-topic bucket.
+ * Strictly filters out topics with insufficient data (< 5 attempts).
+ */
+export function feedReportLeaksIntoWeakTopics(
+  report: {
+    report_json?: { biggest_leaks?: Array<{ topic?: string; issue?: string; evidence?: string }> };
+    stats_json?: { insufficient_data_topics?: Array<{ topic?: string }> };
+    subject?: string;
+  } | null | undefined,
+  existingWeakTopics: Array<{ chapter: string; subject: string; accuracy: number }> = []
+): Array<{ chapter: string; subject: string; accuracy: number }> {
+  if (!report?.report_json?.biggest_leaks || !Array.isArray(report.report_json.biggest_leaks)) {
+    return existingWeakTopics;
+  }
+  const reportSubject = report.subject || "Domain";
+  const leakTopics: Array<{ chapter: string; subject: string; accuracy: number }> = [];
+
+  const insufficientNames = new Set<string>();
+  if (Array.isArray(report.stats_json?.insufficient_data_topics)) {
+    report.stats_json.insufficient_data_topics.forEach((it) => {
+      if (it?.topic) insufficientNames.add(it.topic.trim().toLowerCase());
+    });
+  }
+
+  report.report_json.biggest_leaks.forEach((leak) => {
+    let topicName = leak.topic?.trim();
+    if (!topicName && leak.issue) {
+      const match = leak.issue.match(/(?:gap in|topic|in)\s+([A-Za-z0-9\s]+)/i);
+      topicName = match ? match[1]?.trim() : leak.issue;
+    }
+    if (
+      topicName &&
+      !insufficientNames.has(topicName.toLowerCase()) &&
+      !leakTopics.some((t) => t.chapter.toLowerCase() === topicName!.toLowerCase())
+    ) {
+      leakTopics.push({
+        chapter: topicName,
+        subject: reportSubject,
+        accuracy: 30, // Diagnosed critical leak accuracy
+      });
+    }
+  });
+
+  const combined = [...leakTopics];
+  for (const existing of existingWeakTopics) {
+    if (
+      !insufficientNames.has(existing.chapter.toLowerCase()) &&
+      !combined.some((c) => c.chapter.toLowerCase() === existing.chapter.toLowerCase())
+    ) {
+      combined.push(existing);
+    }
+  }
+  return combined;
+}
+
 export function generateDailyStudyPlan(params: {
   availableMinutes?: number;
   topWeakTopics: Array<{ chapter: string; subject: string; accuracy: number }>;
   spacedDueCount: number;
   calibrationProgressPct: number;
+  latestReport?: any;
   daysToExam?: number; // Optional placeholder for future extension
 }): DailyStudyPlan {
   const totalMinutes = params.availableMinutes || 40;
-  const { topWeakTopics, spacedDueCount, calibrationProgressPct } = params;
+  const { spacedDueCount, calibrationProgressPct, latestReport } = params;
+  const topWeakTopics = feedReportLeaksIntoWeakTopics(latestReport, params.topWeakTopics);
 
   const tasks: DailyStudyTask[] = [];
   let remainingMinutes = totalMinutes;
 
-  // Task 1: Spaced Repetition of Missed Questions (if due)
-  if (spacedDueCount > 0 && remainingMinutes >= 10) {
-    const time = Math.min(15, Math.max(8, spacedDueCount * 2));
+  // Target task distribution:
+  // - 65% weak-topic practice
+  // - 25% revision (spaced repetition)
+  // - 10% new topics / mixed CBT calibration
+  const targetWeakPracticeMinutes = Math.round(totalMinutes * 0.65);
+  const targetRevisionMinutes = Math.round(totalMinutes * 0.25);
+  const targetMixedMinutes = Math.max(5, totalMinutes - targetWeakPracticeMinutes - targetRevisionMinutes);
+
+  // 1. Revision Bucket (25% target): Spaced Repetition of Missed Questions
+  let actualRevisionMinutes = 0;
+  if (spacedDueCount > 0 && remainingMinutes >= 8) {
+    actualRevisionMinutes = Math.min(targetRevisionMinutes, Math.max(8, spacedDueCount * 2));
     tasks.push({
       id: "task_spaced",
-      durationMinutes: time,
+      durationMinutes: actualRevisionMinutes,
       taskType: "spaced_review",
       title: "Spaced Repetition Review",
       topic: `${spacedDueCount} Missed Questions Due`,
@@ -53,16 +120,25 @@ export function generateDailyStudyPlan(params: {
       actionUrl: "#spaced-repetition",
       actionLabel: "Review Due Questions",
     });
-    remainingMinutes -= time;
+    remainingMinutes -= actualRevisionMinutes;
   }
 
-  // Task 2: Core Concept Review on Highest Priority Weak Topic
-  const primaryWeak = topWeakTopics[0] || { chapter: "General Domain Foundations", subject: "Domain", accuracy: 20 };
-  if (remainingMinutes >= 10) {
-    const conceptTime = Math.min(12, Math.round(remainingMinutes * 0.35));
+  // 2. Weak-Topic Practice Bucket (65% target + unused revision time):
+  // Core Concept Review + Targeted 10-Question Repair Drill
+  const primaryWeak = topWeakTopics[0] || {
+    chapter: "General Domain Foundations",
+    subject: "Domain",
+    accuracy: 20,
+  };
+
+  const weakBudget = remainingMinutes > targetMixedMinutes ? remainingMinutes - targetMixedMinutes : remainingMinutes;
+  const conceptMinutes = Math.max(5, Math.round(weakBudget * 0.4));
+  const drillMinutes = Math.max(8, weakBudget - conceptMinutes);
+
+  if (remainingMinutes >= conceptMinutes) {
     tasks.push({
       id: "task_concept",
-      durationMinutes: conceptTime,
+      durationMinutes: conceptMinutes,
       taskType: "concept_review",
       title: "Concept & Formula Review",
       topic: primaryWeak.chapter,
@@ -71,28 +147,26 @@ export function generateDailyStudyPlan(params: {
       actionUrl: `/dashboard/ai-coach?subject=${primaryWeak.subject.toLowerCase()}`,
       actionLabel: "View Concept Guide",
     });
-    remainingMinutes -= conceptTime;
+    remainingMinutes -= conceptMinutes;
   }
 
-  // Task 3: Targeted 5-Question Repair Drill
-  if (remainingMinutes >= 10) {
-    const drillTime = Math.min(15, Math.round(remainingMinutes * 0.5));
+  if (remainingMinutes >= drillMinutes) {
     tasks.push({
       id: "task_drill",
-      durationMinutes: drillTime,
+      durationMinutes: drillMinutes,
       taskType: "repair_drill",
-      title: "Targeted Repair Drill",
+      title: "Targeted 10-Question Repair Drill",
       topic: primaryWeak.chapter,
       subject: primaryWeak.subject,
-      description: `Solve 5 adaptive questions targeting your recorded error pattern in ${primaryWeak.chapter}. Aim for ≥80% accuracy.`,
+      description: `Solve 10 adaptive questions targeting your recorded error pattern in ${primaryWeak.chapter}. Aim for ≥80% accuracy.`,
       actionUrl: `/dashboard/mocks?subject=${primaryWeak.subject.toLowerCase()}&drill=true`,
-      actionLabel: "Start 5-Q Drill",
+      actionLabel: "Start 10-Question Fix",
     });
-    remainingMinutes -= drillTime;
+    remainingMinutes -= drillMinutes;
   }
 
-  // Task 4: Mixed Domain Practice / Calibration Window
-  if (remainingMinutes >= 8) {
+  // 3. New Topics / Mixed Domain Practice Bucket (10% target):
+  if (remainingMinutes >= 5) {
     tasks.push({
       id: "task_practice",
       durationMinutes: remainingMinutes,
@@ -100,7 +174,7 @@ export function generateDailyStudyPlan(params: {
       title: "Domain CBT Practice",
       topic: "Timed Mock Practice",
       subject: primaryWeak.subject,
-      description: `Complete timed practice questions to advance your 150-question cycle calibration (${calibrationProgressPct}% complete).`,
+      description: `Complete authentic practice questions to advance your 150-question cycle calibration (${calibrationProgressPct}% complete).`,
       actionUrl: "/dashboard/mocks",
       actionLabel: "Take CBT Mock",
     });

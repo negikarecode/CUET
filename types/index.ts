@@ -191,6 +191,8 @@ export interface RecordedQuestionAttempt {
   options?: QuestionOption[];
   questionType?: string;
   selectedOption: "A" | "B" | "C" | "D" | null;
+  firstSavedOption?: "A" | "B" | "C" | "D" | null;
+  hasAnswerChanged?: boolean;
   correctOption: "A" | "B" | "C" | "D";
   isCorrect: boolean | null;
   timeSpentSeconds: number;
@@ -555,6 +557,8 @@ export interface SubjectCalibrationData {
   isUnlocked: boolean;
   attemptsToUnlock: number;
   unlockProgress: number;
+  freshQuestionsCount?: number;
+  uniqueQuestionsAttempted?: number;
   mockUrl: string;
 }
 

@@ -43,11 +43,11 @@ interface UserAttemptRow {
   created_at: string;
 }
 
-export async function reconcileUserAttempts(targetUserId?: string, dryRun: boolean = false) {
+export async function reconcileUserAttempts(targetUserId?: string, dryRun: boolean = true) {
   console.log(`\n==================================================`);
   console.log(`CANONICAL QUESTION ATTEMPT RECONCILIATION AUDIT`);
   console.log(`Target User: ${targetUserId || "ALL USERS"}`);
-  console.log(`Dry Run Mode: ${dryRun ? "YES (No deletions)" : "NO (Live reconciliation)"}`);
+  console.log(`Dry Run Mode: ${dryRun ? "YES (Safe: read-only analysis)" : "NO (Live: changes will be applied)"}`);
   console.log(`==================================================\n`);
 
   let query = supabase.from("user_attempts").select("*").order("created_at", { ascending: true });
@@ -172,7 +172,8 @@ export async function reconcileUserAttempts(targetUserId?: string, dryRun: boole
 async function main() {
   const args = process.argv.slice(2);
   const targetUserId = args[0] && !args[0].startsWith("--") ? args[0] : undefined;
-  const isDryRun = args.includes("--dry-run");
+  // Default to safe dry-run mode unless --apply is explicitly specified
+  const isDryRun = !args.includes("--apply");
 
   await reconcileUserAttempts(targetUserId, isDryRun);
 }
