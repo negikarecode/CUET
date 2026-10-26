@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ProgressCardFrozenData } from "@/lib/progress-cards/types";
+import { rateLimit } from "@/lib/security/rateLimiter";
 
 export const runtime = "edge";
 
@@ -12,6 +13,18 @@ interface RouteParams {
 }
 
 export async function GET(req: NextRequest, { params }: RouteParams) {
+  // Rate limit: 20 image generation requests per minute per IP
+  const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "anonymous";
+  const rateCheck = await rateLimit("progress_cards:image", `progress_cards:image:${clientIp}`);
+  if (!rateCheck.success) {
+    return new Response("Too many progress card requests. Please slow down.", {
+      status: 429,
+      headers: {
+        "Retry-After": String(rateCheck.retryAfter || 60),
+      },
+    });
+  }
+
   const cardId = params.id;
   const isOg =
     req.nextUrl.searchParams.get("og") === "1" ||
@@ -360,6 +373,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     {
       width,
       height,
+      headers: {
+        "Cache-Control": "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400",
+      },
     }
   );
 }

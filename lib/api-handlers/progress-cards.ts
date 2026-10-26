@@ -7,6 +7,7 @@ import {
   isProgressCardSafeguardPassed,
 } from "@/lib/progress-cards/logic";
 import { filterStudentNote } from "@/lib/progress-cards/profanity";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 import { AICoachStoredReport } from "@/types/ai-coach";
 import { ProgressCardRecord } from "@/lib/progress-cards/types";
 
@@ -101,6 +102,14 @@ export async function handleProgressCardsPost(
   }
 
   const userId = authUser.id;
+
+  // Rate limit: 10 progress card creation requests per minute per candidate
+  const rateIdentifier = getClientRateLimitIdentifier(req, userId, "progress_cards:create");
+  const rateCheck = await rateLimit("progress_cards:create", rateIdentifier);
+  if (!rateCheck.success) {
+    return rateLimitResponse(rateCheck);
+  }
+
   const body = await req.json().catch(() => ({}));
   const { fromReportId, toReportId, displayName, studentNote, milestoneBadge, isPublic } = body;
 
