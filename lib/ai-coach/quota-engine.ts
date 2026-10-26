@@ -5,6 +5,13 @@ import { AI_COACH_CONFIG } from "./config";
 const activeGenerationLocks = new Map<string, number>();
 const LOCK_TIMEOUT_MS = 60 * 1000; // 60 seconds
 
+// In-memory fallback daily quota tracker for unmigrated or unreachable database tables
+const fallbackDailyUsage = new Map<string, number>();
+
+function getFallbackQuotaKey(userId: string, usageDate: string): string {
+  return `${userId}:${usageDate}`;
+}
+
 /**
  * Returns current date string in Asia/Kolkata (IST) timezone: "YYYY-MM-DD"
  */
@@ -78,6 +85,7 @@ export async function reserveDailyReportSlot(
 ): Promise<{ success: boolean; count: number }> {
   const usageDate = getCurrentISTDate();
   const supabaseAdmin = createAdminClient();
+  const fallbackKey = getFallbackQuotaKey(userId, usageDate);
 
   try {
     // 1. Try PostgreSQL atomic function if provisioned
@@ -98,12 +106,25 @@ export async function reserveDailyReportSlot(
 
   // 2. Direct atomic check & update pattern via Supabase
   try {
-    const { data: existing } = await supabaseAdmin
+    const { data: existing, error: selectErr } = await supabaseAdmin
       .from("ai_usage")
       .select("count")
       .eq("user_id", userId)
       .eq("usage_date", usageDate)
       .maybeSingle();
+
+    if (selectErr) {
+      console.warn(
+        `[Quota Engine] ai_usage table query failed (${selectErr.message}). Using resilient in-memory quota tracking.`
+      );
+      const current = fallbackDailyUsage.get(fallbackKey) || 0;
+      if (current >= AI_COACH_CONFIG.DAILY_REPORT_LIMIT) {
+        return { success: false, count: current };
+      }
+      const next = current + 1;
+      fallbackDailyUsage.set(fallbackKey, next);
+      return { success: true, count: next };
+    }
 
     const currentCount = existing?.count || 0;
     if (currentCount >= AI_COACH_CONFIG.DAILY_REPORT_LIMIT) {
@@ -121,13 +142,28 @@ export async function reserveDailyReportSlot(
     );
 
     if (upsertErr) {
-      return { success: false, count: currentCount };
+      console.warn(
+        `[Quota Engine] ai_usage upsert failed (${upsertErr.message}). Using resilient in-memory quota tracking.`
+      );
+      const current = fallbackDailyUsage.get(fallbackKey) || 0;
+      if (current >= AI_COACH_CONFIG.DAILY_REPORT_LIMIT) {
+        return { success: false, count: current };
+      }
+      const next = current + 1;
+      fallbackDailyUsage.set(fallbackKey, next);
+      return { success: true, count: next };
     }
 
     return { success: true, count: nextCount };
   } catch (err) {
-    console.error("Failed to reserve daily report slot:", err);
-    return { success: false, count: AI_COACH_CONFIG.DAILY_REPORT_LIMIT };
+    console.error("Failed to reserve daily report slot, using fallback:", err);
+    const current = fallbackDailyUsage.get(fallbackKey) || 0;
+    if (current >= AI_COACH_CONFIG.DAILY_REPORT_LIMIT) {
+      return { success: false, count: current };
+    }
+    const next = current + 1;
+    fallbackDailyUsage.set(fallbackKey, next);
+    return { success: true, count: next };
   }
 }
 
@@ -137,6 +173,13 @@ export async function reserveDailyReportSlot(
 export async function refundDailyReportSlot(userId: string): Promise<void> {
   const usageDate = getCurrentISTDate();
   const supabaseAdmin = createAdminClient();
+  const fallbackKey = getFallbackQuotaKey(userId, usageDate);
+
+  // Always refund in-memory fallback
+  const fallbackCount = fallbackDailyUsage.get(fallbackKey) || 0;
+  if (fallbackCount > 0) {
+    fallbackDailyUsage.set(fallbackKey, fallbackCount - 1);
+  }
 
   try {
     // 1. Try RPC refund if provisioned
@@ -176,17 +219,22 @@ export async function refundDailyReportSlot(userId: string): Promise<void> {
 export async function getDailyUsageCount(userId: string): Promise<number> {
   const usageDate = getCurrentISTDate();
   const supabaseAdmin = createAdminClient();
+  const fallbackKey = getFallbackQuotaKey(userId, usageDate);
 
   try {
-    const { data } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from("ai_usage")
       .select("count")
       .eq("user_id", userId)
       .eq("usage_date", usageDate)
       .maybeSingle();
 
-    return data?.count || 0;
+    if (error || !data) {
+      return fallbackDailyUsage.get(fallbackKey) || 0;
+    }
+
+    return data.count || 0;
   } catch {
-    return 0;
+    return fallbackDailyUsage.get(fallbackKey) || 0;
   }
 }

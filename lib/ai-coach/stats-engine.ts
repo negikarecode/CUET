@@ -49,14 +49,14 @@ export async function checkSubjectEligibility(
   try {
     const { data: latestReport } = await supabaseAdmin
       .from("ai_reports")
-      .select("id, created_at")
+      .select("id, created_at, questions_analyzed")
       .eq("user_id", userId)
       .ilike("subject", normalized.name)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
 
-    if (latestReport) {
+    if (latestReport && (latestReport.questions_analyzed || 0) > 0) {
       lastReportId = latestReport.id;
       lastReportDate = latestReport.created_at;
     }
@@ -150,12 +150,11 @@ export async function computeAICoachStats(
         subject,
         chapter,
         micro_topic,
-        difficulty
+        is_pyq
       ),
       tests (
         id,
         title,
-        test_type,
         total_questions
       )
     `)
@@ -167,7 +166,10 @@ export async function computeAICoachStats(
     attemptsQuery = attemptsQuery.gt("created_at", sinceDate);
   }
 
-  const { data: rows } = await attemptsQuery;
+  const { data: rows, error: queryErr } = await attemptsQuery;
+  if (queryErr) {
+    console.error("[Stats Engine] Error fetching user_attempts:", queryErr.message);
+  }
 
   // Filter to subject rows
   const subjectRows = (rows || []).filter((r: any) => {
@@ -248,7 +250,7 @@ export async function computeAICoachStats(
     const isPyq =
       testId.toLowerCase().includes("pyq") ||
       testTitle.includes("pyq") ||
-      testObj?.test_type === "pyq";
+      Boolean(q?.is_pyq);
 
     if (isPyq) {
       pyqAttempts += 1;

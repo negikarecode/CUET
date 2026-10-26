@@ -8,8 +8,30 @@ CRITICAL INSTRUCTIONS:
 1. Use ONLY the numbers and telemetry given in the computed stats JSON. NEVER invent, extrapolate, or hallucinate data.
 2. Be specific, actionable, kind, but completely honest about weaknesses and negative marks lost.
 3. Every biggest leak MUST cite empirical evidence from the stats (e.g. "lost 14 negative marks in Careless Errors", "52% accuracy in Optics across 9 attempts").
-4. Weekly plan must have specific actionable tasks with minute allocations for 7 days.
-5. Provide strict JSON-only output matching the requested schema. No markdown ticks, no preamble.`;
+4. Weekly plan must have specific actionable tasks with minute allocations for 7 days (Day 1 through Day 7).
+5. Output strict JSON only without markdown formatting or preamble, adhering exactly to this schema:
+{
+  "summary": "2-3 sentence strategic summary citing analyzed questions, accuracy, and net score",
+  "biggest_leaks": [
+    {
+      "issue": "Specific concept or pacing leak title",
+      "evidence": "Empirical evidence from candidate stats",
+      "fix": "Actionable NCERT/practice fix"
+    }
+  ],
+  "strengths": ["Topic with accuracy and attempt numbers"],
+  "weekly_plan": [
+    {
+      "day": "Day 1",
+      "focus": "Focus topic",
+      "task": "Specific task",
+      "minutes": 25
+    }
+  ],
+  "test_taking_strategy": ["Actionable test taking tips"],
+  "next_test_goal": "A single clear measurable objective for the student's next practice test (e.g. 'Target 75%+ accuracy in Kinematics while containing careless errors to under 2')",
+  "comparison_with_previous": "Baseline or delta note compared to previous report"
+}`;
 
 /**
  * Validates AI Coach JSON structure strictly
@@ -169,33 +191,48 @@ async function callGroq(
     previousReportStats: prevStats,
   };
 
-  const completion = await groq.chat.completions.create({
-    model: AI_COACH_CONFIG.GROQ_MODEL,
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      {
-        role: "user",
-        content: `Candidate performance telemetry (JSON):\n${JSON.stringify(userPayload, null, 2)}`,
-      },
-    ],
-    response_format: { type: "json_object" },
-    temperature: 0.2,
-    max_tokens: 1800,
-  });
+  const primaryModel = process.env.GROQ_MODEL || "qwen/qwen3.8-27b";
+  const candidateModels = Array.from(new Set([primaryModel, "qwen/qwen3.8-27b", AI_COACH_CONFIG.GROQ_MODEL]));
 
-  const content = completion.choices[0]?.message?.content?.trim();
-  if (!content) return null;
+  for (const model of candidateModels) {
+    try {
+      const completion = await groq.chat.completions.create({
+        model,
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          {
+            role: "user",
+            content: `Candidate performance telemetry (JSON):\n${JSON.stringify(userPayload, null, 2)}`,
+          },
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.2,
+        max_tokens: 1800,
+      });
 
-  let cleaned = content;
-  const match = content.match(/\{[\s\S]*\}/);
-  if (match) cleaned = match[0];
+      const content = completion.choices[0]?.message?.content?.trim();
+      if (!content) continue;
 
-  const parsed = JSON.parse(cleaned);
-  const validation = validateAICoachReport(parsed);
-  if (validation.valid && validation.data) {
-    return validation.data;
+      let cleaned = content;
+      const match = content.match(/\{[\s\S]*\}/);
+      if (match) cleaned = match[0];
+
+      const parsed = JSON.parse(cleaned);
+      const validation = validateAICoachReport(parsed);
+      if (validation.valid && validation.data) {
+        return validation.data;
+      }
+      console.warn(`[AI Coach] Model ${model} output failed schema validation: ${validation.error}`);
+    } catch (modelErr: any) {
+      if (modelErr?.status === 404 || modelErr?.message?.includes("does not exist")) {
+        console.warn(`[AI Coach] Groq model ${model} unavailable, trying next candidate...`);
+        continue;
+      }
+      throw modelErr;
+    }
   }
-  throw new Error(`Groq output failed schema validation: ${validation.error}`);
+
+  return null;
 }
 
 /**
@@ -216,7 +253,7 @@ export async function generateAICoachReport(
       try {
         const groqResult = await callGroq(stats, prevStats);
         if (groqResult) {
-          return { report: groqResult, model: AI_COACH_CONFIG.GROQ_MODEL };
+          return { report: groqResult, model: process.env.GROQ_MODEL || "qwen/qwen3.8-27b" };
         }
       } catch (err: any) {
         lastError = err;

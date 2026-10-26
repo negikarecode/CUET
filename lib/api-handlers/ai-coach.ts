@@ -19,6 +19,9 @@ import { generateAICoachReport } from "@/lib/ai-coach/ai-service";
 
 const DEFAULT_SUBJECTS = ["Physics", "Chemistry", "Mathematics", "Biology"];
 
+// In-memory fallback report cache if public.ai_reports table is unmigrated
+const fallbackReports = new Map<string, any[]>();
+
 /**
  * GET /api/ai-coach/* dispatcher
  */
@@ -104,12 +107,22 @@ export async function handleAICoachGet(
 
     const { data: reports, error } = await query;
     if (error) {
-      return NextResponse.json({ error: "Failed to load reports" }, { status: 500 });
+      console.warn("[AI Coach] ai_reports table query failed, serving from fallback cache:", error.message);
+      const userCached = fallbackReports.get(userId) || [];
+      const validCached = userCached.filter((r) => (r.questions_analyzed || 0) > 0);
+      const filtered = subjectParam
+        ? validCached.filter((r) => r.subject?.toLowerCase() === normalizeSubject(subjectParam).name.toLowerCase())
+        : validCached;
+      return NextResponse.json({
+        success: true,
+        reports: filtered,
+      });
     }
 
+    const validReports = (reports || []).filter((r) => (r.questions_analyzed || 0) > 0);
     return NextResponse.json({
       success: true,
-      reports: reports || [],
+      reports: validReports,
     });
   }
 
@@ -187,13 +200,22 @@ export async function handleAICoachPost(
     const slotReservation = await reserveDailyReportSlot(userId);
     if (!slotReservation.success) {
       releaseGenerationLock(userId, norm.name);
+      if (slotReservation.count >= AI_COACH_CONFIG.DAILY_REPORT_LIMIT) {
+        return NextResponse.json(
+          {
+            error: "Daily report generation limit (3/3) reached. Limit resets at midnight IST.",
+            code: "DAILY_LIMIT_REACHED",
+            nextResetIso: eligibility.nextResetIso,
+          },
+          { status: 429 }
+        );
+      }
       return NextResponse.json(
         {
-          error: "Daily report generation limit (3/3) reached. Limit resets at midnight IST.",
-          code: "DAILY_LIMIT_REACHED",
-          nextResetIso: eligibility.nextResetIso,
+          error: "Quota reservation encountered a system error. Please try again.",
+          code: "QUOTA_ERROR",
         },
-        { status: 429 }
+        { status: 500 }
       );
     }
 
@@ -211,7 +233,7 @@ export async function handleAICoachPost(
         previousReportStats
       );
 
-      // Step F: Persist report to public.ai_reports
+      // Step F: Persist report to public.ai_reports (with resilient fallback)
       const supabaseAdmin = createAdminClient();
       const scoreSnapshot = {
         netScore: stats.netScore,
@@ -220,28 +242,55 @@ export async function handleAICoachPost(
         negativeMarksLost: stats.negativeMarksLost,
       };
 
-      const { data: savedReport, error: saveErr } = await supabaseAdmin
-        .from("ai_reports")
-        .insert({
+      let finalReport: any = null;
+
+      try {
+        const { data: savedReport, error: saveErr } = await supabaseAdmin
+          .from("ai_reports")
+          .insert({
+            user_id: userId,
+            subject: norm.name,
+            stats_json: stats as any,
+            report_json: report as any,
+            questions_analyzed: stats.uniqueQuestionsAnalyzed,
+            score_snapshot: scoreSnapshot as any,
+            model,
+            prompt_version: AI_COACH_CONFIG.PROMPT_VERSION,
+          })
+          .select("*")
+          .single();
+
+        if (saveErr || !savedReport) {
+          console.warn("[AI Coach] Database insert failed on ai_reports (table may be unmigrated):", saveErr?.message);
+        } else {
+          finalReport = savedReport;
+        }
+      } catch (insertErr: any) {
+        console.warn("[AI Coach] Exception saving to ai_reports table:", insertErr?.message);
+      }
+
+      if (!finalReport) {
+        finalReport = {
+          id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `report_${Date.now()}`,
           user_id: userId,
           subject: norm.name,
-          stats_json: stats as any,
-          report_json: report as any,
+          stats_json: stats,
+          report_json: report,
           questions_analyzed: stats.uniqueQuestionsAnalyzed,
-          score_snapshot: scoreSnapshot as any,
+          score_snapshot: scoreSnapshot,
           model,
           prompt_version: AI_COACH_CONFIG.PROMPT_VERSION,
-        })
-        .select("*")
-        .single();
-
-      if (saveErr || !savedReport) {
-        throw new Error(saveErr?.message || "Database insert failed on ai_reports");
+          created_at: new Date().toISOString(),
+          feedback: null,
+        };
+        const userCached = (fallbackReports.get(userId) || []).filter((r) => (r.questions_analyzed || 0) > 0);
+        userCached.unshift(finalReport);
+        fallbackReports.set(userId, userCached);
       }
 
       return NextResponse.json({
         success: true,
-        report: savedReport,
+        report: finalReport,
       });
     } catch (err: any) {
       // Step G: REFUND QUOTA SLOT IF CALL OR VALIDATION FAILS
