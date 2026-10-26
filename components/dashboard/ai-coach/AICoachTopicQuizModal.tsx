@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Question } from "@/types";
 import { MistakeTag, TopicPracticeDelta } from "@/types/ai-coach";
-import { generateTopicPracticeQuiz, recordTopicPracticeDelta } from "@/lib/ai-coach/practice-engine";
+import { recordTopicPracticeDelta } from "@/lib/ai-coach/practice-deltas";
 import { enrollMissedQuestion, setMistakeTag } from "@/lib/spaced-repetition";
 import MathRenderer from "@/components/cbt/MathRenderer";
 
@@ -60,22 +60,17 @@ export default function AICoachTopicQuizModal({
     setScoreSummary(null);
     setMistakeTags({});
 
-    try {
-      const generated = generateTopicPracticeQuiz(subject, topic, userId);
-      setQuestions(generated.questions || []);
-    } catch (err) {
-      console.warn("Failed to generate practice quiz locally, attempting API fallback:", err);
-      fetch(`/api/ai-coach/practice-quiz?subject=${encodeURIComponent(subject)}&topic=${encodeURIComponent(topic)}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success && data.questions) {
-            setQuestions(data.questions);
-          }
-        })
-        .catch((e) => console.error("Practice quiz API error:", e));
-    } finally {
-      setIsLoading(false);
-    }
+    fetch(`/api/ai-coach/practice-quiz?subject=${encodeURIComponent(subject)}&topic=${encodeURIComponent(topic)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.questions) {
+          setQuestions(data.questions);
+        }
+      })
+      .catch((e) => console.error("Practice quiz API error:", e))
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [isOpen, subject, topic, userId]);
 
   if (!isOpen) return null;

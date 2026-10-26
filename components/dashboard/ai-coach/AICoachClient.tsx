@@ -22,7 +22,7 @@ import {
   Info,
 } from "lucide-react";
 import { SubjectEligibility, AICoachStoredReport, TopicPracticeDelta } from "@/types/ai-coach";
-import { loadTopicPracticeDeltas } from "@/lib/ai-coach/practice-engine";
+import { loadTopicPracticeDeltas } from "@/lib/ai-coach/practice-deltas";
 import { getSpacedRepetitionSummary } from "@/lib/spaced-repetition";
 import { SpacedRepetitionModal } from "@/components/dashboard/SpacedRepetitionModal";
 import AICoachTopicQuizModal from "./AICoachTopicQuizModal";
@@ -731,7 +731,7 @@ export default function AICoachClient({
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
-                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Didn't know concept</span>
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Didn&apos;t know concept</span>
                     <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.didntKnowConcept}</span>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">

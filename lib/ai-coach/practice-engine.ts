@@ -9,65 +9,10 @@
  */
 
 import { Question, FullTestMeta } from "@/types";
-import { TopicPracticeDelta } from "@/types/ai-coach";
+export type { TopicPracticeDelta } from "@/types/ai-coach";
 import { resolveSubjectDefinition, loadRawMockData, RawQuestion } from "@/lib/data/mock50Questions";
 import { loadSpacedRepetitionItems } from "@/lib/spaced-repetition";
-import { safeStorage } from "@/lib/storage/safe-storage";
-
-const DELTAS_STORAGE_KEY_PREFIX = "cuet_topic_deltas_";
-
-function getDeltasStorageKey(userId?: string): string {
-  return `${DELTAS_STORAGE_KEY_PREFIX}${userId || "guest"}`;
-}
-
-const memoryDeltasStore = new Map<string, TopicPracticeDelta[]>();
-
-/**
- * Load saved topic practice deltas for a student
- */
-export function loadTopicPracticeDeltas(userId?: string): TopicPracticeDelta[] {
-  const key = getDeltasStorageKey(userId);
-  const inMemory = memoryDeltasStore.get(key);
-  if (inMemory) return inMemory;
-
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = safeStorage.getItem(key);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    memoryDeltasStore.set(key, parsed);
-    return parsed;
-  } catch {
-    return [];
-  }
-}
-
-/**
- * Save an immediate topic practice before/after delta (5+ attempts)
- */
-export function recordTopicPracticeDelta(
-  userId: string,
-  delta: TopicPracticeDelta
-): void {
-  const existing = loadTopicPracticeDeltas(userId);
-  // Keep latest delta per topic at the front
-  const filtered = existing.filter(
-    (d) => d.topic.toLowerCase() !== delta.topic.toLowerCase() || d.subject.toLowerCase() !== delta.subject.toLowerCase()
-  );
-  filtered.unshift(delta);
-
-  const bounded = filtered.slice(0, 20);
-  const key = getDeltasStorageKey(userId);
-  memoryDeltasStore.set(key, bounded);
-
-  if (typeof window !== "undefined") {
-    try {
-      safeStorage.setItem(key, JSON.stringify(bounded));
-    } catch (err) {
-      console.warn("Failed to persist topic practice delta:", err);
-    }
-  }
-}
+export { loadTopicPracticeDeltas, recordTopicPracticeDelta } from "./practice-deltas";
 
 /**
  * Normalizes topic/chapter text for robust fuzzy matching
