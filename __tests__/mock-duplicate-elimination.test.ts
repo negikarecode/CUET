@@ -15,8 +15,6 @@ import path from "path";
 import assert from "node:assert";
 import {
   normalizeQuestionText,
-  normalizeOptionText,
-  getExactFingerprint,
   getStructuralFingerprint,
   compareQuestions,
   extractNumbers,
@@ -285,7 +283,7 @@ async function runAllDuplicateEliminationTests() {
         const filePath = path.join(process.cwd(), "mock", sub.folder, `${m}.json`);
         assert.ok(fs.existsSync(filePath), `Mock file missing: ${filePath}`);
 
-        const questions = JSON.parse(fs.readFileSync(filePath, "utf8"));
+        const questions: any[] = JSON.parse(fs.readFileSync(filePath, "utf8"));
         assert.ok(Array.isArray(questions), `Mock content not an array: ${filePath}`);
         assert.strictEqual(questions.length, 50, `Mock ${m} for ${sub.id} must have exactly 50 questions`);
 
@@ -294,7 +292,7 @@ async function runAllDuplicateEliminationTests() {
 
         const seenFingerprints = new Set<string>();
         for (let idx = 0; idx < questions.length; idx++) {
-          const q = questions[idx];
+          const q: any = questions[idx];
 
           // 4 options and valid correctOption
           assert.strictEqual(q.questionNumber, idx + 1, `q.questionNumber mismatch in ${sub.id} M${m} Q${idx + 1}`);
