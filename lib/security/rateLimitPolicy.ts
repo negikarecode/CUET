@@ -97,6 +97,34 @@ export const RATE_LIMIT_POLICIES: Record<string, RateLimitPolicy> = {
     scope: "user",
     errorMessage: "Adaptive drill generation limit reached. Please wait a minute before generating another quiz.",
   },
+  "ai_coach:generate": {
+    max: 5,
+    windowSeconds: 60, // 5 per minute per user (protects against rapid Groq quota burn)
+    failClosed: true,
+    scope: "user",
+    errorMessage: "AI Coach report generation in progress. Please wait a minute before requesting another report.",
+  },
+  "progress_cards:image": {
+    max: 20,
+    windowSeconds: 60, // 20 image renders per minute per IP
+    failClosed: false,
+    scope: "ip",
+    errorMessage: "Progress card image rendering rate limit reached. Please slow down.",
+  },
+  "progress_cards:create": {
+    max: 10,
+    windowSeconds: 60, // 10 per minute per user
+    failClosed: false,
+    scope: "user",
+    errorMessage: "Progress card generation limit reached. Please wait a moment.",
+  },
+  "auth:session": {
+    max: 15,
+    windowSeconds: 60, // 15 session synchronizations per minute per IP
+    failClosed: false,
+    scope: "ip",
+    errorMessage: "Authentication session rate limit exceeded. Please wait a moment.",
+  },
 
   // ─── PAYMENTS & ENTITLEMENTS ───────────────────────────────────────────────
   "payment:create_order": {
