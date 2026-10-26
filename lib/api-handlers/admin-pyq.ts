@@ -64,7 +64,8 @@ export async function GET(req: NextRequest) {
       offset: Math.max(0, Number(params.get("offset") || 0)),
     }));
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : "PYQ database unavailable" }, { status: 500 });
+    console.error("[PYQ Admin GET Error]:", error);
+    return NextResponse.json({ error: "PYQ database operation failed" }, { status: 500 });
   }
 }
 
@@ -83,7 +84,8 @@ export async function PATCH(req: NextRequest) {
     if (!valid) return NextResponse.json({ error: "Question text and four options are required" }, { status: 400 });
     return NextResponse.json(editQuestion(body.id, body));
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : "Could not save review" }, { status: 400 });
+    console.error("[PYQ Admin PATCH Error]:", error);
+    return NextResponse.json({ error: "Could not save review" }, { status: 400 });
   }
 }
 

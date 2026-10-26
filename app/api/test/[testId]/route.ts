@@ -288,7 +288,7 @@ export async function GET(
   } catch (err: any) {
     console.error("[Test Fetch Error]:", err);
     return NextResponse.json(
-      { error: err?.message || "Failed to retrieve test" },
+      { error: "Failed to retrieve test" },
       { status: 500 }
     );
   }
@@ -977,7 +977,7 @@ export async function POST(
   } catch (err: any) {
     console.error("[Test Reveal/Action Error]:", err);
     return NextResponse.json(
-      { error: err?.message || "Failed to process test action" },
+      { error: "Failed to process test action" },
       { status: 500 }
     );
   }

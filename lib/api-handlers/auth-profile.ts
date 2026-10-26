@@ -205,12 +205,13 @@ export async function GET(req: Request) {
     const isSelf = authUser.id === id;
     const supabaseAdmin = createAdminClient();
 
-    // If viewing another student, only expose public safe display fields
+    // Minor Privacy Hardening: If viewing another candidate, strictly redact PII
+    // (full legal name, target college, target university) to prevent enumeration and spear-phishing.
     const query = isSelf
       ? supabaseAdmin.from("profiles").select("*").eq("id", id).single()
       : supabaseAdmin
           .from("profiles")
-          .select("id, full_name, avatar_url, target_stream, target_college, target_university, xp, current_streak")
+          .select("id, avatar_url, target_stream, xp, current_streak")
           .eq("id", id)
           .single();
 
@@ -218,7 +219,7 @@ export async function GET(req: Request) {
 
     if (error || !profile) {
       return NextResponse.json(
-        { error: error?.message || "Profile not found" },
+        { error: "Profile not found" },
         { status: 404 }
       );
     }
@@ -233,8 +234,9 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ success: true, profile });
   } catch (err: any) {
+    console.error("[Profile Route Error]:", err);
     return NextResponse.json(
-      { error: err?.message || "Internal server error" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
