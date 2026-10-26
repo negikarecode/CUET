@@ -14,6 +14,7 @@ import {
   getDailyUsageCount,
   getNextMidnightIST,
 } from "@/lib/ai-coach/quota-engine";
+import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 import { generateAICoachReport } from "@/lib/ai-coach/ai-service";
 import { generateTopicPracticeQuiz } from "@/lib/ai-coach/practice-engine";
 import { setMistakeTag, MistakeTag } from "@/lib/spaced-repetition";
@@ -171,6 +172,13 @@ export async function handleAICoachPost(
 
   // 1. POST /api/ai-coach/generate
   if (resolvedAction === "generate") {
+    // Rate limit: 5 requests per minute per candidate to prevent cost abuse
+    const rateIdentifier = getClientRateLimitIdentifier(req, userId, "ai_coach:generate");
+    const rateCheck = await rateLimit("ai_coach:generate", rateIdentifier);
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck);
+    }
+
     const subject = body.subject;
     if (!subject || typeof subject !== "string") {
       return NextResponse.json(
@@ -193,6 +201,19 @@ export async function handleAICoachPost(
           questionsRemaining: eligibility.questionsRemaining,
         },
         { status: 403 }
+      );
+    }
+
+    // Step A1: Pre-check daily quota BEFORE calculating stats or calling external Groq API (Cost Abuse / Denial of Wallet Defense)
+    const currentDailyUsage = await getDailyUsageCount(userId);
+    if (currentDailyUsage >= AI_COACH_CONFIG.DAILY_REPORT_LIMIT) {
+      return NextResponse.json(
+        {
+          error: "Daily report generation limit (3/3) reached. Limit resets at midnight IST.",
+          code: "DAILY_LIMIT_REACHED",
+          nextResetIso: eligibility.nextResetIso,
+        },
+        { status: 429 }
       );
     }
 
