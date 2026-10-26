@@ -125,6 +125,13 @@ export const RATE_LIMIT_POLICIES: Record<string, RateLimitPolicy> = {
     scope: "ip",
     errorMessage: "Authentication session rate limit exceeded. Please wait a moment.",
   },
+  "user:profile_delete": {
+    max: 3,
+    windowSeconds: 60 * 60, // 3 deletion attempts per hour per user
+    failClosed: true,
+    scope: "user",
+    errorMessage: "Too many profile deletion requests. Please wait an hour before trying again.",
+  },
 
   // ─── PAYMENTS & ENTITLEMENTS ───────────────────────────────────────────────
   "payment:create_order": {

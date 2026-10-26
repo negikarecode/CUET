@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleAI, WhyWrongResponse, RepairQuizResponse } from "@/lib/api-handlers/ai";
-import { getProfile, postProfile } from "@/lib/api-handlers/auth-profile";
+import { getProfile, postProfile, deleteProfile } from "@/lib/api-handlers/auth-profile";
 import { handleRateCheck } from "@/lib/api-handlers/auth-rate-check";
 import { getStudentAttempts, deleteStudentAttempts } from "@/lib/api-handlers/student-attempts";
 import { getAdminPYQ, patchAdminPYQ } from "@/lib/api-handlers/admin-pyq";
@@ -174,6 +174,11 @@ export async function PATCH(req: NextRequest, context?: RouteContext): Promise<N
 export async function DELETE(req: NextRequest, context?: RouteContext): Promise<NextResponse> {
   const segments = parseRoute(req, context);
   const path = segments.join("/");
+
+  // /api/auth/profile
+  if (path === "auth/profile") {
+    return deleteProfile(req) as unknown as NextResponse;
+  }
 
   // /api/student/attempts
   if (path === "student/attempts") {

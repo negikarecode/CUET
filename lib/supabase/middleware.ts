@@ -108,9 +108,7 @@ export async function updateSession(request: NextRequest) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/verify-email";
     redirectUrl.search = "";
-    if (authUser?.email) {
-      redirectUrl.searchParams.set("email", authUser.email);
-    }
+    // Note: Email is not attached to URL query params to prevent PII leakage in history/logs
     const redirectResponse = NextResponse.redirect(redirectUrl);
     supabaseResponse.cookies.getAll().forEach((cookie) => {
       redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
@@ -148,9 +146,7 @@ export async function updateSession(request: NextRequest) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/verify-email";
     redirectUrl.search = "";
-    if (authUser?.email) {
-      redirectUrl.searchParams.set("email", authUser.email);
-    }
+    // Note: Email is not attached to URL query params to prevent PII leakage in history/logs
     const redirectResponse = NextResponse.redirect(redirectUrl);
     supabaseResponse.cookies.getAll().forEach((cookie) => {
       redirectResponse.cookies.set(cookie.name, cookie.value, cookie);

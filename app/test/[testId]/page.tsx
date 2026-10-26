@@ -75,7 +75,7 @@ export default async function TestPage({ params, searchParams }: PageProps) {
               "Sync your answers and past sessions across devices",
               "Access official CUET UG domain question papers",
             ]}
-            returnUrl={`/verify-email?email=${encodeURIComponent(authUser.email || "")}`}
+            returnUrl="/verify-email"
             returnLabel="Verify Email"
           />
         </div>

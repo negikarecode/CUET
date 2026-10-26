@@ -301,11 +301,15 @@ export default function AuthPageContent({
       });
 
       if (error) {
-        if (error.message.toLowerCase().includes("user not found") || error.message.toLowerCase().includes("not registered")) {
-          setErrorMessage("No candidate account found with this email. Please register as a new candidate first.");
-        } else {
-          setErrorMessage(parseAuthError(error).message);
+        const parsed = parseAuthError(error);
+        if (parsed.isRateLimit) {
+          setErrorMessage(parsed.message);
+          setIsLoading(false);
+          return;
         }
+        // Account enumeration defense: transition to OTP verification regardless of user existence
+        setOtpType("email");
+        setMode("otp");
         setIsLoading(false);
         return;
       }
