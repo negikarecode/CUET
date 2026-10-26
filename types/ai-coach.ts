@@ -4,20 +4,31 @@
 
 export type TopicClassification = "weak" | "strong" | "insufficient data";
 
+export type MistakeTag = "Didn't know concept" | "Misread" | "Guessed" | "Changed my answer";
+
+export interface MistakeTagCounts {
+  didntKnowConcept: number;
+  misread: number;
+  guessed: number;
+  changedAnswer: number;
+}
+
 export interface TopicStat {
   topic: string;
   chapter?: string;
   attempted: number;
   correct: number;
   accuracyPercentage: number;
-  averageTimeSeconds: number;
+  averageTimeSeconds?: number;
   classification: TopicClassification;
+  mostCommonWrongOption?: string;
 }
 
 export interface ErrorTypeBreakdown {
-  carelessErrors: number;     // Fast + wrong (< 15s)
-  conceptGaps: number;        // Slow + wrong (> 60s)
-  confidenceGaps: number;     // Skipped easy / high-yield
+  carelessErrors: number;     // Wrong answers on questions tagged easy: "careless"
+  conceptGaps: number;        // Topic accuracy < 40% with 5+ attempts: "concept gap"
+  confidenceGaps: number;     // Skipped questions: "confidence gap"
+  secondGuessing?: number;    // Right-to-wrong answer changes: "second-guessing"
 }
 
 export interface MockVsPyqStats {
@@ -41,9 +52,10 @@ export interface AICoachComputedStats {
   attemptRate: number;
   netScore: number;                 // CUET (+5/-1)
   potentialScore: number;           // If all attempted were correct (+5 * attempted)
-  negativeMarksLost: number;        // Total marks deducted by -1 penalty
-  averageTimePerQuestionSeconds: number;
+  negativeMarksLost: number;        // Total marks deducted by -1 penalty (marks lost to wrong answers)
+  averageTimePerQuestionSeconds?: number;
   errorTypes: ErrorTypeBreakdown;
+  mistakeTags?: MistakeTagCounts;
   rightToWrongChanges: number;
   mockVsPyqGap: MockVsPyqStats;
   recentTrend: RecentTrendStats;
@@ -52,9 +64,20 @@ export interface AICoachComputedStats {
 }
 
 export interface BiggestLeak {
+  topic?: string;
   issue: string;
   evidence: string;
+  likelyConfusion?: string;
   fix: string;
+}
+
+export interface TopicPracticeDelta {
+  topic: string;
+  subject: string;
+  beforeAccuracy: number;
+  afterAccuracy: number;
+  attemptsCount: number;
+  timestamp: string;
 }
 
 export interface WeeklyPlanItem {

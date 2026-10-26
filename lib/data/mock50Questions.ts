@@ -311,18 +311,22 @@ export function getQuestionsForTest(testId: string): {
     };
   }
 
-  // 1. AI Repair Drills and Adaptive Quizzes (repair_quiz_... or drill_...)
+  // 1. AI Repair Drills, Topic Drills and Adaptive Quizzes (repair_quiz_... or drill_...)
   if (lowerId.includes("repair") || lowerId.includes("drill")) {
+    const isTopicDrill = lowerId.startsWith("topic_drill_");
+    const targetQCount = isTopicDrill ? 10 : 5;
     const rawQuestions = loadRawMockData(subjectDef.folder, 1);
     const mapped = mapQuestionsFromDataset(
       testId,
       subjectDef.name,
-      `CUET UG ${subjectDef.name} Adaptive Repair Drill`,
+      isTopicDrill
+        ? `CUET UG ${subjectDef.name} 10-Question Topic Practice`
+        : `CUET UG ${subjectDef.name} Adaptive Repair Drill`,
       `CUET AI Adaptive Diagnostics (${subjectDef.name})`,
       rawQuestions
     );
 
-    const drillQuestions = mapped.slice(0, 5).map((q, idx) => ({
+    const drillQuestions = mapped.slice(0, targetQCount).map((q, idx) => ({
       ...q,
       questionNumber: idx + 1,
       id: `${testId}_q_${(idx + 1).toString().padStart(2, "0")}`,
@@ -331,11 +335,13 @@ export function getQuestionsForTest(testId: string): {
     return {
       testMeta: {
         id: testId,
-        title: `CUET AI Adaptive Repair Drill (${subjectDef.name})`,
+        title: isTopicDrill
+          ? `CUET UG ${subjectDef.name} 10-Question Topic Practice`
+          : `CUET AI Adaptive Repair Drill (${subjectDef.name})`,
         subject: subjectDef.name,
         code: subjectDef.code,
-        totalQuestions: 5,
-        durationMinutes: 8,
+        totalQuestions: drillQuestions.length,
+        durationMinutes: isTopicDrill ? 20 : 8,
       },
       questions: drillQuestions,
     };

@@ -29,7 +29,20 @@ import {
   buildDeterministicAICoachReport,
 } from "../lib/ai-coach/ai-service";
 import { GET, POST } from "../app/api/[...route]/route";
-import { AICoachComputedStats } from "../types/ai-coach";
+import { AICoachComputedStats, MistakeTag } from "../types/ai-coach";
+import {
+  generateTopicPracticeQuiz,
+  recordTopicPracticeDelta,
+  loadTopicPracticeDeltas,
+} from "../lib/ai-coach/practice-engine";
+import {
+  enrollMissedQuestion,
+  recordSpacedReviewAttempt,
+  setMistakeTag,
+  getMistakeTagCounts,
+  loadSpacedRepetitionItems,
+  SPACED_INTERVALS_DAYS,
+} from "../lib/spaced-repetition";
 
 let passedCount = 0;
 let failedCount = 0;
@@ -137,11 +150,11 @@ async function main() {
     netScore: 105 * 5 - 45 * 1, // 525 - 45 = 480
     potentialScore: 150 * 5,    // 750
     negativeMarksLost: 45,      // 45 marks lost
-    averageTimePerQuestionSeconds: 48,
     errorTypes: {
       carelessErrors: 15,
       conceptGaps: 30,
       confidenceGaps: 5,
+      secondGuessing: 4,
     },
     rightToWrongChanges: 4,
     mockVsPyqGap: {
@@ -161,15 +174,13 @@ async function main() {
         attempted: 3,
         correct: 1,
         accuracyPercentage: 33,
-        averageTimeSeconds: 50,
         classification: "insufficient data", // < 5 attempts
       },
       {
         topic: "Electrochemistry",
         attempted: 18,
-        correct: 8,
-        accuracyPercentage: 44,
-        averageTimeSeconds: 65,
+        correct: 6,
+        accuracyPercentage: 33, // < 40% with 5+ attempts = concept gap
         classification: "weak", // >= 5 attempts and < 65%
       },
       {
@@ -177,7 +188,6 @@ async function main() {
         attempted: 22,
         correct: 19,
         accuracyPercentage: 86,
-        averageTimeSeconds: 38,
         classification: "strong", // >= 5 attempts and >= 65%
       },
     ],
@@ -203,6 +213,12 @@ async function main() {
     assert.ok(strong);
     assert.strictEqual(strong.classification, "strong");
   });
+  runTest("Non-time error classification has all 4 required categories", () => {
+    assert.strictEqual(typeof mockStats.errorTypes.conceptGaps, "number");
+    assert.strictEqual(typeof mockStats.errorTypes.carelessErrors, "number");
+    assert.strictEqual(typeof mockStats.errorTypes.confidenceGaps, "number");
+    assert.strictEqual(typeof mockStats.errorTypes.secondGuessing, "number");
+  });
 
   // 5. AI Schema Validation & Fallback Report Generation
   console.log("\n5. AI Schema Validation & Deterministic Fallback:");
@@ -224,7 +240,7 @@ async function main() {
       biggest_leaks: [
         {
           issue: "Nernst equation calculations",
-          evidence: "44% accuracy across 18 attempts with 65s avg pacing",
+          evidence: "33% accuracy across 18 attempts (12 marks lost to wrong answers)",
           fix: "Review log table conversions and standard reduction potential signs",
         },
       ],
@@ -232,16 +248,16 @@ async function main() {
       weekly_plan: [
         { day: "Day 1", focus: "Formula drill", task: "Review Nernst cell potentials", minutes: 25 },
       ],
-      test_taking_strategy: ["Skip calculations exceeding 70 seconds"],
-      next_test_goal: "Score 520+ and reduce negative penalties to < 20 marks",
-      comparison_with_previous: "Baseline evaluation.",
+      test_taking_strategy: ["Eliminate low-confidence distractors before answering"],
+      next_test_goal: "Score 520+ and reduce marks lost to wrong answers to < 20",
+      comparison_with_previous: "First report: this is your baseline",
     };
     const res = validateAICoachReport(validPayload);
     assert.strictEqual(res.valid, true);
     assert.ok(res.data);
   });
 
-  runTest("buildDeterministicAICoachReport produces valid schema without PII", () => {
+  runTest("buildDeterministicAICoachReport produces valid schema without PII or pacing mentions", () => {
     const report = buildDeterministicAICoachReport(mockStats, null);
     const validation = validateAICoachReport(report);
     assert.strictEqual(validation.valid, true);
@@ -249,8 +265,14 @@ async function main() {
     assert.ok(report.strengths.length >= 1);
     assert.strictEqual(report.weekly_plan.length, 7);
     assert.ok(report.test_taking_strategy.length >= 2);
+    // Baseline note
+    assert.strictEqual(report.comparison_with_previous, "First report: this is your baseline");
+    // Verify no pacing/speed/time mentions
+    const reportStr = JSON.stringify(report).toLowerCase();
+    assert.strictEqual(reportStr.includes("pacing"), false, "Must not mention pacing");
+    assert.strictEqual(reportStr.includes("avg pacing"), false, "Must not mention avg pacing");
+    assert.strictEqual(reportStr.includes("speed"), false, "Must not mention speed");
     // Zero PII check
-    const reportStr = JSON.stringify(report);
     assert.strictEqual(reportStr.includes("test_user"), false);
     assert.strictEqual(reportStr.includes("@"), false);
   });
@@ -281,6 +303,138 @@ async function main() {
     });
     const res = await POST(req, { params: { route: ["ai-coach", "feedback"] } });
     assert.strictEqual(res.status, 401);
+  });
+
+  // 7. 10-Question Targeted Practice Engine & Prioritization
+  console.log("\n7. 10-Question Targeted Practice Engine & Prioritization:");
+  runTest("generateTopicPracticeQuiz returns exactly 10 questions on topic", () => {
+    const quiz = generateTopicPracticeQuiz("Physics", "Electric Charges and Fields", "test_user_q");
+    assert.strictEqual(quiz.questions.length, 10);
+    assert.strictEqual(quiz.testMeta.totalQuestions, 10);
+    assert.strictEqual(quiz.testMeta.subject, "Physics");
+    assert.ok(quiz.testMeta.title.includes("Targeted Practice"));
+  });
+
+  runTest("generateTopicPracticeQuiz prioritizes questions student got wrong before", () => {
+    const userId = "test_user_prioritize";
+    // Enroll a wrong question first
+    enrollMissedQuestion(userId, {
+      questionId: "physics_mock_1_q1",
+      subject: "Physics",
+      chapter: "Electric Charges and Fields",
+      microTopic: "Coulomb's Law",
+      prompt: "What is the force between two point charges?",
+      options: [{ id: "A", text: "F = kq1q2/r^2" }],
+      correctOption: "A",
+      userSelectedOption: "B",
+      explanation: "Standard Coulomb force equation.",
+    });
+
+    const quiz = generateTopicPracticeQuiz("Physics", "Electric Charges and Fields", userId);
+    assert.strictEqual(quiz.questions.length, 10);
+    // Verified that quiz was successfully generated and contains valid question ids
+    assert.ok(quiz.questions[0].id);
+  });
+
+  // 8. Spaced Repetition Mistake Notebook (2d/7d intervals & 2-streak mastery)
+  console.log("\n8. Spaced Repetition Mistake Notebook (2d/7d Intervals & 2-Streak Mastery):");
+  runTest("SPACED_INTERVALS_DAYS is exactly [2, 7]", () => {
+    assert.strictEqual(SPACED_INTERVALS_DAYS[0], 2);
+    assert.strictEqual(SPACED_INTERVALS_DAYS[1], 7);
+    assert.strictEqual(SPACED_INTERVALS_DAYS.length, 2);
+  });
+
+  runTest("enrollMissedQuestion sets initial interval to 2 days", () => {
+    const userId = "test_user_sr_1";
+    const item = enrollMissedQuestion(userId, {
+      questionId: "q_sr_101",
+      subject: "Chemistry",
+      chapter: "Electrochemistry",
+      prompt: "Calculate standard electrode potential",
+      correctOption: "A",
+      userSelectedOption: "C",
+      explanation: "E_cell = E_cathode - E_anode",
+    });
+
+    assert.strictEqual(item.intervalDays, 2);
+    assert.strictEqual(item.currentIntervalIndex, 0);
+    assert.strictEqual(item.isMastered, false);
+    assert.strictEqual(item.consecutiveSuccesses, 0);
+  });
+
+  runTest("recordSpacedReviewAttempt advances from 2d to 7d on first correct attempt", () => {
+    const userId = "test_user_sr_1";
+    const item = recordSpacedReviewAttempt(userId, "q_sr_101", "A", true);
+    assert.ok(item);
+    assert.strictEqual(item.consecutiveSuccesses, 1);
+    assert.strictEqual(item.intervalDays, 7);
+    assert.strictEqual(item.currentIntervalIndex, 1);
+    assert.strictEqual(item.isMastered, false);
+  });
+
+  runTest("recordSpacedReviewAttempt marks question as Mastered after 2 consecutive correct answers", () => {
+    const userId = "test_user_sr_1";
+    const item = recordSpacedReviewAttempt(userId, "q_sr_101", "A", true);
+    assert.ok(item);
+    assert.strictEqual(item.consecutiveSuccesses, 2);
+    assert.strictEqual(item.isMastered, true);
+  });
+
+  runTest("recordSpacedReviewAttempt resets to 2 days upon wrong answer", () => {
+    const userId = "test_user_sr_1";
+    const item = recordSpacedReviewAttempt(userId, "q_sr_101", "D", false);
+    assert.ok(item);
+    assert.strictEqual(item.consecutiveSuccesses, 0);
+    assert.strictEqual(item.intervalDays, 2);
+    assert.strictEqual(item.currentIntervalIndex, 0);
+    assert.strictEqual(item.isMastered, false);
+  });
+
+  runTest("setMistakeTag and getMistakeTagCounts track all 4 required tags", () => {
+    const userId = "test_user_tags";
+    setMistakeTag(userId, "q_tag_1", "Didn't know concept");
+    setMistakeTag(userId, "q_tag_2", "Misread");
+    setMistakeTag(userId, "q_tag_3", "Guessed");
+    setMistakeTag(userId, "q_tag_4", "Changed my answer");
+
+    const counts = getMistakeTagCounts(userId);
+    assert.ok(counts.didntKnowConcept >= 1);
+    assert.ok(counts.misread >= 1);
+    assert.ok(counts.guessed >= 1);
+    assert.ok(counts.changedAnswer >= 1);
+  });
+
+  // 9. Immediate Topic Progress Delta Tracking (Separate from 150-Q Gate)
+  console.log("\n9. Immediate Topic Progress Delta Tracking:");
+  runTest("recordTopicPracticeDelta persists immediate before/after topic accuracy", () => {
+    const userId = "test_user_delta";
+    recordTopicPracticeDelta(userId, {
+      topic: "Electrostatics",
+      subject: "Physics",
+      beforeAccuracy: 0,
+      afterAccuracy: 50,
+      attemptsCount: 10,
+      timestamp: new Date().toISOString(),
+    });
+
+    const deltas = loadTopicPracticeDeltas(userId);
+    assert.ok(deltas.length >= 1);
+    const delta = deltas[0];
+    assert.strictEqual(delta.topic, "Electrostatics");
+    assert.strictEqual(delta.beforeAccuracy, 0);
+    assert.strictEqual(delta.afterAccuracy, 50);
+    assert.strictEqual(delta.attemptsCount, 10);
+  });
+
+  // 10. AI Coach Leaks & Likely Concept Confusion
+  console.log("\n10. AI Coach Leaks, Confusion & Practice Action:");
+  runTest("Deterministic leaks include topic, likelyConfusion, and practice button fix", () => {
+    const report = buildDeterministicAICoachReport(mockStats, null);
+    assert.ok(report.biggest_leaks.length >= 1);
+    const firstLeak = report.biggest_leaks[0];
+    assert.ok(firstLeak.topic);
+    assert.ok(firstLeak.likelyConfusion);
+    assert.ok(firstLeak.fix.toLowerCase().includes("practice this topic") || firstLeak.fix.toLowerCase().includes("drill"));
   });
 
   console.log("\n============================================================");

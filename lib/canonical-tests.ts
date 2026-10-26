@@ -106,11 +106,12 @@ export function resolveCanonicalTestId(
 
   const clean = (rawTestId || "").trim().toLowerCase();
 
-  // 1. DB-generated custom tests (e.g. Sunday ritual, adaptive drills, or repair quizzes)
+  // 1. DB-generated custom tests (e.g. Sunday ritual, adaptive drills, topic drills, or repair quizzes)
   if (
     clean.startsWith("sunday_redemption_") ||
     clean.startsWith("adaptive_drill_") ||
-    clean.startsWith("repair_quiz_")
+    clean.startsWith("repair_quiz_") ||
+    clean.startsWith("topic_drill_")
   ) {
     return clean;
   }

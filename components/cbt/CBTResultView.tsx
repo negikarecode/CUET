@@ -13,6 +13,7 @@ import { buildPostMockDeterministicReport } from "@/lib/post-mock-engine";
 import { stringToUuid } from "@/lib/utils";
 import { resolveCanonicalTestId } from "@/lib/canonical-tests";
 import { resolveQuestionCorrectOptionId, isQuestionDropped, isQuestionUnresolved } from "@/lib/scoring";
+import { enrollMissedQuestion } from "@/lib/spaced-repetition";
 
 export default function CBTResultView() {
   const router = useRouter();
@@ -66,6 +67,25 @@ export default function CBTResultView() {
         : selectedOption !== null && selectedOption !== undefined && trueCorrect
         ? selectedOption === trueCorrect
         : null;
+
+      // Automatically enroll every wrong question into the Mistake Notebook
+      if (isCorrect === false && selectedOption !== null) {
+        try {
+          enrollMissedQuestion(user?.id || "guest", {
+            questionId: q.id,
+            subject: testMeta?.subject ?? "Physics",
+            chapter: q.chapter || q.topic || "Domain Core",
+            microTopic: q.topic,
+            prompt: q.prompt,
+            options: q.options,
+            correctOption: (trueCorrect || "") as any,
+            userSelectedOption: selectedOption,
+            explanation: q.explanation || "Refer to NCERT textbook.",
+          });
+        } catch (e) {
+          console.warn("Failed to auto-enroll missed question:", e);
+        }
+      }
       const timeSpent = ans?.timeSpentSeconds ?? 0;
       return {
         questionId: q.id,

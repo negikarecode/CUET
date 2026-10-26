@@ -16,6 +16,7 @@ import { normalizeSubject } from "@/lib/analytics";
 import { recordRepairEvent } from "@/lib/repair-plan";
 import { recordRepairPlanProgress } from "@/lib/repair-plan-v2";
 import { resolveQuestionCorrectOptionId, isQuestionDropped, isQuestionUnresolved, isQuestionEligibleForActiveCBT } from "@/lib/scoring";
+import { enrollMissedQuestion } from "@/lib/spaced-repetition";
 
 export interface QuestionSessionState {
   visited: boolean;
@@ -932,6 +933,24 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
             : selectedOption !== null && selectedOption !== undefined && correctKey
             ? selectedOption === correctKey
             : null;
+
+          if (isCorrect === false && selectedOption !== null) {
+            try {
+              enrollMissedQuestion(storeUser?.id || "guest", {
+                questionId: q.id,
+                subject: meta?.subject ?? "Physics",
+                chapter: q.chapter || q.topic || "Domain Core",
+                microTopic: q.topic,
+                prompt: q.prompt,
+                options: q.options,
+                correctOption: (correctKey || "") as any,
+                userSelectedOption: selectedOption,
+                explanation: q.explanation || "Refer to NCERT textbook.",
+              });
+            } catch (err) {
+              console.warn("Failed to enroll missed question in store submit:", err);
+            }
+          }
           const timeSpent = qState?.timeSpentSeconds ?? 0;
           return {
             questionId: q.id,

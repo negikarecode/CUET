@@ -8,7 +8,9 @@ import {
   TopicStat,
   ErrorTypeBreakdown,
   MockVsPyqStats,
+  MistakeTagCounts,
 } from "@/types/ai-coach";
+import { getMistakeTagCounts } from "@/lib/spaced-repetition";
 import {
   getDailyUsageCount,
   getNextMidnightIST,
@@ -91,14 +93,40 @@ export async function checkSubjectEligibility(
 }
 
 /**
+ * Checks whether a question is tagged as easy based on question/attempt metadata
+ */
+export function isQuestionTaggedEasy(q: any, row?: any): boolean {
+  const raw =
+    q?.difficulty ??
+    row?.difficulty ??
+    q?.difficultyLevel ??
+    row?.difficultyLevel ??
+    row?.diagnostic_report?.difficulty;
+  if (typeof raw === "string") {
+    const s = raw.trim().toLowerCase();
+    return s === "easy" || s === "1";
+  }
+  if (typeof raw === "number") {
+    return raw <= 1;
+  }
+  const qNum = q?.questionNumber ?? q?.question_number ?? row?.question_number;
+  if (typeof qNum === "number" && qNum > 0 && qNum <= 15) {
+    return true;
+  }
+  return false;
+}
+
+/**
  * Computes ALL authoritative stats in code for AI Coach:
  * - overall and topic accuracy
  * - attempt rate
  * - net score vs potential score (CUET: +5/-1)
- * - negative marks lost
- * - time per question
- * - error types (careless, concept gap, confidence gap)
- * - right-to-wrong answer changes
+ * - marks lost to wrong answers (negativeMarksLost)
+ * - non-time error classification:
+ *   * topic accuracy < 40% with 5+ attempts: "concept gap"
+ *   * wrong answers on questions tagged easy: "careless"
+ *   * skipped questions: "confidence gap"
+ *   * right-to-wrong answer changes: "second-guessing"
  * - trend over recent tests
  * - mock vs PYQ gap
  * - days to exam
@@ -134,7 +162,7 @@ export async function computeAICoachStats(
     console.warn("Failed to fetch previous report stats:", err);
   }
 
-  // 2. Fetch all qualifying attempts in subject
+  // 2. Fetch all qualifying attempts in subject (no time-based selection)
   let attemptsQuery = supabaseAdmin
     .from("user_attempts")
     .select(`
@@ -143,8 +171,8 @@ export async function computeAICoachStats(
       question_id,
       selected_option,
       is_correct,
-      time_spent_seconds,
       created_at,
+      diagnostic_report,
       questions (
         id,
         subject,
@@ -186,12 +214,12 @@ export async function computeAICoachStats(
   const uniqueQIds = new Set<string>();
   let correctCount = 0;
   let incorrectCount = 0;
-  let totalTimeSeconds = 0;
 
-  // Error type tracking
-  let carelessErrors = 0;   // Fast + wrong (< 15s)
-  let conceptGaps = 0;      // Slow + wrong (>= 15s)
-  let confidenceGaps = 0;   // Easy questions skipped or left unattempted
+  // Non-time error type tracking:
+  // - Wrong answers on questions tagged easy: "careless"
+  // - Right-to-wrong answer changes: "second-guessing"
+  let carelessErrors = 0;
+  let secondGuessing = 0;
 
   // Mock vs PYQ tracking
   let mockAttempts = 0;
@@ -207,11 +235,21 @@ export async function computeAICoachStats(
       chapter?: string;
       attempted: number;
       correct: number;
-      totalTime: number;
     }
   >();
 
-  // Session-level test grouping for trend & attempt rate
+  // Track wrong distractors per topic for concept confusion diagnosis
+  const topicWrongDistractors = new Map<string, Map<string, number>>();
+
+  // Track mistake tags from database rows
+  const dbMistakeTagCounts: MistakeTagCounts = {
+    didntKnowConcept: 0,
+    misread: 0,
+    guessed: 0,
+    changedAnswer: 0,
+  };
+
+  // Session-level test grouping for trend, attempt rate, and skipped questions ("confidence gap")
   const testSessions = new Map<
     string,
     {
@@ -228,21 +266,29 @@ export async function computeAICoachStats(
     const testObj = Array.isArray(row.tests) ? row.tests[0] : row.tests;
     const testId = row.test_id || "mock-session";
     const qId = String(row.question_id || row.id);
-    const timeSpent = Math.max(0, Number(row.time_spent_seconds) || 0);
     const isCorrect = Boolean(row.is_correct);
 
     uniqueQIds.add(qId);
-    totalTimeSeconds += timeSpent;
 
     if (isCorrect) {
       correctCount += 1;
     } else {
       incorrectCount += 1;
-      if (timeSpent < 15) {
+      // Rule 2: Wrong answers on questions tagged easy: "careless"
+      if (isQuestionTaggedEasy(q, row)) {
         carelessErrors += 1;
-      } else {
-        conceptGaps += 1;
       }
+    }
+
+    // Rule 2: Right-to-wrong answer changes: "second-guessing"
+    if (
+      row?.diagnostic_report?.right_to_wrong ||
+      row?.diagnostic_report?.rightToWrongChange ||
+      row?.diagnostic_report?.second_guessing ||
+      row?.right_to_wrong ||
+      row?.is_second_guess
+    ) {
+      secondGuessing += 1;
     }
 
     // Classify Mock vs PYQ
@@ -260,7 +306,7 @@ export async function computeAICoachStats(
       if (isCorrect) mockCorrect += 1;
     }
 
-    // Topic map
+    // Topic map (no time metrics stored)
     const topicName = q?.micro_topic || q?.chapter || "Core Principles";
     const chapterName = q?.chapter || "Syllabus Unit";
     const existingTopic = topicMap.get(topicName) || {
@@ -268,12 +314,29 @@ export async function computeAICoachStats(
       chapter: chapterName,
       attempted: 0,
       correct: 0,
-      totalTime: 0,
     };
     existingTopic.attempted += 1;
-    if (isCorrect) existingTopic.correct += 1;
-    existingTopic.totalTime += timeSpent;
+    if (isCorrect) {
+      existingTopic.correct += 1;
+    } else if (row.selected_option) {
+      const optStr = String(row.selected_option).trim().toUpperCase();
+      const currentTopicWrong = topicWrongDistractors.get(topicName) || new Map<string, number>();
+      currentTopicWrong.set(optStr, (currentTopicWrong.get(optStr) || 0) + 1);
+      topicWrongDistractors.set(topicName, currentTopicWrong);
+    }
     topicMap.set(topicName, existingTopic);
+
+    // Mistake tags from row diagnostic report
+    const rawTag =
+      row?.diagnostic_report?.mistakeTag ||
+      row?.diagnostic_report?.tag ||
+      row?.diagnostic_report?.mistake_tag;
+    if (rawTag) {
+      if (rawTag === "Didn't know concept" || rawTag === "concept") dbMistakeTagCounts.didntKnowConcept++;
+      else if (rawTag === "Misread" || rawTag === "misread") dbMistakeTagCounts.misread++;
+      else if (rawTag === "Guessed" || rawTag === "guessed") dbMistakeTagCounts.guessed++;
+      else if (rawTag === "Changed my answer" || rawTag === "changed") dbMistakeTagCounts.changedAnswer++;
+    }
 
     // Test session grouping
     const sessionKey = `${testId}:::${row.created_at ? new Date(row.created_at).toISOString().slice(0, 10) : "default"}`;
@@ -297,15 +360,14 @@ export async function computeAICoachStats(
     incorrectCount * AI_COACH_CONFIG.MARKING_SCHEME.INCORRECT;
   const potentialScore = totalAttempts * AI_COACH_CONFIG.MARKING_SCHEME.CORRECT;
   const negativeMarksLost = incorrectCount * Math.abs(AI_COACH_CONFIG.MARKING_SCHEME.INCORRECT);
-  const averageTimePerQuestionSeconds =
-    totalAttempts > 0 ? Math.round(totalTimeSeconds / totalAttempts) : 0;
 
-  // Estimate confidence gaps (unattempted questions across tests taken)
+  // Rule 2: Skipped questions: "confidence gap"
+  let confidenceGaps = 0;
   let totalTestQuestionsOffered = 0;
   testSessions.forEach((s) => {
     totalTestQuestionsOffered += s.totalTestQuestions;
     const unattempted = Math.max(0, s.totalTestQuestions - s.attempted);
-    confidenceGaps += Math.min(unattempted, 5); // cap per test
+    confidenceGaps += unattempted;
   });
 
   const attemptRate =
@@ -313,10 +375,9 @@ export async function computeAICoachStats(
       ? Math.min(100, Math.round((totalAttempts / totalTestQuestionsOffered) * 100))
       : 100;
 
-  // Topic breakdown with 5+ attempt threshold
+  // Topic breakdown with 5+ attempt threshold (no time metrics)
   const topicBreakdown: TopicStat[] = Array.from(topicMap.values()).map((t) => {
     const topicAccuracy = t.attempted > 0 ? Math.round((t.correct / t.attempted) * 100) : 0;
-    const avgTime = t.attempted > 0 ? Math.round(t.totalTime / t.attempted) : 0;
 
     let classification: "weak" | "strong" | "insufficient data";
     if (t.attempted < AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS) {
@@ -327,16 +388,34 @@ export async function computeAICoachStats(
       classification = "strong";
     }
 
+    const wrongDistractors = topicWrongDistractors.get(t.topic);
+    let mostCommonWrongOption: string | undefined;
+    if (wrongDistractors && wrongDistractors.size > 0) {
+      let maxCnt = 0;
+      wrongDistractors.forEach((cnt, opt) => {
+        if (cnt > maxCnt) {
+          maxCnt = cnt;
+          mostCommonWrongOption = opt;
+        }
+      });
+    }
+
     return {
       topic: t.topic,
       chapter: t.chapter,
       attempted: t.attempted,
       correct: t.correct,
       accuracyPercentage: topicAccuracy,
-      averageTimeSeconds: avgTime,
       classification,
+      mostCommonWrongOption,
     };
   });
+
+  // Rule 2: Topic accuracy < 40% with 5+ attempts: "concept gap"
+  const conceptGapTopics = topicBreakdown.filter(
+    (t) => t.attempted >= AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS && t.accuracyPercentage < 40
+  );
+  const conceptGaps = conceptGapTopics.reduce((sum, t) => sum + (t.attempted - t.correct), 0);
 
   // Mock vs PYQ breakdown
   const mockAccuracy = mockAttempts > 0 ? Math.round((mockCorrect / mockAttempts) * 100) : 0;
@@ -373,6 +452,24 @@ export async function computeAICoachStats(
     carelessErrors,
     conceptGaps,
     confidenceGaps,
+    secondGuessing,
+  };
+
+  let localTagCounts: MistakeTagCounts = {
+    didntKnowConcept: 0,
+    misread: 0,
+    guessed: 0,
+    changedAnswer: 0,
+  };
+  try {
+    localTagCounts = getMistakeTagCounts(userId);
+  } catch {}
+
+  const mergedMistakeTags: MistakeTagCounts = {
+    didntKnowConcept: Math.max(dbMistakeTagCounts.didntKnowConcept, localTagCounts.didntKnowConcept),
+    misread: Math.max(dbMistakeTagCounts.misread, localTagCounts.misread),
+    guessed: Math.max(dbMistakeTagCounts.guessed, localTagCounts.guessed),
+    changedAnswer: Math.max(dbMistakeTagCounts.changedAnswer, localTagCounts.changedAnswer),
   };
 
   const computed: AICoachComputedStats = {
@@ -384,9 +481,9 @@ export async function computeAICoachStats(
     netScore,
     potentialScore,
     negativeMarksLost,
-    averageTimePerQuestionSeconds,
     errorTypes,
-    rightToWrongChanges: Math.round(carelessErrors * 0.3), // empirical estimate
+    mistakeTags: mergedMistakeTags,
+    rightToWrongChanges: secondGuessing,
     mockVsPyqGap,
     recentTrend: {
       recentAccuracies,

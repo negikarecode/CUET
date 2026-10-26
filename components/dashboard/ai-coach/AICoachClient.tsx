@@ -16,8 +16,15 @@ import {
   Calendar,
   Target,
   ShieldAlert,
+  Play,
+  Tag,
+  BookmarkCheck,
 } from "lucide-react";
-import { SubjectEligibility, AICoachStoredReport } from "@/types/ai-coach";
+import { SubjectEligibility, AICoachStoredReport, TopicPracticeDelta } from "@/types/ai-coach";
+import { loadTopicPracticeDeltas } from "@/lib/ai-coach/practice-engine";
+import { getSpacedRepetitionSummary } from "@/lib/spaced-repetition";
+import { SpacedRepetitionModal } from "@/components/dashboard/SpacedRepetitionModal";
+import AICoachTopicQuizModal from "./AICoachTopicQuizModal";
 
 interface AICoachClientProps {
   initialSubjects: SubjectEligibility[];
@@ -47,6 +54,85 @@ export default function AICoachClient({
     text: string;
   } | null>(null);
   const [feedbackState, setFeedbackState] = useState<"up" | "down" | null>(null);
+
+  // Topic Practice Quiz & Mistake Notebook State
+  const [practiceQuizState, setPracticeQuizState] = useState<{
+    isOpen: boolean;
+    topic: string;
+    baselineAccuracy: number;
+  }>({
+    isOpen: false,
+    topic: "",
+    baselineAccuracy: 0,
+  });
+  const [isMistakeNotebookOpen, setIsMistakeNotebookOpen] = useState(false);
+  const [topicDeltas, setTopicDeltas] = useState<TopicPracticeDelta[]>([]);
+  const [notebookSummary, setNotebookSummary] = useState<{
+    dueTodayCount: number;
+    masteredCount: number;
+    totalTracked: number;
+  }>({ dueTodayCount: 0, masteredCount: 0, totalTracked: 0 });
+
+  const reloadDeltasAndNotebook = React.useCallback(() => {
+    try {
+      const deltas = loadTopicPracticeDeltas();
+      setTopicDeltas(deltas);
+      const summary = getSpacedRepetitionSummary("guest");
+      setNotebookSummary({
+        dueTodayCount: summary.dueTodayCount,
+        masteredCount: summary.masteredCount,
+        totalTracked: summary.totalTracked,
+      });
+    } catch (e) {
+      console.warn("Failed to load topic deltas or notebook summary:", e);
+    }
+  }, []);
+
+  useEffect(() => {
+    reloadDeltasAndNotebook();
+  }, [reloadDeltasAndNotebook, selectedSubjectName]);
+
+  const extractTopicFromLeak = (leak: { topic?: string; issue: string }, defaultSubject: string): string => {
+    if (leak.topic && leak.topic.trim()) return leak.topic.trim();
+    const match = leak.issue.match(/(?:gap in|topic|in)\s+([A-Za-z0-9\s]+)/i);
+    if (match && match[1]) {
+      return match[1].trim();
+    }
+    return defaultSubject;
+  };
+
+  const getBaselineAccuracyForTopic = (
+    report: AICoachStoredReport | null,
+    topicName: string
+  ): number => {
+    if (!report?.stats_json?.topicBreakdown) return 0;
+    const match = report.stats_json.topicBreakdown.find(
+      (t) =>
+        t.topic.toLowerCase().includes(topicName.toLowerCase()) ||
+        topicName.toLowerCase().includes(t.topic.toLowerCase())
+    );
+    return match?.accuracyPercentage ?? 0;
+  };
+
+  const handlePracticeTopic = (topicName: string, baselineAcc?: number) => {
+    const base =
+      baselineAcc !== undefined
+        ? baselineAcc
+        : getBaselineAccuracyForTopic(activeReport, topicName);
+    setPracticeQuizState({
+      isOpen: true,
+      topic: topicName,
+      baselineAccuracy: base,
+    });
+  };
+
+  const handleQuizCompleted = (delta: TopicPracticeDelta) => {
+    reloadDeltasAndNotebook();
+    setStatusMessage({
+      type: "success",
+      text: `Practice completed for ${delta.topic}! Immediate progress: ${delta.beforeAccuracy}% → ${delta.afterAccuracy}%.`,
+    });
+  };
 
   const activeSubject = subjects.find(
     (s) => s.subject.toLowerCase() === selectedSubjectName.toLowerCase()
@@ -102,7 +188,7 @@ export default function AICoachClient({
     setIsGenerating(true);
     setStatusMessage({
       type: "info",
-      text: "Synthesizing empirical telemetry, analyzing error patterns, and formulating your coaching strategy...",
+      text: "Analyzing your practice data, identifying error patterns, and preparing your report...",
     });
 
     try {
@@ -178,13 +264,13 @@ export default function AICoachClient({
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold border border-indigo-500/30">
               <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              <span>CUET UG Deterministic Diagnostic Intelligence</span>
+              <span>Your Performance Report</span>
             </div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
               AI Coach
             </h1>
             <p className="text-sm sm:text-base text-slate-300 max-w-2xl">
-              Subject-level diagnostic evaluation calibrated every 150 unique questions. Uncover careless speed leaks, concept gaps, and score-accelerating weekly plans.
+              Subject-level diagnostic evaluation calibrated every 150 unique questions. Uncover careless errors, concept gaps, second-guessing patterns, and score-accelerating weekly plans.
             </p>
           </div>
 
@@ -204,13 +290,24 @@ export default function AICoachClient({
               </div>
             </div>
 
-            <Link
-              href="/dashboard/reports"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-300 hover:text-white transition-colors"
-            >
-              <span>View Saved Reports Hub</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setIsMistakeNotebookOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-400/30 text-xs font-bold transition-all cursor-pointer"
+              >
+                <BookmarkCheck className="w-3.5 h-3.5 text-purple-300" />
+                <span>Mistake Notebook ({notebookSummary.dueTodayCount} Due, {notebookSummary.masteredCount} Mastered)</span>
+              </button>
+
+              <Link
+                href="/dashboard/reports"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-300 hover:text-white transition-colors"
+              >
+                <span>View Saved Reports Hub</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -245,6 +342,90 @@ export default function AICoachClient({
           </button>
         </div>
       )}
+
+      {/* 3. "Do this today" single action (taken from latest report's top leak) */}
+      {(() => {
+        const topLeak = activeReport?.report_json?.biggest_leaks?.[0];
+        if (!topLeak) return null;
+        const topLeakTopic = extractTopicFromLeak(topLeak, selectedSubjectName);
+        return (
+          <div className="p-6 rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 text-white shadow-xl border border-indigo-500/30 flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="space-y-1.5 flex-1 relative z-10">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 fill-slate-950" />
+                  Do This Today
+                </span>
+                <span className="text-xs font-semibold text-indigo-200">
+                  Top Priority Action • {selectedSubjectName}
+                </span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                {topLeak.issue}
+              </h3>
+              <p className="text-xs sm:text-sm text-indigo-200 leading-relaxed max-w-2xl">
+                {topLeak.evidence}
+              </p>
+              {topLeak.likelyConfusion && (
+                <p className="text-xs text-amber-200 font-medium pt-0.5">
+                  <span className="font-bold text-amber-300">Likely Concept Confusion: </span>
+                  {topLeak.likelyConfusion}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => handlePracticeTopic(topLeakTopic)}
+              className="px-5 py-3 rounded-2xl bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xs sm:text-sm shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer active:scale-98 relative z-10"
+            >
+              <Play className="w-4 h-4 fill-white" />
+              <span>Practice This Topic (10 Qs)</span>
+            </button>
+          </div>
+        );
+      })()}
+
+      {/* 4. Immediate Topic Practice Progress (Separate from 150-question report gate) */}
+      {topicDeltas && topicDeltas.length > 0 && (() => {
+        const firstDelta = topicDeltas[0];
+        if (!firstDelta) return null;
+        return (
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-white border border-emerald-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-wide flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                  Immediate Topic Progress
+                </span>
+                <span className="text-xs text-emerald-700 font-semibold">
+                  Separate from 150-Question Calibration Gate
+                </span>
+              </div>
+              <div className="text-base font-bold text-slate-900">
+                {firstDelta.topic}: {firstDelta.beforeAccuracy}% → {firstDelta.afterAccuracy}%
+                <span className="ml-2 text-xs font-semibold text-emerald-700">
+                  ({firstDelta.afterAccuracy >= firstDelta.beforeAccuracy ? "+" : ""}
+                  {firstDelta.afterAccuracy - firstDelta.beforeAccuracy}% change across {firstDelta.attemptsCount} practice questions)
+                </span>
+              </div>
+              <p className="text-xs text-slate-600">
+                Recorded on {new Date(firstDelta.timestamp).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}. Keep practicing flagged topics to eliminate marks lost to wrong answers!
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => handlePracticeTopic(firstDelta.topic, firstDelta.afterAccuracy)}
+              className="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs transition-all shadow-xs shrink-0 cursor-pointer flex items-center gap-1.5"
+            >
+              <Play className="w-3.5 h-3.5 fill-white" />
+              <span>Practice {firstDelta.topic} (10 Qs)</span>
+            </button>
+          </div>
+        );
+      })()}
 
       {/* 3. Subject Eligibility Cards Grid */}
       <div className="space-y-3">
@@ -306,8 +487,10 @@ export default function AICoachClient({
                 </div>
 
                 <div className="mt-3 text-[11px] text-slate-500">
-                  {sub.isUnlocked
-                    ? "Sufficient telemetry to generate comprehensive report"
+                  {sub.lastReportId
+                    ? `Next report unlocks after 150 new questions (${sub.freshQuestionsCount}/150)`
+                    : sub.isUnlocked
+                    ? "Ready to generate first report (150/150)"
                     : `${sub.questionsRemaining} more questions needed to unlock`}
                 </div>
               </div>
@@ -329,8 +512,12 @@ export default function AICoachClient({
               )}
             </h3>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              {activeSubject?.isUnlocked
-                ? `150+ unique questions verified. Ready to evaluate accuracy leaks and pacing.`
+              {activeReport || activeSubject?.lastReportId
+                ? activeSubject?.isUnlocked
+                  ? "150 new questions completed! You can now generate your next report."
+                  : `Next report unlocks after 150 new questions (${activeSubject?.freshQuestionsCount || 0}/150)`
+                : activeSubject?.isUnlocked
+                ? "150 unique questions verified. Ready to evaluate accuracy leaks and error patterns."
                 : `Attempt ${activeSubject?.questionsRemaining} more unique questions in ${activeSubject?.subject} mocks or PYQs to calibrate.`}
             </p>
           </div>
@@ -350,7 +537,7 @@ export default function AICoachClient({
             {isGenerating ? (
               <>
                 <RefreshCw className="w-4 h-4 animate-spin" />
-                <span>Evaluating Telemetry...</span>
+                <span>Preparing your report...</span>
               </>
             ) : dailyLimitReached ? (
               <>
@@ -374,8 +561,21 @@ export default function AICoachClient({
         {/* Report Display */}
         {activeReport ? (
           <div className="space-y-8 animate-fadeIn">
+            {/* Next report status indicator */}
+            <div className="p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-indigo-950">
+              <span className="font-bold flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-indigo-600 shrink-0" />
+                Next report unlocks after 150 new questions ({activeSubject?.freshQuestionsCount || 0}/150)
+              </span>
+              <span className="text-indigo-700 font-medium">
+                {activeSubject?.isUnlocked
+                  ? "150 new questions completed — ready to generate next report!"
+                  : `${activeSubject?.questionsRemaining || 0} questions remaining until next unlock`}
+              </span>
+            </div>
+
             {/* Score Snapshot Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
                 <span className="text-[11px] uppercase tracking-wider font-bold text-indigo-700">
                   Net Score
@@ -403,24 +603,42 @@ export default function AICoachClient({
 
               <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100">
                 <span className="text-[11px] uppercase tracking-wider font-bold text-rose-700">
-                  Negative Marks Lost
+                  Marks lost to wrong answers
                 </span>
                 <div className="text-xl sm:text-2xl font-black text-rose-950 mt-1">
-                  -{activeReport.stats_json.negativeMarksLost}
+                  {activeReport.stats_json.negativeMarksLost}
                 </div>
-                <span className="text-[10px] text-rose-600/80">Lost to -1 wrong penalties</span>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-100">
-                <span className="text-[11px] uppercase tracking-wider font-bold text-blue-700">
-                  Avg Pacing
-                </span>
-                <div className="text-xl sm:text-2xl font-black text-blue-950 mt-1">
-                  {activeReport.stats_json.averageTimePerQuestionSeconds}s
-                </div>
-                <span className="text-[10px] text-blue-600/80">Per question (Target: &lt;60s)</span>
+                <span className="text-[10px] text-rose-600/80">Marks lost to wrong answers: {activeReport.stats_json.negativeMarksLost}</span>
               </div>
             </div>
+
+            {/* Tagged Mistake Patterns Card */}
+            {activeReport.stats_json.mistakeTags && (
+              <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-2.5">
+                <div className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Student-Tagged Mistake Categories</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Didn't know concept</span>
+                    <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.didntKnowConcept}</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Misread question</span>
+                    <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.misread}</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Guessed answer</span>
+                    <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.guessed}</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Changed answer</span>
+                    <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.changedAnswer}</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Diagnostic Summary */}
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
@@ -433,31 +651,51 @@ export default function AICoachClient({
               </p>
             </div>
 
-            {/* Biggest Leaks (Issues, Evidence, Fixes) */}
+            {/* Biggest Leaks (Issues, Evidence, Fixes & Practice button) */}
             <div className="space-y-3">
               <h4 className="text-sm font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-rose-600" />
                 <span>Critical Score Leaks</span>
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {activeReport.report_json.biggest_leaks.map((leak, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 rounded-2xl bg-white border border-rose-200/80 shadow-xs space-y-2"
-                  >
-                    <div className="text-xs font-bold text-rose-700 uppercase tracking-wide">
-                      {leak.issue}
+                {activeReport.report_json.biggest_leaks.map((leak, idx) => {
+                  const leakTopic = extractTopicFromLeak(leak, selectedSubjectName);
+                  return (
+                    <div
+                      key={idx}
+                      className="p-4 rounded-2xl bg-white border border-rose-200/80 shadow-xs flex flex-col justify-between space-y-3"
+                    >
+                      <div className="space-y-2">
+                        <div className="text-xs font-bold text-rose-700 uppercase tracking-wide">
+                          {leak.issue}
+                        </div>
+                        <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                          <span className="font-semibold text-slate-800">Evidence: </span>
+                          {leak.evidence}
+                        </div>
+                        {leak.likelyConfusion && (
+                          <div className="text-xs text-amber-900 bg-amber-50/70 p-2.5 rounded-xl border border-amber-200">
+                            <span className="font-semibold text-amber-800">Likely Concept Confusion: </span>
+                            {leak.likelyConfusion}
+                          </div>
+                        )}
+                        <div className="text-xs text-indigo-900 bg-indigo-50/70 p-2.5 rounded-xl border border-indigo-100">
+                          <span className="font-semibold text-indigo-700">Fix: </span>
+                          {leak.fix}
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handlePracticeTopic(leakTopic)}
+                        className="w-full py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-98"
+                      >
+                        <Play className="w-3.5 h-3.5 fill-white" />
+                        <span>Practice this topic</span>
+                      </button>
                     </div>
-                    <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                      <span className="font-semibold text-slate-800">Evidence: </span>
-                      {leak.evidence}
-                    </div>
-                    <div className="text-xs text-indigo-900 bg-indigo-50/70 p-2.5 rounded-xl border border-indigo-100">
-                      <span className="font-semibold text-indigo-700">Fix: </span>
-                      {leak.fix}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -481,7 +719,7 @@ export default function AICoachClient({
               <div className="p-5 rounded-2xl bg-blue-50/40 border border-blue-200/80 space-y-3">
                 <div className="flex items-center gap-2 text-blue-800 font-bold text-sm">
                   <Target className="w-4 h-4 text-blue-600" />
-                  <span>Exam Pacing & Test Strategy</span>
+                  <span>Test-Taking Strategy</span>
                 </div>
                 <ul className="space-y-2">
                   {activeReport.report_json.test_taking_strategy.map((st, idx) => (
@@ -510,10 +748,10 @@ export default function AICoachClient({
                       <span className="text-indigo-600">{item.day}</span>
                       <span className="text-slate-500 text-[10px]">{item.minutes}m</span>
                     </div>
-                    <div className="text-[11px] font-bold text-slate-800 truncate">
+                    <div className="text-[11px] font-bold text-slate-800">
                       {item.focus}
                     </div>
-                    <p className="text-[11px] text-slate-600 leading-snug line-clamp-3">
+                    <p className="text-[11px] text-slate-600 leading-snug">
                       {item.task}
                     </p>
                   </div>
@@ -531,7 +769,10 @@ export default function AICoachClient({
                   {activeReport.report_json.next_test_goal}
                 </p>
                 <p className="text-xs text-indigo-700/80">
-                  {activeReport.report_json.comparison_with_previous}
+                  {!activeReport.report_json.comparison_with_previous ||
+                  activeReport.report_json.comparison_with_previous.toLowerCase().includes("no previous")
+                    ? "First report: this is your baseline"
+                    : activeReport.report_json.comparison_with_previous}
                 </p>
               </div>
 
@@ -586,6 +827,27 @@ export default function AICoachClient({
           </div>
         )}
       </div>
+
+      {/* 10-Question Targeted Practice Quiz Modal */}
+      <AICoachTopicQuizModal
+        isOpen={practiceQuizState.isOpen}
+        onClose={() => setPracticeQuizState((prev) => ({ ...prev, isOpen: false }))}
+        subject={selectedSubjectName}
+        topic={practiceQuizState.topic}
+        userId="guest"
+        baselineAccuracy={practiceQuizState.baselineAccuracy}
+        onQuizCompleted={handleQuizCompleted}
+      />
+
+      {/* Spaced Repetition Mistake Notebook Modal */}
+      <SpacedRepetitionModal
+        isOpen={isMistakeNotebookOpen}
+        onClose={() => {
+          setIsMistakeNotebookOpen(false);
+          reloadDeltasAndNotebook();
+        }}
+        userId="guest"
+      />
     </div>
   );
 }

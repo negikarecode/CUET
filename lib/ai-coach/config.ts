@@ -5,7 +5,8 @@
  * - Eligibility: count UNIQUE questions attempted (mocks + PYQs + practice) since the last report.
  *   Unlock when fresh >= 150 (FRESH_QUESTIONS_THRESHOLD).
  * - No time-based exclusion: Every submitted answer counts regardless of completion time.
- *   time_spent_seconds is preserved for telemetry & pacing analysis, never to exclude attempts.
+ * - Non-time analysis: No time, speed, or pacing analysis is performed. Base analysis solely on
+ *   accuracy, topics, skips, answer changes, and marks lost to wrong answers.
  * - Daily limit: 3 reports per user across all subjects, resetting at midnight IST (DAILY_REPORT_LIMIT).
  * - Confidence gate: Only label a topic "weak" or "strong" with 5+ attempts (MIN_TOPIC_ATTEMPTS);
  *   otherwise mark it "insufficient data".

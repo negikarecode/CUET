@@ -36,7 +36,6 @@ export function SpacedRepetitionModal({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
-  const [startTime, setStartTime] = useState(Date.now());
   const [reviewedCount, setReviewedCount] = useState(0);
 
   const reloadItems = React.useCallback(() => {
@@ -45,7 +44,6 @@ export function SpacedRepetitionModal({
     setCurrentIndex(0);
     setSelectedOption(null);
     setIsAnswered(false);
-    setStartTime(Date.now());
   }, [userId]);
 
   useEffect(() => {
@@ -58,7 +56,6 @@ export function SpacedRepetitionModal({
   useEffect(() => {
     setSelectedOption(null);
     setIsAnswered(false);
-    setStartTime(Date.now());
   }, [currentIndex]);
 
   if (!isOpen) return null;
@@ -68,15 +65,13 @@ export function SpacedRepetitionModal({
 
   const handleCheckAnswer = () => {
     if (!selectedOption || !currentItem || isAnswered) return;
-    const timeSpent = Math.max(1, Math.round((Date.now() - startTime) / 1000));
     const isCorrect = selectedOption === currentItem.correctOption;
 
     recordSpacedReviewAttempt(
       userId,
       currentItem.questionId,
       selectedOption,
-      isCorrect,
-      timeSpent
+      isCorrect
     );
 
     setIsAnswered(true);
@@ -99,14 +94,14 @@ export function SpacedRepetitionModal({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-slate-900 tracking-tight">
-                  Spaced Repetition Review Queue
+                  Mistake Notebook Review Queue
                 </h3>
                 <span className="px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 text-[10px] font-bold font-mono">
-                  1-3-7-21 Day Curve
+                  2d & 7d Resurface
                 </span>
               </div>
               <p className="text-xs text-slate-500 font-medium mt-0.5">
-                Resurfacing previously missed questions on calibrated cognitive retention intervals.
+                Resurfacing missed questions after 2 days, then 7 days. Mastered after 2 consecutive correct answers.
               </p>
             </div>
           </div>
@@ -133,8 +128,8 @@ export function SpacedRepetitionModal({
                 </h4>
                 <p className="text-xs text-slate-600 max-w-md mx-auto font-medium">
                   {reviewedCount > 0
-                    ? `You reviewed ${reviewedCount} due question${reviewedCount === 1 ? "" : "s"}. Successful attempts have advanced to their next spacing interval.`
-                    : "No questions are currently due for review under the 1-3-7-21 day retention schedule. Practice more mocks or drills to populate your retention queue."}
+                    ? `You reviewed ${reviewedCount} due question${reviewedCount === 1 ? "" : "s"}. Mastered questions require 2 consecutive correct attempts.`
+                    : "No questions are currently due for re-attempt under the 2-day / 7-day schedule. Missed questions are saved here automatically."}
                 </p>
               </div>
               <div className="pt-2">

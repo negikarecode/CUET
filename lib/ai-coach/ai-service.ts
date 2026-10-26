@@ -1,22 +1,27 @@
 import Groq from "groq-sdk";
-import { AICoachComputedStats, AICoachReportContent } from "@/types/ai-coach";
+import { AICoachComputedStats, AICoachReportContent, BiggestLeak } from "@/types/ai-coach";
 import { AI_COACH_CONFIG } from "./config";
 
 const SYSTEM_PROMPT = `You are the authentic CUET UG AI Learning Coach.
 Your role is to diagnose candidate performance with empirical precision and strategic warmth.
 CRITICAL INSTRUCTIONS:
-1. Use ONLY the numbers and telemetry given in the computed stats JSON. NEVER invent, extrapolate, or hallucinate data.
-2. Be specific, actionable, kind, but completely honest about weaknesses and negative marks lost.
-3. Every biggest leak MUST cite empirical evidence from the stats (e.g. "lost 14 negative marks in Careless Errors", "52% accuracy in Optics across 9 attempts").
-4. Weekly plan must have specific actionable tasks with minute allocations for 7 days (Day 1 through Day 7).
-5. Output strict JSON only without markdown formatting or preamble, adhering exactly to this schema:
+1. Do not mention time, speed, or pacing. Base advice only on accuracy, topics, skips, answer changes, and marks lost.
+2. Use ONLY the numbers and telemetry given in the computed stats JSON. NEVER invent, extrapolate, or hallucinate data.
+3. Be specific, actionable, kind, but completely honest about weaknesses and marks lost to wrong answers.
+4. Every biggest leak MUST cite empirical evidence from the stats (e.g. "lost 14 marks to wrong answers in careless errors", "33% accuracy in Optics across 9 attempts as a concept gap", "6 skipped questions showing confidence gaps", or "second-guessing right-to-wrong answer changes").
+5. Weekly plan must have specific actionable tasks with daily study allocations for 7 days (Day 1 through Day 7).
+6. If this is the candidate's first report, set "comparison_with_previous" to exactly "First report: this is your baseline".
+7. For each weak topic in "biggest_leaks", identify the likely concept confusion per weak topic, using the student's most common wrong options if available in topicBreakdown.mostCommonWrongOption. Keep every fix tied to a practice button (e.g. "Tap 'Practice this topic' to take a 10-question drill on [Topic]...").
+8. Output strict JSON only without markdown formatting or preamble, adhering exactly to this schema:
 {
-  "summary": "2-3 sentence strategic summary citing analyzed questions, accuracy, and net score",
+  "summary": "2-3 sentence strategic summary citing analyzed questions, accuracy, and net score (do not mention time, speed, or pacing)",
   "biggest_leaks": [
     {
-      "issue": "Specific concept or pacing leak title",
-      "evidence": "Empirical evidence from candidate stats",
-      "fix": "Actionable NCERT/practice fix"
+      "topic": "Topic name (e.g. Electrostatics)",
+      "issue": "Specific concept gap, careless error, confidence gap, or second-guessing leak title",
+      "evidence": "Empirical evidence from candidate stats (accuracy, topics, skips, answer changes, marks lost)",
+      "likelyConfusion": "Analysis of the likely conceptual confusion based on common wrong options if available",
+      "fix": "Actionable practice fix tied directly to the 'Practice this topic' button"
     }
   ],
   "strengths": ["Topic with accuracy and attempt numbers"],
@@ -28,9 +33,9 @@ CRITICAL INSTRUCTIONS:
       "minutes": 25
     }
   ],
-  "test_taking_strategy": ["Actionable test taking tips"],
-  "next_test_goal": "A single clear measurable objective for the student's next practice test (e.g. 'Target 75%+ accuracy in Kinematics while containing careless errors to under 2')",
-  "comparison_with_previous": "Baseline or delta note compared to previous report"
+  "test_taking_strategy": ["Actionable test taking tips focusing on accuracy, question selection, eliminating distractors, and containing marks lost to wrong answers"],
+  "next_test_goal": "A single clear measurable objective for the student's next practice test (e.g. 'Target 75%+ accuracy in Kinematics while containing marks lost to wrong answers to under 5')",
+  "comparison_with_previous": "First report: this is your baseline (or delta note compared to previous report)"
 }`;
 
 /**
@@ -98,34 +103,109 @@ export function validateAICoachReport(
 }
 
 /**
+ * Recursively strips all time, speed, and pacing telemetry before sending to AI
+ */
+function sanitizeStatsForAI(statsObj: any): any {
+  if (!statsObj || typeof statsObj !== "object") return statsObj;
+  const clone = JSON.parse(JSON.stringify(statsObj));
+  delete clone.averageTimePerQuestionSeconds;
+  if (Array.isArray(clone.topicBreakdown)) {
+    clone.topicBreakdown.forEach((t: any) => {
+      delete t.averageTimeSeconds;
+    });
+  }
+  return clone;
+}
+
+/**
  * Builds deterministic fallback AI report from computed stats if upstream calls fail
  */
 export function buildDeterministicAICoachReport(
   stats: AICoachComputedStats,
   prevStats: AICoachComputedStats | null
 ): AICoachReportContent {
+  const conceptGapTopics = stats.topicBreakdown.filter(
+    (t) => t.attempted >= AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS && t.accuracyPercentage < 40
+  );
   const weakTopics = stats.topicBreakdown.filter((t) => t.classification === "weak");
   const strongTopics = stats.topicBreakdown.filter((t) => t.classification === "strong");
 
-  const biggest_leaks = weakTopics.slice(0, 3).map((w) => ({
-    issue: `Concept leakage in ${w.topic}`,
-    evidence: `${w.accuracyPercentage}% accuracy across ${w.attempted} attempts (avg pacing: ${w.averageTimeSeconds}s).`,
-    fix: `Review core NCERT definitions and distinction boundaries for ${w.topic}, then take a timed 5-question drill.`,
-  }));
+  const biggest_leaks: BiggestLeak[] = [];
 
-  if (biggest_leaks.length === 0 && stats.errorTypes.carelessErrors > 0) {
+  // 1. Concept gap: Topic accuracy < 40% with 5+ attempts
+  conceptGapTopics.slice(0, 2).forEach((cg) => {
+    const wrongDistractorNote = cg.mostCommonWrongOption
+      ? ` (frequently picking distractor Option ${cg.mostCommonWrongOption})`
+      : "";
     biggest_leaks.push({
-      issue: "Careless speed execution errors",
-      evidence: `Recorded ${stats.errorTypes.carelessErrors} incorrect answers on responses under 15 seconds.`,
-      fix: "Enforce a mandatory 10-second stem re-read rule on questions featuring NOT, EXCEPT, or numerical units.",
+      topic: cg.topic,
+      issue: `Concept gap in ${cg.topic}`,
+      evidence: `${cg.accuracyPercentage}% accuracy across ${cg.attempted} attempts (${cg.attempted - cg.correct} marks lost to wrong answers)${wrongDistractorNote}.`,
+      likelyConfusion: cg.mostCommonWrongOption
+        ? `Likely confusing core NCERT principles with trap Option ${cg.mostCommonWrongOption} due to blurred definition boundaries.`
+        : `Difficulty isolating core formulas and boundary conditions under NCERT criteria.`,
+      fix: `Tap "Practice this topic" to launch a 10-question quiz on ${cg.topic}, prioritizing questions you got wrong before to eliminate distractor traps.`,
+    });
+  });
+
+  // 2. Careless: Wrong answers on questions tagged easy
+  if (stats.errorTypes.carelessErrors > 0 && biggest_leaks.length < 3) {
+    const focusTopic = weakTopics[0]?.topic || stats.topicBreakdown[0]?.topic || stats.subject;
+    biggest_leaks.push({
+      topic: focusTopic,
+      issue: "Careless errors on easy questions",
+      evidence: `Recorded ${stats.errorTypes.carelessErrors} wrong answers on questions tagged easy.`,
+      likelyConfusion: "Misreading negative or qualifying stems (such as NOT, EXCEPT, or FALSE) rather than fundamental conceptual gaps.",
+      fix: `Tap "Practice this topic" to take a 10-question practice quiz on ${focusTopic} while enforcing stem verification before locking your choice.`,
+    });
+  }
+
+  // 3. Confidence gap: Skipped questions
+  if (stats.errorTypes.confidenceGaps > 0 && biggest_leaks.length < 3) {
+    const focusTopic = weakTopics[0]?.topic || stats.topicBreakdown[0]?.topic || stats.subject;
+    biggest_leaks.push({
+      topic: focusTopic,
+      issue: "Confidence gap from skipped questions",
+      evidence: `Left ${stats.errorTypes.confidenceGaps} questions unattempted across tests.`,
+      likelyConfusion: "Hesitation when evaluating options with two plausible candidates, leading to unnecessary skips on solvable questions.",
+      fix: `Tap "Practice this topic" to drill 10 questions on ${focusTopic} using deliberate two-option elimination to build confidence.`,
+    });
+  }
+
+  // 4. Second-guessing: Right-to-wrong answer changes
+  const changes = stats.errorTypes.secondGuessing || stats.rightToWrongChanges || 0;
+  if (changes > 0 && biggest_leaks.length < 3) {
+    const focusTopic = weakTopics[0]?.topic || stats.topicBreakdown[0]?.topic || stats.subject;
+    biggest_leaks.push({
+      topic: focusTopic,
+      issue: "Second-guessing answer changes",
+      evidence: `Recorded ${changes} instances of changing an answer from correct to wrong.`,
+      likelyConfusion: "Over-analyzing straightforward questions and switching away from correct intuitive solutions to tempting distractors.",
+      fix: `Tap "Practice this topic" to solve 10 targeted questions on ${focusTopic}, locking your primary answer unless you detect a factual contradiction.`,
+    });
+  }
+
+  // Fallback to remaining weak topics if leaks still needed
+  if (biggest_leaks.length === 0) {
+    weakTopics.slice(0, 2).forEach((w) => {
+      biggest_leaks.push({
+        topic: w.topic,
+        issue: `Knowledge gap in ${w.topic}`,
+        evidence: `${w.accuracyPercentage}% accuracy across ${w.attempted} attempts.`,
+        likelyConfusion: `Uncertainty with advanced NCERT applications and calculation steps in ${w.topic}.`,
+        fix: `Tap "Practice this topic" to run a 10-question practice quiz on ${w.topic} prioritizing past mistakes.`,
+      });
     });
   }
 
   if (biggest_leaks.length === 0) {
+    const defaultTopic = stats.topicBreakdown[0]?.topic || stats.subject;
     biggest_leaks.push({
-      issue: "Negative marking friction",
-      evidence: `Lost ${stats.negativeMarksLost} potential marks due to wrong answers on uncertain options.`,
-      fix: "Utilize strategic option elimination and skip options below 50% subjective certainty.",
+      topic: defaultTopic,
+      issue: "Marks lost to wrong answers",
+      evidence: `Lost ${stats.negativeMarksLost} marks due to wrong answers on uncertain options.`,
+      likelyConfusion: "Selecting options without definitive elimination of distractors.",
+      fix: `Tap "Practice this topic" to complete a 10-question accuracy quiz on ${defaultTopic}.`,
     });
   }
 
@@ -133,27 +213,27 @@ export function buildDeterministicAICoachReport(
     (s) => `${s.topic} (${s.accuracyPercentage}% accuracy over ${s.attempted} questions)`
   );
   if (strengths.length === 0) {
-    strengths.push(`Steady exam pacing averaging ${stats.averageTimePerQuestionSeconds}s per question`);
+    strengths.push(`Solid accuracy foundation with ${stats.overallAccuracyPercentage}% overall accuracy across ${stats.uniqueQuestionsAnalyzed} questions`);
   }
 
-  const primaryLeakTopic = weakTopics[0]?.topic || stats.subject;
+  const primaryLeakTopic = conceptGapTopics[0]?.topic || weakTopics[0]?.topic || stats.subject;
   const weekly_plan = [
     { day: "Day 1", focus: "Foundation Audit", task: `Review core NCERT formulas & summary notes for ${primaryLeakTopic}`, minutes: 25 },
     { day: "Day 2", focus: "Targeted Drill", task: `Solve 10 curated questions focusing on ${primaryLeakTopic}`, minutes: 20 },
-    { day: "Day 3", focus: "Pacing & Error Log", task: "Review error logs and analyze wrong answers from Day 2", minutes: 15 },
+    { day: "Day 3", focus: "Error Log Analysis", task: "Review error logs and analyze wrong answers from Day 2", minutes: 15 },
     { day: "Day 4", focus: "PYQ Provenance", task: `Solve 15 past year questions from ${stats.subject}`, minutes: 30 },
-    { day: "Day 5", focus: "Timed Simulation", task: "Attempt a 25-question timed sectional mock under 30 minutes", minutes: 30 },
+    { day: "Day 5", focus: "Sectional Practice", task: "Attempt a 25-question sectional mock to solidify accuracy", minutes: 30 },
     { day: "Day 6", focus: "Option Elimination", task: "Practice 10 Assertion-Reasoning and Match-the-Following questions", minutes: 20 },
     { day: "Day 7", focus: "Milestone Assessment", task: "Take a full 50-question mock exam and analyze net score", minutes: 60 },
   ];
 
   const test_taking_strategy = [
     `Preserve positive momentum: net score is currently ${stats.netScore} marks out of ${stats.potentialScore} potential.`,
-    `Contain negative marking: you have lost ${stats.negativeMarksLost} marks to -1 penalties. Skip low-confidence guesses.`,
-    `Maintain target pacing around ${Math.max(45, stats.averageTimePerQuestionSeconds)}s per question to avoid last-minute panic.`,
+    `Contain marks lost to wrong answers: you have lost ${stats.negativeMarksLost} marks to -1 penalties. Skip low-confidence guesses.`,
+    `Focus on high-accuracy topics first and eliminate distractors systematically.`,
   ];
 
-  let comparison_with_previous = "This is your initial baseline diagnostic evaluation for this subject.";
+  let comparison_with_previous = "First report: this is your baseline";
   if (prevStats) {
     const accuracyDelta = stats.overallAccuracyPercentage - prevStats.overallAccuracyPercentage;
     const netDelta = stats.netScore - prevStats.netScore;
@@ -163,12 +243,12 @@ export function buildDeterministicAICoachReport(
   }
 
   return {
-    summary: `In ${stats.subject}, you have analyzed ${stats.uniqueQuestionsAnalyzed} questions with an overall accuracy of ${stats.overallAccuracyPercentage}%. Your net score is ${stats.netScore}/${stats.potentialScore} marks with ${stats.negativeMarksLost} marks lost to negative penalties. With ${stats.daysToExam} days remaining until CUET, focused correction of your top error patterns will accelerate your rank.`,
+    summary: `In ${stats.subject}, you have analyzed ${stats.uniqueQuestionsAnalyzed} questions with an overall accuracy of ${stats.overallAccuracyPercentage}%. Your net score is ${stats.netScore}/${stats.potentialScore} marks with ${stats.negativeMarksLost} marks lost to wrong answers. With ${stats.daysToExam} days remaining until CUET, focused correction of your top error patterns will accelerate your rank.`,
     biggest_leaks,
     strengths,
     weekly_plan,
     test_taking_strategy,
-    next_test_goal: `Aim for ${Math.min(95, stats.overallAccuracyPercentage + 8)}% accuracy and reduce negative marks below ${Math.max(2, Math.floor(stats.negativeMarksLost * 0.5))} on your next 50-question mock.`,
+    next_test_goal: `Aim for ${Math.min(95, stats.overallAccuracyPercentage + 8)}% accuracy and reduce marks lost to wrong answers below ${Math.max(2, Math.floor(stats.negativeMarksLost * 0.5))} on your next 50-question mock.`,
     comparison_with_previous,
   };
 }
@@ -187,8 +267,8 @@ async function callGroq(
 
   const groq = new Groq({ apiKey });
   const userPayload = {
-    currentStats: stats,
-    previousReportStats: prevStats,
+    currentStats: sanitizeStatsForAI(stats),
+    previousReportStats: sanitizeStatsForAI(prevStats),
   };
 
   const primaryModel = process.env.GROQ_MODEL || "qwen/qwen3.8-27b";

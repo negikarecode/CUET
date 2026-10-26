@@ -1,16 +1,19 @@
 /**
- * Spaced Repetition Engine for Missed Questions
- * Intervals: 1, 3, 7, 21 days.
- * Resurfaces missed questions on the schedule.
- * Correct answer at normal pace moves item to next interval; wrong answer resets to day 1.
- * Questions answered in low-effort sessions are skipped.
+ * Spaced Repetition Mistake Notebook Engine
+ * Intervals: Resurfaces for re-attempt after 2 days, then 7 days.
+ * Mastery: Shows "Mastered" after 2 consecutive correct answers.
+ * Tagging: Tracks one-tap mistake tags ("Didn't know concept" / "Misread" / "Guessed" / "Changed my answer").
+ * Strictly non-time based.
  */
 
 import { QuestionOption } from "@/types";
+import { MistakeTag, MistakeTagCounts } from "@/types/ai-coach";
 import { safeStorage } from "@/lib/storage/safe-storage";
 
+export type { MistakeTag, MistakeTagCounts };
+
 export interface SpacedRepetitionItem {
-  id: string; // questionId or testKey:::qId
+  id: string;
   questionId: string;
   subject: string;
   chapter: string;
@@ -20,12 +23,13 @@ export interface SpacedRepetitionItem {
   correctOption: string;
   explanation: string;
   userLastSelectedOption: string;
+  mistakeTag?: MistakeTag;
   source?: string;
   reviewed_by_human?: boolean;
 
   // Spaced repetition state
-  currentIntervalIndex: number; // 0 (1d), 1 (3d), 2 (7d), 3 (21d), 4 (Mastered/Archived)
-  intervalDays: number; // 1, 3, 7, 21
+  currentIntervalIndex: number; // 0 (2d), 1 (7d)
+  intervalDays: number; // 2, 7
   lastReviewedDate: string; // ISO date
   nextDueDate: string; // ISO date
   consecutiveSuccesses: number;
@@ -35,17 +39,21 @@ export interface SpacedRepetitionItem {
     date: string;
     selectedOption: string;
     isCorrect: boolean;
-    timeSpentSeconds: number;
     intervalApplied: number;
   }>;
 }
 
-export const SPACED_INTERVALS_DAYS = [1, 3, 7, 21];
+export const SPACED_INTERVALS_DAYS: readonly [number, number] = [2, 7] as const;
 
 const STORAGE_KEY_PREFIX = "cuet_spaced_repetition_";
+const MISTAKE_TAGS_STORAGE_KEY_PREFIX = "cuet_mistake_tags_";
 
 function getStorageKey(userId: string): string {
   return `${STORAGE_KEY_PREFIX}${userId || "guest"}`;
+}
+
+function getTagsStorageKey(userId: string): string {
+  return `${MISTAKE_TAGS_STORAGE_KEY_PREFIX}${userId || "guest"}`;
 }
 
 /**
@@ -67,6 +75,7 @@ export function isItemDue(nextDueDate: string, targetDate?: string): boolean {
 }
 
 const memorySpacedRepetitionStore = new Map<string, SpacedRepetitionItem[]>();
+const memoryTagsStore = new Map<string, Record<string, MistakeTag>>();
 
 /**
  * Load spaced repetition items for a user
@@ -93,8 +102,8 @@ export function loadSpacedRepetitionItems(userId: string): SpacedRepetitionItem[
  */
 export function saveSpacedRepetitionItems(userId: string, items: SpacedRepetitionItem[]): void {
   const key = getStorageKey(userId);
-  // Bound to at most 30 items to prevent storage bloat
-  const boundedItems = items.slice(0, 30);
+  // Bound to at most 500 items to prevent storage bloat while keeping comprehensive notebook
+  const boundedItems = items.slice(0, 500);
   memorySpacedRepetitionStore.set(key, boundedItems);
 
   if (typeof window === "undefined") return;
@@ -106,8 +115,8 @@ export function saveSpacedRepetitionItems(userId: string, items: SpacedRepetitio
 }
 
 /**
- * Enroll a missed question into spaced repetition.
- * Skips if question was from a low-effort session.
+ * Automatically enroll every wrong question into the Mistake Notebook.
+ * Resurfaces for re-attempt after 2 days, then 7 days.
  */
 export function enrollMissedQuestion(
   userId: string,
@@ -121,41 +130,42 @@ export function enrollMissedQuestion(
     correctOption: string;
     userSelectedOption: string;
     explanation: string;
+    mistakeTag?: MistakeTag;
     source?: string;
     reviewed_by_human?: boolean;
-    isLowEffort?: boolean;
   },
   nowIso: string = new Date().toISOString()
-): SpacedRepetitionItem | null {
+): SpacedRepetitionItem {
   const items = loadSpacedRepetitionItems(userId);
   const existingIdx = items.findIndex((i) => i.questionId === question.questionId);
 
   if (existingIdx >= 0) {
-    // If already enrolled, keep existing interval or reset if wrong again
     const existing = items[existingIdx];
     if (existing) {
       existing.userLastSelectedOption = question.userSelectedOption;
+      if (question.mistakeTag) {
+        existing.mistakeTag = question.mistakeTag;
+      }
       existing.history.push({
         date: nowIso,
         selectedOption: question.userSelectedOption,
         isCorrect: false,
-        timeSpentSeconds: 0,
-        intervalApplied: 1,
+        intervalApplied: SPACED_INTERVALS_DAYS[0],
       });
-      // Reset to interval 0 (1 day)
+      // Reset to interval 0 (2 days) on repeated wrong attempt
       existing.currentIntervalIndex = 0;
-      existing.intervalDays = SPACED_INTERVALS_DAYS[0] ?? 1;
+      existing.intervalDays = SPACED_INTERVALS_DAYS[0];
       existing.consecutiveSuccesses = 0;
       existing.isMastered = false;
       existing.lastReviewedDate = nowIso;
-      existing.nextDueDate = calculateNextDueDate(1, nowIso);
+      existing.nextDueDate = calculateNextDueDate(SPACED_INTERVALS_DAYS[0], nowIso);
       items[existingIdx] = existing;
       saveSpacedRepetitionItems(userId, items);
       return existing;
     }
   }
 
-  const initialInterval = SPACED_INTERVALS_DAYS[0] ?? 1;
+  const initialInterval = SPACED_INTERVALS_DAYS[0]; // 2 days
   const newItem: SpacedRepetitionItem = {
     id: `sr_${question.questionId}`,
     questionId: question.questionId,
@@ -167,6 +177,7 @@ export function enrollMissedQuestion(
     correctOption: question.correctOption,
     explanation: question.explanation,
     userLastSelectedOption: question.userSelectedOption,
+    mistakeTag: question.mistakeTag,
     source: question.source,
     reviewed_by_human: question.reviewed_by_human,
     currentIntervalIndex: 0,
@@ -181,28 +192,29 @@ export function enrollMissedQuestion(
         date: nowIso,
         selectedOption: question.userSelectedOption,
         isCorrect: false,
-        timeSpentSeconds: 0,
-        intervalApplied: 1,
+        intervalApplied: initialInterval,
       },
     ],
   };
 
-  items.push(newItem);
+  items.unshift(newItem);
   saveSpacedRepetitionItems(userId, items);
   return newItem;
 }
 
 /**
- * Record a review attempt on a spaced repetition question.
- * If correct at normal pace: moves to next interval (1 -> 3 -> 7 -> 21 -> Mastered).
- * If wrong: resets to interval 0 (1 day).
+ * Record a review attempt on a mistake notebook question.
+ * If correct:
+ * - consecutiveSuccesses++
+ * - if consecutiveSuccesses >= 2: marked "Mastered"
+ * - else: next interval is 7 days.
+ * If wrong: resets to interval 0 (2 days), consecutiveSuccesses = 0.
  */
 export function recordSpacedReviewAttempt(
   userId: string,
   questionId: string,
   selectedOption: string,
   isCorrect: boolean,
-  timeSpentSeconds: number,
   nowIso: string = new Date().toISOString()
 ): SpacedRepetitionItem | null {
   const items = loadSpacedRepetitionItems(userId);
@@ -218,21 +230,22 @@ export function recordSpacedReviewAttempt(
 
   if (isCorrect) {
     item.consecutiveSuccesses++;
-    const nextIdx = item.currentIntervalIndex + 1;
-    if (nextIdx >= SPACED_INTERVALS_DAYS.length) {
-      // Completed all intervals (21 days) -> Mastered
+    if (item.consecutiveSuccesses >= 2) {
+      // 2 consecutive correct answers -> Mastered
       item.isMastered = true;
-      item.intervalDays = 30; // Archive interval
+      item.currentIntervalIndex = 1;
+      item.intervalDays = 30; // Archived interval
       item.nextDueDate = calculateNextDueDate(30, nowIso);
     } else {
-      const nextInterval = SPACED_INTERVALS_DAYS[nextIdx] ?? 21;
-      item.currentIntervalIndex = nextIdx;
+      // Advance to second interval (7 days)
+      const nextInterval = SPACED_INTERVALS_DAYS[1] ?? 7;
+      item.currentIntervalIndex = 1;
       item.intervalDays = nextInterval;
       item.nextDueDate = calculateNextDueDate(nextInterval, nowIso);
     }
   } else {
-    // Reset to interval 0 (1 day)
-    const baseInterval = SPACED_INTERVALS_DAYS[0] ?? 1;
+    // Reset to interval 0 (2 days)
+    const baseInterval = SPACED_INTERVALS_DAYS[0] ?? 2;
     item.consecutiveSuccesses = 0;
     item.currentIntervalIndex = 0;
     item.intervalDays = baseInterval;
@@ -244,7 +257,6 @@ export function recordSpacedReviewAttempt(
     date: nowIso,
     selectedOption,
     isCorrect,
-    timeSpentSeconds,
     intervalApplied: item.intervalDays,
   });
 
@@ -254,13 +266,100 @@ export function recordSpacedReviewAttempt(
 }
 
 /**
- * Get summary of spaced repetition items due today
+ * Store a one-tap mistake tag for a question
+ */
+export function setMistakeTag(
+  userId: string,
+  questionId: string,
+  tag: MistakeTag
+): void {
+  // Update in notebook items if present
+  const items = loadSpacedRepetitionItems(userId);
+  const idx = items.findIndex((i) => i.questionId === questionId);
+  if (idx >= 0 && items[idx]) {
+    items[idx]!.mistakeTag = tag;
+    saveSpacedRepetitionItems(userId, items);
+  }
+
+  // Update in dedicated tag store for high-performance lookup
+  const key = getTagsStorageKey(userId);
+  const map = loadMistakeTagsMap(userId);
+  map[questionId] = tag;
+  memoryTagsStore.set(key, map);
+
+  if (typeof window !== "undefined") {
+    try {
+      safeStorage.setItem(key, JSON.stringify(map));
+    } catch (err) {
+      console.warn("Failed to persist mistake tag", err);
+    }
+  }
+}
+
+/**
+ * Load raw mistake tags map (questionId -> MistakeTag)
+ */
+export function loadMistakeTagsMap(userId: string): Record<string, MistakeTag> {
+  const key = getTagsStorageKey(userId);
+  const inMemory = memoryTagsStore.get(key);
+  if (inMemory) return inMemory;
+
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = safeStorage.getItem(key);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    memoryTagsStore.set(key, parsed);
+    return parsed;
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Get aggregated counts of mistake tags for a user
+ */
+export function getMistakeTagCounts(userId: string): MistakeTagCounts {
+  const map = loadMistakeTagsMap(userId);
+  const items = loadSpacedRepetitionItems(userId);
+
+  // Combine items tags with tags map
+  const combined = new Map<string, MistakeTag>();
+  items.forEach((item) => {
+    if (item.mistakeTag) {
+      combined.set(item.questionId, item.mistakeTag);
+    }
+  });
+  Object.entries(map).forEach(([qId, tag]) => {
+    combined.set(qId, tag);
+  });
+
+  const counts: MistakeTagCounts = {
+    didntKnowConcept: 0,
+    misread: 0,
+    guessed: 0,
+    changedAnswer: 0,
+  };
+
+  combined.forEach((tag) => {
+    if (tag === "Didn't know concept") counts.didntKnowConcept++;
+    else if (tag === "Misread") counts.misread++;
+    else if (tag === "Guessed") counts.guessed++;
+    else if (tag === "Changed my answer") counts.changedAnswer++;
+  });
+
+  return counts;
+}
+
+/**
+ * Get summary of spaced repetition mistake notebook items
  */
 export function getSpacedRepetitionSummary(userId: string, targetDate?: string): {
   totalTracked: number;
   dueTodayCount: number;
   masteredCount: number;
   dueItems: SpacedRepetitionItem[];
+  allMistakes: SpacedRepetitionItem[];
 } {
   const items = loadSpacedRepetitionItems(userId);
   const dueItems = items.filter((i) => !i.isMastered && isItemDue(i.nextDueDate, targetDate));
@@ -271,5 +370,6 @@ export function getSpacedRepetitionSummary(userId: string, targetDate?: string):
     dueTodayCount: dueItems.length,
     masteredCount,
     dueItems,
+    allMistakes: items,
   };
 }

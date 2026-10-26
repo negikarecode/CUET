@@ -17,7 +17,11 @@ import {
   Target,
   Trophy as TrophyIcon,
   Zap,
+  CheckCircle2,
+  Check,
+  Tag,
 } from "lucide-react";
+import { setMistakeTag, loadMistakeTagsMap, MistakeTag } from "@/lib/spaced-repetition";
 import {
   PostMockDeterministicReport,
   AIPostMockInsight,
@@ -91,9 +95,35 @@ export default function PostMockAnalysisClient({
   scoreImprovement: propScoreImprovement,
 }: PostMockAnalysisClientProps) {
   const router = useRouter();
+  const user = useTestStore((state) => state.user);
+  const userId = user?.id || "guest";
   const testAttempts = useTestStore((state) => state.testAttempts);
   const { overall, difficultyBreakdown, chapterBreakdown, chapterDifficultyMatrix, allQuestions } =
     report;
+
+  const [mistakeTags, setMistakeTags] = useState<Record<string, MistakeTag>>({});
+
+  useEffect(() => {
+    setMistakeTags(loadMistakeTagsMap(userId));
+  }, [userId]);
+
+  const handleTagMistake = async (questionId: string, tag: MistakeTag) => {
+    setMistakeTags((prev) => ({ ...prev, [questionId]: tag }));
+    setMistakeTag(userId, questionId, tag);
+    try {
+      await fetch("/api/ai-coach/tag-mistake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ questionId, tag, testId: report.testId }),
+      });
+    } catch (e) {
+      console.warn("Failed to persist mistake tag to server:", e);
+    }
+  };
+
+  const wrongQuestions = useMemo(() => {
+    return allQuestions.filter((q) => q.isCorrect === false);
+  }, [allQuestions]);
 
   // Derive all-time personal best stats if not explicitly passed as props
   const computedStats = useMemo(() => {
@@ -216,6 +246,7 @@ export default function PostMockAnalysisClient({
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({
     scorecard: false,
     benchmark: false,
+    mistakeReview: false,
     difficulty: false,
     chapters: false,
     chapterDifficulty: false,
@@ -232,6 +263,7 @@ export default function PostMockAnalysisClient({
     setCollapsedSections({
       scorecard: nextState,
       benchmark: nextState,
+      mistakeReview: nextState,
       difficulty: nextState,
       chapters: nextState,
       chapterDifficulty: nextState,
@@ -550,6 +582,154 @@ export default function PostMockAnalysisClient({
           </button>
         </div>
       </div>
+
+      {/* MISTAKE REVIEW SCREEN (Each wrong question shows student answer, correct answer, explanation, and one-tap tag) */}
+      {wrongQuestions.length > 0 && (
+        <div className="bg-white rounded-3xl border border-rose-200/90 shadow-xs overflow-hidden">
+          <div className="p-6 bg-gradient-to-r from-rose-50/80 via-amber-50/40 to-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-rose-100">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[11px] font-bold uppercase tracking-wider">
+                  Post-Test Mistake Review
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-slate-900 text-white text-[11px] font-mono font-bold">
+                  {wrongQuestions.length} {wrongQuestions.length === 1 ? "Mistake" : "Mistakes"}
+                </span>
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+                Review & Categorize Your Errors
+              </h2>
+              <p className="text-xs text-slate-600 font-medium">
+                Tap a tag for each wrong question. Saved automatically into your Mistake Notebook (resurfacing in 2d, then 7d).
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => toggleSection("mistakeReview")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200 transition-all cursor-pointer shadow-xs shrink-0 self-start sm:self-center"
+            >
+              <span>{collapsedSections.mistakeReview ? "Expand Mistakes" : "Collapse"}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${collapsedSections.mistakeReview ? "" : "rotate-180"}`} />
+            </button>
+          </div>
+
+          {!collapsedSections.mistakeReview && (
+            <div className="p-6 space-y-6 divide-y divide-slate-100">
+              {wrongQuestions.map((q, idx) => {
+                const currentTag = mistakeTags[q.questionId];
+                const studentOpt = q.options.find((o) => o.id === q.selectedOption);
+                const correctOpt = q.options.find((o) => o.id === q.correctOption);
+
+                const TAG_OPTIONS: MistakeTag[] = [
+                  "Didn't know concept",
+                  "Misread",
+                  "Guessed",
+                  "Changed my answer",
+                ];
+
+                return (
+                  <div key={q.questionId} className={`space-y-4 ${idx > 0 ? "pt-6" : ""}`}>
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-lg">
+                          Q{q.questionNumber}
+                        </span>
+                        <span className="text-xs font-semibold text-slate-700">
+                          {q.chapter} {q.microTopic ? `• ${q.microTopic}` : ""}
+                        </span>
+                      </div>
+                      {currentTag && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-[11px] font-bold">
+                          <Check className="w-3 h-3 text-indigo-600" />
+                          Tag: {currentTag}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Question Prompt */}
+                    <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs text-slate-900 font-medium leading-relaxed">
+                      <MathRenderer text={q.prompt} />
+                    </div>
+
+                    {/* Answers Comparison */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="p-3 rounded-xl bg-rose-50/80 border border-rose-200 text-xs space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-bold uppercase text-rose-700 tracking-wider">
+                            Your Pick
+                          </span>
+                          <span className="font-mono font-bold text-rose-800">
+                            ({q.selectedOption || "None"})
+                          </span>
+                        </div>
+                        <div className="text-slate-900 font-medium text-xs leading-relaxed">
+                          <MathRenderer text={studentOpt?.text || "No option selected"} />
+                        </div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-emerald-50/80 border border-emerald-200 text-xs space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-bold uppercase text-emerald-700 tracking-wider">
+                            Correct Answer
+                          </span>
+                          <span className="font-mono font-bold text-emerald-800">
+                            ({q.correctOption})
+                          </span>
+                        </div>
+                        <div className="text-slate-900 font-medium text-xs leading-relaxed">
+                          <MathRenderer text={correctOpt?.text || "Option text unavailable"} />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Explanation */}
+                    {q.explanation && (
+                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs text-slate-700 space-y-1">
+                        <span className="text-[10px] font-bold uppercase text-slate-600 tracking-wider block">
+                          Explanation & NCERT Rationale:
+                        </span>
+                        <MathRenderer text={sanitizeSolutionExplanation(q.explanation)} className="leading-relaxed" />
+                      </div>
+                    )}
+
+                    {/* One-Tap Tags */}
+                    <div className="pt-1">
+                      <span className="text-[11px] font-semibold text-slate-600 block mb-2">
+                        Why did you miss this question? (One-tap tag):
+                      </span>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {TAG_OPTIONS.map((tag) => {
+                          const isSelected = currentTag === tag;
+                          return (
+                            <button
+                              key={tag}
+                              type="button"
+                              onClick={() => handleTagMistake(q.questionId, tag)}
+                              className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs ${
+                                isSelected
+                                  ? "bg-indigo-600 text-white border-indigo-600 ring-2 ring-indigo-600/30 font-bold"
+                                  : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200 hover:border-slate-300"
+                              }`}
+                            >
+                              {isSelected ? (
+                                <CheckCircle2 className="w-3.5 h-3.5 text-white shrink-0" />
+                              ) : (
+                                <Tag className="w-3 h-3 text-slate-400 shrink-0" />
+                              )}
+                              <span>{tag}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* 2. DIFFICULTY ANALYSIS */}
       <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-7 shadow-xs space-y-4">

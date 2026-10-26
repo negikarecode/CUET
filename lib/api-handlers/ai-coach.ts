@@ -16,6 +16,8 @@ import {
   getNextMidnightIST,
 } from "@/lib/ai-coach/quota-engine";
 import { generateAICoachReport } from "@/lib/ai-coach/ai-service";
+import { generateTopicPracticeQuiz } from "@/lib/ai-coach/practice-engine";
+import { setMistakeTag, MistakeTag } from "@/lib/spaced-repetition";
 
 const DEFAULT_SUBJECTS = ["Physics", "Chemistry", "Mathematics", "Biology"];
 
@@ -123,6 +125,17 @@ export async function handleAICoachGet(
     return NextResponse.json({
       success: true,
       reports: validReports,
+    });
+  }
+
+  // 3. GET /api/ai-coach/practice-quiz
+  if (resolvedAction === "practice-quiz") {
+    const subjectParam = searchParams.get("subject") || "Physics";
+    const topicParam = searchParams.get("topic") || "Core Concepts";
+    const quiz = generateTopicPracticeQuiz(subjectParam, topicParam, userId);
+    return NextResponse.json({
+      success: true,
+      ...quiz,
     });
   }
 
@@ -329,6 +342,43 @@ export async function handleAICoachPost(
     }
 
     return NextResponse.json({ success: true, feedback });
+  }
+
+  // 3. POST /api/ai-coach/tag-mistake
+  if (resolvedAction === "tag-mistake") {
+    const { questionId, tag } = body;
+    if (!questionId || !tag) {
+      return NextResponse.json({ error: "Missing required fields: questionId, tag" }, { status: 400 });
+    }
+
+    setMistakeTag(userId, questionId, tag as MistakeTag);
+
+    try {
+      const supabaseAdmin = createAdminClient();
+      const { data: rows } = await supabaseAdmin
+        .from("user_attempts")
+        .select("id, diagnostic_report")
+        .eq("user_id", userId)
+        .eq("question_id", questionId)
+        .limit(1);
+
+      if (rows && rows.length > 0 && rows[0]) {
+        const existingDiag = rows[0].diagnostic_report || {};
+        await supabaseAdmin
+          .from("user_attempts")
+          .update({
+            diagnostic_report: {
+              ...existingDiag,
+              mistakeTag: tag,
+            },
+          })
+          .eq("id", rows[0].id);
+      }
+    } catch (err: any) {
+      console.warn("[AI Coach] Failed to persist mistake tag to user_attempts:", err?.message);
+    }
+
+    return NextResponse.json({ success: true, questionId, tag });
   }
 
   return NextResponse.json({ error: `Unknown AI Coach POST action: ${resolvedAction}` }, { status: 404 });

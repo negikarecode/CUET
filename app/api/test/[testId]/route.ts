@@ -185,7 +185,7 @@ async function getAuthoritativeTest(targetTestId: string): Promise<{
 function checkTestOwnership(testId: string, authUserId: string): boolean {
   if (!testId) return true;
   const lower = testId.toLowerCase();
-  const prefixes = ["sunday_redemption_", "adaptive_drill_", "repair_quiz_"];
+  const prefixes = ["sunday_redemption_", "adaptive_drill_", "repair_quiz_", "topic_drill_"];
   const matchedPrefix = prefixes.find((p) => lower.startsWith(p));
   if (!matchedPrefix) {
     // Standard mock, PYQ, and practice tests have no per-user ownership restriction
