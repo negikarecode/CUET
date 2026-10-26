@@ -9,7 +9,8 @@ async function main() {
   let passed = 0;
 
   // Retrieve configured headers
-  const headerConfigs = await nextConfig.headers();
+  assert.ok(typeof nextConfig.headers === "function", "headers must be configured on nextConfig");
+  const headerConfigs = await nextConfig.headers!();
   assert.ok(Array.isArray(headerConfigs), "headers() must return an array of routes");
   const allRouteHeaders = headerConfigs.find((h: any) => h.source === "/(.*)");
   assert.ok(allRouteHeaders, "Must contain global root header configuration for /(.*)");

@@ -252,11 +252,11 @@ export async function GET(req: Request) {
 export async function DELETE(req: Request) {
   try {
     const auth = await requireAuth(req);
-    if (!auth.success || !auth.user) {
+    if (!auth.success) {
       return auth.response;
     }
 
-    const userId = auth.user.id;
+    const userId = auth.userId;
 
     // Rate limit: 3 profile deletion attempts per hour per user
     const rateIdentifier = getClientRateLimitIdentifier(req, userId, "user:profile_delete");

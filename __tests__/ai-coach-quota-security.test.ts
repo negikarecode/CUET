@@ -19,6 +19,7 @@ async function main() {
   let passed = 0;
 
   // 1. Rate Limiting Protection Policy
+  assert.strictEqual(AI_COACH_CONFIG.DAILY_REPORT_LIMIT, 3);
   const policy = getRateLimitPolicy("ai_coach:generate");
   assert.strictEqual(policy.max, 5);
   assert.strictEqual(policy.windowSeconds, 60);
