@@ -10,8 +10,11 @@ export function getAuthSiteUrl(): string {
   if (process.env.NEXT_PUBLIC_SITE_URL) {
     return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, "");
   }
-  // Production fallback matching the authoritative Supabase Site URL
-  return "https://cuetmate-negihikehde.vercel.app";
+  if (process.env.NEXT_PUBLIC_APP_URL) {
+    return process.env.NEXT_PUBLIC_APP_URL.replace(/\/+$/, "");
+  }
+  // Production fallback matching the authoritative production domain
+  return "https://cuetmate.vercel.app";
 }
 
 /**

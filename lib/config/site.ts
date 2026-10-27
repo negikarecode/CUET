@@ -8,10 +8,13 @@ export const SITE_CONFIG = {
   tagline: "NTA-Grade CBT Practice & AI Mistake Diagnosis",
   description:
     "India's practice-first test preparation platform for CUET UG entrance examination. Experience authentic NTA CBT interface, real 60-minute timers, and granular AI mistake diagnosis for Science, Commerce, and Humanities.",
-  // Production URL fallback normalized to the deployed Vercel domain
+  // Production URL fallback normalized to the authoritative production domain
   url:
     process.env.NEXT_PUBLIC_APP_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://cuetmate.vercel.app"),
+    (process.env.NEXT_PUBLIC_SITE_URL ? process.env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, "") : undefined) ||
+    (process.env.VERCEL_ENV === "preview" && process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "https://cuetmate.vercel.app"),
   ogImage: "/images/landing/og-image.png",
   supportEmail: "support@cuetprep.com",
   officialNTAHelpdeskEmail: "cuet-ug@nta.ac.in",
