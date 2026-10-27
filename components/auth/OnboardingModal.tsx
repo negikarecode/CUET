@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import {
   X,
   GraduationCap,
@@ -349,9 +350,15 @@ export default function OnboardingModal({
         {/* Modal Top Header */}
         <div className="bg-slate-50/80 p-5 border-b border-slate-200/80 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-xs">
+            <Link
+              href="/"
+              onClick={onClose}
+              title="Go to Homepage"
+              className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-xs hover:scale-105 transition-transform cursor-pointer shrink-0"
+              aria-label="CUET AI-Prep Home"
+            >
               <GraduationCap className="w-4 h-4 stroke-[2]" />
-            </div>
+            </Link>
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-slate-900 tracking-tight">
@@ -485,7 +492,7 @@ export default function OnboardingModal({
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="aspirant@example.com"
+                  placeholder="aspirant@cuet-prep.in"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-blue-500 shadow-xs"
                 />
               </div>
@@ -586,7 +593,7 @@ export default function OnboardingModal({
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="aspirant@example.com"
+                      placeholder="aspirant@cuet-prep.in"
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-blue-500 shadow-xs"
                     />
                   </div>

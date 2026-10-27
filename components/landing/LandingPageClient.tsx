@@ -2452,14 +2452,42 @@ function LandingFooter({ onAuth }: { onAuth: (mode: "login" | "signup") => void 
               </a>
             </div>
             <div>
-              <a href="#pricing" className="hover:text-white transition-colors">
-                Gold Pass Pricing
-              </a>
+              <Link href="/pricing" className="hover:text-white transition-colors">
+                Ranker Pass Pricing
+              </Link>
+            </div>
+            <div>
+              <Link href="/contact" className="hover:text-white transition-colors">
+                Contact Academic Support
+              </Link>
             </div>
             <div>
               <a href={`mailto:${CUET_AUTHORITY.contactSupport.platformSupportEmail}`} className="hover:text-white transition-colors">
                 Academic Support ({CUET_AUTHORITY.contactSupport.platformSupportEmail})
               </a>
+            </div>
+            <div>
+              <a href="tel:01140759000" className="hover:text-white transition-colors">
+                NTA Helpline: 011-40759000
+              </a>
+            </div>
+            <div>
+              <a href={`mailto:${CUET_AUTHORITY.contactSupport.officialNTAHelpdeskEmail}`} className="hover:text-white transition-colors">
+                NTA Helpdesk ({CUET_AUTHORITY.contactSupport.officialNTAHelpdeskEmail})
+              </a>
+            </div>
+            <div className="pt-1 flex flex-wrap gap-x-2 text-[11px] text-slate-400">
+              <Link href="/terms" className="hover:text-white transition-colors">
+                Terms
+              </Link>
+              <span>•</span>
+              <Link href="/privacy" className="hover:text-white transition-colors">
+                Privacy
+              </Link>
+              <span>•</span>
+              <Link href="/refunds" className="hover:text-white transition-colors">
+                Refunds
+              </Link>
             </div>
             <div>
               <a
@@ -2475,7 +2503,7 @@ function LandingFooter({ onAuth }: { onAuth: (mode: "login" | "signup") => void 
         </div>
 
         <div className="pt-8 border-t border-slate-900 flex flex-wrap items-center justify-between gap-4 text-slate-500">
-          <span>&copy; 2026 CUETPrep. All rights reserved.</span>
+          <span>&copy; {new Date().getFullYear()} CUET AI-Prep. All rights reserved. Built for NTA CBT Candidates.</span>
           <div className="flex items-center gap-4">
             <button
               type="button"

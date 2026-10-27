@@ -147,7 +147,7 @@ export default function BottomNav() {
 
             {/* Mocks */}
             <Link
-              href="/#stream-matrix"
+              href="/dashboard/mocks"
               className="flex flex-col items-center justify-center min-h-[44px] py-1 text-slate-500 hover:text-slate-800 font-medium transition-all touch-manipulation cursor-pointer"
             >
               <div className="p-1.5 rounded-xl hover:bg-slate-100/70 transition-colors">
@@ -158,22 +158,22 @@ export default function BottomNav() {
               </span>
             </Link>
 
-            {/* Demo */}
+            {/* Practice */}
             <Link
-              href="/#live-demo"
+              href="/dashboard/practice"
               className="flex flex-col items-center justify-center min-h-[44px] py-1 text-slate-500 hover:text-slate-800 font-medium transition-all touch-manipulation cursor-pointer"
             >
               <div className="p-1.5 rounded-xl hover:bg-slate-100/70 transition-colors">
                 <Target className="w-4 h-4 stroke-[2] text-rose-500" />
               </div>
               <span className="text-[10px] mt-0.5 tracking-tight leading-none truncate max-w-[56px]">
-                {t("dailyDrill", "Demo")}
+                {t("practice", "Practice")}
               </span>
             </Link>
 
             {/* Pricing */}
             <Link
-              href="/#pricing"
+              href="/pricing"
               className="flex flex-col items-center justify-center min-h-[44px] py-1 text-slate-500 hover:text-slate-800 font-medium transition-all touch-manipulation cursor-pointer"
             >
               <div className="p-1.5 rounded-xl hover:bg-slate-100/70 transition-colors">

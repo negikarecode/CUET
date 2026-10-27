@@ -325,7 +325,7 @@ export default function PracticeTestsHubPage() {
               </h2>
             </div>
             <Link
-              href="/profile"
+              href="/dashboard/profile"
               className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline self-start sm:self-auto"
             >
               Change target in Profile
@@ -429,7 +429,7 @@ export default function PracticeTestsHubPage() {
             <span>Target college not configured. Set your dream college to get prioritized subjects.</span>
           </div>
           <Link
-            href="/profile"
+            href="/dashboard/profile"
             className="font-bold text-blue-600 hover:underline shrink-0"
           >
             Set your dream college

@@ -168,7 +168,7 @@ export default function VerifyEmailView({
                 type="email"
                 value={editInput}
                 onChange={(e) => setEditInput(e.target.value)}
-                placeholder="name@example.com"
+                placeholder="yourname@gmail.com"
                 className="flex-1 px-3 py-1.5 rounded-xl border border-blue-500 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 autoFocus
                 required

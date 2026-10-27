@@ -1,22 +1,54 @@
 import { MetadataRoute } from "next";
+import { SITE_CONFIG } from "@/lib/config/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://cuet-prep.in";
+  const baseUrl = SITE_CONFIG.url;
 
-  const routes = [
-    "",
-    "/pricing",
-    "/dashboard/mocks",
-    "/dashboard/practice",
-    "/dashboard/pyqs",
-    "/dashboard/standing",
-    "/dashboard/notes",
+  // Real, indexable, public canonical routes only.
+  // Private dashboard, CBT simulator, and auth pages are excluded per technical SEO standards.
+  const publicRoutes: {
+    path: string;
+    changeFrequency: "daily" | "weekly" | "monthly";
+    priority: number;
+  }[] = [
+    {
+      path: "",
+      changeFrequency: "daily",
+      priority: 1.0,
+    },
+    {
+      path: "/pricing",
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      path: "/contact",
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      path: "/privacy",
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      path: "/terms",
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      path: "/refunds",
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
   ];
 
-  return routes.map((path) => ({
+  const now = new Date();
+
+  return publicRoutes.map(({ path, changeFrequency, priority }) => ({
     url: `${baseUrl}${path}`,
-    lastModified: new Date(),
-    changeFrequency: path === "" ? "daily" : "weekly",
-    priority: path === "" ? 1.0 : 0.8,
+    lastModified: now,
+    changeFrequency,
+    priority,
   }));
 }

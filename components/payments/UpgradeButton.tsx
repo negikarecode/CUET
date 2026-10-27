@@ -61,6 +61,7 @@ export default function UpgradeButton({
 
   const [loading, setLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const is399 = planId === "ai_pass_399";
   const isAllAccess = planId === "all_access_pass_799";
@@ -69,12 +70,13 @@ export default function UpgradeButton({
 
   const handleCheckout = async () => {
     setLoading(true);
+    setErrorMessage(null);
 
     try {
       // 1. Ensure Razorpay script is loaded
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
-        alert("Unable to load Razorpay payment gateway. Please check your internet connection.");
+        setErrorMessage("Unable to load Razorpay payment gateway. Please check your internet connection.");
         setLoading(false);
         return;
       }
@@ -151,7 +153,6 @@ export default function UpgradeButton({
         prefill: {
           name: user.name,
           email: user.email,
-          contact: "9876543210",
         },
         notes: {
           userId: user.id,
@@ -172,14 +173,14 @@ export default function UpgradeButton({
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", function (response: any) {
         console.error("[Razorpay Payment Failed]:", response.error);
-        alert(`Payment failed: ${response.error?.description || "Transaction declined."}`);
+        setErrorMessage(`Payment failed: ${response.error?.description || "Transaction declined by bank."}`);
         setLoading(false);
       });
 
       rzp.open();
     } catch (err: any) {
       console.error("Checkout launch error:", err);
-      alert(err.message || "Error initiating checkout. Please retry.");
+      setErrorMessage(err.message || "Error initiating checkout. Please retry.");
       setLoading(false);
     }
   };
@@ -197,25 +198,32 @@ export default function UpgradeButton({
 
   return (
     <>
-      <button
-        type="button"
-        disabled={loading}
-        onClick={handleCheckout}
-        className={`px-5 py-3 rounded-xl flex items-center justify-center gap-2 text-xs transition-all disabled:opacity-50 ${variantStyles[variant]} ${className}`}
-      >
-        {loading ? (
-          <>
-            <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-            <span>Connecting Razorpay...</span>
-          </>
-        ) : (
-          <>
-            <Sparkles className="w-4 h-4 fill-current" />
-            <span>{buttonContent}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </>
+      <div className="flex flex-col items-center">
+        <button
+          type="button"
+          disabled={loading}
+          onClick={handleCheckout}
+          className={`px-5 py-3 rounded-xl flex items-center justify-center gap-2 text-xs transition-all disabled:opacity-50 ${variantStyles[variant]} ${className}`}
+        >
+          {loading ? (
+            <>
+              <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+              <span>Connecting Razorpay...</span>
+            </>
+          ) : (
+            <>
+              <Sparkles className="w-4 h-4 fill-current" />
+              <span>{buttonContent}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </>
+          )}
+        </button>
+        {errorMessage && (
+          <p className="mt-2 text-[11px] font-semibold text-rose-600 text-center max-w-xs animate-in fade-in">
+            {errorMessage}
+          </p>
         )}
-      </button>
+      </div>
 
       {/* Celebratory Success Modal */}
       {showSuccessModal && (

@@ -470,10 +470,15 @@ export default function AuthPageContent({
           {/* Top Banner */}
           <div className="bg-slate-50/60 p-6 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center gap-3.5">
-              <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm shadow-blue-500/20 shrink-0">
+              <Link
+                href="/"
+                title="Back to Homepage"
+                className="relative w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm shadow-blue-500/20 shrink-0 hover:scale-105 transition-transform cursor-pointer"
+                aria-label="CUET AI-Prep Home"
+              >
                 <GraduationCap className="w-6 h-6 stroke-[2.2]" />
                 <Sparkles className="w-3.5 h-3.5 text-amber-300 absolute -top-1 -right-1 fill-amber-300" />
-              </div>
+              </Link>
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
@@ -675,7 +680,7 @@ export default function AuthPageContent({
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="aspirant@example.com"
+                        placeholder="aspirant@cuet-prep.in"
                         className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/70 font-medium text-sm bg-slate-50 hover:bg-slate-100/70 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                       />
                     </div>
@@ -758,7 +763,7 @@ export default function AuthPageContent({
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="aspirant@example.com"
+                        placeholder="aspirant@cuet-prep.in"
                         className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/70 font-medium text-sm bg-slate-50 hover:bg-slate-100/70 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                       />
                       <p className="text-[11px] text-slate-500 pt-0.5">
@@ -821,7 +826,7 @@ export default function AuthPageContent({
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="aspirant@example.com"
+                        placeholder="aspirant@cuet-prep.in"
                         className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/70 font-medium text-sm bg-slate-50 hover:bg-slate-100/70 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                       />
                     </div>

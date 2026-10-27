@@ -136,18 +136,18 @@ export default function Footer() {
             <ul className="space-y-2 text-xs font-medium text-slate-500">
               <li>
                 <Link
-                  href="/#live-demo"
+                  href="/#simulator"
                   className="hover:text-indigo-600 transition-colors"
                 >
-                  Interactive Diagnostic Demo
+                  Interactive CBT Simulator
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/#features"
+                  href="/#pattern"
                   className="hover:text-indigo-600 transition-colors"
                 >
-                  72-Second Pacing Radar
+                  72-Second Pacing Pattern
                 </Link>
               </li>
               <li>
@@ -163,15 +163,23 @@ export default function Footer() {
                   href="/dashboard/ai-coach"
                   className="hover:text-indigo-600 transition-colors"
                 >
-                  AI Coach
+                  AI Coach & Mistake Breakdown
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/#pricing"
+                  href="/pricing"
                   className="hover:text-indigo-600 transition-colors"
                 >
                   Ranker Pass (₹2 Lifetime)
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="hover:text-indigo-600 transition-colors"
+                >
+                  Contact Academic Support
                 </Link>
               </li>
             </ul>
@@ -180,14 +188,35 @@ export default function Footer() {
           {/* Col 4: Official Cutoffs & System Status (2 cols) */}
           <div className="lg:col-span-2 space-y-3">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900">
-              North Campus
+              Helpline & Support
             </h3>
             <div className="space-y-2 text-xs font-normal text-slate-600">
               <p className="leading-snug">
-                Target: <strong className="text-slate-900 font-semibold">960+ / 1,000</strong>
+                Support:{" "}
+                <a
+                  href="mailto:support@cuetprep.com"
+                  className="font-semibold text-indigo-600 hover:text-indigo-700 underline underline-offset-2"
+                >
+                  support@cuetprep.com
+                </a>
               </p>
-              <p className="text-[11px] text-slate-400">
-                (99.5+ Percentile Benchmark for SRCC, St. Stephen&apos;s, Hindu & Hansraj)
+              <p className="leading-snug">
+                NTA Helpline:{" "}
+                <a
+                  href="tel:01140759000"
+                  className="font-semibold text-slate-900 hover:text-indigo-600"
+                >
+                  011-40759000
+                </a>
+              </p>
+              <p className="leading-snug text-[11px] text-slate-500">
+                Alt:{" "}
+                <a
+                  href="tel:01169227700"
+                  className="text-slate-700 hover:text-indigo-600"
+                >
+                  011-69227700
+                </a>
               </p>
               <div className="pt-2">
                 <button
@@ -233,16 +262,28 @@ export default function Footer() {
       <div className="border-t border-slate-200/80 bg-white py-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-normal text-slate-400">
           <div>
-            <span>&copy; 2025–2026 CUET AI-Prep. Built strictly for NTA CBT Candidates.</span>
+            <span>&copy; {new Date().getFullYear()} CUET AI-Prep. Built strictly for NTA CBT Candidates.</span>
           </div>
 
-          <div className="flex items-center gap-4 text-slate-500 font-medium">
-            <Link href="/#pricing" className="hover:text-slate-900 transition-colors">
-              Pricing Policy
+          <div className="flex flex-wrap items-center gap-4 text-slate-500 font-medium">
+            <Link href="/pricing" className="hover:text-slate-900 transition-colors">
+              Pricing Plans
             </Link>
             <span>•</span>
-            <Link href="/#features" className="hover:text-slate-900 transition-colors">
-              NCERT Compliance
+            <Link href="/contact" className="hover:text-slate-900 transition-colors">
+              Contact Us
+            </Link>
+            <span>•</span>
+            <Link href="/terms" className="hover:text-slate-900 transition-colors">
+              Terms of Service
+            </Link>
+            <span>•</span>
+            <Link href="/privacy" className="hover:text-slate-900 transition-colors">
+              Privacy Policy
+            </Link>
+            <span>•</span>
+            <Link href="/refunds" className="hover:text-slate-900 transition-colors">
+              Cancellation &amp; Refund
             </Link>
             <span>•</span>
             <Link href="/dashboard" className="hover:text-slate-900 transition-colors">

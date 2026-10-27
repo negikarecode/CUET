@@ -393,7 +393,7 @@ export default function PricingView() {
           </Link>
         </div>
         <p className="text-[11px] text-slate-400">
-          © 2026 CUETMate AI-Prep. 256-bit SSL encrypted checkout powered by Razorpay.
+          © {new Date().getFullYear()} CUET AI-Prep. 256-bit SSL encrypted checkout powered by Razorpay.
         </p>
       </div>
     </div>

@@ -221,7 +221,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
               Take a full mock test or chapter drill to calibrate topic-level accuracy.
             </p>
             <Link
-              href="/test"
+              href="/dashboard/mocks"
               className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-sm"
             >
               Start Diagnostic Test

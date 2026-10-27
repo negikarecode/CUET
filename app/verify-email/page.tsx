@@ -158,7 +158,7 @@ function VerifyEmailContent() {
                   type="email"
                   value={manualEmailInput}
                   onChange={(e) => setManualEmailInput(e.target.value)}
-                  placeholder="name@example.com"
+                  placeholder="yourname@gmail.com"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
                   required
                 />

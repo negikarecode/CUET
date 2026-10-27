@@ -33,7 +33,7 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://checkout.razorpay.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.razorpay.com; frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://checkout.razorpay.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.razorpay.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self';",
           },
         ],
       },
@@ -44,6 +44,36 @@ const nextConfig = {
       {
         source: "/dashboard/radar",
         destination: "/dashboard/reports",
+        permanent: true,
+      },
+      {
+        source: "/mocks",
+        destination: "/dashboard/mocks",
+        permanent: true,
+      },
+      {
+        source: "/tests",
+        destination: "/dashboard/mocks",
+        permanent: true,
+      },
+      {
+        source: "/pyqs",
+        destination: "/dashboard/pyqs",
+        permanent: true,
+      },
+      {
+        source: "/practice",
+        destination: "/dashboard/practice",
+        permanent: true,
+      },
+      {
+        source: "/standing",
+        destination: "/dashboard/standing",
+        permanent: true,
+      },
+      {
+        source: "/plans",
+        destination: "/pricing",
         permanent: true,
       },
     ];

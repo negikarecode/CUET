@@ -31,7 +31,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const isClient = useIsClient();
   const isHomepage = pathname === "/";
-  const isDashboard = pathname === "/dashboard";
 
   const user = useTestStore((state) => state.user);
   const logout = useTestStore((state) => state.logout);
@@ -117,10 +116,11 @@ export default function Navbar() {
               <Link
                 href="/"
                 className="flex items-center gap-2 sm:gap-3 group focus:outline-none rounded-xl py-1 px-1"
+                aria-label="CUET AI-Prep Homepage"
               >
                 <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xs group-hover:scale-105 transition-all shrink-0">
                   <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[2]" />
-                  <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-300 absolute -top-1 -right-1 fill-amber-300" />
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300 absolute -top-1 -right-1 fill-amber-300" />
                 </div>
                 <div className="flex flex-col justify-center min-w-0">
                   <div className="flex items-center gap-1 sm:gap-1.5 leading-none">
@@ -136,6 +136,28 @@ export default function Navbar() {
                   </span>
                 </div>
               </Link>
+
+              {/* Desktop Marketing Navigation Links */}
+              <nav className="hidden lg:flex items-center gap-5 ml-4 text-xs font-semibold text-slate-600" aria-label="Main Navigation">
+                <Link href="/dashboard/mocks" className="hover:text-blue-600 transition-colors py-1">
+                  Mock Tests
+                </Link>
+                <Link href="/dashboard/pyqs" className="hover:text-blue-600 transition-colors py-1">
+                  251 PYQs
+                </Link>
+                <Link href="/dashboard/practice" className="hover:text-blue-600 transition-colors py-1">
+                  Practice
+                </Link>
+                <Link href="/dashboard/standing" className="hover:text-blue-600 transition-colors py-1">
+                  College Cutoffs
+                </Link>
+                <Link href="/pricing" className={`py-1 transition-colors ${pathname === "/pricing" ? "text-blue-600 font-bold" : "hover:text-blue-600"}`}>
+                  Pricing
+                </Link>
+                <Link href="/contact" className={`py-1 transition-colors ${pathname === "/contact" ? "text-blue-600 font-bold" : "hover:text-blue-600"}`}>
+                  Contact
+                </Link>
+              </nav>
             </div>
 
             {/* Right Action Items: Logged Out vs Logged In */}
@@ -393,48 +415,90 @@ export default function Navbar() {
               </div>
             )}
 
-            <div className="space-y-1 font-medium text-slate-700">
-              {isDashboard ? (
-                <>
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-xl text-xs font-semibold bg-indigo-50 text-indigo-600 border border-indigo-100"
-                  >
-                    {t("commandHub", "Command Hub")}
-                  </Link>
-                  <Link
-                    href="/dashboard/pyqs"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-50 transition-colors"
-                  >
-                    {t("domainTests", "PYQs")}
-                  </Link>
-                  <Link
-                    href="/dashboard/mocks"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-50 transition-colors"
-                  >
-                    {t("mocks", "Mock Tests")}
-                  </Link>
-                  <Link
-                    href="/dashboard/ai-coach"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-50 transition-colors"
-                  >
-                    AI Coach
-                  </Link>
-                </>
-              ) : (
-                <Link
-                  href="/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors"
-                >
-                  {t("commandHub", "My Dashboard")}
-                </Link>
-              )}
-            </div>
+            <nav className="space-y-1 font-medium text-slate-700" aria-label="Mobile Menu">
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                href="/dashboard/mocks"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+              >
+                Full Mock Tests (50 Qs)
+              </Link>
+              <Link
+                href="/dashboard/pyqs"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+              >
+                251 Shift PYQs Vault (2022–2025)
+              </Link>
+              <Link
+                href="/dashboard/practice"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+              >
+                Chapter Practice &amp; NCERT Traps
+              </Link>
+              <Link
+                href="/dashboard/standing"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+              >
+                Target College Cutoff Benchmarks
+              </Link>
+              <Link
+                href="/dashboard/ai-coach"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+              >
+                AI Mistake Coach
+              </Link>
+              <Link
+                href="/pricing"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                  pathname === "/pricing" ? "bg-blue-50 text-blue-700 font-bold" : "hover:bg-slate-50 hover:text-blue-600"
+                }`}
+              >
+                Ranker Pass Pricing (₹2 Lifetime)
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                  pathname === "/contact" ? "bg-blue-50 text-blue-700 font-bold" : "hover:bg-slate-50 hover:text-blue-600"
+                }`}
+              >
+                Contact Support Desk
+              </Link>
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2.5 rounded-xl text-xs font-bold bg-slate-900 text-white text-center mt-2 shadow-xs"
+              >
+                {t("commandHub", "My Candidate Dashboard")}
+              </Link>
+
+              <div className="pt-3 mt-3 border-t border-slate-100 text-xs text-slate-500 space-y-1.5 px-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-semibold text-slate-700">Support:</span>
+                  <a href="mailto:support@cuetprep.com" className="text-blue-600 underline font-medium">
+                    support@cuetprep.com
+                  </a>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-semibold text-slate-700">NTA Helpline:</span>
+                  <a href="tel:01140759000" className="text-slate-800 font-bold">
+                    011-40759000
+                  </a>
+                </div>
+              </div>
+            </nav>
 
             {/* Language Selector in Mobile Menu */}
             <div className="pt-2 border-t border-slate-100">

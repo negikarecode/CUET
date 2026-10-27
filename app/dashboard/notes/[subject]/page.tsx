@@ -1,4 +1,5 @@
 import React from "react";
+import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ExternalLink } from "lucide-react";
@@ -8,6 +9,15 @@ import { hasNote } from "@/lib/notes/store";
 interface Props {
   params: {
     subject: string;
+  };
+}
+
+export function generateMetadata({ params }: Props): Metadata {
+  const subject = getTaxonomySubject(params.subject);
+  if (!subject) return { title: "Subject Notes | CUET AI-Prep" };
+  return {
+    title: `${subject.name} Revision Notes & Formulas | CUET AI-Prep`,
+    description: `High-yield chapter notes, formulas, and NCERT revision points for CUET UG ${subject.name}. Master core concepts and question shortcuts.`,
   };
 }
 

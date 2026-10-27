@@ -98,7 +98,9 @@ export default function CBTCaseStudyPanel({
 
           <button
             type="button"
-            className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-xs cursor-pointer"
+            onClick={() => setIsMobileExpanded(!isMobileExpanded)}
+            aria-expanded={isMobileExpanded}
+            className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-xs hover:bg-slate-50 active:scale-95 transition-all cursor-pointer"
           >
             <span>{isMobileExpanded ? "Collapse" : "Expand"}</span>
             {isMobileExpanded ? (
