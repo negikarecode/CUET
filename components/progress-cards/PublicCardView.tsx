@@ -10,6 +10,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { ProgressCardRecord, ProgressCardFrozenData } from "@/lib/progress-cards/types";
+import { SITE_CONFIG } from "@/lib/config/site";
 
 interface PublicCardViewProps {
   card: ProgressCardRecord;
@@ -23,7 +24,7 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
   const showGain = cardData.showAccuracyGain;
   const highlights = (cardData.highlights || []).slice(0, 3);
 
-  const shareUrl = typeof window !== "undefined" ? window.location.href : `https://cuetmate.com/r/${card.id}`;
+  const shareUrl = typeof window !== "undefined" ? window.location.href : `${SITE_CONFIG.url}/r/${card.id}`;
   const shareText = `Check out my ${cardData.subject} score gain on CUETMate! ${
     showGain ? `+${accuracyDelta}% accuracy increase` : "Significant topic mastery"
   }: ${shareUrl}`;

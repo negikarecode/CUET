@@ -146,9 +146,10 @@ export async function POST(req: NextRequest) {
       .substring(2, 6)
       .toUpperCase()}`;
 
-    // 4. Honest Server Logging
+    // 4. Privacy-Hardened Server Logging (Redact PII & omit message body)
+    const maskedEmail = email.replace(/^(.{2})(.*)(@.*)$/, (_, a, b, c) => `${a}${"*".repeat(Math.min(b.length, 4))}${c}`);
     console.info(
-      `[Support Desk] New Ticket Registered: ${ticketId} | From: ${email} | Category: ${safeCategory} | Excerpt: ${message.slice(0, 80)}...`
+      `[Support Desk] New Ticket Registered: ${ticketId} | Account: ${maskedEmail} | Category: ${safeCategory}`
     );
 
     return NextResponse.json(

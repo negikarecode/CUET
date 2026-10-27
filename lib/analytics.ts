@@ -182,13 +182,14 @@ export function normalizeSubject(rawSubject?: string): CanonicalSubjectInfo {
     };
   }
 
-  const title = (rawSubject || "General").trim();
+  const safeSlug = clean.replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-") || "general";
+  const title = (rawSubject || "General").replace(/[^a-zA-Z0-9\s-_()]/g, "").trim() || "General";
   return {
-    key: clean.replace(/\s+/g, "-"),
+    key: safeSlug,
     name: title.charAt(0).toUpperCase() + title.slice(1),
     icon: "GraduationCap",
     category: "Science",
-    mockUrl: `/dashboard/mocks/${clean.replace(/\s+/g, "-")}`,
+    mockUrl: `/dashboard/mocks/${safeSlug}`,
   };
 }
 

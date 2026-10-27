@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import PublicCardView from "@/components/progress-cards/PublicCardView";
 import { ProgressCardRecord, ProgressCardFrozenData } from "@/lib/progress-cards/types";
+import { SITE_CONFIG } from "@/lib/config/site";
 
 interface PageProps {
   params: {
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = `${cardData.subject}: ${cardData.fromAccuracy}% → ${cardData.toAccuracy}% (${
     cardData.showAccuracyGain ? `+${cardData.accuracyDelta}% gain` : "Verified topic growth"
   }). Prepared with CUETMate AI Learning Coach.`;
-  const imageUrl = `https://cuetmate.com/r/${cardId}/image?og=1`;
+  const imageUrl = `${SITE_CONFIG.url}/r/${cardId}/image?og=1`;
 
   return {
     title,
@@ -46,7 +47,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       type: "website",
-      url: `https://cuetmate.com/r/${cardId}`,
+      url: `${SITE_CONFIG.url}/r/${cardId}`,
       images: [
         {
           url: imageUrl,

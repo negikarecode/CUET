@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
           // FAIL-CLOSED: Never fall back to uncoordinated non-atomic mutations on fulfillment errors
           console.error(`[CRITICAL SEC-01] Webhook atomic fulfillment rejected for user ${userId}:`, rpcError);
           return NextResponse.json(
-            { error: "Atomic payment fulfillment rejected.", code: "ATOMIC_FULFILLMENT_FAILED", details: rpcError.message },
+            { error: "Atomic payment fulfillment rejected.", code: "ATOMIC_FULFILLMENT_FAILED" },
             { status: 500 }
           );
         } catch (dbError) {
@@ -462,9 +462,8 @@ export async function POST(req: NextRequest) {
       console.error("[CRITICAL SEC-01] Atomic payment fulfillment failed or unavailable:", fulfillmentError);
       return NextResponse.json(
         {
-          error: "Payment confirmed by gateway, but atomic account provisioning encountered a database error. Please retry or contact support.",
+          error: "Payment confirmed by gateway, but atomic account provisioning encountered a system error. Please retry or contact support.",
           code: "ATOMIC_FULFILLMENT_FAILED",
-          details: fulfillmentError?.message || "PostgreSQL RPC fulfill_payment_order unavailable.",
         },
         { status: 503 }
       );

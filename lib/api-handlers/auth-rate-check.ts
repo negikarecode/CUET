@@ -44,8 +44,9 @@ export async function POST(req: NextRequest) {
       reset: result.reset,
     });
   } catch (err: any) {
+    console.error("[Rate Check Error]:", err);
     return NextResponse.json(
-      { error: err?.message || "Rate limit check failed" },
+      { error: "Rate limit check failed." },
       { status: 500 }
     );
   }

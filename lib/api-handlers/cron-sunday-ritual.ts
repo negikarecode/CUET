@@ -46,12 +46,11 @@ export async function GET(request: NextRequest) {
       success: true,
       timestamp: new Date().toISOString(),
       processedCount: processedUsers.length,
-      users: processedUsers,
     });
   } catch (error) {
     console.error("[Cron /api/cron/sunday-ritual] Error:", error);
     return NextResponse.json(
-      { success: false, error: (error as Error).message },
+      { success: false, error: "Cron execution failed." },
       { status: 500 }
     );
   }

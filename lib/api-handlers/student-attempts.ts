@@ -44,7 +44,7 @@ export async function GET() {
   } catch (err: any) {
     console.error("[Student Attempts Route Error]:", err);
     return NextResponse.json(
-      { error: err?.message || "Internal server error" },
+      { error: "Failed to retrieve student attempts." },
       { status: 500 }
     );
   }
@@ -112,7 +112,7 @@ export async function DELETE(req: NextRequest) {
   } catch (err: any) {
     console.error("[Student Attempts Delete Error]:", err);
     return NextResponse.json(
-      { error: err?.message || "Internal server error" },
+      { error: "Failed to delete student attempts." },
       { status: 500 }
     );
   }

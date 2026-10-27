@@ -150,14 +150,14 @@ export async function POST(req: Request) {
 
     if (error) {
       console.error("[Auth Profile Upsert Error]:", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({ error: "Failed to update profile." }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, profile: data });
   } catch (err: any) {
     console.error("[Auth Profile Unexpected Error]:", err);
     return NextResponse.json(
-      { error: err?.message || "Internal server error" },
+      { error: "Internal server error occurred." },
       { status: 500 }
     );
   }

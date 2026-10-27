@@ -30,13 +30,21 @@ interface Props {
   note: NoteDocument;
 }
 
-function sanitizeSvg(raw: string): string {
+export function sanitizeSvg(raw: string): string {
   if (!raw || typeof raw !== "string") return "";
   return raw
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<script\b[\s\S]*?(?:<\/script>|\/>)/gi, "")
+    .replace(/<foreignObject\b[\s\S]*?(?:<\/foreignObject>|\/>)/gi, "")
+    .replace(/<iframe\b[\s\S]*?(?:<\/iframe>|\/>)/gi, "")
+    .replace(/<embed\b[\s\S]*?(?:<\/embed>|\/>)/gi, "")
+    .replace(/<object\b[\s\S]*?(?:<\/object>|\/>)/gi, "")
+    .replace(/<animate\b[\s\S]*?(?:<\/animate>|\/>)/gi, "")
+    .replace(/<set\b[\s\S]*?(?:<\/set>|\/>)/gi, "")
+    .replace(/<use\b[\s\S]*?(?:<\/use>|\/>)/gi, "")
     .replace(/\bon\w+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, "")
+    .replace(/(?:href|xlink:href)\s*=\s*(?:'javascript:[^']*'|"javascript:[^"]*"|javascript:[^\s>]+)/gi, "")
     .replace(/javascript:/gi, "")
-    .replace(/data:text\/html/gi, "");
+    .replace(/data:(?:text\/html|application\/xhtml\+xml|text\/xml)/gi, "");
 }
 
 export function NoteReader({ note }: Props) {

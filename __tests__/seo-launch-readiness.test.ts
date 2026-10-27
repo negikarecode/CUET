@@ -28,12 +28,19 @@ async function runSeoLaunchReadinessTests() {
   const robotsConfig = robots();
   assert.ok(robotsConfig.rules, "Robots config must specify rules");
   assert.strictEqual(robotsConfig.sitemap, `${SITE_CONFIG.url}/sitemap.xml`);
-  const rules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules[0] : robotsConfig.rules;
-  assert.ok(rules.disallow?.includes("/dashboard/"), "Robots must disallow /dashboard/");
-  assert.ok(rules.disallow?.includes("/api/"), "Robots must disallow /api/");
-  assert.ok(rules.disallow?.includes("/test/"), "Robots must disallow /test/");
-  assert.ok(rules.allow?.includes("/pricing"), "Robots must allow /pricing");
-  assert.ok(rules.allow?.includes("/contact"), "Robots must allow /contact");
+  const rawRules = Array.isArray(robotsConfig.rules) ? robotsConfig.rules[0] : robotsConfig.rules;
+  assert.ok(rawRules, "Rules must not be empty");
+  const disallowList = Array.isArray(rawRules.disallow)
+    ? rawRules.disallow
+    : [rawRules.disallow].filter((item): item is string => Boolean(item));
+  const allowList = Array.isArray(rawRules.allow)
+    ? rawRules.allow
+    : [rawRules.allow].filter((item): item is string => Boolean(item));
+  assert.ok(disallowList.includes("/dashboard/"), "Robots must disallow /dashboard/");
+  assert.ok(disallowList.includes("/api/"), "Robots must disallow /api/");
+  assert.ok(disallowList.includes("/test/"), "Robots must disallow /test/");
+  assert.ok(allowList.includes("/pricing"), "Robots must allow /pricing");
+  assert.ok(allowList.includes("/contact"), "Robots must allow /contact");
   console.log("  PASS: robots.txt properly secures private routes and exposes canonical pages");
   passed++;
 

@@ -187,8 +187,9 @@ export async function handleProgressCardsPost(
     .single();
 
   if (insertErr || !inserted) {
+    console.error("[Progress Cards Insert Error]:", insertErr);
     return NextResponse.json(
-      { error: "Failed to persist progress card to database.", details: insertErr?.message },
+      { error: "Failed to persist progress card to database." },
       { status: 500 }
     );
   }

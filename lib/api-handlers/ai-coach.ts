@@ -343,7 +343,6 @@ export async function handleAICoachPost(
       return NextResponse.json(
         {
           error: "AI diagnostic generation encountered an error. Your daily report credit was not used. Please try again.",
-          details: err?.message,
         },
         { status: 500 }
       );
