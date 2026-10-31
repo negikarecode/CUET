@@ -266,7 +266,7 @@ export default function CBTPlayer() {
         {/* =================================================================== */}
         {/* HEADER BAR: Subject Title, Countdown Timer, Submit Action */}
         {/* =================================================================== */}
-        <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+        <header className="sticky top-0 z-40 bg-[#441408] text-white border-b border-[#5A1D0D]/80 shadow-xs">
           <div className="max-w-[1600px] mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
             {/* Left: Exit/Back Button, Test Paper & Subject Title */}
             <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
@@ -297,7 +297,7 @@ export default function CBTPlayer() {
                       : t("compulsoryBadge", `${examConfig.totalQuestions} Compulsory Qs`)}
                   </span>
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium truncate hidden sm:block">
+                <p className="text-[10px] sm:text-[11px] text-[#F5EBE1] font-medium truncate hidden sm:block">
                   {isMathExam ? (
                     <>
                       {t("subjectLabel", "Subject:")} <span className="font-semibold text-slate-700">Mathematics</span> • Total: <span className="font-semibold text-slate-700">85 Questions</span> • Attempt: <span className="font-semibold text-emerald-600">40 Max</span> (Sec A: 15 + Sec B1/B2: 25) • Max Marks: <span className="font-semibold text-emerald-600">200</span>
@@ -357,7 +357,7 @@ export default function CBTPlayer() {
                 type="button"
                 disabled={isSubmitting || isSubmitted}
                 onClick={openSubmitModal}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold text-xs sm:text-sm tracking-wide shadow-xs hover:shadow disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center gap-1.5 shrink-0"
+                className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-semibold text-xs sm:text-sm tracking-wide shadow-xs hover:shadow disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center gap-1.5 shrink-0"
               >
                 <Send className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2]" />
                 <span className="hidden sm:inline">
@@ -375,7 +375,7 @@ export default function CBTPlayer() {
         {/* NTA MATHEMATICS SECTION TABS BAR (SEC A compulsory, SEC B1/B2 choice) */}
         {/* =================================================================== */}
         {isMathExam && (
-          <div className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-14 sm:top-16 z-30 shadow-xs">
+          <div className="bg-[#441408] text-white border-b border-[#5A1D0D] sticky top-14 sm:top-16 z-30 shadow-xs">
             <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mr-1 hidden sm:inline">
@@ -479,11 +479,11 @@ export default function CBTPlayer() {
           {/* ================================================================= */}
           {/* LEFT PANEL: Question Workspace (70% on Desktop = 8-9 cols) */}
           {/* ================================================================= */}
-          <section className="lg:col-span-8 xl:col-span-9 flex flex-col bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <section className="lg:col-span-8 xl:col-span-9 flex flex-col bg-white rounded-3xl border border-[#EFE6DC] shadow-xs overflow-hidden">
             {/* Question Workspace Sub-header */}
-            <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3.5 bg-slate-50/70 border-b border-slate-200/80 text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3.5 bg-[#FFF8F0] border-b border-[#EFE6DC] text-xs">
               <div className="flex items-center gap-2.5">
-                <span className="font-mono font-semibold text-blue-700 text-xs bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-lg">
+                <span className="font-mono font-semibold text-[#9F3014] text-xs bg-[#FEF1E0] border border-[#F6D3AF] px-2.5 py-1 rounded-lg">
                   {isMathExam
                     ? `[Section ${currentSection}] Q${currentQuestionIndex + 1} of ${questions.length}`
                     : `${t("question", "Question")} ${currentQuestionIndex + 1} ${t("of", "of")} ${questions.length}`}
@@ -548,16 +548,16 @@ export default function CBTPlayer() {
                       onClick={() => handleSelectOption(opt.id)}
                       className={`w-full flex items-start gap-3.5 p-4 rounded-2xl border text-left cursor-pointer transition-all ${
                         isChecked
-                          ? "bg-blue-50/70 border-blue-600 text-slate-900 shadow-xs"
-                          : "bg-white hover:bg-slate-50/80 border-slate-200/80 text-slate-800 hover:border-slate-300"
+                          ? "bg-[#FEF1E0] border-[#C2410C] text-stone-900 shadow-xs"
+                          : "bg-white hover:bg-[#FFF8F0] border-[#EFE6DC] text-stone-800 hover:border-[#F6D3AF]"
                       }`}
                     >
                       {/* Radio Circle */}
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center font-semibold text-xs shrink-0 mt-0.5 transition-all ${
                           isChecked
-                            ? "bg-blue-600 text-white"
-                            : "bg-slate-100 text-slate-600 border border-slate-200"
+                            ? "bg-[#C2410C] text-white"
+                            : "bg-white text-stone-600 border border-[#EFE6DC]"
                         }`}
                         translate="no"
                       >
@@ -577,7 +577,7 @@ export default function CBTPlayer() {
             {/* =============================================================== */}
             {/* BOTTOM ACTION BAR: Save & Next, Clear, Mark for Review, Prev/Next */}
             {/* =============================================================== */}
-            <div className="p-3.5 sm:p-5 bg-slate-50/70 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+            <div className="p-3.5 sm:p-5 bg-[#FFF8F0] border-t border-[#EFE6DC] flex flex-wrap items-center justify-between gap-2 sm:gap-3">
               {/* Left Actions: Clear & Mark for Review */}
               <div className="flex flex-wrap items-center gap-2">
                 <button
@@ -645,7 +645,7 @@ export default function CBTPlayer() {
                     <button
                       type="button"
                       onClick={saveAndNext}
-                      className="min-h-[44px] px-4 sm:px-5 py-2 rounded-xl font-semibold text-xs tracking-wide shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shrink-0 whitespace-nowrap"
+                      className="min-h-[44px] px-4 sm:px-5 py-2 rounded-xl font-semibold text-xs tracking-wide shadow-xs hover:shadow transition-all flex items-center justify-center gap-1.5 touch-manipulation cursor-pointer bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white shrink-0 whitespace-nowrap"
                     >
                       <span>{t("saveAndNext", "Save & Next")}</span>
                       <ChevronRight className="w-4 h-4 stroke-[2]" />

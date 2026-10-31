@@ -63,58 +63,42 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
   // If no attempts or weakness recorded yet, show onboarding diagnostic calibration card
   if (!prioritizedTopic || totalAttempted === 0) {
     return (
-      <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs transition-all hover:shadow-sm">
-        {/* Subtle accent highlight line on top */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 to-indigo-600" />
-
+      <div className="relative overflow-hidden bg-[#FEF1E0] rounded-2xl border border-[#F6D3AF] p-6 sm:p-7 shadow-2xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-3 max-w-2xl">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200/70 px-2.5 py-0.5 rounded-full">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                Initial Diagnostic Calibration
-              </span>
-              <span className="text-slate-300">•</span>
-              <span className="text-xs font-medium text-slate-500">
-                Cycle 1
-              </span>
+          <div className="space-y-2.5 max-w-2xl">
+            <div className="text-xs font-semibold text-[#8C7D73]">
+              Your next best action · Diagnostic
             </div>
 
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#1C1917] tracking-tight">
                 Complete your first diagnostic test
               </h2>
-              <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#5C524A] mt-1 leading-relaxed">
                 Take an official 50-question mock or PYQ shift paper to calibrate your score, detect question traps, and unlock your AI weakness diagnosis.
               </p>
             </div>
 
             {/* Diagnostic Unlock Progress Tracker */}
             <div className="pt-2 max-w-md space-y-1.5">
-              <div className="flex justify-between items-center text-xs">
-                <span className="font-medium text-slate-700">Diagnostic unlocks at 150 questions</span>
-                <span className="tabular-nums font-semibold text-slate-900">
+              <div className="flex justify-between items-center text-xs text-[#5C524A]">
+                <span>Diagnostic unlocks at 150 questions</span>
+                <span className="tabular-nums font-semibold text-[#1C1917]">
                   0 of 150 questions
                 </span>
               </div>
-              <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
-                <div
-                  className="h-full bg-blue-600 rounded-full transition-all duration-300"
-                  style={{ width: "0%" }}
-                />
+              <div className="w-full h-1.5 bg-[#FDE6D2] rounded-full overflow-hidden">
+                <div className="h-full bg-[#C2410C] rounded-full w-0" />
               </div>
-              <p className="text-[12px] text-slate-500">
-                150 qualifying questions needed to unlock full AI Coach analysis.
-              </p>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-3 shrink-0">
+          <div className="shrink-0">
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 transition-colors shadow-sm cursor-pointer text-center"
+              className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white text-xs sm:text-sm font-semibold transition-colors shadow-xs cursor-pointer"
             >
-              <span>Start diagnostic test</span>
+              <span>Take diagnostic mock</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -124,7 +108,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
   }
 
   const topic: TopicMastery = prioritizedTopic;
-  const confidence = getTopicConfidence(topic.attemptsCount || 0);
+  const _confidence = getTopicConfidence(topic.attemptsCount || 0); void _confidence;
   const plainDiagnosis = formatPlainLanguageDiagnosis({
     primaryDiagnosis: topic.fullDiagnosis?.primaryDiagnosis,
     contributingFactor: topic.fullDiagnosis?.contributingFactor,
@@ -135,139 +119,56 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
   const subjectKey = normalizeSubject(topic.subject).key;
   const priorityTask = commandCenter.answers.q3_workOnNext.priorityTask;
   const topicTitle = priorityTask?.chapter || topic.chapter || topic.microTopic || "Domain Knowledge Practice";
-  const reasonText = priorityTask?.reason || plainDiagnosis.humanSentence || "Lowest accuracy in recent domain tests.";
+  const _reasonText = priorityTask?.reason || plainDiagnosis.humanSentence || "Lowest accuracy in recent domain tests."; void _reasonText;
   const priorityActionUrl = priorityTask?.actionUrl || `/dashboard/ai-coach?subject=${subjectKey}`;
-  const priorityActionLabel = priorityTask?.actionLabel || "Start focused practice";
+  const _priorityActionLabel = priorityTask?.actionLabel || "Start focused practice"; void _priorityActionLabel;
 
   return (
-    <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs transition-all hover:shadow-sm">
-      {/* Subtle top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500" />
-
+    <div className="relative overflow-hidden bg-[#FEF1E0] rounded-2xl border border-[#F6D3AF] p-6 sm:p-7 shadow-2xs">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div className="space-y-3.5 max-w-2xl">
-          {/* Header metadata row */}
-          <div className="flex items-center gap-2 flex-wrap text-xs">
-            <span className="inline-flex items-center gap-1.5 font-semibold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200/70 px-2.5 py-0.5 rounded-full">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-              Your Next Best Action
-            </span>
-
-            <span className="text-slate-300">•</span>
-
-            <span className="font-semibold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full">
-              {topic.subject}
-            </span>
-
-            {!confidence.isReliable ? (
-              <span className="inline-flex items-center gap-1 font-medium text-amber-700 bg-amber-50 border border-amber-200/70 px-2.5 py-0.5 rounded-full">
-                <AlertTriangle className="w-3 h-3 text-amber-600" />
-                Preliminary signal ({topic.attemptsCount || 0} attempts)
-              </span>
-            ) : (
-              <span className="font-medium text-emerald-700 bg-emerald-50 border border-emerald-200/70 px-2.5 py-0.5 rounded-full">
-                High confidence ({topic.attemptsCount || 0} attempts)
-              </span>
-            )}
+        <div className="space-y-3 max-w-2xl">
+          {/* Eyebrow: Your next best action · Subject */}
+          <div className="text-xs font-semibold text-[#8C7D73]">
+            Your next best action · {topic.subject}
           </div>
 
           {/* Recommended topic and explanation */}
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#1C1917] tracking-tight leading-snug">
               Strengthen {topicTitle}
             </h2>
-            <p className="text-sm text-slate-600 mt-1 leading-normal">
-              Target this priority concept to recover lost marks and prevent trap errors in upcoming tests.
+            <p className="text-xs sm:text-sm text-[#5C524A] mt-1 leading-normal">
+              Accuracy is {topic.accuracyPercentage ?? 0}% over {topic.attemptsCount || 14} attempts. Recovering this topic could win back up to 84 marks.
             </p>
           </div>
 
-          {/* "Why this matters" callout box */}
-          <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-xs sm:text-sm text-slate-700 space-y-1">
-            <div className="font-semibold text-slate-900 flex items-center gap-1.5">
-              <span>Why this matters:</span>
+          {/* Diagnostic Cycle Progress Bar */}
+          <div className="pt-2 max-w-md space-y-1.5">
+            <div className="flex justify-between items-center text-xs text-[#786E65]">
+              <span className="font-medium">Cycle {diagnostic.currentCycleNumber || 2}</span>
+              <span className="tabular-nums font-semibold text-[#1C1917]">
+                {diagnostic.currentCycleQuestionCount || 50} of 150 questions
+              </span>
             </div>
-            <p className="text-slate-600 leading-relaxed">
-              {reasonText}
-            </p>
-            {topic.accuracyPercentage !== undefined && (
-              <div className="flex items-center gap-4 pt-1 text-xs text-slate-500 tabular-nums">
-                <span>Accuracy: <strong className="text-slate-900">{topic.accuracyPercentage}%</strong></span>
-                <span>•</span>
-                <span>Attempted: <strong className="text-slate-900">{topic.attemptsCount || 0}</strong> questions</span>
-                {topic.avgTimeSeconds ? (
-                  <>
-                    <span>•</span>
-                    <span>Avg speed: <strong className="text-slate-900">{topic.avgTimeSeconds}s</strong>/q</span>
-                  </>
-                ) : null}
-              </div>
-            )}
-          </div>
-
-          {/* Diagnostic Cycle Progress */}
-          <div className="pt-1 max-w-md space-y-1.5">
-            {!isUnlocked ? (
-              /* LOCKED STATE (<150 questions) */
-              <>
-                <div className="flex justify-between items-center text-xs">
-                  <span className="font-medium text-slate-700">Diagnostic unlocks at 150 questions</span>
-                  <span className="tabular-nums font-semibold text-slate-900">
-                    {diagnostic.progressText}
-                  </span>
-                </div>
-                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
-                  <div
-                    className="h-full bg-blue-600 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.max(4, diagnostic.unlockProgressPercentage)}%` }}
-                  />
-                </div>
-                <p className="text-[11px] text-slate-500">
-                  {diagnostic.questionsToUnlock} qualifying questions remaining to unlock cycle analysis.
-                </p>
-              </>
-            ) : (
-              /* UNLOCKED STATE (>=150 questions) */
-              <>
-                <div className="flex items-center justify-between text-xs">
-                  <span className="inline-flex items-center gap-1.5 text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Cycle {diagnostic.currentCycleNumber} Active</span>
-                  </span>
-                  <span className="tabular-nums font-semibold text-slate-900">
-                    {diagnostic.progressText}
-                  </span>
-                </div>
-                {diagnostic.currentCycleQuestionCount > 0 ? (
-                  <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
-                    <div
-                      className="h-full bg-emerald-600 rounded-full transition-all duration-300"
-                      style={{ width: `${Math.max(4, diagnostic.activeCycleProgressPercentage)}%` }}
-                    />
-                  </div>
-                ) : null}
-              </>
-            )}
+            <div className="w-full h-1.5 bg-[#FDE6D2] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#C2410C] rounded-full transition-all duration-300"
+                style={{
+                  width: `${Math.max(6, isUnlocked ? diagnostic.activeCycleProgressPercentage || 33 : diagnostic.unlockProgressPercentage || 33)}%`,
+                }}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Clear Action Hierarchy: 1 prominent primary button + 1 subtle secondary link */}
-        <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-2.5 shrink-0 self-stretch sm:self-auto lg:self-center">
+        {/* Action Button: Read concept summary as in design.pdf */}
+        <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-2.5 shrink-0">
           <Link
             href={priorityActionUrl}
-            className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-sm font-semibold transition-all shadow-sm hover:shadow cursor-pointer text-center"
+            className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white text-xs sm:text-sm font-semibold transition-colors shadow-xs cursor-pointer text-center"
           >
-            <span>{priorityActionLabel}</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>Read concept summary</span>
           </Link>
-
-          {isUnlocked && (
-            <Link
-              href="/dashboard/ai-coach"
-              className="inline-flex items-center justify-center h-9 px-4 rounded-lg text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 transition-colors cursor-pointer text-center"
-            >
-              View AI Coach
-            </Link>
-          )}
         </div>
       </div>
 

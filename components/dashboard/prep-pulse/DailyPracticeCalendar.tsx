@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Activity, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { generateHeatmapGrid, HeatmapDay } from "@/lib/heatmap-utils";
 import { deduplicateTestAttempts } from "@/lib/analytics";
@@ -21,12 +21,12 @@ export const DailyPracticeCalendar: React.FC = () => {
   }, [attempts]);
 
   const getCellColor = (count: number, isInRange: boolean) => {
-    if (!isInRange) return "bg-slate-50 opacity-40 border border-slate-100 cursor-default";
-    if (count === 0) return "bg-slate-100 border border-slate-200/50 hover:border-slate-300";
-    if (count <= 1) return "bg-blue-100 border border-blue-200 hover:border-blue-300";
-    if (count <= 3) return "bg-blue-300 border border-blue-400 hover:border-blue-500";
-    if (count <= 5) return "bg-blue-600 border border-blue-600 hover:bg-blue-700";
-    return "bg-indigo-700 border border-indigo-700 hover:bg-indigo-800";
+    if (!isInRange) return "bg-[#FAF3EB]/50 opacity-40 border border-[#EFE6DC] cursor-default";
+    if (count === 0) return "bg-[#FAF3EB] border border-[#EFE6DC] hover:border-[#E2D4C3]";
+    if (count <= 1) return "bg-[#FDE6D2] border border-[#F6D3AF] hover:border-[#C2410C]";
+    if (count <= 3) return "bg-[#FED7AA] border border-[#F97316] hover:border-[#C2410C]";
+    if (count <= 5) return "bg-[#EA580C] border border-[#C2410C] hover:bg-[#C2410C]";
+    return "bg-[#C2410C] border border-[#9A3412] hover:bg-[#9A3412]";
   };
 
   const handleMouseEnter = (day: HeatmapDay | null, e: React.MouseEvent) => {
@@ -47,25 +47,20 @@ export const DailyPracticeCalendar: React.FC = () => {
   const PITCH = 22;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4 relative">
+    <div className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-2xs space-y-4 relative">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3.5 gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#EFE6DC] pb-3 gap-2">
         <div>
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600">
-              <Activity className="w-4 h-4" />
-            </div>
-            <h2 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
-              Practice Activity
-            </h2>
-          </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <h2 className="text-base font-bold text-[#1C1917] tracking-tight leading-tight">
+            Practice activity
+          </h2>
+          <p className="text-xs text-[#8C7D73] mt-0.5">
             Daily study sessions, practice drills, and mock exams over the last 60 days.
           </p>
         </div>
 
-        <div className="text-xs text-slate-500 tabular-nums self-start sm:self-auto font-medium bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/60">
-          <strong className="text-slate-900">{heatmapData.totalMocks}</strong> {heatmapData.totalMocks === 1 ? "test" : "tests"} completed • <strong className="text-slate-900">{heatmapData.totalQuestions}</strong> questions answered
+        <div className="text-xs text-[#5C524A] tabular-nums self-start sm:self-auto font-medium bg-[#FFF8F0] px-2.5 py-1 rounded-lg border border-[#EFE6DC]">
+          <strong className="text-[#1C1917]">{heatmapData.totalMocks}</strong> {heatmapData.totalMocks === 1 ? "test" : "tests"} completed • <strong className="text-[#1C1917]">{heatmapData.totalQuestions}</strong> questions answered
         </div>
       </div>
 

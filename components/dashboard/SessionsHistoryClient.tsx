@@ -358,7 +358,7 @@ export default function SessionsHistoryClient({
   if (!isClient) {
     return (
       <div className="py-16 flex justify-center items-center">
-        <div className="w-9 h-9 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-9 h-9 border-3 border-[#C2410C] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -367,7 +367,7 @@ export default function SessionsHistoryClient({
     <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-6">
       {/* 1. Top Header & Navigation */}
       <div className="space-y-1.5">
-        <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 tracking-wide uppercase">
+        <div className="flex items-center gap-2 text-xs font-semibold text-[#C2410C] tracking-wide uppercase">
           <Compass className="w-3.5 h-3.5" />
           <span>CUET UG 2026 · Past Performance Record</span>
         </div>
@@ -394,7 +394,7 @@ export default function SessionsHistoryClient({
           <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition-all"
+              className="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white text-xs sm:text-sm font-semibold shadow-xs transition-all"
             >
               <ClipboardCheck className="w-4 h-4" />
               <span>Take a Mock Test</span>
@@ -407,7 +407,7 @@ export default function SessionsHistoryClient({
       {allAttempts.length > 0 ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
           {/* Card 1: Completed Sessions */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
+          <div className="bg-white rounded-2xl border border-[#EFE6DC] p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
             <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 shrink-0">
               <ClipboardCheck className="w-5 h-5 stroke-[2.2]" />
             </div>
@@ -422,7 +422,7 @@ export default function SessionsHistoryClient({
           </div>
 
           {/* Card 2: Average Score */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
+          <div className="bg-white rounded-2xl border border-[#EFE6DC] p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
             <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-200/60 flex items-center justify-center text-emerald-600 shrink-0">
               <TrendingUp className="w-5 h-5 stroke-[2.2]" />
             </div>
@@ -445,7 +445,7 @@ export default function SessionsHistoryClient({
           </div>
 
           {/* Card 3: Average Accuracy */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
+          <div className="bg-white rounded-2xl border border-[#EFE6DC] p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
             <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-600 shrink-0">
               <Target className="w-5 h-5 stroke-[2.2]" />
             </div>
@@ -460,7 +460,7 @@ export default function SessionsHistoryClient({
           </div>
 
           {/* Card 4: Personal Best */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
+          <div className="bg-white rounded-2xl border border-[#EFE6DC] p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
             <div className="w-11 h-11 rounded-xl bg-purple-50 border border-purple-200/60 flex items-center justify-center text-purple-600 shrink-0">
               <Award className="w-5 h-5 stroke-[2.2]" />
             </div>
@@ -483,7 +483,7 @@ export default function SessionsHistoryClient({
 
       {/* 3. Score Trajectory Line Chart */}
       {allAttempts.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
@@ -515,7 +515,7 @@ export default function SessionsHistoryClient({
                       };
                     }),
                   ]}
-                  buttonClassName="py-1 px-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-700"
+                  buttonClassName="py-1 px-2.5 rounded-xl border border-[#EFE6DC] bg-slate-50 text-xs font-semibold text-slate-700"
                   searchPlaceholder="Search subjects..."
                 />
               </div>
@@ -554,7 +554,7 @@ export default function SessionsHistoryClient({
 
       {/* 4. Filter and Search Toolbar */}
       {allAttempts.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs space-y-3.5">
+        <div className="bg-white rounded-2xl border border-[#EFE6DC] p-4 shadow-xs space-y-3.5">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
             {/* Search Input */}
             <div className="relative sm:col-span-2 lg:col-span-5">
@@ -564,7 +564,7 @@ export default function SessionsHistoryClient({
                 placeholder="Search by test title or subject..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-[#EFE6DC] text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C] transition-all"
               />
             </div>
 
@@ -581,7 +581,7 @@ export default function SessionsHistoryClient({
                   { value: "practice", label: "Chapter Practice" },
                 ]}
                 className="w-full"
-                buttonClassName="py-2 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-800"
+                buttonClassName="py-2 px-3 rounded-xl border border-[#EFE6DC] bg-slate-50 text-xs font-medium text-slate-800"
               />
             </div>
 
@@ -598,7 +598,7 @@ export default function SessionsHistoryClient({
                   { value: "30days", label: "Last 30 Days" },
                 ]}
                 className="w-full"
-                buttonClassName="py-2 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-800"
+                buttonClassName="py-2 px-3 rounded-xl border border-[#EFE6DC] bg-slate-50 text-xs font-medium text-slate-800"
               />
             </div>
 
@@ -615,7 +615,7 @@ export default function SessionsHistoryClient({
                   { value: "highest_accuracy", label: "Sort: Highest accuracy" },
                 ]}
                 className="w-full"
-                buttonClassName="py-2 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-medium text-slate-800"
+                buttonClassName="py-2 px-3 rounded-xl border border-[#EFE6DC] bg-slate-50 text-xs font-medium text-slate-800"
               />
             </div>
           </div>
@@ -665,7 +665,7 @@ export default function SessionsHistoryClient({
       {/* 5. Sessions Results / Presentation */}
       {allAttempts.length === 0 ? (
         /* Zero State: User has not taken any tests */
-        <div className="bg-white rounded-2xl py-16 px-4 text-center space-y-4 border border-slate-200/90 shadow-xs">
+        <div className="bg-white rounded-2xl py-16 px-4 text-center space-y-4 border border-[#EFE6DC] shadow-xs">
           <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-200/60 shadow-xs">
             <ClipboardCheck className="w-7 h-7" />
           </div>
@@ -687,7 +687,7 @@ export default function SessionsHistoryClient({
         </div>
       ) : filteredAttempts.length === 0 ? (
         /* Filter Zero State: No tests match search/subject */
-        <div className="bg-white rounded-2xl py-12 px-4 text-center space-y-3 border border-slate-200/90 shadow-xs">
+        <div className="bg-white rounded-2xl py-12 px-4 text-center space-y-3 border border-[#EFE6DC] shadow-xs">
           <p className="text-base font-bold text-slate-900">No sessions match your search or filters</p>
           <p className="text-xs text-slate-400">
             Try resetting the filters or entering different search keywords.
@@ -700,7 +700,7 @@ export default function SessionsHistoryClient({
               setSelectedType("all");
               setDateRange("all");
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#EFE6DC] bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer shadow-xs"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset filters</span>
@@ -709,7 +709,7 @@ export default function SessionsHistoryClient({
       ) : (
         <div className="space-y-4">
           {/* Header count info */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 px-4 py-3 shadow-xs flex items-center justify-between text-xs text-slate-500 font-medium">
+          <div className="bg-white rounded-2xl border border-[#EFE6DC] px-4 py-3 shadow-xs flex items-center justify-between text-xs text-slate-500 font-medium">
             <span>
               Showing <strong className="text-slate-900 font-bold">{(currentPage - 1) * pageSize + 1}</strong> –{" "}
               <strong className="text-slate-900 font-bold">{Math.min(currentPage * pageSize, filteredAttempts.length)}</strong> of{" "}
@@ -729,7 +729,7 @@ export default function SessionsHistoryClient({
           </div>
 
           {/* Desktop Table View (>= 768px) */}
-          <div className="hidden md:block bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+          <div className="hidden md:block bg-white rounded-2xl border border-[#EFE6DC] shadow-xs overflow-hidden">
             <div className="overflow-x-auto w-full">
               <table className="w-full text-left border-collapse table-auto">
                 <thead className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-400 uppercase tracking-wider">
@@ -801,7 +801,7 @@ export default function SessionsHistoryClient({
 
                         {/* Subject */}
                         <td className="py-3.5 px-3 whitespace-nowrap">
-                          <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200/70 font-sans">
+                          <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-[#EFE6DC]/70 font-sans">
                             {att.subject || "Domain"}
                           </span>
                         </td>
@@ -858,7 +858,7 @@ export default function SessionsHistoryClient({
                               <span className="text-slate-300 mx-1">·</span>
                               <span className="text-slate-400">{skipped} skipped</span>
                             </div>
-                            <div className="w-20 h-1.5 rounded-full bg-slate-100 overflow-hidden flex border border-slate-200/50">
+                            <div className="w-20 h-1.5 rounded-full bg-slate-100 overflow-hidden flex border border-[#EFE6DC]/50">
                               <div
                                 style={{ width: `${totalQ > 0 ? Math.min(100, (correct / totalQ) * 100) : 0}%` }}
                                 className="bg-emerald-500 h-full"
@@ -891,7 +891,7 @@ export default function SessionsHistoryClient({
                             <Link
                               href={retakeHref}
                               onClick={(e) => e.stopPropagation()}
-                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200/60 transition-colors"
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-[#EFE6DC]/60 transition-colors"
                               title="Re-attempt this test"
                             >
                               <RotateCw className="w-3.5 h-3.5" />
@@ -941,7 +941,7 @@ export default function SessionsHistoryClient({
               return (
                 <div
                   key={att.id || `mobile-session-${idx}`}
-                  className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs space-y-3"
+                  className="bg-white rounded-2xl border border-[#EFE6DC] p-4 shadow-xs space-y-3"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="space-y-1 min-w-0">
@@ -1016,7 +1016,7 @@ export default function SessionsHistoryClient({
                     </Link>
                     <Link
                       href={retakeHref}
-                      className="py-1.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors flex items-center gap-1"
+                      className="py-1.5 px-3 rounded-xl border border-[#EFE6DC] bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors flex items-center gap-1"
                     >
                       <RotateCw className="w-3 h-3" />
                       <span>Retake</span>
@@ -1037,7 +1037,7 @@ export default function SessionsHistoryClient({
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs flex items-center justify-between text-xs">
+            <div className="bg-white rounded-2xl border border-[#EFE6DC] p-4 shadow-xs flex items-center justify-between text-xs">
               <div className="text-slate-500 font-medium">
                 Page <strong className="text-slate-900 font-bold">{currentPage}</strong> of{" "}
                 <strong className="text-slate-900 font-bold">{totalPages}</strong>
@@ -1048,7 +1048,7 @@ export default function SessionsHistoryClient({
                   type="button"
                   disabled={currentPage <= 1}
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
+                  className="px-3 py-1.5 rounded-xl border border-[#EFE6DC] bg-white text-slate-700 font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
                 >
                   <ChevronLeft className="w-3.5 h-3.5" />
                   <span>Previous</span>
@@ -1062,7 +1062,7 @@ export default function SessionsHistoryClient({
                     className={`w-8 h-8 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                       currentPage === page
                         ? "bg-slate-900 text-white shadow-xs"
-                        : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+                        : "bg-white border border-[#EFE6DC] text-slate-700 hover:bg-slate-50"
                     }`}
                   >
                     {page}
@@ -1073,7 +1073,7 @@ export default function SessionsHistoryClient({
                   type="button"
                   disabled={currentPage >= totalPages}
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
+                  className="px-3 py-1.5 rounded-xl border border-[#EFE6DC] bg-white text-slate-700 font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:pointer-events-none transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
                 >
                   <span>Next</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -1110,7 +1110,7 @@ export default function SessionsHistoryClient({
               <p>
                 Are you sure you want to permanently delete your session for:
               </p>
-              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1">
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-[#EFE6DC]/70 space-y-1">
                 <p className="font-bold text-slate-900">
                   {sessionToDelete.testTitle || `${sessionToDelete.subject} Mock Test`}
                 </p>
@@ -1133,7 +1133,7 @@ export default function SessionsHistoryClient({
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setSessionToDelete(null)}
-                className="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold rounded-xl border border-[#EFE6DC] bg-white text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
               >
                 Cancel
               </button>

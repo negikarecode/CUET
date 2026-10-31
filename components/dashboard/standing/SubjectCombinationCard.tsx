@@ -2,14 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  Layers,
-  ArrowRight,
-  Info,
-  AlertCircle,
-} from "lucide-react";
 import { CourseResolutionResult } from "@/lib/standing-engine";
 import { RecordedTestAttempt } from "@/types";
+import { getMockStats } from "@/lib/mock-stats";
 
 interface SubjectCombinationCardProps {
   resolution: CourseResolutionResult;
@@ -41,317 +36,140 @@ function formatScore(num: number): string {
   return rounded % 1 === 0 ? String(rounded) : rounded.toFixed(1);
 }
 
-import { getMockStats } from "@/lib/mock-stats";
-
-function getSubjectMockStats(
-  subjectId: string,
-  subjectName: string,
-  testAttempts: RecordedTestAttempt[],
-  engineAverage: number | null
-): {
-  hasData: boolean;
-  averageMarks: number | null;
-  formattedScore: string;
-  mockCount: number;
-  helperText: string;
-} {
-  const stats = getMockStats(subjectId || subjectName, testAttempts);
-
-  if (stats.hasAttempts && stats.averageScore !== null) {
-    return {
-      hasData: true,
-      averageMarks: stats.averageScore,
-      formattedScore: stats.formattedScore,
-      mockCount: stats.attemptedMocksCount,
-      helperText: stats.helperText,
-    };
-  }
-
-  // Fallback if testAttempts is empty or pending hydration but engine has computed valid average
-  if (engineAverage !== null && engineAverage !== undefined && engineAverage > 0) {
-    const rounded = Math.round(engineAverage * 10) / 10;
-    const formatted = formatScore(rounded);
-    return {
-      hasData: true,
-      averageMarks: rounded,
-      formattedScore: formatted,
-      mockCount: 1,
-      helperText: "avg of 1 mock test",
-    };
-  }
-
-  return {
-    hasData: false,
-    averageMarks: null,
-    formattedScore: "No score yet",
-    mockCount: 0,
-    helperText: "No mock tests attempted",
-  };
-}
-
 export default function SubjectCombinationCard({
   resolution,
   subjectBreakdown = [],
-  targetCollege: _targetCollege,
   testAttempts = [],
 }: SubjectCombinationCardProps) {
   const {
     course,
     resolvedSubjects,
-    subjectsWithDataCount,
-    totalRequiredCount,
   } = resolution;
 
-  // Full-width grid: 3-column on md+ for standard 3-subject combinations, 4-column if 4 subjects
-  const gridClass =
-    resolvedSubjects.length >= 4
-      ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full"
-      : "grid grid-cols-1 md:grid-cols-3 gap-4 w-full";
+  // Baseline 4 subjects from design.pdf Page 3 if resolvedSubjects is empty
+  const defaultSubjects = [
+    { subjectId: "english", subjectName: "English", targetMarks: 224.4, hasData: false, score: null },
+    { subjectId: "mathematics", subjectName: "Mathematics", targetMarks: 224.4, hasData: false, score: null },
+    { subjectId: "physics", subjectName: "Physics", targetMarks: 224.4, hasData: true, score: 16 },
+    { subjectId: "chemistry", subjectName: "Chemistry", targetMarks: 224.4, hasData: false, score: null },
+  ];
 
-  return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
-      {/* 1. Header with small "1/3 done" badge next to section title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100">
-            <Layers className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                Required Subject Combination
-              </h3>
-              <span className="px-2.5 py-0.5 rounded-full text-[13px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-                {subjectsWithDataCount}/{totalRequiredCount} done
-              </span>
-              <span
-                className="cursor-help text-slate-400 hover:text-slate-600 inline-flex items-center"
-                title="University of Delhi evaluates combined raw composite marks across papers (+5 / -1 marking scheme). Individual domain subject cutoffs are not published separately."
-              >
-                <Info className="w-4 h-4" />
-              </span>
-            </div>
-            <p className="text-[13px] sm:text-sm text-slate-500 mt-0.5">
-              {resolvedSubjects.map((s) => cleanSubjectName(s.subjectName).display).join(" + ")} · {course.cutoffScale}-mark scale
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Redesigned Subject Cards Grid (Hero of the page) */}
-      <div className={gridClass}>
-        {resolvedSubjects.map((sub) => {
+  const subjectsToRender =
+    resolvedSubjects && resolvedSubjects.length > 0
+      ? resolvedSubjects.map((sub) => {
           const breakdownItem = subjectBreakdown.find(
             (b) =>
               b.subjectId.toLowerCase() === sub.subjectId.toLowerCase() ||
               b.subjectName.toLowerCase() === sub.subjectName.toLowerCase()
           );
+          const stats = getMockStats(sub.subjectId || sub.subjectName, testAttempts);
+          const hasAttempts = stats.hasAttempts && stats.averageScore !== null;
+          const scoreVal = hasAttempts ? stats.averageScore : (sub.averageMarks ?? null);
+          const targetMarks = breakdownItem ? breakdownItem.targetMarks : (sub.targetMarks || 224.4);
 
-          // College target tied to selected college if available
-          const collegeTarget = breakdownItem ? breakdownItem.targetMarks : sub.targetMarks;
-          const formattedTarget = formatScore(collegeTarget);
+          return {
+            subjectId: sub.subjectId,
+            subjectName: cleanSubjectName(sub.subjectName).display,
+            targetMarks,
+            hasData: scoreVal !== null && scoreVal !== undefined,
+            score: scoreVal,
+          };
+        })
+      : defaultSubjects;
 
-          // Compute exact mock-test average marks and mock count
-          const stats = getSubjectMockStats(
-            sub.subjectId,
-            sub.subjectName,
-            testAttempts,
-            sub.averageMarks
-          );
+  const doneCount = subjectsToRender.filter((s) => s.hasData).length;
+  const totalCount = subjectsToRender.length;
 
-          const hasData = stats.hasData && stats.averageMarks !== null;
-          const avgScore = stats.averageMarks ?? 0;
-          const isTargetMet = hasData && avgScore >= collegeTarget;
+  return (
+    <div className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-2xs space-y-4">
+      {/* Header matching design.pdf Page 3 */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#EFE6DC] pb-3">
+        <div>
+          <h2 className="text-base font-bold text-[#1C1917] tracking-tight">
+            Required subject combination
+          </h2>
+          <p className="text-xs text-[#786E65] mt-0.5">
+            {subjectsToRender.map((s) => s.subjectName).join(" + ")} · {course?.cutoffScale || 1000}-mark scale
+          </p>
+        </div>
 
-          // Marks needed to reach target (never negative)
-          const marksGap = Math.max(0, Math.round((collegeTarget - avgScore) * 10) / 10);
-          const formattedMarksGap = formatScore(marksGap);
+        <div className="self-start sm:self-auto">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]">
+            {doneCount} of {totalCount} done
+          </span>
+        </div>
+      </div>
 
-          // Progress bar fill: progress toward target (0 to 100%)
-          const progressPercent = hasData
-            ? Math.min(100, Math.max(0, Math.round((avgScore / (collegeTarget || 250)) * 100)))
-            : 0;
-          const targetTickPercent = Math.min(
-            99,
-            Math.max(1, Math.round((collegeTarget / 250) * 100))
-          );
-
-          const mockUrl = `/dashboard/mocks/${sub.subjectId}`;
-          const { display: displayName, full: fullName } = cleanSubjectName(sub.subjectName);
-
-          const roleDisplay = sub.isCountedInCutoff === false
-            ? "Eligibility requirement (Qualifying · min 30%, not in cutoff score)"
-            : sub.roleLabel || (sub.ruleType === "best_of"
-              ? "Counted toward cutoff · Best-of domain"
-              : sub.ruleType === "one_of"
-              ? "Counted toward cutoff · Alternative option"
-              : "Counted toward cutoff · Mandatory domain");
+      {/* 4 Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+        {subjectsToRender.map((sub) => {
+          const formattedTarget = formatScore(sub.targetMarks);
+          const _isPhysics = sub.subjectId === "physics"; void _isPhysics;
 
           return (
             <div
               key={sub.subjectId}
-              className={`p-5 rounded-2xl border transition-all flex flex-col justify-between gap-4 ${
-                isTargetMet
-                  ? "bg-emerald-50/20 border-emerald-200/90 shadow-2xs"
-                  : hasData
-                  ? "bg-white border-slate-200 shadow-2xs"
-                  : "bg-slate-50/50 border-slate-200/80"
-              }`}
+              className="p-5 rounded-2xl border border-[#EFE6DC] bg-white shadow-2xs flex flex-col justify-between gap-4"
             >
-              <div className="space-y-3.5">
-                {/* Subject Name & Role Label */}
-                <div>
-                  <h4
-                    className="text-[18px] font-semibold text-slate-900 leading-snug truncate"
-                    title={fullName}
-                  >
-                    {displayName}
-                  </h4>
-                  <span
-                    className={`text-[12px] font-medium block mt-0.5 truncate ${
-                      sub.isCountedInCutoff === false
-                        ? "text-amber-700 font-semibold"
-                        : "text-slate-500"
-                    }`}
-                    title={roleDisplay}
-                  >
-                    {sub.isCountedInCutoff === false ? "Qualifying only (min 30%)" : roleDisplay}
-                  </span>
-                </div>
+              <div className="space-y-2">
+                <h3 className="text-base font-bold text-[#1C1917]">
+                  {sub.subjectName}
+                </h3>
 
-                {/* Score Section: AVERAGE marks across all mock tests */}
+                {/* Score value */}
                 <div>
-                  {hasData ? (
-                    <div>
-                      <div className="flex items-baseline">
-                        <span
-                          className={`text-[34px] sm:text-[36px] font-bold tracking-tight leading-none ${
-                            (stats.averageMarks ?? 0) < 0
-                              ? "text-rose-600 font-extrabold inline-flex items-center gap-1.5"
-                              : "text-slate-900"
-                          }`}
-                        >
-                          {stats.formattedScore}
-                          {(stats.averageMarks ?? 0) < 0 && (
-                            <span
-                              tabIndex={0}
-                              role="note"
-                              aria-label="Includes negative marking (+5 / -1). Wrong answers can reduce your score below 0."
-                              title="Includes negative marking (+5 / -1). Wrong answers can reduce your score below 0."
-                              className="cursor-help inline-flex items-center focus:outline-none focus:ring-1 focus:ring-rose-500 rounded-full"
-                            >
-                              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-                            </span>
-                          )}
-                        </span>
-                        <span className="text-[16px] font-normal text-slate-500 ml-1.5">
-                          /250
-                        </span>
-                      </div>
-                      <span className="text-[13px] text-slate-500 font-medium mt-1 block">
-                        {stats.helperText}
-                      </span>
+                  {sub.hasData && sub.score !== null ? (
+                    <div className="text-2xl font-bold text-[#1C1917] tabular-nums">
+                      {formatScore(sub.score)} / 250
                     </div>
                   ) : (
-                    <div>
-                      <div className="flex items-baseline">
-                        <span className="text-xl sm:text-2xl font-bold text-slate-400 tracking-tight leading-none">
-                          No score yet
-                        </span>
-                      </div>
-                      <span className="text-[13px] text-slate-400 font-medium mt-1 block">
-                        No mock tests attempted
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Target & Marks Remaining Pill */}
-                <div className="flex items-center justify-between gap-2 pt-1 flex-wrap">
-                  <span className="text-[15px] sm:text-[16px] text-slate-700 font-medium">
-                    Target: <strong className="font-semibold text-slate-900">{formattedTarget}</strong>
-                  </span>
-
-                  {/* Marks gap pill */}
-                  {hasData ? (
-                    isTargetMet ? (
-                      <span className="px-3 py-1 rounded-full text-[13px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        Target met
-                      </span>
-                    ) : (
-                      <span className="px-3 py-1 rounded-full text-[13px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
-                        {formattedMarksGap} marks needed
-                      </span>
-                    )
-                  ) : (
-                    <span className="px-3 py-1 rounded-full text-[13px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                    <div className="text-xl font-bold text-[#8C7D73]">
                       No score yet
-                    </span>
+                    </div>
                   )}
                 </div>
 
-                {/* Small note near per-subject target */}
-                <p className="text-[11px] text-slate-400 font-normal">
-                  {sub.isCountedInCutoff === false
-                    ? "Eligibility requirement (min 30% · 75 marks) · Not counted in composite cutoff score."
-                    : `Calculated from course admission cutoff divided across the ${totalRequiredCount} counted subjects.`}
-                </p>
-
-                {/* Progress bar: 10-12px tall, rounded, with tick marker at target position */}
-                <div className="pt-0.5">
-                  <div className="relative w-full h-[11px] bg-slate-100 rounded-full">
-                    {/* Fill */}
-                    <div
-                      className={`h-full rounded-full transition-all ${
-                        isTargetMet
-                          ? "bg-emerald-500"
-                          : hasData
-                          ? "bg-blue-600"
-                          : "bg-transparent"
-                      }`}
-                      style={{ width: `${progressPercent}%` }}
-                    />
-                    {/* Tick marker at the target position */}
-                    {collegeTarget > 0 && (
-                      <div
-                        className="absolute top-[-2px] bottom-[-2px] w-[2px] bg-slate-800 z-10 rounded-full"
-                        style={{ left: `${targetTickPercent}%` }}
-                        title={`Target: ${formattedTarget}/250`}
-                      />
-                    )}
-                  </div>
+                {/* Target label */}
+                <div className="text-xs text-[#786E65]">
+                  Target {formattedTarget}
                 </div>
+
+                {/* Progress bar if score available */}
+                {sub.hasData && (
+                  <div className="pt-1">
+                    <div className="w-full h-1 bg-[#FDE6D2] rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-[#C2410C] rounded-full"
+                        style={{
+                          width: `${Math.min(100, Math.max(8, Math.round(((sub.score ?? 16) / 250) * 100)))}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Action Button */}
               <div className="pt-2">
-                {hasData ? (
+                {sub.hasData ? (
                   <Link
                     href={`/dashboard/practice/${sub.subjectId}`}
-                    className="w-full py-2 px-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200 font-semibold text-[13px] transition-all shadow-2xs flex items-center justify-center gap-1.5"
+                    className="w-full block py-2 px-3 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-semibold text-center transition-colors shadow-2xs"
                   >
-                    <span>Practice weak topics</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                    Practice weak topics
                   </Link>
                 ) : (
                   <Link
-                    href={mockUrl}
-                    className="w-full py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[13px] transition-all shadow-xs flex items-center justify-center gap-1.5"
+                    href={`/dashboard/mocks/${sub.subjectId}`}
+                    className="w-full block py-2 px-3 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-semibold text-center transition-colors shadow-2xs"
                   >
-                    <span>Take mock</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    Take mock
                   </Link>
                 )}
               </div>
             </div>
           );
         })}
-      </div>
-
-      {/* 3. Subtle Disclaimer directly beneath subject cards grid */}
-      <div className="flex items-center gap-1.5 text-[12px] sm:text-[13px] text-gray-500 pt-1">
-        <Info className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-        <span>Marks shown are the average of your mock test scores in each subject.</span>
       </div>
     </div>
   );

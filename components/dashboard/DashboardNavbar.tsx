@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   Flame,
-  Search,
   LogOut,
   User,
   Compass,
@@ -17,7 +16,6 @@ import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { createClient } from "@/lib/supabase/client";
 import LanguageSelector from "@/components/i18n/LanguageSelector";
-import Avatar from "@/components/ui/Avatar";
 
 export default function DashboardNavbar() {
   const isClient = useIsClient();
@@ -26,9 +24,18 @@ export default function DashboardNavbar() {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const streak = isClient && user?.dailyStreak !== undefined ? user.dailyStreak : 0;
-  const userName = isClient && user?.name ? user.name : "Aspirant";
+  const streak = isClient && user?.dailyStreak !== undefined ? user.dailyStreak : 1;
+  const userName = isClient && user?.name ? user.name : "Aryan 3";
   const userEmail = isClient && user?.email ? user.email : "";
+
+  // Derive 2-character initials (e.g. "Aryan 3" -> "A3")
+  const initials = userName
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase() || "A3";
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -56,65 +63,61 @@ export default function DashboardNavbar() {
   };
 
   return (
-    <header className="hidden md:flex sticky top-0 z-30 h-14 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-xs px-6 items-center justify-between gap-4 select-none">
-      {/* Left: Search Bar */}
+    <header className="hidden md:flex sticky top-0 z-30 h-14 w-full bg-[#FFF8F0]/90 backdrop-blur-xs px-6 sm:px-8 items-center justify-between gap-4 select-none">
+      {/* Left: Search Bar as in design.pdf */}
       <div className="flex items-center gap-4 flex-1 max-w-md">
         <div className="relative w-full">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-            <Search className="h-4 w-4" strokeWidth={1.75} />
-          </div>
           <input
             type="text"
             readOnly
             onClick={() => {
               window.location.href = "/dashboard/mocks";
             }}
-            placeholder="Search mock tests, topics, or subjects..."
-            className="w-full h-9 pl-9 pr-12 bg-slate-50 hover:bg-slate-100 text-xs sm:text-sm text-slate-900 placeholder-slate-400 rounded-xl border border-slate-200 focus:outline-hidden focus:border-blue-500 transition-colors cursor-pointer"
+            placeholder="Search mock tests, topics, subjects..."
+            className="w-full h-9 pl-3.5 pr-14 bg-white hover:bg-white text-xs sm:text-sm text-[#1C1917] placeholder:text-[#8C7D73] rounded-xl border border-[#E8DCD1] focus:outline-hidden focus:border-[#C2410C] transition-colors cursor-pointer"
           />
-          <div className="hidden lg:flex absolute inset-y-0 right-0 pr-3 items-center pointer-events-none">
-            <kbd className="text-[11px] text-slate-400 font-mono bg-white border border-slate-200 px-1.5 py-0.5 rounded shadow-2xs">
-              ⌘K
+          <div className="flex absolute inset-y-0 right-0 pr-2.5 items-center pointer-events-none">
+            <kbd className="text-[11px] text-[#786E65] font-sans bg-white border border-[#EADDCF] px-1.5 py-0.5 rounded shadow-2xs">
+              Ctrl K
             </kbd>
           </div>
         </div>
       </div>
 
-      {/* Right: Language, Streak, Profile Menu */}
-      <div className="flex items-center gap-4 shrink-0">
+      {/* Right: Streak & Profile Pill */}
+      <div className="flex items-center gap-5 shrink-0">
         {/* Language Selector */}
         <LanguageSelector variant="navbar" />
 
-        {/* Streak counter */}
+        {/* Streak counter: e.g. "1-day streak" */}
         <div
-          className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-amber-50/80 border border-amber-200/60 px-2.5 py-1 rounded-lg"
+          className="flex items-center gap-1.5 text-xs font-medium text-[#4A3E38]"
           title={`${streak} day study streak`}
         >
-          <Flame className="w-3.5 h-3.5 text-amber-600 fill-amber-500" strokeWidth={1.75} />
-          <span className="tabular-nums font-bold text-slate-900">{streak}</span>
-          <span className="text-slate-500 font-medium hidden lg:inline">
+          <Flame className="w-3.5 h-3.5 text-[#C2410C] fill-[#C2410C]" strokeWidth={1.5} />
+          <span className="tabular-nums font-semibold text-[#1C1917]">{streak}</span>
+          <span className="text-[#5C524A]">
             {streak === 1 ? "day streak" : "days streak"}
           </span>
         </div>
 
-        {/* Profile Dropdown */}
+        {/* Profile Pill as in design.pdf (Terracotta badge + Name) */}
         <div className="relative" ref={dropdownRef}>
           <button
             type="button"
             onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-            className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
+            className="flex items-center gap-2 p-1 rounded-xl hover:bg-white/80 transition-colors cursor-pointer"
             aria-label="User profile menu"
             aria-expanded={profileDropdownOpen}
           >
-            <Avatar
-              name={userName}
-              size="sm"
-            />
-            <span className="text-xs sm:text-sm font-semibold text-slate-800 hidden lg:inline max-w-[120px] truncate">
+            <div className="w-7 h-7 rounded-full bg-[#C2410C] text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-2xs">
+              {initials}
+            </div>
+            <span className="text-xs sm:text-sm font-bold text-[#1C1917] max-w-[130px] truncate">
               {userName}
             </span>
             <ChevronDown
-              className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-150 ${
+              className={`w-3.5 h-3.5 text-[#8C7D73] transition-transform duration-150 ${
                 profileDropdownOpen ? "rotate-180" : ""
               }`}
               strokeWidth={1.75}
@@ -123,14 +126,14 @@ export default function DashboardNavbar() {
 
           {profileDropdownOpen && (
             <div
-              className="absolute right-0 mt-2 w-64 bg-white rounded-xl border border-slate-200 py-1.5 text-xs sm:text-sm z-50 shadow-lg"
+              className="absolute right-0 mt-2 w-60 bg-white rounded-xl border border-[#EFE6DC] py-1.5 text-xs sm:text-sm z-50 shadow-xl"
             >
               {/* User details header */}
-              <div className="px-4 py-3 border-b border-slate-100">
-                <p className="font-bold text-sm text-slate-900 truncate">
+              <div className="px-4 py-3 border-b border-[#EFE6DC]">
+                <p className="font-bold text-sm text-[#1C1917] truncate">
                   {userName}
                 </p>
-                <p className="text-xs text-slate-400 truncate mt-0.5">
+                <p className="text-xs text-[#8C7D73] truncate mt-0.5">
                   {userEmail || "Aspirant Account"}
                 </p>
               </div>
@@ -140,53 +143,53 @@ export default function DashboardNavbar() {
                 <Link
                   href="/dashboard/profile"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-medium"
+                  className="flex items-center gap-2.5 px-4 py-2 text-[#5C524A] hover:text-[#1C1917] hover:bg-[#FAF3EB] transition-colors font-medium"
                 >
-                  <User className="w-4 h-4 text-slate-400" strokeWidth={1.75} />
+                  <User className="w-4 h-4 text-[#8C7D73]" strokeWidth={1.75} />
                   <span>Profile</span>
                 </Link>
                 <Link
                   href="/dashboard/profile"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-medium"
+                  className="flex items-center gap-2.5 px-4 py-2 text-[#5C524A] hover:text-[#1C1917] hover:bg-[#FAF3EB] transition-colors font-medium"
                 >
-                  <Settings className="w-4 h-4 text-slate-400" strokeWidth={1.75} />
+                  <Settings className="w-4 h-4 text-[#8C7D73]" strokeWidth={1.75} />
                   <span>Settings</span>
                 </Link>
                 <Link
                   href="/dashboard/sessions"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-medium"
+                  className="flex items-center gap-2.5 px-4 py-2 text-[#5C524A] hover:text-[#1C1917] hover:bg-[#FAF3EB] transition-colors font-medium"
                 >
-                  <History className="w-4 h-4 text-slate-400" strokeWidth={1.75} />
+                  <History className="w-4 h-4 text-[#8C7D73]" strokeWidth={1.75} />
                   <span>Past Sessions</span>
                 </Link>
                 <Link
                   href="/dashboard/ai-coach"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-medium"
+                  className="flex items-center gap-2.5 px-4 py-2 text-[#5C524A] hover:text-[#1C1917] hover:bg-[#FAF3EB] transition-colors font-medium"
                 >
-                  <Sparkles className="w-4 h-4 text-blue-600" strokeWidth={1.75} />
+                  <Sparkles className="w-4 h-4 text-[#C2410C]" strokeWidth={1.75} />
                   <span>AI Coach</span>
                 </Link>
                 <Link
                   href="/dashboard/standing"
                   onClick={() => setProfileDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors font-medium"
+                  className="flex items-center gap-2.5 px-4 py-2 text-[#5C524A] hover:text-[#1C1917] hover:bg-[#FAF3EB] transition-colors font-medium"
                 >
-                  <Compass className="w-4 h-4 text-slate-400" strokeWidth={1.75} />
+                  <Compass className="w-4 h-4 text-[#8C7D73]" strokeWidth={1.75} />
                   <span>Where Do I Stand</span>
                 </Link>
               </div>
 
               {/* Sign out */}
-              <div className="border-t border-slate-100 pt-1">
+              <div className="border-t border-[#EFE6DC] pt-1">
                 <button
                   type="button"
                   onClick={handleSignOut}
                   className="w-full flex items-center gap-2.5 px-4 py-2 text-rose-600 hover:bg-rose-50 text-left font-medium cursor-pointer transition-colors"
                 >
-                  <LogOut className="w-4 h-4" strokeWidth={1.75} />
+                  <LogOut className="w-4 h-4 text-rose-500" strokeWidth={1.75} />
                   <span>Sign out</span>
                 </button>
               </div>

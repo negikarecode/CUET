@@ -72,8 +72,8 @@ export function NotesHubClient({ subjects }: Props) {
     <div className="space-y-6">
       {/* Controls Bar: Search & Stream Tabs */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-        {/* Stream Filter Pills */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-200/60 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 self-stretch sm:self-auto">
+        {/* Stream Filter Pills matching Warm Redesign */}
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#FEF1E0] rounded-2xl border border-[#F6D3AF] self-stretch sm:self-auto">
           {[
             { id: "all", label: "All Subjects", icon: Layers },
             { id: "science", label: "Science", icon: Atom },
@@ -87,10 +87,10 @@ export function NotesHubClient({ subjects }: Props) {
               <button
                 key={tab.id}
                 onClick={() => setSelectedStream(tab.id)}
-                className={`flex items-center px-3.5 py-1.5 rounded-xl text-xs font-semibold transition ${
+                className={`flex items-center px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
                   isSelected
-                    ? "bg-white dark:bg-slate-800 text-sky-600 dark:text-sky-400 shadow-sm"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                    ? "bg-white text-[#9F3014] shadow-xs font-bold"
+                    : "text-stone-600 hover:text-stone-900"
                 }`}
               >
                 <Icon className="w-3.5 h-3.5 mr-1.5" />
@@ -102,13 +102,13 @@ export function NotesHubClient({ subjects }: Props) {
 
         {/* Global Search Bar */}
         <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
           <input
             type="text"
             placeholder="Search topics, units, subjects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition shadow-sm"
+            className="w-full pl-9 pr-4 py-2 bg-white border border-[#EFE6DC] rounded-xl text-sm placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C] transition shadow-xs"
           />
         </div>
       </div>
@@ -122,54 +122,54 @@ export function NotesHubClient({ subjects }: Props) {
           return (
             <div
               key={sub.folder}
-              className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition flex flex-col justify-between group"
+              className="bg-white rounded-3xl p-6 border border-[#EFE6DC] shadow-xs hover:shadow-md transition flex flex-col justify-between group"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-600">
                     Code {sub.code}
                   </span>
                   {isPhysics ? (
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF]">
                       16 Notes Ready
                     </span>
                   ) : (
-                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-50 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-stone-50 text-stone-500">
                       Curated Syllabus
                     </span>
                   )}
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition">
+                  <h3 className="text-xl font-bold text-stone-900 group-hover:text-[#C2410C] transition">
                     {sub.name}
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  <p className="text-xs text-stone-500 mt-1">
                     {sub.units.length} Syllabus Units • {sub.totalTopics} High-Yield Topics
                   </p>
                 </div>
 
                 {/* Sample Topics List */}
                 <div className="space-y-1.5 pt-1">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-stone-400">
                     Units & Topics
                   </span>
                   <div className="space-y-1">
                     {sub.units.slice(0, 3).map((u) => (
                       <div
                         key={u.unitNumber}
-                        className="text-xs text-slate-700 dark:text-slate-300 flex items-center justify-between"
+                        className="text-xs text-stone-700 flex items-center justify-between"
                       >
                         <span className="truncate pr-2">
                           Unit {u.unitNumber}: {u.unitTitle}
                         </span>
-                        <span className="text-[10px] text-slate-400 flex-shrink-0">
+                        <span className="text-[10px] text-stone-400 flex-shrink-0">
                           {u.topics.length} topic{u.topics.length > 1 ? "s" : ""}
                         </span>
                       </div>
                     ))}
                     {sub.units.length > 3 && (
-                      <div className="text-[11px] text-slate-400 italic">
+                      <div className="text-[11px] text-stone-400 italic">
                         +{sub.units.length - 3} more units...
                       </div>
                     )}
@@ -178,10 +178,10 @@ export function NotesHubClient({ subjects }: Props) {
               </div>
 
               {/* Action Buttons */}
-              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+              <div className="mt-6 pt-4 border-t border-[#EFE6DC] flex items-center justify-between gap-3">
                 <Link
                   href={`/dashboard/notes/${sub.folder}`}
-                  className="flex-1 text-center py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs transition"
+                  className="flex-1 text-center py-2 px-3 rounded-xl bg-white hover:bg-[#FFF8F0] border border-[#EFE6DC] text-stone-700 font-semibold text-xs transition"
                 >
                   View All Units
                 </Link>
@@ -189,7 +189,7 @@ export function NotesHubClient({ subjects }: Props) {
                 {firstTopic && (
                   <Link
                     href={`/dashboard/notes/${sub.folder}/${firstTopic.slug}`}
-                    className="flex-1 text-center py-2 px-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition shadow-sm inline-flex items-center justify-center"
+                    className="flex-1 text-center py-2 px-3 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs transition shadow-xs inline-flex items-center justify-center gap-1"
                   >
                     <span>Read Free</span>
                     <ArrowRight className="w-3.5 h-3.5 ml-1" />

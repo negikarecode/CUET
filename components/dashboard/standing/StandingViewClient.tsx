@@ -292,21 +292,41 @@ export default function StandingViewClient({
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 sm:space-y-6">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight">
+            Where do I stand
+          </h1>
+          <p className="text-sm text-stone-600 mt-0.5">
+            Real-time cutoff calibration and gap analysis against your target college
+          </p>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF]">
+            {targetCollege}
+          </span>
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-700 border border-[#EFE6DC]">
+            {targetSelection.selectedCourse?.name || initialCourse}
+          </span>
+        </div>
+      </div>
+
       {/* Zero Attempts Guidance Banner */}
       {hasZeroAttempts ? (
-        <div className="p-5 bg-blue-50 border border-blue-200/80 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="p-5 bg-[#FEF1E0] border border-[#F6D3AF] rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-sm font-bold text-blue-900">
-              <ClipboardCheck className="w-5 h-5 text-blue-600" />
+            <div className="flex items-center gap-2 text-sm font-bold text-[#9F3014]">
+              <ClipboardCheck className="w-5 h-5 text-[#C2410C]" />
               <span>Take your first mock to see your standing</span>
             </div>
-            <p className="text-sm text-blue-800 leading-relaxed max-w-2xl">
+            <p className="text-sm text-stone-700 leading-relaxed max-w-2xl">
               You haven&apos;t taken any mock tests yet. Complete at least one mock test in your core domain subject to see your standing against previous cutoffs.
             </p>
           </div>
           <Link
             href="/dashboard/mocks"
-            className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-xs transition-all shrink-0 flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-sm rounded-xl shadow-xs transition-all shrink-0 flex items-center gap-2"
           >
             <span>Take Your First Mock</span>
             <ArrowRight className="w-4 h-4" />
@@ -316,11 +336,11 @@ export default function StandingViewClient({
 
       {/* Viewing vs Saved Target Chip (View-only for this page, never overwrites profile) */}
       {isViewingDifferentTarget && (
-        <div className="flex items-center justify-between bg-amber-50 border border-amber-200/90 px-4 py-2.5 rounded-2xl text-xs sm:text-sm text-amber-900 shadow-2xs">
+        <div className="flex items-center justify-between bg-[#FEF1E0] border border-[#F6D3AF] px-4 py-2.5 rounded-2xl text-xs sm:text-sm text-[#9F3014] shadow-2xs">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold text-amber-800">Viewing:</span>
-            <span className="font-bold text-amber-950">{targetCollege}</span>
-            <span className="text-amber-700 hidden sm:inline">(view-only for this page)</span>
+            <span className="font-semibold text-stone-700">Viewing:</span>
+            <span className="font-bold text-[#9F3014]">{targetCollege}</span>
+            <span className="text-stone-500 hidden sm:inline">(view-only for this page)</span>
           </div>
           <button
             type="button"
@@ -334,7 +354,7 @@ export default function StandingViewClient({
                 setTrendCollege(profileTarget.college);
               }
             }}
-            className="inline-flex items-center gap-1.5 text-blue-700 hover:text-blue-900 font-bold hover:underline cursor-pointer ml-3 shrink-0"
+            className="inline-flex items-center gap-1.5 text-[#C2410C] hover:text-[#9A3412] font-bold hover:underline cursor-pointer ml-3 shrink-0"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset to saved target ({profileTarget.college})</span>
@@ -343,7 +363,7 @@ export default function StandingViewClient({
       )}
 
       {/* 1. Cascading Target Selector Toolbar: Two equal-width dropdowns side by side */}
-      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFE6DC] shadow-xs">
         <CascadingTargetSelector
           targetSelection={targetSelection}
           layout="grid"
@@ -396,12 +416,12 @@ export default function StandingViewClient({
       />
 
       {/* 5. Methodology & Honest Labelling Disclaimers */}
-      <div className="p-5 bg-slate-50/90 rounded-2xl border border-slate-200/80 space-y-2.5 text-sm text-slate-500">
-        <div className="flex items-center gap-2 font-bold text-slate-700">
-          <Info className="w-4 h-4 text-blue-600 shrink-0" />
+      <div className="p-5 bg-white rounded-2xl border border-[#EFE6DC] space-y-2.5 text-sm text-stone-600">
+        <div className="flex items-center gap-2 font-bold text-stone-800">
+          <Info className="w-4 h-4 text-[#C2410C] shrink-0" />
           <span>Cutoff Methodology & Disclaimers</span>
         </div>
-        <ul className="space-y-1.5 list-disc list-inside text-[13px] leading-relaxed text-slate-600">
+        <ul className="space-y-1.5 list-disc list-inside text-[13px] leading-relaxed text-stone-600">
           <li>
             <strong>Data Source:</strong> Benchmarks are derived from official institutional archives across participating CUET universities (University of Delhi, Banaras Hindu University, Jawaharlal Nehru University, University of Allahabad, Jamia Millia Islamia, Dr. B.R. Ambedkar University Delhi, BBAU, GGSIPU, and Central Universities) covering 2023 to 2026 seat allocations across 118 colleges and 47 degree programs.
           </li>

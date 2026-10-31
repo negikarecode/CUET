@@ -12,9 +12,19 @@ const config: Config = {
     extend: {
       colors: {
         bg: "var(--bg)",
-        surface: "var(--surface)",
-        border: "var(--border)",
+        surface: {
+          DEFAULT: "var(--surface)",
+          warm: "var(--surface-warm)",
+          "warm-subtle": "var(--surface-warm-subtle)",
+          dark: "var(--surface-dark)",
+        },
+        border: {
+          DEFAULT: "var(--border)",
+          strong: "var(--border-strong)",
+          warm: "var(--border-warm)",
+        },
         "border-strong": "var(--border-strong)",
+        "border-warm": "var(--border-warm)",
         text: {
           DEFAULT: "var(--text)",
           secondary: "var(--text-secondary)",

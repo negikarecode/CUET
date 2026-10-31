@@ -955,12 +955,12 @@ function Navigation({
           className="flex items-center gap-2.5 group cursor-pointer"
           aria-label="CUET AI-Prep Home"
         >
-          <span className="w-9 h-9 rounded-xl bg-blue-600 text-white font-black text-lg flex items-center justify-center shadow-xs group-hover:bg-blue-700 transition-colors">
+          <span className="w-9 h-9 rounded-xl bg-[#C2410C] text-white font-black text-lg flex items-center justify-center shadow-xs group-hover:bg-[#9A3412] transition-colors">
             C
           </span>
           <div className="flex flex-col">
             <span className="text-slate-900 font-extrabold text-base tracking-tight leading-none">
-              CUET<span className="text-blue-600">Prep</span>
+              CUET<span className="text-[#C2410C]"> AI-Prep</span>
             </span>
             <span className="text-[10px] text-slate-400 font-semibold tracking-wider uppercase mt-0.5">
               NTA CBT Platform
@@ -972,31 +972,31 @@ function Navigation({
         <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600" aria-label="Main navigation">
           <a
             href="#pattern"
-            className="hover:text-blue-600 transition-colors py-1"
+            className="hover:text-[#C2410C] transition-colors py-1"
           >
             Exam Pattern
           </a>
           <a
             href="#syllabus"
-            className="hover:text-blue-600 transition-colors py-1"
+            className="hover:text-[#C2410C] transition-colors py-1"
           >
             Syllabus
           </a>
           <a
             href="#colleges"
-            className="hover:text-blue-600 transition-colors py-1"
+            className="hover:text-[#C2410C] transition-colors py-1"
           >
             Target Colleges
           </a>
           <a
             href="#simulator"
-            className="hover:text-blue-600 transition-colors py-1"
+            className="hover:text-[#C2410C] transition-colors py-1"
           >
             CBT Simulator
           </a>
           <a
             href="#pricing"
-            className="hover:text-blue-600 transition-colors py-1"
+            className="hover:text-[#C2410C] transition-colors py-1"
           >
             Pricing
           </a>
@@ -1007,7 +1007,7 @@ function Navigation({
               type="button"
               onClick={() => setMoreDropdownOpen(!moreDropdownOpen)}
               onBlur={() => setTimeout(() => setMoreDropdownOpen(false), 200)}
-              className="flex items-center gap-1 hover:text-blue-600 transition-colors py-1 cursor-pointer"
+              className="flex items-center gap-1 hover:text-[#C2410C] transition-colors py-1 cursor-pointer"
               aria-expanded={moreDropdownOpen}
             >
               <span>More</span>
@@ -1022,21 +1022,21 @@ function Navigation({
               <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 z-50 text-xs font-semibold">
                 <Link
                   href="/dashboard/pyqs"
-                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 hover:text-blue-600 transition-colors"
+                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 hover:text-[#C2410C] transition-colors"
                 >
-                  <FileText className="w-4 h-4 text-blue-600" />
+                  <FileText className="w-4 h-4 text-[#C2410C]" />
                   <span>251 Shift PYQs Vault</span>
                 </Link>
                 <a
                   href="#eligibility"
-                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 hover:text-blue-600 transition-colors"
+                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 hover:text-[#C2410C] transition-colors"
                 >
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
                   <span>Eligibility &amp; Steps</span>
                 </a>
                 <a
                   href="#faq"
-                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 hover:text-blue-600 transition-colors"
+                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 hover:text-[#C2410C] transition-colors"
                 >
                   <HelpCircle className="w-4 h-4 text-amber-600" />
                   <span>Candidate FAQs</span>
@@ -1051,7 +1051,7 @@ function Navigation({
           {isLoggedIn ? (
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-xs transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs transition-colors"
             >
               <LayoutDashboard className="w-4 h-4" />
               <span>Go to Dashboard</span>
@@ -1061,14 +1061,14 @@ function Navigation({
               <button
                 type="button"
                 onClick={() => onAuth("login")}
-                className="hidden sm:inline-flex px-3.5 py-2 text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer"
+                className="hidden sm:inline-flex px-3.5 py-2 text-sm font-bold text-slate-700 hover:text-[#C2410C] transition-colors cursor-pointer"
               >
                 Log In
               </button>
               <button
                 type="button"
                 onClick={() => onAuth("signup")}
-                className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm shadow-xs hover:shadow transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs hover:shadow transition-all cursor-pointer"
               >
                 <span>Join Now</span>
                 <ArrowRight className="w-4 h-4" />
@@ -1079,7 +1079,7 @@ function Navigation({
           {/* Mobile hamburger */}
           <button
             type="button"
-            className="lg:hidden p-2 text-slate-700 hover:text-blue-600 transition-colors"
+            className="lg:hidden p-2 text-slate-700 hover:text-[#C2410C] transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
           >
@@ -1097,7 +1097,7 @@ function Navigation({
             onClick={() => setMobileMenuOpen(false)}
           >
             <span className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-blue-600" />
+              <FileText className="w-4 h-4 text-[#C2410C]" />
               251 Shift PYQs Vault
             </span>
             <span className="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-bold">
@@ -1106,49 +1106,49 @@ function Navigation({
           </Link>
           <a
             href="#pattern"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-blue-600"
+            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
             Exam Pattern &amp; Marking
           </a>
           <a
             href="#syllabus"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-blue-600"
+            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
             Stream Syllabus Explorer
           </a>
           <a
             href="#colleges"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-blue-600"
+            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
             Target Universities &amp; Cutoffs
           </a>
           <a
             href="#simulator"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-blue-600"
+            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
             CBT Simulator Demo
           </a>
           <a
             href="#eligibility"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-blue-600"
+            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
             Eligibility &amp; 4-Step Registration
           </a>
           <a
             href="#pricing"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-blue-600"
+            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
             Plans &amp; Pricing
           </a>
           <a
             href="#faq"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-blue-600"
+            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
             Frequently Asked Questions
@@ -1213,7 +1213,7 @@ function Hero({
         <div className="max-w-3xl mx-auto text-center space-y-6">
           {/* Eyebrow Trust Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-bold">
-            <Trophy className="w-3.5 h-3.5 text-blue-600" />
+            <Trophy className="w-3.5 h-3.5 text-[#C2410C]" />
             <span>India&apos;s #1 Dedicated NTA CBT Practice Engine</span>
             <span className="w-1 h-1 rounded-full bg-blue-400" />
             <span className="text-slate-500 font-semibold">200,000+ Aspirants</span>
@@ -1222,7 +1222,7 @@ function Hero({
           {/* Main Headline */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
             Master CUET UG 2026 With{" "}
-            <span className="text-blue-600">Authentic Exam Pacing</span> &amp; Confidence.
+            <span className="text-[#C2410C]">Authentic Exam Pacing</span> &amp; Confidence.
           </h1>
 
           {/* Subtitle */}
@@ -1252,7 +1252,7 @@ function Hero({
               href="/dashboard/pyqs"
               className="px-6 py-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-sm border border-slate-200 transition-colors flex items-center gap-2"
             >
-              <FileText className="w-4 h-4 text-blue-600" />
+              <FileText className="w-4 h-4 text-[#C2410C]" />
               <span>Solve 251+ Official PYQs</span>
             </Link>
           </div>
@@ -1277,7 +1277,7 @@ function Hero({
         {/* 3 Core Value Pillars (Equal Height Cards, Generous Padding) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
           <div className="bg-slate-50/80 rounded-2xl p-6 border border-slate-200/80 hover:border-slate-300 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold mb-4">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#C2410C] flex items-center justify-center font-bold mb-4">
               <MonitorCheck className="w-5 h-5" />
             </div>
             <h2 className="text-base font-bold text-slate-900 mb-2">
@@ -1383,7 +1383,7 @@ function ExamPatternSection() {
                   </div>
                   <div className="flex justify-between">
                     <span>Maximum Marks:</span>
-                    <strong className="text-blue-600">{sec.maxMarks} Marks</strong>
+                    <strong className="text-[#C2410C]">{sec.maxMarks} Marks</strong>
                   </div>
                 </div>
               </div>
@@ -1493,7 +1493,7 @@ function SyllabusSection() {
                     <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
                       Code: {subject.code}
                     </span>
-                    <span className="text-xs font-semibold text-blue-600">
+                    <span className="text-xs font-semibold text-[#C2410C]">
                       {subject.unitsCount} Official Units
                     </span>
                   </div>
@@ -1540,7 +1540,7 @@ function SyllabusSection() {
                 <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
                   <Link
                     href={`/dashboard/practice`}
-                    className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                    className="text-xs font-bold text-[#C2410C] hover:text-blue-700 flex items-center gap-1"
                   >
                     <span>Practice Chapter Drills</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1890,7 +1890,7 @@ function TargetUniversitiesSection({
                 <button
                   type="button"
                   onClick={() => onAuth("signup")}
-                  className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 group transition-colors cursor-pointer"
+                  className="text-xs font-bold text-[#C2410C] hover:text-blue-700 inline-flex items-center gap-1 group transition-colors cursor-pointer"
                 >
                   <span>{item.cta}</span>
                   <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
@@ -1997,7 +1997,7 @@ function EligibilityRegistrationSection() {
                   {s.description}
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] text-blue-600 font-bold">
+              <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] text-[#C2410C] font-bold">
                 {s.badge}
               </div>
             </div>
@@ -2055,7 +2055,7 @@ function EligibilityRegistrationSection() {
                   href={eligibility.officialSourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-700 font-semibold inline-flex items-center gap-1 text-xs"
+                  className="text-[#C2410C] hover:text-blue-700 font-semibold inline-flex items-center gap-1 text-xs"
                 >
                   Verify on official NTA portal &rarr;
                 </a>
@@ -2154,7 +2154,7 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
                     <div key={fIdx} className="flex items-start gap-2.5 text-xs sm:text-sm">
                       <Check
                         className={`w-4 h-4 shrink-0 mt-0.5 ${
-                          card.highlight ? "text-amber-400" : "text-blue-600"
+                          card.highlight ? "text-amber-400" : "text-[#C2410C]"
                         }`}
                       />
                       <span className={card.highlight ? "text-slate-200" : "text-slate-700"}>
@@ -2171,7 +2171,7 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
                 className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
                   card.highlight
                     ? "bg-amber-400 hover:bg-amber-500 text-slate-950 shadow-md"
-                    : "bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+                    : "bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white shadow-xs"
                 }`}
               >
                 {card.cta}
@@ -2234,7 +2234,7 @@ function HallOfFameSection() {
                 />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900 leading-tight">{item.name}</h4>
-                  <p className="text-xs text-blue-600 font-semibold mt-0.5">
+                  <p className="text-xs text-[#C2410C] font-semibold mt-0.5">
                     {item.college} &bull; <strong>{item.score}</strong>
                   </p>
                 </div>
@@ -2551,7 +2551,7 @@ function BackToTopButton() {
     <button
       type="button"
       onClick={scrollToTop}
-      className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg transition-all hover:scale-105 cursor-pointer"
+      className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white shadow-lg transition-all hover:scale-105 cursor-pointer"
       aria-label="Back to top"
     >
       <ArrowUp className="w-5 h-5" />
@@ -2654,7 +2654,7 @@ export default function LandingPageClient() {
   const isLoggedIn = isClient && authChecked && hasActiveSession;
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-[#FCE7D0] selection:text-[#441408]">
       {/* 1. Top Notice & Live Exam Countdown Pill */}
       <NoticeCountdownBanner />
 

@@ -358,7 +358,7 @@ export default function PostMockAnalysisClient({
             <span>{backLabel}</span>
           </Link>
           <span className="text-slate-300">|</span>
-          <span className="text-xs font-semibold uppercase tracking-wider bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full border border-slate-200 font-mono">
+          <span className="text-xs font-semibold uppercase tracking-wider bg-[#FEF1E0] text-[#9F3014] px-2.5 py-0.5 rounded-full border border-[#F6D3AF] font-mono">
             {badgeLabel}
           </span>
         </div>
@@ -367,7 +367,7 @@ export default function PostMockAnalysisClient({
           <button
             type="button"
             onClick={toggleAllSections}
-            className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center gap-2 cursor-pointer shrink-0 whitespace-nowrap"
+            className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-[#EFE6DC] shadow-xs transition-all flex items-center gap-2 cursor-pointer shrink-0 whitespace-nowrap"
             title={allCollapsed ? "Expand all sections" : "Collapse all sections"}
           >
             <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${allCollapsed ? "" : "rotate-180"}`} />
@@ -377,7 +377,7 @@ export default function PostMockAnalysisClient({
             <button
               type="button"
               onClick={onRetake}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center gap-2 cursor-pointer shrink-0 whitespace-nowrap"
+              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-[#EFE6DC] shadow-xs transition-all flex items-center gap-2 cursor-pointer shrink-0 whitespace-nowrap"
             >
               <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
               <span>{retakeLabel}</span>
@@ -389,7 +389,7 @@ export default function PostMockAnalysisClient({
                 const targetId = resolveCanonicalTestId(report.testId, report.testTitle, report.subject) || report.testId;
                 router.push(`/test/${targetId}?reattempt=true`);
               }}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all flex items-center gap-2 cursor-pointer shrink-0 whitespace-nowrap"
+              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-[#EFE6DC] shadow-xs transition-all flex items-center gap-2 cursor-pointer shrink-0 whitespace-nowrap"
             >
               <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
               <span>{retakeLabel}</span>
@@ -397,7 +397,7 @@ export default function PostMockAnalysisClient({
           )}
           <Link
             href={backHref}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all shrink-0 whitespace-nowrap"
+            className="px-4 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-semibold text-xs shadow-xs hover:shadow transition-all shrink-0 whitespace-nowrap"
           >
             {backButtonText}
           </Link>
@@ -405,11 +405,11 @@ export default function PostMockAnalysisClient({
       </div>
 
       {/* SECTION 1 — OFFICIAL SCORECARD */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-xs">
+      <div className="bg-white rounded-3xl border border-[#EFE6DC] p-6 sm:p-8 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold uppercase tracking-wider mb-2 border border-blue-200/80 shadow-xs">
-              <Award className="w-3.5 h-3.5 text-blue-600" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FEF1E0] text-[#9F3014] text-xs font-semibold uppercase tracking-wider mb-2 border border-[#F6D3AF] shadow-xs">
+              <Award className="w-3.5 h-3.5 text-[#C2410C]" />
               Official NTA CUET CBT Analysis
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
@@ -441,9 +441,9 @@ export default function PostMockAnalysisClient({
         {!collapsedSections.scorecard && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 mt-6 pt-6 border-t border-slate-100">
             {/* Score */}
-            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+            <div className="bg-[#FEF1E0] rounded-2xl p-4 border border-[#F6D3AF] shadow-xs">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Score</span>
+                <span className="text-[10px] font-semibold uppercase text-[#9F3014] tracking-wider">Score</span>
               </div>
               <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
                 {overall.totalMarks}{" "}
@@ -459,8 +459,8 @@ export default function PostMockAnalysisClient({
             </div>
 
             {/* Accuracy */}
-            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-              <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Accuracy</span>
+            <div className="bg-[#FEF1E0] rounded-2xl p-4 border border-[#F6D3AF] shadow-xs">
+              <span className="text-[10px] font-semibold uppercase text-[#9F3014] tracking-wider">Accuracy</span>
               <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-900">
                 {overall.accuracyPercentage}%
               </p>
@@ -470,7 +470,7 @@ export default function PostMockAnalysisClient({
             </div>
 
             {/* Correct */}
-            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+            <div className="bg-[#FEF1E0] rounded-2xl p-4 border border-[#F6D3AF] shadow-xs">
               <span className="text-[10px] font-semibold uppercase text-emerald-600 tracking-wider">Correct</span>
               <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-emerald-600">
                 {overall.correctCount}
@@ -481,7 +481,7 @@ export default function PostMockAnalysisClient({
             </div>
 
             {/* Incorrect */}
-            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+            <div className="bg-[#FEF1E0] rounded-2xl p-4 border border-[#F6D3AF] shadow-xs">
               <span className="text-[10px] font-semibold uppercase text-rose-600 tracking-wider">Incorrect</span>
               <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-rose-600">
                 {overall.incorrectCount}
@@ -492,8 +492,8 @@ export default function PostMockAnalysisClient({
             </div>
 
             {/* Unattempted / Skipped */}
-            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-              <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Unattempted</span>
+            <div className="bg-[#FEF1E0] rounded-2xl p-4 border border-[#F6D3AF] shadow-xs">
+              <span className="text-[10px] font-semibold uppercase text-[#9F3014] tracking-wider">Unattempted</span>
               <p className="text-2xl sm:text-3xl font-bold font-mono mt-1 text-slate-600">
                 {overall.skippedCount}
               </p>
@@ -503,9 +503,9 @@ export default function PostMockAnalysisClient({
             </div>
 
             {/* Time Elapsed & Time Sinks */}
-            <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/60 shadow-xs">
+            <div className="bg-[#FEF1E0] rounded-2xl p-4 border border-[#F6D3AF] shadow-xs">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-semibold uppercase text-slate-400 tracking-wider">Time Elapsed</span>
+                <span className="text-[10px] font-semibold uppercase text-[#9F3014] tracking-wider">Time Elapsed</span>
                 {overall.timeSinkCount > 0 && (
                   <span className="text-[9px] font-semibold font-mono bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded-full border border-rose-200">
                     {overall.timeSinkCount} Sinks
@@ -1485,11 +1485,11 @@ export default function PostMockAnalysisClient({
                           -1 Mark (Penalty)
                         </span>
                       ) : isPending ? (
-                        <span className="bg-slate-50 text-slate-600 font-semibold px-2.5 py-0.5 rounded-full border border-slate-200 shadow-xs">
+                        <span className="bg-slate-50 text-slate-600 font-semibold px-2.5 py-0.5 rounded-full border border-[#EFE6DC] shadow-xs">
                           Evaluating...
                         </span>
                       ) : (
-                        <span className="bg-slate-50 text-slate-600 font-semibold px-2.5 py-0.5 rounded-full border border-slate-200 shadow-xs">
+                        <span className="bg-slate-50 text-slate-600 font-semibold px-2.5 py-0.5 rounded-full border border-[#EFE6DC] shadow-xs">
                           0 Marks (Skipped)
                         </span>
                       )}
@@ -1665,7 +1665,7 @@ export default function PostMockAnalysisClient({
               onClick={() => {
                 handleInspectSlice({ result: "incorrect" });
               }}
-              className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all cursor-pointer shrink-0 whitespace-nowrap"
+              className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-[#EFE6DC] shadow-xs transition-all cursor-pointer shrink-0 whitespace-nowrap"
             >
               Review {overall.incorrectCount} Incorrect Questions
             </button>
@@ -1683,7 +1683,7 @@ export default function PostMockAnalysisClient({
             <button
               type="button"
               onClick={onRetake}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap"
+              className="px-4 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap"
             >
               <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
               <span>{retakeLabel}</span>
@@ -1695,7 +1695,7 @@ export default function PostMockAnalysisClient({
                 const targetId = resolveCanonicalTestId(report.testId, report.testTitle, report.subject) || report.testId;
                 router.push(`/test/${targetId}?reattempt=true`);
               }}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap"
+              className="px-4 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap"
             >
               <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
               <span>{retakeLabel}</span>
@@ -1704,7 +1704,7 @@ export default function PostMockAnalysisClient({
 
           <Link
             href={backHref}
-            className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-slate-200 shadow-xs transition-all shrink-0 whitespace-nowrap"
+            className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-[#EFE6DC] shadow-xs transition-all shrink-0 whitespace-nowrap"
           >
             {backButtonText}
           </Link>

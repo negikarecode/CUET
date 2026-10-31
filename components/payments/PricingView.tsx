@@ -53,8 +53,8 @@ export default function PricingView() {
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12 sm:space-y-16">
       {/* 1. Header Section */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold uppercase tracking-wider border border-blue-200/80 shadow-xs">
-          <Sparkles className="w-3.5 h-3.5 text-blue-600 fill-blue-500" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FEF1E0] text-[#9F3014] text-xs font-semibold uppercase tracking-wider border border-[#F6D3AF] shadow-xs">
+          <Sparkles className="w-3.5 h-3.5 text-[#C2410C]" />
           <span>CUET UG 2026 Aspirant Pass</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
@@ -66,11 +66,11 @@ export default function PricingView() {
 
         {/* Truthful Promotional Banner */}
         {pricing.isPromotionalActive && pricing.remainingSlots > 0 ? (
-          <div className="mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm font-semibold shadow-xs animate-in fade-in duration-300">
-            <Flame className="w-4 h-4 text-amber-600 fill-amber-500" />
+          <div className="mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#FEF1E0] border border-[#F6D3AF] text-[#9F3014] text-xs sm:text-sm font-semibold shadow-xs animate-in fade-in duration-300">
+            <Flame className="w-4 h-4 text-[#C2410C] fill-[#C2410C]" />
             <span>
               Launch Offer: <strong>₹{pricing.currentPriceInr}</strong> for the first {pricing.totalSlots} buyers (
-              <span className="text-amber-700 font-bold">{pricing.remainingSlots} slots remaining</span>)
+              <span className="text-[#9F3014] font-bold">{pricing.remainingSlots} slots remaining</span>)
             </span>
           </div>
         ) : (
@@ -83,7 +83,7 @@ export default function PricingView() {
       {/* 2. Side-by-Side Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-4xl mx-auto">
         {/* Free Plan */}
-        <div className="p-7 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs flex flex-col justify-between">
+        <div className="p-7 sm:p-8 rounded-3xl bg-white border border-[#EFE6DC] shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
@@ -102,19 +102,19 @@ export default function PricingView() {
 
             <div className="mt-7 space-y-3.5 text-xs text-slate-700 font-medium">
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
+                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span>3 Distinct Domain Mock Exams (Unlimited Retries)</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
+                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span>3 Distinct Unit Practice Tests (Unlimited Retries)</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
+                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span>1 Distinct Official PYQ Paper (Unlimited Retries)</span>
@@ -137,7 +137,7 @@ export default function PricingView() {
           <div className="mt-8 pt-6 border-t border-slate-100">
             <Link
               href="/dashboard/mocks"
-              className="w-full py-3.5 px-4 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs flex items-center justify-center gap-2 border border-slate-200 transition-all"
+              className="w-full py-3.5 px-4 rounded-xl bg-white hover:bg-[#FFF8F0] text-stone-700 font-semibold text-xs flex items-center justify-center gap-2 border border-[#EFE6DC] transition-all"
             >
               <span>Explore Free Mocks</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -146,17 +146,17 @@ export default function PricingView() {
         </div>
 
         {/* Premium Plan */}
-        <div className="p-7 sm:p-8 rounded-3xl bg-white border-2 border-indigo-600 shadow-lg flex flex-col justify-between relative ring-4 ring-indigo-50/50">
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[11px] font-semibold uppercase tracking-wider px-4 py-1 rounded-full shadow-xs">
+        <div className="p-7 sm:p-8 rounded-3xl bg-white border-2 border-[#C2410C] shadow-lg flex flex-col justify-between relative ring-4 ring-[#C2410C]/10">
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#C2410C] text-white text-[11px] font-semibold uppercase tracking-wider px-4 py-1 rounded-full shadow-xs">
             Most Popular
           </div>
 
           <div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200/60">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[#9F3014] bg-[#FEF1E0] px-3 py-1 rounded-full border border-[#F6D3AF]">
                 CUETMate Premium
               </span>
-              <span className="text-[11px] font-semibold text-indigo-600">Single One-Time Payment</span>
+              <span className="text-[11px] font-semibold text-[#C2410C]">Single One-Time Payment</span>
             </div>
 
             <div className="mt-5 flex items-baseline gap-2">
@@ -176,37 +176,37 @@ export default function PricingView() {
 
             <div className="mt-7 space-y-3.5 text-xs text-slate-700 font-medium">
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
+                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Unlimited</strong> Full-Length Mock Exams (All 20 Subjects)</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
+                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Unlimited</strong> Unit-wise Practice Tests</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
+                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Unlimited</strong> Official Past Year Question Papers (PYQs)</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
+                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Where Do I Stand:</strong> Official College Cutoff Gap Analysis</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
+                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Subject Weakness Radar:</strong> Micro-topic diagnostic engine</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
+                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Target College Standing:</strong> Real-time cutoff prediction</span>

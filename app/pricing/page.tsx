@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#FFF8F0]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
         <Breadcrumbs items={[{ label: "Pricing & Plans" }]} />
       </div>

@@ -586,7 +586,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             setClearCourseOnOpen(false);
             setIsEditGoalsOpen(true);
           }}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm border border-slate-200 shadow-xs hover:shadow transition-all cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm border border-[#EFE6DC] shadow-xs hover:shadow transition-all cursor-pointer self-start sm:self-auto"
         >
           <Edit3 className="w-4 h-4 text-slate-500" />
           <span>Edit goals</span>
@@ -637,12 +637,12 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       {/* ──────────────────────────────────────────────────────────── */}
       {/* SECTION 1: HERO & ACADEMIC IDENTITY CARD */}
       {/* ──────────────────────────────────────────────────────────── */}
-      <section className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 sm:p-7 space-y-6">
+      <section className="bg-white rounded-2xl border border-[#EFE6DC] shadow-xs p-5 sm:p-7 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pb-6 border-b border-slate-100">
           <div className="flex items-center gap-4">
             {/* Student Avatar */}
             <div className="relative">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xl sm:text-2xl shadow-xs shrink-0">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#C2410C] text-white flex items-center justify-center font-bold text-xl sm:text-2xl shadow-xs shrink-0">
                 {initials}
               </div>
               <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-white shadow-xs">
@@ -670,8 +670,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
 
           {/* Quick Target College Goal Pill with Edit Button (No Cutoff) */}
-          <div className="flex items-start gap-3 bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl self-start sm:self-auto max-w-sm">
-            <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0 mt-0.5">
+          <div className="flex items-start gap-3 bg-[#FEF1E0] border border-[#F6D3AF] p-3.5 rounded-2xl self-start sm:self-auto max-w-sm">
+            <div className="w-9 h-9 rounded-xl bg-[#FEF1E0] text-[#C2410C] border border-[#F6D3AF] flex items-center justify-center shrink-0 mt-0.5">
               <Building2 className="w-4 h-4" />
             </div>
             <div className="text-left flex-1 min-w-0 pr-1">
@@ -721,7 +721,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             {displaySubjects.map((subj) => (
               <span
                 key={subj}
-                className="px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs sm:text-sm font-semibold text-slate-700 shadow-2xs"
+                className="px-3 py-1.5 rounded-xl bg-white border border-[#EFE6DC] text-xs sm:text-sm font-semibold text-slate-700 shadow-2xs"
               >
                 {subj}
               </span>
@@ -760,7 +760,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         {/* ──────────────────────────────────────────────────────────── */}
         {/* CARD 2: DIAGNOSTIC READINESS & WEAK TOPICS */}
         {/* ──────────────────────────────────────────────────────────── */}
-        <section className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-5">
+        <section className="bg-white rounded-2xl border border-[#EFE6DC] shadow-xs p-5 sm:p-6 space-y-5">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
               <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
@@ -789,7 +789,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
 
           {/* 1. Diagnostic Calibration Progress Meter */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-[#EFE6DC] space-y-3">
             <div className="flex items-center justify-between text-xs sm:text-sm font-semibold">
               <span className="text-slate-700 flex items-center gap-1.5 font-bold">
                 <Target className="w-4 h-4 text-blue-600" />
@@ -821,7 +821,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
 
           {/* 2. Target College Readiness Card (Data-Driven from useTarget & getMockStats) */}
-          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+          <div className="p-5 rounded-2xl bg-white border border-[#EFE6DC] shadow-xs space-y-4">
             <div className="flex items-start justify-between gap-3">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -931,7 +931,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
 
           {/* 3. Weakness Section: Top 3 Weak Topics (Min 10 Qs) */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-[#EFE6DC] space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-indigo-600" />
@@ -955,7 +955,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                   return (
                     <div
                       key={idx}
-                      className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200/80 gap-3"
+                      className="flex items-center justify-between p-3 rounded-xl bg-white border border-[#EFE6DC] gap-3"
                     >
                       <div className="min-w-0 flex-1">
                         <p className="text-xs sm:text-sm font-bold text-slate-900 truncate">
@@ -1018,7 +1018,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         {/* ──────────────────────────────────────────────────────────── */}
         {/* CARD 3: SUBSCRIPTION & SETTINGS */}
         {/* ──────────────────────────────────────────────────────────── */}
-        <section className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-5">
+        <section className="bg-white rounded-2xl border border-[#EFE6DC] shadow-xs p-5 sm:p-6 space-y-5">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
               <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
@@ -1082,7 +1082,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
 
           {/* Target Exam Season Setting (Dynamically computed from date) */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-between gap-3">
+          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#EFE6DC] shadow-xs flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
                 <Calendar className="w-4 h-4 text-indigo-600" />
@@ -1105,7 +1105,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
 
           {/* Daily Revision Push Alerts with Time Picker */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#EFE6DC] shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
@@ -1178,7 +1178,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       {/* ──────────────────────────────────────────────────────────── */}
       {/* SECTION 4: DATA & PRACTICE HISTORY (Danger Zone) */}
       {/* ──────────────────────────────────────────────────────────── */}
-      <section className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4">
+      <section className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-xs space-y-4">
         <div>
           <h3 className="text-base font-bold text-slate-900 tracking-tight">
             Data Management
@@ -1230,7 +1230,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       {/* ──────────────────────────────────────────────────────────── */}
       {/* SECTION 5: ACCOUNT SESSION & SIGN OUT */}
       {/* ──────────────────────────────────────────────────────────── */}
-      <section className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <section className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
             <User className="w-5 h-5" />
