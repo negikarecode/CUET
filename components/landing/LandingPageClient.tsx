@@ -11,7 +11,6 @@ import {
   FileText,
   Lightbulb,
   MonitorCheck,
-  Trophy,
   LayoutDashboard,
   Check,
   Star,
@@ -22,7 +21,6 @@ import {
   HelpCircle,
   ArrowUp,
   ShieldCheck,
-  CheckCircle2,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -900,22 +898,21 @@ function NoticeCountdownBanner() {
   }, []);
 
   return (
-    <aside aria-label="Official announcement" className="bg-slate-900 text-slate-200 border-b border-slate-800 text-xs py-2.5 px-4">
+    <aside aria-label="Official announcement" className="bg-[#FFF0C4] text-stone-900 border-b border-[#F6D3AF] text-xs py-2 px-4">
       <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[11px] tracking-wide uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-            {CUET_AUTHORITY.officialNotice.badge}
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-[11px] tracking-wide uppercase">
+            NTA 2026 notice
           </span>
-          <span className="text-slate-300 font-medium">
-            Exam Window: <strong>{CUET_AUTHORITY.examDates.examWindow}</strong> • {CUET_AUTHORITY.officialNotice.headline}
+          <span className="text-stone-800 font-medium text-xs sm:text-sm">
+            Exam window: <strong>May 15 – May 31, 2026</strong> · 50 compulsory questions, zero internal choice
           </span>
         </div>
 
         <div className="flex items-center gap-4 ml-auto">
           {timeLeft && (
-            <div className="flex items-center gap-1.5 font-mono text-[11px] text-amber-300 font-bold bg-amber-400/10 px-2.5 py-0.5 rounded-md border border-amber-400/20">
-              <Clock3 className="w-3.5 h-3.5" />
+            <div className="hidden sm:flex items-center gap-1.5 font-mono text-[11px] text-[#9F3014] font-bold bg-[#FEF1E0] px-2.5 py-0.5 rounded-md border border-[#F6D3AF]">
+              <Clock3 className="w-3.5 h-3.5 text-[#C2410C]" />
               <span>
                 {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m remaining
               </span>
@@ -923,9 +920,9 @@ function NoticeCountdownBanner() {
           )}
           <a
             href="#pattern"
-            className="text-blue-400 hover:text-blue-300 font-semibold underline underline-offset-2 transition-colors"
+            className="text-[#C2410C] hover:text-[#9A3412] font-semibold underline underline-offset-2 transition-colors flex items-center gap-1 text-xs sm:text-sm"
           >
-            Check Pattern
+            Check pattern &rarr;
           </a>
         </div>
       </div>
@@ -947,52 +944,52 @@ function Navigation({
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+    <header className="sticky top-0 z-40 bg-[#FFF8F0]/95 backdrop-blur-md border-b border-[#EFE6DC] shadow-xs">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Brand */}
         <Link
           href="/"
           className="flex items-center gap-2.5 group cursor-pointer"
-          aria-label="CUET AI-Prep Home"
+          aria-label="CUETPrep Home"
         >
           <span className="w-9 h-9 rounded-xl bg-[#C2410C] text-white font-black text-lg flex items-center justify-center shadow-xs group-hover:bg-[#9A3412] transition-colors">
             C
           </span>
           <div className="flex flex-col">
-            <span className="text-slate-900 font-extrabold text-base tracking-tight leading-none">
-              CUET<span className="text-[#C2410C]"> AI-Prep</span>
+            <span className="text-stone-900 font-black text-lg tracking-tight leading-none">
+              CUET<span className="text-[#C2410C]">Prep</span>
             </span>
-            <span className="text-[10px] text-slate-400 font-semibold tracking-wider uppercase mt-0.5">
+            <span className="text-[10px] text-stone-500 font-semibold tracking-wider uppercase mt-0.5">
               NTA CBT Platform
             </span>
           </div>
         </Link>
 
-        {/* Desktop Nav: Max 5 primary links + 'More' dropdown */}
-        <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600" aria-label="Main navigation">
+        {/* Desktop Nav: 5 links matching Landing page.pdf + 'More' dropdown */}
+        <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-stone-700" aria-label="Main navigation">
           <a
             href="#pattern"
             className="hover:text-[#C2410C] transition-colors py-1"
           >
-            Exam Pattern
+            Exam pattern
           </a>
           <a
-            href="#syllabus"
+            href="#ai-coach"
             className="hover:text-[#C2410C] transition-colors py-1"
           >
-            Syllabus
+            AI Coach
           </a>
           <a
             href="#colleges"
             className="hover:text-[#C2410C] transition-colors py-1"
           >
-            Target Colleges
+            Target colleges
           </a>
           <a
             href="#simulator"
             className="hover:text-[#C2410C] transition-colors py-1"
           >
-            CBT Simulator
+            CBT simulator
           </a>
           <a
             href="#pricing"
@@ -1019,24 +1016,31 @@ function Navigation({
             </button>
 
             {moreDropdownOpen && (
-              <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 z-50 text-xs font-semibold">
+              <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-[#EFE6DC] py-1.5 z-50 text-xs font-semibold">
+                <a
+                  href="#syllabus"
+                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-[#FFF8F0] text-stone-700 hover:text-[#C2410C] transition-colors"
+                >
+                  <FileText className="w-4 h-4 text-[#C2410C]" />
+                  <span>Syllabus Explorer</span>
+                </a>
                 <Link
                   href="/dashboard/pyqs"
-                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 hover:text-[#C2410C] transition-colors"
+                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-[#FFF8F0] text-stone-700 hover:text-[#C2410C] transition-colors"
                 >
                   <FileText className="w-4 h-4 text-[#C2410C]" />
                   <span>251 Shift PYQs Vault</span>
                 </Link>
                 <a
                   href="#eligibility"
-                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 hover:text-[#C2410C] transition-colors"
+                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-[#FFF8F0] text-stone-700 hover:text-[#C2410C] transition-colors"
                 >
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
                   <span>Eligibility &amp; Steps</span>
                 </a>
                 <a
                   href="#faq"
-                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 hover:text-[#C2410C] transition-colors"
+                  className="flex items-center gap-2 px-3.5 py-2 hover:bg-[#FFF8F0] text-stone-700 hover:text-[#C2410C] transition-colors"
                 >
                   <HelpCircle className="w-4 h-4 text-amber-600" />
                   <span>Candidate FAQs</span>
@@ -1046,22 +1050,22 @@ function Navigation({
           </div>
         </nav>
 
-        {/* Action CTAs */}
+        {/* Action CTAs: 'Go to dashboard' matching Landing page.pdf */}
         <div className="flex items-center gap-3">
           {isLoggedIn ? (
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs transition-colors"
+              className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs transition-colors"
             >
               <LayoutDashboard className="w-4 h-4" />
-              <span>Go to Dashboard</span>
+              <span>Go to dashboard</span>
             </Link>
           ) : (
             <>
               <button
                 type="button"
                 onClick={() => onAuth("login")}
-                className="hidden sm:inline-flex px-3.5 py-2 text-sm font-bold text-slate-700 hover:text-[#C2410C] transition-colors cursor-pointer"
+                className="hidden sm:inline-flex px-3.5 py-2 text-sm font-semibold text-stone-700 hover:text-[#C2410C] transition-colors cursor-pointer"
               >
                 Log In
               </button>
@@ -1070,7 +1074,7 @@ function Navigation({
                 onClick={() => onAuth("signup")}
                 className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs hover:shadow transition-all cursor-pointer"
               >
-                <span>Join Now</span>
+                <span>Go to dashboard</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </>
@@ -1079,89 +1083,89 @@ function Navigation({
           {/* Mobile hamburger */}
           <button
             type="button"
-            className="lg:hidden p-2 text-slate-700 hover:text-[#C2410C] transition-colors"
+            className="lg:hidden p-2 text-stone-700 hover:text-[#C2410C] transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6 text-stone-800" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-2 shadow-lg">
+        <div className="lg:hidden border-t border-[#EFE6DC] bg-[#FFF8F0] px-4 py-4 space-y-2 shadow-lg">
           <Link
             href="/dashboard/pyqs"
-            className="flex items-center justify-between p-3 rounded-xl bg-blue-50 text-blue-700 font-bold text-sm"
+            className="flex items-center justify-between p-3 rounded-xl bg-[#FEF1E0] text-[#9F3014] font-bold text-sm border border-[#F6D3AF]"
             onClick={() => setMobileMenuOpen(false)}
           >
             <span className="flex items-center gap-2">
               <FileText className="w-4 h-4 text-[#C2410C]" />
               251 Shift PYQs Vault
             </span>
-            <span className="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-bold">
+            <span className="text-[10px] bg-[#C2410C] text-white px-2 py-0.5 rounded-full font-bold">
               2022–2025
             </span>
           </Link>
           <a
             href="#pattern"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
+            className="block px-3 py-2.5 text-sm font-semibold text-stone-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
-            Exam Pattern &amp; Marking
+            Exam pattern
           </a>
           <a
-            href="#syllabus"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
+            href="#ai-coach"
+            className="block px-3 py-2.5 text-sm font-semibold text-stone-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
-            Stream Syllabus Explorer
+            AI Coach
           </a>
           <a
             href="#colleges"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
+            className="block px-3 py-2.5 text-sm font-semibold text-stone-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
-            Target Universities &amp; Cutoffs
+            Target colleges
           </a>
           <a
             href="#simulator"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
+            className="block px-3 py-2.5 text-sm font-semibold text-stone-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
-            CBT Simulator Demo
+            CBT simulator
           </a>
           <a
-            href="#eligibility"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
+            href="#syllabus"
+            className="block px-3 py-2.5 text-sm font-semibold text-stone-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
-            Eligibility &amp; 4-Step Registration
+            Syllabus Explorer
           </a>
           <a
             href="#pricing"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
+            className="block px-3 py-2.5 text-sm font-semibold text-stone-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
-            Plans &amp; Pricing
+            Pricing
           </a>
           <a
             href="#faq"
-            className="block px-3 py-2.5 text-sm font-semibold text-slate-800 hover:text-[#C2410C]"
+            className="block px-3 py-2.5 text-sm font-semibold text-stone-800 hover:text-[#C2410C]"
             onClick={() => setMobileMenuOpen(false)}
           >
             Frequently Asked Questions
           </a>
 
-          <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
+          <div className="pt-3 border-t border-[#EFE6DC] flex flex-col gap-2">
             {isLoggedIn ? (
               <Link
                 href="/dashboard"
-                className="w-full py-3 text-center bg-blue-600 text-white rounded-xl font-bold text-sm"
+                className="w-full py-3 text-center bg-[#C2410C] text-white rounded-xl font-bold text-sm"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Go to Dashboard
+                Go to dashboard
               </Link>
             ) : (
               <>
@@ -1171,7 +1175,7 @@ function Navigation({
                     setMobileMenuOpen(false);
                     onAuth("login");
                   }}
-                  className="w-full py-2.5 text-center text-slate-700 border border-slate-300 rounded-xl font-bold text-sm"
+                  className="w-full py-2.5 text-center text-stone-800 bg-white border border-[#EFE6DC] rounded-xl font-bold text-sm"
                 >
                   Log In
                 </button>
@@ -1196,7 +1200,8 @@ function Navigation({
 
 /**
  * 3. Hero Section (Primary Hierarchy)
- * - Focused focal point: H1, subtext (~65 chars per line), top 2 CTAs, trust metric pills.
+ * - Matching Landing page.pdf: Two-column hero with authentic interactive NTA CBT mockup card
+ *   and 3 core feature highlights.
  */
 function Hero({
   onAuth,
@@ -1206,112 +1211,244 @@ function Hero({
   isLoggedIn: boolean;
 }) {
   const router = useRouter();
+  const [selectedHeroOption, setSelectedHeroOption] = useState<string>("B");
+
+  const heroOptions = [
+    { id: "A", label: "0.2 mJ" },
+    { id: "B", label: "0.4 mJ" },
+    { id: "C", label: "2 mJ" },
+    { id: "D", label: "4 mJ" },
+  ];
 
   return (
-    <section className="relative overflow-hidden bg-white pt-10 pb-16 md:pt-14 md:pb-20 border-b border-slate-100">
+    <section className="relative overflow-hidden bg-[#FFF8F0] pt-10 pb-14 md:pt-14 md:pb-16 border-b border-[#EFE6DC]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
-          {/* Eyebrow Trust Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-bold">
-            <Trophy className="w-3.5 h-3.5 text-[#C2410C]" />
-            <span>India&apos;s #1 Dedicated NTA CBT Practice Engine</span>
-            <span className="w-1 h-1 rounded-full bg-blue-400" />
-            <span className="text-slate-500 font-semibold">200,000+ Aspirants</span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          {/* Left Column: Copy & Actions */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* Eyebrow Trust Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] text-[#9F3014] text-xs sm:text-sm font-semibold shadow-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C2410C]" />
+              <span>India&apos;s #1 dedicated NTA CBT practice engine · 200,000+ aspirants</span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-stone-900 tracking-tight leading-[1.15]">
+              Master CUET UG 2026 with authentic exam pacing and confidence.
+            </h1>
+
+            {/* Subtitle */}
+            <p className="text-base sm:text-lg text-stone-600 leading-relaxed max-w-xl">
+              Practice 50-question full-length CBT mocks, 251 official shift papers and AI-powered
+              NCERT mistake explanations to secure your dream Delhi University campus.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <button
+                type="button"
+                className="px-6 py-3.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-base shadow-sm hover:shadow transition-all flex items-center gap-2 cursor-pointer"
+                onClick={() => {
+                  if (isLoggedIn) {
+                    router.push("/dashboard");
+                  } else {
+                    onAuth("signup");
+                  }
+                }}
+              >
+                <span>Open dashboard</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <Link
+                href="/dashboard/pyqs"
+                className="px-6 py-3.5 rounded-xl bg-white hover:bg-stone-50 text-stone-800 font-semibold text-base border border-[#EFE6DC] shadow-xs hover:border-stone-400 transition-all flex items-center gap-2"
+              >
+                <FileText className="w-4 h-4 text-[#C2410C]" />
+                <span>Solve 251+ official PYQs</span>
+              </Link>
+            </div>
+
+            {/* 3 Checks */}
+            <div className="pt-4 flex flex-wrap items-center gap-5 text-xs sm:text-sm text-stone-700 font-medium">
+              <div className="flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-[#C2410C] stroke-[3]" />
+                <span>Zero internal choice format</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-[#C2410C] stroke-[3]" />
+                <span>Authentic +5 / −1 marking</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-[#C2410C] stroke-[3]" />
+                <span>All 27 domain subjects</span>
+              </div>
+            </div>
           </div>
 
-          {/* Main Headline */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
-            Master CUET UG 2026 With{" "}
-            <span className="text-[#C2410C]">Authentic Exam Pacing</span> &amp; Confidence.
-          </h1>
+          {/* Right Column: Authentic NTA CBT Mockup Card */}
+          <div className="lg:col-span-5">
+            <div className="bg-white rounded-2xl border border-[#EFE6DC] p-5 shadow-sm space-y-4">
+              {/* Card Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-[#EFE6DC]">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="font-bold text-stone-900 text-sm">CUET UG Physics · Mock 4</span>
+                </div>
+                <div className="bg-[#FEF1E0] text-[#9F3014] font-mono font-bold text-xs px-2.5 py-1 rounded-full border border-[#F6D3AF] flex items-center gap-1">
+                  <Clock3 className="w-3.5 h-3.5 text-[#C2410C]" />
+                  <span>52:14 left</span>
+                </div>
+              </div>
 
-          {/* Subtitle */}
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            Practice 50-question full-length CBT mocks, 251 official shift papers, and AI-powered
-            NCERT mistake explanations to secure your dream Delhi University campus.
-          </p>
+              {/* Question Stem */}
+              <div>
+                <p className="text-xs font-bold text-[#C2410C] uppercase tracking-wider mb-1">
+                  Question 12 of 50
+                </p>
+                <p className="text-sm font-semibold text-stone-900 leading-snug">
+                  Q12. A 4 &mu;F capacitor is charged to 10 V. The energy stored in it is:
+                </p>
+              </div>
 
-          {/* Top Primary CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <button
-              type="button"
-              className="px-7 py-3.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-base shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer"
-              onClick={() => {
-                if (isLoggedIn) {
-                  router.push("/dashboard");
-                } else {
-                  onAuth("signup");
-                }
-              }}
-            >
-              <span>{isLoggedIn ? "Open Dashboard" : "Join Now — Start Free"}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+              {/* Options & Question Palette */}
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 pt-1">
+                {/* Options List */}
+                <div className="sm:col-span-7 space-y-2">
+                  {heroOptions.map((opt) => {
+                    const isSelected = selectedHeroOption === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => setSelectedHeroOption(opt.id)}
+                        className={`w-full text-left p-2.5 rounded-xl border text-xs sm:text-sm font-medium flex items-center justify-between transition-all cursor-pointer ${
+                          isSelected
+                            ? "bg-[#FEF1E0] border-[#C2410C] text-stone-900 font-bold shadow-xs"
+                            : "bg-white border-[#EFE6DC] text-stone-700 hover:bg-stone-50"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <span
+                            className={`w-5 h-5 rounded-md flex items-center justify-center text-xs font-bold ${
+                              isSelected
+                                ? "bg-[#C2410C] text-white"
+                                : "bg-stone-100 text-stone-600"
+                            }`}
+                          >
+                            {opt.id}
+                          </span>
+                          <span>{opt.label}</span>
+                        </span>
+                        {isSelected && (
+                          <span className="w-4 h-4 rounded-full bg-[#C2410C] text-white flex items-center justify-center text-[10px] font-bold">
+                            ✓
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
 
-            <Link
-              href="/dashboard/pyqs"
-              className="px-6 py-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-sm border border-slate-200 transition-colors flex items-center gap-2"
-            >
-              <FileText className="w-4 h-4 text-[#C2410C]" />
-              <span>Solve 251+ Official PYQs</span>
-            </Link>
-          </div>
+                {/* Palette */}
+                <div className="sm:col-span-5 bg-[#FFF8F0] p-3 rounded-xl border border-[#EFE6DC] flex flex-col justify-between">
+                  <div>
+                    <div className="text-[11px] font-bold text-stone-800 mb-2 flex items-center justify-between">
+                      <span>Question palette</span>
+                      <span className="text-[10px] text-emerald-700 font-semibold">11 done</span>
+                    </div>
+                    <div className="grid grid-cols-5 gap-1.5 text-center text-[10px] font-bold">
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((num) => {
+                        const isAnswered = [1, 2, 3, 5, 6, 8, 10, 11].includes(num);
+                        const isMarked = [7, 9].includes(num);
+                        const isCurrent = num === 12;
 
-          {/* Trust Social Proof Bar */}
-          <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-semibold border-t border-slate-100">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>Zero internal choice format</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>Authentic +5 / -1 marking scheme</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>All 27 Domain Subjects</span>
+                        let style = "bg-white border-[#EFE6DC] text-stone-500";
+                        if (isCurrent) {
+                          style = "bg-[#FEF1E0] border-2 border-[#C2410C] text-[#C2410C] font-black scale-105 shadow-xs";
+                        } else if (isAnswered) {
+                          style = "bg-emerald-600 border-emerald-600 text-white";
+                        } else if (isMarked) {
+                          style = "bg-amber-500 border-amber-500 text-white";
+                        }
+
+                        return (
+                          <div
+                            key={num}
+                            className={`h-6 rounded-md border flex items-center justify-center transition-all ${style}`}
+                          >
+                            {num}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div className="pt-2 mt-2 border-t border-[#EFE6DC] flex items-center justify-between text-[9px] text-stone-500 font-medium">
+                    <span className="flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                      Answered
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                      Review
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Attached AI Coach Callout */}
+              <div className="bg-[#FEF1E0] border border-[#F6D3AF] rounded-xl p-3.5 flex items-start gap-3">
+                <div className="w-7 h-7 rounded-lg bg-[#C2410C] text-white flex items-center justify-center shrink-0 mt-0.5">
+                  <Lightbulb className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#9F3014] block">
+                    AI Coach · after your mock
+                  </span>
+                  <p className="text-xs sm:text-sm text-stone-800 font-medium mt-0.5 leading-snug">
+                    154 of 156 errors were careless. Fix them with a 10-question drill.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* 3 Core Value Pillars (Equal Height Cards, Generous Padding) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
-          <div className="bg-slate-50/80 rounded-2xl p-6 border border-slate-200/80 hover:border-slate-300 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#C2410C] flex items-center justify-center font-bold mb-4">
+        {/* 3 Core Feature Highlights from Landing page.pdf */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 pt-10 border-t border-[#EFE6DC]">
+          <div className="bg-white rounded-2xl p-6 border border-[#EFE6DC] shadow-xs hover:border-[#F6D3AF] transition-all">
+            <div className="w-10 h-10 rounded-xl bg-[#FEF1E0] text-[#C2410C] border border-[#F6D3AF] flex items-center justify-center font-bold mb-4">
               <MonitorCheck className="w-5 h-5" />
             </div>
-            <h2 className="text-base font-bold text-slate-900 mb-2">
-              Exact NTA CBT Environment
+            <h2 className="text-base sm:text-lg font-bold text-stone-900 mb-2">
+              Exact NTA CBT environment
             </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Familiarize with the authentic 60-minute timer, color-coded Question Palette (Answered,
-              Marked for Review), and screen layout so test day feels natural.
+            <p className="text-sm text-stone-600 leading-relaxed">
+              Familiarize yourself with the authentic 60-minute timer, color-coded question palette (answered, marked for review) and screen layout, so test day feels natural.
             </p>
           </div>
 
-          <div className="bg-slate-50/80 rounded-2xl p-6 border border-slate-200/80 hover:border-slate-300 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold mb-4">
+          <div className="bg-white rounded-2xl p-6 border border-[#EFE6DC] shadow-xs hover:border-[#F6D3AF] transition-all">
+            <div className="w-10 h-10 rounded-xl bg-[#FEF1E0] text-[#C2410C] border border-[#F6D3AF] flex items-center justify-center font-bold mb-4">
               <Lightbulb className="w-5 h-5" />
             </div>
-            <h2 className="text-base font-bold text-slate-900 mb-2">
-              NCERT Concept Mistake Breakdown
+            <h2 className="text-base sm:text-lg font-bold text-stone-900 mb-2">
+              NCERT concept mistake breakdown
             </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Don&apos;t just see the right answer. Discover why you fell into conceptual traps, what NCERT
-              chapter to re-read, and how to turn negative marks into +5s.
+            <p className="text-sm text-stone-600 leading-relaxed">
+              Don&apos;t just see the right answer. Discover why you fell into conceptual traps, what NCERT chapter to re-read, and how to turn negative marks into +5s.
             </p>
           </div>
 
-          <div className="bg-slate-50/80 rounded-2xl p-6 border border-slate-200/80 hover:border-slate-300 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold mb-4">
+          <div className="bg-white rounded-2xl p-6 border border-[#EFE6DC] shadow-xs hover:border-[#F6D3AF] transition-all">
+            <div className="w-10 h-10 rounded-xl bg-[#FEF1E0] text-[#C2410C] border border-[#F6D3AF] flex items-center justify-center font-bold mb-4">
               <FileText className="w-5 h-5" />
             </div>
-            <h2 className="text-base font-bold text-slate-900 mb-2">
-              251 Official Shift PYQs (2022–2025)
+            <h2 className="text-base sm:text-lg font-bold text-stone-900 mb-2">
+              251 official shift PYQs (2022–2025)
             </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Every past paper preserved across Science, Commerce, and Humanities. Practice by real
-              exam shift date with verified answer keys and forensic scorecards.
+            <p className="text-sm text-stone-600 leading-relaxed">
+              Every past paper preserved across Science, Commerce and Humanities. Practice by real exam shift date with verified answer keys and detailed scorecards.
             </p>
           </div>
         </div>
@@ -1322,24 +1459,44 @@ function Hero({
 
 /**
  * 4. Official CUET UG 2026 Exam Pattern & Marking Scheme (Secondary Hierarchy)
+ * - Matching Landing page.pdf: 4 Stat Cards (50, 60 min, +5 / −1, 27)
  */
 function ExamPatternSection() {
-  const { examPattern, meta } = CUET_AUTHORITY;
+  const { examPattern } = CUET_AUTHORITY;
 
   return (
-    <section id="pattern" className="py-20 md:py-24 bg-slate-50 border-b border-slate-200/80">
+    <section id="pattern" className="py-16 md:py-20 bg-white border-b border-[#EFE6DC]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto text-center mb-14">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 tracking-wider uppercase mb-3">
-            Official NTA Specification
+        <div className="max-w-2xl mx-auto text-center mb-10">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase mb-3">
+            Official NTA specification
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            CUET UG Exam Pattern at a Glance
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-stone-900 tracking-tight">
+            CUET UG exam pattern at a glance
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
-            Standardized nationwide by {meta.authority}. All domain papers feature {examPattern.totalQuestionsPerDomain} compulsory
-            questions with {examPattern.internalChoice.toLowerCase()}.
+          <p className="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
+            Standardized nationwide by the National Testing Agency. All domain papers feature 50 compulsory questions with zero internal choice.
           </p>
+        </div>
+
+        {/* 4 Stat Cards from Landing page.pdf */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10">
+          <div className="bg-[#FFF8F0] rounded-2xl p-6 border border-[#EFE6DC] text-center shadow-xs">
+            <div className="text-3xl sm:text-4xl font-black text-stone-900">50</div>
+            <div className="text-xs sm:text-sm text-stone-600 mt-1 font-medium">compulsory questions per paper</div>
+          </div>
+          <div className="bg-[#FFF8F0] rounded-2xl p-6 border border-[#EFE6DC] text-center shadow-xs">
+            <div className="text-3xl sm:text-4xl font-black text-stone-900">60 min</div>
+            <div className="text-xs sm:text-sm text-stone-600 mt-1 font-medium">per domain paper (45 for English)</div>
+          </div>
+          <div className="bg-[#FFF8F0] rounded-2xl p-6 border border-[#EFE6DC] text-center shadow-xs">
+            <div className="text-3xl sm:text-4xl font-black text-[#C2410C]">+5 / −1</div>
+            <div className="text-xs sm:text-sm text-stone-600 mt-1 font-medium">authentic marking scheme</div>
+          </div>
+          <div className="bg-[#FFF8F0] rounded-2xl p-6 border border-[#EFE6DC] text-center shadow-xs">
+            <div className="text-3xl sm:text-4xl font-black text-stone-900">27</div>
+            <div className="text-xs sm:text-sm text-stone-600 mt-1 font-medium">domain subjects covered</div>
+          </div>
         </div>
 
         {/* 3-Column Card Grid for the Exam Sections */}
@@ -1349,37 +1506,37 @@ function ExamPatternSection() {
             return (
               <div
                 key={sec.id}
-                className={`bg-white rounded-2xl p-6 border ${
-                  isCore ? "border-2 border-blue-500 shadow-md relative" : "border-slate-200 shadow-xs"
+                className={`bg-[#FFF8F0] rounded-2xl p-6 border ${
+                  isCore ? "border-2 border-[#C2410C] shadow-xs relative" : "border-[#EFE6DC]"
                 } flex flex-col justify-between`}
               >
                 {isCore && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[11px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#C2410C] text-white text-[11px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider">
                     Core Subject Section
                   </span>
                 )}
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100 uppercase">
+                    <span className="px-2.5 py-1 rounded-md bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-xs font-bold uppercase">
                       {sec.name.includes(":") ? sec.name.split(":")[0]?.trim() : `Section ${sec.id}`}
                     </span>
-                    <span className="text-xs font-semibold text-slate-500">{sec.duration}</span>
+                    <span className="text-xs font-semibold text-stone-500">{sec.duration}</span>
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  <h3 className="text-lg font-bold text-stone-900 mb-2">
                     {sec.name.includes(":") ? sec.name.split(":")[1]?.trim() : sec.name}
                   </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed mb-4">
+                  <p className="text-sm text-stone-600 leading-relaxed mb-4">
                     {sec.description}
                   </p>
                 </div>
-                <div className="pt-4 border-t border-slate-100 space-y-1.5 text-xs text-slate-500 font-semibold">
+                <div className="pt-4 border-t border-[#EFE6DC] space-y-1.5 text-xs text-stone-600 font-semibold">
                   <div className="flex justify-between">
                     <span>Total Questions:</span>
-                    <strong className="text-slate-900">{sec.questions} Questions</strong>
+                    <strong className="text-stone-900">{sec.questions} Questions</strong>
                   </div>
                   <div className="flex justify-between">
                     <span>Format:</span>
-                    <strong className="text-slate-900">{sec.format}</strong>
+                    <strong className="text-stone-900">{sec.format}</strong>
                   </div>
                   <div className="flex justify-between">
                     <span>Maximum Marks:</span>
@@ -1392,14 +1549,14 @@ function ExamPatternSection() {
         </div>
 
         {/* Marking Scheme Highlight Banner */}
-        <div className="mt-8 bg-blue-50/70 border border-blue-200 rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
+        <div className="mt-8 bg-[#FEF1E0] border border-[#F6D3AF] rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-sm">
+            <div className="w-10 h-10 rounded-xl bg-[#C2410C] text-white flex items-center justify-center font-black text-sm">
               +/-
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-900">Authoritative Marking Formula</h4>
-              <p className="text-xs text-slate-600">
+              <h4 className="text-sm font-bold text-stone-900">Authoritative Marking Formula</h4>
+              <p className="text-xs text-stone-700">
                 Calibrated per Question: {examPattern.markingScheme.correct} (Correct) &bull; {examPattern.markingScheme.incorrect} (Incorrect) &bull; {examPattern.markingScheme.unattempted} (Unattempted)
               </p>
             </div>
@@ -1409,17 +1566,190 @@ function ExamPatternSection() {
               href={examPattern.officialSourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-semibold text-slate-500 hover:text-slate-800 underline underline-offset-2"
+              className="text-xs font-semibold text-stone-600 hover:text-stone-900 underline underline-offset-2"
             >
               Verify on Official NTA Portal
             </a>
             <Link
               href="/dashboard/mocks"
-              className="text-xs font-bold text-blue-700 hover:text-blue-800 flex items-center gap-1.5"
+              className="text-xs font-bold text-[#C2410C] hover:text-[#9A3412] flex items-center gap-1.5"
             >
               <span>Practice Timed Tests</span>
               <ChevronRight className="w-4 h-4" />
             </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * 5. From first mock to dream campus in three steps (Landing page.pdf Page 2)
+ */
+function ThreeStepWorkflowSection() {
+  const steps = [
+    {
+      num: "1",
+      title: "Take a full-length mock",
+      desc: "Sit 50 questions under the real NTA timer, palette and marking scheme.",
+    },
+    {
+      num: "2",
+      title: "Get your AI diagnosis",
+      desc: "See which errors were careless, which were concept gaps, and which NCERT chapter to revisit.",
+    },
+    {
+      num: "3",
+      title: "Follow your 7-day plan",
+      desc: "Work through a personalised score accelerator and watch your gap to the cutoff shrink.",
+    },
+  ];
+
+  return (
+    <section className="py-16 md:py-20 bg-[#FFF8F0] border-b border-[#EFE6DC]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="max-w-2xl mx-auto text-center mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-stone-900 tracking-tight">
+            From first mock to dream campus in three steps
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {steps.map((s) => (
+            <div
+              key={s.num}
+              className="bg-white rounded-2xl p-6 border border-[#EFE6DC] relative flex flex-col justify-between shadow-xs hover:border-[#F6D3AF] transition-all"
+            >
+              <div>
+                <span className="w-9 h-9 rounded-full bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] font-black text-sm flex items-center justify-center mb-4">
+                  {s.num}
+                </span>
+                <h3 className="text-lg font-bold text-stone-900 mb-2">{s.title}</h3>
+                <p className="text-sm text-stone-600 leading-relaxed">{s.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * 6. AI Coach: Know why you lost marks, not just how many (Landing page.pdf Page 2)
+ */
+function AICoachSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void }) {
+  const chapters = [
+    { name: "Electric Charges and Fields", pct: 33 },
+    { name: "Magnetism and Matter", pct: 29 },
+    { name: "Dual Nature of Radiation", pct: 15 },
+    { name: "Electrostatic Potential and Capacitance", pct: 0 },
+  ];
+
+  return (
+    <section id="ai-coach" className="py-16 md:py-20 bg-white border-b border-[#EFE6DC]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          {/* Left Column: AI Coach Value Prop */}
+          <div className="lg:col-span-6 space-y-6">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase">
+              AI Coach
+            </span>
+
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-stone-900 tracking-tight leading-tight">
+              Know why you lost marks, not just how many.
+            </h2>
+
+            <div className="space-y-3.5 pt-2">
+              <div className="flex items-center gap-3">
+                <Check className="w-5 h-5 text-[#C2410C] stroke-[3] shrink-0" />
+                <span className="text-sm sm:text-base font-semibold text-stone-800">
+                  Careless errors and concept gaps, separated
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="w-5 h-5 text-[#C2410C] stroke-[3] shrink-0" />
+                <span className="text-sm sm:text-base font-semibold text-stone-800">
+                  Chapter-level accuracy for every attempt
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="w-5 h-5 text-[#C2410C] stroke-[3] shrink-0" />
+                <span className="text-sm sm:text-base font-semibold text-stone-800">
+                  Right-to-wrong answer changes flagged
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="w-5 h-5 text-[#C2410C] stroke-[3] shrink-0" />
+                <span className="text-sm sm:text-base font-semibold text-stone-800">
+                  A 7-day score accelerator built from your mistakes
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => onAuth("signup")}
+                className="px-6 py-3.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs hover:shadow transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <span>Meet your AI Coach</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Sample Report Card */}
+          <div className="lg:col-span-6">
+            <div className="bg-[#FFF8F0] rounded-2xl border border-[#EFE6DC] p-6 shadow-sm">
+              {/* Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-[#EFE6DC]">
+                <div>
+                  <span className="font-bold text-stone-900 text-base">Sample report · Physics</span>
+                </div>
+                <span className="bg-stone-100 text-stone-600 border border-stone-200 text-xs px-2.5 py-0.5 rounded-full font-semibold">
+                  Sample
+                </span>
+              </div>
+
+              {/* 3 Metric Boxes */}
+              <div className="grid grid-cols-3 gap-3 my-5">
+                <div className="bg-white border border-[#EFE6DC] rounded-xl p-3 text-center shadow-2xs">
+                  <div className="text-[11px] font-bold text-stone-600 mb-0.5">Net score</div>
+                  <div className="text-2xl font-black text-stone-900">64</div>
+                </div>
+                <div className="bg-white border border-[#EFE6DC] rounded-xl p-3 text-center shadow-2xs">
+                  <div className="text-[11px] font-bold text-stone-600 mb-0.5">Accuracy</div>
+                  <div className="text-2xl font-black text-stone-900">22%</div>
+                </div>
+                <div className="bg-white border border-[#EFE6DC] rounded-xl p-3 text-center shadow-2xs">
+                  <div className="text-[11px] font-bold text-[#9F3014] mb-0.5">Lost marks</div>
+                  <div className="text-2xl font-black text-[#C2410C]">−156</div>
+                </div>
+              </div>
+
+              {/* Topic Bars */}
+              <div className="space-y-3.5 pt-1">
+                <span className="text-xs font-bold text-stone-800 uppercase tracking-wider block">
+                  Topic Breakdown
+                </span>
+                {chapters.map((ch) => (
+                  <div key={ch.name} className="space-y-1">
+                    <div className="flex justify-between text-xs font-semibold text-stone-700">
+                      <span>{ch.name}</span>
+                      <span className="font-mono font-bold text-stone-900">{ch.pct}%</span>
+                    </div>
+                    <div className="h-2 w-full bg-stone-200/70 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-[#C2410C] rounded-full transition-all duration-500"
+                        style={{ width: `${Math.max(ch.pct, ch.pct === 0 ? 0 : 2)}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1444,16 +1774,16 @@ function SyllabusSection() {
   const currentSubjects = syllabusByStream[activeStream] || [];
 
   return (
-    <section id="syllabus" className="py-20 md:py-24 bg-white border-b border-slate-200/80">
+    <section id="syllabus" className="py-16 md:py-20 bg-white border-b border-[#EFE6DC]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="max-w-2xl mx-auto text-center mb-10">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 tracking-wider uppercase mb-3">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase mb-3">
             Rationalized NCERT Syllabus
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
             Stream-Wise Syllabus Explorer
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
+          <p className="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
             Inspect official units, chapters, and topics tested by NTA. Select your stream to explore.
           </p>
         </div>
@@ -1470,8 +1800,8 @@ function SyllabusSection() {
               }}
               className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeStream === s.id
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-[#C2410C] text-white shadow-xs"
+                  : "bg-[#FFF8F0] text-stone-600 border border-[#EFE6DC] hover:bg-stone-100"
               }`}
             >
               {s.label}
@@ -1486,23 +1816,23 @@ function SyllabusSection() {
             return (
               <div
                 key={subject.code}
-                className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col justify-between hover:border-slate-300 transition-colors shadow-xs"
+                className="bg-[#FFF8F0] rounded-2xl border border-[#EFE6DC] p-6 flex flex-col justify-between hover:border-[#F6D3AF] transition-colors shadow-xs"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                    <span className="text-[11px] font-bold text-stone-600 bg-white border border-[#EFE6DC] px-2 py-0.5 rounded">
                       Code: {subject.code}
                     </span>
-                    <span className="text-xs font-semibold text-[#C2410C]">
+                    <span className="text-xs font-bold text-[#C2410C]">
                       {subject.unitsCount} Official Units
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  <h3 className="text-lg font-bold text-stone-900 mb-2">
                     {subject.name}
                   </h3>
 
-                  <p className="text-xs text-slate-500 mb-4">
+                  <p className="text-xs text-stone-500 mb-4">
                     Strictly covers rationalized Class 12 NCERT curriculum.
                   </p>
 
@@ -1510,7 +1840,7 @@ function SyllabusSection() {
                   <button
                     type="button"
                     onClick={() => setExpandedSubject(isExpanded ? null : subject.code)}
-                    className="w-full py-2 px-3 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center justify-between border border-slate-200/80 transition-colors cursor-pointer"
+                    className="w-full py-2 px-3 rounded-lg bg-white hover:bg-stone-50 text-stone-800 text-xs font-bold flex items-center justify-between border border-[#EFE6DC] transition-colors cursor-pointer"
                   >
                     <span>{isExpanded ? "Hide Units" : "View Units & Chapters"}</span>
                     <ChevronDown
@@ -1520,13 +1850,13 @@ function SyllabusSection() {
 
                   {/* Expanded Accordion List */}
                   {isExpanded && (
-                    <div className="mt-4 pt-3 border-t border-slate-100 space-y-3">
+                    <div className="mt-4 pt-3 border-t border-[#EFE6DC] space-y-3">
                       {subject.units.map((unit, idx) => (
-                        <div key={idx} className="bg-slate-50/70 p-2.5 rounded-lg text-xs">
-                          <strong className="block text-slate-800 font-bold mb-1">
+                        <div key={idx} className="bg-white p-2.5 rounded-lg text-xs border border-[#EFE6DC]">
+                          <strong className="block text-stone-900 font-bold mb-1">
                             Unit {idx + 1}: {unit.title}
                           </strong>
-                          <ul className="list-disc list-inside text-slate-500 space-y-0.5">
+                          <ul className="list-disc list-inside text-stone-600 space-y-0.5">
                             {unit.topics.map((t, tIdx) => (
                               <li key={tIdx}>{t}</li>
                             ))}
@@ -1537,17 +1867,17 @@ function SyllabusSection() {
                   )}
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+                <div className="pt-4 mt-4 border-t border-[#EFE6DC] flex items-center justify-between">
                   <Link
                     href={`/dashboard/practice`}
-                    className="text-xs font-bold text-[#C2410C] hover:text-blue-700 flex items-center gap-1"
+                    className="text-xs font-bold text-[#C2410C] hover:text-[#9A3412] flex items-center gap-1"
                   >
                     <span>Practice Chapter Drills</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                   <Link
                     href={`/dashboard/mocks`}
-                    className="text-xs font-semibold text-slate-500 hover:text-slate-800"
+                    className="text-xs font-semibold text-stone-500 hover:text-stone-900"
                   >
                     Take Mock
                   </Link>
@@ -1580,62 +1910,62 @@ function CBTSimulatorSection({
   ];
 
   return (
-    <section id="simulator" className="py-20 md:py-24 bg-slate-900 text-white border-b border-slate-800">
+    <section id="simulator" className="py-16 md:py-20 bg-[#FFF8F0] border-b border-[#EFE6DC]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           {/* Left Column: Context & Benefits */}
           <div className="lg:col-span-5 space-y-6">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-orange-500/20 text-orange-400 border border-orange-500/30 tracking-wider uppercase">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase">
               Real NTA CBT Simulator
             </span>
 
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-stone-900 tracking-tight leading-tight">
               Experience the Exact NTA Exam Screen Before Test Day.
             </h2>
 
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            <p className="text-stone-600 text-sm sm:text-base leading-relaxed">
               Eliminate exam-day friction. Our simulator faithfully recreates the authentic NTA color
               palette, question navigation palette, marking rules (+5 / -1), and countdown timer.
             </p>
 
             <div className="space-y-4 pt-2">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-lg bg-[#FEF1E0] text-[#C2410C] border border-[#F6D3AF] flex items-center justify-center shrink-0 mt-0.5">
                   <Check className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <div>
-                  <strong className="block text-white text-sm font-semibold">
+                  <strong className="block text-stone-900 text-sm font-semibold">
                     Authentic Question Palette
                   </strong>
-                  <span className="text-xs text-slate-400 leading-normal">
+                  <span className="text-xs text-stone-600 leading-normal">
                     Green for answered, Purple for marked for review, Grey for unvisited.
                   </span>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-lg bg-[#FEF1E0] text-[#C2410C] border border-[#F6D3AF] flex items-center justify-center shrink-0 mt-0.5">
                   <Zap className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <div>
-                  <strong className="block text-white text-sm font-semibold">
+                  <strong className="block text-stone-900 text-sm font-semibold">
                     Instant AI NCERT Concept Breakdown
                   </strong>
-                  <span className="text-xs text-slate-400 leading-normal">
+                  <span className="text-xs text-stone-600 leading-normal">
                     Identify the exact NCERT textbook concept behind every question step.
                   </span>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-lg bg-[#FEF1E0] text-[#C2410C] border border-[#F6D3AF] flex items-center justify-center shrink-0 mt-0.5">
                   <Target className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <div>
-                  <strong className="block text-white text-sm font-semibold">
+                  <strong className="block text-stone-900 text-sm font-semibold">
                     All-India Percentile Benchmarking
                   </strong>
-                  <span className="text-xs text-slate-400 leading-normal">
+                  <span className="text-xs text-stone-600 leading-normal">
                     Compare your speed and score against 200,000+ active aspirants.
                   </span>
                 </div>
@@ -1645,7 +1975,7 @@ function CBTSimulatorSection({
             <button
               type="button"
               onClick={() => onAuth("signup")}
-              className="px-6 py-3.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-sm shadow-md transition-all flex items-center gap-2 cursor-pointer mt-4"
+              className="px-6 py-3.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs hover:shadow transition-all flex items-center gap-2 cursor-pointer mt-4"
             >
               <span>Try a Full 60-Minute Mock Test</span>
               <ArrowRight className="w-4 h-4" />
@@ -1654,42 +1984,42 @@ function CBTSimulatorSection({
 
           {/* Right Column: Live Interactive Drill Preview */}
           <div className="lg:col-span-7">
-            <div className="bg-slate-950 rounded-2xl border border-slate-800 p-6 shadow-2xl">
+            <div className="bg-white rounded-2xl border border-[#EFE6DC] p-6 shadow-sm">
               {/* Header Bar */}
-              <div className="flex items-center justify-between pb-4 border-b border-slate-800 text-xs">
+              <div className="flex items-center justify-between pb-4 border-b border-[#EFE6DC] text-xs">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="font-bold tracking-wide text-slate-200">
+                  <span className="font-bold tracking-wide text-stone-900">
                     CUET 2026 SAMPLE DRILL
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-amber-400 font-mono font-bold">
-                  <Clock3 className="w-4 h-4" />
+                <div className="bg-[#FEF1E0] text-[#9F3014] font-mono font-bold text-xs px-2.5 py-1 rounded-full border border-[#F6D3AF] flex items-center gap-1.5">
+                  <Clock3 className="w-3.5 h-3.5 text-[#C2410C]" />
                   <span>44:50 remaining</span>
                 </div>
               </div>
 
               {/* Subject Tabs */}
               <div className="flex gap-2 my-4 overflow-x-auto pb-1 text-xs">
-                <span className="px-3 py-1 bg-blue-600 text-white font-bold rounded-md whitespace-nowrap">
+                <span className="px-3 py-1 bg-[#C2410C] text-white font-bold rounded-md whitespace-nowrap shadow-2xs">
                   General Test
                 </span>
-                <span className="px-3 py-1 bg-slate-900 text-slate-400 rounded-md whitespace-nowrap">
+                <span className="px-3 py-1 bg-[#FFF8F0] text-stone-600 border border-[#EFE6DC] rounded-md whitespace-nowrap">
                   Economics
                 </span>
-                <span className="px-3 py-1 bg-slate-900 text-slate-400 rounded-md whitespace-nowrap">
+                <span className="px-3 py-1 bg-[#FFF8F0] text-stone-600 border border-[#EFE6DC] rounded-md whitespace-nowrap">
                   Mathematics
                 </span>
-                <span className="px-3 py-1 bg-slate-900 text-slate-400 rounded-md whitespace-nowrap">
+                <span className="px-3 py-1 bg-[#FFF8F0] text-stone-600 border border-[#EFE6DC] rounded-md whitespace-nowrap">
                   English
                 </span>
               </div>
 
               {/* Question Stem */}
-              <div className="text-xs font-semibold text-slate-400 mb-2">
+              <div className="text-xs font-semibold text-stone-500 mb-2">
                 Question 14 of 50 | Marks: +5, -1
               </div>
-              <h3 className="text-base font-bold text-slate-100 leading-relaxed mb-4">
+              <h3 className="text-base font-bold text-stone-900 leading-relaxed mb-4">
                 Which Article of the Constitution of India provides for the establishment and
                 constitution of the Supreme Court of India?
               </h3>
@@ -1699,12 +2029,12 @@ function CBTSimulatorSection({
                 {options.map((option) => {
                   const isSelected = selectedOption === option.id;
                   const isCorrect = option.correct;
-                  let btnStyle = "bg-slate-900 border-slate-800 text-slate-200 hover:bg-slate-800/80";
+                  let btnStyle = "bg-white border-[#EFE6DC] text-stone-800 hover:bg-stone-50";
 
                   if (isSelected) {
                     btnStyle = isCorrect
-                      ? "bg-emerald-950/80 border-emerald-500 text-emerald-200"
-                      : "bg-rose-950/80 border-rose-500 text-rose-200";
+                      ? "bg-emerald-50 border-2 border-emerald-500 text-emerald-950 font-bold"
+                      : "bg-rose-50 border-2 border-rose-500 text-rose-950 font-bold";
                   }
 
                   return (
@@ -1721,9 +2051,9 @@ function CBTSimulatorSection({
                         className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
                           isSelected
                             ? isCorrect
-                              ? "bg-emerald-500 text-white"
-                              : "bg-rose-500 text-white"
-                            : "border border-slate-700 text-slate-400"
+                              ? "bg-emerald-600 text-white"
+                              : "bg-rose-600 text-white"
+                            : "border border-stone-300 text-stone-500"
                         }`}
                       >
                         {isSelected ? (isCorrect ? "✓" : "✕") : option.id}
@@ -1738,13 +2068,13 @@ function CBTSimulatorSection({
                 <div
                   className={`p-3.5 rounded-xl text-xs leading-relaxed border ${
                     options.find((o) => o.id === selectedOption)?.correct
-                      ? "bg-emerald-950/50 border-emerald-800 text-emerald-300"
-                      : "bg-rose-950/50 border-rose-800 text-rose-300"
+                      ? "bg-emerald-50 border-emerald-200 text-emerald-900"
+                      : "bg-rose-50 border-rose-200 text-rose-900"
                   }`}
                 >
                   {options.find((o) => o.id === selectedOption)?.correct ? (
                     <>
-                      <strong className="block text-emerald-400 font-bold mb-1">
+                      <strong className="block text-emerald-800 font-bold mb-1">
                         ✓ Correct (+5 Marks)
                       </strong>
                       Article 124 of the Indian Constitution establishes the Supreme Court of India.
@@ -1753,7 +2083,7 @@ function CBTSimulatorSection({
                     </>
                   ) : (
                     <>
-                      <strong className="block text-rose-400 font-bold mb-1">
+                      <strong className="block text-rose-800 font-bold mb-1">
                         ✕ Incorrect (-1 Mark Penalty)
                       </strong>
                       The correct answer is (B) Article 124. Article 148 provides for the Comptroller
@@ -1764,10 +2094,10 @@ function CBTSimulatorSection({
               )}
 
               {/* Status Footer */}
-              <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                <span className="text-emerald-400">● 1 Answered</span>
-                <span className="text-purple-400">● 0 Marked for Review</span>
-                <span className="text-slate-500">● 49 Not Visited</span>
+              <div className="mt-4 pt-3 border-t border-[#EFE6DC] flex items-center justify-between text-[11px] text-stone-600 font-semibold">
+                <span className="text-emerald-700">● 1 Answered</span>
+                <span className="text-amber-700">● 0 Marked for Review</span>
+                <span className="text-stone-400">● 49 Not Visited</span>
               </div>
             </div>
           </div>
@@ -1778,8 +2108,8 @@ function CBTSimulatorSection({
 }
 
 /**
- * 7. Target Universities & Cutoff Benchmarks (Secondary Hierarchy)
- * - Organized into clean tabs (All, Central, Heritage, Specialized) with 3 equal-height cards per row.
+ * 7. Target Colleges & Cutoff Benchmarks (Landing page.pdf Page 2)
+ * - 2-Column Projected Cutoffs Card vs Target Colleges Copy, plus university explorer.
  */
 function TargetUniversitiesSection({
   onAuth,
@@ -1788,116 +2118,191 @@ function TargetUniversitiesSection({
 }) {
   const [filter, setFilter] = useState<string>("all");
 
+  const projectedCutoffsDU = [
+    { name: "Shri Ram College of Commerce", cutoff: "897.4", target: true },
+    { name: "St. Stephen's College", cutoff: "892.0", target: false },
+    { name: "Hindu College", cutoff: "880.8", target: false },
+    { name: "Lady Shri Ram College", cutoff: "851.2", target: false },
+    { name: "Hansraj College", cutoff: "849.2", target: false },
+    { name: "Kirori Mal College", cutoff: "836.6", target: false },
+  ];
+
   const filtered =
     filter === "all"
       ? targetUniversities
       : targetUniversities.filter((item) => item.category === filter);
 
   return (
-    <section id="colleges" className="py-20 md:py-24 bg-slate-50 border-b border-slate-200/80">
+    <section id="colleges" className="py-16 md:py-20 bg-white border-b border-[#EFE6DC]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto text-center mb-10">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 tracking-wider uppercase mb-3">
-            Top Central &amp; State Universities
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Target Your Dream Campus With Verified Cutoffs
-          </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
-            We calibrate domain syllabus, test series, and past cutoff benchmarks tailored for the
-            most coveted university campuses in India.
-          </p>
-        </div>
-
-        {/* Category Filter Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-          <button
-            type="button"
-            onClick={() => setFilter("all")}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-              filter === "all"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
-            }`}
-          >
-            All Campuses (6)
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter("central")}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-              filter === "central"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
-            }`}
-          >
-            Delhi University (DU)
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter("heritage")}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-              filter === "heritage"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
-            }`}
-          >
-            Central Heritage (BHU &amp; AMU)
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter("specialized")}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-              filter === "specialized"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
-            }`}
-          >
-            Specialized &amp; Language (JNU &amp; JMI)
-          </button>
-        </div>
-
-        {/* 3 Cards per row (desktop), 1 on mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((item) => (
-            <div
-              key={item.name}
-              className={`bg-white rounded-2xl p-6 border transition-all flex flex-col justify-between ${
-                item.highlight
-                  ? "border-blue-500 shadow-md ring-1 ring-blue-500/20"
-                  : "border-slate-200 shadow-xs hover:border-slate-300"
-              }`}
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="px-2.5 py-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-100 rounded-md">
-                    {item.badge}
-                  </span>
-                  <span className="text-xs font-semibold text-slate-500">{item.subBadge}</span>
-                </div>
-
-                <h3 className="text-lg font-bold text-slate-900 mb-2">{item.name}</h3>
-
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
-                  {item.description}
-                </p>
+        {/* 2-Column Layout from Landing page.pdf */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center mb-14">
+          {/* Left Column: Projected Cutoffs Card */}
+          <div className="lg:col-span-6">
+            <div className="bg-[#FFF8F0] rounded-2xl border border-[#EFE6DC] p-6 shadow-sm">
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#EFE6DC]">
+                <span className="font-bold text-stone-900 text-sm sm:text-base">
+                  Projected cutoffs · UR · University of Delhi
+                </span>
+                <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider">
+                  2026 est.
+                </span>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 mt-auto">
-                <span className="text-xs font-bold text-slate-700 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200/60">
-                  {item.cutoff}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => onAuth("signup")}
-                  className="text-xs font-bold text-[#C2410C] hover:text-blue-700 inline-flex items-center gap-1 group transition-colors cursor-pointer"
-                >
-                  <span>{item.cta}</span>
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-                </button>
+              <div className="space-y-2">
+                {projectedCutoffsDU.map((row) => (
+                  <div
+                    key={row.name}
+                    className={`flex items-center justify-between p-3 rounded-xl transition-all ${
+                      row.target
+                        ? "bg-[#FFF5EA] border-2 border-[#F6D3AF] font-bold text-stone-900 shadow-xs"
+                        : "bg-white border border-[#EFE6DC] text-stone-800 text-sm font-medium hover:border-stone-300"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span>{row.name}</span>
+                      {row.target && (
+                        <span className="bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">
+                          Target
+                        </span>
+                      )}
+                    </div>
+                    <span className="font-mono font-bold text-[#C2410C] text-sm sm:text-base">
+                      {row.cutoff}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Right Column: Copy & CTA */}
+          <div className="lg:col-span-6 space-y-6">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase">
+              Target colleges
+            </span>
+
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-stone-900 tracking-tight leading-tight">
+              See the exact gap to your dream college.
+            </h2>
+
+            <p className="text-stone-600 text-sm sm:text-base leading-relaxed">
+              Pick your college and course. Where do I stand compares your mock scores with its cutoff history and the next-year projection.
+            </p>
+
+            <div className="pt-2">
+              <Link
+                href="/dashboard/standing"
+                className="px-6 py-3.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs hover:shadow transition-all inline-flex items-center gap-2 cursor-pointer"
+              >
+                <span>Check where you stand</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Detailed University Explorer */}
+        <div className="pt-10 border-t border-[#EFE6DC]">
+          <div className="max-w-2xl mx-auto text-center mb-8">
+            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider block mb-1">
+              All Central &amp; State Universities
+            </span>
+            <h3 className="text-xl sm:text-2xl font-bold text-stone-900">
+              Campus Cutoffs &amp; Seat Matrix
+            </h3>
+          </div>
+
+          {/* Filter Tabs */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+            <button
+              type="button"
+              onClick={() => setFilter("all")}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                filter === "all"
+                  ? "bg-[#C2410C] text-white shadow-xs"
+                  : "bg-[#FFF8F0] text-stone-600 border border-[#EFE6DC] hover:bg-stone-100"
+              }`}
+            >
+              All Campuses (6)
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilter("central")}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                filter === "central"
+                  ? "bg-[#C2410C] text-white shadow-xs"
+                  : "bg-[#FFF8F0] text-stone-600 border border-[#EFE6DC] hover:bg-stone-100"
+              }`}
+            >
+              Delhi University (DU)
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilter("heritage")}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                filter === "heritage"
+                  ? "bg-[#C2410C] text-white shadow-xs"
+                  : "bg-[#FFF8F0] text-stone-600 border border-[#EFE6DC] hover:bg-stone-100"
+              }`}
+            >
+              Central Heritage (BHU &amp; AMU)
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilter("specialized")}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                filter === "specialized"
+                  ? "bg-[#C2410C] text-white shadow-xs"
+                  : "bg-[#FFF8F0] text-stone-600 border border-[#EFE6DC] hover:bg-stone-100"
+              }`}
+            >
+              Specialized &amp; Language (JNU &amp; JMI)
+            </button>
+          </div>
+
+          {/* Campus Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((item) => (
+              <div
+                key={item.name}
+                className={`bg-[#FFF8F0] rounded-2xl p-6 border transition-all flex flex-col justify-between ${
+                  item.highlight
+                    ? "border-2 border-[#C2410C] shadow-xs"
+                    : "border-[#EFE6DC] shadow-2xs hover:border-[#F6D3AF]"
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="px-2.5 py-1 text-[11px] font-bold text-[#9F3014] bg-[#FEF1E0] border border-[#F6D3AF] rounded-md">
+                      {item.badge}
+                    </span>
+                    <span className="text-xs font-semibold text-stone-500">{item.subBadge}</span>
+                  </div>
+
+                  <h4 className="text-lg font-bold text-stone-900 mb-2">{item.name}</h4>
+
+                  <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-4">
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-[#EFE6DC] flex items-center justify-between gap-2 mt-auto">
+                  <span className="text-xs font-bold text-stone-800 bg-white px-2.5 py-1 rounded-md border border-[#EFE6DC]">
+                    {item.cutoff}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => onAuth("signup")}
+                    className="text-xs font-bold text-[#C2410C] hover:text-[#9A3412] inline-flex items-center gap-1 group transition-colors cursor-pointer"
+                  >
+                    <span>{item.cta}</span>
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -1910,16 +2315,16 @@ function TargetUniversitiesSection({
  */
 function CampusGallerySection() {
   return (
-    <section className="py-20 md:py-24 bg-white border-b border-slate-200/80">
+    <section className="py-16 md:py-20 bg-white border-b border-[#EFE6DC]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="max-w-2xl mx-auto text-center mb-12">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 tracking-wider uppercase mb-3">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase mb-3">
             Premier Campus Aspirations
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
             Turning Ambition Into Admission
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
+          <p className="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
             The road to North Campus starts with systematic daily testing. Find your place at
             India&apos;s leading institutions.
           </p>
@@ -1930,9 +2335,9 @@ function CampusGallerySection() {
           {colleges.map((c, idx) => (
             <div
               key={idx}
-              className="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
+              className="group bg-[#FFF8F0] rounded-2xl border border-[#EFE6DC] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+              <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
                 <img
                   src={c.src}
                   alt={c.title}
@@ -1940,14 +2345,14 @@ function CampusGallerySection() {
                   decoding="async"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <span className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
+                <span className="absolute top-3 right-3 bg-stone-900/80 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
                   {c.cutoff}
                 </span>
               </div>
               <div className="p-5 flex flex-col justify-between flex-1">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 mb-1">{c.title}</h3>
-                  <p className="text-xs text-slate-500 font-medium">{c.subtitle}</p>
+                  <h3 className="text-base font-bold text-stone-900 mb-1">{c.title}</h3>
+                  <p className="text-xs text-stone-500 font-medium">{c.subtitle}</p>
                 </div>
               </div>
             </div>
@@ -1967,16 +2372,16 @@ function EligibilityRegistrationSection() {
   const { eligibility, registrationSteps } = CUET_AUTHORITY;
 
   return (
-    <section id="eligibility" className="py-20 md:py-24 bg-slate-50 border-b border-slate-200/80">
+    <section id="eligibility" className="py-16 md:py-20 bg-[#FFF8F0] border-b border-[#EFE6DC]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="max-w-2xl mx-auto text-center mb-12">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 tracking-wider uppercase mb-3">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase mb-3">
             Admissions Advisory
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
             CUET UG Eligibility &amp; 4-Step Registration
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
+          <p className="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
             Follow this step-by-step roadmap to submit an error-free NTA application and align your
             Class 12 subjects with target college prerequisites.
           </p>
@@ -1985,19 +2390,19 @@ function EligibilityRegistrationSection() {
         {/* 4 Progressive Steps */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {registrationSteps.map((s) => (
-            <div key={s.step} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div key={s.step} className="bg-white rounded-2xl p-6 border border-[#EFE6DC] shadow-xs flex flex-col justify-between">
               <div>
-                <div className="w-9 h-9 rounded-xl bg-blue-600 text-white font-extrabold text-sm flex items-center justify-center mb-4">
+                <div className="w-9 h-9 rounded-xl bg-[#C2410C] text-white font-extrabold text-sm flex items-center justify-center mb-4">
                   {s.step}
                 </div>
-                <h3 className="text-base font-bold text-slate-900 mb-2">
+                <h3 className="text-base font-bold text-stone-900 mb-2">
                   {s.title}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-stone-600 leading-relaxed">
                   {s.description}
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] text-[#C2410C] font-bold">
+              <div className="mt-4 pt-3 border-t border-[#EFE6DC] text-[11px] text-[#C2410C] font-bold">
                 {s.badge}
               </div>
             </div>
@@ -2005,7 +2410,7 @@ function EligibilityRegistrationSection() {
         </div>
 
         {/* Expandable Official Eligibility Rules Accordion */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+        <div className="bg-white rounded-2xl border border-[#EFE6DC] p-6 shadow-xs">
           <button
             type="button"
             onClick={() => setEligibilityOpen(!eligibilityOpen)}
@@ -2015,37 +2420,37 @@ function EligibilityRegistrationSection() {
             <div className="flex items-center gap-3">
               <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
               <div>
-                <h3 className="text-sm font-bold text-slate-900">
+                <h3 className="text-sm font-bold text-stone-900">
                   Detailed CUET UG Eligibility Guidelines
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-stone-500">
                   Age limit, Class 12 qualifications, and university-specific mapping rules.
                 </p>
               </div>
             </div>
             <ChevronDown
-              className={`w-5 h-5 text-slate-400 transition-transform ${
+              className={`w-5 h-5 text-stone-400 transition-transform ${
                 eligibilityOpen ? "rotate-180" : ""
               }`}
             />
           </button>
 
           {eligibilityOpen && (
-            <div className="mt-5 pt-4 border-t border-slate-100 space-y-3 text-xs text-slate-600 leading-relaxed">
-              <div className="bg-slate-50 p-3 rounded-xl">
-                <strong className="text-slate-800 font-bold block mb-1">
+            <div className="mt-5 pt-4 border-t border-[#EFE6DC] space-y-3 text-xs text-stone-600 leading-relaxed">
+              <div className="bg-[#FFF8F0] p-3 rounded-xl border border-[#EFE6DC]">
+                <strong className="text-stone-900 font-bold block mb-1">
                   1. Age Limit
                 </strong>
                 {eligibility.ageLimit}
               </div>
-              <div className="bg-slate-50 p-3 rounded-xl">
-                <strong className="text-slate-800 font-bold block mb-1">
+              <div className="bg-[#FFF8F0] p-3 rounded-xl border border-[#EFE6DC]">
+                <strong className="text-stone-900 font-bold block mb-1">
                   2. Qualifying Examination (Class 12)
                 </strong>
                 {eligibility.qualifyingExam}
               </div>
-              <div className="bg-slate-50 p-3 rounded-xl">
-                <strong className="text-slate-800 font-bold block mb-1">
+              <div className="bg-[#FFF8F0] p-3 rounded-xl border border-[#EFE6DC]">
+                <strong className="text-stone-900 font-bold block mb-1">
                   3. University Specific Mapping Rule
                 </strong>
                 {eligibility.universityMapping}
@@ -2055,7 +2460,7 @@ function EligibilityRegistrationSection() {
                   href={eligibility.officialSourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#C2410C] hover:text-blue-700 font-semibold inline-flex items-center gap-1 text-xs"
+                  className="text-[#C2410C] hover:text-[#9A3412] font-semibold inline-flex items-center gap-1 text-xs"
                 >
                   Verify on official NTA portal &rarr;
                 </a>
@@ -2074,16 +2479,16 @@ function EligibilityRegistrationSection() {
  */
 function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void }) {
   return (
-    <section id="pricing" className="py-20 md:py-24 bg-white border-b border-slate-200/80">
+    <section id="pricing" className="py-16 md:py-20 bg-white border-b border-[#EFE6DC]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="max-w-2xl mx-auto text-center mb-14">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 tracking-wider uppercase mb-3">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase mb-3">
             Simple &amp; Predictable Access
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
             Invest in Your Dream College Admission
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
+          <p className="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
             Start 100% free with diagnostic practice or unlock the full 251-paper PYQ vault with Gold
             Pass. No hidden renewals.
           </p>
@@ -2096,12 +2501,12 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
               key={card.title}
               className={`rounded-2xl p-7 flex flex-col justify-between transition-all ${
                 card.highlight
-                  ? "bg-slate-900 text-white border-2 border-amber-400 shadow-xl relative"
-                  : "bg-slate-50 text-slate-900 border border-slate-200 shadow-xs"
+                  ? "bg-[#441408] text-white border-2 border-[#F6D3AF] shadow-xl relative"
+                  : "bg-[#FFF8F0] text-stone-900 border border-[#EFE6DC] shadow-xs"
               }`}
             >
               {card.badge && (
-                <span className="absolute -top-3 right-6 bg-amber-400 text-slate-950 text-[11px] font-extrabold px-3 py-0.5 rounded-full uppercase tracking-wider">
+                <span className="absolute -top-3 right-6 bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-[11px] font-extrabold px-3 py-0.5 rounded-full uppercase tracking-wider">
                   {card.badge}
                 </span>
               )}
@@ -2112,8 +2517,8 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
                   <span
                     className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
                       card.highlight
-                        ? "bg-slate-800 text-amber-300"
-                        : "bg-slate-200/70 text-slate-700"
+                        ? "bg-[#5A1C0C] text-[#FED7AA]"
+                        : "bg-white text-stone-700 border border-[#EFE6DC]"
                     }`}
                   >
                     {card.subtitle}
@@ -2122,7 +2527,7 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
 
                 <p
                   className={`text-xs sm:text-sm leading-relaxed mb-6 ${
-                    card.highlight ? "text-slate-300" : "text-slate-600"
+                    card.highlight ? "text-stone-300" : "text-stone-600"
                   }`}
                 >
                   {card.description}
@@ -2131,14 +2536,14 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className="text-4xl font-extrabold tracking-tight">{card.price}</span>
                   {card.originalPrice && (
-                    <del className="text-sm font-semibold text-slate-500">
+                    <del className="text-sm font-semibold text-stone-400">
                       {card.originalPrice}
                     </del>
                   )}
                 </div>
                 <div
                   className={`text-xs font-semibold mb-6 ${
-                    card.highlight ? "text-slate-400" : "text-slate-500"
+                    card.highlight ? "text-stone-400" : "text-stone-500"
                   }`}
                 >
                   {card.period}
@@ -2147,17 +2552,17 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
                 {/* Features List */}
                 <div
                   className={`pt-5 border-t space-y-3 mb-8 ${
-                    card.highlight ? "border-slate-800" : "border-slate-200"
+                    card.highlight ? "border-stone-800" : "border-[#EFE6DC]"
                   }`}
                 >
                   {card.features.map((f, fIdx) => (
                     <div key={fIdx} className="flex items-start gap-2.5 text-xs sm:text-sm">
                       <Check
                         className={`w-4 h-4 shrink-0 mt-0.5 ${
-                          card.highlight ? "text-amber-400" : "text-[#C2410C]"
+                          card.highlight ? "text-[#FED7AA]" : "text-[#C2410C]"
                         }`}
                       />
-                      <span className={card.highlight ? "text-slate-200" : "text-slate-700"}>
+                      <span className={card.highlight ? "text-stone-200" : "text-stone-700"}>
                         {f}
                       </span>
                     </div>
@@ -2170,7 +2575,7 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
                 onClick={() => onAuth("signup")}
                 className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer ${
                   card.highlight
-                    ? "bg-amber-400 hover:bg-amber-500 text-slate-950 shadow-md"
+                    ? "bg-[#C2410C] hover:bg-[#9A3412] text-white shadow-md"
                     : "bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white shadow-xs"
                 }`}
               >
@@ -2190,16 +2595,16 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
  */
 function HallOfFameSection() {
   return (
-    <section className="py-20 md:py-24 bg-slate-50 border-b border-slate-200/80">
+    <section className="py-16 md:py-20 bg-[#FFF8F0] border-b border-[#EFE6DC]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="max-w-2xl mx-auto text-center mb-12">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 tracking-wider uppercase mb-3">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase mb-3">
             Hall of Fame
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
             From Our Mock Tests to DU North Campus
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
+          <p className="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
             Hear directly from aspirants who cracked 100 percentiles in CUET 2025.
           </p>
         </div>
@@ -2209,20 +2614,20 @@ function HallOfFameSection() {
           {testimonials.map((item) => (
             <div
               key={item.name}
-              className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs flex flex-col justify-between"
+              className="bg-white rounded-2xl p-6 border border-[#EFE6DC] shadow-xs flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center gap-1 text-amber-400 mb-4">
+                <div className="flex items-center gap-1 text-amber-500 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
                   ))}
                 </div>
-                <p className="text-slate-700 text-xs sm:text-sm leading-relaxed mb-6 italic">
+                <p className="text-stone-700 text-xs sm:text-sm leading-relaxed mb-6 italic">
                   &ldquo;{item.quote}&rdquo;
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
+              <div className="pt-4 border-t border-[#EFE6DC] flex items-center gap-3">
                 <img
                   src={item.avatar}
                   alt={item.name}
@@ -2230,10 +2635,10 @@ function HallOfFameSection() {
                   height={40}
                   loading="lazy"
                   decoding="async"
-                  className="w-10 h-10 rounded-full object-cover border border-slate-200"
+                  className="w-10 h-10 rounded-full object-cover border border-[#EFE6DC]"
                 />
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 leading-tight">{item.name}</h4>
+                  <h4 className="text-sm font-bold text-stone-900 leading-tight">{item.name}</h4>
                   <p className="text-xs text-[#C2410C] font-semibold mt-0.5">
                     {item.college} &bull; <strong>{item.score}</strong>
                   </p>
@@ -2254,16 +2659,16 @@ function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="py-20 md:py-24 bg-white border-b border-slate-200/80">
+    <section id="faq" className="py-16 md:py-20 bg-white border-b border-[#EFE6DC]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 tracking-wider uppercase mb-3">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase mb-3">
             Clear Answers
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
             Frequently Asked Questions
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
+          <p className="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
             Everything you need to know about NTA exam patterns, syllabus coverage, and platform access.
           </p>
         </div>
@@ -2275,23 +2680,23 @@ function FAQSection() {
             return (
               <div
                 key={index}
-                className="border border-slate-200 rounded-xl overflow-hidden transition-colors"
+                className="border border-[#EFE6DC] rounded-xl overflow-hidden transition-colors bg-[#FFF8F0]"
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm sm:text-base hover:bg-slate-50 transition-colors cursor-pointer"
+                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-stone-900 text-sm sm:text-base hover:bg-white transition-colors cursor-pointer"
                   aria-expanded={isOpen}
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-slate-500 shrink-0 transition-transform ${
+                    className={`w-4 h-4 text-stone-500 shrink-0 transition-transform ${
                       isOpen ? "rotate-180" : ""
                     }`}
                   />
                 </button>
                 {isOpen && (
-                  <div className="px-4 sm:px-5 pb-5 pt-1 text-slate-600 text-xs sm:text-sm leading-relaxed border-t border-slate-100">
+                  <div className="px-4 sm:px-5 pb-5 pt-1 text-stone-600 text-xs sm:text-sm leading-relaxed border-t border-[#EFE6DC] bg-white">
                     <p>{faq.a}</p>
                   </div>
                 )}
@@ -2305,7 +2710,8 @@ function FAQSection() {
 }
 
 /**
- * 13. Final Call to Action (Primary Hierarchy)
+ * 13. Final Call to Action (Landing page.pdf Page 2/3)
+ * - Deep terracotta container with high-conversion CTAs.
  */
 function FinalCTA({
   onAuth,
@@ -2317,42 +2723,41 @@ function FinalCTA({
   const router = useRouter();
 
   return (
-    <section className="py-20 md:py-24 bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-950 text-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30 uppercase tracking-wider">
-          Your CUET Journey Starts Here
-        </span>
+    <section className="py-16 md:py-20 bg-[#FFF8F0]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="bg-[#C2410C] rounded-3xl p-8 sm:p-14 text-white text-center shadow-lg relative overflow-hidden">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+            Your dream campus starts with the next mock.
+          </h2>
 
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
-          Ready to Step Into Your Dream Campus?
-        </h2>
+          <p className="text-[#FED7AA] text-base sm:text-lg mt-3 max-w-xl mx-auto font-medium">
+            Join 200,000+ aspirants practising under real NTA conditions.
+          </p>
 
-        <p className="text-slate-300 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
-          Join over 200,000 students practicing with India&apos;s most authentic NTA CBT mock test platform today.
-        </p>
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-6">
+            <button
+              type="button"
+              className="px-7 py-3.5 rounded-xl bg-[#FFF8F0] hover:bg-white text-[#C2410C] font-bold text-base shadow-sm hover:shadow transition-all flex items-center gap-2 cursor-pointer"
+              onClick={() => {
+                if (isLoggedIn) {
+                  router.push("/dashboard");
+                } else {
+                  onAuth("signup");
+                }
+              }}
+            >
+              <span>Open dashboard</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-          <button
-            type="button"
-            className="px-7 py-3.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-base shadow-lg transition-all flex items-center gap-2 cursor-pointer"
-            onClick={() => {
-              if (isLoggedIn) {
-                router.push("/dashboard");
-              } else {
-                onAuth("signup");
-              }
-            }}
-          >
-            <span>{isLoggedIn ? "Open Dashboard" : "Join Now — Start Free"}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-
-          <Link
-            href="/dashboard/mocks"
-            className="px-6 py-3.5 rounded-xl border border-white/20 hover:border-white/40 text-white font-bold text-sm transition-colors"
-          >
-            View Test Schedule
-          </Link>
+            <Link
+              href="/dashboard/pyqs"
+              className="px-6 py-3.5 rounded-xl bg-transparent hover:bg-white/10 text-white font-semibold border border-white/40 text-base transition-colors flex items-center gap-2"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Solve 251+ official PYQs</span>
+            </Link>
+          </div>
         </div>
       </div>
     </section>
@@ -2360,162 +2765,141 @@ function FinalCTA({
 }
 
 /**
- * 14. Clean Structured Site Footer
+ * 14. Clean Structured Site Footer (Landing page.pdf Page 3)
  */
 function LandingFooter({ onAuth }: { onAuth: (mode: "login" | "signup") => void }) {
   return (
-    <footer className="bg-slate-950 text-slate-400 py-14 border-t border-slate-900 text-xs">
+    <footer className="bg-[#FFF8F0] text-stone-600 py-12 border-t border-[#EFE6DC] text-xs">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-          {/* Brand Column */}
+        {/* PDF Top Bar in Footer */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-8 mb-8 border-b border-[#EFE6DC]">
+          <div className="flex items-center gap-2.5">
+            <span className="w-8 h-8 rounded-lg bg-[#C2410C] text-white font-black text-base flex items-center justify-center shadow-xs">
+              C
+            </span>
+            <strong className="text-stone-900 text-base font-bold">CUETPrep</strong>
+            <span className="text-stone-400">·</span>
+            <span className="text-stone-600 font-medium">NTA CBT platform</span>
+          </div>
+          <span className="text-stone-500 font-medium text-xs sm:text-sm">
+            Practice guidance, not an examination guarantee.
+          </span>
+        </div>
+
+        {/* Structured Columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-10">
           <div className="lg:col-span-2 space-y-3">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="w-8 h-8 rounded-lg bg-blue-600 text-white font-black text-base flex items-center justify-center">
-                C
-              </span>
-              <strong className="text-white text-lg font-bold">
-                CUET<span className="text-blue-500">Prep</span>
-              </strong>
-            </Link>
-            <p className="text-slate-400 leading-relaxed max-w-sm">
+            <p className="text-stone-600 leading-relaxed max-w-sm">
               Practice smarter, master authentic NTA exam timing, and get ready for your dream Delhi
-              University seat.
+              University seat with full-length mocks and NCERT mistake breakdowns.
             </p>
-            <div className="flex items-center gap-2 pt-2 text-emerald-400 font-semibold text-[11px]">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>All 251 test modules operational</span>
+            <div className="flex items-center gap-2 pt-2 text-emerald-700 font-semibold text-[11px]">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+              <span>All 251 official shift modules operational</span>
             </div>
           </div>
 
-          {/* Links 1 */}
           <div className="space-y-2">
-            <strong className="text-white text-xs uppercase tracking-wider block mb-1">
+            <strong className="text-stone-900 text-xs uppercase tracking-wider block mb-1">
               Prepare
             </strong>
             <div>
-              <a href="#pattern" className="hover:text-white transition-colors">
-                Exam Pattern
+              <a href="#pattern" className="hover:text-[#C2410C] transition-colors">
+                Exam pattern
               </a>
             </div>
             <div>
-              <a href="#syllabus" className="hover:text-white transition-colors">
+              <a href="#syllabus" className="hover:text-[#C2410C] transition-colors">
                 Syllabus Explorer
               </a>
             </div>
             <div>
-              <a href="#simulator" className="hover:text-white transition-colors">
-                CBT Simulator
+              <a href="#simulator" className="hover:text-[#C2410C] transition-colors">
+                CBT simulator
               </a>
             </div>
             <div>
-              <Link href="/dashboard/mocks" className="hover:text-white transition-colors">
+              <Link href="/dashboard/mocks" className="hover:text-[#C2410C] transition-colors">
                 Full-Length Mocks
               </Link>
             </div>
           </div>
 
-          {/* Links 2 */}
           <div className="space-y-2">
-            <strong className="text-white text-xs uppercase tracking-wider block mb-1">
+            <strong className="text-stone-900 text-xs uppercase tracking-wider block mb-1">
               Explore
             </strong>
             <div>
-              <Link href="/dashboard/pyqs" className="hover:text-white transition-colors">
+              <Link href="/dashboard/pyqs" className="hover:text-[#C2410C] transition-colors">
                 251 Shift PYQs Vault
               </Link>
             </div>
             <div>
-              <a href="#colleges" className="hover:text-white transition-colors">
-                College Cutoffs
+              <a href="#colleges" className="hover:text-[#C2410C] transition-colors">
+                Target colleges
               </a>
             </div>
             <div>
-              <a href="#eligibility" className="hover:text-white transition-colors">
+              <a href="#eligibility" className="hover:text-[#C2410C] transition-colors">
                 Eligibility &amp; Steps
               </a>
             </div>
             <div>
-              <Link href="/dashboard/standing" className="hover:text-white transition-colors">
+              <Link href="/dashboard/standing" className="hover:text-[#C2410C] transition-colors">
                 Target College Standings
               </Link>
             </div>
           </div>
 
-          {/* Links 3 */}
           <div className="space-y-2">
-            <strong className="text-white text-xs uppercase tracking-wider block mb-1">
+            <strong className="text-stone-900 text-xs uppercase tracking-wider block mb-1">
               Support &amp; Legal
             </strong>
             <div>
-              <a href="#faq" className="hover:text-white transition-colors">
+              <a href="#faq" className="hover:text-[#C2410C] transition-colors">
                 Candidate FAQs
               </a>
             </div>
             <div>
-              <Link href="/pricing" className="hover:text-white transition-colors">
-                Ranker Pass Pricing
-              </Link>
-            </div>
-            <div>
-              <Link href="/contact" className="hover:text-white transition-colors">
-                Contact Academic Support
-              </Link>
-            </div>
-            <div>
-              <a href={`mailto:${CUET_AUTHORITY.contactSupport.platformSupportEmail}`} className="hover:text-white transition-colors">
-                Academic Support ({CUET_AUTHORITY.contactSupport.platformSupportEmail})
+              <a href="#pricing" className="hover:text-[#C2410C] transition-colors">
+                Pricing
               </a>
             </div>
             <div>
-              <a href="tel:01140759000" className="hover:text-white transition-colors">
-                NTA Helpline: 011-40759000
+              <a href="mailto:support@cuetaiprep.in" className="hover:text-[#C2410C] transition-colors">
+                Academic Support
               </a>
             </div>
-            <div>
-              <a href={`mailto:${CUET_AUTHORITY.contactSupport.officialNTAHelpdeskEmail}`} className="hover:text-white transition-colors">
-                NTA Helpdesk ({CUET_AUTHORITY.contactSupport.officialNTAHelpdeskEmail})
-              </a>
-            </div>
-            <div className="pt-1 flex flex-wrap gap-x-2 text-[11px] text-slate-400">
-              <Link href="/terms" className="hover:text-white transition-colors">
+            <div className="pt-1 flex flex-wrap gap-x-2 text-[11px] text-stone-500">
+              <Link href="/terms" className="hover:text-[#C2410C] transition-colors">
                 Terms
               </Link>
               <span>•</span>
-              <Link href="/privacy" className="hover:text-white transition-colors">
+              <Link href="/privacy" className="hover:text-[#C2410C] transition-colors">
                 Privacy
               </Link>
               <span>•</span>
-              <Link href="/refunds" className="hover:text-white transition-colors">
+              <Link href="/refunds" className="hover:text-[#C2410C] transition-colors">
                 Refunds
               </Link>
-            </div>
-            <div>
-              <a
-                href={CUET_AUTHORITY.meta.officialSourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors inline-flex items-center gap-1"
-              >
-                Official NTA Portal &rarr;
-              </a>
             </div>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-slate-900 flex flex-wrap items-center justify-between gap-4 text-slate-500">
-          <span>&copy; {new Date().getFullYear()} CUET AI-Prep. All rights reserved. Built for NTA CBT Candidates.</span>
+        <div className="pt-6 border-t border-[#EFE6DC] flex flex-wrap items-center justify-between gap-4 text-stone-500">
+          <span>&copy; {new Date().getFullYear()} CUETPrep. All rights reserved. Built for NTA CBT Candidates.</span>
           <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={() => onAuth("login")}
-              className="hover:text-white cursor-pointer"
+              className="hover:text-stone-900 cursor-pointer font-medium"
             >
               Log In
             </button>
             <button
               type="button"
               onClick={() => onAuth("signup")}
-              className="text-orange-400 hover:text-orange-300 font-bold cursor-pointer"
+              className="text-[#C2410C] hover:text-[#9A3412] font-bold cursor-pointer"
             >
               Start Free Trial &rarr;
             </button>
@@ -2654,50 +3038,56 @@ export default function LandingPageClient() {
   const isLoggedIn = isClient && authChecked && hasActiveSession;
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-[#FCE7D0] selection:text-[#441408]">
+    <div className="min-h-screen bg-[#FFF8F0] text-stone-900 font-sans selection:bg-[#FCE7D0] selection:text-[#441408]">
       {/* 1. Top Notice & Live Exam Countdown Pill */}
       <NoticeCountdownBanner />
 
       {/* 2. Sticky Header Navigation (5 primary links + 'More' dropdown + CTA) */}
       <Navigation onAuth={setAuthMode} isLoggedIn={isLoggedIn} />
 
-      {/* 3. Hero Section (Single clear focal point, 2 CTAs, social proof) */}
+      {/* 3. Hero Section (Two-Column with CBT Mockup Card + 3 Feature Highlights) */}
       <Hero onAuth={setAuthMode} isLoggedIn={isLoggedIn} />
 
       {/* 4. Official CUET UG 2026 Exam Pattern & Marking Scheme */}
       <ExamPatternSection />
 
-      {/* 5. Complete Stream-Wise Syllabus Explorer (Tabs + Progressive Accordions) */}
-      <SyllabusSection />
+      {/* 5. From first mock to dream campus in three steps */}
+      <ThreeStepWorkflowSection />
 
-      {/* 6. Realistic NTA CBT Exam Interface Simulator (Interactive Drill) */}
-      <CBTSimulatorSection onAuth={setAuthMode} />
+      {/* 6. AI Coach: Know why you lost marks, not just how many */}
+      <AICoachSection onAuth={setAuthMode} />
 
-      {/* 7. Target Central Universities & Cutoff Benchmarks (Tabbed Grid) */}
+      {/* 7. Target Colleges & Cutoffs (Projected Cutoffs Card + University Explorer) */}
       <TargetUniversitiesSection onAuth={setAuthMode} />
 
-      {/* 8. Turning Ambition into Admission (Top DU Campuses Gallery) */}
-      <CampusGallerySection />
+      {/* 8. Realistic NTA CBT Exam Interface Simulator (Interactive Drill) */}
+      <CBTSimulatorSection onAuth={setAuthMode} />
 
-      {/* 9. CUET UG 2026 Eligibility & 4-Step Registration Advisory */}
-      <EligibilityRegistrationSection />
+      {/* 9. Complete Stream-Wise Syllabus Explorer (Tabs + Progressive Accordions) */}
+      <SyllabusSection />
 
       {/* 10. Transparent Free vs. Gold Pass Plans & Pricing */}
       <PricingSection onAuth={setAuthMode} />
 
-      {/* 11. Student Hall of Fame Testimonials */}
+      {/* 11. Turning Ambition into Admission (Top DU Campuses Gallery) */}
+      <CampusGallerySection />
+
+      {/* 12. CUET UG 2026 Eligibility & 4-Step Registration Advisory */}
+      <EligibilityRegistrationSection />
+
+      {/* 13. Student Hall of Fame Testimonials */}
       <HallOfFameSection />
 
-      {/* 12. Frequently Asked Questions (Accordion) */}
+      {/* 14. Frequently Asked Questions (Accordion) */}
       <FAQSection />
 
-      {/* 13. High-Conversion Final CTA */}
+      {/* 15. High-Conversion Final CTA */}
       <FinalCTA onAuth={setAuthMode} isLoggedIn={isLoggedIn} />
 
-      {/* 14. Structured Site Footer */}
+      {/* 16. Structured Site Footer */}
       <LandingFooter onAuth={setAuthMode} />
 
-      {/* 15. Floating Back-to-Top Button */}
+      {/* 17. Floating Back-to-Top Button */}
       <BackToTopButton />
 
       {/* Authentic Multi-Step Onboarding Modal */}
