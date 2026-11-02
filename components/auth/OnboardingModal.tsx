@@ -44,7 +44,7 @@ export default function OnboardingModal({
   const loginUser = useTestStore((state) => state.loginUser);
 
   const [mode, setMode] = useState<"signup" | "login" | "otp" | "verify_email">(initialMode);
-  const [otpType] = useState<OtpVerificationType>("signup");
+  const [otpType, setOtpType] = useState<OtpVerificationType>("signup");
   const [unconfirmedEmail, setUnconfirmedEmail] = useState<string | null>(null);
   const [step, setStep] = useState<1 | 2>(1);
 
@@ -324,18 +324,13 @@ export default function OnboardingModal({
           setErrorMessage("An account with this email already exists. Please sign in instead.");
           setMode("login");
           setIsLoading(false);
-          return;
-        }
-
-        if (!data.user.email_confirmed_at && !data.session) {
-          setMode("verify_email");
-          setIsLoading(false);
+          isSubmittingRef.current = false;
           return;
         }
 
         const createdUserId = data.user.id;
 
-        // Persist authentic profile to Supabase database via server route
+        // Persist profile to Supabase database via server route
         try {
           await fetch("/api/auth/profile", {
             method: "POST",
@@ -354,24 +349,29 @@ export default function OnboardingModal({
           console.warn("[Profile Persistence Notice]:", profileErr);
         }
 
-        // Initialize clean Zustand store session
-        loginUser({
-          id: createdUserId,
-          name: cleanName,
-          email: cleanEmail,
-          age,
-          targetCollege: finalCollege,
-          targetUniversity: finalUniversity,
-          targetCourse: finalCourse,
-          preferredStream: stream,
-          selectedSubjects,
-          dailyStreak: 0,
-          xpPoints: 0,
-          campusCoins: 0,
+        // Dispatch 6-digit verification OTP via Brevo
+        const otpRes = await fetch("/api/auth/otp/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: cleanEmail, type: "signup" }),
         });
+        const otpData = await otpRes.json().catch(() => null);
 
-        onClose();
-        window.location.href = "/dashboard";
+        if (!otpRes.ok || !otpData?.ok) {
+          setErrorMessage(otpData?.error || "Failed to dispatch verification code. Please try again.");
+          setIsLoading(false);
+          isSubmittingRef.current = false;
+          return;
+        }
+
+        // Sign out any auto-session so the user MUST verify OTP before accessing the dashboard
+        try {
+          await supabase.auth.signOut();
+        } catch {}
+
+        setOtpType("signup");
+        setMode("otp");
+        return;
       }
     } catch (err: any) {
       setErrorMessage(parseAuthError(err).message);
@@ -712,6 +712,28 @@ export default function OnboardingModal({
                       ))}
                     </div>
                   </div>
+
+                  {errorMessage && (
+                    <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-medium space-y-2 animate-in fade-in">
+                      <div className="flex items-start gap-2">
+                        <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                        <span className="font-semibold text-amber-950">{errorMessage}</span>
+                      </div>
+                      {errorMessage.toLowerCase().includes("already exists") && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setErrorMessage(null);
+                            setMode("login");
+                          }}
+                          className="w-full py-2.5 px-3 rounded-lg bg-[#C2410C] text-white font-bold hover:bg-[#9A3412] text-center flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                        >
+                          <span>Click Here to Sign In to Your Existing Account</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  )}
 
                   <div className="pt-3">
                     <button

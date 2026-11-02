@@ -455,16 +455,11 @@ export default function AuthPageContent({
           setErrorMessage("An account with this email already exists. Please sign in instead.");
           setMode("login");
           setIsLoading(false);
+          isSubmittingRef.current = false;
           return;
         }
 
-        // 2. If the user was already confirmed automatically (e.g. email confirmation disabled in project)
-        if (data.user.email_confirmed_at) {
-          await syncProfileAndLogin(data.user);
-          return;
-        }
-
-        // 3. Dispatch 6-digit OTP via Brevo and transition to OTP verification screen
+        // 2. Dispatch 6-digit OTP via Brevo and transition to OTP verification screen
         const otpRes = await fetch("/api/auth/otp/send", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -478,6 +473,11 @@ export default function AuthPageContent({
           isSubmittingRef.current = false;
           return;
         }
+
+        // Ensure user is signed out until OTP verification completes
+        try {
+          await supabase.auth.signOut();
+        } catch {}
 
         setOtpType("signup");
         setMode("otp");
@@ -918,6 +918,28 @@ export default function AuthPageContent({
                       {/* Password Requirements Checklist */}
                       <PasswordStrengthIndicator password={password} />
                     </div>
+
+                    {errorMessage && (
+                      <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-medium space-y-2 animate-in fade-in">
+                        <div className="flex items-start gap-2">
+                          <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                          <span className="font-semibold text-amber-950">{errorMessage}</span>
+                        </div>
+                        {errorMessage.toLowerCase().includes("already exists") && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setErrorMessage(null);
+                              setMode("login");
+                            }}
+                            className="w-full py-2.5 px-3 rounded-lg bg-[#C2410C] text-white font-bold hover:bg-[#9A3412] text-center flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                          >
+                            <span>Click Here to Sign In to Your Existing Account</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    )}
 
                     <div className="pt-3">
                       <button
