@@ -733,17 +733,18 @@ const targetUniversities = [
 const pricingCards = [
   {
     title: "Free",
-    subtitle: "Diagnostic Access",
+    subtitle: "Starter Access",
     description:
-      "Build your preparation rhythm with daily practice and essential CUET resources.",
+      "Essential CUET preparation with diagnostic scoring to start your practice rhythm.",
     price: "₹0",
     period: "Free forever",
     features: [
-      "Daily chapter-wise practice drills",
-      "Essential CUET syllabus & formula sheets",
-      "Full diagnostic mock test with score",
-      "NCERT concept explanations for every answer",
-      "Access on mobile, tablet & desktop",
+      { text: "1 official PYQ paper per subject", included: true },
+      { text: "3 chapter practice tests per subject", included: true },
+      { text: "3 full-length CBT mock tests per subject", included: true },
+      { text: "Diagnostic test with instant scorecard", included: true },
+      { text: "NCERT answer key & concept explanations", included: true },
+      { text: "No AI analysis (upgrade to Gold for AI Debrief)", included: false },
     ],
     cta: "Start Practicing Free",
     tier: "free",
@@ -753,18 +754,18 @@ const pricingCards = [
     title: "Gold Pass",
     subtitle: "Complete Exam Vault",
     description:
-      "Get the focused practice, All-India percentiles, and AI insights you need to secure North Campus.",
+      "Get unlimited practice, All-India percentiles, and granular AI insights to secure North Campus.",
     price: "₹699",
     originalPrice: "₹999",
     period: "One-time payment • Valid till CUET 2026",
     badge: "Most Popular",
     features: [
-      "Everything included in Free tier",
-      "All 251 official shift PYQ papers (2022–2025)",
-      "Full-length NTA CBT timed mock tests",
-      "Granular AI Trap & Mistake Diagnosis",
-      "Target College Cutoffs & Realistic Admission Standing",
-      "Unlimited test attempts with forensic answer logs",
+      { text: "Everything included in Free tier", included: true },
+      { text: "All 251 official shift PYQ papers (2022–2025)", included: true },
+      { text: "Unlimited chapter practice tests across all subjects", included: true },
+      { text: "Unlimited full-length NTA CBT timed mock tests", included: true },
+      { text: "Granular AI Trap & Mistake Diagnosis", included: true },
+      { text: "Target College Cutoffs & Realistic Admission Standing", included: true },
     ],
     cta: "Get Gold Pass",
     tier: "gold",
@@ -787,7 +788,7 @@ const faqs = [
   },
   {
     q: "Is the Free plan genuinely free with zero credit card required?",
-    a: "Yes. You can start immediately with diagnostic mock tests, chapter practice questions, NCERT explanations, and syllabus explorers with zero credit card or payment commitment.",
+    a: "Yes. You can start immediately with 1 official PYQ, 3 practice tests, and 3 full mock tests per subject, plus diagnostic testing with instant scorecards (AI analysis is exclusive to Gold Pass). Zero credit card or payment commitment required.",
   },
   {
     q: "How do I choose the right domain subjects for Delhi University (DU)?",
@@ -2310,8 +2311,7 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
             Invest in Your Dream College Admission
           </h2>
           <p className="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
-            Start 100% free with diagnostic practice or unlock the full 251-paper PYQ vault with Gold
-            Pass. No hidden renewals.
+            Start free with 1 PYQ, 3 practice tests &amp; 3 mocks per subject, or unlock the full 251-paper vault and AI analysis with Gold Pass.
           </p>
         </div>
 
@@ -2376,18 +2376,36 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
                     card.highlight ? "border-stone-800" : "border-[#EFE6DC]"
                   }`}
                 >
-                  {card.features.map((f, fIdx) => (
-                    <div key={fIdx} className="flex items-start gap-2.5 text-xs sm:text-sm">
-                      <Check
-                        className={`w-4 h-4 shrink-0 mt-0.5 ${
-                          card.highlight ? "text-[#FED7AA]" : "text-[#C2410C]"
-                        }`}
-                      />
-                      <span className={card.highlight ? "text-stone-200" : "text-stone-700"}>
-                        {f}
-                      </span>
-                    </div>
-                  ))}
+                  {card.features.map((f, fIdx) => {
+                    const isObj = typeof f === "object";
+                    const isIncluded = isObj ? f.included !== false : true;
+                    const text = isObj ? f.text : f;
+
+                    return (
+                      <div key={fIdx} className="flex items-start gap-2.5 text-xs sm:text-sm">
+                        {isIncluded ? (
+                          <Check
+                            className={`w-4 h-4 shrink-0 mt-0.5 ${
+                              card.highlight ? "text-[#FED7AA]" : "text-[#C2410C]"
+                            }`}
+                          />
+                        ) : (
+                          <X className="w-4 h-4 shrink-0 mt-0.5 text-stone-400" />
+                        )}
+                        <span
+                          className={
+                            card.highlight
+                              ? "text-stone-200"
+                              : isIncluded
+                              ? "text-stone-700"
+                              : "text-stone-400"
+                          }
+                        >
+                          {text}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 

@@ -105,31 +105,31 @@ export default function PricingView() {
                 <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
-                <span>3 Distinct Domain Mock Exams (Unlimited Retries)</span>
+                <span>1 Official Shift PYQ Paper per Subject</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
-                <span>3 Distinct Unit Practice Tests (Unlimited Retries)</span>
+                <span>3 Practice Tests per Subject</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
-                <span>1 Distinct Official PYQ Paper (Unlimited Retries)</span>
+                <span>3 Full-Length CBT Mock Tests per Subject</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                  <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                </span>
+                <span>Full Diagnostic Test with Instant Score</span>
               </div>
               <div className="flex items-center gap-2.5 text-slate-400">
                 <span className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-400">
                   <X className="w-3 h-3 stroke-[2]" />
                 </span>
-                <span>Where Do I Stand College Predictor</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-slate-400">
-                <span className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-400">
-                  <X className="w-3 h-3 stroke-[2]" />
-                </span>
-                <span>Subject Weakness Radar & AI Diagnosis</span>
+                <span>AI Post-Mock Telemetry &amp; Analysis (Gold only)</span>
               </div>
             </div>
           </div>

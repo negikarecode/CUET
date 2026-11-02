@@ -54,31 +54,31 @@ export default function PricingSection() {
                   <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
                     <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                   </span>
-                  <span>3 Domain Mock Tests</span>
+                  <span>1 Official Shift PYQ Paper per Subject</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
                     <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                   </span>
-                  <span>60-Minute Countdown CBT Player (Exact NTA clone)</span>
+                  <span>3 Chapter Practice Tests per Subject</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
                     <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                   </span>
-                  <span>Official +5 / -1 Marking Scorecard</span>
+                  <span>3 Full-Length CBT Mock Tests per Subject</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
+                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                  </span>
+                  <span>Diagnostic Baseline Test with Instant Score</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-slate-400">
                   <span className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-400">
                     <X className="w-3 h-3 stroke-[2]" />
                   </span>
-                  <span>AI NCERT Mistake Decrypter</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-slate-400">
-                  <span className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-400">
-                    <X className="w-3 h-3 stroke-[2]" />
-                  </span>
-                  <span>5-Question Adaptive Repair Drills</span>
+                  <span>AI Post-Mock Telemetry &amp; Analysis (Gold Pass only)</span>
                 </div>
               </div>
             </div>
