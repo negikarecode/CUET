@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useTestStore } from "@/lib/store/useTestStore";
+import { useTestStore, DEFAULT_ANALYTICS } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useTarget } from "@/lib/hooks/useTarget";
 import InvalidTargetBanner from "@/components/profile/InvalidTargetBanner";
@@ -12,7 +12,6 @@ import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { calculateCUETScore, MARKING_SCHEME } from "@/lib/config/dashboardConfig";
 import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
 import { safeStorage } from "@/lib/storage/safe-storage";
-import { stringToUuid } from "@/lib/utils";
 
 import { WelcomeBanner } from "@/components/dashboard/prep-pulse/WelcomeBanner";
 import { NextBestActionCard } from "@/components/dashboard/prep-pulse/NextBestActionCard";
@@ -87,15 +86,22 @@ export default function DashboardClient({
     if (typeof window !== "undefined") {
       try {
         safeStorage.initStartupCleanup();
-        const { recoverUnrecordedCBTSessions } = useTestStore.getState();
-        if (typeof recoverUnrecordedCBTSessions === "function") {
-          recoverUnrecordedCBTSessions();
+        if (isServerUser && (!initialData.serverAttempts || initialData.serverAttempts.length === 0)) {
+          // Stale cross-account cache purge: ensure clean baseline for fresh/reset account
+          safeStorage.removeItem("cuet_ai_prep_session_storage:guest");
+          safeStorage.removeItem("cuet_ai_prep_session_storage");
+          useTestStore.setState({ testAttempts: [], analytics: DEFAULT_ANALYTICS });
+        } else {
+          const { recoverUnrecordedCBTSessions } = useTestStore.getState();
+          if (typeof recoverUnrecordedCBTSessions === "function") {
+            recoverUnrecordedCBTSessions();
+          }
         }
       } catch (err) {
         console.warn("Session recovery notice:", err);
       }
     }
-  }, []);
+  }, [isServerUser, initialData.serverAttempts]);
 
   // Synchronize authenticated server data and test attempts into store
   useEffect(() => {
@@ -119,34 +125,10 @@ export default function DashboardClient({
         });
       }
 
-      if (initialData.serverAttempts && initialData.serverAttempts.length > 0) {
-        const localAttempts = state.testAttempts || [];
-        const localCanonicalKeys = new Set(localAttempts.map(getCanonicalTestKey));
-        const localKeys = new Set(
-          localAttempts.flatMap((a) => [
-            (a.testId || "").trim().toLowerCase(),
-            (a.id || "").trim().toLowerCase(),
-            (a.attemptId || "").trim().toLowerCase(),
-            stringToUuid((a.testId || "").trim()),
-          ])
-        );
-        initialData.serverAttempts.forEach((att) => {
-          const k = (att.testId || att.id || "").trim().toLowerCase();
-          const uuidK = stringToUuid(k);
-          const attCanonicalKey = getCanonicalTestKey(att);
-          const matchesLocal =
-            localCanonicalKeys.has(attCanonicalKey) ||
-            localAttempts.some(
-              (la) =>
-                (att.attemptId && la.attemptId && la.attemptId.toLowerCase() === att.attemptId.toLowerCase()) ||
-                (att.id && la.id && la.id.toLowerCase() === att.id.toLowerCase()) ||
-                (att.testId && la.testId && la.testId.toLowerCase() === att.testId.toLowerCase()) ||
-                (la.testTitle?.toLowerCase().trim() === att.testTitle?.toLowerCase().trim() &&
-                  la.subject?.toLowerCase().trim() === att.subject?.toLowerCase().trim())
-            );
-          if (k && !localKeys.has(k) && !localKeys.has(uuidK) && !matchesLocal) {
-            state.recordTestAttempt(att);
-          }
+      if (isServerUser) {
+        // Authenticated users strictly reflect their own server attempts; clean any stale cross-account data
+        useTestStore.setState({
+          testAttempts: initialData.serverAttempts || [],
         });
       }
     }
@@ -187,17 +169,19 @@ export default function DashboardClient({
   const serverAttempted = initialData?.kpi?.totalAttempted ?? 0;
   const serverCorrectCount = initialData?.kpi?.correctCount ?? 0;
 
-  // Single source for total attempted (strictly derived from deduplicated attempts)
-  const totalAttempted =
-    isClient && deduplicatedAttempts.length > 0
-      ? deduplicatedAttemptedSum
-      : (isServerUser ? serverAttempted : clientQuestionsAttempted);
+  // Single source for total attempted (strictly derived from authoritative server metrics for authenticated users)
+  const totalAttempted = isServerUser
+    ? serverAttempted
+    : (isClient && deduplicatedAttempts.length > 0
+        ? deduplicatedAttemptedSum
+        : clientQuestionsAttempted);
 
-  // Single source for correct answers (strictly derived from deduplicated attempts)
-  const correctCount =
-    isClient && deduplicatedAttempts.length > 0
-      ? deduplicatedCorrectSum
-      : (isServerUser ? serverCorrectCount : (clientAnalytics?.totalCorrectAnswers ?? 0));
+  // Single source for correct answers (strictly derived from authoritative server metrics for authenticated users)
+  const correctCount = isServerUser
+    ? serverCorrectCount
+    : (isClient && deduplicatedAttempts.length > 0
+        ? deduplicatedCorrectSum
+        : (clientAnalytics?.totalCorrectAnswers ?? 0));
 
   // Single source for accuracy: strictly correct / attempted
   const accuracyPercentage =

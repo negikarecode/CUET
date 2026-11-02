@@ -63,7 +63,7 @@ interface TestStoreState {
   decrementTimer: () => void;
 }
 
-const DEFAULT_ANALYTICS: UserAnalyticsSummary = {
+export const DEFAULT_ANALYTICS: UserAnalyticsSummary = {
   totalQuestionsAttempted: 0,
   totalCorrectAnswers: 0,
   totalIncorrectAnswers: 0,
@@ -395,6 +395,18 @@ export const useTestStore = create<TestStoreState>()(
         }
         if (typeof window !== "undefined") {
           safeStorage.removeItem("cuet_active_uid");
+          safeStorage.removeItem("cuet_ai_prep_session_storage");
+          safeStorage.removeItem("cuet_ai_prep_session_storage:guest");
+          try {
+            const keysToRemove: string[] = [];
+            for (let i = 0; i < window.localStorage.length; i++) {
+              const k = window.localStorage.key(i);
+              if (k && (k.startsWith("cuet_") || k.startsWith("cbt_"))) {
+                keysToRemove.push(k);
+              }
+            }
+            keysToRemove.forEach((k) => window.localStorage.removeItem(k));
+          } catch {}
         }
         set({
           user: DEFAULT_USER,
@@ -895,30 +907,17 @@ export const useTestStore = create<TestStoreState>()(
           getItem: (_name: string) => {
             // Priority 1: Check active user pointer
             const activeUid = safeStorage.getItem("cuet_active_uid");
-            if (activeUid) {
+            if (activeUid && activeUid !== "guest") {
               const userScoped = safeStorage.getItem(`cuet_ai_prep_session_storage:${activeUid}`);
               if (userScoped) return userScoped;
+              // A new authenticated user must NEVER inherit old guest or legacy attempts
+              return null;
             }
-            // Fallback for guest
+
+            // Fallback for guest strictly when no user is logged in
             const guestScoped = safeStorage.getItem("cuet_ai_prep_session_storage:guest");
             if (guestScoped) return guestScoped;
 
-            // Safe migration: ONLY if legacy data explicitly has an id that matches activeUid
-            const legacy = safeStorage.getItem("cuet_ai_prep_session_storage");
-            if (legacy) {
-              try {
-                const parsed = JSON.parse(legacy);
-                const legacyUserId = parsed?.state?.user?.id;
-                // If legacy owner matches current activeUid, migrate it safely
-                if (legacyUserId && activeUid && legacyUserId === activeUid) {
-                  safeStorage.setItem(`cuet_ai_prep_session_storage:${activeUid}`, legacy);
-                  safeStorage.removeItem("cuet_ai_prep_session_storage");
-                  return legacy;
-                }
-              } catch {
-                // Ignore parse errors
-              }
-            }
             return null;
           },
           setItem: (_name: string, value: string) => {

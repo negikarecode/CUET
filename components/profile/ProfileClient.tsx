@@ -491,13 +491,39 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
     }
   };
 
-  const handleResetConfirmed = () => {
+  const handleResetConfirmed = async () => {
     try {
       clearAttempts();
       if (typeof window !== "undefined") {
-        localStorage.removeItem("cbt_completed_attempts");
-        localStorage.removeItem("cuet_user_attempts");
+        try {
+          const keysToRemove: string[] = [];
+          for (let i = 0; i < window.localStorage.length; i++) {
+            const k = window.localStorage.key(i);
+            if (k && (k.startsWith("cuet_") || k.startsWith("cbt_"))) {
+              keysToRemove.push(k);
+            }
+          }
+          keysToRemove.forEach((k) => window.localStorage.removeItem(k));
+        } catch {}
       }
+
+      // If authenticated, also reset in Supabase
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase.from("user_attempts").delete().eq("user_id", user.id);
+          await supabase.from("profiles").update({
+            total_questions_attempted: 0,
+            current_streak: 0,
+            xp: 0,
+            campus_coins: 50,
+          }).eq("id", user.id);
+        }
+      } catch (dbErr) {
+        console.warn("DB reset notice:", dbErr);
+      }
+
       setStatusMessage({
         type: "success",
         text: "Practice data reset successfully. Dashboard and targets refreshed.",
