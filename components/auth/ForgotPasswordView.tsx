@@ -3,10 +3,8 @@
 import React, { useState, useRef } from "react";
 import { Mail, ArrowRight, Loader2, AlertCircle, ArrowLeft, KeyRound } from "lucide-react";
 import { validateEmail } from "@/lib/auth/validation";
-import { createClient } from "@/lib/supabase/client";
-import { parseAuthError } from "@/lib/auth/emailErrorHandler";
-import { getAuthRecoveryUrl } from "@/lib/auth/urls";
 import OtpVerificationView from "./OtpVerificationView";
+import ResetPasswordView from "./ResetPasswordView";
 
 interface ForgotPasswordViewProps {
   onBackToLogin: () => void;
@@ -20,7 +18,7 @@ export default function ForgotPasswordView({
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [showOtpView, setShowOtpView] = useState(false);
+  const [step, setStep] = useState<"email" | "otp" | "reset">("email");
   const isSubmittingRef = useRef(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,34 +61,32 @@ export default function ForgotPasswordView({
         return;
       }
 
-      const supabase = createClient();
-      const redirectTo = getAuthRecoveryUrl("/reset-password");
-
-      const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
-        redirectTo,
+      // Dispatch 6-digit OTP via Brevo
+      const otpRes = await fetch("/api/auth/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: cleanEmail, type: "recovery" }),
       });
 
-      if (error) {
-        const parsed = parseAuthError(error);
-        if (parsed.isRateLimit) {
-          setErrorMessage(parsed.message);
-        } else {
-          // Never reveal whether an arbitrary email exists for security
-          setShowOtpView(true);
-        }
+      const otpData = await otpRes.json().catch(() => null);
+
+      if (!otpRes.ok || !otpData?.ok) {
+        setErrorMessage(otpData?.error || "Failed to dispatch recovery code. Please try again.");
+        setIsLoading(false);
+        isSubmittingRef.current = false;
         return;
       }
 
-      setShowOtpView(true);
+      setStep("otp");
     } catch (err: any) {
-      setErrorMessage(parseAuthError(err).message);
+      setErrorMessage(err?.message || "Failed to dispatch verification code.");
     } finally {
       setIsLoading(false);
       isSubmittingRef.current = false;
     }
   };
 
-  if (showOtpView) {
+  if (step === "otp") {
     return (
       <OtpVerificationView
         email={email.trim().toLowerCase()}
@@ -99,10 +95,20 @@ export default function ForgotPasswordView({
           if (onResetReady) {
             onResetReady();
           } else {
-            window.location.href = "/reset-password";
+            setStep("reset");
           }
         }}
-        onBack={() => setShowOtpView(false)}
+        onBack={() => setStep("email")}
+      />
+    );
+  }
+
+  if (step === "reset") {
+    return (
+      <ResetPasswordView
+        onSuccess={() => {
+          window.location.href = "/dashboard";
+        }}
       />
     );
   }
@@ -110,7 +116,7 @@ export default function ForgotPasswordView({
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 border border-amber-100 shadow-2xs mx-auto">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-[#FDF0E6] text-[#C2410C] border border-[#F6D3AF] shadow-2xs mx-auto">
           <KeyRound className="w-6 h-6" strokeWidth={2} />
         </div>
         <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">

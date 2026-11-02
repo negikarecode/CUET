@@ -19,7 +19,7 @@ export type OtpVerificationType = "signup" | "email" | "recovery";
 interface OtpVerificationViewProps {
   email: string;
   otpType?: OtpVerificationType;
-  onSuccess: (data: { user: any; session: any }) => void;
+  onSuccess: (data: { user: any; session: any; token_hash?: string }) => void;
   onBack?: () => void;
   metadata?: Record<string, any>;
 }
@@ -60,46 +60,61 @@ export default function OtpVerificationView({
       setIsVerifying(true);
 
       try {
-        const supabase = createClient();
         const cleanEmail = email.trim().toLowerCase();
+        const apiType = otpType === "email" ? "login" : otpType;
 
-        // Supabase Auth verifyOtp call
-        const { data, error } = await supabase.auth.verifyOtp({
-          email: cleanEmail,
-          token,
-          type: otpType as any,
+        // Verify via Brevo OTP Verification API
+        const response = await fetch("/api/auth/otp/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: cleanEmail,
+            code: token,
+            type: apiType,
+          }),
         });
 
-        if (error) {
-          // If signup OTP fails, attempt 'email' type as fallback in case of template configuration
-          if (otpType === "signup") {
-            const fallback = await supabase.auth.verifyOtp({
-              email: cleanEmail,
-              token,
-              type: "email",
-            });
-            if (!fallback.error && fallback.data.user) {
-              setSuccessMessage("Verification successful! Initializing your workspace...");
-              onSuccess({ user: fallback.data.user, session: fallback.data.session });
-              return;
-            }
-          }
+        const result = await response.json();
 
-          if (error.message.toLowerCase().includes("expired")) {
-            setErrorMessage("This verification code has expired. Please request a new code.");
-          } else if (error.message.toLowerCase().includes("invalid")) {
-            setErrorMessage("Incorrect 6-digit code. Please verify the numbers and try again.");
-          } else {
-            setErrorMessage(error.message || "Verification failed. Please try again.");
+        if (!response.ok || !result.ok) {
+          setErrorMessage(result.error || "Incorrect verification code. Please try again.");
+          if (result.isExpired || result.isMaxAttempts) {
+            setOtp("");
           }
           return;
         }
 
-        if (data.user) {
-          setSuccessMessage("Verification successful! Initializing your workspace...");
-          onSuccess({ user: data.user, session: data.session });
+        setSuccessMessage("Code verified! Synchronizing your account...");
+
+        // If a token_hash was returned, finalize Supabase Auth session in the browser
+        if (result.token_hash) {
+          const supabase = createClient();
+          const verifyResult = await supabase.auth.verifyOtp({
+            token_hash: result.token_hash,
+            type: otpType === "recovery" ? "recovery" : "magiclink",
+          });
+
+          if (verifyResult.data?.session) {
+            await fetch("/api/auth/session", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                access_token: verifyResult.data.session.access_token,
+                refresh_token: verifyResult.data.session.refresh_token,
+              }),
+            }).catch(() => {});
+          }
+
+          onSuccess({
+            user: verifyResult.data?.user || { email: cleanEmail, id: result.userId },
+            session: verifyResult.data?.session,
+            token_hash: result.token_hash,
+          });
         } else {
-          setErrorMessage("Verification succeeded, but no session was returned. Please try logging in.");
+          onSuccess({
+            user: { email: cleanEmail, id: result.userId },
+            session: null,
+          });
         }
       } catch (err: any) {
         setErrorMessage(err?.message || "A network error occurred. Please check your connection.");
@@ -118,39 +133,30 @@ export default function OtpVerificationView({
     setSuccessMessage(null);
 
     try {
-      const supabase = createClient();
       const cleanEmail = email.trim().toLowerCase();
+      const apiType = otpType === "email" ? "login" : otpType;
 
-      let error = null;
-
-      if (otpType === "signup") {
-        const res = await supabase.auth.resend({
-          type: "signup",
+      const response = await fetch("/api/auth/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           email: cleanEmail,
-        });
-        error = res.error;
-      } else if (otpType === "recovery") {
-        const res = await supabase.auth.resetPasswordForEmail(cleanEmail);
-        error = res.error;
-      } else {
-        const res = await supabase.auth.signInWithOtp({
-          email: cleanEmail,
-          options: { shouldCreateUser: false },
-        });
-        error = res.error;
-      }
+          type: apiType,
+        }),
+      });
 
-      if (error) {
-        if (error.message.toLowerCase().includes("rate limit") || error.status === 429) {
-          setErrorMessage("Security rate limit reached. Please wait a moment before requesting another code.");
-          setCooldown(60);
-        } else {
-          setErrorMessage(error.message || "Failed to resend code. Please try again.");
+      const result = await response.json();
+
+      if (!response.ok || !result.ok) {
+        setErrorMessage(result.error || "Failed to resend code. Please try again shortly.");
+        if (result.cooldownRemaining) {
+          setCooldown(result.cooldownRemaining);
         }
         return;
       }
 
       setSuccessMessage("A fresh 6-digit verification code has been dispatched to your email.");
+      setCooldown(60);
       setOtp("");
     } catch (err: any) {
       setErrorMessage(err?.message || "Failed to resend code. Please check your internet connection.");

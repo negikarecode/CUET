@@ -290,25 +290,18 @@ export default function AuthPageContent({
         return;
       }
 
-      const supabase = createClient();
-      const { error } = await supabase.auth.signInWithOtp({
-        email: cleanEmail,
-        options: {
-          shouldCreateUser: false, // Login flow only allows existing users
-        },
+      // Dispatch 6-digit OTP via Brevo
+      const otpRes = await fetch("/api/auth/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: cleanEmail, type: "login" }),
       });
+      const otpData = await otpRes.json().catch(() => null);
 
-      if (error) {
-        const parsed = parseAuthError(error);
-        if (parsed.isRateLimit) {
-          setErrorMessage(parsed.message);
-          setIsLoading(false);
-          return;
-        }
-        // Account enumeration defense: transition to OTP verification regardless of user existence
-        setOtpType("email");
-        setMode("otp");
+      if (!otpRes.ok || !otpData?.ok) {
+        setErrorMessage(otpData?.error || "Failed to send verification code. Please try again.");
         setIsLoading(false);
+        isSubmittingRef.current = false;
         return;
       }
 
@@ -429,8 +422,23 @@ export default function AuthPageContent({
           return;
         }
 
-        // 3. Transition to dedicated email verification screen
-        setMode("verify_email");
+        // 3. Dispatch 6-digit OTP via Brevo and transition to OTP verification screen
+        const otpRes = await fetch("/api/auth/otp/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: cleanEmail, type: "signup" }),
+        });
+        const otpData = await otpRes.json().catch(() => null);
+
+        if (!otpRes.ok || !otpData?.ok) {
+          setErrorMessage(otpData?.error || "Failed to dispatch verification code.");
+          setIsLoading(false);
+          isSubmittingRef.current = false;
+          return;
+        }
+
+        setOtpType("signup");
+        setMode("otp");
         return;
       }
     } catch (err: any) {
