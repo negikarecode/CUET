@@ -179,7 +179,7 @@ export default function Navbar() {
                     onClick={() => handleOpenOnboarding("signup")}
                     className="px-4 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:scale-[0.98] text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
                   >
-                    <span>{t("joinNow", "Join Now")}</span>
+                    <span>Sign Up</span>
                     <ArrowRight className="w-3.5 h-3.5 stroke-[2]" />
                   </button>
                 </div>
@@ -227,7 +227,7 @@ export default function Navbar() {
                       <Link
                         href="/dashboard"
                         className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5"
-                        aria-label="Go to dashboard"
+                        aria-label="Dashboard"
                       >
                         <LayoutDashboard className="w-3.5 h-3.5 stroke-[2]" />
                         <span>{t("dashboard", "Dashboard")}</span>
@@ -346,13 +346,23 @@ export default function Navbar() {
                     onClick={() => handleOpenOnboarding("signup")}
                     className="px-2.5 py-1.5 rounded-xl bg-[#C2410C] text-white font-semibold text-xs shadow-xs active:scale-95 shrink-0"
                   >
-                    {t("joinNow", "Join Now")}
+                    Sign Up
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-1 px-2.5 py-1 bg-amber-50 border border-amber-200/80 rounded-full text-slate-800 text-xs font-semibold shadow-xs shrink-0">
-                  <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
-                  <span>{streak}</span>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <Link
+                    href="/dashboard"
+                    className="px-2.5 py-1.5 rounded-xl bg-[#C2410C] text-white font-semibold text-xs shadow-xs active:scale-95 flex items-center gap-1"
+                    aria-label="Dashboard"
+                  >
+                    <LayoutDashboard className="w-3.5 h-3.5" />
+                    <span className="hidden xs:inline">Dashboard</span>
+                  </Link>
+                  <div className="flex items-center gap-1 px-2.5 py-1 bg-amber-50 border border-amber-200/80 rounded-full text-slate-800 text-xs font-semibold shadow-xs">
+                    <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                    <span>{streak}</span>
+                  </div>
                 </div>
               )}
 

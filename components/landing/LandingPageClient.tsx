@@ -924,7 +924,7 @@ function Navigation({
           </div>
         </nav>
 
-        {/* Action CTAs: 'Go to dashboard' matching Landing page.pdf */}
+        {/* Action CTAs: 'Dashboard' when logged in, 'Sign Up' & 'Log In' when logged out */}
         <div className="flex items-center gap-3">
           {isLoggedIn ? (
             <Link
@@ -932,7 +932,7 @@ function Navigation({
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs hover:shadow transition-all"
             >
               <LayoutDashboard className="w-4 h-4" />
-              <span>Go to dashboard</span>
+              <span>Dashboard</span>
             </Link>
           ) : (
             <>
@@ -948,7 +948,7 @@ function Navigation({
                 onClick={() => onAuth("signup")}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs hover:shadow transition-all cursor-pointer"
               >
-                <span>Go to dashboard</span>
+                <span>Sign Up</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </>
@@ -1040,7 +1040,7 @@ function Navigation({
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <LayoutDashboard className="w-4 h-4" />
-                <span>Go to dashboard</span>
+                <span>Dashboard</span>
               </Link>
             ) : (
               <>
@@ -1062,7 +1062,7 @@ function Navigation({
                   }}
                   className="w-full px-5 py-3 text-center bg-[#C2410C] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-xs"
                 >
-                  <span>Go to dashboard</span>
+                  <span>Sign Up</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </>
@@ -1132,7 +1132,7 @@ function Hero({
                   }
                 }}
               >
-                <span>Open dashboard</span>
+                <span>{isLoggedIn ? "Dashboard" : "Sign Up"}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -2522,7 +2522,7 @@ function FinalCTA({
                 }
               }}
             >
-              <span>Open dashboard</span>
+              <span>{isLoggedIn ? "Dashboard" : "Sign Up"}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
