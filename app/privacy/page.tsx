@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FFF8F0] py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Breadcrumb Navigation */}
         <div className="space-y-4">
@@ -46,14 +46,14 @@ export default function PrivacyPolicyPage() {
 
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-[#C2410C] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Home</span>
           </Link>
 
           <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-xs space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDF0E6] text-[#C2410C] text-xs font-bold border border-[#F6D3AF]">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>DPDP Act 2023 Compliant • Zero-PII AI Governance</span>
             </div>
@@ -71,7 +71,7 @@ export default function PrivacyPolicyPage() {
           {/* Section 1: Information We Collect */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Lock className="w-4 h-4 text-blue-600" />
+              <Lock className="w-4 h-4 text-[#C2410C]" />
               1. Information We Collect
             </h2>
             <p>
@@ -93,14 +93,14 @@ export default function PrivacyPolicyPage() {
           {/* Section 2: AI Processing & Zero PII Transmission */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-blue-600" />
+              <Cpu className="w-4 h-4 text-[#C2410C]" />
               2. Third-Party AI Processing &amp; Zero PII Policy
             </h2>
             <p>
               CUET AI-Prep integrates advanced foundation models (including Google Gemini and Groq Llama inference engines) exclusively to generate contextual mistake explanations, NCERT concept clarifications, and adaptive drill recommendations.
             </p>
-            <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-100 text-slate-700 space-y-2">
-              <p className="font-semibold text-blue-900">Zero PII Policy with AI Providers:</p>
+            <div className="p-4 rounded-2xl bg-[#FDF0E6] border border-[#F6D3AF] text-slate-700 space-y-2">
+              <p className="font-semibold text-[#441408]">Zero PII Policy with AI Providers:</p>
               <ul className="list-disc pl-5 space-y-1 text-xs">
                 <li>Candidate name, email address, IP address, user ID, and personal identifiers are <strong>strictly stripped</strong> before any diagnostic request reaches AI APIs.</li>
                 <li>AI models receive only the academic question stem, student&rsquo;s selected option, correct answer key, and the relevant NCERT curriculum reference.</li>
@@ -112,7 +112,7 @@ export default function PrivacyPolicyPage() {
           {/* Section 3: How We Use Diagnostic Data */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Eye className="w-4 h-4 text-blue-600" />
+              <Eye className="w-4 h-4 text-[#C2410C]" />
               3. How We Use Diagnostic Data
             </h2>
             <p>Diagnostic performance data is utilized strictly for academic calibration and user experience:</p>
@@ -127,7 +127,7 @@ export default function PrivacyPolicyPage() {
           {/* Section 4: Cookies & Local Storage */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Database className="w-4 h-4 text-blue-600" />
+              <Database className="w-4 h-4 text-[#C2410C]" />
               4. Cookies, Session Tokens &amp; Local Storage
             </h2>
             <p>
@@ -144,7 +144,7 @@ export default function PrivacyPolicyPage() {
           {/* Section 5: Progress Card Sharing */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Share2 className="w-4 h-4 text-blue-600" />
+              <Share2 className="w-4 h-4 text-[#C2410C]" />
               5. Voluntary Progress Card Sharing (`/r/[id]`)
             </h2>
             <p>
@@ -160,7 +160,7 @@ export default function PrivacyPolicyPage() {
           {/* Section 6: Minor & Under-18 Candidate Notice */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Users className="w-4 h-4 text-blue-600" />
+              <Users className="w-4 h-4 text-[#C2410C]" />
               6. Under-18 Candidates &amp; Parental/Guardian Guidance
             </h2>
             <p>
@@ -175,7 +175,7 @@ export default function PrivacyPolicyPage() {
           {/* Section 7: Data Retention & DPDP Act 2023 Rights */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Trash2 className="w-4 h-4 text-blue-600" />
+              <Trash2 className="w-4 h-4 text-[#C2410C]" />
               7. Your Rights Under the Digital Personal Data Protection (DPDP) Act 2023
             </h2>
             <p>
@@ -204,7 +204,7 @@ export default function PrivacyPolicyPage() {
           {/* Section 8: Contact Grievance Officer */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Mail className="w-4 h-4 text-blue-600" />
+              <Mail className="w-4 h-4 text-[#C2410C]" />
               8. Contact Our Data Protection &amp; Grievance Redressal Desk
             </h2>
             <p>
@@ -216,7 +216,7 @@ export default function PrivacyPolicyPage() {
                 Email:{" "}
                 <a
                   href="mailto:support@cuetprep.com"
-                  className="text-blue-600 font-semibold hover:underline"
+                  className="text-[#C2410C] font-semibold hover:underline"
                 >
                   support@cuetprep.com
                 </a>

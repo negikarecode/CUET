@@ -266,7 +266,7 @@ export default function DashboardSidebar() {
             <button
               type="button"
               onClick={() => setMobileProfileOpen(!mobileProfileOpen)}
-              className="flex items-center gap-1.5 p-1 rounded-xl hover:bg-[#FAF3EB] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-2 py-1 rounded-xl hover:bg-[#FAF3EB] transition-colors cursor-pointer"
               aria-label="User profile menu"
               aria-expanded={mobileProfileOpen}
             >

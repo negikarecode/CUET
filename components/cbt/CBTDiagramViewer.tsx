@@ -27,7 +27,7 @@ export default function CBTDiagramViewer({ question }: CBTDiagramViewerProps) {
           {/* Principal Axis */}
           <line x1="20" y1="80" x2="380" y2="80" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
           {/* Convex Lens */}
-          <path d="M 200 20 Q 220 80 200 140 Q 180 80 200 20" fill="#E0F2FE" stroke="currentColor" strokeWidth="2.5" />
+          <path d="M 200 20 Q 220 80 200 140 Q 180 80 200 20" fill="#FEF1E0" stroke="currentColor" strokeWidth="2.5" />
           {/* Focus Points */}
           <circle cx="120" cy="80" r="3" fill="currentColor" />
           <text x="120" y="100" fontSize="11" fontWeight="bold" textAnchor="middle">F₁</text>
@@ -38,9 +38,9 @@ export default function CBTDiagramViewer({ question }: CBTDiagramViewerProps) {
           <polygon points="76,43 84,43 80,33" fill="#DC2626" />
           <text x="80" y="100" fontSize="11" fontWeight="bold" textAnchor="middle">Object</text>
           {/* Incident Ray Parallel */}
-          <line x1="80" y1="40" x2="200" y2="40" stroke="#2563EB" strokeWidth="2" />
+          <line x1="80" y1="40" x2="200" y2="40" stroke="#C2410C" strokeWidth="2" />
           {/* Refracted Ray through F2 */}
-          <line x1="200" y1="40" x2="340" y2="120" stroke="#2563EB" strokeWidth="2" />
+          <line x1="200" y1="40" x2="340" y2="120" stroke="#C2410C" strokeWidth="2" />
           {/* Ray through Optical Center */}
           <line x1="80" y1="40" x2="320" y2="120" stroke="#059669" strokeWidth="2" />
         </svg>
@@ -106,8 +106,8 @@ export default function CBTDiagramViewer({ question }: CBTDiagramViewerProps) {
           <path d="M 50 40 Q 150 70 260 125" fill="none" stroke="#DC2626" strokeWidth="3" />
           <text x="260" y="115" fontSize="11" fontWeight="bold" fill="#DC2626">Curve C</text>
           {/* Reference Tangent Point */}
-          <circle cx="150" cy="78" r="4" fill="#2563EB" />
-          <text x="160" y="75" fontSize="10" fontWeight="bold" fill="#2563EB">Point P</text>
+          <circle cx="150" cy="78" r="4" fill="#C2410C" />
+          <text x="160" y="75" fontSize="10" fontWeight="bold" fill="#C2410C">Point P</text>
         </svg>
       );
     }

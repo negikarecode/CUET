@@ -240,7 +240,7 @@ export default function LiveDiagnosticDemo() {
                 onClick={() => handleSelectStream(q.streamId)}
                 className={`px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-center truncate ${
                   isActive
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs"
+                    ? "bg-[#C2410C] text-white shadow-xs"
                     : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                 }`}
               >
@@ -256,7 +256,7 @@ export default function LiveDiagnosticDemo() {
       <div className="p-4 sm:p-7 space-y-4 sm:space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-200/60 font-semibold text-indigo-700" translate="no">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] font-bold text-[#9F3014]" translate="no">
               Q1 of 50
             </span>
             <span className="font-medium text-slate-500">{activeQuestion.chapter}</span>
@@ -367,7 +367,7 @@ export default function LiveDiagnosticDemo() {
 
               <Link
                 href="/dashboard/mocks"
-                className="inline-flex items-center gap-1.5 font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+                className="inline-flex items-center gap-1.5 font-semibold text-[#C2410C] hover:text-[#9A3412] transition-colors"
               >
                 <span>{t("practiceMore", "Practice 49 More Questions Like This")}</span>
                 <ArrowRight className="w-3.5 h-3.5" />

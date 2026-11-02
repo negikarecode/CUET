@@ -355,7 +355,7 @@ export default function SubjectPYQClient({
                     ? `/test/${pyqPapers[0]?.id || `${subjectKey}-pyq-1`}?reattempt=true`
                     : `/test/${subjectStats.nextPaper?.id || `${subjectKey}-pyq-1`}`
                 }
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
               >
                 {subjectStats.isAllAttempted ? (
                   <>
@@ -376,7 +376,7 @@ export default function SubjectPYQClient({
         {/* Stat Chips + Progress bar */}
         <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
-            <span className="px-3 py-1 rounded-lg bg-blue-50 text-blue-800 border border-blue-200/60 tabular-nums">
+            <span className="px-3 py-1 rounded-lg bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tabular-nums">
               {subjectStats.attemptedCount} of {pyqPapers.length} Attempted
             </span>
 
@@ -408,7 +408,7 @@ export default function SubjectPYQClient({
           <div className="flex items-center gap-2 sm:w-48">
             <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div
-                className="bg-blue-600 h-full rounded-full transition-all duration-300"
+                className="bg-[#C2410C] h-full rounded-full transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -507,7 +507,7 @@ export default function SubjectPYQClient({
               onClick={() => setStatusFilter("all")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 statusFilter === "all"
-                  ? "bg-blue-600 text-white shadow-2xs"
+                  ? "bg-[#C2410C] text-white shadow-2xs"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
@@ -518,7 +518,7 @@ export default function SubjectPYQClient({
               onClick={() => setStatusFilter("attempted")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 statusFilter === "attempted"
-                  ? "bg-blue-600 text-white shadow-2xs"
+                  ? "bg-[#C2410C] text-white shadow-2xs"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
@@ -529,7 +529,7 @@ export default function SubjectPYQClient({
               onClick={() => setStatusFilter("not_attempted")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 statusFilter === "not_attempted"
-                  ? "bg-blue-600 text-white shadow-2xs"
+                  ? "bg-[#C2410C] text-white shadow-2xs"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
@@ -604,8 +604,8 @@ export default function SubjectPYQClient({
                           </span>
                         )}
                         {test.verificationStatus === "official_final_key_verified" && (
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200 inline-flex items-center gap-1">
-                            <CheckCircle2 className="w-2.5 h-2.5 text-blue-600" />
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#FDF0E6] text-[#C2410C] border border-[#F6D3AF] inline-flex items-center gap-1">
+                            <CheckCircle2 className="w-2.5 h-2.5 text-[#C2410C]" />
                             Official NTA Key
                           </span>
                         )}
@@ -635,7 +635,7 @@ export default function SubjectPYQClient({
                           </span>
                         )
                       )}
-                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-[#FDF0E6] text-[#C2410C] border border-[#F6D3AF] shrink-0">
                         {test.shift || `Shift 1`}
                       </span>
                     </div>
@@ -710,7 +710,7 @@ export default function SubjectPYQClient({
                     <>
                       <Link
                         href={`/dashboard/pyqs/analysis/${bestAttempt.id || test.id}`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                       >
                         <BarChart2 className="w-3.5 h-3.5" />
                         <span>Analysis</span>
@@ -735,7 +735,7 @@ export default function SubjectPYQClient({
                   ) : (
                     <Link
                       href={`/test/${test.id}`}
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                     >
                       <span>Start</span>
                       <Play className="w-3.5 h-3.5 fill-current" />
@@ -755,7 +755,7 @@ export default function SubjectPYQClient({
               setSelectedYear("all");
               setStatusFilter("all");
             }}
-            className="text-xs font-bold text-blue-600 hover:underline cursor-pointer"
+            className="text-xs font-bold text-[#C2410C] hover:underline cursor-pointer"
           >
             Show all papers
           </button>

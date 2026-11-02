@@ -165,7 +165,7 @@ export default async function TestPage({ params, searchParams }: PageProps) {
           <div className="pt-2 flex flex-col gap-2.5">
             <Link
               href={isPractice ? "/dashboard/practice" : isMock ? "/dashboard/mocks" : "/dashboard/pyqs"}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-xs hover:shadow transition-all"
             >
               <span>{isPractice ? "Back to Practice Tests" : isMock ? "Back to All Mocks" : "Back to All PYQ Papers"}</span>
             </Link>

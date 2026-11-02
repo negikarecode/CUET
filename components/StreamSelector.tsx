@@ -80,8 +80,8 @@ export default function StreamSelector() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold uppercase tracking-wider mb-3 border border-indigo-200/80 shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600 fill-indigo-600" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEF1E0] text-[#9F3014] text-xs font-bold uppercase tracking-wider mb-3 border border-[#F6D3AF] shadow-xs">
+              <Sparkles className="w-3.5 h-3.5 text-[#C2410C] fill-[#C2410C]" />
               {t("domainStreams", "Stream-Specific Mock Repository")}
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
@@ -118,7 +118,7 @@ export default function StreamSelector() {
                   <span
                     className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${
                       isActive
-                        ? "bg-indigo-50 text-indigo-700 border border-indigo-200/60"
+                        ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF]"
                         : "bg-slate-200/70 text-slate-600"
                     }`}
                   >
@@ -149,7 +149,7 @@ export default function StreamSelector() {
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <div className="w-10 h-10 rounded-2xl bg-[#FEF1E0] text-[#C2410C] border border-[#F6D3AF] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                       <IconComponent className="w-5 h-5" />
                     </div>
                     <span className="text-[11px] font-mono font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200/60" translate="no">
@@ -157,7 +157,7 @@ export default function StreamSelector() {
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">
+                  <h3 className="text-lg font-bold text-slate-900 tracking-tight group-hover:text-[#C2410C] transition-colors">
                     {t(subj.id.toLowerCase().replace(/-/g, ""), subj.name)}
                   </h3>
 
@@ -171,8 +171,8 @@ export default function StreamSelector() {
                       <Timer className="w-3 h-3 text-slate-500" />
                       {subj.durationMinutes} Mins
                     </span>
-                    <span className="inline-flex items-center gap-1 bg-indigo-50/70 border border-indigo-200/60 px-2.5 py-1 rounded-full text-indigo-700 shadow-xs">
-                      <BookMarked className="w-3 h-3 text-indigo-600" />
+                    <span className="inline-flex items-center gap-1 bg-[#FEF1E0] border border-[#F6D3AF] px-2.5 py-1 rounded-full text-[#9F3014] shadow-xs">
+                      <BookMarked className="w-3 h-3 text-[#C2410C]" />
                       {t("compulsoryBadge", "50 Compulsory Questions")}
                     </span>
                   </div>
@@ -181,7 +181,7 @@ export default function StreamSelector() {
                 <div className="mt-6 pt-4 border-t border-slate-100">
                   <Link
                     href="/dashboard/mocks"
-                    className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs tracking-wide transition-all shadow-xs hover:shadow"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs tracking-wide transition-all shadow-xs hover:shadow"
                   >
                     <span>{t("startTest", "Launch Free Official PYQ Mock")}</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />

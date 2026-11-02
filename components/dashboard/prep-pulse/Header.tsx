@@ -72,12 +72,12 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
         <div className="flex items-center gap-4 lg:gap-8 flex-1 max-w-2xl">
           {/* Logo Badge */}
           <div className="flex items-center gap-2.5 shrink-0">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-sm shadow-blue-500/20">
+            <div className="w-9 h-9 rounded-xl bg-[#C2410C] flex items-center justify-center text-white shadow-sm shadow-orange-500/20">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div className="hidden sm:block">
               <span className="font-bold text-slate-900 tracking-tight text-lg">PrepPulse</span>
-              <span className="text-[10px] font-semibold tracking-wider text-blue-600 uppercase ml-1.5 px-1.5 py-0.5 bg-blue-50 rounded-md">CUET &apos;25</span>
+              <span className="text-[10px] font-semibold tracking-wider text-[#C2410C] uppercase ml-1.5 px-1.5 py-0.5 bg-[#FDF0E6] rounded-md">CUET &apos;25</span>
             </div>
           </div>
 
@@ -91,7 +91,7 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
               value={searchQuery}
               onChange={handleSearchChange}
               placeholder="Search for tests, subjects, or topics..."
-              className="w-full pl-10 pr-10 py-2.5 bg-slate-50 hover:bg-slate-100/70 focus:bg-white text-sm text-slate-800 placeholder-slate-400 rounded-xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-150"
+              className="w-full pl-10 pr-10 py-2.5 bg-slate-50 hover:bg-slate-100/70 focus:bg-white text-sm text-slate-800 placeholder-slate-400 rounded-xl border border-slate-200/70 focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C] transition-all duration-150"
             />
             {searchQuery ? (
               <button 
@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="font-medium text-slate-700">Target DU / SRCC</span>
             <span className="text-slate-400">|</span>
-            <span className="font-semibold text-blue-600">38 Days Left</span>
+            <span className="font-semibold text-[#C2410C]">38 Days Left</span>
           </div>
 
           {/* Bell Notification Button */}
@@ -144,7 +144,7 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-slate-900 text-sm">Notifications</span>
                     {unreadCount > 0 && (
-                      <span className="text-[11px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">
+                      <span className="text-[11px] font-bold bg-[#FDF0E6] text-[#C2410C] px-2 py-0.5 rounded-full">
                         {unreadCount} new
                       </span>
                     )}
@@ -152,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
                   {unreadCount > 0 && (
                     <button 
                       onClick={markAllRead}
-                      className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                      className="text-xs text-[#C2410C] hover:text-[#9A3412] font-medium"
                     >
                       Mark all as read
                     </button>
@@ -164,7 +164,7 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
                     <div 
                       key={item.id} 
                       className={`p-3.5 hover:bg-slate-50 transition-colors cursor-pointer ${
-                        item.unread ? 'bg-blue-50/30' : ''
+                        item.unread ? 'bg-[#FFF5EA]' : ''
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
@@ -209,7 +209,7 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
                   height={40}
                   loading="lazy"
                   decoding="async"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-blue-500/20"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-[#C2410C]/20"
                 />
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></span>
               </div>

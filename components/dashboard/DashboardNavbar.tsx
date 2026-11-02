@@ -106,7 +106,7 @@ export default function DashboardNavbar() {
           <button
             type="button"
             onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-            className="flex items-center gap-2 p-1 rounded-xl hover:bg-white/80 transition-colors cursor-pointer"
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-white/80 transition-colors cursor-pointer"
             aria-label="User profile menu"
             aria-expanded={profileDropdownOpen}
           >

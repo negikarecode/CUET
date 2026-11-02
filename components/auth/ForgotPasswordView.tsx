@@ -150,7 +150,7 @@ export default function ForgotPasswordView({
                 if (errorMessage) setErrorMessage(null);
               }}
               placeholder="e.g. aspirant@gmail.com"
-              className="w-full h-11 pl-10 pr-4 bg-white text-sm text-slate-900 placeholder-slate-400 rounded-xl border border-slate-200 hover:border-slate-300 focus:outline-hidden focus:border-blue-600 focus:ring-3 focus:ring-blue-500/15 transition-all"
+              className="w-full h-11 pl-10 pr-4 bg-white text-sm text-slate-900 placeholder-slate-400 rounded-xl border border-slate-200 hover:border-slate-300 focus:outline-hidden focus:border-[#C2410C] focus:ring-3 focus:ring-[#C2410C]/15 transition-all"
             />
           </div>
         </div>
@@ -162,7 +162,7 @@ export default function ForgotPasswordView({
             ${
               isLoading || !email.trim()
                 ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
-                : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-blue-500/25 active:scale-[0.99]"
+                : "bg-[#C2410C] hover:bg-[#9A3412] shadow-orange-500/20 active:scale-[0.99]"
             }
           `}
         >

@@ -408,7 +408,7 @@ export default function SessionsHistoryClient({
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
           {/* Card 1: Completed Sessions */}
           <div className="bg-white rounded-2xl border border-[#EFE6DC] p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
-            <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 shrink-0">
+            <div className="w-11 h-11 rounded-xl bg-[#FDF0E6] border border-[#F6D3AF] flex items-center justify-center text-[#C2410C] shrink-0">
               <ClipboardCheck className="w-5 h-5 stroke-[2.2]" />
             </div>
             <div className="min-w-0">
@@ -487,7 +487,7 @@ export default function SessionsHistoryClient({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-blue-600" />
+                <TrendingUp className="w-4 h-4 text-[#C2410C]" />
                 <span>Score Trajectory Over Time</span>
               </h2>
               <p className="text-xs text-slate-500 font-medium mt-0.5">
@@ -536,7 +536,7 @@ export default function SessionsHistoryClient({
                     <p className="text-xs font-medium text-slate-500">Single session recorded:</p>
                     <p className="text-base sm:text-lg font-bold text-slate-900">
                       {sp.testTitle} —{" "}
-                      <span className="text-blue-600">{sp.totalMarks}</span> /{" "}
+                      <span className="text-[#C2410C]">{sp.totalMarks}</span> /{" "}
                       {sp.maxMarks || 250} marks
                     </p>
                     <p className="text-xs text-slate-400 font-mono">
@@ -564,7 +564,7 @@ export default function SessionsHistoryClient({
                 placeholder="Search by test title or subject..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-[#EFE6DC] text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C] transition-all"
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-[#EFE6DC] text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C] transition-all"
               />
             </div>
 
@@ -666,7 +666,7 @@ export default function SessionsHistoryClient({
       {allAttempts.length === 0 ? (
         /* Zero State: User has not taken any tests */
         <div className="bg-white rounded-2xl py-16 px-4 text-center space-y-4 border border-[#EFE6DC] shadow-xs">
-          <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-200/60 shadow-xs">
+          <div className="w-14 h-14 rounded-2xl bg-[#FDF0E6] text-[#C2410C] flex items-center justify-center mx-auto border border-[#F6D3AF] shadow-xs">
             <ClipboardCheck className="w-7 h-7" />
           </div>
           <div className="max-w-md mx-auto space-y-1">
@@ -678,7 +678,7 @@ export default function SessionsHistoryClient({
           <div className="pt-2">
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center justify-center gap-2 py-2 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold transition-all shadow-xs"
+              className="inline-flex items-center justify-center gap-2 py-2 px-5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs sm:text-sm font-semibold transition-all shadow-xs"
             >
               <ClipboardCheck className="w-4 h-4" />
               <span>Browse Mock Tests</span>
@@ -772,7 +772,7 @@ export default function SessionsHistoryClient({
                         {/* Test Title */}
                         <td className="py-3.5 pl-4 pr-2 font-medium max-w-[240px]">
                           <div className="space-y-1">
-                            <p className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug whitespace-normal break-words">
+                            <p className="font-bold text-slate-900 group-hover:text-[#C2410C] transition-colors leading-snug whitespace-normal break-words">
                               {title}
                             </p>
                             <div className="flex items-center gap-1.5 flex-wrap">
@@ -784,7 +784,7 @@ export default function SessionsHistoryClient({
                               <span
                                 className={`inline-block px-1.5 py-0.5 rounded-md text-[10px] font-bold border ${
                                   type === "Mock"
-                                    ? "bg-blue-50 text-blue-700 border-blue-200/80"
+                                    ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
                                     : type === "Past Paper"
                                     ? "bg-purple-50 text-purple-700 border-purple-200/80"
                                     : "bg-emerald-50 text-emerald-700 border-emerald-200/80"
@@ -840,7 +840,7 @@ export default function SessionsHistoryClient({
                               acc >= 70
                                 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                                 : acc >= 40
-                                ? "bg-blue-50 text-blue-700 border-blue-200"
+                                ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
                                 : "bg-amber-50 text-amber-700 border-amber-200"
                             }`}
                           >
@@ -881,7 +881,7 @@ export default function SessionsHistoryClient({
                             <Link
                               href={reviewHref}
                               onClick={(e) => e.stopPropagation()}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200/60 transition-colors shadow-2xs"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#FEF1E0] text-[#9F3014] hover:bg-[#FDE6D2] border border-[#F6D3AF] transition-colors shadow-2xs"
                               title="View test analysis and solutions"
                             >
                               <span>Analysis</span>
@@ -954,7 +954,7 @@ export default function SessionsHistoryClient({
                         <span
                           className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${
                             type === "Mock"
-                              ? "bg-blue-50 text-blue-700 border-blue-200/80"
+                              ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
                               : type === "Past Paper"
                               ? "bg-purple-50 text-purple-700 border-purple-200/80"
                               : "bg-emerald-50 text-emerald-700 border-emerald-200/80"
@@ -988,7 +988,7 @@ export default function SessionsHistoryClient({
                           acc >= 70
                             ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                             : acc >= 40
-                            ? "bg-blue-50 text-blue-700 border-blue-200"
+                            ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
                             : "bg-amber-50 text-amber-700 border-amber-200"
                         }`}
                       >
@@ -1010,7 +1010,7 @@ export default function SessionsHistoryClient({
                   <div className="flex items-center gap-2 pt-1 border-t border-slate-100">
                     <Link
                       href={reviewHref}
-                      className="flex-1 py-1.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs text-center shadow-xs transition-colors"
+                      className="flex-1 py-1.5 px-3 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs text-center shadow-xs transition-colors"
                     >
                       Analysis
                     </Link>
@@ -1271,8 +1271,8 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
       >
         <defs>
           <linearGradient id="scoreAreaGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#2563EB" stopOpacity="0.20" />
-            <stop offset="100%" stopColor="#2563EB" stopOpacity="0.01" />
+            <stop offset="0%" stopColor="#C2410C" stopOpacity="0.20" />
+            <stop offset="100%" stopColor="#C2410C" stopOpacity="0.01" />
           </linearGradient>
         </defs>
 
@@ -1334,7 +1334,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
           <path
             d={pathD}
             fill="none"
-            stroke="#2563EB"
+            stroke="#C2410C"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -1356,7 +1356,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
                   cx={pt.x}
                   cy={pt.y}
                   r="8"
-                  fill="#2563EB"
+                  fill="#C2410C"
                   fillOpacity="0.2"
                   className="animate-ping"
                 />
@@ -1365,7 +1365,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
                 cx={pt.x}
                 cy={pt.y}
                 r={isHovered ? "5.5" : "4"}
-                fill={isHovered ? "#1D4ED8" : pt.score < 0 ? "#E11D48" : "#2563EB"}
+                fill={isHovered ? "#9A3412" : pt.score < 0 ? "#E11D48" : "#C2410C"}
                 stroke="#FFFFFF"
                 strokeWidth="2"
                 className="transition-all duration-150"
@@ -1431,7 +1431,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
                 </span>
                 <span>·</span>
                 <span>
-                  Acc: <strong className="text-blue-400 font-bold">{hoveredCoord.attempt.accuracyPercentage}%</strong>
+                  Acc: <strong className="text-orange-400 font-bold">{hoveredCoord.attempt.accuracyPercentage}%</strong>
                 </span>
               </div>
               <p className="text-[10px] text-slate-400 font-mono">

@@ -133,7 +133,7 @@ export const SUBJECT_PERFORMANCE_LIST: SubjectPerformance[] = [
     subject: "Physics",
     score: 78,
     percentile: 82.3,
-    color: "#3B82F6",
+    color: "#C2410C",
     iconName: "Atom",
   },
   {
@@ -281,9 +281,9 @@ export const PREPARATION_CALENDAR_DAYS: CalendarDayItem[] = [
     isActive: false,
     activityTitle: "Physics Practice",
     activityType: "practice",
-    badgeColor: "#3B82F6",
-    badgeBgColor: "#EFF6FF",
-    badgeTextColor: "#1D4ED8",
+    badgeColor: "#C2410C",
+    badgeBgColor: "#FEF1E0",
+    badgeTextColor: "#9F3014",
   },
   {
     id: "cal-tue",

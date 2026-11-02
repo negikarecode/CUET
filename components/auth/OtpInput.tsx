@@ -121,8 +121,8 @@ export default function OtpInput({
                   : hasError
                   ? "bg-rose-50/50 text-rose-900 border-rose-300 focus:border-rose-500 focus:ring-3 focus:ring-rose-500/15"
                   : isFilled
-                  ? "bg-blue-50/40 text-blue-900 border-blue-400 focus:border-blue-600 focus:ring-3 focus:ring-blue-500/15"
-                  : "bg-white text-slate-900 border-slate-200 hover:border-slate-300 focus:border-blue-600 focus:ring-3 focus:ring-blue-500/15"
+                  ? "bg-[#FEF1E0] text-[#441408] border-[#F6D3AF] focus:border-[#C2410C] focus:ring-3 focus:ring-[#C2410C]/15"
+                  : "bg-white text-stone-900 border-[#EFE6DC] hover:border-[#E2D4C3] focus:border-[#C2410C] focus:ring-3 focus:ring-[#C2410C]/15"
               }
               focus:outline-hidden
             `}

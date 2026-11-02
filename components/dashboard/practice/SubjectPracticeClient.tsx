@@ -56,27 +56,27 @@ const SUBJECT_STREAM_MAP: Record<
   string,
   { icon: any; accentColor: string; badgeBg: string }
 > = {
-  physics: { icon: Atom, accentColor: "#0284C7", badgeBg: "#E0F2FE" },
+  physics: { icon: Atom, accentColor: "#C2410C", badgeBg: "#FEF1E0" },
   chemistry: { icon: FlaskConical, accentColor: "#7C3AED", badgeBg: "#EDE9FE" },
-  maths: { icon: Calculator, accentColor: "#2563EB", badgeBg: "#DBEAFE" },
+  maths: { icon: Calculator, accentColor: "#B45309", badgeBg: "#FEF3C7" },
   bio: { icon: Dna, accentColor: "#059669", badgeBg: "#D1FAE5" },
   accountancy: { icon: Calculator, accentColor: "#D97706", badgeBg: "#FEF3C7" },
   eco: { icon: TrendingUp, accentColor: "#0D9488", badgeBg: "#CCFBF1" },
-  bst: { icon: Briefcase, accentColor: "#4F46E5", badgeBg: "#E0E7FF" },
+  bst: { icon: Briefcase, accentColor: "#9A3412", badgeBg: "#FDF0E6" },
   history: { icon: ScrollText, accentColor: "#B45309", badgeBg: "#FEF3C7" },
   "pol science": { icon: Landmark, accentColor: "#DC2626", badgeBg: "#FEE2E2" },
-  geo: { icon: Globe, accentColor: "#0284C7", badgeBg: "#E0F2FE" },
+  geo: { icon: Globe, accentColor: "#0D9488", badgeBg: "#CCFBF1" },
   psychology: { icon: BrainCircuit, accentColor: "#9333EA", badgeBg: "#F3E8FF" },
   sociology: { icon: Users, accentColor: "#EA580C", badgeBg: "#FFEDD5" },
   physical_education: { icon: Activity, accentColor: "#16A34A", badgeBg: "#DCFCE7" },
-  computer_science: { icon: Laptop, accentColor: "#0284C7", badgeBg: "#E0F2FE" },
+  computer_science: { icon: Laptop, accentColor: "#78350F", badgeBg: "#FEF3C7" },
   home_science: { icon: Home, accentColor: "#DB2777", badgeBg: "#FCE7F3" },
-  mass_media: { icon: Tv, accentColor: "#6366F1", badgeBg: "#EEF2FF" },
+  mass_media: { icon: Tv, accentColor: "#C2410C", badgeBg: "#FEF1E0" },
   environmental_studies: { icon: Leaf, accentColor: "#059669", badgeBg: "#D1FAE5" },
   fine_arts: { icon: Palette, accentColor: "#CA8A04", badgeBg: "#FEF08A" },
   agriculture: { icon: Sprout, accentColor: "#15803D", badgeBg: "#DCFCE7" },
   anthropology: { icon: Footprints, accentColor: "#854D0E", badgeBg: "#FEF9C3" },
-  english: { icon: FileText, accentColor: "#2563EB", badgeBg: "#DBEAFE" },
+  english: { icon: FileText, accentColor: "#9F3014", badgeBg: "#FEF1E0" },
   "general-test": { icon: Layers, accentColor: "#7C3AED", badgeBg: "#EDE9FE" },
 };
 
@@ -242,7 +242,7 @@ export default function SubjectPracticeClient({
         </p>
         <Link
           href="/dashboard/practice"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-semibold"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Practice Tests</span>
@@ -254,8 +254,8 @@ export default function SubjectPracticeClient({
   const { name, code } = subjectEntry;
   const meta = SUBJECT_STREAM_MAP[folder] || {
     icon: BookOpen,
-    accentColor: "#2563EB",
-    badgeBg: "#DBEAFE",
+    accentColor: "#C2410C",
+    badgeBg: "#FDF0E6",
   };
   const IconComp = meta.icon;
 
@@ -277,7 +277,7 @@ export default function SubjectPracticeClient({
 
       {/* Free Plan Status & Limit Banner - Rendered ONLY after confirming user is on Free Plan */}
       {isConfirmedFree && (
-        <div className="bg-gradient-to-r from-amber-50 via-white to-blue-50 rounded-2xl border border-amber-200/90 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+        <div className="bg-gradient-to-r from-[#FEF1E0] via-white to-[#FAF3EB] rounded-2xl border border-amber-200/90 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
@@ -307,7 +307,7 @@ export default function SubjectPracticeClient({
       <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 tracking-wide uppercase">
+            <div className="flex items-center gap-2 text-xs font-semibold text-[#C2410C] tracking-wide uppercase">
               <Compass className="w-3.5 h-3.5" />
               <span>CUET UG 2026 Curriculum · Code {code}</span>
             </div>
@@ -336,7 +336,7 @@ export default function SubjectPracticeClient({
                   {subjectStats.attemptedCount} / {totalTests} completed ({progressPct}%)
                 </span>
                 {subjectStats.accuracy !== null ? (
-                  <span className="text-blue-600 font-bold">{subjectStats.accuracy}% accuracy</span>
+                  <span className="text-[#C2410C] font-bold">{subjectStats.accuracy}% accuracy</span>
                 ) : (
                   <span className="text-slate-400 font-normal">Not started</span>
                 )}
@@ -347,7 +347,7 @@ export default function SubjectPracticeClient({
                     progressPct >= 100
                       ? "bg-emerald-600"
                       : progressPct > 0
-                      ? "bg-blue-600"
+                      ? "bg-[#C2410C]"
                       : "bg-transparent"
                   }`}
                   style={{ width: `${progressPct}%` }}
@@ -369,7 +369,7 @@ export default function SubjectPracticeClient({
             ) : (
               <Link
                 href={`/test/${nextTestTarget}`}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all"
               >
                 <Play className="w-4 h-4 fill-current" />
                 <span>
@@ -397,7 +397,7 @@ export default function SubjectPracticeClient({
         <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
           Syllabus Units ({units.length})
         </h2>
-        <div className="flex items-center gap-3 text-xs font-semibold text-blue-600">
+        <div className="flex items-center gap-3 text-xs font-semibold text-[#C2410C]">
           <button
             type="button"
             onClick={expandAll}
@@ -445,7 +445,7 @@ export default function SubjectPracticeClient({
                       isComplete
                         ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                         : hasAttempts
-                        ? "bg-blue-50 text-blue-700 border border-blue-200"
+                        ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF]"
                         : "bg-slate-100 text-slate-700"
                     }`}
                   >
@@ -467,7 +467,7 @@ export default function SubjectPracticeClient({
                             unitAccuracy >= 80
                               ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                               : unitAccuracy >= 50
-                              ? "bg-blue-50 text-blue-700 border border-blue-200"
+                              ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF]"
                               : "bg-amber-50 text-amber-700 border border-amber-200"
                           }`}
                         >
@@ -569,10 +569,10 @@ export default function SubjectPracticeClient({
                           <Link
                             key={testNum}
                             href={`/test/${testId}`}
-                            className={`group relative h-[82px] rounded-xl border p-2.5 flex flex-col justify-between transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                            className={`group relative h-[82px] rounded-xl border p-2.5 flex flex-col justify-between transition-all focus:outline-none focus:ring-2 focus:ring-[#C2410C] ${
                               isNext
-                                ? "bg-blue-50/60 border-blue-400 ring-2 ring-blue-500/20 shadow-xs"
-                                : "bg-white border-slate-200/90 hover:border-blue-300 hover:bg-blue-50/20"
+                                ? "bg-[#FEF1E0] border-[#F6D3AF] ring-2 ring-[#F6D3AF]/40 shadow-xs"
+                                : "bg-white border-slate-200/90 hover:border-[#F6D3AF] hover:bg-[#FAF3EB]/50"
                             }`}
                           >
                             <div className="flex items-center justify-between">
@@ -580,7 +580,7 @@ export default function SubjectPracticeClient({
                                 Test {testNum}
                               </span>
                               {isNext ? (
-                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white shadow-2xs">
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#C2410C] text-white shadow-2xs">
                                   Next
                                 </span>
                               ) : !isPremium && isConfirmedFree && !isLocked ? (
@@ -593,8 +593,8 @@ export default function SubjectPracticeClient({
                                 </span>
                               )}
                             </div>
-                            <div className="flex items-center justify-between text-xs font-semibold text-blue-600">
-                              <span className="text-[11px] font-medium text-slate-500 group-hover:text-blue-600 transition-colors">
+                            <div className="flex items-center justify-between text-xs font-semibold text-[#C2410C]">
+                              <span className="text-[11px] font-medium text-slate-500 group-hover:text-[#C2410C] transition-colors">
                                 Start
                               </span>
                               <Play className="w-3 h-3 fill-current group-hover:translate-x-0.5 transition-transform" />
@@ -607,10 +607,10 @@ export default function SubjectPracticeClient({
                         <div
                           key={testNum}
                           tabIndex={0}
-                          className={`group relative h-[82px] rounded-xl border p-2.5 flex flex-col justify-between transition-all overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          className={`group relative h-[82px] rounded-xl border p-2.5 flex flex-col justify-between transition-all overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#C2410C] ${
                             isNext
-                              ? "bg-blue-50/50 border-blue-400 ring-2 ring-blue-500/20"
-                              : "bg-slate-50/80 border-slate-200/90 hover:border-blue-300"
+                              ? "bg-[#FEF1E0] border-[#F6D3AF] ring-2 ring-[#F6D3AF]/40"
+                              : "bg-slate-50/80 border-slate-200/90 hover:border-[#F6D3AF]"
                           }`}
                         >
                           {/* Default content */}
@@ -627,7 +627,7 @@ export default function SubjectPracticeClient({
                                   ? "text-rose-600"
                                   : (testStat?.bestScore ?? 0) >= 80
                                   ? "text-emerald-700"
-                                  : "text-blue-700"
+                                  : "text-[#C2410C]"
                               }`}
                             >
                               {testStat?.bestScore} / 100
@@ -657,7 +657,7 @@ export default function SubjectPracticeClient({
                           <div className="absolute inset-0 bg-white/95 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity flex items-center justify-center gap-1.5 p-2 z-10">
                             <Link
                               href={`/dashboard/pyqs/analysis/${testStat?.bestAttempt?.id || ""}`}
-                              className="flex-1 text-center py-1.5 px-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[11px] font-semibold transition-colors shadow-2xs"
+                              className="flex-1 text-center py-1.5 px-1 bg-[#C2410C] hover:bg-[#9A3412] text-white rounded-lg text-[11px] font-semibold transition-colors shadow-2xs"
                             >
                               Analysis
                             </Link>

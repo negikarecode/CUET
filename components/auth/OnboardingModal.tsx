@@ -354,7 +354,7 @@ export default function OnboardingModal({
               href="/"
               onClick={onClose}
               title="Go to Homepage"
-              className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-xs hover:scale-105 transition-transform cursor-pointer shrink-0"
+              className="w-9 h-9 rounded-xl bg-[#C2410C] text-white flex items-center justify-center shadow-xs hover:scale-105 transition-transform cursor-pointer shrink-0"
               aria-label="CUET AI-Prep Home"
             >
               <GraduationCap className="w-4 h-4 stroke-[2]" />
@@ -365,7 +365,7 @@ export default function OnboardingModal({
                   {mode === "signup" ? "Join CUET AI-Prep" : "Candidate Sign In"}
                 </span>
                 {mode === "signup" && (
-                  <span className="text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700">
+                  <span className="text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-[#FDF0E6] border border-[#F6D3AF] text-[#9F3014]">
                     Step {step} of 2
                   </span>
                 )}
@@ -396,7 +396,7 @@ export default function OnboardingModal({
             }}
             className={`py-3 text-center border-r border-slate-200 transition-all cursor-pointer ${
               mode === "signup"
-                ? "bg-white text-blue-600 font-bold border-b-2 border-blue-600"
+                ? "bg-white text-[#C2410C] font-bold border-b-2 border-[#C2410C]"
                 : "text-slate-500 hover:text-slate-800"
             }`}
           >
@@ -410,7 +410,7 @@ export default function OnboardingModal({
             }}
             className={`py-3 text-center transition-all cursor-pointer ${
               mode === "login"
-                ? "bg-white text-blue-600 font-bold border-b-2 border-blue-600"
+                ? "bg-white text-[#C2410C] font-bold border-b-2 border-[#C2410C]"
                 : "text-slate-500 hover:text-slate-800"
             }`}
           >
@@ -432,7 +432,7 @@ export default function OnboardingModal({
                     setMode("verify_email");
                     setErrorMessage(null);
                   }}
-                  className="inline-flex items-center gap-1 font-bold text-blue-700 hover:text-blue-800 hover:underline pt-0.5 cursor-pointer"
+                  className="inline-flex items-center gap-1 font-bold text-[#C2410C] hover:text-[#9A3412] hover:underline pt-0.5 cursor-pointer"
                 >
                   <span>Click here to verify your email address</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -484,7 +484,7 @@ export default function OnboardingModal({
             <form onSubmit={handleSignIn} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-blue-600" />
+                  <Mail className="w-3.5 h-3.5 text-[#C2410C]" />
                   <span>Registered Email Address</span>
                 </label>
                 <input
@@ -493,13 +493,13 @@ export default function OnboardingModal({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="aspirant@cuet-prep.in"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-blue-500 shadow-xs"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-[#C2410C] shadow-xs"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-blue-600" />
+                  <Lock className="w-3.5 h-3.5 text-[#C2410C]" />
                   <span>Password</span>
                 </label>
                 <div className="relative flex items-center">
@@ -509,7 +509,7 @@ export default function OnboardingModal({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
-                    className="w-full pl-3.5 pr-11 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-blue-500 shadow-xs"
+                    className="w-full pl-3.5 pr-11 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-[#C2410C] shadow-xs"
                   />
                   <button
                     type="button"
@@ -530,7 +530,7 @@ export default function OnboardingModal({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full py-3 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {isLoading ? (
                     <>
@@ -553,7 +553,7 @@ export default function OnboardingModal({
                     setMode("signup");
                     setStep(1);
                   }}
-                  className="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                  className="text-xs font-semibold text-[#C2410C] hover:text-[#9A3412] transition-colors"
                 >
                   Don&apos;t have an account? Join Now & Create Profile
                 </button>
@@ -569,7 +569,7 @@ export default function OnboardingModal({
                   {/* Full Name */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                      <User className="w-3.5 h-3.5 text-blue-600" />
+                      <User className="w-3.5 h-3.5 text-[#C2410C]" />
                       <span>Full Name</span>
                     </label>
                     <input
@@ -578,14 +578,14 @@ export default function OnboardingModal({
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Aryan Gupta"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-blue-500 shadow-xs"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-[#C2410C] shadow-xs"
                     />
                   </div>
 
                   {/* Email */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                      <Mail className="w-3.5 h-3.5 text-blue-600" />
+                      <Mail className="w-3.5 h-3.5 text-[#C2410C]" />
                       <span>Email Address</span>
                     </label>
                     <input
@@ -594,14 +594,14 @@ export default function OnboardingModal({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="aspirant@cuet-prep.in"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-blue-500 shadow-xs"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-[#C2410C] shadow-xs"
                     />
                   </div>
 
                   {/* Password */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                      <Lock className="w-3.5 h-3.5 text-blue-600" />
+                      <Lock className="w-3.5 h-3.5 text-[#C2410C]" />
                       <span>Password (Min 6 Characters)</span>
                     </label>
                     <div className="relative flex items-center">
@@ -612,7 +612,7 @@ export default function OnboardingModal({
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full pl-3.5 pr-11 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-blue-500 shadow-xs"
+                        className="w-full pl-3.5 pr-11 py-2.5 rounded-xl border border-slate-200 font-medium text-sm bg-white focus:outline-none focus:border-[#C2410C] shadow-xs"
                       />
                       <button
                         type="button"
@@ -647,7 +647,7 @@ export default function OnboardingModal({
                           onClick={() => setAge(item.val)}
                           className={`p-2.5 rounded-xl border text-xs font-semibold transition-all shadow-xs cursor-pointer ${
                             age === item.val
-                              ? "bg-blue-50/70 border-blue-600 text-blue-700"
+                              ? "bg-[#FDF0E6] border-[#F6D3AF] text-[#9F3014]"
                               : "bg-white border-slate-200 hover:bg-slate-50 text-slate-700"
                           }`}
                         >
@@ -660,7 +660,7 @@ export default function OnboardingModal({
                   <div className="pt-3">
                     <button
                       type="submit"
-                      className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full py-3 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <span>Proceed to Dream College & Stream</span>
                       <ArrowRight className="w-4 h-4 stroke-[2]" />
@@ -685,7 +685,7 @@ export default function OnboardingModal({
                   <div className="p-4 bg-slate-50/70 border border-slate-200/80 rounded-2xl space-y-2.5 shadow-xs">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-semibold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                        <Sparkles className="w-3.5 h-3.5 text-[#C2410C]" />
                         <span>Stream Domain Subjects (Auto-Calibrated)</span>
                       </label>
                       <span className="text-[10px] font-medium bg-white px-2.5 py-0.5 rounded-full border border-slate-200 text-slate-600 shadow-xs">
@@ -721,7 +721,7 @@ export default function OnboardingModal({
                       disabled={isLoading || !targetSelection.isValidPair}
                       className={`flex-1 py-3 px-4 rounded-xl font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 ${
                         targetSelection.isValidPair && !isLoading
-                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white cursor-pointer"
+                          ? "bg-[#C2410C] hover:bg-[#9A3412] text-white cursor-pointer"
                           : "bg-slate-200 text-slate-400 cursor-not-allowed opacity-70"
                       }`}
                     >

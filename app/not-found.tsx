@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between py-10 px-4 sm:px-6 lg:px-8 text-slate-900">
+    <div className="min-h-screen bg-[#FFF8F0] flex flex-col justify-between py-10 px-4 sm:px-6 lg:px-8 text-slate-900">
       {/* Top Header with Clickable Logo */}
       <header className="max-w-4xl mx-auto w-full flex items-center justify-between pb-6 border-b border-slate-200/80">
         <Link
@@ -27,13 +27,13 @@ export default function NotFound() {
           className="flex items-center gap-2.5 group cursor-pointer"
           aria-label="CUET AI-Prep Homepage"
         >
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xs group-hover:scale-105 transition-transform shrink-0">
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-[#C2410C] text-white shadow-xs group-hover:scale-105 transition-transform shrink-0">
             <GraduationCap className="w-5 h-5 stroke-[2]" />
             <Sparkles className="w-3.5 h-3.5 text-amber-300 absolute -top-1 -right-1 fill-amber-300" />
           </div>
           <div className="flex flex-col">
             <span className="text-xl font-extrabold tracking-tight text-slate-900 leading-tight">
-              CUET <span className="text-blue-600">AI-Prep</span>
+              CUET <span className="text-[#C2410C]">AI-Prep</span>
             </span>
             <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
               NTA CBT Diagnostic Platform
@@ -55,7 +55,7 @@ export default function NotFound() {
         <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl p-8 sm:p-10 text-center space-y-6">
           {/* 404 Badge */}
           <div className="relative inline-flex items-center justify-center">
-            <div className="w-20 h-20 rounded-3xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 font-mono font-black text-3xl shadow-xs">
+            <div className="w-20 h-20 rounded-3xl bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center text-[#C2410C] font-mono font-black text-3xl shadow-xs">
               404
             </div>
             <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shadow-xs">
@@ -77,13 +77,13 @@ export default function NotFound() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-left">
             <Link
               href="/"
-              className="p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200 hover:border-blue-200 transition-all flex items-center gap-3 group"
+              className="p-3.5 rounded-2xl bg-slate-50 hover:bg-[#FFF5EA] border border-slate-200 hover:border-[#F6D3AF] transition-all flex items-center gap-3 group"
             >
-              <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-9 h-9 rounded-xl bg-[#C2410C] text-white flex items-center justify-center shrink-0 shadow-xs">
                 <Home className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <strong className="block text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                <strong className="block text-xs font-bold text-slate-900 group-hover:text-[#C2410C] transition-colors">
                   Platform Home
                 </strong>
                 <span className="text-[11px] text-slate-500 truncate block">
@@ -94,13 +94,13 @@ export default function NotFound() {
 
             <Link
               href="/dashboard/mocks"
-              className="p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200 hover:border-blue-200 transition-all flex items-center gap-3 group"
+              className="p-3.5 rounded-2xl bg-slate-50 hover:bg-[#FFF5EA] border border-slate-200 hover:border-[#F6D3AF] transition-all flex items-center gap-3 group"
             >
-              <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-9 h-9 rounded-xl bg-[#9A3412] text-white flex items-center justify-center shrink-0 shadow-xs">
                 <ClipboardCheck className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <strong className="block text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                <strong className="block text-xs font-bold text-slate-900 group-hover:text-[#C2410C] transition-colors">
                   Mock Tests Hub
                 </strong>
                 <span className="text-[11px] text-slate-500 truncate block">
@@ -111,7 +111,7 @@ export default function NotFound() {
 
             <Link
               href="/dashboard/pyqs"
-              className="p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200 hover:border-blue-200 transition-all flex items-center gap-3 group"
+              className="p-3.5 rounded-2xl bg-slate-50 hover:bg-[#FFF5EA] border border-slate-200 hover:border-[#F6D3AF] transition-all flex items-center gap-3 group"
             >
               <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
                 <FileText className="w-4 h-4" />
@@ -128,13 +128,13 @@ export default function NotFound() {
 
             <Link
               href="/dashboard"
-              className="p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200 hover:border-blue-200 transition-all flex items-center gap-3 group"
+              className="p-3.5 rounded-2xl bg-slate-50 hover:bg-[#FFF5EA] border border-slate-200 hover:border-[#F6D3AF] transition-all flex items-center gap-3 group"
             >
               <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-xs">
                 <Compass className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <strong className="block text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                <strong className="block text-xs font-bold text-slate-900 group-hover:text-[#C2410C] transition-colors">
                   Aspirant Command Hub
                 </strong>
                 <span className="text-[11px] text-slate-500 truncate block">
@@ -153,14 +153,14 @@ export default function NotFound() {
             <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-1 font-semibold text-blue-600 hover:underline"
+                className="inline-flex items-center gap-1 font-semibold text-[#C2410C] hover:underline"
               >
                 <span>Academic Help Desk</span>
               </Link>
               <span>•</span>
               <a
                 href="mailto:support@cuetprep.com"
-                className="inline-flex items-center gap-1 font-semibold text-blue-600 hover:underline"
+                className="inline-flex items-center gap-1 font-semibold text-[#C2410C] hover:underline"
               >
                 <Mail className="w-3.5 h-3.5" />
                 <span>support@cuetprep.com</span>
@@ -168,7 +168,7 @@ export default function NotFound() {
               <span>•</span>
               <a
                 href="tel:01140759000"
-                className="inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-blue-600"
+                className="inline-flex items-center gap-1 font-semibold text-slate-700 hover:text-[#C2410C]"
               >
                 <Phone className="w-3.5 h-3.5" />
                 <span>011-40759000</span>

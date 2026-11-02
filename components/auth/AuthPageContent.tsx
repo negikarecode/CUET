@@ -898,7 +898,7 @@ export default function AuthPageContent({
                             onClick={() => handleStreamChange(st)}
                             className={`py-2 px-3 rounded-xl border text-xs font-semibold capitalize transition-all cursor-pointer ${
                               stream === st
-                                ? "bg-blue-50 border-blue-600 text-blue-700 shadow-xs"
+                                ? "bg-[#FDF0E6] border-[#F6D3AF] text-[#9F3014] shadow-xs"
                                 : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
                             }`}
                           >

@@ -54,7 +54,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
         {/* Header */}
         <div className="p-4 sm:p-6 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-[#C2410C] text-white flex items-center justify-center font-bold text-lg shadow-xs">
               <BarChart3 className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -62,7 +62,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
                 <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                   Weekly Performance Report
                 </h2>
-                <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold uppercase tracking-wider">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#FDF0E6] text-[#C2410C] text-[10px] font-bold uppercase tracking-wider">
                   {report.weekLabel}
                 </span>
               </div>
@@ -148,7 +148,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
                   <span className="text-[10px] text-slate-400 uppercase font-bold block">{wt.weekLabel}</span>
                   <div className="h-16 bg-slate-800 rounded-xl flex items-end p-1 overflow-hidden">
                     <div
-                      className="w-full bg-gradient-to-t from-blue-600 to-indigo-400 rounded-lg transition-all"
+                      className="w-full bg-gradient-to-t from-[#C2410C] to-[#EA580C] rounded-lg transition-all"
                       style={{ height: `${Math.max(10, wt.accuracy)}%` }}
                     />
                   </div>
@@ -161,9 +161,9 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
 
           {/* Student Narrative & Parent Takeaway */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4.5 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-900 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            <div className="p-4 rounded-2xl bg-[#FEF1E0]/70 border border-[#F6D3AF] space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#441408] flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#C2410C]" />
                 <span>Student Performance Summary</span>
               </span>
               <p className="text-slate-800 font-medium leading-relaxed">
@@ -171,7 +171,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
               </p>
             </div>
 
-            <div className="p-4.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-2">
+            <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-2">
               <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5">
                 <Award className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Parent / Mentor Takeaway</span>
@@ -224,7 +224,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
           </div>
 
           {/* Next Week's Action Plan */}
-          <div className="p-4.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
               <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
               <span>Recommended Next Week Action Plan</span>

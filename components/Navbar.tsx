@@ -118,16 +118,16 @@ export default function Navbar() {
                 className="flex items-center gap-2 sm:gap-3 group focus:outline-none rounded-xl py-1 px-1"
                 aria-label="CUET AI-Prep Homepage"
               >
-                <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xs group-hover:scale-105 transition-all shrink-0">
+                <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#C2410C] text-white shadow-xs group-hover:scale-105 transition-all shrink-0">
                   <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[2]" />
                   <Sparkles className="w-3.5 h-3.5 text-amber-300 absolute -top-1 -right-1 fill-amber-300" />
                 </div>
                 <div className="flex flex-col justify-center min-w-0">
                   <div className="flex items-center gap-1 sm:gap-1.5 leading-none">
                     <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 font-sans leading-tight whitespace-nowrap">
-                      CUET <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">AI-Prep</span>
+                      CUET <span className="text-[#C2410C]">AI-Prep</span>
                     </span>
-                    <span className="rounded-full bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-indigo-600 uppercase tracking-wide">
+                    <span className="rounded-full bg-[#FDF0E6] border border-[#F6D3AF] px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-[#C2410C] uppercase tracking-wide">
                       UG
                     </span>
                   </div>
@@ -139,22 +139,22 @@ export default function Navbar() {
 
               {/* Desktop Marketing Navigation Links */}
               <nav className="hidden lg:flex items-center gap-5 ml-4 text-xs font-semibold text-slate-600" aria-label="Main Navigation">
-                <Link href="/dashboard/mocks" className="hover:text-blue-600 transition-colors py-1">
+                <Link href="/dashboard/mocks" className="hover:text-[#C2410C] transition-colors py-1">
                   Mock Tests
                 </Link>
-                <Link href="/dashboard/pyqs" className="hover:text-blue-600 transition-colors py-1">
+                <Link href="/dashboard/pyqs" className="hover:text-[#C2410C] transition-colors py-1">
                   251 PYQs
                 </Link>
-                <Link href="/dashboard/practice" className="hover:text-blue-600 transition-colors py-1">
+                <Link href="/dashboard/practice" className="hover:text-[#C2410C] transition-colors py-1">
                   Practice
                 </Link>
-                <Link href="/dashboard/standing" className="hover:text-blue-600 transition-colors py-1">
+                <Link href="/dashboard/standing" className="hover:text-[#C2410C] transition-colors py-1">
                   College Cutoffs
                 </Link>
-                <Link href="/pricing" className={`py-1 transition-colors ${pathname === "/pricing" ? "text-blue-600 font-bold" : "hover:text-blue-600"}`}>
+                <Link href="/pricing" className={`py-1 transition-colors ${pathname === "/pricing" ? "text-[#C2410C] font-bold" : "hover:text-[#C2410C]"}`}>
                   Pricing
                 </Link>
-                <Link href="/contact" className={`py-1 transition-colors ${pathname === "/contact" ? "text-blue-600 font-bold" : "hover:text-blue-600"}`}>
+                <Link href="/contact" className={`py-1 transition-colors ${pathname === "/contact" ? "text-[#C2410C] font-bold" : "hover:text-[#C2410C]"}`}>
                   Contact
                 </Link>
               </nav>
@@ -177,7 +177,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("signup")}
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
+                    className="px-4 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:scale-[0.98] text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
                   >
                     <span>{t("joinNow", "Join Now")}</span>
                     <ArrowRight className="w-3.5 h-3.5 stroke-[2]" />
@@ -241,7 +241,7 @@ export default function Navbar() {
                         aria-label="User Profile menu"
                         aria-expanded={profileDropdownOpen}
                       >
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                        <div className="w-7 h-7 rounded-full bg-[#C2410C] text-white flex items-center justify-center font-bold text-xs shadow-xs">
                           {userInitials}
                         </div>
                         <span className="text-xs font-semibold text-slate-800 hidden lg:inline max-w-[110px] truncate">
@@ -290,7 +290,7 @@ export default function Navbar() {
                             onClick={() => setProfileDropdownOpen(false)}
                             className="flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 transition-colors"
                           >
-                            <Sparkles className="w-4 h-4 text-blue-600" />
+                            <Sparkles className="w-4 h-4 text-[#C2410C]" />
                             <span>AI Coach</span>
                           </Link>
                           <Link
@@ -344,7 +344,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("signup")}
-                    className="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-xs shadow-xs active:scale-95 shrink-0"
+                    className="px-2.5 py-1.5 rounded-xl bg-[#C2410C] text-white font-semibold text-xs shadow-xs active:scale-95 shrink-0"
                   >
                     {t("joinNow", "Join Now")}
                   </button>
@@ -380,7 +380,7 @@ export default function Navbar() {
             {isLoggedIn ? (
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                  <div className="w-9 h-9 rounded-xl bg-[#C2410C] text-white flex items-center justify-center font-bold text-xs shadow-xs">
                     {userInitials}
                   </div>
                   <div>
@@ -400,7 +400,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => handleOpenOnboarding("signup")}
-                    className="flex-1 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-xs shadow-xs text-center"
+                    className="flex-1 py-2 rounded-xl bg-[#C2410C] text-white font-semibold text-xs shadow-xs text-center"
                   >
                     {t("joinNow", "Join Now")}
                   </button>
@@ -419,42 +419,42 @@ export default function Navbar() {
               <Link
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-[#C2410C] transition-colors"
               >
                 Home
               </Link>
               <Link
                 href="/dashboard/mocks"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-[#C2410C] transition-colors"
               >
                 Full Mock Tests (50 Qs)
               </Link>
               <Link
                 href="/dashboard/pyqs"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-[#C2410C] transition-colors"
               >
                 251 Shift PYQs Vault (2022–2025)
               </Link>
               <Link
                 href="/dashboard/practice"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-[#C2410C] transition-colors"
               >
                 Chapter Practice &amp; NCERT Traps
               </Link>
               <Link
                 href="/dashboard/standing"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-[#C2410C] transition-colors"
               >
                 Target College Cutoff Benchmarks
               </Link>
               <Link
                 href="/dashboard/ai-coach"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-[#C2410C] transition-colors"
               >
                 AI Mistake Coach
               </Link>
@@ -462,7 +462,7 @@ export default function Navbar() {
                 href="/pricing"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
-                  pathname === "/pricing" ? "bg-blue-50 text-blue-700 font-bold" : "hover:bg-slate-50 hover:text-blue-600"
+                  pathname === "/pricing" ? "bg-[#FDF0E6] text-[#C2410C] font-bold" : "hover:bg-slate-50 hover:text-[#C2410C]"
                 }`}
               >
                 Ranker Pass Pricing (₹2 Lifetime)
@@ -471,7 +471,7 @@ export default function Navbar() {
                 href="/contact"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
-                  pathname === "/contact" ? "bg-blue-50 text-blue-700 font-bold" : "hover:bg-slate-50 hover:text-blue-600"
+                  pathname === "/contact" ? "bg-[#FDF0E6] text-[#C2410C] font-bold" : "hover:bg-slate-50 hover:text-[#C2410C]"
                 }`}
               >
                 Contact Support Desk
@@ -487,7 +487,7 @@ export default function Navbar() {
               <div className="pt-3 mt-3 border-t border-slate-100 text-xs text-slate-500 space-y-1.5 px-2">
                 <div className="flex items-center gap-1.5">
                   <span className="font-semibold text-slate-700">Support:</span>
-                  <a href="mailto:support@cuetprep.com" className="text-blue-600 underline font-medium">
+                  <a href="mailto:support@cuetprep.com" className="text-[#C2410C] underline font-medium">
                     support@cuetprep.com
                   </a>
                 </div>

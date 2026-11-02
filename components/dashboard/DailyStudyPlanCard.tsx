@@ -75,7 +75,7 @@ export function DailyStudyPlanCard({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-[#FDF0E6] border border-[#F6D3AF] text-[#C2410C] flex items-center justify-center shrink-0">
             <Calendar className="w-5 h-5" />
           </div>
           <div>
@@ -118,7 +118,7 @@ export function DailyStudyPlanCard({
         </div>
         <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-300"
+            className="h-full bg-gradient-to-r from-[#C2410C] to-[#EA580C] rounded-full transition-all duration-300"
             style={{ width: `${progressPct}%` }}
           />
         </div>

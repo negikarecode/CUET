@@ -56,7 +56,7 @@ export function NotesMarkdownRenderer({ content, className = "" }: Props) {
           ),
           em: ({ children }) => <em className="italic text-slate-800 dark:text-slate-200">{children}</em>,
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-sky-500 bg-sky-50/50 dark:bg-sky-950/20 px-4 py-2.5 rounded-r-lg my-3 text-slate-700 dark:text-slate-300 italic">
+            <blockquote className="border-l-4 border-[#C2410C] bg-[#FEF1E0]/50 dark:bg-[#441408]/20 px-4 py-2.5 rounded-r-lg my-3 text-slate-700 dark:text-slate-300 italic">
               {children}
             </blockquote>
           ),
@@ -86,7 +86,7 @@ export function NotesMarkdownRenderer({ content, className = "" }: Props) {
             if (inline) {
               return (
                 <code
-                  className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-sm text-sky-600 dark:text-sky-400 font-medium"
+                  className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-sm text-[#C2410C] dark:text-[#F6D3AF] font-medium"
                   {...props}
                 >
                   {children}

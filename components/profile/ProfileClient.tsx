@@ -559,7 +559,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       .toUpperCase() || "CU";
 
   const streamBadgeColors: Record<StreamOption, { bg: string; text: string; border: string }> = {
-    Science: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
+    Science: { bg: "bg-[#FEF1E0]", text: "text-[#9F3014]", border: "border-[#F6D3AF]" },
     Commerce: { bg: "bg-amber-50", text: "text-amber-800", border: "border-amber-200" },
     Humanities: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
   };
@@ -611,7 +611,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               ? "bg-emerald-50 border-emerald-200 text-emerald-800"
               : statusMessage.type === "error"
               ? "bg-rose-50 border-rose-200 text-rose-800"
-              : "bg-blue-50 border-blue-200 text-blue-800"
+              : "bg-[#FEF1E0] border-[#F6D3AF] text-[#9F3014]"
           }`}
         >
           <div className="flex items-center gap-2.5">
@@ -620,7 +620,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             ) : statusMessage.type === "error" ? (
               <AlertTriangle className="w-4 h-4 text-rose-600" />
             ) : (
-              <RefreshCw className="w-4 h-4 text-blue-600 animate-spin" />
+              <RefreshCw className="w-4 h-4 text-[#C2410C] animate-spin" />
             )}
             <span>{statusMessage.text}</span>
           </div>
@@ -705,13 +705,13 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/60 space-y-2.5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-              <Layers className="w-3.5 h-3.5 text-blue-600" />
+              <Layers className="w-3.5 h-3.5 text-[#C2410C]" />
               <span>Stream Domain Subjects ({profile.targetStream || "Science"} Stream · {displaySubjects.length} Domains)</span>
             </span>
             <button
               type="button"
               onClick={() => setIsEditGoalsOpen(true)}
-              className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer transition-colors"
+              className="text-xs font-semibold text-[#C2410C] hover:text-[#9A3412] flex items-center gap-1 cursor-pointer transition-colors"
             >
               <Edit3 className="w-3 h-3" />
               <span>Change stream</span>
@@ -763,8 +763,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         <section className="bg-white rounded-2xl border border-[#EFE6DC] shadow-xs p-5 sm:p-6 space-y-5">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
-                <Brain className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 rounded-xl bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center text-[#C2410C]">
+                <Brain className="w-5 h-5 text-[#C2410C]" />
               </div>
               <div>
                 <h2 className="text-lg font-bold text-slate-900 tracking-tight">
@@ -782,7 +782,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                 Diagnostic complete
               </span>
             ) : (
-              <span className="px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-semibold text-blue-700">
+              <span className="px-2.5 py-1 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] text-xs font-semibold text-[#9F3014]">
                 Diagnostic in progress
               </span>
             )}
@@ -792,7 +792,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           <div className="p-4 rounded-2xl bg-slate-50 border border-[#EFE6DC] space-y-3">
             <div className="flex items-center justify-between text-xs sm:text-sm font-semibold">
               <span className="text-slate-700 flex items-center gap-1.5 font-bold">
-                <Target className="w-4 h-4 text-blue-600" />
+                <Target className="w-4 h-4 text-[#C2410C]" />
                 <span>Diagnostic Calibration Progress</span>
               </span>
               <span className="text-slate-800 font-bold">
@@ -803,7 +803,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             {/* Linear Progress Bar */}
             <div className="w-full h-2.5 bg-slate-200/80 rounded-full overflow-hidden">
               <div
-                className="h-full bg-blue-600 transition-all duration-500 rounded-full"
+                className="h-full bg-[#C2410C] transition-all duration-500 rounded-full"
                 style={{ width: `${diagnosticPct}%` }}
               />
             </div>
@@ -825,7 +825,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             <div className="flex items-start justify-between gap-3">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-blue-600 shrink-0" />
+                  <Building2 className="w-4 h-4 text-[#C2410C] shrink-0" />
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                     Target College Readiness
                   </span>
@@ -863,7 +863,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               {allRequiredHaveData && (
                 <div>
                   <span className="font-semibold text-slate-600">Your mock average: </span>
-                  <strong className="text-blue-600">{currentMockAvgPerSubject} marks</strong>
+                  <strong className="text-[#C2410C]">{currentMockAvgPerSubject} marks</strong>
                 </div>
               )}
             </div>
@@ -894,7 +894,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                   <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-300 ${
-                        marksGap <= 0 ? "bg-emerald-500" : "bg-blue-600"
+                        marksGap <= 0 ? "bg-emerald-500" : "bg-[#C2410C]"
                       }`}
                       style={{
                         width: `${Math.min(100, Math.max(5, Math.round((currentMockAvgPerSubject / target.perSubjectTarget) * 100)))}%`,
@@ -904,9 +904,9 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                 </div>
               </div>
             ) : (
-              <div className="p-3.5 rounded-xl bg-blue-50 border border-blue-200 text-xs sm:text-sm text-blue-900 space-y-2">
+              <div className="p-3.5 rounded-xl bg-[#FEF1E0] border border-[#F6D3AF] text-xs sm:text-sm text-[#441408] space-y-2">
                 <div className="font-semibold flex items-center gap-1.5">
-                  <Info className="w-4 h-4 text-blue-600 shrink-0" />
+                  <Info className="w-4 h-4 text-[#C2410C] shrink-0" />
                   <span>Take mocks to see your gap:</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 pt-0.5">
@@ -917,7 +917,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                       <Link
                         key={subName}
                         href={`/dashboard/mocks/${norm.key}`}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-blue-200 text-blue-700 font-bold hover:bg-blue-100/60 transition-colors text-xs"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-[#F6D3AF] text-[#9F3014] font-bold hover:bg-[#FEF1E0] transition-colors text-xs"
                       >
                         <span>{subName}</span>
                         <ArrowRight className="w-3 h-3" />
@@ -934,14 +934,14 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-[#EFE6DC] space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Activity className="w-4 h-4 text-indigo-600" />
+                <Activity className="w-4 h-4 text-[#C2410C]" />
                 <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700">
                   Priority Focus Topics
                 </h3>
               </div>
               <Link
                 href="/dashboard/ai-coach"
-                className="text-xs font-semibold text-blue-600 hover:underline"
+                className="text-xs font-semibold text-[#C2410C] hover:underline"
               >
                 View all
               </Link>
@@ -990,7 +990,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
               type="button"
               disabled={isLaunchingDrill}
               onClick={handleLaunchFixDrill}
-              className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="w-full py-3 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {isLaunchingDrill ? (
                 <>
@@ -1039,7 +1039,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           <div
             className={`p-5 rounded-2xl border space-y-3.5 ${
               profile.isPremium
-                ? "bg-indigo-50/50 border-indigo-100"
+                ? "bg-[#FEF1E0]/50 border-[#F6D3AF]"
                 : "bg-slate-50 border-slate-200/70"
             }`}
           >
@@ -1075,7 +1075,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                   planId="all_access_pass_799"
                   variant="primary"
                   buttonText="Upgrade to Premium (₹2 · 1-Year Access)"
-                  className="w-full py-3 rounded-xl font-bold text-xs sm:text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-xs hover:shadow"
+                  className="w-full py-3 rounded-xl font-bold text-xs sm:text-sm bg-[#C2410C] hover:bg-[#9A3412] text-white shadow-xs hover:shadow"
                 />
               </div>
             )}
@@ -1084,8 +1084,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           {/* Target Exam Season Setting (Dynamically computed from date) */}
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#EFE6DC] shadow-xs flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
-                <Calendar className="w-4 h-4 text-indigo-600" />
+              <div className="w-8 h-8 rounded-xl bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center text-[#C2410C] shrink-0">
+                <Calendar className="w-4 h-4 text-[#C2410C]" />
               </div>
               <div className="min-w-0">
                 <h4 className="text-xs sm:text-sm font-bold text-slate-900">Target Exam Season</h4>
@@ -1108,8 +1108,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#EFE6DC] shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
-                  <BellRing className="w-4 h-4 text-blue-600" />
+                <div className="w-8 h-8 rounded-xl bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center text-[#C2410C] shrink-0">
+                  <BellRing className="w-4 h-4 text-[#C2410C]" />
                 </div>
                 <div>
                   <h4 className="text-xs sm:text-sm font-bold text-slate-900">
@@ -1125,7 +1125,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                 type="button"
                 onClick={handleTogglePush}
                 className={`w-11 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${
-                  pushEnabled ? "bg-blue-600" : "bg-slate-200"
+                  pushEnabled ? "bg-[#C2410C]" : "bg-slate-200"
                 }`}
                 aria-label="Toggle push alerts"
               >
@@ -1146,12 +1146,12 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                     type="time"
                     value={reminderTime}
                     onChange={(e) => handleReminderTimeChange(e.target.value)}
-                    className="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 text-xs sm:text-sm font-semibold focus:outline-none focus:border-blue-500"
+                    className="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 text-xs sm:text-sm font-semibold focus:outline-none focus:border-[#C2410C]"
                   />
                   <button
                     type="button"
                     onClick={handleTestNotification}
-                    className="text-xs font-semibold text-blue-600 hover:text-blue-800 underline ml-2"
+                    className="text-xs font-semibold text-[#C2410C] hover:text-[#9A3412] underline ml-2"
                   >
                     Send test ping
                   </button>
@@ -1160,12 +1160,12 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             )}
 
             {pushNotice && (
-              <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-800 flex items-center justify-between">
+              <div className="p-2.5 rounded-xl bg-[#FEF1E0] border border-[#F6D3AF] text-xs text-[#9F3014] flex items-center justify-between">
                 <span>{pushNotice}</span>
                 <button
                   type="button"
                   onClick={() => setPushNotice(null)}
-                  className="text-blue-500 hover:text-blue-800 font-bold ml-2"
+                  className="text-[#C2410C] hover:text-[#9A3412] font-bold ml-2"
                 >
                   ✕
                 </button>

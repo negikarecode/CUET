@@ -44,7 +44,7 @@ export default function MockAnalysisPage({ attemptId: propAttemptId }: { attempt
   if (!isClient) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-12 flex justify-center">
-        <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-3 border-[#C2410C] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -71,7 +71,7 @@ export default function MockAnalysisPage({ attemptId: propAttemptId }: { attempt
           <div className="pt-2">
             <Link
               href="/dashboard/mocks"
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs inline-flex items-center gap-2 transition-all"
+              className="px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-xs inline-flex items-center gap-2 transition-all"
             >
               <span>View All Mocks</span>
             </Link>

@@ -30,7 +30,7 @@ export function getInitials(name?: string): string {
 }
 
 export function getAvatarColor(_name?: string): { bg: string; text: string } {
-  return { bg: "bg-[#EFF6FF]", text: "text-[#2563EB]" };
+  return { bg: "bg-[#FEF1E0]", text: "text-[#C2410C]" };
 }
 
 export const Avatar: React.FC<AvatarProps> = ({
@@ -57,7 +57,7 @@ export const Avatar: React.FC<AvatarProps> = ({
       {shouldShowFallback ? (
         <div
           data-testid="avatar-fallback"
-          className="w-full h-full rounded-full flex items-center justify-center font-semibold bg-[#EFF6FF] text-[#2563EB] border border-[#CBD5E1]"
+          className="w-full h-full rounded-full flex items-center justify-center font-semibold bg-[#FEF1E0] text-[#C2410C] border border-[#F6D3AF]"
           aria-label={alt || name}
         >
           {initials}

@@ -84,7 +84,7 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
           </p>
           <Link
             href="/"
-            className="inline-block px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold"
+            className="inline-block px-4 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-bold"
           >
             Return to Dashboard
           </Link>
@@ -98,7 +98,7 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
       {/* Top Bar */}
       <div className="max-w-3xl mx-auto w-full flex items-center justify-between pb-6 border-b border-slate-800">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center font-black text-white text-lg shadow-md shadow-indigo-500/20">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C2410C] to-[#9A3412] flex items-center justify-center font-black text-white text-lg shadow-md shadow-[#C2410C]/20">
             C
           </div>
           <span className="font-black text-xl tracking-tight text-white">CUETMate</span>
@@ -106,7 +106,7 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
 
         <Link
           href="/signup"
-          className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md transition-all flex items-center gap-1.5"
+          className="px-4 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-bold shadow-md transition-all flex items-center gap-1.5"
         >
           <span>Try AI Coach Free</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -115,12 +115,12 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
 
       {/* Main Card View */}
       <div className="max-w-xl mx-auto w-full my-8 space-y-6">
-        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950/70 to-slate-900 border border-indigo-500/30 shadow-2xl space-y-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#2D0D05] via-[#441408] to-[#1A0602] border border-[#F6D3AF]/30 shadow-2xl space-y-6 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#C2410C]/10 rounded-full blur-3xl pointer-events-none" />
 
           {/* Card Header */}
           <div className="flex items-center justify-between">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-indigo-400">
+            <span className="text-xs uppercase font-extrabold tracking-widest text-[#F6D3AF]">
               {cardData.subject} Performance
             </span>
             <div className="flex items-center gap-2">
@@ -129,7 +129,7 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
                   ★ {cardData.milestoneBadge}
                 </span>
               )}
-              <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[11px] font-bold border border-indigo-500/30">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#C2410C]/20 text-[#F6D3AF] text-[11px] font-bold border border-[#F6D3AF]/30">
                 CUET UG 2027
               </span>
             </div>
@@ -148,7 +148,7 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
             <div className="text-4xl sm:text-5xl font-black text-slate-400">
               {cardData.fromAccuracy}%
             </div>
-            <div className="text-2xl sm:text-3xl font-bold text-indigo-400">→</div>
+            <div className="text-2xl sm:text-3xl font-bold text-[#F6D3AF]">→</div>
             <div className="text-4xl sm:text-5xl font-black text-emerald-400 drop-shadow-[0_0_25px_rgba(52,211,153,0.3)]">
               {cardData.toAccuracy}%
             </div>
@@ -173,14 +173,14 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
                   <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
                   <span className="font-semibold text-slate-200">{h.title}</span>
                 </div>
-                <span className="font-bold text-indigo-300">{h.detail}</span>
+                <span className="font-bold text-[#F6D3AF]">{h.detail}</span>
               </div>
             ))}
           </div>
 
           {/* Student Note */}
           {cardData.studentNote && (
-            <div className="p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xs italic text-center text-indigo-200">
+            <div className="p-3.5 rounded-xl bg-[#C2410C]/10 border border-[#C2410C]/20 text-xs italic text-center text-[#F6D3AF]">
               &ldquo;{cardData.studentNote}&rdquo;
             </div>
           )}
@@ -232,7 +232,7 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
             <button
               type="button"
               onClick={handleNativeShare}
-              className="p-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+              className="p-3 rounded-2xl bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Share2 className="w-3.5 h-3.5" />
               <span>Share</span>
@@ -248,7 +248,7 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
         </p>
         <Link
           href="/signup"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F6D3AF] hover:text-white"
         >
           <span>Create Free Aspirant Account</span>
           <ArrowRight className="w-3 h-3" />

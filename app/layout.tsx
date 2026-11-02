@@ -62,7 +62,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#4F46E5",
+  themeColor: "#C2410C",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -81,7 +81,7 @@ export default function RootLayout({
           <meta name="google-site-verification" content={gscVerification} />
         )}
       </head>
-      <body className="flex min-h-full flex-col bg-white font-sans text-slate-900 antialiased selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden w-full max-w-full">
+      <body className="flex min-h-full flex-col bg-[#FFF8F0] font-sans text-slate-900 antialiased selection:bg-[#FDF0E6] selection:text-[#C2410C] overflow-x-hidden w-full max-w-full">
         {gaId && (
           <>
             <Script

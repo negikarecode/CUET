@@ -166,7 +166,7 @@ export default function CBTPlayer() {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
         <div className="flex flex-col items-center gap-3 text-slate-500">
-          <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-3 border-[#C2410C] border-t-transparent rounded-full animate-spin" />
           <p className="text-xs font-semibold">Initializing NTA CBT Secure Engine...</p>
         </div>
       </div>
@@ -281,15 +281,15 @@ export default function CBTPlayer() {
                 <span className="hidden sm:inline">{t("back", "Back")}</span>
               </button>
 
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#C2410C] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
                 CBT
               </div>
               <div className="truncate min-w-0">
                 <div className="flex items-center gap-1.5 sm:gap-2">
-                  <h1 className="text-xs sm:text-base font-bold text-slate-900 truncate">
+                  <h1 className="text-xs sm:text-base font-bold text-white truncate">
                     {testMeta?.title ?? examConfig.name}
                   </h1>
-                  <span className="hidden md:inline rounded-full bg-blue-50 text-blue-700 border border-blue-200/80 px-2.5 py-0.5 text-[10px] font-semibold uppercase">
+                  <span className="hidden md:inline rounded-full bg-[#FDF0E6] text-[#C2410C] border border-[#F6D3AF] px-2.5 py-0.5 text-[10px] font-semibold uppercase">
                     {isMathExam
                       ? "CUET Mathematics • 40 Qs Allowed (15 Sec A + 25 Sec B)"
                       : questions.length <= 15 || testMeta?.title?.toLowerCase().includes("repair")
@@ -388,7 +388,7 @@ export default function CBTPlayer() {
                   onClick={() => jumpToQuestion(0)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                     currentSection === "A"
-                      ? "bg-blue-600 text-white shadow-xs"
+                      ? "bg-[#C2410C] text-white shadow-xs"
                       : "bg-slate-100 hover:bg-slate-200 text-slate-700"
                   }`}
                 >
@@ -410,7 +410,7 @@ export default function CBTPlayer() {
                   onClick={() => jumpToQuestion(15)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                     currentSection === "B1"
-                      ? "bg-blue-600 text-white shadow-xs"
+                      ? "bg-[#C2410C] text-white shadow-xs"
                       : secB2Answered > 0
                       ? "bg-slate-50 text-slate-400 opacity-60 cursor-not-allowed"
                       : "bg-slate-100 hover:bg-slate-200 text-slate-700"
@@ -438,7 +438,7 @@ export default function CBTPlayer() {
                   onClick={() => jumpToQuestion(50)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                     currentSection === "B2"
-                      ? "bg-blue-600 text-white shadow-xs"
+                      ? "bg-[#C2410C] text-white shadow-xs"
                       : secB1Answered > 0
                       ? "bg-slate-50 text-slate-400 opacity-60 cursor-not-allowed"
                       : "bg-slate-100 hover:bg-slate-200 text-slate-700"
@@ -463,7 +463,7 @@ export default function CBTPlayer() {
 
               <div className="flex items-center gap-2 text-xs font-medium text-slate-600">
                 <span className="font-semibold text-slate-900">Total Attempts:</span>
-                <span className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-blue-700 font-bold font-mono">
+                <span className="px-2 py-0.5 rounded-md bg-[#FDF0E6] border border-[#F6D3AF] text-[#C2410C] font-bold font-mono">
                   {secAAnswered + secB1Answered + secB2Answered} / 40 Allowed
                 </span>
                 <span className="hidden md:inline text-[11px] text-slate-500">(Max 200 Marks)</span>
@@ -770,7 +770,7 @@ function PaletteCard({
         <h2 className="font-bold text-slate-800 text-xs uppercase tracking-wider">
           {t("questionPalette", "Question Palette")}
         </h2>
-        <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/80">
+        <span className="text-[11px] font-semibold text-[#C2410C] bg-[#FDF0E6] px-2.5 py-0.5 rounded-full border border-[#F6D3AF]">
           {isMathExam ? "85 Qs (40 Allowed)" : `${questions.length} ${t("questionsCount", "Questions")}`}
         </span>
       </div>
@@ -888,7 +888,7 @@ function PaletteCard({
               onClick={() => onSelectQuestion(idx)}
               className={`relative h-10 min-h-[40px] rounded-xl text-xs font-mono font-semibold transition-all flex items-center justify-center cursor-pointer touch-manipulation ${colorClasses} ${
                 isCurrent
-                  ? "ring-2 ring-blue-600 ring-offset-2 scale-105 z-10 shadow-sm"
+                  ? "ring-2 ring-[#C2410C] ring-offset-2 scale-105 z-10 shadow-sm"
                   : ""
               }`}
               title={`Question ${idx + 1}: ${status.replace("_", " ")}`}

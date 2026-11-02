@@ -232,7 +232,7 @@ export default function PricingView() {
               <UpgradeButton
                 planId="all_access_pass_799"
                 variant="primary"
-                className="w-full text-center py-3.5 shadow-md shadow-blue-500/10"
+                className="w-full text-center py-3.5 shadow-md shadow-orange-500/10"
                 buttonText={`Get CUETMate Premium (₹${pricing.currentPriceInr})`}
               />
             )}
@@ -258,64 +258,64 @@ export default function PricingView() {
                 <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-semibold">
                   <th className="py-4 px-6">Feature</th>
                   <th className="py-4 px-6 text-center w-36">Free Starter</th>
-                  <th className="py-4 px-6 text-center w-48 text-indigo-700 bg-indigo-50/50">CUETMate Premium</th>
+                  <th className="py-4 px-6 text-center w-48 text-[#9F3014] bg-[#FEF1E0]">CUETMate Premium</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                 <tr>
                   <td className="py-3.5 px-6">Domain Mock Tests (50 Qs)</td>
                   <td className="py-3.5 px-6 text-center text-slate-500">First 3 Tests</td>
-                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-indigo-50/20">Unlimited (400+)</td>
+                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-[#FEF1E0]/30">Unlimited (400+)</td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Unit Practice Tests</td>
                   <td className="py-3.5 px-6 text-center text-slate-500">First 3 Units</td>
-                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-indigo-50/20">Unlimited (100+)</td>
+                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-[#FEF1E0]/30">Unlimited (100+)</td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Official Past Year Papers (PYQ)</td>
                   <td className="py-3.5 px-6 text-center text-slate-500">1 per Subject</td>
-                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-indigo-50/20">Unlimited All Subjects</td>
+                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-[#FEF1E0]/30">Unlimited All Subjects</td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Where Do I Stand (College Predictor)</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-indigo-50/20"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Subject Weakness Radar & Deep Diagnosis</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-indigo-50/20"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Target College Cutoff Standing & Gaps</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-indigo-50/20"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">NCERT Mistake Decrypter & Doubt Solver</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-indigo-50/20"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Adaptive 15-Question Repair Drills</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-indigo-50/20"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Sunday Ritual Mentor AI Debriefs</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-indigo-50/20"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Official NTA +5 / -1 Marking Engine</td>
                   <td className="py-3.5 px-6 text-center text-emerald-600"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-indigo-50/20"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Access Duration</td>
                   <td className="py-3.5 px-6 text-center text-slate-500">Ongoing</td>
-                  <td className="py-3.5 px-6 text-center font-semibold text-slate-800 bg-indigo-50/20">Full 2026 Exam Cycle</td>
+                  <td className="py-3.5 px-6 text-center font-semibold text-slate-800 bg-[#FEF1E0]/30">Full 2026 Exam Cycle</td>
                 </tr>
               </tbody>
             </table>

@@ -178,7 +178,7 @@ export default function CBTMatchTheFollowingView({
     <div className={`space-y-4 my-2 ${className}`}>
       {data.intro && (
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+          <span className="w-2 h-2 rounded-full bg-[#C2410C] shrink-0" />
           <h4 className="font-semibold text-slate-900 text-sm sm:text-base">
             <MathRenderer text={data.intro} inline />
           </h4>
@@ -201,7 +201,7 @@ export default function CBTMatchTheFollowingView({
                 key={item.id}
                 className="p-3 bg-white rounded-xl border border-slate-200/70 shadow-2xs flex items-start gap-2.5 text-xs sm:text-sm text-slate-800"
               >
-                <span className="px-2 py-0.5 rounded-lg bg-blue-50 text-blue-700 font-bold text-xs shrink-0 border border-blue-100">
+                <span className="px-2 py-0.5 rounded-lg bg-[#FDF0E6] text-[#C2410C] font-bold text-xs shrink-0 border border-[#F6D3AF]">
                   ({item.id})
                 </span>
                 <div className="flex-1 leading-relaxed">

@@ -10,7 +10,7 @@ interface SubjectWisePerformanceProps {
 
 const getSubjectIcon = (subject: string) => {
   const s = subject.toLowerCase();
-  if (s.includes('phys')) return <Atom className="w-4 h-4 text-blue-600" />;
+  if (s.includes('phys')) return <Atom className="w-4 h-4 text-[#C2410C]" />;
   if (s.includes('chem')) return <FlaskConical className="w-4 h-4 text-orange-600" />;
   if (s.includes('math')) return <Binary className="w-4 h-4 text-emerald-600" />;
   if (s.includes('eng')) return <Languages className="w-4 h-4 text-purple-600" />;
@@ -20,7 +20,7 @@ const getSubjectIcon = (subject: string) => {
 
 const getSubjectBgLight = (subject: string) => {
   const s = subject.toLowerCase();
-  if (s.includes('phys')) return 'bg-blue-50';
+  if (s.includes('phys')) return 'bg-[#FDF0E6]';
   if (s.includes('chem')) return 'bg-orange-50';
   if (s.includes('math')) return 'bg-emerald-50';
   if (s.includes('eng')) return 'bg-purple-50';
@@ -30,7 +30,7 @@ const getSubjectBgLight = (subject: string) => {
 
 const getSubjectColor = (subject: string) => {
   const s = subject.toLowerCase();
-  if (s.includes('phys')) return '#3B82F6';
+  if (s.includes('phys')) return '#C2410C';
   if (s.includes('chem')) return '#F97316';
   if (s.includes('math')) return '#10B981';
   if (s.includes('eng')) return '#8B5CF6';
@@ -65,7 +65,7 @@ export const SubjectWisePerformance: React.FC<SubjectWisePerformanceProps> = ({
         {displaySubjects.length > 0 && (
           <button 
             onClick={() => setShowModal(true)}
-            className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg text-blue-600 hover:text-blue-700 action-glow group cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg text-[#C2410C] hover:text-[#9A3412] action-glow group cursor-pointer"
           >
             <span>View Details</span>
             <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -93,7 +93,7 @@ export const SubjectWisePerformance: React.FC<SubjectWisePerformanceProps> = ({
                       {getSubjectIcon(item.subject)}
                     </div>
                     <div>
-                      <span className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                      <span className="text-sm font-bold text-slate-800 group-hover:text-[#C2410C] transition-colors">
                         {item.subject}
                       </span>
                       <span className="text-xs font-bold text-slate-900 ml-2">
@@ -143,7 +143,7 @@ export const SubjectWisePerformance: React.FC<SubjectWisePerformanceProps> = ({
         {displaySubjects.length > 0 && (
           <button 
             onClick={() => setShowModal(true)}
-            className="font-semibold text-blue-600 px-2 py-0.5 rounded-md action-glow text-[11px] cursor-pointer"
+            className="font-semibold text-[#C2410C] px-2 py-0.5 rounded-md action-glow text-[11px] cursor-pointer"
           >
             Deep Dive →
           </button>
@@ -156,7 +156,7 @@ export const SubjectWisePerformance: React.FC<SubjectWisePerformanceProps> = ({
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-xl bg-[#FDF0E6] text-[#C2410C] flex items-center justify-center font-bold">
                   %
                 </div>
                 <h3 className="font-bold text-slate-900 text-lg">Subject Performance Breakdown</h3>
@@ -199,7 +199,7 @@ export const SubjectWisePerformance: React.FC<SubjectWisePerformanceProps> = ({
             <div className="flex items-center gap-2 pt-2">
               <Link
                 href="/dashboard/mocks"
-                className="flex-1 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl text-xs text-center transition-all action-glow"
+                className="flex-1 py-2.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold rounded-xl text-xs text-center transition-all action-glow"
               >
                 Launch Mock Practice
               </Link>

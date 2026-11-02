@@ -445,7 +445,7 @@ export default function CollegeStandingsTable({
                   setCurrentPage(1);
                 }}
                 placeholder="Search colleges..."
-                className="w-full pl-8 pr-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-500"
+                className="w-full pl-8 pr-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#C2410C]"
               />
             </div>
 
@@ -553,7 +553,7 @@ export default function CollegeStandingsTable({
                   stroke="#C2410C"
                   strokeWidth={2.5}
                   connectNulls={false}
-                  dot={{ r: 4, fill: "#2563EB" }}
+                  dot={{ r: 4, fill: "#C2410C" }}
                   activeDot={{ r: 6 }}
                   label={{
                     position: "top",
@@ -694,7 +694,7 @@ export default function CollegeStandingsTable({
                           onSelectCollegeForTrend(item.collegeName);
                         }
                       }}
-                      className={`hover:bg-[#FFF8F0]/80 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
+                      className={`hover:bg-[#FFF8F0]/80 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C2410C] focus:ring-inset ${
                         isSavedTarget
                           ? "bg-[#FFF5EA] border-l-4 border-l-[#C2410C]"
                           : isSelected || isViewing
@@ -783,7 +783,7 @@ export default function CollegeStandingsTable({
                             e.stopPropagation();
                             onSelectCollegeForTrend(item.collegeName);
                           }}
-                          className="px-3 py-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+                          className="px-3 py-1.5 text-xs font-semibold text-[#C2410C] hover:text-[#9A3412] hover:bg-[#FDF0E6] rounded-lg transition-colors cursor-pointer"
                         >
                           {isSelected ? "Viewing Trend" : "View Trend"}
                         </button>
@@ -847,11 +847,11 @@ export default function CollegeStandingsTable({
                       onSelectCollegeForTrend(item.collegeName);
                     }
                   }}
-                  className={`p-4 rounded-xl border transition-all space-y-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`p-4 rounded-xl border transition-all space-y-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C2410C] ${
                     isSavedTarget
-                      ? "bg-blue-50/70 border-blue-300"
+                      ? "bg-[#FEF1E0] border-[#F6D3AF]"
                       : isSelected || isViewing
-                      ? "bg-blue-50/40 border-blue-200"
+                      ? "bg-[#FFF5EA] border-[#F6D3AF]"
                       : "bg-white border-slate-200"
                   }`}
                 >
@@ -927,7 +927,7 @@ export default function CollegeStandingsTable({
                       e.stopPropagation();
                       onSelectCollegeForTrend(item.collegeName);
                     }}
-                    className="w-full py-1.5 text-center text-xs font-semibold text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-100 cursor-pointer"
+                    className="w-full py-1.5 text-center text-xs font-semibold text-[#C2410C] hover:bg-[#FDF0E6] rounded-lg transition-colors border border-[#F6D3AF] cursor-pointer"
                   >
                     {isSelected ? "Viewing Cutoff Trend" : "View Cutoff Trend"}
                   </button>
@@ -951,7 +951,7 @@ export default function CollegeStandingsTable({
                 }}
                 className={`px-2.5 py-1 rounded-md text-xs sm:text-sm font-semibold cursor-pointer ${
                   pageSize === size
-                    ? "bg-blue-600 text-white shadow-2xs"
+                    ? "bg-[#C2410C] text-white shadow-2xs"
                     : "bg-slate-100 hover:bg-slate-200 text-slate-700"
                 }`}
               >

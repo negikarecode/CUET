@@ -51,13 +51,13 @@ export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onS
   const getTestIcon = (title: string) => {
     if (title.toLowerCase().includes('physics')) {
       return (
-        <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-[#FDF0E6] border border-[#F6D3AF] flex items-center justify-center text-[#C2410C] shrink-0">
           <Atom className="w-5 h-5" />
         </div>
       );
     }
     return (
-      <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+      <div className="w-10 h-10 rounded-xl bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center text-[#9F3014] shrink-0">
         <FileText className="w-5 h-5" />
       </div>
     );
@@ -78,7 +78,7 @@ export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onS
 
         <button 
           onClick={() => router.push('/dashboard/mocks')}
-          className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg text-blue-600 hover:text-blue-700 action-glow group"
+          className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg text-[#C2410C] hover:text-[#9A3412] action-glow group"
         >
           <span>View All</span>
           <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -146,7 +146,7 @@ export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onS
                       }}
                       className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2 font-medium action-glow"
                     >
-                      <Play className="w-3.5 h-3.5 text-blue-600" />
+                      <Play className="w-3.5 h-3.5 text-[#C2410C]" />
                       <span>{test.status === 'Ready' ? 'Start Mock Test' : 'Test Instructions'}</span>
                     </button>
                     <button
@@ -184,8 +184,8 @@ export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onS
           <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                  <Play className="w-4 h-4 fill-blue-600" />
+                <div className="w-9 h-9 rounded-xl bg-[#FDF0E6] text-[#C2410C] flex items-center justify-center">
+                  <Play className="w-4 h-4 fill-[#C2410C]" />
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 text-sm sm:text-base">{activeModalTest.title}</h3>
@@ -243,7 +243,7 @@ export const UpcomingMockTests: React.FC<UpcomingMockTestsProps> = ({ tests, onS
                     router.push('/dashboard/mocks');
                   }
                 }}
-                className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-colors shadow-sm shadow-blue-500/20 action-glow"
+                className="flex-1 py-2.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold rounded-xl text-xs transition-colors shadow-sm shadow-orange-500/20 action-glow"
               >
                 Launch Mock Exam
               </button>

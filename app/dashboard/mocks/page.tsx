@@ -89,8 +89,8 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     name: "Science Stream",
     shortName: "Science",
     badge: "7 Domains",
-    accentBg: "#E0F2FE",
-    accentText: "#0369A1",
+    accentBg: "#FDF0E6",
+    accentText: "#C2410C",
     subjects: [
       "physics",
       "chemistry",
@@ -140,8 +140,8 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     name: "General Subjects (English & GAT)",
     shortName: "General Subjects",
     badge: "2 Subjects",
-    accentBg: "#EEF2FF",
-    accentText: "#4F46E5",
+    accentBg: "#FEF1E0",
+    accentText: "#9F3014",
     subjects: [
       "english",
       "general-test",

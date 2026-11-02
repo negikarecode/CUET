@@ -390,7 +390,7 @@ export default function AICoachClient({
               ? "bg-rose-50 border-rose-200 text-rose-800"
               : statusMessage.type === "success"
               ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-              : "bg-blue-50 border-blue-200 text-blue-800"
+              : "bg-[#FEF1E0] border-[#F6D3AF] text-[#9F3014]"
           }`}
         >
           <div className="flex items-center gap-2.5">
@@ -399,7 +399,7 @@ export default function AICoachClient({
             ) : statusMessage.type === "success" ? (
               <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-600" />
             ) : (
-              <RefreshCw className="w-5 h-5 shrink-0 text-blue-600 animate-spin" />
+              <RefreshCw className="w-5 h-5 shrink-0 text-[#C2410C] animate-spin" />
             )}
             <p className="text-xs sm:text-sm font-medium">{statusMessage.text}</p>
           </div>
@@ -721,7 +721,7 @@ export default function AICoachClient({
             {activeReport.stats_json.mistakeTags && (
               <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-2.5">
                 <div className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <Tag className="w-3.5 h-3.5 text-indigo-600" />
+                  <Tag className="w-3.5 h-3.5 text-[#C2410C]" />
                   <span>Student-Tagged Mistake Categories</span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
@@ -747,8 +747,8 @@ export default function AICoachClient({
 
             {/* Diagnostic Summary */}
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-              <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
-                <Sparkles className="w-4 h-4 text-indigo-600" />
+              <div className="flex items-center gap-2 text-[#C2410C] font-bold text-sm">
+                <Sparkles className="w-4 h-4 text-[#C2410C]" />
                 <span>Coach Diagnostic Brief</span>
               </div>
               <p className="text-sm text-slate-700 leading-relaxed">
@@ -784,8 +784,8 @@ export default function AICoachClient({
                             {leak.likelyConfusion}
                           </div>
                         )}
-                        <div className="text-xs text-indigo-900 bg-indigo-50/70 p-2.5 rounded-xl border border-indigo-100">
-                          <span className="font-semibold text-indigo-700">Fix: </span>
+                        <div className="text-xs text-[#441408] bg-[#FEF1E0] p-2.5 rounded-xl border border-[#F6D3AF]">
+                          <span className="font-semibold text-[#9F3014]">Fix: </span>
                           {leak.fix}
                         </div>
                       </div>
@@ -903,15 +903,15 @@ export default function AICoachClient({
                 </ul>
               </div>
 
-              <div className="p-5 rounded-2xl bg-blue-50/40 border border-blue-200/80 space-y-3">
-                <div className="flex items-center gap-2 text-blue-800 font-bold text-sm">
-                  <Target className="w-4 h-4 text-blue-600" />
+              <div className="p-5 rounded-2xl bg-[#FEF1E0]/50 border border-[#F6D3AF] space-y-3">
+                <div className="flex items-center gap-2 text-[#441408] font-bold text-sm">
+                  <Target className="w-4 h-4 text-[#C2410C]" />
                   <span>Test-Taking Strategy</span>
                 </div>
                 <ul className="space-y-2">
                   {activeReport.report_json.test_taking_strategy.map((st, idx) => (
-                    <li key={idx} className="text-xs text-blue-950 flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                    <li key={idx} className="text-xs text-[#441408] flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#C2410C] mt-1.5 shrink-0" />
                       <span>{st}</span>
                     </li>
                   ))}
@@ -1014,7 +1014,7 @@ export default function AICoachClient({
           </div>
         ) : (
           <div className="text-center py-12 space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mx-auto text-indigo-600">
+            <div className="w-12 h-12 rounded-2xl bg-[#FDF0E6] border border-[#F6D3AF] flex items-center justify-center mx-auto text-[#C2410C]">
               <Sparkles className="w-6 h-6" />
             </div>
             <h4 className="text-base font-bold text-slate-800">

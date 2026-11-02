@@ -325,7 +325,7 @@ export default function SearchableSelect({
         aria-expanded={isOpen}
         aria-controls={listboxId}
         aria-label={ariaLabel || placeholder}
-        className={`w-full bg-slate-50 hover:bg-slate-100/90 text-slate-800 font-semibold text-[13px] px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors flex items-center justify-between gap-2 text-left disabled:opacity-50 disabled:cursor-not-allowed ${buttonClassName}`}
+        className={`w-full bg-slate-50 hover:bg-slate-100/90 text-slate-800 font-semibold text-[13px] px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C] transition-colors flex items-center justify-between gap-2 text-left disabled:opacity-50 disabled:cursor-not-allowed ${buttonClassName}`}
       >
         <div className="flex items-center gap-2 min-w-0 truncate">
           {SelectedIcon && (
@@ -364,7 +364,7 @@ export default function SearchableSelect({
           )}
           <ChevronDown
             className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
-              isOpen ? "rotate-180 text-blue-600" : ""
+              isOpen ? "rotate-180 text-[#C2410C]" : ""
             }`}
           />
         </div>
@@ -418,7 +418,7 @@ export default function SearchableSelect({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={searchPlaceholder}
                 aria-label={searchPlaceholder}
-                className="w-full pl-9 pr-8 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                className="w-full pl-9 pr-8 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C]"
               />
               {searchQuery && (
                 <button
@@ -447,7 +447,7 @@ export default function SearchableSelect({
                       setSearchQuery("");
                       searchInputRef.current?.focus();
                     }}
-                    className="text-xs text-blue-600 font-semibold hover:underline"
+                    className="text-xs text-[#C2410C] font-semibold hover:underline"
                   >
                     Clear search
                   </button>
@@ -480,7 +480,7 @@ export default function SearchableSelect({
                                   onMouseEnter={() => setHighlightedIndex(currIdx)}
                                   className={`w-full flex items-center justify-between gap-2 px-2.5 py-2 rounded-xl text-left text-xs transition-all cursor-pointer ${
                                     isSelected
-                                      ? "bg-blue-50 text-blue-700 font-bold"
+                                      ? "bg-[#FEF1E0] text-[#9F3014] font-bold"
                                       : isHighlighted
                                       ? "bg-slate-100 text-slate-900 font-semibold"
                                       : "text-slate-700 hover:bg-slate-50 font-medium"
@@ -490,7 +490,7 @@ export default function SearchableSelect({
                                     {OptIcon && (
                                       <OptIcon
                                         className={`w-4 h-4 shrink-0 ${
-                                          isSelected ? "text-blue-600" : "text-slate-400"
+                                          isSelected ? "text-[#C2410C]" : "text-slate-400"
                                         }`}
                                       />
                                     )}
@@ -513,7 +513,7 @@ export default function SearchableSelect({
                                       </span>
                                     )}
                                     {isSelected && (
-                                      <Check className="w-4 h-4 text-blue-600 shrink-0 stroke-[2.5]" />
+                                      <Check className="w-4 h-4 text-[#C2410C] shrink-0 stroke-[2.5]" />
                                     )}
                                   </div>
                                 </button>
@@ -541,7 +541,7 @@ export default function SearchableSelect({
                         onMouseEnter={() => setHighlightedIndex(currIdx)}
                         className={`w-full flex items-center justify-between gap-2 px-2.5 py-2 rounded-xl text-left text-xs transition-all cursor-pointer ${
                           isSelected
-                            ? "bg-blue-50 text-blue-700 font-bold"
+                            ? "bg-[#FEF1E0] text-[#9F3014] font-bold"
                             : isHighlighted
                             ? "bg-slate-100 text-slate-900 font-semibold"
                             : "text-slate-700 hover:bg-slate-50 font-medium"
@@ -551,7 +551,7 @@ export default function SearchableSelect({
                           {OptIcon && (
                             <OptIcon
                               className={`w-4 h-4 shrink-0 ${
-                                isSelected ? "text-blue-600" : "text-slate-400"
+                                isSelected ? "text-[#C2410C]" : "text-slate-400"
                               }`}
                             />
                           )}
@@ -574,7 +574,7 @@ export default function SearchableSelect({
                             </span>
                           )}
                           {isSelected && (
-                            <Check className="w-4 h-4 text-blue-600 shrink-0 stroke-[2.5]" />
+                            <Check className="w-4 h-4 text-[#C2410C] shrink-0 stroke-[2.5]" />
                           )}
                         </div>
                       </button>

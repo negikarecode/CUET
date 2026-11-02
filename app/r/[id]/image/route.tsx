@@ -86,7 +86,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
             right: "-10%",
             width: "500px",
             height: "500px",
-            background: "radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(0,0,0,0) 70%)",
+            background: "radial-gradient(circle, rgba(194, 65, 12, 0.25) 0%, rgba(0,0,0,0) 70%)",
             borderRadius: "50%",
           }}
         />
@@ -118,14 +118,14 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
                 width: "44px",
                 height: "44px",
                 borderRadius: "14px",
-                background: "linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)",
+                background: "linear-gradient(135deg, #c2410c 0%, #9a3412 100%)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: 900,
                 fontSize: "24px",
                 color: "#ffffff",
-                boxShadow: "0 4px 14px rgba(79, 70, 229, 0.4)",
+                boxShadow: "0 4px 14px rgba(194, 65, 12, 0.4)",
               }}
             >
               C
@@ -161,9 +161,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
               style={{
                 padding: "8px 18px",
                 borderRadius: "999px",
-                background: "rgba(99, 102, 241, 0.2)",
-                border: "1px solid rgba(99, 102, 241, 0.4)",
-                color: "#c7d2fe",
+                background: "rgba(194, 65, 12, 0.2)",
+                border: "1px solid rgba(246, 211, 175, 0.4)",
+                color: "#f6d3af",
                 fontSize: "14px",
                 fontWeight: 800,
                 letterSpacing: "0.5px",
@@ -190,7 +190,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
               fontWeight: 800,
               textTransform: "uppercase",
               letterSpacing: "2px",
-              color: "#818cf8",
+              color: "#f6d3af",
               marginBottom: "8px",
             }}
           >
@@ -232,7 +232,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
               style={{
                 fontSize: isOg ? "44px" : "60px",
                 fontWeight: 900,
-                color: "#6366f1",
+                color: "#f6d3af",
               }}
             >
               →
@@ -330,9 +330,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
               style={{
                 padding: isOg ? "10px 20px" : "14px 24px",
                 borderRadius: "16px",
-                background: "rgba(99, 102, 241, 0.12)",
-                border: "1px dashed rgba(99, 102, 241, 0.35)",
-                color: "#e0e7ff",
+                background: "rgba(194, 65, 12, 0.12)",
+                border: "1px dashed rgba(246, 211, 175, 0.35)",
+                color: "#fef1e0",
                 fontSize: isOg ? "14px" : "16px",
                 fontStyle: "italic",
                 textAlign: "center",

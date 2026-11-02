@@ -57,27 +57,27 @@ const SUBJECT_STREAM_MAP: Record<
   string,
   { stream: StreamKey; icon: any; accentColor: string; badgeBg: string }
 > = {
-  physics: { stream: "science", icon: Atom, accentColor: "#0284C7", badgeBg: "#E0F2FE" },
+  physics: { stream: "science", icon: Atom, accentColor: "#C2410C", badgeBg: "#FEF1E0" },
   chemistry: { stream: "science", icon: FlaskConical, accentColor: "#7C3AED", badgeBg: "#EDE9FE" },
-  maths: { stream: "science", icon: Calculator, accentColor: "#2563EB", badgeBg: "#DBEAFE" },
+  maths: { stream: "science", icon: Calculator, accentColor: "#B45309", badgeBg: "#FEF3C7" },
   bio: { stream: "science", icon: Dna, accentColor: "#059669", badgeBg: "#D1FAE5" },
   accountancy: { stream: "commerce", icon: Calculator, accentColor: "#D97706", badgeBg: "#FEF3C7" },
   eco: { stream: "commerce", icon: TrendingUp, accentColor: "#0D9488", badgeBg: "#CCFBF1" },
-  bst: { stream: "commerce", icon: Briefcase, accentColor: "#4F46E5", badgeBg: "#E0E7FF" },
+  bst: { stream: "commerce", icon: Briefcase, accentColor: "#9A3412", badgeBg: "#FDF0E6" },
   history: { stream: "humanities", icon: ScrollText, accentColor: "#B45309", badgeBg: "#FEF3C7" },
   "pol science": { stream: "humanities", icon: Landmark, accentColor: "#DC2626", badgeBg: "#FEE2E2" },
-  geo: { stream: "humanities", icon: Globe, accentColor: "#0284C7", badgeBg: "#E0F2FE" },
+  geo: { stream: "humanities", icon: Globe, accentColor: "#0D9488", badgeBg: "#CCFBF1" },
   psychology: { stream: "humanities", icon: BrainCircuit, accentColor: "#9333EA", badgeBg: "#F3E8FF" },
   sociology: { stream: "humanities", icon: Users, accentColor: "#EA580C", badgeBg: "#FFEDD5" },
   physical_education: { stream: "applied", icon: Activity, accentColor: "#16A34A", badgeBg: "#DCFCE7" },
-  computer_science: { stream: "science", icon: Laptop, accentColor: "#0284C7", badgeBg: "#E0F2FE" },
+  computer_science: { stream: "science", icon: Laptop, accentColor: "#78350F", badgeBg: "#FEF3C7" },
   home_science: { stream: "applied", icon: Home, accentColor: "#DB2777", badgeBg: "#FCE7F3" },
-  mass_media: { stream: "applied", icon: Tv, accentColor: "#6366F1", badgeBg: "#EEF2FF" },
+  mass_media: { stream: "applied", icon: Tv, accentColor: "#C2410C", badgeBg: "#FEF1E0" },
   environmental_studies: { stream: "applied", icon: Leaf, accentColor: "#059669", badgeBg: "#D1FAE5" },
   fine_arts: { stream: "applied", icon: Palette, accentColor: "#CA8A04", badgeBg: "#FEF08A" },
   agriculture: { stream: "applied", icon: Sprout, accentColor: "#15803D", badgeBg: "#DCFCE7" },
   anthropology: { stream: "humanities", icon: Footprints, accentColor: "#854D0E", badgeBg: "#FEF9C3" },
-  english: { stream: "applied", icon: FileText, accentColor: "#2563EB", badgeBg: "#DBEAFE" },
+  english: { stream: "applied", icon: FileText, accentColor: "#9F3014", badgeBg: "#FEF1E0" },
   "general-test": { stream: "applied", icon: Layers, accentColor: "#7C3AED", badgeBg: "#EDE9FE" },
 };
 
@@ -96,8 +96,8 @@ export default function PracticeTestsHubPage() {
       const meta = SUBJECT_STREAM_MAP[folder] || {
         stream: "applied" as StreamKey,
         icon: BookOpen,
-        accentColor: "#2563EB",
-        badgeBg: "#DBEAFE",
+        accentColor: "#C2410C",
+        badgeBg: "#FEF1E0",
       };
       const unitsCount = data.units.length;
       return {
@@ -306,17 +306,17 @@ export default function PracticeTestsHubPage() {
 
       {/* 2. Recommended for Your Target Section */}
       {showRecommendedRow ? (
-        <div className="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 rounded-2xl border border-blue-200/80 p-5 shadow-xs space-y-4">
+        <div className="bg-[#FEF1E0] rounded-2xl border border-[#F6D3AF] p-5 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+              <Sparkles className="w-4 h-4 text-[#C2410C] shrink-0" />
               <h2 className="text-sm sm:text-base font-bold text-slate-900">
                 Recommended for your target: {target.college} ({target.course})
               </h2>
             </div>
             <Link
               href="/dashboard/profile"
-              className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline self-start sm:self-auto"
+              className="text-xs font-semibold text-[#C2410C] hover:text-[#9A3412] hover:underline self-start sm:self-auto"
             >
               Change target in Profile
             </Link>
@@ -405,12 +405,12 @@ export default function PracticeTestsHubPage() {
       ) : !target.hasTarget && !isSearchActive ? (
         <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex items-center justify-between gap-3 text-xs text-slate-600">
           <div className="flex items-center gap-2">
-            <Target className="w-4 h-4 text-blue-600 shrink-0" />
+            <Target className="w-4 h-4 text-[#C2410C] shrink-0" />
             <span>Target college not configured. Set your dream college to get prioritized subjects.</span>
           </div>
           <Link
             href="/dashboard/profile"
-            className="font-bold text-blue-600 hover:underline shrink-0"
+            className="font-bold text-[#C2410C] hover:text-[#9A3412] hover:underline shrink-0"
           >
             Set your dream college
           </Link>
@@ -477,7 +477,7 @@ export default function PracticeTestsHubPage() {
                 onClick={() => setStatusFilter("started")}
                 className={`px-3 py-1 rounded-lg font-semibold transition-all ${
                   statusFilter === "started"
-                    ? "bg-white text-blue-700 shadow-xs font-bold"
+                    ? "bg-white text-[#C2410C] shadow-xs font-bold"
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
@@ -504,7 +504,7 @@ export default function PracticeTestsHubPage() {
               placeholder="Filter by name or code..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+              className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C] transition-all"
             />
           </div>
         </div>

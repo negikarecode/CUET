@@ -29,13 +29,13 @@ export default function CheckoutTestClient() {
               onClick={() => setSelectedPlan("standard")}
               className={`p-4 rounded-2xl border text-left transition-all ${
                 selectedPlan === "standard"
-                  ? "border-indigo-600 bg-indigo-50/40 ring-2 ring-indigo-600/20"
+                  ? "border-[#C2410C] bg-[#FEF1E0] ring-2 ring-[#C2410C]/20"
                   : "border-slate-200 hover:border-slate-300 bg-slate-50/50"
               }`}
             >
               <div className="flex items-center justify-between">
                 <span className="font-bold text-slate-900 text-sm">CUETMate Premium</span>
-                <span className="text-xs font-extrabold text-indigo-700 bg-indigo-100 px-2.5 py-0.5 rounded-full">
+                <span className="text-xs font-extrabold text-[#C2410C] bg-[#FDF0E6] px-2.5 py-0.5 rounded-full">
                   ₹2
                 </span>
               </div>
@@ -48,7 +48,7 @@ export default function CheckoutTestClient() {
                 onClick={() => setSelectedPlan("test")}
                 className={`p-4 rounded-2xl border text-left transition-all ${
                   selectedPlan === "test"
-                    ? "border-indigo-600 bg-indigo-50/40 ring-2 ring-indigo-600/20"
+                    ? "border-[#C2410C] bg-[#FEF1E0] ring-2 ring-[#C2410C]/20"
                     : "border-slate-200 hover:border-slate-300 bg-slate-50/50"
                 }`}
               >
@@ -125,7 +125,7 @@ export default function CheckoutTestClient() {
         <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
           <Link
             href="/pricing"
-            className="inline-flex items-center gap-1.5 text-indigo-600 font-semibold hover:text-indigo-800 transition-colors"
+            className="inline-flex items-center gap-1.5 text-[#C2410C] font-semibold hover:text-[#9A3412] transition-colors"
           >
             <span>View Full Pricing Page</span>
             <ArrowRight className="w-3.5 h-3.5" />

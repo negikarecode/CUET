@@ -222,7 +222,7 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
           {activeTab === "comparison" && comp && (
             <div className="space-y-6">
               {/* Header Banner */}
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-indigo-950 text-white space-y-1 shadow-sm">
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-[#441408] to-[#2D0D05] text-white space-y-1 shadow-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">
                     CYCLE {comp.previousCycleNumber} → CYCLE {comp.currentCycleNumber} DELTA
@@ -419,7 +419,7 @@ export function CycleAnalysisModal({ cycle, onClose }: CycleAnalysisModalProps) 
                         </div>
                         <p className="text-xs font-medium text-slate-600">{focus.reason}</p>
                         <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/60 text-[11px] font-semibold text-slate-800 flex items-center gap-1.5">
-                          <ArrowRight className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                          <ArrowRight className="w-3.5 h-3.5 text-[#C2410C] shrink-0" />
                           <span>Action: {focus.recommendedDrill}</span>
                         </div>
                       </div>

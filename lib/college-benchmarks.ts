@@ -189,7 +189,7 @@ export function calculateCollegeReadiness(
       deltaPercentile: Math.round((predicted - cutoff) * 10) / 10,
       status: "calibrating",
       statusLabel: "Calibration Underway",
-      statusBadgeClass: "bg-blue-50 text-blue-800 border-blue-200",
+      statusBadgeClass: "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]",
       recommendation: `Attempt at least 150 questions across Domain mocks to calibrate accurate percentile prediction against ${collegeName || "your target college"}.`,
     };
   }

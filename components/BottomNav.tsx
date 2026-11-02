@@ -94,7 +94,7 @@ export default function BottomNav() {
                   href={item.href}
                   className={`flex flex-col items-center justify-center min-h-[44px] py-1 rounded-xl transition-all touch-manipulation cursor-pointer ${
                     item.isActive
-                      ? "text-blue-600 font-bold"
+                      ? "text-[#C2410C] font-bold"
                       : "text-slate-500 hover:text-slate-800 font-medium"
                   }`}
                   aria-current={item.isActive ? "page" : undefined}
@@ -102,13 +102,13 @@ export default function BottomNav() {
                   <div
                     className={`relative p-1.5 rounded-xl transition-all ${
                       item.isActive
-                        ? "bg-blue-50 text-blue-600 shadow-2xs scale-105"
+                        ? "bg-[#FDF0E6] text-[#C2410C] shadow-2xs scale-105"
                         : "hover:bg-slate-100/70"
                     }`}
                   >
                     <Icon className="w-4 h-4 stroke-[2.2]" />
                     {item.isActive && (
-                      <span className="absolute -top-0.5 right-1 w-1.5 h-1.5 bg-blue-600 rounded-full" />
+                      <span className="absolute -top-0.5 right-1 w-1.5 h-1.5 bg-[#C2410C] rounded-full" />
                     )}
                   </div>
                   <span className="text-[10px] mt-0.5 tracking-tight leading-none truncate max-w-[56px]">
@@ -128,14 +128,14 @@ export default function BottomNav() {
               href="/"
               className={`flex flex-col items-center justify-center min-h-[44px] py-1 rounded-xl transition-all touch-manipulation cursor-pointer ${
                 pathname === "/"
-                  ? "text-blue-600 font-bold"
+                  ? "text-[#C2410C] font-bold"
                   : "text-slate-500 hover:text-slate-800 font-medium"
               }`}
               aria-current={pathname === "/" ? "page" : undefined}
             >
               <div
                 className={`p-1.5 rounded-xl transition-all ${
-                  pathname === "/" ? "bg-blue-50 text-blue-600 shadow-2xs scale-105" : "hover:bg-slate-100/70"
+                  pathname === "/" ? "bg-[#FDF0E6] text-[#C2410C] shadow-2xs scale-105" : "hover:bg-slate-100/70"
                 }`}
               >
                 <Home className="w-4 h-4 stroke-[2.2]" />
@@ -190,14 +190,14 @@ export default function BottomNav() {
                 href="/dashboard"
                 className={`flex flex-col items-center justify-center min-h-[44px] py-1 rounded-xl transition-all touch-manipulation cursor-pointer ${
                   isDashboardRoute
-                    ? "text-blue-600 font-bold"
+                    ? "text-[#C2410C] font-bold"
                     : "text-slate-500 hover:text-slate-800 font-medium"
                 }`}
               >
                 <div
                   className={`p-1.5 rounded-xl transition-all ${
                     isDashboardRoute
-                      ? "bg-blue-50 text-blue-600 shadow-2xs scale-105"
+                      ? "bg-[#FDF0E6] text-[#C2410C] shadow-2xs scale-105"
                       : "hover:bg-slate-100/70"
                   }`}
                 >
@@ -211,12 +211,12 @@ export default function BottomNav() {
               <button
                 type="button"
                 onClick={() => setAuthModalOpen(true)}
-                className="flex flex-col items-center justify-center min-h-[44px] py-1 text-blue-600 font-semibold transition-all touch-manipulation cursor-pointer"
+                className="flex flex-col items-center justify-center min-h-[44px] py-1 text-[#C2410C] font-semibold transition-all touch-manipulation cursor-pointer"
               >
-                <div className="p-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs">
+                <div className="p-1.5 rounded-xl bg-[#C2410C] text-white shadow-xs">
                   <UserPlus className="w-4 h-4 stroke-[2]" />
                 </div>
-                <span className="text-[10px] mt-0.5 tracking-tight leading-none text-blue-600 truncate max-w-[56px]">
+                <span className="text-[10px] mt-0.5 tracking-tight leading-none text-[#C2410C] truncate max-w-[56px]">
                   {t("join", "Join")}
                 </span>
               </button>

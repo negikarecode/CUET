@@ -58,7 +58,7 @@ export const PreparationCalendar: React.FC = () => {
 
           <button 
             onClick={() => setActiveTab(activeTab === 'schedule' ? 'activity' : 'schedule')}
-            className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg text-blue-600 hover:text-blue-700 action-glow group"
+            className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg text-[#C2410C] hover:text-[#9A3412] action-glow group"
           >
             <span>{activeTab === 'schedule' ? 'Heatmap' : 'Roadmap'}</span>
             <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -124,7 +124,7 @@ export const PreparationCalendar: React.FC = () => {
 
                     {/* Active Indicator dot */}
                     {isSelected && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-1 animate-pulse"></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#C2410C] mt-1 animate-pulse"></span>
                     )}
                   </div>
                 );

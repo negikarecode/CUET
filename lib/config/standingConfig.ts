@@ -75,8 +75,8 @@ export const CHANCE_BANDS: Record<ChanceBand, ChanceBandInfo> = {
   Likely: {
     band: "Likely",
     label: "Likely",
-    badgeClass: "bg-blue-100 text-blue-800 border-blue-300",
-    cardBorderClass: "border-blue-200 bg-blue-50/40",
+    badgeClass: "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]",
+    cardBorderClass: "border-[#F6D3AF] bg-[#FEF1E0]/40",
     description: "Your performance is above the historical midpoint for admission.",
   },
   Possible: {

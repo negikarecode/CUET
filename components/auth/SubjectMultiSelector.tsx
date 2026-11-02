@@ -48,7 +48,7 @@ export default function SubjectMultiSelector({
 
   const categoryBadges: Record<string, string> = {
     Commerce: "bg-amber-50 text-amber-800 border-amber-200",
-    Science: "bg-blue-50 text-blue-800 border-blue-200",
+    Science: "bg-[#FDF0E6] text-[#9F3014] border-[#F6D3AF]",
     Humanities: "bg-purple-50 text-purple-800 border-purple-200",
     "Arts & Performing": "bg-pink-50 text-pink-800 border-pink-200",
     Common: "bg-emerald-50 text-emerald-800 border-emerald-200",
@@ -59,7 +59,7 @@ export default function SubjectMultiSelector({
       {/* Label and Count */}
       <div className="flex items-center justify-between">
         <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-          <Layers className="w-3.5 h-3.5 text-blue-600" />
+          <Layers className="w-3.5 h-3.5 text-[#C2410C]" />
           <span>CUET Domain Subjects ({selectedSubjects.length} selected)</span>
         </label>
         <span className="text-[10px] text-slate-400 font-mono font-medium">
@@ -98,7 +98,7 @@ export default function SubjectMultiSelector({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search domain subjects (e.g. Physics, Accountancy, Dance)..."
-            className="w-full pl-8 pr-7 py-2 text-xs font-medium bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 placeholder:text-slate-400 shadow-xs"
+            className="w-full pl-8 pr-7 py-2 text-xs font-medium bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-[#C2410C] placeholder:text-slate-400 shadow-xs"
           />
           {searchQuery && (
             <button
@@ -127,7 +127,7 @@ export default function SubjectMultiSelector({
               onClick={() => setActiveCategory(tab.id)}
               className={`px-2.5 py-0.5 rounded-full border whitespace-nowrap transition-all shadow-xs ${
                 activeCategory === tab.id
-                  ? "bg-blue-600 text-white border-blue-600"
+                  ? "bg-[#C2410C] text-white border-[#C2410C]"
                   : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
               }`}
             >
@@ -148,7 +148,7 @@ export default function SubjectMultiSelector({
               onClick={() => toggleSubject(sub.name)}
               className={`p-2.5 rounded-xl border text-left flex items-start justify-between transition-all cursor-pointer shadow-xs ${
                 isChecked
-                  ? "bg-blue-50/70 border-blue-600 text-slate-900"
+                  ? "bg-[#FEF1E0] border-[#F6D3AF] text-slate-900"
                   : "bg-white border-slate-200/80 hover:border-slate-300 hover:bg-slate-50"
               }`}
             >
@@ -174,7 +174,7 @@ export default function SubjectMultiSelector({
               <div
                 className={`w-4 h-4 rounded-md mt-0.5 border flex items-center justify-center shrink-0 transition-all ${
                   isChecked
-                    ? "bg-blue-600 border-blue-600 shadow-xs"
+                    ? "bg-[#C2410C] border-[#C2410C] shadow-xs"
                     : "border-slate-300 bg-white"
                 }`}
               >

@@ -871,67 +871,7 @@ const faqs = [
    ========================================================================== */
 
 /**
- * 1. Top Urgent Notice & Live Countdown Bar (Primary Hierarchy)
- */
-function NoticeCountdownBanner() {
-  const [timeLeft, setTimeLeft] = useState<{
-    days: number;
-    hours: number;
-    minutes: number;
-  } | null>(null);
-
-  useEffect(() => {
-    const calculate = () => {
-      // Estimated CUET examination commencement from authoritative config
-      const examDate = new Date(CUET_AUTHORITY.examDates.examStartDate).getTime();
-      const now = Date.now();
-      const diff = Math.max(0, examDate - now);
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      setTimeLeft({ days, hours, minutes });
-    };
-
-    calculate();
-    const timer = setInterval(calculate, 60000);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <aside aria-label="Official announcement" className="bg-[#FFF0C4] text-stone-900 border-b border-[#F6D3AF] text-xs py-2 px-4">
-      <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-[11px] tracking-wide uppercase">
-            NTA 2026 notice
-          </span>
-          <span className="text-stone-800 font-medium text-xs sm:text-sm">
-            Exam window: <strong>May 15 – May 31, 2026</strong> · 50 compulsory questions, zero internal choice
-          </span>
-        </div>
-
-        <div className="flex items-center gap-4 ml-auto">
-          {timeLeft && (
-            <div className="hidden sm:flex items-center gap-1.5 font-mono text-[11px] text-[#9F3014] font-bold bg-[#FEF1E0] px-2.5 py-0.5 rounded-md border border-[#F6D3AF]">
-              <Clock3 className="w-3.5 h-3.5 text-[#C2410C]" />
-              <span>
-                {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m remaining
-              </span>
-            </div>
-          )}
-          <a
-            href="#pattern"
-            className="text-[#C2410C] hover:text-[#9A3412] font-semibold underline underline-offset-2 transition-colors flex items-center gap-1 text-xs sm:text-sm"
-          >
-            Check pattern &rarr;
-          </a>
-        </div>
-      </div>
-    </aside>
-  );
-}
-
-/**
- * 2. Sticky Clean Navigation Header (Primary Hierarchy)
+ * 1. Sticky Clean Navigation Header (Primary Hierarchy)
  */
 function Navigation({
   onAuth,
@@ -1055,7 +995,7 @@ function Navigation({
           {isLoggedIn ? (
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs hover:shadow transition-all"
             >
               <LayoutDashboard className="w-4 h-4" />
               <span>Go to dashboard</span>
@@ -1065,14 +1005,14 @@ function Navigation({
               <button
                 type="button"
                 onClick={() => onAuth("login")}
-                className="hidden sm:inline-flex px-3.5 py-2 text-sm font-semibold text-stone-700 hover:text-[#C2410C] transition-colors cursor-pointer"
+                className="hidden sm:inline-flex px-4 py-2.5 text-sm font-semibold text-stone-700 hover:text-[#C2410C] transition-colors cursor-pointer"
               >
                 Log In
               </button>
               <button
                 type="button"
                 onClick={() => onAuth("signup")}
-                className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs hover:shadow transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-sm shadow-xs hover:shadow transition-all cursor-pointer"
               >
                 <span>Go to dashboard</span>
                 <ArrowRight className="w-4 h-4" />
@@ -1162,10 +1102,11 @@ function Navigation({
             {isLoggedIn ? (
               <Link
                 href="/dashboard"
-                className="w-full py-3 text-center bg-[#C2410C] text-white rounded-xl font-bold text-sm"
+                className="w-full px-5 py-3 text-center bg-[#C2410C] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Go to dashboard
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Go to dashboard</span>
               </Link>
             ) : (
               <>
@@ -1175,7 +1116,7 @@ function Navigation({
                     setMobileMenuOpen(false);
                     onAuth("login");
                   }}
-                  className="w-full py-2.5 text-center text-stone-800 bg-white border border-[#EFE6DC] rounded-xl font-bold text-sm"
+                  className="w-full px-4 py-2.5 text-center text-stone-800 bg-white border border-[#EFE6DC] rounded-xl font-bold text-sm"
                 >
                   Log In
                 </button>
@@ -1185,9 +1126,10 @@ function Navigation({
                     setMobileMenuOpen(false);
                     onAuth("signup");
                   }}
-                  className="w-full py-3 text-center bg-orange-600 text-white rounded-xl font-bold text-sm shadow-sm"
+                  className="w-full px-5 py-3 text-center bg-[#C2410C] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-xs"
                 >
-                  Start Practicing Free
+                  <span>Go to dashboard</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </>
             )}
@@ -3039,10 +2981,7 @@ export default function LandingPageClient() {
 
   return (
     <div className="min-h-screen bg-[#FFF8F0] text-stone-900 font-sans selection:bg-[#FCE7D0] selection:text-[#441408]">
-      {/* 1. Top Notice & Live Exam Countdown Pill */}
-      <NoticeCountdownBanner />
-
-      {/* 2. Sticky Header Navigation (5 primary links + 'More' dropdown + CTA) */}
+      {/* 1. Sticky Header Navigation (5 primary links + 'More' dropdown + CTA) */}
       <Navigation onAuth={setAuthMode} isLoggedIn={isLoggedIn} />
 
       {/* 3. Hero Section (Two-Column with CBT Mockup Card + 3 Feature Highlights) */}

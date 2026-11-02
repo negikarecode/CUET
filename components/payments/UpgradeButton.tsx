@@ -159,7 +159,7 @@ export default function UpgradeButton({
           targetCollege: user.targetCollege,
         },
         theme: {
-          color: "#312E81", // Deep Indigo Brand Primary
+          color: "#C2410C", // Terracotta Brand Primary
         },
         modal: {
           ondismiss: function () {
@@ -271,7 +271,7 @@ export default function UpgradeButton({
                   router.push("/dashboard");
                   router.refresh();
                 }}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs transition-all shadow-xs hover:shadow active:scale-[0.98]"
+                className="w-full py-3 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs transition-all shadow-xs hover:shadow active:scale-[0.98]"
               >
                 Go to Aspirant Dashboard
               </button>

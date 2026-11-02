@@ -34,7 +34,7 @@ interface SubjectConfig {
 }
 
 const SUBJECT_CONFIGS: SubjectConfig[] = [
-  { key: 'Physics', label: 'Physics', color: '#3B82F6', lightBg: '#EFF6FF' },
+  { key: 'Physics', label: 'Physics', color: '#C2410C', lightBg: '#FEF1E0' },
   { key: 'Chemistry', label: 'Chemistry', color: '#F97316', lightBg: '#FFF7ED' },
   { key: 'Maths', label: 'Maths', color: '#10B981', lightBg: '#ECFDF5' },
   { key: 'English', label: 'English', color: '#8B5CF6', lightBg: '#F5F3FF' },
@@ -335,7 +335,7 @@ export const ScoreImprovementTrend: React.FC = () => {
                   : 'text-slate-500 hover:text-slate-800'
               }`}
             >
-              <Layers className="w-3 h-3 text-blue-500" />
+              <Layers className="w-3 h-3 text-[#C2410C]" />
               <span>By Subject</span>
             </button>
           </div>
@@ -569,10 +569,10 @@ export const ScoreImprovementTrend: React.FC = () => {
                   <Line
                     type="monotone"
                     dataKey="Physics"
-                    stroke="#3B82F6"
+                    stroke="#C2410C"
                     strokeWidth={3}
-                    dot={{ r: 3.5, stroke: '#3B82F6', strokeWidth: 2, fill: '#FFFFFF' }}
-                    activeDot={{ r: 6, stroke: '#3B82F6', strokeWidth: 3, fill: '#FFFFFF' }}
+                    dot={{ r: 3.5, stroke: '#C2410C', strokeWidth: 2, fill: '#FFFFFF' }}
+                    activeDot={{ r: 6, stroke: '#C2410C', strokeWidth: 3, fill: '#FFFFFF' }}
                     animationDuration={1000}
                   />
                 )}

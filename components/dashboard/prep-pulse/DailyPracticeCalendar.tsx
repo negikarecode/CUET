@@ -118,7 +118,7 @@ export const DailyPracticeCalendar: React.FC = () => {
                         onMouseLeave={handleMouseLeave}
                         onFocus={(e) => handleMouseEnter(day, e as any)}
                         onBlur={handleMouseLeave}
-                        className={`w-[18px] h-[18px] rounded-xs transition-colors cursor-pointer outline-hidden focus:ring-2 focus:ring-blue-500 ${getCellColor(
+                        className={`w-[18px] h-[18px] rounded-xs transition-colors cursor-pointer outline-hidden focus:ring-2 focus:ring-[#C2410C] ${getCellColor(
                           day.count,
                           day.isInRange
                         )}`}
@@ -141,10 +141,10 @@ export const DailyPracticeCalendar: React.FC = () => {
               <span>Less</span>
               <div className="flex gap-1">
                 <div className="w-[16px] h-[16px] rounded-xs bg-slate-100 border border-slate-200/50" />
-                <div className="w-[16px] h-[16px] rounded-xs bg-blue-100 border border-blue-200" />
-                <div className="w-[16px] h-[16px] rounded-xs bg-blue-300 border border-blue-400" />
-                <div className="w-[16px] h-[16px] rounded-xs bg-blue-600 border border-blue-600" />
-                <div className="w-[16px] h-[16px] rounded-xs bg-indigo-700 border border-indigo-700" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-[#FDE6D2] border border-[#F6D3AF]" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-[#FED7AA] border border-[#F97316]" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-[#EA580C] border border-[#C2410C]" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-[#C2410C] border border-[#9A3412]" />
               </div>
               <span>More</span>
             </div>

@@ -124,8 +124,8 @@ export function renderAuthHandoffHtml(targetNext: string, type: string): string 
     .spinner {
       width: 2.75rem;
       height: 2.75rem;
-      border: 3.5px solid #EEF2FF;
-      border-top-color: #4F46E5;
+      border: 3.5px solid #FEF1E0;
+      border-top-color: #C2410C;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 1.25rem;
@@ -146,8 +146,8 @@ export function renderAuthHandoffHtml(targetNext: string, type: string): string 
       border: none;
       margin-bottom: 0.625rem;
     }
-    .btn-primary { background: #4F46E5; color: #FFFFFF; }
-    .btn-primary:hover { background: #4338CA; }
+    .btn-primary { background: #C2410C; color: #FFFFFF; }
+    .btn-primary:hover { background: #9A3412; }
     .btn-secondary { background: #F1F5F9; color: #475569; }
     .btn-secondary:hover { background: #E2E8F0; }
     .hidden { display: none !important; }

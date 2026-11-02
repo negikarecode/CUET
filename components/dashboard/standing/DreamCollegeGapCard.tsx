@@ -416,7 +416,7 @@ export default function DreamCollegeGapCard({
                     : isBelowCutoff
                     ? "bg-amber-50 text-amber-900 border-amber-200"
                     : isIncomplete
-                    ? "bg-blue-50 text-stone-700 border-blue-200"
+                    ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
                     : "bg-slate-100 text-slate-700 border-slate-200"
                 }`}
               >

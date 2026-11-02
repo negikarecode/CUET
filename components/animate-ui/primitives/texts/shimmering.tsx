@@ -8,8 +8,8 @@ export function ShimmeringText({
   duration = 1,
   transition,
   wave = false,
-  color = "var(--primary-blue, #0066ff)",
-  shimmeringColor = "#7dd3fc",
+  color = "var(--primary-blue, #c2410c)",
+  shimmeringColor = "#f6d3af",
   ...props
 }: {
   text: string;

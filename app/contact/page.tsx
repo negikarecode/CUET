@@ -36,14 +36,14 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FFF8F0] py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Breadcrumb Navigation */}
         <Breadcrumbs items={[{ label: "Contact Us" }]} />
 
         {/* Page Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold uppercase tracking-wider border border-blue-200/80 shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FDF0E6] text-[#C2410C] text-xs font-semibold uppercase tracking-wider border border-[#F6D3AF] shadow-xs">
             <HelpCircle className="w-3.5 h-3.5" />
             <span>Candidate Assistance Desk</span>
           </div>
@@ -72,14 +72,14 @@ export default function ContactPage() {
 
               <div className="space-y-4 text-xs sm:text-sm">
                 <div className="flex items-start gap-3">
-                  <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 flex-shrink-0">
+                  <div className="p-2.5 rounded-xl bg-[#FDF0E6] text-[#C2410C] flex-shrink-0">
                     <Mail className="w-4 h-4" />
                   </div>
                   <div>
                     <span className="block text-slate-500 text-xs font-medium">Academic Support Email</span>
                     <a
                       href="mailto:support@cuetprep.com"
-                      className="font-semibold text-blue-600 hover:underline"
+                      className="font-semibold text-[#C2410C] hover:underline"
                     >
                       support@cuetprep.com
                     </a>
@@ -95,7 +95,7 @@ export default function ContactPage() {
                     <span className="block text-slate-500 text-xs font-medium">Platform Helpline</span>
                     <a
                       href="tel:01140759000"
-                      className="font-semibold text-slate-900 hover:text-blue-600"
+                      className="font-semibold text-slate-900 hover:text-[#C2410C]"
                     >
                       011-40759000
                     </a>
@@ -119,15 +119,15 @@ export default function ContactPage() {
 
               {/* Quick Legal Links */}
               <div className="pt-4 border-t border-slate-100 flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-500">
-                <Link href="/privacy" className="hover:text-blue-600 hover:underline">
+                <Link href="/privacy" className="hover:text-[#C2410C] hover:underline">
                   Privacy Policy
                 </Link>
                 <span>•</span>
-                <Link href="/terms" className="hover:text-blue-600 hover:underline">
+                <Link href="/terms" className="hover:text-[#C2410C] hover:underline">
                   Terms of Service
                 </Link>
                 <span>•</span>
-                <Link href="/refunds" className="hover:text-blue-600 hover:underline">
+                <Link href="/refunds" className="hover:text-[#C2410C] hover:underline">
                   Refund Guarantee
                 </Link>
               </div>

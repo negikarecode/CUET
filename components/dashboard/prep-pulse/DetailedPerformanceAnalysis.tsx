@@ -31,7 +31,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
   const [activeTopicIndex, setActiveTopicIndex] = useState<number>(0);
 
   const uniqueId = useId().replace(/:/g, '');
-  const bluePillGradId = `bluePillGrad_${uniqueId}`;
+  const warmPillGradId = `warmPillGrad_${uniqueId}`;
 
   // Subject calibrations to display (up to 4 domains)
   const displaySubjects = calibrations.length > 0 ? calibrations.slice(0, 4) : [];
@@ -95,7 +95,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
             <div className="text-[11px] font-semibold text-slate-300">
               {item?.topic}
             </div>
-            <div className="text-base font-extrabold text-blue-400 font-mono">
+            <div className="text-base font-extrabold text-[#EA580C] font-mono">
               {item?.score}% Mastery
             </div>
             {/* Downward pointer triangle beak */}
@@ -109,7 +109,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
         <div className="relative bg-slate-900 text-white rounded-xl shadow-2xl p-3 min-w-[180px] z-50 border border-slate-800 animate-in fade-in zoom-in-95 duration-100">
           <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-slate-800">
             <span className="text-xs font-bold text-slate-200">{label}</span>
-            <span className="text-[10px] font-semibold text-blue-400 bg-blue-950/80 px-1.5 py-0.5 rounded">
+            <span className="text-[10px] font-semibold text-[#EA580C] bg-[#441408] px-1.5 py-0.5 rounded">
               {activeTab}
             </span>
           </div>
@@ -117,10 +117,10 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
           <div className="space-y-1.5 text-xs">
             <div className="flex items-center justify-between gap-3">
               <span className="flex items-center gap-1.5 text-slate-300 font-medium">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#C2410C]" />
                 Your Score:
               </span>
-              <span className="font-bold text-blue-400 font-mono">{payload[0]?.value}{unit}</span>
+              <span className="font-bold text-[#EA580C] font-mono">{payload[0]?.value}{unit}</span>
             </div>
             <div className="flex items-center justify-between gap-3">
               <span className="flex items-center gap-1.5 text-slate-400">
@@ -184,7 +184,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
               }`}
               style={viewType === 'topics' ? { backgroundColor: '#FF671F' } : {}}
             >
-              <Layers className={`w-3 h-3 ${viewType === 'topics' ? 'text-white' : 'text-blue-600'}`} />
+              <Layers className={`w-3 h-3 ${viewType === 'topics' ? 'text-white' : 'text-[#C2410C]'}`} />
               <span>Topic Drill</span>
             </button>
           </div>
@@ -215,14 +215,14 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
       <div role="region" aria-label="Detailed performance comparison bar chart" className="w-full h-60 pt-3">
         {viewType === 'topics' && topicBars.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center p-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
-            <Sparkles className="w-8 h-8 text-blue-500/40 mb-2" />
+            <Sparkles className="w-8 h-8 text-[#C2410C]/40 mb-2" />
             <p className="text-sm font-semibold text-slate-700">No topic diagnostic data yet</p>
             <p className="text-xs text-slate-400 mt-0.5 max-w-sm mb-3">
               Take a full mock test or chapter drill to calibrate topic-level accuracy.
             </p>
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-sm"
+              className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-[#C2410C] hover:bg-[#9A3412] transition-colors shadow-sm"
             >
               Start Diagnostic Test
             </Link>
@@ -238,9 +238,9 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
                 barCategoryGap={32}
               >
                 <defs>
-                  <linearGradient id={bluePillGradId} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#38BDF8" />
-                    <stop offset="100%" stopColor="#2563EB" />
+                  <linearGradient id={warmPillGradId} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#EA580C" />
+                    <stop offset="100%" stopColor="#C2410C" />
                   </linearGradient>
                 </defs>
 
@@ -264,7 +264,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
                 <Bar 
                   dataKey="yours" 
                   name="Your Score" 
-                  fill={`url(#${bluePillGradId})`} 
+                  fill={`url(#${warmPillGradId})`} 
                   radius={[12, 12, 12, 12]} 
                   barSize={16}
                   animationDuration={800}
@@ -299,9 +299,9 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
                 }}
               >
                 <defs>
-                  <linearGradient id={bluePillGradId} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#38BDF8" />
-                    <stop offset="100%" stopColor="#0284C7" />
+                  <linearGradient id={warmPillGradId} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#FB923C" />
+                    <stop offset="100%" stopColor="#C2410C" />
                   </linearGradient>
                 </defs>
 
@@ -334,7 +334,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
                     return (
                       <Cell
                         key={`topic-cell-${index}`}
-                        fill={isHighlighted ? `url(#${bluePillGradId})` : '#E2E8F0'}
+                        fill={isHighlighted ? `url(#${warmPillGradId})` : '#E2E8F0'}
                         className="cursor-pointer transition-colors duration-200"
                       />
                     );
@@ -351,7 +351,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
         {viewType === 'comparison' ? (
           <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
             <div className="flex items-center gap-1.5 p-1 rounded-md action-glow cursor-pointer">
-              <span className="w-3 h-3 rounded-full bg-blue-600" />
+              <span className="w-3 h-3 rounded-full bg-[#C2410C]" />
               <span className="font-semibold text-slate-800">Your {activeTab === 'Time Taken' ? 'Time' : activeTab}</span>
             </div>
             <div className="flex items-center gap-1.5 p-1 rounded-md action-glow cursor-pointer">
@@ -368,7 +368,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
             {topicBars.length > 0 && (
               <>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-blue-600" />
+                  <span className="w-3 h-3 rounded-full bg-[#C2410C]" />
                   <span className="font-semibold text-slate-800">Selected: {topicBars[activeTopicIndex]?.topic}</span>
                 </div>
                 <div className="flex items-center gap-1.5">

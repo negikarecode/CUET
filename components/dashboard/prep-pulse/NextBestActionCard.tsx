@@ -181,7 +181,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
             className="w-full flex items-center justify-between py-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer"
           >
             <div className="flex items-center gap-2 flex-wrap">
-              <Sparkles className="w-4 h-4 text-indigo-600 shrink-0" />
+              <Sparkles className="w-4 h-4 text-[#C2410C] shrink-0" />
               <span className="font-bold text-slate-900">
                 AI Performance Intelligence Briefing (5 Core Answers)
               </span>
@@ -192,7 +192,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                     : commandCenter.answers.q4_isImproving.trajectory === "DECLINING"
                     ? "bg-rose-50 text-rose-700 border-rose-200"
                     : commandCenter.answers.q4_isImproving.trajectory === "STABLE"
-                    ? "bg-blue-50 text-blue-700 border-blue-200"
+                    ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
                     : "bg-slate-100 text-slate-700 border-slate-200"
                 }`}
               >
@@ -238,7 +238,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                   onClick={() => setActiveBriefingTab("trajectory")}
                   className={`px-3 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
                     activeBriefingTab === "trajectory"
-                      ? "bg-blue-50 text-blue-800 border border-blue-200 shadow-2xs"
+                      ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] shadow-2xs"
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
@@ -249,7 +249,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                   onClick={() => setActiveBriefingTab("session_plan")}
                   className={`px-3 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
                     activeBriefingTab === "session_plan"
-                      ? "bg-indigo-50 text-indigo-800 border border-indigo-200 shadow-2xs"
+                      ? "bg-[#FDF0E6] text-[#C2410C] border border-[#F6D3AF] shadow-2xs"
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
@@ -328,7 +328,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
               {activeBriefingTab === "trajectory" && (
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 text-xs">
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-blue-600 shrink-0" />
+                    <TrendingUp className="w-4 h-4 text-[#C2410C] shrink-0" />
                     <span className="font-bold text-slate-900">Is your preparation improving?</span>
                   </div>
                   <p className="text-slate-600 font-medium leading-relaxed">
@@ -362,10 +362,10 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 text-xs">
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-indigo-600 shrink-0" />
+                      <Clock className="w-4 h-4 text-[#C2410C] shrink-0" />
                       <span className="font-bold text-slate-900">Recommended Next Study Session</span>
                     </div>
-                    <span className="font-mono text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
+                    <span className="font-mono text-[11px] font-bold text-[#9F3014] bg-[#FEF1E0] px-2 py-0.5 rounded-full border border-[#F6D3AF]">
                       {commandCenter.answers.q5_nextSessionPlan.recommendedDurationMinutes} Minutes Total
                     </span>
                   </div>
@@ -388,7 +388,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                           <span className="font-mono text-[10px] text-slate-400">{s.durationMinutes}m</span>
                           <Link
                             href={s.actionUrl}
-                            className="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-[11px] transition-colors"
+                            className="px-2.5 py-1 rounded-lg bg-[#FEF1E0] hover:bg-[#FDE6D2] text-[#9F3014] font-semibold text-[11px] transition-colors"
                           >
                             Open
                           </Link>

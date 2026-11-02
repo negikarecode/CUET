@@ -126,7 +126,7 @@ export function CycleCompletionModal({
               onClose();
               onViewAnalysis();
             }}
-            className="w-full sm:flex-1 py-3 px-5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full sm:flex-1 py-3 px-5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <span>View Cycle Analysis</span>
             <ArrowRight className="w-4 h-4" />
