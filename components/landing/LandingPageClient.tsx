@@ -2543,7 +2543,13 @@ function FinalCTA({
 /**
  * 14. Clean Structured Site Footer (Landing page.pdf Page 3)
  */
-function LandingFooter({ onAuth }: { onAuth: (mode: "login" | "signup") => void }) {
+function LandingFooter({
+  onAuth,
+  isLoggedIn,
+}: {
+  onAuth: (mode: "login" | "signup") => void;
+  isLoggedIn: boolean;
+}) {
   return (
     <footer className="bg-[#FFF8F0] text-stone-600 py-12 border-t border-[#EFE6DC] text-xs">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -2665,20 +2671,31 @@ function LandingFooter({ onAuth }: { onAuth: (mode: "login" | "signup") => void 
         <div className="pt-6 border-t border-[#EFE6DC] flex flex-wrap items-center justify-between gap-4 text-stone-500">
           <span>&copy; {new Date().getFullYear()} CUETPrep. All rights reserved. Built for NTA CBT Candidates.</span>
           <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => onAuth("login")}
-              className="hover:text-stone-900 cursor-pointer font-medium"
-            >
-              Log In
-            </button>
-            <button
-              type="button"
-              onClick={() => onAuth("signup")}
-              className="text-[#C2410C] hover:text-[#9A3412] font-bold cursor-pointer"
-            >
-              Start Free Trial &rarr;
-            </button>
+            {isLoggedIn ? (
+              <Link
+                href="/dashboard"
+                className="text-[#C2410C] hover:text-[#9A3412] font-bold"
+              >
+                Dashboard &rarr;
+              </Link>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => onAuth("login")}
+                  className="hover:text-stone-900 cursor-pointer font-medium"
+                >
+                  Log In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onAuth("signup")}
+                  className="text-[#C2410C] hover:text-[#9A3412] font-bold cursor-pointer"
+                >
+                  Sign Up &rarr;
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -2852,7 +2869,7 @@ export default function LandingPageClient() {
       <FinalCTA onAuth={setAuthMode} isLoggedIn={isLoggedIn} />
 
       {/* 16. Structured Site Footer */}
-      <LandingFooter onAuth={setAuthMode} />
+      <LandingFooter onAuth={setAuthMode} isLoggedIn={isLoggedIn} />
 
       {/* 17. Floating Back-to-Top Button */}
       <BackToTopButton />
