@@ -79,6 +79,7 @@ export default function AuthPageContent({
 
   // Loading & Error States
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const isSubmittingRef = useRef(false);
@@ -314,6 +315,47 @@ export default function AuthPageContent({
       setIsLoading(false);
       isSubmittingRef.current = false;
     }
+  };
+
+  // Step 1 Validation & Email Availability Check
+  const handleStep1Submit = async () => {
+    if (!name.trim()) {
+      setErrorMessage("Please enter your full legal name.");
+      return;
+    }
+    const cleanEmail = email.trim().toLowerCase();
+    if (!validateEmail(cleanEmail)) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
+    if (!isPasswordValid(password)) {
+      setErrorMessage("Please ensure your password satisfies all security requirements.");
+      return;
+    }
+
+    setErrorMessage(null);
+    setIsCheckingEmail(true);
+
+    try {
+      const res = await fetch("/api/auth/check-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: cleanEmail }),
+      });
+      const data = await res.json().catch(() => null);
+
+      if (data?.exists) {
+        setErrorMessage(data.message || "An account with this email already exists. Please log in instead.");
+        setIsCheckingEmail(false);
+        return;
+      }
+    } catch {
+      // Allow user to proceed if non-critical network check fails
+    } finally {
+      setIsCheckingEmail(false);
+    }
+
+    setStep(2);
   };
 
   // Sign Up Initiation
@@ -563,6 +605,19 @@ export default function AuthPageContent({
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
               <div className="flex-1 space-y-1">
                 <p>{errorMessage}</p>
+                {errorMessage.includes("already exists") && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setErrorMessage(null);
+                      setMode("login");
+                    }}
+                    className="inline-flex items-center gap-1.5 font-bold text-[#C2410C] hover:text-[#9A3412] hover:underline pt-1 cursor-pointer"
+                  >
+                    <span>Click here to Sign In with this email</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
                 {unconfirmedEmailForVerification && (
                   <button
                     type="button"
@@ -867,26 +922,21 @@ export default function AuthPageContent({
                     <div className="pt-3">
                       <button
                         type="button"
-                        onClick={() => {
-                          if (!name.trim()) {
-                            setErrorMessage("Please enter your full legal name.");
-                            return;
-                          }
-                          if (!validateEmail(email.trim())) {
-                            setErrorMessage("Please enter a valid email address.");
-                            return;
-                          }
-                          if (!isPasswordValid(password)) {
-                            setErrorMessage("Please ensure your password satisfies all security requirements.");
-                            return;
-                          }
-                          setErrorMessage(null);
-                          setStep(2);
-                        }}
-                        className="w-full py-3.5 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-semibold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                        onClick={handleStep1Submit}
+                        disabled={isCheckingEmail}
+                        className="w-full py-3.5 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-semibold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
                       >
-                        <span>Continue to Target & Subjects</span>
-                        <ArrowRight className="w-4 h-4 stroke-[2.2]" />
+                        {isCheckingEmail ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin stroke-[2.2]" />
+                            <span>Checking email availability...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Continue to Target & Subjects</span>
+                            <ArrowRight className="w-4 h-4 stroke-[2.2]" />
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>

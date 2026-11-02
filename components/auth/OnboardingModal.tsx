@@ -69,6 +69,7 @@ export default function OnboardingModal({
 
   // Loading & Error States
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const isSubmittingRef = useRef(false);
@@ -197,6 +198,48 @@ export default function OnboardingModal({
       setIsLoading(false);
       isSubmittingRef.current = false;
     }
+  };
+
+  // Step 1 Validation & Email Availability Check
+  const handleStep1Submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) {
+      setErrorMessage("Please enter your full legal name.");
+      return;
+    }
+    const cleanEmail = email.trim().toLowerCase();
+    if (!validateEmail(cleanEmail)) {
+      setErrorMessage("Please provide a valid email address.");
+      return;
+    }
+    if (!isPasswordValid(password)) {
+      setErrorMessage("Password must be at least 8 characters and include uppercase, lowercase, and a number.");
+      return;
+    }
+
+    setErrorMessage(null);
+    setIsCheckingEmail(true);
+
+    try {
+      const res = await fetch("/api/auth/check-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: cleanEmail }),
+      });
+      const data = await res.json().catch(() => null);
+
+      if (data?.exists) {
+        setErrorMessage(data.message || "An account with this email already exists. Please log in instead.");
+        setIsCheckingEmail(false);
+        return;
+      }
+    } catch {
+      // Allow proceeding if network check is unavailable
+    } finally {
+      setIsCheckingEmail(false);
+    }
+
+    setStep(2);
   };
 
   // Sign Up with real Supabase Auth credentials & store profile in Supabase
@@ -424,6 +467,19 @@ export default function OnboardingModal({
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 stroke-[2]" />
             <div className="flex-1 space-y-1.5">
               <p>{errorMessage}</p>
+              {errorMessage.includes("already exists") && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setErrorMessage(null);
+                    setMode("login");
+                  }}
+                  className="inline-flex items-center gap-1 font-bold text-[#C2410C] hover:text-[#9A3412] hover:underline pt-0.5 cursor-pointer"
+                >
+                  <span>Click here to Sign In with this email</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
               {unconfirmedEmail && (
                 <button
                   type="button"
@@ -563,7 +619,7 @@ export default function OnboardingModal({
             /* ======================================================= */
             /* SIGN UP FLOW (Step 1: Account Info, Step 2: Academics)   */
             /* ======================================================= */
-            <form onSubmit={step === 1 ? (e) => { e.preventDefault(); setStep(2); } : handleSignUp} className="space-y-5">
+            <form onSubmit={step === 1 ? handleStep1Submit : handleSignUp} className="space-y-5">
               {step === 1 ? (
                 <>
                   {/* Full Name */}
@@ -660,10 +716,20 @@ export default function OnboardingModal({
                   <div className="pt-3">
                     <button
                       type="submit"
-                      className="w-full py-3 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer"
+                      disabled={isCheckingEmail}
+                      className="w-full py-3 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
                     >
-                      <span>Proceed to Dream College & Stream</span>
-                      <ArrowRight className="w-4 h-4 stroke-[2]" />
+                      {isCheckingEmail ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Checking email availability...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Proceed to Dream College & Stream</span>
+                          <ArrowRight className="w-4 h-4 stroke-[2]" />
+                        </>
+                      )}
                     </button>
                   </div>
                 </>
