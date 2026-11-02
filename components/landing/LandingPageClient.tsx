@@ -13,7 +13,6 @@ import {
   MonitorCheck,
   LayoutDashboard,
   Check,
-  Star,
   Zap,
   Target,
   Menu,
@@ -731,45 +730,6 @@ const targetUniversities = [
   },
 ];
 
-const colleges = [
-  {
-    title: "Shri Ram College of Commerce (SRCC)",
-    subtitle: "Delhi University • North Campus",
-    cutoff: "99.4+ Percentile Target",
-    src: "/assets/images/srcc.jpg",
-  },
-  {
-    title: "St. Stephen's College",
-    subtitle: "Delhi University • North Campus",
-    cutoff: "99.2+ Percentile Target",
-    src: "/assets/images/st-stephens.jpg",
-  },
-  {
-    title: "Hindu College",
-    subtitle: "Delhi University • North Campus",
-    cutoff: "99.0+ Percentile Target",
-    src: "/assets/images/hindu-college.jpg",
-  },
-  {
-    title: "Miranda House",
-    subtitle: "Delhi University • NIRF #1 College",
-    cutoff: "98.8+ Percentile Target",
-    src: "/assets/images/miranda-house.jpg",
-  },
-  {
-    title: "Campus Life & Academics",
-    subtitle: "Experience Premier Collegiate Life",
-    cutoff: "All-India Community",
-    src: "/assets/images/campus-life.jpg",
-  },
-  {
-    title: "University of Delhi Main Campus",
-    subtitle: "The Dream Landmark for Every Aspirant",
-    cutoff: "Historic North Campus",
-    src: "/assets/images/delhi-university.jpg",
-  },
-];
-
 const pricingCards = [
   {
     title: "Free",
@@ -809,33 +769,6 @@ const pricingCards = [
     cta: "Get Gold Pass",
     tier: "gold",
     highlight: true,
-  },
-];
-
-const testimonials = [
-  {
-    name: "Aarav Sharma",
-    college: "SRCC, B.Com (Hons)",
-    score: "796 / 800",
-    quote:
-      "The NTA CBT format in this platform was identical to the actual exam screen! Doing 20 full-length mocks here kept me calm and got me 100 percentile in Economics and Accountancy.",
-    avatar: "/assets/images/avatar1.png",
-  },
-  {
-    name: "Priya Nair",
-    college: "St. Stephen's College, BA History",
-    score: "792 / 800",
-    quote:
-      "Chapter-wise practice helped me master the micro-details in NCERT Political Science and History. The solutions were so clean and concept-focused. Best CUET tool out there!",
-    avatar: "/assets/images/avatar2.png",
-  },
-  {
-    name: "Rohan Verma",
-    college: "Hindu College, B.Sc Physics (Hons)",
-    score: "198 / 200",
-    quote:
-      "The General Test and English sections used to be my biggest worry. The timed speed drills and sectional test series gave me the exact timing tricks I needed to score 198/200.",
-    avatar: "/assets/images/avatar3.png",
   },
 ];
 
@@ -2252,60 +2185,6 @@ function TargetUniversitiesSection({
 }
 
 /**
- * 8. Turning Ambition into Admission: Campus Inspiration Gallery (Secondary Hierarchy)
- * - Replaces 400vh scroll-trap with clean, elegant 3-column cards.
- */
-function CampusGallerySection() {
-  return (
-    <section className="py-16 md:py-20 bg-white border-b border-[#EFE6DC]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto text-center mb-12">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase mb-3">
-            Premier Campus Aspirations
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
-            Turning Ambition Into Admission
-          </h2>
-          <p className="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
-            The road to North Campus starts with systematic daily testing. Find your place at
-            India&apos;s leading institutions.
-          </p>
-        </div>
-
-        {/* 3-Column Clean Campus Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {colleges.map((c, idx) => (
-            <div
-              key={idx}
-              className="group bg-[#FFF8F0] rounded-2xl border border-[#EFE6DC] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
-                <img
-                  src={c.src}
-                  alt={c.title}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <span className="absolute top-3 right-3 bg-stone-900/80 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
-                  {c.cutoff}
-                </span>
-              </div>
-              <div className="p-5 flex flex-col justify-between flex-1">
-                <div>
-                  <h3 className="text-base font-bold text-stone-900 mb-1">{c.title}</h3>
-                  <p className="text-xs text-stone-500 font-medium">{c.subtitle}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/**
  * 9. CUET UG 2026 Eligibility & 4-Step Registration Guide (Secondary & Tertiary Hierarchy)
  * - 4-step progressive timeline + expandable official eligibility rules accordion.
  */
@@ -2523,69 +2402,6 @@ function PricingSection({ onAuth }: { onAuth: (mode: "login" | "signup") => void
               >
                 {card.cta}
               </button>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/**
- * 11. Student Hall of Fame Testimonials (Secondary Hierarchy)
- * - 3 clean equal-height cards with real student scores.
- */
-function HallOfFameSection() {
-  return (
-    <section className="py-16 md:py-20 bg-[#FFF8F0] border-b border-[#EFE6DC]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto text-center mb-12">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tracking-wider uppercase mb-3">
-            Hall of Fame
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
-            From Our Mock Tests to DU North Campus
-          </h2>
-          <p className="text-stone-600 text-sm sm:text-base mt-3 leading-relaxed">
-            Hear directly from aspirants who cracked 100 percentiles in CUET 2025.
-          </p>
-        </div>
-
-        {/* 3 Testimonials in 1 row (desktop), 1 on mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((item) => (
-            <div
-              key={item.name}
-              className="bg-white rounded-2xl p-6 border border-[#EFE6DC] shadow-xs flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center gap-1 text-amber-500 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <p className="text-stone-700 text-xs sm:text-sm leading-relaxed mb-6 italic">
-                  &ldquo;{item.quote}&rdquo;
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-[#EFE6DC] flex items-center gap-3">
-                <img
-                  src={item.avatar}
-                  alt={item.name}
-                  width={40}
-                  height={40}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-10 h-10 rounded-full object-cover border border-[#EFE6DC]"
-                />
-                <div>
-                  <h4 className="text-sm font-bold text-stone-900 leading-tight">{item.name}</h4>
-                  <p className="text-xs text-[#C2410C] font-semibold mt-0.5">
-                    {item.college} &bull; <strong>{item.score}</strong>
-                  </p>
-                </div>
-              </div>
             </div>
           ))}
         </div>
@@ -3008,16 +2824,10 @@ export default function LandingPageClient() {
       {/* 10. Transparent Free vs. Gold Pass Plans & Pricing */}
       <PricingSection onAuth={setAuthMode} />
 
-      {/* 11. Turning Ambition into Admission (Top DU Campuses Gallery) */}
-      <CampusGallerySection />
-
-      {/* 12. CUET UG 2026 Eligibility & 4-Step Registration Advisory */}
+      {/* 11. CUET UG 2026 Eligibility & 4-Step Registration Advisory */}
       <EligibilityRegistrationSection />
 
-      {/* 13. Student Hall of Fame Testimonials */}
-      <HallOfFameSection />
-
-      {/* 14. Frequently Asked Questions (Accordion) */}
+      {/* 12. Frequently Asked Questions (Accordion) */}
       <FAQSection />
 
       {/* 15. High-Conversion Final CTA */}
