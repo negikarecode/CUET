@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import HeroCampusIllustration from "./illustrations/HeroCampusIllustration";
-import { Sparkles, ArrowRight, Eye, Trophy, ShieldCheck, Clock, QrCode } from "lucide-react";
+import { Sparkles, ArrowRight, Eye, Trophy, ShieldCheck, Clock } from "lucide-react";
 
 interface CUETHeroProps {
   onAuth: (mode: "login" | "signup") => void;
@@ -11,7 +11,7 @@ interface CUETHeroProps {
   onOpenQuickStart?: () => void;
 }
 
-export default function CUETHero({ onAuth, isLoggedIn, onOpenQuickStart }: CUETHeroProps) {
+export default function CUETHero({ onAuth, isLoggedIn }: CUETHeroProps) {
   return (
     <section
       id="home"
@@ -22,68 +22,8 @@ export default function CUETHero({ onAuth, isLoggedIn, onOpenQuickStart }: CUETH
       <div className="absolute top-40 right-10 w-80 h-80 rounded-full bg-emerald-200/40 blur-2xl pointer-events-none" />
 
       <div className="max-w-6xl mx-auto">
-        {/* Top Feature Pill Card: "Designed for Focus. Built for Rank 1." */}
-        <div className="mb-10 p-5 md:p-6 rounded-3xl bg-white/75 backdrop-blur-md border border-white/80 shadow-sm max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="max-w-xs text-center md:text-left">
-            <h3 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
-              Designed for Focus.<br />
-              <span className="text-purple-600">Built for Rank 1.</span>
-            </h3>
-            <p className="mt-1.5 text-xs text-slate-600 leading-relaxed font-medium">
-              Rigorous, analytical, and honest — from 50-question NTA CBT mocks to AI-powered NCERT mistake diagnosis.
-            </p>
-            {onOpenQuickStart && (
-              <button
-                type="button"
-                onClick={onOpenQuickStart}
-                className="mt-3 text-[11px] font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-full border border-emerald-200 transition-colors inline-flex items-center gap-1.5 cursor-pointer"
-              >
-                <QrCode className="w-3.5 h-3.5 text-emerald-700" />
-                <span>Mobile QR Quick-Access</span>
-              </button>
-            )}
-          </div>
-
-          {/* 2 Floating Feature Pills */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full md:w-auto flex-1">
-            {/* Card 1: Master Authentic NTA Pacing */}
-            <div className="p-4 rounded-2xl bg-white/95 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-2.5">
-                <Clock className="w-4 h-4" />
-              </div>
-              <h4 className="text-xs font-bold text-slate-900">Master Authentic NTA Pacing</h4>
-              <p className="mt-1 text-[11px] text-slate-500 leading-relaxed">
-                Sit real 60-minute countdowns, zero internal choice, and strict +5/−1 negative marking schemes.
-              </p>
-              <Link
-                href="/dashboard/mocks"
-                className="mt-2 text-[11px] font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1 group"
-              >
-                Explore Mocks <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-            </div>
-
-            {/* Card 2: Diagnose Score Leaks Instantly */}
-            <div className="p-4 rounded-2xl bg-white/95 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2.5">
-                <Eye className="w-4 h-4" />
-              </div>
-              <h4 className="text-xs font-bold text-slate-900">Diagnose Score Leaks Instantly</h4>
-              <p className="mt-1 text-[11px] text-slate-500 leading-relaxed">
-                Separate careless reading slips from foundational NCERT concept gaps with precision AI analytics.
-              </p>
-              <Link
-                href="/dashboard/ai-coach"
-                className="mt-2 text-[11px] font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1 group"
-              >
-                View AI Coach <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Hero Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        {/* Main Hero Grid - H1 as the first major element */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center pt-2">
           {/* Left Column: Headlines & Admission CTAs */}
           <div className="lg:col-span-6 text-center lg:text-left space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-white text-xs font-bold text-purple-800 shadow-sm">
@@ -130,25 +70,68 @@ export default function CUETHero({ onAuth, isLoggedIn, onOpenQuickStart }: CUETH
               </Link>
             </div>
 
-            {/* Trust and Highlights Row */}
-            <div className="pt-3 border-t border-emerald-300/60 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs text-slate-700 font-medium">
-              <span className="flex items-center gap-1.5 font-bold text-slate-900">
-                <Trophy className="w-4 h-4 text-amber-500" />
-                200,000+ Aspirants
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1.5 font-bold text-slate-900">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                Latest NTA Rationalized Syllabus
-              </span>
-              <span>•</span>
-              <span>45+ Central Universities</span>
+            {/* Proof Row - Evenly spaced without stray bullets */}
+            <div className="pt-4 border-t border-emerald-300/60 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 text-xs font-semibold text-slate-800">
+              <div className="flex items-center justify-center lg:justify-start gap-1.5">
+                <Trophy className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>200,000+ Aspirants</span>
+              </div>
+              <div className="flex items-center justify-center lg:justify-start gap-1.5 sm:border-l sm:border-emerald-300/60 sm:pl-4">
+                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>Latest NTA Rationalized Syllabus</span>
+              </div>
+              <div className="flex items-center justify-center lg:justify-start gap-1.5 sm:border-l sm:border-emerald-300/60 sm:pl-4">
+                <Clock className="w-4 h-4 text-purple-600 shrink-0" />
+                <span>45+ Central Universities</span>
+              </div>
             </div>
+
+            {/* Non-Affiliation Notice */}
+            <p className="text-[11px] text-slate-600/90 font-normal pt-1 text-center lg:text-left">
+              CUET AI-Prep is an independent learning platform not affiliated with the National Testing Agency (NTA).
+            </p>
           </div>
 
           {/* Right Column: High-Fidelity Campus & Scholar Illustration */}
           <div className="lg:col-span-6 flex justify-center">
             <HeroCampusIllustration />
+          </div>
+        </div>
+
+        {/* 2 Feature Focus Cards Moved Below Hero */}
+        <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
+          {/* Card 1: Master NTA-Style Exam Pacing */}
+          <div className="p-5 rounded-2xl bg-white/90 backdrop-blur-md border border-white/80 shadow-sm hover:shadow-md transition-all">
+            <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-2.5">
+              <Clock className="w-4 h-4" />
+            </div>
+            <h3 className="text-sm font-bold text-slate-900">Master NTA-Style Exam Pacing</h3>
+            <p className="mt-1 text-xs text-slate-600 leading-relaxed">
+              Sit real 60-minute countdowns, zero internal choice, and strict +5/−1 negative marking schemes.
+            </p>
+            <Link
+              href="/dashboard/mocks"
+              className="mt-2.5 text-xs font-bold text-purple-600 hover:text-purple-700 inline-flex items-center gap-1 group"
+            >
+              Explore Mocks <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </div>
+
+          {/* Card 2: Diagnose Score Leaks Instantly */}
+          <div className="p-5 rounded-2xl bg-white/90 backdrop-blur-md border border-white/80 shadow-sm hover:shadow-md transition-all">
+            <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2.5">
+              <Eye className="w-4 h-4" />
+            </div>
+            <h3 className="text-sm font-bold text-slate-900">Diagnose Score Leaks Instantly</h3>
+            <p className="mt-1 text-xs text-slate-600 leading-relaxed">
+              Separate careless reading slips from foundational NCERT concept gaps with precision AI analytics.
+            </p>
+            <Link
+              href="/dashboard/ai-coach"
+              className="mt-2.5 text-xs font-bold text-purple-600 hover:text-purple-700 inline-flex items-center gap-1 group"
+            >
+              View AI Coach <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           </div>
         </div>
       </div>

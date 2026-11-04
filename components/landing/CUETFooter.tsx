@@ -39,7 +39,7 @@ export default function CUETFooter({ onAuth, isLoggedIn }: CUETFooterProps) {
               </span>
             </Link>
             <p className="mt-2 text-xs sm:text-sm text-emerald-200/80 leading-relaxed font-normal">
-              India&apos;s practice-first test preparation engine for CUET UG. Experience authentic NTA CBT simulators, granular AI mistake diagnosis, and verified DU cutoffs.
+              India&apos;s practice-first test preparation engine for CUET UG. Experience NTA-style CBT simulators, granular AI mistake diagnosis, and verified DU cutoffs.
             </p>
           </div>
 
@@ -53,7 +53,7 @@ export default function CUETFooter({ onAuth, isLoggedIn }: CUETFooterProps) {
             ) : (
               <form
                 onSubmit={handleSubscribe}
-                className="flex flex-col sm:flex-row items-center gap-2 bg-white/10 p-1.5 rounded-full border border-white/20 backdrop-blur-sm max-w-md mx-auto"
+                className="flex flex-col sm:flex-row items-center gap-2 bg-white/10 p-1.5 rounded-full border border-white/20 backdrop-blur-sm max-w-lg w-full mx-auto lg:mx-0"
               >
                 <div className="flex items-center gap-2 px-4 py-2 w-full">
                   <Mail className="w-4 h-4 text-emerald-300" />
@@ -61,14 +61,14 @@ export default function CUETFooter({ onAuth, isLoggedIn }: CUETFooterProps) {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter email for weekly NCERT drills"
+                    placeholder="Enter email for NCERT drills"
                     required
-                    className="bg-transparent text-white placeholder-emerald-200/60 text-xs sm:text-sm focus:outline-none w-full"
+                    className="bg-transparent text-white placeholder-emerald-200/70 text-xs sm:text-sm focus:outline-none w-full"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full sm:w-auto bg-[#6C5CE7] hover:bg-[#5846E0] text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-full shadow-md transition-all hover:shadow-purple-500/30 whitespace-nowrap"
+                  className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-full shadow-md transition-all hover:shadow-purple-500/30 whitespace-nowrap"
                 >
                   Subscribe
                 </button>
@@ -147,9 +147,9 @@ export default function CUETFooter({ onAuth, isLoggedIn }: CUETFooterProps) {
         </div>
 
         {/* Bottom Disclaimer & Copyright */}
-        <div className="pt-8 border-t border-emerald-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-emerald-300/80">
-          <p>© {new Date().getFullYear()} CUET AI-Prep. All rights reserved.</p>
-          <div className="flex items-center gap-1.5 text-[11px] text-emerald-400/90 text-center md:text-right max-w-xl">
+        <div className="pt-8 border-t border-emerald-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-emerald-200">
+          <p className="text-xs sm:text-sm text-emerald-300 font-medium">© {new Date().getFullYear()} CUET AI-Prep. All rights reserved.</p>
+          <div className="flex items-center gap-2 text-[13px] text-emerald-100/90 text-center md:text-right max-w-xl font-medium leading-relaxed">
             <ShieldAlert className="w-4 h-4 shrink-0 text-emerald-300" />
             <span>
               Disclaimer: CUET AI-Prep is an independent academic assessment tool and is not officially affiliated with or endorsed by the National Testing Agency (NTA).

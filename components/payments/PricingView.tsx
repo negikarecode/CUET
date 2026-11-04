@@ -97,7 +97,7 @@ export default function PricingView() {
               <span className="text-xs text-slate-500 font-medium">Free Forever</span>
             </div>
             <p className="mt-2 text-xs text-slate-500 leading-relaxed font-normal">
-              Get familiar with the authentic NTA Computer-Based Test environment.
+              Get familiar with the NTA-style Computer-Based Test environment.
             </p>
 
             <div className="mt-7 space-y-3.5 text-xs text-slate-700 font-medium">

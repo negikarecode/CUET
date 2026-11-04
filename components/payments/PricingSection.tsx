@@ -46,7 +46,7 @@ export default function PricingSection() {
                 <span className="text-xs text-slate-500 font-medium">Forever Free</span>
               </div>
               <p className="mt-2 text-xs text-slate-500 font-normal leading-relaxed">
-                Test drive the authentic NTA CBT Player with official domain sample questions.
+                Test drive the NTA-style CBT Player with official domain sample questions.
               </p>
 
               <div className="mt-7 space-y-3 text-xs text-slate-700 font-medium">

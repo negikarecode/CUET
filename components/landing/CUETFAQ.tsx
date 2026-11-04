@@ -30,7 +30,7 @@ export default function CUETFAQ() {
     {
       question: "Can I practice on smartphones and tablets?",
       answer:
-        "Yes. While we strongly recommend taking full 60-minute mock tests on a desktop or laptop to replicate authentic NTA Computer-Based Test conditions, all practice drills, AI diagnostic explanations, and chapter revisions work seamlessly across modern mobile phones and tablets.",
+        "Yes. While we strongly recommend taking full 60-minute mock tests on a desktop or laptop to replicate NTA-style Computer-Based Test conditions, all practice drills, AI diagnostic explanations, and chapter revisions work seamlessly across modern mobile phones and tablets.",
     },
     {
       question: "How accurate are the dream college cutoff projections?",
@@ -44,47 +44,59 @@ export default function CUETFAQ() {
   };
 
   return (
-    <section id="faq" className="py-16 md:py-24 bg-[#FAFBFD] px-4 sm:px-6 lg:px-8 border-b border-slate-100">
+    <section id="faq" className="py-14 md:py-24 bg-[#FAFBFD] px-4 sm:px-6 lg:px-8 border-b border-slate-100">
       <div className="max-w-4xl mx-auto">
         {/* Section Heading */}
-        <div className="text-center mb-12 sm:mb-16">
-          <span className="text-xs uppercase font-extrabold tracking-widest text-purple-700 bg-purple-50 px-4 py-1.5 rounded-full border border-purple-200">
+        <div className="text-center mb-10 sm:mb-14 space-y-2">
+          <p className="text-xs font-bold uppercase tracking-wider text-purple-700">
             Frequently Asked Questions
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mt-3">
-            Everything You Need to Know<br />
-            <span className="text-purple-600">About CUET AI-Prep</span>
+          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            Everything you need to know about CUET preparation
           </h2>
+          <p className="text-sm sm:text-base text-slate-600 max-w-lg mx-auto">
+            Clear, honest answers about our syllabus coverage, NTA-style simulation, and scoring engine.
+          </p>
         </div>
 
-        {/* Accordion List */}
-        <div className="space-y-4">
+        {/* Accordion List with full WAI-ARIA accessibility */}
+        <div className="space-y-3.5">
           {faqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
+            const buttonId = `faq-btn-${idx}`;
+            const panelId = `faq-panel-${idx}`;
             return (
               <div
                 key={idx}
-                className="bg-white rounded-3xl border border-slate-200/90 shadow-sm transition-all duration-200 overflow-hidden"
+                className="bg-white rounded-2xl border border-slate-200/90 shadow-xs transition-all duration-200 overflow-hidden"
               >
                 <button
+                  id={buttonId}
                   type="button"
                   onClick={() => toggle(idx)}
-                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 hover:text-purple-700 transition-colors"
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
+                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 hover:text-purple-700 focus-visible:outline-2 focus-visible:outline-purple-600 transition-colors"
                 >
-                  <span>{faq.question}</span>
+                  <span className="leading-snug">{faq.question}</span>
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${
+                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-colors shrink-0 ${
                       isOpen
                         ? "bg-purple-600 text-white"
-                        : "bg-slate-100 text-slate-700 hover:bg-purple-100 hover:text-purple-700"
+                        : "bg-slate-100 text-slate-700"
                     }`}
                   >
-                    {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                    {isOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </div>
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal border-t border-slate-100/80 pt-3 animate-in fade-in duration-200">
+                  <div
+                    id={panelId}
+                    role="region"
+                    aria-labelledby={buttonId}
+                    className="px-5 pb-5 sm:px-6 sm:pb-6 text-sm text-slate-600 leading-relaxed font-normal border-t border-slate-100 pt-3"
+                  >
                     <p>{faq.answer}</p>
                   </div>
                 )}

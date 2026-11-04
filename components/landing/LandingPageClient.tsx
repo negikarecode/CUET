@@ -8,7 +8,9 @@ import CUETSteps from "./CUETSteps";
 import CozyStudyRoomScene from "./illustrations/CozyStudyRoomScene";
 import CUETSystemTabs from "./CUETSystemTabs";
 import CUETArticles from "./CUETArticles";
+import CUETPlanComparison from "./CUETPlanComparison";
 import CUETFAQ from "./CUETFAQ";
+import CUETClosingCTA from "./CUETClosingCTA";
 import CUETFooter from "./CUETFooter";
 import CUETQuickStartModal from "./CUETQuickStartModal";
 import OnboardingModal from "@/components/auth/OnboardingModal";
@@ -79,17 +81,17 @@ export default function LandingPageClient() {
       <CUETSteps />
 
       {/* 5. Interactive Mobile Experience in Cozy Study Room */}
-      <section id="simulator" className="py-16 md:py-24 bg-[#0E2E24] px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <section id="simulator" className="py-14 md:py-24 bg-[#0E2E24] px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-12 text-white space-y-2">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-400 bg-emerald-950/60 px-4 py-1.5 rounded-full border border-emerald-800">
+          <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14 text-white space-y-2.5">
+            <span className="inline-block text-xs uppercase font-extrabold tracking-wider text-emerald-300 bg-emerald-950/70 px-4 py-1.5 rounded-full border border-emerald-700/60 shadow-xs">
               Interactive Mobile CBT Simulator
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight pt-2">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight pt-1">
               Your Daily CUET Exam Companion
             </h2>
-            <p className="text-xs sm:text-sm text-emerald-200/80 font-normal">
-              Click the domain subjects on the phone screen below to test real-time cutoff projections, target accuracy, and priority NCERT fixes.
+            <p className="text-sm sm:text-base text-emerald-100/90 font-normal max-w-lg mx-auto">
+              Tap the domain subjects on the phone simulator below to test real-time cutoff projections, target accuracy, and priority NCERT fixes.
             </p>
           </div>
 
@@ -103,10 +105,18 @@ export default function LandingPageClient() {
       {/* 7. Daily Insights & CUET Strategy Articles (Featured Mascot Guide + 3 Sub-Articles) */}
       <CUETArticles />
 
-      {/* 8. FAQ Accordion Section */}
+      {/* 8. Free vs Gold Pass Comparison */}
+      <CUETPlanComparison
+        onSelectPlan={(plan) => handleOpenAuth(plan === "gold" ? "signup" : "signup")}
+      />
+
+      {/* 9. FAQ Accordion Section */}
       <CUETFAQ />
 
-      {/* 9. Bottom Footer with Green Wave Hills & Newsletter */}
+      {/* 10. Closing Call To Action Band */}
+      <CUETClosingCTA onStartFreeMock={() => handleOpenAuth("signup")} />
+
+      {/* 11. Bottom Footer with Green Wave Hills & Newsletter */}
       <CUETFooter isLoggedIn={isLoggedIn} onAuth={handleOpenAuth} />
 
       {/* 10. Quick Start / QR Code Modal */}

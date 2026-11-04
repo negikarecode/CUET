@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import MeditatingMascot from "./illustrations/MeditatingMascot";
+import OwlScholarMascot from "./illustrations/OwlScholarMascot";
 import { ArrowRight, Clock, X, Target, BookOpen, Landmark } from "lucide-react";
 
 interface ArticleItem {
@@ -100,16 +100,15 @@ Selecting the optimal domain subject combination maximizes your eligibility acro
   ];
 
   return (
-    <section id="articles" className="py-16 md:py-24 bg-white px-4 sm:px-6 lg:px-8 border-b border-slate-100">
+    <section id="articles" className="py-14 md:py-24 bg-white px-4 sm:px-6 lg:px-8 border-b border-slate-100">
       <div className="max-w-6xl mx-auto">
         {/* Section Heading */}
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-          <span className="text-xs uppercase font-extrabold tracking-widest text-purple-700 bg-purple-50 px-4 py-1.5 rounded-full border border-purple-200">
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 space-y-2">
+          <p className="text-xs font-bold uppercase tracking-wider text-purple-700">
             Admissions Knowledge Base
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Daily <span className="text-purple-600">Insights</span> for Higher<br />
-            CUET Percentiles
+          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            Daily Insights for Higher CUET Percentiles
           </h2>
           <p className="text-sm sm:text-base text-slate-600 font-medium max-w-md mx-auto">
             Practical strategies, exam pacing frameworks, and NCERT revision blueprints distilled from past 100-percentile toppers.
@@ -119,7 +118,7 @@ Selecting the optimal domain subject combination maximizes your eligibility acro
         {/* Articles Layout: Featured Card on Left + 3 Cards on Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Featured Card (Left - 5 Cols) */}
-          <div className="lg:col-span-5 bg-gradient-to-br from-purple-50/80 via-white to-amber-50/50 rounded-[32px] p-6 sm:p-8 border border-purple-100/80 shadow-md flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+          <div className="lg:col-span-5 bg-gradient-to-br from-purple-50/80 via-white to-amber-50/50 rounded-3xl p-6 sm:p-8 border border-purple-100/80 shadow-md flex flex-col justify-between hover:shadow-lg transition-all duration-300">
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className={`text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1.5 ${featuredArticle.accent}`}>
@@ -131,15 +130,15 @@ Selecting the optimal domain subject combination maximizes your eligibility acro
                 </span>
               </div>
 
-              {/* Meditating / Study Mascot */}
-              <div className="mb-6">
-                <MeditatingMascot />
+              {/* Canonical Scholar Owl Mascot */}
+              <div className="mb-6 h-[200px] flex items-center justify-center bg-purple-50/70 rounded-2xl border border-purple-100/80 overflow-hidden">
+                <OwlScholarMascot size={160} withCap={true} />
               </div>
 
               <h3 className="text-xl font-extrabold text-slate-900 leading-snug mb-3">
                 {featuredArticle.title}
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              <p className="text-sm text-slate-600 leading-relaxed font-normal">
                 {featuredArticle.summary}
               </p>
             </div>
@@ -147,9 +146,9 @@ Selecting the optimal domain subject combination maximizes your eligibility acro
             <button
               type="button"
               onClick={() => setActiveArticle(featuredArticle)}
-              className="mt-6 inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-purple-600 hover:text-purple-700 group pt-2 border-t border-purple-100"
+              className="mt-6 inline-flex items-center gap-1.5 text-sm font-bold text-purple-600 hover:text-purple-700 pt-2 border-t border-purple-100"
             >
-              Read Strategy Guide <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              Read Strategy Guide
             </button>
           </div>
 

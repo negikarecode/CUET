@@ -204,25 +204,10 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
             <circle cx="112" cy="188" r="5" fill="#0F172A" />
           </g>
 
-          {/* Study Desk & Cozy Yellow Desk Lamp (Right) */}
-          <g transform="translate(680, 240)">
-            {/* Lamp base on table */}
-            <ellipse cx="140" cy="270" rx="22" ry="7" fill="#475569" />
-            <path d="M 140 270 Q 155 180 120 140" stroke="#E2E8F0" strokeWidth="5" fill="none" />
-            {/* Lamp Hood */}
-            <path d="M 90 145 L 140 120 L 145 155 Z" fill="#FBBF24" stroke="#D97706" strokeWidth="2" />
-            {/* Warm Cone Light Glow radiating down */}
-            <polygon points="90,145 145,155 240,360 40,360" fill="url(#sunGlow)" opacity="0.35" />
-
-            {/* Coffee mug with steam */}
-            <rect x="190" y="270" width="18" height="22" rx="4" fill="#F8FAFC" />
-            <path d="M 208 274 Q 215 281 208 288" stroke="#F8FAFC" strokeWidth="2.5" fill="none" />
-            <path d="M 194 264 Q 192 256 195 250 M 202 264 Q 200 256 203 250" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-
-            {/* Sturdy Study Table */}
-            <rect x="20" y="290" width="260" height="18" rx="4" fill="#78350F" />
-            <rect x="40" y="308" width="14" height="160" fill="#451A03" />
-            <rect x="240" y="308" width="14" height="160" fill="#451A03" />
+          {/* Ambient Study Room Atmosphere - simplified vectors to give callout breathing room */}
+          <g opacity="0.4">
+            <ellipse cx="800" cy="300" rx="90" ry="140" fill="url(#vaultArch)" />
+            <circle cx="820" cy="240" r="40" fill="#25725A" opacity="0.5" />
           </g>
 
           {/* Cozy Bohemian Moroccan Rug */}
@@ -239,9 +224,9 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
         {/* ============================================================== */}
         {/* HIGH-RES SMARTPHONE MOCKUP (iPhone with Dynamic Island)        */}
         {/* ============================================================== */}
-        <div className="relative w-full max-w-[340px] md:max-w-[360px] bg-slate-900 p-[10px] rounded-[48px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] border-4 border-slate-700/60 ring-1 ring-white/10">
+        <div className="relative w-full max-w-[390px] md:max-w-[420px] bg-slate-900 p-[10px] rounded-[48px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] border-4 border-slate-700/60 ring-1 ring-white/10 shrink-0">
           {/* Realistic iPhone Screen Container */}
-          <div className="relative bg-[#F8FAFC] text-slate-800 rounded-[38px] overflow-hidden flex flex-col min-h-[580px] select-none">
+          <div className="relative bg-[#F8FAFC] text-slate-800 rounded-[38px] overflow-hidden flex flex-col min-h-[620px] select-none">
             {/* Status Bar */}
             <div className="px-6 pt-3 pb-2 flex items-center justify-between text-xs font-semibold text-slate-800 bg-white/70 backdrop-blur border-b border-slate-100">
               <span>9:41</span>
@@ -278,7 +263,7 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
             </div>
 
             {/* App Scrollable Body Content */}
-            <div className="flex-1 p-3.5 space-y-3.5 overflow-y-auto max-h-[460px]">
+            <div className="flex-1 p-3.5 space-y-3.5 overflow-y-auto max-h-[510px]">
               {/* Active Full Mock Exam Card */}
               <div className="p-3 rounded-2xl bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 text-white shadow-md relative overflow-hidden">
                 <div className="flex items-center justify-between mb-1.5">
@@ -290,10 +275,10 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
                   </span>
                 </div>
                 <h5 className="text-xs font-bold">CUET 2026 Full-Length Mock #12</h5>
-                <p className="text-[10px] text-purple-200 mt-0.5">50 Compulsory Questions · Zero Choice</p>
+                <p className="text-[10px] text-purple-200 mt-0.5">50 Compulsory Questions · Max 250 Raw Marks</p>
 
                 <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[10px]">
-                  <span className="text-emerald-300 font-medium">Standard +5 / −1 Marking</span>
+                  <span className="text-emerald-300 font-medium">Strict +5 / −1 Marking (Raw)</span>
                   <button
                     type="button"
                     onClick={onStartTest}
@@ -347,12 +332,15 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
                   </span>
                 </div>
 
-                <div className="flex items-baseline justify-between mb-1">
-                  <div>
+                <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mb-1.5">
+                  <div className="flex items-baseline gap-1.5 flex-wrap">
                     <span className="text-xl font-black text-slate-900 tabular-nums">{current.score}</span>
-                    <span className="text-[10px] text-slate-500 ml-1">({current.accuracy} accuracy)</span>
+                    <span className="text-[10px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200">Normalized</span>
+                    <span className="text-xs text-slate-500 font-medium">({current.accuracy} accuracy)</span>
                   </div>
-                  <span className="text-[10px] text-emerald-600 font-semibold">{current.statusText}</span>
+                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                    {current.statusText}
+                  </span>
                 </div>
 
                 <p className="text-[10px] text-slate-500 border-t border-slate-100 pt-2 mt-2">
@@ -430,18 +418,29 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
           </div>
         </div>
 
-        {/* Right Mascot Presentation: Owl Scholar Mentor */}
-        <div className="hidden lg:flex flex-col items-center text-center max-w-xs space-y-4">
-          <OwlScholarMascot size={230} withCap={true} />
-          <div className="bg-white/90 backdrop-blur-md border border-white/80 p-4 rounded-3xl shadow-xl text-slate-900 space-y-1">
-            <span className="text-xs font-bold text-purple-700 uppercase tracking-wider">
+        {/* Right Mascot Presentation: Owl Scholar Mentor with directional pointer */}
+        <div className="hidden lg:flex flex-col items-center text-center max-w-sm space-y-4 relative pl-4 lg:pl-6">
+          {/* Directional pointer to the subject grid */}
+          <div className="hidden xl:flex items-center gap-2 absolute -left-12 top-24 text-emerald-300 pointer-events-none">
+            <svg width="48" height="28" viewBox="0 0 48 28" fill="none">
+              <path d="M 44 24 C 28 24, 16 16, 4 4" stroke="currentColor" strokeWidth="2" strokeDasharray="3 3" strokeLinecap="round" />
+              <polyline points="4,12 4,4 12,4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span className="text-[10px] font-bold tracking-wider uppercase bg-emerald-950/80 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-700/60 shadow-xs">
+              Tap subjects
+            </span>
+          </div>
+
+          <OwlScholarMascot size={210} withCap={true} />
+          <div className="bg-white/95 backdrop-blur-md border border-white/90 p-5 rounded-3xl shadow-xl text-slate-900 space-y-1.5 text-left w-full">
+            <span className="inline-block text-[10px] font-bold text-purple-700 uppercase tracking-wider bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-200/60">
               AI Academic Mentor
             </span>
-            <h4 className="text-sm font-extrabold text-slate-900">
+            <h4 className="text-sm sm:text-base font-extrabold text-slate-900">
               Interactive Domain Radar
             </h4>
             <p className="text-xs text-slate-600 leading-relaxed font-medium">
-              Click the domain subjects on the phone screen to inspect real-time cutoff projections and chapter priority fixes.
+              Click any domain subject on the phone simulator to inspect real-time cutoff projections and AI chapter priority fixes.
             </p>
           </div>
         </div>

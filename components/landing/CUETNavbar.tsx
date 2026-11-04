@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ArrowRight, GraduationCap, QrCode } from "lucide-react";
+import { Menu, X, GraduationCap, QrCode } from "lucide-react";
 
 interface CUETNavbarProps {
   isLoggedIn: boolean;
@@ -14,25 +14,28 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="relative w-full pt-5 pb-2 px-4 sm:px-6 lg:px-8 z-50">
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
+    <header className="relative w-full pt-4 pb-2 px-3 sm:px-6 lg:px-8 z-50">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-emerald-500 flex items-center justify-center text-white shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform">
+        <Link href="/" className="flex items-center gap-2.5 group shrink-0" aria-label="CUET AI-Prep Homepage">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-emerald-500 flex items-center justify-center text-white shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform shrink-0">
             <GraduationCap className="w-5 h-5 text-white" />
           </div>
-          <div className="flex flex-col">
-            <span className="font-extrabold text-2xl tracking-tight text-slate-900 leading-none">
+          <div className="flex flex-col whitespace-nowrap">
+            <span className="font-extrabold text-xl sm:text-2xl tracking-tight text-slate-900 leading-none">
               CUET<span className="text-purple-600"> AI-Prep</span>
             </span>
             <span className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase mt-0.5">
-              NTA CBT Engine
+              NTA-Style CBT Simulator
             </span>
           </div>
         </Link>
 
-        {/* Center Floating Dark Pill Navigation Bar (Desktop) */}
-        <nav className="hidden lg:flex items-center bg-[#18262E] text-slate-200 px-7 py-2.5 rounded-full shadow-xl border border-slate-700/50 text-xs sm:text-sm font-medium gap-7">
+        {/* Center Floating Dark Pill Navigation Bar (Desktop ≥1024px) */}
+        <nav
+          aria-label="Primary navigation"
+          className="hidden lg:flex items-center bg-[#18262E] text-slate-200 px-5 xl:px-6 py-2 rounded-full shadow-xl border border-slate-700/50 text-xs font-medium gap-4 xl:gap-6 whitespace-nowrap"
+        >
           <Link
             href="#home"
             className="hover:text-white transition-colors py-1 px-1 relative font-semibold text-white"
@@ -49,7 +52,7 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
             How It Works
           </Link>
           <Link href="#curriculum" className="hover:text-white transition-colors py-1 px-1 text-slate-300">
-            System Spec
+            Syllabus
           </Link>
           <Link href="#articles" className="hover:text-white transition-colors py-1 px-1 text-slate-300">
             Strategy
@@ -59,30 +62,30 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
           </Link>
         </nav>
 
-        {/* Right CTA Actions */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* Right CTA Actions (Desktop ≥1024px) */}
+        <div className="hidden lg:flex items-center gap-2.5 shrink-0 whitespace-nowrap">
           {isLoggedIn ? (
             <Link
               href="/dashboard"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-md hover:shadow-emerald-500/30 transition-all duration-200 flex items-center gap-1.5"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs xl:text-sm font-bold px-4 py-2 rounded-full shadow-md hover:shadow-emerald-500/30 transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap"
             >
-              Go to Dashboard <ArrowRight className="w-3.5 h-3.5" />
+              Go to Dashboard
             </Link>
           ) : (
             <>
               <button
                 type="button"
                 onClick={() => onAuth("login")}
-                className="text-xs sm:text-sm font-semibold text-slate-700 hover:text-purple-700 bg-white/80 hover:bg-white px-4 py-2 rounded-full border border-slate-200/90 shadow-2xs transition-all"
+                className="text-xs xl:text-sm font-semibold text-slate-700 hover:text-purple-700 bg-white/90 hover:bg-white px-3.5 py-2 rounded-full border border-slate-200/90 shadow-2xs transition-all whitespace-nowrap"
               >
                 Login
               </button>
               <button
                 type="button"
                 onClick={() => onAuth("signup")}
-                className="bg-[#18262E] hover:bg-purple-700 text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-md hover:shadow-purple-500/30 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5"
+                className="bg-[#18262E] hover:bg-purple-700 text-white text-xs xl:text-sm font-bold px-4 py-2 rounded-full shadow-md hover:shadow-purple-500/30 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-1.5 whitespace-nowrap"
               >
-                Start Free <ArrowRight className="w-3.5 h-3.5" />
+                Start Free
               </button>
             </>
           )}
@@ -91,7 +94,7 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
             <button
               type="button"
               onClick={onOpenQuickStart}
-              className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors flex items-center justify-center"
+              className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors flex items-center justify-center shrink-0"
               title="Mobile App & QR Code"
               aria-label="Mobile App QR Code"
             >
@@ -100,12 +103,12 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
           )}
         </div>
 
-        {/* Mobile Menu Hamburger Button */}
-        <div className="flex md:hidden items-center gap-2">
+        {/* Below 1024px: Single visible button + Accessible menu button */}
+        <div className="flex lg:hidden items-center gap-2 shrink-0">
           {isLoggedIn ? (
             <Link
               href="/dashboard"
-              className="bg-emerald-600 text-white text-xs font-bold px-3 py-2 rounded-full shadow-sm"
+              className="bg-emerald-600 text-white text-xs sm:text-sm font-bold px-3.5 sm:px-4 py-2 rounded-full shadow-sm whitespace-nowrap"
             >
               Dashboard
             </Link>
@@ -113,15 +116,17 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
             <button
               type="button"
               onClick={() => onAuth("signup")}
-              className="bg-purple-600 text-white text-xs font-bold px-3 py-2 rounded-full shadow-sm"
+              className="bg-[#18262E] hover:bg-purple-700 text-white text-xs sm:text-sm font-bold px-3.5 sm:px-4 py-2 rounded-full shadow-sm whitespace-nowrap"
             >
-              Start Free
+              Start free mock
             </button>
           )}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+            className="p-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-purple-600"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav-drawer"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -129,9 +134,12 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile & Tablet Drawer Menu (<1024px) */}
       {mobileMenuOpen && (
-        <div className="md:hidden mt-3 max-w-sm mx-auto bg-[#18262E] text-white p-5 rounded-3xl shadow-xl border border-slate-700/50 flex flex-col gap-3.5 text-center text-sm font-medium animate-in fade-in slide-in-from-top-2 duration-200">
+        <div
+          id="mobile-nav-drawer"
+          className="lg:hidden mt-3 max-w-md mx-auto bg-[#18262E] text-white p-5 rounded-3xl shadow-xl border border-slate-700/50 flex flex-col gap-3 text-center text-sm font-medium animate-in fade-in slide-in-from-top-2 duration-200"
+        >
           <Link
             href="#home"
             onClick={() => setMobileMenuOpen(false)}
@@ -165,7 +173,7 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
             onClick={() => setMobileMenuOpen(false)}
             className="py-2 hover:bg-slate-800 rounded-xl text-slate-300"
           >
-            System Spec
+            Syllabus
           </Link>
           <Link
             href="#articles"
@@ -209,7 +217,7 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
                     setMobileMenuOpen(false);
                     onAuth("signup");
                   }}
-                  className="w-full bg-purple-600 text-white font-bold py-2.5 rounded-full"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 rounded-full"
                 >
                   Start Practicing Free
                 </button>

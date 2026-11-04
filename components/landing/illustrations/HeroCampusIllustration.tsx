@@ -4,7 +4,13 @@ import { Award } from "lucide-react";
 
 export default function HeroCampusIllustration({ className = "" }: { className?: string }) {
   return (
-    <div className={`relative w-full max-w-[560px] select-none ${className}`}>
+    <div
+      className={`relative w-full max-w-[560px] select-none ${className}`}
+      style={{
+        maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 82%, rgba(0,0,0,0) 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 82%, rgba(0,0,0,0) 100%)",
+      }}
+    >
       <svg
         viewBox="0 0 600 520"
         fill="none"
@@ -162,14 +168,18 @@ export default function HeroCampusIllustration({ className = "" }: { className?:
         <OwlScholarMascot size={210} withCap={true} />
       </div>
 
-      {/* Floating Score Badge on right */}
-      <div className="absolute right-4 top-20 md:right-8 md:top-24 bg-white/95 backdrop-blur-md border border-slate-100 rounded-2xl p-3 shadow-xl z-20 flex items-center gap-3 animate-bounce duration-1000">
-        <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+      {/* Floating Sample Score Badge - placed in open sky area above building to avoid roof overlap */}
+      <div className="absolute right-2 top-2 sm:right-6 sm:top-4 md:right-4 md:top-6 bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-2xl p-3 sm:p-3.5 shadow-xl z-20 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
           <Award className="w-5 h-5 text-purple-700" />
         </div>
         <div>
-          <div className="text-[11px] font-semibold text-slate-500">Predicted Score</div>
-          <div className="text-sm font-extrabold text-slate-900">800/800 · SRCC</div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-bold text-purple-700 uppercase tracking-wider">Sample Projection</span>
+            <span className="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-semibold border border-slate-200/80">Demo</span>
+          </div>
+          <div className="text-sm font-extrabold text-slate-900 leading-tight mt-0.5">800/800 · SRCC Target</div>
+          <div className="text-[10px] text-slate-500 font-medium">Class 12 Normalized Score</div>
         </div>
       </div>
     </div>

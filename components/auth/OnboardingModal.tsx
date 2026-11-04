@@ -414,7 +414,7 @@ export default function OnboardingModal({
                 )}
               </div>
               <p className="text-[11px] text-slate-500 font-normal">
-                Authentic NTA CBT Simulator & University Cutoff Calibration
+                NTA-Style CBT Simulator & University Cutoff Calibration
               </p>
             </div>
           </div>
