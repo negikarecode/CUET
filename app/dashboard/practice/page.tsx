@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import {
   Search,
@@ -85,6 +85,19 @@ export default function PracticeTestsHubPage() {
   const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
   const target = useTarget();
+
+  // Authoritatively synchronize authenticated server attempts
+  useEffect(() => {
+    if (!isClient) return;
+    fetch("/api/student/attempts")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data.attempts)) {
+          useTestStore.setState({ testAttempts: data.attempts });
+        }
+      })
+      .catch(() => {});
+  }, [isClient]);
 
   const [selectedStream, setSelectedStream] = useState<StreamKey>("all");
   const [selectedSubjectKey, setSelectedSubjectKey] = useState<string>("all");

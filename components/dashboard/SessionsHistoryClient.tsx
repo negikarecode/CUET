@@ -33,6 +33,7 @@ import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface SessionsHistoryClientProps {
   initialAttempts?: RecordedTestAttempt[];
+  initialUserId?: string;
 }
 
 export type SessionType = "Mock" | "Past Paper" | "Practice";
@@ -122,6 +123,7 @@ function getRetakeHref(att?: RecordedTestAttempt | null): string {
 
 export default function SessionsHistoryClient({
   initialAttempts = [],
+  initialUserId,
 }: SessionsHistoryClientProps) {
   const router = useRouter();
   const isClient = useIsClient();
@@ -130,9 +132,11 @@ export default function SessionsHistoryClient({
   const recordTestAttempt = useTestStore((s) => s.recordTestAttempt);
   const deleteTestAttempt = useTestStore((s) => s.deleteTestAttempt);
 
-  // Synchronize initial server attempts into Zustand store idempotently
+  // Synchronize initial server attempts into Zustand store authoritatively
   useEffect(() => {
-    if (initialAttempts.length > 0) {
+    if (initialUserId) {
+      useTestStore.setState({ testAttempts: initialAttempts });
+    } else if (initialAttempts.length > 0) {
       const state = useTestStore.getState();
       const localAttempts = state.testAttempts || [];
       const localCanonicalKeys = new Set(localAttempts.map(getCanonicalTestKey));
@@ -164,13 +168,16 @@ export default function SessionsHistoryClient({
         }
       });
     }
-  }, [initialAttempts, recordTestAttempt]);
+  }, [initialAttempts, initialUserId, recordTestAttempt]);
 
   // Canonical deduplication across store and server attempts
   const allAttempts = useMemo(() => {
+    if (initialUserId) {
+      return (storeAttempts && storeAttempts.length > 0) ? storeAttempts : initialAttempts;
+    }
     const list = storeAttempts.length > 0 ? storeAttempts : initialAttempts;
     return deduplicateTestAttempts(list);
-  }, [storeAttempts, initialAttempts]);
+  }, [storeAttempts, initialAttempts, initialUserId]);
 
   // Filter & Search states
   const [searchQuery, setSearchQuery] = useState("");

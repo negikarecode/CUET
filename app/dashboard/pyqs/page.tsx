@@ -254,6 +254,19 @@ export default function PYQsPage() {
   const testAttempts = useTestStore((state) => state.testAttempts);
   const targetData = useTarget();
 
+  // Authoritatively synchronize authenticated server attempts
+  useEffect(() => {
+    if (!isClient) return;
+    fetch("/api/student/attempts")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data.attempts)) {
+          useTestStore.setState({ testAttempts: data.attempts });
+        }
+      })
+      .catch(() => {});
+  }, [isClient]);
+
   // Backward compatibility redirect: /dashboard/pyqs?subject=physics -> /dashboard/pyqs/physics
   useEffect(() => {
     if (typeof window === "undefined") return;

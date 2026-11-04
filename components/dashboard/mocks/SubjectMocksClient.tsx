@@ -52,9 +52,11 @@ export default function SubjectMocksClient({
 
   const testAttempts = useTestStore((state) => state.testAttempts);
 
-  // Sync initial server attempts into local Zustand store if store is empty
+  // Authoritatively sync server attempts into store for authenticated candidates
   React.useEffect(() => {
-    if (initialServerAttempts && initialServerAttempts.length > 0) {
+    if (initialUserId) {
+      useTestStore.setState({ testAttempts: initialServerAttempts || [] });
+    } else if (initialServerAttempts && initialServerAttempts.length > 0) {
       const store = useTestStore.getState();
       const current = store.testAttempts || [];
       const currentIds = new Set(current.flatMap((a) => [a.id, a.attemptId, a.testId]));
@@ -64,13 +66,16 @@ export default function SubjectMocksClient({
         }
       });
     }
-  }, [initialServerAttempts]);
+  }, [initialServerAttempts, initialUserId]);
 
   // Fallback to initialServerAttempts if client store is not yet hydrated
   const effectiveAttempts = useMemo(() => {
+    if (initialUserId) {
+      return (testAttempts && testAttempts.length > 0) ? testAttempts : (initialServerAttempts || []);
+    }
     if (testAttempts && testAttempts.length > 0) return testAttempts;
     return initialServerAttempts || [];
-  }, [testAttempts, initialServerAttempts]);
+  }, [testAttempts, initialServerAttempts, initialUserId]);
 
   // Authoritative entitlement hook
   const { isPremium, isConfirmedFree } = useEntitlement({

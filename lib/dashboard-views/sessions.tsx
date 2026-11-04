@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 
 export default async function SessionsPage() {
   let initialAttempts: RecordedTestAttempt[] = [];
+  let initialUserId: string | undefined;
 
   try {
     const supabase = createClient();
@@ -21,6 +22,7 @@ export default async function SessionsPage() {
     } = await supabase.auth.getUser();
 
     if (authUser?.id) {
+      initialUserId = authUser.id;
       const serverAttempts = await fetchServerTestAttempts(supabase, authUser.id);
       // Strictly guarantee plain JSON serializability across RSC boundary
       initialAttempts = JSON.parse(JSON.stringify(serverAttempts || []));
@@ -30,5 +32,10 @@ export default async function SessionsPage() {
     initialAttempts = [];
   }
 
-  return <SessionsHistoryClient initialAttempts={initialAttempts} />;
+  return (
+    <SessionsHistoryClient
+      initialAttempts={initialAttempts}
+      initialUserId={initialUserId}
+    />
+  );
 }

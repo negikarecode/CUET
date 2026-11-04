@@ -71,6 +71,11 @@ export default function StandingViewClient({
   const setSelectedStream = useTestStore((state) => state.setSelectedStream);
   const testAttemptsRaw = useTestStore((state) => state.testAttempts);
   const testAttempts = useMemo(() => {
+    if (initialUserId) {
+      return (testAttemptsRaw && testAttemptsRaw.length > 0)
+        ? deduplicateTestAttempts(testAttemptsRaw)
+        : deduplicateTestAttempts(initialAttempts || []);
+    }
     const raw =
       testAttemptsRaw && testAttemptsRaw.length > 0
         ? testAttemptsRaw
@@ -78,12 +83,14 @@ export default function StandingViewClient({
         ? initialAttempts
         : [];
     return deduplicateTestAttempts(raw);
-  }, [testAttemptsRaw, initialAttempts]);
+  }, [testAttemptsRaw, initialAttempts, initialUserId]);
   const setTargetCollege = useTestStore((state) => state.setTargetCollege);
 
-  // Sync server attempts into store if missing locally
+  // Authoritatively sync server attempts into store for authenticated candidates
   useEffect(() => {
-    if (initialAttempts && initialAttempts.length > 0) {
+    if (initialUserId) {
+      useTestStore.setState({ testAttempts: initialAttempts || [] });
+    } else if (initialAttempts && initialAttempts.length > 0) {
       const { testAttempts: localAttempts, recordTestAttempt } = useTestStore.getState();
       const localCanonicalKeys = new Set((localAttempts || []).map(getCanonicalTestKey));
       const localKeys = new Set(
@@ -113,7 +120,7 @@ export default function StandingViewClient({
         }
       });
     }
-  }, [initialAttempts]);
+  }, [initialAttempts, initialUserId]);
 
   const searchParams = useSearchParams();
   const collegeParam = searchParams ? searchParams.get("college") : null;

@@ -19,6 +19,7 @@ import {
   User,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
+import { safeStorage } from "@/lib/storage/safe-storage";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { createClient } from "@/lib/supabase/client";
 import UpgradeButton from "@/components/payments/UpgradeButton";
@@ -56,6 +57,16 @@ export default function Navbar() {
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT" || !session) {
         logout();
+      } else if (event === "SIGNED_IN" && session?.user) {
+        const activeUid = safeStorage.getItem("cuet_active_uid");
+        if (activeUid && activeUid !== session.user.id) {
+          // Different user signed in! Clean up previous user storage immediately
+          safeStorage.clearUserScopedData(activeUid);
+          safeStorage.removeItem("cuet_ai_prep_session_storage:guest");
+          safeStorage.removeItem("cuet_ai_prep_session_storage");
+          logout();
+        }
+        safeStorage.setItem("cuet_active_uid", session.user.id);
       }
     });
 
