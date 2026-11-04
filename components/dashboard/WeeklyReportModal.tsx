@@ -54,7 +54,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
         {/* Header */}
         <div className="p-4 sm:p-6 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#C2410C] text-white flex items-center justify-center font-bold text-lg shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-[#18262E] text-white flex items-center justify-center font-bold text-lg shadow-xs">
               <BarChart3 className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -62,7 +62,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
                 <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                   Weekly Performance Report
                 </h2>
-                <span className="px-2.5 py-0.5 rounded-full bg-[#FDF0E6] text-[#C2410C] text-[10px] font-bold uppercase tracking-wider">
+                <span className="px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 text-[10px] font-bold uppercase tracking-wider">
                   {report.weekLabel}
                 </span>
               </div>
@@ -148,7 +148,7 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
                   <span className="text-[10px] text-slate-400 uppercase font-bold block">{wt.weekLabel}</span>
                   <div className="h-16 bg-slate-800 rounded-xl flex items-end p-1 overflow-hidden">
                     <div
-                      className="w-full bg-gradient-to-t from-[#C2410C] to-[#EA580C] rounded-lg transition-all"
+                      className="w-full bg-gradient-to-t from-purple-600 to-indigo-600 rounded-lg transition-all"
                       style={{ height: `${Math.max(10, wt.accuracy)}%` }}
                     />
                   </div>
@@ -161,9 +161,9 @@ export function WeeklyReportModal({ report, onClose }: WeeklyReportModalProps) {
 
           {/* Student Narrative & Parent Takeaway */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-2xl bg-[#FEF1E0]/70 border border-[#F6D3AF] space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#441408] flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#C2410C]" />
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-purple-600" />
                 <span>Student Performance Summary</span>
               </span>
               <p className="text-slate-800 font-medium leading-relaxed">

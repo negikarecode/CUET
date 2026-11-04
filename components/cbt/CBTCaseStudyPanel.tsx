@@ -121,7 +121,7 @@ export default function CBTCaseStudyPanel({
 
       {/* Specific Question Stem for Current Question */}
       <div className="p-5 sm:p-6 rounded-2xl border border-slate-200/80 bg-white shadow-xs space-y-2">
-        <div className="inline-block px-2.5 py-0.5 rounded-full bg-[#FDF0E6] text-[#C2410C] border border-[#F6D3AF] text-[10px] font-bold tracking-wider uppercase">
+        <div className="inline-block px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200/80 text-[10px] font-bold tracking-wider uppercase">
           Question {questionNumber} Target
         </div>
         {stemMatchData ? (

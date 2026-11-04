@@ -228,7 +228,7 @@ export default function CBTPageClient({
               <button
                 type="button"
                 onClick={handleRetry}
-                className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-xs hover:shadow transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>Retry Initialization</span>
@@ -238,7 +238,7 @@ export default function CBTPageClient({
             {initError.type === "auth_expired" && (
               <Link
                 href={`/signup?redirect=${encodeURIComponent(typeof window !== "undefined" ? window.location.pathname + window.location.search : `/test/${testId}`)}`}
-                className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-xs hover:shadow transition-all"
+                className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all"
               >
                 <LogIn className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>Sign In / Register</span>
@@ -271,7 +271,7 @@ export default function CBTPageClient({
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
         <div className="flex flex-col items-center gap-3 text-slate-600">
-          <div className="w-9 h-9 border-3 border-[#C2410C] border-t-transparent rounded-full animate-spin" />
+          <div className="w-9 h-9 border-3 border-purple-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
             {isReattempt
               ? "Preparing Fresh Re-attempt Environment..."

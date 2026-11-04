@@ -127,7 +127,7 @@ export class CBTErrorBoundary extends Component<Props, State> {
                 <button
                   type="button"
                   onClick={this.handleReload}
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-xs hover:shadow transition-all cursor-pointer"
+                  className="flex-1 py-2.5 px-4 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-xs hover:shadow transition-all cursor-pointer"
                 >
                   <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span>Recover &amp; Resume Test</span>

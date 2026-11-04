@@ -171,7 +171,7 @@ export default function OtpVerificationView({
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Header Info */}
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-[#FDF0E6] text-[#C2410C] border border-[#F6D3AF] shadow-2xs mx-auto">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 border border-purple-200 shadow-2xs mx-auto">
           <Mail className="w-6 h-6" strokeWidth={2} />
         </div>
         <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
@@ -236,7 +236,7 @@ export default function OtpVerificationView({
           ${
             isVerifying || otp.length !== 6
               ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
-              : "bg-[#C2410C] hover:bg-[#9A3412] shadow-orange-500/20 active:scale-[0.99]"
+              : "bg-[#18262E] hover:bg-purple-700 shadow-slate-900/10 active:scale-[0.99]"
           }
         `}
       >
@@ -266,7 +266,7 @@ export default function OtpVerificationView({
               type="button"
               onClick={handleResend}
               disabled={isResending}
-              className="font-semibold text-[#C2410C] hover:text-[#9A3412] hover:underline flex items-center gap-1 cursor-pointer transition-colors disabled:opacity-50"
+              className="font-semibold text-purple-600 hover:text-purple-700 hover:underline flex items-center gap-1 cursor-pointer transition-colors disabled:opacity-50"
             >
               {isResending ? (
                 <>

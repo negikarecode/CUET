@@ -103,16 +103,16 @@ export default function LockedFeaturePaywall({
 
       <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
         {/* Top Accent Strip */}
-        <div className="h-2 bg-gradient-to-r from-[#C2410C] via-[#EA580C] to-[#F97316]" />
+        <div className="h-2 bg-gradient-to-r from-[#18262E] via-purple-700 to-emerald-600" />
 
         <div className="p-6 sm:p-10 text-center max-w-2xl mx-auto">
           {/* Badge & Lock Icon */}
-          <div className="w-16 h-16 rounded-2xl bg-[#FEF1E0] border border-[#F6D3AF] text-[#C2410C] flex items-center justify-center mx-auto mb-5 shadow-xs">
+          <div className="w-16 h-16 rounded-2xl bg-purple-50 border border-purple-200 text-purple-700 flex items-center justify-center mx-auto mb-5 shadow-xs">
             <Icon className="w-8 h-8 stroke-[2]" />
           </div>
 
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEF1E0] text-[#9F3014] text-xs font-bold border border-[#F6D3AF] uppercase tracking-wider mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-[#C2410C]" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold border border-purple-200 uppercase tracking-wider mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
             <span>{featureSubtitle}</span>
           </div>
 
@@ -176,7 +176,7 @@ export default function LockedFeaturePaywall({
                 planId="all_access_pass_799"
                 variant="primary"
                 buttonText={`Get Premium (₹${pricing.currentPriceInr})`}
-                className="w-full sm:w-auto text-sm px-6 py-3.5 shadow-md shadow-orange-500/10"
+                className="w-full sm:w-auto text-sm px-6 py-3.5 shadow-md shadow-slate-900/10"
               />
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function LockedFeaturePaywall({
             </div>
             <span>•</span>
             <div className="inline-flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5 text-[#C2410C]" />
+              <Zap className="w-3.5 h-3.5 text-purple-600" />
               <span>No recurring auto-debits</span>
             </div>
           </div>

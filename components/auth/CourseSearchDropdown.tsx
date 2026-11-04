@@ -68,7 +68,7 @@ export default function CourseSearchDropdown({
 
   const categoryBadges: Record<string, string> = {
     "Commerce & Mgmt": "bg-amber-50 text-amber-800 border-amber-200",
-    "Science & Tech": "bg-[#FDF0E6] text-[#9F3014] border-[#F6D3AF]",
+    "Science & Tech": "bg-indigo-50 text-indigo-800 border-indigo-200",
     "Arts & Humanities": "bg-purple-50 text-purple-800 border-purple-200",
     "Education & Professional": "bg-emerald-50 text-emerald-800 border-emerald-200",
   };
@@ -78,7 +78,7 @@ export default function CourseSearchDropdown({
       {label && (
         <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center justify-between">
           <span className="flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5 text-[#C2410C]" />
+            <BookOpen className="w-3.5 h-3.5 text-purple-600" />
             <span>{label}</span>
           </span>
           <span className="text-[10px] text-slate-400 font-mono">
@@ -121,7 +121,7 @@ export default function CourseSearchDropdown({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search degree, course name (e.g. BCom, Physics)..."
-                className="w-full pl-8 pr-7 py-1.5 text-xs font-medium bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-[#C2410C] placeholder:text-slate-400"
+                className="w-full pl-8 pr-7 py-1.5 text-xs font-medium bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-500/20 placeholder:text-slate-400"
               />
               {searchQuery && (
                 <button
@@ -149,7 +149,7 @@ export default function CourseSearchDropdown({
                   onClick={() => setCategoryFilter(tab.id)}
                   className={`px-2.5 py-0.5 rounded-full border whitespace-nowrap transition-all shadow-xs ${
                     categoryFilter === tab.id
-                      ? "bg-[#C2410C] text-white border-[#C2410C]"
+                      ? "bg-[#18262E] text-white border-[#18262E]"
                       : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
                   }`}
                 >
@@ -169,7 +169,7 @@ export default function CourseSearchDropdown({
                 <button
                   type="button"
                   onClick={() => handleSelect(searchQuery)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FDF0E6] border border-[#F6D3AF] text-xs font-semibold text-[#9F3014] hover:bg-[#FCE7D0] transition-colors shadow-xs"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 border border-purple-200 text-xs font-semibold text-purple-700 hover:bg-purple-100 transition-colors shadow-xs"
                 >
                   <span>Select &quot;{searchQuery}&quot; as custom course</span>
                 </button>
@@ -183,7 +183,7 @@ export default function CourseSearchDropdown({
                     type="button"
                     onClick={() => handleSelect(crs.name)}
                     className={`w-full px-3.5 py-2 text-left flex items-center justify-between text-xs transition-all hover:bg-slate-50 ${
-                      isSelected ? "bg-[#FFF5EA] font-semibold" : "font-normal"
+                      isSelected ? "bg-purple-50 text-purple-900 font-semibold" : "font-normal"
                     }`}
                   >
                     <div className="flex flex-col truncate pr-2">

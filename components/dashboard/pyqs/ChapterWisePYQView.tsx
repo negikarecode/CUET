@@ -145,7 +145,7 @@ function ChapterList({ chapters, subjectName, onSelectChapter, progress }: Chapt
             </p>
           </div>
           {totalAttempted > 0 && (
-            <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] shrink-0">
+            <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 shrink-0">
               {totalAttempted} of {totalQs} Attempted
             </span>
           )}
@@ -155,7 +155,7 @@ function ChapterList({ chapters, subjectName, onSelectChapter, progress }: Chapt
           <div className="flex items-center gap-2">
             <div className="flex-1 bg-slate-100 h-2 rounded-full overflow-hidden">
               <div
-                className="bg-[#C2410C] h-full rounded-full transition-all duration-500"
+                className="bg-purple-600 h-full rounded-full transition-all duration-500"
                 style={{ width: `${Math.min(100, Math.round((totalAttempted / totalQs) * 100))}%` }}
               />
             </div>
@@ -179,11 +179,11 @@ function ChapterList({ chapters, subjectName, onSelectChapter, progress }: Chapt
               key={ch.chapterName}
               type="button"
               onClick={() => onSelectChapter(idx)}
-              className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs hover:border-[#F6D3AF] hover:shadow-sm transition-all text-left group w-full"
+              className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs hover:border-purple-200 hover:shadow-sm transition-all text-left group w-full"
             >
               <div className="flex items-start justify-between gap-2 mb-3">
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-bold text-slate-900 group-hover:text-[#C2410C] transition-colors leading-snug line-clamp-2">
+                  <h3 className="text-sm font-bold text-slate-900 group-hover:text-purple-600 transition-colors leading-snug line-clamp-2">
                     {ch.chapterName}
                   </h3>
                   {ch.topics && ch.topics.length > 0 && (
@@ -192,7 +192,7 @@ function ChapterList({ chapters, subjectName, onSelectChapter, progress }: Chapt
                     </p>
                   )}
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#C2410C] transition-colors shrink-0 mt-0.5" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-purple-600 transition-colors shrink-0 mt-0.5" />
               </div>
 
               <div className="flex items-center gap-2 flex-wrap mb-3">
@@ -201,7 +201,7 @@ function ChapterList({ chapters, subjectName, onSelectChapter, progress }: Chapt
                   {qCount} {qCount === 1 ? "question" : "questions"}
                 </span>
                 {ch.weightagePercent && ch.weightagePercent > 0 && (
-                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF]">
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">
                     {ch.weightagePercent.toFixed(1)}% weightage
                   </span>
                 )}
@@ -228,7 +228,7 @@ function ChapterList({ chapters, subjectName, onSelectChapter, progress }: Chapt
                   <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-300 ${
-                        accuracy !== null && accuracy >= 70 ? "bg-emerald-500" : "bg-[#C2410C]"
+                        accuracy !== null && accuracy >= 70 ? "bg-emerald-500" : "bg-purple-600"
                       }`}
                       style={{
                         width: `${Math.min(100, Math.round((prog.attempted / qCount) * 100))}%`,
@@ -347,7 +347,7 @@ function QuestionPractice({ chapter, onBack, onUpdateProgress }: QuestionPractic
             setYearFilter("all");
             setCurrentIdx(0);
           }}
-          className="text-xs font-bold text-[#C2410C] hover:underline cursor-pointer"
+          className="text-xs font-bold text-purple-700 hover:underline cursor-pointer"
         >
           Show all questions
         </button>
@@ -394,7 +394,7 @@ function QuestionPractice({ chapter, onBack, onUpdateProgress }: QuestionPractic
                     setShowYearDropdown(false);
                   }}
                   className={`w-full text-left px-3 py-2 text-xs font-semibold transition-colors cursor-pointer ${
-                    yearFilter === p ? "bg-[#FEF1E0] text-[#9F3014]" : "text-slate-700 hover:bg-slate-50"
+                    yearFilter === p ? "bg-purple-50 text-purple-700" : "text-slate-700 hover:bg-slate-50"
                   }`}
                 >
                   {p === "all" ? `All Papers (${questions.length})` : p}
@@ -458,7 +458,7 @@ function QuestionPractice({ chapter, onBack, onUpdateProgress }: QuestionPractic
         {/* Progress bar */}
         <div className="mt-3 w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
           <div
-            className="bg-[#C2410C] h-full rounded-full transition-all duration-300"
+            className="bg-purple-600 h-full rounded-full transition-all duration-300"
             style={{ width: `${Math.round(((currentIdx + 1) / filteredQuestions.length) * 100)}%` }}
           />
         </div>
@@ -501,7 +501,7 @@ function QuestionPractice({ chapter, onBack, onUpdateProgress }: QuestionPractic
 
             if (!isSubmitted) {
               optClass += isSelected
-                ? "border-[#C2410C] bg-[#FEF1E0] text-[#441408] shadow-xs cursor-pointer"
+                ? "border-purple-600 bg-purple-50 text-purple-900 shadow-xs cursor-pointer"
                 : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 cursor-pointer";
             } else {
               optClass += isThisCorrect
@@ -527,7 +527,7 @@ function QuestionPractice({ chapter, onBack, onUpdateProgress }: QuestionPractic
                         : isSubmitted && isSelected && !isThisCorrect
                         ? "border-rose-400 bg-rose-400 text-white"
                         : isSelected
-                        ? "border-[#C2410C] bg-[#C2410C] text-white"
+                        ? "border-purple-600 bg-purple-600 text-white"
                         : "border-slate-300 text-slate-500 bg-white"
                     }`}
                   >
@@ -554,7 +554,7 @@ function QuestionPractice({ chapter, onBack, onUpdateProgress }: QuestionPractic
             type="button"
             disabled={!currentState?.selected}
             onClick={handleSubmit}
-            className="w-full py-3 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all cursor-pointer"
+            className="w-full py-3 rounded-xl bg-[#18262E] hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all cursor-pointer"
           >
             Submit Answer
           </button>
@@ -626,7 +626,7 @@ function QuestionPractice({ chapter, onBack, onUpdateProgress }: QuestionPractic
               <button
                 type="button"
                 onClick={() => setCurrentIdx((i) => i + 1)}
-                className="w-full py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-sm transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-sm transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 Next Question
                 <ChevronRight className="w-4 h-4" />
@@ -653,7 +653,7 @@ function QuestionPractice({ chapter, onBack, onUpdateProgress }: QuestionPractic
                   <button
                     type="button"
                     onClick={onBack}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs transition-all cursor-pointer"
                   >
                     All Chapters
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -685,7 +685,7 @@ function QuestionPractice({ chapter, onBack, onUpdateProgress }: QuestionPractic
                 onClick={() => setCurrentIdx(idx)}
                 className={`w-7 h-7 rounded-lg text-[11px] font-bold transition-all cursor-pointer border ${
                   isCurrent
-                    ? "bg-[#C2410C] text-white border-[#C2410C] shadow-xs"
+                    ? "bg-purple-600 text-white border-purple-600 shadow-xs"
                     : isAttempted
                     ? wasCorrect
                       ? "bg-emerald-500 text-white border-emerald-500"

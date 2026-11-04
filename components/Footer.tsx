@@ -34,13 +34,13 @@ export default function Footer() {
           {/* Col 1: Brand & Core Philosophy (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5">
-              <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-[#C2410C] text-white shadow-xs shrink-0">
-                <GraduationCap className="w-5 h-5 stroke-[2]" />
-                <Sparkles className="w-3.5 h-3.5 text-amber-300 absolute -top-1 -right-1 fill-amber-300" />
+              <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-[#18262E] text-white shadow-xs shrink-0">
+                <GraduationCap className="w-5 h-5 stroke-[2] text-white" />
+                <Sparkles className="w-3.5 h-3.5 text-purple-400 absolute -top-1 -right-1 fill-purple-400" />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-bold tracking-tight text-slate-900 font-sans leading-tight">
-                  CUET <span className="text-[#C2410C]">AI-Prep</span>
+                  CUET <span className="text-purple-600">AI-Prep</span>
                 </span>
                 <span className="text-[10px] font-medium tracking-wider text-slate-400 uppercase">
                   {t("appTagline", "NTA CBT Diagnostic Engine")}
@@ -72,7 +72,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/test/physics"
-                  className="hover:text-[#C2410C] transition-colors flex items-center gap-1.5"
+                  className="hover:text-purple-600 transition-colors flex items-center gap-1.5"
                 >
                   <span>Physics (50 Compulsory Qs)</span>
                 </Link>
@@ -80,7 +80,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/test/chemistry"
-                  className="hover:text-[#C2410C] transition-colors flex items-center gap-1.5"
+                  className="hover:text-purple-600 transition-colors flex items-center gap-1.5"
                 >
                   <span>Chemistry (Physical & Organic)</span>
                 </Link>
@@ -88,7 +88,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/test/mathematics"
-                  className="hover:text-[#C2410C] transition-colors flex items-center gap-1.5"
+                  className="hover:text-purple-600 transition-colors flex items-center gap-1.5"
                 >
                   <span>Mathematics & Applied Math</span>
                 </Link>
@@ -96,7 +96,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/test/accountancy"
-                  className="hover:text-[#C2410C] transition-colors flex items-center gap-1.5"
+                  className="hover:text-purple-600 transition-colors flex items-center gap-1.5"
                 >
                   <span>Accountancy (Debentures & Capital)</span>
                 </Link>
@@ -104,7 +104,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/test/business-studies"
-                  className="hover:text-[#C2410C] transition-colors flex items-center gap-1.5"
+                  className="hover:text-purple-600 transition-colors flex items-center gap-1.5"
                 >
                   <span>Business Studies & Management</span>
                 </Link>
@@ -112,7 +112,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/test/economics"
-                  className="hover:text-[#C2410C] transition-colors flex items-center gap-1.5"
+                  className="hover:text-purple-600 transition-colors flex items-center gap-1.5"
                 >
                   <span>Economics (Micro & Macro)</span>
                 </Link>
@@ -120,7 +120,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/test/english"
-                  className="hover:text-[#C2410C] transition-colors flex items-center gap-1.5"
+                  className="hover:text-purple-600 transition-colors flex items-center gap-1.5"
                 >
                   <span>English Core & Grammar</span>
                 </Link>
@@ -137,7 +137,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/#simulator"
-                  className="hover:text-[#C2410C] transition-colors"
+                  className="hover:text-purple-600 transition-colors"
                 >
                   Interactive CBT Simulator
                 </Link>
@@ -145,7 +145,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/#pattern"
-                  className="hover:text-[#C2410C] transition-colors"
+                  className="hover:text-purple-600 transition-colors"
                 >
                   72-Second Pacing Pattern
                 </Link>
@@ -153,7 +153,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/dashboard"
-                  className="hover:text-[#C2410C] transition-colors"
+                  className="hover:text-purple-600 transition-colors"
                 >
                   Aspirant Command Hub
                 </Link>
@@ -161,7 +161,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/dashboard/ai-coach"
-                  className="hover:text-[#C2410C] transition-colors"
+                  className="hover:text-purple-600 transition-colors"
                 >
                   AI Coach & Mistake Breakdown
                 </Link>
@@ -169,7 +169,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/pricing"
-                  className="hover:text-[#C2410C] transition-colors"
+                  className="hover:text-purple-600 transition-colors"
                 >
                   Ranker Pass (₹2 Lifetime)
                 </Link>
@@ -177,7 +177,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="hover:text-[#C2410C] transition-colors"
+                  className="hover:text-purple-600 transition-colors"
                 >
                   Contact Academic Support
                 </Link>
@@ -195,7 +195,7 @@ export default function Footer() {
                 Support:{" "}
                 <a
                   href="mailto:support@cuetprep.com"
-                  className="font-semibold text-[#C2410C] hover:text-[#9A3412] underline underline-offset-2"
+                  className="font-semibold text-purple-600 hover:text-purple-700 underline underline-offset-2"
                 >
                   support@cuetprep.com
                 </a>
@@ -204,7 +204,7 @@ export default function Footer() {
                 NTA Helpline:{" "}
                 <a
                   href="tel:01140759000"
-                  className="font-semibold text-slate-900 hover:text-[#C2410C]"
+                  className="font-semibold text-slate-900 hover:text-purple-600"
                 >
                   011-40759000
                 </a>
@@ -213,7 +213,7 @@ export default function Footer() {
                 Alt:{" "}
                 <a
                   href="tel:01169227700"
-                  className="text-slate-700 hover:text-[#C2410C]"
+                  className="text-slate-700 hover:text-purple-600"
                 >
                   011-69227700
                 </a>
@@ -237,7 +237,7 @@ export default function Footer() {
       <div className="border-t border-slate-200/80 bg-slate-50/70 py-3.5 sm:py-4 px-3 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 text-xs">
           <div className="flex items-center gap-2 font-semibold text-slate-900">
-            <FileCheck2 className="w-4 h-4 text-[#C2410C] shrink-0" />
+            <FileCheck2 className="w-4 h-4 text-purple-600 shrink-0" />
             <span className="font-semibold text-xs">Official NTA Scoring Engine:</span>
           </div>
 

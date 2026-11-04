@@ -55,7 +55,7 @@ export default function LanguageSelector({
     return (
       <div className={`relative inline-flex items-center gap-1.5 ${className}`} ref={dropdownRef}>
         <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-1">
-          <Languages className="w-3.5 h-3.5 text-[#C2410C]" />
+          <Languages className="w-3.5 h-3.5 text-purple-600" />
           <span>{t("viewIn", "View in:")}</span>
         </span>
 
@@ -77,9 +77,9 @@ export default function LanguageSelector({
 
           {isOpen && (
             <div className="absolute right-0 top-full mt-1.5 w-64 max-h-80 overflow-y-auto bg-white rounded-2xl border border-slate-200/80 shadow-xl z-50 p-1.5">
-              <div className="px-2.5 py-1.5 mb-1 bg-[#FEF1E0] rounded-xl border border-[#F6D3AF] text-[10px] font-bold text-[#9F3014] flex items-center justify-between">
+              <div className="px-2.5 py-1.5 mb-1 bg-purple-50 rounded-xl border border-purple-200 text-[10px] font-bold text-purple-700 flex items-center justify-between">
                 <span>NTA CUET 13 OFFICIAL MEDIUMS</span>
-                <span className="bg-[#C2410C] text-white px-1.5 py-0.5 rounded-full text-[9px]">IN-BUILT</span>
+                <span className="bg-purple-600 text-white px-1.5 py-0.5 rounded-full text-[9px]">IN-BUILT</span>
               </div>
               <div className="space-y-0.5">
                 {CUET_OFFICIAL_LANGUAGES.map((lang) => {
@@ -91,7 +91,7 @@ export default function LanguageSelector({
                       onClick={() => handleSelect(lang.code)}
                       className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs text-left transition-all ${
                         isSelected
-                          ? "bg-[#FEF1E0] text-[#9F3014] font-semibold border border-[#F6D3AF] shadow-xs"
+                          ? "bg-purple-50 text-purple-700 font-semibold border border-purple-200 shadow-xs"
                           : "hover:bg-slate-50 font-medium text-slate-700 border border-transparent"
                       }`}
                     >
@@ -108,7 +108,7 @@ export default function LanguageSelector({
                           </span>
                         </div>
                       </div>
-                      {isSelected && <Check className="w-3.5 h-3.5 text-[#C2410C] stroke-[2.5]" />}
+                      {isSelected && <Check className="w-3.5 h-3.5 text-purple-600 stroke-[2.5]" />}
                     </button>
                   );
                 })}
@@ -128,10 +128,10 @@ export default function LanguageSelector({
       <div className={`space-y-2 ${className}`}>
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-1.5 text-xs font-semibold uppercase text-slate-700">
-            <Globe className="w-4 h-4 text-[#C2410C]" />
+            <Globe className="w-4 h-4 text-purple-600" />
             <span>NTA CUET Official Language (13 Mediums)</span>
           </div>
-          <span className="text-[10px] font-semibold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] px-2 py-0.5 rounded-full">
+          <span className="text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded-full">
             {currentLang.name}
           </span>
         </div>
@@ -146,7 +146,7 @@ export default function LanguageSelector({
                 onClick={() => handleSelect(lang.code)}
                 className={`flex items-center justify-between px-2.5 py-2 rounded-xl text-xs text-left transition-all ${
                   isSelected
-                    ? "bg-[#FEF1E0] text-[#9F3014] font-semibold border border-[#F6D3AF] shadow-xs"
+                    ? "bg-purple-50 text-purple-700 font-semibold border border-purple-200 shadow-xs"
                     : "hover:bg-white bg-white/70 font-medium text-slate-700 border border-slate-200/60"
                 }`}
               >
@@ -158,7 +158,7 @@ export default function LanguageSelector({
                     {lang.name}
                   </span>
                 </div>
-                {isSelected && <Check className="w-3 h-3 text-[#C2410C] stroke-[2.5] shrink-0" />}
+                {isSelected && <Check className="w-3 h-3 text-purple-600 stroke-[2.5] shrink-0" />}
               </button>
             );
           })}
@@ -179,7 +179,7 @@ export default function LanguageSelector({
           className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 rounded-xl border border-slate-200/80 shadow-xs transition-all cursor-pointer"
         >
           <div className="flex items-center gap-2 min-w-0">
-            <Globe className="w-4 h-4 text-[#C2410C] shrink-0" />
+            <Globe className="w-4 h-4 text-purple-600 shrink-0" />
             <div className="flex flex-col items-start truncate leading-tight">
               <span className="text-[9px] font-semibold uppercase text-slate-400 tracking-wider">
                 {t("examLanguage", "Exam Language")}
@@ -197,7 +197,7 @@ export default function LanguageSelector({
 
         {isOpen && (
           <div className="absolute left-0 bottom-full mb-1.5 w-64 max-h-72 overflow-y-auto bg-white rounded-2xl border border-slate-200/80 shadow-xl z-50 p-1.5">
-            <div className="px-2.5 py-1 mb-1 bg-[#FEF1E0] rounded-xl border border-[#F6D3AF] text-[9px] font-bold text-[#9F3014]">
+            <div className="px-2.5 py-1 mb-1 bg-purple-50 rounded-xl border border-purple-200 text-[9px] font-bold text-purple-700">
               13 OFFICIAL CUET EXAM LANGUAGES
             </div>
             <div className="space-y-0.5">
@@ -210,14 +210,14 @@ export default function LanguageSelector({
                     onClick={() => handleSelect(lang.code)}
                     className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs text-left transition-all ${
                       isSelected
-                        ? "bg-[#FEF1E0] text-[#9F3014] font-semibold border border-[#F6D3AF] shadow-xs"
+                        ? "bg-purple-50 text-purple-700 font-semibold border border-purple-200 shadow-xs"
                         : "hover:bg-slate-50 font-medium text-slate-700"
                     }`}
                   >
                     <span>
                       {lang.nativeName} ({lang.name})
                     </span>
-                    {isSelected && <Check className="w-3 h-3 text-[#C2410C] stroke-[2.5]" />}
+                    {isSelected && <Check className="w-3 h-3 text-purple-600 stroke-[2.5]" />}
                   </button>
                 );
               })}

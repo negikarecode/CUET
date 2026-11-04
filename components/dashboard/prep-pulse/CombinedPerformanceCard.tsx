@@ -67,10 +67,10 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
     if (active && payload && payload.length) {
       const item = payload[0].payload;
       return (
-        <div className="bg-white border border-[#EFE6DC] rounded-xl p-2.5 shadow-lg text-xs">
-          <div className="font-bold text-[#1C1917]">{item.mockLabel}</div>
-          <div className="text-[#5C524A] mt-0.5">
-            Score: <span className="font-bold text-[#C2410C]">{item.score} / 250</span>
+        <div className="bg-white border border-slate-200 rounded-xl p-2.5 shadow-lg text-xs">
+          <div className="font-bold text-slate-900">{item.mockLabel}</div>
+          <div className="text-slate-600 mt-0.5">
+            Score: <span className="font-bold text-purple-600">{item.score} / 250</span>
           </div>
         </div>
       );
@@ -79,13 +79,13 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-2xs flex flex-col justify-between space-y-4">
+    <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-2xs flex flex-col justify-between space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#EFE6DC] pb-3">
-        <h2 className="text-base font-bold text-[#1C1917] tracking-tight">
+      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h2 className="text-base font-bold text-slate-900 tracking-tight">
           Performance analytics
         </h2>
-        <span className="text-xs text-[#8C7D73]">
+        <span className="text-xs text-slate-500 font-medium">
           {testsCount} tests plotted
         </span>
       </div>
@@ -101,37 +101,37 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
             data={chartData}
             margin={{ top: 24, right: 24, left: -20, bottom: 8 }}
           >
-            <CartesianGrid stroke="#FAF3EB" strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid stroke="#F1F5F9" strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="mockLabel"
               stroke="transparent"
-              tick={{ fontSize: 12, fill: "#8C7D73" }}
+              tick={{ fontSize: 12, fill: "#64748B" }}
               tickLine={false}
             />
             <YAxis
               stroke="transparent"
               ticks={[-8, 0, 25, 50]}
               domain={[-15, 60]}
-              tick={{ fontSize: 12, fill: "#8C7D73" }}
+              tick={{ fontSize: 12, fill: "#64748B" }}
               tickLine={false}
             />
-            <ReferenceLine y={0} stroke="#E2D4C3" strokeDasharray="3 3" />
+            <ReferenceLine y={0} stroke="#CBD5E1" strokeDasharray="3 3" />
             <Tooltip content={<CustomChartTooltip />} />
 
-            {/* Terracotta Line with white circular dots matching design.pdf */}
+            {/* Modern Purple Line with circular dots */}
             <Line
               type="monotone"
               dataKey="score"
-              stroke="#C2410C"
+              stroke="#7C3AED"
               strokeWidth={2.5}
-              dot={{ r: 4.5, fill: "#FFFFFF", stroke: "#C2410C", strokeWidth: 2.5 }}
-              activeDot={{ r: 6, fill: "#C2410C" }}
+              dot={{ r: 4.5, fill: "#FFFFFF", stroke: "#7C3AED", strokeWidth: 2.5 }}
+              activeDot={{ r: 6, fill: "#7C3AED" }}
             >
               <LabelList
                 dataKey="displayVal"
                 position="top"
                 offset={10}
-                style={{ fontSize: "11px", fontWeight: "700", fill: "#1C1917" }}
+                style={{ fontSize: "11px", fontWeight: "700", fill: "#0F172A" }}
               />
             </Line>
           </LineChart>

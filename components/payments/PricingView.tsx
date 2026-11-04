@@ -53,8 +53,8 @@ export default function PricingView() {
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12 sm:space-y-16">
       {/* 1. Header Section */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FEF1E0] text-[#9F3014] text-xs font-semibold uppercase tracking-wider border border-[#F6D3AF] shadow-xs">
-          <Sparkles className="w-3.5 h-3.5 text-[#C2410C]" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-50 text-purple-700 text-xs font-bold uppercase tracking-wider border border-purple-200 shadow-xs">
+          <Sparkles className="w-3.5 h-3.5 text-purple-600" />
           <span>CUET UG 2026 Aspirant Pass</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
@@ -66,11 +66,11 @@ export default function PricingView() {
 
         {/* Truthful Promotional Banner */}
         {pricing.isPromotionalActive && pricing.remainingSlots > 0 ? (
-          <div className="mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#FEF1E0] border border-[#F6D3AF] text-[#9F3014] text-xs sm:text-sm font-semibold shadow-xs animate-in fade-in duration-300">
-            <Flame className="w-4 h-4 text-[#C2410C] fill-[#C2410C]" />
+          <div className="mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-purple-50 border border-purple-200 text-purple-800 text-xs sm:text-sm font-semibold shadow-xs animate-in fade-in duration-300">
+            <Flame className="w-4 h-4 text-purple-600 fill-purple-600" />
             <span>
               Launch Offer: <strong>₹{pricing.currentPriceInr}</strong> for the first {pricing.totalSlots} buyers (
-              <span className="text-[#9F3014] font-bold">{pricing.remainingSlots} slots remaining</span>)
+              <span className="text-purple-700 font-bold">{pricing.remainingSlots} slots remaining</span>)
             </span>
           </div>
         ) : (
@@ -102,25 +102,25 @@ export default function PricingView() {
 
             <div className="mt-7 space-y-3.5 text-xs text-slate-700 font-medium">
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0 text-emerald-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span>1 Official Shift PYQ Paper per Subject</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0 text-emerald-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span>3 Practice Tests per Subject</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0 text-emerald-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span>3 Full-Length CBT Mock Tests per Subject</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0 text-emerald-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span>Full Diagnostic Test with Instant Score</span>
@@ -137,7 +137,7 @@ export default function PricingView() {
           <div className="mt-8 pt-6 border-t border-slate-100">
             <Link
               href="/dashboard/mocks"
-              className="w-full py-3.5 px-4 rounded-xl bg-white hover:bg-[#FFF8F0] text-stone-700 font-semibold text-xs flex items-center justify-center gap-2 border border-[#EFE6DC] transition-all"
+              className="w-full py-3.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 border border-slate-200 transition-all shadow-2xs"
             >
               <span>Explore Free Mocks</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -146,17 +146,17 @@ export default function PricingView() {
         </div>
 
         {/* Premium Plan */}
-        <div className="p-7 sm:p-8 rounded-3xl bg-white border-2 border-[#C2410C] shadow-lg flex flex-col justify-between relative ring-4 ring-[#C2410C]/10">
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#C2410C] text-white text-[11px] font-semibold uppercase tracking-wider px-4 py-1 rounded-full shadow-xs">
+        <div className="p-7 sm:p-8 rounded-[32px] bg-white border-2 border-purple-600 shadow-xl flex flex-col justify-between relative ring-4 ring-purple-600/10">
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[11px] font-bold uppercase tracking-wider px-4 py-1 rounded-full shadow-xs">
             Most Popular
           </div>
 
           <div>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#9F3014] bg-[#FEF1E0] px-3 py-1 rounded-full border border-[#F6D3AF]">
-                CUETMate Premium
+              <span className="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-3 py-1 rounded-full border border-purple-200">
+                CUET AI-Prep Premium
               </span>
-              <span className="text-[11px] font-semibold text-[#C2410C]">Single One-Time Payment</span>
+              <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Single One-Time Payment</span>
             </div>
 
             <div className="mt-5 flex items-baseline gap-2">
@@ -176,37 +176,37 @@ export default function PricingView() {
 
             <div className="mt-7 space-y-3.5 text-xs text-slate-700 font-medium">
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                <span className="w-5 h-5 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center shrink-0 text-purple-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Unlimited</strong> Full-Length Mock Exams (All 20 Subjects)</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                <span className="w-5 h-5 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center shrink-0 text-purple-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Unlimited</strong> Unit-wise Practice Tests</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                <span className="w-5 h-5 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center shrink-0 text-purple-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Unlimited</strong> Official Past Year Question Papers (PYQs)</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                <span className="w-5 h-5 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center shrink-0 text-purple-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Where Do I Stand:</strong> Official College Cutoff Gap Analysis</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                <span className="w-5 h-5 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center shrink-0 text-purple-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Subject Weakness Radar:</strong> Micro-topic diagnostic engine</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FEF1E0] border border-[#F6D3AF] flex items-center justify-center shrink-0 text-[#C2410C]">
+                <span className="w-5 h-5 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center shrink-0 text-purple-600">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </span>
                 <span><strong>Target College Standing:</strong> Real-time cutoff prediction</span>
@@ -258,64 +258,64 @@ export default function PricingView() {
                 <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-semibold">
                   <th className="py-4 px-6">Feature</th>
                   <th className="py-4 px-6 text-center w-36">Free Starter</th>
-                  <th className="py-4 px-6 text-center w-48 text-[#9F3014] bg-[#FEF1E0]">CUETMate Premium</th>
+                  <th className="py-4 px-6 text-center w-48 text-purple-900 bg-purple-50 font-bold">CUET AI-Prep Premium</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                 <tr>
                   <td className="py-3.5 px-6">Domain Mock Tests (50 Qs)</td>
                   <td className="py-3.5 px-6 text-center text-slate-500">First 3 Tests</td>
-                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-[#FEF1E0]/30">Unlimited (400+)</td>
+                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-purple-50/30">Unlimited (400+)</td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Unit Practice Tests</td>
                   <td className="py-3.5 px-6 text-center text-slate-500">First 3 Units</td>
-                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-[#FEF1E0]/30">Unlimited (100+)</td>
+                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-purple-50/30">Unlimited (100+)</td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Official Past Year Papers (PYQ)</td>
                   <td className="py-3.5 px-6 text-center text-slate-500">1 per Subject</td>
-                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-[#FEF1E0]/30">Unlimited All Subjects</td>
+                  <td className="py-3.5 px-6 text-center font-bold text-emerald-700 bg-purple-50/30">Unlimited All Subjects</td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Where Do I Stand (College Predictor)</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-purple-50/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Subject Weakness Radar & Deep Diagnosis</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-purple-50/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Target College Cutoff Standing & Gaps</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-purple-50/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">NCERT Mistake Decrypter & Doubt Solver</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-purple-50/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Adaptive 15-Question Repair Drills</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-purple-50/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Sunday Ritual Mentor AI Debriefs</td>
                   <td className="py-3.5 px-6 text-center text-slate-400"><X className="w-4 h-4 mx-auto" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-purple-50/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Official NTA +5 / -1 Marking Engine</td>
                   <td className="py-3.5 px-6 text-center text-emerald-600"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
-                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-[#FEF1E0]/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
+                  <td className="py-3.5 px-6 text-center text-emerald-600 font-bold bg-purple-50/30"><Check className="w-4 h-4 mx-auto stroke-[2.5]" /></td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-6">Access Duration</td>
                   <td className="py-3.5 px-6 text-center text-slate-500">Ongoing</td>
-                  <td className="py-3.5 px-6 text-center font-semibold text-slate-800 bg-[#FEF1E0]/30">Full 2026 Exam Cycle</td>
+                  <td className="py-3.5 px-6 text-center font-semibold text-slate-800 bg-purple-50/30">Full 2026 Exam Cycle</td>
                 </tr>
               </tbody>
             </table>

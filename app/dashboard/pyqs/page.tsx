@@ -574,7 +574,7 @@ export default function PYQsPage() {
         key={sub.key}
         className={`bg-white rounded-2xl border transition-all flex flex-col justify-between p-5 sm:p-6 min-w-0 ${
           isRecommended
-            ? "border-[#F6D3AF] shadow-xs ring-1 ring-[#F6D3AF]/40"
+            ? "border-purple-200 shadow-xs ring-1 ring-purple-100"
             : "border-slate-200/90 shadow-xs hover:border-slate-300"
         }`}
       >
@@ -584,8 +584,8 @@ export default function PYQsPage() {
             <div
               className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
                 isRecommended
-                  ? "bg-[#C2410C] text-white shadow-xs"
-                  : "bg-[#FDF0E6] border border-[#F6D3AF] text-[#C2410C]"
+                  ? "bg-[#18262E] text-white shadow-xs"
+                  : "bg-purple-50 border border-purple-200/80 text-purple-700"
               }`}
             >
               <Icon className="w-5 h-5" />
@@ -594,7 +594,7 @@ export default function PYQsPage() {
             <div className="flex items-center gap-1.5 flex-wrap justify-end">
               {stats.attemptedCount > 0 ? (
                 <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/70 flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                   <span>
                     {stats.attemptedCount} / {paperCount} Attempted
                   </span>
@@ -618,8 +618,8 @@ export default function PYQsPage() {
                 {sub.name}
               </h3>
               {isRecommended && (
-                <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200/70 inline-flex items-center gap-1 shrink-0">
-                  <Sparkles className="w-2.5 h-2.5 text-amber-600" />
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200/70 inline-flex items-center gap-1 shrink-0">
+                  <Sparkles className="w-2.5 h-2.5 text-purple-600" />
                   Target Required
                 </span>
               )}
@@ -643,7 +643,7 @@ export default function PYQsPage() {
                   progressPercent >= 100
                     ? "bg-emerald-600"
                     : progressPercent > 0
-                    ? "bg-[#C2410C]"
+                    ? "bg-purple-600"
                     : "bg-transparent"
                 }`}
                 style={{ width: `${progressPercent}%` }}
@@ -662,7 +662,7 @@ export default function PYQsPage() {
               <span>50 Questions</span>
             </div>
             <div className="flex items-center gap-1.5 col-span-2 text-slate-700">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#C2410C] shrink-0" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <span>{paperCount} Official NTA Papers (+5 / −1)</span>
             </div>
           </div>
@@ -672,7 +672,7 @@ export default function PYQsPage() {
         <div className="pt-3.5 border-t border-slate-100 mt-auto flex items-center gap-2 w-full">
           <Link
             href={`/dashboard/pyqs/${sub.key}`}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#7C2D12] text-white font-semibold text-xs transition-all shadow-xs text-center cursor-pointer"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 active:bg-purple-800 text-white font-semibold text-xs transition-all shadow-xs text-center cursor-pointer"
           >
             <span>View all papers</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -684,7 +684,7 @@ export default function PYQsPage() {
                 ? `/test/${bestPaperId}?reattempt=true`
                 : `/test/${nextPaperId}`
             }
-            className="px-3 py-2.5 rounded-xl border border-[#F6D3AF] bg-[#FEF1E0] hover:bg-[#FDE6D2] text-[#9F3014] font-semibold text-xs transition-all text-center flex items-center gap-1.5 shrink-0 max-w-[48%] cursor-pointer"
+            className="px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 hover:text-purple-700 text-slate-700 font-semibold text-xs transition-all text-center flex items-center gap-1.5 shrink-0 max-w-[48%] cursor-pointer"
             title={
               stats.isAllAttempted
                 ? `Re-attempt best paper for ${sub.name}`
@@ -723,7 +723,7 @@ export default function PYQsPage() {
                 role="note"
                 aria-label="Provisional official NTA answer keys under continuous verification."
                 title="Provisional official NTA answer keys under continuous verification."
-                className="cursor-help inline-flex items-center text-slate-400 hover:text-slate-600 focus:text-[#C2410C] focus:outline-hidden"
+                className="cursor-help inline-flex items-center text-slate-400 hover:text-slate-600 focus:text-purple-600 focus:outline-hidden"
               >
                 <Info className="w-4 h-4" />
               </span>
@@ -760,14 +760,14 @@ export default function PYQsPage() {
 
       {/* In-Progress Unsubmitted Session Strip (if any) */}
       {inProgressSession && (
-        <div className="bg-[#FEF1E0] border border-[#F6D3AF] rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+        <div className="bg-purple-50/70 border border-purple-200/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-[#C2410C] text-white flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-9 h-9 rounded-xl bg-[#18262E] text-white flex items-center justify-center shrink-0 shadow-xs">
               <Play className="w-4 h-4 fill-white translate-x-0.5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#9F3014] bg-[#FDE6D2] px-2 py-0.5 rounded-md">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded-md">
                   Resume active exam
                 </span>
                 <h4 className="text-xs sm:text-sm font-bold text-slate-900 truncate">
@@ -781,7 +781,7 @@ export default function PYQsPage() {
           </div>
           <Link
             href={`/test/${inProgressSession.testId}`}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 shrink-0"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 shrink-0"
           >
             <span>Resume Test</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -869,7 +869,7 @@ export default function PYQsPage() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-2">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[#FDF0E6] text-[#C2410C] flex items-center justify-center shrink-0">
+              <div className="w-7 h-7 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center shrink-0">
                 <Target className="w-4 h-4" />
               </div>
               <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
@@ -886,14 +886,14 @@ export default function PYQsPage() {
           </div>
         </div>
       ) : !targetData.hasTarget && !isFilterActive ? (
-        <div className="bg-[#FEF1E0] border border-[#F6D3AF] rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#441408]">
+        <div className="bg-purple-50/60 border border-purple-200/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-700">
           <div className="flex items-center gap-2.5">
-            <Target className="w-4 h-4 text-[#C2410C] shrink-0" />
+            <Target className="w-4 h-4 text-purple-600 shrink-0" />
             <span>Set your target college & course to unlock personalized paper recommendations.</span>
           </div>
           <Link
             href="/dashboard/profile"
-            className="font-bold text-[#C2410C] hover:text-[#9A3412] hover:underline shrink-0"
+            className="font-bold text-purple-700 hover:text-purple-800 hover:underline shrink-0"
           >
             Set target goals &rarr;
           </Link>
@@ -931,7 +931,7 @@ export default function PYQsPage() {
                 setSelectedSubjectTab("all");
                 setStatusFilter("all");
               }}
-              className="text-xs font-bold text-[#C2410C] hover:underline cursor-pointer"
+              className="text-xs font-bold text-purple-700 hover:underline cursor-pointer"
             >
               Reset filters
             </button>

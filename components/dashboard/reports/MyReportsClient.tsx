@@ -219,16 +219,16 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
       {/* 1. Header Banner matching design.pdf Page 5 */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-[#441408] text-white shadow-xl border border-[#5A1D0D] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#18262E] text-white shadow-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FEF1E0] text-[#9F3014] text-xs font-semibold border border-[#F6D3AF]">
-            <FileText className="w-3.5 h-3.5 text-[#C2410C]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-semibold border border-purple-200">
+            <FileText className="w-3.5 h-3.5 text-purple-600" />
             <span>Diagnostic & Progress Archive</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
             My Reports
           </h1>
-          <p className="text-sm text-[#F5EBE1] max-w-2xl leading-relaxed">
+          <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
             Permanent, unlimited archive of your saved diagnostic evaluations. Compare before vs after progress, track verified accuracy gains, and create shareable score cards.
           </p>
         </div>
@@ -236,23 +236,23 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
         <div className="flex items-center gap-3 shrink-0">
           <Link
             href="/dashboard/ai-coach"
-            className="px-4 py-2.5 rounded-2xl bg-[#FCE7D0] hover:bg-[#F9D6B3] text-[#441408] font-bold text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer"
           >
-            <Sparkles className="w-4 h-4 text-[#C2410C]" />
+            <Sparkles className="w-4 h-4 text-purple-300" />
             <span>AI Coach Hub</span>
           </Link>
         </div>
       </div>
 
       {/* 2. Tabs: Saved Reports vs Shareable Progress Cards */}
-      <div className="flex items-center justify-between border-b border-[#EFE6DC] pb-2">
+      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
         <div className="flex items-center gap-4">
           <button
             type="button"
             onClick={() => setActiveTab("reports")}
             className={`pb-2 text-sm font-bold border-b-2 transition-all ${
               activeTab === "reports"
-                ? "border-[#C2410C] text-[#C2410C]"
+                ? "border-purple-600 text-purple-700"
                 : "border-transparent text-stone-500 hover:text-stone-800"
             }`}
           >
@@ -263,7 +263,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
             onClick={() => setActiveTab("cards")}
             className={`pb-2 text-sm font-bold border-b-2 transition-all flex items-center gap-1.5 ${
               activeTab === "cards"
-                ? "border-[#C2410C] text-[#C2410C]"
+                ? "border-purple-600 text-purple-700"
                 : "border-transparent text-stone-500 hover:text-stone-800"
             }`}
           >
@@ -284,8 +284,8 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                 onClick={() => setSelectedSubjectFilter("All")}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   selectedSubjectFilter === "All"
-                    ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] shadow-xs font-bold"
-                    : "bg-white text-stone-600 border border-[#EFE6DC] hover:bg-[#FEF1E0]"
+                    ? "bg-purple-50 text-purple-700 border border-purple-200 shadow-xs font-bold"
+                    : "bg-white text-stone-600 border border-slate-200 hover:bg-purple-50/50"
                 }`}
               >
                 All Subjects ({reports.length})
@@ -297,8 +297,8 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                   onClick={() => setSelectedSubjectFilter(sub)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     selectedSubjectFilter === sub
-                      ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] shadow-xs font-bold"
-                      : "bg-white text-stone-600 border border-[#EFE6DC] hover:bg-[#FEF1E0]"
+                      ? "bg-purple-50 text-purple-700 border border-purple-200 shadow-xs font-bold"
+                      : "bg-white text-stone-600 border border-slate-200 hover:bg-purple-50/50"
                   }`}
                 >
                   {sub}
@@ -308,15 +308,15 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
 
             {/* Compare Action Bar */}
             {compareReportIds.length > 0 && (
-              <div className="flex items-center gap-3 bg-[#FEF1E0] px-4 py-2 rounded-2xl border border-[#F6D3AF]">
-                <span className="text-xs font-semibold text-[#9F3014]">
+              <div className="flex items-center gap-3 bg-purple-50 px-4 py-2 rounded-2xl border border-purple-200">
+                <span className="text-xs font-semibold text-purple-700">
                   {compareReportIds.length} of 2 selected for comparison
                 </span>
                 {compareReportIds.length === 2 && (
                   <button
                     type="button"
                     onClick={() => setIsCompareModalOpen(true)}
-                    className="px-3 py-1 rounded-xl bg-[#C2410C] text-white text-xs font-bold shadow-xs hover:bg-[#9A3412] transition-colors flex items-center gap-1.5"
+                    className="px-3 py-1 rounded-xl bg-[#18262E] text-white text-xs font-bold shadow-xs hover:bg-purple-700 transition-colors flex items-center gap-1.5"
                   >
                     <Scale className="w-3.5 h-3.5" />
                     <span>Compare Now</span>
@@ -349,8 +349,8 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                     key={report.id}
                     className={`p-6 rounded-3xl bg-white border transition-all space-y-4 shadow-xs hover:shadow-md ${
                       isComparing
-                        ? "border-[#C2410C] ring-2 ring-[#C2410C]/20"
-                        : "border-[#EFE6DC]"
+                        ? "border-purple-600 ring-2 ring-purple-600/20"
+                        : "border-slate-200"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -359,7 +359,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                           <span className="text-base font-bold text-slate-900">
                             {report.subject}
                           </span>
-                          <span className="px-2 py-0.5 rounded-full bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-[10px] font-bold">
+                          <span className="px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 text-[10px] font-bold">
                             {dateStr}
                           </span>
                         </div>
@@ -373,8 +373,8 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                         onClick={() => handleToggleCompare(report)}
                         className={`px-2.5 py-1 rounded-xl text-xs font-bold border transition-colors ${
                           isComparing
-                            ? "bg-[#C2410C] text-white border-[#C2410C]"
-                            : "bg-white text-stone-600 border border-[#EFE6DC] hover:bg-[#FEF1E0]"
+                            ? "bg-purple-600 text-white border-purple-600"
+                            : "bg-white text-stone-600 border border-slate-200 hover:bg-purple-50/50"
                         }`}
                       >
                         {isComparing ? "Selected" : "Compare"}
@@ -382,22 +382,22 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                     </div>
 
                     {/* Score Snapshot matching design.pdf Page 5 */}
-                    <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-[#FEF1E0] border border-[#F6D3AF] text-center">
+                    <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-center">
                       <div>
-                        <span className="text-[10px] uppercase font-bold text-[#9F3014]">Net Score</span>
+                        <span className="text-[10px] uppercase font-bold text-slate-600">Net Score</span>
                         <div className="text-sm sm:text-base font-black text-stone-900 mt-0.5">
                           {report.score_snapshot?.netScore ?? report.stats_json.netScore}
                         </div>
                       </div>
                       <div>
-                        <span className="text-[10px] uppercase font-bold text-[#9F3014]">Accuracy</span>
+                        <span className="text-[10px] uppercase font-bold text-slate-600">Accuracy</span>
                         <div className="text-sm sm:text-base font-black text-stone-900 mt-0.5">
                           {report.score_snapshot?.accuracyPercentage ?? report.stats_json.overallAccuracyPercentage}%
                         </div>
                       </div>
                       <div>
-                        <span className="text-[10px] uppercase font-bold text-[#9F3014]">Lost Marks</span>
-                        <div className="text-sm sm:text-base font-black text-[#C2410C] mt-0.5">
+                        <span className="text-[10px] uppercase font-bold text-slate-600">Lost Marks</span>
+                        <div className="text-sm sm:text-base font-black text-rose-600 mt-0.5">
                           -{report.score_snapshot?.negativeMarksLost ?? report.stats_json.negativeMarksLost}
                         </div>
                       </div>
@@ -407,7 +407,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                       {report.report_json.summary}
                     </p>
 
-                    <div className="flex items-center justify-between pt-3 border-t border-[#EFE6DC]">
+                    <div className="flex items-center justify-between pt-3 border-t border-slate-200">
                       <div className="flex items-center gap-1.5">
                         <span className="text-[11px] text-slate-400 font-medium">Was helpful:</span>
                         <button
@@ -444,7 +444,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
             </div>
           ) : (
             <div className="text-center py-16 p-8 rounded-3xl bg-white border border-slate-200 space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-[#FDF0E6] border border-[#F6D3AF] flex items-center justify-center mx-auto text-[#C2410C]">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-center mx-auto text-purple-600">
                 <FileText className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-slate-900">No Saved Reports Found</h3>
@@ -453,7 +453,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
               </p>
               <Link
                 href="/dashboard/ai-coach"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] text-white font-bold text-xs shadow-md hover:bg-[#9A3412] transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#18262E] text-white font-bold text-xs shadow-md hover:bg-purple-700 transition-colors"
               >
                 <span>Go to AI Coach</span>
                 <ArrowRight className="w-4 h-4" />
@@ -510,7 +510,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                       {/* Accuracy numbers */}
                       <div className="flex items-center justify-center gap-3 py-2">
                         <span className="text-2xl font-black text-slate-400">{cardData.fromAccuracy}%</span>
-                        <span className="text-[#C2410C] font-bold">→</span>
+                        <span className="text-purple-400 font-bold">→</span>
                         <span className="text-3xl font-black text-emerald-400">{cardData.toAccuracy}%</span>
                         {cardData.showAccuracyGain && (
                           <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-black">
@@ -542,7 +542,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                         <Link
                           href={`/r/${card.id}`}
                           target="_blank"
-                          className="p-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-bold text-center transition-colors"
+                          className="p-2 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white text-xs font-bold text-center transition-colors"
                         >
                           View Public Page
                         </Link>
@@ -582,7 +582,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
             </div>
           ) : (
             <div className="text-center py-12 p-8 rounded-3xl bg-white border border-slate-200 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-[#FDF0E6] border border-[#F6D3AF] flex items-center justify-center mx-auto text-[#C2410C]">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-center mx-auto text-purple-600">
                 <Share2 className="w-6 h-6" />
               </div>
               <h3 className="text-base font-bold text-slate-800">No Progress Cards Created Yet</h3>
@@ -600,7 +600,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
           <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div className="flex items-center gap-2.5">
-                <Scale className="w-5 h-5 text-[#C2410C]" />
+                <Scale className="w-5 h-5 text-purple-600" />
                 <h3 className="text-lg sm:text-xl font-bold text-slate-900">
                   Comparing {olderReport.subject} Evaluations
                 </h3>
@@ -626,9 +626,9 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                 newerReport.stats_json.negativeMarksLost;
 
               return (
-                <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-[#FEF1E0]/60 border border-[#F6D3AF] text-center">
+                <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-[#C2410C]">
+                    <span className="text-[10px] uppercase font-bold text-slate-700">
                       Accuracy Shift
                     </span>
                     <div
@@ -640,7 +640,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                     </div>
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-[#C2410C]">
+                    <span className="text-[10px] uppercase font-bold text-slate-700">
                       Net Score Shift
                     </span>
                     <div
@@ -652,7 +652,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                     </div>
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-[#C2410C]">
+                    <span className="text-[10px] uppercase font-bold text-slate-700">
                       Penalty Reduction
                     </span>
                     <div
@@ -696,12 +696,12 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                 </div>
               </div>
 
-              <div className="p-5 rounded-2xl bg-[#FEF1E0]/50 border border-[#F6D3AF] space-y-3">
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#9F3014]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                     Latest Evaluation
                   </span>
-                  <span className="text-xs text-[#C2410C]">
+                  <span className="text-xs text-slate-600">
                     {new Date(newerReport.created_at).toLocaleDateString()}
                   </span>
                 </div>
@@ -711,8 +711,8 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                 <p className="text-xs text-slate-600 leading-relaxed">
                   {newerReport.report_json.summary}
                 </p>
-                <div className="space-y-1 pt-2 border-t border-[#F6D3AF]">
-                  <span className="text-[11px] font-bold text-[#9F3014]">Current Leaks:</span>
+                <div className="space-y-1 pt-2 border-t border-slate-200">
+                  <span className="text-[11px] font-bold text-slate-700">Current Leaks:</span>
                   <ul className="text-xs text-slate-600 space-y-1 list-disc pl-4">
                     {newerReport.report_json.biggest_leaks.map((l, i) => (
                       <li key={i}>{l.issue}</li>
@@ -723,7 +723,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
             </div>
 
             {/* Action Bar inside compare modal */}
-            <div className="flex items-center justify-between pt-4 border-t border-[#EFE6DC]">
+            <div className="flex items-center justify-between pt-4 border-t border-slate-200">
               <button
                 type="button"
                 onClick={() => setIsCompareModalOpen(false)}
@@ -735,7 +735,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
               <button
                 type="button"
                 onClick={handleOpenCreateCardModal}
-                className="px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs shadow-md transition-all flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2"
               >
                 <Share2 className="w-4 h-4 text-amber-300" />
                 <span>Create Shareable Progress Card</span>
@@ -751,7 +751,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
           <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-xl w-full p-6 sm:p-8 space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <Share2 className="w-5 h-5 text-[#C2410C]" />
+                <Share2 className="w-5 h-5 text-purple-600" />
                 <h3 className="text-lg font-bold text-slate-900">Create Shareable Progress Card</h3>
               </div>
               <button
@@ -781,7 +781,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
 
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                   <div className="text-xs font-bold text-slate-700">Public Link:</div>
-                  <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-xs font-mono text-[#C2410C] truncate">
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-xs font-mono text-purple-700 truncate">
                     {window.location.origin}/r/{createdCardSuccess.id}
                   </div>
 
@@ -789,7 +789,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                     <button
                       type="button"
                       onClick={() => handleCopyCardLink(createdCardSuccess.id)}
-                      className="p-2.5 rounded-xl bg-[#C2410C] text-white text-xs font-bold hover:bg-[#9A3412] transition-colors flex items-center justify-center gap-1.5"
+                      className="p-2.5 rounded-xl bg-[#18262E] text-white text-xs font-bold hover:bg-purple-700 transition-colors flex items-center justify-center gap-1.5"
                     >
                       {copiedCardId === createdCardSuccess.id ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                       <span>{copiedCardId === createdCardSuccess.id ? "Copied!" : "Copy Link"}</span>
@@ -812,16 +812,16 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                     setIsCompareModalOpen(false);
                     setActiveTab("cards");
                   }}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-[#C2410C] hover:bg-[#FDF0E6]"
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-purple-700 hover:bg-purple-50"
                 >
                   View All Created Cards
                 </button>
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-[#FEF1E0]/60 border border-[#F6D3AF] flex items-center justify-between text-xs">
-                  <span className="font-bold text-[#9F3014]">{olderReport.subject}</span>
-                  <span className="text-[#9F3014] font-semibold">
+                <div className="p-4 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-between text-xs">
+                  <span className="font-bold text-purple-700">{olderReport.subject}</span>
+                  <span className="text-purple-700 font-semibold">
                     {olderReport.stats_json.overallAccuracyPercentage}% → {newerReport.stats_json.overallAccuracyPercentage}%
                   </span>
                 </div>
@@ -837,7 +837,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                     placeholder="e.g. Aryan or CUET Ranker (Leave blank for anonymous)"
                     value={cardDisplayName}
                     onChange={(e) => setCardDisplayName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600"
                   />
                   <span className="text-[10px] text-slate-400">Anonymous by default. Opt-in first name only.</span>
                 </div>
@@ -853,7 +853,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                     placeholder="e.g. Focused on optics formulas & fixed careless errors!"
                     value={cardStudentNote}
                     onChange={(e) => setCardStudentNote(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600"
                   />
                   <div className="flex justify-between text-[10px] text-slate-400">
                     <span>Profanity filtered automatically</span>
@@ -869,7 +869,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                   <select
                     value={cardMilestone}
                     onChange={(e) => setCardMilestone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600"
                   >
                     <option value="CUET UG 2027 Aspirant">CUET UG 2027 Aspirant</option>
                     <option value="500+ Questions Solved">500+ Questions Solved</option>
@@ -884,7 +884,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                   Your name, phone and email are never sent to the AI
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-[#EFE6DC]">
+                <div className="flex items-center justify-between pt-4 border-t border-slate-200">
                   <button
                     type="button"
                     onClick={() => setIsCardModalOpen(false)}
@@ -896,7 +896,7 @@ export default function MyReportsClient({ initialReports }: MyReportsClientProps
                     type="button"
                     disabled={isGeneratingCard}
                     onClick={handleCreateProgressCard}
-                    className="px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:bg-slate-300"
+                    className="px-5 py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:bg-slate-300"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                     <span>{isGeneratingCard ? "Generating Card..." : "Create Card & Get Link"}</span>

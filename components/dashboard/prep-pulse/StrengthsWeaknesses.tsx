@@ -75,7 +75,7 @@ export const StrengthsWeaknesses: React.FC<StrengthsWeaknessesProps> = ({
 
               <Link
                 href={`/dashboard/ai-coach?subject=${item.subjectKey}`}
-                className="text-xs font-semibold text-[#C2410C] hover:underline shrink-0"
+                className="text-xs font-bold text-purple-600 hover:text-purple-700 hover:underline shrink-0"
               >
                 AI diagnosis
               </Link>

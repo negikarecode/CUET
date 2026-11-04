@@ -116,7 +116,7 @@ export default function ForgotPasswordView({
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-[#FDF0E6] text-[#C2410C] border border-[#F6D3AF] shadow-2xs mx-auto">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 border border-purple-200 shadow-2xs mx-auto">
           <KeyRound className="w-6 h-6" strokeWidth={2} />
         </div>
         <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
@@ -156,7 +156,7 @@ export default function ForgotPasswordView({
                 if (errorMessage) setErrorMessage(null);
               }}
               placeholder="e.g. aspirant@gmail.com"
-              className="w-full h-11 pl-10 pr-4 bg-white text-sm text-slate-900 placeholder-slate-400 rounded-xl border border-slate-200 hover:border-slate-300 focus:outline-hidden focus:border-[#C2410C] focus:ring-3 focus:ring-[#C2410C]/15 transition-all"
+              className="w-full h-11 pl-10 pr-4 bg-white text-sm text-slate-900 placeholder-slate-400 rounded-xl border border-slate-200 hover:border-slate-300 focus:outline-hidden focus:border-purple-600 focus:ring-3 focus:ring-purple-500/15 transition-all"
             />
           </div>
         </div>
@@ -168,7 +168,7 @@ export default function ForgotPasswordView({
             ${
               isLoading || !email.trim()
                 ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
-                : "bg-[#C2410C] hover:bg-[#9A3412] shadow-orange-500/20 active:scale-[0.99]"
+                : "bg-[#18262E] hover:bg-purple-700 shadow-slate-900/10 active:scale-[0.99]"
             }
           `}
         >

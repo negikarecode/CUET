@@ -137,9 +137,9 @@ export default function SubjectCombinationCard({
                 {/* Progress bar if score available */}
                 {sub.hasData && (
                   <div className="pt-1">
-                    <div className="w-full h-1 bg-[#FDE6D2] rounded-full overflow-hidden">
+                    <div className="w-full h-1 bg-purple-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-[#C2410C] rounded-full"
+                        className="h-full bg-purple-600 rounded-full"
                         style={{
                           width: `${Math.min(100, Math.max(8, Math.round(((sub.score ?? 16) / 250) * 100)))}%`,
                         }}
@@ -154,14 +154,14 @@ export default function SubjectCombinationCard({
                 {sub.hasData ? (
                   <Link
                     href={`/dashboard/practice/${sub.subjectId}`}
-                    className="w-full block py-2 px-3 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-semibold text-center transition-colors shadow-2xs"
+                    className="w-full block py-2 px-3 rounded-lg bg-[#18262E] hover:bg-purple-700 text-white text-xs font-bold text-center transition-colors shadow-2xs"
                   >
                     Practice weak topics
                   </Link>
                 ) : (
                   <Link
                     href={`/dashboard/mocks/${sub.subjectId}`}
-                    className="w-full block py-2 px-3 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-semibold text-center transition-colors shadow-2xs"
+                    className="w-full block py-2 px-3 rounded-lg bg-[#18262E] hover:bg-purple-700 text-white text-xs font-bold text-center transition-colors shadow-2xs"
                   >
                     Take mock
                   </Link>

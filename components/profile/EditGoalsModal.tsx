@@ -147,8 +147,8 @@ export default function EditGoalsModal({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-[#FEF1E0] text-[#C2410C] border border-[#F6D3AF] flex items-center justify-center">
-              <Target className="w-5 h-5 text-[#C2410C]" />
+            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 border border-purple-200 flex items-center justify-center">
+              <Target className="w-5 h-5 text-purple-600" />
             </div>
             <div>
               <h3 id="edit-goals-title" className="text-lg font-bold text-slate-900 tracking-tight">
@@ -191,7 +191,7 @@ export default function EditGoalsModal({
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="e.g. Aarav Sharma"
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-slate-800 font-semibold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C] transition-all"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-slate-800 font-semibold text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600 transition-all"
             />
           </div>
 
@@ -209,7 +209,7 @@ export default function EditGoalsModal({
           <div className="p-3.5 rounded-2xl border border-slate-200/60 bg-slate-50 space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#C2410C]" />
+                <Sparkles className="w-3.5 h-3.5 text-purple-600" />
                 <span>Stream Domain Subjects (Auto-Calibrated)</span>
               </label>
               <span className="text-[11px] font-bold bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-600">
@@ -246,7 +246,7 @@ export default function EditGoalsModal({
               disabled={isSaving || !targetSelection.isValidPair}
               className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-xs hover:shadow transition-all flex items-center gap-2 ${
                 targetSelection.isValidPair && !isSaving
-                  ? "bg-[#C2410C] hover:bg-[#9A3412] text-white cursor-pointer"
+                  ? "bg-[#18262E] hover:bg-purple-700 text-white cursor-pointer"
                   : "bg-slate-200 text-slate-400 cursor-not-allowed opacity-70"
               }`}
             >

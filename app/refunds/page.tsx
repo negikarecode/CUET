@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function RefundPolicyPage() {
   return (
-    <div className="min-h-screen bg-[#FFF8F0] py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Breadcrumb Navigation */}
         <div className="space-y-4">
@@ -35,7 +35,7 @@ export default function RefundPolicyPage() {
 
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-[#C2410C] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-purple-700 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Home</span>
@@ -69,7 +69,7 @@ export default function RefundPolicyPage() {
 
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <RefreshCcw className="w-4 h-4 text-[#C2410C]" />
+              <RefreshCcw className="w-4 h-4 text-purple-600" />
               2. Duplicate or Failed Transactions
             </h2>
             <p>
@@ -84,7 +84,7 @@ export default function RefundPolicyPage() {
 
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#C2410C]" />
+              <Clock className="w-4 h-4 text-purple-600" />
               3. Processing Timelines &amp; Modes
             </h2>
             <p>
@@ -98,7 +98,7 @@ export default function RefundPolicyPage() {
 
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Mail className="w-4 h-4 text-[#C2410C]" />
+              <Mail className="w-4 h-4 text-purple-600" />
               4. How to Initiate a Refund
             </h2>
             <p>
@@ -110,7 +110,7 @@ export default function RefundPolicyPage() {
                 Email:{" "}
                 <a
                   href="mailto:support@cuetprep.com"
-                  className="text-[#C2410C] font-semibold hover:underline"
+                  className="text-purple-700 font-semibold hover:underline"
                 >
                   support@cuetprep.com
                 </a>

@@ -326,20 +326,20 @@ export default function AICoachClient({
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
       {/* 1. Header Banner matching design.pdf Page 4 */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-[#441408] text-white shadow-xl border border-[#5A1D0D] relative overflow-hidden">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#18262E] text-white shadow-xl border border-slate-800 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FEF1E0] text-[#9F3014] text-xs font-semibold border border-[#F6D3AF]">
-              <Sparkles className="w-3.5 h-3.5 text-[#C2410C]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-semibold border border-purple-200">
+              <Sparkles className="w-3.5 h-3.5 text-purple-600" />
               <span>Calibrated every 150 questions</span>
             </div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
               AI Coach
             </h1>
-            <p className="text-sm sm:text-base text-[#F5EBE1] max-w-2xl leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-200 max-w-2xl leading-relaxed">
               Subject-level diagnostic evaluation calibrated every 150 unique questions. Uncover careless errors, concept gaps, second-guessing patterns, and score-accelerating weekly plans.
             </p>
-            <p className="text-xs text-[#FCE7D0]/90 font-medium pt-1">
+            <p className="text-xs text-purple-200/90 font-medium pt-1">
               Your name, phone and email are never sent to the AI
             </p>
           </div>
@@ -347,14 +347,14 @@ export default function AICoachClient({
           {/* Daily Quota Counter Badge */}
           <div className="flex flex-col sm:items-end gap-2 shrink-0">
             <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-right">
-              <div className="text-xs uppercase font-bold tracking-wider text-[#FCE7D0]">
+              <div className="text-xs uppercase font-bold tracking-wider text-purple-200">
                 Daily Report Quota
               </div>
               <div className="text-2xl font-black text-white mt-0.5">
                 {reportsLeftToday}{" "}
-                <span className="text-sm font-semibold text-[#F5EBE1]">of 3 left today</span>
+                <span className="text-sm font-semibold text-slate-200">of 3 left today</span>
               </div>
-              <div className="text-xs text-[#FCE7D0]/80 mt-1 flex items-center gap-1 sm:justify-end">
+              <div className="text-xs text-purple-200/80 mt-1 flex items-center gap-1 sm:justify-end">
                 <Clock className="w-3 h-3" />
                 <span>Resets at midnight IST ({resetTimeFormatted})</span>
               </div>
@@ -364,15 +364,15 @@ export default function AICoachClient({
               <button
                 type="button"
                 onClick={() => setIsMistakeNotebookOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-[#F5EBE1] border border-white/20 text-xs font-bold transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 border border-white/20 text-xs font-bold transition-all cursor-pointer"
               >
-                <BookmarkCheck className="w-3.5 h-3.5 text-[#FCE7D0]" />
+                <BookmarkCheck className="w-3.5 h-3.5 text-purple-300" />
                 <span>Mistake Notebook ({notebookSummary.dueTodayCount} Due)</span>
               </button>
 
               <Link
                 href="/dashboard/reports"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FCE7D0] hover:text-white transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-purple-200 hover:text-white transition-colors"
               >
                 <span>View Saved Reports</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -390,7 +390,7 @@ export default function AICoachClient({
               ? "bg-rose-50 border-rose-200 text-rose-800"
               : statusMessage.type === "success"
               ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-              : "bg-[#FEF1E0] border-[#F6D3AF] text-[#9F3014]"
+              : "bg-purple-50 border-purple-200 text-purple-700"
           }`}
         >
           <div className="flex items-center gap-2.5">
@@ -399,7 +399,7 @@ export default function AICoachClient({
             ) : statusMessage.type === "success" ? (
               <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-600" />
             ) : (
-              <RefreshCw className="w-5 h-5 shrink-0 text-[#C2410C] animate-spin" />
+              <RefreshCw className="w-5 h-5 shrink-0 text-purple-600 animate-spin" />
             )}
             <p className="text-xs sm:text-sm font-medium">{statusMessage.text}</p>
           </div>
@@ -422,22 +422,22 @@ export default function AICoachClient({
         if (!topLeak) return null;
         const topLeakTopic = extractTopicFromLeak(topLeak, selectedSubjectName);
         return (
-          <div className="p-6 rounded-3xl bg-[#FEF1E0] border border-[#F6D3AF] text-stone-900 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
+          <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 text-slate-900 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
             <div className="space-y-1.5 flex-1 relative z-10">
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-[#FCE7D0] text-[#9F3014] text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 border border-[#F6D3AF]">
-                  <Sparkles className="w-3 h-3 text-[#C2410C]" />
+                <span className="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 border border-purple-200">
+                  <Sparkles className="w-3 h-3 text-purple-600" />
                   Do This Today · {selectedSubjectName}
                 </span>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                 {topLeak.issue}
               </h3>
-              <p className="text-xs sm:text-sm text-stone-700 leading-relaxed max-w-2xl">
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-2xl">
                 {topLeak.evidence}
               </p>
               {topLeak.likelyConfusion && (
-                <p className="text-xs text-[#9F3014] font-medium pt-0.5">
+                <p className="text-xs text-purple-700 font-medium pt-0.5">
                   <span className="font-bold">Likely Concept Confusion: </span>
                   {topLeak.likelyConfusion}
                 </p>
@@ -447,7 +447,7 @@ export default function AICoachClient({
             <button
               type="button"
               onClick={() => handlePracticeTopic(topLeakTopic)}
-              className="px-5 py-3 rounded-2xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer shadow-xs"
+              className="px-5 py-3 rounded-2xl bg-[#18262E] hover:bg-purple-700 active:bg-purple-800 text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer shadow-xs"
             >
               <Play className="w-4 h-4 fill-white" />
               <span>Start 10-question fix</span>
@@ -518,15 +518,15 @@ export default function AICoachClient({
                 onClick={() => setSelectedSubjectName(sub.subject)}
                 className={`p-5 rounded-2xl border transition-all cursor-pointer text-left relative overflow-hidden ${
                   isSelected
-                    ? "bg-[#FFF5EA] border-[#C2410C] shadow-xs ring-2 ring-[#C2410C]/20"
-                    : "bg-white border-[#EFE6DC] hover:border-[#F6D3AF] shadow-xs hover:shadow"
+                    ? "bg-purple-50/50 border-purple-300 shadow-xs ring-2 ring-purple-200/50"
+                    : "bg-white border-slate-200 hover:border-purple-200 shadow-xs hover:shadow"
                 }`}
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-bold text-slate-900">{sub.subject}</span>
                   {sub.isUnlocked ? (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-[11px] font-bold">
-                      <Unlock className="w-3 h-3 text-[#C2410C]" />
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 text-[11px] font-bold">
+                      <Unlock className="w-3 h-3 text-purple-600" />
                       Ready
                     </span>
                   ) : (
@@ -545,10 +545,10 @@ export default function AICoachClient({
                     </span>
                     <span className="text-slate-500 font-medium">{percentage}%</span>
                   </div>
-                  <div className="h-2 w-full bg-[#FEF1E0] rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div
                       className={`h-full transition-all duration-500 rounded-full ${
-                        sub.isUnlocked ? "bg-[#C2410C]" : "bg-[#C2410C]"
+                        sub.isUnlocked ? "bg-purple-600" : "bg-purple-600"
                       }`}
                       style={{ width: `${percentage}%` }}
                     />
@@ -569,13 +569,13 @@ export default function AICoachClient({
       </div>
 
       {/* 4. Generation Action & Current Report View */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#EFE6DC] shadow-sm space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EFE6DC]">
+      <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
           <div>
             <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
               <span>{activeSubject?.subject} Diagnostic Dossier</span>
               {activeSubject?.isUnlocked && (
-                <span className="px-2.5 py-0.5 rounded-full bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-xs font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 text-xs font-bold">
                   Calibrated
                 </span>
               )}
@@ -599,8 +599,8 @@ export default function AICoachClient({
               !activeSubject?.isUnlocked || dailyLimitReached
                 ? "bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed shadow-none"
                 : isGenerating
-                ? "bg-[#C2410C]/70 text-white cursor-wait"
-                : "bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white hover:shadow-lg active:scale-98"
+                ? "bg-purple-600/70 text-white cursor-wait"
+                : "bg-[#18262E] hover:bg-purple-700 active:bg-purple-800 text-white hover:shadow-lg active:scale-98"
             }`}
           >
             {isGenerating ? (
@@ -631,12 +631,12 @@ export default function AICoachClient({
         {activeReport ? (
           <div className="space-y-8 animate-fadeIn">
             {/* Next report status indicator */}
-            <div className="p-3.5 rounded-2xl bg-[#FEF1E0] border border-[#F6D3AF] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-[#9F3014]">
+            <div className="p-3.5 rounded-2xl bg-purple-50 border border-purple-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-purple-700">
               <span className="font-bold flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-[#C2410C] shrink-0" />
+                <Sparkles className="w-4 h-4 text-purple-600 shrink-0" />
                 Next report unlocks after 150 new questions ({activeSubject?.freshQuestionsCount || 0}/150)
               </span>
-              <span className="text-stone-700 font-medium">
+              <span className="text-slate-700 font-medium">
                 {activeSubject?.isUnlocked
                   ? "150 new questions completed — ready to generate next report!"
                   : `${activeSubject?.questionsRemaining || 0} questions remaining until next unlock`}
@@ -681,8 +681,8 @@ export default function AICoachClient({
 
             {/* Score Snapshot Grid matching design.pdf Page 4 */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-              <div className="p-4 rounded-2xl bg-[#FEF1E0] border border-[#F6D3AF]">
-                <span className="text-[11px] uppercase tracking-wider font-bold text-[#9F3014]">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
                   Net Score
                 </span>
                 <div className="text-xl sm:text-2xl font-black text-stone-900 mt-1">
@@ -694,8 +694,8 @@ export default function AICoachClient({
                 <span className="text-[10px] text-stone-600">CUET +5 / -1 Marking</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FEF1E0] border border-[#F6D3AF]">
-                <span className="text-[11px] uppercase tracking-wider font-bold text-[#9F3014]">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
                   Overall Accuracy
                 </span>
                 <div className="text-xl sm:text-2xl font-black text-stone-900 mt-1">
@@ -706,11 +706,11 @@ export default function AICoachClient({
                 </span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FEF1E0] border border-[#F6D3AF]">
-                <span className="text-[11px] uppercase tracking-wider font-bold text-[#9F3014]">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
                   Marks lost to wrong answers
                 </span>
-                <div className="text-xl sm:text-2xl font-black text-[#C2410C] mt-1">
+                <div className="text-xl sm:text-2xl font-black text-rose-600 mt-1">
                   -{activeReport.stats_json.negativeMarksLost}
                 </div>
                 <span className="text-[10px] text-stone-600">Lost to negative marking</span>
@@ -721,7 +721,7 @@ export default function AICoachClient({
             {activeReport.stats_json.mistakeTags && (
               <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-2.5">
                 <div className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <Tag className="w-3.5 h-3.5 text-[#C2410C]" />
+                  <Tag className="w-3.5 h-3.5 text-purple-600" />
                   <span>Student-Tagged Mistake Categories</span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
@@ -747,8 +747,8 @@ export default function AICoachClient({
 
             {/* Diagnostic Summary */}
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-              <div className="flex items-center gap-2 text-[#C2410C] font-bold text-sm">
-                <Sparkles className="w-4 h-4 text-[#C2410C]" />
+              <div className="flex items-center gap-2 text-purple-700 font-bold text-sm">
+                <Sparkles className="w-4 h-4 text-purple-600" />
                 <span>Coach Diagnostic Brief</span>
               </div>
               <p className="text-sm text-slate-700 leading-relaxed">
@@ -759,7 +759,7 @@ export default function AICoachClient({
             {/* Biggest Leaks (Issues, Evidence, Fixes & Practice button) */}
             <div className="space-y-3">
               <h4 className="text-sm font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-[#C2410C]" />
+                <ShieldAlert className="w-4 h-4 text-purple-600" />
                 <span>Critical Score Leaks</span>
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -768,10 +768,10 @@ export default function AICoachClient({
                   return (
                     <div
                       key={idx}
-                      className="p-4 rounded-2xl bg-white border border-[#F6D3AF] shadow-xs flex flex-col justify-between space-y-3"
+                      className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between space-y-3"
                     >
                       <div className="space-y-2">
-                        <div className="text-xs font-bold text-[#C2410C] uppercase tracking-wide">
+                        <div className="text-xs font-bold text-purple-700 uppercase tracking-wide">
                           {leak.issue}
                         </div>
                         <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
@@ -784,8 +784,8 @@ export default function AICoachClient({
                             {leak.likelyConfusion}
                           </div>
                         )}
-                        <div className="text-xs text-[#441408] bg-[#FEF1E0] p-2.5 rounded-xl border border-[#F6D3AF]">
-                          <span className="font-semibold text-[#9F3014]">Fix: </span>
+                        <div className="text-xs text-slate-800 bg-purple-50/70 p-2.5 rounded-xl border border-purple-200">
+                          <span className="font-semibold text-purple-700">Fix: </span>
                           {leak.fix}
                         </div>
                       </div>
@@ -793,7 +793,7 @@ export default function AICoachClient({
                       <button
                         type="button"
                         onClick={() => handlePracticeTopic(leakTopic)}
-                        className="w-full py-2.5 px-3 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-98"
+                        className="w-full py-2.5 px-3 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-98"
                       >
                         <Play className="w-3.5 h-3.5 fill-white" />
                         <span>Start 10-question fix</span>
@@ -817,7 +817,7 @@ export default function AICoachClient({
               return (
                 <div className="space-y-4">
                   {weakTopics.length > 0 && (
-                    <div className="p-5 rounded-2xl bg-white border border-[#EFE6DC] shadow-xs space-y-3">
+                    <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-rose-700 font-bold text-sm">
                           <Target className="w-4 h-4 text-rose-600" />
@@ -831,7 +831,7 @@ export default function AICoachClient({
                         {weakTopics.map((top, idx) => (
                           <div
                             key={idx}
-                            className="p-3.5 rounded-xl bg-[#FFF8F0] border border-[#EFE6DC] flex flex-col justify-between gap-2.5"
+                            className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between gap-2.5"
                           >
                             <div className="space-y-1">
                               <div className="text-xs font-bold text-slate-800 line-clamp-1">
@@ -847,7 +847,7 @@ export default function AICoachClient({
                             <button
                               type="button"
                               onClick={() => handlePracticeTopic(top.topic, top.accuracyPercentage)}
-                              className="w-full py-1.5 px-2 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white text-[11px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer"
+                              className="w-full py-1.5 px-2 rounded-lg bg-[#18262E] hover:bg-purple-700 text-white text-[11px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer"
                             >
                               <Play className="w-3 h-3 fill-white" />
                               <span>Start 10-question fix</span>
@@ -903,15 +903,15 @@ export default function AICoachClient({
                 </ul>
               </div>
 
-              <div className="p-5 rounded-2xl bg-[#FEF1E0]/50 border border-[#F6D3AF] space-y-3">
-                <div className="flex items-center gap-2 text-[#441408] font-bold text-sm">
-                  <Target className="w-4 h-4 text-[#C2410C]" />
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
+                  <Target className="w-4 h-4 text-purple-600" />
                   <span>Test-Taking Strategy</span>
                 </div>
                 <ul className="space-y-2">
                   {activeReport.report_json.test_taking_strategy.map((st, idx) => (
-                    <li key={idx} className="text-xs text-[#441408] flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#C2410C] mt-1.5 shrink-0" />
+                    <li key={idx} className="text-xs text-slate-700 flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-purple-600 mt-1.5 shrink-0" />
                       <span>{st}</span>
                     </li>
                   ))}
@@ -922,7 +922,7 @@ export default function AICoachClient({
             {/* 7-Day Action Plan */}
             <div className="space-y-3">
               <h4 className="text-sm font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-[#C2410C]" />
+                <Calendar className="w-4 h-4 text-purple-600" />
                 <span>Personalized 7-Day Score Accelerator Plan</span>
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2.5">
@@ -935,7 +935,7 @@ export default function AICoachClient({
                     >
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between text-xs font-bold">
-                          <span className="text-[#C2410C]">{item.day}</span>
+                          <span className="text-purple-700">{item.day}</span>
                           <span className="text-slate-500 text-[10px]">{item.minutes}m</span>
                         </div>
                         <div className="text-[11px] font-bold text-slate-800">
@@ -949,9 +949,9 @@ export default function AICoachClient({
                       <button
                         type="button"
                         onClick={() => handlePracticeTopic(planTopic)}
-                        className="w-full mt-1.5 py-1.5 px-2 rounded-lg bg-[#FEF1E0] hover:bg-[#FCE7D0] text-[#9F3014] text-[11px] font-bold flex items-center justify-center gap-1 transition-colors border border-[#F6D3AF] cursor-pointer"
+                        className="w-full mt-1.5 py-1.5 px-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-[11px] font-bold flex items-center justify-center gap-1 transition-colors border border-purple-200 cursor-pointer"
                       >
-                        <Play className="w-3 h-3 fill-[#C2410C]" />
+                        <Play className="w-3 h-3 fill-purple-600" />
                         <span>Start 10-question fix</span>
                       </button>
                     </div>
@@ -961,9 +961,9 @@ export default function AICoachClient({
             </div>
 
             {/* Target for your next mock card matching design.pdf Page 4 */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#FEF1E0] border border-[#F6D3AF] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1">
-                <span className="text-[11px] uppercase tracking-wider font-bold text-[#9F3014]">
+                <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
                   Target for your next mock · {selectedSubjectName}
                 </span>
                 <p className="text-xs sm:text-sm font-bold text-stone-900">
@@ -1014,7 +1014,7 @@ export default function AICoachClient({
           </div>
         ) : (
           <div className="text-center py-12 space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#FDF0E6] border border-[#F6D3AF] flex items-center justify-center mx-auto text-[#C2410C]">
+            <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-center mx-auto text-purple-600">
               <Sparkles className="w-6 h-6" />
             </div>
             <h4 className="text-base font-bold text-slate-800">

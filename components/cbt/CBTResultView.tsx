@@ -253,7 +253,7 @@ export default function CBTResultView() {
   if (!submittedScore || (questions.length > 0 && !hasRevealedKey)) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-12 h-12 rounded-2xl bg-[#FDF0E6] border border-[#F6D3AF] text-[#C2410C] flex items-center justify-center mb-4 shadow-xs">
+        <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-200 text-purple-600 flex items-center justify-center mb-4 shadow-xs">
           <Loader2 className="w-6 h-6 animate-spin stroke-[2.5]" />
         </div>
         <h3 className="text-base font-bold text-slate-900 tracking-tight">
@@ -269,7 +269,7 @@ export default function CBTResultView() {
   if (!deterministicReport) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-12 h-12 rounded-2xl bg-[#FDF0E6] border border-[#F6D3AF] text-[#C2410C] flex items-center justify-center mb-4 shadow-xs">
+        <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-200 text-purple-600 flex items-center justify-center mb-4 shadow-xs">
           <Loader2 className="w-6 h-6 animate-spin stroke-[2.5]" />
         </div>
         <h3 className="text-base font-bold text-slate-900 tracking-tight">

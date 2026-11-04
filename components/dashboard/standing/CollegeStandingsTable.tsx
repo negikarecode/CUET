@@ -82,7 +82,7 @@ function MiniTrendSparkline({
   if (!lastPt) return null;
 
   const isRising = lastVal > firstVal;
-  const strokeColor = isRising ? "#C2410C" : "#8C7D73";
+  const strokeColor = isRising ? "#7C3AED" : "#8C7D73";
   const titleText = yearlyData.map((d) => `${d.year}: ${d.cutoffValue} marks`).join(" → ");
 
   return (
@@ -332,8 +332,8 @@ export default function CollegeStandingsTable({
                 }}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   category === cat
-                    ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] shadow-2xs font-bold"
-                    : "bg-[#FFF8F0] hover:bg-[#FEF1E0] text-stone-700 border border-[#EFE6DC]"
+                    ? "bg-purple-50 text-purple-700 border border-purple-200 shadow-2xs font-bold"
+                    : "bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200"
                 }`}
               >
                 {cat}
@@ -342,7 +342,7 @@ export default function CollegeStandingsTable({
           </div>
 
           {/* Year Selector */}
-          <div className="flex items-center bg-[#FFF8F0] border border-[#EFE6DC] p-0.5 rounded-lg text-xs font-semibold self-start sm:self-auto">
+          <div className="flex items-center bg-slate-50 border border-slate-200 p-0.5 rounded-lg text-xs font-semibold self-start sm:self-auto">
             {(["all", 2026, 2025, 2024, 2023] as const).map((yr) => (
               <button
                 key={yr}
@@ -445,7 +445,7 @@ export default function CollegeStandingsTable({
                   setCurrentPage(1);
                 }}
                 placeholder="Search colleges..."
-                className="w-full pl-8 pr-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#C2410C]"
+                className="w-full pl-8 pr-2.5 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-500/20"
               />
             </div>
 
@@ -470,15 +470,15 @@ export default function CollegeStandingsTable({
 
       {/* 2. Historical Cutoff Trend Chart */}
       {selectedStandingItem && trendData.length > 0 && (
-        <div className="p-4 bg-[#FFF8F0] rounded-2xl border border-[#EFE6DC] space-y-3">
+        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <TrendingUp className="w-4 h-4 text-[#C2410C] shrink-0" />
-              <h4 className="text-sm font-bold text-stone-900">
+              <TrendingUp className="w-4 h-4 text-purple-600 shrink-0" />
+              <h4 className="text-sm font-bold text-slate-900">
                 Cutoff Trend: {selectedStandingItem.collegeName}
               </h4>
               {trendDelta && (
-                <span className="px-2 py-0.5 rounded-full bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-xs font-bold">
+                <span className="px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 text-xs font-bold">
                   {trendDelta}
                 </span>
               )}
@@ -486,11 +486,11 @@ export default function CollegeStandingsTable({
 
             <div className="flex items-center gap-3 text-xs text-slate-600 flex-wrap">
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#C2410C] inline-block" />
+                <span className="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block" />
                 Historical Cutoffs
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full border-2 border-[#C2410C] bg-white inline-block" />
+                <span className="w-2.5 h-2.5 rounded-full border-2 border-purple-600 bg-white inline-block" />
                 2027 Projected
               </span>
               {hasUserScore && (
@@ -550,10 +550,10 @@ export default function CollegeStandingsTable({
                 <Line
                   type="monotone"
                   dataKey="cutoffMarks"
-                  stroke="#C2410C"
+                  stroke="#7C3AED"
                   strokeWidth={2.5}
                   connectNulls={false}
-                  dot={{ r: 4, fill: "#C2410C" }}
+                  dot={{ r: 4, fill: "#7C3AED" }}
                   activeDot={{ r: 6 }}
                   label={{
                     position: "top",
@@ -568,7 +568,7 @@ export default function CollegeStandingsTable({
                 <Line
                   type="monotone"
                   dataKey="projectedCutoffMarks"
-                  stroke="#C2410C"
+                  stroke="#7C3AED"
                   strokeWidth={2.5}
                   strokeDasharray="4 4"
                   connectNulls
@@ -584,7 +584,7 @@ export default function CollegeStandingsTable({
                         cy={cy}
                         r={5}
                         fill="#FFFFFF"
-                        stroke="#C2410C"
+                        stroke="#7C3AED"
                         strokeWidth={2.5}
                       />
                     );
@@ -600,7 +600,7 @@ export default function CollegeStandingsTable({
                         key={props.key || `proj-${x}-${y}`}
                         x={x}
                         y={y - 10}
-                        fill="#C2410C"
+                        fill="#7C3AED"
                         textAnchor="middle"
                         fontSize={12}
                         fontWeight={700}
@@ -623,9 +623,9 @@ export default function CollegeStandingsTable({
       {/* 3. College Standings Table & Cards */}
       <div className="space-y-3">
         {/* Desktop View Table */}
-        <div className="hidden md:block overflow-hidden rounded-xl border border-[#EFE6DC]">
+        <div className="hidden md:block overflow-hidden rounded-xl border border-slate-200">
           <table className="w-full text-left text-sm">
-            <thead className="bg-[#FFF8F0] text-xs font-bold uppercase tracking-wider text-stone-600 border-b border-[#EFE6DC]">
+            <thead className="bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-600 border-b border-slate-200">
               <tr>
                 <th scope="col" className="py-3.5 px-4">College Name</th>
                 <th scope="col" className="py-3.5 px-3 whitespace-nowrap">
@@ -642,7 +642,7 @@ export default function CollegeStandingsTable({
                 <th scope="col" className="py-3.5 px-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EFE6DC]">
+            <tbody className="divide-y divide-slate-100">
               {paginatedStandings.length === 0 ? (
                 <tr>
                   <td colSpan={hasUserScore ? 7 : 5} className="py-8 text-center text-sm text-slate-500">
@@ -694,11 +694,11 @@ export default function CollegeStandingsTable({
                           onSelectCollegeForTrend(item.collegeName);
                         }
                       }}
-                      className={`hover:bg-[#FFF8F0]/80 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C2410C] focus:ring-inset ${
+                      className={`hover:bg-slate-50/80 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-inset ${
                         isSavedTarget
-                          ? "bg-[#FFF5EA] border-l-4 border-l-[#C2410C]"
+                          ? "bg-purple-50/50 border-l-4 border-l-purple-600"
                           : isSelected || isViewing
-                          ? "bg-[#FEF1E0]/40"
+                          ? "bg-purple-50/30"
                           : ""
                       }`}
                     >
@@ -711,8 +711,8 @@ export default function CollegeStandingsTable({
                               {item.collegeName}
                             </span>
                             {isSavedTarget && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-xs font-bold shrink-0">
-                                <Pin className="w-3 h-3 text-[#92400E]" /> Target College
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200 text-xs font-bold shrink-0">
+                                <Pin className="w-3 h-3 text-purple-600" /> Target College
                               </span>
                             )}
                             {!isSavedTarget && isViewing && (
@@ -783,7 +783,7 @@ export default function CollegeStandingsTable({
                             e.stopPropagation();
                             onSelectCollegeForTrend(item.collegeName);
                           }}
-                          className="px-3 py-1.5 text-xs font-semibold text-[#C2410C] hover:text-[#9A3412] hover:bg-[#FDF0E6] rounded-lg transition-colors cursor-pointer"
+                          className="px-3 py-1.5 text-xs font-semibold text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors cursor-pointer"
                         >
                           {isSelected ? "Viewing Trend" : "View Trend"}
                         </button>
@@ -847,23 +847,23 @@ export default function CollegeStandingsTable({
                       onSelectCollegeForTrend(item.collegeName);
                     }
                   }}
-                  className={`p-4 rounded-xl border transition-all space-y-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C2410C] ${
+                  className={`p-4 rounded-xl border transition-all space-y-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-600 ${
                     isSavedTarget
-                      ? "bg-[#FEF1E0] border-[#F6D3AF]"
+                      ? "bg-purple-50/70 border-purple-200"
                       : isSelected || isViewing
-                      ? "bg-[#FFF5EA] border-[#F6D3AF]"
+                      ? "bg-purple-50/40 border-purple-200"
                       : "bg-white border-slate-200"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex flex-col gap-0.5 min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-sm font-bold text-stone-900 leading-snug break-words">
+                        <span className="text-sm font-bold text-slate-900 leading-snug break-words">
                           {item.collegeName}
                         </span>
                         {isSavedTarget && (
-                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-xs font-bold">
-                            <Pin className="w-3 h-3 text-[#92400E]" /> Target
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm bg-purple-100 text-purple-800 border border-purple-300 text-xs font-bold">
+                            <Pin className="w-3 h-3 text-purple-700" /> Target
                           </span>
                         )}
                         {!isSavedTarget && isViewing && (
@@ -927,7 +927,7 @@ export default function CollegeStandingsTable({
                       e.stopPropagation();
                       onSelectCollegeForTrend(item.collegeName);
                     }}
-                    className="w-full py-1.5 text-center text-xs font-semibold text-[#C2410C] hover:bg-[#FDF0E6] rounded-lg transition-colors border border-[#F6D3AF] cursor-pointer"
+                    className="w-full py-1.5 text-center text-xs font-semibold text-purple-600 hover:bg-purple-50 rounded-lg transition-colors border border-purple-200 cursor-pointer"
                   >
                     {isSelected ? "Viewing Cutoff Trend" : "View Cutoff Trend"}
                   </button>
@@ -951,7 +951,7 @@ export default function CollegeStandingsTable({
                 }}
                 className={`px-2.5 py-1 rounded-md text-xs sm:text-sm font-semibold cursor-pointer ${
                   pageSize === size
-                    ? "bg-[#C2410C] text-white shadow-2xs"
+                    ? "bg-[#18262E] text-white shadow-2xs"
                     : "bg-slate-100 hover:bg-slate-200 text-slate-700"
                 }`}
               >

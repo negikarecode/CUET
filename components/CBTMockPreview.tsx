@@ -77,7 +77,7 @@ export default function CBTMockPreview() {
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-6 border-b border-slate-200/80 gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="bg-[#FDF0E6] text-[#C2410C] font-mono text-xs font-bold px-3 py-1 rounded-full border border-[#F6D3AF]">
+              <span className="bg-purple-50 text-purple-700 font-mono text-xs font-bold px-3 py-1 rounded-full border border-purple-200">
                 NTA CBT INTERFACE
               </span>
               <span className="text-xs font-medium text-slate-500">
@@ -150,14 +150,14 @@ export default function CBTMockPreview() {
                       onClick={() => handleSelectOption(opt.id)}
                       className={`w-full flex items-start gap-3.5 p-4 rounded-2xl border text-left transition-all font-sans text-sm focus:outline-none cursor-pointer ${
                         isSelected
-                          ? "bg-[#FEF1E0]/80 border-[#C2410C] text-slate-900 shadow-xs font-semibold"
+                          ? "bg-purple-50/80 border-purple-600 text-slate-900 shadow-xs font-semibold"
                           : "bg-white hover:bg-slate-50 border-slate-200/80 text-slate-700"
                       }`}
                     >
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 transition-colors ${
                           isSelected
-                            ? "bg-[#C2410C] text-white"
+                            ? "bg-purple-600 text-white"
                             : "bg-slate-100 text-slate-600 border border-slate-200"
                         }`}
                         translate="no"
@@ -202,7 +202,7 @@ export default function CBTMockPreview() {
                     onClick={() => {
                       setShowAiDiagnosis(true);
                     }}
-                    className="px-5 py-2.5 text-xs font-semibold rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white shadow-xs hover:shadow flex items-center gap-2 transition-all cursor-pointer"
+                    className="px-5 py-2.5 text-xs font-semibold rounded-xl bg-[#18262E] hover:bg-purple-700 text-white shadow-xs hover:shadow flex items-center gap-2 transition-all cursor-pointer"
                   >
                     <span>{t("saveAndNext", "Save & Next")}</span>
                     <ChevronRight className="w-4 h-4 stroke-[2.5]" />
@@ -310,7 +310,7 @@ export default function CBTMockPreview() {
                       type="button"
                       onClick={() => setCurrentQuestionNumber(q.num)}
                       className={`h-8 rounded-xl text-xs transition-all flex items-center justify-center font-mono cursor-pointer ${colorClasses} ${
-                        isCurrent ? "ring-2 ring-[#C2410C] scale-105" : ""
+                        isCurrent ? "ring-2 ring-purple-600 scale-105" : ""
                       }`}
                       translate="no"
                     >

@@ -365,7 +365,7 @@ export default function SessionsHistoryClient({
   if (!isClient) {
     return (
       <div className="py-16 flex justify-center items-center">
-        <div className="w-9 h-9 border-3 border-[#C2410C] border-t-transparent rounded-full animate-spin" />
+        <div className="w-9 h-9 border-3 border-purple-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -374,7 +374,7 @@ export default function SessionsHistoryClient({
     <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-6">
       {/* 1. Top Header & Navigation */}
       <div className="space-y-1.5">
-        <div className="flex items-center gap-2 text-xs font-semibold text-[#C2410C] tracking-wide uppercase">
+        <div className="flex items-center gap-2 text-xs font-semibold text-purple-700 tracking-wide uppercase">
           <Compass className="w-3.5 h-3.5" />
           <span>CUET UG 2026 · Past Performance Record</span>
         </div>
@@ -386,7 +386,7 @@ export default function SessionsHistoryClient({
                 href="/dashboard"
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors focus:outline-none focus:underline"
               >
-                <ArrowLeft className="w-3.5 h-3.5" />
+                <ArrowLeft className="w-4 h-4" />
                 <span>Back to Dashboard</span>
               </Link>
             </div>
@@ -401,7 +401,7 @@ export default function SessionsHistoryClient({
           <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white text-xs sm:text-sm font-semibold shadow-xs transition-all"
+              className="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-[#18262E] hover:bg-purple-700 active:bg-purple-800 text-white text-xs sm:text-sm font-semibold shadow-xs transition-all"
             >
               <ClipboardCheck className="w-4 h-4" />
               <span>Take a Mock Test</span>
@@ -414,8 +414,8 @@ export default function SessionsHistoryClient({
       {allAttempts.length > 0 ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
           {/* Card 1: Completed Sessions */}
-          <div className="bg-white rounded-2xl border border-[#EFE6DC] p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
-            <div className="w-11 h-11 rounded-xl bg-[#FDF0E6] border border-[#F6D3AF] flex items-center justify-center text-[#C2410C] shrink-0">
+          <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs flex items-center gap-3.5 min-w-0">
+            <div className="w-11 h-11 rounded-xl bg-purple-50 border border-purple-200 text-purple-600 flex items-center justify-center shrink-0">
               <ClipboardCheck className="w-5 h-5 stroke-[2.2]" />
             </div>
             <div className="min-w-0">
@@ -490,11 +490,11 @@ export default function SessionsHistoryClient({
 
       {/* 3. Score Trajectory Line Chart */}
       {allAttempts.length > 0 && (
-        <div className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-[#C2410C]" />
+                <TrendingUp className="w-4 h-4 text-purple-600" />
                 <span>Score Trajectory Over Time</span>
               </h2>
               <p className="text-xs text-slate-500 font-medium mt-0.5">
@@ -522,7 +522,7 @@ export default function SessionsHistoryClient({
                       };
                     }),
                   ]}
-                  buttonClassName="py-1 px-2.5 rounded-xl border border-[#EFE6DC] bg-slate-50 text-xs font-semibold text-slate-700"
+                  buttonClassName="py-1 px-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-700"
                   searchPlaceholder="Search subjects..."
                 />
               </div>
@@ -543,7 +543,7 @@ export default function SessionsHistoryClient({
                     <p className="text-xs font-medium text-slate-500">Single session recorded:</p>
                     <p className="text-base sm:text-lg font-bold text-slate-900">
                       {sp.testTitle} —{" "}
-                      <span className="text-[#C2410C]">{sp.totalMarks}</span> /{" "}
+                      <span className="text-purple-600">{sp.totalMarks}</span> /{" "}
                       {sp.maxMarks || 250} marks
                     </p>
                     <p className="text-xs text-slate-400 font-mono">
@@ -561,7 +561,7 @@ export default function SessionsHistoryClient({
 
       {/* 4. Filter and Search Toolbar */}
       {allAttempts.length > 0 && (
-        <div className="bg-white rounded-2xl border border-[#EFE6DC] p-4 shadow-xs space-y-3.5">
+        <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs space-y-3.5">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
             {/* Search Input */}
             <div className="relative sm:col-span-2 lg:col-span-5">
@@ -571,7 +571,7 @@ export default function SessionsHistoryClient({
                 placeholder="Search by test title or subject..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-[#EFE6DC] text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C] transition-all"
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-600/20 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition-all"
               />
             </div>
 
@@ -672,8 +672,8 @@ export default function SessionsHistoryClient({
       {/* 5. Sessions Results / Presentation */}
       {allAttempts.length === 0 ? (
         /* Zero State: User has not taken any tests */
-        <div className="bg-white rounded-2xl py-16 px-4 text-center space-y-4 border border-[#EFE6DC] shadow-xs">
-          <div className="w-14 h-14 rounded-2xl bg-[#FDF0E6] text-[#C2410C] flex items-center justify-center mx-auto border border-[#F6D3AF] shadow-xs">
+        <div className="bg-white rounded-2xl py-16 px-4 text-center space-y-4 border border-slate-200 shadow-xs">
+          <div className="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto border border-purple-200 shadow-xs">
             <ClipboardCheck className="w-7 h-7" />
           </div>
           <div className="max-w-md mx-auto space-y-1">
@@ -685,7 +685,7 @@ export default function SessionsHistoryClient({
           <div className="pt-2">
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center justify-center gap-2 py-2 px-5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs sm:text-sm font-semibold transition-all shadow-xs"
+              className="inline-flex items-center justify-center gap-2 py-2 px-5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white text-xs sm:text-sm font-semibold transition-all shadow-xs"
             >
               <ClipboardCheck className="w-4 h-4" />
               <span>Browse Mock Tests</span>
@@ -694,7 +694,7 @@ export default function SessionsHistoryClient({
         </div>
       ) : filteredAttempts.length === 0 ? (
         /* Filter Zero State: No tests match search/subject */
-        <div className="bg-white rounded-2xl py-12 px-4 text-center space-y-3 border border-[#EFE6DC] shadow-xs">
+        <div className="bg-white rounded-2xl py-12 px-4 text-center space-y-3 border border-slate-200 shadow-xs">
           <p className="text-base font-bold text-slate-900">No sessions match your search or filters</p>
           <p className="text-xs text-slate-400">
             Try resetting the filters or entering different search keywords.
@@ -707,7 +707,7 @@ export default function SessionsHistoryClient({
               setSelectedType("all");
               setDateRange("all");
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#EFE6DC] bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer shadow-xs"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset filters</span>
@@ -779,7 +779,7 @@ export default function SessionsHistoryClient({
                         {/* Test Title */}
                         <td className="py-3.5 pl-4 pr-2 font-medium max-w-[240px]">
                           <div className="space-y-1">
-                            <p className="font-bold text-slate-900 group-hover:text-[#C2410C] transition-colors leading-snug whitespace-normal break-words">
+                            <p className="font-bold text-slate-900 group-hover:text-purple-600 transition-colors leading-snug whitespace-normal break-words">
                               {title}
                             </p>
                             <div className="flex items-center gap-1.5 flex-wrap">
@@ -791,7 +791,7 @@ export default function SessionsHistoryClient({
                               <span
                                 className={`inline-block px-1.5 py-0.5 rounded-md text-[10px] font-bold border ${
                                   type === "Mock"
-                                    ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
+                                    ? "bg-purple-50 text-purple-700 border-purple-200"
                                     : type === "Past Paper"
                                     ? "bg-purple-50 text-purple-700 border-purple-200/80"
                                     : "bg-emerald-50 text-emerald-700 border-emerald-200/80"
@@ -808,7 +808,7 @@ export default function SessionsHistoryClient({
 
                         {/* Subject */}
                         <td className="py-3.5 px-3 whitespace-nowrap">
-                          <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-[#EFE6DC]/70 font-sans">
+                          <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200/70 font-sans">
                             {att.subject || "Domain"}
                           </span>
                         </td>
@@ -847,7 +847,7 @@ export default function SessionsHistoryClient({
                               acc >= 70
                                 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                                 : acc >= 40
-                                ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
+                                ? "bg-purple-50 text-purple-700 border-purple-200"
                                 : "bg-amber-50 text-amber-700 border-amber-200"
                             }`}
                           >
@@ -888,7 +888,7 @@ export default function SessionsHistoryClient({
                             <Link
                               href={reviewHref}
                               onClick={(e) => e.stopPropagation()}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#FEF1E0] text-[#9F3014] hover:bg-[#FDE6D2] border border-[#F6D3AF] transition-colors shadow-2xs"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 transition-colors shadow-2xs"
                               title="View test analysis and solutions"
                             >
                               <span>Analysis</span>
@@ -898,7 +898,7 @@ export default function SessionsHistoryClient({
                             <Link
                               href={retakeHref}
                               onClick={(e) => e.stopPropagation()}
-                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-[#EFE6DC]/60 transition-colors"
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition-colors"
                               title="Re-attempt this test"
                             >
                               <RotateCw className="w-3.5 h-3.5" />
@@ -961,7 +961,7 @@ export default function SessionsHistoryClient({
                         <span
                           className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${
                             type === "Mock"
-                              ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
+                              ? "bg-purple-50 text-purple-700 border border-purple-200"
                               : type === "Past Paper"
                               ? "bg-purple-50 text-purple-700 border-purple-200/80"
                               : "bg-emerald-50 text-emerald-700 border-emerald-200/80"
@@ -995,7 +995,7 @@ export default function SessionsHistoryClient({
                           acc >= 70
                             ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                             : acc >= 40
-                            ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
+                            ? "bg-purple-50 text-purple-700 border-purple-200"
                             : "bg-amber-50 text-amber-700 border-amber-200"
                         }`}
                       >
@@ -1017,7 +1017,7 @@ export default function SessionsHistoryClient({
                   <div className="flex items-center gap-2 pt-1 border-t border-slate-100">
                     <Link
                       href={reviewHref}
-                      className="flex-1 py-1.5 px-3 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs text-center shadow-xs transition-colors"
+                      className="flex-1 py-1.5 px-3 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs text-center shadow-xs transition-colors"
                     >
                       Analysis
                     </Link>
@@ -1278,8 +1278,8 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
       >
         <defs>
           <linearGradient id="scoreAreaGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#C2410C" stopOpacity="0.20" />
-            <stop offset="100%" stopColor="#C2410C" stopOpacity="0.01" />
+            <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.20" />
+            <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.01" />
           </linearGradient>
         </defs>
 
@@ -1341,7 +1341,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
           <path
             d={pathD}
             fill="none"
-            stroke="#C2410C"
+            stroke="#7C3AED"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -1363,7 +1363,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
                   cx={pt.x}
                   cy={pt.y}
                   r="8"
-                  fill="#C2410C"
+                  fill="#7C3AED"
                   fillOpacity="0.2"
                   className="animate-ping"
                 />
@@ -1372,7 +1372,7 @@ function ScoreLineChart({ points }: ScoreLineChartProps) {
                 cx={pt.x}
                 cy={pt.y}
                 r={isHovered ? "5.5" : "4"}
-                fill={isHovered ? "#9A3412" : pt.score < 0 ? "#E11D48" : "#C2410C"}
+                fill={isHovered ? "#6D28D9" : pt.score < 0 ? "#E11D48" : "#7C3AED"}
                 stroke="#FFFFFF"
                 strokeWidth="2"
                 className="transition-all duration-150"

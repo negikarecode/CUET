@@ -42,7 +42,7 @@ export default function DashboardError({ error, reset }: DashboardErrorProps) {
           <button
             type="button"
             onClick={() => reset()}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-xs hover:shadow transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs shadow-xs hover:shadow transition-all cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Try Again</span>

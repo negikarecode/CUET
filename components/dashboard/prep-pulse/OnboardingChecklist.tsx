@@ -44,7 +44,7 @@ export const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({
     <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-800">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-[#C2410C]/20 text-[#EA580C] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
@@ -57,7 +57,7 @@ export const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({
           </div>
         </div>
         <div className="flex items-center gap-2 self-start sm:self-auto">
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#C2410C]/20 text-[#FB923C] border border-[#C2410C]/30 font-mono">
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">
             {Math.round((completedCount / 3) * 100)}% Onboarded
           </span>
         </div>

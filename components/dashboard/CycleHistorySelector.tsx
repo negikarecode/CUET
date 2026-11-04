@@ -54,7 +54,7 @@ export function CycleHistorySelector({
         onClick={() => setIsOpen((prev) => !prev)}
         className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-[13px] border border-slate-200/80 shadow-xs flex items-center gap-2 transition-all cursor-pointer"
       >
-        <History className="w-4 h-4 text-[#C2410C]" />
+        <History className="w-4 h-4 text-purple-600" />
         <span>Cycle History ({diagnosticCycles.length} Completed)</span>
         <ChevronDown
           className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
@@ -129,7 +129,7 @@ export function CycleHistorySelector({
                       className="w-full p-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/80 shadow-xs text-left transition-all space-y-1.5 group cursor-pointer"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-bold text-slate-900 group-hover:text-[#C2410C] transition-colors">
+                        <span className="text-sm font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
                           Cycle {cycle.cycleNumber}
                         </span>
                         <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[13px] font-semibold text-emerald-700 flex items-center gap-1">
@@ -169,7 +169,7 @@ export function CycleHistorySelector({
                             </>
                           )}
                         </div>
-                        <span className="text-[#C2410C] font-semibold group-hover:underline text-[13px] shrink-0">
+                        <span className="text-purple-600 font-semibold group-hover:underline text-[13px] shrink-0">
                           View Analysis →
                         </span>
                       </div>

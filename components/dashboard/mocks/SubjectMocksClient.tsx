@@ -254,7 +254,7 @@ export default function SubjectMocksClient({
 
       {/* Free Plan Status & Limit Banner - Render ONLY after confirming user is on Free Plan */}
       {isConfirmedFree && (
-        <div className="bg-gradient-to-r from-[#FEF1E0] via-white to-[#FAF3EB] rounded-2xl border border-amber-200/90 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+        <div className="bg-gradient-to-r from-purple-50/60 via-white to-slate-50 rounded-2xl border border-purple-200/90 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
@@ -312,7 +312,7 @@ export default function SubjectMocksClient({
             ) : (
               <Link
                 href={mockStats.isAllAttempted ? `/test/${mockTests[0]?.id || `${subjectKey}-mock-1`}?reattempt=true` : `/test/${nextMockId}`}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
               >
                 {mockStats.isAllAttempted ? (
                   <>
@@ -333,7 +333,7 @@ export default function SubjectMocksClient({
         {/* Stat Chips + Progress bar */}
         <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
-            <span className="px-3 py-1 rounded-lg bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] tabular-nums">
+            <span className="px-3 py-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 tabular-nums">
               {mockStats.attemptedMocksCount} of {mockTests.length || 50} Attempted
             </span>
 
@@ -365,7 +365,7 @@ export default function SubjectMocksClient({
           <div className="flex items-center gap-2 sm:w-48">
             <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div
-                className="bg-[#C2410C] h-full rounded-full transition-all duration-300"
+                className="bg-purple-600 h-full rounded-full transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -464,7 +464,7 @@ export default function SubjectMocksClient({
                           </span>
                         )
                       )}
-                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF]">
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">
                         Mock #{mockNum}
                       </span>
                     </div>
@@ -539,7 +539,7 @@ export default function SubjectMocksClient({
                     <>
                       <Link
                         href={`/dashboard/mocks/analysis/${bestAttempt.id || test.id}`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                       >
                         <BarChart2 className="w-3.5 h-3.5" />
                         <span>Analysis</span>
@@ -564,7 +564,7 @@ export default function SubjectMocksClient({
                   ) : (
                     <Link
                       href={`/test/${test.id}`}
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                     >
                       <span>Start</span>
                       <Play className="w-3.5 h-3.5 fill-current" />
@@ -581,7 +581,7 @@ export default function SubjectMocksClient({
           <button
             type="button"
             onClick={() => setStatusFilter("all")}
-            className="text-xs font-bold text-[#C2410C] hover:underline cursor-pointer"
+            className="text-xs font-bold text-purple-600 hover:underline cursor-pointer"
           >
             Show all mocks
           </button>

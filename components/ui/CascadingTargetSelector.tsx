@@ -45,7 +45,7 @@ const STREAM_OPTIONS: Array<{
     id: "Science",
     label: "Science",
     desc: "Physics, Chem, Math, Bio",
-    selectedColor: "bg-[#FEF1E0] border-[#C2410C] text-[#9F3014]",
+    selectedColor: "bg-blue-50/80 border-blue-500 text-blue-900",
   },
   {
     id: "Commerce",
@@ -168,7 +168,7 @@ export default function CascadingTargetSelector({
         <div className="space-y-2">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <GraduationCap className="w-3.5 h-3.5 text-[#C2410C]" />
+              <GraduationCap className="w-3.5 h-3.5 text-purple-600" />
               <span>Target Domain Stream</span>
             </span>
             <span className="text-[11px] font-semibold text-slate-400 lowercase">
@@ -192,7 +192,7 @@ export default function CascadingTargetSelector({
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-bold">{opt.label}</span>
                     {isSelected && (
-                      <div className="w-4 h-4 rounded-full bg-[#C2410C] text-white flex items-center justify-center">
+                      <div className="w-4 h-4 rounded-full bg-[#18262E] text-white flex items-center justify-center">
                         <Check className="w-2.5 h-2.5 stroke-[3]" />
                       </div>
                     )}
@@ -215,13 +215,13 @@ export default function CascadingTargetSelector({
           className={`p-3 rounded-xl border flex items-start gap-2.5 text-xs font-semibold animate-in fade-in slide-in-from-top-1 duration-200 ${
             inlineNotice.type === "warning"
               ? "bg-amber-50/90 border-amber-200 text-amber-900"
-              : "bg-[#FEF1E0] border-[#F6D3AF] text-[#9F3014]"
+              : "bg-purple-50 border-purple-200 text-purple-800"
           }`}
         >
           {inlineNotice.type === "warning" ? (
             <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
           ) : (
-            <Info className="w-4 h-4 text-[#C2410C] shrink-0 mt-0.5" />
+            <Info className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
           )}
           <span className="flex-1 leading-relaxed">{inlineNotice.message}</span>
         </div>
@@ -233,7 +233,7 @@ export default function CascadingTargetSelector({
         <div className="space-y-1.5">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-[#C2410C]" />
+              <Building2 className="w-3.5 h-3.5 text-purple-600" />
               <span>{collegeLabelPrefix}</span>
             </span>
             <span className="text-[11px] font-semibold text-slate-500 font-mono">
@@ -266,7 +266,7 @@ export default function CascadingTargetSelector({
         <div className="space-y-1.5">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-[#C2410C]" />
+              <BookOpen className="w-3.5 h-3.5 text-purple-600" />
               <span>{courseLabelPrefix}</span>
             </span>
             <span className="text-[11px] font-semibold text-slate-500 font-mono">
@@ -294,7 +294,7 @@ export default function CascadingTargetSelector({
               type="checkbox"
               checked={showUnavailable}
               onChange={(e) => setShowUnavailable(e.target.checked)}
-              className="w-3.5 h-3.5 text-[#C2410C] rounded-sm border-slate-300 focus:ring-[#C2410C]"
+              className="w-3.5 h-3.5 text-purple-600 rounded-sm border-slate-300 focus:ring-purple-500"
             />
             <span>Show unavailable options across all institutions</span>
           </label>

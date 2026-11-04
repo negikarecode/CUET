@@ -63,32 +63,32 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
   // If no attempts or weakness recorded yet, show onboarding diagnostic calibration card
   if (!prioritizedTopic || totalAttempted === 0) {
     return (
-      <div className="relative overflow-hidden bg-[#FEF1E0] rounded-2xl border border-[#F6D3AF] p-6 sm:p-7 shadow-2xs">
+      <div className="relative overflow-hidden bg-purple-50/70 rounded-2xl border border-purple-200/80 p-6 sm:p-7 shadow-2xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2.5 max-w-2xl">
-            <div className="text-xs font-semibold text-[#8C7D73]">
+            <div className="text-xs font-semibold text-slate-500">
               Your next best action · Diagnostic
             </div>
 
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#1C1917] tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 Complete your first diagnostic test
               </h2>
-              <p className="text-xs sm:text-sm text-[#5C524A] mt-1 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
                 Take an official 50-question mock or PYQ shift paper to calibrate your score, detect question traps, and unlock your AI weakness diagnosis.
               </p>
             </div>
 
             {/* Diagnostic Unlock Progress Tracker */}
             <div className="pt-2 max-w-md space-y-1.5">
-              <div className="flex justify-between items-center text-xs text-[#5C524A]">
+              <div className="flex justify-between items-center text-xs text-slate-600">
                 <span>Diagnostic unlocks at 150 questions</span>
-                <span className="tabular-nums font-semibold text-[#1C1917]">
+                <span className="tabular-nums font-semibold text-slate-900">
                   0 of 150 questions
                 </span>
               </div>
-              <div className="w-full h-1.5 bg-[#FDE6D2] rounded-full overflow-hidden">
-                <div className="h-full bg-[#C2410C] rounded-full w-0" />
+              <div className="w-full h-1.5 bg-purple-100 rounded-full overflow-hidden">
+                <div className="h-full bg-purple-600 rounded-full w-0" />
               </div>
             </div>
           </div>
@@ -96,7 +96,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
           <div className="shrink-0">
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white text-xs sm:text-sm font-semibold transition-colors shadow-xs cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-xl bg-[#18262E] hover:bg-purple-700 active:bg-purple-800 text-white text-xs sm:text-sm font-bold transition-colors shadow-xs cursor-pointer"
             >
               <span>Take diagnostic mock</span>
               <ArrowRight className="w-4 h-4" />
@@ -124,35 +124,35 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
   const _priorityActionLabel = priorityTask?.actionLabel || "Start focused practice"; void _priorityActionLabel;
 
   return (
-    <div className="relative overflow-hidden bg-[#FEF1E0] rounded-2xl border border-[#F6D3AF] p-6 sm:p-7 shadow-2xs">
+    <div className="relative overflow-hidden bg-white rounded-22px border border-slate-200/80 p-6 sm:p-7 shadow-xs">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="space-y-3 max-w-2xl">
           {/* Eyebrow: Your next best action · Subject */}
-          <div className="text-xs font-semibold text-[#8C7D73]">
+          <div className="text-xs font-semibold text-purple-700">
             Your next best action · {topic.subject}
           </div>
 
           {/* Recommended topic and explanation */}
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-[#1C1917] tracking-tight leading-snug">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
               Strengthen {topicTitle}
             </h2>
-            <p className="text-xs sm:text-sm text-[#5C524A] mt-1 leading-normal">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-normal">
               Accuracy is {topic.accuracyPercentage ?? 0}% over {topic.attemptsCount || 14} attempts. Recovering this topic could win back up to 84 marks.
             </p>
           </div>
 
           {/* Diagnostic Cycle Progress Bar */}
           <div className="pt-2 max-w-md space-y-1.5">
-            <div className="flex justify-between items-center text-xs text-[#786E65]">
+            <div className="flex justify-between items-center text-xs text-slate-600">
               <span className="font-medium">Cycle {diagnostic.currentCycleNumber || 2}</span>
-              <span className="tabular-nums font-semibold text-[#1C1917]">
+              <span className="tabular-nums font-semibold text-slate-900">
                 {diagnostic.currentCycleQuestionCount || 50} of 150 questions
               </span>
             </div>
-            <div className="w-full h-1.5 bg-[#FDE6D2] rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#C2410C] rounded-full transition-all duration-300"
+                className="h-full bg-purple-600 rounded-full transition-all duration-300"
                 style={{
                   width: `${Math.max(6, isUnlocked ? diagnostic.activeCycleProgressPercentage || 33 : diagnostic.unlockProgressPercentage || 33)}%`,
                 }}
@@ -165,7 +165,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
         <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-2.5 shrink-0">
           <Link
             href={priorityActionUrl}
-            className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] active:bg-[#852C08] text-white text-xs sm:text-sm font-semibold transition-colors shadow-xs cursor-pointer text-center"
+            className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-xl bg-[#18262E] hover:bg-purple-700 active:bg-purple-800 text-white text-xs sm:text-sm font-semibold transition-colors shadow-xs cursor-pointer text-center"
           >
             <span>Read concept summary</span>
           </Link>
@@ -181,7 +181,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
             className="w-full flex items-center justify-between py-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer"
           >
             <div className="flex items-center gap-2 flex-wrap">
-              <Sparkles className="w-4 h-4 text-[#C2410C] shrink-0" />
+              <Sparkles className="w-4 h-4 text-purple-600 shrink-0" />
               <span className="font-bold text-slate-900">
                 AI Performance Intelligence Briefing (5 Core Answers)
               </span>
@@ -192,7 +192,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                     : commandCenter.answers.q4_isImproving.trajectory === "DECLINING"
                     ? "bg-rose-50 text-rose-700 border-rose-200"
                     : commandCenter.answers.q4_isImproving.trajectory === "STABLE"
-                    ? "bg-[#FEF1E0] text-[#9F3014] border-[#F6D3AF]"
+                    ? "bg-amber-50 text-amber-800 border-amber-200"
                     : "bg-slate-100 text-slate-700 border-slate-200"
                 }`}
               >
@@ -238,7 +238,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                   onClick={() => setActiveBriefingTab("trajectory")}
                   className={`px-3 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
                     activeBriefingTab === "trajectory"
-                      ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] shadow-2xs"
+                      ? "bg-purple-50 text-purple-700 border border-purple-200 shadow-2xs"
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
@@ -249,7 +249,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                   onClick={() => setActiveBriefingTab("session_plan")}
                   className={`px-3 py-1.5 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
                     activeBriefingTab === "session_plan"
-                      ? "bg-[#FDF0E6] text-[#C2410C] border border-[#F6D3AF] shadow-2xs"
+                      ? "bg-purple-50 text-purple-700 border border-purple-200 shadow-2xs"
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
@@ -328,7 +328,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
               {activeBriefingTab === "trajectory" && (
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 text-xs">
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-[#C2410C] shrink-0" />
+                    <TrendingUp className="w-4 h-4 text-purple-600 shrink-0" />
                     <span className="font-bold text-slate-900">Is your preparation improving?</span>
                   </div>
                   <p className="text-slate-600 font-medium leading-relaxed">
@@ -362,10 +362,10 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3 text-xs">
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-[#C2410C] shrink-0" />
+                      <Clock className="w-4 h-4 text-purple-600 shrink-0" />
                       <span className="font-bold text-slate-900">Recommended Next Study Session</span>
                     </div>
-                    <span className="font-mono text-[11px] font-bold text-[#9F3014] bg-[#FEF1E0] px-2 py-0.5 rounded-full border border-[#F6D3AF]">
+                    <span className="font-mono text-[11px] font-bold text-purple-800 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">
                       {commandCenter.answers.q5_nextSessionPlan.recommendedDurationMinutes} Minutes Total
                     </span>
                   </div>
@@ -388,7 +388,7 @@ export const NextBestActionCard: React.FC<NextBestActionCardProps> = ({
                           <span className="font-mono text-[10px] text-slate-400">{s.durationMinutes}m</span>
                           <Link
                             href={s.actionUrl}
-                            className="px-2.5 py-1 rounded-lg bg-[#FEF1E0] hover:bg-[#FDE6D2] text-[#9F3014] font-semibold text-[11px] transition-colors"
+                            className="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-[11px] transition-colors"
                           >
                             Open
                           </Link>

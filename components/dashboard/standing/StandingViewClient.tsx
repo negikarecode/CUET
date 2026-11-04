@@ -310,7 +310,7 @@ export default function StandingViewClient({
           </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF]">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
             {targetCollege}
           </span>
           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-700 border border-[#EFE6DC]">
@@ -321,19 +321,19 @@ export default function StandingViewClient({
 
       {/* Zero Attempts Guidance Banner */}
       {hasZeroAttempts ? (
-        <div className="p-5 bg-[#FEF1E0] border border-[#F6D3AF] rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="p-5 bg-purple-50 border border-purple-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-sm font-bold text-[#9F3014]">
-              <ClipboardCheck className="w-5 h-5 text-[#C2410C]" />
+            <div className="flex items-center gap-2 text-sm font-bold text-purple-900">
+              <ClipboardCheck className="w-5 h-5 text-purple-600" />
               <span>Take your first mock to see your standing</span>
             </div>
-            <p className="text-sm text-stone-700 leading-relaxed max-w-2xl">
+            <p className="text-sm text-slate-700 leading-relaxed max-w-2xl">
               You haven&apos;t taken any mock tests yet. Complete at least one mock test in your core domain subject to see your standing against previous cutoffs.
             </p>
           </div>
           <Link
             href="/dashboard/mocks"
-            className="px-4 py-2.5 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold text-sm rounded-xl shadow-xs transition-all shrink-0 flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#18262E] hover:bg-purple-700 text-white font-bold text-sm rounded-xl shadow-xs transition-all shrink-0 flex items-center gap-2"
           >
             <span>Take Your First Mock</span>
             <ArrowRight className="w-4 h-4" />
@@ -343,11 +343,11 @@ export default function StandingViewClient({
 
       {/* Viewing vs Saved Target Chip (View-only for this page, never overwrites profile) */}
       {isViewingDifferentTarget && (
-        <div className="flex items-center justify-between bg-[#FEF1E0] border border-[#F6D3AF] px-4 py-2.5 rounded-2xl text-xs sm:text-sm text-[#9F3014] shadow-2xs">
+        <div className="flex items-center justify-between bg-purple-50 border border-purple-200 px-4 py-2.5 rounded-2xl text-xs sm:text-sm text-purple-900 shadow-2xs">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold text-stone-700">Viewing:</span>
-            <span className="font-bold text-[#9F3014]">{targetCollege}</span>
-            <span className="text-stone-500 hidden sm:inline">(view-only for this page)</span>
+            <span className="font-semibold text-slate-700">Viewing:</span>
+            <span className="font-bold text-purple-900">{targetCollege}</span>
+            <span className="text-slate-500 hidden sm:inline">(view-only for this page)</span>
           </div>
           <button
             type="button"
@@ -361,7 +361,7 @@ export default function StandingViewClient({
                 setTrendCollege(profileTarget.college);
               }
             }}
-            className="inline-flex items-center gap-1.5 text-[#C2410C] hover:text-[#9A3412] font-bold hover:underline cursor-pointer ml-3 shrink-0"
+            className="inline-flex items-center gap-1.5 text-purple-600 hover:text-purple-700 font-bold hover:underline cursor-pointer ml-3 shrink-0"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset to saved target ({profileTarget.college})</span>
@@ -423,9 +423,9 @@ export default function StandingViewClient({
       />
 
       {/* 5. Methodology & Honest Labelling Disclaimers */}
-      <div className="p-5 bg-white rounded-2xl border border-[#EFE6DC] space-y-2.5 text-sm text-stone-600">
-        <div className="flex items-center gap-2 font-bold text-stone-800">
-          <Info className="w-4 h-4 text-[#C2410C] shrink-0" />
+      <div className="p-5 bg-white rounded-2xl border border-slate-200 space-y-2.5 text-sm text-slate-600">
+        <div className="flex items-center gap-2 font-bold text-slate-800">
+          <Info className="w-4 h-4 text-purple-600 shrink-0" />
           <span>Cutoff Methodology & Disclaimers</span>
         </div>
         <ul className="space-y-1.5 list-disc list-inside text-[13px] leading-relaxed text-stone-600">

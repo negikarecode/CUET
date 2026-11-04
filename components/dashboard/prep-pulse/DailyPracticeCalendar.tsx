@@ -21,12 +21,12 @@ export const DailyPracticeCalendar: React.FC = () => {
   }, [attempts]);
 
   const getCellColor = (count: number, isInRange: boolean) => {
-    if (!isInRange) return "bg-[#FAF3EB]/50 opacity-40 border border-[#EFE6DC] cursor-default";
-    if (count === 0) return "bg-[#FAF3EB] border border-[#EFE6DC] hover:border-[#E2D4C3]";
-    if (count <= 1) return "bg-[#FDE6D2] border border-[#F6D3AF] hover:border-[#C2410C]";
-    if (count <= 3) return "bg-[#FED7AA] border border-[#F97316] hover:border-[#C2410C]";
-    if (count <= 5) return "bg-[#EA580C] border border-[#C2410C] hover:bg-[#C2410C]";
-    return "bg-[#C2410C] border border-[#9A3412] hover:bg-[#9A3412]";
+    if (!isInRange) return "bg-slate-50 opacity-40 border border-slate-100 cursor-default";
+    if (count === 0) return "bg-slate-100 border border-slate-200/60 hover:border-slate-300";
+    if (count <= 1) return "bg-emerald-100 border border-emerald-200 hover:border-emerald-400";
+    if (count <= 3) return "bg-emerald-300 border border-emerald-400 hover:border-emerald-500";
+    if (count <= 5) return "bg-emerald-500 border border-emerald-600 hover:bg-emerald-600";
+    return "bg-emerald-600 border border-emerald-700 hover:bg-emerald-700";
   };
 
   const handleMouseEnter = (day: HeatmapDay | null, e: React.MouseEvent) => {
@@ -47,20 +47,20 @@ export const DailyPracticeCalendar: React.FC = () => {
   const PITCH = 22;
 
   return (
-    <div className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-2xs space-y-4 relative">
+    <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-2xs space-y-4 relative">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#EFE6DC] pb-3 gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
         <div>
-          <h2 className="text-base font-bold text-[#1C1917] tracking-tight leading-tight">
+          <h2 className="text-base font-bold text-slate-900 tracking-tight leading-tight">
             Practice activity
           </h2>
-          <p className="text-xs text-[#8C7D73] mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             Daily study sessions, practice drills, and mock exams over the last 60 days.
           </p>
         </div>
 
-        <div className="text-xs text-[#5C524A] tabular-nums self-start sm:self-auto font-medium bg-[#FFF8F0] px-2.5 py-1 rounded-lg border border-[#EFE6DC]">
-          <strong className="text-[#1C1917]">{heatmapData.totalMocks}</strong> {heatmapData.totalMocks === 1 ? "test" : "tests"} completed • <strong className="text-[#1C1917]">{heatmapData.totalQuestions}</strong> questions answered
+        <div className="text-xs text-slate-600 tabular-nums self-start sm:self-auto font-medium bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200">
+          <strong className="text-slate-900">{heatmapData.totalMocks}</strong> {heatmapData.totalMocks === 1 ? "test" : "tests"} completed • <strong className="text-slate-900">{heatmapData.totalQuestions}</strong> questions answered
         </div>
       </div>
 
@@ -118,7 +118,7 @@ export const DailyPracticeCalendar: React.FC = () => {
                         onMouseLeave={handleMouseLeave}
                         onFocus={(e) => handleMouseEnter(day, e as any)}
                         onBlur={handleMouseLeave}
-                        className={`w-[18px] h-[18px] rounded-xs transition-colors cursor-pointer outline-hidden focus:ring-2 focus:ring-[#C2410C] ${getCellColor(
+                        className={`w-[18px] h-[18px] rounded-xs transition-colors cursor-pointer outline-hidden focus:ring-2 focus:ring-purple-600 ${getCellColor(
                           day.count,
                           day.isInRange
                         )}`}
@@ -141,10 +141,10 @@ export const DailyPracticeCalendar: React.FC = () => {
               <span>Less</span>
               <div className="flex gap-1">
                 <div className="w-[16px] h-[16px] rounded-xs bg-slate-100 border border-slate-200/50" />
-                <div className="w-[16px] h-[16px] rounded-xs bg-[#FDE6D2] border border-[#F6D3AF]" />
-                <div className="w-[16px] h-[16px] rounded-xs bg-[#FED7AA] border border-[#F97316]" />
-                <div className="w-[16px] h-[16px] rounded-xs bg-[#EA580C] border border-[#C2410C]" />
-                <div className="w-[16px] h-[16px] rounded-xs bg-[#C2410C] border border-[#9A3412]" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-emerald-100 border border-emerald-200" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-emerald-300 border border-emerald-400" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-emerald-500 border border-emerald-600" />
+                <div className="w-[16px] h-[16px] rounded-xs bg-emerald-600 border border-emerald-700" />
               </div>
               <span>More</span>
             </div>

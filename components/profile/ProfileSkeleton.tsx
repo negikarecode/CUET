@@ -26,7 +26,7 @@ export default function ProfileSkeleton() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-          <div className="h-18 bg-[#FEF1E0]/50 rounded-2xl border border-[#F6D3AF]/50" />
+          <div className="h-18 bg-purple-50/50 rounded-2xl border border-purple-200/50" />
           <div className="h-18 bg-amber-50/50 rounded-2xl border border-amber-100/50" />
           <div className="h-18 bg-emerald-50/50 rounded-2xl border border-emerald-100/50" />
         </div>

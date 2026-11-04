@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 
 export default function TermsOfServicePage() {
   return (
-    <div className="min-h-screen bg-[#FFF8F0] py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Breadcrumb Navigation */}
         <div className="space-y-4">
@@ -44,14 +44,14 @@ export default function TermsOfServicePage() {
 
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-[#C2410C] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-purple-700 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Home</span>
           </Link>
 
           <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-xs space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDF0E6] text-[#C2410C] text-xs font-bold border border-[#F6D3AF]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold border border-purple-200">
               <Scale className="w-3.5 h-3.5" />
               <span>User Agreement &amp; CBT Exam Guidelines</span>
             </div>
@@ -69,7 +69,7 @@ export default function TermsOfServicePage() {
           {/* Section 1: Acceptance */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-[#C2410C]" />
+              <BookOpen className="w-4 h-4 text-purple-600" />
               1. Acceptance of Terms &amp; Eligibility
             </h2>
             <p>
@@ -83,7 +83,7 @@ export default function TermsOfServicePage() {
           {/* Section 2: Non-Affiliation */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Building className="w-4 h-4 text-[#C2410C]" />
+              <Building className="w-4 h-4 text-purple-600" />
               2. Independent Platform &amp; NTA Non-Affiliation Disclaimer
             </h2>
             <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 space-y-2">
@@ -102,7 +102,7 @@ export default function TermsOfServicePage() {
           {/* Section 3: Diagnostic Nature & No Guarantees */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-[#C2410C]" />
+              <AlertCircle className="w-4 h-4 text-purple-600" />
               3. Nature of Diagnostic Practice &amp; Disclaimer of Results
             </h2>
             <p>
@@ -121,7 +121,7 @@ export default function TermsOfServicePage() {
           {/* Section 4: Acceptable Use & Account Integrity */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#C2410C]" />
+              <ShieldCheck className="w-4 h-4 text-purple-600" />
               4. Candidate Account Integrity &amp; Anti-Abuse
             </h2>
             <p>Each candidate registration is strictly for single-user educational usage. You agree not to:</p>
@@ -137,7 +137,7 @@ export default function TermsOfServicePage() {
           {/* Section 5: Subscription Passes & Payments */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <CreditCard className="w-4 h-4 text-[#C2410C]" />
+              <CreditCard className="w-4 h-4 text-purple-600" />
               5. Subscription Passes, Billing &amp; Validity
             </h2>
             <p>
@@ -146,14 +146,14 @@ export default function TermsOfServicePage() {
             <ul className="list-disc pl-5 space-y-1.5 text-slate-600">
               <li>All payments are processed securely in Indian Rupees (INR) via Razorpay.</li>
               <li>Passes are valid for the full duration of the CUET UG 2026 examination cycle through the final counseling phase.</li>
-              <li>Refunds are governed by our <Link href="/refunds" className="text-[#C2410C] font-semibold hover:underline">Cancellation &amp; Refund Policy</Link>, which offers a 48-hour satisfaction guarantee.</li>
+              <li>Refunds are governed by our <Link href="/refunds" className="text-purple-700 font-semibold hover:underline">Cancellation &amp; Refund Policy</Link>, which offers a 48-hour satisfaction guarantee.</li>
             </ul>
           </section>
 
           {/* Section 6: Intellectual Property */}
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-              <FileCheck className="w-4 h-4 text-[#C2410C]" />
+              <FileCheck className="w-4 h-4 text-purple-600" />
               6. Intellectual Property Rights
             </h2>
             <p>
@@ -183,7 +183,7 @@ export default function TermsOfServicePage() {
               If you have any questions, legal concerns, or dispute notices regarding these Terms, contact our academic help desk:
             </p>
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-              <p>Email: <a href="mailto:support@cuetprep.com" className="text-[#C2410C] font-semibold hover:underline">support@cuetprep.com</a></p>
+              <p>Email: <a href="mailto:support@cuetprep.com" className="text-purple-700 font-semibold hover:underline">support@cuetprep.com</a></p>
               <p>Helpline: <a href="tel:01140759000" className="text-slate-800 font-semibold hover:underline">011-40759000</a></p>
               <p className="text-xs text-slate-500">Available Monday to Saturday, 9:30 AM to 6:00 PM IST.</p>
             </div>

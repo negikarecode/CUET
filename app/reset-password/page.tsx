@@ -33,7 +33,7 @@ function ResetPasswordContent() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] flex flex-col justify-center py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(194,65,12,0.08),rgba(255,255,255,0))] pointer-events-none" />
 
       <div className="relative max-w-md w-full mx-auto space-y-6">
@@ -64,8 +64,8 @@ export default function ResetPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#FFF8F0] flex items-center justify-center p-4">
-          <div className="w-8 h-8 border-3 border-[#C2410C] border-t-transparent rounded-full animate-spin" />
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+          <div className="w-8 h-8 border-3 border-purple-600 border-t-transparent rounded-full animate-spin" />
         </div>
       }
     >

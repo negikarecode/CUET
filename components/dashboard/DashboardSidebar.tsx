@@ -182,20 +182,25 @@ export default function DashboardSidebar() {
   ];
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full justify-between bg-white text-[#1C1917] select-none">
+    <div className="flex flex-col h-full justify-between bg-white text-slate-900 select-none">
       {/* Brand Header & Nav links */}
       <div className="space-y-6">
-        {/* Brand Logo - Terracotta square with rounded corners and 'C' as in design.pdf */}
+        {/* Brand Logo */}
         <Link
           href="/dashboard"
-          className="flex items-center gap-2.5 px-2 py-2 rounded-xl transition-colors"
+          className="flex items-center gap-2.5 px-2 py-2 rounded-xl transition-colors group"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#C2410C] text-white flex items-center justify-center font-bold text-base leading-none shadow-xs shrink-0">
-            C
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform shrink-0">
+            <span>🦉</span>
           </div>
-          <span className="text-base font-bold text-[#1C1917] tracking-tight">
-            CUET AI-Prep
-          </span>
+          <div className="flex flex-col">
+            <span className="text-base font-extrabold text-slate-900 tracking-tight leading-none">
+              CUET<span className="text-purple-600"> AI-Prep</span>
+            </span>
+            <span className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mt-0.5">
+              Command Hub
+            </span>
+          </div>
         </Link>
 
         {/* Grouped Nav Items */}
@@ -203,7 +208,7 @@ export default function DashboardSidebar() {
           {navSections.map((section, sIdx) => (
             <div key={sIdx} className="space-y-1">
               {section.title && (
-                <div className="px-3 pt-2 pb-1 text-xs font-medium text-[#8C7D73] tracking-normal">
+                <div className="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   {section.title}
                 </div>
               )}
@@ -212,10 +217,10 @@ export default function DashboardSidebar() {
                   key={item.id}
                   href={item.href}
                   onClick={() => setMobileDrawerOpen(false)}
-                  className={`flex items-center px-3 py-2 rounded-xl text-sm transition-colors ${
+                  className={`flex items-center px-3 py-2 rounded-xl text-xs sm:text-sm transition-all ${
                     item.active
-                      ? "bg-[#FDF0E6] text-[#9F3014] font-semibold"
-                      : "text-[#5C524A] font-normal hover:bg-[#FAF3EB] hover:text-[#1C1917]"
+                      ? "bg-purple-50 text-purple-700 font-bold border border-purple-200/60 shadow-2xs"
+                      : "text-slate-600 font-medium hover:bg-slate-50 hover:text-slate-900"
                   }`}
                 >
                   <span>{item.label}</span>
@@ -227,18 +232,18 @@ export default function DashboardSidebar() {
       </div>
 
       {/* Footer: Premium plan active pill & Sign out */}
-      <div className="pt-4 border-t border-[#EFE6DC] space-y-2">
+      <div className="pt-4 border-t border-slate-100 space-y-2">
         <Link
           href="/pricing"
-          className="w-full flex items-center justify-center h-10 px-3 rounded-xl border border-[#EADDCF] bg-white/70 hover:bg-[#FAF3EB] text-xs font-medium text-[#5C524A] transition-colors"
+          className="w-full flex items-center justify-center h-10 px-3 rounded-xl border border-emerald-200 bg-emerald-50/80 hover:bg-emerald-100 text-xs font-bold text-emerald-800 transition-colors shadow-2xs"
         >
-          <span>Premium plan active</span>
+          <span>✨ Premium plan active</span>
         </Link>
 
         <button
           type="button"
           onClick={handleSignOut}
-          className="w-full flex items-center justify-center gap-2 h-9 px-3 rounded-xl text-xs font-medium text-[#8C7D73] hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+          className="w-full flex items-center justify-center gap-2 h-9 px-3 rounded-xl text-xs font-semibold text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" strokeWidth={1.75} />
           <span>Sign out</span>
@@ -250,13 +255,13 @@ export default function DashboardSidebar() {
   return (
     <>
       {/* 1. Mobile Top Header (Only on screens < 768px) */}
-      <div className="md:hidden sticky top-0 z-40 bg-white border-b border-[#EFE6DC] px-4 h-14 flex items-center justify-between w-full max-w-full">
+      <div className="md:hidden sticky top-0 z-40 bg-white border-b border-slate-200/80 px-4 h-14 flex items-center justify-between w-full max-w-full">
         <Link href="/dashboard" className="flex items-center gap-2 min-w-0">
-          <div className="w-7 h-7 rounded-lg bg-[#C2410C] text-white flex items-center justify-center font-bold text-sm shrink-0">
-            C
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
+            <span>🦉</span>
           </div>
-          <span className="font-bold text-sm text-[#1C1917] tracking-tight">
-            CUET AI-Prep
+          <span className="font-extrabold text-sm text-slate-900 tracking-tight">
+            CUET <span className="text-purple-600">AI-Prep</span>
           </span>
         </Link>
 
@@ -266,53 +271,53 @@ export default function DashboardSidebar() {
             <button
               type="button"
               onClick={() => setMobileProfileOpen(!mobileProfileOpen)}
-              className="flex items-center gap-1.5 px-2 py-1 rounded-xl hover:bg-[#FAF3EB] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-2 py-1 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer"
               aria-label="User profile menu"
               aria-expanded={mobileProfileOpen}
             >
-              <div className="w-7 h-7 rounded-full bg-[#C2410C] text-white flex items-center justify-center text-xs font-bold">
+              <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold">
                 {userName.slice(0, 2).toUpperCase()}
               </div>
               <ChevronDown
-                className={`w-3.5 h-3.5 text-[#8C7D73] transition-transform ${
+                className={`w-3.5 h-3.5 text-slate-500 transition-transform ${
                   mobileProfileOpen ? "rotate-180" : ""
                 }`}
               />
             </button>
 
             {mobileProfileOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl border border-[#EFE6DC] py-1.5 text-xs z-50 shadow-xl">
-                <div className="px-4 py-2.5 border-b border-[#EFE6DC]">
-                  <p className="font-bold text-xs text-[#1C1917] truncate">{userName}</p>
-                  <p className="text-[11px] text-[#8C7D73] truncate mt-0.5">{userEmail || "Aspirant Account"}</p>
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl border border-slate-200/80 py-1.5 text-xs z-50 shadow-xl">
+                <div className="px-4 py-2.5 border-b border-slate-100">
+                  <p className="font-bold text-xs text-slate-900 truncate">{userName}</p>
+                  <p className="text-[11px] text-slate-500 truncate mt-0.5">{userEmail || "Aspirant Account"}</p>
                 </div>
                 <div className="py-1">
                   <Link
                     href="/dashboard/profile"
                     onClick={() => setMobileProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-[#5C524A] hover:bg-[#FAF3EB] font-medium"
+                    className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:bg-slate-50 font-medium"
                   >
-                    <User className="w-4 h-4 text-[#8C7D73]" />
+                    <User className="w-4 h-4 text-slate-500" />
                     <span>Profile</span>
                   </Link>
                   <Link
                     href="/dashboard/profile"
                     onClick={() => setMobileProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-[#5C524A] hover:bg-[#FAF3EB] font-medium"
+                    className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:bg-slate-50 font-medium"
                   >
-                    <Settings className="w-4 h-4 text-[#8C7D73]" />
+                    <Settings className="w-4 h-4 text-slate-500" />
                     <span>Settings</span>
                   </Link>
                   <Link
                     href="/dashboard/sessions"
                     onClick={() => setMobileProfileOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-[#5C524A] hover:bg-[#FAF3EB] font-medium"
+                    className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:bg-slate-50 font-medium"
                   >
-                    <History className="w-4 h-4 text-[#8C7D73]" />
+                    <History className="w-4 h-4 text-slate-500" />
                     <span>Past Sessions</span>
                   </Link>
                 </div>
-                <div className="border-t border-[#EFE6DC] pt-1">
+                <div className="border-t border-slate-100 pt-1">
                   <button
                     type="button"
                     onClick={handleSignOut}
@@ -329,7 +334,7 @@ export default function DashboardSidebar() {
           <button
             type="button"
             onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
-            className="w-9 h-9 flex items-center justify-center rounded-lg border border-[#EFE6DC] text-[#5C524A] hover:bg-[#FAF3EB] cursor-pointer"
+            className="w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer"
             aria-label="Toggle navigation menu"
             aria-expanded={mobileDrawerOpen}
           >
@@ -348,14 +353,14 @@ export default function DashboardSidebar() {
           role="dialog"
           aria-modal="true"
           aria-label="Dashboard Navigation"
-          className="md:hidden fixed inset-0 z-50 bg-[#441408]/30 backdrop-blur-xs flex"
+          className="md:hidden fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex"
         >
-          <div className="w-64 max-w-[80vw] h-full bg-white border-r border-[#EFE6DC] p-4 flex flex-col shadow-lg">
+          <div className="w-64 max-w-[80vw] h-full bg-white border-r border-slate-200/80 p-4 flex flex-col shadow-2xl">
             <div className="flex justify-end pb-2">
               <button
                 type="button"
                 onClick={() => setMobileDrawerOpen(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-lg border border-[#EFE6DC] text-[#5C524A] hover:bg-[#FAF3EB] cursor-pointer"
+                className="w-8 h-8 flex items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer"
                 aria-label="Close navigation menu"
               >
                 <X className="w-4 h-4" strokeWidth={1.75} />
@@ -373,14 +378,14 @@ export default function DashboardSidebar() {
       )}
 
       {/* 3. Desktop Left Sidebar (Fixed 240px width, white, 1px right border) */}
-      <aside className="hidden md:flex flex-col w-[240px] fixed inset-y-0 left-0 h-screen overflow-y-auto shrink-0 z-40 bg-white border-r border-[#EFE6DC] p-4">
+      <aside className="hidden md:flex flex-col w-[240px] fixed inset-y-0 left-0 h-screen overflow-y-auto shrink-0 z-40 bg-white border-r border-slate-200/80 p-4">
         <SidebarContent />
       </aside>
 
       {/* 4. Mobile Bottom Tab Bar */}
       <nav
         aria-label="Mobile Navigation"
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#EFE6DC] px-2 py-1.5 flex items-center justify-around shadow-sm"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200/80 px-2 py-1.5 flex items-center justify-around shadow-sm"
       >
         {bottomNavItems.map((item) => {
           const Icon = item.icon;
@@ -388,10 +393,10 @@ export default function DashboardSidebar() {
             <Link
               key={item.id}
               href={item.href}
-              className={`flex flex-col items-center py-1 px-2.5 rounded-lg text-[11px] font-semibold transition-colors ${
+              className={`flex flex-col items-center py-1 px-2.5 rounded-xl text-[11px] font-semibold transition-colors ${
                 item.active
-                  ? "text-[#C2410C]"
-                  : "text-[#8C7D73] hover:text-[#1C1917]"
+                  ? "text-purple-600 font-bold"
+                  : "text-slate-500 hover:text-slate-900"
               }`}
             >
               <Icon className="w-4 h-4 mb-0.5" strokeWidth={item.active ? 2 : 1.75} />

@@ -95,17 +95,17 @@ export default function PricingSection() {
           </div>
 
           {/* Plan 2: Ranker Pass (₹2) */}
-          <div className="p-7 sm:p-8 rounded-3xl bg-white border-2 border-[#C2410C] shadow-sm flex flex-col justify-between relative ring-4 ring-[#FEF1E0] hover:shadow-md transition-all">
-            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#C2410C] text-white text-[11px] font-bold uppercase tracking-wider px-4 py-1 rounded-full shadow-xs">
+          <div className="p-7 sm:p-8 rounded-3xl bg-white border-2 border-purple-600 shadow-sm flex flex-col justify-between relative ring-4 ring-purple-100 hover:shadow-md transition-all">
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[11px] font-bold uppercase tracking-wider px-4 py-1 rounded-full shadow-xs">
               Complete Ranker Pass
             </div>
 
             <div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#9F3014] bg-[#FEF1E0] px-2.5 py-1 rounded-full border border-[#F6D3AF]">
+                <span className="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-200">
                   Ranker Pass
                 </span>
-                <span className="text-[11px] font-bold text-[#C2410C]">One-Time Payment</span>
+                <span className="text-[11px] font-bold text-purple-600">One-Time Payment</span>
               </div>
 
               <div className="mt-5 flex items-baseline gap-2">
@@ -163,7 +163,7 @@ export default function PricingSection() {
               />
               <Link
                 href="/pricing"
-                className="block text-center text-[11px] font-semibold text-[#C2410C] hover:text-[#9A3412] transition-colors pt-1"
+                className="block text-center text-[11px] font-semibold text-purple-600 hover:text-purple-700 transition-colors pt-1"
               >
                 View full feature comparison & FAQs →
               </Link>

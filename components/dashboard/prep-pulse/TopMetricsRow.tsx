@@ -61,22 +61,22 @@ export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
       {statCards.map((card) => (
         <div
           key={card.id}
-          className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-2xs flex flex-col justify-between"
+          className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-2xs flex flex-col justify-between hover:border-purple-200 transition-colors"
         >
           {/* Label */}
-          <div className="text-xs text-[#8C7D73] font-medium">
+          <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
             {card.label}
           </div>
 
           {/* Large Value */}
           <div className="my-1.5">
-            <span className="text-2xl sm:text-[32px] font-bold text-[#1C1917] tracking-tight tabular-nums block leading-tight">
+            <span className="text-2xl sm:text-[32px] font-extrabold text-slate-900 tracking-tight tabular-nums block leading-tight">
               {card.value}
             </span>
           </div>
 
           {/* Context note */}
-          <div className="text-xs text-[#786E65] truncate">
+          <div className="text-xs text-slate-500 truncate font-medium">
             {card.context}
           </div>
         </div>

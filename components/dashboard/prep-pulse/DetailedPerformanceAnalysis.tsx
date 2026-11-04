@@ -109,7 +109,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
         <div className="relative bg-slate-900 text-white rounded-xl shadow-2xl p-3 min-w-[180px] z-50 border border-slate-800 animate-in fade-in zoom-in-95 duration-100">
           <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-slate-800">
             <span className="text-xs font-bold text-slate-200">{label}</span>
-            <span className="text-[10px] font-semibold text-[#EA580C] bg-[#441408] px-1.5 py-0.5 rounded">
+            <span className="text-[10px] font-semibold text-purple-300 bg-purple-950/60 border border-purple-800/40 px-1.5 py-0.5 rounded">
               {activeTab}
             </span>
           </div>
@@ -117,10 +117,10 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
           <div className="space-y-1.5 text-xs">
             <div className="flex items-center justify-between gap-3">
               <span className="flex items-center gap-1.5 text-slate-300 font-medium">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#C2410C]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />
                 Your Score:
               </span>
-              <span className="font-bold text-[#EA580C] font-mono">{payload[0]?.value}{unit}</span>
+              <span className="font-bold text-purple-400 font-mono">{payload[0]?.value}{unit}</span>
             </div>
             <div className="flex items-center justify-between gap-3">
               <span className="flex items-center gap-1.5 text-slate-400">
@@ -170,7 +170,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
                   ? 'text-white shadow-sm'
                   : 'text-slate-500 hover:text-slate-800'
               }`}
-              style={viewType === 'comparison' ? { backgroundColor: '#FF671F' } : {}}
+              style={viewType === 'comparison' ? { backgroundColor: '#18262E' } : {}}
             >
               <BarChart3 className="w-3 h-3" />
               <span>Subjects</span>
@@ -182,9 +182,9 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
                   ? 'text-white shadow-sm'
                   : 'text-slate-500 hover:text-slate-800'
               }`}
-              style={viewType === 'topics' ? { backgroundColor: '#FF671F' } : {}}
+              style={viewType === 'topics' ? { backgroundColor: '#18262E' } : {}}
             >
-              <Layers className={`w-3 h-3 ${viewType === 'topics' ? 'text-white' : 'text-[#C2410C]'}`} />
+              <Layers className={`w-3 h-3 ${viewType === 'topics' ? 'text-white' : 'text-purple-600'}`} />
               <span>Topic Drill</span>
             </button>
           </div>
@@ -201,7 +201,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
                       ? 'text-white shadow-sm'
                       : 'text-slate-500 hover:text-slate-800'
                   }`}
-                  style={activeTab === tab ? { backgroundColor: '#FF671F' } : {}}
+                  style={activeTab === tab ? { backgroundColor: '#18262E' } : {}}
                 >
                   {tab}
                 </button>
@@ -215,14 +215,14 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
       <div role="region" aria-label="Detailed performance comparison bar chart" className="w-full h-60 pt-3">
         {viewType === 'topics' && topicBars.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center p-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
-            <Sparkles className="w-8 h-8 text-[#C2410C]/40 mb-2" />
+            <Sparkles className="w-8 h-8 text-purple-600/40 mb-2" />
             <p className="text-sm font-semibold text-slate-700">No topic diagnostic data yet</p>
             <p className="text-xs text-slate-400 mt-0.5 max-w-sm mb-3">
               Take a full mock test or chapter drill to calibrate topic-level accuracy.
             </p>
             <Link
               href="/dashboard/mocks"
-              className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-[#C2410C] hover:bg-[#9A3412] transition-colors shadow-sm"
+              className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-[#18262E] hover:bg-purple-700 transition-colors shadow-sm"
             >
               Start Diagnostic Test
             </Link>
@@ -239,8 +239,8 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
               >
                 <defs>
                   <linearGradient id={warmPillGradId} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#EA580C" />
-                    <stop offset="100%" stopColor="#C2410C" />
+                    <stop offset="0%" stopColor="#9333EA" />
+                    <stop offset="100%" stopColor="#7C3AED" />
                   </linearGradient>
                 </defs>
 
@@ -300,8 +300,8 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
               >
                 <defs>
                   <linearGradient id={warmPillGradId} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#FB923C" />
-                    <stop offset="100%" stopColor="#C2410C" />
+                    <stop offset="0%" stopColor="#A855F7" />
+                    <stop offset="100%" stopColor="#7C3AED" />
                   </linearGradient>
                 </defs>
 
@@ -351,7 +351,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
         {viewType === 'comparison' ? (
           <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
             <div className="flex items-center gap-1.5 p-1 rounded-md action-glow cursor-pointer">
-              <span className="w-3 h-3 rounded-full bg-[#C2410C]" />
+              <span className="w-3 h-3 rounded-full bg-purple-600" />
               <span className="font-semibold text-slate-800">Your {activeTab === 'Time Taken' ? 'Time' : activeTab}</span>
             </div>
             <div className="flex items-center gap-1.5 p-1 rounded-md action-glow cursor-pointer">
@@ -368,7 +368,7 @@ export const DetailedPerformanceAnalysis: React.FC<DetailedPerformanceAnalysisPr
             {topicBars.length > 0 && (
               <>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-[#C2410C]" />
+                  <span className="w-3 h-3 rounded-full bg-purple-600" />
                   <span className="font-semibold text-slate-800">Selected: {topicBars[activeTopicIndex]?.topic}</span>
                 </div>
                 <div className="flex items-center gap-1.5">

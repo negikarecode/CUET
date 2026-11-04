@@ -95,7 +95,7 @@ export const RecentEvaluationsTable: React.FC = () => {
 
         <Link
           href="/dashboard/sessions"
-          className="text-xs font-semibold text-[#C2410C] hover:underline"
+          className="text-xs font-bold text-purple-600 hover:text-purple-700 hover:underline"
         >
           View all past sessions
         </Link>
@@ -131,7 +131,7 @@ export const RecentEvaluationsTable: React.FC = () => {
                 <td className="py-3.5 pl-4 text-right whitespace-nowrap">
                   <Link
                     href={s.reviewUrl}
-                    className="text-xs font-semibold text-[#C2410C] hover:underline"
+                    className="text-xs font-bold text-purple-600 hover:text-purple-700 hover:underline"
                   >
                     Review
                   </Link>

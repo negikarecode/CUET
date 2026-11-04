@@ -89,7 +89,7 @@ export default function UsageLimitPaywallModal({
         </button>
 
         {/* Top Header Banner */}
-        <div className="bg-[#441408] p-6 text-white text-center relative border-b border-[#F6D3AF]/20">
+        <div className="bg-[#18262E] p-6 text-white text-center relative border-b border-slate-700/50">
           <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mx-auto mb-3 shadow-xs">
             <Lock className="w-6 h-6 text-white" />
           </div>

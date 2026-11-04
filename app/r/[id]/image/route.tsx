@@ -118,14 +118,14 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
                 width: "44px",
                 height: "44px",
                 borderRadius: "14px",
-                background: "linear-gradient(135deg, #c2410c 0%, #9a3412 100%)",
+                background: "linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: 900,
                 fontSize: "24px",
                 color: "#ffffff",
-                boxShadow: "0 4px 14px rgba(194, 65, 12, 0.4)",
+                boxShadow: "0 4px 14px rgba(124, 58, 237, 0.4)",
               }}
             >
               C
@@ -161,9 +161,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
               style={{
                 padding: "8px 18px",
                 borderRadius: "999px",
-                background: "rgba(194, 65, 12, 0.2)",
-                border: "1px solid rgba(246, 211, 175, 0.4)",
-                color: "#f6d3af",
+                background: "rgba(124, 58, 237, 0.2)",
+                border: "1px solid rgba(167, 139, 250, 0.4)",
+                color: "#c4b5fd",
                 fontSize: "14px",
                 fontWeight: 800,
                 letterSpacing: "0.5px",
@@ -190,7 +190,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
               fontWeight: 800,
               textTransform: "uppercase",
               letterSpacing: "2px",
-              color: "#f6d3af",
+              color: "#c4b5fd",
               marginBottom: "8px",
             }}
           >
@@ -232,7 +232,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
               style={{
                 fontSize: isOg ? "44px" : "60px",
                 fontWeight: 900,
-                color: "#f6d3af",
+                color: "#c4b5fd",
               }}
             >
               →
@@ -330,9 +330,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
               style={{
                 padding: isOg ? "10px 20px" : "14px 24px",
                 borderRadius: "16px",
-                background: "rgba(194, 65, 12, 0.12)",
-                border: "1px dashed rgba(246, 211, 175, 0.35)",
-                color: "#fef1e0",
+                background: "rgba(124, 58, 237, 0.12)",
+                border: "1px dashed rgba(167, 139, 250, 0.35)",
+                color: "#e0e7ff",
                 fontSize: isOg ? "14px" : "16px",
                 fontStyle: "italic",
                 textAlign: "center",

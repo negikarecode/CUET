@@ -160,7 +160,7 @@ export default function RazorpayCheckoutButton({
           contact: prefillContact,
         },
         theme: {
-          color: "#C2410C", // Terracotta Brand Primary
+          color: "#7C3AED", // Modern Purple Brand Accent
         },
         modal: {
           ondismiss: function () {
@@ -206,7 +206,7 @@ export default function RazorpayCheckoutButton({
         type="button"
         disabled={loading}
         onClick={handleCheckout}
-        className={`px-5 py-3 rounded-xl flex items-center justify-center gap-2 text-xs font-semibold transition-all disabled:opacity-60 bg-[#C2410C] hover:bg-[#9A3412] text-white shadow-md active:scale-[0.98] ${className}`}
+        className={`px-5 py-3 rounded-xl flex items-center justify-center gap-2 text-xs font-semibold transition-all disabled:opacity-60 bg-[#18262E] hover:bg-purple-700 text-white shadow-md active:scale-[0.98] ${className}`}
       >
         {loading ? (
           <>

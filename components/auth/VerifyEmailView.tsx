@@ -138,7 +138,7 @@ export default function VerifyEmailView({
     <div className="space-y-6 text-center animate-in fade-in duration-300">
       {/* Icon Badge */}
       <div className="relative inline-flex items-center justify-center">
-        <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-[#C2410C] to-[#EA580C] text-white flex items-center justify-center shadow-lg shadow-orange-500/20">
+        <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-[#18262E] to-purple-800 text-white flex items-center justify-center shadow-lg shadow-purple-900/20">
           <Mail className="w-8 h-8 stroke-[2]" />
         </div>
         <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center border-2 border-white shadow-xs">
@@ -169,13 +169,13 @@ export default function VerifyEmailView({
                 value={editInput}
                 onChange={(e) => setEditInput(e.target.value)}
                 placeholder="yourname@gmail.com"
-                className="flex-1 px-3 py-1.5 rounded-xl border border-[#C2410C] text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20"
+                className="flex-1 px-3 py-1.5 rounded-xl border border-purple-600 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                 autoFocus
                 required
               />
               <button
                 type="submit"
-                className="p-2 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white transition-all cursor-pointer"
+                className="p-2 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white transition-all cursor-pointer"
                 title="Save corrected email"
               >
                 <Check className="w-3.5 h-3.5" />
@@ -198,7 +198,7 @@ export default function VerifyEmailView({
                 <button
                   type="button"
                   onClick={onBackToSignup}
-                  className="text-[#C2410C] hover:underline font-semibold"
+                  className="text-purple-600 hover:underline font-semibold"
                 >
                   Return to registration
                 </button>
@@ -208,7 +208,7 @@ export default function VerifyEmailView({
         ) : (
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-[#FDF0E6] text-[#C2410C] flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center shrink-0">
                 <Inbox className="w-4 h-4" />
               </div>
               <div className="min-w-0">
@@ -225,7 +225,7 @@ export default function VerifyEmailView({
               <button
                 type="button"
                 onClick={() => setIsEditingEmail(true)}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-[#C2410C] hover:text-[#9A3412] hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-purple-600 hover:text-purple-700 hover:underline cursor-pointer"
                 title="Fix a typo in your email"
               >
                 <Pencil className="w-3 h-3" />
@@ -270,7 +270,7 @@ export default function VerifyEmailView({
           href="https://mail.google.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full py-3.5 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group cursor-pointer"
+          className="w-full py-3.5 px-4 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group cursor-pointer"
         >
           <span>Open Gmail</span>
           <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -295,7 +295,7 @@ export default function VerifyEmailView({
         >
           {isResending ? (
             <>
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-[#C2410C]" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-purple-600" />
               <span>Sending fresh link...</span>
             </>
           ) : cooldown > 0 ? (
@@ -305,7 +305,7 @@ export default function VerifyEmailView({
             </>
           ) : (
             <>
-              <RotateCw className="w-3.5 h-3.5 text-[#C2410C]" />
+              <RotateCw className="w-3.5 h-3.5 text-purple-600" />
               <span>Resend confirmation email</span>
             </>
           )}
@@ -333,7 +333,7 @@ export default function VerifyEmailView({
 
         <Link
           href="/login"
-          className="inline-flex items-center gap-1.5 text-[#C2410C] hover:text-[#9A3412] font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 text-purple-600 hover:text-purple-700 font-semibold transition-colors"
         >
           <span>Already verified? Sign in</span>
         </Link>

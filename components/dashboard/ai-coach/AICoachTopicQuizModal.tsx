@@ -162,7 +162,7 @@ export default function AICoachTopicQuizModal({
         <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/70 shrink-0">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#FDF0E6] text-[#C2410C] text-[10px] font-bold uppercase tracking-wider">
+              <span className="px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 text-[10px] font-bold uppercase tracking-wider">
                 Targeted Practice Drill
               </span>
               <span className="text-xs font-semibold text-slate-500 font-mono">
@@ -170,7 +170,7 @@ export default function AICoachTopicQuizModal({
               </span>
             </div>
             <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-[#C2410C] shrink-0" />
+              <BookOpen className="w-5 h-5 text-purple-600 shrink-0" />
               <span>{topic}</span>
             </h3>
           </div>
@@ -189,7 +189,7 @@ export default function AICoachTopicQuizModal({
         <div className="p-5 sm:p-6 overflow-y-auto space-y-6 flex-1">
           {isLoading ? (
             <div className="text-center py-16 space-y-3">
-              <RotateCcw className="w-6 h-6 animate-spin mx-auto text-[#C2410C]" />
+              <RotateCcw className="w-6 h-6 animate-spin mx-auto text-purple-600" />
               <p className="text-xs font-semibold text-slate-600">
                 Generating 10 targeted questions for {topic}...
               </p>
@@ -210,9 +210,9 @@ export default function AICoachTopicQuizModal({
                         onClick={() => setCurrentIndex(idx)}
                         className={`w-7 h-7 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer flex items-center justify-center ${
                           isCurrent
-                            ? "bg-[#C2410C] text-white shadow-xs ring-2 ring-[#C2410C]/30"
+                            ? "bg-[#18262E] text-white shadow-xs ring-2 ring-purple-600/30"
                             : isAnswered
-                            ? "bg-[#FDF0E6] text-[#C2410C] border border-[#F6D3AF]"
+                            ? "bg-purple-50 text-purple-700 border border-purple-200"
                             : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                         }`}
                       >
@@ -231,7 +231,7 @@ export default function AICoachTopicQuizModal({
               {currentQ && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-mono font-bold text-[#C2410C] bg-[#FDF0E6] px-2 py-0.5 rounded-md">
+                    <span className="font-mono font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md">
                       Question {currentIndex + 1} of {questions.length}
                     </span>
                     <span className="text-slate-500 font-medium">
@@ -254,14 +254,14 @@ export default function AICoachTopicQuizModal({
                           onClick={() => handleSelectOption(opt.id)}
                           className={`w-full p-3.5 rounded-xl text-left text-xs transition-all cursor-pointer flex items-start gap-3 border shadow-2xs ${
                             isSelected
-                              ? "bg-[#FEF1E0]/80 border-[#C2410C] ring-2 ring-[#C2410C]/20 text-[#441408] font-semibold"
+                              ? "bg-purple-50 border-purple-600 ring-2 ring-purple-600/20 text-purple-900 font-semibold"
                               : "bg-white border-slate-200 hover:border-slate-300 text-slate-800 hover:bg-slate-50/60"
                           }`}
                         >
                           <span
                             className={`w-5 h-5 rounded-lg font-mono font-bold flex items-center justify-center text-xs shrink-0 ${
                               isSelected
-                                ? "bg-[#C2410C] text-white"
+                                ? "bg-purple-600 text-white"
                                 : "bg-slate-100 text-slate-700"
                             }`}
                           >
@@ -302,7 +302,7 @@ export default function AICoachTopicQuizModal({
                   <button
                     type="button"
                     onClick={handleSubmitQuiz}
-                    className="px-5 py-2.5 rounded-xl bg-[#C2410C] text-white text-xs font-bold hover:bg-[#9A3412] cursor-pointer shadow-md transition-all flex items-center gap-1.5"
+                    className="px-5 py-2.5 rounded-xl bg-[#18262E] text-white text-xs font-bold hover:bg-purple-700 cursor-pointer shadow-md transition-all flex items-center gap-1.5"
                   >
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Submit Practice Quiz</span>
@@ -314,13 +314,13 @@ export default function AICoachTopicQuizModal({
             /* Post-Quiz Results & Mistake Review Screen */
             <div className="space-y-6">
               {/* Scorecard Banner with Before/After */}
-              <div className="p-5 rounded-2xl bg-gradient-to-br from-[#441408] to-[#2D0D05] text-white shadow-lg space-y-3">
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-[#18262E] to-[#0F172A] text-white shadow-lg space-y-3">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <span className="px-2.5 py-0.5 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
                     <Sparkles className="w-3 h-3 fill-slate-950" />
                     Immediate Progress Recorded
                   </span>
-                  <span className="text-xs text-orange-200 font-mono">
+                  <span className="text-xs text-slate-300 font-mono">
                     10 Questions Attempted
                   </span>
                 </div>
@@ -424,7 +424,7 @@ export default function AICoachTopicQuizModal({
                                     onClick={() => handleTagMistake(q.id, tag)}
                                     className={`px-2.5 py-1.5 rounded-lg text-[11px] font-semibold border transition-all cursor-pointer flex items-center justify-center gap-1 ${
                                       isSelected
-                                        ? "bg-[#C2410C] text-white border-[#C2410C] font-bold shadow-xs"
+                                        ? "bg-purple-600 text-white border-purple-600 font-bold shadow-xs"
                                         : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200"
                                     }`}
                                   >

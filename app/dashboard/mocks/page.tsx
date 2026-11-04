@@ -89,8 +89,8 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     name: "Science Stream",
     shortName: "Science",
     badge: "7 Domains",
-    accentBg: "#FDF0E6",
-    accentText: "#C2410C",
+    accentBg: "#F3E8FF",
+    accentText: "#7C3AED",
     subjects: [
       "physics",
       "chemistry",
@@ -140,8 +140,8 @@ const STREAM_CONFIGS: Record<Exclude<StreamKey, "all">, StreamInfo> = {
     name: "General Subjects (English & GAT)",
     shortName: "General Subjects",
     badge: "2 Subjects",
-    accentBg: "#FEF1E0",
-    accentText: "#9F3014",
+    accentBg: "#EDE9FE",
+    accentText: "#6D28D9",
     subjects: [
       "english",
       "general-test",
@@ -673,16 +673,16 @@ export default function MocksPage() {
 
           {/* Progress bar */}
           <div className="pt-2">
-            <div className="w-full h-1 bg-[#FDE6D2] rounded-full overflow-hidden">
+            <div className="w-full h-1 bg-purple-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#C2410C] rounded-full transition-all"
+                className="h-full bg-purple-600 rounded-full transition-all"
                 style={{ width: `${Math.max(attemptedCount > 0 ? 8 : 0, progressPercent)}%` }}
               />
             </div>
           </div>
 
           {/* Meta line */}
-          <div className="pt-2 text-xs text-[#8C7D73]">
+          <div className="pt-2 text-xs text-slate-500 font-medium">
             {mockCount} full mock papers · +5 / −1
           </div>
         </div>
@@ -691,13 +691,13 @@ export default function MocksPage() {
         <div className="pt-4 flex items-center gap-2.5">
           <Link
             href={`/test/${nextMockId}`}
-            className="px-4 py-2 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-semibold transition-colors text-center"
+            className="px-4 py-2 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white text-xs font-bold transition-colors text-center shadow-2xs"
           >
             Start Mock {nextMockNum}
           </Link>
           <Link
             href={`/dashboard/mocks/${sub.key}`}
-            className="px-3.5 py-2 rounded-lg border border-[#E2D4C3] bg-white text-[#5C524A] hover:bg-[#FAF3EB] text-xs font-semibold transition-colors text-center"
+            className="px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold transition-colors text-center shadow-2xs"
           >
             All mocks
           </Link>
@@ -708,16 +708,16 @@ export default function MocksPage() {
 
   return (
     <div className="w-full min-w-0 max-w-7xl mx-auto space-y-6">
-      {/* 1. Header & Sibling Links matching design.pdf Page 2 */}
+      {/* 1. Header & Sibling Links */}
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pt-1">
         <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#1C1917] tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
             CUET UG mock exams
           </h1>
-          <p className="text-xs sm:text-sm text-[#786E65] leading-normal max-w-3xl">
+          <p className="text-xs sm:text-sm text-slate-600 leading-normal max-w-3xl font-medium">
             Full-syllabus 50-question papers under authentic NTA conditions, with instant analysis.
           </p>
-          <p className="text-xs text-[#8C7D73]">
+          <p className="text-xs text-slate-400">
             PYQs and unit practice tests share this layout.
           </p>
         </div>
@@ -725,30 +725,30 @@ export default function MocksPage() {
         <div className="flex items-center gap-2.5 flex-wrap shrink-0">
           <Link
             href="/dashboard/pyqs"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#FDF0E6] border border-[#F6D3AF] hover:bg-[#FCE7D0] text-[#9F3014] font-semibold text-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-50 border border-purple-200 hover:bg-purple-100 text-purple-700 font-bold text-xs transition-colors shadow-2xs"
           >
             <span>Official PYQ papers</span>
           </Link>
           <Link
             href="/dashboard/practice"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#FDF0E6] border border-[#F6D3AF] hover:bg-[#FCE7D0] text-[#9F3014] font-semibold text-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-50 border border-purple-200 hover:bg-purple-100 text-purple-700 font-bold text-xs transition-colors shadow-2xs"
           >
             <span>Unit practice tests</span>
           </Link>
         </div>
       </div>
 
-      {/* 2. Filter Toolbar matching design.pdf */}
+      {/* 2. Filter Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-        {/* Status Filter Pills as shown in design.pdf */}
-        <div className="inline-flex items-center gap-1.5 bg-white p-1 rounded-xl border border-[#EFE6DC] text-xs">
+        {/* Status Filter Pills */}
+        <div className="inline-flex items-center gap-1.5 bg-white p-1 rounded-2xl border border-slate-200 text-xs shadow-2xs">
           <button
             type="button"
             onClick={() => setStatusFilter("all")}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl transition-colors cursor-pointer ${
               statusFilter === "all"
-                ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] font-semibold"
-                : "text-[#5C524A] hover:bg-[#FAF3EB]"
+                ? "bg-purple-50 text-purple-700 border border-purple-200 font-bold shadow-2xs"
+                : "text-slate-600 hover:bg-slate-50 font-medium"
             }`}
           >
             All ({allSubjects.length})
@@ -756,10 +756,10 @@ export default function MocksPage() {
           <button
             type="button"
             onClick={() => setStatusFilter("started")}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl transition-colors cursor-pointer ${
               statusFilter === "started"
-                ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] font-semibold"
-                : "text-[#5C524A] hover:bg-[#FAF3EB]"
+                ? "bg-purple-50 text-purple-700 border border-purple-200 font-bold shadow-2xs"
+                : "text-slate-600 hover:bg-slate-50 font-medium"
             }`}
           >
             Started (1)
@@ -767,10 +767,10 @@ export default function MocksPage() {
           <button
             type="button"
             onClick={() => setStatusFilter("not_started")}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl transition-colors cursor-pointer ${
               statusFilter === "not_started"
-                ? "bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] font-semibold"
-                : "text-[#5C524A] hover:bg-[#FAF3EB]"
+                ? "bg-purple-50 text-purple-700 border border-purple-200 font-bold shadow-2xs"
+                : "text-slate-600 hover:bg-slate-50 font-medium"
             }`}
           >
             Not started ({allSubjects.length > 1 ? allSubjects.length - 1 : 21})
@@ -830,7 +830,7 @@ export default function MocksPage() {
                 setSelectedTab("all");
                 setStatusFilter("all");
               }}
-              className="text-xs font-bold text-[#C2410C] hover:underline cursor-pointer"
+              className="text-xs font-bold text-purple-700 hover:underline cursor-pointer"
             >
               Reset filters
             </button>

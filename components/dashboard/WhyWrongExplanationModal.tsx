@@ -256,9 +256,9 @@ export function WhyWrongExplanationModal({
               </div>
 
               {/* Underlying Concept */}
-              <div className="p-4 rounded-2xl bg-[#FEF1E0]/70 border border-[#F6D3AF] space-y-1.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#441408] flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-[#C2410C]" />
+              <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-purple-900 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-600" />
                   <span>Underlying Concept</span>
                 </span>
                 <p className="text-slate-800 font-medium leading-relaxed">
@@ -412,7 +412,7 @@ export function WhyWrongExplanationModal({
                 value={flagReason}
                 onChange={(e) => setFlagReason(e.target.value)}
                 placeholder="e.g. NCERT reference misquoted, wrong distractor assumption..."
-                className="w-full h-20 p-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-[#C2410C] focus:border-[#C2410C] outline-none"
+                className="w-full h-20 p-2.5 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-purple-600 focus:border-purple-600 outline-none"
               />
               <div className="flex items-center justify-end gap-2">
                 <button

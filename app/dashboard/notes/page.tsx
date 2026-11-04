@@ -12,12 +12,12 @@ export default function NotesPage() {
   const subjects = getAllTaxonomySubjects();
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header Hero matching Warm Redesign Espresso Banner */}
-        <div className="bg-[#441408] text-white rounded-3xl p-8 border border-[#5A1D0D] shadow-xl relative overflow-hidden">
+        {/* Header Hero Banner */}
+        <div className="bg-[#18262E] text-white rounded-3xl p-8 border border-slate-800 shadow-xl relative overflow-hidden">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#FEF1E0] text-[#9F3014] border border-[#F6D3AF] text-xs font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-900/50 text-purple-200 border border-purple-700/60 text-xs font-bold uppercase tracking-wider">
               <span>CUET-UG Revision Notes</span>
             </div>
 
@@ -25,27 +25,27 @@ export default function NotesPage() {
               Exam-Focused Revision Notes Shaped by 13,200+ PYQs
             </h1>
 
-            <p className="text-base sm:text-lg text-[#F5EBE1] leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
               NCERT-aligned, concise, formula-rich notes engineered specifically for how the National Testing Agency tests each topic. Features worked examples, common traps, speed mnemonics, and 10 practice MCQs per topic.
             </p>
 
             {/* Quick Metrics */}
             <div className="pt-2 flex flex-wrap items-center gap-6 text-sm">
               <div className="flex items-baseline space-x-1.5">
-                <span className="text-xl font-bold text-[#FCE7D0]">22</span>
-                <span className="text-[#F5EBE1]/80">Domain & Lang Subjects</span>
+                <span className="text-xl font-bold text-purple-400">22</span>
+                <span className="text-slate-300">Domain & Lang Subjects</span>
               </div>
               <div className="flex items-baseline space-x-1.5">
-                <span className="text-xl font-bold text-[#FCE7D0]">155</span>
-                <span className="text-[#F5EBE1]/80">Syllabus Units</span>
+                <span className="text-xl font-bold text-purple-400">155</span>
+                <span className="text-slate-300">Syllabus Units</span>
               </div>
               <div className="flex items-baseline space-x-1.5">
-                <span className="text-xl font-bold text-[#FCE7D0]">191</span>
-                <span className="text-[#F5EBE1]/80">Curated Topics</span>
+                <span className="text-xl font-bold text-purple-400">191</span>
+                <span className="text-slate-300">Curated Topics</span>
               </div>
               <div className="flex items-baseline space-x-1.5">
-                <span className="text-xl font-bold text-[#FCE7D0]">2 Free</span>
-                <span className="text-[#F5EBE1]/80">Previews per Subject</span>
+                <span className="text-xl font-bold text-purple-400">2 Free</span>
+                <span className="text-slate-300">Previews per Subject</span>
               </div>
             </div>
           </div>

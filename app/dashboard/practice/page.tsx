@@ -57,13 +57,13 @@ const SUBJECT_STREAM_MAP: Record<
   string,
   { stream: StreamKey; icon: any; accentColor: string; badgeBg: string }
 > = {
-  physics: { stream: "science", icon: Atom, accentColor: "#C2410C", badgeBg: "#FEF1E0" },
+  physics: { stream: "science", icon: Atom, accentColor: "#2563EB", badgeBg: "#EFF6FF" },
   chemistry: { stream: "science", icon: FlaskConical, accentColor: "#7C3AED", badgeBg: "#EDE9FE" },
   maths: { stream: "science", icon: Calculator, accentColor: "#B45309", badgeBg: "#FEF3C7" },
   bio: { stream: "science", icon: Dna, accentColor: "#059669", badgeBg: "#D1FAE5" },
   accountancy: { stream: "commerce", icon: Calculator, accentColor: "#D97706", badgeBg: "#FEF3C7" },
   eco: { stream: "commerce", icon: TrendingUp, accentColor: "#0D9488", badgeBg: "#CCFBF1" },
-  bst: { stream: "commerce", icon: Briefcase, accentColor: "#9A3412", badgeBg: "#FDF0E6" },
+  bst: { stream: "commerce", icon: Briefcase, accentColor: "#7C3AED", badgeBg: "#EDE9FE" },
   history: { stream: "humanities", icon: ScrollText, accentColor: "#B45309", badgeBg: "#FEF3C7" },
   "pol science": { stream: "humanities", icon: Landmark, accentColor: "#DC2626", badgeBg: "#FEE2E2" },
   geo: { stream: "humanities", icon: Globe, accentColor: "#0D9488", badgeBg: "#CCFBF1" },
@@ -72,12 +72,12 @@ const SUBJECT_STREAM_MAP: Record<
   physical_education: { stream: "applied", icon: Activity, accentColor: "#16A34A", badgeBg: "#DCFCE7" },
   computer_science: { stream: "science", icon: Laptop, accentColor: "#78350F", badgeBg: "#FEF3C7" },
   home_science: { stream: "applied", icon: Home, accentColor: "#DB2777", badgeBg: "#FCE7F3" },
-  mass_media: { stream: "applied", icon: Tv, accentColor: "#C2410C", badgeBg: "#FEF1E0" },
+  mass_media: { stream: "applied", icon: Tv, accentColor: "#7C3AED", badgeBg: "#F3E8FF" },
   environmental_studies: { stream: "applied", icon: Leaf, accentColor: "#059669", badgeBg: "#D1FAE5" },
   fine_arts: { stream: "applied", icon: Palette, accentColor: "#CA8A04", badgeBg: "#FEF08A" },
   agriculture: { stream: "applied", icon: Sprout, accentColor: "#15803D", badgeBg: "#DCFCE7" },
   anthropology: { stream: "humanities", icon: Footprints, accentColor: "#854D0E", badgeBg: "#FEF9C3" },
-  english: { stream: "applied", icon: FileText, accentColor: "#9F3014", badgeBg: "#FEF1E0" },
+  english: { stream: "applied", icon: FileText, accentColor: "#6366F1", badgeBg: "#EEF2FF" },
   "general-test": { stream: "applied", icon: Layers, accentColor: "#7C3AED", badgeBg: "#EDE9FE" },
 };
 
@@ -109,8 +109,8 @@ export default function PracticeTestsHubPage() {
       const meta = SUBJECT_STREAM_MAP[folder] || {
         stream: "applied" as StreamKey,
         icon: BookOpen,
-        accentColor: "#C2410C",
-        badgeBg: "#FEF1E0",
+        accentColor: "#7C3AED",
+        badgeBg: "#F3E8FF",
       };
       const unitsCount = data.units.length;
       return {
@@ -304,13 +304,13 @@ export default function PracticeTestsHubPage() {
         <div className="flex items-center gap-2.5 flex-wrap shrink-0">
           <Link
             href="/dashboard/mocks"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#FDF0E6] border border-[#F6D3AF] hover:bg-[#FCE7D0] text-[#9F3014] font-semibold text-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-50 border border-slate-200 hover:bg-purple-50 hover:border-purple-200 hover:text-purple-700 text-slate-700 font-semibold text-xs transition-colors"
           >
             <span>Full mock exams</span>
           </Link>
           <Link
             href="/dashboard/pyqs"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#FDF0E6] border border-[#F6D3AF] hover:bg-[#FCE7D0] text-[#9F3014] font-semibold text-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-50 border border-slate-200 hover:bg-purple-50 hover:border-purple-200 hover:text-purple-700 text-slate-700 font-semibold text-xs transition-colors"
           >
             <span>Official PYQ papers</span>
           </Link>
@@ -319,17 +319,17 @@ export default function PracticeTestsHubPage() {
 
       {/* 2. Recommended for Your Target Section */}
       {showRecommendedRow ? (
-        <div className="bg-[#FEF1E0] rounded-2xl border border-[#F6D3AF] p-5 shadow-xs space-y-4">
+        <div className="bg-purple-50/60 rounded-2xl border border-purple-200/80 p-5 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#C2410C] shrink-0" />
+              <Sparkles className="w-4 h-4 text-purple-600 shrink-0" />
               <h2 className="text-sm sm:text-base font-bold text-slate-900">
                 Recommended for your target: {target.college} ({target.course})
               </h2>
             </div>
             <Link
               href="/dashboard/profile"
-              className="text-xs font-semibold text-[#C2410C] hover:text-[#9A3412] hover:underline self-start sm:self-auto"
+              className="text-xs font-semibold text-purple-700 hover:text-purple-800 hover:underline self-start sm:self-auto"
             >
               Change target in Profile
             </Link>
@@ -351,43 +351,43 @@ export default function PracticeTestsHubPage() {
               return (
                 <div
                   key={`rec-${s.id}`}
-                  className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-2xs flex flex-col justify-between min-w-0"
+                  className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-2xs flex flex-col justify-between min-w-0"
                 >
                   <div className="space-y-1">
                     {/* Top Row: Code (left), count (right) */}
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#8C7D73] font-medium">Code {s.code}</span>
-                      <span className="text-[#5C524A] font-medium">
+                      <span className="text-slate-400 font-medium">Code {s.code}</span>
+                      <span className="text-slate-600 font-medium">
                         {stats?.attemptedCount || 0} / {s.totalTests} attempted
                       </span>
                     </div>
 
                     {/* Subject Name + Target badge */}
                     <div className="flex items-center gap-2 pt-1 flex-wrap">
-                      <h3 className="text-lg font-bold text-[#1C1917]">
+                      <h3 className="text-lg font-bold text-slate-900">
                         {s.name}
                       </h3>
-                      <span className="text-[10px] font-semibold text-[#92400E] bg-[#FEF3C7] border border-[#FDE68A] px-2 py-0.5 rounded-md">
+                      <span className="text-[10px] font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md">
                         Target required
                       </span>
                     </div>
 
                     {/* Description */}
-                    <p className="text-xs text-[#786E65] line-clamp-2 min-h-[34px] leading-relaxed pt-1">
+                    <p className="text-xs text-slate-500 line-clamp-2 min-h-[34px] leading-relaxed pt-1">
                       {s.unitsCount} syllabus units · 20 unit tests/unit
                     </p>
 
                     {/* Progress line & bar */}
                     <div className="pt-2">
-                      <div className="w-full h-1 bg-[#FDE6D2] rounded-full overflow-hidden">
+                      <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-[#C2410C] rounded-full transition-all"
+                          className="h-full bg-purple-600 rounded-full transition-all"
                           style={{ width: `${Math.max(hasAttempts ? 8 : 0, progressPct)}%` }}
                         />
                       </div>
                     </div>
 
-                    <div className="pt-2 text-xs text-[#8C7D73]">
+                    <div className="pt-2 text-xs text-slate-400">
                       {s.totalTests} practice tests · +5 / −1
                     </div>
                   </div>
@@ -399,13 +399,13 @@ export default function PracticeTestsHubPage() {
                           ? `/test/${stats.nextUnattemptedTestId}`
                           : `/test/practice-${s.id}-unit1-test1`
                       }
-                      className="px-4 py-2 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-semibold transition-colors text-center"
+                      className="px-4 py-2 rounded-lg bg-[#18262E] hover:bg-purple-700 text-white text-xs font-semibold transition-colors text-center"
                     >
                       {hasAttempts ? "Continue" : "Start"}
                     </Link>
                     <Link
                       href={`/dashboard/practice/${urlSlug}`}
-                      className="px-3.5 py-2 rounded-lg border border-[#E2D4C3] bg-white text-[#5C524A] hover:bg-[#FAF3EB] text-xs font-semibold transition-colors text-center"
+                      className="px-3.5 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold transition-colors text-center"
                     >
                       All units
                     </Link>
@@ -418,12 +418,12 @@ export default function PracticeTestsHubPage() {
       ) : !target.hasTarget && !isSearchActive ? (
         <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex items-center justify-between gap-3 text-xs text-slate-600">
           <div className="flex items-center gap-2">
-            <Target className="w-4 h-4 text-[#C2410C] shrink-0" />
+            <Target className="w-4 h-4 text-purple-600 shrink-0" />
             <span>Target college not configured. Set your dream college to get prioritized subjects.</span>
           </div>
           <Link
             href="/dashboard/profile"
-            className="font-bold text-[#C2410C] hover:text-[#9A3412] hover:underline shrink-0"
+            className="font-bold text-purple-700 hover:text-purple-800 hover:underline shrink-0"
           >
             Set your dream college
           </Link>
@@ -490,7 +490,7 @@ export default function PracticeTestsHubPage() {
                 onClick={() => setStatusFilter("started")}
                 className={`px-3 py-1 rounded-lg font-semibold transition-all ${
                   statusFilter === "started"
-                    ? "bg-white text-[#C2410C] shadow-xs font-bold"
+                    ? "bg-white text-purple-700 shadow-xs font-bold"
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
@@ -517,7 +517,7 @@ export default function PracticeTestsHubPage() {
               placeholder="Filter by name or code..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C] transition-all"
+              className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600 transition-all"
             />
           </div>
         </div>
@@ -546,40 +546,40 @@ export default function PracticeTestsHubPage() {
             return (
               <div
                 key={s.id}
-                className="bg-white rounded-2xl border border-[#EFE6DC] p-5 sm:p-6 shadow-2xs flex flex-col justify-between min-w-0"
+                className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-2xs flex flex-col justify-between min-w-0"
               >
                 <div className="space-y-1">
                   {/* Top Row: Code (left), count (right) */}
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-[#8C7D73] font-medium">Code {s.code}</span>
-                    <span className="text-[#5C524A] font-medium">
+                    <span className="text-slate-400 font-medium">Code {s.code}</span>
+                    <span className="text-slate-600 font-medium">
                       {stats?.attemptedCount || 0} / {s.totalTests} attempted
                     </span>
                   </div>
 
                   {/* Subject Name */}
                   <div className="pt-1">
-                    <h3 className="text-lg font-bold text-[#1C1917] truncate">
-                      <Link href={`/dashboard/practice/${urlSlug}`}>{s.name}</Link>
+                    <h3 className="text-lg font-bold text-slate-900 truncate">
+                      <Link href={`/dashboard/practice/${urlSlug}`} className="hover:text-purple-700 transition-colors">{s.name}</Link>
                     </h3>
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs text-[#786E65] line-clamp-2 min-h-[34px] leading-relaxed pt-1">
+                  <p className="text-xs text-slate-500 line-clamp-2 min-h-[34px] leading-relaxed pt-1">
                     {s.unitsCount} syllabus units · 20 unit tests/unit
                   </p>
 
                   {/* Progress Line and Bar */}
                   <div className="pt-2">
-                    <div className="w-full h-1 bg-[#FDE6D2] rounded-full overflow-hidden">
+                    <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-[#C2410C] rounded-full transition-all"
+                        className="h-full bg-purple-600 rounded-full transition-all"
                         style={{ width: `${Math.max(hasAttempts ? 8 : 0, progressPct)}%` }}
                       />
                     </div>
                   </div>
 
-                  <div className="pt-2 text-xs text-[#8C7D73]">
+                  <div className="pt-2 text-xs text-slate-400">
                     {s.totalTests} practice tests · +5 / −1
                   </div>
                 </div>
@@ -592,13 +592,13 @@ export default function PracticeTestsHubPage() {
                         ? `/test/${stats.nextUnattemptedTestId}`
                         : `/test/practice-${s.id}-unit1-test1`
                     }
-                    className="px-4 py-2 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-semibold transition-colors text-center"
+                    className="px-4 py-2 rounded-lg bg-[#18262E] hover:bg-purple-700 text-white text-xs font-semibold transition-colors text-center"
                   >
                     {hasAttempts ? "Continue" : "Start"}
                   </Link>
                   <Link
                     href={`/dashboard/practice/${urlSlug}`}
-                    className="px-3.5 py-2 rounded-lg border border-[#E2D4C3] bg-white text-[#5C524A] hover:bg-[#FAF3EB] text-xs font-semibold transition-colors text-center"
+                    className="px-3.5 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold transition-colors text-center"
                   >
                     All units
                   </Link>

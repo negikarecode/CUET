@@ -104,7 +104,7 @@ function VerifyEmailContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] flex flex-col justify-center py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
       {/* Background Subtle Gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(194,65,12,0.08),rgba(255,255,255,0))] pointer-events-none" />
 
@@ -137,7 +137,7 @@ function VerifyEmailContent() {
             />
           ) : (
             <div className="space-y-5 text-center">
-              <div className="w-12 h-12 rounded-2xl bg-[#FDF0E6] text-[#C2410C] flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center mx-auto border border-purple-200/80">
                 <Mail className="w-6 h-6" />
               </div>
               <div className="space-y-1">
@@ -159,12 +159,12 @@ function VerifyEmailContent() {
                   value={manualEmailInput}
                   onChange={(e) => setManualEmailInput(e.target.value)}
                   placeholder="yourname@gmail.com"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C2410C]/20 focus:border-[#C2410C]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600"
                   required
                 />
                 <button
                   type="submit"
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#18262E] hover:bg-purple-700 text-white font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
                 >
                   <span>Continue</span>
                   <ArrowRight className="w-4 h-4" />
@@ -182,8 +182,8 @@ export default function VerifyEmailPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#FFF8F0] flex items-center justify-center p-4">
-          <div className="w-8 h-8 border-3 border-[#C2410C] border-t-transparent rounded-full animate-spin" />
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+          <div className="w-8 h-8 border-3 border-purple-600 border-t-transparent rounded-full animate-spin" />
         </div>
       }
     >
