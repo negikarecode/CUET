@@ -8,6 +8,7 @@ import {
   Check,
   Download,
   ArrowRight,
+  Star,
 } from "lucide-react";
 import { ProgressCardRecord, ProgressCardFrozenData } from "@/lib/progress-cards/types";
 import { SITE_CONFIG } from "@/lib/config/site";
@@ -125,8 +126,9 @@ export default function PublicCardView({ card }: PublicCardViewProps) {
             </span>
             <div className="flex items-center gap-2">
               {cardData.milestoneBadge && (
-                <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-bold border border-amber-500/30">
-                  ★ {cardData.milestoneBadge}
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-bold border border-amber-500/30">
+                  <Star className="w-3 h-3 fill-amber-300 text-amber-300 shrink-0" />
+                  <span>{cardData.milestoneBadge}</span>
                 </span>
               )}
               <span className="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[11px] font-bold border border-purple-400/30">

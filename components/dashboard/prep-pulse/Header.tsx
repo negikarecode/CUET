@@ -8,6 +8,7 @@ import {
   LogOut, 
   User as UserIcon, 
   Sparkles,
+  Command,
   X
 } from 'lucide-react';
 import { useTestStore } from '@/lib/store/useTestStore';
@@ -102,8 +103,8 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTes
               </button>
             ) : (
               <div className="hidden md:flex absolute inset-y-0 right-0 pr-3 items-center pointer-events-none">
-                <kbd className="text-[10px] uppercase font-semibold text-slate-400 bg-white border border-slate-200 px-1.5 py-0.5 rounded shadow-2xs">
-                  ⌘K
+                <kbd className="text-[10px] uppercase font-semibold text-slate-400 bg-white border border-slate-200 px-1.5 py-0.5 rounded shadow-2xs inline-flex items-center gap-0.5">
+                  <Command className="w-2.5 h-2.5" />K
                 </kbd>
               </div>
             )}

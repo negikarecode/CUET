@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
+  GraduationCap,
   ArrowRight,
   Check,
   Mail,
@@ -521,10 +522,10 @@ export default function AuthPageContent({
               <Link
                 href="/"
                 title="Back to Homepage"
-                className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-emerald-500 text-white flex items-center justify-center font-black text-lg shadow-md shadow-purple-500/20 shrink-0 hover:scale-105 transition-all cursor-pointer"
+                className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-emerald-500 text-white flex items-center justify-center shadow-md shadow-purple-500/20 shrink-0 hover:scale-105 transition-all cursor-pointer"
                 aria-label="CUET AI-Prep Home"
               >
-                <span>🦉</span>
+                <GraduationCap className="w-5 h-5 text-white" />
               </Link>
               <div>
                 <div className="flex items-center gap-2">

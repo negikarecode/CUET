@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { X, ArrowRight } from "lucide-react";
+import { X, ArrowRight, GraduationCap, Monitor, Rocket } from "lucide-react";
 
 interface CUETQuickStartModalProps {
   isOpen: boolean;
@@ -31,8 +31,8 @@ export default function CUETQuickStartModal({
         </button>
 
         {/* Mascot & Heading */}
-        <div className="w-16 h-16 rounded-3xl bg-purple-100 text-purple-600 flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm">
-          🦉
+        <div className="w-16 h-16 rounded-3xl bg-purple-100 text-purple-600 flex items-center justify-center mx-auto mb-4 shadow-sm">
+          <GraduationCap className="w-8 h-8 text-purple-600" />
         </div>
 
         <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">
@@ -84,7 +84,8 @@ export default function CUETQuickStartModal({
             onClick={onClose}
             className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-3 px-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md"
           >
-            <span className="text-base">💻</span> Launch Web CBT
+            <Monitor className="w-4 h-4 text-purple-400" />
+            <span>Launch Web CBT</span>
           </Link>
           <button
             type="button"
@@ -94,7 +95,8 @@ export default function CUETQuickStartModal({
             }}
             className="flex-1 bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs py-3 px-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md"
           >
-            <span className="text-base">🚀</span> Create Free Account
+            <Rocket className="w-4 h-4 text-emerald-200" />
+            <span>Create Free Account</span>
           </button>
         </div>
 

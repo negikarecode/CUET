@@ -130,7 +130,7 @@ export function sendTestNotification(): boolean {
 
   try {
     const options: NotificationOptions = {
-      body: "🎯 Daily CUET Revision Ping: Solve today's 15-question micro-drill and maintain your practice streak!",
+      body: "Daily CUET Revision Ping: Solve today's 15-question micro-drill and maintain your practice streak!",
       icon: "https://cdn-icons-png.flaticon.com/512/2997/2997295.png",
       badge: "https://cdn-icons-png.flaticon.com/512/2997/2997295.png",
       tag: "cuet-daily-reminder",
@@ -143,7 +143,7 @@ export function sendTestNotification(): boolean {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.ready.then((reg) => {
         reg.showNotification("CUET AI-Prep: 8:00 PM Revision Reminder", {
-          body: "🎯 Daily CUET Revision Ping: Solve today's 15-question micro-drill and maintain your practice streak!",
+          body: "Daily CUET Revision Ping: Solve today's 15-question micro-drill and maintain your practice streak!",
         });
       });
       return true;

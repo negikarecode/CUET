@@ -26,6 +26,7 @@ import {
   Download,
   Trash2,
   Info,
+  X,
 } from "lucide-react";
 import {
   ProfileInitialData,
@@ -653,9 +654,10 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           <button
             type="button"
             onClick={() => setStatusMessage(null)}
-            className="text-slate-400 hover:text-slate-700 font-bold p-1"
+            className="text-slate-400 hover:text-slate-700 p-1 flex items-center justify-center"
+            aria-label="Dismiss notification"
           >
-            ✕
+            <X className="w-4 h-4" />
           </button>
         </div>
       )}
@@ -1191,9 +1193,10 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                 <button
                   type="button"
                   onClick={() => setPushNotice(null)}
-                  className="text-purple-600 hover:text-purple-800 font-bold ml-2"
+                  className="text-purple-600 hover:text-purple-800 p-0.5 ml-2 flex items-center justify-center"
+                  aria-label="Dismiss message"
                 >
-                  ✕
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
             )}

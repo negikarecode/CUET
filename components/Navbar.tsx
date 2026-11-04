@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Flame,
+  GraduationCap,
   Sparkles,
   Menu,
   X,
@@ -129,7 +130,7 @@ export default function Navbar() {
                 aria-label="CUET AI-Prep Homepage"
               >
                 <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-emerald-500 text-white shadow-md shadow-purple-500/20 group-hover:scale-105 transition-all shrink-0">
-                  <span className="text-lg">🦉</span>
+                  <GraduationCap className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex flex-col justify-center min-w-0">
                   <div className="flex items-center gap-1 sm:gap-1.5 leading-none">

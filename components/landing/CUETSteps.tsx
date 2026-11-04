@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Clock, Brain, Target } from "lucide-react";
 
 export default function CUETSteps() {
   const steps = [
@@ -11,7 +11,8 @@ export default function CUETSteps() {
       border: "border-emerald-200/80",
       pill: "bg-emerald-600 text-white",
       textColor: "text-emerald-950",
-      accentIcon: "⏱️",
+      accentIcon: Clock,
+      iconColor: "text-emerald-700",
       tag: "Authentic NTA Engine",
     },
     {
@@ -22,7 +23,8 @@ export default function CUETSteps() {
       border: "border-amber-200/80",
       pill: "bg-amber-600 text-white",
       textColor: "text-amber-950",
-      accentIcon: "🧠",
+      accentIcon: Brain,
+      iconColor: "text-amber-700",
       tag: "NCERT Citations & Traps",
     },
     {
@@ -33,7 +35,8 @@ export default function CUETSteps() {
       border: "border-purple-200/80",
       pill: "bg-purple-600 text-white",
       textColor: "text-purple-950",
-      accentIcon: "🎯",
+      accentIcon: Target,
+      iconColor: "text-purple-700",
       tag: "Dream College Match",
     },
   ];
@@ -74,7 +77,9 @@ export default function CUETSteps() {
                   <span className={`text-xs font-black px-3 py-1 rounded-full ${item.pill} shadow-sm tracking-wider uppercase`}>
                     Step {item.step}
                   </span>
-                  <span className="text-2xl">{item.accentIcon}</span>
+                  <div className="w-10 h-10 rounded-2xl bg-white/80 border border-slate-200/50 flex items-center justify-center shadow-xs">
+                    <item.accentIcon className={`w-5 h-5 ${item.iconColor}`} />
+                  </div>
                 </div>
                 <h4 className={`text-xl font-bold ${item.textColor} mb-3`}>
                   {item.title}

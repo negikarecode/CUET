@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import HeroCampusIllustration from "./illustrations/HeroCampusIllustration";
-import { Sparkles, ArrowRight, Eye, Trophy, ShieldCheck, Clock } from "lucide-react";
+import { Sparkles, ArrowRight, Eye, Trophy, ShieldCheck, Clock, QrCode } from "lucide-react";
 
 interface CUETHeroProps {
   onAuth: (mode: "login" | "signup") => void;
@@ -38,7 +38,8 @@ export default function CUETHero({ onAuth, isLoggedIn, onOpenQuickStart }: CUETH
                 onClick={onOpenQuickStart}
                 className="mt-3 text-[11px] font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-full border border-emerald-200 transition-colors inline-flex items-center gap-1.5 cursor-pointer"
               >
-                📱 Mobile QR Quick-Access
+                <QrCode className="w-3.5 h-3.5 text-emerald-700" />
+                <span>Mobile QR Quick-Access</span>
               </button>
             )}
           </div>

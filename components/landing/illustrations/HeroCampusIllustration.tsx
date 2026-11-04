@@ -1,5 +1,6 @@
 import React from "react";
 import OwlScholarMascot from "./OwlScholarMascot";
+import { Award } from "lucide-react";
 
 export default function HeroCampusIllustration({ className = "" }: { className?: string }) {
   return (
@@ -163,8 +164,8 @@ export default function HeroCampusIllustration({ className = "" }: { className?:
 
       {/* Floating Score Badge on right */}
       <div className="absolute right-4 top-20 md:right-8 md:top-24 bg-white/95 backdrop-blur-md border border-slate-100 rounded-2xl p-3 shadow-xl z-20 flex items-center gap-3 animate-bounce duration-1000">
-        <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-lg">
-          💯
+        <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+          <Award className="w-5 h-5 text-purple-700" />
         </div>
         <div>
           <div className="text-[11px] font-semibold text-slate-500">Predicted Score</div>

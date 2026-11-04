@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, GraduationCap, QrCode } from "lucide-react";
 
 interface CUETNavbarProps {
   isLoggedIn: boolean;
@@ -19,7 +19,7 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-emerald-500 flex items-center justify-center text-white shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform">
-            <span className="text-xl">🦉</span>
+            <GraduationCap className="w-5 h-5 text-white" />
           </div>
           <div className="flex flex-col">
             <span className="font-extrabold text-2xl tracking-tight text-slate-900 leading-none">
@@ -91,11 +91,11 @@ export default function CUETNavbar({ isLoggedIn, onAuth, onOpenQuickStart }: CUE
             <button
               type="button"
               onClick={onOpenQuickStart}
-              className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+              className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors flex items-center justify-center"
               title="Mobile App & QR Code"
               aria-label="Mobile App QR Code"
             >
-              📱
+              <QrCode className="w-4 h-4 text-slate-700" />
             </button>
           )}
         </div>

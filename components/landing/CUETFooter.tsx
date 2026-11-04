@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import FooterHills from "./illustrations/FooterHills";
-import { Check, Mail, ShieldAlert } from "lucide-react";
+import { Check, Mail, ShieldAlert, GraduationCap } from "lucide-react";
 
 interface CUETFooterProps {
   onAuth: (mode: "login" | "signup") => void;
@@ -30,8 +30,10 @@ export default function CUETFooter({ onAuth, isLoggedIn }: CUETFooterProps) {
         {/* Top Newsletter & Brand Section */}
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8 pb-12 border-b border-emerald-800/80">
           <div className="max-w-md text-center lg:text-left">
-            <Link href="/" className="inline-flex items-center gap-2 group">
-              <span className="text-3xl">🦉</span>
+            <Link href="/" className="inline-flex items-center gap-2.5 group">
+              <div className="w-9 h-9 rounded-2xl bg-white/10 flex items-center justify-center text-white border border-white/20 group-hover:scale-105 transition-transform">
+                <GraduationCap className="w-5 h-5 text-emerald-300" />
+              </div>
               <span className="font-extrabold text-3xl tracking-tight text-white">
                 CUET<span className="text-purple-400"> AI-Prep</span>
               </span>

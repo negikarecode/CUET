@@ -12,6 +12,13 @@ import {
   Clock,
   Target,
   Trophy,
+  BarChart3,
+  Calculator,
+  Percent,
+  Atom,
+  FlaskConical,
+  Landmark,
+  TrendingUp,
 } from "lucide-react";
 
 interface SubjectData {
@@ -25,7 +32,7 @@ interface SubjectData {
   statusText: string;
   focusTopic: string;
   ecgColor: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
 export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () => void }) {
@@ -43,7 +50,7 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
       statusText: "SRCC Cutoff: 196",
       focusTopic: "National Income Accounting & Multiplier",
       ecgColor: "#10B981",
-      icon: "📊",
+      icon: BarChart3,
     },
     {
       name: "Accounts",
@@ -56,7 +63,7 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
       statusText: "Hindu Cutoff: 192",
       focusTopic: "Partnership Dissolution & Share Forfeiture",
       ecgColor: "#8B5CF6",
-      icon: "📑",
+      icon: Calculator,
     },
     {
       name: "Maths",
@@ -69,7 +76,7 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
       statusText: "St. Stephen's: 190",
       focusTopic: "Definite Integrals & Differential Equations",
       ecgColor: "#F59E0B",
-      icon: "📐",
+      icon: Percent,
     },
     {
       name: "Physics",
@@ -82,7 +89,7 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
       statusText: "Miranda Cutoff: 188",
       focusTopic: "Electromagnetic Waves & Ray Optics",
       ecgColor: "#10B981",
-      icon: "⚛️",
+      icon: Atom,
     },
     {
       name: "Chemistry",
@@ -95,7 +102,7 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
       statusText: "Hansraj Cutoff: 186",
       focusTopic: "Coordination Compounds & Electrochemistry",
       ecgColor: "#14B8A6",
-      icon: "🧪",
+      icon: FlaskConical,
     },
     {
       name: "Pol Science",
@@ -108,7 +115,7 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
       statusText: "LSR Cutoff: 194",
       focusTopic: "Contemporary World Politics & Globalisation",
       ecgColor: "#F43F5E",
-      icon: "🏛️",
+      icon: Landmark,
     },
   ];
 
@@ -123,7 +130,7 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
     statusText: "SRCC Cutoff: 196",
     focusTopic: "National Income Accounting & Multiplier",
     ecgColor: "#10B981",
-    icon: "📈",
+    icon: TrendingUp,
   };
   const current: SubjectData = subjects[selectedSubjectIndex] ?? fallbackSubject;
 
@@ -320,7 +327,7 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
                             : "bg-slate-50 border-slate-200/80 hover:bg-slate-100 text-slate-700"
                         }`}
                       >
-                        <span className="text-base leading-none mb-1">{sub.icon}</span>
+                        <sub.icon className={`w-4 h-4 mb-1 ${isSelected ? "text-purple-700" : "text-slate-600"}`} />
                         <span className="text-[10px] font-semibold leading-tight">{sub.name}</span>
                       </button>
                     );
@@ -332,7 +339,8 @@ export default function CozyStudyRoomScene({ onStartTest }: { onStartTest?: () =
               <div className="p-3 bg-white rounded-2xl shadow-sm border border-slate-100">
                 <div className="flex items-center justify-between text-xs mb-2">
                   <span className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <span>{current.icon}</span> {current.name} Standing
+                    <current.icon className="w-4 h-4 text-purple-600 shrink-0" />
+                    <span>{current.name} Standing</span>
                   </span>
                   <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${current.statusBg}`}>
                     {current.status}

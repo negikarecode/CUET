@@ -267,50 +267,50 @@ export function deriveTopicRepairPlan(
 
   const step1: RepairPlanStepInfo = {
     stepNumber: 1,
-    title: "① CONCEPT REPAIR",
+    title: "1. CONCEPT REPAIR",
     description: "NCERT core definitions and distinctions reviewed.",
     state: step1State,
     status: step1State,
     isCompleted: step1Completed,
     isActive: step1Active,
     isLocked: false,
-    badge: step1Completed ? "✓ Done" : "Not started",
+    badge: step1Completed ? "Done" : "Not started",
   };
 
   const step2: RepairPlanStepInfo = {
     stepNumber: 2,
-    title: "② GUIDED DRILL",
+    title: "2. GUIDED DRILL",
     description: "5 targeted adaptive questions on weak patterns.",
     state: step2State,
     status: step2State,
     isCompleted: step2Completed,
     isActive: step2Active,
     isLocked: step2Locked,
-    badge: step2Completed ? "✓ Completed" : step2Active ? "→ Active" : "Locked",
+    badge: step2Completed ? "Completed" : step2Active ? "Active" : "Locked",
   };
 
   const step3: RepairPlanStepInfo = {
     stepNumber: 3,
-    title: "③ TIMED RETEST",
+    title: "3. TIMED RETEST",
     description: "10 Qs under timed exam conditions.",
     state: step3State,
     status: step3State,
     isCompleted: step3Completed,
     isActive: step3Active,
     isLocked: step3Locked,
-    badge: step3Completed ? "✓ Done" : step3Active ? "→ Ready" : "Locked",
+    badge: step3Completed ? "Done" : step3Active ? "Ready" : "Locked",
   };
 
   const step4: RepairPlanStepInfo = {
     stepNumber: 4,
-    title: "④ RECOVERY CHECK",
+    title: "4. RECOVERY CHECK",
     description: "Verified only when ≥80% accuracy over 10+ attempts.",
     state: step4State,
     status: step4State,
     isCompleted: step4Completed,
     isActive: step4Active,
     isLocked: step4Locked,
-    badge: step4Completed ? "✅ Recovered" : step4Active ? "Evaluating" : "Pending",
+    badge: step4Completed ? "Recovered" : step4Active ? "Evaluating" : "Pending",
   };
 
   const steps: [RepairPlanStepInfo, RepairPlanStepInfo, RepairPlanStepInfo, RepairPlanStepInfo] = [

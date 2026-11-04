@@ -20,7 +20,7 @@ export const USER_PROFILE = {
 };
 
 export const BANNER_INFO = {
-  greeting: "Good Morning, Sarah! 👋",
+  greeting: "Good Morning, Sarah!",
   subtitle: "Stay consistent. Every mock test brings you closer to your dream university.",
   quote: "“Discipline today creates options tomorrow.”",
   quoteAuthor: "Daily Preparation Mantra",

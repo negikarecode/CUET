@@ -9,6 +9,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 export interface PricingCardItem {
   title: string;
@@ -154,9 +155,9 @@ export function ScrollSplitCard({
                   </div>
                   <ul className="pricing-plan-features">
                     {card.features.map((feature) => (
-                      <li key={feature}>
-                        <span aria-hidden="true">✓</span>
-                        {feature}
+                      <li key={feature} className="flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
