@@ -155,6 +155,72 @@ export const PRICING_CONFIG = {
   TAX_POLICY: "Inclusive of all taxes & GST. Flat one-time checkout.",
 } as const;
 
+export interface PlanDefinition {
+  planId: string;
+  name: string;
+  tier: SubscriptionTier;
+  standardPricePaise: number;
+  promotionalPricePaise?: number;
+  currency: string;
+  durationDays: number;
+  bonusCoins: number;
+  supportsPromotional: boolean;
+}
+
+export const SUPPORTED_PLANS: Record<string, PlanDefinition> = {
+  all_access_pass_799: {
+    planId: "all_access_pass_799",
+    name: "CUETMate Premium (All-Access Pass)",
+    tier: "all_access_pass",
+    standardPricePaise: 79900,
+    promotionalPricePaise: 200,
+    currency: "INR",
+    durationDays: 365,
+    bonusCoins: 500,
+    supportsPromotional: true,
+  },
+  all_access_pass: {
+    planId: "all_access_pass",
+    name: "CUETMate Premium (All-Access Pass Legacy)",
+    tier: "all_access_pass",
+    standardPricePaise: 79900,
+    promotionalPricePaise: 200,
+    currency: "INR",
+    durationDays: 365,
+    bonusCoins: 500,
+    supportsPromotional: true,
+  },
+  ai_practice_pass_499: {
+    planId: "ai_practice_pass_499",
+    name: "CUETMate AI Practice Pass",
+    tier: "ai_practice_pass",
+    standardPricePaise: 49900,
+    currency: "INR",
+    durationDays: 365,
+    bonusCoins: 250,
+    supportsPromotional: false,
+  },
+  ai_pass_399: {
+    planId: "ai_pass_399",
+    name: "CUET AI Pass",
+    tier: "all_access_pass",
+    standardPricePaise: 39900,
+    currency: "INR",
+    durationDays: 365,
+    bonusCoins: 200,
+    supportsPromotional: false,
+  },
+};
+
+export function getPlanConfig(planId: string): PlanDefinition {
+  const normalized = (planId || "all_access_pass_799").trim().toLowerCase();
+  const plan = SUPPORTED_PLANS[normalized];
+  if (!plan) {
+    throw new Error(`Unauthorized or unrecognized plan ID: ${planId}`);
+  }
+  return plan;
+}
+
 /**
  * Retrieves the authoritative entitlement for a candidate from Supabase.
  */
@@ -660,21 +726,31 @@ export async function recordSessionCompletion(params: {
 
 /**
  * Retrieves the authoritative promotional slot availability and current pricing.
+ * Counts both claimed slots and active unexpired reservations to prevent overselling.
  */
 export async function getPricingOffer(): Promise<PricingOfferDetails> {
-  let claimedCount = 0;
+  let allocatedCount = 0;
 
   try {
     const admin = createAdminClient();
+    const nowIso = new Date().toISOString();
 
-    // Check promotional_slots table if available
-    const { count, error } = await admin
+    // Check promotional_slots table for claimed AND active unexpired reservations
+    const { count: claimedCount, error: claimedErr } = await admin
       .from("promotional_slots")
       .select("slot_number", { count: "exact", head: true })
       .eq("status", "claimed");
 
-    if (!error && typeof count === "number") {
-      claimedCount = count;
+    const { count: reservedCount, error: reservedErr } = await admin
+      .from("promotional_slots")
+      .select("slot_number", { count: "exact", head: true })
+      .eq("status", "reserved")
+      .gt("expires_at", nowIso);
+
+    if (!claimedErr && !reservedErr && typeof claimedCount === "number" && typeof reservedCount === "number") {
+      allocatedCount = claimedCount + reservedCount;
+    } else if (!claimedErr && typeof claimedCount === "number") {
+      allocatedCount = claimedCount;
     } else {
       // Fallback: count paid premium profiles
       const { count: profileCount } = await admin
@@ -682,14 +758,14 @@ export async function getPricingOffer(): Promise<PricingOfferDetails> {
         .select("id", { count: "exact", head: true })
         .eq("is_premium", true);
 
-      claimedCount = profileCount || 0;
+      allocatedCount = profileCount || 0;
     }
   } catch (err) {
     console.warn("[Promotional Slot Check Notice]:", err);
   }
 
   const totalSlots = PRICING_CONFIG.TOTAL_PROMOTIONAL_SLOTS;
-  const remainingSlots = Math.max(0, totalSlots - claimedCount);
+  const remainingSlots = Math.max(0, totalSlots - allocatedCount);
   const isPromotionalActive = remainingSlots > 0;
 
   const currentPricePaise = isPromotionalActive
@@ -709,12 +785,120 @@ export async function getPricingOffer(): Promise<PricingOfferDetails> {
     promotionalPriceInr: PRICING_CONFIG.PROMOTIONAL_PRICE_INR,
     isPromotionalActive,
     totalPromotionalSlots: totalSlots,
-    claimedPromotionalSlots: claimedCount,
+    claimedPromotionalSlots: allocatedCount,
     remainingPromotionalSlots: remainingSlots,
     currentPricePaise,
     currentPriceInr,
     currency: PRICING_CONFIG.CURRENCY,
     billingDuration: PRICING_CONFIG.BILLING_DURATION,
     taxPolicy: PRICING_CONFIG.TAX_POLICY,
+  };
+}
+
+/**
+ * Authoritatively reconciles a user's entitlement against all historical captured transactions.
+ * Called upon refunds, disputes, or manual administrative adjustments.
+ * Ensures that if a user has multiple valid qualifying purchases, refunding one does not
+ * unfairly strip access backed by surviving active purchases.
+ */
+export async function reconcileUserEntitlements(userId: string): Promise<{
+  isPremium: boolean;
+  tier: SubscriptionTier;
+  expiresAt: string | null;
+}> {
+  if (!userId || userId === "guest") {
+    return { isPremium: false, tier: "free", expiresAt: null };
+  }
+
+  const admin = createAdminClient();
+  const now = new Date();
+
+  // Query all non-refunded captured transactions for this user
+  const { data: transactions, error } = await admin
+    .from("payment_transactions")
+    .select(`
+      id,
+      verified_at,
+      status,
+      order_id,
+      payment_orders (
+        id,
+        plan_id,
+        status
+      )
+    `)
+    .eq("user_id", userId)
+    .eq("status", "captured")
+    .order("verified_at", { ascending: false });
+
+  if (error) {
+    console.error("[reconcileUserEntitlements] Error querying transactions:", error);
+    throw error;
+  }
+
+  // Filter for transactions that are still within their 1-year valid subscription window
+  // and whose parent order is not marked refunded/cancelled
+  const validTransactions = (transactions || []).filter((tx: any) => {
+    const order = Array.isArray(tx.payment_orders) ? tx.payment_orders[0] : tx.payment_orders;
+    if (order && (order.status === "refunded" || order.status === "cancelled")) {
+      return false;
+    }
+    const verifiedTime = new Date(tx.verified_at).getTime();
+    const oneYearAfter = verifiedTime + 365 * 24 * 60 * 60 * 1000;
+    return !isNaN(verifiedTime) && oneYearAfter > now.getTime();
+  });
+
+  if (validTransactions.length === 0) {
+    // Zero valid qualifying purchases remain - revoke Premium
+    await admin
+      .from("profiles")
+      .update({
+        is_premium: false,
+        subscription_tier: "free",
+        subscription_expires_at: null,
+        updated_at: now.toISOString(),
+      })
+      .eq("id", userId);
+
+    return { isPremium: false, tier: "free", expiresAt: null };
+  }
+
+  // Find the maximum expiration date from all surviving valid transactions
+  let maxExpiryMs = 0;
+  let highestTier: SubscriptionTier = "free";
+
+  for (const tx of validTransactions) {
+    const verifiedTime = new Date(tx.verified_at).getTime();
+    const expiryMs = verifiedTime + 365 * 24 * 60 * 60 * 1000;
+    if (expiryMs > maxExpiryMs) {
+      maxExpiryMs = expiryMs;
+    }
+
+    const order = Array.isArray(tx.payment_orders) ? tx.payment_orders[0] : tx.payment_orders;
+    const planId = order?.plan_id || "all_access_pass_799";
+    const plan = SUPPORTED_PLANS[planId];
+    if (plan?.tier === "all_access_pass") {
+      highestTier = "all_access_pass";
+    } else if (plan?.tier === "ai_practice_pass" && highestTier !== "all_access_pass") {
+      highestTier = "ai_practice_pass";
+    }
+  }
+
+  const finalExpiresAt = new Date(maxExpiryMs).toISOString();
+
+  await admin
+    .from("profiles")
+    .update({
+      is_premium: true,
+      subscription_tier: highestTier,
+      subscription_expires_at: finalExpiresAt,
+      updated_at: now.toISOString(),
+    })
+    .eq("id", userId);
+
+  return {
+    isPremium: true,
+    tier: highestTier,
+    expiresAt: finalExpiresAt,
   };
 }

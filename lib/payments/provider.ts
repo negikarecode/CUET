@@ -60,6 +60,7 @@ export class RazorpayProvider implements PaymentProvider {
     this.keyId = keyId;
     this.keySecret = keySecret;
     this.webhookSecret = webhookSecret;
+    this.isLive = Boolean(keyId && keyId.startsWith("rzp_live_"));
     this.client = new Razorpay({
       key_id: keyId,
       key_secret: keySecret,
@@ -138,12 +139,41 @@ export class RazorpayProvider implements PaymentProvider {
           error: `Payment order ID mismatch: expected ${orderId}, found ${payment.order_id}`,
         };
       }
-      if (payment.status !== "captured" && payment.status !== "authorized") {
+
+      // CRITICAL SEC-02: 'authorized' is NOT paid. Only 'captured' is paid.
+      // If the payment is authorized, attempt server-side capture via Razorpay API.
+      if (payment.status === "authorized") {
+        try {
+          const captureResponse: any = await this.client.payments.capture(
+            paymentId,
+            Number(payment.amount),
+            String(payment.currency)
+          );
+          if (captureResponse && captureResponse.status === "captured") {
+            return {
+              isPaid: true,
+              amount: Number(captureResponse.amount),
+              currency: String(captureResponse.currency),
+            };
+          }
+        } catch (captureErr: any) {
+          console.warn("[Razorpay Auto-Capture Attempt Notice]:", captureErr?.message);
+        }
+
+        // Authorization alone is NEVER sufficient to activate Premium
         return {
           isPaid: false,
-          error: `Payment in non-successful state: ${payment.status}`,
+          error: "Payment is authorized but not captured. Payment capture is required before Premium activation.",
         };
       }
+
+      if (payment.status !== "captured") {
+        return {
+          isPaid: false,
+          error: `Payment in non-captured state: ${payment.status}`,
+        };
+      }
+
       return {
         isPaid: true,
         amount: Number(payment.amount),
@@ -263,6 +293,24 @@ export class MockSandboxProvider implements PaymentProvider {
     paymentId: string,
     _orderId: string
   ): Promise<{ isPaid: boolean; amount?: number; currency?: string; error?: string }> {
+    if (paymentId.startsWith("pay_sim_authorized_")) {
+      return {
+        isPaid: false,
+        error: "Payment is authorized but not captured. Payment capture is required before Premium activation.",
+      };
+    }
+    if (paymentId.startsWith("pay_sim_failed_")) {
+      return {
+        isPaid: false,
+        error: "Payment in failed state.",
+      };
+    }
+    if (paymentId.startsWith("pay_sim_unknown_")) {
+      return {
+        isPaid: false,
+        error: "Payment in unknown non-captured state.",
+      };
+    }
     if (paymentId.startsWith("pay_sim_")) {
       return { isPaid: true, amount: 49900, currency: "INR" };
     }

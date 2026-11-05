@@ -6,6 +6,8 @@ import {
   getPricingOffer,
   getUserEntitlement,
   getUserUsageSummary,
+  getPlanConfig,
+  reconcileUserEntitlements,
 } from "@/lib/payments/entitlements";
 import { rateLimit, rateLimitResponse, getClientRateLimitIdentifier } from "@/lib/security/rateLimiter";
 
@@ -79,6 +81,12 @@ export async function POST(req: NextRequest) {
 
       const { event, userId, tier, orderId, paymentId, amount } = webhookResult;
 
+      // CRITICAL SEC-02: 'authorized' is NOT paid. Do NOT activate Premium on authorization alone.
+      if (event === "payment.authorized") {
+        console.log(`[Webhook Notice] Payment ${paymentId} is authorized but not captured. Entitlement fulfillment deferred.`);
+        return NextResponse.json({ status: "ok", received: true, message: "Payment authorized; awaiting capture." });
+      }
+
       if ((event === "order.paid" || event === "payment.captured") && userId) {
         const supabaseAdmin = createAdminClient();
         const oneYearFromNow = new Date();
@@ -117,7 +125,7 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // ─── 1B. HANDLE REFUNDS & CHARGEBACKS ──────────────────────────────────
+      // ─── 1B. HANDLE REFUNDS & CHARGEBACKS (TRANSACTION-AWARE) ──────────────
       if (
         event === "refund.created" ||
         event === "refund.processed" ||
@@ -131,7 +139,7 @@ export async function POST(req: NextRequest) {
           try {
             const { data: tx } = await supabaseAdmin
               .from("payment_transactions")
-              .select("user_id, provider_order_id")
+              .select("user_id, order_id")
               .eq("provider_payment_id", paymentId)
               .maybeSingle();
 
@@ -170,15 +178,7 @@ export async function POST(req: NextRequest) {
         }
 
         try {
-          await supabaseAdmin
-            .from("profiles")
-            .update({
-              is_premium: false,
-              subscription_tier: "free",
-              updated_at: new Date().toISOString(),
-            })
-            .eq("id", targetUserId);
-
+          // 1. Mark transaction as refunded
           if (paymentId) {
             await supabaseAdmin
               .from("payment_transactions")
@@ -186,15 +186,30 @@ export async function POST(req: NextRequest) {
               .eq("provider_payment_id", paymentId);
           }
 
+          // 2. Mark order as refunded and release any promotional slot
           if (orderId) {
-            await supabaseAdmin
+            const { data: updatedOrd } = await supabaseAdmin
               .from("payment_orders")
               .update({ status: "refunded", updated_at: new Date().toISOString() })
-              .eq("provider_order_id", orderId);
+              .eq("provider_order_id", orderId)
+              .select("id, is_promotional")
+              .maybeSingle();
+
+            if (updatedOrd?.is_promotional && updatedOrd?.id) {
+              await supabaseAdmin
+                .from("promotional_slots")
+                .update({ status: "released", user_id: null, order_id: null, claimed_at: null })
+                .eq("order_id", updatedOrd.id);
+            }
           }
 
-          console.log(`[Webhook Refund Processed] Entitlement revoked for user ${targetUserId}.`);
-          return NextResponse.json({ status: "ok", refunded: true });
+          // 3. Reconcile entitlements against all surviving active transactions (Requirement Phase 5)
+          const reconciliation = await reconcileUserEntitlements(targetUserId);
+
+          console.log(
+            `[Webhook Refund Processed] Entitlements reconciled for user ${targetUserId}: isPremium=${reconciliation.isPremium}, tier=${reconciliation.tier}.`
+          );
+          return NextResponse.json({ status: "ok", refunded: true, entitlement: reconciliation });
         } catch (refundErr) {
           console.error("[Webhook Refund Error]:", refundErr);
           return NextResponse.json({ error: "Refund processing error." }, { status: 500 });
@@ -267,18 +282,18 @@ export async function POST(req: NextRequest) {
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
-        tier = "all_access_pass",
       } = body;
 
       const supabaseAdmin = createAdminClient();
 
-      // Verify order ownership if payment_orders table has this order
+      // Verify order ownership and provider if payment_orders table has this order
       let expectedAmountPaise: number | null = null;
+      let existingOrderRecord: any = null;
 
       try {
         const { data: existingOrder } = await supabaseAdmin
           .from("payment_orders")
-          .select("user_id, status, amount_paise, plan_id")
+          .select("id, user_id, status, amount_paise, plan_id, provider, currency, is_promotional")
           .eq("provider_order_id", razorpay_order_id)
           .maybeSingle();
 
@@ -296,10 +311,37 @@ export async function POST(req: NextRequest) {
             );
           }
 
+          // Provider mismatch check (Requirement Phase 2.2)
+          if (existingOrder.provider && existingOrder.provider !== provider.name) {
+            console.error(
+              `[SECURITY] Provider mismatch for order ${razorpay_order_id}: expected ${existingOrder.provider}, got ${provider.name}`
+            );
+            return NextResponse.json(
+              {
+                error: `Payment provider mismatch: order was created for ${existingOrder.provider}, but submitted through ${provider.name}.`,
+                code: "PROVIDER_MISMATCH",
+              },
+              { status: 400 }
+            );
+          }
+
+          existingOrderRecord = existingOrder;
           expectedAmountPaise = existingOrder.amount_paise;
         }
       } catch (err) {
         console.warn("[Payment Orders Query Notice]:", err);
+      }
+
+      // Validate plan against server allowlist (Requirement Phase 2.3)
+      const resolvedPlanId = existingOrderRecord?.plan_id || "all_access_pass_799";
+      let planConfig;
+      try {
+        planConfig = getPlanConfig(resolvedPlanId);
+      } catch (planErr: any) {
+        return NextResponse.json(
+          { error: planErr.message || "Invalid subscription plan.", code: "INVALID_PLAN" },
+          { status: 400 }
+        );
       }
 
       // Cryptographic signature check (Must precede idempotency checks to prevent probing)
@@ -357,7 +399,7 @@ export async function POST(req: NextRequest) {
             success: true,
             isPremium: isCurrentlyPremium,
             message: "Payment transaction already recorded and active.",
-            tier: profile?.subscription_tier || tier,
+            tier: profile?.subscription_tier || planConfig.tier,
             expiresAt: profile?.subscription_expires_at || null,
             idempotent: true,
           });
@@ -367,6 +409,7 @@ export async function POST(req: NextRequest) {
       }
 
       // Verify payment status and amount with gateway provider (Fail-Closed)
+      // Only CAPTURED payments can activate Premium (Requirement Phase 2.1)
       const statusCheck = await provider.verifyPaymentStatus(razorpay_payment_id, razorpay_order_id);
       if (!statusCheck.isPaid || typeof statusCheck.amount !== "number") {
         return NextResponse.json(
@@ -409,13 +452,6 @@ export async function POST(req: NextRequest) {
       oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
 
       // ─── ATOMIC TRANSACTION FULFILLMENT (SEC-01) ───────────────────────────
-      // Calls PostgreSQL stored function fulfill_payment_order to atomically:
-      // 1. Lock rows FOR UPDATE
-      // 2. Insert payment_transaction exactly once
-      // 3. Mark payment_order paid exactly once
-      // 4. Grant Premium entitlement & award bonus coins
-      // 5. Claim launch promotional slot
-      // 6. Roll back all related changes if any step fails
       let fulfillmentResult: any = null;
       let fulfillmentError: any = null;
 
@@ -428,9 +464,9 @@ export async function POST(req: NextRequest) {
           p_provider_signature: razorpay_signature,
           p_amount_paise: statusCheck.amount || requiredAmountPaise,
           p_currency: statusCheck.currency || "INR",
-          p_tier: tier,
+          p_tier: planConfig.tier,
           p_expires_at: oneYearFromNow.toISOString(),
-          p_bonus_coins: 500,
+          p_bonus_coins: planConfig.bonusCoins,
           p_raw_payload: { order_id: razorpay_order_id },
         });
 
@@ -447,109 +483,157 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
           success: true,
           isPremium: Boolean(fulfillmentResult.is_premium ?? true),
-          message: fulfillmentResult.message || "CUETMate Premium successfully activated! +500 Campus Coins awarded.",
-          tier: fulfillmentResult.tier || tier,
+          message: fulfillmentResult.message || "CUETMate Premium successfully activated!",
+          tier: fulfillmentResult.tier || planConfig.tier,
           expiresAt: fulfillmentResult.expires_at || oneYearFromNow.toISOString(),
-          bonusCoinsAwarded: fulfillmentResult.bonus_coins_awarded ?? 500,
+          bonusCoinsAwarded: fulfillmentResult.bonus_coins_awarded ?? planConfig.bonusCoins,
           idempotent: Boolean(fulfillmentResult.idempotent),
         });
       }
 
       // ─── FAIL-CLOSED ENFORCEMENT (SEC-01) ──────────────────────────────────
-      // If atomic RPC fulfillment fails, fail closed strictly with HTTP 503.
-      // Never perform unsafe, uncoordinated non-atomic partial table mutations
-      // that could leave payments captured but accounts locked or corrupted.
       console.error("[CRITICAL SEC-01] Atomic payment fulfillment failed or unavailable:", fulfillmentError);
       return NextResponse.json(
         {
           error: "Payment confirmed by gateway, but atomic account provisioning encountered a system error. Please retry or contact support.",
           code: "ATOMIC_FULFILLMENT_FAILED",
+          details: fulfillmentError?.message,
         },
         { status: 503 }
       );
     }
 
-    // ─── CASE B: CREATE ORDER ────────────────────────────────────────────────
+    // ─── CASE C: CREATE ORDER ────────────────────────────────────────────────
     const rateIdentifier = getClientRateLimitIdentifier(req, authUser.id, "payment:create_order");
     const rateCheck = await rateLimit("payment:create_order", rateIdentifier);
     if (!rateCheck.success) {
       return rateLimitResponse(rateCheck);
     }
 
-    const pricing = await getPricingOffer();
-    const amountPaise = pricing.currentPricePaise;
-    const isPromotional = pricing.isPromotionalActive;
+    // Validate requested plan from body
+    const requestedPlanId = (typeof body.planId === "string" ? body.planId : "").trim() || "all_access_pass_799";
+    let selectedPlan;
+    try {
+      selectedPlan = getPlanConfig(requestedPlanId);
+    } catch {
+      selectedPlan = getPlanConfig("all_access_pass_799");
+    }
 
+    const pricing = await getPricingOffer();
+    let amountPaise = selectedPlan.standardPricePaise;
+    let isPromotional = false;
+
+    // Check promotional eligibility
+    if (selectedPlan.supportsPromotional && pricing.isPromotionalActive && pricing.remainingPromotionalSlots > 0) {
+      isPromotional = true;
+      amountPaise = selectedPlan.promotionalPricePaise || pricing.promotionalPricePaise;
+    }
+
+    // 1. Create external gateway order
     const orderResult = await provider.createOrder({
       userId: authUser.id,
       userEmail: authUser.email || "aspirant@cuetmate.in",
       userName: authUser.user_metadata?.full_name || "CUET Aspirant",
       amountPaise,
       currency: "INR",
-      planId: pricing.planId,
+      planId: selectedPlan.planId,
       isPromotional,
     });
 
-    // Record order in payment_orders table if available and reserve promotional slot if active
-    try {
-      const supabaseAdmin = createAdminClient();
-      const { data: insertedOrder, error: insertError } = await supabaseAdmin
-        .from("payment_orders")
-        .insert({
-          user_id: authUser.id,
-          provider: provider.name,
-          provider_order_id: orderResult.orderId,
-          plan_id: pricing.planId,
-          amount_paise: amountPaise,
-          currency: "INR",
-          is_promotional: isPromotional,
-          status: "created",
-        })
-        .select("id")
-        .maybeSingle();
+    // 2. Local Database Order Persistence (Strict Fail-Closed, Phase 4)
+    const supabaseAdmin = createAdminClient();
+    const { data: insertedOrder, error: insertError } = await supabaseAdmin
+      .from("payment_orders")
+      .insert({
+        user_id: authUser.id,
+        provider: provider.name,
+        provider_order_id: orderResult.orderId,
+        plan_id: selectedPlan.planId,
+        amount_paise: amountPaise,
+        currency: "INR",
+        is_promotional: isPromotional,
+        status: "created",
+      })
+      .select("id")
+      .maybeSingle();
 
-      if (insertError) {
-        console.warn("[Payment Order Insert Warning]:", insertError);
+    if (insertError || !insertedOrder?.id) {
+      console.error("[CRITICAL SEC-04] Failed to persist payment order in database:", insertError);
+      return NextResponse.json(
+        {
+          error: "Failed to persist order locally. Checkout cancelled to prevent orphaned transactions.",
+          code: "ORDER_PERSISTENCE_FAILED",
+        },
+        { status: 500 }
+      );
+    }
+
+    // 3. Promotional Slot Reservation (Atomic RPC, Phase 3)
+    let reservedSlotNumber: number | null = null;
+    if (isPromotional && insertedOrder?.id) {
+      try {
+        const { data: slotNum, error: slotRpcErr } = await supabaseAdmin.rpc("reserve_promotional_slot", {
+          p_user_id: authUser.id,
+          p_order_id: insertedOrder.id,
+        });
+        if (!slotRpcErr && typeof slotNum === "number") {
+          reservedSlotNumber = slotNum;
+        }
+      } catch (rpcErr) {
+        console.warn("[Promotional Slot RPC Notice]:", rpcErr);
       }
 
-      // If this is an early-bird promotional order, atomically reserve a promotional slot
-      if (isPromotional && insertedOrder?.id) {
-        try {
-          // Reserve the lowest available slot (status = 'released' or expired reservation)
-          const nowIso = new Date().toISOString();
-          const { data: availableSlot } = await supabaseAdmin
+      // Optimistic concurrency fallback if RPC is not yet compiled in DB
+      if (reservedSlotNumber === null) {
+        const nowIso = new Date().toISOString();
+        const { data: availableSlot } = await supabaseAdmin
+          .from("promotional_slots")
+          .select("slot_number")
+          .or(`status.eq.released,and(status.eq.reserved,expires_at.lt.${nowIso})`)
+          .order("slot_number", { ascending: true })
+          .limit(1)
+          .maybeSingle();
+
+        if (availableSlot?.slot_number) {
+          const expiresAt = new Date(Date.now() + 30 * 60 * 1000).toISOString();
+          const { error: reserveUpdateErr } = await supabaseAdmin
             .from("promotional_slots")
-            .select("slot_number")
-            .or(`status.eq.released,and(status.eq.reserved,expires_at.lt.${nowIso})`)
-            .order("slot_number", { ascending: true })
-            .limit(1)
-            .maybeSingle();
+            .update({
+              order_id: insertedOrder.id,
+              user_id: authUser.id,
+              status: "reserved",
+              reserved_at: nowIso,
+              expires_at: expiresAt,
+              claimed_at: null,
+            })
+            .eq("slot_number", availableSlot.slot_number)
+            .or(`status.eq.released,and(status.eq.reserved,expires_at.lt.${nowIso})`);
 
-          if (availableSlot?.slot_number) {
-            const expiresAt = new Date(Date.now() + 30 * 60 * 1000).toISOString();
-            await supabaseAdmin
-              .from("promotional_slots")
-              .update({
-                order_id: insertedOrder.id,
-                user_id: authUser.id,
-                status: "reserved",
-                reserved_at: nowIso,
-                expires_at: expiresAt,
-                claimed_at: null,
-              })
-              .eq("slot_number", availableSlot.slot_number);
-
+          if (!reserveUpdateErr) {
+            reservedSlotNumber = availableSlot.slot_number;
             await supabaseAdmin
               .from("payment_orders")
-              .update({ promotional_slot_number: availableSlot.slot_number })
+              .update({ promotional_slot_number: reservedSlotNumber })
               .eq("id", insertedOrder.id);
           }
-        } catch (slotErr) {
-          console.warn("[Promotional Slot Reservation Warning]:", slotErr);
         }
       }
-    } catch (orderRecordErr) {
-      console.warn("[Payment Order Record Exception]:", orderRecordErr);
+
+      // INVARIANT: If promotional order has no inventory remaining, roll back order and reject
+      if (reservedSlotNumber === null) {
+        await supabaseAdmin
+          .from("payment_orders")
+          .update({ status: "failed", updated_at: new Date().toISOString() })
+          .eq("id", insertedOrder.id);
+
+        return NextResponse.json(
+          {
+            error: "Promotional launch offer slots have just sold out. Please refresh to checkout with standard pricing.",
+            code: "PROMOTIONAL_SLOTS_EXHAUSTED",
+          },
+          { status: 409 }
+        );
+      }
     }
 
     return NextResponse.json({
@@ -560,9 +644,10 @@ export async function POST(req: NextRequest) {
       key_id: orderResult.keyId,
       keyId: orderResult.keyId,
       isSimulated: orderResult.isSimulated,
-      tier: "all_access_pass",
+      tier: selectedPlan.tier,
       isPromotional,
       remainingSlots: pricing.remainingPromotionalSlots,
+      promotionalSlotNumber: reservedSlotNumber,
     });
   } catch (error: any) {
     console.error("[Payments API Handler Error]:", error);
