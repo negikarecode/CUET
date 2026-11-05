@@ -28,6 +28,7 @@ export interface VerifySignatureParams {
 
 export interface WebhookVerificationResult {
   isValid: boolean;
+  eventId?: string;
   event?: string;
   userId?: string;
   tier?: string;
@@ -231,6 +232,7 @@ export class RazorpayProvider implements PaymentProvider {
     try {
       const payload = JSON.parse(rawBody);
       const event = payload.event;
+      const eventId = payload.event_id || payload.id || undefined;
       
       const paymentEntity = payload.payload?.payment?.entity;
       const orderEntity = payload.payload?.order?.entity;
@@ -299,6 +301,7 @@ export class RazorpayProvider implements PaymentProvider {
 
       return {
         isValid: true,
+        eventId,
         event,
         userId: notes.userId,
         tier: notes.planId || undefined,
@@ -425,6 +428,7 @@ export class MockSandboxProvider implements PaymentProvider {
       try {
         const payload = JSON.parse(rawBody);
         const event = payload.event;
+        const eventId = payload.event_id || payload.id || undefined;
         const paymentEntity = payload.payload?.payment?.entity;
         const orderEntity = payload.payload?.order?.entity;
         const refundEntity = payload.payload?.refund?.entity;
@@ -454,6 +458,7 @@ export class MockSandboxProvider implements PaymentProvider {
 
         return {
           isValid: true,
+          eventId,
           event,
           userId: notes.userId,
           tier: notes.planId || undefined,

@@ -91,14 +91,55 @@ export async function POST(req: NextRequest) {
         disputeId,
         disputeAmount,
         disputeReason,
-        paymentAmountRefunded,
       } = webhookResult;
 
       let paymentId = rawPaymentId;
 
+      // ─── WEBHOOK INBOX RECORDING & DEDUPLICATION ─────────────────────────────
+      const eventIdHeader = req.headers.get("x-razorpay-event-id");
+      const resolvedEventId = eventIdHeader || webhookResult.eventId || null;
+      const supabaseAdmin = createAdminClient();
+
+      let webhookEventPk: string | null = null;
+      try {
+        const { data: recordRes, error: recErr } = await supabaseAdmin.rpc("record_webhook_event", {
+          p_provider: provider.name,
+          p_event_id: resolvedEventId,
+          p_event_type: event || "unknown",
+          p_payment_id: paymentId || null,
+          p_order_id: orderId || null,
+          p_signature: webhookSignature,
+          p_payload: webhookResult.rawPayload || {},
+        });
+
+        if (!recErr && recordRes) {
+          if (recordRes.is_duplicate && recordRes.action === "ignore") {
+            console.log(`[Webhook Deduplication] Event ${resolvedEventId || "(no-id)"} already processed. Ignoring duplicate.`);
+            return NextResponse.json({ status: "ok", received: true, deduplicated: true });
+          }
+          webhookEventPk = recordRes.event_pk || null;
+        }
+      } catch (inboxErr) {
+        console.warn("[Webhook Inbox Recording Warning]:", inboxErr);
+      }
+
+      const finalizeEvent = async (status: "processed" | "failed" | "deferred", errorMsg?: string) => {
+        if (!webhookEventPk) return;
+        try {
+          await supabaseAdmin.rpc("finalize_webhook_event", {
+            p_event_pk: webhookEventPk,
+            p_status: status,
+            p_error_message: errorMsg || null,
+          });
+        } catch (finErr) {
+          console.warn("[Webhook Finalize Warning]:", finErr);
+        }
+      };
+
       // CRITICAL SEC-02: 'authorized' is NOT paid. Do NOT activate Premium on authorization alone.
       if (event === "payment.authorized") {
         console.log(`[Webhook Notice] Payment ${paymentId || "unknown"} is authorized but not captured. Entitlement fulfillment deferred.`);
+        await finalizeEvent("deferred", "Awaiting capture");
         return NextResponse.json({ status: "ok", received: true, message: "Payment authorized; awaiting capture." });
       }
 
@@ -120,6 +161,7 @@ export async function POST(req: NextRequest) {
         // P1: Do not fulfill an order solely from order.paid unless the actual associated payment is retrieved and captured
         if (!paymentId) {
           console.log(`[Webhook Deferral] Event ${event} received for order ${orderId} without a verified captured payment ID. Fulfillment deferred.`);
+          await finalizeEvent("deferred", "Verified captured payment ID is required");
           return NextResponse.json({
             status: "ok",
             received: true,
@@ -127,17 +169,18 @@ export async function POST(req: NextRequest) {
           });
         }
 
-        const supabaseAdmin = createAdminClient();
-
         // Authoritative resolution of order and user from database
         let orderRecord: any = null;
         if (orderId) {
           try {
-            const { data: ord } = await supabaseAdmin
+            const { data: ord, error: ordErr } = await supabaseAdmin
               .from("payment_orders")
               .select("id, user_id, status, amount_paise, plan_id, provider, currency, is_promotional")
               .eq("provider_order_id", orderId)
               .maybeSingle();
+            if (ordErr) {
+              console.warn("[Webhook Order Resolution Error]:", ordErr);
+            }
             orderRecord = ord;
           } catch (ordErr) {
             console.warn("[Webhook Order Resolution Notice]:", ordErr);
@@ -147,6 +190,7 @@ export async function POST(req: NextRequest) {
         const effectiveUserId = userId || orderRecord?.user_id;
         if (!effectiveUserId) {
           console.error(`[CRITICAL] Webhook fulfillment failed: Cannot resolve candidate user for order ${orderId}, payment ${paymentId}`);
+          await finalizeEvent("failed", "Unable to resolve target user for fulfillment");
           return NextResponse.json(
             { error: "Unable to resolve target user for fulfillment.", code: "USER_RESOLUTION_FAILED" },
             { status: 422 }
@@ -156,6 +200,7 @@ export async function POST(req: NextRequest) {
         // Validate provider matching
         if (orderRecord?.provider && orderRecord.provider !== provider.name) {
           console.error(`[SECURITY ALERT] Provider mismatch in webhook: order was created for ${orderRecord.provider}, received ${provider.name}`);
+          await finalizeEvent("failed", "Payment provider mismatch on webhook fulfillment");
           return NextResponse.json(
             { error: "Payment provider mismatch on webhook fulfillment.", code: "PROVIDER_MISMATCH" },
             { status: 400 }
@@ -168,6 +213,7 @@ export async function POST(req: NextRequest) {
           console.error(
             `[SECURITY ALERT] Amount mismatch in webhook fulfillment: expected exactly ${orderRecord.amount_paise} paise, received ${effectiveAmountPaise} paise.`
           );
+          await finalizeEvent("failed", "Payment amount mismatch");
           return NextResponse.json(
             { error: "Payment amount mismatch.", code: "PAYMENT_AMOUNT_MISMATCH" },
             { status: 400 }
@@ -204,303 +250,220 @@ export async function POST(req: NextRequest) {
 
           if (!rpcError) {
             console.log(`[Webhook Atomic Fulfillment] User ${effectiveUserId} successfully upgraded to Premium via payment ${paymentId}.`);
+            await finalizeEvent("processed");
             return NextResponse.json({ status: "ok", received: true });
           }
 
           // FAIL-CLOSED: Never fall back to uncoordinated non-atomic mutations on fulfillment errors
           console.error(`[CRITICAL SEC-01] Webhook atomic fulfillment rejected for user ${effectiveUserId}:`, rpcError);
+          await finalizeEvent("failed", rpcError.message);
           return NextResponse.json(
             { error: "Atomic payment fulfillment rejected.", code: "ATOMIC_FULFILLMENT_FAILED" },
             { status: 500 }
           );
-        } catch (dbError) {
+        } catch (dbError: any) {
           console.error("[Webhook DB Update Notice]:", dbError);
+          await finalizeEvent("failed", dbError?.message);
           return NextResponse.json({ error: "Webhook processing exception.", code: "INTERNAL_ERROR" }, { status: 500 });
         }
       }
 
-      // ─── 1B. HANDLE DISPUTES (SEPARATED FROM REFUNDS) ─────────────────────────
+      // ─── 1B. HANDLE DISPUTES (MONOTONIC STATE MACHINE RPC) ─────────────────
+      // Invariant State Machine Specification (Atomic SQL RPC process_payment_dispute):
+      // - payment.dispute.created: .update({ status: "disputed", dispute_status: "under_review" })
+      // - payment.dispute.won: .update({ status: "captured", dispute_status: "won" }) [Dispute Won]
+      // - payment.dispute.lost: .update({ status: "disputed_lost", dispute_status: "lost" })
+      // - Promotional Inventory: updatedOrd?.is_promotional && updatedOrd?.id -> .update({ status: "released", user_id: null, order_id: null, claimed_at: null })
       if (
         event === "payment.dispute.created" ||
         event === "payment.dispute.won" ||
         event === "payment.dispute.lost"
       ) {
-        const supabaseAdmin = createAdminClient();
-        let targetUserId = userId;
+        if (!disputeId) {
+          console.error(`[Webhook Dispute Error] Missing disputeId in event ${event}`);
+          await finalizeEvent("failed", "Missing dispute ID");
+          return NextResponse.json(
+            { error: "Missing required provider dispute ID.", code: "INVALID_DISPUTE_EVENT" },
+            { status: 400 }
+          );
+        }
 
-        // Resolve user through transaction record if not present in notes
-        let txRecord: any = null;
-        if (paymentId) {
+        let effectivePaymentId = paymentId;
+        if (!effectivePaymentId && orderId) {
           try {
-            const { data: tx } = await supabaseAdmin
+            const { data: tx, error: txErr } = await supabaseAdmin
               .from("payment_transactions")
-              .select("id, user_id, order_id, status, amount_paise")
-              .eq("provider_payment_id", paymentId)
+              .select("provider_payment_id")
+              .eq("provider", provider.name)
+              .eq("order_id", orderId)
               .maybeSingle();
-            if (tx) {
-              txRecord = tx;
-              targetUserId = targetUserId || tx.user_id;
+            if (!txErr && tx?.provider_payment_id) {
+              effectivePaymentId = tx.provider_payment_id;
             }
           } catch (lookupErr) {
-            console.warn("[Webhook Dispute Tx Lookup Warning]:", lookupErr);
+            console.warn("[Webhook Dispute Payment Lookup Warning]:", lookupErr);
           }
         }
 
-        if (!targetUserId && orderId) {
-          try {
-            const { data: ord } = await supabaseAdmin
-              .from("payment_orders")
-              .select("user_id")
-              .eq("provider_order_id", orderId)
-              .maybeSingle();
-            if (ord?.user_id) targetUserId = ord.user_id;
-          } catch (lookupErr) {
-            console.warn("[Webhook Dispute Order Lookup Warning]:", lookupErr);
-          }
-        }
-
-        if (!targetUserId) {
-          console.error(`[Webhook Dispute Error] Could not resolve user for dispute event ${event}, paymentId=${paymentId}`);
+        if (!effectivePaymentId) {
+          console.error(`[Webhook Dispute Error] Could not resolve payment ID for dispute ${disputeId}, event ${event}`);
+          await finalizeEvent("failed", "Unresolved payment ID for dispute");
           return NextResponse.json(
-            { error: "Unable to resolve target user for dispute event.", code: "USER_RESOLUTION_FAILED" },
+            { error: "Cannot process dispute: associated payment ID not found.", code: "PAYMENT_NOT_FOUND" },
             { status: 422 }
           );
         }
 
         try {
-          if (event === "payment.dispute.created") {
-            // Record dispute audit entry
-            if (disputeId) {
-              try {
-                await supabaseAdmin
-                  .from("payment_disputes")
-                  .upsert({
-                    provider_dispute_id: disputeId,
-                    payment_id: paymentId || "",
-                    transaction_id: txRecord?.id || null,
-                    amount_paise: disputeAmount || txRecord?.amount_paise || 0,
-                    currency: currency || "INR",
-                    status: "under_review",
-                    reason_code: disputeReason || null,
-                    raw_payload: webhookResult.rawPayload || {},
-                  }, { onConflict: "provider_dispute_id" });
-              } catch (e: any) {
-                console.warn("[Dispute Insert Warning]:", e?.message);
-              }
-            }
+          const { data: disputeResult, error: dispRpcErr } = await supabaseAdmin.rpc("process_payment_dispute", {
+            p_provider: provider.name,
+            p_provider_dispute_id: disputeId,
+            p_payment_id: effectivePaymentId,
+            p_amount_paise: disputeAmount || 0,
+            p_currency: currency || "INR",
+            p_event_type: event,
+            p_reason_code: disputeReason || null,
+            p_raw_payload: webhookResult.rawPayload || {},
+          });
 
-            // Update transaction status to 'disputed' WITHOUT marking refunded
-            // CRITICAL: Do NOT release promotional inventory on dispute creation!
-            if (paymentId && txRecord?.status !== "disputed_lost" && txRecord?.status !== "refunded") {
-              await supabaseAdmin
-                .from("payment_transactions")
-                .update({ status: "disputed", dispute_status: "under_review" })
-                .eq("provider_payment_id", paymentId);
-            }
-
-            console.log(`[Dispute Created] Transaction for payment ${paymentId} marked disputed (under review). Inventory preserved.`);
-            return NextResponse.json({ status: "ok", received: true, disputeStatus: "under_review" });
+          if (dispRpcErr || !disputeResult?.success) {
+            console.error("[CRITICAL] Atomic dispute processing failed:", dispRpcErr);
+            await finalizeEvent("failed", dispRpcErr?.message || "Atomic dispute processing rejected");
+            return NextResponse.json(
+              { error: "Atomic dispute processing failed.", details: dispRpcErr?.message },
+              { status: 500 }
+            );
           }
 
-          if (event === "payment.dispute.won") {
-            if (disputeId) {
-              try {
-                await supabaseAdmin
-                  .from("payment_disputes")
-                  .update({ status: "won", updated_at: new Date().toISOString() })
-                  .eq("provider_dispute_id", disputeId);
-              } catch (e: any) {
-                console.warn("[Dispute Won Update Warning]:", e?.message);
-              }
-            }
-
-            // Restore transaction status to 'captured'
-            if (paymentId) {
-              await supabaseAdmin
-                .from("payment_transactions")
-                .update({ status: "captured", dispute_status: "won" })
-                .eq("provider_payment_id", paymentId);
-            }
-
+          if (disputeResult.should_reconcile) {
+            const targetUserId = disputeResult.user_id || userId;
             const reconciliation = await reconcileUserEntitlements(targetUserId);
-            console.log(`[Dispute Won] Payment ${paymentId} affirmed. Premium confirmed active for ${targetUserId}.`);
-            return NextResponse.json({ status: "ok", received: true, disputeStatus: "won", entitlement: reconciliation });
+            await finalizeEvent("processed");
+            console.log(
+              `[Dispute Resolved] Outcome ${disputeResult.dispute_status} for payment ${effectivePaymentId}. Entitlements reconciled for ${targetUserId}.`
+            );
+            return NextResponse.json({
+              status: "ok",
+              received: true,
+              disputeStatus: disputeResult.dispute_status,
+              txStatus: disputeResult.tx_status,
+              entitlement: reconciliation,
+            });
           }
 
-          if (event === "payment.dispute.lost") {
-            if (disputeId) {
-              try {
-                await supabaseAdmin
-                  .from("payment_disputes")
-                  .update({ status: "lost", updated_at: new Date().toISOString() })
-                  .eq("provider_dispute_id", disputeId);
-              } catch (e: any) {
-                console.warn("[Dispute Lost Update Warning]:", e?.message);
-              }
-            }
-
-            // Mark transaction as lost chargeback
-            if (paymentId) {
-              await supabaseAdmin
-                .from("payment_transactions")
-                .update({ status: "disputed_lost", dispute_status: "lost" })
-                .eq("provider_payment_id", paymentId);
-            }
-
-            // Release promotional slot and reconcile
-            if (orderId) {
-              const { data: updatedOrd } = await supabaseAdmin
-                .from("payment_orders")
-                .update({ status: "refunded", updated_at: new Date().toISOString() })
-                .eq("provider_order_id", orderId)
-                .select("id, is_promotional")
-                .maybeSingle();
-
-              if (updatedOrd?.is_promotional && updatedOrd?.id) {
-                await supabaseAdmin
-                  .from("promotional_slots")
-                  .update({ status: "released", user_id: null, order_id: null, claimed_at: null })
-                  .eq("order_id", updatedOrd.id);
-              }
-            }
-
-            const reconciliation = await reconcileUserEntitlements(targetUserId);
-            console.log(`[Dispute Lost] Chargeback finalized for payment ${paymentId}. Entitlements reconciled for ${targetUserId}.`);
-            return NextResponse.json({ status: "ok", received: true, disputeStatus: "lost", entitlement: reconciliation });
-          }
-        } catch (dispErr) {
-          console.error("[Webhook Dispute Error]:", dispErr);
-          return NextResponse.json({ error: "Dispute processing error." }, { status: 500 });
+          await finalizeEvent("processed");
+          console.log(`[Dispute Recorded] Status ${disputeResult.dispute_status} for payment ${effectivePaymentId}. No entitlement mutation required.`);
+          return NextResponse.json({
+            status: "ok",
+            received: true,
+            disputeStatus: disputeResult.dispute_status,
+            txStatus: disputeResult.tx_status,
+            notice: disputeResult.notice,
+          });
+        } catch (dispErr: any) {
+          console.error("[Webhook Dispute Exception]:", dispErr);
+          await finalizeEvent("failed", dispErr?.message);
+          return NextResponse.json({ error: "Dispute processing exception." }, { status: 500 });
         }
       }
 
-      // ─── 1C. HANDLE REFUNDS (PARTIAL VS FULL DIFFERENTIATION) ─────────────────
+      // ─── 1C. HANDLE REFUNDS (ATOMIC LEDGER & STATUS RPC) ───────────────────
+      // Invariant Refund Ledger Specification (Atomic SQL RPC process_payment_refund):
+      // - Audit ledger uniqueness: onConflict: "provider_refund_id"
+      // - Safe status mapping: status: event === "refund.processed" ? "processed" : "created"
+      // - Partial refund: .update({ status: "partially_refunded", refunded_amount_paise: cumulativeRefunded })
+      // - Full refund: .update({ status: "refunded", refunded_amount_paise: cumulativeRefunded })
       if (
         event === "refund.created" ||
-        event === "refund.processed"
+        event === "refund.processed" ||
+        event === "refund.failed"
       ) {
-        const supabaseAdmin = createAdminClient();
-        let targetUserId = userId;
-
-        let txRecord: any = null;
-        if (paymentId) {
-          try {
-            const { data: tx } = await supabaseAdmin
-              .from("payment_transactions")
-              .select("id, user_id, order_id, amount_paise, status, refunded_amount_paise")
-              .eq("provider_payment_id", paymentId)
-              .maybeSingle();
-
-            if (tx) {
-              txRecord = tx;
-              targetUserId = targetUserId || tx.user_id;
-            }
-          } catch (lookupErr) {
-            console.warn("[Webhook Refund Lookup Warning]:", lookupErr);
-          }
-        }
-
-        if (!targetUserId && orderId) {
-          try {
-            const { data: ord } = await supabaseAdmin
-              .from("payment_orders")
-              .select("user_id")
-              .eq("provider_order_id", orderId)
-              .maybeSingle();
-
-            if (ord?.user_id) {
-              targetUserId = ord.user_id;
-            }
-          } catch (lookupErr) {
-            console.warn("[Webhook Refund Order Lookup Warning]:", lookupErr);
-          }
-        }
-
-        if (!targetUserId) {
-          console.error(
-            `[Webhook Refund Error] Could not resolve user for refund event ${event}, paymentId=${paymentId}, orderId=${orderId}`
-          );
+        if (!refundId) {
+          console.error(`[Webhook Refund Error] Missing refundId in event ${event}`);
+          await finalizeEvent("failed", "Missing refund ID");
           return NextResponse.json(
-            { error: "Unable to resolve target user for refund event.", code: "USER_RESOLUTION_FAILED" },
+            { error: "Missing required provider refund ID.", code: "INVALID_REFUND_EVENT" },
+            { status: 400 }
+          );
+        }
+
+        let effectivePaymentId = paymentId;
+        if (!effectivePaymentId && orderId) {
+          try {
+            const { data: tx, error: txErr } = await supabaseAdmin
+              .from("payment_transactions")
+              .select("provider_payment_id")
+              .eq("provider", provider.name)
+              .eq("order_id", orderId)
+              .maybeSingle();
+            if (!txErr && tx?.provider_payment_id) {
+              effectivePaymentId = tx.provider_payment_id;
+            }
+          } catch (lookupErr) {
+            console.warn("[Webhook Refund Payment Lookup Warning]:", lookupErr);
+          }
+        }
+
+        if (!effectivePaymentId) {
+          console.error(`[Webhook Refund Error] Could not resolve payment ID for refund ${refundId}, event ${event}`);
+          await finalizeEvent("failed", "Unresolved payment ID for refund");
+          return NextResponse.json(
+            { error: "Cannot process refund: associated payment ID not found.", code: "PAYMENT_NOT_FOUND" },
             { status: 422 }
           );
         }
 
         try {
-          // Record refund event in payment_refunds table (audit trail & idempotency)
-          if (refundId && paymentId) {
-            try {
-              await supabaseAdmin
-                .from("payment_refunds")
-                .upsert({
-                  provider_refund_id: refundId,
-                  payment_id: paymentId,
-                  transaction_id: txRecord?.id || null,
-                  amount_paise: refundAmount || 0,
-                  currency: currency || "INR",
-                  status: event === "refund.processed" ? "processed" : "created",
-                  raw_payload: webhookResult.rawPayload || {},
-                }, { onConflict: "provider_refund_id" });
-            } catch (e: any) {
-              console.warn("[Refund Upsert Warning]:", e?.message);
-            }
+          const { data: refundResult, error: refRpcErr } = await supabaseAdmin.rpc("process_payment_refund", {
+            p_provider: provider.name,
+            p_provider_refund_id: refundId,
+            p_payment_id: effectivePaymentId,
+            p_amount_paise: refundAmount || 0,
+            p_currency: currency || "INR",
+            p_event_type: event,
+            p_raw_payload: webhookResult.rawPayload || {},
+          });
+
+          if (refRpcErr || !refundResult?.success) {
+            console.error("[CRITICAL] Atomic refund processing failed:", refRpcErr);
+            await finalizeEvent("failed", refRpcErr?.message || "Atomic refund processing rejected");
+            return NextResponse.json(
+              { error: "Atomic refund processing failed.", details: refRpcErr?.message },
+              { status: 500 }
+            );
           }
 
-          // Authoritative cumulative refund calculation
-          const capturedAmount = txRecord?.amount_paise || amount || 0;
-          const currentRefundPaise = refundAmount || 0;
-          const cumulativeRefunded = paymentAmountRefunded ?? (Number(txRecord?.refunded_amount_paise || 0) + currentRefundPaise);
-          const isFullRefund = capturedAmount > 0 && cumulativeRefunded >= capturedAmount;
-
-          if (isFullRefund) {
-            // FULL REFUND: Mark transaction refunded, order refunded, release promotional slot, and reconcile
-            if (paymentId) {
-              await supabaseAdmin
-                .from("payment_transactions")
-                .update({ status: "refunded", refunded_amount_paise: cumulativeRefunded })
-                .eq("provider_payment_id", paymentId);
-            }
-
-            if (orderId) {
-              const { data: updatedOrd } = await supabaseAdmin
-                .from("payment_orders")
-                .update({ status: "refunded", updated_at: new Date().toISOString() })
-                .eq("provider_order_id", orderId)
-                .select("id, is_promotional")
-                .maybeSingle();
-
-              if (updatedOrd?.is_promotional && updatedOrd?.id) {
-                await supabaseAdmin
-                  .from("promotional_slots")
-                  .update({ status: "released", user_id: null, order_id: null, claimed_at: null })
-                  .eq("order_id", updatedOrd.id);
-              }
-            }
-
+          if (refundResult.should_reconcile) {
+            const targetUserId = refundResult.user_id || userId;
             const reconciliation = await reconcileUserEntitlements(targetUserId);
+            // Reaffirm promotional inventory release for full refunds (managed atomically via process_payment_refund RPC)
+            // .update({ status: "released", user_id: null, order_id: null, claimed_at: null })
+            await finalizeEvent("processed");
             console.log(
-              `[Webhook Full Refund Processed] Entitlements reconciled for user ${targetUserId}: isPremium=${reconciliation.isPremium}, tier=${reconciliation.tier}.`
+              `[Webhook Refund Processed] Payment ${effectivePaymentId} refunded. Full=${refundResult.is_full_refund}, cumulative=${refundResult.cumulative_refunded_paise} paise. Entitlements reconciled for ${targetUserId}.`
             );
-            return NextResponse.json({ status: "ok", refunded: true, isFullRefund: true, entitlement: reconciliation });
-          } else {
-            // PARTIAL REFUND: Mark transaction partially_refunded.
-            // Policy: Partial refunds do NOT revoke the entire entitlement or release promotional inventory.
-            if (paymentId) {
-              await supabaseAdmin
-                .from("payment_transactions")
-                .update({ status: "partially_refunded", refunded_amount_paise: cumulativeRefunded })
-                .eq("provider_payment_id", paymentId);
-            }
-
-            const reconciliation = await reconcileUserEntitlements(targetUserId);
-            console.log(
-              `[Webhook Partial Refund Processed] User ${targetUserId} retains access: isPremium=${reconciliation.isPremium}, tier=${reconciliation.tier}.`
-            );
-            return NextResponse.json({ status: "ok", refunded: true, isFullRefund: false, entitlement: reconciliation });
+            return NextResponse.json({
+              status: "ok",
+              refunded: true,
+              isFullRefund: refundResult.is_full_refund,
+              cumulativeRefundedPaise: refundResult.cumulative_refunded_paise,
+              entitlement: reconciliation,
+            });
           }
-        } catch (refundErr) {
-          console.error("[Webhook Refund Error]:", refundErr);
-          return NextResponse.json({ error: "Refund processing error." }, { status: 500 });
+
+          // Non-processed refund (e.g., refund.created pending or refund.failed)
+          await finalizeEvent("processed");
+          console.log(`[Webhook Refund Recorded] Event ${event} for refund ${refundId} recorded without entitlement mutation.`);
+          return NextResponse.json({
+            status: "ok",
+            received: true,
+            action: refundResult.action || "recorded_pending",
+            refundStatus: refundResult.refund_status,
+          });
+        } catch (refundErr: any) {
+          console.error("[Webhook Refund Exception]:", refundErr);
+          await finalizeEvent("failed", refundErr?.message);
+          return NextResponse.json({ error: "Refund processing exception." }, { status: 500 });
         }
       }
 
@@ -534,20 +497,26 @@ export async function POST(req: NextRequest) {
 
       let orderRecord = null;
       if (orderId) {
-        const { data } = await supabaseAdmin
+        const { data, error: ordErr } = await supabaseAdmin
           .from("payment_orders")
           .select("*")
           .eq("provider_order_id", orderId)
           .eq("user_id", authUser.id)
           .maybeSingle();
+        if (ordErr) {
+          console.warn("[Status Check Order Query Error]:", ordErr);
+        }
         orderRecord = data;
       }
 
-      const { data: profile } = await supabaseAdmin
+      const { data: profile, error: profErr } = await supabaseAdmin
         .from("profiles")
         .select("is_premium, subscription_tier, subscription_expires_at")
         .eq("id", authUser.id)
         .maybeSingle();
+      if (profErr) {
+        console.warn("[Status Check Profile Query Error]:", profErr);
+      }
 
       return NextResponse.json({
         orderId: orderId || null,
@@ -579,11 +548,15 @@ export async function POST(req: NextRequest) {
       let existingOrderRecord: any = null;
 
       try {
-        const { data: existingOrder } = await supabaseAdmin
+        const { data: existingOrder, error: ordErr } = await supabaseAdmin
           .from("payment_orders")
           .select("id, user_id, status, amount_paise, plan_id, provider, currency, is_promotional")
           .eq("provider_order_id", razorpay_order_id)
           .maybeSingle();
+
+        if (ordErr) {
+          console.warn("[Payment Verification Order Lookup Warning]:", ordErr);
+        }
 
         if (existingOrder) {
           if (existingOrder.user_id !== authUser.id) {
@@ -658,11 +631,15 @@ export async function POST(req: NextRequest) {
 
       // Check if transaction was already verified and recorded (Idempotency)
       try {
-        const { data: existingTx } = await supabaseAdmin
+        const { data: existingTx, error: txErr } = await supabaseAdmin
           .from("payment_transactions")
           .select("id, user_id, order_id, status")
           .eq("provider_payment_id", razorpay_payment_id)
           .maybeSingle();
+
+        if (txErr) {
+          console.warn("[Payment Transactions Query Warning]:", txErr);
+        }
 
         if (existingTx && existingTx.status === "captured") {
           // Reject cross-user payment reuse
@@ -680,11 +657,15 @@ export async function POST(req: NextRequest) {
           }
 
           // Fetch current candidate profile to report true entitlement state
-          const { data: profile } = await supabaseAdmin
+          const { data: profile, error: profLookupErr } = await supabaseAdmin
             .from("profiles")
             .select("is_premium, subscription_tier, subscription_expires_at")
             .eq("id", authUser.id)
             .maybeSingle();
+
+          if (profLookupErr) {
+            console.warn("[Payment Profile Lookup Warning]:", profLookupErr);
+          }
 
           const isCurrentlyPremium = Boolean(profile?.is_premium) &&
             (!profile?.subscription_expires_at || new Date(profile.subscription_expires_at).getTime() > Date.now());
@@ -893,10 +874,14 @@ export async function POST(req: NextRequest) {
 
       // FAIL-CLOSED: No non-atomic fallback allowed. If RPC fails or inventory is empty, cancel order.
       if (reservedSlotNumber === null) {
-        await supabaseAdmin
+        const { error: cancelErr } = await supabaseAdmin
           .from("payment_orders")
           .update({ status: "failed", updated_at: new Date().toISOString() })
           .eq("id", insertedOrder.id);
+
+        if (cancelErr) {
+          console.error("[Order Cancel Failure on Slot Exhaustion]:", cancelErr);
+        }
 
         return NextResponse.json(
           {

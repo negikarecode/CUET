@@ -1,7 +1,8 @@
-# CUETMATE — PAYMENT TEST MATRIX & VERIFICATION REPORT (PASS 1 & PASS 2)
+# CUETMATE — PAYMENT TEST MATRIX & VERIFICATION REPORT (PASS 1, PASS 2 & PASS 3)
 
 **Application:** CUETMate (`cuetmate.vercel.app`)  
 **Test Suites:**
+- [`tests/payment-security-pass3-postgres.test.ts`](file:///home/aryan/Documents/CUET%20(copy)/tests/payment-security-pass3-postgres.test.ts) (15/15 Passed — Real PostgreSQL 16)
 - [`tests/payment-remediation-pass2-behavioral.test.ts`](file:///home/aryan/Documents/CUET%20(copy)/tests/payment-remediation-pass2-behavioral.test.ts) (20/20 Passed)
 - [`tests/payment-infrastructure-remediation.test.ts`](file:///home/aryan/Documents/CUET%20(copy)/tests/payment-infrastructure-remediation.test.ts) (32/32 Passed)
 - [`__tests__/atomic-payment-scenarios.test.ts`](file:///home/aryan/Documents/CUET%20(copy)/__tests__/atomic-payment-scenarios.test.ts) (14/14 Passed)
@@ -10,13 +11,37 @@
 - [`__tests__/production-entitlements-sessions.test.ts`](file:///home/aryan/Documents/CUET%20(copy)/__tests__/production-entitlements-sessions.test.ts) (43/43 Passed)
 
 **Execution Date:** November 6, 2026  
-**Total Tests Executed:** 150 Tests  
-**Total Tests Passed:** 150 Tests (100% Success Rate)  
+**Total Tests Executed:** 165 Tests  
+**Total Tests Passed:** 165 Tests (100% Success Rate)  
 **Total Failures:** 0  
 
 ---
 
-## 1. Pass 2 Behavioral Invariant Test Matrix (20 Required Scenarios)
+## 1. Pass 3 Real PostgreSQL 16 Integration Suite (15 Required Scenarios)
+
+Tested against live local PostgreSQL 16 server (`localhost:54338`) using native `pg` driver and connection pooling.
+
+| # | Test Scenario | Target Function / RPC | Verification Method | Status |
+| :-: | :--- | :--- | :--- | :-: |
+| **1.1** | `refund.created` non-revocation | `process_payment_refund` | Records refund as `created`, preserves `captured` tx status, `should_reconcile = false`, preserves Premium | **PASS** |
+| **1.2** | Duplicate refund webhook idempotency | `process_payment_refund` | Replay of same `provider_refund_id` never increases cumulative refund twice | **PASS** |
+| **1.3** | Multiple partial refunds accumulation | `process_payment_refund` | Cumulative sum in ledger computed authoritatively; full refund revokes Premium | **PASS** |
+| **1.4** | Out-of-order refund event delivery | `process_payment_refund` | `refund.created` arriving after `refund.processed` cannot downgrade ledger status | **PASS** |
+| **2.1** | Dispute creation non-refund invariant | `process_payment_dispute` | Dispute created updates status to `disputed`, does NOT refund or release inventory | **PASS** |
+| **2.2** | Dispute won affirmation | `process_payment_dispute` | Dispute won restores transaction to `captured`, confirms active Premium | **PASS** |
+| **2.3** | Dispute won on refunded transaction | `process_payment_dispute` | **CRITICAL:** Dispute won strictly CANNOT restore an already refunded transaction | **PASS** |
+| **2.4** | Dispute lost chargeback revocation | `process_payment_dispute` | Transitions to `disputed_lost`, releases promotional inventory, revokes Premium | **PASS** |
+| **2.5** | Delayed event monotonic guard | `process_payment_dispute` | Delayed `under_review` event cannot overwrite finalized `won` or `lost` dispute | **PASS** |
+| **3.1** | Webhook inbox event recording | `record_webhook_event` | Inserts record into `payment_webhook_events` with status `processing` | **PASS** |
+| **3.2** | Webhook inbox replay deduplication | `record_webhook_event` | Replay of processed event returns `is_duplicate: true, action: 'ignore'` | **PASS** |
+| **4.1** | 5 concurrent connections for 2 slots | `reserve_promotional_slot` | Real pool race: exactly 2 distinct slots allocated, 3 clean rejections, 0 duplicates | **PASS** |
+| **4.2** | Atomic rollback on slot exhaustion | `fulfill_payment_order` | Slot exhaustion aborts transaction, rolls back captured transaction insertion | **PASS** |
+| **5.1** | Consecutive 1-year purchases stacking | `reconcile_user_entitlements` | Chronological stacking extends duration to ~2 years; refunding one preserves survivor | **PASS** |
+| **5.2** | Multi-purchase chargeback survival | `reconcile_user_entitlements` | User with 1 valid purchase and 1 `disputed_lost` retains Premium from valid purchase | **PASS** |
+
+---
+
+## 2. Pass 2 Behavioral Invariant Test Matrix (20 Required Scenarios)
 
 | # | Test Scenario | Target Layer | Verification Method | Status |
 | :-: | :--- | :--- | :--- | :-: |
@@ -43,7 +68,7 @@
 
 ---
 
-## 2. Pass 1 Remediation Test Matrix (32 Scenarios)
+## 3. Pass 1 Remediation Test Matrix (32 Scenarios)
 
 | Category | Test Case Name | Target File / Function | Result |
 | :--- | :--- | :--- | :---: |
@@ -82,26 +107,30 @@
 
 ---
 
-## 3. Execution Verification
+## 4. Execution Verification Commands
 
 ```bash
-# Behavioral Pass 2 Test Suite (20 Scenarios)
+# Pass 3 Real PostgreSQL 16 Integration Suite (15 Scenarios)
+npx tsx tests/payment-security-pass3-postgres.test.ts
+# Result: 15 passed, 0 failed
+
+# Pass 2 Behavioral Invariant Test Suite (20 Scenarios)
 npx tsx tests/payment-remediation-pass2-behavioral.test.ts
 # Result: 20 passed, 0 failed
 
-# Pass 1 Remediation Suite (32 Scenarios)
+# Pass 1 Forensic Remediation Test Suite (32 Scenarios)
 npx tsx tests/payment-infrastructure-remediation.test.ts
 # Result: 32 passed, 0 failed
 
-# Invariants & Concurrency Suite (14 Scenarios)
-npx tsx __tests__/atomic-payment-scenarios.test.ts
-# Result: 14 passed, 0 failed
-
 # TypeScript Typecheck
 npm run typecheck
-# Result: 0 errors (Code 0)
+# Result: 0 errors
 
 # ESLint
 npm run lint
 # Result: 0 errors
+
+# Production Build
+npm run build
+# Result: Compiled successfully (47/47 static pages generated)
 ```
