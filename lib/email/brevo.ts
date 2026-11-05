@@ -42,8 +42,25 @@ export async function sendBrevoEmail(payload: SendEmailPayload): Promise<{ messa
     throw new BrevoError("BREVO_API_KEY environment variable is not configured.", { status: 500 });
   }
 
-  const senderEmail = process.env.BREVO_SENDER_EMAIL || "cuetmateofficial@gmail.com";
-  const senderName = process.env.BREVO_SENDER_NAME || "CUETMate";
+  const rawSenderEmail = (process.env.BREVO_SENDER_EMAIL || "").trim();
+  const rawSenderName = (process.env.BREVO_SENDER_NAME || "").trim();
+
+  // Defensive resolution: ensure senderEmail is a valid email, not a swapped name string
+  let senderEmail = "cuetmateofficial@gmail.com";
+  let senderName = "CUETMate";
+
+  if (rawSenderEmail.includes("@") && rawSenderEmail.includes(".")) {
+    senderEmail = rawSenderEmail;
+  } else if (rawSenderName.includes("@") && rawSenderName.includes(".")) {
+    // If env vars were swapped on deployment, recover gracefully
+    senderEmail = rawSenderName;
+  }
+
+  if (rawSenderName && !rawSenderName.includes("@")) {
+    senderName = rawSenderName;
+  } else if (rawSenderEmail && !rawSenderEmail.includes("@")) {
+    senderName = rawSenderEmail;
+  }
 
   const body = {
     sender: payload.sender || { name: senderName, email: senderEmail },
