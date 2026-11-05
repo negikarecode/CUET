@@ -5,7 +5,7 @@
 **Scope:** Deletion Inventory, Protected Assets, Backup Verification & Reset Procedure  
 **Execution Script:** [`scripts/reset-candidate-database.ts`](file:///home/aryan/Documents/CUET (copy)/scripts/reset-candidate-database.ts)  
 **Backup Archive:** [`backups/pre_reset_candidate_backup_20261105.json`](file:///home/aryan/Documents/CUET (copy)/backups/pre_reset_candidate_backup_20261105.json)  
-**Status:** Pre-flight Complete; Backup Verified; Awaiting User Confirmation Before Purge
+**Status:** Executed & Verified (100% Clean Slate Achieved; Static Question Banks Protected)
 
 ---
 
@@ -100,21 +100,50 @@ If restoration is ever required, the candidate accounts can be re-imported via `
 
 ---
 
-## 6. Execution Command & Safety Gate
+## 6. Execution Log & Verified Post-Reset State
 
-The cleanup script has been implemented at:
-[`scripts/reset-candidate-database.ts`](file:///home/aryan/Documents/CUET (copy)/scripts/reset-candidate-database.ts)
+The cleanup script [`scripts/reset-candidate-database.ts`](file:///home/aryan/Documents/CUET (copy)/scripts/reset-candidate-database.ts) was executed with `--confirm` upon explicit user authorization:
 
-Running without arguments executes a dry run:
-```bash
-npx tsx --env-file=.env.local scripts/reset-candidate-database.ts
-# Output: Dry run: To execute reset, pass --confirm flag.
+```text
+=================================================
+CUET AI-PREP: CANDIDATE DATABASE PURGE & RESET
+=================================================
+[Static Datasets Safeguard] Questions: 23536, Tests: 940
+Loaded approved backup snapshot with 4 approved candidate account(s).
+Eligible for purge: 4 account(s).
+Protected & Preserved: 0 account(s) (outside approved snapshot / system).
+Purged records in table: user_attempts for target candidate IDs
+Purged records in table: user_usage_ledger for target candidate IDs
+Purged records in table: progress_cards for target candidate IDs
+Purged records in table: ai_reports for target candidate IDs
+Purged records in table: sunday_mentor_reports for target candidate IDs
+Purged records in table: payment_transactions for target candidate IDs
+Purged records in table: payment_orders for target candidate IDs
+Purged targeted OTP codes.
+Safely unlinked target candidate claims on promotional slots.
+Purged candidate profiles matching target candidate IDs.
+Deleted auth user c07a5fba-776d-4b43-9cfe-690ff2b38568 (trendr.studio@gmail.com)
+Deleted auth user 46414589-5e59-4db5-9b46-0e7f2d2cfe82 (pupadhayay089@gmail.com)
+Deleted auth user e159bcb3-3a9d-47eb-a894-80cb5d473a8d (auditfreight2026@gmail.com)
+Deleted auth user 886aa156-0b0a-4f32-9441-14d58e21185e (bzaemon11@gmail.com)
+
+--- Post-Purge Verification ---
+Remaining auth.users: 0
+Remaining profiles: 0
+Remaining user_otp_codes: 0
+Remaining user_attempts: 0
+Remaining user_usage_ledger: 0
+Remaining progress_cards: 0
+Remaining ai_reports: 0
+Remaining payment_orders: 0
+Remaining payment_transactions: 0
+Preserved Questions: 23536 (Protected)
+Preserved Tests: 940 (Protected)
+=================================================
+Reset completed successfully. Total deleted: 4.
 ```
 
-To execute the permanent deletion once confirmed:
+### Restoration Command (Available at Any Time):
 ```bash
-npx tsx --env-file=.env.local scripts/reset-candidate-database.ts --confirm
+npx tsx --env-file=.env.local scripts/restore-candidate-database.ts --confirm
 ```
-
-> [!IMPORTANT]
-> In accordance with safety protocol, execution of `--confirm` is held until explicit confirmation is provided by the user.
