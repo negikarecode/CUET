@@ -74,12 +74,23 @@ export default function DashboardClient({
   const target = useTarget();
   const storeUser = useTestStore((state) => state.user);
   const clientAnalytics = useTestStore((state) => state.analytics);
-  const testAttempts = useTestStore((state) => state.testAttempts);
+  const storeAttempts = useTestStore((state) => state.testAttempts);
   const storeCycleNumber = useTestStore((state) => state.currentCycleNumber || 1);
   const storeCycleQuestionCount = useTestStore((state) => state.currentCycleQuestionCount || 0);
   const storeDiagnosticCycles = useTestStore((state) => state.diagnosticCycles || []);
 
   const isServerUser = Boolean(initialData.user && initialData.user.id !== "guest");
+
+  // Prevent stale cross-user attempt bleeding before client synchronization completes
+  const testAttempts = useMemo(() => {
+    if (isServerUser) {
+      if (storeUser?.id && storeUser.id !== initialData.user.id) {
+        return initialData.serverAttempts || [];
+      }
+      return initialData.serverAttempts || storeAttempts || [];
+    }
+    return storeAttempts || [];
+  }, [isServerUser, storeUser?.id, initialData.user?.id, initialData.serverAttempts, storeAttempts]);
 
   // Attempt recovery on mount: cleans stale cache and ingests any completed CBT session from storage that was missed
   useEffect(() => {

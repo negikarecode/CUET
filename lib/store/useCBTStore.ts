@@ -60,6 +60,7 @@ export interface CBTStoreState {
   submittedScore: CBTScoreSummary | null;
 
   // Actions
+  resetCBTState: () => void;
   initTest: (
     testId: string,
     meta: FullTestMeta,
@@ -231,6 +232,28 @@ export const useCBTStore = create<CBTStoreState>()((set, get) => ({
   isSubmitting: false,
   attemptId: null,
   submittedScore: null,
+
+  resetCBTState: () => {
+    set({
+      isInitialized: false,
+      testId: "",
+      testMeta: null,
+      questions: [],
+      currentQuestionIndex: 0,
+      durationSeconds: 3600,
+      remainingSeconds: 3600,
+      expiresAt: null,
+      isTimerRunning: false,
+      questionStates: {},
+      answers: {},
+      isSubmitModalOpen: false,
+      isExitModalOpen: false,
+      isSubmitted: false,
+      isSubmitting: false,
+      attemptId: null,
+      submittedScore: null,
+    });
+  },
 
   initTest: (testId, meta, questionsList, forceFresh = false) => {
     if (!questionsList || questionsList.length === 0) {

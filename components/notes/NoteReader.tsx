@@ -55,15 +55,18 @@ export function NoteReader({ note }: Props) {
   const [showWorkedSolution, setShowWorkedSolution] = useState<Record<number, boolean>>({});
 
   // User practice stats from useTestStore
+  const storeUser = useTestStore((s) => s.user);
   const testAttempts = useTestStore((s) => s.testAttempts);
   const [topicAccuracy, setTopicAccuracy] = useState<number | null>(null);
   const [attemptsCount, setAttemptsCount] = useState<number>(0);
 
+  const activeUid = storeUser?.id || "guest";
+  const bKey = `notes_bookmarked_${activeUid}_${note.id}`;
+  const rKey = `notes_revised_${activeUid}_${note.id}`;
+
   useEffect(() => {
     // Check localStorage for bookmark and revised state
     try {
-      const bKey = `notes_bookmarked_${note.id}`;
-      const rKey = `notes_revised_${note.id}`;
       setIsBookmarked(localStorage.getItem(bKey) === "true");
       setIsRevised(localStorage.getItem(rKey) === "true");
     } catch {}
@@ -86,13 +89,13 @@ export function NoteReader({ note }: Props) {
         setTopicAccuracy(Math.round(sumAcc / relevantAttempts.length));
       }
     }
-  }, [note.id, note.unitNumber, note.subject, testAttempts]);
+  }, [note.id, note.unitNumber, note.subject, testAttempts, bKey, rKey]);
 
   const toggleBookmark = () => {
     const next = !isBookmarked;
     setIsBookmarked(next);
     try {
-      localStorage.setItem(`notes_bookmarked_${note.id}`, String(next));
+      localStorage.setItem(bKey, String(next));
     } catch {}
   };
 
@@ -100,7 +103,7 @@ export function NoteReader({ note }: Props) {
     const next = !isRevised;
     setIsRevised(next);
     try {
-      localStorage.setItem(`notes_revised_${note.id}`, String(next));
+      localStorage.setItem(rKey, String(next));
     } catch {}
   };
 

@@ -32,7 +32,6 @@ import ForgotPasswordView from "./ForgotPasswordView";
 import { DEFAULT_STREAM_SUBJECTS, getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { validateEmail, isPasswordValid } from "@/lib/auth/validation";
 import { parseAuthError } from "@/lib/auth/emailErrorHandler";
-import { getAuthCallbackUrl } from "@/lib/auth/urls";
 
 interface AuthPageContentProps {
   initialMode?: "signup" | "login";
@@ -76,6 +75,7 @@ export default function AuthPageContent({
 
   // OTP Configuration State
   const [otpType, setOtpType] = useState<OtpVerificationType>("signup");
+  const [registrationId, setRegistrationId] = useState<string>("");
   const [unconfirmedEmailForVerification, setUnconfirmedEmailForVerification] = useState<string | null>(null);
 
   // Loading & Error States
@@ -419,71 +419,45 @@ export default function AuthPageContent({
         return;
       }
 
-      const supabase = createClient();
-
-      try {
-        await supabase.auth.signOut();
-      } catch {}
-
-      const emailRedirectTo = getAuthCallbackUrl(redirectUrl);
-
-      const { data, error } = await supabase.auth.signUp({
-        email: cleanEmail,
-        password,
-        options: {
-          emailRedirectTo,
-          data: {
-            full_name: cleanName,
-            age,
-            target_college: finalCollege,
-            target_university: finalUniversity,
-            target_course: finalCourse,
-            target_stream: stream.charAt(0).toUpperCase() + stream.slice(1),
-            selected_subjects: selectedSubjects,
-          },
-        },
+      // Stage A: Dispatch OTP and register pending registration (ZERO permanent account created before OTP verification)
+      const otpRes = await fetch("/api/auth/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: cleanEmail,
+          type: "signup",
+          password,
+          fullName: cleanName,
+          age,
+          targetCollege: finalCollege,
+          targetUniversity: finalUniversity,
+          targetCourse: finalCourse,
+          targetStream: stream.charAt(0).toUpperCase() + stream.slice(1),
+          selectedSubjects,
+        }),
       });
 
-      if (error) {
-        setErrorMessage(parseAuthError(error).message);
-        setIsLoading(false);
-        return;
-      }
+      const otpData = await otpRes.json().catch(() => null);
 
-      if (data.user) {
-        // 1. Check if an account already exists with this email address
-        if (data.user.identities && data.user.identities.length === 0) {
-          setErrorMessage("An account with this email already exists. Please sign in instead.");
+      if (!otpRes.ok || !otpData?.ok) {
+        if (otpRes.status === 409 || otpData?.code === "ACCOUNT_EXISTS") {
+          setErrorMessage(otpData?.error || "An account with this email already exists. Please sign in instead.");
           setMode("login");
-          setIsLoading(false);
-          isSubmittingRef.current = false;
-          return;
-        }
-
-        // 2. Dispatch 6-digit OTP via Brevo and transition to OTP verification screen
-        const otpRes = await fetch("/api/auth/otp/send", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: cleanEmail, type: "signup" }),
-        });
-        const otpData = await otpRes.json().catch(() => null);
-
-        if (!otpRes.ok || !otpData?.ok) {
+        } else {
           setErrorMessage(otpData?.error || "Failed to dispatch verification code.");
-          setIsLoading(false);
-          isSubmittingRef.current = false;
-          return;
         }
-
-        // Ensure user is signed out until OTP verification completes
-        try {
-          await supabase.auth.signOut();
-        } catch {}
-
-        setOtpType("signup");
-        setMode("otp");
+        setIsLoading(false);
+        isSubmittingRef.current = false;
         return;
       }
+
+      if (otpData.registrationId) {
+        setRegistrationId(otpData.registrationId);
+      }
+
+      setOtpType("signup");
+      setMode("otp");
+      return;
     } catch (err: any) {
       setErrorMessage(parseAuthError(err).message);
     } finally {
@@ -670,6 +644,7 @@ export default function AuthPageContent({
               <OtpVerificationView
                 email={email.trim().toLowerCase()}
                 otpType={otpType}
+                registrationId={registrationId}
                 onSuccess={async (data) => {
                   if (data.user) {
                     await syncProfileAndLogin(data.user);

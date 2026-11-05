@@ -393,7 +393,9 @@ export const useTestStore = create<TestStoreState>()(
         if (typeof document !== "undefined") {
           document.cookie = "cuet_auth=; path=/; max-age=0; SameSite=Lax";
         }
+        const activeUid = get().user?.id;
         if (typeof window !== "undefined") {
+          safeStorage.clearUserScopedData(activeUid || "");
           safeStorage.removeItem("cuet_active_uid");
           safeStorage.removeItem("cuet_ai_prep_session_storage");
           safeStorage.removeItem("cuet_ai_prep_session_storage:guest");
@@ -401,12 +403,25 @@ export const useTestStore = create<TestStoreState>()(
             const keysToRemove: string[] = [];
             for (let i = 0; i < window.localStorage.length; i++) {
               const k = window.localStorage.key(i);
-              if (k && (k.startsWith("cuet_") || k.startsWith("cbt_"))) {
+              if (
+                k &&
+                (k.startsWith("cuet_") ||
+                  k.startsWith("cbt_") ||
+                  k.startsWith("notes_") ||
+                  k.startsWith("streak_") ||
+                  k.startsWith("last_practice_"))
+              ) {
                 keysToRemove.push(k);
               }
             }
             keysToRemove.forEach((k) => window.localStorage.removeItem(k));
           } catch {}
+
+          if (window.sessionStorage) {
+            try {
+              window.sessionStorage.clear();
+            } catch {}
+          }
         }
         set({
           user: DEFAULT_USER,

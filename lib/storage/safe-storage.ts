@@ -341,17 +341,39 @@ class SafeStorageEngine {
    * Cleans up user-scoped data upon logout without wiping global preferences or other users
    */
   clearUserScopedData(userId: string): void {
-    if (!userId || userId === "guest") return;
+    if (userId && userId !== "guest") {
+      this.removeItem(`cuet_ai_prep_session_storage:${userId}`);
+      this.removeItem(`last_practice_date_${userId}`);
+      this.removeItem(`streak_${userId}`);
+      this.removeItem(`unlocked_trophies_${userId}`);
+      this.removeItem(`sr_items_${userId}`);
+      this.removeByPrefix(`cuet_rate_limit:${userId}:`);
+      this.removeByPrefix(`cuet_repair_plan_${userId}_`);
+      this.removeByPrefix(`cuet_cbt_session_${userId}_`);
+      this.removeByPrefix(`notes_bookmarked_${userId}_`);
+      this.removeByPrefix(`notes_revised_${userId}_`);
+    }
 
-    this.removeItem(`cuet_ai_prep_session_storage:${userId}`);
-    this.removeItem(`last_practice_date_${userId}`);
-    this.removeItem(`streak_${userId}`);
-    this.removeItem(`unlocked_trophies_${userId}`);
-    this.removeItem(`sr_items_${userId}`);
-    this.removeByPrefix(`cuet_rate_limit:${userId}:`);
-    this.removeByPrefix(`cuet_repair_plan_${userId}_`);
-    this.removeByPrefix(`cuet_cbt_session_${userId}_`);
     this.removeItem("cuet_active_uid");
+    this.removeItem("cuet_ai_prep_session_storage");
+    this.removeItem("cuet_ai_prep_session_storage:guest");
+    this.removeItem("cuet_target_exam_date");
+    this.removeItem("cuet_push_reminder_time");
+    this.removeByPrefix("notes_bookmarked_");
+    this.removeByPrefix("notes_revised_");
+
+    if (typeof window !== "undefined" && window.sessionStorage) {
+      try {
+        const sessionKeysToRemove: string[] = [];
+        for (let i = 0; i < window.sessionStorage.length; i++) {
+          const k = window.sessionStorage.key(i);
+          if (k && (k.startsWith("cuet_") || k.startsWith("cbt_") || k.startsWith("notes_"))) {
+            sessionKeysToRemove.push(k);
+          }
+        }
+        sessionKeysToRemove.forEach((k) => window.sessionStorage.removeItem(k));
+      } catch {}
+    }
   }
 
   /**

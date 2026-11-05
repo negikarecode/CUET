@@ -33,6 +33,7 @@ import {
 } from "@/lib/data/subjects";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { deduplicateTestAttempts, normalizeSubject } from "@/lib/analytics";
+import { safeStorage } from "@/lib/storage/safe-storage";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useTarget } from "@/lib/hooks/useTarget";
 import SearchableSelect, { SearchableSelectOption } from "@/components/ui/SearchableSelect";
@@ -284,18 +285,31 @@ export default function PYQsPage() {
 
   // In-progress test session detection
   const [inProgressSession, setInProgressSession] = useState<InProgressSessionInfo | null>(null);
+  const storeUser = useTestStore((state) => state.user);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const activeUid =
+      storeUser?.id && storeUser.id !== "guest"
+        ? storeUser.id
+        : safeStorage.getItem("cuet_active_uid") || "";
+
+    if (!activeUid || activeUid === "guest") {
+      setInProgressSession(null);
+      return;
+    }
+    const targetPrefix = `cuet_cbt_session_${activeUid}_`;
+
     try {
       for (let i = 0; i < window.localStorage.length; i++) {
         const key = window.localStorage.key(i);
-        if (!key || !key.startsWith("cuet_cbt_session_")) continue;
+        if (!key || !key.startsWith(targetPrefix)) continue;
         const raw = window.localStorage.getItem(key);
         if (!raw) continue;
         const session = JSON.parse(raw);
         if (
           session &&
+          session.userId === activeUid &&
           !session.isSubmitted &&
           session.testId &&
           (session.testId.includes("-pyq") || session.testId.includes("pyq"))
@@ -320,7 +334,7 @@ export default function PYQsPage() {
     } catch (err) {
       console.warn("[PYQsPage] Error checking in-progress session:", err);
     }
-  }, []);
+  }, [storeUser?.id]);
 
   // Deduplicate test attempts strictly for PYQs
   const cleanAttempts = useMemo(() => {

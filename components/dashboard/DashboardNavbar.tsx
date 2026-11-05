@@ -14,18 +14,17 @@ import {
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
-import { createClient } from "@/lib/supabase/client";
+import { performSecureLogout } from "@/lib/auth/logout-handler";
 import LanguageSelector from "@/components/i18n/LanguageSelector";
 
 export default function DashboardNavbar() {
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
-  const logout = useTestStore((state) => state.logout);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const streak = isClient && user?.dailyStreak !== undefined ? user.dailyStreak : 1;
-  const userName = isClient && user?.name ? user.name : "Aryan 3";
+  const streak = isClient && user?.dailyStreak !== undefined ? user.dailyStreak : 0;
+  const userName = isClient && user?.name ? user.name : "CUET Aspirant";
   const userEmail = isClient && user?.email ? user.email : "";
 
   // Derive 2-character initials (e.g. "Aryan 3" -> "A3")
@@ -51,15 +50,8 @@ export default function DashboardNavbar() {
   }, []);
 
   const handleSignOut = async () => {
-    try {
-      const supabase = createClient();
-      await supabase.auth.signOut();
-    } catch (err) {
-      console.error("Sign out error:", err);
-    }
-    logout();
     setProfileDropdownOpen(false);
-    window.location.href = "/";
+    await performSecureLogout("/login");
   };
 
   return (

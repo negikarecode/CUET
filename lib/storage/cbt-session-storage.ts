@@ -242,6 +242,37 @@ export async function clearSessionFromIndexedDB(
   }
 }
 
+/**
+ * Purges all records from the IndexedDB exam session store.
+ */
+export async function clearAllIndexedDB(): Promise<boolean> {
+  try {
+    const db = await openIndexedDB();
+    if (!db) return false;
+
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(IDB_STORE_NAME, "readwrite");
+        const store = tx.objectStore(IDB_STORE_NAME);
+        const req = store.clear();
+
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => resolve(false);
+        tx.oncomplete = () => db.close();
+        tx.onerror = () => {
+          try { db.close(); } catch {}
+          resolve(false);
+        };
+      } catch {
+        try { db.close(); } catch {}
+        resolve(false);
+      }
+    });
+  } catch {
+    return false;
+  }
+}
+
 // ============================================================================
 // Proactive Storage Quota Management & Pruning
 // ============================================================================
@@ -476,6 +507,39 @@ export function clearCBTSessionSync(testId: string, userId?: string): void {
   } catch {}
 
   clearSessionFromIndexedDB(testId, targetUid).catch(() => {});
+}
+
+/**
+ * Completely purges all CBT exam state across all storage tiers on logout.
+ */
+export function purgeAllCBTStateOnLogout(userId?: string): void {
+  if (typeof window === "undefined") return;
+
+  // Cancel any pending debounced autosave immediately
+  cbtAutosave.cancel();
+
+  const targetUid = userId || getActiveUserId();
+
+  try {
+    safeStorage.removeByPrefix(`cuet_cbt_session_${targetUid}_`);
+    safeStorage.removeByPrefix("cuet_cbt_session_");
+    safeStorage.removeItem(`cuet_cbt_active_session_${targetUid}`);
+    safeStorage.removeItem("cuet_cbt_active_session");
+
+    // Clear from sessionStorage
+    if (window.sessionStorage) {
+      const sessionKeysToRemove: string[] = [];
+      for (let i = 0; i < window.sessionStorage.length; i++) {
+        const k = window.sessionStorage.key(i);
+        if (k && (k.startsWith("cuet_cbt_") || k.startsWith("cbt_"))) {
+          sessionKeysToRemove.push(k);
+        }
+      }
+      sessionKeysToRemove.forEach((k) => window.sessionStorage.removeItem(k));
+    }
+  } catch {}
+
+  clearAllIndexedDB().catch(() => {});
 }
 
 // ============================================================================

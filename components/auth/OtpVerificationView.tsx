@@ -19,6 +19,7 @@ export type OtpVerificationType = "signup" | "email" | "recovery";
 interface OtpVerificationViewProps {
   email: string;
   otpType?: OtpVerificationType;
+  registrationId?: string;
   onSuccess: (data: { user: any; session: any; token_hash?: string }) => void;
   onBack?: () => void;
   metadata?: Record<string, any>;
@@ -27,11 +28,13 @@ interface OtpVerificationViewProps {
 export default function OtpVerificationView({
   email,
   otpType = "signup",
+  registrationId: initialRegId,
   onSuccess,
   onBack,
   metadata: _metadata,
 }: OtpVerificationViewProps) {
   const [otp, setOtp] = useState("");
+  const [registrationId, setRegistrationId] = useState(initialRegId || "");
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -71,6 +74,7 @@ export default function OtpVerificationView({
             email: cleanEmail,
             code: token,
             type: apiType,
+            registrationId: registrationId || undefined,
           }),
         });
 
@@ -106,13 +110,13 @@ export default function OtpVerificationView({
           }
 
           onSuccess({
-            user: verifyResult.data?.user || { email: cleanEmail, id: result.userId },
+            user: verifyResult.data?.user || result.user || { email: cleanEmail, id: result.userId },
             session: verifyResult.data?.session,
             token_hash: result.token_hash,
           });
         } else {
           onSuccess({
-            user: { email: cleanEmail, id: result.userId },
+            user: result.user || { email: cleanEmail, id: result.userId },
             session: null,
           });
         }
@@ -122,7 +126,7 @@ export default function OtpVerificationView({
         setIsVerifying(false);
       }
     },
-    [otp, email, otpType, onSuccess]
+    [otp, email, otpType, registrationId, onSuccess]
   );
 
   const handleResend = async () => {
@@ -142,6 +146,7 @@ export default function OtpVerificationView({
         body: JSON.stringify({
           email: cleanEmail,
           type: apiType,
+          registrationId: registrationId || undefined,
         }),
       });
 
@@ -153,6 +158,10 @@ export default function OtpVerificationView({
           setCooldown(result.cooldownRemaining);
         }
         return;
+      }
+
+      if (result.registrationId) {
+        setRegistrationId(result.registrationId);
       }
 
       setSuccessMessage("A fresh 6-digit verification code has been dispatched to your email.");

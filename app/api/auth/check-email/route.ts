@@ -51,7 +51,13 @@ export async function POST(request: NextRequest) {
         break;
       }
 
-      if (data.users.some((u) => u.email?.toLowerCase() === cleanEmail)) {
+      if (
+        data.users.some(
+          (u) =>
+            u.email?.toLowerCase() === cleanEmail &&
+            Boolean(u.email_confirmed_at || (u as any).confirmed_at)
+        )
+      ) {
         found = true;
         break;
       }

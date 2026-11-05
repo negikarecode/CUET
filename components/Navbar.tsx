@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { safeStorage } from "@/lib/storage/safe-storage";
+import { performSecureLogout } from "@/lib/auth/logout-handler";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { createClient } from "@/lib/supabase/client";
 import UpgradeButton from "@/components/payments/UpgradeButton";
@@ -93,16 +94,9 @@ export default function Navbar() {
   };
 
   const handleSignOut = async () => {
-    try {
-      const supabase = createClient();
-      await supabase.auth.signOut();
-    } catch (err) {
-      console.error("Sign out error:", err);
-    }
-    logout();
     setProfileDropdownOpen(false);
     setMobileMenuOpen(false);
-    window.location.href = "/";
+    await performSecureLogout("/login");
   };
 
   if (

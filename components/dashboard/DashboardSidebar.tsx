@@ -20,7 +20,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { createClient } from "@/lib/supabase/client";
+import { performSecureLogout } from "@/lib/auth/logout-handler";
 import { useEntitlement } from "@/lib/hooks/useEntitlement";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 
@@ -28,7 +28,6 @@ export default function DashboardSidebar() {
   const pathname = usePathname();
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
-  const logout = useTestStore((state) => state.logout);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
@@ -66,15 +65,8 @@ export default function DashboardSidebar() {
   }, [mobileDrawerOpen]);
 
   const handleSignOut = async () => {
-    try {
-      const supabase = createClient();
-      await supabase.auth.signOut();
-    } catch (e) {
-      console.error("Sign out error:", e);
-    }
-    logout();
     setMobileDrawerOpen(false);
-    window.location.href = "/";
+    await performSecureLogout("/login");
   };
 
   const navSections = [

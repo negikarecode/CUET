@@ -48,11 +48,10 @@ import {
   sendTestNotification,
 } from "@/lib/push-notifications";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { useCBTStore } from "@/lib/store/useCBTStore";
+import { performSecureLogout } from "@/lib/auth/logout-handler";
 import { useTarget } from "@/lib/hooks/useTarget";
 import { getMockStats, MockStatsResult } from "@/lib/mock-stats";
 import { createClient } from "@/lib/supabase/client";
-import { safeStorage } from "@/lib/storage/safe-storage";
 import { updateProfileGoalsAction } from "@/app/dashboard/profile/actions";
 import EditGoalsModal from "@/components/profile/EditGoalsModal";
 import InvalidTargetBanner from "@/components/profile/InvalidTargetBanner";
@@ -85,7 +84,6 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
   const rawAnalytics = useTestStore((state) => state.analytics);
   const loginUser = useTestStore((state) => state.loginUser);
   const setTargetCollege = useTestStore((state) => state.setTargetCollege);
-  const logout = useTestStore((state) => state.logout);
   const clearAttempts = useTestStore((state) => state.clearAttempts);
 
   // Authoritative target from single source of truth useTarget()
@@ -539,40 +537,8 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
   };
 
   const handleSignOut = async () => {
-    try {
-      const supabase = createClient();
-      await supabase.auth.signOut();
-    } catch (e) {
-      console.warn("Supabase auth signout warning:", e);
-    }
-
-    logout();
-    try {
-      useCBTStore.setState({
-        isInitialized: false,
-        isTimerRunning: false,
-        remainingSeconds: 0,
-        questionStates: {},
-        answers: {},
-        submittedScore: null,
-      });
-    } catch {
-      // Safe fallback
-    }
-
-    if (typeof window !== "undefined") {
-      try {
-        safeStorage.clearUserScopedData(zustandUser?.id || initialData.profile?.id || "");
-      } catch {
-        // Safe fallback
-      }
-    }
-
     setIsSignOutModalOpen(false);
-    startTransition(() => {
-      router.push("/");
-      router.refresh();
-    });
+    await performSecureLogout("/login");
   };
 
   // Student Initials

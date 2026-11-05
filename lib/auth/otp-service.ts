@@ -14,7 +14,7 @@ export interface StoredOtpRecord {
   created_at: string;
 }
 
-// In-memory fallback cache (used if Supabase user_otp_codes table is not yet migrated)
+// In-memory fallback cache
 declare global {
   // eslint-disable-next-line no-var
   var __cuetOtpMemoryStore: Map<string, StoredOtpRecord> | undefined;
@@ -26,9 +26,10 @@ if (!globalThis.__cuetOtpMemoryStore) {
 const memoryStore = globalThis.__cuetOtpMemoryStore;
 
 const OTP_SECRET = process.env.OTP_SECRET || "cuetmate-default-otp-secret-salt-2026";
-const OTP_EXPIRY_MS = 10 * 60 * 1000; // 10 minutes
-const COOLDOWN_SECONDS = 60;
-const MAX_ATTEMPTS = 5;
+export const OTP_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
+export const COOLDOWN_SECONDS = 60;
+export const MAX_ATTEMPTS = 5;
+export const MAX_RESENDS_PER_HOUR = 5;
 
 /**
  * Generates a cryptographically secure 6-digit numeric OTP.
@@ -47,7 +48,7 @@ export function hashOtp(code: string): string {
 /**
  * Constant-time comparison of two hex hashes to prevent timing attacks.
  */
-function timingSafeEqualHex(a: string, b: string): boolean {
+export function timingSafeEqualHex(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
   const bufA = Buffer.from(a, "hex");
   const bufB = Buffer.from(b, "hex");
@@ -61,7 +62,7 @@ function getMemoryKey(email: string, type: OtpType): string {
 
 /**
  * Stores a freshly generated OTP code with HMAC-SHA256 hashing.
- * Enforces a 60-second cooldown per email and OTP type.
+ * Enforces a 60-second cooldown and maximum 5 resends per hour per email and OTP type.
  */
 export async function saveOtp({
   email,
@@ -77,13 +78,15 @@ export async function saveOtp({
   const cleanEmail = email.trim().toLowerCase();
   const hash = hashOtp(code);
   const now = new Date();
-  const expiresAt = new Date(now.getTime() + OTP_EXPIRY_MS).toISOString();
+  const nowMs = now.getTime();
+  const expiresAt = new Date(nowMs + OTP_EXPIRY_MS).toISOString();
 
-  // 1. Check existing record for active cooldown
+  // 1. Check existing record for active cooldown & hourly limits
   const existing = await getActiveOtpRecord(cleanEmail, type);
+  let resendCount = 0;
   if (existing) {
     const elapsedSeconds = Math.floor(
-      (now.getTime() - new Date(existing.created_at).getTime()) / 1000
+      (nowMs - new Date(existing.created_at).getTime()) / 1000
     );
     if (elapsedSeconds < COOLDOWN_SECONDS) {
       return {
@@ -92,12 +95,35 @@ export async function saveOtp({
         error: `Please wait ${COOLDOWN_SECONDS - elapsedSeconds}s before requesting a new code.`,
       };
     }
+
+    const prevResends = Number(existing.metadata?.resend_count || 0);
+    const firstSentAt = existing.metadata?.first_sent_at
+      ? new Date(existing.metadata.first_sent_at).getTime()
+      : new Date(existing.created_at).getTime();
+
+    // Check if within the 1-hour window
+    if (nowMs - firstSentAt < 60 * 60 * 1000) {
+      if (prevResends >= MAX_RESENDS_PER_HOUR) {
+        return {
+          success: false,
+          error: "Maximum verification code requests exceeded for this hour. Please try again later.",
+        };
+      }
+      resendCount = prevResends + 1;
+    }
   }
 
-  // 2. Try persisting to Supabase `user_otp_codes` table
+  const enhancedMetadata = {
+    ...metadata,
+    resend_count: resendCount,
+    first_sent_at: existing?.metadata?.first_sent_at || now.toISOString(),
+    last_sent_at: now.toISOString(),
+  };
+
+  // 2. Persist to Supabase `user_otp_codes` table
   let persistedInDb = false;
   try {
-    // Delete any old OTPs for this email and type
+    // Delete old OTPs for this email and type
     await supabaseAdmin
       .from("user_otp_codes")
       .delete()
@@ -109,7 +135,7 @@ export async function saveOtp({
       otp_type: type,
       otp_hash: hash,
       attempts: 0,
-      metadata,
+      metadata: enhancedMetadata,
       expires_at: expiresAt,
       created_at: now.toISOString(),
     });
@@ -118,10 +144,10 @@ export async function saveOtp({
       persistedInDb = true;
     }
   } catch (err) {
-    // Table might not exist yet; will fall back to memory
+    // Fall back to memory
   }
 
-  // 3. Fallback to in-memory store if DB table was unavailable
+  // 3. Fallback to in-memory store
   if (!persistedInDb) {
     const record: StoredOtpRecord = {
       id: crypto.randomUUID(),
@@ -129,7 +155,7 @@ export async function saveOtp({
       otp_type: type,
       otp_hash: hash,
       attempts: 0,
-      metadata,
+      metadata: enhancedMetadata,
       expires_at: expiresAt,
       created_at: now.toISOString(),
     };
@@ -142,7 +168,7 @@ export async function saveOtp({
 /**
  * Retrieves the currently active OTP record for an email and type.
  */
-async function getActiveOtpRecord(
+export async function getActiveOtpRecord(
   email: string,
   type: OtpType
 ): Promise<StoredOtpRecord | null> {

@@ -13,6 +13,7 @@ function VerifyOtpContent() {
 
   const queryEmail = searchParams.get("email") || "";
   const queryType = (searchParams.get("type") || "signup") as OtpVerificationType;
+  const queryRegId = searchParams.get("regId") || searchParams.get("registrationId") || "";
 
   const [email, setEmail] = useState(queryEmail);
   const [manualEmailInput, setManualEmailInput] = useState("");
@@ -57,6 +58,7 @@ function VerifyOtpContent() {
             <OtpVerificationView
               email={email}
               otpType={queryType}
+              registrationId={queryRegId || undefined}
               onSuccess={() => {
                 router.push("/dashboard");
               }}
