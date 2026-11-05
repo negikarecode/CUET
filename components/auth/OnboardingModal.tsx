@@ -28,7 +28,6 @@ import OtpVerificationView, { OtpVerificationType } from "./OtpVerificationView"
 import VerifyEmailView from "./VerifyEmailView";
 import { validateEmail, isPasswordValid } from "@/lib/auth/validation";
 import { parseAuthError } from "@/lib/auth/emailErrorHandler";
-import { getAuthCallbackUrl } from "@/lib/auth/urls";
 
 interface OnboardingModalProps {
   isOpen: boolean;
@@ -45,6 +44,7 @@ export default function OnboardingModal({
 
   const [mode, setMode] = useState<"signup" | "login" | "otp" | "verify_email">(initialMode);
   const [otpType, setOtpType] = useState<OtpVerificationType>("signup");
+  const [registrationId, setRegistrationId] = useState<string | null>(null);
   const [unconfirmedEmail, setUnconfirmedEmail] = useState<string | null>(null);
   const [step, setStep] = useState<1 | 2>(1);
 
@@ -78,11 +78,84 @@ export default function OnboardingModal({
   useEffect(() => {
     setMode(initialMode);
     setStep(1);
+    setRegistrationId(null);
     setErrorMessage(null);
     setInfoMessage(null);
   }, [initialMode, isOpen]);
 
   if (!isOpen) return null;
+
+  // Synchronize authenticated user profile and establish application session
+  const syncProfileAndLogin = async (authUser: any, emailFallback?: string) => {
+    const cleanEmail = (authUser.email || emailFallback || email).trim().toLowerCase();
+    let userFullName = authUser.user_metadata?.full_name || cleanEmail.split("@")[0];
+    let userStream: StreamType = (authUser.user_metadata?.target_stream?.toLowerCase() as StreamType) || "commerce";
+    let userCollege = authUser.user_metadata?.target_college || "Central University";
+    let userUniversity = authUser.user_metadata?.target_university || "Delhi University";
+    let userCourse = authUser.user_metadata?.target_course || "Undergraduate Program";
+    let userSelectedSubjects = authUser.user_metadata?.selected_subjects || DEFAULT_STREAM_SUBJECTS[userStream] || DEFAULT_STREAM_SUBJECTS.commerce;
+    let userXp = 0;
+    let userStreak = 1;
+    let userCoins = 50;
+
+    try {
+      const res = await fetch(`/api/auth/profile?id=${authUser.id}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.profile) {
+          userFullName = json.profile.full_name || userFullName;
+          userStream = (json.profile.target_stream?.toLowerCase() as StreamType) || userStream;
+          userCollege = json.profile.target_college || userCollege;
+          userUniversity = json.profile.target_university || userUniversity;
+          if (Array.isArray(json.profile.selected_subjects) && json.profile.selected_subjects.length > 0) {
+            userSelectedSubjects = json.profile.selected_subjects;
+          }
+          userXp = json.profile.xp ?? 0;
+          userStreak = calculateActiveStreak(
+            json.profile.current_streak ?? 0,
+            json.profile.last_practice_date
+          );
+          userCoins = json.profile.campus_coins ?? 50;
+        }
+      } else {
+        // Auto-heal missing profile row in public.profiles
+        await fetch("/api/auth/profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: authUser.id,
+            full_name: userFullName,
+            target_stream: userStream.charAt(0).toUpperCase() + userStream.slice(1),
+            target_college: userCollege,
+            target_university: userUniversity,
+            target_course: userCourse,
+            selected_subjects: userSelectedSubjects,
+            age: authUser.user_metadata?.age || "18",
+          }),
+        }).catch(() => {});
+      }
+    } catch {
+      // Profile fallback to metadata
+    }
+
+    loginUser({
+      id: authUser.id,
+      name: userFullName,
+      email: cleanEmail,
+      age: authUser.user_metadata?.age || "18",
+      targetCollege: userCollege,
+      targetUniversity: userUniversity,
+      targetCourse: userCourse,
+      preferredStream: userStream,
+      selectedSubjects: userSelectedSubjects,
+      dailyStreak: userStreak,
+      xpPoints: userXp,
+      campusCoins: userCoins,
+    });
+
+    onClose();
+    window.location.href = "/dashboard";
+  };
 
   // Sign In with real Supabase Auth credentials
   const handleSignIn = async (e: React.FormEvent) => {
@@ -124,73 +197,7 @@ export default function OnboardingModal({
       }
 
       if (data.user) {
-        let userFullName = data.user.user_metadata?.full_name || cleanEmail.split("@")[0];
-        let userStream: StreamType = (data.user.user_metadata?.target_stream?.toLowerCase() as StreamType) || "commerce";
-        let userCollege = data.user.user_metadata?.target_college || "Central University";
-        let userUniversity = data.user.user_metadata?.target_university || "Delhi University";
-        let userCourse = data.user.user_metadata?.target_course || "Undergraduate Program";
-        let userSelectedSubjects = data.user.user_metadata?.selected_subjects || DEFAULT_STREAM_SUBJECTS[userStream] || DEFAULT_STREAM_SUBJECTS.commerce;
-        let userXp = 0;
-        let userStreak = 1;
-        let userCoins = 0;
-
-        try {
-          const res = await fetch(`/api/auth/profile?id=${data.user.id}`);
-          if (res.ok) {
-            const json = await res.json();
-            if (json.profile) {
-              userFullName = json.profile.full_name || userFullName;
-              userStream = (json.profile.target_stream?.toLowerCase() as StreamType) || userStream;
-              userCollege = json.profile.target_college || userCollege;
-              userUniversity = json.profile.target_university || userUniversity;
-              if (Array.isArray(json.profile.selected_subjects) && json.profile.selected_subjects.length > 0) {
-                userSelectedSubjects = json.profile.selected_subjects;
-              }
-              userXp = json.profile.xp ?? 0;
-              userStreak = calculateActiveStreak(
-                json.profile.current_streak ?? 0,
-                json.profile.last_practice_date
-              );
-              userCoins = json.profile.campus_coins ?? 0;
-            }
-          } else {
-            // Auto-heal missing profile row in public.profiles
-            fetch("/api/auth/profile", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                id: data.user.id,
-                full_name: userFullName,
-                target_stream: userStream.charAt(0).toUpperCase() + userStream.slice(1),
-                target_college: userCollege,
-                target_university: userUniversity,
-                target_course: userCourse,
-                selected_subjects: userSelectedSubjects,
-                age: data.user.user_metadata?.age || "18",
-              }),
-            }).catch(() => {});
-          }
-        } catch {
-          // Profile fallback to metadata
-        }
-
-        loginUser({
-          id: data.user.id,
-          name: userFullName,
-          email: cleanEmail,
-          age: data.user.user_metadata?.age || "18",
-          targetCollege: userCollege,
-          targetUniversity: userUniversity,
-          targetCourse: userCourse,
-          preferredStream: userStream,
-          selectedSubjects: userSelectedSubjects,
-          dailyStreak: userStreak,
-          xpPoints: userXp,
-          campusCoins: userCoins,
-        });
-
-        onClose();
-        window.location.href = "/dashboard";
+        await syncProfileAndLogin(data.user, cleanEmail);
       }
     } catch (err: any) {
       setErrorMessage(parseAuthError(err).message);
@@ -242,7 +249,7 @@ export default function OnboardingModal({
     setStep(2);
   };
 
-  // Sign Up with real Supabase Auth credentials & store profile in Supabase
+  // Sign Up Initiation (Stage A: Zero Supabase account created before OTP verification)
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isLoading || isSubmittingRef.current) return;
@@ -285,94 +292,62 @@ export default function OnboardingModal({
     setIsLoading(true);
 
     try {
-      const supabase = createClient();
+      // Preliminary rate limit verification before calling OTP endpoint
+      const rateCheck = await fetch("/api/auth/rate-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "auth:signup", identifier: cleanEmail }),
+      }).catch(() => null);
 
-      // Ensure any previous session is cleared before new signup
-      try {
-        await supabase.auth.signOut();
-      } catch {
-        // Ignore if already signed out
+      if (rateCheck && rateCheck.status === 429) {
+        const errJson = await rateCheck.json().catch(() => ({}));
+        setErrorMessage(
+          errJson.error || "Too many signup requests. Please wait a few minutes before trying again."
+        );
+        setIsLoading(false);
+        isSubmittingRef.current = false;
+        return;
       }
 
-      const emailRedirectTo = getAuthCallbackUrl("/dashboard");
-
-      const { data, error } = await supabase.auth.signUp({
-        email: cleanEmail,
-        password,
-        options: {
-          emailRedirectTo,
-          data: {
-            full_name: cleanName,
-            age,
-            target_college: finalCollege,
-            target_university: finalUniversity,
-            target_course: finalCourse,
-            target_stream: stream.charAt(0).toUpperCase() + stream.slice(1),
-            selected_subjects: selectedSubjects,
-          },
-        },
+      // Stage A: Dispatch OTP and stage pending registration (ZERO permanent account created before OTP verification)
+      const otpRes = await fetch("/api/auth/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: cleanEmail,
+          type: "signup",
+          password,
+          fullName: cleanName,
+          age,
+          targetCollege: finalCollege,
+          targetUniversity: finalUniversity,
+          targetCourse: finalCourse,
+          targetStream: stream.charAt(0).toUpperCase() + stream.slice(1),
+          selectedSubjects,
+        }),
       });
 
-      if (error) {
-        setErrorMessage(parseAuthError(error).message);
-        setIsLoading(false);
-        return;
-      }
+      const otpData = await otpRes.json().catch(() => null);
 
-      if (data.user) {
-        if (data.user.identities && data.user.identities.length === 0) {
-          setErrorMessage("An account with this email already exists. Please sign in instead.");
+      if (!otpRes.ok || !otpData?.ok) {
+        if (otpRes.status === 409 || otpData?.code === "ACCOUNT_EXISTS") {
+          setErrorMessage(otpData?.error || "An account with this email already exists. Please log in instead.");
           setMode("login");
-          setIsLoading(false);
-          isSubmittingRef.current = false;
-          return;
-        }
-
-        const createdUserId = data.user.id;
-
-        // Persist profile to Supabase database via server route
-        try {
-          await fetch("/api/auth/profile", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id: createdUserId,
-              fullName: cleanName,
-              targetStream: stream,
-              targetUniversity: finalUniversity,
-              targetCollege: finalCollege,
-              targetCourse: finalCourse,
-              selectedSubjects,
-            }),
-          });
-        } catch (profileErr) {
-          console.warn("[Profile Persistence Notice]:", profileErr);
-        }
-
-        // Dispatch 6-digit verification OTP via Brevo
-        const otpRes = await fetch("/api/auth/otp/send", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: cleanEmail, type: "signup" }),
-        });
-        const otpData = await otpRes.json().catch(() => null);
-
-        if (!otpRes.ok || !otpData?.ok) {
+        } else {
           setErrorMessage(otpData?.error || "Failed to dispatch verification code. Please try again.");
-          setIsLoading(false);
-          isSubmittingRef.current = false;
-          return;
         }
-
-        // Sign out any auto-session so the user MUST verify OTP before accessing the dashboard
-        try {
-          await supabase.auth.signOut();
-        } catch {}
-
-        setOtpType("signup");
-        setMode("otp");
+        setIsLoading(false);
+        isSubmittingRef.current = false;
         return;
       }
+
+      if (otpData.registrationId) {
+        setRegistrationId(otpData.registrationId);
+      }
+
+      setOtpType("signup");
+      setMode("otp");
+      return;
     } catch (err: any) {
       setErrorMessage(parseAuthError(err).message);
     } finally {
@@ -405,11 +380,22 @@ export default function OnboardingModal({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-slate-900 tracking-tight">
-                  {mode === "signup" ? "Join CUET AI-Prep" : "Candidate Sign In"}
+                  {mode === "signup"
+                    ? "Join CUET AI-Prep"
+                    : mode === "login"
+                    ? "Candidate Sign In"
+                    : mode === "otp"
+                    ? "Verify One-Time Code"
+                    : "Verify Your Email"}
                 </span>
                 {mode === "signup" && (
                   <span className="text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-purple-50 border border-purple-200 text-purple-700">
                     Step {step} of 2
+                  </span>
+                )}
+                {mode === "otp" && (
+                  <span className="text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-purple-50 border border-purple-200 text-purple-700">
+                    Verification
                   </span>
                 )}
               </div>
@@ -430,36 +416,41 @@ export default function OnboardingModal({
         </div>
 
         {/* Mode Switcher Tabs */}
-        <div className="grid grid-cols-2 border-b border-slate-200 bg-slate-50/50 text-xs font-semibold">
-          <button
-            type="button"
-            onClick={() => {
-              setMode("signup");
-              setErrorMessage(null);
-            }}
-            className={`py-3 text-center border-r border-slate-200 transition-all cursor-pointer ${
-              mode === "signup"
-                ? "bg-white text-purple-700 font-bold border-b-2 border-purple-700"
-                : "text-slate-500 hover:text-slate-800"
-            }`}
-          >
-            Join Now (New Candidate)
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMode("login");
-              setErrorMessage(null);
-            }}
-            className={`py-3 text-center transition-all cursor-pointer ${
-              mode === "login"
-                ? "bg-white text-purple-700 font-bold border-b-2 border-purple-700"
-                : "text-slate-500 hover:text-slate-800"
-            }`}
-          >
-            Sign In (Existing Candidate)
-          </button>
-        </div>
+        {(mode === "signup" || mode === "login") && (
+          <div className="grid grid-cols-2 border-b border-slate-200 bg-slate-50/50 text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => {
+                setMode("signup");
+                setStep(1);
+                setRegistrationId(null);
+                setErrorMessage(null);
+              }}
+              className={`py-3 text-center border-r border-slate-200 transition-all cursor-pointer ${
+                mode === "signup"
+                  ? "bg-white text-purple-700 font-bold border-b-2 border-purple-700"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              Join Now (New Candidate)
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMode("login");
+                setRegistrationId(null);
+                setErrorMessage(null);
+              }}
+              className={`py-3 text-center transition-all cursor-pointer ${
+                mode === "login"
+                  ? "bg-white text-purple-700 font-bold border-b-2 border-purple-700"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              Sign In (Existing Candidate)
+            </button>
+          </div>
+        )}
 
         {/* Error / Alert Banner */}
         {errorMessage && (
@@ -525,13 +516,13 @@ export default function OnboardingModal({
             <OtpVerificationView
               email={email.trim().toLowerCase()}
               otpType={otpType}
+              registrationId={registrationId || undefined}
               onSuccess={async (data) => {
                 if (data.user) {
-                  onClose();
-                  window.location.href = "/dashboard";
+                  await syncProfileAndLogin(data.user);
                 }
               }}
-              onBack={() => setMode("signup")}
+              onBack={() => setMode(otpType === "signup" ? "signup" : "login")}
             />
           ) : mode === "login" ? (
             /* ======================================================= */
