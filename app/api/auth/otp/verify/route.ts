@@ -8,6 +8,7 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { validateEmail, isPasswordValid } from "@/lib/auth/validation";
 import { createServerClient } from "@supabase/ssr";
 import { syncUserProfile } from "@/lib/api-handlers/auth-session";
+import { findAuthUserByEmail } from "@/lib/auth/email-classification";
 
 export const dynamic = "force-dynamic";
 
@@ -114,13 +115,7 @@ export async function POST(request: NextRequest) {
       // 2. Atomically create permanent candidate account in Supabase
       let targetUser: any = null;
       try {
-        const { data: existingData } = await supabaseAdmin.auth.admin.listUsers({
-          page: 1,
-          perPage: 50,
-        });
-        targetUser = existingData?.users?.find(
-          (u) => u.email?.toLowerCase() === cleanEmail
-        );
+        targetUser = await findAuthUserByEmail(cleanEmail);
 
         if (!targetUser) {
           // Fresh permanent user creation
@@ -237,13 +232,7 @@ export async function POST(request: NextRequest) {
     // Lookup user in Supabase auth.users
     let targetUser: any = null;
     try {
-      const { data: usersData } = await supabaseAdmin.auth.admin.listUsers({
-        page: 1,
-        perPage: 100,
-      });
-      targetUser = usersData?.users?.find(
-        (u) => u.email?.toLowerCase() === cleanEmail
-      );
+      targetUser = await findAuthUserByEmail(cleanEmail);
     } catch (e) {
       console.error("[OTP Verify] User lookup error:", e);
     }

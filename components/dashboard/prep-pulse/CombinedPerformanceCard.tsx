@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import Link from "next/link";
 import {
   ResponsiveContainer,
   LineChart,
@@ -12,6 +13,7 @@ import {
   ReferenceLine,
   LabelList,
 } from "recharts";
+import { TrendingUp, ArrowRight } from "lucide-react";
 import { SubjectCalibrationData, TopicMastery } from "@/types";
 import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
@@ -38,30 +40,31 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
     });
   }, [isClient, rawAttempts]);
 
-  // Baseline 4-test data matching design.pdf Page 1
-  const defaultChartData = [
-    { mockLabel: "Mock 1", score: -8, rawScore: -8, displayVal: "-8" },
-    { mockLabel: "Mock 2", score: 46, rawScore: 46, displayVal: "46" },
-    { mockLabel: "Mock 3", score: 28, rawScore: 28, displayVal: "28" },
-    { mockLabel: "Mock 4", score: -2, rawScore: -2, displayVal: "-2" },
-  ];
-
   const chartData = useMemo(() => {
-    if (cleanAttempts.length >= 2) {
-      return cleanAttempts.map((att, idx) => {
-        const rawScore = Math.round(att.totalMarks ?? 0);
-        return {
-          mockLabel: `Mock ${idx + 1}`,
-          score: rawScore,
-          rawScore,
-          displayVal: String(rawScore),
-        };
-      });
-    }
-    return defaultChartData;
+    if (cleanAttempts.length === 0) return [];
+    return cleanAttempts.map((att, idx) => {
+      const rawScore = Math.round(att.totalMarks ?? 0);
+      return {
+        mockLabel: `Mock ${idx + 1}`,
+        score: rawScore,
+        rawScore,
+        displayVal: String(rawScore),
+      };
+    });
   }, [cleanAttempts]);
 
-  const testsCount = cleanAttempts.length >= 2 ? cleanAttempts.length : 4;
+  const testsCount = cleanAttempts.length;
+
+  const { minY, maxY } = useMemo(() => {
+    if (chartData.length === 0) return { minY: -10, maxY: 100 };
+    const scores = chartData.map((d) => d.score);
+    const min = Math.min(...scores);
+    const max = Math.max(...scores);
+    return {
+      minY: Math.min(-10, Math.floor(min / 10) * 10 - 10),
+      maxY: Math.max(50, Math.ceil(max / 10) * 10 + 10),
+    };
+  }, [chartData]);
 
   const CustomChartTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -86,59 +89,79 @@ export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = (
           Performance analytics
         </h2>
         <span className="text-xs text-slate-500 font-medium">
-          {testsCount} tests plotted
+          {testsCount} {testsCount === 1 ? "test" : "tests"} plotted
         </span>
       </div>
 
-      {/* Main Recharts Area */}
-      <div
-        role="region"
-        aria-label="Performance analytics score trend chart"
-        className="h-[220px] sm:h-[250px] w-full"
-      >
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={chartData}
-            margin={{ top: 24, right: 24, left: -20, bottom: 8 }}
+      {/* Main Area: Real chart if data exists, clean empty state otherwise */}
+      {chartData.length === 0 ? (
+        <div className="h-[220px] sm:h-[250px] w-full flex flex-col items-center justify-center text-center p-6 border border-dashed border-slate-200 rounded-xl bg-slate-50/50 space-y-3">
+          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center border border-purple-200">
+            <TrendingUp className="w-5 h-5" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-sm font-bold text-slate-900">No test data plotted</h3>
+            <p className="text-xs text-slate-500 max-w-sm">
+              Complete full-length CBT mock tests to track your score improvement trend and accuracy calibration.
+            </p>
+          </div>
+          <Link
+            href="/dashboard/mocks"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-purple-600 hover:text-purple-700 hover:underline pt-0.5"
           >
-            <CartesianGrid stroke="#F1F5F9" strokeDasharray="3 3" vertical={false} />
-            <XAxis
-              dataKey="mockLabel"
-              stroke="transparent"
-              tick={{ fontSize: 12, fill: "#64748B" }}
-              tickLine={false}
-            />
-            <YAxis
-              stroke="transparent"
-              ticks={[-8, 0, 25, 50]}
-              domain={[-15, 60]}
-              tick={{ fontSize: 12, fill: "#64748B" }}
-              tickLine={false}
-            />
-            <ReferenceLine y={0} stroke="#CBD5E1" strokeDasharray="3 3" />
-            <Tooltip content={<CustomChartTooltip />} />
-
-            {/* Modern Purple Line with circular dots */}
-            <Line
-              type="monotone"
-              dataKey="score"
-              stroke="#7C3AED"
-              strokeWidth={2.5}
-              dot={{ r: 4.5, fill: "#FFFFFF", stroke: "#7C3AED", strokeWidth: 2.5 }}
-              activeDot={{ r: 6, fill: "#7C3AED" }}
+            <span>Take a CBT Mock Test</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      ) : (
+        <div
+          role="region"
+          aria-label="Performance analytics score trend chart"
+          className="h-[220px] sm:h-[250px] w-full"
+        >
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={chartData}
+              margin={{ top: 24, right: 24, left: -20, bottom: 8 }}
             >
-              <LabelList
-                dataKey="displayVal"
-                position="top"
-                offset={10}
-                style={{ fontSize: "11px", fontWeight: "700", fill: "#0F172A" }}
+              <CartesianGrid stroke="#F1F5F9" strokeDasharray="3 3" vertical={false} />
+              <XAxis
+                dataKey="mockLabel"
+                stroke="transparent"
+                tick={{ fontSize: 12, fill: "#64748B" }}
+                tickLine={false}
               />
-            </Line>
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+              <YAxis
+                stroke="transparent"
+                domain={[minY, maxY]}
+                tick={{ fontSize: 12, fill: "#64748B" }}
+                tickLine={false}
+              />
+              <ReferenceLine y={0} stroke="#CBD5E1" strokeDasharray="3 3" />
+              <Tooltip content={<CustomChartTooltip />} />
 
-      {/* Footer caption matching design.pdf Page 1 */}
+              {/* Modern Purple Line with circular dots */}
+              <Line
+                type="monotone"
+                dataKey="score"
+                stroke="#7C3AED"
+                strokeWidth={2.5}
+                dot={{ r: 4.5, fill: "#FFFFFF", stroke: "#7C3AED", strokeWidth: 2.5 }}
+                activeDot={{ r: 6, fill: "#7C3AED" }}
+              >
+                <LabelList
+                  dataKey="displayVal"
+                  position="top"
+                  offset={10}
+                  style={{ fontSize: "11px", fontWeight: "700", fill: "#0F172A" }}
+                />
+              </Line>
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      {/* Footer caption */}
       <div className="pt-2 border-t border-[#EFE6DC] text-xs text-[#8C7D73]">
         +5 for correct, −1 for incorrect.
       </div>

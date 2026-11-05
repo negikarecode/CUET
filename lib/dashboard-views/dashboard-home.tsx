@@ -56,6 +56,7 @@ export default async function DashboardPage() {
     currentCycleNumber: 1,
     currentCycleQuestionCount: 0,
     isDiagnosticUnlocked: false,
+    serverAttempts: [],
   };
 
   // 2. Query Supabase database to override with live data if available

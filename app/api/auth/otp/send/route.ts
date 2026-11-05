@@ -13,7 +13,7 @@ import {
 } from "@/lib/auth/pending-registration-service";
 import { sendOtpEmail, BrevoError } from "@/lib/email/brevo";
 import { validateEmail } from "@/lib/auth/validation";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { classifyEmail, findAuthUserByEmail } from "@/lib/auth/email-classification";
 
 export const dynamic = "force-dynamic";
 
@@ -46,19 +46,10 @@ export async function POST(request: NextRequest) {
     // STAGE A: PENDING REGISTRATION (type === 'signup')
     // ─────────────────────────────────────────────────────────────────────────
     if (type === "signup") {
-      // 1. Check if user already exists and is verified in auth.users
+      // 1. Authoritative check: only genuine permanent verified accounts block registration
       try {
-        const { data: usersData } = await supabaseAdmin.auth.admin.listUsers({
-          page: 1,
-          perPage: 50,
-        });
-        const existingVerifiedUser = usersData?.users?.find(
-          (u) =>
-            u.email?.toLowerCase() === cleanEmail &&
-            Boolean(u.email_confirmed_at || (u as any).confirmed_at)
-        );
-
-        if (existingVerifiedUser) {
+        const classification = await classifyEmail(cleanEmail);
+        if (classification.category === "VERIFIED_EXISTING") {
           return NextResponse.json(
             {
               ok: false,
@@ -69,7 +60,7 @@ export async function POST(request: NextRequest) {
           );
         }
       } catch (checkErr) {
-        // Proceed if listing fails
+        // Proceed if check throws non-fatal exception
       }
 
       // 2. Validate required registration payload fields if provided
@@ -163,13 +154,7 @@ export async function POST(request: NextRequest) {
     // LOGIN / RECOVERY FLOWS (type === 'login' || type === 'recovery')
     // ─────────────────────────────────────────────────────────────────────────
     try {
-      const { data: usersData } = await supabaseAdmin.auth.admin.listUsers({
-        page: 1,
-        perPage: 50,
-      });
-      const existingUser = usersData?.users?.find(
-        (u) => u.email?.toLowerCase() === cleanEmail
-      );
+      const existingUser = await findAuthUserByEmail(cleanEmail);
 
       if (!existingUser) {
         // Account enumeration defense: respond with success to avoid leaking registration state

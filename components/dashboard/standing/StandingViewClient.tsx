@@ -72,9 +72,11 @@ export default function StandingViewClient({
   const testAttemptsRaw = useTestStore((state) => state.testAttempts);
   const testAttempts = useMemo(() => {
     if (initialUserId) {
-      return (testAttemptsRaw && testAttemptsRaw.length > 0)
-        ? deduplicateTestAttempts(testAttemptsRaw)
-        : deduplicateTestAttempts(initialAttempts || []);
+      const currentStoreUserId = useTestStore.getState().user?.id;
+      if (currentStoreUserId === initialUserId && testAttemptsRaw && testAttemptsRaw.length > 0) {
+        return deduplicateTestAttempts(testAttemptsRaw);
+      }
+      return deduplicateTestAttempts(initialAttempts || []);
     }
     const raw =
       testAttemptsRaw && testAttemptsRaw.length > 0

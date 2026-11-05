@@ -108,7 +108,7 @@ export default function AuthPageContent({
     let userSelectedSubjects =
       authUser.user_metadata?.selected_subjects || selectedSubjects || DEFAULT_STREAM_SUBJECTS[userStream];
     let userXp = 0;
-    let userStreak = 1;
+    let userStreak = 0;
     let userCoins = 50;
 
     try {

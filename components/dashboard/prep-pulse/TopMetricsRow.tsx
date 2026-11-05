@@ -13,14 +13,14 @@ interface TopMetricsRowProps {
 }
 
 export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
-  score = -2,
+  score = 0,
   maxScore = 250,
-  testTitle = "Physics Full Mock 50",
-  accuracyPercentage = 22,
-  correctCount = 44,
-  totalAttempted = 200,
-  completedTestsCount = 4,
-  dailyStreak = 1,
+  testTitle,
+  accuracyPercentage = 0,
+  correctCount = 0,
+  totalAttempted = 0,
+  completedTestsCount = 0,
+  dailyStreak = 0,
 }) => {
   const hasAttempts = totalAttempted > 0;
 
@@ -28,30 +28,30 @@ export const TopMetricsRow: React.FC<TopMetricsRowProps> = ({
     {
       id: "score",
       label: "Latest mock",
-      value: hasAttempts ? `${score} / ${maxScore}` : "−2 / 250",
-      context: testTitle || "Physics Full Mock 50",
+      value: hasAttempts ? `${score} / ${maxScore}` : "— / 250",
+      context: hasAttempts && testTitle ? testTitle : "No mock tests attempted yet",
     },
     {
       id: "accuracy",
       label: "Recent accuracy",
-      value: hasAttempts ? `${accuracyPercentage}%` : "22%",
+      value: hasAttempts ? `${accuracyPercentage}%` : "0%",
       context: hasAttempts
         ? `${correctCount} of ${totalAttempted} correct`
-        : "44 of 200 correct",
+        : "No attempts yet",
     },
     {
       id: "attempted",
       label: "Questions attempted",
-      value: hasAttempts ? `${totalAttempted}` : "200",
+      value: `${totalAttempted}`,
       context:
         completedTestsCount > 0
           ? `Across ${completedTestsCount} ${completedTestsCount === 1 ? "test" : "tests"}`
-          : "Across 4 tests",
+          : "Across 0 tests",
     },
     {
       id: "streak",
       label: "Study streak",
-      value: `${dailyStreak || 1} ${dailyStreak === 1 ? "day" : "days"}`,
+      value: `${dailyStreak} ${dailyStreak === 1 ? "day" : "days"}`,
       context: "Consecutive practice days",
     },
   ];

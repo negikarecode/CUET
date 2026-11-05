@@ -95,7 +95,7 @@ export default function OnboardingModal({
     let userCourse = authUser.user_metadata?.target_course || "Undergraduate Program";
     let userSelectedSubjects = authUser.user_metadata?.selected_subjects || DEFAULT_STREAM_SUBJECTS[userStream] || DEFAULT_STREAM_SUBJECTS.commerce;
     let userXp = 0;
-    let userStreak = 1;
+    let userStreak = 0;
     let userCoins = 50;
 
     try {

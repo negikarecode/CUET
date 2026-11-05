@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase/admin";
 import { validateEmail } from "@/lib/auth/validation";
+import { classifyEmail } from "@/lib/auth/email-classification";
 
 export const dynamic = "force-dynamic";
 
@@ -17,68 +17,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 1. Check in students view (direct DB join with auth.users)
-    try {
-      const { data: studentMatches } = await supabaseAdmin
-        .from("students")
-        .select("id, email")
-        .ilike("email", cleanEmail)
-        .limit(1);
+    // Authoritative email classification:
+    // Only genuine permanent verified accounts (auth.users + email_confirmed_at != null) produce exists: true.
+    // Pending registrations, expired codes, or unconfirmed accounts must NEVER block new registrations.
+    const result = await classifyEmail(cleanEmail);
 
-      if (studentMatches && studentMatches.length > 0) {
-        return NextResponse.json({
-          ok: true,
-          exists: true,
-          message: "An account with this email already exists. Please log in instead.",
-        });
-      }
-    } catch {
-      // Continue to listUsers fallback
-    }
-
-    // 2. Check directly against Supabase Auth users catalog
-    let page = 1;
-    const perPage = 500;
-    let found = false;
-
-    while (page <= 5) {
-      const { data, error } = await supabaseAdmin.auth.admin.listUsers({
-        page,
-        perPage,
-      });
-
-      if (error || !data?.users || data.users.length === 0) {
-        break;
-      }
-
-      if (
-        data.users.some(
-          (u) =>
-            u.email?.toLowerCase() === cleanEmail &&
-            Boolean(u.email_confirmed_at || (u as any).confirmed_at)
-        )
-      ) {
-        found = true;
-        break;
-      }
-
-      if (data.users.length < perPage) {
-        break;
-      }
-      page++;
-    }
-
-    if (found) {
+    if (result.category === "VERIFIED_EXISTING") {
       return NextResponse.json({
         ok: true,
         exists: true,
-        message: "An account with this email already exists. Please log in instead.",
+        category: result.category,
+        message: result.message || "An account with this email already exists. Please log in instead.",
       });
     }
 
     return NextResponse.json({
       ok: true,
       exists: false,
+      category: result.category,
+      isPending: result.isPending,
+      isExpired: result.isExpired,
+      registrationId: result.registrationId,
     });
   } catch (error: any) {
     console.error("[check-email] Internal error:", error);

@@ -84,10 +84,12 @@ export default function DashboardClient({
   // Prevent stale cross-user attempt bleeding before client synchronization completes
   const testAttempts = useMemo(() => {
     if (isServerUser) {
-      if (storeUser?.id && storeUser.id !== initialData.user.id) {
+      if (!storeUser?.id || storeUser.id !== initialData.user.id) {
         return initialData.serverAttempts || [];
       }
-      return initialData.serverAttempts || storeAttempts || [];
+      return (initialData.serverAttempts && initialData.serverAttempts.length > 0)
+        ? initialData.serverAttempts
+        : (storeUser.id === initialData.user.id ? (storeAttempts || []) : []);
     }
     return storeAttempts || [];
   }, [isServerUser, storeUser?.id, initialData.user?.id, initialData.serverAttempts, storeAttempts]);

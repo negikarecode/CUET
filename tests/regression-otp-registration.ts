@@ -1,4 +1,8 @@
-import { describe, it, before, after } from "node:test";
+import { config } from "dotenv";
+import path from "path";
+config({ path: path.resolve(process.cwd(), ".env.local") });
+
+import { describe, it, after } from "node:test";
 import assert from "node:assert/strict";
 import { supabaseAdmin } from "../lib/supabase/admin";
 import { NextRequest } from "next/server";

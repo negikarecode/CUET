@@ -26,7 +26,9 @@ export interface PendingRegistrationRecord {
   ip?: string;
 }
 
-const OTP_SECRET = process.env.OTP_SECRET || "cuetmate-default-otp-secret-salt-2026";
+function getOtpSecret(): string {
+  return process.env.OTP_SECRET || "cuetmate-default-otp-secret-salt-2026";
+}
 export const OTP_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
 export const RESEND_COOLDOWN_MS = 60 * 1000; // 60 seconds
 export const MAX_RESENDS_PER_HOUR = 5;
@@ -43,7 +45,7 @@ export const MAX_VERIFY_ATTEMPTS = 5;
  * Derives a 32-byte key from OTP_SECRET for AES-256-GCM.
  */
 function getEncryptionKey(): Buffer {
-  return crypto.createHash("sha256").update(OTP_SECRET).digest();
+  return crypto.createHash("sha256").update(getOtpSecret()).digest();
 }
 
 /**
@@ -95,7 +97,7 @@ export function generateRegistrationId(): string {
  * Hashes an OTP with HMAC-SHA256 using OTP_SECRET.
  */
 export function hashOtp(code: string): string {
-  return crypto.createHmac("sha256", OTP_SECRET).update(code.trim()).digest("hex");
+  return crypto.createHmac("sha256", getOtpSecret()).update(code.trim()).digest("hex");
 }
 
 /**

@@ -25,7 +25,9 @@ if (!globalThis.__cuetOtpMemoryStore) {
 }
 const memoryStore = globalThis.__cuetOtpMemoryStore;
 
-const OTP_SECRET = process.env.OTP_SECRET || "cuetmate-default-otp-secret-salt-2026";
+function getOtpSecret(): string {
+  return process.env.OTP_SECRET || "cuetmate-default-otp-secret-salt-2026";
+}
 export const OTP_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
 export const COOLDOWN_SECONDS = 60;
 export const MAX_ATTEMPTS = 5;
@@ -42,7 +44,7 @@ export function generateNumericOtp(): string {
  * Hashes an OTP with HMAC-SHA256 using the configured secret.
  */
 export function hashOtp(code: string): string {
-  return crypto.createHmac("sha256", OTP_SECRET).update(code.trim()).digest("hex");
+  return crypto.createHmac("sha256", getOtpSecret()).update(code.trim()).digest("hex");
 }
 
 /**
