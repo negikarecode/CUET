@@ -213,7 +213,10 @@ export const SUPPORTED_PLANS: Record<string, PlanDefinition> = {
 };
 
 export function getPlanConfig(planId: string): PlanDefinition {
-  const normalized = (planId || "all_access_pass_799").trim().toLowerCase();
+  if (!planId || typeof planId !== "string" || planId.trim() === "") {
+    throw new Error("Unauthorized or unrecognized plan ID: missing or empty plan identifier.");
+  }
+  const normalized = planId.trim().toLowerCase();
   const plan = SUPPORTED_PLANS[normalized];
   if (!plan) {
     throw new Error(`Unauthorized or unrecognized plan ID: ${planId}`);
@@ -813,7 +816,25 @@ export async function reconcileUserEntitlements(userId: string): Promise<{
   const admin = createAdminClient();
   const now = new Date();
 
-  // Query all non-refunded captured transactions for this user
+  // 1. Attempt atomic PostgreSQL RPC reconciliation with row-level lock (FOR UPDATE)
+  try {
+    const { data: rpcResult, error: rpcError } = await admin.rpc("reconcile_user_entitlements", {
+      p_user_id: userId,
+    });
+    if (!rpcError && rpcResult && typeof rpcResult === "object") {
+      return {
+        isPremium: Boolean(rpcResult.is_premium),
+        tier: (rpcResult.subscription_tier as SubscriptionTier) || "free",
+        expiresAt: rpcResult.subscription_expires_at || null,
+      };
+    }
+  } catch (rpcErr) {
+    console.warn("[reconcileUserEntitlements] RPC call fallback to application-level reconciliation:", rpcErr);
+  }
+
+  // 2. Application-level sequential stacking reconciliation
+  // Query all active qualifying transactions: captured, partially_refunded, and disputed (under review).
+  // Exclude fully refunded ('refunded'), lost disputes ('disputed_lost'), and failed ('failed').
   const { data: transactions, error } = await admin
     .from("payment_transactions")
     .select(`
@@ -828,29 +849,27 @@ export async function reconcileUserEntitlements(userId: string): Promise<{
       )
     `)
     .eq("user_id", userId)
-    .eq("status", "captured")
-    .order("verified_at", { ascending: false });
+    .in("status", ["captured", "partially_refunded", "disputed"])
+    .order("verified_at", { ascending: true });
 
   if (error) {
     console.error("[reconcileUserEntitlements] Error querying transactions:", error);
     throw error;
   }
 
-  // Filter for transactions that are still within their 1-year valid subscription window
-  // and whose parent order is not marked refunded/cancelled
+  // Filter out transactions whose parent order is marked refunded or cancelled
   const validTransactions = (transactions || []).filter((tx: any) => {
     const order = Array.isArray(tx.payment_orders) ? tx.payment_orders[0] : tx.payment_orders;
     if (order && (order.status === "refunded" || order.status === "cancelled")) {
       return false;
     }
     const verifiedTime = new Date(tx.verified_at).getTime();
-    const oneYearAfter = verifiedTime + 365 * 24 * 60 * 60 * 1000;
-    return !isNaN(verifiedTime) && oneYearAfter > now.getTime();
+    return !isNaN(verifiedTime);
   });
 
   if (validTransactions.length === 0) {
     // Zero valid qualifying purchases remain - revoke Premium
-    await admin
+    const { error: updateErr } = await admin
       .from("profiles")
       .update({
         is_premium: false,
@@ -860,23 +879,36 @@ export async function reconcileUserEntitlements(userId: string): Promise<{
       })
       .eq("id", userId);
 
+    if (updateErr) {
+      console.error("[reconcileUserEntitlements] Profile update error on revocation:", updateErr);
+      throw updateErr;
+    }
+
     return { isPremium: false, tier: "free", expiresAt: null };
   }
 
-  // Find the maximum expiration date from all surviving valid transactions
-  let maxExpiryMs = 0;
+  // Chronologically stack durations to preserve sequential subscription extensions
+  let currentExpiryMs = 0;
   let highestTier: SubscriptionTier = "free";
 
   for (const tx of validTransactions) {
     const verifiedTime = new Date(tx.verified_at).getTime();
-    const expiryMs = verifiedTime + 365 * 24 * 60 * 60 * 1000;
-    if (expiryMs > maxExpiryMs) {
-      maxExpiryMs = expiryMs;
-    }
+    if (isNaN(verifiedTime)) continue;
 
     const order = Array.isArray(tx.payment_orders) ? tx.payment_orders[0] : tx.payment_orders;
     const planId = order?.plan_id || "all_access_pass_799";
-    const plan = SUPPORTED_PLANS[planId];
+    const plan = SUPPORTED_PLANS[planId] || SUPPORTED_PLANS["all_access_pass_799"];
+    const durationDays = plan?.durationDays || 365;
+    const durationMs = durationDays * 24 * 60 * 60 * 1000;
+
+    if (verifiedTime < currentExpiryMs) {
+      // Sequential extension: previous subscription was still active when this purchase occurred
+      currentExpiryMs = currentExpiryMs + durationMs;
+    } else {
+      // First purchase or purchased after previous subscription lapsed
+      currentExpiryMs = verifiedTime + durationMs;
+    }
+
     if (plan?.tier === "all_access_pass") {
       highestTier = "all_access_pass";
     } else if (plan?.tier === "ai_practice_pass" && highestTier !== "all_access_pass") {
@@ -884,21 +916,28 @@ export async function reconcileUserEntitlements(userId: string): Promise<{
     }
   }
 
-  const finalExpiresAt = new Date(maxExpiryMs).toISOString();
+  const isStillActive = currentExpiryMs > now.getTime();
+  const finalExpiresAt = currentExpiryMs > 0 ? new Date(currentExpiryMs).toISOString() : null;
+  const finalTier: SubscriptionTier = isStillActive ? highestTier : "free";
 
-  await admin
+  const { error: updateErr } = await admin
     .from("profiles")
     .update({
-      is_premium: true,
-      subscription_tier: highestTier,
+      is_premium: isStillActive,
+      subscription_tier: finalTier,
       subscription_expires_at: finalExpiresAt,
       updated_at: now.toISOString(),
     })
     .eq("id", userId);
 
+  if (updateErr) {
+    console.error("[reconcileUserEntitlements] Profile update error on reconciliation:", updateErr);
+    throw updateErr;
+  }
+
   return {
-    isPremium: true,
-    tier: highestTier,
+    isPremium: isStillActive,
+    tier: finalTier,
     expiresAt: finalExpiresAt,
   };
 }

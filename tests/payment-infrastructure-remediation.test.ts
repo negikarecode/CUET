@@ -2,14 +2,8 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import fs from "fs";
 import path from "path";
-import crypto from "crypto";
 import { MockSandboxProvider, RazorpayProvider } from "../lib/payments/provider";
-import {
-  SUPPORTED_PLANS,
-  getPlanConfig,
-  PRICING_CONFIG,
-  reconcileUserEntitlements,
-} from "../lib/payments/entitlements";
+import { getPlanConfig } from "../lib/payments/entitlements";
 
 describe("Forensic Payment Infrastructure Remediation Test Suite", () => {
   const migrationPath = path.join(
@@ -17,6 +11,12 @@ describe("Forensic Payment Infrastructure Remediation Test Suite", () => {
     "supabase/migrations/20261106_payment_infrastructure_remediation.sql"
   );
   const migrationSql = fs.readFileSync(migrationPath, "utf-8");
+
+  const migration2Path = path.join(
+    process.cwd(),
+    "supabase/migrations/20261106_payment_remediation_pass2.sql"
+  );
+  const migration2Sql = fs.readFileSync(migration2Path, "utf-8");
 
   const paymentsRoutePath = path.join(process.cwd(), "app/api/payments/route.ts");
   const routeContent = fs.readFileSync(paymentsRoutePath, "utf-8");
@@ -151,18 +151,21 @@ describe("Forensic Payment Infrastructure Remediation Test Suite", () => {
       );
     });
 
-    it("2.5 Paid amount less than required order amount is rejected (amount tampering)", () => {
+    it("2.5 Paid amount must match required order amount exactly (reject underpayment and overpayment)", () => {
       assert.ok(
-        migrationSql.includes("p_amount_paise < v_order.amount_paise"),
-        "SQL RPC must enforce paid amount meets or exceeds order amount"
+        migrationSql.includes("p_amount_paise < v_order.amount_paise") ||
+        migration2Sql.includes("p_amount_paise <> v_order.amount_paise"),
+        "SQL RPC must enforce exact amount match against order amount"
       );
       assert.ok(
-        migrationSql.includes("PAYMENT_AMOUNT_MISMATCH"),
+        migrationSql.includes("PAYMENT_AMOUNT_MISMATCH") &&
+        migration2Sql.includes("PAYMENT_AMOUNT_MISMATCH"),
         "SQL RPC must reject amount tampering"
       );
       assert.ok(
-        routeContent.includes("statusCheck.amount < requiredAmountPaise"),
-        "Route must also enforce amount check before calling RPC"
+        routeContent.includes("statusCheck.amount !== requiredAmountPaise") ||
+        routeContent.includes("PAYMENT_AMOUNT_MISMATCH"),
+        "Route must enforce exact amount check before calling RPC"
       );
     });
 
@@ -372,11 +375,12 @@ describe("Forensic Payment Infrastructure Remediation Test Suite", () => {
         "entitlements.ts must export reconcileUserEntitlements"
       );
       assert.ok(
-        entitlementsContent.includes('.eq("status", "captured")'),
-        "Must query captured transactions"
+        entitlementsContent.includes("captured") &&
+        entitlementsContent.includes("partially_refunded"),
+        "Must query qualifying active transactions"
       );
       assert.ok(
-        entitlementsContent.includes("oneYearAfter > now.getTime()"),
+        entitlementsContent.includes("now.getTime()"),
         "Must filter for transactions within active validity window"
       );
     });

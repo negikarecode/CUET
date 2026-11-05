@@ -79,42 +79,136 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const { event, userId, tier, orderId, paymentId, amount } = webhookResult;
+      const {
+        event,
+        userId,
+        orderId,
+        paymentId: rawPaymentId,
+        amount,
+        currency,
+        refundId,
+        refundAmount,
+        disputeId,
+        disputeAmount,
+        disputeReason,
+        paymentAmountRefunded,
+      } = webhookResult;
+
+      let paymentId = rawPaymentId;
 
       // CRITICAL SEC-02: 'authorized' is NOT paid. Do NOT activate Premium on authorization alone.
       if (event === "payment.authorized") {
-        console.log(`[Webhook Notice] Payment ${paymentId} is authorized but not captured. Entitlement fulfillment deferred.`);
+        console.log(`[Webhook Notice] Payment ${paymentId || "unknown"} is authorized but not captured. Entitlement fulfillment deferred.`);
         return NextResponse.json({ status: "ok", received: true, message: "Payment authorized; awaiting capture." });
       }
 
-      if ((event === "order.paid" || event === "payment.captured") && userId) {
+      // ─── 1A. HANDLE ORDER.PAID & PAYMENT.CAPTURED (FULFILLMENT GATE) ───────────
+      if (event === "order.paid" || event === "payment.captured") {
+        // Requirement P1: If event is order.paid without payment ID, attempt retrieval of captured payment from provider
+        if (event === "order.paid" && !paymentId && orderId) {
+          try {
+            const orderPayments = await provider.fetchOrderPayments(orderId);
+            const capturedPayment = orderPayments.find((p) => p.status === "captured");
+            if (capturedPayment) {
+              paymentId = capturedPayment.id;
+            }
+          } catch (fetchErr) {
+            console.warn(`[Webhook Notice] Unable to fetch payments for order ${orderId}:`, fetchErr);
+          }
+        }
+
+        // P1: Do not fulfill an order solely from order.paid unless the actual associated payment is retrieved and captured
+        if (!paymentId) {
+          console.log(`[Webhook Deferral] Event ${event} received for order ${orderId} without a verified captured payment ID. Fulfillment deferred.`);
+          return NextResponse.json({
+            status: "ok",
+            received: true,
+            message: "Fulfillment deferred: verified captured payment ID is required.",
+          });
+        }
+
         const supabaseAdmin = createAdminClient();
+
+        // Authoritative resolution of order and user from database
+        let orderRecord: any = null;
+        if (orderId) {
+          try {
+            const { data: ord } = await supabaseAdmin
+              .from("payment_orders")
+              .select("id, user_id, status, amount_paise, plan_id, provider, currency, is_promotional")
+              .eq("provider_order_id", orderId)
+              .maybeSingle();
+            orderRecord = ord;
+          } catch (ordErr) {
+            console.warn("[Webhook Order Resolution Notice]:", ordErr);
+          }
+        }
+
+        const effectiveUserId = userId || orderRecord?.user_id;
+        if (!effectiveUserId) {
+          console.error(`[CRITICAL] Webhook fulfillment failed: Cannot resolve candidate user for order ${orderId}, payment ${paymentId}`);
+          return NextResponse.json(
+            { error: "Unable to resolve target user for fulfillment.", code: "USER_RESOLUTION_FAILED" },
+            { status: 422 }
+          );
+        }
+
+        // Validate provider matching
+        if (orderRecord?.provider && orderRecord.provider !== provider.name) {
+          console.error(`[SECURITY ALERT] Provider mismatch in webhook: order was created for ${orderRecord.provider}, received ${provider.name}`);
+          return NextResponse.json(
+            { error: "Payment provider mismatch on webhook fulfillment.", code: "PROVIDER_MISMATCH" },
+            { status: 400 }
+          );
+        }
+
+        // Exact amount validation: reject underpayment and overpayment
+        const effectiveAmountPaise = amount ?? orderRecord?.amount_paise;
+        if (orderRecord?.amount_paise && effectiveAmountPaise !== orderRecord.amount_paise) {
+          console.error(
+            `[SECURITY ALERT] Amount mismatch in webhook fulfillment: expected exactly ${orderRecord.amount_paise} paise, received ${effectiveAmountPaise} paise.`
+          );
+          return NextResponse.json(
+            { error: "Payment amount mismatch.", code: "PAYMENT_AMOUNT_MISMATCH" },
+            { status: 400 }
+          );
+        }
+
+        // Derive plan configuration server-side
+        const resolvedPlanId = orderRecord?.plan_id || "all_access_pass_799";
+        let planConfig;
+        try {
+          planConfig = getPlanConfig(resolvedPlanId);
+        } catch {
+          planConfig = getPlanConfig("all_access_pass_799");
+        }
+
         const oneYearFromNow = new Date();
         oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
 
         try {
           // Attempt atomic PostgreSQL transaction fulfillment (SEC-01)
           const { error: rpcError } = await supabaseAdmin.rpc("fulfill_payment_order", {
-            p_user_id: userId,
+            p_user_id: effectiveUserId,
             p_provider: provider.name,
             p_provider_order_id: orderId || "",
-            p_provider_payment_id: paymentId || `wh_${Date.now()}`,
+            p_provider_payment_id: paymentId,
             p_provider_signature: webhookSignature,
-            p_amount_paise: amount || 200,
-            p_currency: "INR",
-            p_tier: tier || "all_access_pass",
+            p_amount_paise: effectiveAmountPaise || planConfig.standardPricePaise,
+            p_currency: currency || orderRecord?.currency || "INR",
+            p_tier: planConfig.tier,
             p_expires_at: oneYearFromNow.toISOString(),
-            p_bonus_coins: 500,
-            p_raw_payload: { event, orderId },
+            p_bonus_coins: planConfig.bonusCoins,
+            p_raw_payload: { event, orderId, paymentId },
           });
 
           if (!rpcError) {
-            console.log(`[Webhook Atomic Fulfillment] User ${userId} successfully upgraded to Premium.`);
+            console.log(`[Webhook Atomic Fulfillment] User ${effectiveUserId} successfully upgraded to Premium via payment ${paymentId}.`);
             return NextResponse.json({ status: "ok", received: true });
           }
 
           // FAIL-CLOSED: Never fall back to uncoordinated non-atomic mutations on fulfillment errors
-          console.error(`[CRITICAL SEC-01] Webhook atomic fulfillment rejected for user ${userId}:`, rpcError);
+          console.error(`[CRITICAL SEC-01] Webhook atomic fulfillment rejected for user ${effectiveUserId}:`, rpcError);
           return NextResponse.json(
             { error: "Atomic payment fulfillment rejected.", code: "ATOMIC_FULFILLMENT_FAILED" },
             { status: 500 }
@@ -125,26 +219,181 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // ─── 1B. HANDLE REFUNDS & CHARGEBACKS (TRANSACTION-AWARE) ──────────────
+      // ─── 1B. HANDLE DISPUTES (SEPARATED FROM REFUNDS) ─────────────────────────
       if (
-        event === "refund.created" ||
-        event === "refund.processed" ||
-        event === "payment.dispute.created"
+        event === "payment.dispute.created" ||
+        event === "payment.dispute.won" ||
+        event === "payment.dispute.lost"
       ) {
         const supabaseAdmin = createAdminClient();
         let targetUserId = userId;
 
-        // If userId was not passed in webhook notes, resolve it via payment_transactions or payment_orders
-        if (!targetUserId && paymentId) {
+        // Resolve user through transaction record if not present in notes
+        let txRecord: any = null;
+        if (paymentId) {
           try {
             const { data: tx } = await supabaseAdmin
               .from("payment_transactions")
-              .select("user_id, order_id")
+              .select("id, user_id, order_id, status, amount_paise")
+              .eq("provider_payment_id", paymentId)
+              .maybeSingle();
+            if (tx) {
+              txRecord = tx;
+              targetUserId = targetUserId || tx.user_id;
+            }
+          } catch (lookupErr) {
+            console.warn("[Webhook Dispute Tx Lookup Warning]:", lookupErr);
+          }
+        }
+
+        if (!targetUserId && orderId) {
+          try {
+            const { data: ord } = await supabaseAdmin
+              .from("payment_orders")
+              .select("user_id")
+              .eq("provider_order_id", orderId)
+              .maybeSingle();
+            if (ord?.user_id) targetUserId = ord.user_id;
+          } catch (lookupErr) {
+            console.warn("[Webhook Dispute Order Lookup Warning]:", lookupErr);
+          }
+        }
+
+        if (!targetUserId) {
+          console.error(`[Webhook Dispute Error] Could not resolve user for dispute event ${event}, paymentId=${paymentId}`);
+          return NextResponse.json(
+            { error: "Unable to resolve target user for dispute event.", code: "USER_RESOLUTION_FAILED" },
+            { status: 422 }
+          );
+        }
+
+        try {
+          if (event === "payment.dispute.created") {
+            // Record dispute audit entry
+            if (disputeId) {
+              try {
+                await supabaseAdmin
+                  .from("payment_disputes")
+                  .upsert({
+                    provider_dispute_id: disputeId,
+                    payment_id: paymentId || "",
+                    transaction_id: txRecord?.id || null,
+                    amount_paise: disputeAmount || txRecord?.amount_paise || 0,
+                    currency: currency || "INR",
+                    status: "under_review",
+                    reason_code: disputeReason || null,
+                    raw_payload: webhookResult.rawPayload || {},
+                  }, { onConflict: "provider_dispute_id" });
+              } catch (e: any) {
+                console.warn("[Dispute Insert Warning]:", e?.message);
+              }
+            }
+
+            // Update transaction status to 'disputed' WITHOUT marking refunded
+            // CRITICAL: Do NOT release promotional inventory on dispute creation!
+            if (paymentId && txRecord?.status !== "disputed_lost" && txRecord?.status !== "refunded") {
+              await supabaseAdmin
+                .from("payment_transactions")
+                .update({ status: "disputed", dispute_status: "under_review" })
+                .eq("provider_payment_id", paymentId);
+            }
+
+            console.log(`[Dispute Created] Transaction for payment ${paymentId} marked disputed (under review). Inventory preserved.`);
+            return NextResponse.json({ status: "ok", received: true, disputeStatus: "under_review" });
+          }
+
+          if (event === "payment.dispute.won") {
+            if (disputeId) {
+              try {
+                await supabaseAdmin
+                  .from("payment_disputes")
+                  .update({ status: "won", updated_at: new Date().toISOString() })
+                  .eq("provider_dispute_id", disputeId);
+              } catch (e: any) {
+                console.warn("[Dispute Won Update Warning]:", e?.message);
+              }
+            }
+
+            // Restore transaction status to 'captured'
+            if (paymentId) {
+              await supabaseAdmin
+                .from("payment_transactions")
+                .update({ status: "captured", dispute_status: "won" })
+                .eq("provider_payment_id", paymentId);
+            }
+
+            const reconciliation = await reconcileUserEntitlements(targetUserId);
+            console.log(`[Dispute Won] Payment ${paymentId} affirmed. Premium confirmed active for ${targetUserId}.`);
+            return NextResponse.json({ status: "ok", received: true, disputeStatus: "won", entitlement: reconciliation });
+          }
+
+          if (event === "payment.dispute.lost") {
+            if (disputeId) {
+              try {
+                await supabaseAdmin
+                  .from("payment_disputes")
+                  .update({ status: "lost", updated_at: new Date().toISOString() })
+                  .eq("provider_dispute_id", disputeId);
+              } catch (e: any) {
+                console.warn("[Dispute Lost Update Warning]:", e?.message);
+              }
+            }
+
+            // Mark transaction as lost chargeback
+            if (paymentId) {
+              await supabaseAdmin
+                .from("payment_transactions")
+                .update({ status: "disputed_lost", dispute_status: "lost" })
+                .eq("provider_payment_id", paymentId);
+            }
+
+            // Release promotional slot and reconcile
+            if (orderId) {
+              const { data: updatedOrd } = await supabaseAdmin
+                .from("payment_orders")
+                .update({ status: "refunded", updated_at: new Date().toISOString() })
+                .eq("provider_order_id", orderId)
+                .select("id, is_promotional")
+                .maybeSingle();
+
+              if (updatedOrd?.is_promotional && updatedOrd?.id) {
+                await supabaseAdmin
+                  .from("promotional_slots")
+                  .update({ status: "released", user_id: null, order_id: null, claimed_at: null })
+                  .eq("order_id", updatedOrd.id);
+              }
+            }
+
+            const reconciliation = await reconcileUserEntitlements(targetUserId);
+            console.log(`[Dispute Lost] Chargeback finalized for payment ${paymentId}. Entitlements reconciled for ${targetUserId}.`);
+            return NextResponse.json({ status: "ok", received: true, disputeStatus: "lost", entitlement: reconciliation });
+          }
+        } catch (dispErr) {
+          console.error("[Webhook Dispute Error]:", dispErr);
+          return NextResponse.json({ error: "Dispute processing error." }, { status: 500 });
+        }
+      }
+
+      // ─── 1C. HANDLE REFUNDS (PARTIAL VS FULL DIFFERENTIATION) ─────────────────
+      if (
+        event === "refund.created" ||
+        event === "refund.processed"
+      ) {
+        const supabaseAdmin = createAdminClient();
+        let targetUserId = userId;
+
+        let txRecord: any = null;
+        if (paymentId) {
+          try {
+            const { data: tx } = await supabaseAdmin
+              .from("payment_transactions")
+              .select("id, user_id, order_id, amount_paise, status, refunded_amount_paise")
               .eq("provider_payment_id", paymentId)
               .maybeSingle();
 
-            if (tx?.user_id) {
-              targetUserId = tx.user_id;
+            if (tx) {
+              txRecord = tx;
+              targetUserId = targetUserId || tx.user_id;
             }
           } catch (lookupErr) {
             console.warn("[Webhook Refund Lookup Warning]:", lookupErr);
@@ -169,47 +418,86 @@ export async function POST(req: NextRequest) {
 
         if (!targetUserId) {
           console.error(
-            `[Webhook Refund/Dispute Error] Could not resolve user for event ${event}, paymentId=${paymentId}, orderId=${orderId}`
+            `[Webhook Refund Error] Could not resolve user for refund event ${event}, paymentId=${paymentId}, orderId=${orderId}`
           );
           return NextResponse.json(
-            { error: "Unable to resolve target user for refund/dispute event.", code: "USER_RESOLUTION_FAILED" },
+            { error: "Unable to resolve target user for refund event.", code: "USER_RESOLUTION_FAILED" },
             { status: 422 }
           );
         }
 
         try {
-          // 1. Mark transaction as refunded
-          if (paymentId) {
-            await supabaseAdmin
-              .from("payment_transactions")
-              .update({ status: "refunded" })
-              .eq("provider_payment_id", paymentId);
-          }
-
-          // 2. Mark order as refunded and release any promotional slot
-          if (orderId) {
-            const { data: updatedOrd } = await supabaseAdmin
-              .from("payment_orders")
-              .update({ status: "refunded", updated_at: new Date().toISOString() })
-              .eq("provider_order_id", orderId)
-              .select("id, is_promotional")
-              .maybeSingle();
-
-            if (updatedOrd?.is_promotional && updatedOrd?.id) {
+          // Record refund event in payment_refunds table (audit trail & idempotency)
+          if (refundId && paymentId) {
+            try {
               await supabaseAdmin
-                .from("promotional_slots")
-                .update({ status: "released", user_id: null, order_id: null, claimed_at: null })
-                .eq("order_id", updatedOrd.id);
+                .from("payment_refunds")
+                .upsert({
+                  provider_refund_id: refundId,
+                  payment_id: paymentId,
+                  transaction_id: txRecord?.id || null,
+                  amount_paise: refundAmount || 0,
+                  currency: currency || "INR",
+                  status: event === "refund.processed" ? "processed" : "created",
+                  raw_payload: webhookResult.rawPayload || {},
+                }, { onConflict: "provider_refund_id" });
+            } catch (e: any) {
+              console.warn("[Refund Upsert Warning]:", e?.message);
             }
           }
 
-          // 3. Reconcile entitlements against all surviving active transactions (Requirement Phase 5)
-          const reconciliation = await reconcileUserEntitlements(targetUserId);
+          // Authoritative cumulative refund calculation
+          const capturedAmount = txRecord?.amount_paise || amount || 0;
+          const currentRefundPaise = refundAmount || 0;
+          const cumulativeRefunded = paymentAmountRefunded ?? (Number(txRecord?.refunded_amount_paise || 0) + currentRefundPaise);
+          const isFullRefund = capturedAmount > 0 && cumulativeRefunded >= capturedAmount;
 
-          console.log(
-            `[Webhook Refund Processed] Entitlements reconciled for user ${targetUserId}: isPremium=${reconciliation.isPremium}, tier=${reconciliation.tier}.`
-          );
-          return NextResponse.json({ status: "ok", refunded: true, entitlement: reconciliation });
+          if (isFullRefund) {
+            // FULL REFUND: Mark transaction refunded, order refunded, release promotional slot, and reconcile
+            if (paymentId) {
+              await supabaseAdmin
+                .from("payment_transactions")
+                .update({ status: "refunded", refunded_amount_paise: cumulativeRefunded })
+                .eq("provider_payment_id", paymentId);
+            }
+
+            if (orderId) {
+              const { data: updatedOrd } = await supabaseAdmin
+                .from("payment_orders")
+                .update({ status: "refunded", updated_at: new Date().toISOString() })
+                .eq("provider_order_id", orderId)
+                .select("id, is_promotional")
+                .maybeSingle();
+
+              if (updatedOrd?.is_promotional && updatedOrd?.id) {
+                await supabaseAdmin
+                  .from("promotional_slots")
+                  .update({ status: "released", user_id: null, order_id: null, claimed_at: null })
+                  .eq("order_id", updatedOrd.id);
+              }
+            }
+
+            const reconciliation = await reconcileUserEntitlements(targetUserId);
+            console.log(
+              `[Webhook Full Refund Processed] Entitlements reconciled for user ${targetUserId}: isPremium=${reconciliation.isPremium}, tier=${reconciliation.tier}.`
+            );
+            return NextResponse.json({ status: "ok", refunded: true, isFullRefund: true, entitlement: reconciliation });
+          } else {
+            // PARTIAL REFUND: Mark transaction partially_refunded.
+            // Policy: Partial refunds do NOT revoke the entire entitlement or release promotional inventory.
+            if (paymentId) {
+              await supabaseAdmin
+                .from("payment_transactions")
+                .update({ status: "partially_refunded", refunded_amount_paise: cumulativeRefunded })
+                .eq("provider_payment_id", paymentId);
+            }
+
+            const reconciliation = await reconcileUserEntitlements(targetUserId);
+            console.log(
+              `[Webhook Partial Refund Processed] User ${targetUserId} retains access: isPremium=${reconciliation.isPremium}, tier=${reconciliation.tier}.`
+            );
+            return NextResponse.json({ status: "ok", refunded: true, isFullRefund: false, entitlement: reconciliation });
+          }
         } catch (refundErr) {
           console.error("[Webhook Refund Error]:", refundErr);
           return NextResponse.json({ error: "Refund processing error." }, { status: 500 });
@@ -333,7 +621,13 @@ export async function POST(req: NextRequest) {
       }
 
       // Validate plan against server allowlist (Requirement Phase 2.3)
-      const resolvedPlanId = existingOrderRecord?.plan_id || "all_access_pass_799";
+      const resolvedPlanId = existingOrderRecord?.plan_id;
+      if (!resolvedPlanId) {
+        return NextResponse.json(
+          { error: "Payment order does not specify a valid plan ID.", code: "INVALID_PLAN" },
+          { status: 400 }
+        );
+      }
       let planConfig;
       try {
         planConfig = getPlanConfig(resolvedPlanId);
@@ -432,16 +726,16 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // Anti-Tampering: Enforce that paid amount meets or exceeds the required order price
-      const pricing = await getPricingOffer();
-      const requiredAmountPaise = expectedAmountPaise || pricing.currentPricePaise;
-      if (statusCheck.amount < requiredAmountPaise) {
+      // Anti-Tampering: Enforce exact payment amount match (Requirement P1)
+      // Stored order amount must match actual captured payment amount exactly. Reject underpayment and overpayment.
+      const requiredAmountPaise = expectedAmountPaise || planConfig.standardPricePaise;
+      if (statusCheck.amount !== requiredAmountPaise) {
         console.error(
-          `[SECURITY ALERT] Payment amount tampering: order ${razorpay_order_id} expected ${requiredAmountPaise} paise, but received ${statusCheck.amount} paise.`
+          `[SECURITY ALERT] Payment amount mismatch: order ${razorpay_order_id} expected exactly ${requiredAmountPaise} paise, but received ${statusCheck.amount} paise.`
         );
         return NextResponse.json(
           {
-            error: "Payment amount does not match authorized order amount.",
+            error: `Payment amount mismatch: expected exactly ${requiredAmountPaise} paise, received ${statusCheck.amount} paise.`,
             code: "PAYMENT_AMOUNT_MISMATCH",
           },
           { status: 400 }
@@ -510,13 +804,22 @@ export async function POST(req: NextRequest) {
       return rateLimitResponse(rateCheck);
     }
 
-    // Validate requested plan from body
-    const requestedPlanId = (typeof body.planId === "string" ? body.planId : "").trim() || "all_access_pass_799";
+    // Validate requested plan from body (Requirement P1: Never silently substitute plan)
+    const requestedPlanId = (typeof body.planId === "string" ? body.planId : "").trim();
+    if (!requestedPlanId) {
+      return NextResponse.json(
+        { error: "Missing required planId in request body.", code: "INVALID_PLAN" },
+        { status: 400 }
+      );
+    }
     let selectedPlan;
     try {
       selectedPlan = getPlanConfig(requestedPlanId);
-    } catch {
-      selectedPlan = getPlanConfig("all_access_pass_799");
+    } catch (planErr: any) {
+      return NextResponse.json(
+        { error: planErr.message || `Invalid plan identifier: ${requestedPlanId}.`, code: "INVALID_PLAN" },
+        { status: 400 }
+      );
     }
 
     const pricing = await getPricingOffer();
@@ -558,17 +861,22 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
 
     if (insertError || !insertedOrder?.id) {
-      console.error("[CRITICAL SEC-04] Failed to persist payment order in database:", insertError);
+      const trackingId = `diag_${crypto.randomUUID()}`;
+      console.error(
+        `[CRITICAL SEC-04] Failed to persist order in database. Tracking ID: ${trackingId}, providerOrderId: ${orderResult.orderId}:`,
+        insertError
+      );
       return NextResponse.json(
         {
           error: "Failed to persist order locally. Checkout cancelled to prevent orphaned transactions.",
           code: "ORDER_PERSISTENCE_FAILED",
+          tracking_id: trackingId,
         },
         { status: 500 }
       );
     }
 
-    // 3. Promotional Slot Reservation (Atomic RPC, Phase 3)
+    // 3. Promotional Slot Reservation (Atomic RPC ONLY, Requirement P1)
     let reservedSlotNumber: number | null = null;
     if (isPromotional && insertedOrder?.id) {
       try {
@@ -583,43 +891,7 @@ export async function POST(req: NextRequest) {
         console.warn("[Promotional Slot RPC Notice]:", rpcErr);
       }
 
-      // Optimistic concurrency fallback if RPC is not yet compiled in DB
-      if (reservedSlotNumber === null) {
-        const nowIso = new Date().toISOString();
-        const { data: availableSlot } = await supabaseAdmin
-          .from("promotional_slots")
-          .select("slot_number")
-          .or(`status.eq.released,and(status.eq.reserved,expires_at.lt.${nowIso})`)
-          .order("slot_number", { ascending: true })
-          .limit(1)
-          .maybeSingle();
-
-        if (availableSlot?.slot_number) {
-          const expiresAt = new Date(Date.now() + 30 * 60 * 1000).toISOString();
-          const { error: reserveUpdateErr } = await supabaseAdmin
-            .from("promotional_slots")
-            .update({
-              order_id: insertedOrder.id,
-              user_id: authUser.id,
-              status: "reserved",
-              reserved_at: nowIso,
-              expires_at: expiresAt,
-              claimed_at: null,
-            })
-            .eq("slot_number", availableSlot.slot_number)
-            .or(`status.eq.released,and(status.eq.reserved,expires_at.lt.${nowIso})`);
-
-          if (!reserveUpdateErr) {
-            reservedSlotNumber = availableSlot.slot_number;
-            await supabaseAdmin
-              .from("payment_orders")
-              .update({ promotional_slot_number: reservedSlotNumber })
-              .eq("id", insertedOrder.id);
-          }
-        }
-      }
-
-      // INVARIANT: If promotional order has no inventory remaining, roll back order and reject
+      // FAIL-CLOSED: No non-atomic fallback allowed. If RPC fails or inventory is empty, cancel order.
       if (reservedSlotNumber === null) {
         await supabaseAdmin
           .from("payment_orders")

@@ -34,6 +34,21 @@ export interface WebhookVerificationResult {
   orderId?: string;
   paymentId?: string;
   amount?: number;
+  currency?: string;
+  refundId?: string;
+  refundAmount?: number;
+  disputeId?: string;
+  disputeAmount?: number;
+  disputeStatus?: string;
+  disputeReason?: string;
+  paymentStatus?: string;
+  paymentAmountRefunded?: number;
+  entityType?: "payment" | "order" | "refund" | "dispute";
+  paymentEntity?: any;
+  orderEntity?: any;
+  refundEntity?: any;
+  disputeEntity?: any;
+  rawPayload?: any;
 }
 
 export interface PaymentProvider {
@@ -43,6 +58,7 @@ export interface PaymentProvider {
   verifySignature(params: VerifySignatureParams): { isValid: boolean; error?: string };
   verifyPaymentStatus(paymentId: string, orderId: string): Promise<{ isPaid: boolean; amount?: number; currency?: string; error?: string }>;
   verifyWebhook(rawBody: string, signature: string): WebhookVerificationResult;
+  fetchOrderPayments(orderId: string): Promise<Array<{ id: string; status: string; amount: number; currency: string }>>;
 }
 
 /**
@@ -215,38 +231,116 @@ export class RazorpayProvider implements PaymentProvider {
     try {
       const payload = JSON.parse(rawBody);
       const event = payload.event;
-      const entity =
-        payload.payload?.payment?.entity ||
-        payload.payload?.order?.entity ||
-        payload.payload?.refund?.entity ||
-        payload.payload?.dispute?.entity;
-      const notes =
-        entity?.notes ||
-        payload.payload?.payment?.entity?.notes ||
-        payload.payload?.order?.entity?.notes ||
-        {};
-      const paymentId =
-        payload.payload?.payment?.entity?.id ||
-        payload.payload?.refund?.entity?.payment_id ||
-        payload.payload?.dispute?.entity?.payment_id ||
-        entity?.payment_id ||
-        entity?.id;
+      
+      const paymentEntity = payload.payload?.payment?.entity;
+      const orderEntity = payload.payload?.order?.entity;
+      const refundEntity = payload.payload?.refund?.entity;
+      const disputeEntity = payload.payload?.dispute?.entity;
+
+      // CRITICAL P1: Distinguish payment, order, refund and dispute entities.
+      // NEVER use an order ID as a payment ID. Do not synthesize payment IDs.
+      let paymentId: string | undefined = undefined;
+      if (paymentEntity?.id && (paymentEntity.entity === "payment" || String(paymentEntity.id).startsWith("pay_"))) {
+        paymentId = paymentEntity.id;
+      } else if (refundEntity?.payment_id) {
+        paymentId = refundEntity.payment_id;
+      } else if (disputeEntity?.payment_id) {
+        paymentId = disputeEntity.payment_id;
+      }
+
       const orderId =
-        payload.payload?.order?.entity?.id ||
-        payload.payload?.payment?.entity?.order_id ||
-        entity?.order_id;
+        orderEntity?.id ||
+        paymentEntity?.order_id ||
+        undefined;
+
+      const refundId = refundEntity?.id;
+      const refundAmount = typeof refundEntity?.amount === "number" ? refundEntity.amount : undefined;
+
+      const disputeId = disputeEntity?.id;
+      const disputeAmount = typeof disputeEntity?.amount === "number" ? disputeEntity.amount : undefined;
+      const disputeStatus = disputeEntity?.status;
+      const disputeReason = disputeEntity?.reason_code;
+
+      const notes =
+        orderEntity?.notes ||
+        paymentEntity?.notes ||
+        refundEntity?.notes ||
+        disputeEntity?.notes ||
+        {};
+
+      let amount: number | undefined = undefined;
+      if (typeof paymentEntity?.amount === "number") {
+        amount = paymentEntity.amount;
+      } else if (typeof orderEntity?.amount === "number") {
+        amount = orderEntity.amount;
+      } else if (typeof refundEntity?.amount === "number") {
+        amount = refundEntity.amount;
+      } else if (typeof disputeEntity?.amount === "number") {
+        amount = disputeEntity.amount;
+      }
+
+      const currency =
+        paymentEntity?.currency ||
+        orderEntity?.currency ||
+        refundEntity?.currency ||
+        disputeEntity?.currency ||
+        "INR";
+
+      let entityType: "payment" | "order" | "refund" | "dispute" | undefined = undefined;
+      if (event?.startsWith("payment.dispute.")) {
+        entityType = "dispute";
+      } else if (event?.startsWith("refund.")) {
+        entityType = "refund";
+      } else if (event?.startsWith("order.")) {
+        entityType = "order";
+      } else if (event?.startsWith("payment.")) {
+        entityType = "payment";
+      }
 
       return {
         isValid: true,
         event,
         userId: notes.userId,
-        tier: notes.planId || "all_access_pass",
+        tier: notes.planId || undefined,
         orderId,
         paymentId,
-        amount: entity?.amount,
+        amount,
+        currency,
+        refundId,
+        refundAmount,
+        disputeId,
+        disputeAmount,
+        disputeStatus,
+        disputeReason,
+        paymentStatus: paymentEntity?.status,
+        paymentAmountRefunded: typeof paymentEntity?.amount_refunded === "number" ? paymentEntity.amount_refunded : undefined,
+        entityType,
+        paymentEntity,
+        orderEntity,
+        refundEntity,
+        disputeEntity,
+        rawPayload: payload,
       };
     } catch {
       return { isValid: false };
+    }
+  }
+
+  async fetchOrderPayments(
+    orderId: string
+  ): Promise<Array<{ id: string; status: string; amount: number; currency: string }>> {
+    try {
+      const res: any = await this.client.orders.fetchPayments(orderId);
+      const items = res?.items || (Array.isArray(res) ? res : []);
+      return items.map((p: any) => ({
+        id: String(p.id),
+        status: String(p.status),
+        amount: Number(p.amount),
+        currency: String(p.currency),
+      }));
+    } catch (err: any) {
+      console.warn(`[Razorpay fetchOrderPayments Error for order ${orderId}]:`, err?.message);
+      return [];
     }
   }
 }
@@ -317,7 +411,75 @@ export class MockSandboxProvider implements PaymentProvider {
     return { isPaid: false, error: "Invalid sandbox payment reference." };
   }
 
-  verifyWebhook(_rawBody: string, _signature: string): WebhookVerificationResult {
+  async fetchOrderPayments(
+    orderId: string
+  ): Promise<Array<{ id: string; status: string; amount: number; currency: string }>> {
+    if (orderId && orderId.includes("has_captured_payment")) {
+      return [{ id: `pay_sim_captured_${orderId}`, status: "captured", amount: 79900, currency: "INR" }];
+    }
+    return [];
+  }
+
+  verifyWebhook(rawBody: string, signature: string): WebhookVerificationResult {
+    if (signature === "mock_webhook_sig" || signature.startsWith("mock_")) {
+      try {
+        const payload = JSON.parse(rawBody);
+        const event = payload.event;
+        const paymentEntity = payload.payload?.payment?.entity;
+        const orderEntity = payload.payload?.order?.entity;
+        const refundEntity = payload.payload?.refund?.entity;
+        const disputeEntity = payload.payload?.dispute?.entity;
+
+        let paymentId: string | undefined = undefined;
+        if (paymentEntity?.id && (paymentEntity.entity === "payment" || String(paymentEntity.id).startsWith("pay_"))) {
+          paymentId = paymentEntity.id;
+        } else if (refundEntity?.payment_id) {
+          paymentId = refundEntity.payment_id;
+        } else if (disputeEntity?.payment_id) {
+          paymentId = disputeEntity.payment_id;
+        }
+
+        const notes =
+          orderEntity?.notes ||
+          paymentEntity?.notes ||
+          refundEntity?.notes ||
+          disputeEntity?.notes ||
+          {};
+
+        let entityType: "payment" | "order" | "refund" | "dispute" | undefined = undefined;
+        if (event?.startsWith("payment.dispute.")) entityType = "dispute";
+        else if (event?.startsWith("refund.")) entityType = "refund";
+        else if (event?.startsWith("order.")) entityType = "order";
+        else if (event?.startsWith("payment.")) entityType = "payment";
+
+        return {
+          isValid: true,
+          event,
+          userId: notes.userId,
+          tier: notes.planId || undefined,
+          orderId: orderEntity?.id || paymentEntity?.order_id || undefined,
+          paymentId,
+          amount: paymentEntity?.amount || orderEntity?.amount || refundEntity?.amount,
+          currency: paymentEntity?.currency || orderEntity?.currency || "INR",
+          refundId: refundEntity?.id,
+          refundAmount: typeof refundEntity?.amount === "number" ? refundEntity.amount : undefined,
+          disputeId: disputeEntity?.id,
+          disputeAmount: typeof disputeEntity?.amount === "number" ? disputeEntity.amount : undefined,
+          disputeStatus: disputeEntity?.status,
+          disputeReason: disputeEntity?.reason_code,
+          paymentStatus: paymentEntity?.status,
+          paymentAmountRefunded: typeof paymentEntity?.amount_refunded === "number" ? paymentEntity.amount_refunded : undefined,
+          entityType,
+          paymentEntity,
+          orderEntity,
+          refundEntity,
+          disputeEntity,
+          rawPayload: payload,
+        };
+      } catch {
+        return { isValid: false };
+      }
+    }
     return { isValid: false };
   }
 }
