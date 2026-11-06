@@ -16,6 +16,7 @@ import {
   History,
   BookOpen,
   Sparkles,
+  MessageSquare,
   Zap,
   Settings,
   ChevronDown,
@@ -223,6 +224,13 @@ export default function DashboardSidebar({
           href: "/dashboard/ai-coach",
           icon: Sparkles,
           active: pathname.startsWith("/dashboard/ai-coach"),
+        },
+        {
+          id: "coach-chat",
+          label: "Coach Chat",
+          href: "/dashboard/coach-chat",
+          icon: MessageSquare,
+          active: pathname.startsWith("/dashboard/coach-chat"),
         },
         {
           id: "reports",
