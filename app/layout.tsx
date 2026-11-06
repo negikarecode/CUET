@@ -5,7 +5,6 @@ import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import GoogleTranslateSync from "@/components/i18n/GoogleTranslateSync";
 import { SITE_CONFIG } from "@/lib/config/site";
 import "./globals.css";
-import "katex/dist/katex.min.css";
 
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
 const gscVerification = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
