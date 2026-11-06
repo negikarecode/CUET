@@ -187,7 +187,10 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        const effectiveUserId = userId || orderRecord?.user_id;
+        if (orderRecord?.user_id && userId && orderRecord.user_id !== userId) {
+          console.warn(`[SECURITY WARNING] Webhook user ID in notes (${userId}) does not match stored order owner (${orderRecord.user_id}). Stored order owner takes precedence.`);
+        }
+        const effectiveUserId = orderRecord?.user_id || userId;
         if (!effectiveUserId) {
           console.error(`[CRITICAL] Webhook fulfillment failed: Cannot resolve candidate user for order ${orderId}, payment ${paymentId}`);
           await finalizeEvent("failed", "Unable to resolve target user for fulfillment");

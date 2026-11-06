@@ -860,7 +860,7 @@ export async function reconcileUserEntitlements(userId: string): Promise<{
   // Filter out transactions whose parent order is marked refunded or cancelled
   const validTransactions = (transactions || []).filter((tx: any) => {
     const order = Array.isArray(tx.payment_orders) ? tx.payment_orders[0] : tx.payment_orders;
-    if (order && (order.status === "refunded" || order.status === "cancelled")) {
+    if (order && (order.status === "refunded" || order.status === "cancelled" || order.status === "disputed_lost")) {
       return false;
     }
     const verifiedTime = new Date(tx.verified_at).getTime();
