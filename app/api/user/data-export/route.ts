@@ -60,6 +60,19 @@ export async function GET() {
       .select("*")
       .eq("user_id", userId);
 
+    // 6. Fetch Coach Chat Threads & Messages (if any)
+    const { data: chatThreads } = await supabaseAdmin
+      .from("chat_threads")
+      .select("id, title, is_archived, created_at, updated_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    const { data: chatMessages } = await supabaseAdmin
+      .from("chat_messages")
+      .select("id, thread_id, role, content, tool_calls, created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: true });
+
     const exportPayload = {
       export_meta: {
         platform: "CUETMate (CUET AI-Prep)",
@@ -74,6 +87,8 @@ export async function GET() {
       usage_ledger: usageLedger || [],
       progress_cards: progressCards || [],
       question_reports: questionReports || [],
+      chat_threads: chatThreads || [],
+      chat_messages: chatMessages || [],
     };
 
     const fileName = `cuetmate-user-data-${new Date().toISOString().slice(0, 10)}.json`;

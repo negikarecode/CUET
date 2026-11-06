@@ -63,6 +63,12 @@ export async function POST(req: NextRequest) {
       .delete()
       .eq("user_id", userId);
 
+    // 3b. Delete Coach Chat History, Feedback & Daily Usage
+    await supabaseAdmin.from("chat_feedback").delete().eq("user_id", userId);
+    await supabaseAdmin.from("chat_messages").delete().eq("user_id", userId);
+    await supabaseAdmin.from("chat_threads").delete().eq("user_id", userId);
+    await supabaseAdmin.from("chat_usage_daily").delete().eq("user_id", userId);
+
     // 4. Delete Sunday Mentor Reports
     await supabaseAdmin
       .from("sunday_mentor_reports")
