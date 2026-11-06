@@ -1,20 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import CUETNavbar from "./CUETNavbar";
 import CUETHero from "./CUETHero";
 import CUETStats from "./CUETStats";
 import CUETSteps from "./CUETSteps";
-import CozyStudyRoomScene from "./illustrations/CozyStudyRoomScene";
-import CUETSystemTabs from "./CUETSystemTabs";
-import CUETArticles from "./CUETArticles";
 import PricingSection from "@/components/payments/PricingSection";
-import CUETFAQ from "./CUETFAQ";
-import CUETClosingCTA from "./CUETClosingCTA";
 import CUETFooter from "./CUETFooter";
-import CUETQuickStartModal from "./CUETQuickStartModal";
-import OnboardingModal from "@/components/auth/OnboardingModal";
 import { createClient } from "@/lib/supabase/client";
+
+const CozyStudyRoomScene = dynamic(() => import("./illustrations/CozyStudyRoomScene"), {
+  loading: () => <div className="h-96 w-full animate-pulse bg-emerald-950/20 rounded-2xl" />,
+});
+const CUETSystemTabs = dynamic(() => import("./CUETSystemTabs"));
+const CUETArticles = dynamic(() => import("./CUETArticles"));
+const CUETFAQ = dynamic(() => import("./CUETFAQ"));
+const CUETClosingCTA = dynamic(() => import("./CUETClosingCTA"));
+const CUETQuickStartModal = dynamic(() => import("./CUETQuickStartModal"), { ssr: false });
+const OnboardingModal = dynamic(() => import("@/components/auth/OnboardingModal"), { ssr: false });
 
 export default function LandingPageClient() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
