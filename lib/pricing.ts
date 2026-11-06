@@ -26,13 +26,13 @@ export interface PricingConfig {
 export const PRICING_CONFIG: PricingConfig = {
   planId: "gold_pass_2027",
   planName: "Gold Pass",
-  priceInr: 999,
+  priceInr: 499,
   validityLabel: "Valid till CUET 2027",
   // [[GST_INCLUSIVE_OR_EXCLUSIVE]] - Specify whether prices include or exclude GST
   gstNote: "[[GST_INCLUSIVE_OR_EXCLUSIVE]]",
   // [[ORIGINAL_PRICE_CONFIRMED]] - Keep null until an authentic original/anchor price is confirmed
   strikethroughPriceInr: null,
-  launchBadgeText: "Launch price",
+  launchBadgeText: "Launch price ₹499",
   domainSubjectCount: 22,
   freeFeatures: [
     "3 Full-Length NTA-Style Mocks per domain subject",

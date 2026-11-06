@@ -1099,7 +1099,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                       className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-xs sm:text-sm bg-purple-600 hover:bg-purple-700 text-white shadow-xs hover:shadow transition-colors"
                     >
                       <Sparkles className="w-4 h-4 text-purple-200" />
-                      <span>Upgrade to Gold Pass (₹999)</span>
+                      <span>Upgrade to Gold Pass (₹499)</span>
                     </Link>
                   </div>
                 )}
