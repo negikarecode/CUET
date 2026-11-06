@@ -648,67 +648,6 @@ canvas {
 .final-cta h2 { color: white; font-size: clamp(30px, 4vw, 44px); font-weight: 800; margin-bottom: 14px; }
 .final-cta p { max-width: 600px; margin: 0 auto 32px; color: #94A3B8; font-size: 17px; line-height: 1.6; }
 
-/* Pricing Split */
-.pricing-section {
-  position: relative;
-  isolation: isolate;
-  color: #0f172a;
-  background-color: #ffffff;
-  background-image: url('/assets/images/PRICING_SECTION_BACKGROUND.png');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  border-block: 0;
-  box-shadow: inset 0 -22px 40px -38px rgba(15, 23, 42, 0.8);
-}
-.pricing-section::before,
-.pricing-section::after {
-  position: absolute;
-  right: 0;
-  left: 0;
-  height: 64px;
-  content: '';
-  pointer-events: none;
-  z-index: 2;
-}
-.pricing-section::before {
-  top: 0;
-  height: 96px;
-  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.82) 38%, rgba(255, 255, 255, 0) 100%);
-}
-.pricing-section::after {
-  bottom: 0;
-  background: linear-gradient(0deg, #ffffff 0%, rgba(255, 255, 255, 0.88) 38%, rgba(255, 255, 255, 0));
-}
-.scroll-split-card { position: relative; height: 500vh; width: 100%; }
-.scroll-split-navigation-target { position: absolute; top: 68.8%; left: 0; }
-.scroll-split-sticky { position: sticky; top: 0; display: flex; align-items: center; justify-content: center; width: 100%; height: 100dvh; overflow: hidden; perspective: 1200px; }
-.scroll-split-end { position: absolute; left: 0; right: 0; text-align: center; top: 86%; color: rgba(15, 23, 42, .75); font-family: Georgia, serif; font-size: clamp(26px, 4vw, 42px); font-style: italic; }
-.scroll-split-panels { --split-gap: clamp(40px, 5vw, 64px); position: relative; display: flex; gap: var(--split-gap); width: min(1000px, 92vw); height: min(760px, 76vh); padding: 0; }
-.scroll-split-panel { position: relative; height: 100%; flex: 1; min-width: 0; transform-style: preserve-3d; }
-.scroll-split-front, .scroll-split-back { position: absolute; inset: 0; overflow: hidden; backface-visibility: hidden; }
-.scroll-split-front { z-index: 2; }
-.scroll-split-front::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,.82) 8%, rgba(255,255,255,0) 25%, rgba(255,255,255,0) 72%, rgba(255,255,255,.78) 92%, #ffffff 100%), linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,.72) 8%, rgba(255,255,255,0) 24%, rgba(255,255,255,0) 76%, rgba(255,255,255,.72) 92%, #ffffff 100%); }
-.scroll-split-image { position: absolute; top: 0; bottom: 0; width: calc(200% + var(--split-gap)); background-position: center; background-size: 100% 100%; }
-.scroll-split-back { z-index: 1; display: flex; flex-direction: column; justify-content: flex-start; padding: clamp(20px, 2.4vw, 32px); border: 1px solid rgba(255,255,255,.08); transform-style: preserve-3d; }
-.scroll-split-noise { position: absolute; inset: 0; opacity: .09; pointer-events: none; background-image: url('/assets/images/PRICING_SECTION_BACKGROUND.png'); background-size: 280px; mix-blend-mode: overlay; }
-.pricing-plan-card > *:not(.scroll-split-noise) { position: relative; z-index: 1; }
-.pricing-plan-card--gold { border-color: rgba(246, 203, 88, .78); box-shadow: inset 0 0 0 1px rgba(246, 203, 88, .28); }
-.pricing-plan-badge { align-self: flex-start; margin-bottom: 14px; padding: 6px 10px; border-radius: 999px; color: #30220a; background: #f6cf65; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.pricing-plan-heading h3 { margin: 0 0 9px; font-size: clamp(24px, 2.4vw, 32px); line-height: 1; }
-.pricing-plan-heading p { min-height: 3.1em; margin: 0; font-size: clamp(11px, 1vw, 13px); line-height: 1.55; opacity: .78; }
-.pricing-plan-price { display: flex; align-items: baseline; gap: 10px; margin: 20px 0; }
-.pricing-plan-price strong { font-size: clamp(34px, 4vw, 48px); font-weight: 700; letter-spacing: -.06em; line-height: 1; }
-.pricing-plan-price del { color: currentColor; font-size: 15px; opacity: .55; }
-.pricing-plan-card--gold .pricing-plan-price strong, .pricing-plan-card--gold .pricing-plan-features li > span { color: #f6cf65; }
-.pricing-plan-features { display: grid; gap: 12px; margin: 0; padding: 17px 0 0; border-top: 1px solid currentColor; border-color: rgba(127, 140, 163, .25); list-style: none; }
-.pricing-plan-features li { display: flex; align-items: flex-start; gap: 9px; font-size: clamp(10px, .95vw, 12px); line-height: 1.4; }
-.pricing-plan-features li > span { flex: 0 0 auto; color: #5e9c42; font-weight: 800; }
-.pricing-plan-cta { width: 100%; margin-top: auto; padding: 12px 14px; border: 0; border-radius: 999px; color: #172033; background: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer; transition: transform .2s ease, background-color .2s ease; }
-.pricing-plan-cta:hover { transform: translateY(-2px); background: #f3f5f8; }
-.pricing-plan-card--gold .pricing-plan-cta { color: #272116; background: #f6cf65; }
-.pricing-plan-card--gold .pricing-plan-cta:hover { background: #ffdc7d; }
-
 /* Site Footer */
 .site-footer {
   position: relative;
@@ -772,11 +711,7 @@ canvas {
   .footer-bottom { align-items: flex-start; flex-direction: column; gap: 15px; margin-top: 30px; }
 }
 
-@media (max-width: 560px) {
-  .scroll-split-card { height: 260vh; }
-  .scroll-split-panels { flex-direction: column; width: min(420px, 90vw); height: 80vh; }
-  .scroll-split-panel { flex: 1 1 0; width: 100%; }
-}
+
 
 /* ========================================================================= */
 /* Math & KaTeX Display Protection                                          */
