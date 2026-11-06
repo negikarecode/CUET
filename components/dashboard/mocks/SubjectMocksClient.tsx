@@ -265,16 +265,16 @@ export default function SubjectMocksClient({
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-600 font-medium">
-              Free plan includes 3 distinct full CBT mock exams with unlimited retries. Mock 4 through {mockTests.length || 50} and unlimited subject mocks require CUETMate Premium.
+              Free plan includes 3 distinct full CBT mock exams with unlimited retries. Mock 4 through {mockTests.length || 50} and unlimited subject mocks require Gold Pass.
             </p>
           </div>
           <div className="shrink-0 flex items-center gap-2.5">
             <Link
-              href="/pricing"
+              href="/dashboard/upgrade"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Upgrade to Premium (₹2)</span>
+              <span>Upgrade to Gold Pass</span>
             </Link>
           </div>
         </div>
@@ -303,11 +303,11 @@ export default function SubjectMocksClient({
           <div className="shrink-0 flex items-center gap-2">
             {!isPremium && isConfirmedFree && (mockStats.nextUnattemptedMockIndex > 3 || (totalUnlockedDistinctMocks >= 3 && !unlockedDistinctMockIds.has(nextMockId.toLowerCase()))) ? (
               <Link
-                href="/pricing"
+                href="/dashboard/upgrade"
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
               >
                 <Lock className="w-3.5 h-3.5" />
-                <span>Unlock All {mockTests.length || 50} Mocks (₹2)</span>
+                <span>Unlock All {mockTests.length || 50} Mocks</span>
               </Link>
             ) : (
               <Link
@@ -529,11 +529,11 @@ export default function SubjectMocksClient({
                 <div className="pt-3 border-t border-slate-100 mt-auto flex flex-col gap-2 w-full">
                   {!isPremium && isConfirmedFree && mockNum > 3 ? (
                     <Link
-                      href="/pricing"
+                      href="/dashboard/upgrade"
                       className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                     >
                       <Lock className="w-3.5 h-3.5" />
-                      <span>Upgrade to Unlock (₹2)</span>
+                      <span>Upgrade to Unlock</span>
                     </Link>
                   ) : hasAttempted && bestAttempt ? (
                     <>
@@ -555,7 +555,7 @@ export default function SubjectMocksClient({
                     </>
                   ) : !isPremium && isConfirmedFree && totalUnlockedDistinctMocks >= 3 ? (
                     <Link
-                      href="/pricing"
+                      href="/dashboard/upgrade"
                       className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-all cursor-pointer"
                     >
                       <Lock className="w-3.5 h-3.5" />

@@ -108,14 +108,13 @@ export function WhyWrongExplanationModal({
   const handleFlagSubmit = async () => {
     if (!flagReason.trim()) return;
     try {
-      await fetch("/api/ai/why-wrong", {
+      await fetch("/api/questions/report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "flag",
           questionId: question.questionId,
-          selectedOption: question.selectedOption,
-          reason: flagReason,
+          reportReason: "factual_error",
+          comment: flagReason,
         }),
       });
       setIsFlagged(true);
@@ -244,6 +243,14 @@ export function WhyWrongExplanationModal({
             </div>
           ) : data ? (
             <div className="space-y-4">
+              {/* AI Disclosure Notice */}
+              <div className="p-3 rounded-xl bg-purple-50/70 border border-purple-200/80 flex items-start gap-2 text-[11px] text-purple-900 leading-relaxed font-normal">
+                <Sparkles className="w-3.5 h-3.5 text-purple-600 shrink-0 mt-0.5" />
+                <span>
+                  <strong>Educational Guidance:</strong> AI mistake diagnosis is calibrated against the NCERT Class 12 curriculum. Always verify concepts and formulas against standard NCERT textbooks.
+                </span>
+              </div>
+
               {/* Correct Reasoning */}
               <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-1.5">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">

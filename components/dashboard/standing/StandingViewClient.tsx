@@ -10,7 +10,6 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useTarget } from "@/lib/hooks/useTarget";
 import { useEntitlement } from "@/lib/hooks/useEntitlement";
 import CascadingTargetSelector from "@/components/ui/CascadingTargetSelector";
@@ -47,7 +46,6 @@ export default function StandingViewClient({
   initialIsVerified = false,
   initialUserId,
 }: StandingViewClientProps = {}) {
-  const isClient = useIsClient();
   const profileTarget = useTarget();
   const storeUser = useTestStore((state) => state.user);
 
@@ -272,7 +270,7 @@ export default function StandingViewClient({
     Boolean(profileTarget.college) &&
     targetCollege.toLowerCase() !== (profileTarget.college || "").toLowerCase();
 
-  if (!isClient || isLoading) {
+  if (isLoading && !initialIsVerified) {
     return (
       <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 animate-pulse">
         <div className="h-14 bg-slate-200 rounded-2xl w-full" />

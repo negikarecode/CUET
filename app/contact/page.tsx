@@ -7,30 +7,31 @@ import {
   ExternalLink,
   ShieldAlert,
   HelpCircle,
+  Building,
+  Scale,
 } from "lucide-react";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ContactForm from "@/components/contact/ContactForm";
 import { getCanonicalUrl } from "@/lib/config/site";
 
 export const metadata: Metadata = {
-  title: "Contact Academic Support | CUET AI-Prep",
+  title: "Contact Academic Support | CUETMate (CUET AI-Prep)",
   description:
-    "Reach the CUET AI-Prep academic help desk for mock test support, previous year question inquiries, and billing assistance. Fast 24-hour turnaround.",
+    "Reach CUETMate academic support and the DPDP Grievance Redressal Desk for mock test inquiries, billing help, and privacy requests.",
   alternates: {
     canonical: getCanonicalUrl("/contact"),
   },
   openGraph: {
-    title: "Contact Academic Support | CUET AI-Prep",
+    title: "Contact Academic Support | CUETMate",
     description:
-      "Get in touch with CUET AI-Prep academic mentors for mock test queries, account help, and technical support.",
+      "Get in touch with CUETMate mentors for mock test queries, account help, and technical support.",
     url: getCanonicalUrl("/contact"),
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contact Academic Support | CUET AI-Prep",
-    description:
-      "CUET AI-Prep Helpdesk: Academic queries, mock test support, and candidate assistance.",
+    title: "Contact Academic Support | CUETMate",
+    description: "CUETMate Helpdesk & Grievance Desk for CUET UG aspirants.",
   },
 };
 
@@ -38,20 +39,20 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
-        {/* Breadcrumb Navigation */}
+        {/* Navigation */}
         <Breadcrumbs items={[{ label: "Contact Us" }]} />
 
         {/* Page Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-50 text-purple-700 text-xs font-semibold uppercase tracking-wider border border-purple-200/80 shadow-xs">
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>Candidate Assistance Desk</span>
+            <span>Candidate Assistance &amp; Grievance Desk</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Contact CUET AI-Prep Academic Support
+            Contact CUETMate Academic Support
           </h1>
           <p className="text-xs sm:text-base text-slate-600 leading-relaxed">
-            Have questions regarding NTA CBT mock tests, NCERT mistake diagnosis, or Ranker Pass upgrades? We respond within 24 working hours.
+            Have questions regarding CBT mock tests, NCERT mistake diagnosis, pass activations, or data privacy? We respond within 24 working hours.
           </p>
         </div>
 
@@ -78,12 +79,12 @@ export default function ContactPage() {
                   <div>
                     <span className="block text-slate-500 text-xs font-medium">Academic Support Email</span>
                     <a
-                      href="mailto:support@cuetprep.com"
+                      href="mailto:[[SUPPORT_EMAIL]]"
                       className="font-semibold text-purple-700 hover:underline"
                     >
-                      support@cuetprep.com
+                      [[SUPPORT_EMAIL]]
                     </a>
-                    <span className="block text-[11px] text-slate-400 mt-0.5">Average reply time: Under 4 hours</span>
+                    <span className="block text-[11px] text-slate-400 mt-0.5">Average reply time: Under 24 hours</span>
                   </div>
                 </div>
 
@@ -93,12 +94,9 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <span className="block text-slate-500 text-xs font-medium">Platform Helpline</span>
-                    <a
-                      href="tel:01140759000"
-                      className="font-semibold text-slate-900 hover:text-purple-700"
-                    >
-                      011-40759000
-                    </a>
+                    <span className="font-semibold text-slate-900">
+                      [[SUPPORT_PHONE]]
+                    </span>
                     <span className="block text-[11px] text-slate-400 mt-0.5">Mon–Sat, 9:30 AM to 6:00 PM IST</span>
                   </div>
                 </div>
@@ -110,9 +108,42 @@ export default function ContactPage() {
                   <div>
                     <span className="block text-slate-500 text-xs font-medium">Operating Hours</span>
                     <span className="font-semibold text-slate-800">
-                      Monday to Saturday • 9:30 AM – 6:00 PM
+                      Monday to Saturday • 9:30 AM – 6:00 PM IST
                     </span>
-                    <span className="block text-[11px] text-slate-400 mt-0.5">Automated test submission is live 24/7</span>
+                    <span className="block text-[11px] text-slate-400 mt-0.5">Automated test engines and practice drills run 24/7</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="p-2.5 rounded-xl bg-slate-100 text-slate-700 flex-shrink-0">
+                    <Building className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="block text-slate-500 text-xs font-medium">Operating Entity &amp; Office</span>
+                    <span className="font-semibold text-slate-800">
+                      [[BUSINESS_LEGAL_NAME]]
+                    </span>
+                    <span className="block text-[11px] text-slate-500 mt-0.5">
+                      [[BUSINESS_ADDRESS]], [[BUSINESS_STATE_COUNTRY]]
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="p-2.5 rounded-xl bg-amber-50 text-amber-700 flex-shrink-0">
+                    <Scale className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="block text-slate-500 text-xs font-medium">DPDP Grievance Officer</span>
+                    <span className="font-semibold text-slate-800">
+                      [[GRIEVANCE_OFFICER_NAME]]
+                    </span>
+                    <a
+                      href="mailto:[[GRIEVANCE_OFFICER_EMAIL]]"
+                      className="block text-[11px] text-purple-700 hover:underline mt-0.5"
+                    >
+                      [[GRIEVANCE_OFFICER_EMAIL]]
+                    </a>
                   </div>
                 </div>
               </div>
@@ -128,7 +159,11 @@ export default function ContactPage() {
                 </Link>
                 <span>•</span>
                 <Link href="/refunds" className="hover:text-purple-700 hover:underline">
-                  Refund Guarantee
+                  Refund Policy
+                </Link>
+                <span>•</span>
+                <Link href="/disclaimer" className="hover:text-purple-700 hover:underline">
+                  NTA Disclaimer
                 </Link>
               </div>
             </div>
@@ -140,7 +175,7 @@ export default function ContactPage() {
                 <span>Notice for Official NTA Exam Inquiries</span>
               </div>
               <p className="text-xs text-amber-800 leading-relaxed">
-                CUET AI-Prep is an independent practice platform. For official candidate registration corrections, official NTA admit cards, or exam city slip grievances, please contact the National Testing Agency directly:
+                CUETMate is an independent practice tool. For official candidate registration corrections, official NTA admit cards, or exam city slip grievances, please contact the National Testing Agency directly:
               </p>
               <div className="text-xs text-amber-900 font-medium space-y-1 pt-1">
                 <p>NTA Helpline: <a href="tel:01140759000" className="underline font-bold">011-40759000</a> / <a href="tel:01169227700" className="underline font-bold">011-69227700</a></p>

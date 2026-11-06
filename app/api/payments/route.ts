@@ -1,3 +1,12 @@
+// =============================================================================
+// DEPRECATED - LEGACY PAYMENT GATEWAY & ROUTE HANDLER (CASHFREE / PROMOTIONAL SLOTS)
+// Superseded by unified Razorpay routes:
+// - POST /api/payments/razorpay/create-order
+// - POST /api/payments/razorpay/verify
+// - POST /api/payments/razorpay/webhook
+// Kept for backward compatibility and automated compliance regression tests.
+// =============================================================================
+
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -366,6 +375,17 @@ export async function POST(req: NextRequest) {
       // - payment.dispute.won: .update({ status: "captured", dispute_status: "won" }) [Dispute Won]
       // - payment.dispute.lost: .update({ status: "disputed_lost", dispute_status: "lost" })
       // - Promotional Inventory: updatedOrd?.is_promotional && updatedOrd?.id -> .update({ status: "released", user_id: null, order_id: null, claimed_at: null })
+
+      // SECURITY GUARD (Pass 5): Ordinary webhooks can NEVER authorize dispute reversals!
+      if (event === "payment.dispute.reversal_approved") {
+        console.error(`[SECURITY ALERT] Unauthorized dispute reversal attempt via webhook: event ${event}, disputeId ${disputeId}`);
+        await finalizeEvent("failed", "Unauthorized dispute reversal attempt via webhook");
+        return NextResponse.json(
+          { error: "Dispute reversal cannot be authorized via webhook event.", code: "UNAUTHORIZED_REVERSAL_ATTEMPT" },
+          { status: 403 }
+        );
+      }
+
       if (
         event === "payment.dispute.created" ||
         event === "payment.dispute.won" ||
@@ -928,8 +948,8 @@ export async function POST(req: NextRequest) {
     // 1. Create external gateway order
     const orderResult = await provider.createOrder({
       userId: authUser.id,
-      userEmail: authUser.email || "aspirant@cuetmate.in",
-      userName: authUser.user_metadata?.full_name || "CUET Aspirant",
+      userEmail: authUser.email || "",
+      userName: authUser.user_metadata?.full_name || authUser.user_metadata?.name || "Candidate",
       amountPaise,
       currency: "INR",
       planId: selectedPlan.planId,

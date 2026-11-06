@@ -622,22 +622,10 @@ export default function MocksPage() {
     const mockCount = SUBJECT_MOCK_COUNTS[sub.key] ?? 50;
     const baseMockId = SUBJECT_TO_MOCK[sub.key] || `${sub.key}-mock`;
 
-    const stats = isClient
-      ? getMockStats(sub.key, testAttempts)
-      : {
-          attemptedMocksCount: sub.key === "physics" ? 4 : 0,
-          totalMocksCount: mockCount,
-          peakScore: null,
-          peakMaxMarks: 250,
-          averageScore: null,
-          nextUnattemptedMockIndex: sub.key === "physics" ? 4 : 1,
-          isAllAttempted: false,
-          hasAttempts: sub.key === "physics",
-        };
-
+    const stats = getMockStats(sub.key, testAttempts || []);
     const nextMockNum = stats.nextUnattemptedMockIndex || 1;
     const nextMockId = `${baseMockId}-${nextMockNum}`;
-    const attemptedCount = stats.attemptedMocksCount || (sub.key === "physics" && !isClient ? 4 : 0);
+    const attemptedCount = stats.attemptedMocksCount || 0;
     const progressPercent = Math.min(100, Math.round((attemptedCount / mockCount) * 100));
 
     return (

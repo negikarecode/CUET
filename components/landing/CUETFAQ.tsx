@@ -25,7 +25,7 @@ export default function CUETFAQ() {
     {
       question: "What is included in the Free tier vs the Gold Pass?",
       answer:
-        "The Free plan includes 1 official shift PYQ, 3 unit practice tests, 3 full mocks per subject, and diagnostic scoring with baseline percentiles. The Gold Pass unlocks all 251+ reconstructed shift PYQs, full-length NTA CBT mock test series, granular AI mistake diagnosis, and weekly All-India leaderboard rankings.",
+        "The Free plan includes 1 past-year shift paper, 3 unit practice tests, 3 full mocks per subject, and diagnostic scoring with baseline percentiles. The Gold Pass unlocks all 251+ reconstructed shift papers, full-length NTA CBT mock test series, granular AI mistake diagnosis, and exact NCERT citations.",
     },
     {
       question: "Can I practice on smartphones and tablets?",

@@ -25,7 +25,6 @@ import {
 import { useTestStore } from "@/lib/store/useTestStore";
 import { RecordedTestAttempt } from "@/types";
 import { formatDateTimeIndian } from "@/lib/config/dashboardConfig";
-import { useIsClient } from "@/lib/hooks/useIsClient";
 import { stringToUuid } from "@/lib/utils";
 import { resolveCanonicalTestId } from "@/lib/canonical-tests";
 import { deduplicateTestAttempts, getCanonicalTestKey } from "@/lib/analytics";
@@ -126,7 +125,6 @@ export default function SessionsHistoryClient({
   initialUserId,
 }: SessionsHistoryClientProps) {
   const router = useRouter();
-  const isClient = useIsClient();
   const rawStoreAttempts = useTestStore((s) => s.testAttempts);
   const storeAttempts = useMemo(() => rawStoreAttempts || [], [rawStoreAttempts]);
   const recordTestAttempt = useTestStore((s) => s.recordTestAttempt);
@@ -361,14 +359,6 @@ export default function SessionsHistoryClient({
       setIsDeleting(false);
     }
   };
-
-  if (!isClient) {
-    return (
-      <div className="py-16 flex justify-center items-center">
-        <div className="w-9 h-9 border-3 border-purple-600 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <div className="w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7 space-y-6">

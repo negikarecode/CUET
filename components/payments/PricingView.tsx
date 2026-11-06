@@ -1,3 +1,9 @@
+// =============================================================================
+// DEPRECATED - LEGACY PRICING VIEW (CASHFREE / WHITE THEME)
+// This view has been retired and replaced by components/payments/PricingSection.tsx
+// All upgrade traffic is unified to /dashboard/upgrade and /#pricing.
+// =============================================================================
+
 "use client";
 
 import React, { useState, useEffect } from "react";

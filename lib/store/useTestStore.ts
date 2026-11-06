@@ -20,6 +20,7 @@ import { calculateStreakFromAttempts, calculateActiveStreak } from "@/lib/gamifi
 import { getDiagnosticProgress } from "@/lib/diagnostic-status";
 import { safeStorage } from "@/lib/storage/safe-storage";
 import { stringToUuid } from "@/lib/utils";
+import { isPlaceholderName, isPlaceholderEmail } from "@/lib/auth/user-display";
 
 interface TestStoreState {
   // Gamification & User Auth state
@@ -325,10 +326,29 @@ export const useTestStore = create<TestStoreState>()(
                       parsed.state?.user?.lastActiveDate
                     );
 
+                const rawCandidateEmail =
+                  profile.email && !isPlaceholderEmail(profile.email)
+                    ? profile.email
+                    : parsed.state.user?.email && !isPlaceholderEmail(parsed.state.user.email)
+                    ? parsed.state.user.email
+                    : "";
+                const safeMergedEmail = !isPlaceholderEmail(rawCandidateEmail) ? rawCandidateEmail : "";
+
+                const safeMergedName =
+                  profile.name && !isPlaceholderName(profile.name)
+                    ? profile.name
+                    : parsed.state.user?.name && !isPlaceholderName(parsed.state.user.name)
+                    ? parsed.state.user.name
+                    : safeMergedEmail
+                    ? safeMergedEmail.split("@")[0] || ""
+                    : "";
+
                 set({
                   user: {
                     ...parsed.state.user,
                     ...profile,
+                    name: safeMergedName,
+                    email: safeMergedEmail,
                     dailyStreak: computedStreak,
                     id: targetId,
                     isLoggedIn: true,
@@ -353,13 +373,25 @@ export const useTestStore = create<TestStoreState>()(
         }
 
         // Fresh initialization for new or unpersisted user - ZERO inherited metrics
+        const safeInitEmail =
+          profile.email && !isPlaceholderEmail(profile.email)
+            ? profile.email
+            : "";
+
+        const safeInitName: string =
+          profile.name && !isPlaceholderName(profile.name)
+            ? profile.name
+            : safeInitEmail
+            ? safeInitEmail.split("@")[0] || ""
+            : "";
+
         set({
           user: {
             ...DEFAULT_USER,
             ...profile,
             id: targetId,
-            name: profile.name || "Aspirant",
-            email: profile.email || `${(profile.name || "aspirant").toLowerCase().replace(/\s+/g, "")}@example.com`,
+            name: safeInitName,
+            email: safeInitEmail,
             age: profile.age || "17",
             targetCollege: profile.targetCollege || "SRCC / St. Stephen's (Delhi University)",
             targetUniversity: profile.targetUniversity || "Delhi University",
@@ -921,7 +953,32 @@ export const useTestStore = create<TestStoreState>()(
         return {
           getItem: (_name: string) => {
             // Priority 1: Check active user pointer
-            const activeUid = safeStorage.getItem("cuet_active_uid");
+            let activeUid = safeStorage.getItem("cuet_active_uid");
+
+            // If activeUid is not set, discover from Supabase Auth storage in localStorage
+            if (!activeUid || activeUid === "guest") {
+              try {
+                for (let i = 0; i < localStorage.length; i++) {
+                  const key = localStorage.key(i);
+                  if (
+                    key &&
+                    ((key.startsWith("sb-") && key.endsWith("-auth-token")) || key === "supabase.auth.token")
+                  ) {
+                    const raw = localStorage.getItem(key);
+                    if (raw) {
+                      const parsed = JSON.parse(raw);
+                      const user = parsed?.user || parsed?.currentSession?.user;
+                      if (user?.id) {
+                        activeUid = user.id;
+                        safeStorage.setItem("cuet_active_uid", user.id);
+                        break;
+                      }
+                    }
+                  }
+                }
+              } catch {}
+            }
+
             if (activeUid && activeUid !== "guest") {
               const userScoped = safeStorage.getItem(`cuet_ai_prep_session_storage:${activeUid}`);
               if (userScoped) return userScoped;
@@ -1000,6 +1057,14 @@ export const useTestStore = create<TestStoreState>()(
         };
       }),
       onRehydrateStorage: () => (state) => {
+        if (state?.user) {
+          if (isPlaceholderEmail(state.user.email)) {
+            state.user.email = "";
+          }
+          if (isPlaceholderName(state.user.name)) {
+            state.user.name = "";
+          }
+        }
         if (state && Array.isArray(state.testAttempts) && state.testAttempts.length > 0) {
           const deduped = deduplicateTestAttempts(state.testAttempts);
           state.testAttempts = deduped;

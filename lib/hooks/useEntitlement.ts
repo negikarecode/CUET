@@ -37,16 +37,18 @@ export function useEntitlement({
   const storeUser = useTestStore((s) => s.user);
   const isStorePremium = Boolean(storeUser?.isPremium);
 
-  // Determine initial status synchronously to prevent hydration mismatches
+  // Determine initial status synchronously to prevent hydration mismatches and false paywalls on first load
   const initialStatus: EntitlementStatus = initialIsVerified
     ? initialIsPremium
       ? "premium"
       : "free"
+    : isStorePremium
+    ? "premium"
     : "loading";
 
   const [status, setStatus] = useState<EntitlementStatus>(initialStatus);
   const [isPremium, setIsPremium] = useState<boolean>(
-    initialIsVerified ? Boolean(initialIsPremium) : false
+    initialIsVerified ? Boolean(initialIsPremium) : isStorePremium
   );
 
   const isVerifiedRef = useRef(initialIsVerified);
@@ -87,48 +89,83 @@ export function useEntitlement({
         const { createClient } = await import("@/lib/supabase/client");
         const supabase = createClient();
         const {
-          data: { user: authUser },
-        } = await supabase.auth.getUser();
+          data: { session },
+        } = await supabase.auth.getSession();
 
+        const authUser = session?.user;
         const uid = authUser?.id || initialUserId || storeUser?.id;
 
         if (uid && uid !== "guest") {
-          const res = await fetch(`/api/auth/profile?id=${encodeURIComponent(uid)}`, {
-            cache: "no-store",
-          });
+          // 1. Direct Supabase query to public.profiles
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("is_premium, subscription_tier, subscription_expires_at")
+            .eq("id", uid)
+            .maybeSingle();
 
-          if (res.ok) {
-            const data = await res.json();
-            const serverIsPremium = Boolean(data?.profile?.is_premium);
+          let serverIsPremium = Boolean(profile?.is_premium);
 
-            if (isMounted) {
-              if (serverIsPremium) {
-                setIsPremium(true);
-                setStatus("premium");
-                if (!storeUser?.isPremium) {
-                  useTestStore.getState().loginUser({ isPremium: true });
-                }
-              } else {
-                setIsPremium(false);
-                setStatus("free");
-                if (storeUser?.isPremium) {
-                  // Revoke invalid or expired local premium flag
-                  useTestStore.getState().loginUser({ isPremium: false });
+          // 2. Direct Supabase query to public.payment_orders for captured orders
+          if (!serverIsPremium) {
+            const { data: capturedOrder } = await supabase
+              .from("payment_orders")
+              .select("id")
+              .eq("user_id", uid)
+              .eq("status", "captured")
+              .limit(1)
+              .maybeSingle();
+
+            if (capturedOrder) {
+              serverIsPremium = true;
+            }
+          }
+
+          // 3. Fallback to API route with authorization token
+          if (!serverIsPremium && session?.access_token) {
+            try {
+              const res = await fetch(`/api/auth/profile?id=${encodeURIComponent(uid)}`, {
+                cache: "no-store",
+                headers: {
+                  Authorization: `Bearer ${session.access_token}`,
+                },
+              });
+
+              if (res.ok) {
+                const data = await res.json();
+                if (data?.profile?.is_premium) {
+                  serverIsPremium = true;
                 }
               }
-              return;
+            } catch {}
+          }
+
+          if (isMounted) {
+            if (serverIsPremium) {
+              setIsPremium(true);
+              setStatus("premium");
+              if (!storeUser?.isPremium) {
+                useTestStore.getState().loginUser({ isPremium: true });
+              }
+            } else {
+              if (!isStorePremium) {
+                setIsPremium(false);
+                setStatus("free");
+              }
             }
+            return;
           }
         }
 
         // If no authenticated user exists or profile fetch failed
         if (isMounted) {
-          setIsPremium(false);
-          setStatus("free");
+          if (!isStorePremium) {
+            setIsPremium(false);
+            setStatus("free");
+          }
         }
       } catch (err) {
         console.warn("[useEntitlement] Client verification notice:", err);
-        if (isMounted && !initialIsVerified) {
+        if (isMounted && !initialIsVerified && !isStorePremium) {
           setIsPremium(false);
           setStatus("free");
         }
@@ -142,11 +179,13 @@ export function useEntitlement({
     };
   }, [initialIsVerified, initialIsPremium, initialUserId, storeUser?.id, isStorePremium, storeUser?.isPremium]);
 
+  const effectiveIsPremium = Boolean(isPremium || isStorePremium || (initialIsVerified && initialIsPremium));
+
   return {
-    isPremium,
+    isPremium: effectiveIsPremium,
     status,
-    isLoading: status === "loading",
-    isConfirmedFree: status === "free",
-    isConfirmedPremium: status === "premium",
+    isLoading: status === "loading" && !effectiveIsPremium,
+    isConfirmedFree: status === "free" && !effectiveIsPremium,
+    isConfirmedPremium: effectiveIsPremium,
   };
 }

@@ -182,11 +182,22 @@ export async function GET(req: Request) {
 
     let authUser = null;
     try {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      authUser = user;
+      const authHeader = req.headers.get("authorization");
+      if (authHeader?.startsWith("Bearer ")) {
+        const token = authHeader.substring(7);
+        const supabaseAdmin = createAdminClient();
+        const {
+          data: { user },
+        } = await supabaseAdmin.auth.getUser(token);
+        authUser = user;
+      }
+      if (!authUser) {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        authUser = user;
+      }
     } catch {}
 
     if (!authUser) {
@@ -231,6 +242,7 @@ export async function GET(req: Request) {
       profile.is_premium = entitlement.isPremium;
       profile.subscription_tier = entitlement.subscriptionTier;
       profile.subscription_expires_at = entitlement.subscriptionExpiresAt;
+      profile.email = authUser.email;
     }
 
     return NextResponse.json({ success: true, profile });

@@ -173,7 +173,7 @@ export default function BottomNav() {
 
             {/* Pricing */}
             <Link
-              href="/pricing"
+              href={isLoggedIn ? "/dashboard/upgrade" : "/#pricing"}
               className="flex flex-col items-center justify-center min-h-[44px] py-1 text-slate-500 hover:text-slate-800 font-medium transition-all touch-manipulation cursor-pointer"
             >
               <div className="p-1.5 rounded-xl hover:bg-slate-100/70 transition-colors">

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     "Practice for CUET UG with timed CBT-style mock tests, mistake explanations, and official previous years' college cutoff standings.",
   keywords: [
-    "CUET UG 2026 Mock Tests",
+    "CUET UG 2027 Mock Tests",
     "CUET College Cutoffs",
     "CUET Previous Year Papers",
     "Delhi University Cutoffs",

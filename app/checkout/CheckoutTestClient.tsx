@@ -124,7 +124,7 @@ export default function CheckoutTestClient() {
 
         <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
           <Link
-            href="/pricing"
+            href="/#pricing"
             className="inline-flex items-center gap-1.5 text-purple-700 font-semibold hover:text-purple-800 transition-colors"
           >
             <span>View Full Pricing Page</span>

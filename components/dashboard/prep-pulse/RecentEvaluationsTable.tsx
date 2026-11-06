@@ -4,24 +4,22 @@ import React, { useMemo } from "react";
 import Link from "next/link";
 import { ClipboardCheck, ArrowRight } from "lucide-react";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { useIsClient } from "@/lib/hooks/useIsClient";
 import { deduplicateTestAttempts } from "@/lib/analytics";
 
 export const RecentEvaluationsTable: React.FC = () => {
-  const isClient = useIsClient();
   const rawAttempts = useTestStore((state) => state.testAttempts);
 
   // Deduplicate and sort attempts newest first
   const sortedAttempts = useMemo(() => {
     const attempts = rawAttempts || [];
-    if (!isClient || attempts.length === 0) return [];
+    if (attempts.length === 0) return [];
     const deduped = deduplicateTestAttempts(attempts);
     return [...deduped].sort((a, b) => {
       const ta = new Date(a.submittedAt || (a as any).date || 0).getTime();
       const tb = new Date(b.submittedAt || (b as any).date || 0).getTime();
       return tb - ta;
     });
-  }, [isClient, rawAttempts]);
+  }, [rawAttempts]);
 
   const sessions = useMemo(() => {
     return sortedAttempts.slice(0, 5).map((att) => {

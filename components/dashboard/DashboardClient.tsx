@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useTestStore, DEFAULT_ANALYTICS } from "@/lib/store/useTestStore";
+import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { useTarget } from "@/lib/hooks/useTarget";
 import InvalidTargetBanner from "@/components/profile/InvalidTargetBanner";
@@ -12,6 +12,7 @@ import { getSubjectsForStream } from "@/lib/constants/cuetSubjects";
 import { calculateCUETScore, MARKING_SCHEME } from "@/lib/config/dashboardConfig";
 import { computeAuthoritativeDiagnosticProgress } from "@/lib/diagnostic-status";
 import { safeStorage } from "@/lib/storage/safe-storage";
+import { isPlaceholderName, isPlaceholderEmail } from "@/lib/auth/user-display";
 
 import { WelcomeBanner } from "@/components/dashboard/prep-pulse/WelcomeBanner";
 import { NextBestActionCard } from "@/components/dashboard/prep-pulse/NextBestActionCard";
@@ -25,6 +26,7 @@ export interface DashboardInitialData {
   user: {
     id: string;
     fullName: string;
+    email?: string;
     targetStream: string;
     targetUniversity: string;
     targetCollege: string;
@@ -99,16 +101,13 @@ export default function DashboardClient({
     if (typeof window !== "undefined") {
       try {
         safeStorage.initStartupCleanup();
-        if (isServerUser && (!initialData.serverAttempts || initialData.serverAttempts.length === 0)) {
-          // Stale cross-account cache purge: ensure clean baseline for fresh/reset account
+        if (isServerUser) {
+          // Remove guest cache when logged in
           safeStorage.removeItem("cuet_ai_prep_session_storage:guest");
-          safeStorage.removeItem("cuet_ai_prep_session_storage");
-          useTestStore.setState({ testAttempts: [], analytics: DEFAULT_ANALYTICS });
-        } else {
-          const { recoverUnrecordedCBTSessions } = useTestStore.getState();
-          if (typeof recoverUnrecordedCBTSessions === "function") {
-            recoverUnrecordedCBTSessions();
-          }
+        }
+        const { recoverUnrecordedCBTSessions } = useTestStore.getState();
+        if (typeof recoverUnrecordedCBTSessions === "function") {
+          recoverUnrecordedCBTSessions();
         }
       } catch (err) {
         console.warn("Session recovery notice:", err);
@@ -120,10 +119,22 @@ export default function DashboardClient({
   useEffect(() => {
     if (isServerUser && initialData.user) {
       const state = useTestStore.getState();
-      if (state.user.id !== initialData.user.id || !state.user.targetCollege) {
+      const validServerEmail = !isPlaceholderEmail(initialData.user.email) ? initialData.user.email : "";
+      const validStoreEmail = !isPlaceholderEmail(state.user.email) ? state.user.email : "";
+      const validServerName = !isPlaceholderName(initialData.user.fullName) ? initialData.user.fullName : "";
+      const validStoreName = !isPlaceholderName(state.user.name) ? state.user.name : "";
+
+      if (
+        state.user.id !== initialData.user.id ||
+        !state.user.targetCollege ||
+        !state.user.email ||
+        isPlaceholderEmail(state.user.email) ||
+        isPlaceholderName(state.user.name)
+      ) {
         state.loginUser({
           id: initialData.user.id,
-          name: initialData.user.fullName,
+          name: validServerName || validStoreName || (validServerEmail ? validServerEmail.split("@")[0] : ""),
+          email: validServerEmail || validStoreEmail || "",
           targetCollege: initialData.user.targetCollege,
           targetUniversity: initialData.user.targetUniversity,
           targetCourse: initialData.user.targetCourse,
@@ -138,10 +149,10 @@ export default function DashboardClient({
         });
       }
 
-      if (isServerUser) {
-        // Authenticated users strictly reflect their own server attempts; clean any stale cross-account data
+      if (isServerUser && initialData.serverAttempts && initialData.serverAttempts.length > 0) {
+        // Authenticated users reflect authoritative server attempts when present
         useTestStore.setState({
-          testAttempts: initialData.serverAttempts || [],
+          testAttempts: initialData.serverAttempts,
         });
       }
     }
@@ -230,9 +241,13 @@ export default function DashboardClient({
   // User profile identifiers
   const fullName = isServerUser
     ? initialData.user.fullName
-    : isClient && storeUser.name
+    : isClient && storeUser.name && !isPlaceholderName(storeUser.name)
     ? storeUser.name
-    : initialData?.user?.fullName || "Aspirant";
+    : !isPlaceholderName(initialData?.user?.fullName)
+    ? initialData.user.fullName
+    : storeUser?.email && !isPlaceholderEmail(storeUser.email)
+    ? storeUser.email.split("@")[0]
+    : "Candidate";
 
   const targetStream = isServerUser
     ? initialData.user.targetStream

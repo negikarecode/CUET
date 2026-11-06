@@ -340,7 +340,7 @@ export default function AICoachClient({
               Subject-level diagnostic evaluation calibrated every 150 unique questions. Uncover careless errors, concept gaps, second-guessing patterns, and score-accelerating weekly plans.
             </p>
             <p className="text-xs text-purple-200/90 font-medium pt-1">
-              Your name, phone and email are never sent to the AI
+              Your name, phone, and email are never sent to the AI · Grounded in NCERT Class 12 · For educational guidance
             </p>
           </div>
 

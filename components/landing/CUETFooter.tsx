@@ -113,7 +113,7 @@ export default function CUETFooter({ onAuth, isLoggedIn }: CUETFooterProps) {
             <ul className="space-y-2.5 text-emerald-200/80">
               <li><Link href="/dashboard/ai-coach" className="hover:text-white transition-colors">AI Mistake Diagnosis</Link></li>
               <li><Link href="/dashboard/ai-coach" className="hover:text-white transition-colors">7-Day Score Accelerator</Link></li>
-              <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing &amp; Gold Pass</Link></li>
+              <li><Link href="/#pricing" className="hover:text-white transition-colors">Pricing &amp; Gold Pass</Link></li>
               <li>
                 {isLoggedIn ? (
                   <Link href="/dashboard" className="text-white font-bold hover:underline">
@@ -141,6 +141,7 @@ export default function CUETFooter({ onAuth, isLoggedIn }: CUETFooterProps) {
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
               <li><Link href="/refunds" className="hover:text-white transition-colors">Refund &amp; Cancellation Policy</Link></li>
+              <li><Link href="/disclaimer" className="hover:text-white transition-colors">NTA Non-Affiliation Disclaimer</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Academic Support Helpdesk</Link></li>
             </ul>
           </div>

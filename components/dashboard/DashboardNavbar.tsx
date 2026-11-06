@@ -16,25 +16,154 @@ import { useTestStore } from "@/lib/store/useTestStore";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { performSecureLogout } from "@/lib/auth/logout-handler";
 import LanguageSelector from "@/components/i18n/LanguageSelector";
+import { resolveUserDisplay, getClientAuthSession, isPlaceholderEmail, isPlaceholderName } from "@/lib/auth/user-display";
 
-export default function DashboardNavbar() {
+interface DashboardNavbarProps {
+  initialIsPremium?: boolean;
+  initialUserId?: string;
+  initialUserEmail?: string;
+  initialUserName?: string;
+}
+
+export default function DashboardNavbar({
+  initialIsPremium = false,
+  initialUserId,
+  initialUserEmail,
+  initialUserName,
+}: DashboardNavbarProps = {}) {
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const streak = isClient && user?.dailyStreak !== undefined ? user.dailyStreak : 0;
-  const userName = isClient && user?.name ? user.name : "CUET Aspirant";
-  const userEmail = isClient && user?.email ? user.email : "";
+  const [sessionUser, setSessionUser] = useState<{
+    email?: string | null;
+    user_metadata?: { full_name?: string; name?: string } | null;
+    id?: string;
+  } | null>(() => {
+    if (initialUserEmail && !isPlaceholderEmail(initialUserEmail)) {
+      return {
+        id: initialUserId,
+        email: initialUserEmail,
+        user_metadata: initialUserName && !isPlaceholderName(initialUserName) ? { full_name: initialUserName } : null,
+      };
+    }
+    const clientSession = getClientAuthSession();
+    if (clientSession?.email && !isPlaceholderEmail(clientSession.email)) {
+      return {
+        id: clientSession.id,
+        email: clientSession.email,
+        user_metadata: clientSession.fullName && !isPlaceholderName(clientSession.fullName) ? { full_name: clientSession.fullName } : null,
+      };
+    }
+    return null;
+  });
+  const [profileData, setProfileData] = useState<{ full_name?: string | null; is_premium?: boolean | null } | null>(null);
 
-  // Derive 2-character initials (e.g. "Aryan 3" -> "A3")
-  const initials = userName
-    .split(" ")
-    .filter(Boolean)
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase() || "A3";
+  // Authoritative background profile and session synchronization
+  useEffect(() => {
+    let isMounted = true;
+    let subscription: { unsubscribe: () => void } | null = null;
+
+    async function syncAuth() {
+      try {
+        const { createClient } = await import("@/lib/supabase/client");
+        const supabase = createClient();
+
+        // 1. Immediate local session retrieval
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session?.user && isMounted) {
+          setSessionUser(session.user);
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("full_name, is_premium, subscription_tier")
+            .eq("id", session.user.id)
+            .maybeSingle();
+
+          if (isMounted) {
+            setProfileData(profile);
+            const currentStore = useTestStore.getState();
+            const display = resolveUserDisplay(session.user, profile, currentStore.user);
+            const isUserPremium = Boolean(initialIsPremium || profile?.is_premium || currentStore.user.isPremium);
+
+            if (
+              currentStore.user.email !== display.displayEmail ||
+              currentStore.user.name !== display.displayName ||
+              !currentStore.user.isLoggedIn ||
+              currentStore.user.isPremium !== isUserPremium
+            ) {
+              currentStore.loginUser({
+                id: session.user.id,
+                name: display.displayName,
+                email: display.displayEmail,
+                isLoggedIn: true,
+                isPremium: isUserPremium,
+                subscriptionTier: profile?.subscription_tier ?? currentStore.user.subscriptionTier,
+              });
+            }
+          }
+        }
+
+        // 2. Real-time auth state changes listener
+        const {
+          data: { subscription: sub },
+        } = supabase.auth.onAuthStateChange(async (event, newSession) => {
+          if (!isMounted) return;
+
+          if (newSession?.user) {
+            setSessionUser(newSession.user);
+            const { data: profile } = await supabase
+              .from("profiles")
+              .select("full_name, is_premium, subscription_tier")
+              .eq("id", newSession.user.id)
+              .maybeSingle();
+
+            if (isMounted) {
+              setProfileData(profile);
+              const currentStore = useTestStore.getState();
+              const display = resolveUserDisplay(newSession.user, profile, currentStore.user);
+              const isUserPremium = Boolean(initialIsPremium || profile?.is_premium || currentStore.user.isPremium);
+
+              currentStore.loginUser({
+                id: newSession.user.id,
+                name: display.displayName,
+                email: display.displayEmail,
+                isLoggedIn: true,
+                isPremium: isUserPremium,
+                subscriptionTier: profile?.subscription_tier ?? currentStore.user.subscriptionTier,
+              });
+            }
+          } else if (event === "SIGNED_OUT") {
+            setSessionUser(null);
+            setProfileData(null);
+          }
+        });
+
+        subscription = sub;
+      } catch (err) {
+        console.warn("[DashboardNavbar] Auth sync notice:", err);
+      }
+    }
+
+    syncAuth();
+
+    return () => {
+      isMounted = false;
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    };
+  }, [initialIsPremium, initialUserId, initialUserEmail, initialUserName]);
+
+  const streak = isClient && user?.dailyStreak !== undefined ? user.dailyStreak : 0;
+  const { displayName, displayEmail, initials } = resolveUserDisplay(
+    sessionUser,
+    profileData,
+    isClient ? user : null
+  );
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -106,7 +235,7 @@ export default function DashboardNavbar() {
               {initials}
             </div>
             <span className="text-xs sm:text-sm font-bold text-slate-900 max-w-[130px] truncate">
-              {userName}
+              {displayName}
             </span>
             <ChevronDown
               className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-150 ${
@@ -123,11 +252,13 @@ export default function DashboardNavbar() {
               {/* User details header */}
               <div className="px-4 py-3 border-b border-slate-100">
                 <p className="font-bold text-sm text-slate-900 truncate">
-                  {userName}
+                  {displayName}
                 </p>
-                <p className="text-xs text-slate-500 truncate mt-0.5">
-                  {userEmail || "Aspirant Account"}
-                </p>
+                {displayEmail && (
+                  <p className="text-xs text-slate-500 truncate mt-0.5">
+                    {displayEmail}
+                  </p>
+                )}
               </div>
 
               {/* Navigation links */}

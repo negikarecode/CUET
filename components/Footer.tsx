@@ -168,10 +168,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/pricing"
+                  href="/#pricing"
                   className="hover:text-purple-600 transition-colors"
                 >
-                  Ranker Pass (₹2 Lifetime)
+                  Gold Pass (Full Season Access)
                 </Link>
               </li>
               <li>
@@ -193,12 +193,12 @@ export default function Footer() {
             <div className="space-y-2 text-xs font-normal text-slate-600">
               <p className="leading-snug">
                 Support:{" "}
-                <a
-                  href="mailto:support@cuetprep.com"
+                <Link
+                  href="/contact"
                   className="font-semibold text-purple-600 hover:text-purple-700 underline underline-offset-2"
                 >
-                  support@cuetprep.com
-                </a>
+                  Contact Helpdesk
+                </Link>
               </p>
               <p className="leading-snug">
                 NTA Helpline:{" "}
@@ -266,8 +266,8 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-wrap items-center gap-4 text-slate-500 font-medium">
-            <Link href="/pricing" className="hover:text-slate-900 transition-colors">
-              Pricing Plans
+            <Link href="/#pricing" className="hover:text-slate-900 transition-colors">
+              Pricing
             </Link>
             <span>•</span>
             <Link href="/contact" className="hover:text-slate-900 transition-colors">
@@ -280,6 +280,10 @@ export default function Footer() {
             <span>•</span>
             <Link href="/privacy" className="hover:text-slate-900 transition-colors">
               Privacy Policy
+            </Link>
+            <span>•</span>
+            <Link href="/disclaimer" className="hover:text-slate-900 transition-colors">
+              Disclaimer
             </Link>
             <span>•</span>
             <Link href="/refunds" className="hover:text-slate-900 transition-colors">

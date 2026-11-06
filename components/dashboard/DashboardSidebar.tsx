@@ -16,6 +16,7 @@ import {
   History,
   BookOpen,
   Sparkles,
+  Zap,
   Settings,
   ChevronDown,
 } from "lucide-react";
@@ -23,18 +24,116 @@ import { useTestStore } from "@/lib/store/useTestStore";
 import { performSecureLogout } from "@/lib/auth/logout-handler";
 import { useEntitlement } from "@/lib/hooks/useEntitlement";
 import { useIsClient } from "@/lib/hooks/useIsClient";
+import { resolveUserDisplay } from "@/lib/auth/user-display";
 
-export default function DashboardSidebar() {
+interface DashboardSidebarProps {
+  initialIsPremium?: boolean;
+  initialUserId?: string;
+  initialUserEmail?: string;
+  initialUserName?: string;
+}
+
+export default function DashboardSidebar({
+  initialIsPremium = false,
+  initialUserId,
+  initialUserEmail,
+  initialUserName,
+}: DashboardSidebarProps = {}) {
   const pathname = usePathname();
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
-  useEntitlement();
 
-  const userName = isClient && user?.name ? user.name : "Aryan 3";
-  const userEmail = isClient && user?.email ? user.email : "";
+  const { isPremium } = useEntitlement({
+    initialIsPremium,
+    initialIsVerified: initialIsPremium,
+    initialUserId,
+  });
+
+  const [dbIsPremium, setDbIsPremium] = useState<boolean>(initialIsPremium);
+
+  // Authoritative background verification directly against Supabase
+  useEffect(() => {
+    let isMounted = true;
+
+    async function syncSidebarEntitlement() {
+      try {
+        const { createClient } = await import("@/lib/supabase/client");
+        const supabase = createClient();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        const uid = session?.user?.id || user?.id || initialUserId;
+        if (!uid || uid === "guest") return;
+
+        // 1. Check profiles table
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("is_premium, subscription_tier")
+          .eq("id", uid)
+          .maybeSingle();
+
+        if (profile?.is_premium) {
+          if (isMounted) setDbIsPremium(true);
+          const currentStore = useTestStore.getState();
+          if (!currentStore.user.isPremium) {
+            currentStore.loginUser({ isPremium: true });
+          }
+          return;
+        }
+
+        // 2. Check payment_orders captured transactions
+        const { data: capturedOrder } = await supabase
+          .from("payment_orders")
+          .select("id")
+          .eq("user_id", uid)
+          .eq("status", "captured")
+          .limit(1)
+          .maybeSingle();
+
+        if (capturedOrder) {
+          if (isMounted) setDbIsPremium(true);
+          const currentStore = useTestStore.getState();
+          if (!currentStore.user.isPremium) {
+            currentStore.loginUser({ isPremium: true });
+          }
+          return;
+        }
+      } catch (err) {
+        console.warn("[DashboardSidebar] entitlement sync notice:", err);
+      }
+    }
+
+    syncSidebarEntitlement();
+  }, [user?.id, initialUserId]);
+
+  const hasPremium = Boolean(
+    initialIsPremium ||
+    dbIsPremium ||
+    isPremium ||
+    user?.isPremium ||
+    (isClient && typeof window !== "undefined" && (() => {
+      try {
+        const activeUid = window.localStorage.getItem("cuet_active_uid");
+        if (activeUid && activeUid !== "guest") {
+          const store = window.localStorage.getItem(`cuet_test_store_${activeUid}`);
+          if (store && JSON.parse(store)?.state?.user?.isPremium) return true;
+        }
+        const defaultStore = window.localStorage.getItem("cuet_test_store");
+        if (defaultStore && JSON.parse(defaultStore)?.state?.user?.isPremium) return true;
+      } catch {}
+      return false;
+    })())
+  );
+
+  const { displayName, displayEmail, initials } = resolveUserDisplay(
+    initialUserEmail ? { email: initialUserEmail, user_metadata: initialUserName ? { full_name: initialUserName } : null } : null,
+    null,
+    isClient ? user : null
+  );
 
   // Close mobile dropdown on outside click
   useEffect(() => {
@@ -134,6 +233,22 @@ export default function DashboardSidebar() {
         },
       ],
     },
+    ...(!hasPremium
+      ? [
+          {
+            title: "Membership",
+            items: [
+              {
+                id: "upgrade",
+                label: "Upgrade to Gold",
+                href: "/dashboard/upgrade",
+                icon: Zap,
+                active: pathname.startsWith("/dashboard/upgrade"),
+              },
+            ],
+          },
+        ]
+      : []),
   ];
 
   const bottomNavItems = [
@@ -224,15 +339,18 @@ export default function DashboardSidebar() {
         </nav>
       </div>
 
-      {/* Footer: Premium plan active pill & Sign out */}
+      {/* Footer: Join Premium Now CTA (completely removed when premium is active) & Sign out */}
       <div className="pt-4 border-t border-slate-100 space-y-2">
-        <Link
-          href="/pricing"
-          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 rounded-xl border border-emerald-200 bg-emerald-50/80 hover:bg-emerald-100 text-xs font-bold text-emerald-800 transition-colors shadow-2xs"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Premium plan active</span>
-        </Link>
+        {!hasPremium && (
+          <Link
+            href="/dashboard/upgrade"
+            className="w-full flex items-center justify-center gap-1.5 h-10 px-3 rounded-xl border border-purple-200 bg-purple-50/90 hover:bg-purple-100 text-xs font-bold text-purple-800 transition-colors shadow-2xs"
+            data-testid="join-premium-now"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+            <span>Join Premium Now</span>
+          </Link>
+        )}
 
         <button
           type="button"
@@ -270,7 +388,7 @@ export default function DashboardSidebar() {
               aria-expanded={mobileProfileOpen}
             >
               <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold">
-                {userName.slice(0, 2).toUpperCase()}
+                {initials}
               </div>
               <ChevronDown
                 className={`w-3.5 h-3.5 text-slate-500 transition-transform ${
@@ -282,8 +400,10 @@ export default function DashboardSidebar() {
             {mobileProfileOpen && (
               <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl border border-slate-200/80 py-1.5 text-xs z-50 shadow-xl">
                 <div className="px-4 py-2.5 border-b border-slate-100">
-                  <p className="font-bold text-xs text-slate-900 truncate">{userName}</p>
-                  <p className="text-[11px] text-slate-500 truncate mt-0.5">{userEmail || "Aspirant Account"}</p>
+                  <p className="font-bold text-xs text-slate-900 truncate">{displayName}</p>
+                  {displayEmail && (
+                    <p className="text-[11px] text-slate-500 truncate mt-0.5">{displayEmail}</p>
+                  )}
                 </div>
                 <div className="py-1">
                   <Link

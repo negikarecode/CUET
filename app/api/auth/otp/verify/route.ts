@@ -126,6 +126,11 @@ export async function POST(request: NextRequest) {
             user_metadata: {
               full_name: record.candidateDetails.fullName,
               age: record.candidateDetails.age,
+              dob: record.candidateDetails.dob,
+              guardian_consent: record.candidateDetails.guardianConsent,
+              guardian_email: record.candidateDetails.guardianEmail,
+              consent_accepted_at: record.candidateDetails.consentAcceptedAt,
+              consent_version: record.candidateDetails.consentVersion,
               target_college: record.candidateDetails.targetCollege,
               target_university: record.candidateDetails.targetUniversity,
               target_course: record.candidateDetails.targetCourse,
@@ -155,6 +160,11 @@ export async function POST(request: NextRequest) {
             user_metadata: {
               full_name: record.candidateDetails.fullName,
               age: record.candidateDetails.age,
+              dob: record.candidateDetails.dob,
+              guardian_consent: record.candidateDetails.guardianConsent,
+              guardian_email: record.candidateDetails.guardianEmail,
+              consent_accepted_at: record.candidateDetails.consentAcceptedAt,
+              consent_version: record.candidateDetails.consentVersion,
               target_college: record.candidateDetails.targetCollege,
               target_university: record.candidateDetails.targetUniversity,
               target_course: record.candidateDetails.targetCourse,

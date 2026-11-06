@@ -57,7 +57,7 @@ import EditGoalsModal from "@/components/profile/EditGoalsModal";
 import InvalidTargetBanner from "@/components/profile/InvalidTargetBanner";
 import SignOutModal from "@/components/profile/SignOutModal";
 import ResetConfirmModal from "@/components/profile/ResetConfirmModal";
-import UpgradeButton from "@/components/payments/UpgradeButton";
+import DeleteAccountModal from "@/components/profile/DeleteAccountModal";
 
 interface ProfileClientProps {
   initialData: ProfileInitialData;
@@ -106,6 +106,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
   const [clearCourseOnOpen, setClearCourseOnOpen] = useState(false);
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // Handle URL query parameters to open Edit Goals modal with course cleared if flagged
   useEffect(() => {
@@ -454,7 +455,28 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
   // ────────────────────────────────────────────────────────────
   // DATA MANAGEMENT & SIGN OUT
   // ────────────────────────────────────────────────────────────
-  const handleExportData = () => {
+  const handleExportData = async () => {
+    try {
+      setStatusMessage({ type: "info", text: "Generating authoritative DPDP export..." });
+      const res = await fetch("/api/user/data-export");
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `cuetmate-user-data-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        setStatusMessage({ type: "success", text: "Personal data exported successfully in JSON format." });
+        setTimeout(() => setStatusMessage(null), 4000);
+        return;
+      }
+    } catch {
+      // Fallback to client-side data compilation if fetch encounters issues
+    }
+
     try {
       const exportPayload = {
         profile,
@@ -478,7 +500,7 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `cuet-prep-data-${new Date().toISOString().slice(0, 10)}.json`;
+      a.download = `cuetmate-user-data-${new Date().toISOString().slice(0, 10)}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -648,7 +670,9 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             <div className="space-y-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
-                  {profile.fullName || "CUET Aspirant"}
+                  {(profile.fullName && profile.fullName !== "CUET Aspirant" && profile.fullName !== "Aspirant")
+                    ? profile.fullName
+                    : (profile.email ? profile.email.split("@")[0] : "Candidate")}
                 </h2>
                 <span
                   className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-xs font-bold font-sans ${activeStreamBadge.bg} ${activeStreamBadge.text} ${activeStreamBadge.border}`}
@@ -657,9 +681,11 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
                   {profile.targetStream}
                 </span>
               </div>
-              <p className="text-[13px] text-slate-500 font-medium font-sans">
-                {profile.email || "aspirant@cuet-prep.in"}
-              </p>
+              {profile.email && !profile.email.includes("aspirant@") && (
+                <p className="text-[13px] text-slate-500 font-medium font-sans">
+                  {profile.email}
+                </p>
+              )}
             </div>
           </div>
 
@@ -1030,50 +1056,56 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
           </div>
 
           {/* Subscription Status Card (Single tier wording) */}
-          <div
-            className={`p-5 rounded-2xl border space-y-3.5 ${
-              profile.isPremium
-                ? "bg-purple-50/50 border-purple-200"
-                : "bg-slate-50 border-slate-200/70"
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                Current Plan
-              </span>
-              <span
-                className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${
-                  profile.isPremium
-                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                    : "bg-white text-slate-600 border-slate-200"
+          {(() => {
+            const isEffectivePremium = Boolean(profile.isPremium || zustandUser?.isPremium);
+            return (
+              <div
+                className={`p-5 rounded-2xl border space-y-3.5 ${
+                  isEffectivePremium
+                    ? "bg-purple-50/50 border-purple-200"
+                    : "bg-slate-50 border-slate-200/70"
                 }`}
               >
-                {profile.isPremium ? "Active AI Pass" : "Free Plan"}
-              </span>
-            </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    Current Plan
+                  </span>
+                  <span
+                    className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${
+                      isEffectivePremium
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                        : "bg-white text-slate-600 border-slate-200"
+                    }`}
+                  >
+                    {isEffectivePremium ? "Active AI Pass" : "Free Plan"}
+                  </span>
+                </div>
 
-            <div>
-              <h3 className="text-base font-bold text-slate-900 tracking-tight">
-                {profile.isPremium ? "CUET AI Practice Pass (Active)" : "Free Plan: 1 Full Mock per Day"}
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1 leading-relaxed">
-                {profile.isPremium
-                  ? "Unlimited full-length CUET mock simulations, targeted weak-topic practice drills, and All-India standing analytics are active."
-                  : "Free plan includes 1 official mock test per day with complete score breakdown and answer key explanations. Upgrade to unlock unlimited simulations."}
-              </p>
-            </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 tracking-tight">
+                    {isEffectivePremium ? "CUET AI Practice Pass (Active)" : "Free Plan: 1 Full Mock per Day"}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1 leading-relaxed">
+                    {isEffectivePremium
+                      ? "Unlimited full-length CUET mock simulations, targeted weak-topic practice drills, and All-India standing analytics are active."
+                      : "Free plan includes 1 official mock test per day with complete score breakdown and answer key explanations. Upgrade to unlock unlimited simulations."}
+                  </p>
+                </div>
 
-            {!profile.isPremium && (
-              <div className="pt-2">
-                <UpgradeButton
-                  planId="all_access_pass_799"
-                  variant="primary"
-                  buttonText="Upgrade to Premium (₹2 · 1-Year Access)"
-                  className="w-full py-3 rounded-xl font-bold text-xs sm:text-sm bg-[#18262E] hover:bg-purple-700 text-white shadow-xs hover:shadow"
-                />
+                {!isEffectivePremium && (
+                  <div className="pt-2">
+                    <Link
+                      href="/dashboard/upgrade"
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-xs sm:text-sm bg-purple-600 hover:bg-purple-700 text-white shadow-xs hover:shadow transition-colors"
+                    >
+                      <Sparkles className="w-4 h-4 text-purple-200" />
+                      <span>Upgrade to Gold Pass (₹999)</span>
+                    </Link>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            );
+          })()}
 
           {/* Target Exam Season Setting (Dynamically computed from date) */}
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between gap-3">
@@ -1220,6 +1252,39 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
             <span>Reset Practice Data</span>
           </button>
         </div>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-slate-100">
+          <div className="space-y-0.5">
+            <p className="text-xs sm:text-sm font-semibold text-rose-950">
+              Permanently delete account (DPDP Act 2023)
+            </p>
+            <p className="text-[13px] text-slate-500">
+              Exercise your DPDP Section 12 Right to Erasure. Permanently destroys your candidate profile, mock tests, and auth credentials.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsDeleteModalOpen(true)}
+            className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer shrink-0 shadow-xs"
+          >
+            <Trash2 className="w-4 h-4 text-white" />
+            <span>Delete Account</span>
+          </button>
+        </div>
+
+        {/* DPDP Consent & Privacy Desk Notice */}
+        <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 font-medium">
+          <span>Protected under India&apos;s Digital Personal Data Protection Act, 2023.</span>
+          <div className="flex items-center gap-3">
+            <Link href="/privacy" className="text-purple-700 font-semibold hover:underline">
+              Privacy Policy
+            </Link>
+            <span>•</span>
+            <Link href="/contact" className="text-purple-700 font-semibold hover:underline">
+              Grievance Desk
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* ──────────────────────────────────────────────────────────── */}
@@ -1270,6 +1335,12 @@ export default function ProfileClient({ initialData }: ProfileClientProps) {
         isOpen={isResetModalOpen}
         onClose={() => setIsResetModalOpen(false)}
         onConfirm={handleResetConfirmed}
+      />
+
+      <DeleteAccountModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        userEmail={profile.email}
       />
 
       <SignOutModal

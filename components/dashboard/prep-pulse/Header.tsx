@@ -12,6 +12,7 @@ import {
   X
 } from 'lucide-react';
 import { useTestStore } from '@/lib/store/useTestStore';
+import { resolveUserDisplay } from '@/lib/auth/user-display';
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -20,8 +21,8 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onSearch, onOpenTest: _onOpenTest }) => {
   const storeUser = useTestStore((s) => s.user);
-  const userName = storeUser?.name?.trim() ? storeUser.name : "CUET Aspirant";
-  const roleSubtitle = storeUser?.targetCollege ? `Targeting ${storeUser.targetCollege}` : "Aspirant, CUET UG 2026";
+  const { displayName: userName } = resolveUserDisplay(null, null, storeUser);
+  const roleSubtitle = storeUser?.targetCollege ? `Targeting ${storeUser.targetCollege}` : "CUET UG 2027 Candidate";
   const avatarUrl = "/assets/images/avatar1.png";
 
   const [searchQuery, setSearchQuery] = useState('');

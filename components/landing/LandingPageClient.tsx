@@ -8,7 +8,7 @@ import CUETSteps from "./CUETSteps";
 import CozyStudyRoomScene from "./illustrations/CozyStudyRoomScene";
 import CUETSystemTabs from "./CUETSystemTabs";
 import CUETArticles from "./CUETArticles";
-import CUETPlanComparison from "./CUETPlanComparison";
+import PricingSection from "@/components/payments/PricingSection";
 import CUETFAQ from "./CUETFAQ";
 import CUETClosingCTA from "./CUETClosingCTA";
 import CUETFooter from "./CUETFooter";
@@ -19,6 +19,7 @@ import { createClient } from "@/lib/supabase/client";
 export default function LandingPageClient() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "signup">("signup");
+  const [authRedirectUrl, setAuthRedirectUrl] = useState("/dashboard");
   const [quickStartModalOpen, setQuickStartModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -53,8 +54,9 @@ export default function LandingPageClient() {
     };
   }, []);
 
-  const handleOpenAuth = (mode: "login" | "signup") => {
+  const handleOpenAuth = (mode: "login" | "signup", redirectUrl = "/dashboard") => {
     setAuthMode(mode);
+    setAuthRedirectUrl(redirectUrl);
     setAuthModalOpen(true);
   };
 
@@ -106,8 +108,14 @@ export default function LandingPageClient() {
       <CUETArticles />
 
       {/* 8. Free vs Gold Pass Comparison */}
-      <CUETPlanComparison
-        onSelectPlan={(plan) => handleOpenAuth(plan === "gold" ? "signup" : "signup")}
+      <PricingSection
+        id="pricing"
+        onSelectPlan={(plan) =>
+          handleOpenAuth(
+            "signup",
+            plan === "gold" ? "/dashboard/upgrade?checkout=1" : "/dashboard"
+          )
+        }
       />
 
       {/* 9. FAQ Accordion Section */}
@@ -131,6 +139,7 @@ export default function LandingPageClient() {
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         initialMode={authMode}
+        redirectUrl={authRedirectUrl}
       />
     </div>
   );

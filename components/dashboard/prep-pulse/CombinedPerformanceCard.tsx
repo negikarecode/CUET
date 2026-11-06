@@ -16,7 +16,6 @@ import {
 import { TrendingUp, ArrowRight } from "lucide-react";
 import { SubjectCalibrationData, TopicMastery } from "@/types";
 import { useTestStore } from "@/lib/store/useTestStore";
-import { useIsClient } from "@/lib/hooks/useIsClient";
 import { deduplicateTestAttempts } from "@/lib/analytics";
 
 interface CombinedPerformanceCardProps {
@@ -25,20 +24,19 @@ interface CombinedPerformanceCardProps {
 }
 
 export const CombinedPerformanceCard: React.FC<CombinedPerformanceCardProps> = () => {
-  const isClient = useIsClient();
   const rawAttempts = useTestStore((state) => state.testAttempts);
 
   // Deduplicate attempts strictly
   const cleanAttempts = useMemo(() => {
     const attempts = rawAttempts || [];
-    if (!isClient || attempts.length === 0) return [];
+    if (attempts.length === 0) return [];
     const deduped = deduplicateTestAttempts(attempts);
     return [...deduped].sort((a, b) => {
       const ta = new Date(a.submittedAt || (a as any).date || 0).getTime();
       const tb = new Date(b.submittedAt || (b as any).date || 0).getTime();
       return ta - tb;
     });
-  }, [isClient, rawAttempts]);
+  }, [rawAttempts]);
 
   const chartData = useMemo(() => {
     if (cleanAttempts.length === 0) return [];

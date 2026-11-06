@@ -26,6 +26,7 @@ import { createClient } from "@/lib/supabase/client";
 import UpgradeButton from "@/components/payments/UpgradeButton";
 import OnboardingModal from "@/components/auth/OnboardingModal";
 import LanguageSelector from "@/components/i18n/LanguageSelector";
+import { resolveUserDisplay } from "@/lib/auth/user-display";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function Navbar() {
@@ -47,15 +48,50 @@ export default function Navbar() {
   // Verify authentic Supabase session state and listen for sign-outs
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!session && user?.isLoggedIn) {
         logout();
+      } else if (session?.user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name, is_premium, subscription_tier")
+          .eq("id", session.user.id)
+          .maybeSingle();
+
+        const realName =
+          (profile?.full_name && profile.full_name !== "CUET Aspirant" && profile.full_name !== "Aspirant"
+            ? profile.full_name
+            : null) ||
+          session.user.user_metadata?.full_name ||
+          session.user.user_metadata?.name ||
+          session.user.email?.split("@")[0] ||
+          profile?.full_name ||
+          "";
+
+        const realEmail = session.user.email || "";
+        const currentStore = useTestStore.getState();
+
+        if (
+          !currentStore.user.email ||
+          currentStore.user.email !== realEmail ||
+          !currentStore.user.name ||
+          currentStore.user.name !== realName
+        ) {
+          currentStore.loginUser({
+            id: session.user.id,
+            name: realName || currentStore.user.name,
+            email: realEmail,
+            isLoggedIn: true,
+            isPremium: profile?.is_premium ?? currentStore.user.isPremium,
+            subscriptionTier: profile?.subscription_tier ?? currentStore.user.subscriptionTier,
+          });
+        }
       }
     });
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_OUT" || !session) {
         logout();
       } else if (event === "SIGNED_IN" && session?.user) {
@@ -68,6 +104,32 @@ export default function Navbar() {
           logout();
         }
         safeStorage.setItem("cuet_active_uid", session.user.id);
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name, is_premium, subscription_tier")
+          .eq("id", session.user.id)
+          .maybeSingle();
+
+        const realName =
+          (profile?.full_name && profile.full_name !== "CUET Aspirant" && profile.full_name !== "Aspirant"
+            ? profile.full_name
+            : null) ||
+          session.user.user_metadata?.full_name ||
+          session.user.user_metadata?.name ||
+          session.user.email?.split("@")[0] ||
+          profile?.full_name ||
+          "";
+
+        const realEmail = session.user.email || "";
+        useTestStore.getState().loginUser({
+          id: session.user.id,
+          name: realName,
+          email: realEmail,
+          isLoggedIn: true,
+          isPremium: profile?.is_premium ?? useTestStore.getState().user.isPremium,
+          subscriptionTier: profile?.subscription_tier ?? useTestStore.getState().user.subscriptionTier,
+        });
       }
     });
 
@@ -78,14 +140,11 @@ export default function Navbar() {
 
   // Safe defaults
   const streak = isClient && isLoggedIn ? user.dailyStreak : 0;
-  const userName = isClient && isLoggedIn && user.name ? user.name : "Aspirant";
-  const userInitials = userName
-    .split(" ")
-    .filter(Boolean)
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase() || "CU";
+  const { displayName, displayEmail, initials: userInitials } = resolveUserDisplay(
+    null,
+    null,
+    isClient ? user : null
+  );
 
   const handleOpenOnboarding = (mode: "signup" | "login" = "signup") => {
     setOnboardingMode(mode);
@@ -155,7 +214,7 @@ export default function Navbar() {
                 <Link href="/dashboard/standing" className="hover:text-purple-600 transition-colors py-1">
                   College Cutoffs
                 </Link>
-                <Link href="/pricing" className={`py-1 transition-colors ${pathname === "/pricing" ? "text-purple-600 font-bold" : "hover:text-purple-600"}`}>
+                <Link href="/#pricing" className="hover:text-purple-600 transition-colors py-1">
                   Pricing
                 </Link>
                 <Link href="/contact" className={`py-1 transition-colors ${pathname === "/contact" ? "text-purple-600 font-bold" : "hover:text-purple-600"}`}>
@@ -249,7 +308,7 @@ export default function Navbar() {
                           {userInitials}
                         </div>
                         <span className="text-xs font-semibold text-slate-800 hidden lg:inline max-w-[110px] truncate">
-                          {userName}
+                          {displayName}
                         </span>
                         <ChevronDown
                           className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 ${
@@ -267,11 +326,13 @@ export default function Navbar() {
                       >
                         <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/60">
                           <p className="font-bold text-slate-900 text-sm truncate">
-                            {userName}
+                            {displayName}
                           </p>
-                          <p className="text-slate-500 text-xs font-medium truncate">
-                            {user.email || "aspirant@cuet-prep.in"}
-                          </p>
+                          {displayEmail && (
+                            <p className="text-slate-500 text-xs font-medium truncate">
+                              {displayEmail}
+                            </p>
+                          )}
                           <div className="mt-2 flex items-center gap-2 text-[11px]">
                             <span className="inline-flex items-center gap-1 font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/60">
                               <Award className="w-3 h-3 text-amber-600" />
@@ -398,7 +459,7 @@ export default function Navbar() {
                     {userInitials}
                   </div>
                   <div>
-                    <p className="font-bold text-slate-900 text-sm">{userName}</p>
+                    <p className="font-bold text-slate-900 text-sm">{displayName}</p>
                     <p className="text-slate-500 text-xs font-medium">
                       {user.targetCollege || "CUET UG Aspirant"}
                     </p>
@@ -473,13 +534,11 @@ export default function Navbar() {
                 AI Mistake Coach
               </Link>
               <Link
-                href="/pricing"
+                href="/#pricing"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
-                  pathname === "/pricing" ? "bg-purple-50 text-purple-700 font-bold" : "hover:bg-slate-50 hover:text-purple-600"
-                }`}
+                className="block px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-purple-600 transition-colors"
               >
-                Ranker Pass Pricing (₹2 Lifetime)
+                Pricing &amp; Plans
               </Link>
               <Link
                 href="/contact"

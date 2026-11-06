@@ -76,7 +76,7 @@ NTA strictly restricts the CUET UG domain syllabus to rationalized Class 12 NCER
 - **Physics**: Electrostatics, Current Electricity, and Optics.
 - **Mathematics**: Definite Integrals, Matrices, and Differential Equations.
 
-Mastering NCERT summary tables, solved examples, and end-of-chapter exemplar problems guarantees high accuracy.
+Mastering NCERT summary tables, solved examples, and end-of-chapter exemplar problems supports high accuracy.
       `,
     },
     {
@@ -111,7 +111,7 @@ Selecting the optimal domain subject combination maximizes your eligibility acro
             Daily Insights for Higher CUET Percentiles
           </h2>
           <p className="text-sm sm:text-base text-slate-600 font-medium max-w-md mx-auto">
-            Practical strategies, exam pacing frameworks, and NCERT revision blueprints distilled from past 100-percentile toppers.
+            Practical strategies, exam pacing frameworks, and NCERT revision blueprints distilled from past examination trends.
           </p>
         </div>
 

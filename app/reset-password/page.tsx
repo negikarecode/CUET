@@ -2,13 +2,11 @@
 
 import React, { Suspense, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import ResetPasswordView from "@/components/auth/ResetPasswordView";
 import { createClient } from "@/lib/supabase/client";
 
 function ResetPasswordContent() {
-  const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.hash) {
@@ -53,7 +51,7 @@ function ResetPasswordContent() {
         </div>
 
         <div className="bg-white rounded-3xl border border-slate-100 shadow-xl overflow-hidden p-6 sm:p-8">
-          <ResetPasswordView onSuccess={() => router.push("/dashboard")} />
+          <ResetPasswordView onSuccess={() => { window.location.href = "/dashboard"; }} />
         </div>
       </div>
     </div>

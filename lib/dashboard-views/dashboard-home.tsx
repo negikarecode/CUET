@@ -73,41 +73,42 @@ export default async function DashboardPage() {
         .from("profiles")
         .select("*")
         .eq("id", authUser.id)
-        .single();
+        .maybeSingle();
 
-      if (profile) {
-        const streamKey = (profile.target_stream?.toLowerCase() as StreamType) || "science";
-        const fallbackSubs = DEFAULT_STREAM_SUBJECTS[streamKey] || DEFAULT_STREAM_SUBJECTS.science;
-        const profileSubjects =
-          Array.isArray(profile.selected_subjects) && profile.selected_subjects.length > 0
-            ? profile.selected_subjects
-            : fallbackSubs;
+      const streamKey = (profile?.target_stream?.toLowerCase() as StreamType) || "science";
+      const fallbackSubs = DEFAULT_STREAM_SUBJECTS[streamKey] || DEFAULT_STREAM_SUBJECTS.science;
+      const profileSubjects =
+        Array.isArray(profile?.selected_subjects) && profile.selected_subjects.length > 0
+          ? profile.selected_subjects
+          : fallbackSubs;
 
-        const activeStreak = calculateActiveStreak(
-          profile.current_streak ?? 0,
-          profile.last_practice_date
-        );
+      const activeStreak = calculateActiveStreak(
+        profile?.current_streak ?? 0,
+        profile?.last_practice_date
+      );
 
-        const { getUserEntitlement } = await import("@/lib/payments/entitlements");
-        const entitlement = await getUserEntitlement(authUser.id);
+      const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+      const entitlement = await getUserEntitlement(authUser.id);
+      const { resolveUserDisplay } = await import("@/lib/auth/user-display");
+      const display = resolveUserDisplay(authUser, profile, null);
 
-        serverData.user = {
-          id: profile.id,
-          fullName: profile.full_name,
-          targetStream: profile.target_stream,
-          targetUniversity: profile.target_university ?? "Delhi University",
-          targetCollege: profile.target_college ?? "SRCC",
-          targetCourse: profile.target_course ?? authUser.user_metadata?.target_course ?? "Undergraduate Program",
-          selectedSubjects: profileSubjects,
-          xp: profile.xp,
-          campusCoins: profile.campus_coins,
-          currentStreak: activeStreak,
-          isPremium: entitlement.isPremium,
-          subscriptionTier: entitlement.subscriptionTier,
-          subscriptionExpiresAt: entitlement.subscriptionExpiresAt,
-        };
-        serverData.kpi.dailyStreak = activeStreak;
-      }
+      serverData.user = {
+        id: authUser.id,
+        fullName: display.displayName,
+        email: display.displayEmail,
+        targetStream: profile?.target_stream || "Science",
+        targetUniversity: profile?.target_university ?? "Delhi University",
+        targetCollege: profile?.target_college ?? "SRCC",
+        targetCourse: profile?.target_course ?? authUser.user_metadata?.target_course ?? "Undergraduate Program",
+        selectedSubjects: profileSubjects,
+        xp: profile?.xp ?? 0,
+        campusCoins: profile?.campus_coins ?? 50,
+        currentStreak: activeStreak,
+        isPremium: entitlement.isPremium,
+        subscriptionTier: entitlement.subscriptionTier,
+        subscriptionExpiresAt: entitlement.subscriptionExpiresAt,
+      };
+      serverData.kpi.dailyStreak = activeStreak;
 
       // Authoritative user progress from single source of truth
       const userProgress = await getUserProgress(authUser.id);

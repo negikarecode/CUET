@@ -74,6 +74,11 @@ export async function POST(request: NextRequest) {
         ? body.selectedSubjects || body.selected_subjects
         : [];
       const age = body.age ? String(body.age) : "18";
+      const dob = body.dob ? String(body.dob) : undefined;
+      const guardianConsent = Boolean(body.guardianConsent || body.guardian_consent);
+      const guardianEmail = body.guardianEmail || body.guardian_email ? String(body.guardianEmail || body.guardian_email).trim().toLowerCase() : undefined;
+      const consentAcceptedAt = body.consentAcceptedAt || body.consent_accepted_at || new Date().toISOString();
+      const consentVersion = body.consentVersion || body.consent_version || "v1.0";
 
       // 3. Generate cryptographic transaction ID & 6-digit OTP
       const registrationId = body.registrationId || generateRegistrationId();
@@ -87,6 +92,11 @@ export async function POST(request: NextRequest) {
         candidateDetails: {
           fullName,
           age,
+          dob,
+          guardianConsent,
+          guardianEmail,
+          consentAcceptedAt,
+          consentVersion,
           targetCollege,
           targetUniversity,
           targetCourse,

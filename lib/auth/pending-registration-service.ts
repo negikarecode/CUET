@@ -4,6 +4,11 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 export interface CandidateRegistrationDetails {
   fullName: string;
   age?: string;
+  dob?: string;
+  guardianConsent?: boolean;
+  guardianEmail?: string;
+  consentAcceptedAt?: string;
+  consentVersion?: string;
   targetCollege: string;
   targetUniversity: string;
   targetCourse: string;

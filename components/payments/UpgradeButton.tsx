@@ -1,6 +1,13 @@
+// =============================================================================
+// DEPRECATED - LEGACY UPGRADE BUTTON
+// Replaced by unified Razorpay checkout in components/payments/PricingSection.tsx
+// All upgrade navigation routes through lib/navigation/upgrade.ts.
+// =============================================================================
+
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Sparkles,
@@ -60,6 +67,7 @@ export default function UpgradeButton({
   const loginUser = useTestStore((state) => state.loginUser);
 
   const [loading, setLoading] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -69,6 +77,11 @@ export default function UpgradeButton({
   const planTitle = is399 ? "CUET AI Pass" : isAllAccess ? "All-Access Pass" : "CUETMate Premium";
 
   const handleCheckout = async () => {
+    if (!termsAccepted) {
+      setErrorMessage("Please accept the Terms of Service and Cancellation & Refund Policy to proceed.");
+      return;
+    }
+
     setLoading(true);
     setErrorMessage(null);
 
@@ -218,6 +231,30 @@ export default function UpgradeButton({
             </>
           )}
         </button>
+
+        <label className="mt-2.5 flex items-start gap-2 cursor-pointer select-none max-w-xs text-left">
+          <input
+            type="checkbox"
+            checked={termsAccepted}
+            onChange={(e) => {
+              setTermsAccepted(e.target.checked);
+              if (errorMessage) setErrorMessage(null);
+            }}
+            className="mt-0.5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 w-3.5 h-3.5 cursor-pointer shrink-0"
+          />
+          <span className="text-[11px] text-slate-500 leading-snug">
+            I agree to the{" "}
+            <Link href="/terms" target="_blank" className="font-semibold text-purple-700 underline hover:text-purple-800">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/refunds" target="_blank" className="font-semibold text-purple-700 underline hover:text-purple-800">
+              Cancellation &amp; Refund Policy
+            </Link>
+            .
+          </span>
+        </label>
+
         {errorMessage && (
           <p className="mt-2 text-[11px] font-semibold text-rose-600 text-center max-w-xs animate-in fade-in">
             {errorMessage}

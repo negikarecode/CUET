@@ -1,185 +1,504 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
-import { Check, Sparkles, ShieldCheck, QrCode, ArrowRight, X } from "lucide-react";
-import UpgradeButton from "./UpgradeButton";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Check,
+  Zap,
+  Sparkles,
+  ShieldCheck,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  Lock,
+} from "lucide-react";
+import { PRICING_CONFIG } from "@/lib/pricing";
+import { useEntitlement } from "@/lib/hooks/useEntitlement";
+import { useTestStore } from "@/lib/store/useTestStore";
+import { loadRazorpayScript } from "@/lib/payments/razorpay-client";
+import { getLoggedOutUpgradeLoginHref } from "@/lib/navigation/upgrade";
 
-export default function PricingSection() {
+export interface PricingSectionProps {
+  id?: string;
+  className?: string;
+  isDashboard?: boolean;
+  onSelectPlan?: (plan: "free" | "gold") => void;
+}
+
+function CheckoutParamSync({
+  isAuthenticated,
+  isPremium,
+  onActivateCheckout,
+}: {
+  isAuthenticated: boolean;
+  isPremium: boolean;
+  onActivateCheckout: () => void;
+}) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams?.get("checkout") === "1" && isAuthenticated && !isPremium) {
+      onActivateCheckout();
+    }
+  }, [searchParams, isAuthenticated, isPremium, onActivateCheckout]);
+
+  return null;
+}
+
+export default function PricingSection({
+  id = "pricing",
+  className = "",
+  isDashboard = false,
+  onSelectPlan,
+}: PricingSectionProps) {
+  const router = useRouter();
+  const { isPremium } = useEntitlement();
+  const storeUser = useTestStore((s) => s.user);
+  const loginUser = useTestStore((s) => s.loginUser);
+
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<{
+    type: "error" | "success" | "info";
+    text: string;
+  } | null>(null);
+
+  // Check if candidate is authenticated
+  const isAuthenticated = Boolean(storeUser?.id && storeUser.id !== "guest");
+
+  const handleActivateCheckout = useCallback(() => {
+    setTermsAccepted(true);
+    setStatusMessage({
+      type: "info",
+      text: "Please accept the Terms of Service to proceed with Gold Pass checkout.",
+    });
+  }, []);
+
+  const handleCheckout = async () => {
+    if (isPremium) {
+      return;
+    }
+
+    if (!isAuthenticated) {
+      if (onSelectPlan) {
+        onSelectPlan("gold");
+      } else {
+        router.push(getLoggedOutUpgradeLoginHref());
+      }
+      return;
+    }
+
+    if (!termsAccepted) {
+      setStatusMessage({
+        type: "error",
+        text: "Please accept the Terms of Service and Refund Policy to proceed with payment.",
+      });
+      return;
+    }
+
+    setLoading(true);
+    setStatusMessage(null);
+
+    try {
+      // 1. Load Razorpay Checkout SDK
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        setStatusMessage({
+          type: "error",
+          text: "Unable to load the secure payment gateway. Please verify your internet connection and retry.",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // 2. Request verified order from server route
+      const orderRes = await fetch("/api/payments/razorpay/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!orderRes.ok) {
+        if (orderRes.status === 409) {
+          loginUser({ isPremium: true, subscriptionTier: "all_access_pass" });
+          setStatusMessage({
+            type: "success",
+            text: "Your account already has an active Gold Pass! Refreshing access...",
+          });
+          router.refresh();
+          setLoading(false);
+          return;
+        }
+
+        const errData = await orderRes.json().catch(() => null);
+        throw new Error(errData?.error || "Failed to initialize checkout session.");
+      }
+
+      const orderData = await orderRes.json();
+      const { orderId, amount, currency, keyId } = orderData;
+
+      // 3. Open Razorpay Checkout Modal
+      const options = {
+        key: keyId,
+        amount,
+        currency: currency || "INR",
+        name: "CUET AI-Prep",
+        description: PRICING_CONFIG.planName,
+        order_id: orderId,
+        prefill: {
+          name: storeUser?.name || "",
+          email: storeUser?.email || "",
+        },
+        theme: {
+          color: "#059669", // Emerald brand color matching Gold Pass
+        },
+        modal: {
+          ondismiss: () => {
+            setLoading(false);
+            setStatusMessage({
+              type: "info",
+              text: "Payment window was dismissed. You can complete your upgrade whenever you are ready.",
+            });
+          },
+        },
+        handler: async (response: {
+          razorpay_order_id: string;
+          razorpay_payment_id: string;
+          razorpay_signature: string;
+        }) => {
+          try {
+            setStatusMessage({
+              type: "info",
+              text: "Verifying transaction signature...",
+            });
+
+            // 4. Authoritative server verification
+            const verifyRes = await fetch("/api/payments/razorpay/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+
+            if (!verifyRes.ok) {
+              const verifyErr = await verifyRes.json().catch(() => null);
+              throw new Error(
+                verifyErr?.error || "Transaction verification could not be confirmed."
+              );
+            }
+
+            // 5. Update local state and refresh router
+            loginUser({
+              isPremium: true,
+              subscriptionTier: "all_access_pass",
+            });
+
+            setStatusMessage({
+              type: "success",
+              text: "Payment confirmed! Gold Pass has been activated for your account.",
+            });
+            router.refresh();
+          } catch (verifyError: any) {
+            console.error("[Razorpay Verification Error]:", verifyError);
+            setStatusMessage({
+              type: "error",
+              text:
+                verifyError?.message ||
+                "Payment was received, but server verification is processing. Please refresh shortly.",
+            });
+          } finally {
+            setLoading(false);
+          }
+        },
+      };
+
+      const rzpInstance = new (window as any).Razorpay(options);
+      rzpInstance.open();
+    } catch (err: any) {
+      console.error("[Razorpay Checkout Error]:", err);
+      setStatusMessage({
+        type: "error",
+        text: err?.message || "An unexpected error occurred during checkout initialization.",
+      });
+      setLoading(false);
+    }
+  };
+
+  const handleFreeAction = () => {
+    if (onSelectPlan) {
+      onSelectPlan("free");
+    } else if (isAuthenticated) {
+      router.push("/dashboard/mocks");
+    } else {
+      router.push("/test/physics");
+    }
+  };
+
   return (
-    <section id="pricing" className="py-16 sm:py-20 bg-[#F8FAFC] border-t border-slate-200/80">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold uppercase tracking-wider mb-3 border border-amber-200/80 shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-            <span>Zero Corporate Fluff • 100% Transparent</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
-            Transparent, Zero-Friction Pricing
+    <section
+      id={id}
+      className={`py-12 md:py-20 px-4 sm:px-6 lg:px-8 ${
+        isDashboard ? "bg-transparent max-w-6xl mx-auto" : "bg-white border-b border-slate-100"
+      } ${className}`}
+    >
+      <Suspense fallback={null}>
+        <CheckoutParamSync
+          isAuthenticated={isAuthenticated}
+          isPremium={isPremium}
+          onActivateCheckout={handleActivateCheckout}
+        />
+      </Suspense>
+
+      <div className="max-w-5xl mx-auto">
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14 space-y-2.5">
+          <span className="text-xs uppercase font-extrabold tracking-wider text-emerald-800 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">
+            Transparent Preparation Plans
+          </span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            Free Forever vs Gold Pass
           </h2>
-          <p className="mt-2 text-sm text-slate-500 font-normal">
-            No sales calls. No hidden checkout taxes. Instant activation for your CUET exam cycle.
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            Start preparing immediately with zero payment details required, or upgrade to
+            Gold Pass for unrestricted access to all 251+ reconstructed shift papers and AI
+            mistake telemetry.
           </p>
-
-          {/* Instant UPI highlight pill */}
-          <div className="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-xs text-xs font-semibold text-slate-700">
-            <QrCode className="w-4 h-4 text-emerald-600" />
-            <span>Scan & unlock via PhonePe / GPay in 10s</span>
-          </div>
         </div>
 
-        {/* Pricing Cards: Exactly 2 Cards */}
+        {/* Global Feedback Banner */}
+        {statusMessage && (
+          <div
+            className={`max-w-4xl mx-auto mb-8 p-4 rounded-2xl flex items-start gap-3 text-sm font-medium animate-in fade-in duration-200 ${
+              statusMessage.type === "error"
+                ? "bg-rose-50 border border-rose-200 text-rose-800"
+                : statusMessage.type === "success"
+                ? "bg-emerald-50 border border-emerald-200 text-emerald-800"
+                : "bg-blue-50 border border-blue-200 text-blue-800"
+            }`}
+          >
+            {statusMessage.type === "error" ? (
+              <AlertCircle className="w-5 h-5 shrink-0 text-rose-600 mt-0.5" />
+            ) : statusMessage.type === "success" ? (
+              <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-600 mt-0.5" />
+            ) : (
+              <Sparkles className="w-5 h-5 shrink-0 text-blue-600 mt-0.5" />
+            )}
+            <div className="flex-1">
+              <p>{statusMessage.text}</p>
+            </div>
+          </div>
+        )}
+
+        {/* 2-Column Comparison Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-4xl mx-auto">
-          {/* Plan 1: Free Starter (₹0) */}
-          <div className="p-7 sm:p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-all">
+          {/* Plan 1: Free Tier Card */}
+          <div className="bg-slate-50/80 rounded-3xl border border-slate-200/90 p-6 sm:p-8 flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow">
             <div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">
-                  Free Starter
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs uppercase font-extrabold tracking-wider text-slate-600 bg-slate-200/70 px-3 py-1 rounded-full">
+                  Free Plan
                 </span>
-                <span className="text-[11px] font-medium text-slate-400">No Card Needed</span>
+                <span className="text-xs text-slate-500 font-medium">No Card Required</span>
               </div>
 
-              <div className="mt-5 flex items-baseline gap-2">
-                <span className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">₹0</span>
-                <span className="text-xs text-slate-500 font-medium">Forever Free</span>
-              </div>
-              <p className="mt-2 text-xs text-slate-500 font-normal leading-relaxed">
-                Test drive the NTA-style CBT Player with official domain sample questions.
+              <h3 className="text-2xl font-extrabold text-slate-900">Essential Practice</h3>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 mb-6 leading-relaxed">
+                Ideal for diagnosing your baseline score and experiencing authentic NTA-style
+                test conditions.
               </p>
 
-              <div className="mt-7 space-y-3 text-xs text-slate-700 font-medium">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                  </span>
-                  <span>1 Official Shift PYQ Paper per Subject</span>
+              <div className="mb-6 pb-6 border-b border-slate-200">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl sm:text-4xl font-black text-slate-900">₹0</span>
+                  <span className="text-xs text-slate-500 font-medium">/ free forever</span>
                 </div>
-                <div className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                  </span>
-                  <span>3 Chapter Practice Tests per Subject</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                  </span>
-                  <span>3 Full-Length CBT Mock Tests per Subject</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                  </span>
-                  <span>Diagnostic Baseline Test with Instant Score</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-slate-400">
-                  <span className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-400">
-                    <X className="w-3 h-3 stroke-[2]" />
-                  </span>
-                  <span>AI Post-Mock Telemetry &amp; Analysis (Gold Pass only)</span>
-                </div>
+                <p className="text-xs text-slate-500 mt-1">
+                  Start immediately without creating an account
+                </p>
+              </div>
+
+              <div className="space-y-3 mb-8">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+                  What is included:
+                </span>
+                {PRICING_CONFIG.freeFeatures.map((feat, idx) => (
+                  <div key={idx} className="flex items-start gap-2.5">
+                    <div className="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 mt-0.5">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
+                      {feat}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-slate-100">
-              <Link
-                href="/test/physics"
-                className="w-full py-3.5 px-4 rounded-xl bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-700 font-semibold text-xs flex items-center justify-center gap-2 border border-slate-200 shadow-xs transition-all"
-              >
-                <span>Start Free Mock</span>
-                <ArrowRight className="w-3.5 h-3.5 stroke-[2]" />
-              </Link>
-            </div>
+            <button
+              type="button"
+              onClick={handleFreeAction}
+              className="w-full py-3 px-5 rounded-xl font-bold text-sm bg-slate-900 text-white hover:bg-slate-800 transition-colors focus-visible:outline-2 focus-visible:outline-slate-900 shadow-sm cursor-pointer"
+            >
+              Start Free Mock Test
+            </button>
           </div>
 
-          {/* Plan 2: Ranker Pass (₹2) */}
-          <div className="p-7 sm:p-8 rounded-3xl bg-white border-2 border-purple-600 shadow-sm flex flex-col justify-between relative ring-4 ring-purple-100 hover:shadow-md transition-all">
-            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[11px] font-bold uppercase tracking-wider px-4 py-1 rounded-full shadow-xs">
-              Complete Ranker Pass
+          {/* Plan 2: Green Gold Pass Card */}
+          <div className="bg-gradient-to-b from-[#123E30] to-[#0D2B22] text-white rounded-3xl border-2 border-emerald-500/40 p-6 sm:p-8 flex flex-col justify-between shadow-xl relative overflow-hidden">
+            {/* Top Badge */}
+            <div className="absolute top-0 right-0 bg-gradient-to-l from-amber-400 to-amber-500 text-slate-950 font-black text-[11px] uppercase tracking-wider px-4 py-1.5 rounded-bl-2xl shadow-xs flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 fill-slate-950" />
+              <span>Most Popular</span>
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-200">
-                  Ranker Pass
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-xs uppercase font-extrabold tracking-wider text-emerald-300 bg-emerald-950/80 border border-emerald-700/60 px-3 py-1 rounded-full">
+                  {PRICING_CONFIG.planName}
                 </span>
-                <span className="text-[11px] font-bold text-purple-600">One-Time Payment</span>
+                <span className="text-xs text-emerald-200/80 font-medium">Full Season Access</span>
               </div>
 
-              <div className="mt-5 flex items-baseline gap-2">
-                <span className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">₹2</span>
-                <span className="text-sm font-semibold text-slate-400 line-through">₹799</span>
-                <span className="text-xs text-slate-500 font-medium">/ 2026 Exam Cycle</span>
-              </div>
-              <p className="mt-1 text-[11px] font-semibold text-amber-700">
-                Launch Offer: First 100 qualifying buyers only
-              </p>
-              <p className="mt-2 text-xs text-slate-500 font-normal leading-relaxed">
-                Everything you need to eliminate trap options, debug time-sinks, and secure a top Central University seat.
+              <h3 className="text-2xl font-extrabold text-white">{PRICING_CONFIG.planName}</h3>
+              <p className="text-xs sm:text-sm text-emerald-100/80 mt-1 mb-6 leading-relaxed">
+                Comprehensive preparation engine built to secure top North Campus DU colleges
+                (SRCC, Hindu, Hansraj).
               </p>
 
-              <div className="mt-7 space-y-3.5 text-xs text-slate-700 font-medium">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+              <div className="mb-6 pb-6 border-b border-emerald-800/60">
+                <div className="flex items-baseline gap-2 flex-wrap">
+                  <span className="text-3xl sm:text-4xl font-black text-white">
+                    ₹{PRICING_CONFIG.priceInr}
                   </span>
-                  <span><strong>Unlimited</strong> 50-Q Full NTA Mock Papers (All Streams)</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                  {PRICING_CONFIG.strikethroughPriceInr ? (
+                    <span className="text-xs text-emerald-300 line-through">
+                      ₹{PRICING_CONFIG.strikethroughPriceInr}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-emerald-200/90 font-semibold bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-700/60">
+                      {PRICING_CONFIG.launchBadgeText}
+                    </span>
+                  )}
+                  <span className="text-xs text-emerald-300 font-semibold bg-emerald-900/80 px-2 py-0.5 rounded border border-emerald-700">
+                    {PRICING_CONFIG.validityLabel}
                   </span>
-                  <span><strong>Instant NCERT Mistake Decrypter</strong> with direct rule citations</span>
                 </div>
-                <div className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                  </span>
-                  <span><strong>Automated 5-Question AI Repair Quizzes</strong> for weak spots</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center shrink-0 text-emerald-600">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                  </span>
-                  <span><strong>Where Do I Stand:</strong> College cutoff chance band predictor</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-amber-50 border border-amber-200/60 flex items-center justify-center shrink-0 text-amber-600">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                  </span>
-                  <span className="text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/60">+500 Campus Coins Bonus</span>
-                </div>
+                <p className="text-xs text-emerald-200/70 mt-1.5">
+                  {PRICING_CONFIG.gstNote} · Single pass covers all {PRICING_CONFIG.domainSubjectCount} domain subjects + General Test
+                </p>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-300 block">
+                  Everything in Free, plus:
+                </span>
+                {PRICING_CONFIG.goldFeatures.map((feat, idx) => (
+                  <div key={idx} className="flex items-start gap-2.5">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 flex items-center justify-center shrink-0 mt-0.5">
+                      <Zap className="w-3 h-3 fill-emerald-300 text-emerald-300" />
+                    </div>
+                    <span className="text-xs sm:text-sm text-emerald-100 font-medium leading-relaxed">
+                      {feat}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-slate-100 space-y-2">
-              <UpgradeButton
-                planId="all_access_pass_799"
-                variant="primary"
-                className="w-full text-center"
-                buttonText="Get Premium (₹2)"
-              />
-              <Link
-                href="/pricing"
-                className="block text-center text-[11px] font-semibold text-purple-600 hover:text-purple-700 transition-colors pt-1"
-              >
-                View full feature comparison & FAQs →
-              </Link>
+            <div>
+              {/* If user is already premium: disabled "Premium active" button */}
+              {isPremium ? (
+                <div className="space-y-3">
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    className="w-full py-3.5 px-5 rounded-xl font-bold text-sm bg-emerald-900/80 text-emerald-200 border border-emerald-700/80 flex items-center justify-center gap-2 cursor-not-allowed shadow-none"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>Premium active</span>
+                  </button>
+                  <p className="text-center text-[11px] text-emerald-300/80">
+                    Your Gold Pass is active for CUET UG 2027. All mock tests and AI debriefs are unlocked.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Terms & Refund Policy Agreement Checkbox */}
+                  <div className="pt-2 border-t border-emerald-800/40">
+                    <label className="flex items-start gap-2.5 cursor-pointer text-xs text-emerald-100/90 select-none">
+                      <input
+                        type="checkbox"
+                        checked={termsAccepted}
+                        onChange={(e) => setTermsAccepted(e.target.checked)}
+                        className="mt-0.5 h-4 w-4 rounded border-emerald-600 bg-emerald-950/80 text-purple-600 focus:ring-purple-400 focus:ring-offset-0"
+                      />
+                      <span>
+                        I agree to the{" "}
+                        <Link
+                          href="/terms"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline hover:text-white"
+                        >
+                          Terms of Service
+                        </Link>{" "}
+                        and{" "}
+                        <Link
+                          href="/refunds"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline hover:text-white"
+                        >
+                          Refund Policy
+                        </Link>
+                        .
+                      </span>
+                    </label>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleCheckout}
+                    disabled={loading || !termsAccepted}
+                    className={`w-full py-3.5 px-5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md ${
+                      !termsAccepted
+                        ? "bg-emerald-950/70 text-emerald-400/60 border border-emerald-800/50 cursor-not-allowed"
+                        : loading
+                        ? "bg-purple-700 text-white cursor-wait opacity-90"
+                        : "bg-purple-600 hover:bg-purple-700 text-white cursor-pointer focus-visible:outline-2 focus-visible:outline-purple-400"
+                    }`}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        <span>Initializing Razorpay...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="w-4 h-4 text-purple-200" />
+                        <span>Unlock Gold Pass</span>
+                      </>
+                    )}
+                  </button>
+
+                  <div className="flex items-center justify-center gap-1.5 text-[11px] text-emerald-200/70">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Instant Digital Activation · 100% Secure Razorpay Checkout</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Disclaimer & Security badge footer */}
-        <div className="mt-10 text-center space-y-2">
-          <p className="text-xs text-slate-500 font-medium">
-            <em>No auto-renewing subscription traps. Pay once for the exam cycle.</em>
-          </p>
-          <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400 font-medium">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>256-bit SSL encrypted. Instant digital activation with official Razorpay invoice.</span>
-          </div>
+        {/* Disclaimer / Non-affiliation notice */}
+        <div className="mt-8 text-center text-xs text-slate-500 max-w-xl mx-auto">
+          cuetmate is an independent academic preparation platform and is not affiliated
+          with, authorized, or endorsed by the National Testing Agency (NTA).
         </div>
       </div>
     </section>

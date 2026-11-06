@@ -288,16 +288,16 @@ export default function SubjectPracticeClient({
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-600 font-medium">
-              Free plan includes 3 distinct unit practice tests with unlimited retries. Additional units and unlimited practice tests require CUETMate Premium.
+              Free plan includes 3 distinct unit practice tests with unlimited retries. Additional units and unlimited practice tests require Gold Pass.
             </p>
           </div>
           <div className="shrink-0 flex items-center gap-2.5">
             <Link
-              href="/pricing"
+              href="/dashboard/upgrade"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Upgrade to Premium (₹2)</span>
+              <span>Upgrade to Gold Pass</span>
             </Link>
           </div>
         </div>
@@ -309,7 +309,7 @@ export default function SubjectPracticeClient({
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-xs font-semibold text-purple-700 tracking-wide uppercase">
               <Compass className="w-3.5 h-3.5" />
-              <span>CUET UG 2026 Curriculum · Code {code}</span>
+              <span>CUET UG 2027 Curriculum · Code {code}</span>
             </div>
 
             <div className="flex items-start sm:items-center gap-3.5">
@@ -360,11 +360,11 @@ export default function SubjectPracticeClient({
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             {!isPremium && isConfirmedFree && totalCompletedPracticeSessions >= 3 ? (
               <Link
-                href="/pricing"
+                href="/dashboard/upgrade"
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold text-xs sm:text-sm shadow-xs hover:shadow transition-all"
               >
                 <Lock className="w-4 h-4" />
-                <span>Unlock All Practice Tests (₹2)</span>
+                <span>Unlock All Practice Tests</span>
               </Link>
             ) : (
               <Link
@@ -543,7 +543,7 @@ export default function SubjectPracticeClient({
                           return (
                             <Link
                               key={testNum}
-                              href="/pricing"
+                              href="/dashboard/upgrade"
                               className="group relative h-[82px] rounded-xl border border-amber-200/90 bg-amber-50/50 p-2.5 flex flex-col justify-between transition-all hover:border-amber-300"
                             >
                               <div className="flex items-center justify-between">

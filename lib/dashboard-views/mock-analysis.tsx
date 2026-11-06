@@ -26,6 +26,20 @@ export default function MockAnalysisPage({ attemptId: propAttemptId }: { attempt
     }
   }, [attemptId, router]);
 
+  // If attempt not present in local store, fetch latest student attempts
+  React.useEffect(() => {
+    if (isClient) {
+      fetch("/api/student/attempts")
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data && Array.isArray(data.attempts)) {
+            useTestStore.setState({ testAttempts: data.attempts });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [isClient]);
+
   // Find attempt matching either attempt.id or attempt.testId
   const matchingAttempt = useMemo(() => {
     if (!testAttempts || testAttempts.length === 0) return null;

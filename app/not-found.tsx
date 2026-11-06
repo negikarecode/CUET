@@ -67,7 +67,7 @@ export default function NotFound() {
               Exam Paper or Page Not Found
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-              The mock test, official past paper, or diagnostic view you requested does not exist or may have been relocated.
+              The mock test, past year paper, or diagnostic view you requested does not exist or may have been relocated.
             </p>
           </div>
 
@@ -119,7 +119,7 @@ export default function NotFound() {
                   251 Shift PYQs Vault
                 </strong>
                 <span className="text-[11px] text-slate-500 truncate block">
-                  Official Papers 2022–2025
+                  Authentic Papers 2022–2025
                 </span>
               </div>
             </Link>

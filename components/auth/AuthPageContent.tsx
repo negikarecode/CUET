@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -66,6 +66,25 @@ export default function AuthPageContent({
   // Aspirant Profile Fields
   const [name, setName] = useState("");
   const [age] = useState("17");
+  const [dob, setDob] = useState("");
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [guardianConsent, setGuardianConsent] = useState(false);
+  const [guardianEmail, setGuardianEmail] = useState("");
+
+  const computedAge = useMemo(() => {
+    if (!dob) return Number(age) || 17;
+    const birthDate = new Date(dob);
+    if (isNaN(birthDate.getTime())) return Number(age) || 17;
+    const today = new Date();
+    let calculated = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      calculated--;
+    }
+    return calculated;
+  }, [dob, age]);
+
+  const isMinor = computedAge < 18;
   const [dreamCollege, setDreamCollege] = useState("Shri Ram College of Commerce (SRCC)");
   const [targetCourse, setTargetCourse] = useState("B.Com (Hons)");
   const [stream, setStream] = useState<StreamType>("commerce");
@@ -116,7 +135,14 @@ export default function AuthPageContent({
       if (res.ok) {
         const json = await res.json();
         if (json?.profile) {
-          userFullName = json.profile.full_name || userFullName;
+          if (
+            json.profile.full_name &&
+            json.profile.full_name !== "CUET Aspirant" &&
+            json.profile.full_name !== "Aspirant" &&
+            json.profile.full_name !== "Aryan 3"
+          ) {
+            userFullName = json.profile.full_name;
+          }
           userStream = (json.profile.target_stream?.toLowerCase() as StreamType) || userStream;
           userCollege = json.profile.target_college || userCollege;
           userUniversity = json.profile.target_university || userUniversity;
@@ -333,6 +359,20 @@ export default function AuthPageContent({
       setErrorMessage("Please ensure your password satisfies all security requirements.");
       return;
     }
+    if (!agreeTerms) {
+      setErrorMessage("Please read and accept the Terms of Service and Privacy Policy to continue.");
+      return;
+    }
+    if (isMinor) {
+      if (!guardianConsent) {
+        setErrorMessage("Parental / guardian consent is required under DPDP Act 2023 for candidates under 18.");
+        return;
+      }
+      if (!guardianEmail || !validateEmail(guardianEmail.trim().toLowerCase())) {
+        setErrorMessage("Please provide a valid parent or legal guardian email address.");
+        return;
+      }
+    }
 
     setErrorMessage(null);
     setIsCheckingEmail(true);
@@ -428,7 +468,12 @@ export default function AuthPageContent({
           type: "signup",
           password,
           fullName: cleanName,
-          age,
+          age: String(computedAge),
+          dob: dob || undefined,
+          guardianConsent,
+          guardianEmail: guardianEmail ? guardianEmail.trim().toLowerCase() : undefined,
+          consentAcceptedAt: new Date().toISOString(),
+          consentVersion: "v1.0",
           targetCollege: finalCollege,
           targetUniversity: finalUniversity,
           targetCourse: finalCourse,
@@ -893,6 +938,87 @@ export default function AuthPageContent({
 
                       {/* Password Requirements Checklist */}
                       <PasswordStrengthIndicator password={password} />
+                    </div>
+
+                    {/* Date of Birth & Age Verification */}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                          Date of Birth
+                        </label>
+                        <span className="text-[11px] text-slate-400 font-medium">
+                          {dob ? `Age: ${computedAge} ${isMinor ? "(Minor Candidate)" : "(Adult Candidate)"}` : "Required for DPDP verification"}
+                        </span>
+                      </div>
+                      <input
+                        type="date"
+                        value={dob}
+                        max={new Date().toISOString().split("T")[0]}
+                        onChange={(e) => setDob(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/70 font-medium text-sm bg-slate-50 hover:bg-slate-100/70 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600 transition-all text-slate-700"
+                      />
+                    </div>
+
+                    {/* Minor Guardian Consent Card (DPDP Act 2023 Section 9) */}
+                    {isMinor && (
+                      <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200/90 text-amber-950 space-y-3 text-xs animate-in fade-in">
+                        <div className="flex items-start gap-2 font-bold text-amber-900">
+                          <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                          <span>Parental / Guardian Consent Notice (DPDP Act 2023)</span>
+                        </div>
+                        <p className="text-[11px] text-amber-800 leading-relaxed font-normal">
+                          Because you are under 18 years of age, Indian data protection law (Section 9 of the Digital Personal Data Protection Act, 2023) requires verifiable parent or legal guardian consent before registering.
+                        </p>
+                        <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            checked={guardianConsent}
+                            onChange={(e) => setGuardianConsent(e.target.checked)}
+                            className="mt-0.5 rounded border-amber-300 text-purple-600 focus:ring-purple-500 w-4 h-4 cursor-pointer shrink-0"
+                          />
+                          <span className="text-xs text-amber-950 font-medium leading-snug">
+                            I confirm that my parent or legal guardian has reviewed and consented to my registration.
+                          </span>
+                        </label>
+                        <div className="space-y-1 pt-1">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-amber-900 block">
+                            Parent / Legal Guardian Email Address
+                          </label>
+                          <input
+                            type="email"
+                            value={guardianEmail}
+                            onChange={(e) => setGuardianEmail(e.target.value)}
+                            placeholder="guardian@example.com"
+                            className="w-full px-3.5 py-2 rounded-xl border border-amber-200 text-xs bg-white text-slate-800 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-600 outline-none"
+                          />
+                          <span className="text-[10px] text-amber-700 block">
+                            A notification of consent terms may be delivered to this guardian address.
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Mandatory Unchecked Terms & Privacy Checkbox */}
+                    <div className="pt-1">
+                      <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={agreeTerms}
+                          onChange={(e) => setAgreeTerms(e.target.checked)}
+                          className="mt-0.5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 w-4 h-4 cursor-pointer shrink-0"
+                        />
+                        <span className="text-xs text-slate-600 leading-snug font-normal">
+                          I agree to the{" "}
+                          <Link href="/terms" target="_blank" className="font-semibold text-purple-700 underline hover:text-purple-800">
+                            Terms of Service
+                          </Link>{" "}
+                          and{" "}
+                          <Link href="/privacy" target="_blank" className="font-semibold text-purple-700 underline hover:text-purple-800">
+                            Privacy Policy
+                          </Link>
+                          .
+                        </span>
+                      </label>
                     </div>
 
                     {errorMessage && (

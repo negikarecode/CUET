@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   Check,
   Tag,
+  Flag,
 } from "lucide-react";
 import { setMistakeTag, loadMistakeTagsMap, MistakeTag } from "@/lib/spaced-repetition";
 import {
@@ -34,7 +35,7 @@ import CBTMatchTheFollowingView, { parseMatchTheFollowing } from "@/components/c
 import { safeCapitalizeOptionText } from "@/lib/utils";
 import { resolveCanonicalTestId } from "@/lib/canonical-tests";
 import SearchableSelect from "@/components/ui/SearchableSelect";
-import UpgradeButton from "@/components/payments/UpgradeButton";
+import QuestionReportModal from "@/components/cbt/QuestionReportModal";
 
 function isGenericFiller(text: string | null | undefined): boolean {
   if (!text) return true;
@@ -189,6 +190,7 @@ export default function PostMockAnalysisClient({
   const [activeEvidenceLabel, setActiveEvidenceLabel] = useState<string | null>(null);
 
   // AI Interpretation State
+  const [reportingQuestion, setReportingQuestion] = useState<{ id: string; number?: number | string } | null>(null);
   const [aiInsight, setAiInsight] = useState<AIPostMockInsight | null>(null);
   const [aiLoading, setAiLoading] = useState(true);
   const [aiError, setAiError] = useState(false);
@@ -1220,19 +1222,21 @@ export default function PostMockAnalysisClient({
                 </div>
                 <div className="space-y-1">
                   <h4 className="text-sm font-bold text-slate-900 tracking-tight">
-                    AI Post-Mock Debrief is a Premium Feature
+                    AI Post-Mock Debrief is a Gold Pass Feature
                   </h4>
                   <p className="text-xs text-slate-600 leading-relaxed max-w-xl">
-                    Upgrade to CUETMate Premium to receive grounded AI telemetry analyzing your distractor trap choices, pacing bottlenecks, and personalized next steps calibrated to official NTA criteria.
+                    Upgrade to Gold Pass to receive grounded AI telemetry analyzing your distractor trap choices, pacing bottlenecks, and personalized next steps calibrated to NTA criteria.
                   </p>
                 </div>
               </div>
               <div className="pt-1 flex items-center gap-3">
-                <UpgradeButton
-                  planId="all_access_pass_799"
-                  buttonText="Unlock AI Analysis — First 100 at ₹2"
-                  variant="primary"
-                />
+                <Link
+                  href="/dashboard/upgrade"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md transition-colors"
+                >
+                  <Sparkles className="w-4 h-4 text-purple-200" />
+                  <span>Upgrade to Gold Pass</span>
+                </Link>
               </div>
             </div>
           ) : (
@@ -1425,6 +1429,14 @@ export default function PostMockAnalysisClient({
       {/* Question Cards List */}
       {!collapsedSections.questions && (
         <div className="divide-y divide-slate-100 p-6 space-y-6">
+          {/* AI Explanation & Syllabus Disclaimer Notice */}
+          <div className="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-200/80 flex items-start gap-2.5 text-xs text-purple-950">
+            <Sparkles className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
+            <div className="leading-relaxed font-normal">
+              <strong className="font-semibold text-purple-900">AI Diagnostic &amp; NCERT Alignment Notice:</strong> Automated mistake breakdowns, distractor analyses, and conceptual explanations are provided for educational self-study guidance. All explanations are calibrated against the authorized NCERT Class 12 curriculum. Always verify rules, definitions, and formulas against standard NCERT textbooks.
+            </div>
+          </div>
+
           {filteredQuestions.length === 0 ? (
             <div className="text-center py-12 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
               <p className="text-sm font-semibold text-slate-700">No questions match the current filter selection.</p>
@@ -1493,6 +1505,17 @@ export default function PostMockAnalysisClient({
                           0 Marks (Skipped)
                         </span>
                       )}
+
+                      {/* Report Question */}
+                      <button
+                        type="button"
+                        onClick={() => setReportingQuestion({ id: q.questionId, number: q.questionNumber })}
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-400 hover:text-rose-600 transition-colors p-1 rounded-md hover:bg-slate-100 cursor-pointer"
+                        title="Report this question"
+                      >
+                        <Flag className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Report</span>
+                      </button>
                     </div>
                   </div>
 
@@ -1710,6 +1733,14 @@ export default function PostMockAnalysisClient({
           </Link>
         </div>
       </div>
+
+      <QuestionReportModal
+        isOpen={Boolean(reportingQuestion)}
+        onClose={() => setReportingQuestion(null)}
+        questionId={reportingQuestion?.id || ""}
+        questionNumber={reportingQuestion?.number}
+        testId={report?.testId}
+      />
     </div>
   );
 }

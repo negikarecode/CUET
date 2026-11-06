@@ -22,7 +22,6 @@ import {
   Play
 } from 'lucide-react';
 import { useTestStore } from '@/lib/store/useTestStore';
-import { useIsClient } from '@/lib/hooks/useIsClient';
 import { GlowCard } from './GlowCard';
 import SearchableSelect from '@/components/ui/SearchableSelect';
 
@@ -142,7 +141,6 @@ export const ScoreImprovementTrend: React.FC = () => {
   const verticalPinGradId = `verticalPinGrad_${chartUniqueId}`;
   const badgeShadowId = `badgeShadow_${chartUniqueId}`;
 
-  const isClient = useIsClient();
   const testAttempts = useTestStore((state) => state.testAttempts);
 
   // Time filter state
@@ -172,13 +170,13 @@ export const ScoreImprovementTrend: React.FC = () => {
   };
 
   const rawAttempts = useMemo(() => {
-    if (!isClient || !testAttempts || testAttempts.length === 0) return [];
+    if (!testAttempts || testAttempts.length === 0) return [];
     return [...testAttempts].sort((a, b) => {
       const ta = new Date(a.submittedAt || 0).getTime();
       const tb = new Date(b.submittedAt || 0).getTime();
       return ta - tb;
     });
-  }, [isClient, testAttempts]);
+  }, [testAttempts]);
 
   // Transform genuine test attempts into timeline data points
   const chartData = useMemo(() => {

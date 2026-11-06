@@ -304,16 +304,16 @@ export default function SubjectPYQClient({
               </h3>
             </div>
             <p className="text-xs text-amber-800/80">
-              Free plan includes 1 distinct official past year paper with unlimited retries. Upgrade to CUETMate Premium for unlimited access to all shift papers across all subjects with complete NCERT solutions.
+              Free plan includes 1 distinct past year paper with unlimited retries. Upgrade to Gold Pass for unlimited access to all shift papers across all subjects with complete NCERT solutions.
             </p>
           </div>
           <div className="shrink-0 flex items-center gap-2.5">
             <Link
-              href="/pricing"
+              href="/dashboard/upgrade"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Upgrade to Premium (₹2)</span>
+              <span>Upgrade to Gold Pass</span>
             </Link>
           </div>
         </div>
@@ -327,7 +327,7 @@ export default function SubjectPYQClient({
               {subjectName} PYQ Papers
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 font-medium truncate max-w-2xl">
-              Official NTA CUET CBT shift papers with complete step-by-step NCERT solutions.
+              Authentic past-year shift papers with complete step-by-step NCERT solutions.
             </p>
             <div className="flex items-center gap-2 text-xs text-slate-600 font-medium pt-0.5">
               <span>{durationMinutes} min</span>
@@ -342,11 +342,11 @@ export default function SubjectPYQClient({
           <div className="shrink-0 flex items-center gap-2">
             {!isPremium && isConfirmedFree && (totalSubjectPYQAttempts >= 1 || (subjectStats.nextPaper && pyqPapers[0]?.id !== subjectStats.nextPaper.id)) ? (
               <Link
-                href="/pricing"
+                href="/dashboard/upgrade"
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold text-xs shadow-xs transition-all cursor-pointer"
               >
                 <Lock className="w-3.5 h-3.5" />
-                <span>Unlock All PYQ Papers (₹2)</span>
+                <span>Unlock All PYQ Papers</span>
               </Link>
             ) : (
               <Link
@@ -700,11 +700,11 @@ export default function SubjectPYQClient({
                 <div className="pt-3 border-t border-slate-100 mt-auto flex flex-col gap-2 w-full">
                   {!isPremium && isConfirmedFree && !isFirstPaper && !hasAttempted ? (
                     <Link
-                      href="/pricing"
+                      href="/dashboard/upgrade"
                       className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
                     >
                       <Lock className="w-3.5 h-3.5" />
-                      <span>Upgrade to Unlock (₹2)</span>
+                      <span>Upgrade to Unlock</span>
                     </Link>
                   ) : hasAttempted && bestAttempt ? (
                     <>
@@ -726,7 +726,7 @@ export default function SubjectPYQClient({
                     </>
                   ) : !isPremium && isConfirmedFree && totalUnlockedDistinctPyqs >= 1 ? (
                     <Link
-                      href="/pricing"
+                      href="/dashboard/upgrade"
                       className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-all cursor-pointer"
                     >
                       <Lock className="w-3.5 h-3.5" />

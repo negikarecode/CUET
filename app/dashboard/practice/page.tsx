@@ -281,10 +281,6 @@ export default function PracticeTestsHubPage() {
     subjectStatsMap,
   ]);
 
-  if (!isClient) {
-    return <div className="min-h-screen bg-[#F8FAFC]" />;
-  }
-
   return (
     <div className="w-full min-w-0 max-w-7xl mx-auto space-y-6">
       {/* 1. Header & Sibling Links matching design.pdf Page 2 */}

@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
+import Link from "next/link";
 import {
   Lock,
   Sparkles,
   CheckCircle2,
   X,
-  Flame,
+  ArrowRight,
 } from "lucide-react";
-import UpgradeButton from "./UpgradeButton";
+import { PRICING_CONFIG } from "@/lib/pricing";
 
 export interface UsageLimitPaywallModalProps {
   isOpen: boolean;
@@ -25,36 +26,6 @@ export default function UsageLimitPaywallModal({
   limitMessage,
   canonicalSubject,
 }: UsageLimitPaywallModalProps) {
-  const [pricing, setPricing] = useState({
-    currentPriceInr: 10,
-    standardPriceInr: 799,
-    remainingSlots: 100,
-  });
-
-  useEffect(() => {
-    if (!isOpen) return;
-    let isMounted = true;
-    async function loadPricing() {
-      try {
-        const res = await fetch("/api/payments");
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.pricing && isMounted) {
-            setPricing({
-              currentPriceInr: data.pricing.currentPriceInr ?? 10,
-              standardPriceInr: data.pricing.standardPriceInr ?? 799,
-              remainingSlots: data.pricing.remainingPromotionalSlots ?? 100,
-            });
-          }
-        }
-      } catch {}
-    }
-    loadPricing();
-    return () => {
-      isMounted = false;
-    };
-  }, [isOpen]);
-
   if (!isOpen) return null;
 
   const title =
@@ -66,36 +37,30 @@ export default function UsageLimitPaywallModal({
 
   const defaultDescription =
     testType === "mock"
-      ? "You have completed your 3 free domain mock tests. Upgrade to CUETMate Premium for unlimited full-length NTA CBT simulations across all 20 subjects."
+      ? `You have completed your 3 free domain mock tests. Upgrade to Gold Pass for unlimited full-length NTA CBT simulations across all ${PRICING_CONFIG.domainSubjectCount} subjects.`
       : testType === "practice"
-      ? "You have completed your 3 free unit practice tests. Upgrade to CUETMate Premium for unlimited unit-wise practice tests across all chapters."
-      : `You have completed your 1 free past year question paper attempt for ${canonicalSubject?.toUpperCase() || "this subject"}. Upgrade to CUETMate Premium to unlock every shift of official past papers across all subjects.`;
+      ? "You have completed your 3 free unit practice tests. Upgrade to Gold Pass for unlimited unit-wise practice tests across all chapters."
+      : `You have completed your 1 free past year question paper attempt for ${canonicalSubject?.toUpperCase() || "this subject"}. Upgrade to Gold Pass to unlock every shift of reconstructed past papers across all subjects.`;
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200"
-    >
-      <div className="w-full max-w-lg bg-white rounded-3xl border border-slate-200/90 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 relative">
-        {/* Close Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close modal"
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors z-10"
-        >
-          <X className="w-5 h-5" />
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="w-full max-w-md rounded-3xl bg-white border border-slate-200/90 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+        {/* Modal Header */}
+        <div className="bg-gradient-to-tr from-purple-700 to-indigo-700 text-white p-6 relative">
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
 
-        {/* Top Header Banner */}
-        <div className="bg-[#18262E] p-6 text-white text-center relative border-b border-slate-700/50">
-          <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mx-auto mb-3 shadow-xs">
-            <Lock className="w-6 h-6 text-white" />
+          <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mb-3">
+            <Lock className="w-5 h-5 text-white" />
           </div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/20 text-white text-[11px] font-semibold uppercase tracking-wider mb-2">
-            <Sparkles className="w-3 h-3 text-amber-300 fill-amber-300" />
-            <span>Free Tier Limit Reached</span>
+
+          <span className="text-[11px] font-bold uppercase tracking-wider text-purple-200 block mb-1">
+            Usage Limit Reached
           </span>
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
             {title}
@@ -108,21 +73,21 @@ export default function UsageLimitPaywallModal({
             {limitMessage || defaultDescription}
           </p>
 
-          {/* Promotional Offer Callout */}
-          <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-between gap-3">
+          {/* Gold Pass Value Callout */}
+          <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <Flame className="w-5 h-5 text-amber-600 fill-amber-500 shrink-0" />
+              <Sparkles className="w-5 h-5 text-emerald-600 shrink-0" />
               <div>
-                <span className="text-xs font-bold text-amber-900 block">
-                  Introductory Launch Offer
+                <span className="text-xs font-bold text-emerald-900 block">
+                  {PRICING_CONFIG.planName}
                 </span>
-                <span className="text-[11px] text-amber-700 font-medium">
-                  Only ₹{pricing.currentPriceInr} (First 100 Buyers · {pricing.remainingSlots} left)
+                <span className="text-[11px] text-emerald-700 font-medium">
+                  {PRICING_CONFIG.validityLabel} · {PRICING_CONFIG.gstNote}
                 </span>
               </div>
             </div>
-            <span className="text-xs font-bold text-slate-400 line-through shrink-0">
-              ₹{pricing.standardPriceInr}
+            <span className="text-sm font-extrabold text-emerald-900 shrink-0">
+              ₹{PRICING_CONFIG.priceInr}
             </span>
           </div>
 
@@ -130,11 +95,11 @@ export default function UsageLimitPaywallModal({
           <div className="space-y-2 text-xs font-medium text-slate-700">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Unlimited Mock Tests across all 20 domain subjects</span>
+              <span>Unlimited Mock Tests across all {PRICING_CONFIG.domainSubjectCount} domain subjects</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Unlimited Unit Practice & Official Past Year Papers</span>
+              <span>Unlimited Unit Practice & Reconstructed Shift Papers</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -142,26 +107,27 @@ export default function UsageLimitPaywallModal({
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Subject Weakness Radar & AI Mistake Decrypter</span>
+              <span>Granular AI Mistake Diagnosis & NCERT Citations</span>
             </div>
           </div>
 
           {/* Action CTAs */}
           <div className="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
-            <UpgradeButton
-              planId="all_access_pass_799"
-              variant="primary"
-              className="w-full text-center"
-              buttonText={`Unlock Unlimited Access (₹${pricing.currentPriceInr})`}
-              onSuccess={onClose}
-            />
+            <Link
+              href="/dashboard/upgrade"
+              onClick={onClose}
+              className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-xs bg-purple-600 hover:bg-purple-700 text-white shadow-md transition-colors"
+            >
+              <span>Unlock Gold Pass (₹{PRICING_CONFIG.priceInr})</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
 
             <button
               type="button"
               onClick={onClose}
               className="w-full py-2.5 text-center text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
             >
-              Continue with Free Plan
+              Continue with Free Features
             </button>
           </div>
         </div>

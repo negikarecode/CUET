@@ -73,7 +73,12 @@ const nextConfig = {
       },
       {
         source: "/plans",
-        destination: "/pricing",
+        destination: "/#pricing",
+        permanent: true,
+      },
+      {
+        source: "/pricing",
+        destination: "/#pricing",
         permanent: true,
       },
     ];

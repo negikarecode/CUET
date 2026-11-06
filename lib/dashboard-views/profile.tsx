@@ -30,8 +30,8 @@ export default async function ProfilePage() {
   // 1. Establish Default Fallback Profile Data
   let initialProfile: StudentProfileData = {
     id: "guest",
-    fullName: "CUET Aspirant",
-    email: "aspirant@cuet-prep.in",
+    fullName: "Candidate",
+    email: "",
     targetStream: "Science",
     targetUniversity: "Delhi University",
     targetCollege: "SRCC",
@@ -66,7 +66,7 @@ export default async function ProfilePage() {
 
     if (authUser) {
       initialProfile.id = authUser.id;
-      initialProfile.email = authUser.email || "aspirant@cuet-prep.in";
+      initialProfile.email = authUser.email || "";
 
       // 2a. Query public.profiles
       const { data: profileRow } = await supabase
@@ -75,42 +75,42 @@ export default async function ProfilePage() {
         .eq("id", authUser.id)
         .maybeSingle();
 
-      if (profileRow) {
-        const { getUserEntitlement } = await import("@/lib/payments/entitlements");
-        const entitlement = await getUserEntitlement(authUser.id);
+      const { getUserEntitlement } = await import("@/lib/payments/entitlements");
+      const entitlement = await getUserEntitlement(authUser.id);
+      const { resolveUserDisplay } = await import("@/lib/auth/user-display");
+      const display = resolveUserDisplay(authUser, profileRow, null);
 
-        initialProfile = {
-          id: profileRow.id,
-          fullName: profileRow.full_name || "CUET Aspirant",
-          email: authUser.email || "aspirant@cuet-prep.in",
-          targetStream: (profileRow.target_stream || "Science") as StreamOption,
-          targetUniversity: profileRow.target_university || "Delhi University",
-          targetCollege: profileRow.target_college || "SRCC",
-          targetCourse:
-            profileRow.target_course ||
-            (authUser.user_metadata?.target_course as string | undefined) ||
-            "B.Com (Hons)",
-          xp: profileRow.xp ?? 0,
-          campusCoins: profileRow.campus_coins ?? 50,
-          currentStreak: calculateActiveStreak(
-            profileRow.current_streak ?? 0,
-            profileRow.last_practice_date
-          ),
-          isPremium: entitlement.isPremium,
-          subscriptionTier: entitlement.subscriptionTier,
-          subscriptionExpiresAt: entitlement.subscriptionExpiresAt,
-          selectedSubjects:
-            profileRow.selected_subjects && profileRow.selected_subjects.length > 0
-              ? profileRow.selected_subjects
-              : profileRow.target_stream === "Commerce"
-              ? ["Accountancy", "Business Studies", "Economics"]
-              : profileRow.target_stream === "Humanities"
-              ? ["History", "Political Science", "Psychology"]
-              : ["Physics", "Chemistry", "Mathematics"],
-          createdAt: profileRow.created_at,
-          updatedAt: profileRow.updated_at,
-        };
-      }
+      initialProfile = {
+        id: authUser.id,
+        fullName: display.displayName,
+        email: display.displayEmail,
+        targetStream: (profileRow?.target_stream || "Science") as StreamOption,
+        targetUniversity: profileRow?.target_university || "Delhi University",
+        targetCollege: profileRow?.target_college || "SRCC",
+        targetCourse:
+          profileRow?.target_course ||
+          (authUser.user_metadata?.target_course as string | undefined) ||
+          "B.Com (Hons)",
+        xp: profileRow?.xp ?? 0,
+        campusCoins: profileRow?.campus_coins ?? 50,
+        currentStreak: calculateActiveStreak(
+          profileRow?.current_streak ?? 0,
+          profileRow?.last_practice_date
+        ),
+        isPremium: entitlement.isPremium,
+        subscriptionTier: entitlement.subscriptionTier,
+        subscriptionExpiresAt: entitlement.subscriptionExpiresAt,
+        selectedSubjects:
+          profileRow?.selected_subjects && profileRow.selected_subjects.length > 0
+            ? profileRow.selected_subjects
+            : profileRow?.target_stream === "Commerce"
+            ? ["Accountancy", "Business Studies", "Economics"]
+            : profileRow?.target_stream === "Humanities"
+            ? ["History", "Political Science", "Psychology"]
+            : ["Physics", "Chemistry", "Mathematics"],
+        createdAt: profileRow?.created_at,
+        updatedAt: profileRow?.updated_at,
+      };
 
       // Reconstruct authentic test attempts for store hydration
       serverAttempts = await fetchServerTestAttempts(supabase, authUser.id);

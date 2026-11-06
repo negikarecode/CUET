@@ -2,13 +2,12 @@
 
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ArrowLeft, ShieldCheck, Mail, ArrowRight } from "lucide-react";
 import OtpVerificationView, { OtpVerificationType } from "@/components/auth/OtpVerificationView";
 import { validateEmail } from "@/lib/auth/validation";
 
 function VerifyOtpContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const queryEmail = searchParams.get("email") || "";
@@ -60,7 +59,7 @@ function VerifyOtpContent() {
               otpType={queryType}
               registrationId={queryRegId || undefined}
               onSuccess={() => {
-                router.push("/dashboard");
+                window.location.href = "/dashboard";
               }}
               onBack={() => setEmail("")}
             />

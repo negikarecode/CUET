@@ -558,10 +558,6 @@ export default function PYQsPage() {
     return groups;
   }, [subjectStatsMap]);
 
-  if (!isClient) {
-    return <div className="min-h-screen bg-[#F8FAFC]" />;
-  }
-
   // Standard PYQ Subject Card (consistent, clean, balanced height)
   const renderSubjectCard = (sub: SubjectMeta, isRecommended: boolean = false) => {
     const Icon = sub.icon;

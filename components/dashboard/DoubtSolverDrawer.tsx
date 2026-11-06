@@ -162,6 +162,11 @@ export function DoubtSolverDrawer({
         </span>
       </div>
 
+      {/* AI Educational Notice */}
+      <div className="px-4 py-1.5 bg-slate-50 border-b border-slate-100 text-[10px] text-slate-500 font-normal">
+        AI-generated study assistance. Grounded in NCERT Class 12 concepts. Verify with official textbooks.
+      </div>
+
       {/* Messages Scroll Area */}
       <div className="flex-1 p-4 overflow-y-auto space-y-3.5 text-xs">
         {messages.map((m) => (
