@@ -896,8 +896,12 @@ export async function reconcileUserEntitlements(userId: string): Promise<{
     if (isNaN(verifiedTime)) continue;
 
     const order = Array.isArray(tx.payment_orders) ? tx.payment_orders[0] : tx.payment_orders;
-    const planId = order?.plan_id || "all_access_pass_799";
-    const plan = SUPPORTED_PLANS[planId] || SUPPORTED_PLANS["all_access_pass_799"];
+    const planId = order?.plan_id;
+    if (!planId || !SUPPORTED_PLANS[planId]) {
+      console.warn(`[Entitlement Reconcile Notice] Transaction ${tx.id} has unrecognized or missing plan ID '${planId}'. Skipping.`);
+      continue;
+    }
+    const plan = SUPPORTED_PLANS[planId];
     const durationDays = plan?.durationDays || 365;
     const durationMs = durationDays * 24 * 60 * 60 * 1000;
 

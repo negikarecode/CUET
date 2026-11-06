@@ -1,6 +1,14 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 let cachedAdminClient: { key: string; client: SupabaseClient } | null = null;
+let testAdminClientOverride: any = null;
+
+/**
+ * Allows integration test suites to inject a database adapter or mock client.
+ */
+export function setTestAdminClientOverride(override: any) {
+  testAdminClientOverride = override;
+}
 
 /**
  * Creates a privileged Supabase client with the Service Role key.
@@ -8,6 +16,10 @@ let cachedAdminClient: { key: string; client: SupabaseClient } | null = null;
  * and transaction handling bypassing RLS.
  */
 export function createAdminClient(): SupabaseClient {
+  if (testAdminClientOverride) {
+    return testAdminClientOverride;
+  }
+
   const supabaseUrl =
     process.env.NEXT_PUBLIC_SUPABASE_URL ||
     "https://djqgpcbjcszczcfrirri.supabase.co";

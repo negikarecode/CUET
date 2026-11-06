@@ -112,34 +112,64 @@ export async function POST(req: NextRequest) {
           p_payload: webhookResult.rawPayload || {},
         });
 
-        if (!recErr && recordRes) {
-          if (recordRes.is_duplicate && recordRes.action === "ignore") {
-            console.log(`[Webhook Deduplication] Event ${resolvedEventId || "(no-id)"} already processed. Ignoring duplicate.`);
-            return NextResponse.json({ status: "ok", received: true, deduplicated: true });
-          }
-          webhookEventPk = recordRes.event_pk || null;
+        if (recErr || !recordRes) {
+          console.error("[CRITICAL] Webhook inbox recording failed:", recErr);
+          return NextResponse.json(
+            { error: "Webhook inbox persistence failed. Retryable.", code: "INBOX_PERSISTENCE_FAILED" },
+            { status: 503 }
+          );
         }
-      } catch (inboxErr) {
-        console.warn("[Webhook Inbox Recording Warning]:", inboxErr);
+
+        if (recordRes.is_duplicate && recordRes.action === "ignore") {
+          console.log(`[Webhook Deduplication] Event ${resolvedEventId || "(no-id)"} already processed. Ignoring duplicate.`);
+          return NextResponse.json({ status: "ok", received: true, deduplicated: true });
+        }
+
+        webhookEventPk = recordRes.event_pk || null;
+        if (!webhookEventPk) {
+          console.error("[CRITICAL] Webhook inbox returned no event primary key.");
+          return NextResponse.json(
+            { error: "Webhook inbox event tracking failed. Retryable.", code: "INBOX_TRACKING_FAILED" },
+            { status: 503 }
+          );
+        }
+      } catch (inboxErr: any) {
+        console.error("[CRITICAL] Webhook inbox recording threw exception:", inboxErr);
+        return NextResponse.json(
+          { error: "Webhook inbox recording exception. Retryable.", code: "INBOX_EXCEPTION" },
+          { status: 503 }
+        );
       }
 
-      const finalizeEvent = async (status: "processed" | "failed" | "deferred", errorMsg?: string) => {
-        if (!webhookEventPk) return;
+      const finalizeEvent = async (
+        status: "processed" | "failed" | "deferred",
+        errorMsg?: string
+      ): Promise<{ success: boolean; error?: string }> => {
+        if (!webhookEventPk) return { success: false, error: "Missing event primary key" };
         try {
-          await supabaseAdmin.rpc("finalize_webhook_event", {
+          const { error: finErr } = await supabaseAdmin.rpc("finalize_webhook_event", {
             p_event_pk: webhookEventPk,
             p_status: status,
             p_error_message: errorMsg || null,
           });
-        } catch (finErr) {
-          console.warn("[Webhook Finalize Warning]:", finErr);
+          if (finErr) {
+            console.error("[CRITICAL] Webhook finalize RPC returned error:", finErr);
+            return { success: false, error: finErr.message };
+          }
+          return { success: true };
+        } catch (finCatch: any) {
+          console.error("[CRITICAL] Webhook finalize threw exception:", finCatch);
+          return { success: false, error: finCatch?.message || "Finalize exception" };
         }
       };
 
       // CRITICAL SEC-02: 'authorized' is NOT paid. Do NOT activate Premium on authorization alone.
       if (event === "payment.authorized") {
         console.log(`[Webhook Notice] Payment ${paymentId || "unknown"} is authorized but not captured. Entitlement fulfillment deferred.`);
-        await finalizeEvent("deferred", "Awaiting capture");
+        const finRes = await finalizeEvent("deferred", "Awaiting capture");
+        if (!finRes.success) {
+          return NextResponse.json({ error: "Webhook finalization failed.", code: "FINALIZATION_FAILED" }, { status: 500 });
+        }
         return NextResponse.json({ status: "ok", received: true, message: "Payment authorized; awaiting capture." });
       }
 
@@ -170,38 +200,66 @@ export async function POST(req: NextRequest) {
         }
 
         // Authoritative resolution of order and user from database
-        let orderRecord: any = null;
-        if (orderId) {
-          try {
-            const { data: ord, error: ordErr } = await supabaseAdmin
-              .from("payment_orders")
-              .select("id, user_id, status, amount_paise, plan_id, provider, currency, is_promotional")
-              .eq("provider_order_id", orderId)
-              .maybeSingle();
-            if (ordErr) {
-              console.warn("[Webhook Order Resolution Error]:", ordErr);
-            }
-            orderRecord = ord;
-          } catch (ordErr) {
-            console.warn("[Webhook Order Resolution Notice]:", ordErr);
-          }
+        if (!orderId) {
+          console.error(`[CRITICAL] Webhook fulfillment failed: Missing orderId in event ${event}`);
+          await finalizeEvent("failed", "Missing order ID in webhook payload");
+          return NextResponse.json(
+            { error: "Missing order ID. Stored order lookup required.", code: "ORDER_REQUIRED" },
+            { status: 400 }
+          );
         }
 
-        if (orderRecord?.user_id && userId && orderRecord.user_id !== userId) {
-          console.warn(`[SECURITY WARNING] Webhook user ID in notes (${userId}) does not match stored order owner (${orderRecord.user_id}). Stored order owner takes precedence.`);
-        }
-        const effectiveUserId = orderRecord?.user_id || userId;
-        if (!effectiveUserId) {
-          console.error(`[CRITICAL] Webhook fulfillment failed: Cannot resolve candidate user for order ${orderId}, payment ${paymentId}`);
-          await finalizeEvent("failed", "Unable to resolve target user for fulfillment");
+        let orderRecord: any = null;
+        try {
+          const { data: ord, error: ordErr } = await supabaseAdmin
+            .from("payment_orders")
+            .select("id, user_id, status, amount_paise, plan_id, provider, currency, is_promotional")
+            .eq("provider_order_id", orderId)
+            .maybeSingle();
+
+          if (ordErr || !ord) {
+            console.error(`[CRITICAL] Stored order lookup failed for order ${orderId}:`, ordErr);
+            await finalizeEvent("failed", "Stored order not found in database");
+            return NextResponse.json(
+              { error: "Stored payment order not found. Failing closed.", code: "ORDER_NOT_FOUND" },
+              { status: 422 }
+            );
+          }
+          orderRecord = ord;
+        } catch (ordErr: any) {
+          console.error(`[CRITICAL] Webhook order query exception for order ${orderId}:`, ordErr);
+          await finalizeEvent("failed", "Stored order query exception");
           return NextResponse.json(
-            { error: "Unable to resolve target user for fulfillment.", code: "USER_RESOLUTION_FAILED" },
+            { error: "Stored order query failed. Failing closed.", code: "ORDER_QUERY_FAILED" },
+            { status: 500 }
+          );
+        }
+
+        // Authoritative candidate user ID from stored order (NEVER fall back to notes userId)
+        const effectiveUserId = orderRecord.user_id;
+        if (!effectiveUserId) {
+          console.error(`[CRITICAL] Webhook fulfillment failed: Stored order ${orderId} has no associated user_id`);
+          await finalizeEvent("failed", "Stored order has no associated user ID");
+          return NextResponse.json(
+            { error: "Stored order has no associated user ID.", code: "USER_RESOLUTION_FAILED" },
             { status: 422 }
           );
         }
 
+        // If webhook notes or supplied metadata contain a different user ID, REJECT and log a security event!
+        if (userId && userId !== effectiveUserId) {
+          console.error(
+            `[SECURITY ALERT] Cross-user metadata mismatch: webhook claims user ${userId}, but stored order ${orderId} is owned by ${effectiveUserId}. Rejecting fulfillment.`
+          );
+          await finalizeEvent("failed", "User metadata mismatch with stored order");
+          return NextResponse.json(
+            { error: "Security violation: Webhook user metadata does not match stored order ownership.", code: "USER_OWNERSHIP_MISMATCH" },
+            { status: 403 }
+          );
+        }
+
         // Validate provider matching
-        if (orderRecord?.provider && orderRecord.provider !== provider.name) {
+        if (orderRecord.provider && orderRecord.provider !== provider.name) {
           console.error(`[SECURITY ALERT] Provider mismatch in webhook: order was created for ${orderRecord.provider}, received ${provider.name}`);
           await finalizeEvent("failed", "Payment provider mismatch on webhook fulfillment");
           return NextResponse.json(
@@ -210,9 +268,19 @@ export async function POST(req: NextRequest) {
           );
         }
 
+        // Currency validation against stored order
+        if (currency && orderRecord.currency && currency.toUpperCase() !== orderRecord.currency.toUpperCase()) {
+          console.error(`[SECURITY ALERT] Currency mismatch in webhook: order requires ${orderRecord.currency}, received ${currency}`);
+          await finalizeEvent("failed", "Payment currency mismatch");
+          return NextResponse.json(
+            { error: "Payment currency mismatch.", code: "PAYMENT_CURRENCY_MISMATCH" },
+            { status: 400 }
+          );
+        }
+
         // Exact amount validation: reject underpayment and overpayment
-        const effectiveAmountPaise = amount ?? orderRecord?.amount_paise;
-        if (orderRecord?.amount_paise && effectiveAmountPaise !== orderRecord.amount_paise) {
+        const effectiveAmountPaise = amount ?? orderRecord.amount_paise;
+        if (orderRecord.amount_paise && effectiveAmountPaise !== orderRecord.amount_paise) {
           console.error(
             `[SECURITY ALERT] Amount mismatch in webhook fulfillment: expected exactly ${orderRecord.amount_paise} paise, received ${effectiveAmountPaise} paise.`
           );
@@ -223,13 +291,27 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // Derive plan configuration server-side
-        const resolvedPlanId = orderRecord?.plan_id || "all_access_pass_799";
+        // Derive plan configuration server-side - STRICT FAIL CLOSED, NO DEFAULT SUBSTITUTION
+        const storedPlanId = orderRecord.plan_id;
+        if (!storedPlanId || typeof storedPlanId !== "string" || storedPlanId.trim() === "") {
+          console.error(`[CRITICAL] Stored order ${orderId} has missing or empty plan_id.`);
+          await finalizeEvent("failed", "Missing plan ID on stored order");
+          return NextResponse.json(
+            { error: "Stored order does not specify a valid plan ID.", code: "INVALID_PLAN" },
+            { status: 400 }
+          );
+        }
+
         let planConfig;
         try {
-          planConfig = getPlanConfig(resolvedPlanId);
-        } catch {
-          planConfig = getPlanConfig("all_access_pass_799");
+          planConfig = getPlanConfig(storedPlanId.trim());
+        } catch (planErr: any) {
+          console.error(`[CRITICAL] Invalid or unrecognized plan ID '${storedPlanId}' on stored order ${orderId}:`, planErr);
+          await finalizeEvent("failed", `Unrecognized plan ID: ${storedPlanId}`);
+          return NextResponse.json(
+            { error: `Invalid subscription plan '${storedPlanId}'.`, code: "INVALID_PLAN" },
+            { status: 400 }
+          );
         }
 
         const oneYearFromNow = new Date();
@@ -253,7 +335,14 @@ export async function POST(req: NextRequest) {
 
           if (!rpcError) {
             console.log(`[Webhook Atomic Fulfillment] User ${effectiveUserId} successfully upgraded to Premium via payment ${paymentId}.`);
-            await finalizeEvent("processed");
+            const finRes = await finalizeEvent("processed");
+            if (!finRes.success) {
+              console.error("[CRITICAL] Webhook finalization failed after fulfillment:", finRes.error);
+              return NextResponse.json(
+                { error: "Payment fulfilled but webhook finalization failed. Retryable.", code: "FINALIZATION_FAILED" },
+                { status: 500 }
+              );
+            }
             return NextResponse.json({ status: "ok", received: true });
           }
 
@@ -341,7 +430,11 @@ export async function POST(req: NextRequest) {
           if (disputeResult.should_reconcile) {
             const targetUserId = disputeResult.user_id || userId;
             const reconciliation = await reconcileUserEntitlements(targetUserId);
-            await finalizeEvent("processed");
+            const finRes = await finalizeEvent("processed");
+            if (!finRes.success) {
+              console.error("[CRITICAL] Finalize webhook event failed after dispute reconciliation:", finRes.error);
+              return NextResponse.json({ error: "Dispute processed but finalization failed.", code: "FINALIZATION_FAILED" }, { status: 500 });
+            }
             console.log(
               `[Dispute Resolved] Outcome ${disputeResult.dispute_status} for payment ${effectivePaymentId}. Entitlements reconciled for ${targetUserId}.`
             );
@@ -354,7 +447,11 @@ export async function POST(req: NextRequest) {
             });
           }
 
-          await finalizeEvent("processed");
+          const finRes = await finalizeEvent("processed");
+          if (!finRes.success) {
+            console.error("[CRITICAL] Finalize webhook event failed after dispute recording:", finRes.error);
+            return NextResponse.json({ error: "Dispute recorded but finalization failed.", code: "FINALIZATION_FAILED" }, { status: 500 });
+          }
           console.log(`[Dispute Recorded] Status ${disputeResult.dispute_status} for payment ${effectivePaymentId}. No entitlement mutation required.`);
           return NextResponse.json({
             status: "ok",
@@ -441,7 +538,11 @@ export async function POST(req: NextRequest) {
             const reconciliation = await reconcileUserEntitlements(targetUserId);
             // Reaffirm promotional inventory release for full refunds (managed atomically via process_payment_refund RPC)
             // .update({ status: "released", user_id: null, order_id: null, claimed_at: null })
-            await finalizeEvent("processed");
+            const finRes = await finalizeEvent("processed");
+            if (!finRes.success) {
+              console.error("[CRITICAL] Finalize webhook event failed after refund reconciliation:", finRes.error);
+              return NextResponse.json({ error: "Refund processed but finalization failed.", code: "FINALIZATION_FAILED" }, { status: 500 });
+            }
             console.log(
               `[Webhook Refund Processed] Payment ${effectivePaymentId} refunded. Full=${refundResult.is_full_refund}, cumulative=${refundResult.cumulative_refunded_paise} paise. Entitlements reconciled for ${targetUserId}.`
             );
@@ -455,7 +556,11 @@ export async function POST(req: NextRequest) {
           }
 
           // Non-processed refund (e.g., refund.created pending or refund.failed)
-          await finalizeEvent("processed");
+          const finRes = await finalizeEvent("processed");
+          if (!finRes.success) {
+            console.error("[CRITICAL] Finalize webhook event failed after refund recording:", finRes.error);
+            return NextResponse.json({ error: "Refund recorded but finalization failed.", code: "FINALIZATION_FAILED" }, { status: 500 });
+          }
           console.log(`[Webhook Refund Recorded] Event ${event} for refund ${refundId} recorded without entitlement mutation.`);
           return NextResponse.json({
             status: "ok",
@@ -470,6 +575,10 @@ export async function POST(req: NextRequest) {
         }
       }
 
+      const finRes = await finalizeEvent("processed");
+      if (!finRes.success) {
+        return NextResponse.json({ error: "Webhook finalization failed.", code: "FINALIZATION_FAILED" }, { status: 500 });
+      }
       return NextResponse.json({ status: "ok", received: true });
     }
 
