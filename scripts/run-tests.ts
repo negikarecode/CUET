@@ -7,7 +7,7 @@ import { computeAnalyticsFromAttempts } from "../lib/analytics";
 import { RecordedTestAttempt, Question } from "../types";
 import { calculateExamScore, getExamConfig } from "../lib/config/examConfig";
 import { SUPPORTED_SUBJECTS_REGISTRY, SUPPORTED_SUBJECT_KEYS } from "../lib/config/subjectRegistry";
-import { parsePassageFromPrompt } from "../components/cbt/CBTCaseStudyPanel";
+import { parsePassageFromPrompt } from "../lib/passage";
 import { buildPostMockDeterministicReport } from "../lib/post-mock-engine";
 import { resolveQuestionCorrectOptionId } from "../lib/scoring";
 import { compareQuestions, getStructuralFingerprint } from "../lib/duplicate-detection";
