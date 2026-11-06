@@ -197,7 +197,7 @@ Paragraph 3: Give exactly two actionable test-taking strategies to apply on the 
       const Groq = (await import("groq-sdk")).default;
       const groq = new Groq({ apiKey: groqKey });
       const completion = await groq.chat.completions.create({
-        model: process.env.GROQ_MODEL || "groq/compound-mini",
+        model: process.env.GROQ_MODEL || "qwen/qwen3.8-27b",
         temperature: 0.3,
         messages: [
           { role: "system", content: "You are the CUET Sunday Mentor. Provide a personalized 3-paragraph debrief." },

@@ -20,15 +20,23 @@ def normalize_text(text):
     t = re.sub(r"[\$\\\{\}\(\)\[\]_^\s\.,;:\-\+=\*\/<>]+", "", t)
     return t
 
-def get_api_key():
+def get_groq_config():
+    api_key = ""
+    model = "qwen/qwen3.8-27b"
     if os.path.exists(".env.local"):
         with open(".env.local", "r") as f:
             for line in f:
                 if line.startswith("GROQ_API_KEY="):
-                    return line.split("=", 1)[1].strip()
-    return os.environ.get("GROQ_API_KEY", "")
+                    api_key = line.split("=", 1)[1].strip()
+                elif line.startswith("GROQ_MODEL="):
+                    model = line.split("=", 1)[1].strip()
+    if not api_key:
+        api_key = os.environ.get("GROQ_API_KEY", "")
+    if os.environ.get("GROQ_MODEL"):
+        model = os.environ.get("GROQ_MODEL")
+    return api_key, model
 
-API_KEY = get_api_key()
+API_KEY, GROQ_MODEL = get_groq_config()
 
 def generate_single_question(subj, chapter, topic, q_num, seen_norm, max_retries=6):
     prompt = f"""Generate 1 authentic CUET UG multiple choice question for:
@@ -64,7 +72,7 @@ Return strict JSON:
 }}"""
 
     req_data = {
-        "model": "groq/compound-mini",
+        "model": GROQ_MODEL,
         "messages": [
             {
                 "role": "system",

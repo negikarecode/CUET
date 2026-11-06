@@ -38,6 +38,9 @@ export async function GET(req: NextRequest) {
         .order("created_at", { ascending: true });
 
       if (error) {
+        if (error.code === "PGRST205" || error.message?.includes("chat_messages")) {
+          return NextResponse.json({ ok: true, messages: [] });
+        }
         return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
       }
 
@@ -53,6 +56,10 @@ export async function GET(req: NextRequest) {
       .order("updated_at", { ascending: false });
 
     if (error) {
+      if (error.code === "PGRST205" || error.message?.includes("chat_threads")) {
+        console.warn("[Coach Chat API] chat_threads table not found in Supabase schema cache.");
+        return NextResponse.json({ ok: true, threads: [] });
+      }
       return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
     }
 

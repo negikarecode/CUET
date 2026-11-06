@@ -152,9 +152,13 @@ CREATE POLICY "Users can view own chat usage"
     TO authenticated
     USING (user_id = (SELECT auth.uid()));
 
--- Restrict mutation to service_role
+-- Explicit Table Permissions
+GRANT ALL ON public.chat_threads TO authenticated, service_role;
+GRANT ALL ON public.chat_messages TO authenticated, service_role;
+GRANT ALL ON public.chat_feedback TO authenticated, service_role;
 REVOKE INSERT, UPDATE, DELETE ON public.chat_usage_daily FROM anon, authenticated;
 GRANT ALL ON public.chat_usage_daily TO service_role;
+GRANT SELECT ON public.chat_usage_daily TO authenticated;
 
 COMMIT;
 

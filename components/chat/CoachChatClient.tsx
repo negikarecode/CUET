@@ -209,6 +209,7 @@ export default function CoachChatClient({
             } else if (parsed.type === "error") {
               setErrorBanner(parsed.error);
               setStatusMessage(null);
+              setMessages((prev) => prev.filter((m) => m.id !== tempAssistantMsgId));
             }
           } catch {
             // Buffer chunk incomplete

@@ -19,7 +19,7 @@ export interface SendChatMessageParams {
   callbacks: ChatStreamCallbacks;
 }
 
-const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+const GROQ_MODEL = process.env.GROQ_MODEL || "qwen/qwen3.8-27b";
 
 function getGroqClient(): Groq {
   const apiKey = process.env.GROQ_API_KEY;
@@ -39,38 +39,50 @@ function getGeminiClient(): GoogleGenAI | null {
  * Check and enforce candidate daily fair-use limits (50 messages/day)
  */
 async function enforceDailyRateLimit(userId: string): Promise<boolean> {
-  const today = new Date().toISOString().slice(0, 10);
+  try {
+    const today = new Date().toISOString().slice(0, 10);
 
-  const { data: usage } = await supabaseAdmin
-    .from("chat_usage_daily")
-    .select("message_count")
-    .eq("user_id", userId)
-    .eq("usage_date", today)
-    .maybeSingle();
-
-  if (usage && usage.message_count >= 50) {
-    return false;
-  }
-
-  // Increment usage
-  if (!usage) {
-    await supabaseAdmin.from("chat_usage_daily").insert({
-      user_id: userId,
-      usage_date: today,
-      message_count: 1,
-    });
-  } else {
-    await supabaseAdmin
+    const { data: usage, error: usageErr } = await supabaseAdmin
       .from("chat_usage_daily")
-      .update({
-        message_count: usage.message_count + 1,
-        updated_at: new Date().toISOString(),
-      })
+      .select("message_count")
       .eq("user_id", userId)
-      .eq("usage_date", today);
-  }
+      .eq("usage_date", today)
+      .maybeSingle();
 
-  return true;
+    if (usageErr) {
+      if (usageErr.code !== "PGRST205") {
+        console.warn("[Coach Chat] enforceDailyRateLimit fetch error:", usageErr);
+      }
+      return true;
+    }
+
+    if (usage && usage.message_count >= 50) {
+      return false;
+    }
+
+    // Increment usage
+    if (!usage) {
+      await supabaseAdmin.from("chat_usage_daily").insert({
+        user_id: userId,
+        usage_date: today,
+        message_count: 1,
+      });
+    } else {
+      await supabaseAdmin
+        .from("chat_usage_daily")
+        .update({
+          message_count: usage.message_count + 1,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", userId)
+        .eq("usage_date", today);
+    }
+
+    return true;
+  } catch (err) {
+    console.warn("[Coach Chat] enforceDailyRateLimit warning:", err);
+    return true;
+  }
 }
 
 /**
@@ -112,18 +124,27 @@ export async function streamCoachChat({
         .single();
 
       if (threadErr || !newThread) {
-        throw new Error("Failed to initialize conversation thread.");
+        console.error("[Coach Chat] Failed to initialize chat thread in Supabase:", threadErr);
+        if (threadErr?.code === "PGRST205" || threadErr?.message?.includes("chat_threads")) {
+          throw new Error(
+            "Coach Chat database tables are not installed. Please run migration 'supabase/migrations/20261106_coach_chat_tables.sql' in your Supabase SQL Editor."
+          );
+        }
+        throw new Error(threadErr?.message || "Failed to initialize conversation thread.");
       }
       threadId = newThread.id;
     }
 
     // 3. Persist User Message
-    await supabaseAdmin.from("chat_messages").insert({
+    const { error: userMsgErr } = await supabaseAdmin.from("chat_messages").insert({
       thread_id: threadId,
       user_id: userId,
       role: "user",
       content: message,
     });
+    if (userMsgErr) {
+      console.warn("[Coach Chat] Warning: Failed to persist user message:", userMsgErr);
+    }
 
     // 4. Fast Router Decision
     const decision = classifyMessageFast(message);

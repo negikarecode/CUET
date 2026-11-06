@@ -184,7 +184,7 @@ You MUST respond strictly with a valid JSON object matching this structure:
   ]
 }`;
 
-    const groqModel = process.env.GROQ_MODEL || "groq/compound-mini";
+    const groqModel = process.env.GROQ_MODEL || "qwen/qwen3.8-27b";
     const completion = await groq.chat.completions.create({
       model: groqModel,
       temperature: 0.1,

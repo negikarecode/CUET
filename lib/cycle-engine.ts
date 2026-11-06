@@ -578,7 +578,7 @@ CRITICAL RULES:
 - If overallAccuracy is below 50% or strengthsCount is 0, explicitly state that foundational remediation is required across all tested areas.`;
 
       const res = await groq.chat.completions.create({
-        model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+        model: process.env.GROQ_MODEL || "qwen/qwen3.8-27b",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.2,
         max_tokens: 600,
