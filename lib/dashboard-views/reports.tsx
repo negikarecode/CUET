@@ -24,7 +24,7 @@ export default async function ReportsPage() {
       const admin = createAdminClient();
       const { data: reports, error } = await admin
         .from("ai_reports")
-        .select("*")
+        .select("id, user_id, subject, stats_json, report_json, questions_analyzed, score_snapshot, feedback, model, prompt_version, created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 

@@ -71,7 +71,7 @@ export default async function DashboardPage() {
     if (authUser) {
       const { data: profile } = await supabase
         .from("profiles")
-        .select("*")
+        .select("id, full_name, target_stream, target_university, target_college, target_course, selected_subjects, xp, campus_coins, current_streak, last_practice_date")
         .eq("id", authUser.id)
         .maybeSingle();
 

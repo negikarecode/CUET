@@ -71,7 +71,7 @@ export default async function ProfilePage() {
       // 2a. Query public.profiles
       const { data: profileRow } = await supabase
         .from("profiles")
-        .select("*")
+        .select("id, full_name, target_stream, target_university, target_college, target_course, xp, campus_coins, current_streak, last_practice_date, selected_subjects, created_at, updated_at")
         .eq("id", authUser.id)
         .maybeSingle();
 
