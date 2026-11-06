@@ -23,7 +23,6 @@ import { safeStorage } from "@/lib/storage/safe-storage";
 import { performSecureLogout } from "@/lib/auth/logout-handler";
 import { useIsClient } from "@/lib/hooks/useIsClient";
 import { createClient } from "@/lib/supabase/client";
-import UpgradeButton from "@/components/payments/UpgradeButton";
 import OnboardingModal from "@/components/auth/OnboardingModal";
 import LanguageSelector from "@/components/i18n/LanguageSelector";
 import { resolveUserDisplay } from "@/lib/auth/user-display";
@@ -274,12 +273,13 @@ export default function Navbar() {
                           <span>Premium</span>
                         </div>
                       ) : (
-                        <UpgradeButton
-                          planId="ai_practice_pass_499"
-                          variant="amber"
-                          className="py-1.5 px-3.5 text-xs rounded-xl hidden sm:flex font-semibold shadow-xs"
-                          buttonText={t("upgrade", "Upgrade")}
-                        />
+                        <Link
+                          href="/dashboard/upgrade"
+                          className="py-1.5 px-3.5 text-xs rounded-xl hidden sm:flex items-center gap-1.5 font-bold bg-purple-600 hover:bg-purple-700 text-white shadow-xs transition-colors"
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>{t("upgrade", "Upgrade")}</span>
+                        </Link>
                       )}
                     </>
                   )}

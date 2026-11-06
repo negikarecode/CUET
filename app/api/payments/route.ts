@@ -1,5 +1,5 @@
 // =============================================================================
-// DEPRECATED - LEGACY PAYMENT GATEWAY & ROUTE HANDLER (CASHFREE / PROMOTIONAL SLOTS)
+// DEPRECATED - LEGACY PAYMENT GATEWAY & ROUTE HANDLER (PROMOTIONAL SLOTS)
 // Superseded by unified Razorpay routes:
 // - POST /api/payments/razorpay/create-order
 // - POST /api/payments/razorpay/verify
