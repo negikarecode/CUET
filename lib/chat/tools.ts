@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { getUserProgress, SubjectProgress } from "@/lib/user-progress";
 import { getCollegeCutoffInfo, calculateCollegeReadiness } from "@/lib/college-benchmarks";
+import { computeMarksLost } from "@/lib/ai-coach/marks";
 
 export interface ToolDefinition {
   type: "function";
@@ -648,8 +649,9 @@ async function getAttemptReview(userId: string, testId: string) {
   const correct = attempts.filter((a) => a.is_correct).length;
   const incorrect = attempts.filter((a) => !a.is_correct && a.selected_option !== null && a.selected_option !== "").length;
   const netScore = correct * 5 - incorrect * 1;
-  const marksLostToNegative = incorrect * 1;
-  const marksLostToOmissionOrError = incorrect * 6; // +5 not earned + 1 deducted
+  const marksCalc = computeMarksLost(incorrect);
+  const marksLostToNegative = marksCalc.penaltyMarks;
+  const marksLostToOmissionOrError = marksCalc.missedMarks;
 
   return {
     hasData: true,

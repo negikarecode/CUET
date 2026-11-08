@@ -22,7 +22,7 @@ export default function CUETArticles() {
     id: "negative-marking",
     title: "How to Score 200/200 in Domain Subjects Without Negative Marking Traps",
     summary:
-      "Understand the strict mathematical risk-to-reward ratio of CUET's +5/−1 marking scheme and why skipping uncertain guesses protects your percentile.",
+      "Understand the mathematical expected value of CUET's +5/−1 marking scheme and how eliminating options maximizes your net score.",
     readTime: "4 min read",
     category: "Exam Strategy",
     accent: "bg-purple-100 text-purple-700",
@@ -33,7 +33,7 @@ In CUET UG, raw scores translate directly into normalized percentiles where a di
 ### The Penalty Mathematics (+5 / −1)
 Every incorrect guess incurs a -1 mark deduction from your score, whereas an unattempted question incurs exactly 0 penalty. 
 - 5 wrong answers forfeit **25 potential marks + 5 penalty marks = 30 marks lost**!
-- If your confidence on an option is below 60%, leaving the question unattempted preserves your baseline score.
+- Guess when you can eliminate at least one option; skip only when you have no idea. A blind guess is worth about +0.5 marks on average with +5/-1 marking.
 
 ### The 3-Pass Solving Framework:
 1. **Pass 1 (0 to 25 mins)**: Answer only the 25–30 direct recall and formula-based questions where your confidence is 100%. Lock in +150 raw marks immediately.

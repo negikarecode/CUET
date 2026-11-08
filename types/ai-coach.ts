@@ -14,12 +14,14 @@ export interface MistakeTagCounts {
 }
 
 export interface TopicStat {
+  id?: string;
   topic: string;
   chapter?: string;
   attempted: number;
   correct: number;
   accuracyPercentage: number;
   classification: TopicClassification;
+  bucket?: "fix" | "strength" | "needs_data" | "neutral";
   mostCommonWrongOption?: string;
 }
 
@@ -62,11 +64,18 @@ export interface AICoachComputedStats {
   insufficient_data_topics?: TopicStat[]; // Topics with < 5 attempts excluded from leaks & strengths
   hasRandomAnswering?: boolean;           // One option chosen for >80% of answers with no skips
   hasLowSignalAttempt?: boolean;          // Low signal / suspicious assessment (e.g. >80% same option or <12% accuracy on 50 Qs)
+  data_quality?: "ok" | "thin" | "near_random" | "untagged";
+  near_random?: boolean;
+  fast_wrong_rate?: number | null;
+  skipped_rate?: number;
+  median_seconds_per_question?: number | null;
+  mistake_tags_count?: number | null;
   daysToExam: number;
 }
 
 export interface BiggestLeak {
   topic?: string;
+  topicId?: string;
   issue: string;
   evidence: string;
   likelyConfusion?: string;
@@ -87,6 +96,9 @@ export interface WeeklyPlanItem {
   focus: string;
   task: string;
   minutes: number;
+  topicId?: string;
+  buttonText?: string;
+  practiceTopic?: string;
 }
 
 export interface AICoachReportContent {

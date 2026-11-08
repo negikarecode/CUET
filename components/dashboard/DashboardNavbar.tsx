@@ -17,12 +17,14 @@ import { useIsClient } from "@/lib/hooks/useIsClient";
 import { performSecureLogout } from "@/lib/auth/logout-handler";
 import LanguageSelector from "@/components/i18n/LanguageSelector";
 import { resolveUserDisplay, getClientAuthSession, isPlaceholderEmail, isPlaceholderName } from "@/lib/auth/user-display";
+import { calculateActiveStreak } from "@/lib/gamification";
 
 interface DashboardNavbarProps {
   initialIsPremium?: boolean;
   initialUserId?: string;
   initialUserEmail?: string;
   initialUserName?: string;
+  initialDailyStreak?: number;
 }
 
 export default function DashboardNavbar({
@@ -30,6 +32,7 @@ export default function DashboardNavbar({
   initialUserId,
   initialUserEmail,
   initialUserName,
+  initialDailyStreak,
 }: DashboardNavbarProps = {}) {
   const isClient = useIsClient();
   const user = useTestStore((state) => state.user);
@@ -79,7 +82,7 @@ export default function DashboardNavbar({
           setSessionUser(session.user);
           const { data: profile } = await supabase
             .from("profiles")
-            .select("full_name, is_premium, subscription_tier")
+            .select("full_name, is_premium, subscription_tier, current_streak, last_practice_date")
             .eq("id", session.user.id)
             .maybeSingle();
 
@@ -88,12 +91,16 @@ export default function DashboardNavbar({
             const currentStore = useTestStore.getState();
             const display = resolveUserDisplay(session.user, profile, currentStore.user);
             const isUserPremium = Boolean(initialIsPremium || profile?.is_premium || currentStore.user.isPremium);
+            const authoritativeStreak = profile
+              ? calculateActiveStreak(profile.current_streak ?? 0, profile.last_practice_date)
+              : (initialDailyStreak ?? currentStore.user.dailyStreak ?? 0);
 
             if (
               currentStore.user.email !== display.displayEmail ||
               currentStore.user.name !== display.displayName ||
               !currentStore.user.isLoggedIn ||
-              currentStore.user.isPremium !== isUserPremium
+              currentStore.user.isPremium !== isUserPremium ||
+              currentStore.user.dailyStreak !== authoritativeStreak
             ) {
               currentStore.loginUser({
                 id: session.user.id,
@@ -102,6 +109,7 @@ export default function DashboardNavbar({
                 isLoggedIn: true,
                 isPremium: isUserPremium,
                 subscriptionTier: profile?.subscription_tier ?? currentStore.user.subscriptionTier,
+                dailyStreak: authoritativeStreak,
               });
             }
           }
@@ -117,7 +125,7 @@ export default function DashboardNavbar({
             setSessionUser(newSession.user);
             const { data: profile } = await supabase
               .from("profiles")
-              .select("full_name, is_premium, subscription_tier")
+              .select("full_name, is_premium, subscription_tier, current_streak, last_practice_date")
               .eq("id", newSession.user.id)
               .maybeSingle();
 
@@ -126,6 +134,9 @@ export default function DashboardNavbar({
               const currentStore = useTestStore.getState();
               const display = resolveUserDisplay(newSession.user, profile, currentStore.user);
               const isUserPremium = Boolean(initialIsPremium || profile?.is_premium || currentStore.user.isPremium);
+              const authoritativeStreak = profile
+                ? calculateActiveStreak(profile.current_streak ?? 0, profile.last_practice_date)
+                : (initialDailyStreak ?? currentStore.user.dailyStreak ?? 0);
 
               currentStore.loginUser({
                 id: newSession.user.id,
@@ -134,6 +145,7 @@ export default function DashboardNavbar({
                 isLoggedIn: true,
                 isPremium: isUserPremium,
                 subscriptionTier: profile?.subscription_tier ?? currentStore.user.subscriptionTier,
+                dailyStreak: authoritativeStreak,
               });
             }
           } else if (event === "SIGNED_OUT") {
@@ -156,9 +168,9 @@ export default function DashboardNavbar({
         subscription.unsubscribe();
       }
     };
-  }, [initialIsPremium, initialUserId, initialUserEmail, initialUserName]);
+  }, [initialIsPremium, initialUserId, initialUserEmail, initialUserName, initialDailyStreak]);
 
-  const streak = isClient && user?.dailyStreak !== undefined ? user.dailyStreak : 0;
+  const streak = isClient && user?.dailyStreak !== undefined ? user.dailyStreak : (initialDailyStreak ?? 0);
   const { displayName, displayEmail, initials } = resolveUserDisplay(
     sessionUser,
     profileData,

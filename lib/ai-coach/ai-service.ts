@@ -1,5 +1,5 @@
 import Groq from "groq-sdk";
-import { AICoachComputedStats, AICoachReportContent, BiggestLeak } from "@/types/ai-coach";
+import { AICoachComputedStats, AICoachReportContent, BiggestLeak, WeeklyPlanItem } from "@/types/ai-coach";
 import { AI_COACH_CONFIG } from "./config";
 
 const SYSTEM_PROMPT = `You are the authentic CUET UG AI Learning Coach.
@@ -9,38 +9,55 @@ PROMPT RULES & CONSTRAINTS:
 1. Tone and vocabulary: Use Class 12 plain English. Strictly NO statistical jargon (never use words like empirical, telemetry, standard deviation, variance, coefficient, regression, percentile distribution, or extrapolation).
 2. Brevity constraint: Maximum 18 words per bullet point across all lists and string fields (strengths, test_taking_strategy, weekly_plan tasks, leak evidence, leak fixes).
 3. Mobile card fit: All text must fit 360px mobile cards without truncation. Keep statements punchy, direct, and compact.
-4. No time or speed logic: Never mention time, speed, or pacing anywhere. Base advice only on accuracy, topics, skips, answer changes, and marks lost.
+4. No time or speed logic: Never mention time, speed, or pacing anywhere unless explicit timing data is provided. Base advice only on accuracy, topics, skips, answer changes, and marks lost.
 5. Grounded data: Use ONLY the numbers and topics given in currentStats JSON. Never invent or hallucinate data.
-6. Topic confidence threshold: Topics in "insufficient_data_topics" have fewer than 5 attempts. Exclude them entirely from "biggest_leaks" and "strengths". You may only say "needs more data" about them. Never treat them as leaks or strengths.
-7. Random answering note: If "hasRandomAnswering" is true in currentStats, you must set "random_answering_note" to exactly: "This looks like random answering, so the advice may be less accurate."
-8. Every leak fix must tie directly to starting a 10-question practice fix (e.g. "Tap 'Start 10-question fix' to solve 10 questions on [Topic]").
-9. Weekly plan must have 7 daily steps (Day 1 to Day 7) with tasks under 18 words.
-10. If this is the candidate's first report, set "comparison_with_previous" to exactly "First report: this is your baseline".
+6. Guessing & Data-Quality Awareness:
+   - If currentStats.near_random is true (or data_quality is "near_random"):
+     - State plainly and kindly: "Your accuracy is close to what random guessing gives (25%), so it's hard to tell concept gaps from guessing. Try a slower 10-question set on one topic and check again."
+     - Strictly NEVER use words like "concept gap", "Severe concept gap", or claim causal reasons in headline, leaks, or summary.
+     - Recommend: slow down, attempt fewer questions with elimination, try an untimed 10-question drill on one topic, and re-check after the next set.
+   - If data_quality is "untagged" or mistake_tags_count is null: state clearly that you can't tell mistake types yet because no questions were tagged. Never present missing tags as good news.
+   - Never say test-taking behavior is "healthy" or "efficient" unless data_quality is "ok" and accuracy supports it.
+7. Don't Invent Causes:
+   - Mistake-tag counts of 0 mean "unknown", not "none".
+   - NEVER say "Concept gaps caused most of your N negative marks" unless mistake tag data specifically proves it.
+   - Replace "Likely Concept Confusion" with a hypothesis ONLY when you have the student's chosen wrong options and the question has a known trap option; use "Possible confusion with Option [X]: ..." wording. Otherwise show "Needs practice: X of Y correct" with NO stated cause.
+   - Replace Severe/Major/Weak labels with neutral, evidence-first titles (e.g. "Low accuracy so far: 1 of 10").
+8. Official +5/-1 Marking Advice:
+   - Never say "Skip questions you are unsure about to avoid negative marks".
+   - ALWAYS advise: "Guess when you can eliminate at least one option; skip only when you have no idea. A blind guess is worth about +0.5 marks on average with +5/-1 marking."
+9. Plan Consistency:
+   - Only generate plan days for topics in the fix bucket (accuracy < 60% and attempts >= 5).
+   - If fewer than 7 topics qualify, fill remaining days with mixed review or rest days instead of repeating weak labels.
+   - Every plan item's task description must match its button (e.g. 10 questions drill must say 10 questions and have a matching ~20 min duration).
+10. Strengths:
+   - "Verified Strengths" must use the strength bucket only (accuracy >= 70% and attempts >= 10).
+   - If no topic qualifies, output exactly: ["No strong topics yet. Keep practicing"]. Never list a low-accuracy topic as a strength.
 11. Output strict JSON only without markdown formatting or preamble, adhering exactly to this schema:
 {
   "summary": "2-3 short sentences in Class 12 plain English citing questions, accuracy, and net score (max 18 words per sentence, no time or speed mentions)",
   "biggest_leaks": [
     {
-      "topic": "Topic name (e.g. Electrostatics)",
-      "issue": "Specific concept gap, careless error, confidence gap, or second-guessing leak title (under 18 words)",
+      "topic": "Topic name (e.g. Current Electricity)",
+      "issue": "Evidence-first title (e.g. Low accuracy so far: 1 of 10) under 18 words",
       "evidence": "Plain-English evidence with numbers (under 18 words)",
-      "likelyConfusion": "Likely concept confusion based on wrong options if available (under 18 words)",
+      "likelyConfusion": "Possible confusion with Option [X] only if known trap distractor exists (under 18 words)",
       "fix": "Start 10-question fix on this topic to eliminate errors (under 18 words)"
     }
   ],
-  "strengths": ["Topic with accuracy and attempt count under 18 words"],
+  "strengths": ["Topic with accuracy >= 70% and attempts >= 10, or 'No strong topics yet. Keep practicing'"],
   "weekly_plan": [
     {
       "day": "Day 1",
-      "focus": "Focus topic",
-      "task": "Specific task under 18 words",
-      "minutes": 25
+      "focus": "Focus topic or Mixed Review or Rest",
+      "task": "Specific task matching button under 18 words",
+      "minutes": 20
     }
   ],
-  "test_taking_strategy": ["Test tip focusing on accuracy and negative marking under 18 words"],
+  "test_taking_strategy": ["Test tip focusing on elimination and expected value under 18 words"],
   "next_test_goal": "A single measurable goal under 18 words",
   "comparison_with_previous": "First report: this is your baseline (or delta note under 18 words)",
-  "random_answering_note": "This looks like random answering, so the advice may be less accurate. (only if hasRandomAnswering is true)"
+  "random_answering_note": "Your accuracy is close to random guessing (only if near_random is true)"
 }`;
 
 function sleep(ms: number): Promise<void> {
@@ -154,18 +171,21 @@ function sanitizeStatsForAI(statsObj: any): any {
   if (Array.isArray(statsObj.topicBreakdown)) {
     statsObj.topicBreakdown.forEach((t: any) => {
       const sanitizedTopic = {
+        id: t.id ? String(t.id) : undefined,
         topic: String(t.topic || ""),
         chapter: t.chapter ? String(t.chapter) : undefined,
         attempted: Number(t.attempted) || 0,
         correct: Number(t.correct) || 0,
         accuracyPercentage: Number(t.accuracyPercentage) || 0,
         classification: String(t.classification || "sufficient"),
+        bucket: t.bucket ? String(t.bucket) : undefined,
         mostCommonWrongOption: t.mostCommonWrongOption ? String(t.mostCommonWrongOption) : undefined,
       };
-      if ((sanitizedTopic.attempted || 0) < AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS) {
+      if ((sanitizedTopic.attempted || 0) < AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS || sanitizedTopic.bucket === "needs_data") {
         insufficientTopics.push({
           ...sanitizedTopic,
           classification: "insufficient data",
+          bucket: "needs_data",
           note: "needs more data",
         });
       } else {
@@ -214,6 +234,12 @@ function sanitizeStatsForAI(statsObj: any): any {
     insufficient_data_topics: insufficientTopics,
     hasRandomAnswering: Boolean(statsObj.hasRandomAnswering),
     hasLowSignalAttempt: Boolean(statsObj.hasLowSignalAttempt),
+    data_quality: statsObj.data_quality || "ok",
+    near_random: Boolean(statsObj.near_random),
+    fast_wrong_rate: statsObj.fast_wrong_rate !== undefined ? statsObj.fast_wrong_rate : null,
+    skipped_rate: statsObj.skipped_rate !== undefined ? Number(statsObj.skipped_rate) : 0,
+    median_seconds_per_question: statsObj.median_seconds_per_question !== undefined ? statsObj.median_seconds_per_question : null,
+    mistake_tags_count: statsObj.mistake_tags_count !== undefined ? statsObj.mistake_tags_count : null,
     daysToExam: Number(statsObj.daysToExam) || 200,
   };
 }
@@ -227,114 +253,191 @@ export function buildDeterministicAICoachReport(
   stats: AICoachComputedStats,
   prevStats: AICoachComputedStats | null
 ): AICoachReportContent {
-  // Only topics with 5+ attempts qualify for leaks and strengths
-  const qualifyingTopics = (stats.topicBreakdown || []).filter(
-    (t) => t.attempted >= AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS
+  const isNearRandom = Boolean(stats.near_random || stats.data_quality === "near_random");
+
+  // Filter topics into the 4 mutually exclusive status buckets
+  const fixTopics = (stats.topicBreakdown || []).filter(
+    (t) => t.bucket === "fix" || ((t.attempted ?? 0) >= 5 && (t.accuracyPercentage ?? 0) < 60)
   );
-  const conceptGapTopics = qualifyingTopics.filter((t) => t.accuracyPercentage < 40);
-  const weakTopics = qualifyingTopics.filter((t) => t.classification === "weak");
-  const strongTopics = qualifyingTopics.filter((t) => t.classification === "strong");
+  const strengthTopics = (stats.topicBreakdown || []).filter(
+    (t) => t.bucket === "strength" || ((t.attempted ?? 0) >= 10 && (t.accuracyPercentage ?? 0) >= 70)
+  );
 
   const biggest_leaks: BiggestLeak[] = [];
 
-  // 1. Concept gap: Topic accuracy < 40% with 5+ attempts
-  conceptGapTopics.slice(0, 2).forEach((cg) => {
-    const wrongDistractorNote = cg.mostCommonWrongOption
-      ? ` Trap option: Option ${cg.mostCommonWrongOption}.`
-      : "";
+  if (isNearRandom) {
+    const leakTopic = fixTopics[0]?.topic || stats.topicBreakdown[0]?.topic || stats.subject;
+    const attemptedCount = fixTopics[0]?.attempted ?? stats.totalAttempts;
+    const correctCount = fixTopics[0]?.correct ?? Math.round((stats.overallAccuracyPercentage / 100) * stats.totalAttempts);
     biggest_leaks.push({
-      topic: cg.topic,
-      issue: `Concept gap in ${cg.topic}`,
-      evidence: `${cg.accuracyPercentage}% accuracy over ${cg.attempted} questions, losing ${cg.attempted - cg.correct} marks to wrong choices.${wrongDistractorNote}`,
-      likelyConfusion: cg.mostCommonWrongOption
-        ? `Confusing core definitions with trap Option ${cg.mostCommonWrongOption}.`
-        : `Difficulty with core formulas and definition boundaries.`,
-      fix: `Tap "Start 10-question fix" to solve 10 questions on ${cg.topic}.`,
+      topic: leakTopic,
+      topicId: fixTopics[0]?.id,
+      issue: `Low accuracy so far: ${correctCount} of ${attemptedCount}`,
+      evidence: `Recorded ${fixTopics[0]?.accuracyPercentage ?? stats.overallAccuracyPercentage}% accuracy over ${attemptedCount} questions.`,
+      fix: `Tap "Start 10-question fix" to solve 10 questions on ${leakTopic}.`,
     });
-  });
-
-  // 2. Careless: Wrong answers on questions tagged easy
-  if (stats.errorTypes.carelessErrors > 0 && biggest_leaks.length < 3) {
-    const focusTopic = weakTopics[0]?.topic || qualifyingTopics[0]?.topic || stats.subject;
-    biggest_leaks.push({
-      topic: focusTopic,
-      issue: "Careless errors on easy questions",
-      evidence: `Recorded ${stats.errorTypes.carelessErrors} wrong answers on easy questions.`,
-      likelyConfusion: "Misreading negative words like NOT or EXCEPT in the question stem.",
-      fix: `Tap "Start 10-question fix" to practice 10 questions on ${focusTopic}.`,
-    });
-  }
-
-  // 3. Confidence gap: Skipped questions
-  if (stats.errorTypes.confidenceGaps > 0 && biggest_leaks.length < 3) {
-    const focusTopic = weakTopics[0]?.topic || qualifyingTopics[0]?.topic || stats.subject;
-    biggest_leaks.push({
-      topic: focusTopic,
-      issue: "Confidence gap from skipped questions",
-      evidence: `Skipped ${stats.errorTypes.confidenceGaps} questions without attempting an answer.`,
-      likelyConfusion: "Hesitating between two close options on solvable questions.",
-      fix: `Tap "Start 10-question fix" to solve 10 questions on ${focusTopic}.`,
-    });
-  }
-
-  // 4. Second-guessing: Right-to-wrong answer changes
-  const changes = stats.errorTypes.secondGuessing || stats.rightToWrongChanges || 0;
-  if (changes > 0 && biggest_leaks.length < 3) {
-    const focusTopic = weakTopics[0]?.topic || qualifyingTopics[0]?.topic || stats.subject;
-    biggest_leaks.push({
-      topic: focusTopic,
-      issue: "Second-guessing answer changes",
-      evidence: `Changed answer from right to wrong ${changes} times across tests.`,
-      likelyConfusion: "Second-guessing correct first choices and switching to distractors.",
-      fix: `Tap "Start 10-question fix" to practice 10 questions on ${focusTopic}.`,
-    });
-  }
-
-  // Fallback to remaining weak topics if leaks still needed
-  if (biggest_leaks.length === 0) {
-    weakTopics.slice(0, 2).forEach((w) => {
+  } else {
+    // 1. Fix bucket topics with neutral evidence-first titles
+    fixTopics.slice(0, 2).forEach((cg) => {
+      const wrongOption = cg.mostCommonWrongOption;
+      const likelyConfusion = wrongOption
+        ? `Possible confusion with trap Option ${wrongOption}.`
+        : `Needs practice: ${cg.correct} of ${cg.attempted} correct`;
       biggest_leaks.push({
-        topic: w.topic,
-        issue: `Knowledge gap in ${w.topic}`,
-        evidence: `${w.accuracyPercentage}% accuracy over ${w.attempted} questions.`,
-        likelyConfusion: `Needs review of NCERT chapter summary and definitions.`,
-        fix: `Tap "Start 10-question fix" to practice 10 questions on ${w.topic}.`,
+        topic: cg.topic,
+        topicId: cg.id,
+        issue: `Low accuracy so far: ${cg.correct} of ${cg.attempted}`,
+        evidence: `${cg.accuracyPercentage}% accuracy over ${cg.attempted} questions, losing ${cg.attempted - cg.correct} marks to wrong choices.`,
+        likelyConfusion,
+        fix: `Tap "Start 10-question fix" to solve 10 questions on ${cg.topic}.`,
       });
     });
+
+    // 2. Careless: Wrong answers on questions tagged easy
+    if (stats.errorTypes.carelessErrors > 0 && biggest_leaks.length < 3) {
+      const focusTopic = fixTopics[0]?.topic || stats.topicBreakdown[0]?.topic || stats.subject;
+      biggest_leaks.push({
+        topic: focusTopic,
+        topicId: fixTopics[0]?.id,
+        issue: `Careless errors on easy questions`,
+        evidence: `Recorded ${stats.errorTypes.carelessErrors} wrong answers on easy questions.`,
+        fix: `Tap "Start 10-question fix" to practice 10 questions on ${focusTopic}.`,
+      });
+    }
+
+    // 3. Confidence gap: Skipped questions
+    if (stats.errorTypes.confidenceGaps > 0 && biggest_leaks.length < 3) {
+      const focusTopic = fixTopics[0]?.topic || stats.topicBreakdown[0]?.topic || stats.subject;
+      biggest_leaks.push({
+        topic: focusTopic,
+        topicId: fixTopics[0]?.id,
+        issue: `Confidence gap from skipped questions`,
+        evidence: `Skipped ${stats.errorTypes.confidenceGaps} questions without attempting an answer.`,
+        fix: `Tap "Start 10-question fix" to solve 10 questions on ${focusTopic}.`,
+      });
+    }
+
+    // 4. Second-guessing: Right-to-wrong answer changes
+    const changes = stats.errorTypes.secondGuessing || stats.rightToWrongChanges || 0;
+    if (changes > 0 && biggest_leaks.length < 3) {
+      const focusTopic = fixTopics[0]?.topic || stats.topicBreakdown[0]?.topic || stats.subject;
+      biggest_leaks.push({
+        topic: focusTopic,
+        topicId: fixTopics[0]?.id,
+        issue: `Second-guessing answer changes`,
+        evidence: `Changed answer from right to wrong ${changes} times across tests.`,
+        fix: `Tap "Start 10-question fix" to practice 10 questions on ${focusTopic}.`,
+      });
+    }
   }
 
+  // Fallback to neutral practice if no leaks found
   if (biggest_leaks.length === 0) {
-    const defaultTopic = qualifyingTopics[0]?.topic || stats.subject;
+    const defaultTopic = stats.topicBreakdown[0]?.topic || stats.subject;
+    const defaultAtt = stats.topicBreakdown[0]?.attempted ?? stats.totalAttempts;
+    const defaultCorr = stats.topicBreakdown[0]?.correct ?? Math.round((stats.overallAccuracyPercentage / 100) * stats.totalAttempts);
     biggest_leaks.push({
       topic: defaultTopic,
-      issue: "Marks lost to wrong answers",
+      issue: `Needs practice: ${defaultCorr} of ${defaultAtt} correct`,
       evidence: `Lost ${stats.negativeMarksLost} marks due to wrong answers.`,
-      likelyConfusion: "Guessing answers without ruling out wrong choices.",
       fix: `Tap "Start 10-question fix" to practice 10 questions on ${defaultTopic}.`,
     });
   }
 
-  const strengths = strongTopics.slice(0, 3).map(
-    (s) => `${s.topic}: ${s.accuracyPercentage}% accuracy over ${s.attempted} questions.`
-  );
-  if (strengths.length === 0) {
-    strengths.push(`Overall accuracy is ${stats.overallAccuracyPercentage}% across ${stats.uniqueQuestionsAnalyzed} questions.`);
+  // Strengths: ONLY from the strength bucket (accuracy >= 70% and attempts >= 10)
+  let strengths: string[] = [];
+  if (strengthTopics.length > 0) {
+    strengths = strengthTopics.slice(0, 3).map(
+      (s) => `${s.topic}: ${s.accuracyPercentage}% accuracy over ${s.attempted} questions.`
+    );
+  } else {
+    strengths = ["No strong topics yet. Keep practicing"];
   }
 
-  const primaryLeakTopic = conceptGapTopics[0]?.topic || weakTopics[0]?.topic || qualifyingTopics[0]?.topic || stats.subject;
-  const weekly_plan = [
-    { day: "Day 1", focus: "Formula Audit", task: `Review NCERT formulas and notes for ${primaryLeakTopic}.`, minutes: 25 },
-    { day: "Day 2", focus: "Targeted Drill", task: `Solve 10 questions on ${primaryLeakTopic} to fix errors.`, minutes: 20 },
-    { day: "Day 3", focus: "Mistake Review", task: "Check wrong answers and note formulas in mistake book.", minutes: 15 },
-    { day: "Day 4", focus: "Past Questions", task: `Solve 15 past year questions for ${stats.subject}.`, minutes: 30 },
-    { day: "Day 5", focus: "Sectional Mock", task: "Take a 25-question sectional test to build accuracy.", minutes: 30 },
-    { day: "Day 6", focus: "Option Elimination", task: "Solve 10 matching and statement questions carefully.", minutes: 20 },
-    { day: "Day 7", focus: "Full Test Review", task: "Take a full 50-question mock test.", minutes: 60 },
+  // Weekly Plan: Only generate plan days for topics in the FIX bucket!
+  // If fewer than 7 topics qualify, fill with mixed review or rest days instead of repeating weak labels.
+  // Day durations should match work described.
+  const weekly_plan: WeeklyPlanItem[] = [];
+  const days = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
+
+  let dayIdx = 0;
+  for (const fixTop of fixTopics) {
+    if (dayIdx >= 7) break;
+    weekly_plan.push({
+      day: days[dayIdx]!,
+      focus: fixTop.topic,
+      task: `Solve 10 questions on ${fixTop.topic} to fix errors.`,
+      minutes: 20,
+      topicId: fixTop.id,
+      practiceTopic: fixTop.topic,
+      buttonText: "Start 10-question fix",
+    });
+    dayIdx++;
+  }
+
+  const fillerTemplates = [
+    {
+      focus: "Mixed Review",
+      task: "Solve 10 questions across chapters to build consistency.",
+      minutes: 20,
+      buttonText: "Start 10-question fix",
+    },
+    {
+      focus: "Mistake Notebook",
+      task: "Review formulas and wrong answers in your mistake notebook.",
+      minutes: 15,
+      buttonText: "Open Mistake Notebook",
+    },
+    {
+      focus: "Option Elimination Drill",
+      task: "Solve 10 questions focusing on eliminating wrong options.",
+      minutes: 20,
+      buttonText: "Start 10-question fix",
+    },
+    {
+      focus: "Rest & Consolidation",
+      task: "Take a planned rest day to recharge before your next mock test.",
+      minutes: 15,
+      buttonText: "Rest Day Scheduled",
+    },
+    {
+      focus: "Past Questions",
+      task: "Solve 10 questions from past papers to build exam readiness.",
+      minutes: 20,
+      buttonText: "Start 10-question fix",
+    },
+    {
+      focus: "Sectional Review",
+      task: "Solve 10 questions for a quick sectional review.",
+      minutes: 20,
+      buttonText: "Start 10-question fix",
+    },
+    {
+      focus: "Weekly Rest Day",
+      task: "Rest and consolidate your revision notes.",
+      minutes: 15,
+      buttonText: "Rest Day Scheduled",
+    },
   ];
 
+  let fillerIdx = 0;
+  while (dayIdx < 7) {
+    const filler = fillerTemplates[fillerIdx % fillerTemplates.length]!;
+    weekly_plan.push({
+      day: days[dayIdx]!,
+      focus: filler.focus,
+      task: filler.task,
+      minutes: filler.minutes,
+      buttonText: filler.buttonText,
+    });
+    dayIdx++;
+    fillerIdx++;
+  }
+
+  // Official +5/-1 Advice
   const test_taking_strategy = [
     `Current net score is ${stats.netScore} marks out of ${stats.potentialScore} potential.`,
-    `Skip doubtful questions to avoid losing marks to -1 penalties.`,
+    `Guess when you can eliminate at least one option; skip only when you have no idea. A blind guess is worth about +0.5 marks on average with +5/-1 marking.`,
     `Solve your strongest topics first and eliminate wrong options.`,
   ];
 
@@ -347,16 +450,22 @@ export function buildDeterministicAICoachReport(
     }${accuracyDelta}% and net score shifted by ${netDelta >= 0 ? "+" : ""}${netDelta} marks.`;
   }
 
-  let summary = `In ${stats.subject}, you solved ${stats.uniqueQuestionsAnalyzed} questions with ${stats.overallAccuracyPercentage}% accuracy and net score of ${stats.netScore}/${stats.potentialScore}. Focus on your top leaks to improve.`;
+  let summary = "";
+  if (isNearRandom) {
+    summary = `Your accuracy is close to what random guessing gives (25%), so it's hard to tell genuine gaps from guessing. Try a slower 10-question set on one topic and check again.`;
+  } else {
+    summary = `In ${stats.subject}, you solved ${stats.uniqueQuestionsAnalyzed} questions with ${stats.overallAccuracyPercentage}% accuracy and net score of ${stats.netScore}/${stats.potentialScore}. Focus on your top leaks to improve.`;
+  }
+
   let random_answering_note: string | undefined;
-  if (stats.hasRandomAnswering) {
+  if (isNearRandom) {
+    random_answering_note =
+      "Your accuracy is close to what random guessing gives (25%), so it's hard to tell genuine gaps from guessing. Try a slower 10-question set on one topic and check again.";
+  } else if (stats.hasRandomAnswering) {
     random_answering_note = "This looks like random answering, so the advice may be less accurate.";
-    summary += " Note: This looks like random answering, so the advice may be less accurate.";
   } else if (stats.hasLowSignalAttempt) {
     random_answering_note =
       "Low-signal attempt detected. This assessment may not be suitable for measuring your current mastery. Complete another assessment to strengthen your AI Coach analysis.";
-    summary +=
-      " Note: Low-signal attempt detected. This assessment may not be suitable for measuring your current mastery. Complete another assessment to strengthen your AI Coach analysis.";
   }
 
   return {
@@ -365,7 +474,9 @@ export function buildDeterministicAICoachReport(
     strengths,
     weekly_plan,
     test_taking_strategy,
-    next_test_goal: `Aim for ${Math.min(95, stats.overallAccuracyPercentage + 8)}% accuracy on your next test.`,
+    next_test_goal: isNearRandom
+      ? "Attempt an untimed 10-question set using elimination."
+      : `Aim for ${Math.min(95, stats.overallAccuracyPercentage + 8)}% accuracy on your next test.`,
     comparison_with_previous,
     random_answering_note,
     is_fallback: true,
@@ -453,7 +564,14 @@ export async function generateAICoachReport(
       try {
         const groqResult = await callGroq(stats, prevStats);
         if (groqResult) {
-          if (stats.hasRandomAnswering && !groqResult.random_answering_note) {
+          if (stats.near_random) {
+            groqResult.random_answering_note =
+              "Your accuracy is close to what random guessing gives (25%), so it's hard to tell genuine gaps from guessing. Try a slower 10-question set on one topic and check again.";
+            if (groqResult.summary.toLowerCase().includes("concept gap")) {
+              groqResult.summary =
+                "Your accuracy is close to what random guessing gives (25%), so it's hard to tell genuine gaps from guessing. Try a slower 10-question set on one topic and check again.";
+            }
+          } else if (stats.hasRandomAnswering && !groqResult.random_answering_note) {
             groqResult.random_answering_note = "This looks like random answering, so the advice may be less accurate.";
           } else if (stats.hasLowSignalAttempt && !groqResult.random_answering_note) {
             groqResult.random_answering_note =

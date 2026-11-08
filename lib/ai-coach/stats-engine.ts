@@ -15,6 +15,8 @@ import {
   getDailyUsageCount,
   getNextMidnightIST,
 } from "./quota-engine";
+import { resolveCanonicalTopic, getTopicBucket } from "./canonical-topics";
+import { computeMarksLost } from "./marks";
 
 /**
  * Calculates days remaining until CUET exam (May 15th milestone)
@@ -229,10 +231,11 @@ export async function computeAICoachStats(
   let pyqAttempts = 0;
   let pyqCorrect = 0;
 
-  // Topic grouping
+  // Topic grouping by canonical topic ID
   const topicMap = new Map<
     string,
     {
+      id: string;
       topic: string;
       chapter?: string;
       attempted: number;
@@ -240,8 +243,13 @@ export async function computeAICoachStats(
     }
   >();
 
-  // Track wrong distractors per topic for concept confusion diagnosis
+  // Track wrong distractors per topic ID for concept confusion diagnosis
   const topicWrongDistractors = new Map<string, Map<string, number>>();
+
+  // Timing tracking (only populated if underlying attempt records contain valid timing)
+  const timingValues: number[] = [];
+  let wrongAnswersWithTiming = 0;
+  let fastWrongCount = 0;
 
   // Track mistake tags from database rows
   const dbMistakeTagCounts: MistakeTagCounts = {
@@ -272,6 +280,22 @@ export async function computeAICoachStats(
     const isCorrect = Boolean(row.is_correct);
 
     uniqueQIds.add(qId);
+
+    // Track per-question timing if present
+    const rawTime =
+      row?.diagnostic_report?.timeSpentSeconds ??
+      row?.diagnostic_report?.time_spent ??
+      row?.time_spent_seconds ??
+      row?.time_spent;
+    if (typeof rawTime === "number" && !isNaN(rawTime) && rawTime > 0) {
+      timingValues.push(rawTime);
+      if (!isCorrect) {
+        wrongAnswersWithTiming += 1;
+        if (rawTime < 10) {
+          fastWrongCount += 1;
+        }
+      }
+    }
 
     if (isCorrect) {
       correctCount += 1;
@@ -319,12 +343,13 @@ export async function computeAICoachStats(
       if (isCorrect) mockCorrect += 1;
     }
 
-    // Topic map (no time metrics stored)
-    const topicName = q?.micro_topic || q?.chapter || "Core Principles";
-    const chapterName = q?.chapter || "Syllabus Unit";
-    const existingTopic = topicMap.get(topicName) || {
-      topic: topicName,
-      chapter: chapterName,
+    // Canonical Topic Mapping
+    const canonicalMeta = resolveCanonicalTopic(normalized.key, q?.chapter, q?.micro_topic);
+    const topicKey = canonicalMeta.id;
+    const existingTopic = topicMap.get(topicKey) || {
+      id: canonicalMeta.id,
+      topic: canonicalMeta.name,
+      chapter: canonicalMeta.chapter,
       attempted: 0,
       correct: 0,
     };
@@ -333,11 +358,11 @@ export async function computeAICoachStats(
       existingTopic.correct += 1;
     } else if (row.selected_option) {
       const optStr = String(row.selected_option).trim().toUpperCase();
-      const currentTopicWrong = topicWrongDistractors.get(topicName) || new Map<string, number>();
+      const currentTopicWrong = topicWrongDistractors.get(topicKey) || new Map<string, number>();
       currentTopicWrong.set(optStr, (currentTopicWrong.get(optStr) || 0) + 1);
-      topicWrongDistractors.set(topicName, currentTopicWrong);
+      topicWrongDistractors.set(topicKey, currentTopicWrong);
     }
-    topicMap.set(topicName, existingTopic);
+    topicMap.set(topicKey, existingTopic);
 
     // Mistake tags from row diagnostic report
     const rawTag =
@@ -398,10 +423,11 @@ export async function computeAICoachStats(
   const overallAccuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
 
   // Marking logic: +5 for correct, -1 for incorrect
+  const marksCalc = computeMarksLost(incorrectCount);
   const netScore = correctCount * AI_COACH_CONFIG.MARKING_SCHEME.CORRECT +
     incorrectCount * AI_COACH_CONFIG.MARKING_SCHEME.INCORRECT;
   const potentialScore = totalAttempts * AI_COACH_CONFIG.MARKING_SCHEME.CORRECT;
-  const negativeMarksLost = incorrectCount * Math.abs(AI_COACH_CONFIG.MARKING_SCHEME.INCORRECT);
+  const negativeMarksLost = marksCalc.penaltyMarks;
 
   // Rule 2: Skipped questions: "confidence gap"
   let confidenceGaps = 0;
@@ -417,20 +443,41 @@ export async function computeAICoachStats(
       ? Math.min(100, Math.round((totalAttempts / totalTestQuestionsOffered) * 100))
       : 100;
 
-  // Topic breakdown with 5+ attempt threshold (no time metrics)
+  const skipped_rate =
+    totalTestQuestionsOffered > 0
+      ? Math.round((confidenceGaps / totalTestQuestionsOffered) * 1000) / 1000
+      : 0;
+
+  // Near-random guessing detection: accuracy <= 32% over >= 50 four-option questions AND skipped_rate < 5%
+  const near_random = totalAttempts >= 50 && overallAccuracy <= 32 && skipped_rate < 0.05;
+
+  // Per-question timing metrics (null if underlying telemetry lacks timing)
+  const fast_wrong_rate =
+    wrongAnswersWithTiming > 0
+      ? Math.round((fastWrongCount / wrongAnswersWithTiming) * 1000) / 1000
+      : null;
+
+  let median_seconds_per_question: number | null = null;
+  if (timingValues.length > 0) {
+    const sorted = [...timingValues].sort((a, b) => a - b);
+    median_seconds_per_question = Math.round(sorted[Math.floor(sorted.length / 2)]!);
+  }
+
+  // Topic breakdown with canonical 4-bucket partition
   const topicBreakdown: TopicStat[] = Array.from(topicMap.values()).map((t) => {
     const topicAccuracy = t.attempted > 0 ? Math.round((t.correct / t.attempted) * 100) : 0;
+    const bucket = getTopicBucket({ attempted: t.attempted, accuracyPercentage: topicAccuracy });
 
     let classification: "weak" | "strong" | "insufficient data";
-    if (t.attempted < AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS) {
+    if (bucket === "needs_data") {
       classification = "insufficient data";
-    } else if (topicAccuracy < 65) {
+    } else if (bucket === "fix") {
       classification = "weak";
     } else {
       classification = "strong";
     }
 
-    const wrongDistractors = topicWrongDistractors.get(t.topic);
+    const wrongDistractors = topicWrongDistractors.get(t.id);
     let mostCommonWrongOption: string | undefined;
     if (wrongDistractors && wrongDistractors.size > 0) {
       let maxCnt = 0;
@@ -443,20 +490,25 @@ export async function computeAICoachStats(
     }
 
     return {
+      id: t.id,
       topic: t.topic,
       chapter: t.chapter,
       attempted: t.attempted,
       correct: t.correct,
       accuracyPercentage: topicAccuracy,
       classification,
+      bucket,
       mostCommonWrongOption,
     };
   });
 
-  // Rule 2: Topic accuracy < 40% with 5+ attempts: "concept gap"
-  const conceptGapTopics = topicBreakdown.filter(
-    (t) => t.attempted >= AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS && t.accuracyPercentage < 40
-  );
+  // Rule 2: Topic accuracy < 40% with 5+ attempts in fix bucket: "concept gap"
+  // When near_random is true, NEVER claim concept gaps
+  const conceptGapTopics = near_random
+    ? []
+    : topicBreakdown.filter(
+        (t) => t.bucket === "fix" && t.accuracyPercentage < 40
+      );
   const conceptGaps = conceptGapTopics.reduce((sum, t) => sum + (t.attempted - t.correct), 0);
 
   // Mock vs PYQ breakdown
@@ -514,8 +566,24 @@ export async function computeAICoachStats(
     changedAnswer: Math.max(dbMistakeTagCounts.changedAnswer, localTagCounts.changedAnswer),
   };
 
+  const totalRawTags =
+    mergedMistakeTags.didntKnowConcept +
+    mergedMistakeTags.misread +
+    mergedMistakeTags.guessed +
+    mergedMistakeTags.changedAnswer;
+  const mistake_tags_count = totalRawTags > 0 ? totalRawTags : null;
+
+  let data_quality: "ok" | "thin" | "near_random" | "untagged" = "ok";
+  if (near_random) {
+    data_quality = "near_random";
+  } else if (totalAttempts < 50) {
+    data_quality = "thin";
+  } else if (mistake_tags_count === null) {
+    data_quality = "untagged";
+  }
+
   const insufficientDataTopics = topicBreakdown.filter(
-    (t) => t.attempted < AI_COACH_CONFIG.MIN_TOPIC_ATTEMPTS
+    (t) => t.bucket === "needs_data"
   );
 
   const computed: AICoachComputedStats = {
@@ -537,8 +605,14 @@ export async function computeAICoachStats(
     },
     topicBreakdown,
     insufficient_data_topics: insufficientDataTopics,
-    hasRandomAnswering,
-    hasLowSignalAttempt,
+    hasRandomAnswering: Boolean(hasRandomAnswering || near_random),
+    hasLowSignalAttempt: Boolean(hasLowSignalAttempt || near_random),
+    data_quality,
+    near_random,
+    fast_wrong_rate,
+    skipped_rate,
+    median_seconds_per_question,
+    mistake_tags_count,
     daysToExam: calculateDaysToExam(),
   };
 

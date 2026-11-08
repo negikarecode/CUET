@@ -106,11 +106,11 @@ export function generateDeterministicExplanation(
     if (highestGapSubject && highestGapSubject.marksNeeded > 0) {
       nextActions.push(`Focus on ${highestGapSubject.subjectName} to close its ${highestGapSubject.marksNeeded} marks gap toward its ${highestGapSubject.targetMarks} marks target.`);
     } else {
-      nextActions.push("Maintain timing discipline: avoid guessing to protect your score from negative marks (-1).");
+      nextActions.push("Guess when you can eliminate at least one option; skip only when you have no idea. A blind guess is worth about +0.5 marks on average with +5/-1 marking.");
     }
   } else if (status === "above_cutoff" || (marksGap !== null && marksGap !== undefined && marksGap <= 0)) {
     summary = `Your combined mock score of ${combinedMarks} marks meets or exceeds the historical cutoff (${cutoffDisplay}) for ${targetCollege}! You are currently ${gapDisplay || "meeting the cutoff threshold"}.`;
-    nextActions.push("Maintain timing discipline: avoid guessing on ambiguous questions to protect your score from negative marks (-1).");
+    nextActions.push("Guess when you can eliminate at least one option; skip only when you have no idea. A blind guess is worth about +0.5 marks on average with +5/-1 marking.");
     nextActions.push("Take full multi-subject timed mocks to build stamina for exam day.");
   } else {
     // below_cutoff

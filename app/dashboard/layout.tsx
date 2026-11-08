@@ -2,6 +2,7 @@ import React from "react";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import { createClient } from "@/lib/supabase/server";
+import { calculateActiveStreak } from "@/lib/gamification";
 
 export default async function DashboardLayout({
   children,
@@ -12,6 +13,7 @@ export default async function DashboardLayout({
   let initialUserId: string | undefined = undefined;
   let initialUserEmail: string | undefined = undefined;
   let initialUserName: string | undefined = undefined;
+  let initialDailyStreak: number | undefined = undefined;
 
   try {
     const supabase = createClient();
@@ -26,6 +28,19 @@ export default async function DashboardLayout({
       const { getUserEntitlement } = await import("@/lib/payments/entitlements");
       const ent = await getUserEntitlement(user.id);
       initialIsPremium = Boolean(ent.isPremium);
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("current_streak, last_practice_date")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (profile) {
+        initialDailyStreak = calculateActiveStreak(
+          profile.current_streak ?? 0,
+          profile.last_practice_date
+        );
+      }
     }
   } catch {}
 
@@ -47,6 +62,7 @@ export default async function DashboardLayout({
           initialUserId={initialUserId}
           initialUserEmail={initialUserEmail}
           initialUserName={initialUserName}
+          initialDailyStreak={initialDailyStreak}
         />
 
         {/* Main Content Container */}

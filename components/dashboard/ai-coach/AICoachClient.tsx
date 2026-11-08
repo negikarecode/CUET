@@ -25,6 +25,7 @@ import { SubjectEligibility, AICoachStoredReport, TopicPracticeDelta } from "@/t
 import { loadTopicPracticeDeltas } from "@/lib/ai-coach/practice-deltas";
 import { getSpacedRepetitionSummary } from "@/lib/spaced-repetition";
 import { SpacedRepetitionModal } from "@/components/dashboard/SpacedRepetitionModal";
+import { computeMarksLost } from "@/lib/ai-coach/marks";
 import AICoachTopicQuizModal from "./AICoachTopicQuizModal";
 
 interface AICoachClientProps {
@@ -340,7 +341,7 @@ export default function AICoachClient({
               Subject-level diagnostic evaluation calibrated every 150 unique questions. Uncover careless errors, concept gaps, second-guessing patterns, and score-accelerating weekly plans.
             </p>
             <p className="text-xs text-purple-200/90 font-medium pt-1">
-              Your name, phone, and email are never sent to the AI · Grounded in NCERT Class 12 · For educational guidance
+              Your name, phone, and email are never sent to the AI · Based on your practice data. AI can make mistakes. · For educational guidance
             </p>
           </div>
 
@@ -680,42 +681,92 @@ export default function AICoachClient({
             )}
 
             {/* Score Snapshot Grid matching design.pdf Page 4 */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
-                  Net Score
-                </span>
-                <div className="text-xl sm:text-2xl font-black text-stone-900 mt-1">
-                  {activeReport.stats_json.netScore}{" "}
-                  <span className="text-xs font-normal text-stone-600">
-                    / {activeReport.stats_json.potentialScore}
-                  </span>
-                </div>
-                <span className="text-[10px] text-stone-600">CUET +5 / -1 Marking</span>
-              </div>
+            {(() => {
+              const marksCalc = computeMarksLost(activeReport.stats_json.negativeMarksLost);
+              const isNearRandom = Boolean(activeReport.stats_json.near_random || activeReport.stats_json.data_quality === "near_random");
 
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
-                  Overall Accuracy
-                </span>
-                <div className="text-xl sm:text-2xl font-black text-stone-900 mt-1">
-                  {activeReport.stats_json.overallAccuracyPercentage}%
-                </div>
-                <span className="text-[10px] text-stone-600">
-                  Across {activeReport.questions_analyzed} unique Qs
-                </span>
-              </div>
+              return (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                      <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
+                        Net Score
+                      </span>
+                      <div className="text-xl sm:text-2xl font-black text-stone-900 mt-1">
+                        {activeReport.stats_json.netScore}{" "}
+                        <span className="text-xs font-normal text-stone-600">
+                          / {activeReport.stats_json.potentialScore}
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-stone-600">CUET +5 / -1 Marking</span>
+                    </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
-                  Marks lost to wrong answers
-                </span>
-                <div className="text-xl sm:text-2xl font-black text-rose-600 mt-1">
-                  -{activeReport.stats_json.negativeMarksLost}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                      <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
+                        Overall Accuracy
+                      </span>
+                      <div className="text-xl sm:text-2xl font-black text-stone-900 mt-1">
+                        {activeReport.stats_json.overallAccuracyPercentage}%
+                      </div>
+                      <span className="text-[10px] text-stone-600">
+                        Across {activeReport.questions_analyzed} unique Qs
+                      </span>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
+                          Penalty from wrong answers
+                        </span>
+                        <span
+                          className="cursor-help text-slate-400 hover:text-slate-600"
+                          title={marksCalc.penaltyTooltip}
+                        >
+                          <Info className="w-3.5 h-3.5" />
+                        </span>
+                      </div>
+                      <div className="text-xl sm:text-2xl font-black text-rose-600 mt-1">
+                        {marksCalc.penaltyMarksDisplay}
+                      </div>
+                      <span className="text-[10px] text-stone-600">1 per wrong answer</span>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] uppercase tracking-wider font-bold text-slate-600">
+                          Marks missed vs. correct
+                        </span>
+                        <span
+                          className="cursor-help text-slate-400 hover:text-slate-600"
+                          title={marksCalc.missedTooltip}
+                        >
+                          <Info className="w-3.5 h-3.5" />
+                        </span>
+                      </div>
+                      <div className="text-xl sm:text-2xl font-black text-amber-700 mt-1">
+                        {marksCalc.missedMarksDisplay}
+                      </div>
+                      <span className="text-[10px] text-stone-600">6 per wrong (+5 missed, -1 penalty)</span>
+                    </div>
+                  </div>
+
+                  {/* Near-Random Guessing Awareness Banner */}
+                  {isNearRandom && (
+                    <div className="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 flex items-start gap-3 shadow-2xs">
+                      <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                      <div className="space-y-0.5">
+                        <div className="text-xs font-bold uppercase tracking-wider text-amber-900">
+                          Empirical Guessing Pattern Detected
+                        </div>
+                        <p className="text-xs sm:text-sm text-amber-900 leading-relaxed">
+                          Your accuracy is close to what random guessing gives (25%), so it&apos;s hard to tell concept gaps from guessing. Try a slower 10-question set on one topic and check again.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <span className="text-[10px] text-stone-600">Lost to negative marking</span>
-              </div>
-            </div>
+              );
+            })()}
 
             {/* Tagged Mistake Patterns Card */}
             {activeReport.stats_json.mistakeTags && (
@@ -724,24 +775,34 @@ export default function AICoachClient({
                   <Tag className="w-3.5 h-3.5 text-purple-600" />
                   <span>Student-Tagged Mistake Categories</span>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
-                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Didn&apos;t know concept</span>
-                    <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.didntKnowConcept}</span>
+                {activeReport.stats_json.mistake_tags_count === null ||
+                (activeReport.stats_json.mistakeTags.didntKnowConcept === 0 &&
+                  activeReport.stats_json.mistakeTags.misread === 0 &&
+                  activeReport.stats_json.mistakeTags.guessed === 0 &&
+                  activeReport.stats_json.mistakeTags.changedAnswer === 0) ? (
+                  <p className="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    I can&apos;t tell your mistake types yet because no wrong answers have been tagged in your review notebook. Tag your wrong answers in tests to unlock behavioral category insights.
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                      <span className="text-[10px] font-semibold text-slate-500 uppercase block">Didn&apos;t know concept</span>
+                      <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.didntKnowConcept}</span>
+                    </div>
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                      <span className="text-[10px] font-semibold text-slate-500 uppercase block">Misread question</span>
+                      <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.misread}</span>
+                    </div>
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                      <span className="text-[10px] font-semibold text-slate-500 uppercase block">Guessed answer</span>
+                      <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.guessed}</span>
+                    </div>
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                      <span className="text-[10px] font-semibold text-slate-500 uppercase block">Changed answer</span>
+                      <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.changedAnswer}</span>
+                    </div>
                   </div>
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
-                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Misread question</span>
-                    <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.misread}</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
-                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Guessed answer</span>
-                    <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.guessed}</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
-                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Changed answer</span>
-                    <span className="text-lg font-bold text-slate-900">{activeReport.stats_json.mistakeTags.changedAnswer}</span>
-                  </div>
-                </div>
+                )}
               </div>
             )}
 
@@ -752,7 +813,9 @@ export default function AICoachClient({
                 <span>Coach Diagnostic Brief</span>
               </div>
               <p className="text-sm text-slate-700 leading-relaxed">
-                {activeReport.report_json.summary}
+                {activeReport.stats_json.near_random
+                  ? "Your accuracy is close to what random guessing gives (25%), so it's hard to tell concept gaps from guessing. Try a slower 10-question set on one topic and check again."
+                  : activeReport.report_json.summary}
               </p>
             </div>
 
@@ -765,6 +828,10 @@ export default function AICoachClient({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {activeReport.report_json.biggest_leaks.map((leak, idx) => {
                   const leakTopic = extractTopicFromLeak(leak, selectedSubjectName);
+                  const isNearRandom = Boolean(activeReport.stats_json.near_random);
+                  // Never show "Severe concept gap"
+                  const cleanIssue = leak.issue.replace(/severe concept gap/i, "Low accuracy so far").replace(/concept gap/i, "Low accuracy so far");
+
                   return (
                     <div
                       key={idx}
@@ -772,15 +839,15 @@ export default function AICoachClient({
                     >
                       <div className="space-y-2">
                         <div className="text-xs font-bold text-purple-700 uppercase tracking-wide">
-                          {leak.issue}
+                          {cleanIssue}
                         </div>
                         <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                           <span className="font-semibold text-slate-800">Evidence: </span>
                           {leak.evidence}
                         </div>
-                        {leak.likelyConfusion && (
+                        {leak.likelyConfusion && !isNearRandom && (
                           <div className="text-xs text-amber-900 bg-amber-50/70 p-2.5 rounded-xl border border-amber-200">
-                            <span className="font-semibold text-amber-800">Likely Concept Confusion: </span>
+                            <span className="font-semibold text-amber-800">Possible Confusion: </span>
                             {leak.likelyConfusion}
                           </div>
                         )}
@@ -804,13 +871,15 @@ export default function AICoachClient({
               </div>
             </div>
 
-            {/* Topics to Fix & Insufficient Data Breakdown */}
+            {/* Topics to Fix & Insufficient Data Breakdown from Canonical Topic Table */}
             {(() => {
               const breakdown = activeReport.stats_json.topicBreakdown || [];
-              const weakTopics = breakdown
-                .filter((t) => (t.attempted ?? 0) >= 5 && (t.accuracyPercentage ?? 0) < 65)
-                .slice(0, 6);
-              const insufficientTopics = activeReport.stats_json.insufficient_data_topics || [];
+              const weakTopics = breakdown.filter(
+                (t) => t.bucket === "fix" || ((t.attempted ?? 0) >= 5 && (t.accuracyPercentage ?? 0) < 60)
+              );
+              const insufficientTopics = breakdown.filter(
+                (t) => t.bucket === "needs_data" || (t.attempted ?? 0) < 5
+              );
 
               if (weakTopics.length === 0 && insufficientTopics.length === 0) return null;
 
@@ -824,7 +893,7 @@ export default function AICoachClient({
                           <span>Topics to Fix</span>
                         </div>
                         <span className="text-xs text-slate-500 font-medium">
-                          Topics with &ge;5 attempts needing improvement
+                          Topics with &ge;5 attempts needing improvement (&lt;60% accuracy)
                         </span>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -888,20 +957,33 @@ export default function AICoachClient({
 
             {/* Strengths & Test Strategy */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-5 rounded-2xl bg-emerald-50/40 border border-emerald-200/80 space-y-3">
-                <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Verified Strengths</span>
-                </div>
-                <ul className="space-y-2">
-                  {activeReport.report_json.strengths.map((st, idx) => (
-                    <li key={idx} className="text-xs text-emerald-950 flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                      <span>{st}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {(() => {
+                const breakdown = activeReport.stats_json.topicBreakdown || [];
+                const strengthTopics = breakdown.filter(
+                  (t) => t.bucket === "strength" || ((t.attempted ?? 0) >= 10 && (t.accuracyPercentage ?? 0) >= 70)
+                );
+
+                return (
+                  <div className="p-5 rounded-2xl bg-emerald-50/40 border border-emerald-200/80 space-y-3">
+                    <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>Verified Strengths</span>
+                    </div>
+                    {strengthTopics.length > 0 ? (
+                      <ul className="space-y-2">
+                        {strengthTopics.slice(0, 3).map((st, idx) => (
+                          <li key={idx} className="text-xs text-emerald-950 flex items-start gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                            <span>{st.topic}: {st.accuracyPercentage}% accuracy over {st.attempted} questions</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-xs text-slate-500 italic">No strong topics yet. Keep practicing</p>
+                    )}
+                  </div>
+                );
+              })()}
 
               <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                 <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
@@ -919,7 +1001,7 @@ export default function AICoachClient({
               </div>
             </div>
 
-            {/* 7-Day Action Plan */}
+            {/* 7-Day Action Plan: Every item's description strictly matches its button */}
             <div className="space-y-3">
               <h4 className="text-sm font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-purple-600" />
@@ -928,6 +1010,17 @@ export default function AICoachClient({
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2.5">
                 {activeReport.report_json.weekly_plan.map((item, idx) => {
                   const planTopic = extractTopicFromPlanItem(item, selectedSubjectName, activeReport);
+                  const isMistakeNotebook =
+                    item.focus?.toLowerCase().includes("mistake") ||
+                    item.task?.toLowerCase().includes("mistake");
+                  const isRest =
+                    item.focus?.toLowerCase().includes("rest") ||
+                    item.task?.toLowerCase().includes("rest");
+
+                  let buttonLabel = item.buttonText || "Start 10-question fix";
+                  if (isMistakeNotebook) buttonLabel = "Open Mistake Notebook";
+                  else if (isRest) buttonLabel = "Rest Day Scheduled";
+
                   return (
                     <div
                       key={idx}
@@ -946,14 +1039,31 @@ export default function AICoachClient({
                         </p>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => handlePracticeTopic(planTopic)}
-                        className="w-full mt-1.5 py-1.5 px-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-[11px] font-bold flex items-center justify-center gap-1 transition-colors border border-purple-200 cursor-pointer"
-                      >
-                        <Play className="w-3 h-3 fill-purple-600" />
-                        <span>Start 10-question fix</span>
-                      </button>
+                      {isMistakeNotebook ? (
+                        <button
+                          type="button"
+                          onClick={() => setIsMistakeNotebookOpen(true)}
+                          className="w-full mt-1.5 py-1.5 px-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-[11px] font-bold flex items-center justify-center gap-1 transition-colors border border-purple-200 cursor-pointer"
+                        >
+                          <BookmarkCheck className="w-3 h-3 text-purple-600" />
+                          <span>{buttonLabel}</span>
+                        </button>
+                      ) : isRest ? (
+                        <div
+                          className="w-full mt-1.5 py-1.5 px-2 rounded-lg bg-slate-100 text-slate-500 text-[11px] font-semibold text-center border border-slate-200"
+                        >
+                          <span>{buttonLabel}</span>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handlePracticeTopic(planTopic)}
+                          className="w-full mt-1.5 py-1.5 px-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-[11px] font-bold flex items-center justify-center gap-1 transition-colors border border-purple-200 cursor-pointer"
+                        >
+                          <Play className="w-3 h-3 fill-purple-600" />
+                          <span>{buttonLabel}</span>
+                        </button>
+                      )}
                     </div>
                   );
                 })}
@@ -1009,7 +1119,7 @@ export default function AICoachClient({
 
             {/* Disclaimer */}
             <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">
-              Disclaimer: This performance analysis provides AI-powered guidance and study suggestions based on recorded test telemetry; it does not constitute a guarantee of actual examination results.
+              Disclaimer: Based on your practice data. AI can make mistakes. Not a guarantee of actual examination results.
             </div>
           </div>
         ) : (

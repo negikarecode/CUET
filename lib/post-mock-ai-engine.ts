@@ -89,8 +89,8 @@ export function buildDeterministicPostMockAIInsight(
   if (overall.skippedCount > 0) {
     const skippedQIds = allQuestions.filter((q) => q.isSkipped).map((q) => q.questionId);
     notablePatterns.push({
-      title: "Strategic Skipping",
-      description: `You chose not to answer ${overall.skippedCount} questions, preserving ${overall.skippedCount} marks from negative penalty.`,
+      title: "Unattempted Questions",
+      description: `You left ${overall.skippedCount} questions unattempted. Guess when you can eliminate at least one option; skip only when you have no idea. A blind guess is worth about +0.5 marks on average with +5/-1 marking.`,
       evidenceQuestionIds: skippedQIds,
     });
   }
