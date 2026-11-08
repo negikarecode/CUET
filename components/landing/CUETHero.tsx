@@ -15,7 +15,7 @@ export default function CUETHero({ onAuth, isLoggedIn }: CUETHeroProps) {
   return (
     <section
       id="home"
-      className="relative w-full pt-4 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-[#BDE8DF] via-[#A6E1D4] to-[#F0FAF7]"
+      className="relative w-full pt-4 pb-16 md:pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-transparent"
     >
       {/* Decorative ambient background glows */}
       <div className="absolute top-10 left-1/4 w-96 h-96 rounded-full bg-white/30 blur-3xl pointer-events-none" />
