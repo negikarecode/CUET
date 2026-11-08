@@ -12,6 +12,8 @@ import { buildPostMockDeterministicReport } from "../lib/post-mock-engine";
 import { resolveQuestionCorrectOptionId } from "../lib/scoring";
 import { compareQuestions, getStructuralFingerprint } from "../lib/duplicate-detection";
 import { getQuestionsForTest } from "../lib/data/mock50Questions";
+import { generateThreadTitle, verifyPercentagesHaveAttemptCounts } from "../lib/chat/engine";
+import { computeDataQualityMetrics } from "../lib/chat/tools";
 
 let totalTests = 0;
 let passedTests = 0;
@@ -788,6 +790,74 @@ What is the immediate impact on commercial banks when RBI increases the repo rat
   assert(
     sampleDups === 0,
     "Mock Generation Invariant: Zero intra-mock duplicates detected across subject mock sample audit"
+  );
+
+  console.log("\nSUITE X: Coach Chat Title Generation, Brevity, Attempt Counts & Invariants");
+  // 1. Title generation invariants
+  const longMsg = "### Can you explain why electrostatics question 14 had option B as an incorrect distractor trap?";
+  const genTitle = generateThreadTitle(longMsg);
+  assert(
+    genTitle.length <= 40,
+    "Coach Chat Title Invariant: Title length capped at <= 40 chars"
+  );
+  assert(
+    !genTitle.includes("###") && !genTitle.includes("*"),
+    "Coach Chat Title Invariant: Markdown symbols stripped from thread title"
+  );
+  assert(
+    genTitle[0] === genTitle[0]?.toUpperCase(),
+    "Coach Chat Title Invariant: Thread title begins capitalized"
+  );
+
+  // 2. Percentage attempt count verification post-check
+  const uncalibratedPercent = "Your accuracy in Magnetism is 40%. You need to work harder.";
+  assert(
+    verifyPercentagesHaveAttemptCounts(uncalibratedPercent) === false,
+    "Coach Chat Invariant: Flags percentage stated without attempt count nearby"
+  );
+  const calibratedPercent = "Your accuracy in Magnetism is 40% across 20 attempts.";
+  assert(
+    verifyPercentagesHaveAttemptCounts(calibratedPercent) === true,
+    "Coach Chat Invariant: Approves percentage stated with attempt count nearby"
+  );
+
+  // 3. Weak topic calibration invariant: < 5 attempts excluded
+  const thinAttempts = [
+    { topic: "Physics - Wave Optics", total: 3, correct: 0 },
+    { topic: "Physics - Magnetism", total: 10, correct: 4 },
+  ];
+  const weakList: string[] = [];
+  const thinList: string[] = [];
+  for (const t of thinAttempts) {
+    const acc = Math.round((t.correct / t.total) * 100);
+    if (t.total < 5) thinList.push(t.topic);
+    else if (acc < 60) weakList.push(t.topic);
+  }
+  assert(
+    !weakList.includes("Physics - Wave Optics") && thinList.includes("Physics - Wave Optics"),
+    "Coach Chat Invariant: Topics under 5 attempts strictly excluded from weak topics list"
+  );
+  assert(
+    weakList.includes("Physics - Magnetism"),
+    "Coach Chat Invariant: Weak topic with >= 5 attempts properly identified"
+  );
+
+  // 4. Data quality metrics: near_random and untagged awareness
+  const nearRandomAttempts = Array.from({ length: 150 }, (_, i) => ({
+    id: `att_${i}`,
+    is_correct: i < 36, // 24%
+    selected_option: (["A", "B", "C", "D"] as const)[i % 4],
+    time_spent_seconds: 6,
+    diagnostic_report: null,
+  }));
+  const nearRandomMetrics = computeDataQualityMetrics(nearRandomAttempts, []);
+  assert(
+    nearRandomMetrics.near_chance === true && nearRandomMetrics.data_quality === "near_random",
+    "Coach Chat Invariant: Near-chance guessing correctly classified as data_quality='near_random'"
+  );
+  assert(
+    nearRandomMetrics.mistake_tags_count === "unknown",
+    "Coach Chat Invariant: Missing mistake tags returned as 'unknown' rather than bare 0"
   );
 
   console.log();

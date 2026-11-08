@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import {
   Sparkles,
   Send,
@@ -13,25 +15,39 @@ import {
   MessageSquare,
   AlertCircle,
 } from "lucide-react";
-import LatexRenderer from "@/components/common/LatexRenderer";
 
-interface ChatMessage {
+// Dynamically import ChatMessageRenderer exclusively on Coach Chat page
+const ChatMessageRenderer = dynamic(
+  () => import("@/components/chat/ChatMessageRenderer"),
+  {
+    ssr: false,
+    loading: () => <div className="text-slate-400 text-xs animate-pulse">Loading response...</div>,
+  }
+);
+
+export interface ActionChip {
+  title: string;
+  actionRoute?: string;
+}
+
+export interface ChatMessage {
   id: string;
   role: "user" | "assistant" | "system";
   content: string;
-  tool_calls?: any[];
+  tool_calls?: any;
+  actions?: ActionChip[];
   created_at?: string;
   feedback?: "up" | "down" | null;
 }
 
-interface ChatThread {
+export interface ChatThread {
   id: string;
   title: string;
   created_at: string;
   updated_at: string;
 }
 
-interface CoachChatClientProps {
+export interface CoachChatClientProps {
   isPremium: boolean;
   initialThreads?: ChatThread[];
 }
@@ -47,6 +63,7 @@ export default function CoachChatClient({
   isPremium,
   initialThreads = [],
 }: CoachChatClientProps) {
+  const router = useRouter();
   const [threads, setThreads] = useState<ChatThread[]>(initialThreads);
   const [activeThreadId, setActiveThreadId] = useState<string | null>(
     initialThreads[0]?.id || null
@@ -56,6 +73,9 @@ export default function CoachChatClient({
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorBanner, setErrorBanner] = useState<string | null>(null);
+
+  // Synchronous lock to strictly block double-clicks/duplicate submissions
+  const isSendingRef = useRef(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -103,12 +123,18 @@ export default function CoachChatClient({
 
   const handleSendMessage = async (textToSend?: string) => {
     const text = (textToSend || inputMessage).trim();
-    if (!text || isLoading) return;
+    if (!text || isLoading || isSendingRef.current) return;
 
     if (!isPremium) {
       setErrorBanner("CUET Coach Chat is available exclusively to Gold Pass members.");
       return;
     }
+
+    // Acquire synchronous lock before any asynchronous operations
+    isSendingRef.current = true;
+    setIsLoading(true);
+
+    const idempotencyKey = `chat_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 
     setInputMessage("");
     setErrorBanner(null);
@@ -129,11 +155,11 @@ export default function CoachChatClient({
       id: tempAssistantMsgId,
       role: "assistant",
       content: "",
+      actions: [],
       created_at: new Date().toISOString(),
     };
 
     setMessages((prev) => [...prev, userMsg, assistantMsg]);
-    setIsLoading(true);
 
     try {
       const response = await fetch("/api/chat", {
@@ -142,6 +168,7 @@ export default function CoachChatClient({
         body: JSON.stringify({
           message: text,
           threadId: activeThreadId || undefined,
+          idempotencyKey,
         }),
       });
 
@@ -187,6 +214,16 @@ export default function CoachChatClient({
                     : m
                 )
               );
+            } else if (parsed.type === "actions") {
+              if (Array.isArray(parsed.actions)) {
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === tempAssistantMsgId
+                      ? { ...m, actions: parsed.actions }
+                      : m
+                  )
+                );
+              }
             } else if (parsed.type === "done") {
               setStatusMessage(null);
               if (parsed.threadId && parsed.threadId !== activeThreadId) {
@@ -199,10 +236,16 @@ export default function CoachChatClient({
                   })
                   .catch(() => {});
               }
-              if (parsed.messageId) {
+              if (parsed.messageId || parsed.actions) {
                 setMessages((prev) =>
                   prev.map((m) =>
-                    m.id === tempAssistantMsgId ? { ...m, id: parsed.messageId } : m
+                    m.id === tempAssistantMsgId
+                      ? {
+                          ...m,
+                          id: parsed.messageId || m.id,
+                          actions: parsed.actions || m.actions || [],
+                        }
+                      : m
                   )
                 );
               }
@@ -212,7 +255,7 @@ export default function CoachChatClient({
               setMessages((prev) => prev.filter((m) => m.id !== tempAssistantMsgId));
             }
           } catch {
-            // Buffer chunk incomplete
+            // Incomplete buffer chunk
           }
         }
       }
@@ -231,8 +274,17 @@ export default function CoachChatClient({
         )
       );
     } finally {
+      isSendingRef.current = false;
       setIsLoading(false);
       setStatusMessage(null);
+    }
+  };
+
+  const handleActionChipClick = (chip: ActionChip) => {
+    if (chip.actionRoute && chip.actionRoute.startsWith("/")) {
+      router.push(chip.actionRoute);
+    } else {
+      handleSendMessage(chip.title);
     }
   };
 
@@ -262,7 +314,8 @@ export default function CoachChatClient({
           </div>
           <button
             onClick={handleStartNewThread}
-            className="p-1.5 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors"
+            disabled={isLoading}
+            className="p-1.5 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors disabled:opacity-40"
             title="Start New Chat"
           >
             <PlusCircle className="w-5 h-5" />
@@ -279,7 +332,8 @@ export default function CoachChatClient({
               <button
                 key={t.id}
                 onClick={() => setActiveThreadId(t.id)}
-                className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-2.5 truncate ${
+                disabled={isLoading}
+                className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-2.5 truncate disabled:opacity-50 ${
                   activeThreadId === t.id
                     ? "bg-emerald-50 text-emerald-900 font-semibold border border-emerald-200"
                     : "text-slate-600 hover:bg-slate-100"
@@ -293,9 +347,9 @@ export default function CoachChatClient({
         </div>
 
         <div className="p-3 border-t border-slate-100 bg-slate-50 text-[11px] text-slate-500">
-          <span className="font-semibold text-slate-700">CUET UG 2027 Mentor</span>
+          <span className="font-semibold text-slate-700">CUET Prep Coach</span>
           <p className="mt-0.5 text-slate-400 leading-snug">
-            Grounded in your real mock scores and NCERT syllabus.
+            Based on your practice data. AI can make mistakes. Not a guarantee of marks or admission.
           </p>
         </div>
       </div>
@@ -313,7 +367,7 @@ export default function CoachChatClient({
                 CUET Academic Coach
               </h1>
               <p className="text-[11px] text-slate-500 mt-0.5">
-                On-topic advice · NTA +5/-1 scoring · Cutoff analysis
+                CUET prep coach . +5/-1 scoring . Cutoff estimates
               </p>
             </div>
           </div>
@@ -335,7 +389,7 @@ export default function CoachChatClient({
                 Unlock CUET Coach Chat
               </h2>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Get an empathetic, personal AI mentor who reviews your mock scores, flags distractor traps, and calculates your exact cutoff gap for SRCC and Hindu College.
+                Get an empathetic personal AI mentor who reviews your mock scores, flags distractor traps, and calculates your exact cutoff gap for SRCC and Hindu College.
               </p>
               <div className="pt-2">
                 <Link
@@ -387,7 +441,8 @@ export default function CoachChatClient({
                   <button
                     key={idx}
                     onClick={() => handleSendMessage(prompt)}
-                    className="p-3 rounded-xl bg-white border border-slate-200 text-xs font-medium text-slate-700 hover:border-emerald-500 hover:bg-emerald-50/50 hover:text-emerald-900 transition-all text-left shadow-xs"
+                    disabled={isLoading}
+                    className="p-3 rounded-xl bg-white border border-slate-200 text-xs font-medium text-slate-700 hover:border-emerald-500 hover:bg-emerald-50/50 hover:text-emerald-900 transition-all text-left shadow-xs disabled:opacity-50"
                   >
                     &ldquo;{prompt}&rdquo;
                   </button>
@@ -406,12 +461,28 @@ export default function CoachChatClient({
                   className={`max-w-2xl rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     msg.role === "user"
                       ? "bg-emerald-600 text-white rounded-br-xs shadow-xs"
-                      : "bg-white text-slate-800 border border-slate-200/80 rounded-bl-xs shadow-xs prose prose-sm max-w-none prose-slate"
+                      : "bg-white text-slate-800 border border-slate-200/80 rounded-bl-xs shadow-xs"
                   }`}
                 >
                   {msg.role === "assistant" ? (
                     <div>
-                      <LatexRenderer content={msg.content} />
+                      <ChatMessageRenderer content={msg.content} />
+
+                      {/* Action Chips */}
+                      {msg.actions && msg.actions.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-3 pt-2.5 border-t border-slate-100">
+                          {msg.actions.map((chip, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => handleActionChipClick(chip)}
+                              disabled={isLoading}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 transition-colors shadow-xs disabled:opacity-50"
+                            >
+                              {chip.title}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -496,7 +567,10 @@ export default function CoachChatClient({
             </button>
           </form>
           <p className="text-center text-[10px] text-slate-400 mt-2">
-            Advice is calibrated to the official CUET UG 2027 NCERT syllabus (+5 / -1 marking).
+            Based on your practice data. AI can make mistakes. Not a guarantee of marks or admission.
+            <Link href="/privacy" className="underline hover:text-slate-600 transition-colors ml-1">
+              Privacy Policy
+            </Link>
           </p>
         </div>
       </div>

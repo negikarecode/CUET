@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
 
     if (threadId) {
       // Fetch messages for a specific thread
-      const { data: messages, error } = await supabaseAdmin
+      const { data: rawMessages, error } = await supabaseAdmin
         .from("chat_messages")
         .select("id, role, content, tool_calls, created_at")
         .eq("thread_id", threadId)
@@ -44,7 +44,20 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
       }
 
-      return NextResponse.json({ ok: true, messages: messages || [] });
+      const messages = (rawMessages || []).map((m) => {
+        let actions: any[] = [];
+        if (m.tool_calls && typeof m.tool_calls === "object") {
+          if (Array.isArray(m.tool_calls.actions)) {
+            actions = m.tool_calls.actions;
+          }
+        }
+        return {
+          ...m,
+          actions,
+        };
+      });
+
+      return NextResponse.json({ ok: true, messages });
     }
 
     // Fetch all active threads for the user
@@ -125,6 +138,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}));
     const message = (body?.message || "").trim();
     const threadId = body?.threadId;
+    const idempotencyKey = body?.idempotencyKey;
 
     if (!message) {
       return NextResponse.json(
@@ -151,12 +165,16 @@ export async function POST(req: NextRequest) {
           userId: user.id,
           threadId,
           message,
+          idempotencyKey,
           callbacks: {
             onStatus: (status) => {
               sendSSE({ type: "status", status });
             },
             onToken: (token) => {
               sendSSE({ type: "token", token });
+            },
+            onActions: (actions) => {
+              sendSSE({ type: "actions", actions });
             },
             onDone: (data) => {
               sendSSE({ type: "done", ...data });

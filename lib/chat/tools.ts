@@ -21,7 +21,7 @@ export const CHAT_TOOLS_DEFINITIONS: ToolDefinition[] = [
     function: {
       name: "get_performance_summary",
       description:
-        "Get the candidate's overall CUET preparation summary: total questions attempted, overall accuracy, current streak, selected subjects, and target college/course goals.",
+        "Get candidate's overall CUET preparation summary including total attempts, accuracy, streak, target college, and data-quality metrics (near_chance, attempts_count, skipped_rate, median_seconds_per_question, mistake_tags_count, fast_wrong_rate, data_quality).",
       parameters: {
         type: "object",
         properties: {},
@@ -34,7 +34,7 @@ export const CHAT_TOOLS_DEFINITIONS: ToolDefinition[] = [
     function: {
       name: "get_weak_topics",
       description:
-        "Retrieve topics where accuracy is below 60% with at least 5 attempts (sufficient data). Topics with fewer than 5 attempts are reported as insufficient data.",
+        "Retrieve topics where accuracy is below 60% with at least 5 attempts (sufficient data). Topics with fewer than 5 attempts are strictly reported as insufficient data. Includes data_quality fields.",
       parameters: {
         type: "object",
         properties: {
@@ -124,7 +124,7 @@ export const CHAT_TOOLS_DEFINITIONS: ToolDefinition[] = [
     function: {
       name: "get_behavior_patterns",
       description:
-        "Analyze exam behavioral patterns: second-guessing leaks (changing correct answers to wrong), trap option susceptibility, and time sinks.",
+        "Analyze exam behavioral patterns: guessing patterns, data quality awareness, pacing leaks, trap option susceptibility, and time sinks.",
       parameters: {
         type: "object",
         properties: {},
@@ -173,7 +173,7 @@ export const CHAT_TOOLS_DEFINITIONS: ToolDefinition[] = [
     function: {
       name: "suggest_actions",
       description:
-        "Suggest the top 3 immediate high-leverage actions for the student (e.g., take a diagnostic mock, solve a 10-Q topic fix, review formulas).",
+        "Suggest up to 3 immediate high-leverage action chips for the student (e.g. 'Fix Magnetism (10 Qs)', 'Review last mock').",
       parameters: {
         type: "object",
         properties: {},
@@ -182,6 +182,122 @@ export const CHAT_TOOLS_DEFINITIONS: ToolDefinition[] = [
     },
   },
 ];
+
+export interface DataQualityMetrics {
+  attempts_count: number;
+  skipped_rate: number;
+  median_seconds_per_question: number | null | "unknown";
+  mistake_tags_count: number | "unknown";
+  near_chance: boolean;
+  fast_wrong_rate: number | "unknown";
+  data_quality: "ok" | "thin" | "near_random" | "untagged";
+  hasTimingData: boolean;
+  hasTagData: boolean;
+}
+
+/**
+ * Computes authoritative data-quality metrics across attempts.
+ * Zero counts are returned as "unknown" when underlying data could not have produced them.
+ */
+export function computeDataQualityMetrics(
+  attempts: any[],
+  completedTests: any[] = []
+): DataQualityMetrics {
+  const attempts_count = attempts.length;
+
+  // 1. Skipped Rate:
+  let skipped_rate = 0;
+  const totalQuestionsInTests = completedTests.reduce(
+    (sum, t) => sum + (Number(t.totalQuestions) || 0),
+    0
+  );
+  const totalUnattemptedInTests = completedTests.reduce(
+    (sum, t) => sum + (Number(t.unattemptedCount) || 0),
+    0
+  );
+
+  if (totalQuestionsInTests > 0) {
+    skipped_rate = Math.round((totalUnattemptedInTests / totalQuestionsInTests) * 1000) / 1000;
+  } else if (attempts_count > 0) {
+    const unattempted = attempts.filter(
+      (a) => a.selected_option === null || a.selected_option === "" || a.selected_option === undefined
+    ).length;
+    skipped_rate = Math.round((unattempted / attempts_count) * 1000) / 1000;
+  }
+
+  // 2. Timing metrics:
+  // Check if positive time_spent_seconds values exist in underlying data
+  const timingValues = attempts
+    .map((a) => a.time_spent_seconds)
+    .filter((t): t is number => typeof t === "number" && !isNaN(t) && t > 0);
+
+  const hasTimingData = timingValues.length > 0;
+  let median_seconds_per_question: number | "unknown" = "unknown";
+  if (hasTimingData) {
+    const sorted = [...timingValues].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    median_seconds_per_question =
+      sorted.length % 2 !== 0 ? sorted[mid]! : Math.round((sorted[mid - 1]! + sorted[mid]!) / 2);
+  }
+
+  // 3. Mistake tags count (how many wrong answers the student tagged themselves):
+  const wrongAttempts = attempts.filter(
+    (a) => a.is_correct === false || (!a.is_correct && a.selected_option !== null && a.selected_option !== "")
+  );
+
+  const taggedAttempts = wrongAttempts.filter((a) => {
+    const diag = a.diagnostic_report;
+    return !!diag?.mistakeTag || !!diag?.userTag;
+  });
+
+  const hasTagData = taggedAttempts.length > 0;
+  const mistake_tags_count: number | "unknown" = hasTagData ? taggedAttempts.length : "unknown";
+
+  // 4. Fast wrong rate (share of wrong answers answered in under 10 seconds):
+  let fast_wrong_rate: number | "unknown" = "unknown";
+  if (hasTimingData) {
+    if (wrongAttempts.length === 0) {
+      fast_wrong_rate = 0;
+    } else {
+      const fastWrong = wrongAttempts.filter(
+        (a) => typeof a.time_spent_seconds === "number" && a.time_spent_seconds > 0 && a.time_spent_seconds < 10
+      ).length;
+      fast_wrong_rate = Math.round((fastWrong / wrongAttempts.length) * 100) / 100;
+    }
+  }
+
+  // 5. Accuracy & Near Chance calculation:
+  // near_chance is true when accuracy <= 32% over >= 50 four-option questions AND skipped_rate < 5%
+  const correctCount = attempts.filter((a) => a.is_correct === true).length;
+  const accuracyFraction = attempts_count > 0 ? correctCount / attempts_count : 0;
+  const accuracyPercent = Math.round(accuracyFraction * 100);
+
+  const near_chance = attempts_count >= 50 && accuracyPercent <= 32 && skipped_rate < 0.05;
+
+  // 6. Data Quality classification: "ok" | "thin" | "near_random" | "untagged"
+  let data_quality: "ok" | "thin" | "near_random" | "untagged" = "ok";
+  if (near_chance) {
+    data_quality = "near_random";
+  } else if (attempts_count < 15) {
+    data_quality = "thin";
+  } else if (!hasTagData) {
+    data_quality = "untagged";
+  } else {
+    data_quality = "ok";
+  }
+
+  return {
+    attempts_count,
+    skipped_rate,
+    median_seconds_per_question,
+    mistake_tags_count,
+    near_chance,
+    fast_wrong_rate,
+    data_quality,
+    hasTimingData,
+    hasTagData,
+  };
+}
 
 /**
  * Safe User-Scoped Tool Dispatcher
@@ -248,9 +364,24 @@ async function getPerformanceSummary(userId: string) {
 
   const progress = await getUserProgress(userId);
 
-  if (progress.totalAttempts === 0) {
+  const { data: rawAttempts } = await supabaseAdmin
+    .from("user_attempts")
+    .select("id, is_correct, selected_option, time_spent_seconds, diagnostic_report")
+    .eq("user_id", userId);
+
+  const attempts = rawAttempts || [];
+  const metrics = computeDataQualityMetrics(attempts, progress.completedTests || []);
+
+  if (progress.totalAttempts === 0 && attempts.length === 0) {
     return {
       hasData: false,
+      data_quality: "thin",
+      attempts_count: 0,
+      skipped_rate: 0,
+      median_seconds_per_question: "unknown",
+      mistake_tags_count: "unknown",
+      near_chance: false,
+      fast_wrong_rate: "unknown",
       message: "No mock tests or practice questions completed yet.",
       profile: {
         targetStream: profile?.target_stream || "General",
@@ -258,7 +389,7 @@ async function getPerformanceSummary(userId: string) {
         targetCourse: profile?.target_course || "Undergraduate Program",
         selectedSubjects: profile?.selected_subjects || [],
       },
-      recommendation: "Take the first 50-question diagnostic mock test to establish your baseline.",
+      recommendation: "Take your first 50-question diagnostic mock test to establish your baseline score.",
     };
   }
 
@@ -273,12 +404,19 @@ async function getPerformanceSummary(userId: string) {
 
   return {
     hasData: true,
+    data_quality: metrics.data_quality,
+    attempts_count: metrics.attempts_count,
+    skipped_rate: metrics.skipped_rate,
+    median_seconds_per_question: metrics.median_seconds_per_question,
+    mistake_tags_count: metrics.mistake_tags_count,
+    near_chance: metrics.near_chance,
+    fast_wrong_rate: metrics.fast_wrong_rate,
     targetStream: profile?.target_stream || "General",
     targetUniversity: profile?.target_university || "Delhi University",
     targetCollege: profile?.target_college || "SRCC",
     targetCourse: profile?.target_course || "Undergraduate Program",
     dailyStreak: progress.activeStreak,
-    totalAttempts: progress.totalAttempts,
+    totalAttempts: progress.totalAttempts || metrics.attempts_count,
     totalCorrect: progress.totalCorrect,
     overallAccuracy: `${progress.overallAccuracyPercentage}%`,
     subjects: subjectSummary,
@@ -291,15 +429,24 @@ async function getPerformanceSummary(userId: string) {
 async function getWeakTopics(userId: string, subjectFilter?: string) {
   const { data: attempts } = await supabaseAdmin
     .from("user_attempts")
-    .select("question_id, is_correct, diagnostic_report")
+    .select("question_id, is_correct, selected_option, time_spent_seconds, diagnostic_report")
     .eq("user_id", userId);
 
   if (!attempts || attempts.length === 0) {
     return {
       hasData: false,
+      data_quality: "thin",
+      attempts_count: 0,
+      skipped_rate: 0,
+      median_seconds_per_question: "unknown",
+      mistake_tags_count: "unknown",
+      near_chance: false,
+      fast_wrong_rate: "unknown",
       message: "Zero attempts recorded. Cannot evaluate weak topics yet.",
     };
   }
+
+  const metrics = computeDataQualityMetrics(attempts);
 
   const questionIds = Array.from(new Set(attempts.map((a) => a.question_id)));
   const { data: questions } = await supabaseAdmin
@@ -336,6 +483,7 @@ async function getWeakTopics(userId: string, subjectFilter?: string) {
   for (const [topicKey, stats] of Object.entries(topicStats)) {
     const acc = Math.round((stats.correct / stats.total) * 100);
     if (stats.total < 5) {
+      // Hard invariant: Under 5 attempts CANNOT be called a weak topic
       insufficientDataTopics.push({
         topic: topicKey,
         attempts: stats.total,
@@ -348,7 +496,7 @@ async function getWeakTopics(userId: string, subjectFilter?: string) {
         accuracy: `${acc}%`,
         attempts: stats.total,
         marksLostEstimate: (stats.total - stats.correct) * 6, // 5 lost + 1 penalty
-        fixAction: `Start 10-question practice fix on ${topicKey}`,
+        fixAction: `Fix ${topicKey} (10 Qs)`,
       });
     }
   }
@@ -357,6 +505,16 @@ async function getWeakTopics(userId: string, subjectFilter?: string) {
 
   return {
     hasData: true,
+    data_quality: metrics.data_quality,
+    attempts_count: metrics.attempts_count,
+    skipped_rate: metrics.skipped_rate,
+    median_seconds_per_question: metrics.median_seconds_per_question,
+    mistake_tags_count: metrics.mistake_tags_count,
+    near_chance: metrics.near_chance,
+    fast_wrong_rate: metrics.fast_wrong_rate,
+    near_chance_note: metrics.near_chance
+      ? "Overall accuracy is near random chance (<= 32% over 50+ Qs). Accuracy across topics reflects guessing rather than localized concept gaps."
+      : undefined,
     weakTopicsCount: weakTopics.length,
     weakTopics,
     insufficientDataTopics: insufficientDataTopics.slice(0, 5),
@@ -508,7 +666,7 @@ async function getAttemptReview(userId: string, testId: string) {
       .map((a) => ({
         questionId: a.question_id,
         selectedOption: a.selected_option,
-        timeSpentSeconds: a.time_spent_seconds,
+        timeSpentSeconds: a.time_spent_seconds ?? "unknown",
         isTimeSink: a.is_time_sink,
         classification: a.diagnostic_report?.errorClassification || "Concept or Slip",
       })),
@@ -560,34 +718,92 @@ async function getQuestionReview(userId: string, questionId: string) {
 async function getBehaviorPatterns(userId: string) {
   const { data: attempts } = await supabaseAdmin
     .from("user_attempts")
-    .select("is_correct, is_time_sink, diagnostic_report, selected_option")
+    .select("id, question_id, is_correct, is_time_sink, diagnostic_report, selected_option, time_spent_seconds")
     .eq("user_id", userId);
 
   if (!attempts || attempts.length === 0) {
     return {
       hasData: false,
+      data_quality: "thin",
+      attempts_count: 0,
+      skipped_rate: 0,
+      median_seconds_per_question: "unknown",
+      mistake_tags_count: "unknown",
+      near_chance: false,
+      fast_wrong_rate: "unknown",
+      time_sink_count: "unknown",
       message: "Need test attempts to evaluate behavioral patterns.",
     };
   }
 
-  const total = attempts.length;
-  const timeSinks = attempts.filter((a) => a.is_time_sink).length;
-  const trapOptionHits = attempts.filter((a) =>
-    a.diagnostic_report?.errorClassification?.toLowerCase().includes("trap")
-  ).length;
+  const metrics = computeDataQualityMetrics(attempts);
+
+  // Time sink calculations
+  let timeSinks: number | "unknown" = "unknown";
+  let timeSinkObservation = "";
+
+  if (!metrics.hasTimingData) {
+    timeSinks = "unknown";
+    timeSinkObservation = "Per-question timing data is unknown as question durations were not recorded. Question pacing cannot be determined.";
+  } else if (metrics.near_chance) {
+    timeSinks = attempts.filter((a) => a.is_time_sink || (a.time_spent_seconds && a.time_spent_seconds > 90)).length;
+    timeSinkObservation = `Accuracy is close to what random guessing gives (${metrics.attempts_count} attempts). Pacing patterns cannot be separated from guessing speed.`;
+  } else {
+    timeSinks = attempts.filter((a) => a.is_time_sink || (a.time_spent_seconds && a.time_spent_seconds > 90)).length;
+    timeSinkObservation =
+      timeSinks > 3
+        ? `${timeSinks} questions exceeded 90s. Skipping stubborn numericals preserves time.`
+        : "Pacing is steady with few extended linger periods.";
+  }
+
+  // Trap option susceptibility
+  let trapOptionSusceptibility = "";
+  if (metrics.near_chance) {
+    trapOptionSusceptibility = "Accuracy is near random chance; cannot determine distractor trap susceptibility without un-guessed attempts.";
+  } else if (metrics.mistake_tags_count === "unknown") {
+    trapOptionSusceptibility = "I can't tell your trap susceptibility yet because no wrong answers have been tagged in the mistake review.";
+  } else {
+    const trapOptionHits = attempts.filter((a) =>
+      a.diagnostic_report?.errorClassification?.toLowerCase().includes("trap") ||
+      a.diagnostic_report?.mistakeTag === "Misread"
+    ).length;
+    trapOptionSusceptibility =
+      trapOptionHits > 2
+        ? `${trapOptionHits} questions flagged as distractor traps. Read final prompt constraints carefully.`
+        : "Low distractor trap susceptibility observed on tagged mistakes.";
+  }
+
+  // Mistake categories
+  let mistakeCategories: any = "unknown";
+  let mistakeObservation = "";
+  if (metrics.mistake_tags_count === "unknown") {
+    mistakeCategories = "unknown";
+    mistakeObservation = "I can't tell your mistake types yet because no wrong answers have been categorized with mistake tags.";
+  } else {
+    const wrongAttempts = attempts.filter((a) => !a.is_correct);
+    mistakeCategories = {
+      conceptGap: wrongAttempts.filter((a) => a.diagnostic_report?.mistakeTag === "Didn't know concept").length,
+      misread: wrongAttempts.filter((a) => a.diagnostic_report?.mistakeTag === "Misread").length,
+      guessed: wrongAttempts.filter((a) => a.diagnostic_report?.mistakeTag === "Guessed").length,
+      changedAnswer: wrongAttempts.filter((a) => a.diagnostic_report?.mistakeTag === "Changed my answer").length,
+    };
+    mistakeObservation = `${metrics.mistake_tags_count} mistakes categorized by student.`;
+  }
 
   return {
     hasData: true,
-    totalAttempted: total,
-    timeSinkQuestionsCount: timeSinks,
-    timeSinkObservation:
-      timeSinks > 3
-        ? "You tend to get stuck on calculation-heavy problems. Skipping after 90 seconds preserves time for direct questions."
-        : "Healthy pacing: you rarely linger excessively on stubborn questions.",
-    trapOptionSusceptibility:
-      trapOptionHits > 2
-        ? `${trapOptionHits} questions lost to distractor traps (e.g. sign errors, unit mismatch). Read final prompt clauses carefully.`
-        : "Low distractor trap susceptibility: high conceptual precision.",
+    data_quality: metrics.data_quality,
+    attempts_count: metrics.attempts_count,
+    skipped_rate: metrics.skipped_rate,
+    median_seconds_per_question: metrics.median_seconds_per_question,
+    mistake_tags_count: metrics.mistake_tags_count,
+    near_chance: metrics.near_chance,
+    fast_wrong_rate: metrics.fast_wrong_rate,
+    time_sink_count: timeSinks,
+    timeSinkObservation,
+    trapOptionSusceptibility,
+    mistake_categories: mistakeCategories,
+    mistakeObservation,
   };
 }
 
@@ -668,30 +884,65 @@ async function getStudyPlan(userId: string, days = 7) {
 }
 
 // ---------------------------------------------------------------------------
-// 10. Suggest Actions
+// 10. Suggest Actions (Max 3 Action Chips, User-Validated, Min 5 Attempts)
 // ---------------------------------------------------------------------------
 async function suggestActions(userId: string) {
   const progress = await getUserProgress(userId);
 
-  if (progress.totalAttempts === 0) {
+  const { data: rawAttempts } = await supabaseAdmin
+    .from("user_attempts")
+    .select("id, question_id, is_correct, selected_option, time_spent_seconds, diagnostic_report, test_id")
+    .eq("user_id", userId);
+
+  const attempts = rawAttempts || [];
+
+  if (progress.totalAttempts === 0 && attempts.length === 0) {
     return {
       actions: [
         {
           priority: 1,
-          title: "Complete 50-Question Diagnostic Mock",
-          reason: "Calibrate your baseline accuracy, speed, and negative mark leaks across all domain subjects.",
+          title: "Complete 50-Q Diagnostic Mock",
+          reason: "Calibrate baseline accuracy across domain subjects.",
           actionRoute: "/dashboard/mocks",
         },
         {
           priority: 2,
           title: "Set Target College & Course",
-          reason: "Define your admission cutoffs in your profile to enable real-time points-gap tracking.",
+          reason: "Define admission cutoffs for real-time gap tracking.",
           actionRoute: "/dashboard/profile",
         },
         {
           priority: 3,
-          title: "Review NCERT Chapter Notes",
-          reason: "Quick formula and concept refresher before attempting timed mocks.",
+          title: "Review NCERT Notes",
+          reason: "Quick formula refresher before attempting timed mocks.",
+          actionRoute: "/dashboard/notes",
+        },
+      ],
+    };
+  }
+
+  const metrics = computeDataQualityMetrics(attempts, progress.completedTests || []);
+
+  // Near-chance handling: Suggest untimed drill and elimination practice
+  if (metrics.near_chance) {
+    return {
+      actions: [
+        {
+          priority: 1,
+          title: "Untimed 10-Q Drill",
+          reason: "Focus on comprehension without timer pressure.",
+          actionRoute: "/dashboard/practice",
+        },
+        {
+          priority: 2,
+          title: "Elimination Practice (5 Qs)",
+          reason: "Eliminate 2 obvious wrong options before picking an answer.",
+          actionRoute: "/dashboard/practice",
+        },
+        {
+          priority: 3,
+          title: "Review Core Formulas",
+          reason: "Reinforce NCERT fundamentals before re-checking accuracy.",
           actionRoute: "/dashboard/notes",
         },
       ],
@@ -699,30 +950,63 @@ async function suggestActions(userId: string) {
   }
 
   const weakData = await getWeakTopics(userId);
-  const topWeak = Array.isArray(weakData.weakTopics) ? weakData.weakTopics[0] : null;
+  // Strict rule: only suggest weak topic if attempts >= 5
+  const eligibleWeakTopics = (weakData.weakTopics || []).filter(
+    (t: any) => typeof t.attempts === "number" && t.attempts >= 5
+  );
+
+  const topWeak = eligibleWeakTopics[0] || null;
+
+  const actions: Array<{ priority: number; title: string; reason: string; actionRoute: string }> = [];
+
+  // 1. Weak topic action (if >= 5 attempts)
+  if (topWeak) {
+    const cleanTopicName = topWeak.topic.includes(" - ")
+      ? topWeak.topic.split(" - ").slice(1).join(" - ").trim()
+      : topWeak.topic;
+    actions.push({
+      priority: 1,
+      title: `Fix ${cleanTopicName} (10 Qs)`,
+      reason: `Accuracy is ${topWeak.accuracy} over ${topWeak.attempts} attempts.`,
+      actionRoute: "/dashboard/practice",
+    });
+  }
+
+  // 2. Review last completed mock if available
+  if (progress.completedTests.length > 0) {
+    actions.push({
+      priority: 2,
+      title: "Review last mock",
+      reason: "Review distractor traps and second-guessing slips.",
+      actionRoute: "/dashboard/mocks",
+    });
+  } else {
+    actions.push({
+      priority: 2,
+      title: "Take a Full 50-Q Mock",
+      reason: "Practice under authentic 60-minute CBT conditions.",
+      actionRoute: "/dashboard/mocks",
+    });
+  }
+
+  // 3. Untagged mistakes review or general practice
+  if (metrics.data_quality === "untagged" || metrics.mistake_tags_count === "unknown") {
+    actions.push({
+      priority: 3,
+      title: "Tag recent mistakes",
+      reason: "Classify your wrong answers in your review journal.",
+      actionRoute: "/dashboard/reports",
+    });
+  } else {
+    actions.push({
+      priority: 3,
+      title: "10-Question Targeted Practice",
+      reason: "Keep domain concepts fresh with a short practice set.",
+      actionRoute: "/dashboard/practice",
+    });
+  }
 
   return {
-    actions: [
-      {
-        priority: 1,
-        title: topWeak ? `Fix ${topWeak.topic}` : "10-Question Targeted Practice",
-        reason: topWeak
-          ? `Your current accuracy is ${topWeak.accuracy}. Eliminating errors here will recover up to ${topWeak.marksLostEstimate} marks.`
-          : "Keep concepts fresh with a short timed practice drill.",
-        actionRoute: "/dashboard/practice",
-      },
-      {
-        priority: 2,
-        title: "Take a Full 50-Question Subject Mock",
-        reason: "Practice under authentic 60-minute NTA CBT conditions to build stamina.",
-        actionRoute: "/dashboard/mocks",
-      },
-      {
-        priority: 3,
-        title: "Analyze Mistake Journal",
-        reason: "Review distractor traps and second-guessing slips from your latest attempt.",
-        actionRoute: "/dashboard/reports",
-      },
-    ],
+    actions: actions.slice(0, 3),
   };
 }
